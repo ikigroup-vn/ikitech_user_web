@@ -1,0 +1,46 @@
+.bill-A6 {
+    width: 96mm;
+    /* height: 72mm; */
+    background: white;
+    line-height: 12.5px;
+    /* border: solid 1px #000; */
+    position: relative;
+    font-size: 13xpx;
+    font-weight: 500;
+    overflow: hidden;
+    margin: 2px auto auto auto;
+}
+
+.bill-A6 * {
+    padding: 0;
+    margin: 0;
+}
+
+.bill-head-list {
+    display: flex;
+}
+
+.bill-price {
+    padding: 15px 12px 2px 12px;
+    display: flex;
+    width: 100%;
+    font-weight: bold;
+}
+
+.bill-price-non-bold {
+    font-weight: normal;
+}
+
+.bill-price-left {
+    float: right;
+    justify-content: end;
+    flex:5;
+    text-align: end;
+}
+
+.bill-price-right {
+    float: right;
+    flex: 3;
+    text-align: end;
+
+}

@@ -1,0 +1,198 @@
+import React, { Component } from "react";
+import Sidebar from "../../components/Partials/Sidebar";
+import NotAccess from "../../components/Partials/NotAccess";
+
+import Topbar from "../../components/Partials/Topbar";
+import Footer from "../../components/Partials/Footer";
+import ChartSales from "../../components/Dashboard/ChartSales";
+import ChartTopTen from "../../components/Dashboard/ChartTopTen";
+
+import General from "../../components/Dashboard/General";
+import { Redirect } from "react-router-dom";
+import { connect } from "react-redux";
+import Loading from "../Loading";
+import BadgeTable from "../../components/Dashboard/BadgeTable";
+import * as dashboardAction from "../../actions/dashboard";
+import * as collaboratorAction from "../../actions/collaborator";
+import * as helper from "../../ultis/helpers"
+
+
+class Dashboard extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      type: ""
+    };
+  }
+  componentDidMount() {
+    var { store_code } = this.props.match.params
+
+    if (typeof store_code != "undefined" || store_code != null) {
+      var date = helper.getDateForChartMonth()
+
+      this.props.fetchDataId(store_code);
+      this.props.fetchAllBadge(store_code);
+      this.props.fetchTopTenProduct(store_code, `?date_from=${date.from}&date_to=${date.to}`)
+      this.props.fetchOverview(store_code, `?date_from=${date.from}&date_to=${date.to}`)
+      this.props.fetchAllCollaborator(store_code);
+    }
+  }
+
+
+  handeOnload = (store_code) => {
+    var date = helper.getDateForChartMonth()
+
+    this.props.fetchDataId(store_code);
+    this.props.fetchAllBadge(store_code);
+    this.props.fetchTopTenProduct(store_code, `?date_from=${date.from}&date_to=${date.to}`)
+    this.props.fetchOverview(store_code, `?date_from=${date.from}&date_to=${date.to}`)
+    this.props.fetchAllCollaborator(store_code);
+  }
+
+  handleGetTypeStore = (type) => {
+    this.setState({
+      type
+    })
+  }
+
+
+  componentWillReceiveProps(nextProps) {
+    console.log(nextProps.permission)
+    if (this.state.isLoading != true && typeof nextProps.permission.product_list != "undefined") {
+      console.log("asdasda")
+      var permissions = nextProps.permission
+      var isShow = permissions.report_view
+
+      this.setState({ isLoading: true, isShow })
+
+    }
+  }
+
+  render() {
+    var { store_code } = this.props.match.params
+    var { badges, collaborators, overview, topten } = this.props
+    var numDiscount = badges.products_discount || 0
+    var { isShow } = this.state
+    console.log(this.props.permission)
+    if (typeof store_code == "undefined" || store_code == null) {
+      return <Redirect to="/home" />
+    }
+    if (this.props.auth) {
+
+      return (
+        <div id="wrapper">
+          <Sidebar store_code={store_code} />
+          <div className="col-10 col-10-wrapper">
+
+            <div id="content-wrapper" className="d-flex flex-column">
+              <div id="content">
+                <Topbar store_code={store_code} handeOnload={this.handeOnload} />
+                {typeof isShow == "undefined" ?             <div style = {{height : "500px"}}></div> :
+ isShow == true ?
+
+                  <div className="container-fluid">
+                    <div className="d-sm-flex  align-items-center justify-content-between mb-4">
+                      <h4 className="h4 title_content mb-0 text-gray-800">
+                        Thông tin chung
+                      </h4>
+                    </div>
+
+                    <General
+                      badges={badges}
+                      store_code={store_code}
+                      numDiscount={numDiscount}
+                      collaborators={collaborators}
+                      store={this.props.store} />
+                    <br></br>
+
+
+                    <div class="row" style={{ display: "flex", justifyContent: "space-between" }}>
+                      <div className="col-lg-3 col-md-12 col-sm-12" style={{ paddingBottom: "15px" }}>
+                        <div class="card shadow mb-4 " style={{ height: "100%" }}>
+                          <div class="card-header py-3">
+                            <h6 class="m-0 title_content font-weight-bold text-primary">
+                              Thông tin chỉ số
+                            </h6>
+                          </div>
+                          <div class="card-body">
+                            <BadgeTable badges={badges} store_code={store_code} />
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card shadow mb-4 col-lg-9 col-md-12 col-sm-12" style={{ height: "100%" }}>
+                        <div class="card-header py-3">
+                          <h6 class="m-0 title_content font-weight-bold text-primary">
+                            Báo cáo doanh thu
+                          </h6>
+                        </div>
+                        <div class="card-body">
+
+                          <ChartSales store_code={store_code} overview={overview} />
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="card shadow mb-4 col-12" >
+                      <div class="card-header py-3">
+                        <h6 class="m-0 title_content font-weight-bold text-primary">
+                          Top 10 sản phẩm
+                        </h6>
+                      </div>
+                      <div class="card-body">
+
+                        <ChartTopTen topten={topten} store_code={store_code} />
+                      </div>
+                    </div>
+                  </div>
+
+                  : <NotAccess/>}
+              </div>
+
+              <Footer />
+
+
+            </div>
+          </div>
+        </div>
+
+      );
+    } else if (this.props.auth === false) {
+      return <Redirect to="/login" />;
+    } else {
+      return <Loading />;
+    }
+  }
+}
+
+const mapStateToProps = (state) => {
+  return {
+    store: state.storeReducers.store.storeID,
+    auth: state.authReducers.login.authentication,
+    badges: state.badgeReducers.allBadge,
+    topten: state.reportReducers.topten,
+    overview: state.reportReducers.overview,
+    collaborators: state.collaboratorReducers.collaborator.allCollaborator,
+    permission: state.authReducers.permission.data,
+
+  };
+};
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    fetchDataId: (id) => {
+      dispatch(dashboardAction.fetchDataId(id));
+    },
+    fetchAllBadge: (store_code) => {
+      dispatch(dashboardAction.fetchAllBadge(store_code));
+    },
+    fetchTopTenProduct: (store_code, params) => {
+      dispatch(dashboardAction.fetchTopTenProduct(store_code, params));
+    },
+    fetchOverview: (store_code, params) => {
+      dispatch(dashboardAction.fetchOverview(store_code, params));
+    },
+    fetchAllCollaborator: (store_code) => {
+      dispatch(collaboratorAction.fetchAllCollaborator(store_code));
+    },
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);

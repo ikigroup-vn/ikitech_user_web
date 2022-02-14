@@ -1,0 +1,30 @@
+import * as Types from "../../constants/ActionType";
+
+var initialState = {
+  allBill: [],
+  billID: {  },
+  billHistory: [],
+  historyDeliveryStatus:[],
+
+
+};
+
+export const bill = (state = initialState, action) => {
+  let newState = { ...state };
+  switch (action.type) {
+    case Types.FETCH_ALL_BILL:
+      newState.allBill = action.data;
+      return newState;
+    case Types.FETCH_ID_BILL:
+      newState.billID = action.data;
+      return newState;
+      case Types.FETCH_BILL_HISTORY:
+        newState.billHistory = action.data;
+        return newState;
+        case Types.FETCH_DELIVERY_HISTORY:
+          newState.historyDeliveryStatus = action.data;
+          return newState;
+    default:
+      return newState;
+  }
+};
