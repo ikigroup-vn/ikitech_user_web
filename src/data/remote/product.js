@@ -4,7 +4,8 @@ export const fetchAllData = (store_code , page , params , agency_type_id) => {
 
   if(agency_type_id)
   {
-    return callApi(`/store/${store_code}/products?page=${page}&agency_type_id=${agency_type_id}`, "get", null)
+    return params ? callApi(`/store/${store_code}/products?page=${page}${params}&agency_type_id=${agency_type_id}`, "get", null) 
+    :callApi(`/store/${store_code}/products?page=${page}&agency_type_id=${agency_type_id}`, "get", null)
   }
 
   return params ? callApi(`/store/${store_code}/products?page=${page}${params}&agency_type_id=${agency_type_id}`, "get", null) 

@@ -9,6 +9,7 @@ class Form extends Component {
     super(props);
     this.state = {
       txtName: "",
+      txtPhone:"",
       txtAddress_detail: "",
       txtCountry: 1,
       txtProvince: "",
@@ -95,6 +96,7 @@ class Form extends Component {
       district: this.state.txtDistrict,
       wards: this.state.txtWards,
       email: this.state.txtEmail,
+      phone: this.state.txtPhone,
       is_default_pickup: is_default_pickup,
       is_default_return: is_default_return
 
@@ -146,7 +148,7 @@ class Form extends Component {
   
   render() {
     var {  province } = this.props
-    var { txtName, txtAddress_detail, txtProvince, txtDistrict, txtWards, txtEmail, txtPickup, txtReturn ,listDistrict,listWards } = this.state;
+    var { txtName, txtAddress_detail, txtProvince, txtDistrict, txtWards, txtEmail, txtPickup, txtReturn ,listDistrict,listWards,txtPhone } = this.state;
 
     var checkPickup = txtPickup == "0" || txtPickup == "" ? false : true
     var checkReturn = txtReturn == "0" || txtReturn == "" ? false : true
@@ -178,6 +180,19 @@ class Form extends Component {
                 value={txtEmail || ""}
                 onChange={this.onChange}
                 name="txtEmail"
+              />
+            </div>
+            <div className="form-group">
+              <label for="product_name">Phone</label>
+              <input
+              type="text"
+              className="form-control"
+              id = "txtPhone"
+              placeholder="Nhập số điện thoại"
+              autocomplete="off"
+              value={txtPhone || ""}
+              onChange={this.onChange}
+              name="txtPhone"
               />
             </div>
             <div class="form-group">

@@ -7,15 +7,13 @@ import { compressed, formatStringCharactor } from "../ultis/helpers";
 import { saveAs } from "file-saver";
 import XlsxPopulate from "xlsx-populate";
 
-export const fetchAllProduct = (store_code, page = 1, params , agency_type_id = null) => {
-  console.log("fetch data")
+export const fetchAllProduct = (store_code, page = 1, params , agency_type_id ) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
     })
     productApi.fetchAllData(store_code, page, params , agency_type_id).then((res) => {
-      console.log(res)
       dispatch({
         type: Types.SHOW_LOADING,
         loading: "hide"
