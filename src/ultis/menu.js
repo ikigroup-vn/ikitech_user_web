@@ -183,6 +183,13 @@ export const menu =  [
               to: "/theme",
             },
             {
+              name: "Chỉnh sửa chi nhánh",
+              class : "web_theme_edit",
+              display : "hide",
+              exact: true,
+              to: "/branch/index",
+            },
+            {
               name: "Cài đặt phân quyền",
               class : "decentralization_list",
               display : "hide",

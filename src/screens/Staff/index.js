@@ -21,7 +21,7 @@ class Staff extends Component {
       modal: {
         title: "",
         id: "",
-        name : ""
+        name: ""
       },
     };
   }
@@ -40,12 +40,12 @@ class Staff extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.state.isLoading != true && typeof this.props.permission.product_list != "undefined") {
       var permissions = this.props.permission
-      var insert = permissions.staff_add 
-      var update = permissions.staff_update 
-      var _delete = permissions.staff_remove 
-      var isShow = permissions.staff_list 
+      var insert = permissions.staff_add
+      var update = permissions.staff_update
+      var _delete = permissions.staff_remove
+      var isShow = permissions.staff_list
 
-      this.setState({ isLoading: true , insert,update,_delete,isShow })
+      this.setState({ isLoading: true, insert, update, _delete, isShow })
 
     }
     $("#dataTable").DataTable(
@@ -54,67 +54,67 @@ class Staff extends Component {
 
     $("#dataTable").DataTable(config());
 
-        window.$(".dataTables_info").hide()
- 
+    window.$(".dataTables_info").hide()
+
   }
 
   render() {
     var { store_code } = this.props.match.params
     var { staff } = this.props
-    var {insert , update , _delete , isShow} = this.state
+    var { insert, update, _delete, isShow } = this.state
 
     if (this.props.auth) {
       return (
         <div id="wrapper">
-         <Sidebar store_code={store_code} />
-<div className="col-10 col-10-wrapper">
+          <Sidebar store_code={store_code} />
+          <div className="col-10 col-10-wrapper">
 
-          <div id="content-wrapper" className="d-flex flex-column">
-            <div id="content">
-              <Topbar store_code={store_code} />
-              {typeof isShow == "undefined" ? <div></div> : isShow == true ?
+            <div id="content-wrapper" className="d-flex flex-column">
+              <div id="content">
+                <Topbar store_code={store_code} />
+                {typeof isShow == "undefined" ? <div></div> : isShow == true ?
 
-              <div className="container-fluid">
-                <Alert
-                  type={Types.ALERT_UID_STATUS}
-                  alert={this.props.alert}
-                />
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <h4 className="h4 title_content mb-0 text-gray-800">
-                    Nhân viên
-                  </h4>{" "}
-                  <Link to={`/staff/create/${store_code}`} 
-                      class={`btn btn-info btn-icon-split btn-sm ${insert == true ? "show" : "hide"}`}
+                  <div className="container-fluid">
+                    <Alert
+                      type={Types.ALERT_UID_STATUS}
+                      alert={this.props.alert}
+                    />
+                    <div
+                      style={{ display: "flex", justifyContent: "space-between" }}
+                    >
+                      <h4 className="h4 title_content mb-0 text-gray-800">
+                        Nhân viên
+                      </h4>{" "}
+                      <Link to={`/staff/create/${store_code}`}
+                        class={`btn btn-info btn-icon-split btn-sm ${insert == true ? "show" : "hide"}`}
                       >
-                    <span class="icon text-white-50">
-                      <i class="fas fa-plus"></i>
-                    </span>
-                    <span class="text">Thêm nhân viên</span>
-                  </Link>
-                </div>
+                        <span class="icon text-white-50">
+                          <i class="fas fa-plus"></i>
+                        </span>
+                        <span class="text">Thêm nhân viên</span>
+                      </Link>
+                    </div>
 
-                <br></br>
-                <div className="card shadow mb-4">
-                  <div className="card-header py-3">
-                    <h6 className="m-0 title_content font-weight-bold text-primary">
-                      Danh sách nhân viên
-                    </h6>
+                    <br></br>
+                    <div className="card shadow mb-4">
+                      <div className="card-header py-3">
+                        <h6 className="m-0 title_content font-weight-bold text-primary">
+                          Danh sách nhân viên
+                        </h6>
+                      </div>
+                      <div className="card-body">
+                        <Table update={update} _delete={_delete} store_code={store_code} handleDelCallBack={this.handleDelCallBack} data={staff} />
+                      </div>
+                    </div>
                   </div>
-                  <div className="card-body">
-                    <Table update = {update} _delete = {_delete} store_code={store_code} handleDelCallBack={this.handleDelCallBack} data={staff} />
-                  </div>
-                </div>
+                  : <NotAccess />}
+
               </div>
-                                                                                        : <NotAccess/>}
 
+              <Footer />
             </div>
-
-            <Footer />
+            <ModalDelete store_code={store_code} modal={this.state.modal} />
           </div>
-          <ModalDelete store_code={store_code} modal={this.state.modal} />
-        </div>
         </div>
 
       );
