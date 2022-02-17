@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import Loading from "../Loading";
 import * as dashboardAction from "../../actions/dashboard";
 import config from "../../ultis/datatable"
+import ListStore from "../../components/Home/ListStore";
 
 class Home extends Component {
   constructor(props) {
@@ -51,7 +52,7 @@ class Home extends Component {
           <div id="content-wrapper" className="d-flex flex-column">
             <div id="content">
               <Topbar isHome={true} isExsitStore={true} />
-              <div className="container-fluid">
+              <div className="container-fluid" style={{width:"60%"}}>
                 <Alert
                   type={Types.ALERT_UID_STATUS}
                   alert={this.props.alert}
@@ -78,7 +79,8 @@ class Home extends Component {
                     </h6>
                   </div>
                   <div className="card-body">
-                    <Table handleDelCallBack={this.handleDelCallBack} data={this.props.stores} />
+                    <ListStore handleDelCallBack={this.handleDelCallBack} data={this.props.stores} />
+
                   </div>
                 </div>
               </div>

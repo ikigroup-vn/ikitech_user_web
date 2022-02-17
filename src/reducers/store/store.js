@@ -4,6 +4,8 @@ var initialState = {
   allStore: [],
   storeID: { store_code: "", name: "", address: "", id_type_of_store: "" },
   type: [],
+  branchStore:[],
+  supplier:[],
 };
 
 export const store = (state = initialState, action) => {
@@ -18,6 +20,12 @@ export const store = (state = initialState, action) => {
       return newState;
     case Types.FETCH_ALL_TYPESTORE:
       newState.type = action.data;
+      return newState;
+    case Types.FETCH_BRANCH_STORE:
+      newState.branchStore = action.data;
+      return newState;
+    case Types.FETCH_ALL_SUPPLIER:
+      newState.supplier = action.data;
       return newState;
     default:
       return newState;

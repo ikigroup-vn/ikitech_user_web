@@ -620,6 +620,67 @@ export const postProduct = (store_code, data) => {
   };
 };
 
+export const postProductV2 = (store_code,branch_id, data) => {
+
+  return (dispatch) => {
+    const _value_price = data.price.toString().replace(/,/g, '');
+    const _value_quantity_in_stock = data.quantity_in_stock.toString().replace(/,/g, '');
+    if (isNaN(Number(_value_price)) || isNaN(Number(_value_quantity_in_stock))) {
+      dispatch({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi ",
+          disable: "show",
+          content: "Giá tiền sai định dạng hoặc bị để trống",
+        },
+      });
+      return;
+    }
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show"
+    })
+    productApi
+      .createProductV2(store_code,branch_id, data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide"
+        })
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+        history.goBack();
+      })
+      .catch(function (error) {
+        var content = "";
+        if (typeof error.response.data.msg == "undefined")
+          content = "Vui lòng chọn ảnh và nhập đầy đủ các thông tin"
+        else
+          content = error.response.data.msg
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide"
+        })
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: content,
+          },
+        });
+      });
+  };
+};
 
 
 export const postMultiProduct = (store_code, data) => {

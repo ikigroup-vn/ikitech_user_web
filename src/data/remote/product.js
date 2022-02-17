@@ -20,6 +20,9 @@ export const fetchProductId = (store_code , id) => {
 export const createProduct = (store_code,data) =>{
   return callApi(`/store/${store_code}/products`, "post", data);
 }
+export const createProductV2 = (store_code,branch_id,data) =>{
+  return callApi(`/store_v2/${store_code}/${branch_id}/products`, "post", data);
+}
 
 export const updateProduct = (store_code,data,id) =>{
   return callApi(`/store/${store_code}/products/${id}`, "put", data);
