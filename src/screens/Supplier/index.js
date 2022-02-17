@@ -105,6 +105,7 @@ class Supplier extends Component {
                                 </div>
 
                                 <br></br>
+                                <div className='card'>
                                 <div className='card-body'>
                                 <div class="table-responsive">
                                     <table class="table  " id="dataTable" width="100%" cellspacing="0">
@@ -127,6 +128,8 @@ class Supplier extends Component {
                                     </table>
                                 </div>
                                 </div>
+                                </div>
+
                             </div>
                         </div>
                         <Footer />
