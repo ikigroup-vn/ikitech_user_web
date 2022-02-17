@@ -47,6 +47,27 @@ export const fetchBranchStore = (store_code) => {
   };
 };
 
+export const fetchAllSupplier = (store_code) => {
+  console.log("store_code",store_code)
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    storeApi.fetchAllSupplier(store_code).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading : "hide"
+      })
+      if(res.data.code !== 401)
+      dispatch({
+        type: Types.FETCH_ALL_SUPPLIER,
+        data: res.data.data,
+      });
+    });
+  };
+};
+
 export const deleteBranchStore = (store_code,id) => {
 
   return (dispatch) => {
@@ -68,6 +89,73 @@ export const deleteBranchStore = (store_code,id) => {
 
             dispatch({
               type: Types.FETCH_BRANCH_STORE,
+              data: res.data.data,
+            });
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "success",
+                title: "Thành công ",
+                disable: "show",
+                content: res.data.msg,
+              },
+            });
+          })
+          .catch(function (error) {
+            dispatch({
+              type: Types.SHOW_LOADING,
+              loading: "hide"
+            })
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "danger",
+                title: "Lỗi",
+                disable: "show",
+                content: error.response.data.msg,
+              },
+            });
+          });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide"
+        })
+    
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error.response.data.msg,
+          },
+        });
+      });
+  };
+};
+export const deleteSupplier = (store_code,id) => {
+
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    storeApi
+      .deleteSupplier(store_code,id)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading : "hide"
+        })
+        storeApi
+          .fetchAllSupplier(store_code)
+          .then((res) => {
+            if(res.data.code !== 401)
+
+            dispatch({
+              type: Types.FETCH_ALL_SUPPLIER,
               data: res.data.data,
             });
             dispatch({
@@ -182,6 +270,141 @@ export const createBranchStore = (store_code,id) => {
   };
 };
 
+export const createSupplier = (store_code,id) => {
+
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    storeApi
+      .createSupplier(store_code,id)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading : "hide"
+        })
+        storeApi
+          .fetchAllSupplier(store_code)
+          .then((res) => {
+            if(res.data.code !== 401)
+
+            dispatch({
+              type: Types.FETCH_ALL_SUPPLIER,
+              data: res.data.data,
+            });
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "success",
+                title: "Thành công ",
+                disable: "show",
+                content: res.data.msg,
+              },
+            });
+          })
+          .catch(function (error) {
+            dispatch({
+              type: Types.SHOW_LOADING,
+              loading: "hide"
+            })
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "danger",
+                title: "Lỗi",
+                disable: "show",
+                content: error.response.data.msg,
+              },
+            });
+          });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide"
+        })
+    
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error.response.data.msg,
+          },
+        });
+      });
+  };
+};
+
+export const editSupplier = (store_code,id,data) => {
+
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    storeApi
+      .editSupplier(store_code,id,data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading : "hide"
+        })
+        storeApi
+          .fetchAllSupplier(store_code)
+          .then((res) => {
+            if(res.data.code !== 401)
+
+            dispatch({
+              type: Types.FETCH_ALL_SUPPLIER,
+              data: res.data.data,
+            });
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "success",
+                title: "Thành công ",
+                disable: "show",
+                content: res.data.msg,
+              },
+            });
+          })
+          .catch(function (error) {
+            dispatch({
+              type: Types.SHOW_LOADING,
+              loading: "hide"
+            })
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "danger",
+                title: "Lỗi",
+                disable: "show",
+                content: error.response.data.msg,
+              },
+            });
+          });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide"
+        })
+    
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error.response.data.msg,
+          },
+        });
+      });
+  };
+};
 
 export const fetchTopTenProduct = (store_code , params = null) => {
   return (dispatch) => {

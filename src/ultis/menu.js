@@ -190,6 +190,13 @@ export const menu =  [
               to: "/branch/index",
             },
             {
+              name: "Nhà cung cấp",
+              class : "web_theme_edit",
+              display : "hide",
+              exact: true,
+              to: "/supplier",
+            },
+            {
               name: "Cài đặt phân quyền",
               class : "decentralization_list",
               display : "hide",

@@ -107,6 +107,7 @@ import ReportAgency from "./components/Agency/ReportAgency/ReportAgency";
 import ReportCollaborator from "./components/Collaborator/ReportCollaborator/ReportCollaborator";
 import AddOrder from "./screens/Add_order";
 import Branch from "./screens/BranchStore";
+import Supplier from "./screens/Supplier";
 
 
 const routes = [
@@ -140,6 +141,12 @@ const routes = [
     exact: true,
 
     main: ({ match }) => <Branch match={match} />,
+  },
+  {
+    path: "/supplier/:store_code",
+    exact: true,
+
+    main: ({ match }) => <Supplier match={match} />,
   },
   {
     path: "/staff/edit/:store_code/:id",

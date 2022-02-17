@@ -128,7 +128,7 @@ class ProductCreate extends Component {
 
     });
 
-
+    console.log("form",this.state.form)
 
 
   };
@@ -139,12 +139,13 @@ class ProductCreate extends Component {
       return { form: formdata };
 
     });
-
+    
 
   };
   postProduct = () => {
     console.log(this.state)
     var { store_code } = this.props;
+    const branch_id = localStorage.getItem('branch_id')
     var form = { ...this.state.form };
     form.index_image_avatar = 0
 
@@ -159,31 +160,43 @@ class ProductCreate extends Component {
               try {
                 console.log(element)
                 const price = element.price != null ? element.price.toString().replace(/,/g, '').replace(/\./g,'') : 0;
+                const import_price = element.import_price != null ? element.import_price.toString().replace(/,/g, '').replace(/\./g,'') : 0;
                 const barcode = element.barcode != null ? element.barcode.toString() : 0;
                 const quantity_in_stock = element.quantity_in_stock != null ? element.quantity_in_stock.toString().replace(/,/g, '').replace(/\./g,'') : 0;
+                const cost_of_capital = element.cost_of_capital != null ? element.cost_of_capital.toString().replace(/,/g, '').replace(/\./g,'') : 0;
                 form.list_distribute[0].element_distributes[index].price = price
+                form.list_distribute[0].element_distributes[index].import_price = import_price
+                form.list_distribute[0].element_distributes[index].cost_of_capital = cost_of_capital
                 form.list_distribute[0].element_distributes[index].quantity_in_stock = quantity_in_stock
                 form.list_distribute[0].element_distributes[index].barcode = barcode
-
+                form.list_distribute[0].element_distributes[index].stock = quantity_in_stock
                 console.log(price, form.list_distribute[0].element_distributes[index].price)
   
-                console.log(form)
+                console.log("element form",form)
                 if (typeof element.sub_element_distributes != "undefined") {
                   if (element.sub_element_distributes.length > 0) {
   
                     element.sub_element_distributes.forEach((_element, _index) => {
                       try {
                         const price = _element.price != null ? _element.price.toString().replace(/,/g, '').replace(/\./g,'') : 0;
+                        const import_price = _element.import_price != null ? _element.import_price.toString().replace(/,/g, '').replace(/\./g,'') : 0;
+                        const cost_of_capital = _element.cost_of_capital != null ? _element.cost_of_capital.toString().replace(/,/g, '').replace(/\./g,'') : 0;
                         const barcode = _element.barcode != null ? _element.barcode.toString() : 0;
                         const quantity_in_stock = _element.quantity_in_stock != null ? _element.quantity_in_stock.toString().replace(/,/g, '').replace(/\./g,'') : 0;
   
                         form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].price = price
+                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].import_price = import_price
+                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].cost_of_capital = cost_of_capital
                         form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].quantity_in_stock = quantity_in_stock
+                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].stock = quantity_in_stock
                         form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].barcode = barcode
   
-  
+                        console.log("sub element form",form)
                       } catch (error) {
                         form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].price = 0
+                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].import_price = 0
+                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].cost_of_capital = 0
+                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].stock = 0
                         form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].quantity_in_stock = 0
                         form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].barcode = ""
                       }
@@ -195,6 +208,9 @@ class ProductCreate extends Component {
               } catch (error) {
                 console.log(error)
                 form.list_distribute[0].element_distributes[index].price = 0
+                form.list_distribute[0].element_distributes[index].import_price = 0
+                form.list_distribute[0].element_distributes[index].cost_of_capital = 0
+                form.list_distribute[0].element_distributes[index].stock = 0
                 form.list_distribute[0].element_distributes[index].quantity_in_stock = 0
                 form.list_distribute[0].element_distributes[index].barcode = ""
               }
@@ -209,7 +225,8 @@ class ProductCreate extends Component {
       form.quantity_in_stock = form.list_distribute.length > 0 ? total : form.quantity_in_stock
 
     }
-    this.props.postProduct(store_code, form)
+    // this.props.postProduct(store_code, form)
+    this.props.postProductV2(store_code, branch_id,form)
   };
 
   goBack = (e) => {
@@ -314,7 +331,7 @@ class ProductCreate extends Component {
                 </div>
 
                 <div class="card mb-4">
-                  <div class="card-header title_content">Phân loại sản phẩm</div>
+                  <div class="card-header title_content">Phân loại sản phẩm </div>
                   <div class="card-body" style={{ padding: "0.8rem" }}>
                     <div class="row">
                       <div class="col-lg-12">
@@ -417,6 +434,10 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     postProduct: (store_code, product) => {
       dispatch(productAction.postProduct(store_code, product));
+
+    },
+    postProductV2: (store_code,branch_id,form) => {
+      dispatch(productAction.postProductV2(store_code,branch_id, form));
 
     },
     fetchAllBlog: (id, page) => {
