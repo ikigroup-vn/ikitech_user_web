@@ -108,6 +108,8 @@ import ReportCollaborator from "./components/Collaborator/ReportCollaborator/Rep
 import AddOrder from "./screens/Add_order";
 import Branch from "./screens/BranchStore";
 import Supplier from "./screens/Supplier";
+import Inventory from "./screens/Inventory";
+import CreateInventory from "./screens/Inventory/create"
 
 
 const routes = [
@@ -136,6 +138,19 @@ const routes = [
 
     main: ({ match }) => <Staff match={match} />,
   },
+  {
+    path:"/inventory/index/:store_code",
+    exact:true,
+
+    main: ({match,history}) => <Inventory match ={match} history = {history}/>,
+  },
+  {
+    path:"/inventory/create/:store_code",
+    exact:true,
+
+    main: ({match,history}) => <CreateInventory match ={match} history = {history}/>,
+  },
+
   {
     path: "/branch/index/:store_code",
     exact: true,

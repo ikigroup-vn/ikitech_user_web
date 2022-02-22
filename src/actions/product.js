@@ -27,6 +27,28 @@ export const fetchAllProduct = (store_code, page = 1, params , agency_type_id ) 
   };
 };
 
+export const fetchAllProductV2 = (store_code,branch_id, page = 1, params , agency_type_id ) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    })
+    productApi.fetchAllProductV2(store_code,branch_id, page, params , agency_type_id).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide"
+      })
+
+    
+      if (res.data.code === 200)
+        dispatch({
+          type: Types.FETCH_ALL_PRODUCT,
+          data: res.data.data,
+        });
+    });
+  };
+};
+
 
 
 
@@ -396,6 +418,55 @@ export const uploadAvataProduct = (file) => {
   };
 };
 
+export const editStock = (store_code,branch_id ,data,page=1) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show"
+    })
+    productApi
+      .editStock(store_code,branch_id ,data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide"
+        })
+
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+        productApi.fetchAllProductV2(store_code,branch_id, page).then((res) => {
+          dispatch({
+            type: Types.SHOW_LOADING,
+            loading: "hide"
+          })
+          if (res.data.code !== 401)
+            dispatch({
+              type: Types.FETCH_ALL_PRODUCT,
+              data: res.data.data,
+            });
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error.response.data.msg,
+          },
+        });
+      });
+  };
+};
+
 
 
 
@@ -457,52 +528,6 @@ export const uploadListImgProduct = function (files) {
 
   };
 };
-
-
-
-
-// export const uploadListImgProduct = (file, imgFromReducers) => {
-//   return (dispatch) => {
-//     dispatch({
-//       type: Types.SHOW_LOADING,
-//       loading: "show"
-//     })
-//     uploadApi
-//       .upload(file)
-//       .then((res) => {
-//         dispatch({
-//           type: Types.SHOW_LOADING,
-//           loading: "hide"
-//         })
-//         dispatch({
-//           type: Types.UPLOAD_ALL_PRODUCT_IMG,
-//           data: res.data.data,
-//         });
-//         dispatch({
-//           type: Types.ALERT_UID_STATUS,
-//           alert: {
-//             type: "success",
-//             title: "Thành công ",
-//             disable: "show",
-//             content: res.data.msg,
-//           },
-//         });
-//       })
-//       .catch(function (error) {
-//         dispatch({
-//           type: Types.ALERT_UPLOAD_PRODUCT_STORE,
-//           alert: {
-//             type: "danger",
-//             title: "Lỗi",
-//             disable: "show",
-//             content: error.response.data.msg,
-//           },
-//         });
-//       });
-//   };
-// };
-
-
 
 
 

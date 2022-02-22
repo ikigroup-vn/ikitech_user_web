@@ -47,12 +47,30 @@ export const menu =  [
           exact: true,
           to: "/chat",
         },
-        // {
-        //   name: "Cửa hàng",
-        //   icon: "fa-store",
-        //   exact: true,
-        //   to: "/cua-hang",
-        // },
+
+        {
+          name: "Kho hàng",
+    
+          icon: "fas fa-store",
+          open : "inventory",
+          children: [
+            {
+              class : "customer_list",
+              display : "hide",
+              name: "Phiếu kiểm kho",
+              exact: true,
+              to: "/inventory/index",
+            },
+            {
+              class : "customer_config_point",
+              display : "hide",
+              name: "nhập hàng",
+              exact: true,
+              to: "/reward_point",
+            },
+      
+          ],
+        },
         {
           name: "Danh mục sản phẩm",
           class : "product_category_list",

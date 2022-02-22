@@ -12,6 +12,18 @@ export const fetchAllData = (store_code , page , params , agency_type_id) => {
   :callApi(`/store/${store_code}/products?page=${page}&agency_type_id=${agency_type_id}`, "get", null)
 
 };
+export const fetchAllProductV2 = (store_code,branch_id , page , params , agency_type_id) => {
+
+  if(agency_type_id)
+  {
+    return params ? callApi(`/store_v2/${store_code}/${branch_id}/products?page=${page}${params}&agency_type_id=${agency_type_id}`, "get", null) 
+    :callApi(`/store_v2/${store_code}/${branch_id}/products?page=${page}&agency_type_id=${agency_type_id}`, "get", null)
+  }
+
+  return params ? callApi(`/store_v2/${store_code}/${branch_id}/products?page=${page}${params}&agency_type_id=${agency_type_id}`, "get", null) 
+  :callApi(`/store_v2/${store_code}/${branch_id}/products?page=${page}&agency_type_id=${agency_type_id}`, "get", null)
+
+};
 
 export const fetchProductId = (store_code , id) => {
   return callApi(`/store/${store_code}/products/${id}`, "get", null);
@@ -61,3 +73,6 @@ export const updateAgencyPrice = (store_code,data,id) =>{
 }
 
 
+export const editStock = (store_code,branch_id,data) =>{
+  return callApi(`/store/${store_code}/${branch_id}/inventory/update_balance`, "put", data);
+}
