@@ -2,11 +2,25 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { filter_arr, format } from "../../ultis/helpers";
 import { shallowEqual } from "../../ultis/shallowEqual";
+import AlertInfor from "./Modal/AlertInfor";
+import EditStock from "./Modal/EditStock";
+import ShowData from "./ShowData";
 class Table extends Component {
   constructor(props) {
     super(props);
     this.state = {
       selected: [],
+      modalElement:{
+        element:"",
+        idProduct:"",
+      },
+      modalSub:{
+        SubElement:"",
+        idProduct:"",
+        NameElement:"",
+        NameDistribute:""
+      },
+      formData:"",
     };
   }
 
@@ -19,6 +33,18 @@ class Table extends Component {
     });
     event.preventDefault();
   };
+
+  editStockCallBack = (form) =>{
+    this.setState({formData:form})
+  }
+
+  handleCallBackElement =(modalElement) =>{
+    this.setState({modalElement:modalElement})
+  }
+  handleCallBackSubElement = (modalSub) =>{
+    console.log("modalSub",modalSub)
+    this.setState({modalSub:modalSub})
+  }
 
   checkSelected = (id) => {
     var selected = [...this.state.selected];
@@ -99,92 +125,9 @@ class Table extends Component {
         var checked = this.checkSelected(data.id);
         console.log(checked)
         return (
-          <tr>
-            <td className={_delete == true ? "show" : "hide"}>
-              {" "}
-              <input
-                style={{
-                  height: "initial",
-                }}
-                type="checkbox"
-                checked={checked}
-                onChange={(e) => this.onChangeSelected(e, data.id)}
-              />
-            </td>
-            <td>{per_page * (current_page - 1) + (index + 1)}</td>
-
-            <td>{data.sku}</td>
-
-            <td>
-              <Link to={`/product/edit/${store_code}/${data.id}/${page}`}>
-                {data.name}
-              </Link>
-            </td>
-            {/* <td>{data.barcode}</td> */}
-
-            <td>{format(Number(data.price))}</td>
-            <td>
-              {" "}
-              <h5>
-                <span class={`badge badge-${status}`}>{status_name}</span>
-              </h5>
-            </td>
-
-            <td>{format(Number(discount))}</td>
-            <td
-              className={
-                status_stock == -2 || status_stock == -1 ? "show" : "hide"
-              }
-            >
-              {" "}
-              <h5>
-                <span
-                  class={`badge badge-${status_stock == -2 ? "danger" : "success"
-                    }`}
-                >
-                  {status_stock == -2 ? "Hết hàng" : "Vô hạn"}
-                </span>
-              </h5>
-            </td>
-            <td
-              className={
-                status_stock != -2 && status_stock != -1 ? "show" : "hide"
-              }
-            >
-              {new Intl.NumberFormat().format(status_stock.toString())}
-            </td>
-
-            <td>{data.view}</td>
-            <td>{data.likes}</td>
-
-            <td className="btn-voucher">
-              <Link
-                to={`/product/edit/${store_code}/${data.id}/${page}`}
-                class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"
-                  }`}
-              >
-                <i class="fa fa-edit"></i> Sửa
-              </Link>
-              <Link
-                to={`/product/create/${store_code}/${data.id}`}
-                class={`btn btn-primary btn-sm ${insert == true ? "show" : "hide"
-                  }`}
-              >
-                <i class="fa fa-copy"></i> Sao chép
-              </Link>
-              <button
-                onClick={(e) =>
-                  this.passDataModal(e, store_code, data.id, data.name)
-                }
-                data-toggle="modal"
-                data-target="#removeModal"
-                class={`btn btn-danger btn-sm ${_delete == true ? "show" : "hide"
-                  }`}
-              >
-                <i class="fa fa-trash"></i> Xóa
-              </button>
-            </td>
-          </tr>
+            <ShowData _delete ={_delete} update ={update} insert ={insert} checked ={checked} page ={page} status ={status} status_name ={status_name} status_stock ={status_stock}
+            data ={data} per_page ={per_page} current_page ={current_page} index ={index} store_code ={store_code}  discount ={discount} 
+            handleCallBackElement ={this.handleCallBackElement} handleCallBackSubElement ={this.handleCallBackSubElement}/>
         );
       });
     } else {
@@ -213,7 +156,7 @@ class Table extends Component {
   };
   render() {
     var { products, store_code } = this.props;
-    var { selected } = this.state;
+    var { selected,modalSub,modalElement,formData } = this.state;
     var per_page = products.per_page;
     var current_page = products.current_page;
 
@@ -256,9 +199,11 @@ class Table extends Component {
               <th>Mã</th>
 
               <th>Tên</th>
-              {/* <th>Mã vạch</th> */}
+
+              <th>Phân loại</th>
 
               <th>Giá</th>
+
               <th>Trạng thái </th>
 
               <th>Giảm giá</th>
@@ -271,9 +216,10 @@ class Table extends Component {
               <th>Hành động</th>
             </tr>
           </thead>
-
           <tbody>{this.showData(listProduct, per_page, current_page)}</tbody>
         </table>
+        <EditStock store_code ={store_code} modalSub = {modalSub} modalElement ={modalElement} editStockCallBack = {this.editStockCallBack} />
+        <AlertInfor formData ={formData} store_code = {store_code}/>
       </div>
     );
   }

@@ -67,12 +67,13 @@ class Product extends Component {
   };
   componentDidMount() {
     var { page } = this.props.match.params
+    const branch_id = localStorage.getItem('branch_id');
+    console.log("branch_id",branch_id)
     if (typeof page != "undefined" && page != null && page != "" && !isNaN(Number(page))) {
-      this.props.fetchAllProduct(this.props.match.params.store_code, page);
+      this.props.fetchAllProductV2(this.props.match.params.store_code,branch_id, page);
     }
     else {
-      this.props.fetchAllProduct(this.props.match.params.store_code);
-
+      this.props.fetchAllProductV2(this.props.match.params.store_code,branch_id);
     }
   }
 
@@ -389,6 +390,9 @@ const mapDispatchToProps = (dispatch, props) => {
 
     fetchAllProduct: (store_code, page, params) => {
       dispatch(productAction.fetchAllProduct(store_code, page, params));
+    },
+    fetchAllProductV2: (store_code,branch_id ,page, params) => {
+      dispatch(productAction.fetchAllProductV2(store_code,branch_id, page, params));
     },
     fetchAllListProduct: (store_code, searchValue) => {
       dispatch(productAction.fetchAllListProduct(store_code, searchValue));

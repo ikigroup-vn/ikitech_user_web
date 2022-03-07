@@ -160,6 +160,8 @@ class Distribute extends Component {
         name: null,
         image_url: null,
         price: null,
+        import_price:null,
+        cost_of_capital: null,
         quantity_in_stock: null,
         sub_element_distributes: []
       }
@@ -173,6 +175,8 @@ class Distribute extends Component {
         name: null,
         image_url: null,
         price: null,
+        import_price:null,
+        cost_of_capital: null,
         quantity_in_stock: null,
         sub_element_distributes: []
       }
@@ -190,6 +194,8 @@ class Distribute extends Component {
         name: null,
         image_url: null,
         price: null,
+        import_price: null,
+        cost_of_capital: null,
         quantity_in_stock: null,
 
       }
@@ -547,12 +553,13 @@ class Distribute extends Component {
               console.log(element.sub_element_distributes)
               try {
                 var value_price = list_distribute[0].element_distributes[_index].sub_element_distributes[index].price
+                var value_price_main = list_distribute[0].element_distributes[_index].sub_element_distributes[index].cost_of_capital
                 var value_quantity_in_stock = list_distribute[0].element_distributes[_index].sub_element_distributes[index].quantity_in_stock
                 var value_barcode = list_distribute[0].element_distributes[_index].sub_element_distributes[index].barcode
-
+                const _values = value_price_main != null ? formatNumber(value_price_main) : "";
                 const _value = value_price != null ? formatNumber(value_price) : "";
                 var price = _value == "" ? "" : new Intl.NumberFormat().format(_value);
-
+                var cost_of_capital = _values == "" ? "" : new Intl.NumberFormat().format(_values);
                 const _value_S = value_quantity_in_stock !== null && value_quantity_in_stock !== "" ? formatNumber(value_quantity_in_stock) : "";
                 var quantity_in_stock = _value_S == "" ? "" : new Intl.NumberFormat().format(_value_S);
 
@@ -578,6 +585,14 @@ class Distribute extends Component {
 
                       </td>
                       <td>
+
+                        <input
+                          onChange={(e) => this.onChange(e, "SUP", { name: "import_price", index, _index, title: _element.name })}
+
+                          value={import_price} id="input" class="form-control" required="required" title="" />
+
+                      </td>
+                      <td>
                         <input
                           value={barcode}
                           onChange={(e) => this.onChange(e, "SUP", { name: "barcode", index, _index, title: _element.name })}
@@ -589,6 +604,14 @@ class Distribute extends Component {
                         <input
                           value={quantity_in_stock}
                           onChange={(e) => this.onChange(e, "SUP", { name: "quantity_in_stock", index, _index, title: _element.name })}
+
+                          name="" id="input" class="form-control" required="required" title="" />
+
+                      </td>
+                      <td>
+                        <input
+                          value={cost_of_capital}
+                          onChange={(e) => this.onChange(e, "SUP", { name: "cost_of_capital", index, _index, title: _element.name })}
 
                           name="" id="input" class="form-control" required="required" title="" />
 
@@ -614,6 +637,16 @@ class Distribute extends Component {
 
                       </td>
                       <td>
+
+                        <input
+                          onChange={(e) => this.onChange(e, "PARENT", { name: "import_price", index: _index })}
+
+                          name="" id="input" class="form-control" required="required" title=""
+                          value={import_price}
+                        />
+
+                      </td>
+                      <td>
                         <input
                           onChange={(e) => this.onChange(e, "PARENT", { name: "barcode", index: _index })}
                           value={barcode}
@@ -634,6 +667,14 @@ class Distribute extends Component {
                           required="required" title="" />
 
                       </td>
+                      <td>
+                        <input
+                          value={cost_of_capital}
+                          onChange={(e) => this.onChange(e, "SUP", { name: "cost_of_capital", index, _index, title: _element.name })}
+
+                          name="" id="input" class="form-control" required="required" title="" />
+
+                      </td>
 
                     </tr>
                   )
@@ -645,13 +686,17 @@ class Distribute extends Component {
             try {
               var barcode = element.barcode
               const _value = element.price != null ? formatNumber(element.price) : "";
+              const _value_import = element.import_price != null ? formatNumber(element.import_price) : "";
+              const _values = element.cost_of_capital != null ? formatNumber(element.cost_of_capital) : "";
               var price = _value == "" ? "" : new Intl.NumberFormat().format(_value);
-
+              var import_price = _value_import == "" ? "" : new Intl.NumberFormat().format(_value_import);
+              var cost_of_capital = _values == "" ? "" : new Intl.NumberFormat().format(_values);
               const _value_S = element.quantity_in_stock !== null && element.quantity_in_stock !== "" ? formatNumber(element.quantity_in_stock) : "";
               var quantity_in_stock = _value_S == "" ? "" : new Intl.NumberFormat().format(_value_S);
 
             } catch (error) {
               var price = element.price
+              var cost_of_capital = element.cost_of_capital
               var quantity_in_stock = element.quantity_in_stock
               var barcode = element.barcode
 
@@ -674,13 +719,13 @@ class Distribute extends Component {
 
                   </td>
                   <td>
+
                     <input
-                      onChange={(e) => this.onChange(e, "PARENT", { name: "quantity_in_stock", index: _index })}
-                      value={quantity_in_stock}
+                      onChange={(e) => this.onChange(e, "PARENT", { name: "import_price", index: _index })}
 
-                      id="input" class="form-control"
-
-                      required="required" title="" />
+                      name="" id="input" class="form-control" required="required" title=""
+                      value={import_price}
+                    />
 
                   </td>
 
@@ -694,6 +739,28 @@ class Distribute extends Component {
                       required="required" title="" />
 
                   </td>
+                  <td>
+                    <input
+                      onChange={(e) => this.onChange(e, "PARENT", { name: "quantity_in_stock", index: _index })}
+                      value={quantity_in_stock}
+
+                      id="input" class="form-control"
+
+                      required="required" title="" />
+
+                  </td>
+
+                  <td>
+                    <input
+                      onChange={(e) => this.onChange(e, "PARENT", { name: "cost_of_capital", index: _index })}
+                      value={cost_of_capital}
+
+                      id="input" class="form-control"
+
+                      required="required" title="" />
+
+                  </td>
+
 
                 </tr>
               )
@@ -746,14 +813,15 @@ class Distribute extends Component {
         <br />
         <h4 style={{ fontSize: "15px", marginTop: "10px", fontWeight: "500" }} class="label">Danh sách thuộc tính sản phẩm</h4>
 
-        <table class="table table-hover table-border" style={{ maxWidth: "900px" }}>
+        <table class="table table-hover table-border">
           <thead>
             <tr>
               <th>Tên thuộc tính</th>
-              <th>Giá</th>
+              <th>Giá bán lẻ</th>
+              <th>Giá nhập</th>
               <th>Barcode</th>
-              <th>Tồn kho</th>
-
+              <th>Tồn kho ban đầu</th>
+              <th>Giá vốn</th>
             </tr>
           </thead>
           <tbody>

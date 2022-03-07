@@ -733,8 +733,8 @@ class Distribute extends Component {
               <th>Tên thuộc tính</th>
               <th>Giá</th>
               <th>Barcode</th>
-              <th>Tồn kho</th>
-
+              <th>Tồn kho ban đầu </th>
+              <th>Giá vốn </th>
             </tr>
           </thead>
           <tbody>

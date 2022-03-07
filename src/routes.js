@@ -106,7 +106,16 @@ import BonusStepEdit from "./components/Agency/BonusProgram/BonusStepEdit";
 import ReportAgency from "./components/Agency/ReportAgency/ReportAgency";
 import ReportCollaborator from "./components/Collaborator/ReportCollaborator/ReportCollaborator";
 import AddOrder from "./screens/Add_order";
-
+import Branch from "./screens/BranchStore";
+import Supplier from "./screens/Supplier";
+import Inventory from "./screens/Inventory";
+import CreateInventory from "./screens/Inventory/create"
+import DetailInventory from "./screens/Inventory/detail"
+import EditInventory from "./screens/Inventory/edit"
+import ImportStock from "./screens/ImportStock";
+import CreateImportStock from "./screens/ImportStock/create"
+import DetailImportStock from "./screens/ImportStock/detail"
+import EditImportStock from "./screens/ImportStock/edit"
 
 const routes = [
 
@@ -133,6 +142,70 @@ const routes = [
     exact: true,
 
     main: ({ match }) => <Staff match={match} />,
+  },
+  {
+    path:"/inventory/index/:store_code",
+    exact:true,
+
+    main: ({match,history}) => <Inventory match ={match} history = {history}/>,
+  },
+  {
+    path:"/inventory/create/:store_code",
+    exact:true,
+
+    main: ({match,history}) => <CreateInventory match ={match} history = {history}/>,
+  },
+  {
+    path:"/inventory/edit/:store_code/:id",
+    exact:true,
+
+    main: ({match,history}) => <EditInventory match ={match} history = {history}/>,
+  },
+
+
+  {
+    path:"/inventory/detail/:store_code/:id",
+    exact:true,
+
+    main: ({match,history}) => <DetailInventory match ={match} history = {history}/>,
+  },
+
+  {
+    path:"/import_stocks/index/:store_code",
+    exact:true,
+
+    main: ({match,history}) => <ImportStock match ={match} history = {history}/>
+  },
+  {
+    path:"/import_stock/create/:store_code",
+    exact:true,
+
+    main: ({match,history}) => <CreateImportStock match ={match} history = {history}/>,
+  },
+  {
+    path:"/import_stock/edit/:store_code/:id",
+    exact:true,
+
+    main: ({match,history}) => <EditImportStock match ={match} history = {history}/>,
+  },
+  {
+    path:"/import_stocks/detail/:store_code/:id",
+    exact:true,
+
+    main: ({match,history}) => <DetailImportStock match ={match} history = {history}/>,
+  },
+
+  {
+    path: "/branch/index/:store_code",
+    exact: true,
+
+    main: ({ match }) => <Branch match={match} />,
+  },
+  {
+    path: "/supplier/:store_code",
+    exact: true,
+
+    main: ({ match }) => <Supplier match={match} />,
   },
   {
     path: "/staff/edit/:store_code/:id",
@@ -200,6 +273,12 @@ const routes = [
   },
   {
     path: "/dashboard/:store_code?",
+    exact: true,
+
+    main: ({ match }) => <Dashboard match={match} />,
+  },
+  {
+    path: "/dashboard/:store_code/:branch_id",
     exact: true,
 
     main: ({ match }) => <Dashboard match={match} />,

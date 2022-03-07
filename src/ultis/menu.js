@@ -47,12 +47,30 @@ export const menu =  [
           exact: true,
           to: "/chat",
         },
-        // {
-        //   name: "Cửa hàng",
-        //   icon: "fa-store",
-        //   exact: true,
-        //   to: "/cua-hang",
-        // },
+
+        {
+          name: "Kho hàng",
+    
+          icon: "fas fa-store",
+          open : "inventory",
+          children: [
+            {
+              class : "customer_list",
+              display : "hide",
+              name: "Phiếu kiểm kho",
+              exact: true,
+              to: "/inventory/index",
+            },
+            {
+              class : "customer_config_point",
+              display : "hide",
+              name: "Nhập hàng",
+              exact: true,
+              to: "/import_stocks/index",
+            },
+      
+          ],
+        },
         {
           name: "Danh mục sản phẩm",
           class : "product_category_list",
@@ -181,6 +199,20 @@ export const menu =  [
               display : "hide",
               exact: true,
               to: "/theme",
+            },
+            {
+              name: "Chỉnh sửa chi nhánh",
+              class : "web_theme_edit",
+              display : "hide",
+              exact: true,
+              to: "/branch/index",
+            },
+            {
+              name: "Nhà cung cấp",
+              class : "web_theme_edit",
+              display : "hide",
+              exact: true,
+              to: "/supplier",
             },
             {
               name: "Cài đặt phân quyền",
