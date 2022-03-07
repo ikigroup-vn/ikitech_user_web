@@ -60,8 +60,8 @@ class ShowData extends Component {
                 if (typeof element.sub_element_distributes != "undefined") {
                     if (listDistribute.element_distributes[0].sub_element_distributes.length > 0) {
                         listDistribute.element_distributes[0].sub_element_distributes.map((sub_element, index) => {
-                            const cost_of_capital = listDistribute.element_distributes[_index].sub_element_distributes[index].cost_of_capital
-                            const stock = listDistribute.element_distributes[_index].sub_element_distributes[index].stock
+                            const cost_of_capital = listDistribute.element_distributes[_index].sub_element_distributes[index]?.cost_of_capital
+                            const stock = listDistribute.element_distributes[_index].sub_element_distributes[index]?.stock
                             result.push(
                                 <div className='row' style={{ padding: "10px" }}>
                                     <div className='col-3' style={{ display: "flex" }}>
@@ -120,7 +120,7 @@ class ShowData extends Component {
 
     render() {
         const { _delete, update, insert, checked, data, per_page, current_page, index, store_code, page, status, status_name, status_stock, discount,historyInventory } = this.props
-        const listDistribute = data.inventory.distributes !== null && data.inventory.distributes.length > 0 ? data.inventory.distributes[0] : []
+        const listDistribute = data.inventory?.distributes !== null && data.inventory?.distributes.length > 0 ? data.inventory?.distributes[0] : []
         const { show_item } = this.state
 
         return (
@@ -147,7 +147,7 @@ class ShowData extends Component {
                         </Link>
                     </td>
                     <td>
-                        {data.inventory.distributes !== null && data.inventory.distributes.length > 0 ? <button className="btn btn-success btn-sm " onClick={() => this.handleOnClick()} >
+                        {data.inventory?.distributes !== null && data.inventory?.distributes.length > 0 ? <button className="btn btn-success btn-sm " onClick={() => this.handleOnClick()} >
                             <i class="fa fa-eye"></i> Xem
                         </button>:""}
  

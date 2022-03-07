@@ -6,17 +6,18 @@ class ItemImportStock extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            currentQuantity: 0,
+            currentQuantity: 1,
             distribute: "",
-            item: ""
-
+            item: "",
+            import_price: 0
         }
         this.nameElementDistribute = ""
         this.nameSubElementDistribute = ""
     }
     componentWillReceiveProps(nextProps) {
+
         if (!shallowEqual(this.props.item.quantity, nextProps.item.quantity)) {
-            this.setState({ currentQuantity: nextProps.item.quantity, item: nextProps.item })
+            this.setState({ currentQuantity: nextProps.item.quantity, import_price:nextProps.item.import_price, item: nextProps.item })
         }
 
     }
@@ -25,6 +26,9 @@ class ItemImportStock extends Component {
         if (!shallowEqual(this.state.currentQuantity, nextState.currentQuantity)) {
             this.props.handleCallbackQuantity({ currentQuantity: nextState.currentQuantity, idElement: elementId })
         }
+        if (!shallowEqual(this.state.import_price, nextState.import_price)) {
+            this.props.handleCallbackPrice({ import_price: nextState.import_price, idElement: elementId })
+        }
 
         if (!shallowEqual(this.state.item, nextState.item)) {
             this.setState({ currentQuantity: nextState.item.reality_exist })
@@ -32,11 +36,17 @@ class ItemImportStock extends Component {
         if (!shallowEqual(this.state.currentQuantity, nextProps.item.reality_exist)) {
             this.setState({ currentQuantity: nextProps.item.reality_exist })
         }
+        if(!shallowEqual(this.state.import_price, nextProps.item.import_price)){
+            this.setState({ import_price:nextProps.item.import_price})
+        }
         return true
     }
     componentDidMount = () => {
 
         this.setState({ item: this.props.item })
+    }
+    onChange = (e) => {
+        this.setState({ import_price: e.target.value })
     }
 
     subQuantity() {
@@ -58,7 +68,7 @@ class ItemImportStock extends Component {
     }
 
     render() {
-        const { currentQuantity } = this.state
+        const { currentQuantity,import_price } = this.state
 
         const { item, index } = this.props
         return (
@@ -76,12 +86,8 @@ class ItemImportStock extends Component {
                                     <div className='name-order'>{item.nameElement ? `${item.nameElement} ` : ""}{item.nameSubDistribute ? item.nameSubDistribute : ""}</div>
                                 </div> : ""
                             }
-
-                            <div style={{ display: "flex" }}>
-                                <div className='price-order' style={{ color: "gray", marginRight: "5px" }}>Giá tiền:</div>
-                                <div className='name-order' style={{ color: "red" }}>{format(Number(item.priceProduct))}</div>
-                            </div>
                         </div>
+
                     </div>
                     <div className='col-4' style={{ paddingLeft: "0" }}>
                         <div className="" style={{ float: "right", border: "1px solid #9c9898ba", borderRadius: "2px" }}>
@@ -96,6 +102,10 @@ class ItemImportStock extends Component {
                     >
                         <i class="fas fa-close close-status "></i>
                     </a>
+                </div>
+                <div style={{ display: "flex", marginTop:"10px" }}>
+                    <div className='price-order' style={{ color: "gray", marginRight: "5px", width: "75%" }}>Giá nhập:</div>
+                    <input type="text" name="import_price" class="form-control" id="usr" style={{ height: "28px",width:"145px"}} value ={import_price} onChange={this.onChange} />
                 </div>
             </div>
         )

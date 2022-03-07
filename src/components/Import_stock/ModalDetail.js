@@ -140,11 +140,12 @@ class ModalDetail extends Component {
                 nameProduct: this.props.modal.nameProduct,
                 element_id: this.props.modal.idProduct,
                 product_id: this.props.modal.idProduct,
-                reality_exist: 0, nameDistribute: distributeName,
+                reality_exist: 1, nameDistribute: distributeName,
                 nameElement: distributeValue,
                 nameSubDistribute: element_distributes,
                 priceProduct:afterPrice,
-                stock: this.props.modal.inventoryProduct.main_stock
+                stock: this.props.modal.inventoryProduct.main_stock,
+                import_price:0
             })
             return
         }
@@ -159,11 +160,12 @@ class ModalDetail extends Component {
                 nameProduct: this.props.modal.nameProduct,
                 product_id: this.props.modal.idProduct,
                 element_id: idElement,
-                reality_exist: 0, nameDistribute: distributeName,
+                reality_exist: 1, nameDistribute: distributeName,
                 nameElement: distributeValue,
                 nameSubDistribute: element_distributes,
                 priceProduct:afterChoosePrice,
-                stock: quantityInStock
+                stock: quantityInStock,
+                import_price:0
             })
             this.setState({ distributeSelected: -1, messageErr: "", afterChoosePrice: "", element_distributes: "", distributeValue: "" })
             return
@@ -179,12 +181,13 @@ class ModalDetail extends Component {
             nameProduct: this.props.modal.nameProduct,
             product_id: this.props.modal.idProduct,
             element_id: idElement,
-            reality_exist: 0,
+            reality_exist: 1,
             nameDistribute: distributeName,
             nameElement: distributeValue,
             nameSubDistribute: element_distributes,
             priceProduct:afterChoosePrice,
-            stock: quantityInStock
+            stock: quantityInStock,
+            import_price:0
         })
         this.setState({
             distributeSelected: -1,

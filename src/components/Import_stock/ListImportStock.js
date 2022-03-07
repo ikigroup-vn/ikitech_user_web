@@ -18,6 +18,9 @@ import ItemImportStock from './ItemImportStock'
      handleDelete = (modal) =>{
          this.props.handleDelete(modal)
      }
+     handleCallbackPrice = (modal) =>{
+         this.props.handleCallbackPrice(modal)
+     }
 
     render() {
         var {listImportStock} = this.props
@@ -26,7 +29,7 @@ import ItemImportStock from './ItemImportStock'
             <div className='list-group' style={{marginTop:"10px"}}>
                 {listImportStock.map((item,index) =>{
                     return(
-                        <ItemImportStock item = {item} index ={index} handleCallbackQuantity ={this.handleCallbackQuantity} handleDelete ={this.handleDelete} />
+                        <ItemImportStock item = {item} index ={index} handleCallbackQuantity ={this.handleCallbackQuantity} handleDelete ={this.handleDelete} handleCallbackPrice = {this.handleCallbackPrice} />
                     )
                 })}
             </div>
