@@ -16,7 +16,7 @@ class BadgeTable extends Component {
         var paid = typeof order != "undefined" && order != null ? format(Number(order.PAID.total_final)) : 0
         var partiallly_paid = typeof order != "undefined" && order != null ? format(Number(order.PARTIALLY_PAID.total_final)) : 0
         var refunds = typeof order != "undefined" && order != null ? format(Number(order.REFUNDS.total_final)) : 0
-        var unpaid = typeof order != "undefined" && order != null ? format(Number(order.UNPAID.total_final)) : 0
+        var unpaid = typeof order != "undefined" && order != null ? format(Number(order.UNPAID?.total_final)) : 0
         var waitting_for_progressing = typeof order != "undefined" && order != null ? format(Number(order.WAITING_FOR_PROGRESSING.total_final)) : 0
 
 
@@ -25,7 +25,7 @@ class BadgeTable extends Component {
         var count_paid = typeof order != "undefined" && order != null ? order.PAID.total_order_count : 0
         var count_partially_paid = typeof order != "undefined" && order != null ? order.PARTIALLY_PAID.total_order_count : 0
         var count_refunds = typeof order != "undefined" && order != null ? order.REFUNDS.total_order_count : 0
-        var count_unpaid = typeof order != "undefined" && order != null ? order.UNPAID.total_order_count : 0
+        var count_unpaid = typeof order != "undefined" && order != null ? order.UNPAID?.total_order_count : 0
         var count_waitting_for_progressing = typeof order != "undefined" && order != null ? order.WAITING_FOR_PROGRESSING.total_order_count : 0
 
 

@@ -7,22 +7,28 @@ import * as Types from "../../constants/ActionType";
 import Alert from '../../components/Partials/Alert';
 import Pagination from '../../components/ProductAgency/Pagination';
 import * as productAction from "../../actions/product";
-import CardProduct from '../../components/Inventory/CardProduct';
-import ListInventorySheet from '../../components/Inventory/ListInventory'
-import ModalDetail from '../../components/Inventory/ModalDetail';
-import * as inventoryAction from "../../actions/inventory"
+import * as ImportAction from "../../actions/import_stock"
 import history from '../../history';
-class CreateInventory extends Component {
+import CardProduct from '../../components/Import_stock/CardProduct';
+import ModalDetail from '../../components/Import_stock/ModalDetail';
+import ModalSupplier from '../../components/Import_stock/ModalSupplier';
+import * as dashboardAction from "../../actions/dashboard";
+import ListImportStock from '../../components/Import_stock/ListImportStock';
+import { format } from '../../ultis/helpers';
+class EditImportStock extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            change:false,
-            listInventory: [],
+            change: false,
+            listImportStock: [],
             reality_exist_total: 0,
-            existing_branch:0,
-            deviant_total:0,
-            note:"",
-
+            existing_branch: 0,
+            price_total:0,
+            note: "",
+            infoSupplier: "",
+            tax:"",
+            discount:"",
+            cost:"",
             infoProduct: {
                 inventoryProduct: "",
                 idProduct: "",
@@ -41,26 +47,41 @@ class CreateInventory extends Component {
 
 
     shouldComponentUpdate(nextProps, nextState) {
-        var exist_branch = 0
         var reality_total = 0
-        if(nextState.change !== this.state.change){
-            nextState.listInventory.forEach((item) =>{
-                exist_branch = exist_branch + item.stock
+        var total_price = 0
+        if (nextState.change !== this.state.change) {
+            console.log("thay doi change")
+            nextState.listImportStock.forEach((item) => {
                 reality_total = parseInt(reality_total) + parseInt(item.reality_exist)
+                total_price = parseInt(total_price) + parseInt(item.priceProduct)
             })
-            this.setState({existing_branch:exist_branch,deviant_total:nextState.reality_exist_total - exist_branch,reality_exist_total : reality_total})
+            this.setState({ reality_exist_total: reality_total,price_total: total_price })
         }
-        if(!shallowEqual(this.state.listInventory,nextState.listInventory) || !shallowEqual(nextState.reality_exist_total,this.state.reality_exist_total)){
-
-            nextState.listInventory.forEach((item) =>{
-                exist_branch = exist_branch + item.stock
-            })
-            console.log("reality_exist_total",nextState.reality_exist_total)
-            this.setState({existing_branch:exist_branch,deviant_total:nextState.reality_exist_total - exist_branch})
-        }
-
         return true
+
     }
+
+    componentWillReceiveProps(nextProps) {
+        var total_price = 0
+        if(!shallowEqual(nextProps.itemImportStock,this.props.itemImportStock)){
+            const {discount,cost,tax,note} = nextProps.itemImportStock
+            const newImportStock = this.state.listImportStock
+            nextProps.itemImportStock.import_stock_items.forEach(item =>{
+                total_price = parseInt(total_price) + parseInt(item.import_price)
+                newImportStock.push({
+                    element_id:item.id,
+                    nameDistribute:item.distribute_name,
+                    nameElement:item.element_distribute_name,
+                    nameProduct:item.product.name,
+                    nameSubDistribute:item.sub_element_distribute_name,
+                    product_id:item.product.id,
+                    priceProduct : item.import_price,
+                    reality_exist: 0
+                    })
+            })
+            this.setState({listImportStock:newImportStock,price_total: total_price,discount:discount,tax:tax,cost:cost,note:note})  
+        }
+      }
 
     handleCallbackProduct = (modal) => {
         this.setState(
@@ -68,44 +89,55 @@ class CreateInventory extends Component {
                 infoProduct: modal
             })
     }
+    onChange = (e) =>{
+        this.setState({[e.target.name]:e.target.value})
+    }
     handleCallbackPushProduct = (modal) => {
-        const index_element = this.state.listInventory.map(e => e.element_id).indexOf(modal.element_id)
+        this.setState({ change: !this.state.change })
+        const index_element = this.state.listImportStock.map(e => e.element_id).indexOf(modal.element_id)
         if(index_element <0){
-            this.setState({ listInventory: [...this.state.listInventory, modal] })
+            this.setState({ listImportStock: [...this.state.listImportStock, modal] })
         }
     }
-    handleCallbackQuantity = (modal) =>{
+    handleCallbackSupplier = (modal) => {
+        this.setState({ infoSupplier: modal })
+    }
+    handleCallbackQuantity = (modal) => {
         var reality_total = 0
-        this.setState({reality_exist_total:modal.currentQuantity})
-        const newInventory = this.state.listInventory
+        const newInventory = this.state.listImportStock
         const index = newInventory.map(e => e.element_id).indexOf(modal.idElement)
-        if( newInventory[index] != null) {
+        if (newInventory[index] != null) {
             newInventory[index].reality_exist = modal.currentQuantity
-            console.log("newInventory",newInventory)
-            newInventory.forEach((item) =>{
+            newInventory.forEach((item) => {
                 reality_total = parseInt(reality_total) + parseInt(item.reality_exist)
             })
-            this.setState({ listInventory:newInventory, reality_exist_total:reality_total})    
+            this.setState({ listImportStock: newInventory, reality_exist_total: reality_total })
         }
-               
+
     }
 
-    handleDelete = (modal) =>{
-        this.setState({change:!this.state.change})
-        const newInventory = this.state.listInventory
-        const index = this.state.listInventory.map(e => e.element_id).indexOf(modal.idElement)
+    handleDelete = (modal) => {
+        this.setState({ change: !this.state.change })
+        const newInventory = this.state.listImportStock
+        const index = this.state.listImportStock.map(e => e.element_id).indexOf(modal.idElement)
         newInventory.splice(index, 1)
-        this.setState({listInventory:newInventory})
+        this.setState({ listImportStock: newInventory })
     }
 
 
-    CreateSheetInventory = () => {
-        const {store_code} = this.props.match.params
+    updateImportStock = () => {
+        const { store_code,id } = this.props.match.params
+        const { infoSupplier } = this.state
         const branch_id = localStorage.getItem('branch_id')
         const formData = {
             note: this.state.note,
-            tally_sheet_items:
-                this.state.listInventory.map((item) => {
+            status: 0,
+            supplier_id: infoSupplier.id_supplier,
+            tax: this.state.tax,
+            cost: this.state.cost,
+            discount: this.state.discount,
+            import_stock_items:
+                this.state.listImportStock.map((item) => {
                     return {
                         product_id: item.product_id,
                         reality_exist: item.reality_exist,
@@ -115,15 +147,14 @@ class CreateInventory extends Component {
                     }
                 })
         }
-        this.props.createInventorys(store_code,branch_id,formData)
-        history.goBack()
+        this.props.updateImportStock(store_code, branch_id, id, formData)
     }
     onChangeSearch = (e) => {
         this.setState({ searchValue: e.target.value });
     };
 
-    onChange = (e) =>{
-        this.setState({note:e.target.value})
+    onChanges = (e) => {
+        this.setState({ note: e.target.value })
     }
     handleOnChange = (e) => {
         var name = e.target.name
@@ -145,13 +176,17 @@ class CreateInventory extends Component {
     }
 
     componentDidMount() {
+        const { store_code,id } = this.props.match.params
         const branch_id = localStorage.getItem('branch_id')
-        this.props.fetchAllProductV2(this.props.match.params.store_code, branch_id);
+        this.props.fetchAllProductV2(store_code, branch_id);
+        this.props.fetchAllSupplier(store_code);
+        this.props.fetchDetailImportStock(store_code, branch_id, id)
     }
 
     render() {
+        var { supplier } = this.props;
         var { store_code } = this.props.match.params
-        var { searchValue, numPage, listInventory,existing_branch,reality_exist_total } = this.state
+        var { searchValue, numPage, listImportStock, infoSupplier, price_total, reality_exist_total,discount,cost,tax } = this.state
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
@@ -160,15 +195,19 @@ class CreateInventory extends Component {
                         <div id='content'>
                             <Topbar store_code={store_code} />
                             <div className='container-fluid'>
+                                
                                 <div className='row'>
                                     <div className='col-lg-4 col-xl-4 col-md-12 col-sm-12'>
                                         <div className='card shadow mb-4' style={{ height: "100%" }}>
-                                            <div className='card-header py-3' style={{ padding: "0" }}>
-                                                Phiếu kiểm hàng
+                                            <div className='card-header py-3' style={{ padding: "0", display: "flex" }}>
+                                                <button class="btn btn-primary" type="submit" data-toggle="modal" data-target="#supplier"><i class="fas fa-user"></i></button>
+                                                <div class="card" style={{ marginLeft: "10px", width: "80%" }}>
+                                                    <div class="card-body" style={{ padding: '0px' }}>{infoSupplier ? `${infoSupplier.name}` : 'Chọn nhà cung cấp'}</div>
+                                                </div>
                                             </div>
 
                                             <div className='card-bodys' style={{ width: "0 10px", height: "380px", overflowY: "auto" }}>
-                                                <ListInventorySheet store_code={store_code} listInventory={listInventory} handleCallbackQuantity={this.handleCallbackQuantity} handleDelete = {this.handleDelete} />
+                                                <ListImportStock store_code={store_code} listImportStock={listImportStock} handleCallbackQuantity={this.handleCallbackQuantity} handleDelete={this.handleDelete} />
                                             </div>
                                             <div className='voucher-input' style={{ margin: "10px 0px" }}>
 
@@ -176,24 +215,38 @@ class CreateInventory extends Component {
                                             <div class="card">
                                                 <div class="card-body" style={{ padding: "0" }}>
                                                     <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                                        <div>SL tồn thực tế:</div>
+                                                        <div>Tổng số lượng:</div>
                                                         <div>{reality_exist_total}</div>
                                                     </div>
                                                     <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                                        <div>SL tồn chi nhánh:</div>
-                                                        <div>{existing_branch}</div>
+                                                        <div>Tổng tiền hàng:</div>
+                                                        <div>{format(Number(price_total))}</div>
                                                     </div>
-                                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                                        <div>SL chênh lệch:</div>
-                                                        <div>{this.state.deviant_total}</div>
+                                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                                        <div>Chiết khấu:</div>
+                                                        <div style={{ width: "50%" }}>
+                                                            <input type="text" class="form-control" id="usr" value={discount} name="discount" onChange={this.onChange} />
+                                                        </div>
+                                                    </div>
+                                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "5px" }}>
+                                                        <div>Chi phí nhập hàng:</div>
+                                                        <div style={{ width: "50%" }}>
+                                                            <input type="text" name ="cost" value={cost} class="form-control" id="usr" onChange={this.onChange} />
+                                                        </div>
+                                                    </div>
+                                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "5px"  }}>
+                                                        <div>Thuế:</div>
+                                                        <div style={{ width: "50%" }}>
+                                                            <input type="text" name ="tax" value={tax} class="form-control" id="usr" onChange={this.onChange} />
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="form-group">
                                                 <label for="comment">Thêm ghi chú:</label>
-                                                <textarea class="form-control" rows="5" id="comment" style={{height:"50px"}} onChange={this.onChange}></textarea>
+                                                <textarea class="form-control" rows="5" id="comment" style={{ height: "50px" }} value ={this.state.note} onChange={this.onChanges}></textarea>
                                             </div>
-                                            <button className='btn btn-danger' style={{ marginTop: "20px" }} onClick={() => this.CreateSheetInventory()}>Tạo phiếu kiểm</button>
+                                            <button className='btn btn-danger' style={{ marginTop: "20px" }} onClick={() => this.updateImportStock()}>Lưu</button>
                                         </div>
                                     </div>
 
@@ -227,6 +280,7 @@ class CreateInventory extends Component {
                                                     </div>
                                                 </form>
                                                 <ModalDetail modal={this.state.infoProduct} handleCallbackPushProduct={this.handleCallbackPushProduct} />
+                                                <ModalSupplier supplier={supplier} handleCallbackSupplier={this.handleCallbackSupplier} />
                                             </div>
                                             <div className='card-body'>
                                                 <CardProduct store_code={store_code} handleCallbackProduct={this.handleCallbackProduct} />
@@ -254,17 +308,25 @@ const mapStateToProps = (state) => {
     return {
         products: state.productReducers.product.allProduct,
         sheetsInventory: state.inventoryReducers.inventory_reducer.sheetsInventory,
+        supplier: state.storeReducers.store.supplier,
+        itemImportStock: state.importStockReducers.import_reducer.detailImportStock,
     };
 };
 const mapDispatchToProps = (dispatch, props) => {
     return {
         fetchAllProductV2: (store_code, branch_id, page, params) => {
             dispatch(productAction.fetchAllProductV2(store_code, branch_id, page, params));
-        
+
         },
-        createInventorys:(store_code,branch_id,data) =>{
-            dispatch(inventoryAction.createInventorys(store_code,branch_id,data))
-        }
+        updateImportStock: (store_code, branch_id,id, data) => {
+            dispatch(ImportAction.updateImportStock(store_code, branch_id,id, data))
+        },
+        fetchAllSupplier: (store_code) => {
+            dispatch(dashboardAction.fetchAllSupplier(store_code))
+        },
+        fetchDetailImportStock: (store_code, branch_id, id) => {
+            dispatch(ImportAction.fetchDetailImportStock(store_code, branch_id, id))
+        },
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(CreateInventory);
+export default connect(mapStateToProps, mapDispatchToProps)(EditImportStock);

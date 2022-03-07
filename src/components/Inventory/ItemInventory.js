@@ -5,37 +5,45 @@ class ItemInventory extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            currentQuantity: 1,
+            currentQuantity: 0,
             distribute: "",
             maxQuantityDistribute: "",
-            deviant:0,
-            item:[]
+            deviant: 0,
+            item: ""
 
         }
         this.nameElementDistribute = ""
         this.nameSubElementDistribute = ""
     }
     componentWillReceiveProps(nextProps) {
-        console.log("nextProps", nextProps)
         if (!shallowEqual(this.props.item.quantity, nextProps.item.quantity)) {
-            this.setState({ currentQuantity: nextProps.item.quantity })
+            this.setState({ currentQuantity: nextProps.item.quantity, item: nextProps.item })
         }
 
     }
-    shouldComponentUpdate(nextProps,nextState){
-        if(!shallowEqual(this.state.currentQuantity,nextState.currentQuantity)){
-            this.props.handleCallbackQuantity({currentQuantity:nextState.currentQuantity})
+    shouldComponentUpdate(nextProps, nextState) {
+        const elementId = nextProps.item.element_id
+        if (!shallowEqual(this.state.currentQuantity, nextState.currentQuantity)) {
+            this.props.handleCallbackQuantity({ currentQuantity: nextState.currentQuantity, idElement: elementId })
+        }
+
+        if (!shallowEqual(this.state.currentQuantity, nextProps.item.reality_exist)) {
+            this.setState({ currentQuantity: nextProps.item.reality_exist })
+        }
+
+        if (!shallowEqual(this.state.item, nextState.item)) {
+            this.setState({ currentQuantity: nextState.item.reality_exist, deviant: nextState.item.reality_exist - nextState.item.stock })
         }
         return true
     }
-    componentDidMount =()=>{
+    componentDidMount = () => {
 
-        this.setState({item:this.props.item,deviant:this.props.item.stock-1})
+        this.setState({ item: this.props.item, deviant: 0 - this.props.item.stock })
     }
 
     subQuantity() {
-        const q = this.state.currentQuantity - 1 < 1 ? 1 : this.state.currentQuantity - 1
-        const d = this.props.item.stock - q
+        const q = this.state.currentQuantity - 1 < 0 ? 0 : this.state.currentQuantity - 1
+        const d = q - this.props.item.stock 
         this.setState({
             currentQuantity: q,
             deviant: d
@@ -43,36 +51,40 @@ class ItemInventory extends Component {
     }
 
     addQuantity() {
-        const q = this.state.currentQuantity +1
-        const d = this.props.item.stock - q
-        this.setState({currentQuantity:q,deviant:d})
+        const q = this.state.currentQuantity + 1
+        const d = q - this.props.item.stock 
+        this.setState({ currentQuantity: q, deviant: d })
+    }
+    handleDelete(id) {
+        this.props.handleDelete({ idElement: id })
     }
     handleOnChange = (e) => {
-
-
+        const d = this.props.item.stock - e.target.value
+        this.setState({ currentQuantity: e.target.value, deviant: d })
     }
-    handleDelete = (id, productId) => {
-        this.props.handleDelete(id, productId)
-    }
+
     render() {
-        const { currentQuantity,deviant,item } = this.state
-        return (
-            <div className='list-group-item'style={{zIndex:"1"}}>
-                <div className='row' style={{position: "relative", width: "100%", margin: "0" }}>
-                    <div className='col-8' style={{ padding: "0px" }}>
-                        <div className='wrap-name' >
-                            <div style={{ display: "flex" }}>
-                                <div className='price-order' style={{ color: "gray", marginRight:"5px" }}>Tên:</div>
-                                <div className='name-order'>{item.nameProduct}</div>
-                            </div>
+        const { currentQuantity } = this.state
 
-                            <div style={{ display: "flex" }}>
-                                <div className='price-order' style={{ color: "gray", marginRight:"5px" }}>Mã SKU:</div>
-                                <div className='code-sku'>6437434</div>
-                            </div>
-                        </div>
+        const { item } = this.props
+        const deviant =  item.reality_exist - item.stock
+        return (
+            <div className='list-group-item' style={{ marginBottom: "10px", borderTopWidth: "1px", borderRadius: "7px" }}>
+                <div className='wrap-name' style={{display:"flex",justifyContent:"space-between"}}>
+                    <div style={{ display: "flex" }}>
+                        <div className='price-order' style={{ color: "gray", marginRight: "5px" }}>Tên:</div>
+                        <div className='name-order'>{item.nameProduct}</div>
                     </div>
-                    <div className='col-4' style={{ paddingLeft: "0" }}>
+                    {item.nameElement || item.nameSubDistribute ? <div style={{ display: "flex" }}>
+                        <div className='price-order' style={{ color: "gray", marginRight: "5px" }}>Phân loại:</div>
+                        <div className='name-order'>{item.nameElement ? `${item.nameElement} ` : ""}{item.nameSubDistribute ? item.nameSubDistribute : ""}</div>
+                    </div> : ""}
+                </div>
+                <div className='row' style={{ position: "relative", width: "100%", margin: "0" }}>
+                    <div className='col-6' style={{ padding: "0px" }}>
+                        Tồn thực tế
+                    </div>
+                    <div className='col-6' style={{ paddingLeft: "0" }}>
                         <div className="" style={{ float: "right", border: "1px solid #9c9898ba", borderRadius: "2px" }}>
                             <button className='btn-sub' onClick={() => this.subQuantity()} style={{ width: "20px", border: "none" }}>-</button>
                             <input className='input-quantity' onChange={this.handleOnChange} style={{ width: "40px", textAlign: "center" }} value={currentQuantity}></input>
@@ -80,8 +92,8 @@ class ItemInventory extends Component {
                         </div>
                     </div>
                     <a
-                        style={{ position: "absolute", right: "-16px", top: "-14px", color: "red" }}
-                        onClick={() => this.handleDelete(item.id, item.product.id)}
+                        style={{ position: "absolute", right: "-16px", top: "-37px", color: "red" }}
+                        onClick={() => this.handleDelete(item.element_id)}
                     >
                         <i class="fas fa-close close-status "></i>
                     </a>

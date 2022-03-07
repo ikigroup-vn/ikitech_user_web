@@ -64,9 +64,9 @@ export const menu =  [
             {
               class : "customer_config_point",
               display : "hide",
-              name: "nhập hàng",
+              name: "Nhập hàng",
               exact: true,
-              to: "/reward_point",
+              to: "/import_stocks/index",
             },
       
           ],

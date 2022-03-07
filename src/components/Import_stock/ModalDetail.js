@@ -110,9 +110,9 @@ class ModalDetail extends Component {
                 var indexDistributes = sub_element_distributes.map(e => e.name).indexOf(nameElement)
                 var sub_elements = sub_element_distributes[indexDistributes]
                 this.setState({
-                    afterChoosePrice: sub_elements.cost_of_capital,
-                    priceBeforeDiscount: sub_elements.price,
-                    quantityInStock: sub_elements.stock,
+                    afterChoosePrice: sub_elements?.cost_of_capital,
+                    priceBeforeDiscount: sub_elements?.price,
+                    quantityInStock: sub_elements?.stock,
                     idElement:id,
                     messageErr: ""
                 })
@@ -134,7 +134,6 @@ class ModalDetail extends Component {
     handleCallback = () => {
         var info = this.props.modal
         const { distributeName, distributeValue, element_distributes, quantityInStock, idElement,afterChoosePrice,afterPrice } = this.state
-        console.log("info",info)
         if (info.distributeProduct.length === 0) {
             window.$('.modal').modal('hide');
             this.props.handleCallbackPushProduct({
@@ -196,7 +195,7 @@ class ModalDetail extends Component {
     }
     componentWillReceiveProps(nextProps, nextState) {
 
-        this.setState({ quantityInStock: nextProps.modal.inventoryProduct.main_stock })
+        this.setState({ quantityInStock: nextProps.modal.quantityProductWithDistribute })
         if (nextProps.modal.priceProduct !== this.state.afterPrice) {
             this.setState({ afterPrice: nextProps.modal.priceProduct })
         }
@@ -215,7 +214,7 @@ class ModalDetail extends Component {
         var inforProduct = this.props.modal
         var itemParent = inforProduct && inforProduct.inventoryProduct && inforProduct.inventoryProduct.distributes !== null && inforProduct.inventoryProduct.distributes.length > 0 ? inforProduct.inventoryProduct.distributes[0] : []
         return (
-            <div class="modal" id="modalDetail">
+            <div class="modal" id="modalDetails">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div className='model-header-modal' style={{ display: 'flex', justifyContent: "space-between", margin: "10px 15px" }}>
@@ -223,7 +222,9 @@ class ModalDetail extends Component {
                             <button type="button" class="close" onClick={this.handleClose} data-dismiss="modal">&times;</button>
                         </div>
                         <div class="modal-body" style={{ position: "relative" }}>
-                        <button class="btn btn-info" onClick={this.handleCallback} style={{ backgroundColor: "green", position: "absolute", right: "15px", top: "20px", zIndex: "100" }}>Thêm</button>
+                            {this.state.quantityInStock === 0 ? <button class="btn btn-secondary" style={{ position: "absolute", right: "15px", top: "20px", zIndex: "100" }}>Hết hàng</button> :
+                                <button class="btn btn-info" onClick={this.handleCallback} style={{ backgroundColor: "green", position: "absolute", right: "15px", top: "20px", zIndex: "100" }}>Thêm</button>
+                            }
                             <div className='model-card row' style={{ margin: "5px", width: "80%" }}>
                                 <div className='name-voucher col-4' style={{ width: "120px", height: "120px", padding: "8px" }}>
                                     <div style={{ justifyContent: "center", width: "100%", height: "100%", borderRadius: "0.25em", display: "flex", alignItems: "center" }}>

@@ -12,17 +12,16 @@ import ListInventorySheet from '../../components/Inventory/ListInventory'
 import ModalDetail from '../../components/Inventory/ModalDetail';
 import * as inventoryAction from "../../actions/inventory"
 import history from '../../history';
-class CreateInventory extends Component {
+class EditInventory extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            change:false,
             listInventory: [],
             reality_exist_total: 0,
             existing_branch:0,
             deviant_total:0,
             note:"",
-
+            change:false,
             infoProduct: {
                 inventoryProduct: "",
                 idProduct: "",
@@ -50,17 +49,35 @@ class CreateInventory extends Component {
             })
             this.setState({existing_branch:exist_branch,deviant_total:nextState.reality_exist_total - exist_branch,reality_exist_total : reality_total})
         }
-        if(!shallowEqual(this.state.listInventory,nextState.listInventory) || !shallowEqual(nextState.reality_exist_total,this.state.reality_exist_total)){
-
+        if(!shallowEqual(nextState.listInventory,this.state.listInventory) || !shallowEqual(nextState.reality_exist_total,this.state.reality_exist_total)){
             nextState.listInventory.forEach((item) =>{
                 exist_branch = exist_branch + item.stock
+                reality_total = parseInt(reality_total) + parseInt(item.reality_exist)
             })
-            console.log("reality_exist_total",nextState.reality_exist_total)
-            this.setState({existing_branch:exist_branch,deviant_total:nextState.reality_exist_total - exist_branch})
+            this.setState({existing_branch:exist_branch,deviant_total:nextState.reality_exist_total - exist_branch,reality_exist_total : reality_total})
         }
-
+        
         return true
     }
+    componentWillReceiveProps(nextProps) {
+        if(!shallowEqual(nextProps.itemInventory,this.props.itemInventory)){
+            const newInventory = this.state.listInventory
+            nextProps.itemInventory.tally_sheet_items.forEach(item =>{
+                newInventory.push({
+                    element_id:item.id,
+                    nameDistribute:item.distribute_name,
+                    nameElement:item.element_distribute_name,
+                    nameProduct:item.product.name,
+                    nameSubDistribute:item.sub_element_distribute_name,
+                    product_id:item.product.id,
+                    reality_exist:item.reality_exist,
+                    stock:item.existing_branch})
+            })
+            this.setState({
+                listInventory:newInventory,note:nextProps.itemInventory.note
+                })  
+        }
+      }
 
     handleCallbackProduct = (modal) => {
         this.setState(
@@ -76,21 +93,20 @@ class CreateInventory extends Component {
     }
     handleCallbackQuantity = (modal) =>{
         var reality_total = 0
-        this.setState({reality_exist_total:modal.currentQuantity})
         const newInventory = this.state.listInventory
         const index = newInventory.map(e => e.element_id).indexOf(modal.idElement)
-        if( newInventory[index] != null) {
-            newInventory[index].reality_exist = modal.currentQuantity
-            console.log("newInventory",newInventory)
-            newInventory.forEach((item) =>{
-                reality_total = parseInt(reality_total) + parseInt(item.reality_exist)
-            })
-            this.setState({ listInventory:newInventory, reality_exist_total:reality_total})    
-        }
-               
+        newInventory[index].reality_exist = modal.currentQuantity
+        newInventory.forEach((item) =>{
+            reality_total = parseInt(reality_total) + parseInt(item.reality_exist)
+        })
+        console.log("reality_total",modal.currentQuantity)
+        this.setState({
+            listInventory:newInventory,
+            reality_exist_total:reality_total,
+            })           
     }
 
-    handleDelete = (modal) =>{
+    handleDelete = (modal) =>{ 
         this.setState({change:!this.state.change})
         const newInventory = this.state.listInventory
         const index = this.state.listInventory.map(e => e.element_id).indexOf(modal.idElement)
@@ -99,8 +115,8 @@ class CreateInventory extends Component {
     }
 
 
-    CreateSheetInventory = () => {
-        const {store_code} = this.props.match.params
+    EditSheetInventory = () => {
+        const {store_code,id} = this.props.match.params
         const branch_id = localStorage.getItem('branch_id')
         const formData = {
             note: this.state.note,
@@ -115,7 +131,7 @@ class CreateInventory extends Component {
                     }
                 })
         }
-        this.props.createInventorys(store_code,branch_id,formData)
+        this.props.editInventorys(store_code,branch_id,id,formData)
         history.goBack()
     }
     onChangeSearch = (e) => {
@@ -146,10 +162,13 @@ class CreateInventory extends Component {
 
     componentDidMount() {
         const branch_id = localStorage.getItem('branch_id')
-        this.props.fetchAllProductV2(this.props.match.params.store_code, branch_id);
+        const {store_code,id} = this.props.match.params
+        this.props.fetchAllProductV2(store_code, branch_id);
+        this.props.fetchDetailInventory(store_code, branch_id,id)
     }
 
     render() {
+        var { products } = this.props;
         var { store_code } = this.props.match.params
         var { searchValue, numPage, listInventory,existing_branch,reality_exist_total } = this.state
         return (
@@ -191,9 +210,9 @@ class CreateInventory extends Component {
                                             </div>
                                             <div class="form-group">
                                                 <label for="comment">Thêm ghi chú:</label>
-                                                <textarea class="form-control" rows="5" id="comment" style={{height:"50px"}} onChange={this.onChange}></textarea>
+                                                <textarea class="form-control" rows="5" id="comment" style={{height:"50px"}} value ={this.state.note} onChange={this.onChange}></textarea>
                                             </div>
-                                            <button className='btn btn-danger' style={{ marginTop: "20px" }} onClick={() => this.CreateSheetInventory()}>Tạo phiếu kiểm</button>
+                                            <button className='btn btn-danger' style={{ marginTop: "20px" }} onClick={() => this.EditSheetInventory()}>Lưu</button>
                                         </div>
                                     </div>
 
@@ -254,6 +273,7 @@ const mapStateToProps = (state) => {
     return {
         products: state.productReducers.product.allProduct,
         sheetsInventory: state.inventoryReducers.inventory_reducer.sheetsInventory,
+        itemInventory: state.inventoryReducers.inventory_reducer.itemInventory,
     };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -262,9 +282,12 @@ const mapDispatchToProps = (dispatch, props) => {
             dispatch(productAction.fetchAllProductV2(store_code, branch_id, page, params));
         
         },
-        createInventorys:(store_code,branch_id,data) =>{
-            dispatch(inventoryAction.createInventorys(store_code,branch_id,data))
+        editInventorys:(store_code,branch_id,id,data) =>{
+            dispatch(inventoryAction.editInventorys(store_code,branch_id,id,data))
+        },
+        fetchDetailInventory: (store_code, branch_id, id) => {
+            dispatch(inventoryAction.fetchDetailInventory(store_code, branch_id, id))
         }
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(CreateInventory);
+export default connect(mapStateToProps, mapDispatchToProps)(EditInventory);

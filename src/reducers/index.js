@@ -36,6 +36,7 @@ import {vipUserReducers} from "./vip_user"
 import {agencyReducers} from "./agency"
 import {orderReducers} from "./order_product"
 import {inventoryReducers} from "./inventory"
+import {importStockReducers} from "./ImportStock"
 
 
 const appReducers = combineReducers({
@@ -76,6 +77,7 @@ const appReducers = combineReducers({
     agencyReducers,
     orderReducers,
     inventoryReducers,
+    importStockReducers,
 })
 
 export default appReducers;

@@ -5,12 +5,14 @@ import Footer from '../../components/Partials/Footer';
 import Sidebar from '../../components/Partials/Sidebar'
 import Topbar from '../../components/Partials/Topbar'
 import * as Types from "../../constants/ActionType";
-import * as inventoryAction from "../../actions/inventory"
+import * as ImportAction from "../../actions/import_stock"
 import { Link } from 'react-router-dom';
-import Pagination from '../../components/Inventory/Pagination';
+import moment from 'moment';
+import { format } from '../../ultis/helpers'
+import Pagination from '../../components/Import_stock/Pagination';
 
 
-class Inventory extends Component {
+class ImportStock extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -20,7 +22,7 @@ class Inventory extends Component {
     componentDidMount() {
         const { store_code } = this.props.match.params
         const branch_id = localStorage.getItem('branch_id')
-        this.props.fetchAllInventory(store_code, branch_id)
+        this.props.fetchAllImportStock(store_code, branch_id)
     }
     onChangeSearch = (e) => {
         this.setState({ searchValue: e.target.value });
@@ -32,26 +34,25 @@ class Inventory extends Component {
         const branch_id = localStorage.getItem('branch_id')
         const value = this.state.searchValue
         const params = `&search=${value}`
-        this.props.fetchAllInventory(store_code, branch_id, 1, params)
+        this.props.fetchAllImportStock(store_code, branch_id, 1, params)
     }
-    showData = (listInventory,store_code) => {
+
+    showData = (listImportStock,store_code) => {
         var result = null
-        if (listInventory) {
-            result = listInventory.map((item, index) => {
+        if (listImportStock) {
+            result = listImportStock.map((item, index) => {
+                var datetime = moment(item.created_at, "YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY HH:mm");
                 return (
                     <tr>
                         <td>{index + 1}</td>
                         <td>{item.code}</td>
-                        <td>{item.branch.name}</td>
-                        <td>{item.reality_exist}</td>
-                        <td>{item.existing_branch}</td>
-                        <td>{item.deviant}</td>
-                        <td>
-                            {item.status === 0 ? "đã kiểm kho" : "đã cân bằng"}
-                        </td>
+                        <td>{format(Number(item.total_final))}</td>
+                        <td>{item.supplier.name}</td>
+                        <td>{item.status===0?"Đặt hàng":item.status===1?"Duyệt":item.status===2?"Nhập kho":item.status===3?"Hoàn thành":item.status===4?"Đã hủy":item.status===5?"Kết thúc":item.status===6?"Trả hàng":""}</td>
+                        <td>{datetime}</td>
                         <td>
                             <Link
-                                to={`/inventory/detail/${store_code}/${item.id}`}
+                                to={`/import_stocks/detail/${store_code}/${item.id}`}
                                 class="btn btn-primary btn-sm"
                             >
                                 <i class="fa fa-eye"></i> Xem
@@ -67,7 +68,7 @@ class Inventory extends Component {
     }
     render() {
         const { store_code } = this.props.match.params
-        const { sheetsInventory } = this.props
+        const { listImportStock } = this.props
         const { searchValue } = this.state
         return (
             <div id="wrapper">
@@ -86,8 +87,8 @@ class Inventory extends Component {
                                 <div
                                     style={{ display: "flex", justifyContent: "flex-end" }}
                                 >
-                                    <Link to={`/inventory/create/${store_code}`} class="btn btn-primary btn-sm" >
-                                        <i class="fa fa-plus"></i> Tạo phiếu kiểm kho
+                                    <Link to={`/import_stock/create/${store_code}`} class="btn btn-primary btn-sm" >
+                                        <i class="fa fa-plus"></i> Tạo đơn nhập hàng
                                     </Link>
                                 </div>
 
@@ -106,7 +107,7 @@ class Inventory extends Component {
                                                     value={searchValue}
                                                     onChange={this.onChangeSearch}
                                                     class="form-control"
-                                                    placeholder="Nhập mã phiếu"
+                                                    placeholder="Nhập mã đơn"
                                                 />
                                                 <div class="input-group-append">
                                                     <button
@@ -129,19 +130,18 @@ class Inventory extends Component {
                                                     <tr>
                                                         <th>STT</th>
                                                         <th>Mã phiếu</th>
-                                                        <th>Tên chi nhánh</th>
-                                                        <th>Tồn thực tế</th>
-                                                        <th>Tồn chi nhánh</th>
-                                                        <th>Chênh lệch</th>
+                                                        <th>Tổng tiền</th>
+                                                        <th>Nhà cung cấp</th>
                                                         <th>Trạng thái</th>
+                                                        <th>Thời gian</th>
                                                         <th>Hành động</th>
                                                     </tr>
                                                 </thead>
 
-                                                <tbody>{this.showData(sheetsInventory?.data,store_code)}</tbody>
+                                                <tbody>{this.showData(listImportStock?.data,store_code)}</tbody>
                                             </table>
                                         </div>
-                                        <Pagination store_code ={store_code} sheetsInventory = {sheetsInventory}/>
+                                        <Pagination store_code ={store_code} listImportStock ={listImportStock}/>
                                     </div>
                                 </div>
 
@@ -156,14 +156,14 @@ class Inventory extends Component {
 }
 const mapStateToProps = (state) => {
     return {
-        sheetsInventory: state.inventoryReducers.inventory_reducer.sheetsInventory,
+        listImportStock: state.importStockReducers.import_reducer.listImportStock,
     }
 }
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        fetchAllInventory: (store_code, branch_id, page, pagram) => {
-            dispatch(inventoryAction.fetchAllInventory(store_code, branch_id, page, pagram))
+        fetchAllImportStock: (store_code,branch_id,page,params) =>{
+            dispatch(ImportAction.fetchAllImportStock(store_code,branch_id,page,params))
         }
     }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(Inventory)
+export default connect(mapStateToProps, mapDispatchToProps)(ImportStock)

@@ -50,7 +50,7 @@ class Topbar extends Component {
       result = stores.map((data, index) => {
         var selected = data.store_code === store_code ? true : false
         return (
-          <option value={data.id} selected={selected} >
+          <option value={data.id} key={index} selected={selected} >
             {data.name}
           </option>
 

@@ -15,7 +15,6 @@ class Sidebar extends Component {
 
 
   shouldComponentUpdate(nextProps, nextState) {
-    console.log(nextProps.permission, this.props.permission)
     if (!shallowEqual(nextProps.permission, this.props.permission)) {
       return true
     }
@@ -26,57 +25,6 @@ class Sidebar extends Component {
 
 
   componentDidUpdate(prevProps, prevState) {
-
-    // if (this.props.isLoadPermission == false && typeof this.props.permission.product_list != "undefined" ) {
-    //   var permissions = this.props.permission
-    //   var arr = [
-    //     "product_list",
-
-    //     "product_category_list",
-
-    //     "customer_list",
-    //     "customer_review_list",
-    //     "promotion_discount_list",
-
-    //     "promotion_voucher_list",
-
-    //     "promotion_combo_list",
-
-    //     "post_list",
-    //     "post_category_list",
-    //     "delivery_pick_address_list",
-
-    //     "payment_list",
-    //     "notification_schedule_list",
-    //     "app_theme_edit",
-    //     "popup_list",
-    //     "web_theme_edit",
-
-    //     "collaborator_list",
-
-    //     "chat_list",
-    //     "report_view",
-
-    //     "decentralization_list",
-
-    //     "staff_list"
-
-    //   ]
-    //   arr.forEach(element => {
-    //     var item = permissions[element]
-    //     console.log(item)
-    //     var display = item == true ? "show" : "hide"
-    //     if (display == "show") {
-    //       window.$(`.${element}`).removeClass("hide").addClass("show");
-    //     }
-    //     else {
-    //       window.$(`.${element}`).removeClass("show").addClass("hide");
-    //     }
-    //   });
-
-    //   this.props.loadPermission({ type : Types.LOAD_PERMISSION  , data : true})
-
-    // }
 
 
     const location = window.location.pathname;
@@ -179,7 +127,7 @@ class Sidebar extends Component {
 
           return (
             <React.Fragment>
-              <li className={`nav-item ${active} ${disableHeading} `}>
+              <li className={`nav-item ${active} ${disableHeading} `} key={index}>
                 <a
                   className={`nav-link collapsed ${link.open}-collapse`}
                   href="#"
@@ -278,11 +226,11 @@ class Sidebar extends Component {
     }
     return result
   }
-  MenuLink_1 = (title, link) => {
+  MenuLink_1 = (title, link,index) => {
     var disableHeading = this.checkDisplayTitle(link) == false ? "show" : "hide"
     return (
       <React.Fragment>
-        <div className={`sidebar-heading ${disableHeading}`}>{title}</div>
+        <div className={`sidebar-heading ${disableHeading}`} key ={index}>{title}</div>
 
         {this.MenuLink_2(link)}
 
@@ -295,7 +243,7 @@ class Sidebar extends Component {
     var result = null;
     if (menu.length > 0) {
       result = menu.map((menu, index) => {
-        return this.MenuLink_1(menu.title, menu.link);
+        return this.MenuLink_1(menu.title, menu.link,index);
       });
     }
     return result;
@@ -307,7 +255,6 @@ class Sidebar extends Component {
 
     var { badges } = this.props;
 
-    console.log(badges)
     return (
       <div className="col-2 col-2-nav">
         <ul

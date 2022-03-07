@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
-import ItemInventory from './ItemInventory'
+import ItemImportStock from './ItemImportStock'
 
 
 
- class ListInventorySheet extends Component {
+
+ class ListImportStock extends Component {
      constructor(props){
          super(props)
          this.state ={
@@ -19,13 +20,13 @@ import ItemInventory from './ItemInventory'
      }
 
     render() {
-        var {listInventory} = this.props
+        var {listImportStock} = this.props
         
         return (
             <div className='list-group' style={{marginTop:"10px"}}>
-                {listInventory.map((item,index) =>{
+                {listImportStock.map((item,index) =>{
                     return(
-                        <ItemInventory item = {item} handleCallbackQuantity ={this.handleCallbackQuantity} handleDelete ={this.handleDelete} />
+                        <ItemImportStock item = {item} index ={index} handleCallbackQuantity ={this.handleCallbackQuantity} handleDelete ={this.handleDelete} />
                     )
                 })}
             </div>
@@ -33,4 +34,4 @@ import ItemInventory from './ItemInventory'
     }
 }
 
-export default ListInventorySheet;
+export default ListImportStock;
