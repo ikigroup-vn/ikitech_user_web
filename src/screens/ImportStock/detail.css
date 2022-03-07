@@ -55,14 +55,16 @@
     position: absolute;
     left: 0;
     top: 16px;
-    z-index: -1
+    z-index: -1;
+    height: 5px;
 }
 
 #progressbar li:last-child:after {
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
     position: absolute;
-    left: -50%
+    left: -50%;
+    height: 5px;
 }
 
 #progressbar li:nth-child(2):after,
@@ -91,6 +93,9 @@
 #progressbar li.active:after {
     background: #651FFF
 }
+#progressbar li.active:after {
+   height: 5px;
+}
 #progressbar li.activeDelete:before {
     background: #f52a3b
 }
@@ -108,4 +113,6 @@
     width: 50px;
     margin-right: 15px
 }
-
+.time-history {
+    font-size: 13px;
+}

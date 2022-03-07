@@ -6,8 +6,8 @@ class ItemDetail extends Component {
     render() {
         const { listItem } = this.props
         return (
-            <div className='list-group-item' style={{marginBottom:"10px",borderTopWidth: "1px",borderRadius:"7px"}}>
-                <div className='' style={{ display: "flex", padding: "0px" }}>
+            <div className='item_detail' style={{borderBottom:"1px solid #8080808c"}}>
+                <div className='' style={{ display: "flex", padding: "10px" }}>
                     <img src={listItem.product.images.length > 0 ? listItem.product.images[0].image_url : Env.IMG_NOT_FOUND } alt='' width="40px" height="63px" style={{width:"16%"}}></img>
                     <div className='wrap-name' style={{ marginLeft: "10px", width:"77%"}} >
                         <div style={{ display: "flex" }}>

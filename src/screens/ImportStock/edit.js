@@ -53,7 +53,7 @@ class EditImportStock extends Component {
             console.log("thay doi change")
             nextState.listImportStock.forEach((item) => {
                 reality_total = parseInt(reality_total) + parseInt(item.reality_exist)
-                total_price = parseInt(total_price) + parseInt(item.priceProduct)
+                total_price = parseInt(total_price) + parseInt(item.import_price )* parseInt(item.reality_exist )
             })
             this.setState({ reality_exist_total: reality_total,price_total: total_price })
         }
@@ -75,8 +75,8 @@ class EditImportStock extends Component {
                     nameProduct:item.product.name,
                     nameSubDistribute:item.sub_element_distribute_name,
                     product_id:item.product.id,
-                    priceProduct : item.import_price,
-                    reality_exist: 0
+                    import_price : item.import_price,
+                    reality_exist: 1
                     })
             })
             this.setState({listImportStock:newImportStock,price_total: total_price,discount:discount,tax:tax,cost:cost,note:note})  
@@ -113,7 +113,15 @@ class EditImportStock extends Component {
             })
             this.setState({ listImportStock: newInventory, reality_exist_total: reality_total })
         }
+        this.setState({ change: !this.state.change })
+    }
 
+    handleCallbackPrice = (modal) => {
+        this.setState({ change: !this.state.change })
+        const newInventory = this.state.listImportStock
+        const index = newInventory.map(e => e.element_id).indexOf(modal.idElement)
+        newInventory[index].import_price = modal.import_price
+        this.setState({ listImportStock: newInventory})
     }
 
     handleDelete = (modal) => {
@@ -140,10 +148,11 @@ class EditImportStock extends Component {
                 this.state.listImportStock.map((item) => {
                     return {
                         product_id: item.product_id,
-                        reality_exist: item.reality_exist,
+                        quantity: item.reality_exist,
                         distribute_name: item.nameDistribute,
                         element_distribute_name: item.nameElement,
-                        sub_element_distribute_name: item.nameSubDistribute
+                        sub_element_distribute_name: item.nameSubDistribute,
+                        import_price:item.import_price
                     }
                 })
         }
@@ -207,7 +216,7 @@ class EditImportStock extends Component {
                                             </div>
 
                                             <div className='card-bodys' style={{ width: "0 10px", height: "380px", overflowY: "auto" }}>
-                                                <ListImportStock store_code={store_code} listImportStock={listImportStock} handleCallbackQuantity={this.handleCallbackQuantity} handleDelete={this.handleDelete} />
+                                                <ListImportStock store_code={store_code} listImportStock={listImportStock} handleCallbackQuantity={this.handleCallbackQuantity} handleDelete={this.handleDelete} handleCallbackPrice = {this.handleCallbackPrice}/>
                                             </div>
                                             <div className='voucher-input' style={{ margin: "10px 0px" }}>
 

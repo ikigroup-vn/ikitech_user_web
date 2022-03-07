@@ -58,7 +58,7 @@ class ModalPayment extends Component {
               </div>
                 <div style={{ display: "flex", justifyContent: "space-between" }}>
                   <div>Còn lại cần thanh toán</div>
-                  <div>{format(Number(0))}</div>
+                  <div>{format(Number(this.props.remaining_amount))}</div>
                 </div>
               </form>
             </div>

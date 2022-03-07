@@ -24,7 +24,7 @@ class DetailImportStock extends Component {
             isActive2: false,
             isActive3: false,
             statusFinal: "",
-            total_price:0
+            total_price: 0
         }
     }
     componentDidMount() {
@@ -45,7 +45,7 @@ class DetailImportStock extends Component {
     }
     componentWillReceiveProps(nextProps, nextState) {
         if (nextProps.itemImportStock !== this.props.itemImportStock) {
-            
+
             nextProps.itemImportStock.change_status_history.forEach(item => {
                 if (item.status === 1) {
                     this.setState({ isActive1: true })
@@ -58,20 +58,20 @@ class DetailImportStock extends Component {
                     this.setState({ isActive3: true, statusFinal: 3 })
                 }
                 if (item.status === 4) {
-                    this.setState({ statusFinal: 4 })
+                    this.setState({ isActive: true, statusFinal: 4 })
                 }
                 if (item.status === 5) {
-                    this.setState({ statusFinal: 5 })
+                    this.setState({ isActive3: true, statusFinal: 5 })
                 }
                 if (item.status === 6) {
-                    this.setState({ statusFinal: 6 })
+                    this.setState({ isActive3: true, statusFinal: 6 })
                 }
             })
             var total_prices = 0
-            nextProps.itemImportStock.import_stock_items.forEach(item =>{
+            nextProps.itemImportStock.import_stock_items.forEach(item => {
                 total_prices = total_prices + item.quantity * item.import_price
             })
-            this.setState({total_price:total_prices})
+            this.setState({ total_price: total_prices })
         }
 
     }
@@ -82,6 +82,7 @@ class DetailImportStock extends Component {
         const { statusFinal } = this.state
         const import_stock_items = this.props.itemImportStock.import_stock_items ? this.props.itemImportStock.import_stock_items : []
         const date = moment(itemImportStock.updated_at, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD")
+        const total = this.state.total_price - itemImportStock.discount + itemImportStock.cost
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
@@ -96,9 +97,9 @@ class DetailImportStock extends Component {
                                     type={Types.ALERT_UID_STATUS}
                                     alert={this.props.alert}
                                 />
-                                {itemImportStock.status ===0 || itemImportStock.status === 1  ? <div style={{ display: "flex", justifyContent: "end", marginBottom: "10px" }}>
+                                {itemImportStock.status === 0 || itemImportStock.status === 1 ? <div style={{ display: "flex", justifyContent: "end", marginBottom: "10px" }}>
                                     <Link style={{ marginRight: "10px" }} type="button" to={`/import_stock/edit/${store_code}/${id}`} class="btn btn-primary  btn-sm"><i class="fa fa-edit"></i>&nbsp;Sửa đơn nhập</Link>
-                                </div>:""}
+                                </div> : ""}
                                 <div class="card card-import">
                                     <div class="row d-flex justify-content-center">
                                         <div class="col-12">
@@ -106,46 +107,71 @@ class DetailImportStock extends Component {
                                                 <li class="active step0"></li>
                                                 <li class={this.state.isActive1 ? "active step0" : "step0"}></li>
                                                 <li class={this.state.isActive2 ? "active step0" : "step0"}></li>
-                                                <li class={this.state.isActive3 ? "active step0" : statusFinal === 4 || statusFinal === 5 || statusFinal ===6 ? "activeDelete step0" : "step0"}></li>
+                                                <li class={this.state.isActive3 ? "active step0" : statusFinal === 4 || statusFinal === 5 || statusFinal === 6 ? "activeDelete step0" : "step0"}></li>
                                             </ul>
                                         </div>
                                     </div>
                                     <div class="row justify-content-between top">
                                         <div class="row d-flex icon-content"> <img class="icon" src="https://i.imgur.com/9nnc9Et.png" />
                                             <div class="d-flex flex-column">
-                                                <p class="font-weight-bold">Đặt hàng</p>
+                                                <p class="font-weight-bold" style={{ margin: "0" }}>Đặt hàng</p>
+                                                <div className='time-history'>{itemImportStock?.change_status_history?.length > 0 ? itemImportStock.change_status_history[0].time_handle : ""}</div>
                                             </div>
                                         </div>
-                                        <div class="row d-flex icon-content"> <img class="icon" src="https://i.imgur.com/u1AzR7w.png" />
-                                            <div class="d-flex flex-column">
-                                                <p class="font-weight-bold">Duyệt</p>
-                                            </div>
-                                        </div>
-                                        <div class="row d-flex icon-content"> <img class="icon" src="https://manmo3h.com/app/webroot/upload/admin/images/icon/icon7.png" />
-                                            <div class="d-flex flex-column">
-                                                <p class="font-weight-bold">Nhập kho</p>
-                                            </div>
-                                        </div>
+                                        {this.state.isActive1 ?
+                                            <div class="row d-flex icon-content"> <img class="icon" src="https://i.imgur.com/u1AzR7w.png" />
+                                                <div class="d-flex flex-column">
+                                                    <p class="font-weight-bold" style={{ margin: "0" }}>Duyệt</p>
+                                                    <div className='time-history'>{itemImportStock.change_status_history[1].time_handle}</div>
+                                                </div>
+                                            </div> :
+                                            <div class="row d-flex icon-content"> <img class="icon" src="https://i.imgur.com/u1AzR7w.png" />
+                                                <div class="d-flex flex-column">
+                                                    <p class="font-weight-bold" style={{ margin: "0" }}>Duyệt</p>
+                                                </div>
+                                            </div>}
+                                        {this.state.isActive2 ?
+                                            <div class="row d-flex icon-content"> <img class="icon" src="https://manmo3h.com/app/webroot/upload/admin/images/icon/icon7.png" />
+                                                <div class="d-flex flex-column">
+                                                    <p class="font-weight-bold" style={{ margin: "0" }}>Nhập kho</p>
+                                                    <div className='time-history'>{itemImportStock.change_status_history[2].time_handle}</div>
+                                                </div>
+                                            </div> :
+                                            <div class="row d-flex icon-content"> <img class="icon" src="https://manmo3h.com/app/webroot/upload/admin/images/icon/icon7.png" />
+                                                <div class="d-flex flex-column">
+                                                    <p class="font-weight-bold" style={{ margin: "0" }}>Nhập kho</p>
+                                                </div>
+                                            </div>}
+
                                         {statusFinal === 4 ? <div class="row d-flex icon-content"> <img class="icon" src="https://png.pngtree.com/png-vector/20190927/ourlarge/pngtree-cancel-cart-product-icon-png-image_1736147.jpg" />
                                             <div class="d-flex flex-column">
-                                                <p class="font-weight-bold">Đã hủy</p>
+                                                <p class="font-weight-bold" style={{ margin: "0" }}>Đã hủy</p>
+                                                <div className='time-history'>{itemImportStock.change_status_history[itemImportStock?.change_status_history?.length - 1].time_handle}</div>
                                             </div>
                                         </div> :
                                             statusFinal === 5 ? <div class="row d-flex icon-content"> <img class="icon" src="https://png.pngtree.com/png-vector/20190927/ourlarge/pngtree-cancel-cart-product-icon-png-image_1736147.jpg" />
                                                 <div class="d-flex flex-column">
-                                                    <p class="font-weight-bold">Kết thúc</p>
+                                                    <p class="font-weight-bold" style={{ margin: "0" }}>Kết thúc</p>
+                                                    <div className='time-history'>{itemImportStock.change_status_history[itemImportStock?.change_status_history?.length - 1].time_handle}</div>
                                                 </div>
                                             </div> :
-                                            statusFinal === 6 ? <div class="row d-flex icon-content"> <img class="icon" src="https://i.imgur.com/TkPm63y.png" />
-                                            <div class="d-flex flex-column">
-                                                <p class="font-weight-bold">Trả hàng</p>
-                                            </div>
-                                        </div> :                                            
-                                                <div class="row d-flex icon-content"> <img class="icon" src="https://i.imgur.com/TkPm63y.png" />
+                                                statusFinal === 6 ? <div class="row d-flex icon-content"> <img class="icon" src="https://i.imgur.com/TkPm63y.png" />
                                                     <div class="d-flex flex-column">
-                                                        <p class="font-weight-bold">Hoàn thành</p>
+                                                        <p class="font-weight-bold" style={{ margin: "0" }}>Trả hàng</p>
+                                                        <div className='time-history'>{itemImportStock.change_status_history[itemImportStock?.change_status_history?.length - 1].time_handle}</div>
                                                     </div>
-                                                </div>
+                                                </div> : this.state.isActive3 ?
+                                                    <div class="row d-flex icon-content"> <img class="icon" src="https://i.imgur.com/TkPm63y.png" />
+                                                        <div class="d-flex flex-column">
+                                                            <p class="font-weight-bold" style={{ margin: "0" }}>Hoàn thành</p>
+                                                            <div className='time-history'>{itemImportStock.change_status_history[itemImportStock?.change_status_history?.length - 1].time_handle}</div>
+                                                        </div>
+                                                    </div> :
+                                                    <div class="row d-flex icon-content"> <img class="icon" src="https://i.imgur.com/TkPm63y.png" />
+                                                        <div class="d-flex flex-column">
+                                                            <p class="font-weight-bold" style={{ margin: "0" }}>Hoàn thành</p>
+                                                        </div>
+                                                    </div>
                                         }
 
                                     </div>
@@ -158,13 +184,15 @@ class DetailImportStock extends Component {
                                             <div className='card-header py-3' style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                                 Thông tin đơn hàng
                                             </div>
-                                            <div className='card-body'>
-                                                {
-                                                    import_stock_items.map(item => (
-                                                        <ItemDetail listItem={item} />
-                                                    ))
-                                                }
-                                                <div class="card">
+                                            <div className='card-body' >
+                                                <div style={{ marginBottom: "10px", borderRadius: "5px" }}>
+                                                    {
+                                                        import_stock_items.map(item => (
+                                                            <ItemDetail listItem={item} />
+                                                        ))
+                                                    }
+                                                </div>
+                                                <div class="">
                                                     <div class="card-body" style={{ padding: "0" }}>
                                                         <div style={{ display: "flex", justifyContent: "space-between" }}>
                                                             <div>Tiền hàng</div>
@@ -180,16 +208,16 @@ class DetailImportStock extends Component {
                                                         </div>
                                                         <div style={{ display: "flex", justifyContent: "space-between" }}>
                                                             <div>Tổng tiền</div>
-                                                            <div>{format(Number(itemImportStock.cost))}</div>
+                                                            <div>{format(Number(itemImportStock.total_final))}</div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                {itemImportStock.note?                                                <div>
-                                                    <label style={{fontWeight:"bold", marginTop:"5px"}}>Ghi chú</label>
+                                                {itemImportStock.note ? <div>
+                                                    <label style={{ fontWeight: "bold", marginTop: "5px" }}>Ghi chú</label>
                                                     <div class="card">
-                                                        <div class="card-body" style={{padding:"0"}}>{itemImportStock.note}</div>
+                                                        <div class="card-body" style={{ padding: "0" }}>{itemImportStock.note}</div>
                                                     </div>
-                                                </div>:""}
+                                                </div> : ""}
 
                                                 {itemImportStock.status === 0 ? <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                                     <button class="btn btn-danger" style={{ marginTop: "20px" }} onClick={() => this.handleChangeStatus(1)} >Duyệt</button>
@@ -209,7 +237,7 @@ class DetailImportStock extends Component {
                                                 }
                                                 <ModalDelete store_code={store_code} id={id} />
                                                 <ModalEnd store_code={store_code} id={id} />
-                                                <ModalPayment store_code={store_code} id={id} price = {itemImportStock.cost} />
+                                                <ModalPayment store_code={store_code} id={id} price={itemImportStock.total_final} remaining_amount ={itemImportStock.remaining_amount}/>
                                             </div>
 
                                         </div>
@@ -235,7 +263,7 @@ class DetailImportStock extends Component {
                                                     </div>
                                                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                                                         <div>Trạng thái:</div>
-                                                        {itemImportStock.payment_status ===0?<div>Chưa thanh toán</div>:<div>Đã thanh toán</div>}
+                                                        {itemImportStock.payment_status === 0 ? <div style={{color:"red"}}>Chưa thanh toán</div> : <div style={{color:"green"}}>Đã thanh toán</div>}
                                                     </div>
                                                 </div>
                                             </div>

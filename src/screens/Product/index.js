@@ -68,7 +68,6 @@ class Product extends Component {
   componentDidMount() {
     var { page } = this.props.match.params
     const branch_id = localStorage.getItem('branch_id');
-    console.log("branch_id",branch_id)
     if (typeof page != "undefined" && page != null && page != "" && !isNaN(Number(page))) {
       this.props.fetchAllProductV2(this.props.match.params.store_code,branch_id, page);
     }
@@ -105,9 +104,10 @@ class Product extends Component {
     e.preventDefault()
     var { store_code } = this.props.match.params;
     var { searchValue } = this.state;
+    const branch_id = localStorage.getItem('branch_id');
     var params = `&search=${searchValue}`;
     this.setState({ numPage: 20 })
-    this.props.fetchAllProduct(store_code, 1, params);
+    this.props.fetchAllProductV2(store_code,branch_id, 1, params);
   };
   fetchAllData = () => {
     this.props.fetchAllProduct(this.props.match.params.store_code);
@@ -333,11 +333,7 @@ class Product extends Component {
                               <Pagination limit={numPage}
                                 searchValue={searchValue}
                                 passNumPage={this.passNumPage} store_code={store_code} products={products} />
-
-
                             </div>
-
-
                           </div>
                         </div>
 

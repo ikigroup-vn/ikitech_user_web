@@ -53,7 +53,7 @@ class CreateImportStock extends Component {
             console.log("thay doi change")
             nextState.listImportStock.forEach((item) => {
                 reality_total = parseInt(reality_total) + parseInt(item.reality_exist)
-                total_price = parseInt(total_price) + parseInt(item.priceProduct)
+                total_price = parseInt(total_price) + parseInt(item.import_price )* parseInt(item.reality_exist )
             })
             this.setState({ reality_exist_total: reality_total,price_total: total_price })
         }
@@ -90,7 +90,15 @@ class CreateImportStock extends Component {
             })
             this.setState({ listImportStock: newInventory, reality_exist_total: reality_total })
         }
+        this.setState({ change: !this.state.change })
 
+    }
+    handleCallbackPrice = (modal) => {
+        this.setState({ change: !this.state.change })
+        const newInventory = this.state.listImportStock
+        const index = newInventory.map(e => e.element_id).indexOf(modal.idElement)
+        newInventory[index].import_price = modal.import_price
+        this.setState({ listImportStock: newInventory})
     }
 
     handleDelete = (modal) => {
@@ -117,10 +125,11 @@ class CreateImportStock extends Component {
                 this.state.listImportStock.map((item) => {
                     return {
                         product_id: item.product_id,
-                        reality_exist: item.reality_exist,
+                        quantity: item.reality_exist,
                         distribute_name: item.nameDistribute,
                         element_distribute_name: item.nameElement,
-                        sub_element_distribute_name: item.nameSubDistribute
+                        sub_element_distribute_name: item.nameSubDistribute,
+                        import_price : item.import_price
                     }
                 })
         }
@@ -183,13 +192,13 @@ class CreateImportStock extends Component {
                                             </div>
 
                                             <div className='card-bodys' style={{ width: "0 10px", height: "380px", overflowY: "auto" }}>
-                                                <ListImportStock store_code={store_code} listImportStock={listImportStock} handleCallbackQuantity={this.handleCallbackQuantity} handleDelete={this.handleDelete} />
+                                                <ListImportStock store_code={store_code} listImportStock={listImportStock} handleCallbackQuantity={this.handleCallbackQuantity} handleDelete={this.handleDelete} handleCallbackPrice = {this.handleCallbackPrice} />
                                             </div>
                                             <div className='voucher-input' style={{ margin: "10px 0px" }}>
 
                                             </div>
-                                            <div class="card">
-                                                <div class="card-body" style={{ padding: "0" }}>
+                                            <div >
+                                                <div class="card-body" style={{ borderBottom:"1px solid #80808038",borderTop:"1px solid #80808038",padding:"10px 0" }}>
                                                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                                                         <div>Tổng số lượng:</div>
                                                         <div>{reality_exist_total}</div>

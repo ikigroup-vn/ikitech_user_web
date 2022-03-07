@@ -47,7 +47,7 @@ class Inventory extends Component {
                         <td>{item.existing_branch}</td>
                         <td>{item.deviant}</td>
                         <td>
-                            {item.status === 0 ? "đã kiểm kho" : "đã cân bằng"}
+                            {item.status === 0 ? <div style={{color:"green"}}>đã kiểm kho</div> : <div style={{color:"#ff6a00"}}>đã cân bằng</div>}
                         </td>
                         <td>
                             <Link
