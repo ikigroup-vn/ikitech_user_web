@@ -79,7 +79,7 @@ export const isEmpty = (data) => {
 export const callUrl = () => {
   var hostname = window.location.hostname
   var name = ""
-  if (hostname.includes("localhost") || hostname.includes("ikiglobal.com"))
+  if (hostname.includes("localhost") || hostname.includes("ikiglobal.com") || hostname.includes("isempai.net") )
     name = Config.API_URL_DEV
   else
     name = Config.API_URL_MAIN
@@ -89,7 +89,7 @@ export const callUrl = () => {
 export const callUrlSocket = () => {
   var hostname = window.location.hostname
   var name = ""
-  if (hostname.includes("localhost") || hostname.includes("ikiglobal.com"))
+  if (hostname.includes("localhost") || hostname.includes("ikiglobal.com") || hostname.includes("isempai.net"))
     name = Config.API_URL_SOCKET_DEV
   else
     name = Config.API_URL_SOCKET_MAIN

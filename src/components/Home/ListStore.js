@@ -32,7 +32,7 @@ class ListStore extends Component {
                                     </div>
                                     <div style={{ marginLeft: "20px" }}>
                                         <div className='name-store' style={{ fontWeight: "bold" }}>{item.name}</div>
-                                        <div className='address-store' style={{ color: "gray" }}>{item.store_code+".mydoapp.vn"}</div>
+                                        <div className='address-store' style={{ color: "gray" }}>{item.store_code+".myiki.vn"}</div>
                                     </div>
                                 </div>
                                 <div className='wrap-btn'>

@@ -173,7 +173,7 @@ class StoreCreate extends Component {
                                       name="txtId"
                                     />
                                     <div class="input-group-append">
-                                      <span class="input-group-text" id="basic-addon2">.mydoapp.vn</span>
+                                      <span class="input-group-text" id="basic-addon2">.myiki.vn</span>
                                     </div>
                                   </div>
                                   <strong>

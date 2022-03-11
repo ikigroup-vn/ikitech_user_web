@@ -37,7 +37,7 @@ class StoreTable extends Component {
             </td>
             <td>{data.name}</td>
             <td>
-              <a target="_blank" href = {"https://"+data.store_code+".mydoapp.vn" }>{"https://"+data.store_code+".mydoapp.vn" }</a>
+              <a target="_blank" href = {"https://"+data.store_code+".myiki.vn" }>{"https://"+data.store_code+".myiki.vn" }</a>
             </td>
 
             <td>{data.address}</td>

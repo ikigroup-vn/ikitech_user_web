@@ -35,7 +35,7 @@ class Login extends Component {
 
                         <div className="text-center">
                           <h1 className="h4 text-gray-900 mb-4">
-                          DoApp - Đăng nhập
+                          IKITECH - Đăng nhập
                           </h1>
                         </div>
                         <div className="text-center">
