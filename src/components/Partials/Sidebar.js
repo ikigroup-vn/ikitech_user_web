@@ -273,7 +273,7 @@ class Sidebar extends Component {
             </div>
             <div className="sidebar-brand-text">
 
-              <img width="80%" src={badges?.config_user_vip?.url_logo_image != null ? badges?.config_user_vip?.url_logo_image : "/images/logo.png"} class="img-responsive" alt="Image" />
+              <img width="80%" src="/images/logoikitechdotrang.png" class="img-responsive" alt="Image" />
 
             </div>
           </Link>

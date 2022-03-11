@@ -26,6 +26,143 @@ export const fetchAllStore = () => {
     });
   };
 };
+export const fetchAllReportInventory = (store_code,branch_id,params) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    storeApi.fetchAllReportInventory(store_code,branch_id,params).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading : "hide"
+      })
+      if(res.data.code !== 401)
+      dispatch({
+        type: Types.FETCH_ALL_REPORT_INVENTORY,
+        data: res.data.data,
+      });
+    });
+  };
+};
+export const fetchAllCustomerDebt = (store_code,branch_id,params) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    storeApi.fetchAllCustomerDebt(store_code,branch_id,params).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading : "hide"
+      })
+      if(res.data.code !== 401)
+      dispatch({
+        type: Types.FETCH_ALL_REPORT_CUSTOMER_DEBT,
+        data: res.data.data,
+      });
+    });
+  };
+};
+
+export const fetchAllInventoryHistory = (store_code,branch_id,params) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    storeApi.fetchAllInventoryHistory(store_code,branch_id,params).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading : "hide"
+      })
+      if(res.data.code !== 401)
+      dispatch({
+        type: Types.FETCH_ALL_INVENTORY_HISTORY,
+        data: res.data.data,
+      });
+    });
+  };
+};
+
+export const fetchReportProfit = (store_code,branch_id,params) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    storeApi.fetchReportProfit(store_code,branch_id,params).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading : "hide"
+      })
+      if(res.data.code !== 401)
+      dispatch({
+        type: Types.FETCH_REPORT_PROFIT,
+        data: res.data.data,
+      });
+    });
+  };
+};
+export const fetchAllSupplierDebt = (store_code,branch_id,params) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    storeApi.fetchAllSupplierDebt(store_code,branch_id,params).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading : "hide"
+      })
+      if(res.data.code !== 401)
+      dispatch({
+        type: Types.FETCH_ALL_REPORT_SUPPLIER_DEBT,
+        data: res.data.data,
+      });
+    });
+  };
+};
+
+export const fetchReportProfitCompare = (store_code,branch_id,params) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    storeApi.fetchReportProfitCompare(store_code,branch_id,params).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading : "hide"
+      })
+      if(res.data.code !== 401)
+      dispatch({
+        type: Types.FETCH_REPORT_PROFIT_COMPARE,
+        data: res.data.data,
+      });
+    });
+  };
+};
+
+export const fetchImportExportStock = (store_code,branch_id,params) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    storeApi.fetchImportExportStock(store_code,branch_id,params).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading : "hide"
+      })
+      if(res.data.code !== 401)
+      dispatch({
+        type: Types.FETCH_IMPORT_EXPORT_STOCK,
+        data: res.data.data,
+      });
+    });
+  };
+};
 
 export const fetchTopTenProduct = (store_code , params = null) => {
   return (dispatch) => {

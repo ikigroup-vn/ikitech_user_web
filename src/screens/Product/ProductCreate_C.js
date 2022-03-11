@@ -289,7 +289,7 @@ class ProductEdit extends Component {
                                 style={{ marginLeft: "10px" }}
                                 onClick={this.goBack}
                                 class="btn btn-warning"
-                                class="btn btn-warning btn-icon-split  btn-sm"
+              
                               >
                                 <span class="icon text-white-50">
                                   <i class="fas fa-arrow-left"></i>
@@ -373,7 +373,6 @@ class ProductEdit extends Component {
                               <a
                                 style={{ marginLeft: "10px" }}
                                 onClick={this.goBack}
-                                class="btn btn-warning"
                                 class="btn btn-warning btn-icon-split  btn-sm"
                               >
                                 <span class="icon text-white-50">
