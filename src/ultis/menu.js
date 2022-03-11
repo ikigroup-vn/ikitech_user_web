@@ -13,15 +13,42 @@ export const menu =  [
         },
 
         {
-          name: "Báo cáo thống kê",
-          class : "order_list",
-
-          icon: "fa-chart-line",
-          exact: true,
-          to: "/report",
-        },
-
+          name: "Báo cáo",
     
+          icon: "fas fa-store",
+          open : "report",
+          children: [
+            {
+              class : "order_list",
+              display : "hide",
+              name: "Báo cáo chung",
+              exact: true,
+              to: "/report",
+            },
+            {
+              class : "customer_config_point",
+              display : "hide",
+              name: "Báo cáo kho ",
+              exact: true,
+              to: "/report_inventory",
+            },
+            {
+              class : "chat_list",
+              display : "hide",
+              name: "Báo cáo bán hàng",
+              exact: true,
+              to: "/gadas",
+            },
+            {
+              class : "customer_list",
+              display : "hide",
+              name: "Báo cáo tài chính",
+              exact: true,
+              to: "/report_finance",
+            },
+      
+          ],
+        },
 
         {
           name: "Đơn hàng",

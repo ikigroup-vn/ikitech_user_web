@@ -116,6 +116,13 @@ import ImportStock from "./screens/ImportStock";
 import CreateImportStock from "./screens/ImportStock/create"
 import DetailImportStock from "./screens/ImportStock/detail"
 import EditImportStock from "./screens/ImportStock/edit"
+import ReportInventory from "./screens/Report/ReportInventory";
+import ImportExpostStock from "./screens/Report/import_export/ImportExpostStock";
+import InventoryHistory from "./screens/Report/report_history/InventoryHistory";
+import ReportFinance from "./screens/Report/report_finance";
+import ReportProfit from "./screens/Report/report_finance/report_profit/ReportProfit";
+import CustomerDebt from "./screens/Report/report_finance/customer_debt/CustomerDebt";
+import SupplierDebt from "./screens/Report/report_finance/supplier_debt/SupplierDebt";
 
 const routes = [
 
@@ -246,6 +253,49 @@ const routes = [
     exact: true,
 
     main: ({ match }) => <ReportAgency match={match} />,
+  },
+
+  {
+    path: "/report_inventory/:store_code",
+    exact: true,
+
+    main: ({ match }) => <ReportInventory match={match} />,
+  },
+  {
+    path: "/customer_debt/:store_code",
+    exact: true,
+
+    main: ({ match }) => <CustomerDebt match={match} />,
+  },
+  {
+    path: "/supplier_debt/:store_code",
+    exact: true,
+
+    main: ({ match }) => <SupplierDebt match={match} />,
+  },
+  {
+    path: "/import_export_stock/:store_code",
+    exact: true,
+
+    main: ({ match }) => <ImportExpostStock match={match} />,
+  },
+  {
+    path: "/inventory_histories/:store_code",
+    exact: true,
+
+    main: ({ match }) => <InventoryHistory match={match} />,
+  },
+  {
+    path: "/report_finance/:store_code",
+    exact: true,
+
+    main: ({ match }) => <ReportFinance match={match} />,
+  },
+  {
+    path: "/report_profit/:store_code",
+    exact: true,
+    
+    main: ({ match }) => <ReportProfit match={match} />,
   },
   {
     path: "/agency/:store_code/:action?/:id?",

@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import * as Env from "../../ultis/default"
 
 class ItemDetail extends Component {
     render() {
@@ -6,7 +7,7 @@ class ItemDetail extends Component {
         return (
             <div className='list-group-item' style={{marginBottom:"10px",borderTopWidth: "1px",borderRadius:"7px"}}>
                 <div className='' style={{ display: "flex", padding: "0px" }}>
-                    <img src={listItem.product.images.length > 0 ? listItem.product.images[0].image_url : ""} alt='' width="40px" style={{width:"16%"}}></img>
+                    <img src={listItem.product.images.length > 0 ? listItem.product.images[0].image_url : Env.IMG_NOT_FOUND} alt='' width="40px" style={{width:"16%"}}></img>
                     <div className='wrap-name' style={{ marginLeft: "10px", width:"77%"}} >
                         <div style={{ display: "flex" }}>
                             <div className='price-order' style={{ color: "gray", marginRight: "5px" }}>Tên:</div>
