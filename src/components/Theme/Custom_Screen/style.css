@@ -10,3 +10,72 @@
 .react-tabs__tab--selected p {
     color:white !important; 
 }
+.col-10{
+    width: 100%;
+    border: 0.7px solid #c4c4c4;
+    border-radius: 0.2rem;
+    position: relative;
+    transition: 0.3s all ease;
+}
+.col-header,.col-banner,.col-blog,.col-product,.col-footer{
+    transition: 0.3s all ease;
+}
+.col-header:hover,.col-banner:hover,.col-product:hover,.col-blog:hover,.col-footer:hover{
+    box-shadow: 0px 0px 15px rgba(0,0,0,0.3);
+}
+.col-header img,.col-banner img,.col-product img,.col-blog img,.col-footer img{
+    object-fit: contain;
+    border-radius: 0px;
+    width: 100%;
+    height: auto;
+   
+}
+.col-header >span,.col-banner >span,.col-product >span,.col-blog >span,.col-footer >span{
+   
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: #c7c7c7;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    transition: 0.3s all ease;
+ 
+
+    opacity: 1;
+    color: white;
+}
+.col-header:hover span,.col-banner:hover span,.col-product:hover span,.col-blog:hover span,.col-footer:hover span{
+background:#0075c4;
+}
+.col-header .linear,.col-banner .linear,.col-blog .linear,.col-product .linear,.col-footer .linear{
+    position: absolute;
+    top:0;
+    left:0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.3s all ease;
+    
+}
+.col-header:hover .linear,.col-banner:hover .linear,.col-blog:hover .linear,.col-product:hover .linear,.col-footer:hover .linear{
+    background-color: rgba(0,0,0,0.05);
+}
+.col-header .btn-header,.col-banner .btn-banner,.col-blog .btn-blog,.col-product .btn-product,.col-footer .btn-footer{
+
+    opacity: 0;
+    transition: 0.3s all ease;
+    background:#0075c4 !important;
+    border-radius: 50%;
+    width:3rem;
+    height: 3rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+.col-header:hover .btn-header,.col-banner:hover .btn-banner,.col-blog:hover .btn-blog,.col-product:hover .btn-product,.col-footer:hover .btn-footer{
+    opacity: 1;
+    }

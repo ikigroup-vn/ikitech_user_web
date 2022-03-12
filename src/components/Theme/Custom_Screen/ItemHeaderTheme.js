@@ -60,29 +60,23 @@ class Custom_Screen extends Component {
         }`}
       >
         <div class="row">
-          <div class="col-10">
-            <img
-              style={{
-                objectFit: "cover",
-                borderRadius: "0px",
-              }}
-              src={v.header}
-              width="100%"
-              height="120"
-            />
+          <div class="col-10 col-header">
+            <img src={v.header} />
+            <span>Header {v.index}</span>
+            <div className="linear">
+            <button
+              onClick={() => this.chooseHeader(v.index)}
+              type="button"
+              class={`btn btn-primary btn-sm btn-header ${
+                header_type !== v.index ? "show" : "hide"
+              }`}
+            >
+               Chọn{" "}</button>
+            </div>
+
           </div>
           <div class="col-2 kv-avatar">
             <div style={{ display: "flex" }}>
-              <button
-                onClick={() => this.chooseHeader(v.index)}
-                style={{ margin: "10px auto" }}
-                type="button"
-                class={`btn btn-primary btn-sm ${
-                  header_type !== v.index ? "show" : "hide"
-                }`}
-              >
-                <i class="fa fa-plus"></i> Chọn
-              </button>
               <button
                 style={{ margin: "10px auto" }}
                 type="button"

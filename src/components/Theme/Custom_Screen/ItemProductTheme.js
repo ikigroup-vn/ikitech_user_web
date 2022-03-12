@@ -60,30 +60,25 @@ class Custom_Screen extends Component {
         }`}
       >
         <div class="row">
-          <div class="col-10">
-            <img
-              style={{
-                display: "block",
-                borderRadius: "0px",
-              }}
-              src={v.product}
-              width="100%"
-              height="120"
-            />
+          <div class="col-10 col-product">
+            <img src={v.product} />
+
+            <span>Product {v.index}</span>
+            <div className="linear">
+              <button
+                onClick={() => this.chooseProduct(v.index)}
+                type="button"
+                class={`btn btn-primary btn-sm btn-product ${
+                  product_home_type !== v.index ? "show" : "hide"
+                }`}
+              >
+                Chọn{" "}
+              </button>
+            </div>
           </div>
 
           <div class="col-2 kv-avatar">
             <div style={{ display: "flex" }}>
-              <button
-                onClick={() => this.chooseProduct(v.index)}
-                style={{ margin: "10px auto" }}
-                type="button"
-                class={`btn btn-primary btn-sm ${
-                  product_home_type !== v.index ? "show" : "hide"
-                }`}
-              >
-                <i class="fa fa-plus"></i> Chọn
-              </button>
               <button
                 style={{ margin: "10px auto" }}
                 type="button"

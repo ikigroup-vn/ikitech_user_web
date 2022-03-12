@@ -10,7 +10,13 @@ import ItemNewsTheme from "./ItemNewsTheme.js";
 import ItemFooterTheme from "./ItemFooterTheme.js";
 import FormFooterHtml from "./FormFooterHtml";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import { data } from "./data.js";
+import {
+  headerImg,
+  bannerImg,
+  productImg,
+  blogImg,
+  footerImg,
+} from "./data.js";
 import "./style.css";
 class Custom_Screen extends Component {
   constructor(props) {
@@ -158,7 +164,7 @@ class Custom_Screen extends Component {
                     style={{
                       color: "black",
 
-                      paddingTop: "15px",
+                      paddingTop: "9px",
                       paddingLeft: "6px",
                       fontSize: "0.8rem",
                     }}
@@ -194,7 +200,7 @@ class Custom_Screen extends Component {
                     style={{
                       color: "black",
 
-                      paddingTop: "15px",
+                      paddingTop: "9px",
                       paddingLeft: "6px",
                       fontSize: "0.8rem",
                     }}
@@ -230,7 +236,7 @@ class Custom_Screen extends Component {
                     style={{
                       color: "black",
 
-                      paddingTop: "15px",
+                      paddingTop: "9px",
                       paddingLeft: "6px",
                       fontSize: "0.8rem",
                     }}
@@ -267,7 +273,7 @@ class Custom_Screen extends Component {
                     style={{
                       color: "black",
 
-                      paddingTop: "15px",
+                      paddingTop: "9px",
                       paddingLeft: "6px",
                       fontSize: "0.8rem",
                     }}
@@ -302,7 +308,7 @@ class Custom_Screen extends Component {
                     style={{
                       color: "black",
 
-                      paddingTop: "15px",
+                      paddingTop: "9px",
                       paddingLeft: "6px",
                       fontSize: "0.8rem",
                     }}
@@ -329,7 +335,7 @@ class Custom_Screen extends Component {
               <form role="form">
                 <div class="box-body">
                   <TabPanel>
-                    {data.map((v, i) => (
+                    {headerImg.map((v, i) => (
                       <ItemHeaderTheme
                         badges={badges}
                         chooseHeader={this.chooseHeader}
@@ -339,7 +345,7 @@ class Custom_Screen extends Component {
                     ))}
                   </TabPanel>
                   <TabPanel>
-                    {data.map((v, i) => (
+                    {bannerImg.map((v, i) => (
                       <ItemBannerTheme
                         badges={badges}
                         chooseBanner={this.chooseBanner}
@@ -349,7 +355,7 @@ class Custom_Screen extends Component {
                     ))}
                   </TabPanel>
                   <TabPanel>
-                    {data.map((v, i) => (
+                    {productImg.map((v, i) => (
                       <ItemProductTheme
                         badges={badges}
                         chooseProduct={this.chooseProduct}
@@ -359,7 +365,7 @@ class Custom_Screen extends Component {
                     ))}
                   </TabPanel>
                   <TabPanel>
-                    {data.map((v, i) => (
+                    {blogImg.map((v, i) => (
                       <ItemNewsTheme
                         badges={badges}
                         chooseNews={this.chooseNews}
@@ -393,7 +399,7 @@ class Custom_Screen extends Component {
                     </div>
 
                     {!use_footer_html ? (
-                      data.map((v, i) => (
+                      footerImg.map((v, i) => (
                         <ItemFooterTheme
                           badges={badges}
                           chooseFooter={this.chooseFooter}
