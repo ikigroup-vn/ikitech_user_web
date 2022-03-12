@@ -10,6 +10,7 @@ import { MomentInput } from 'react-moment-input'
 import moment from "moment";
 import { Link } from 'react-router-dom'
 import General from '../General'
+import Pagination from './Pagination'
 
 class InventoryHistory extends Component {
   constructor(props) {
@@ -36,7 +37,7 @@ class InventoryHistory extends Component {
     const params = `date_from=${this.state.txtStart}&date_to=${this.state.txtEnd}`
     const { store_code } = this.props.match.params
     const branch_id = localStorage.getItem("branch_id")
-    this.props.fetchAllInventoryHistory(store_code, branch_id, params)
+    this.props.fetchAllInventoryHistory(store_code, branch_id,1, params)
   }
 
   onChangeStart = (e) => {
@@ -173,6 +174,7 @@ class InventoryHistory extends Component {
                         <tbody>{this.showData(reportHistory.data, store_code)}</tbody>
                       </table>
                     </div>
+                    <Pagination store_code = {store_code} reportHistory = {reportHistory} />
                   </div>
                 </div>
               </div>
@@ -194,9 +196,9 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllInventoryHistory: (store_code, branch_id, params) => {
-      dispatch(reportAction.fetchAllInventoryHistory(store_code, branch_id, params))
-    }
+      fetchAllInventoryHistory: (store_code, branch_id,page, params) => {
+        dispatch(reportAction.fetchAllInventoryHistory(store_code, branch_id,page, params))
+      }
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(InventoryHistory)

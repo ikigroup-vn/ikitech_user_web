@@ -16,9 +16,10 @@ class General extends Component {
         const branch_id = localStorage.getItem("branch_id")
         this.props.fetchAllSupplierDebt(store_code, branch_id)
         this.props.fetchAllCustomerDebt(store_code, branch_id)
+        this.props.fetchReportExpenditure(store_code, branch_id)
     }
     render() {
-        const { store_code, profitToltal,supplierDebt,custommerDebt } = this.props
+        const { store_code, profitToltal,supplierDebt,custommerDebt,reportExpenditure } = this.props
         return (
             <div className="row">
 
@@ -48,7 +49,7 @@ class General extends Component {
 
                 <div className="col-xl-3 col-md-6 mb-4">
                     <Link
-                        to={``}
+                        to={`/expenditure/${store_code}`}
                     >
                         <div className="card border-left-success shadow h-100 py-2">
                             <div className="card-body set-padding ">
@@ -56,7 +57,7 @@ class General extends Component {
                                     <div className="col mr-2">
                                         <div className=" font-weight-bold text-success text-uppercase mb-1">
                                             Sổ quỹ</div>
-                                        <div className="h5 mb-0 font-weight-bold text-gray-800">{format(Number(0))}</div>
+                                        <div className="h5 mb-0 font-weight-bold text-gray-800">{format(Number(reportExpenditure.reserve))}</div>
                                         <div className="text-gray-800">Quản lý luồng ra, vào cửa hàng</div>
                                         
                                     </div>
@@ -123,6 +124,7 @@ const mapStateToProps = (state) => {
     return {
         supplierDebt: state.reportReducers.supplierDebt,
         custommerDebt: state.reportReducers.custommerDebt,
+        reportExpenditure: state.reportReducers.reportExpenditure,
     }
 }
 const mapDispatchToProps = (dispatch, props) => {
@@ -132,6 +134,9 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         fetchAllCustomerDebt: (store_code, branch_id, params) => {
             dispatch(reportAction.fetchAllCustomerDebt(store_code, branch_id, params))
+        },
+        fetchReportExpenditure: (store_code, branch_id, params) => {
+            dispatch(reportAction.fetchReportExpenditure(store_code, branch_id, params))
         }
     }
 }

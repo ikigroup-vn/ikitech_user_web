@@ -9,6 +9,7 @@ import * as reportAction from "../../../../actions/report";
 import { MomentInput } from 'react-moment-input'
 import moment from 'moment'
 import { format } from '../../../../ultis/helpers'
+import Pagination from './Pagination'
 
 class CustomerDebt extends Component {
     constructor(props) {
@@ -32,7 +33,7 @@ class CustomerDebt extends Component {
             const params = `date=${nextState.txtStart}`
             const { store_code } = this.props.match.params
             const branch_id = localStorage.getItem("branch_id")
-            this.props.fetchAllCustomerDebt(store_code, branch_id, params)
+            this.props.fetchAllCustomerDebt(store_code, branch_id,1, params)
 
         }
         return true
@@ -135,7 +136,7 @@ class CustomerDebt extends Component {
                                                 <tbody>{this.showData(custommerDebt.data)}</tbody>
                                             </table>
                                         </div>
-
+                                        <Pagination store_code = {store_code} custommerDebt ={custommerDebt}/>
                                     </div>
                                 </div>
                             </div>
@@ -154,8 +155,8 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        fetchAllCustomerDebt: (store_code, branch_id, params) => {
-            dispatch(reportAction.fetchAllCustomerDebt(store_code, branch_id, params))
+        fetchAllCustomerDebt: (store_code, branch_id,page, params) => {
+            dispatch(reportAction.fetchAllCustomerDebt(store_code, branch_id,page, params))
         }
     }
 }

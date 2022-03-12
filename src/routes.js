@@ -123,6 +123,8 @@ import ReportFinance from "./screens/Report/report_finance";
 import ReportProfit from "./screens/Report/report_finance/report_profit/ReportProfit";
 import CustomerDebt from "./screens/Report/report_finance/customer_debt/CustomerDebt";
 import SupplierDebt from "./screens/Report/report_finance/supplier_debt/SupplierDebt";
+import Expenditure from "./screens/Report/report_finance/revenue_expenditure/Expenditure";
+
 
 const routes = [
 
@@ -272,6 +274,12 @@ const routes = [
     exact: true,
 
     main: ({ match }) => <SupplierDebt match={match} />,
+  },
+  {
+    path: "/expenditure/:store_code",
+    exact: true,
+
+    main: ({ match }) => <Expenditure match={match} />,
   },
   {
     path: "/import_export_stock/:store_code",

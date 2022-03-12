@@ -47,7 +47,7 @@ class ImportStock extends Component {
                         <td>{index + 1}</td>
                         <td>{item.code}</td>
                         <td>{format(Number(item.total_final))}</td>
-                        <td>{item.supplier.name}</td>
+                        <td>{item.supplier?.name}</td>
                         <td>{item.status===0?"Đặt hàng":item.status===1?"Duyệt":item.status===2?"Nhập kho":item.status===3?"Hoàn thành":item.status===4?"Đã hủy":item.status===5?"Kết thúc":item.status===6?"Trả hàng":""}</td>
                         <td>{datetime}</td>
                         <td>

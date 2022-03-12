@@ -11,6 +11,8 @@ import { format } from '../../ultis/helpers'
 import { MomentInput } from 'react-moment-input'
 import moment from "moment";
 import General from './General'
+import Pagination from './Pagination'
+
 
 class ReportInventory extends Component {
   constructor(props) {
@@ -34,7 +36,7 @@ class ReportInventory extends Component {
       const params = `date=${nextState.txtStart}`
       const { store_code } = this.props.match.params
       const branch_id = localStorage.getItem("branch_id")
-      this.props.fetchAllReportInventory(store_code, branch_id,params)
+      this.props.fetchAllReportInventory(store_code, branch_id,1,params)
 
     }
     return true
@@ -55,7 +57,7 @@ class ReportInventory extends Component {
     if (listDistribute[0].element_distributes) {
       listDistribute[0].element_distributes.map((element, _index) => {
         result.push(
-          <tr class="explode" style={{ backgroundColor: "#8080801a" }} >
+          <tr class="explode" style={{ backgroundColor: "#f8f9fc" }} >
             <td colSpan={12}>
               <div className='show-distribute'>
                 <div className='row' style={{ padding: "10px" }}>
@@ -91,7 +93,7 @@ class ReportInventory extends Component {
       result = listReportInven.map((item, index) => {
         return (
           <>
-            <tr>
+            <tr className='show-data'>
               <td>{index + 1}</td>
               <td><img src={item.images.length > 0 ? item.images[0].image_url : Env.IMG_NOT_FOUND} alt='' width="65px" height="65px"></img></td>
               <td>{item.name}</td>
@@ -167,6 +169,7 @@ class ReportInventory extends Component {
                         <tbody>{this.showData(reportInventory.data)}</tbody>
                       </table>
                     </div>
+                        <Pagination store_code = {store_code} reportInventory = {reportInventory} />
                   </div>
                 </div>
               </div>
@@ -188,8 +191,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllReportInventory: (store_code, branch_id,params) => {
-      dispatch(reportAction.fetchAllReportInventory(store_code, branch_id,params))
+    fetchAllReportInventory: (store_code, branch_id,page,params) => {
+      dispatch(reportAction.fetchAllReportInventory(store_code, branch_id,page,params))
     }
   }
 }

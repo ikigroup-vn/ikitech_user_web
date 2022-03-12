@@ -12,6 +12,7 @@ import { MomentInput } from 'react-moment-input'
 import moment from "moment";
 import { shallowEqual } from '../../../ultis/shallowEqual'
 import General from '../General'
+import Pagination from './Pagination'
 
 class ImportExportStock extends Component {
   constructor(props) {
@@ -43,7 +44,7 @@ class ImportExportStock extends Component {
     const params = `date_from=${this.state.txtStart}&date_to=${this.state.txtEnd}`
     const { store_code } = this.props.match.params
     const branch_id = localStorage.getItem("branch_id")
-    this.props.fetchImportExportStock(store_code, branch_id, params)
+    this.props.fetchImportExportStock(store_code, branch_id,1, params)
   }
 
   onChangeStart = (e) => {
@@ -66,7 +67,7 @@ class ImportExportStock extends Component {
     if (listDistribute[0].element_distributes) {
       listDistribute[0].element_distributes.map((element, _index) => {
         result.push(
-          <tr class="explode" style={{ backgroundColor: "#8080801a" }} >
+          <tr class="explode" style={{ backgroundColor: "#f8f9fc" }} >
             <td colSpan={12}>
               <div className='show-distribute'>
                 <div className='row' style={{ padding: "10px" }}>
@@ -202,6 +203,7 @@ class ImportExportStock extends Component {
                         <tbody>{this.showData(reportImportExport.data)}</tbody>
                       </table>
                     </div>
+                    <Pagination store_code ={store_code} reportImportExport = {reportImportExport}/>
                   </div>
                 </div>
               </div>
@@ -223,8 +225,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchImportExportStock: (store_code, branch_id, params) => {
-      dispatch(reportAction.fetchImportExportStock(store_code, branch_id, params))
+    fetchImportExportStock: (store_code, branch_id,page, params) => {
+      dispatch(reportAction.fetchImportExportStock(store_code, branch_id,page, params))
     }
   }
 }
