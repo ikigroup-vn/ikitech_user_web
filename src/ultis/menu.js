@@ -33,13 +33,6 @@ export const menu =  [
               to: "/report_inventory",
             },
             {
-              class : "chat_list",
-              display : "hide",
-              name: "Báo cáo bán hàng",
-              exact: true,
-              to: "/gadas",
-            },
-            {
               class : "customer_list",
               display : "hide",
               name: "Báo cáo tài chính",

@@ -3,23 +3,23 @@ import callApi from "../../ultis/apiCaller";
 export const fetchAllData = () => {
   return callApi("/store", "get", null);
 };
-export const fetchAllReportInventory = (store_code,branch_id,params) =>{
-  return params ? callApi(`/store/${store_code}/report/stock/${branch_id}/product_last_inventory?${params}`, "get", null)
-  :callApi(`/store/${store_code}/report/stock/${branch_id}/product_last_inventory`, "get", null);
+export const fetchAllReportInventory = (store_code,branch_id,page,params) =>{
+  return params ? callApi(`/store/${store_code}/report/stock/${branch_id}/product_last_inventory?page=${page}&${params}`, "get", null)
+  :callApi(`/store/${store_code}/report/stock/${branch_id}/product_last_inventory?page=${page}`, "get", null);
 }
 
-export const fetchImportExportStock = (store_code,branch_id,params) =>{
-  return params ? callApi(`/store/${store_code}/report/stock/${branch_id}/product_import_export_stock?${params}`, "get", null)
-  :callApi(`/store/${store_code}/report/stock/${branch_id}/product_import_export_stock`, "get", null);
+export const fetchImportExportStock = (store_code,branch_id,page,params) =>{
+  return params ? callApi(`/store/${store_code}/report/stock/${branch_id}/product_import_export_stock?page=${page}&${params}`, "get", null)
+  :callApi(`/store/${store_code}/report/stock/${branch_id}/product_import_export_stock?page=${page}`, "get", null);
 }
 
-export const fetchAllInventoryHistory = (store_code,branch_id,params) =>{
-  return params ? callApi(`/store/${store_code}/report/stock/${branch_id}/inventory_histories?${params}`, "get", null)
-  :callApi(`/store/${store_code}/report/stock/${branch_id}/inventory_histories`, "get", null);
+export const fetchAllInventoryHistory = (store_code,branch_id,page,params) =>{
+  return params ? callApi(`/store/${store_code}/report/stock/${branch_id}/inventory_histories?page=${page}&${params}`, "get", null)
+  :callApi(`/store/${store_code}/report/stock/${branch_id}/inventory_histories?page=${page}`, "get", null);
 }
-export const fetchAllCustomerDebt = (store_code,branch_id,params) =>{
-  return params ? callApi(`/store/${store_code}/report/finance/${branch_id}/customer_debt?${params}`, "get", null)
-  :callApi(`/store/${store_code}/report/finance/${branch_id}/customer_debt`, "get", null);
+export const fetchAllCustomerDebt = (store_code,branch_id,page,params) =>{
+  return params ? callApi(`/store/${store_code}/report/finance/${branch_id}/customer_debt?page=${page}&${params}`, "get", null)
+  :callApi(`/store/${store_code}/report/finance/${branch_id}/customer_debt?page=${page}`, "get", null);
 }
 export const fetchReportProfit = (store_code,branch_id,params) =>{
   return callApi(`/store/${store_code}/report/finance/${branch_id}/profit_and_loss?${params}`, "get", null)
@@ -27,8 +27,11 @@ export const fetchReportProfit = (store_code,branch_id,params) =>{
 export const fetchReportProfitCompare = (store_code,branch_id,params) =>{
   return callApi(`/store/${store_code}/report/finance/${branch_id}/profit_and_loss?${params}`, "get", null)
 }
-export const fetchAllSupplierDebt = (store_code,branch_id,params) =>{
-  return callApi(`/store/${store_code}/report/finance/${branch_id}/supplier_debt?${params}`, "get", null)
+export const fetchAllSupplierDebt = (store_code,branch_id,page,params) =>{
+  return callApi(`/store/${store_code}/report/finance/${branch_id}/supplier_debt?page=${page}&${params}`, "get", null)
+}
+export const fetchReportExpenditure = (store_code,branch_id,page,params) =>{
+  return callApi(`/store/${store_code}/report/finance/${branch_id}/revenue_expenditure?page=${page}&${params}`, "get", null)
 }
 
 export const fetchDataId = (id) => {

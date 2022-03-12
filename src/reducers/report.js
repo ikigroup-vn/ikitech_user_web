@@ -11,6 +11,7 @@ var initialState = {
   compareProfit: [],
   custommerDebt: [],
   supplierDebt: [],
+  reportExpenditure:[],
   alert_fetch_report: {
     disable: "hide",
   }
@@ -50,6 +51,9 @@ export const reportReducers = (state = initialState, action) => {
     case Types.FETCH_ALL_REPORT_SUPPLIER_DEBT:
       newState.supplierDebt = action.data;
       return newState
+      case Types.FETCH_REPORT_EXPENDITURE:
+        newState.reportExpenditure = action.data;
+        return newState
     default:
       return newState;
   }

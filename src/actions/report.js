@@ -26,13 +26,13 @@ export const fetchAllStore = () => {
     });
   };
 };
-export const fetchAllReportInventory = (store_code,branch_id,params) => {
+export const fetchAllReportInventory = (store_code,branch_id,page,params) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading : "show"
     })
-    storeApi.fetchAllReportInventory(store_code,branch_id,params).then((res) => {
+    storeApi.fetchAllReportInventory(store_code,branch_id,page,params).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
         loading : "hide"
@@ -45,13 +45,13 @@ export const fetchAllReportInventory = (store_code,branch_id,params) => {
     });
   };
 };
-export const fetchAllCustomerDebt = (store_code,branch_id,params) => {
+export const fetchAllCustomerDebt = (store_code,branch_id,page,params) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading : "show"
     })
-    storeApi.fetchAllCustomerDebt(store_code,branch_id,params).then((res) => {
+    storeApi.fetchAllCustomerDebt(store_code,branch_id,page,params).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
         loading : "hide"
@@ -65,13 +65,14 @@ export const fetchAllCustomerDebt = (store_code,branch_id,params) => {
   };
 };
 
-export const fetchAllInventoryHistory = (store_code,branch_id,params) => {
+export const fetchAllInventoryHistory = (store_code,branch_id,page,params) => {
+  console.log("params",params)
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading : "show"
     })
-    storeApi.fetchAllInventoryHistory(store_code,branch_id,params).then((res) => {
+    storeApi.fetchAllInventoryHistory(store_code,branch_id,page,params).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
         loading : "hide"
@@ -104,13 +105,33 @@ export const fetchReportProfit = (store_code,branch_id,params) => {
     });
   };
 };
-export const fetchAllSupplierDebt = (store_code,branch_id,params) => {
+
+export const fetchReportExpenditure = (store_code,branch_id,page,params) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading : "show"
     })
-    storeApi.fetchAllSupplierDebt(store_code,branch_id,params).then((res) => {
+    storeApi.fetchReportExpenditure(store_code,branch_id,page,params).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading : "hide"
+      })
+      if(res.data.code !== 401)
+      dispatch({
+        type: Types.FETCH_REPORT_EXPENDITURE,
+        data: res.data.data,
+      });
+    });
+  };
+};
+export const fetchAllSupplierDebt = (store_code,branch_id,page,params) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    storeApi.fetchAllSupplierDebt(store_code,branch_id,page,params).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
         loading : "hide"
@@ -144,13 +165,13 @@ export const fetchReportProfitCompare = (store_code,branch_id,params) => {
   };
 };
 
-export const fetchImportExportStock = (store_code,branch_id,params) => {
+export const fetchImportExportStock = (store_code,branch_id,page,params) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading : "show"
     })
-    storeApi.fetchImportExportStock(store_code,branch_id,params).then((res) => {
+    storeApi.fetchImportExportStock(store_code,branch_id,page,params).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
         loading : "hide"
