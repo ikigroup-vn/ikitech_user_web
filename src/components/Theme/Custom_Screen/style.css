@@ -1,0 +1,12 @@
+.react-tabs__tab--selected{
+    border-radius: 0 0 0 0 !important;
+    background-color: #0075C4 !important;
+    color:white !important;
+  
+ 
+
+    
+}
+.react-tabs__tab--selected p {
+    color:white !important; 
+}
