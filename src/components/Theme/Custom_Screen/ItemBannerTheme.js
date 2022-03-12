@@ -3,16 +3,16 @@ import * as themeAction from "../../../actions/theme";
 import { connect } from "react-redux";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import * as Env from "../../../ultis/default";
-class Home_Screen extends Component {
+class Custom_Screen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      home_page_type: null,
+      banner_type: null,
     };
   }
 
-  chooseTheme = (index) => {
-    this.props.chooseTheme(index);
+  chooseBanner = (index) => {
+    this.props.chooseBanner(index);
   };
 
   checkExsitItem = (index, _isVip, isVip, list_id_theme) => {
@@ -38,7 +38,8 @@ class Home_Screen extends Component {
   };
 
   render() {
-    var { home_page_type, v } = this.props;
+    var { banner_type, v } = this.props;
+
     var isVip =
       typeof this.props.badges.config_user_vip == "undefined" ||
       this.props.badges.config_user_vip == null
@@ -52,36 +53,36 @@ class Home_Screen extends Component {
 
     return (
       <div
-        class={`form-group col-xs-3 col-lg-3 col-md-3 col-sm-3 ${
+        class={`form-group col-xs-12 col-lg-12 col-md-12 col-sm-12 ${
           this.checkExsitItem(v.index, v.isVip, isVip, list_id_theme) == true
             ? ""
             : "hide"
         }`}
       >
-        <div style={{ width: "160px" }}>
-          <img
-            style={{ display: "block", objectFit: "cover" }}
-            src={v.theme}
-            width="160"
-            height="180"
-          />
-          <div class="kv-avatar">
-            <div style={{ display: "flex" }}>
+        <div class="row">
+          <div class="col-10 col-banner">
+            <img src={v.banner} />
+            <span>Banner {v.index}</span>
+            <div className="linear">
               <button
-                onClick={() => this.chooseTheme(v.index)}
-                style={{ margin: "10px auto" }}
+                onClick={() => this.chooseBanner(v.index)}
                 type="button"
-                class={`btn btn-primary btn-sm ${
-                  home_page_type !== v.index ? "show" : "hide"
+                class={`btn btn-primary btn-sm btn-banner ${
+                  banner_type !== v.index ? "show" : "hide"
                 }`}
               >
-                <i class="fa fa-plus"></i> Chọn
+                Chọn{" "}
               </button>
+            </div>
+          </div>
+
+          <div class="col-2 kv-avatar">
+            <div style={{ display: "flex" }}>
               <button
                 style={{ margin: "10px auto" }}
                 type="button"
                 class={`btn btn-secondary btn-sm ${
-                  home_page_type === v.index ? "show" : "hide"
+                  banner_type === v.index ? "show" : "hide"
                 }`}
               >
                 <i class="fa fa-check"></i> Đã chọn
@@ -104,4 +105,4 @@ const mapDispatchToProps = (dispatch, props) => {
     },
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Home_Screen);
+export default connect(mapStateToProps, mapDispatchToProps)(Custom_Screen);
