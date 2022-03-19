@@ -1009,6 +1009,14 @@ padding: 0 5px;
     font-size: 20px;
 }
 
+.header-pos {
+    background-color: #0964CF !important;
+}
+
+.actives{
+    background-color: white !important;
+    color: black !important;
+}
 
 /* 
 	Ok so you have made it this far, that means you are very keen to on my code. 

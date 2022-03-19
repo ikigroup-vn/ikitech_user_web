@@ -124,6 +124,7 @@ import ReportProfit from "./screens/Report/report_finance/report_profit/ReportPr
 import CustomerDebt from "./screens/Report/report_finance/customer_debt/CustomerDebt";
 import SupplierDebt from "./screens/Report/report_finance/supplier_debt/SupplierDebt";
 import Expenditure from "./screens/Report/report_finance/revenue_expenditure/Expenditure";
+import PostOrder from "./screens/Pos_order";
 
 
 const routes = [
@@ -457,6 +458,12 @@ const routes = [
     exact: true,
 
     main: ({ match,history}) => <AddOrder match={match} history={history} />,
+  },
+  {
+    path: "/pos_order/:store_code",
+    exact: true,
+
+    main: ({ match,history}) => <PostOrder match={match} history={history} />,
   },
   {
     path: "/discount/:store_code",

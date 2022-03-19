@@ -52,6 +52,14 @@ export const menu =  [
           to: "/order",
         },
         {
+          name: "Bán hàng tại quầy",
+          class : "order_list",
+
+          icon: "fa-file-invoice",
+          exact: true,
+          to: "/pos_order",
+        },
+        {
           name: "Lên đơn",
           class : "order_list",
 
