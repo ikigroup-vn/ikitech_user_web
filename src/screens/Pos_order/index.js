@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { format } from '../../ultis/helpers'
+import { format, formatNumber } from '../../ultis/helpers'
 import * as productAction from "../../actions/product"
 import { connect } from 'react-redux'
 import CardProduct from '../../components/Pos_Order/CardProduct'
@@ -12,6 +12,9 @@ import PertionInfo from '../../components/Pos_Order/PertionInfo'
 import * as OrderAction from '../../actions/add_order';
 import ModalDiscount from '../../components/Pos_Order/ModalDiscount'
 import "./index.css"
+import ModalPayment from '../../components/Pos_Order/ModalPayment'
+import Alert from '../../components/Partials/Alert'
+import * as Types from "../../constants/ActionType";
 
 
 class PostOrder extends Component {
@@ -26,8 +29,10 @@ class PostOrder extends Component {
                 txtDiscount:0,
                 code:""
             },
+            note:"",
             listPosItem:[],
             idCart:"",
+            payment_method:0,
             priceCustomer:0,
             infoProduct: {
                 inventoryProduct: "",
@@ -56,6 +61,12 @@ class PostOrder extends Component {
                 infoProduct: modal
             })
     }
+    onChanges = (e) =>{
+        this.setState({note:e.target.value})
+    }
+    handleCallbackChoosePayment = (modal) =>{
+        this.setState({payment_method:modal})
+    }
     handleCallbackPushProduct = (modal) => {
         this.setState({listPosItem:modal})
     }
@@ -69,17 +80,39 @@ class PostOrder extends Component {
     handleCallbackDiscount = (modal) =>{
         this.setState({modalUpdateDiscount:modal})
     }
-    handChange = (e) =>{
-        this.setState({priceCustomer:e.target.value})
-    }
+
+    handChange = (e) => {
+        var value_text = e.target.value;
+        var value = value_text
+        const _value = formatNumber(value);
+          if (!isNaN(Number(_value))) {
+            value = new Intl.NumberFormat().format(_value);
+            value = value.toString().replace(/\./g, ',')
+              if (value_text == "") {
+                this.setState({ priceCustomer: "" });
+              }
+              else {
+                this.setState({ priceCustomer: value });
+              }
+            
+          }
+        
+
+      };
     handlePayment = () =>{
         const branch_id = localStorage.getItem("branch_id")
         const {store_code} = this.props.match.params
         const data = {
-            payment_method: 1,
-            amount_money: this.state.priceCustomer
+            payment_method: this.state.payment_method,
+            amount_money: formatNumber(this.state.priceCustomer)
         }
         this.props.paymentOrderPos(store_code,branch_id,this.state.idCart,data)
+        this.setState({priceCustomer:0,
+            modalUpdateCart:{
+                name:"",
+                phone_number:""
+            }
+        })
     }
 
 
@@ -101,6 +134,12 @@ class PostOrder extends Component {
             const branch_id = localStorage.getItem("branch_id")
             const id = nextState.idCart
             this.props.fetchInfoOneCart(this.props.match.params.store_code,branch_id,id)
+            this.setState({
+                priceCustomer:0,
+                modalUpdateDiscount:{
+                    code:""
+                }
+            })
         }
         if(!shallowEqual(nextState.modalUpdateCart,this.state.modalUpdateCart) || !shallowEqual(nextState.modalUpdateDiscount,this.state.modalUpdateDiscount) ){
             const branch_id = localStorage.getItem("branch_id")
@@ -108,11 +147,20 @@ class PostOrder extends Component {
             const formData = {
                 customer_name:nextState.modalUpdateCart.name,
                 customer_phone:nextState.modalUpdateCart.phone_number,
-                discount:nextState.modalUpdateDiscount.txtDiscount,
+                discount: formatNumber(nextState.modalUpdateDiscount.txtDiscount) ,
                 code_voucher:nextState.modalUpdateDiscount.code,
                 name:"Giỏ hàng"
             }
             this.props.updateInfoCart(store_code,branch_id,nextState.idCart,formData)
+        }
+        if(!shallowEqual(nextState.modalUpdateDiscount.code,this.state.modalUpdateDiscount.code)){
+            const branch_id = localStorage.getItem("branch_id")
+            const id = nextState.idCart
+            const data = {
+                code_voucher: nextState.modalUpdateDiscount.code
+            }
+            this.props.fetchVoucher(this.props.match.params.store_code,branch_id,id,data)
+
         }
 
         return true
@@ -121,6 +169,7 @@ class PostOrder extends Component {
     render() {
         var { store_code } = this.props.match.params
         var {listItemCart,listPertion} = this.props
+        var {code} = this.state.modalUpdateDiscount
         return (
             <React.Fragment>
                 <div>
@@ -177,8 +226,12 @@ class PostOrder extends Component {
                                             </div>
                                             <div className='row' style={{padding:"10px 0"}}>
                                                 <div className='title-price col-8'>Chiết khấu</div>
-                                                <input type="text" name="import_price" class=" col-4" id="usr" value={format(Number(this.state.modalUpdateDiscount.txtDiscount))} 
+                                                <input type="text" name="import_price" class=" col-4" id="usr" value={format(Number(listItemCart.info_cart?.discount))} 
                                                 style={{height: "28px", width: "100px",textAlign:"right", border:0,borderRadius:0,borderBottom:"2px solid gray"}}  data-toggle="modal" data-target="#modalDiscount" ></input>
+                                            </div>
+                                            <div className='row' style={{padding:"10px 0"}}>
+                                                <div className='title-price col-6' >Voucher</div>
+                                                <span className='col-6' style={{ textAlign: "end",color:"black",fontSize:"13px" }}>{code ? code: "Không có voucher"}</span>
                                             </div>
                                             <div className='row' style={{padding:"10px 0"}}>
                                                 <div className='title-price col-6' >Khách phải trả</div>
@@ -191,14 +244,14 @@ class PostOrder extends Component {
                                             </div>
                                             <div className='row' style={{borderTop: "1px solid #80808045",padding:"10px 0"}} >
                                                 <div className='title-price col-6'>Tiền thừa trả khách</div>
-                                                <span className='col-6' style={{ textAlign: "end" }}>{format(Number(0))}</span>
+                                                <span className='col-6' style={{ textAlign: "end" }}>{format(Number(formatNumber(this.state.priceCustomer) - listItemCart.info_cart?.total_final))}</span>
                                             </div>
                                             <div class="form-group" >
                                                 <label for="comment">Thêm ghi chú:</label>
                                                 <textarea class="form-control" rows="5" id="comment" style={{ height: "50px" }} value={this.state.note} onChange={this.onChanges}></textarea>
                                             </div>
                                             <div className='wrap-buttom'style={{display:"flex",justifyContent:"space-between",marginTop:"20px"}} >
-                                                <span className='pay-methor' style={{width:"39%",padding:"5px",textAlign:"center",background:"#213fac4a", color:"black", borderRadius:"5px"}}>Phương thức thanh toán</span>
+                                                <span className='pay-methor' style={{width:"39%",padding:"5px",textAlign:"center",background:"#213fac4a", color:"black", borderRadius:"5px",cursor:"pointer"}} data-toggle="modal" data-target="#modalPayment">Phương thức thanh toán</span>
                                                 <button className='btn btn-success' style={{width:"50%",fontSize: "20px" }} onClick={this.handlePayment}>Thanh toán</button>
                                             </div>
                                             
@@ -210,7 +263,13 @@ class PostOrder extends Component {
                         <ModalDetail modal={this.state.infoProduct} handleCallbackPushProduct={this.handleCallbackPushProduct} />
                         <PertionInfo store_code ={store_code} listPertion={listPertion} handleCallbackPertion = {this.handleCallbackPertion}/>
                         <ModalDiscount handleCallbackDiscount = {this.handleCallbackDiscount}/>
+                        <ModalPayment handleCallbackChoosePayment = {this.handleCallbackChoosePayment}/>
+
                     </div>
+                    <Alert
+                    type={Types.ALERT_UID_STATUS}
+                    alert={this.props.alert}
+                />
                 </div>
             </React.Fragment >
         )
@@ -247,6 +306,9 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         paymentOrderPos:(store_code,branch_id,id_cart,data) =>{
             dispatch(posAction.paymentOrderPos(store_code,branch_id,id_cart,data))
+        },
+        fetchVoucher:(store_code,branch_id,id_cart,data) =>{
+            dispatch(posAction.fetchVoucher(store_code,branch_id,id_cart,data))
         }
 
     }

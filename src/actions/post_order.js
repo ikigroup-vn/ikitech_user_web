@@ -507,21 +507,15 @@ export const paymentOrderPos = (store_code, branch_id,id,data) => {
               },
             });
           })
-          .catch(function (error) {
+          PosApi.listPosOrder(store_code,branch_id).then((res) => {
+            if(res.data.code === 200)
+  
             dispatch({
-              type: Types.SHOW_LOADING,
-              loading: "hide"
-            })
-            dispatch({
-              type: Types.ALERT_UID_STATUS,
-              alert: {
-                type: "danger",
-                title: "Lỗi",
-                disable: "show",
-                content: error.response.data.msg,
-              },
+              type: Types.FETCH_LIST_POS_ORDER,
+              data: res.data.data,
             });
-          });
+
+          })
       })
       .catch(function (error) {
         dispatch({
@@ -536,5 +530,26 @@ export const paymentOrderPos = (store_code, branch_id,id,data) => {
       });
   };
 };
+export const fetchVoucher = (store_code, branch_id,id,data) => {
+  return (dispatch) => {
+      dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "show"
+      })
+      PosApi.fetchVoucher(store_code, branch_id,id,data).then((res) => {
+          dispatch({
+              type: Types.SHOW_LOADING,
+              loading: "hide"
+          })
+          console.log("res",res)
+          if (res.data.code !== 401)
+              dispatch({
+                  type: Types.FETCH_LIST_CART_ITEM,
+                  data: res.data.data,
+              });
+      });
+  }
 
+
+}
 

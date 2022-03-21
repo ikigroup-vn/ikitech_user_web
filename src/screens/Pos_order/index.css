@@ -18,13 +18,18 @@
     height: calc(100% - 430px);
 }
 
-.col-list-product{
+/* .col-list-product{
     display: flex;
     overflow: auto;
     background: #fff;
     border-top: 7px solid rgb(229, 229, 229);
     transition: height 0.5s;
     justify-content: center;
+} */
+.col-list-product{
+    background: #fff;
+    border-top: 7px solid rgb(229, 229, 229);
+    transition: height 0.5s;
 }
 .show-product{
     padding: 10px;

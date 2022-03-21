@@ -42,7 +42,7 @@ import { shallowEqual } from '../../ultis/shallowEqual'
         this.setState({modalAdd:{CartIds:CartId,productIds:idProduct,lineItemIds:lineItemId,quantity:quantity,distributesProduct:distribute}})
     }
     subQuantity = (CartId,idItem,idProduct,quantity,distribute) =>{
-        this.setState({modalAdd:{CartIds:CartId,itemIds:idItem,productIds:idProduct,quantity:quantity,distributesProduct:distribute}})
+        this.setState({modalSub:{CartIds:CartId,itemIds:idItem,productIds:idProduct,quantity:quantity,distributesProduct:distribute}})
     }
 
     shouldComponentUpdate(nextProps, nextState) {

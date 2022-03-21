@@ -38,3 +38,7 @@ export const listPosOrder = (store_code,branch_id) => {
   export const paymentOrderPos = (store_code,branch_id,id_cart,data) => {
     return callApi(`/store/${store_code}/carts/${branch_id}/list/${id_cart}/order`, "post", data);
   };
+
+  export const fetchVoucher = (store_code,branch_id,id_cart,data) => {
+    return callApi(`/store/${store_code}/carts/${branch_id}/list/${id_cart}/use_voucher`, "post", data);
+  };
