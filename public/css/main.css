@@ -1010,12 +1010,19 @@ padding: 0 5px;
 }
 
 .header-pos {
-    background-color: #0964CF !important;
+    background-color: #cf7a37  !important;
 }
 
-.actives{
+.activess{
     background-color: white !important;
     color: black !important;
+    padding: 15px !important;
+    border-radius: 0 !important;
+    font-weight: 500;
+}
+.activesss{
+    background-color: #cf7a37  !important;
+    color:white !important;
 }
 
 /* 

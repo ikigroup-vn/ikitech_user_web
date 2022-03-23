@@ -222,7 +222,7 @@ class ModalDetail extends Component {
                             <p class="" style={{ margin: "0px", fontWeight: "bold" }}>Chi tiết sản phẩm</p>
                             <button type="button" class="close" onClick={this.handleClose} data-dismiss="modal">&times;</button>
                         </div>
-                        <div class="modal-body" style={{ position: "relative" }}>
+                        <div class="modal-body" style={{ position: "relative",marginBottom:"20px" }}>
                         <button class="btn btn-info" onClick={this.handleCallback} style={{ backgroundColor: "green", position: "absolute", right: "15px", top: "20px", zIndex: "10000" }}>Thêm</button>
                             <div className='model-card row' style={{ margin: "5px", width: "80%" }}>
                                 <div className='name-voucher col-4' style={{ width: "120px", height: "120px", padding: "8px" }}>

@@ -5,8 +5,9 @@ import * as profileAction from "../../actions/profile"
 import * as posAction from '../../actions/post_order'
 import { shallowEqual } from '../../ultis/shallowEqual'
 import * as dashboardAction from "../../actions/dashboard"
-import * as Env from "../../ultis/default"
 import history from '../../history'
+import ModalBranch from './ModalBranch'
+import ModalKeyboard from './ModalKeyboard'
 
 class Topbar extends Component {
     constructor(props) {
@@ -14,7 +15,8 @@ class Topbar extends Component {
         this.state = {
             searchValue: "",
             selectTap: -1,
-            txtBranch: ""
+            txtBranch: "",
+            fullScreen: false
         }
     }
     componentDidMount() {
@@ -27,7 +29,13 @@ class Topbar extends Component {
     }
     componentWillReceiveProps(nextProps) {
         if (!shallowEqual(this.props.listPos, nextProps.listPos)) {
-            this.props.handleCallbackTab(nextProps.listPos[0]?.id)
+            if (nextProps.listPos.length > 0) {
+                this.props.handleCallbackTab(nextProps.listPos[0]?.id)
+            } else {
+                this.handleCreateTab()
+            }
+            this.setState({selectTap:-1})
+
         }
     }
 
@@ -35,11 +43,11 @@ class Topbar extends Component {
         const { store_code } = this.props
         const branch_id = localStorage.getItem("branch_id")
         this.props.deleteOneCart(store_code, branch_id, idCart)
-        this.setState({selectTap:-1})
+        this.setState({ selectTap: -1 })
     }
     handleCreateTab = () => {
         const nameTab = {
-            name: `Giỏ hàng `
+            name: `Đơn hàng `
         }
         const { store_code } = this.props
         const branch_id = localStorage.getItem("branch_id")
@@ -49,15 +57,16 @@ class Topbar extends Component {
         this.setState({ selectTap: index })
         this.props.handleCallbackTab(id)
     }
-    handleChooseTab1 = (id) =>{
-        this.setState({selectTap:-1})
+    handleChooseTab1 = (id) => {
+        this.setState({ selectTap: -1 })
         this.props.handleCallbackTab(id)
     }
     searchData = (e) => {
         e.preventDefault()
         var { store_code } = this.props;
         var { searchValue } = this.state;
-        var params = `&search=${searchValue}`;
+        const limit = 12
+        var params = `&search=${searchValue}&limit=${limit}`;
         this.setState({ numPage: 20 })
         const branch_id = localStorage.getItem('branch_id')
         this.props.fetchAllProductV2(store_code, branch_id, 1, params);
@@ -69,49 +78,27 @@ class Topbar extends Component {
     onChangeSearch = (e) => {
         this.setState({ searchValue: e.target.value });
     };
-    showData = (stores) => {
-        var result = null;
-        var store_code = typeof this.props.store_code != "undefined" ? this.props.store_code : null
-        if (stores.length > 0) {
-            result = stores.map((data, index) => {
-                var selected = data.store_code === store_code ? true : false
-                return (
-                    <option value={data.id} key={index} selected={selected} >
-                        {data.name}
-                    </option>
 
-                );
-            });
-        } else {
-            return result;
-        }
-        return result;
-    };
-    onChange = (e) => {
-        var value = e.target.value;
-        localStorage.setItem('branch_id', value);
-        this.setState({ txtBranch: value })
-
-    };
     fullScreen = () => {
-        document.documentElement.requestFullscreen();
-        // document.addEventListener("click", () => {
-        //     document.documentElement.requestFullscreen().catch((e) => {
-        //         console.log(e)
-        //     })
-        // })
+        if (!document.fullscreenElement) {
+            document.documentElement.requestFullscreen();
+            this.setState({fullScreen:true})
+        } else {
+            document.exitFullscreen()
+            this.setState({fullScreen:false})
+        }
+
     }
 
 
     render() {
         var { listPos, branchStore, user } = this.props;
-        var branchStore = typeof branchStore == "undefined" ? [] : branchStore
-        var { txtBranch } = this.state
+
         return (
             <div>
                 <nav class="navbar navbar-expand navbar-light bg-white topbar static-top header-pos">
 
-                    <ul class="navbar-nav" >
+                    <ul class="navbar-nav" style={{ alignItems: "center" }} >
                         <li class="nav-item">
                             <div className='search-imput' style={{ display: 'flex' }}>
                                 <input
@@ -140,15 +127,15 @@ class Topbar extends Component {
 
                             listPos !== null && listPos.length > 0 ?
                                 <>
-                                    <li className={this.state.selectTap === -1 ? "actives nav-item" : 'nav-item'} style={{ display: "flex", alignItems: "center", margin: "0 7px", backgroundColor: "#11398a", color: "white", padding: "5px 10px", borderRadius: "5px" }} >
+                                    <li className={this.state.selectTap === -1 ? "activess nav-item" : 'nav-item'} style={{ display: "flex", alignItems: "center", margin: "0 7px", backgroundColor: "rgb(174 61 52)", color: "white", padding: "8px 10px", borderRadius: "5px" }} >
                                         <div className='tab-item' onClick={() => this.handleChooseTab1(listPos[0].id)} style={{ cursor: "pointer", marginRight: "5px" }}>{listPos[0].name}</div>
                                         <i class='fa fa-window-close' onClick={() => this.handleDelete(listPos[0].id)}></i>
                                     </li >
                                     {
-                                        listPos.slice(1,listPos.length).map((item, index) => {
+                                        listPos.slice(1, listPos.length).map((item, index) => {
                                             return (
-                                                <li key={index} className={index === this.state.selectTap ? "actives nav-item" : 'nav-item'} style={{ display: "flex", alignItems: "center", margin: "0 7px", backgroundColor: "#11398a", color: "white", padding: "5px 10px", borderRadius: "5px" }} >
-                                                    <div className='tab-item' onClick={() => this.handleChooseTab(item.id,index)} style={{ cursor: "pointer", marginRight: "5px" }}>{item.name}</div>
+                                                <li key={index} className={index === this.state.selectTap ? "activess nav-item" : 'nav-item'} style={{ display: "flex", alignItems: "center", margin: "0 7px", backgroundColor: "rgb(174 61 52)", color: "white", padding: "8px 10px", borderRadius: "5px" }} >
+                                                    <div className='tab-item' onClick={() => this.handleChooseTab(item.id, index)} style={{ cursor: "pointer", marginRight: "5px" }}>{item.name}</div>
                                                     <i class='fa fa-window-close' onClick={() => this.handleDelete(item.id)}></i>
                                                 </li >
                                             )
@@ -157,58 +144,47 @@ class Topbar extends Component {
                                 </>
                                 : ""
                         }
-                        {/* {listPos !== null && listPos.length > 0 ? listPos.map((item, index) => {
-                            return (
-                                <li key={index} className={index === this.state.selectTap || index === 0 ? "actives nav-item" : 'nav-item'} style={{ display: "flex", alignItems: "center", margin: "0 7px", backgroundColor: "#11398a", color: "white", padding: "5px 10px", borderRadius: "5px" }} >
-                                    <div className='tab-item' onClick={() => this.handleChooseTab(item.id,index)} style={{ cursor: "pointer", marginRight: "5px" }}>{item.name}</div>
-                                    <i class='fa fa-window-close' onClick={() => this.handleDelete(item.id)}></i>
-                                </li >
-                            )
-                        }) : ""
-                        } */}
-                        <li className='nav-item' style={{ display: 'flex', alignItems: "center", color: "white", fontSize: "20px" }}>
-                            <i class='fas fa-plus' onClick={() => this.handleCreateTab()} ></i>
+
+                        <li className='nav-item' style={{ display: 'flex', alignItems: "center", color: "white", fontSize: "20px", padding: "10px", cursor: "pointer" }} onClick={() => this.handleCreateTab()}>
+                            <i class='fas fa-plus' ></i>
                         </li>
                     </ul>
+
                     <ul className="navbar-nav ml-auto" style={{ display: "flex", alignItems: "center" }}>
-                        <div style={{ margin: 'auto' }} className={`nav-item dropdown no-arrow mx-1 `}>
-
-                            <select id="input" className="form-control border-input" name="store" value={txtBranch} onChange={this.onChange}>
-                                <option value="">-- Chọn chi nhánh --</option>
-                                {this.showData(branchStore)}
-                            </select>
-
-                        </div>
                         <li className="nav-item dropdown no-arrow" style={{ margin: "0 10px" }}>
-                            <a
-                                className="nav-link dropdown-toggle"
-                                href="/#"
-                                id="userDropdown"
-                                role="button"
-                                data-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                            >
-                                <span className="mr-2 small" style={{ color: "white" }}>
+                            <div className='wrap-info' data-toggle="modal" data-target="#modalBranch" style={{ display: "flex", color: "white", cursor: "pointer" }}>
+                                <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                <span className="mr-2 small" style={{ color: "white", marginLeft: "5px" }}>
+                                    Chi nhánh mặc định
+                                </span>
+
+                            </div>
+                            <div className='wrap-info' style={{ display: "flex", color: "white" }}>
+                                <i class="fa fa-user-o" aria-hidden="true"></i>
+                                <span className="mr-2 small" style={{ color: "white", marginLeft: "5px" }}>
                                     {user.name}
                                 </span>
-                                <img
-                                    className="img-profile rounded-circle"
-                                    src={user.avatar_image ? user.avatar_image : Env.IMG_NOT_FOUND}
-                                    alt="" />
-                            </a>
+                            </div>
+
                         </li>
+
                         <li className='nav-item' id='btn-full' style={{ margin: "0 10px", color: "white", cursor: "pointer" }} onClick={this.fullScreen}>
-                            <i class='fas fa-expand-arrows-alt fa-2x'></i>
+                            {!this.state.fullScreen  ?
+                                <i class='fas fa-expand-arrows-alt fa-2x' style={{ fontSize: "22px" }}></i> :
+                                <i class='fas fa-compress-arrows-alt' style={{ fontSize: "22px" }}></i>
+                            }
+
                         </li >
                         <li className='nav-item' style={{ color: "white", cursor: "pointer" }} onClick={this.goBackHome}>
-                            <i class='fas fa-home fa-2x'></i>
+                            <i class='fas fa-home fa-2x' style={{ fontSize: "22px" }}></i>
                         </li>
                         <li className='nav-item' style={{ margin: "0 10px" }}>
-                            <button className='btn btn-primary'>Phím tắt</button>
+                            <button className='btn' style={{ color: "white", border: "1px solid" }} data-toggle="modal" data-target="#modalKeyboard">Phím tắt</button>
                         </li>
                     </ul>
                 </nav>
+                <ModalBranch branchStore={branchStore} />
+                <ModalKeyboard />
             </div>
         )
     }
