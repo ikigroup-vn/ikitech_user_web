@@ -17,19 +17,19 @@ export const headerImg = [
   },
   {
     index: 5,
-    header: "https://i.imgur.com/A8E6kE9.png",
+    header: "https://i.imgur.com/bkA4MSp.png",
   },
   {
     index: 6,
-    header: "https://i.imgur.com/0DdXEA4.png",
+    header: "https://i.imgur.com/hL1npwI.png",
   },
   {
     index: 7,
-    header: "https://i.imgur.com/VNNLEEM.png",
+    header: "https://i.imgur.com/xu5BZ92.png",
   },
   {
     index: 8,
-    header: "https://i.imgur.com/xu5BZ92.png",
+    header: "https://i.imgur.com/AKgtOj5.png",
   },
 ];
 export const bannerImg = [
@@ -59,11 +59,7 @@ export const bannerImg = [
   },
   {
     index: 7,
-    banner: "https://i.imgur.com/P7bThvc.png",
-  },
-  {
-    index: 8,
-    banner: "https://i.imgur.com/Z80wcah.png",
+    banner: "https://i.imgur.com/eJrvjuE.png",
   },
 ];
 export const productImg = [
@@ -93,11 +89,11 @@ export const productImg = [
   },
   {
     index: 7,
-    product: "https://i.imgur.com/ur8j5xI.png",
+    product: "https://i.imgur.com/Iyzb3fw.png",
   },
   {
     index: 8,
-    product: "https://i.imgur.com/Iyzb3fw.png",
+    product: "https://i.imgur.com/efnEpc2.png",
   },
 ];
 export const blogImg = [
@@ -125,14 +121,6 @@ export const blogImg = [
     index: 6,
     blog: "https://i.imgur.com/Cak6Klk.png",
   },
-  {
-    index: 7,
-    blog: "https://i.imgur.com/YP0baCT.png",
-  },
-  {
-    index: 8,
-    blog: "https://i.imgur.com/QF0oaDA.png",
-  },
 ];
 export const footerImg = [
   {
@@ -141,30 +129,10 @@ export const footerImg = [
   },
   {
     index: 2,
-    footer: "https://i.imgur.com/qLyZfZl.png",
+    footer: "https://i.imgur.com/V5T6fvN.png",
   },
   {
     index: 3,
-    footer: "https://i.imgur.com/qLyZfZl.png",
-  },
-  {
-    index: 4,
-    footer: "https://i.imgur.com/qLyZfZl.png",
-  },
-  {
-    index: 5,
-    footer: "https://i.imgur.com/V5T6fvN.png",
-  },
-  {
-    index: 6,
     footer: "https://i.imgur.com/YKPn77N.png",
-  },
-  {
-    index: 7,
-    footer: "https://i.imgur.com/V5T6fvN.png",
-  },
-  {
-    index: 8,
-    footer: "https://i.imgur.com/V5T6fvN.png",
   },
 ];

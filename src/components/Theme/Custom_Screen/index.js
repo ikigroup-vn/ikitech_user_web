@@ -17,7 +17,12 @@ import {
   blogImg,
   footerImg,
 } from "./data.js";
+import Slider from "react-slick";
+
 import "./style.css";
+import "slick-carousel/slick/slick.css";
+
+import "slick-carousel/slick/slick-theme.css";
 class Custom_Screen extends Component {
   constructor(props) {
     super(props);
@@ -127,6 +132,18 @@ class Custom_Screen extends Component {
   };
 
   render() {
+    const setting = {
+      dots: true,
+      autoplay: false,
+      autoplaySpeed: 4000,
+      pauseOnHover: true,
+      infinite: true,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+
+      arrow: true,
+      dotsClass: "slick-dots slick-thumb",
+    };
     var {
       header_type,
       banner_type,
@@ -335,44 +352,52 @@ class Custom_Screen extends Component {
               <form role="form">
                 <div class="box-body">
                   <TabPanel>
-                    {headerImg.map((v, i) => (
-                      <ItemHeaderTheme
-                        badges={badges}
-                        chooseHeader={this.chooseHeader}
-                        header_type={header_type}
-                        v={v}
-                      />
-                    ))}
+                    <Slider {...setting}>
+                      {headerImg.map((v, i) => (
+                        <ItemHeaderTheme
+                          badges={badges}
+                          chooseHeader={this.chooseHeader}
+                          header_type={header_type}
+                          v={v}
+                        />
+                      ))}
+                    </Slider>
                   </TabPanel>
                   <TabPanel>
-                    {bannerImg.map((v, i) => (
-                      <ItemBannerTheme
-                        badges={badges}
-                        chooseBanner={this.chooseBanner}
-                        banner_type={banner_type}
-                        v={v}
-                      />
-                    ))}
+                    <Slider {...setting}>
+                      {bannerImg.map((v, i) => (
+                        <ItemBannerTheme
+                          badges={badges}
+                          chooseBanner={this.chooseBanner}
+                          banner_type={banner_type}
+                          v={v}
+                        />
+                      ))}
+                    </Slider>
                   </TabPanel>
                   <TabPanel>
-                    {productImg.map((v, i) => (
-                      <ItemProductTheme
-                        badges={badges}
-                        chooseProduct={this.chooseProduct}
-                        product_home_type={product_home_type}
-                        v={v}
-                      />
-                    ))}
+                    <Slider {...setting}>
+                      {productImg.map((v, i) => (
+                        <ItemProductTheme
+                          badges={badges}
+                          chooseProduct={this.chooseProduct}
+                          product_home_type={product_home_type}
+                          v={v}
+                        />
+                      ))}
+                    </Slider>
                   </TabPanel>
                   <TabPanel>
-                    {blogImg.map((v, i) => (
-                      <ItemNewsTheme
-                        badges={badges}
-                        chooseNews={this.chooseNews}
-                        post_home_type={post_home_type}
-                        v={v}
-                      />
-                    ))}
+                    <Slider {...setting}>
+                      {blogImg.map((v, i) => (
+                        <ItemNewsTheme
+                          badges={badges}
+                          chooseNews={this.chooseNews}
+                          post_home_type={post_home_type}
+                          v={v}
+                        />
+                      ))}
+                    </Slider>
                   </TabPanel>
                   <TabPanel>
                     <div class=" ml-3" style={{ height: "30px" }}>
@@ -399,14 +424,16 @@ class Custom_Screen extends Component {
                     </div>
 
                     {!use_footer_html ? (
-                      footerImg.map((v, i) => (
-                        <ItemFooterTheme
-                          badges={badges}
-                          chooseFooter={this.chooseFooter}
-                          footer_type={footer_type}
-                          v={v}
-                        />
-                      ))
+                      <Slider {...setting}>
+                        {footerImg.map((v, i) => (
+                          <ItemFooterTheme
+                            badges={badges}
+                            chooseFooter={this.chooseFooter}
+                            footer_type={footer_type}
+                            v={v}
+                          />
+                        ))}
+                      </Slider>
                     ) : (
                       <div class="card shadow mb-4">
                         <div class="card-body">

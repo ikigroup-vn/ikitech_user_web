@@ -3,6 +3,7 @@ import * as themeAction from "../../../actions/theme";
 import { connect } from "react-redux";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import * as Env from "../../../ultis/default";
+import "./style.css";
 class Custom_Screen extends Component {
   constructor(props) {
     super(props);
@@ -60,33 +61,32 @@ class Custom_Screen extends Component {
         }`}
       >
         <div class="row">
-          <div class="col-10 col-header">
-            <img src={v.header} />
-            <span>Header {v.index}</span>
-            <div className="linear">
-            <button
-              onClick={() => this.chooseHeader(v.index)}
-              type="button"
-              class={`btn btn-primary btn-sm btn-header ${
-                header_type !== v.index ? "show" : "hide"
-              }`}
-            >
-               Chọn{" "}</button>
-            </div>
-
-          </div>
-          <div class="col-2 kv-avatar">
+          <div class="col-12 kv-avatar" style={{ paddingLeft: 0 }}>
             <div style={{ display: "flex" }}>
               <button
-                style={{ margin: "10px auto" }}
+                onClick={() => this.chooseHeader(v.index)}
                 type="button"
-                class={`btn btn-secondary btn-sm ${
+                style={{ margin: "10px auto" }}
+                class={`btn btn-primary btn-sm btn-header ${
+                  header_type !== v.index ? "show" : "hide"
+                }`}
+              >
+                <i class="fa fa-plus"></i> Chọn
+              </button>
+              <button
+                type="button"
+                style={{ margin: "10px auto" }}
+                class={`btn btn-success btn-sm ${
                   header_type === v.index ? "show" : "hide"
                 }`}
               >
                 <i class="fa fa-check"></i> Đã chọn
               </button>
             </div>
+          </div>
+          <div class="col-12 col-header">
+            <img src={v.header} />
+            <span>Header {v.index}</span>
           </div>
         </div>
       </div>
