@@ -45,6 +45,7 @@ export default function (endpoint, method, body) {
         return response;
       },
       function (error) {
+
         try {
           if (error.response.data.code == 404) {
             store.dispatch({
@@ -56,6 +57,9 @@ export default function (endpoint, method, body) {
                 content: "Đã xảy ra lỗi, vui lòng kiểm tra lại",
               },
             });
+          }
+          if (error.response.data.code == 401) {
+            history.push("/login");
           }
           store.dispatch({
             type: Types.SHOW_LOADING,
