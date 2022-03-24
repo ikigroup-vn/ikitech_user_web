@@ -46,8 +46,10 @@ class Topbar extends Component {
         this.setState({ selectTap: -1 })
     }
     handleCreateTab = () => {
+        const length = this.props.listPos.length 
+        console.log("length",length)
         const nameTab = {
-            name: `Đơn hàng `
+            name: `Đơn hàng ${length}`
         }
         const { store_code } = this.props
         const branch_id = localStorage.getItem("branch_id")

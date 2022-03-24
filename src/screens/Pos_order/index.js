@@ -34,6 +34,7 @@ class PostOrder extends Component {
             note: "",
             page: 1,
             numPage: 12,
+            namePos:"",
             listPosItem: [],
             idCart: "",
             selectPrice:-1,
@@ -128,7 +129,7 @@ class PostOrder extends Component {
 
     componentWillReceiveProps(nextProps) {
         if (!shallowEqual(nextProps.listItemCart, this.props.listItemCart)) {
-            this.setState({ priceCustomer: nextProps.listItemCart.info_cart.total_final,selectPrice:-1 })
+            this.setState({ priceCustomer: nextProps.listItemCart.info_cart.total_final,selectPrice:-1,namePos:nextProps.listItemCart.name })
         }
     }
     shouldComponentUpdate(nextProps, nextState) {
@@ -151,12 +152,13 @@ class PostOrder extends Component {
             this.props.fetchInfoOneCart(this.props.match.params.store_code, branch_id, id)
             this.setState({
                 priceCustomer: 0,
-                modalUpdateDiscount: {
-                    code: ""
-                }
+                // modalUpdateDiscount: {
+                //     code: ""
+                // }
             })
         }
         if (!shallowEqual(nextState.modalUpdateCart, this.state.modalUpdateCart) || !shallowEqual(nextState.modalUpdateDiscount, this.state.modalUpdateDiscount)) {
+            console.log("hiiiiii")
             const branch_id = localStorage.getItem("branch_id")
             const { store_code } = this.props.match.params
             const formData = {
@@ -164,11 +166,12 @@ class PostOrder extends Component {
                 customer_phone: nextState.modalUpdateCart.phone_number,
                 discount: formatNumber(nextState.modalUpdateDiscount.txtDiscount),
                 code_voucher: nextState.modalUpdateDiscount.code,
-                name: "Đơn hàng"
+                name: nextState.namePos
             }
             this.props.updateInfoCart(store_code, branch_id, nextState.idCart, formData)
         }
         if (!shallowEqual(nextState.modalUpdateDiscount.code, this.state.modalUpdateDiscount.code)) {
+            console.log("haaaaaaaa")
             const branch_id = localStorage.getItem("branch_id")
             const id = nextState.idCart
             const data = {
