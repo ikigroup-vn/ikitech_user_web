@@ -3,7 +3,16 @@ import routes from "./routes";
 import { Router, Route, Switch } from "react-router-dom";
 import history from "./history";
 import { randomString } from "./ultis/helpers";
+import themeData from "./ultis/theme_data";
+
+
 class App extends Component {
+
+
+  componentDidMount() {
+    document.title = `Quản lý - ${themeData().loginTitle}`
+  }
+
   showContentMenus = (routes) => {
     var result = null;
     if (routes.length > 0) {
@@ -23,7 +32,7 @@ class App extends Component {
     return <Switch>{result}</Switch>;
   };
   render() {
-    return <Router history={history}>{this.showContentMenus(routes)}</Router>;
+    return <Router history={history}>{this.showContentMenus(routes)}</Router>
   }
 }
 

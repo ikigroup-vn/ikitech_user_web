@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { Route, Link } from "react-router-dom";
 import { connect } from "react-redux"
+import themeData from "../../ultis/theme_data";
+
 class Sidebar extends Component {
 
   
@@ -18,6 +20,7 @@ class Sidebar extends Component {
        <ul
         className="navbar-nav navbar-main sidebar sidebar-dark accordion"
         id="accordionSidebar"
+       
       >
         <Link
           className="sidebar-brand d-flex align-items-center justify-content-center"

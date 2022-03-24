@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { menu } from "../../ultis/menu";
 import { shallowEqual } from "../../ultis/shallowEqual"
 import * as Types from "../../constants/ActionType";
+import themeData from "../../ultis/theme_data";
 class Sidebar extends Component {
   constructor(props) {
     super(props);
@@ -258,8 +259,12 @@ class Sidebar extends Component {
     return (
       <div className="col-2 col-2-nav">
         <ul
-          className="navbar-nav navbar-main sidebar sidebar-dark accordion" style={{ overflowX: "hidden" }}
+          className="navbar-nav navbar-main sidebar sidebar-dark accordion" style={{ 
+            overflowX: "hidden",
+            backgroundColor:themeData().backgroundColor
+           }}
           id="accordionSidebar"
+        
         >
           <Link
             className="sidebar-brand d-flex align-items-center justify-content-center"
@@ -273,7 +278,7 @@ class Sidebar extends Component {
             </div>
             <div className="sidebar-brand-text">
 
-              <img width="80%" src="/images/logoikitechdotrang.png" class="img-responsive" alt="Image" />
+              <img width="80%" src={themeData().logo} class="img-responsive" alt="Image" />
 
             </div>
           </Link>

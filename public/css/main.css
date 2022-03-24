@@ -464,7 +464,7 @@ img {
     position: fixed;
     height: 100%;
     z-index: 1000;
-    background-color: #C12026 !important;
+    background-color: #C12026;
 }
 .col-2-nav{
     flex: 0 0 15.66667% !important;
