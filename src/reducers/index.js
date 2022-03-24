@@ -37,6 +37,7 @@ import {agencyReducers} from "./agency"
 import {orderReducers} from "./order_product"
 import {inventoryReducers} from "./inventory"
 import {importStockReducers} from "./ImportStock"
+import {posReducers} from "./pos_order"
 
 
 const appReducers = combineReducers({
@@ -78,6 +79,8 @@ const appReducers = combineReducers({
     orderReducers,
     inventoryReducers,
     importStockReducers,
+    posReducers,
+
 })
 
 export default appReducers;

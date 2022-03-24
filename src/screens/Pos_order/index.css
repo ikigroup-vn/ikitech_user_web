@@ -1,0 +1,69 @@
+.pos-modal{
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+    color: rgba(0, 0, 0, 0.87);
+}
+.col-list-pos{
+    float: left;
+    width: calc(100% - 452px);
+    height: calc(100vh - 50px);
+    background: #fff;
+}
+.row-payman{
+    height: calc(100vh - 50px);
+    display: flex;
+    padding: 5px 15px;
+    flex-flow: column;
+    background-color: #fff;
+    border-left: 7px solid rgb(229, 229, 229);
+}
+.col-list-order{
+    overflow-y: auto;
+    transition: height 0.5s;
+    height: calc(100% - 400px);
+}
+
+.col-list-product{
+    background: #fff;
+    border-top: 7px solid rgb(229, 229, 229);
+    transition: height 0.5s;
+}
+.show-product{
+    padding: 10px;
+}
+.wap-list{
+    width: 100%;
+    height: 33px;
+    display: flex;
+    font-weight: 500;
+    padding-right: 15px;
+    justify-content: space-between;
+}
+.row-payman{
+    height: calc(100vh - 50px);
+    display: flex;
+    padding: 5px 15px;
+    flex-flow: column;
+    background-color: #fff;
+}
+.wrap-price{
+    height: calc(100% - 40px);
+    overflow-y: clip;
+
+}
+.wrap-price::-webkit-scrollbar { 
+    display: none; 
+}
+.button-note p{
+    border: 1px solid rgb(196, 205, 213);
+    border-radius: 3px;
+    padding: 2px;
+    width: 30px;
+    text-align: center;
+}
+.item-recomment{
+    padding: 2px 20px;
+    color:black;
+    border-radius: 8px;
+    background: #EBEDF1;
+    cursor:pointer;
+}

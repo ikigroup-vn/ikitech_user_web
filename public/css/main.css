@@ -1009,6 +1009,21 @@ padding: 0 5px;
     font-size: 20px;
 }
 
+.header-pos {
+    background-color: #cf7a37  !important;
+}
+
+.activess{
+    background-color: white !important;
+    color: black !important;
+    padding: 15px !important;
+    border-radius: 0 !important;
+    font-weight: 500;
+}
+.activesss{
+    background-color: #cf7a37  !important;
+    color:white !important;
+}
 
 /* 
 	Ok so you have made it this far, that means you are very keen to on my code. 
