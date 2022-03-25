@@ -19,12 +19,11 @@
 .col-list-order{
     overflow-y: auto;
     transition: height 0.5s;
-    height: calc(100% - 400px);
+    height:100%;
 }
 
 .col-list-product{
     background: #fff;
-    border-top: 7px solid rgb(229, 229, 229);
     transition: height 0.5s;
 }
 .show-product{
@@ -66,4 +65,75 @@
     border-radius: 8px;
     background: #EBEDF1;
     cursor:pointer;
+}
+
+#txtPassword {
+    -webkit-text-security: disc;
+  }
+  .panel-container {
+  display: flex;
+  flex-direction: row;
+  border: 1px solid silver;
+  overflow: hidden;
+  
+  /* avoid browser level touch actions */
+  xtouch-action: none;
+}
+
+
+
+.splitter {
+  flex: 0 0 auto;
+  width: 18px;  
+  background: url(https://raw.githubusercontent.com/RickStrahl/jquery-resizable/master/assets/vsizegrip.png) center center no-repeat #535353;
+  min-height: 200px;
+  cursor: col-resize;  
+}
+
+
+
+/* vertical panel */
+
+.panel-container-vertical {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border: none;
+}
+
+.panel-top {
+  flex: 0 0 auto;
+  /* only manually resize */
+  height: 328px;
+  width: 100%;
+  white-space: nowrap;
+  color: white;
+}
+
+.splitter-horizontal {
+    flex: 0 0 auto;
+    z-index: 2;
+    height: 9px;
+    background: url(https://raw.githubusercontent.com/RickStrahl/jquery-resizable/master/assets/hsizegrip.png) center center no-repeat #e5e5e5;
+    cursor: row-resize;
+}
+
+.panel-bottom {
+  flex: 1 1 auto;
+  z-index: 2;
+  /* resizable */
+  padding: 10px;
+  min-height: 200px;
+}
+
+
+
+pre {
+  margin: 20px;
+  padding: 10px;
+  background: #eee;
+  border: 1px solid silver;
+  border-radius: 4px;
+  overflow: auto;
 }

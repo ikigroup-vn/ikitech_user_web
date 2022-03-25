@@ -70,13 +70,6 @@ import { shallowEqual } from '../../ultis/shallowEqual'
         
         return (
             <div className='list-group'>
-                <div className='wap-list'>
-                    <div>STT</div>
-                    <div style={{width:"40%"}}>Tên sản phẩm</div>
-                    <div>Số lượng</div>
-                    <div style={{width:"10%"}}>Đơn giá</div>
-                    <div style={{width:"13%"}}>Thành tiền</div>
-                </div>
                 {listItemPos.info_cart?.line_items.map((item,index) =>{
                     return(
                         <ItemInCart item = {item} index ={index} addQuantity ={this.addQuantity} handleDelete ={this.handleDelete} subQuantity ={this.subQuantity} />

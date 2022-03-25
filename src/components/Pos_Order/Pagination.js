@@ -27,19 +27,19 @@ class Pagination extends Component {
     }
     if (links.length > 0) {
       result = links.map((data, index) => {
-        var active = data.active == true ? "active" : null;
+        var active = data.active == true ? "active_pos" : null;
         var label = (data.label.includes("&laquo; ") || data.label.includes(" &raquo;"))
           ? data.label.replace("&laquo; Previous", "Trước").replace("Next &raquo;", "Sau")
           : data.label
         if (data.url == null) {
           return (
-            <li class={`page-item ${active} `}><a class="page-link" style={{ padding: "3px" }}>{label}</a></li>
+            <li class={`page-item ${active} `}><a class="page-link" style={{ padding: "7px" }}>{label}</a></li>
           );
         }
         else {
 
           return (
-            <li class={`page-item ${active} `}><a onClick={() => this.passPagination(data.url.split('?page=')[1])} class="page-link" style={{ padding: "3px" }}>{label}</a></li>
+            <li class={`page-item ${active} `}><a onClick={() => this.passPagination(data.url.split('?page=')[1])} class="page-link" style={{ padding: "7px" }}>{label}</a></li>
           );
         }
 

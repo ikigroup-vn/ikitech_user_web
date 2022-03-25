@@ -151,10 +151,10 @@ class ItemInCart extends Component {
         const { item,index } = this.props
         const { currentQuantity } = this.state
         return (
-            <div class="card" style={{marginBottom:"10px",background:"#cf7a3717",boxShadow:" 0px 2px 4px rgb(63 63 63 / 25%)"}} key ={index}>
+            <div class="card card-item-pos" style={{marginBottom:"10px"}} key ={index}>
             <div class="card-body" style={{padding:"0",position:"relative"}}>
                 <div className='wrap-item' style={{ display: "flex",fontSize:"1rem", justifyContent: 'space-between',alignItems:"center" }}>
-                    <div className='index'>{index}</div>
+                    <div className='index'>{index + 1}</div>
                     <div className='info-product' style={{width:"40%",fontWeight:"400",display:"flex",flexDirection:"column"}}>
                     <div className='name-product'>{item.product.name}</div>
                     <div className='wrap-distributes_selected' style={{fontSize:"12px",fontStyle:"italic"}}>

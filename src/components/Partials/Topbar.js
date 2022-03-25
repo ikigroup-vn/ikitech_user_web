@@ -13,7 +13,7 @@ class Topbar extends Component {
     super(props);
     this.state = {
       isLoadNotification: "",
-      txtBranch:""
+      txtBranch: ""
     }
   }
 
@@ -27,8 +27,20 @@ class Topbar extends Component {
       this.props.fetchBranchStore(this.props.store_code);
     }
     const branchId = localStorage.getItem('branch_id')
-    this.setState({txtBranch:branchId})
+    this.setState({ txtBranch: branchId })
 
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.branchStore !== this.props.branchStore) {
+      const branch_id = localStorage.getItem("branch_id")
+      this.setState({ txtBranch: branch_id })
+      const value = nextProps.branchStore[0]?.id
+      if (!branch_id) {
+        localStorage.setItem('branch_id', value);
+        this.setState({ txtBranch: value })
+      }
+    }
   }
 
   logout = () => {
@@ -40,7 +52,7 @@ class Topbar extends Component {
   onChange = (e) => {
     var value = e.target.value;
     localStorage.setItem('branch_id', value);
-    this.setState({txtBranch:value})
+    this.setState({ txtBranch: value })
 
   };
   showData = (stores) => {
@@ -70,7 +82,7 @@ class Topbar extends Component {
   render() {
     var chooseStore = this.props.isHome ? "hide" : "show"
     var { user, store_code, stores, store, branchStore } = this.props
-    var { isLoadNotification,txtBranch } = this.state
+    var { isLoadNotification, txtBranch } = this.state
     var stores = typeof stores == "undefined" ? [] : stores
     var branchStore = typeof branchStore == "undefined" ? [] : branchStore
     var name = typeof user.name == "undefined" || user.name == "" || user.name == null ? "Unknown" : user.name

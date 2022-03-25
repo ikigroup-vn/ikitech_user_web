@@ -1024,7 +1024,33 @@ padding: 0 5px;
     background-color: #cf7a37  !important;
     color:white !important;
 }
+.card-item-pos:hover{
+    background:#cf7a3717;
+    box-shadow: 0px 2px 4px rgb(63 63 63 / 25%);
+}
+.page-item.active_pos .page-link {
+    z-index: 3;
+    color: #fff;
+    background-color: #cf7a37 ;
+    border-color: #cf7a37;
+}
+.btn-pay {
+    width: 63%;
+    font-size: 29px;
+    color: #fff;
+    background-color: #E56F25  ;
+    border-color: #E56F25  ;
+}
 
+.btn-pay:hover {
+    color: #fff;
+    background-color: #9c4d10  ;
+    border-color: #9c4d10  ;
+}
+.card-product-pos:hover {
+    border: 1px solid rgb(128 128 128 / 70%) !important;
+    background-color: #daa48324;
+}
 /* 
 	Ok so you have made it this far, that means you are very keen to on my code. 
 	Anyway I don't really mind it. This is a great way to learn so you actually doing the right thing:)
