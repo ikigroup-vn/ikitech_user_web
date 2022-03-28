@@ -139,7 +139,7 @@ export const ikipos_menu = [
 
                 ],
             },
-      
+
 
             {
                 name: "Kế toán",
@@ -149,7 +149,7 @@ export const ikipos_menu = [
                 exact: true,
                 to: "/posts/category",
             },
- 
+
 
             {
                 name: "Khách hàng",
@@ -256,7 +256,7 @@ export const ikipos_menu = [
                         exact: true,
                         to: "/branch/index",
                     },
-                
+
                     {
                         name: "Nhân viên",
                         class: "staff_list",
