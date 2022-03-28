@@ -9,6 +9,7 @@ import history from '../../history'
 import ModalBranch from './ModalBranch'
 import ModalKeyboard from './ModalKeyboard'
 import ModalDelete from './ModalDelete'
+import * as branchAction from "../../actions/branch"
 
 class Topbar extends Component {
     constructor(props) {
@@ -17,8 +18,8 @@ class Topbar extends Component {
             searchValue: "",
             selectTap: -1,
             fullScreen: false,
-            idCart:"",
-            branchId:""
+            idCart: "",
+            branchId: ""
         }
     }
     componentDidMount() {
@@ -30,14 +31,40 @@ class Topbar extends Component {
 
     }
     componentWillReceiveProps(nextProps) {
+        if (!shallowEqual(nextProps.branchStore, this.props.branchStore)) {
+
+
+            if (nextProps.branchStore != null && nextProps.branchStore.length > 0) {
+
+                const branch_id = localStorage.getItem("branch_id")
+
+                console.log("branch_id", branch_id)
+                console.log("currentBranch", this.props.currentBranch)
+
+                if (branch_id != null) {
+                    this.setState({ branchId: branch_id })
+
+                } else {
+                    branch_id = nextProps.branchStore[0]?.id
+                    localStorage.setItem('branch_id', branch_id);
+                    this.setState({ branchId: branch_id })
+
+                }
+                const selectedBranch = this.props.branchStore.find(branch => branch.id == branch_id);
+                this.props.changeBranch(selectedBranch)
+            }
+
+        }
+
+
         if (!shallowEqual(this.props.listPos, nextProps.listPos)) {
             if (nextProps.listPos.length > 0) {
                 this.props.handleCallbackTab(nextProps.listPos[0]?.id)
             } else {
-               // this.handleCreateTab()
-               if (nextProps.listPos.length == 0) {
-                this.handleCreateTab()
-            }
+                // this.handleCreateTab()
+                if (nextProps.listPos.length == 0) {
+                    this.handleCreateTab()
+                }
             }
             this.setState({ selectTap: -1 })
 
@@ -48,10 +75,12 @@ class Topbar extends Component {
                 this.handleCreateTab()
             }
         }
+
+
     }
-    
-    shouldComponentUpdate(nextProps, nextState){
-        if (!shallowEqual(nextState.branchId, this.state.branchId)){
+
+    shouldComponentUpdate(nextProps, nextState) {
+        if (!shallowEqual(nextState.branchId, this.state.branchId)) {
             const { store_code } = this.props
             const branch_id = localStorage.getItem("branch_id")
             this.props.listPosOrder(store_code, branch_id)
@@ -63,7 +92,7 @@ class Topbar extends Component {
 
     handleDelete = (idCart) => {
 
-        this.setState({ selectTap: -1,idCart:idCart })
+        this.setState({ selectTap: -1, idCart: idCart })
     }
     handleCreateTab = () => {
         if (this.props.listPos.length > 0) {
@@ -127,14 +156,21 @@ class Topbar extends Component {
 
     }
 
-    handleCallbackBrach = (modal) =>{
-        this.setState({branchId:modal})
+    handleCallbackBrach = (branchId) => {
+        this.setState({ branchId: branchId })
+
+        const selectedBranch = this.props.branchStore.find(branch => branch.id == branchId);
+
+        this.props.changeBranch(selectedBranch)
+
+
+         window.location.reload();
     }
 
 
     render() {
-        var { listPos, branchStore, user, store_code } = this.props;
-        var {idCart} = this.state
+        var { listPos, branchStore, user, store_code, currentBranch } = this.props;
+        var { idCart } = this.state
         return (
             <div>
                 <nav class="navbar navbar-expand navbar-light bg-white topbar static-top header-pos">
@@ -146,7 +182,7 @@ class Topbar extends Component {
                                     style={{ maxWidth: "400px", minWidth: "300px", borderRadius: '5px' }}
                                     type="search"
                                     name="txtSearch"
-                                    id ="serch-product"
+                                    id="serch-product"
                                     onChange={this.onChangeSearch}
                                     class="form-control"
                                     placeholder="Tìm kiếm sản phẩm"
@@ -196,7 +232,7 @@ class Topbar extends Component {
                             <div className='wrap-info' data-toggle="modal" data-target="#modalBranch" style={{ display: "flex", color: "white", cursor: "pointer" }}>
                                 <i class="fa fa-map-marker" aria-hidden="true"></i>
                                 <span className="mr-2 small" style={{ color: "white", marginLeft: "5px" }}>
-                                    Chi nhánh mặc định
+                                    {currentBranch?.name ?? "Chưa có chi nhánh"}
                                 </span>
 
                             </div>
@@ -224,9 +260,9 @@ class Topbar extends Component {
                         </li>
                     </ul>
                 </nav>
-                <ModalBranch branchStore={branchStore} handleCallbackBrach = {this.handleCallbackBrach}/>
+                <ModalBranch currentBranch={currentBranch} branchStore={branchStore} handleCallbackBrach={this.handleCallbackBrach} />
                 <ModalKeyboard />
-                <ModalDelete idCart = {idCart} store_code = {store_code}/>
+                <ModalDelete idCart={idCart} store_code={store_code} />
             </div>
         )
     }
@@ -237,7 +273,8 @@ const mapStateToProps = (state) => {
         listPos: state.posReducers.pos_reducer.listPosOrder,
         branchStore: state.storeReducers.store.branchStore,
         user: state.userReducers.user.userID,
-        loadingCart: state.posReducers.pos_reducer.loadingCart
+        loadingCart: state.posReducers.pos_reducer.loadingCart,
+        currentBranch: state.branchReducers.branch.currentBranch
     }
 }
 const mapDispatchToProps = (dispatch, props) => {
@@ -258,6 +295,9 @@ const mapDispatchToProps = (dispatch, props) => {
         fetchUserId: () => {
             dispatch(profileAction.fetchUserId());
         },
+        changeBranch: (branchData) => {
+            dispatch(branchAction.changeBranch(branchData))
+        }
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Topbar)

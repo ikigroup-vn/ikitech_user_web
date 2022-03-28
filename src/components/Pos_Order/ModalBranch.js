@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
+import { shallowEqual } from '../../ultis/shallowEqual'
 
 class ModalBranch extends Component {
     constructor(props) {
         super(props)
         this.state = {
             txtBranch: "",
-            nameBranch:""
+            nameBranch: ""
         }
     }
 
@@ -16,7 +17,7 @@ class ModalBranch extends Component {
             result = stores.map((data, index) => {
                 var selected = data.store_code === store_code ? true : false
                 return (
-                    <option value={data.id} key={index} selected={selected} name = {data.name} >
+                    <option value={data.id} key={index} selected={selected} name={data.name} >
                         {data.name}
                     </option>
 
@@ -30,16 +31,28 @@ class ModalBranch extends Component {
     onChange = (e) => {
         var value = e.target.value;
         var name = e.target.name
-        this.setState({ txtBranch: value, nameBranch:name })
+        this.setState({ txtBranch: value, nameBranch: name })
     };
-    handleAddBranch = () =>{
-        localStorage.setItem('branch_id', this.state.txtBranch );
+    handleAddBranch = () => {
+        localStorage.setItem('branch_id', this.state.txtBranch);
         this.props.handleCallbackBrach(this.state.txtBranch)
+    }
+
+    componentWillReceiveProps(nextProps) {
+
+
+        if (!shallowEqual(nextProps.currentBranch, this.props.currentBranch)) {
+
+            if (nextProps.currentBranch != null) {
+                this.setState({ txtBranch: nextProps.currentBranch.id, nameBranch: nextProps.currentBranch.name })
+            }
+
+        }
     }
 
     render() {
         const { branchStore } = this.props
-        var { txtBranch,nameBranch } = this.state
+        var { txtBranch, nameBranch } = this.state
         return (
             <div>
                 <div class="modal" id="modalBranch">

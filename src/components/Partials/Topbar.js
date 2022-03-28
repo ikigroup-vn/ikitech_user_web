@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import * as profileAction from "../../actions/profile"
+import * as branchAction from "../../actions/branch"
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import * as userLocalApi from "../../data/local/user"
@@ -8,6 +9,7 @@ import history from "../../history";
 import * as Env from "../../ultis/default"
 import Notification from "./Notification"
 import * as helper from "../../ultis/helpers"
+import { shallowEqual } from "../../ultis/shallowEqual";
 class Topbar extends Component {
   constructor(props) {
     super(props);
@@ -32,13 +34,20 @@ class Topbar extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.branchStore !== this.props.branchStore) {
+
+
+    if (!shallowEqual(nextProps.branchStore, this.props.branchStore)) {
       const branch_id = localStorage.getItem("branch_id")
       this.setState({ txtBranch: branch_id })
       const value = nextProps.branchStore[0]?.id
+
+      const selectedBranch = this.props.branchStore.find(branch => branch.id == value);
+      this.props.changeBranch(selectedBranch)
+
       if (!branch_id) {
         localStorage.setItem('branch_id', value);
         this.setState({ txtBranch: value })
+   
       }
     }
   }
@@ -53,7 +62,12 @@ class Topbar extends Component {
     var value = e.target.value;
     localStorage.setItem('branch_id', value);
     this.setState({ txtBranch: value })
+    var branchStore = typeof this.props.branchStore == "undefined" ? [] : this.props.branchStore
 
+    const selectedBranch = branchStore.find(branch => branch.id = value);
+    this.props.changeBranch(selectedBranch)
+
+    window.location.reload();
   };
   showData = (stores) => {
     var result = null;
@@ -202,6 +216,7 @@ const mapStateToProps = (state) => {
     stores: state.storeReducers.store.allStore,
     store: state.storeReducers.store.storeID,
     branchStore: state.storeReducers.store.branchStore,
+    currentBranch: state.branchReducers.branch.currentBranch
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -214,6 +229,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchBranchStore: (store_code) => {
       dispatch(dashboardAction.fetchBranchStore(store_code))
+    },
+    changeBranch: (branchData) => {
+      dispatch(branchAction.changeBranch(branchData))
     }
 
   };
