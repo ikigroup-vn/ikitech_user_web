@@ -9,6 +9,7 @@ class InfoProduct extends Component {
     this.state = {
       txtName: "",
       txtPrice: "",
+      txtImportPrice:"",
       txtBarcode: "",
       txtStatus: 0,
       category_parent: [],
@@ -80,7 +81,7 @@ class InfoProduct extends Component {
     var value_text = e.target.value;
     var value = value_text
     const _value = formatNumber(value);
-    if (name == "txtPrice" || name == "txtPercentC" || name == "txtQuantityInStock") {
+    if (name == "txtPrice" || name == "txtImportPrice" || name == "txtPercentC" || name == "txtQuantityInStock") {
       if (!isNaN(Number(_value))) {
         value = new Intl.NumberFormat().format(_value);
         value = value.toString().replace(/\./g, ',')
@@ -223,7 +224,7 @@ class InfoProduct extends Component {
   flipEven() { this.setState({ even: !this.state.even }); }
   render() {
     const { inputValue, menuIsOpen } = this.state;
-    var { listCategory, barcode, category_parent, category_children_ids, txtName, txtStatus, txtCategory, txtBarcode, txtPrice, txtQuantityInStock, txtPercentC, disabledPrice, sku } = this.state;
+    var { listCategory, txtImportPrice, barcode, category_parent, category_children_ids, txtName, txtStatus, txtCategory, txtBarcode, txtPrice, txtQuantityInStock, txtPercentC, disabledPrice, sku } = this.state;
 
     return (
       <div class="card-body" style={{ padding: "0.8rem" }}>
@@ -268,7 +269,7 @@ class InfoProduct extends Component {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="name">Giá</label>
+          <label htmlFor="name">Giá bán lẻ</label>
 
           <div class="form-group" style={{ display: "flex" }}>
             <input
@@ -277,7 +278,7 @@ class InfoProduct extends Component {
               type="text"
               class="form-control"
               id="txtEmail"
-              placeholder="Nhập giá"
+              placeholder="Nhập giá bán lẻ"
               autocomplete="off"
               value={txtPrice}
               onChange={this.onChange}
@@ -293,7 +294,26 @@ class InfoProduct extends Component {
 
           </div>
         </div>
+        <div className="form-group">
+          <label htmlFor="name">Giá nhập</label>
 
+          <div class="form-group" style={{ display: "flex" }}>
+            <input
+              disabled={disabledPrice}
+              style={{ maxWidth: "420px" }}
+              type="text"
+              class="form-control"
+              id="txtEmail"
+              placeholder="Nhập giá nhập"
+              autocomplete="off"
+              value={txtImportPrice}
+              onChange={this.onChange}
+              name="txtImportPrice"
+            />
+
+
+          </div>
+        </div>
 
 
         <div class="form-group">
