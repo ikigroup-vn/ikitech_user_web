@@ -38,10 +38,11 @@ import {orderReducers} from "./order_product"
 import {inventoryReducers} from "./inventory"
 import {importStockReducers} from "./ImportStock"
 import {posReducers} from "./pos_order"
-
+import { branchReducers } from './branch';
 
 const appReducers = combineReducers({
     authReducers,
+    branchReducers,
     storeReducers,
     storeAReducers,
     categoryPReducers,
