@@ -19,9 +19,9 @@ class ProductCreate extends Component {
     super(props);
     this.state = {
       form: {},
-      total : ""
+      total: ""
     }
-    
+
   }
 
   componentDidMount() {
@@ -36,15 +36,18 @@ class ProductCreate extends Component {
       var formdata = { ...prevState.form };
       formdata.name = data.txtName;
 
-      formdata.price = data.txtPrice.toString().replace(/,/g, '').replace(/\./g,'');
+      formdata.price = data.txtPrice.toString().replace(/,/g, '').replace(/\./g, '');
       formdata.barcode = data.txtBarcode;
       formdata.status = data.txtStatus;
-      formdata.quantity_in_stock = data.txtQuantityInStock.toString().replace(/,/g, '').replace(/\./g,'');
+      formdata.quantity_in_stock = data.txtQuantityInStock.toString().replace(/,/g, '').replace(/\./g, '');
       formdata.percent_collaborator = data.txtPercentC
       formdata.sku = data.sku
+      formdata.check_inventory = data.check_inventory
+      formdata.main_cost_of_capital = data.txtCostOfCapital.toString().replace(/,/g, '').replace(/\./g, '');
+      formdata.main_stock = data.txtQuantityInStock.toString().replace(/,/g, '').replace(/\./g, '');
 
       var categories = [];
-      var category_children_ids =[];
+      var category_children_ids = [];
       if (data.category_parent.length > 0) {
         categories = data.category_parent.map((categoryParent, index) => {
           return categoryParent.id;
@@ -86,7 +89,7 @@ class ProductCreate extends Component {
     this.setState((prevState, props) => {
       var formdata = { ...prevState.form };
       formdata.content_for_collaborator = data.txtContentC
-      formdata.description =   data.txtContent
+      formdata.description = data.txtContent
       formdata.seo_description = data.txtSeoDescription
       formdata.seo_title = data.txtSeoTitle
       return { form: formdata };
@@ -128,7 +131,7 @@ class ProductCreate extends Component {
 
     });
 
-    console.log("form",this.state.form)
+    console.log("form", this.state.form)
 
 
   };
@@ -139,7 +142,7 @@ class ProductCreate extends Component {
       return { form: formdata };
 
     });
-    
+
 
   };
   postProduct = () => {
@@ -149,8 +152,7 @@ class ProductCreate extends Component {
     var form = { ...this.state.form };
     form.index_image_avatar = 0
 
-    if(typeof form.list_distribute != "undefined")
-    {
+    if (typeof form.list_distribute != "undefined") {
       if (typeof form.list_distribute[0] != "undefined") {
 
 
@@ -159,11 +161,11 @@ class ProductCreate extends Component {
             form.list_distribute[0].element_distributes.forEach((element, index) => {
               try {
                 console.log(element)
-                const price = element.price != null ? element.price.toString().replace(/,/g, '').replace(/\./g,'') : 0;
-                const import_price = element.import_price != null ? element.import_price.toString().replace(/,/g, '').replace(/\./g,'') : 0;
+                const price = element.price != null ? element.price.toString().replace(/,/g, '').replace(/\./g, '') : 0;
+                const import_price = element.import_price != null ? element.import_price.toString().replace(/,/g, '').replace(/\./g, '') : 0;
                 const barcode = element.barcode != null ? element.barcode.toString() : 0;
-                const quantity_in_stock = element.quantity_in_stock != null ? element.quantity_in_stock.toString().replace(/,/g, '').replace(/\./g,'') : 0;
-                const cost_of_capital = element.cost_of_capital != null ? element.cost_of_capital.toString().replace(/,/g, '').replace(/\./g,'') : 0;
+                const quantity_in_stock = element.quantity_in_stock != null ? element.quantity_in_stock.toString().replace(/,/g, '').replace(/\./g, '') : 0;
+                const cost_of_capital = element.cost_of_capital != null ? element.cost_of_capital.toString().replace(/,/g, '').replace(/\./g, '') : 0;
                 form.list_distribute[0].element_distributes[index].price = price
                 form.list_distribute[0].element_distributes[index].import_price = import_price
                 form.list_distribute[0].element_distributes[index].cost_of_capital = cost_of_capital
@@ -171,27 +173,27 @@ class ProductCreate extends Component {
                 form.list_distribute[0].element_distributes[index].barcode = barcode
                 form.list_distribute[0].element_distributes[index].stock = quantity_in_stock
                 console.log(price, form.list_distribute[0].element_distributes[index].price)
-  
-                console.log("element form",form)
+
+                console.log("element form", form)
                 if (typeof element.sub_element_distributes != "undefined") {
                   if (element.sub_element_distributes.length > 0) {
-  
+
                     element.sub_element_distributes.forEach((_element, _index) => {
                       try {
-                        const price = _element.price != null ? _element.price.toString().replace(/,/g, '').replace(/\./g,'') : 0;
-                        const import_price = _element.import_price != null ? _element.import_price.toString().replace(/,/g, '').replace(/\./g,'') : 0;
-                        const cost_of_capital = _element.cost_of_capital != null ? _element.cost_of_capital.toString().replace(/,/g, '').replace(/\./g,'') : 0;
+                        const price = _element.price != null ? _element.price.toString().replace(/,/g, '').replace(/\./g, '') : 0;
+                        const import_price = _element.import_price != null ? _element.import_price.toString().replace(/,/g, '').replace(/\./g, '') : 0;
+                        const cost_of_capital = _element.cost_of_capital != null ? _element.cost_of_capital.toString().replace(/,/g, '').replace(/\./g, '') : 0;
                         const barcode = _element.barcode != null ? _element.barcode.toString() : 0;
-                        const quantity_in_stock = _element.quantity_in_stock != null ? _element.quantity_in_stock.toString().replace(/,/g, '').replace(/\./g,'') : 0;
-  
+                        const quantity_in_stock = _element.quantity_in_stock != null ? _element.quantity_in_stock.toString().replace(/,/g, '').replace(/\./g, '') : 0;
+
                         form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].price = price
                         form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].import_price = import_price
                         form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].cost_of_capital = cost_of_capital
                         form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].quantity_in_stock = quantity_in_stock
                         form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].stock = quantity_in_stock
                         form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].barcode = barcode
-  
-                        console.log("sub element form",form)
+
+                        console.log("sub element form", form)
                       } catch (error) {
                         form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].price = 0
                         form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].import_price = 0
@@ -202,9 +204,9 @@ class ProductCreate extends Component {
                       }
                     });
                   }
-  
+
                 }
-  
+
               } catch (error) {
                 console.log(error)
                 form.list_distribute[0].element_distributes[index].price = 0
@@ -217,16 +219,15 @@ class ProductCreate extends Component {
             });
           }
         }
-      } 
+      }
     }
-    var total = this.state.total.toString().replace(/,/g, '').replace(/\./g,'');
-    if(typeof form.list_distribute != "undefined")
-    {
+    var total = this.state.total.toString().replace(/,/g, '').replace(/\./g, '');
+    if (typeof form.list_distribute != "undefined") {
       form.quantity_in_stock = form.list_distribute.length > 0 ? total : form.quantity_in_stock
 
     }
     // this.props.postProduct(store_code, form)
-    this.props.postProductV2(store_code, branch_id,form)
+    this.props.postProductV2(store_code, branch_id, form)
   };
 
   goBack = (e) => {
@@ -235,139 +236,138 @@ class ProductCreate extends Component {
     history.goBack();
   };
 
-  onChangeQuantityStock = (total) =>{
-    this.setState({total :total})
+  onChangeQuantityStock = (total) => {
+    this.setState({ total: total })
   }
   render() {
     var { store_code } = this.props;
-    var { category_product, attributeP, auth , isShowAttr , isCreate , isRemove } = this.props
-    var {total} = this.state
-      return (
+    var { category_product, attributeP, auth, isShowAttr, isCreate, isRemove } = this.props
+    var { total } = this.state
+    return (
 
-              <div class="container-fluid">
-                <Alert
-                  type={Types.ALERT_UID_STATUS}
-                  alert={this.props.alert}
-                />
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <h4 className="h4 title_content mb-0 text-gray-800">
-                    Tạo mới sản phẩm
-                  </h4>
+      <div class="container-fluid">
+        <Alert
+          type={Types.ALERT_UID_STATUS}
+          alert={this.props.alert}
+        />
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <h4 className="h4 title_content mb-0 text-gray-800">
+            Tạo mới sản phẩm
+          </h4>
+        </div>
+        <br></br>
+        <div class="card mb-4">
+          <div class="card-header title_content">
+            Nhập thông tin sản phẩm
+          </div>
+          <div class="card-body" style={{ padding: "0.8rem" }}>
+            <div class="row">
+              <div class="col-lg-6">
+                <div>
+                  <InfoProduct
+                    total={total}
+
+                    handleDataFromInfo={this.handleDataFromInfo} category_product={category_product} />
                 </div>
-                <br></br>
-                <div class="card mb-4">
-                  <div class="card-header title_content">
-                    Nhập thông tin sản phẩm
-                  </div>
+              </div>
+
+              <div
+                class="col-lg-6"
+                style={{ borderLeft: "0.5px solid #e6dfdf" }}
+              >
+                <div>
+                  <StoreImage handleDataFromAvatarImg={this.handleDataFromAvatarImg} handleDataFromProductImg={this.handleDataFromProductImg} />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card mb-4">
+          <div class="card-body" style={{ padding: "0.8rem" }}>
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <button
+                  type="button"
+                  class="btn btn-primary btn-sm"
+                  onClick={this.postProduct}
+                >
+                  <i class="fa fa-plus"></i>
+                  Tạo
+                </button>
+                <a
+                  style={{ marginLeft: "10px" }}
+                  onClick={this.goBack}
+                  class="btn btn-warning btn-icon-split  btn-sm"
+                >
+                  <span class="icon text-white-50">
+                    <i class="fas fa-arrow-left"></i>
+                  </span>
+                  <span class="text"> Trở về</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class={`card mb-4 ${typeof isShowAttr == "undefined" || isShowAttr == false ? "hide" : ""}`}>
+          <div class="card-header title_content">Thuộc tính sản phẩm</div>
+          <div class="card-body" style={{ padding: "0.8rem" }}>
+            <div class="row">
+              <div class="col-lg-12">
+                <div>
                   <div class="card-body" style={{ padding: "0.8rem" }}>
-                    <div class="row">
-                      <div class="col-lg-6">
-                        <div>
-                          <InfoProduct
-                                                      total = {total}
+                    <Attribute
+                      isCreate={isCreate}
+                      isRemove={isRemove}
 
-                           handleDataFromInfo={this.handleDataFromInfo} category_product={category_product} />
-                        </div>
-                      </div>
-
-                      <div
-                        class="col-lg-6"
-                        style={{ borderLeft: "0.5px solid #e6dfdf" }}
-                      >
-                        <div>
-                          <StoreImage handleDataFromAvatarImg={this.handleDataFromAvatarImg} handleDataFromProductImg={this.handleDataFromProductImg} />
-                        </div>
-                      </div>
-                    </div>
+                      handleDataFromAttribute={this.handleDataFromAttribute}
+                      store_code={store_code}
+                      attributeP={attributeP}
+                    />
                   </div>
                 </div>
-                <div class="card mb-4">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card mb-4">
+          <div class="card-header title_content">Phân loại sản phẩm </div>
+          <div class="card-body" style={{ padding: "0.8rem" }}>
+            <div class="row">
+              <div class="col-lg-12">
+                <div>
                   <div class="card-body" style={{ padding: "0.8rem" }}>
-                    <div class="row">
-                      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <button
-                          type="button"
-                          class="btn btn-primary btn-sm"
-                          onClick={this.postProduct}
-                        >
-                          <i class="fa fa-plus"></i>
-                          Tạo
-                        </button>
-                        <a
-                          style={{ marginLeft: "10px" }}
-                          onClick={this.goBack}
-                          class="btn btn-warning"
-                          class="btn btn-warning btn-icon-split  btn-sm"
-                        >
-                          <span class="icon text-white-50">
-                            <i class="fas fa-arrow-left"></i>
-                          </span>
-                          <span class="text"> Trở về</span>
-                        </a>
-                      </div>
-                    </div>
+                    <Distribute
+                      onChangeQuantityStock={this.onChangeQuantityStock}
+
+                      handleDataFromDistribute={this.handleDataFromDistribute}
+                    />
                   </div>
                 </div>
-                <div class={`card mb-4 ${typeof isShowAttr == "undefined" || isShowAttr == false ? "hide" : ""}`}>
-                  <div class="card-header title_content">Thuộc tính sản phẩm</div>
-                  <div class="card-body" style={{ padding: "0.8rem" }}>
-                    <div class="row">
-                      <div class="col-lg-12">
-                        <div>
-                          <div class="card-body" style={{ padding: "0.8rem" }}>
-                            <Attribute
-                            isCreate = {isCreate}
-                            isRemove = {isRemove}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card mb-4">
+          <div class="card-header title_content">Nội dung chi tiết</div>
+          <div class="card-body" style={{ padding: "0.8rem" }}>
+            <div class="row">
+              <ContentDetail handleDataFromContent={this.handleDataFromContent} />
+            </div>
+          </div>
 
-                              handleDataFromAttribute={this.handleDataFromAttribute}
-                              store_code={store_code}
-                              attributeP={attributeP}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+        </div>
 
-                <div class="card mb-4">
-                  <div class="card-header title_content">Phân loại sản phẩm </div>
-                  <div class="card-body" style={{ padding: "0.8rem" }}>
-                    <div class="row">
-                      <div class="col-lg-12">
-                        <div>
-                          <div class="card-body" style={{ padding: "0.8rem" }}>
-                            <Distribute
-                                                        onChangeQuantityStock = {this.onChangeQuantityStock}
+        <div class="card mb-4">
+          <div class="card-header title_content">Tối ưu SEO</div>
+          <div class="card-body" style={{ padding: "0.8rem" }}>
+            <div class="row">
+              <SeoOption handleDataFromContent={this.handleDataFromContent} />
+            </div>
+          </div>
 
-                              handleDataFromDistribute={this.handleDataFromDistribute}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="card mb-4">
-                  <div class="card-header title_content">Nội dung chi tiết</div>
-                  <div class="card-body" style={{ padding: "0.8rem" }}>
-                    <div class="row">
-                      <ContentDetail handleDataFromContent={this.handleDataFromContent} />
-                    </div>
-                  </div>
-
-                </div>
-
-                <div class="card mb-4">
-                  <div class="card-header title_content">Tối ưu SEO</div>
-                  <div class="card-body" style={{ padding: "0.8rem" }}>
-                    <div class="row">
-                      <SeoOption handleDataFromContent={this.handleDataFromContent} />
-                    </div>
-                  </div>
-
-                </div>
-                {/* <div class="card mb-4">
+        </div>
+        {/* <div class="card mb-4">
           <div class="card-header title_content">Thông tin khuyến mại</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
@@ -378,36 +378,35 @@ class ProductCreate extends Component {
             </div>
           </div>
         </div> */}
-                <div class="card mb-4">
-                  <div class="card-body" style={{ padding: "0.8rem" }}>
-                    <div class="row">
-                      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <button type="button" class="btn btn-primary btn-sm"
-                          onClick={this.postProduct}
-                        >
-                          <i class="fa fa-plus"></i>
-                          Tạo
-                        </button>
+        <div class="card mb-4">
+          <div class="card-body" style={{ padding: "0.8rem" }}>
+            <div class="row">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <button type="button" class="btn btn-primary btn-sm"
+                  onClick={this.postProduct}
+                >
+                  <i class="fa fa-plus"></i>
+                  Tạo
+                </button>
 
-                        <a
-                          style={{ marginLeft: "10px" }}
-                          onClick={this.goBack}
-                          class="btn btn-warning"
-                          class="btn btn-warning btn-icon-split  btn-sm"
-                        >
-                          <span class="icon text-white-50">
-                            <i class="fas fa-arrow-left"></i>
-                          </span>
-                          <span class="text"> Trở về</span>
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <a
+                  style={{ marginLeft: "10px" }}
+                  onClick={this.goBack}
+                  class="btn btn-warning btn-icon-split  btn-sm"
+                >
+                  <span class="icon text-white-50">
+                    <i class="fas fa-arrow-left"></i>
+                  </span>
+                  <span class="text"> Trở về</span>
+                </a>
               </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
 
-      );
+    );
 
   }
 }
@@ -436,8 +435,8 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(productAction.postProduct(store_code, product));
 
     },
-    postProductV2: (store_code,branch_id,form) => {
-      dispatch(productAction.postProductV2(store_code,branch_id, form));
+    postProductV2: (store_code, branch_id, form) => {
+      dispatch(productAction.postProductV2(store_code, branch_id, form));
 
     },
     fetchAllBlog: (id, page) => {
