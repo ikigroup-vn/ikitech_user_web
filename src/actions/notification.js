@@ -29,6 +29,32 @@ export const fetchAllNotification = (store_code , page=1) => {
       });
   };
 };
+export const fetchAllGeneralSetting = (store_code) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show"
+    })
+    notificationApi
+      .fetchAllGeneralSetting(store_code)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide"
+        })
+        if(res.data.code !== 401)
+        {
+          dispatch({
+            type: Types.FETCH_ALL_GENERAL_SETTING,
+            data : res.data.data
+          });
+   
+          notificationApi.readAllNotification(store_code)
+        }
+
+      });
+  };
+};
 
 export const fetchAllBadge = (store_code) => {
   return (dispatch) => {

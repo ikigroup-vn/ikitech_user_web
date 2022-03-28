@@ -125,6 +125,7 @@ import CustomerDebt from "./screens/Report/report_finance/customer_debt/Customer
 import SupplierDebt from "./screens/Report/report_finance/supplier_debt/SupplierDebt";
 import Expenditure from "./screens/Report/report_finance/revenue_expenditure/Expenditure";
 import PostOrder from "./screens/Pos_order";
+import Setting from "./screens/Setting";
 
 
 const routes = [
@@ -134,6 +135,12 @@ const routes = [
     exact: true,
 
     main: ({ match }) => <Decentralization match={match} />,
+  },
+  {
+    path: "/setting/index/:store_code",
+    exact: true,
+
+    main: ({ match }) => <Setting match={match} />,
   },
   {
     path: "/decentralization/detail/:store_code/:id",
