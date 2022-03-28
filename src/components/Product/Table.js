@@ -125,7 +125,10 @@ class Table extends Component {
         var checked = this.checkSelected(data.id);
         console.log(checked)
         return (
-            <ShowData _delete ={_delete} update ={update} insert ={insert} checked ={checked} page ={page} status ={status} status_name ={status_name} status_stock ={status_stock}
+            <ShowData 
+            _delete ={_delete} 
+            passDataModal={this.passDataModal} 
+            update ={update} insert ={insert} checked ={checked} page ={page} status ={status} status_name ={status_name} status_stock ={status_stock}
             data ={data} per_page ={per_page} current_page ={current_page} index ={index} store_code ={store_code}  discount ={discount} 
             handleCallBackElement ={this.handleCallBackElement} handleCallBackSubElement ={this.handleCallBackSubElement}/>
         );

@@ -40,6 +40,10 @@ export const updateProduct = (store_code,data,id) =>{
   return callApi(`/store/${store_code}/products/${id}`, "put", data);
 }
 
+export const updateDistribute = (store_code,data,productId, branchId) =>{
+  return callApi(`/store_v2/${store_code}/${branchId}/products/${productId}/distribute`, "put", data);
+}
+
 export const destroyProduct = (store_code, id) =>{
   return callApi(`/store/${store_code}/products/${id}`, "delete", null);
 }

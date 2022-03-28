@@ -13,37 +13,37 @@ class ShowData extends Component {
         }
     }
 
-    handleEditStockElement = (element,distribute) => {
+    handleEditStockElement = (element, distribute) => {
         this.props.handleCallBackElement({
-            element: element, idProduct: this.props.data.id,NameDistribute:distribute
+            element: element, idProduct: this.props.data.id, NameDistribute: distribute
         })
     }
-    handleEditSubElement = (subElement,element,distribute) => {
+    handleEditSubElement = (subElement, element, distribute) => {
         this.props.handleCallBackSubElement({
-            SubElement:subElement.name,NameElement: element, idProduct: this.props.data.id,NameDistribute:distribute
+            SubElement: subElement.name, NameElement: element, idProduct: this.props.data.id, NameDistribute: distribute
         })
     }
-    historyInventorys = (subElement,element,nameDistribute) => {
+    historyInventorys = (subElement, element, nameDistribute) => {
         const branch_id = localStorage.getItem("branch_id")
-        const {store_code} = this.props
+        const { store_code } = this.props
         const formData = {
             product_id: this.props.data.id,
-            distribute_name:nameDistribute,
-            element_distribute_name:element,
-            sub_element_distribute_name:subElement.name
+            distribute_name: nameDistribute,
+            element_distribute_name: element,
+            sub_element_distribute_name: subElement.name
         }
-        this.props.historyInventorys(store_code,branch_id,formData)
+        this.props.historyInventorys(store_code, branch_id, formData)
     }
-    historyInventory = (element,nameDistribute) => {
+    historyInventory = (element, nameDistribute) => {
         const branch_id = localStorage.getItem("branch_id")
-        const {store_code} = this.props
+        const { store_code } = this.props
         const formData = {
             product_id: this.props.data.id,
-            distribute_name:nameDistribute,
-            element_distribute_name:element.name,
-            sub_element_distribute_name:""
+            distribute_name: nameDistribute,
+            element_distribute_name: element.name,
+            sub_element_distribute_name: ""
         }
-        this.props.historyInventorys(store_code,branch_id,formData)
+        this.props.historyInventorys(store_code, branch_id, formData)
     }
     handleOnClick = () => {
         this.setState({ show_item: !this.state.show_item })
@@ -65,52 +65,52 @@ class ShowData extends Component {
                             result.push(
                                 <div className='row' style={{ padding: "10px" }}>
                                     <div className='col-3' style={{ display: "flex" }}>
-                                        <label style={{fontWeight:"bold"}}>Tên thuộc tính: </label>
+                                        <label style={{ fontWeight: "bold" }}>Tên thuộc tính: </label>
                                         <div className='name-distribute' style={{ marginLeft: "20px" }}>{element.name},{sub_element.name}</div>
                                     </div>
                                     <div className='col-3' style={{ display: "flex" }}>
-                                        <label style={{fontWeight:"bold"}}>Giá vốn: </label>
+                                        <label style={{ fontWeight: "bold" }}>Giá vốn: </label>
                                         <div className='price-distribute' style={{ marginLeft: "20px" }}>{format(Number(cost_of_capital))}</div>
                                     </div>
                                     <div className='col-3' style={{ display: "flex" }}>
-                                        <label style={{fontWeight:"bold"}}>Tồn kho: </label>
+                                        <label style={{ fontWeight: "bold" }}>Tồn kho: </label>
                                         <div className='quantity-distribute' style={{ marginLeft: "20px" }}>{stock}</div>
                                     </div>
-                                    <div className='col-3' style={{textAlign:"center"}}>
-                                        <button className='btn btn-primary' data-toggle="modal" data-target="#myModal" onClick={() => this.handleEditSubElement(listDistribute.element_distributes[_index].sub_element_distributes[index],element.name,listDistribute.name)}>Sửa kho</button>
-                                        <button className='btn btn-warning' data-toggle="modal" style={{marginLeft:"10px"}} 
-                                                data-target="#historyStock" 
-                                                onClick={() => this.historyInventorys(
-                                                    listDistribute.element_distributes[_index].sub_element_distributes[index],
-                                                    element.name,
-                                                    listDistribute.name)}>Lịch sử kho</button>
+                                    <div className='col-3' style={{ textAlign: "center" }}>
+                                        <button className='btn btn-primary' data-toggle="modal" data-target="#myModal" onClick={() => this.handleEditSubElement(listDistribute.element_distributes[_index].sub_element_distributes[index], element.name, listDistribute.name)}>Sửa kho</button>
+                                        <button className='btn btn-warning' data-toggle="modal" style={{ marginLeft: "10px" }}
+                                            data-target="#historyStock"
+                                            onClick={() => this.historyInventorys(
+                                                listDistribute.element_distributes[_index].sub_element_distributes[index],
+                                                element.name,
+                                                listDistribute.name)}>Lịch sử kho</button>
                                     </div>
                                 </div>
                             )
 
                         })
                     }
-                    else {   
-                            result.push(
-                                <div className='row' style={{ padding: "10px" }}>
-                                    <div className='col-3' style={{ display: "flex" }}>
-                                        <label style={{fontWeight:"bold"}}>Tên thuộc tính: </label>
-                                        <div className='name-distribute' style={{ marginLeft: "20px" }}>{element.name}</div>
-                                    </div>
-                                    <div className='col-3' style={{ display: "flex" }}>
-                                        <label style={{fontWeight:"bold"}}>Giá vốn: </label>
-                                        <div className='price-distribute' style={{ marginLeft: "20px" }}>{format(Number(element.cost_of_capital))}</div>
-                                    </div>
-                                    <div className='col-3' style={{ display: "flex" }}>
-                                        <label style={{fontWeight:"bold"}}>Tồn kho: </label>
-                                        <div className='quantity-distribute' style={{ marginLeft: "20px" }}>{element.stock}</div>
-                                    </div>
-                                    <div className='col-3' style={{textAlign:"center"}}>
-                                        <button className='btn btn-primary' data-toggle="modal" data-target="#myModal" onClick={() => this.handleEditStockElement(element,listDistribute.name)}>Sửa kho</button>
-                                        <button className='btn btn-warning' data-toggle="modal" style={{marginLeft:"10px"}} data-target="#historyStock" onClick={() => this.historyInventory(element,listDistribute.name)}>Lịch sử kho</button>
-                                    </div>
+                    else {
+                        result.push(
+                            <div className='row' style={{ padding: "10px" }}>
+                                <div className='col-3' style={{ display: "flex" }}>
+                                    <label style={{ fontWeight: "bold" }}>Tên thuộc tính: </label>
+                                    <div className='name-distribute' style={{ marginLeft: "20px" }}>{element.name}</div>
                                 </div>
-                            )
+                                <div className='col-3' style={{ display: "flex" }}>
+                                    <label style={{ fontWeight: "bold" }}>Giá vốn: </label>
+                                    <div className='price-distribute' style={{ marginLeft: "20px" }}>{format(Number(element.cost_of_capital))}</div>
+                                </div>
+                                <div className='col-3' style={{ display: "flex" }}>
+                                    <label style={{ fontWeight: "bold" }}>Tồn kho: </label>
+                                    <div className='quantity-distribute' style={{ marginLeft: "20px" }}>{element.stock}</div>
+                                </div>
+                                <div className='col-3' style={{ textAlign: "center" }}>
+                                    <button className='btn btn-primary' data-toggle="modal" data-target="#myModal" onClick={() => this.handleEditStockElement(element, listDistribute.name)}>Sửa kho</button>
+                                    <button className='btn btn-warning' data-toggle="modal" style={{ marginLeft: "10px" }} data-target="#historyStock" onClick={() => this.historyInventory(element, listDistribute.name)}>Lịch sử kho</button>
+                                </div>
+                            </div>
+                        )
                     }
                 }
             })
@@ -119,7 +119,7 @@ class ShowData extends Component {
     }
 
     render() {
-        const { _delete, update, insert, checked, data, per_page, current_page, index, store_code, page, status, status_name, status_stock, discount,historyInventory } = this.props
+        const { _delete, update, insert, checked, data, per_page, current_page, index, store_code, page, status, status_name, status_stock, discount, historyInventory } = this.props
         const listDistribute = data.inventory?.distributes !== null && data.inventory?.distributes.length > 0 ? data.inventory?.distributes[0] : []
         const { show_item } = this.state
 
@@ -149,8 +149,8 @@ class ShowData extends Component {
                     <td>
                         {data.inventory?.distributes !== null && data.inventory?.distributes.length > 0 ? <button className="btn btn-success btn-sm " onClick={() => this.handleOnClick()} >
                             <i class="fa fa-eye"></i> Xem
-                        </button>:""}
- 
+                        </button> : ""}
+
                     </td>
 
                     <td>{format(Number(data.price))}</td>
@@ -205,7 +205,7 @@ class ShowData extends Component {
                         </Link>
                         <button
                             onClick={(e) =>
-                                this.passDataModal(e, store_code, data.id, data.name)
+                                this.props.passDataModal(e, store_code, data.id, data.name)
                             }
                             data-toggle="modal"
                             data-target="#removeModal"
@@ -217,30 +217,30 @@ class ShowData extends Component {
                     </td>
                 </tr>
 
-                <tr class={`explode ${show_item == true ? "show" : "hide"}`} style ={{backgroundColor:"#8080801a"}} >
+                <tr class={`explode ${show_item == true ? "show" : "hide"}`} style={{ backgroundColor: "#8080801a" }} >
                     <td colSpan={12}>
                         <div className='show-distribute'>
                             {this.showDistribute(listDistribute)}
                         </div>
                     </td>
                 </tr>
-                <HistoryStock historyInventory ={historyInventory}/>
+                <HistoryStock historyInventory={historyInventory} />
             </>
         )
     }
 }
-const mapStateToProps = (state) =>{
-    return{
+const mapStateToProps = (state) => {
+    return {
         historyInventory: state.inventoryReducers.inventory_reducer.historyInventory,
     }
 }
- const mapDispatchToProps = (dispatch,props) =>{
-     return{
-        historyInventorys:(store_code,branch_id,data) =>{
-            dispatch(inventoryAction.historyInventorys(store_code,branch_id,data))
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+        historyInventorys: (store_code, branch_id, data) => {
+            dispatch(inventoryAction.historyInventorys(store_code, branch_id, data))
         },
-     }
- }
- 
+    }
+}
 
-export default connect(mapStateToProps,mapDispatchToProps)(ShowData)
+
+export default connect(mapStateToProps, mapDispatchToProps)(ShowData)

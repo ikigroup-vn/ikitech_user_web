@@ -9,7 +9,7 @@ class InfoProduct extends Component {
     this.state = {
       txtName: "",
       txtPrice: "",
-      txtImportPrice:"",
+      txtImportPrice: "",
       txtBarcode: "",
       txtStatus: 0,
       category_parent: [],
@@ -20,6 +20,8 @@ class InfoProduct extends Component {
       txtPercentC: "",
       disabledPrice: false,
       sku: Math.random().toString().slice(2, 11),
+      check_inventory: false,
+      txtCostOfCapital:"",
     };
   }
   handleChangeCheckParent(id) {
@@ -43,7 +45,7 @@ class InfoProduct extends Component {
 
       if (this.state.category_children_ids !== null) {
         categories.forEach((category) => {
-  
+
           category.categories_child.forEach((categoryChild) => {
             if (this.state.category_children_ids.map(e => e.id).indexOf(categoryChild.id) > -1) {
               nam = nam + categoryChild.name + ", "
@@ -51,11 +53,11 @@ class InfoProduct extends Component {
           })
         }
         )
-  
+
       }
     }
-    if(nam.length > 0) {
-      nam = nam.substring(0,nam.length-2)
+    if (nam.length > 0) {
+      nam = nam.substring(0, nam.length - 2)
     }
     return nam;
   }
@@ -68,7 +70,7 @@ class InfoProduct extends Component {
     var categories = [...this.props.category_product];
     if (categories.length > 0) {
       option = categories.map((category, index) => {
-        return { id: category.id, id:category.id, label: category.name, categories_child: category.category_children };
+        return { id: category.id, id: category.id, label: category.name, categories_child: category.category_children };
       });
       this.setState({ listCategory: option });
     }
@@ -81,7 +83,7 @@ class InfoProduct extends Component {
     var value_text = e.target.value;
     var value = value_text
     const _value = formatNumber(value);
-    if (name == "txtPrice" || name == "txtImportPrice" || name == "txtPercentC" || name == "txtQuantityInStock") {
+    if (name == "txtPrice" || name == "txtCostOfCapital" || name == "txtImportPrice" || name == "txtPercentC" || name == "txtQuantityInStock") {
       if (!isNaN(Number(_value))) {
         value = new Intl.NumberFormat().format(_value);
         value = value.toString().replace(/\./g, ',')
@@ -122,13 +124,13 @@ class InfoProduct extends Component {
       var newList = this.state.category_parent;
       newList.splice(indexHas, 1);
       this.setState({ category_parent: newList });
-      this.state.listCategory.forEach((category1) =>{
-        if(category1.id === category.id){
-          category1.categories_child.forEach(categoryChild1 =>{
+      this.state.listCategory.forEach((category1) => {
+        if (category1.id === category.id) {
+          category1.categories_child.forEach(categoryChild1 => {
             const indexChild = this.state.category_children_ids.map((e) => e.id).indexOf(categoryChild1.id)
-            if(indexChild !== -1){
+            if (indexChild !== -1) {
               const newChild = this.state.category_children_ids.splice(indexChild, 1)
-              console.log("newChild",newChild)
+              console.log("newChild", newChild)
             }
           })
         }
@@ -141,32 +143,32 @@ class InfoProduct extends Component {
   }
 
   handleChangeChild = (categoryChild) => {
-    
+
     var categoryParentOb;
     this.state.listCategory.forEach((category) => {
-     
-      if( category.categories_child != null) {
+
+      if (category.categories_child != null) {
 
         category.categories_child.forEach((categorychild2) => {
 
           if (categorychild2.id === categoryChild.id) {
-          
+
             categoryParentOb = category
           }
         })
       }
-      
+
     })
-       if(categoryParentOb != null) {
-     
+    if (categoryParentOb != null) {
+
       var indexHas = this.state.category_parent.map((e) => e.id).indexOf(categoryParentOb.id);
       if (indexHas !== -1) {
- 
+
       } else {
         this.setState({ category_parent: [...this.state.category_parent, categoryParentOb] });
       }
     }
-   
+
     /////
     var indexHasChild = this.state.category_children_ids.map((e) => e.id).indexOf(categoryChild.id)
     if (indexHasChild !== -1) {
@@ -221,10 +223,16 @@ class InfoProduct extends Component {
 
     }
   }
+
+  onChangeCheckInventory = (e) => {
+    var { checked } = e.target
+    this.setState({ check_inventory: checked })
+  }
+
   flipEven() { this.setState({ even: !this.state.even }); }
   render() {
     const { inputValue, menuIsOpen } = this.state;
-    var { listCategory, txtImportPrice, barcode, category_parent, category_children_ids, txtName, txtStatus, txtCategory, txtBarcode, txtPrice, txtQuantityInStock, txtPercentC, disabledPrice, sku } = this.state;
+    var { listCategory, txtImportPrice, barcode, category_parent, category_children_ids, txtName, txtStatus, txtCategory, txtBarcode, txtPrice, txtQuantityInStock, txtPercentC, disabledPrice, sku, check_inventory, txtCostOfCapital } = this.state;
 
     return (
       <div class="card-body" style={{ padding: "0.8rem" }}>
@@ -269,71 +277,105 @@ class InfoProduct extends Component {
           />
         </div>
         <div className="form-group">
-          <label htmlFor="name">Giá bán lẻ</label>
 
-          <div class="form-group" style={{ display: "flex" }}>
-            <input
-              disabled={disabledPrice}
-              style={{ maxWidth: "420px" }}
-              type="text"
-              class="form-control"
-              id="txtEmail"
-              placeholder="Nhập giá bán lẻ"
-              autocomplete="off"
-              value={txtPrice}
-              onChange={this.onChange}
-              name="txtPrice"
-            />
-            <div class="form-check" style={{ margin: "auto 0" }}>
-              <label class="form-check-label" for="gridCheck">
-                Liên hệ
-              </label>
-              <input style={{ marginLeft: "10px" }} class="form-check-input" checked={disabledPrice} type="checkbox" onChange={this.onChangePrice} />
+          <div className="row">
+            <div className="col-6">
+
+              <label htmlFor="name"><b>Giá bán lẻ</b></label>
+
+              <div class="form-group" style={{ display: "flex" }}>
+                <input
+                  disabled={disabledPrice}
+                  style={{ maxWidth: "420px" }}
+                  type="text"
+                  class="form-control"
+                  id="txtEmail"
+                  placeholder="Nhập giá bán lẻ"
+                  autocomplete="off"
+                  value={txtPrice}
+                  onChange={this.onChange}
+                  name="txtPrice"
+                />
+
+
+              </div>
+            </div>
+
+            <div className="col-6">
+
+              <label htmlFor="name"><b>Giá nhập</b></label>
+
+              <div class="form-group" style={{ display: "flex" }}>
+                <input
+                  style={{ maxWidth: "420px" }}
+                  type="text"
+                  class="form-control"
+                  id="txtEmail"
+                  placeholder="Nhập giá nhập"
+                  autocomplete="off"
+                  value={txtImportPrice}
+                  onChange={this.onChange}
+                  name="txtImportPrice"
+                />
+
+
+
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="form-group">
+          <div class="form-check form-switch">
+            <input onChange={this.onChangeCheckInventory} class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked={check_inventory} />
+            <label class="form-check-label" for="flexSwitchCheckDefault">Theo dõi hàng trong kho</label>
+          </div>
+        </div>
+     {check_inventory &&   <div class="form-group">
+          <div className="row">
+
+
+            <div className="col-6">
+
+              <label for="product_name"><b>Tồn kho ban đầu</b></label>
+
+              <input
+                type="text"
+                class="form-control"
+                id="txtAddress_detail"
+                placeholder="Nhập số lượng"
+                autocomplete="off"
+                value={txtQuantityInStock}
+                onChange={this.onChange}
+                name="txtQuantityInStock"
+              />
+
+            </div>
+
+            <div className="col-6">
+
+              <label for="product_name"><b>Giá vốn</b></label>
+
+              <input
+                type="text"
+                class="form-control"
+                id="txtCostOfCapital"
+                placeholder="Nhập giá vốn"
+                autocomplete="off"
+                value={txtCostOfCapital}
+                onChange={this.onChange}
+                name="txtCostOfCapital"
+              />
 
             </div>
 
           </div>
+
+
         </div>
-        <div className="form-group">
-          <label htmlFor="name">Giá nhập</label>
-
-          <div class="form-group" style={{ display: "flex" }}>
-            <input
-              disabled={disabledPrice}
-              style={{ maxWidth: "420px" }}
-              type="text"
-              class="form-control"
-              id="txtEmail"
-              placeholder="Nhập giá nhập"
-              autocomplete="off"
-              value={txtImportPrice}
-              onChange={this.onChange}
-              name="txtImportPrice"
-            />
-
-
-          </div>
-        </div>
-
-
-        <div class="form-group">
-          <label for="product_name">Số lượng trong kho</label>
-          <i style={{
-            display: "block",
-            marginBottom: "5px"
-          }}>Bỏ trống khi bán không quan tâm đến số lượng</i>
-
-          <input
-            type="text"
-            class="form-control"
-            id="txtAddress_detail"
-            placeholder="Nhập số lượng"
-            autocomplete="off"
-            value={txtQuantityInStock}
-            onChange={this.onChange}
-            name="txtQuantityInStock"
-          />
-        </div>
+        }
         <div class="form-group">
           <label for="product_name">Phần trăm hoa hồng CTV</label>
           <i style={{
@@ -371,16 +413,16 @@ class InfoProduct extends Component {
           <label for="product_name">Danh mục</label>
           <div className="Choose-category-product">
             <div className="wrap_category" style={{ display: "flex" }}>
-              <input type="text" class="form-control" placeholder="--Chọn danh mục--" style={{whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",paddingRight:"55px", position: "relative" }} value={this.getNameSelected()}></input>
+              <input type="text" class="form-control" placeholder="--Chọn danh mục--" style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", paddingRight: "55px", position: "relative" }} value={this.getNameSelected()}></input>
               <button data-toggle="collapse" data-target="#demo2" class="btn" style={{ position: "absolute", right: "27px" }}><i class="fa fa-plus"></i></button>
             </div>
             <div id="demo2" class="collapse">
               <ul style={{ listStyle: "none", margin: "5px 0" }} class="list-group">
-                {listCategory.map((category,index) => (
-                  <li class="" style={{ cursor: "pointer",paddingTop:"5px",paddingLeft:"5px" }} ><input type="checkbox" style={{ marginRight: "10px", width: "30px", height: "15px" }} checked={this.handleChangeCheckParent(category.id)} onChange={() => this.handleChangeParent(category)} />{category.label}
+                {listCategory.map((category, index) => (
+                  <li class="" style={{ cursor: "pointer", paddingTop: "5px", paddingLeft: "5px" }} ><input type="checkbox" style={{ marginRight: "10px", width: "30px", height: "15px" }} checked={this.handleChangeCheckParent(category.id)} onChange={() => this.handleChangeParent(category)} />{category.label}
                     <ul style={{ listStyle: "none", margin: "0px 45px" }} >
-                      {(category?.categories_child ?? []).map((categoryChild,index) => (
-                        <li style={{ cursor: "pointer" } } ><input type="checkbox" style={{ marginRight: "10px", width: "30px", height: "15px",marginTop:"3px" }} checked={this.handleChangeCheckChild(categoryChild.id)} onChange={() => this.handleChangeChild(categoryChild)} />{categoryChild.name}</li>
+                      {(category?.categories_child ?? []).map((categoryChild, index) => (
+                        <li style={{ cursor: "pointer" }} ><input type="checkbox" style={{ marginRight: "10px", width: "30px", height: "15px", marginTop: "3px" }} checked={this.handleChangeCheckChild(categoryChild.id)} onChange={() => this.handleChangeChild(categoryChild)} />{categoryChild.name}</li>
                       ))}
                     </ul>
                   </li>
