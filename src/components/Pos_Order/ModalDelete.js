@@ -1,15 +1,16 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import * as inventoryAction from '../../actions/inventory'
+import * as posAction from '../../actions/post_order'
 class ModalDelete extends Component {
     
   onSave = (e) => {
     e.preventDefault();
     window.$('.modal').modal('hide');
-    var {store_code,id} = this.props
+    var {store_code,idCart} = this.props
     const branch_id = localStorage.getItem("branch_id")
-    this.props.deleteItemInventory(store_code,branch_id,id);
+    this.props.deleteOneCart(store_code, branch_id, idCart)
   };
+
 
   render() {
     return (
@@ -24,6 +25,7 @@ class ModalDelete extends Component {
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header" style={{ background: "#47d3b0" }}>
+              <h4>Đóng đơn hàng </h4>
               <button
                 type="button"
                 class="close"
@@ -43,7 +45,7 @@ class ModalDelete extends Component {
               <div class="modal-body">
                 <input type="hidden" name="remove_id_store" />
                 <div class="alert-remove"></div>
-                Bạn có muốn xóa 
+                Hệ thống sẽ không lưu lại thông tin của đơn hàng này. Bạn có chắc chắn đóng đơn hàng này không?
               </div>
               <div class="modal-footer">
                 <button
@@ -68,9 +70,9 @@ class ModalDelete extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    deleteItemInventory: (store_code, branch_id, id) => {
-        dispatch(inventoryAction.deleteItemInventory(store_code, branch_id, id))
-    }
+    deleteOneCart: (store_code, branch_id, id) => {
+      dispatch(posAction.deleteOneCart(store_code, branch_id, id))
+  },
   };
 };
 export default connect(null, mapDispatchToProps)(ModalDelete);

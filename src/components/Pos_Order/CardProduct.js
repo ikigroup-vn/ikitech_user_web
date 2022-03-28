@@ -44,11 +44,11 @@ class CardProduct extends Component {
                 return (
                     <div class="col-sm-2" style={{ marginBottom: "10px" }}>
                         <a data-toggle={this.state.isToggle ? "modal" : ""} data-target="#modalDetail" onClick={() => this.handleInfoProduct(data.inventory, data.id, data.name, data.images, data.price, data.distributes, data.max_price, data.min_price, data.product_discount, data.quantity_in_stock, data.quantity_in_stock_with_distribute)}>
-                            <div class="card">
-                                <img src={data.images.length > 0 ? data.images[0].image_url : Env.IMG_NOT_FOUND} className="img-responsive" alt="Image" width="100%" height="100px" />
-                                <div class="card-body" style={{ padding: '0' }}>
+                            <div class="card card-product-pos" style={{border:"1px solid rgb(128 128 128 / 30%)",padding:"0"}}>
+                                <img src={data.images.length > 0 ? data.images[0].image_url : Env.IMG_NOT_FOUND_2} className="img-responsive" alt="Image" width="100%" height="100px" style={{borderRadius:"2%"}} />
+                                <div class="card-body" style={{ padding: ' 0 5px' }}>
                                     <p class="card-title" style={{ margin: '0', overflow: "hidden", whiteSpace: "nowrap", textOverflow: 'ellipsis' }}>{data.name}</p>
-                                    <p class="card-text" style={{ fontSize: "10px", color: "red", position: "absolute", bottom: "37px", backgroundColor: "white" }}>{format(Number(data.price))}</p>
+                                    <p class="card-text" style={{ fontSize: "17px", bottom: "37px",fontWeight:"bold",color:"rgb(174, 61, 52)",textAlign:"end" }}>{format(Number(data.price))}</p>
                                 </div>
                             </div>
                         </a>

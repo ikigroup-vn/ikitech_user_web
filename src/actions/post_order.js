@@ -6,6 +6,9 @@ export const listPosOrder = (store_code, branch_id) => {
             type: Types.SHOW_LOADING,
             loading: "show"
         })
+        dispatch({
+          type: Types.FETCH_LIST_POS_ORDER_LOADING,
+      })
         PosApi.listPosOrder(store_code,branch_id).then((res) => {
             dispatch({
                 type: Types.SHOW_LOADING,

@@ -9,9 +9,9 @@ class PertionInfo extends Component {
             searchPersion: ""
         }
     }
-    handleOnclicks = (namePertion, phone, id) => {
+    handleOnclicks = (namePertion, phone, id,debt_customer,id_customer) => {
         var { store_code } = this.props
-        this.props.handleCallbackPertion({ name: namePertion, phone_number: phone })
+        this.props.handleCallbackPertion({ name: namePertion, phone_number: phone,debt: debt_customer,id:id_customer })
         this.props.findAddress(store_code, id)
     }
     onChangeSearchPersion = (e) => {
@@ -67,7 +67,7 @@ class PertionInfo extends Component {
                             <div class="modal-body">
                                 {(listPertion.data ?? []).map((item, index) => (
                                     <div className='model-card row' key={index} style={{ borderRadios: "0.25em", border: "dashed 2px red", position: "relative", margin: "5px" }}>
-                                        <button class="btn btn-info" onClick={() => this.handleOnclicks(item.name, item.phone_number, item.id)} data-dismiss="modal" style={{ backgroundColor: "green", position: "absolute", right: "3px", top: "3px", zIndex: "100" }}>Chọn</button>
+                                        <button class="btn btn-info" onClick={() => this.handleOnclicks(item.name, item.phone_number, item.id,item.debt,item.id)} data-dismiss="modal" style={{ backgroundColor: "green", position: "absolute", right: "3px", top: "3px", zIndex: "100" }}>Chọn</button>
                                         <div className='col-6'>
                                             <span style={{ fontWeight: "bold" }}>Tên</span>
                                             <div className='name-pertion'>{item.name}</div>

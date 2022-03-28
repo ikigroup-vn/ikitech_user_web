@@ -30,14 +30,13 @@ class ModalBranch extends Component {
     onChange = (e) => {
         var value = e.target.value;
         var name = e.target.name
-        localStorage.setItem('branch_id', value);
         this.setState({ txtBranch: value, nameBranch:name })
-
     };
-    componentDidMount() {
-        const branch_id = localStorage.getItem("branch_id")
-        this.setState({ txtBranch: branch_id })
+    handleAddBranch = () =>{
+        localStorage.setItem('branch_id', this.state.txtBranch );
+        this.props.handleCallbackBrach(this.state.txtBranch)
     }
+
     render() {
         const { branchStore } = this.props
         var { txtBranch,nameBranch } = this.state
@@ -67,6 +66,9 @@ class ModalBranch extends Component {
                                     data-dismiss="modal"
                                 >
                                     Thoát
+                                </button>
+                                <button class="btn btn-info" onClick={() => this.handleAddBranch()} data-dismiss="modal" >
+                                    Chọn
                                 </button>
                             </div>
                         </div>
