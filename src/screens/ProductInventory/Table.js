@@ -3,9 +3,8 @@ import { Link } from "react-router-dom";
 import getChannel, { IKITECH } from "../../ultis/channel";
 import { filter_arr, format } from "../../ultis/helpers";
 import { shallowEqual } from "../../ultis/shallowEqual";
-import AlertInfor from "./Modal/AlertInfor";
+import EditStock from "./EditStock";
 import ShowData from "./ShowData";
-
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -35,6 +34,9 @@ class Table extends Component {
     event.preventDefault();
   };
 
+  editStockCallBack = (form) => {
+    this.setState({ formData: form })
+  }
 
   handleCallBackElement = (modalElement) => {
     this.setState({ modalElement: modalElement })
@@ -208,35 +210,13 @@ class Table extends Component {
 
               <th>Tên sản phẩm</th>
 
-
-              <th>Giá bán lẻ</th>
-
-              {getChannel() == IKITECH &&
-                  <th>Trạng thái </th>
-              }
-
-            
-
-
-              <th>Số lượng tồn kho</th>
-
-              {getChannel() == IKITECH &&
-                <th>Lượt xem</th>
-              }
-
-              {getChannel() == IKITECH &&
-                <th>Lượt thích</th>
-              }
-
-
-
-              <th>Hành động</th>
+              <th>Tồn kho</th>
             </tr>
           </thead>
           <tbody>{this.showData(listProduct, per_page, current_page)}</tbody>
         </table>
+        <EditStock store_code={store_code} modalSub={modalSub} modalElement={modalElement} editStockCallBack={this.editStockCallBack} />
 
-        <AlertInfor formData={formData} store_code={store_code} />
       </div>
     );
   }

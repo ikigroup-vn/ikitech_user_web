@@ -126,6 +126,7 @@ import SupplierDebt from "./screens/Report/report_finance/supplier_debt/Supplier
 import Expenditure from "./screens/Report/report_finance/revenue_expenditure/Expenditure";
 import PostOrder from "./screens/Pos_order";
 import Setting from "./screens/Setting";
+import ProductInventory from "./screens/ProductInventory";
 
 
 const routes = [
@@ -400,6 +401,13 @@ const routes = [
     exact: true,
 
     main: ({ match }) => <Product match={match} />,
+  },
+
+  {
+    path: "/product_inventory/index/:store_code/:page?",
+    exact: true,
+
+    main: ({ match }) => <ProductInventory match={match} />,
   },
 
 

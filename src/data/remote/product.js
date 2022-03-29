@@ -16,12 +16,12 @@ export const fetchAllProductV2 = (store_code,branch_id , page , params , agency_
 
   if(agency_type_id)
   {
-    return params ? callApi(`/store_v2/${store_code}/${branch_id}/products?page=${page}${params}&agency_type_id=${agency_type_id}`, "get", null) 
-    :callApi(`/store_v2/${store_code}/${branch_id}/products?page=${page}&agency_type_id=${agency_type_id}`, "get", null)
+    return params ? callApi(`/store_v2/${store_code}/${branch_id}/products?page=${page??""}${params??""}&agency_type_id=${agency_type_id??""}`, "get", null) 
+    :callApi(`/store_v2/${store_code}/${branch_id}/products?page=${page??""}&agency_type_id=${agency_type_id??""}`, "get", null)
   }
 
-  return params ? callApi(`/store_v2/${store_code}/${branch_id}/products?page=${page}${params}&agency_type_id=${agency_type_id}`, "get", null) 
-  :callApi(`/store_v2/${store_code}/${branch_id}/products?page=${page}&agency_type_id=${agency_type_id}`, "get", null)
+  return params ? callApi(`/store_v2/${store_code}/${branch_id}/products?page=${page??""}${params??""}&agency_type_id=${agency_type_id??""}`, "get", null) 
+  :callApi(`/store_v2/${store_code}/${branch_id}/products?page=${page??""}&agency_type_id=${agency_type_id??""}`, "get", null)
 
 };
 

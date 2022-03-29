@@ -54,15 +54,15 @@ export const ikipos_menu = [
                         display: "hide",
                         name: "Kho hàng",
                         exact: true,
-                        to: "/product/index",
+                        to: "/product_inventory/index",
                     },
-                    {
-                        class: "customer_config_point",
-                        display: "hide",
-                        name: "In mã vạch",
-                        exact: true,
-                        to: "/product/index",
-                    },
+                    // {
+                    //     class: "customer_config_point",
+                    //     display: "hide",
+                    //     name: "In mã vạch",
+                    //     exact: true,
+                    //     to: "/product/index",
+                    // },
                 ],
             },
 
