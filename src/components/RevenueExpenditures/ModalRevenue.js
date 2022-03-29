@@ -438,6 +438,8 @@ class ModalRevenue extends Component {
                             page: 1,
                           }}
                           debounceTimeout={500}
+                          isClearable
+                          isSearchable
                         />
                       </>
                     )}
@@ -455,6 +457,8 @@ class ModalRevenue extends Component {
                             page: 1,
                           }}
                           debounceTimeout={300}
+                          isClearable
+                          isSearchable
                         />
                       </>
                     )}

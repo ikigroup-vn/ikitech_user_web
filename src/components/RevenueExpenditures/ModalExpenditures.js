@@ -458,6 +458,8 @@ class ModalExpenditures extends Component {
                             page: 1,
                           }}
                           debounceTimeout={500}
+                          isClearable
+                          isSearchable
                         />
                       </>
                     )}
@@ -475,6 +477,8 @@ class ModalExpenditures extends Component {
                             page: 1,
                           }}
                           debounceTimeout={300}
+                          isClearable
+                          isSearchable
                         />
                       </>
                     )}
