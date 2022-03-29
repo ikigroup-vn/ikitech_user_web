@@ -32,11 +32,10 @@ class Report extends Component {
   componentDidMount() {
     var { store_code } = this.props.match.params
     var date = helper.getDateForChartDay()
-
+    const branch_id = localStorage.getItem("branch_id")
     this.props.fetchDataId(store_code);
-    this.props.fetchAllBadge(store_code);
-    this.props.fetchTopTenProduct(store_code, `?date_from=${date.from}&date_to=${date.to}`)
-    this.props.fetchOverview(store_code, `?date_from=${date.from}&date_to=${date.to}`)
+    this.props.fetchTopTenProduct(store_code,branch_id, `?date_from=${date.from}&date_to=${date.to}`)
+    this.props.fetchOverview(store_code,branch_id, `?date_from=${date.from}&date_to=${date.to}`)
     this.props.fetchAllCollaborator(store_code);
 
   }
@@ -186,14 +185,11 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchDataId: (id) => {
       dispatch(reportAction.fetchDataId(id));
     },
-    fetchAllBadge: (store_code) => {
-      dispatch(reportAction.fetchAllBadge(store_code));
+    fetchTopTenProduct: (store_code,branch_id, params) => {
+      dispatch(reportAction.fetchTopTenProduct(store_code,branch_id, params));
     },
-    fetchTopTenProduct: (store_code, params) => {
-      dispatch(reportAction.fetchTopTenProduct(store_code, params));
-    },
-    fetchOverview: (store_code, params) => {
-      dispatch(reportAction.fetchOverview(store_code, params));
+    fetchOverview: (store_code,branch_id, params) => {
+      dispatch(reportAction.fetchOverview(store_code,branch_id, params));
     },
     fetchAllCollaborator: (store_code) => {
       dispatch(collaboratorAction.fetchAllCollaborator(store_code));

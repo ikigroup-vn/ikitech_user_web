@@ -296,12 +296,13 @@ export const ikipos_menu = [
                         exact: true,
                         to: "/combo",
                     },
-                    // {
-                    //   name: "Cài đặt quảng cáo",
-                    //   display : "hide",
-                    //   exact: true,
-                    //   to: "/banner_ads",
-                    // },
+                    {
+                        name: "Cài đặt chung",
+                        class: "web_theme_edit",
+                        display: "hide",
+                        exact: true,
+                        to: "/setting/index",
+                    },
                 ],
             },
 

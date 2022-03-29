@@ -14,9 +14,10 @@ class General extends Component {
     componentDidMount(){
         const { store_code } = this.props
         const branch_id = localStorage.getItem("branch_id")
-        this.props.fetchAllSupplierDebt(store_code, branch_id)
-        this.props.fetchAllCustomerDebt(store_code, branch_id)
-        this.props.fetchReportExpenditure(store_code, branch_id)
+        const params = `branch_id=${branch_id}`
+        this.props.fetchAllSupplierDebt(store_code, branch_id,1,params)
+        this.props.fetchAllCustomerDebt(store_code, branch_id,1,params)
+        this.props.fetchReportExpenditure(store_code, branch_id,1,params)
     }
     render() {
         const { store_code, profitToltal,supplierDebt,custommerDebt,reportExpenditure } = this.props
@@ -129,14 +130,14 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        fetchAllSupplierDebt: (store_code, branch_id, params) => {
-            dispatch(reportAction.fetchAllSupplierDebt(store_code, branch_id, params))
+        fetchAllSupplierDebt: (store_code, branch_id,page, params) => {
+            dispatch(reportAction.fetchAllSupplierDebt(store_code, branch_id,page, params))
         },
-        fetchAllCustomerDebt: (store_code, branch_id, params) => {
-            dispatch(reportAction.fetchAllCustomerDebt(store_code, branch_id, params))
+        fetchAllCustomerDebt: (store_code, branch_id,page, params) => {
+            dispatch(reportAction.fetchAllCustomerDebt(store_code, branch_id,page, params))
         },
-        fetchReportExpenditure: (store_code, branch_id, params) => {
-            dispatch(reportAction.fetchReportExpenditure(store_code, branch_id, params))
+        fetchReportExpenditure: (store_code, branch_id,page, params) => {
+            dispatch(reportAction.fetchReportExpenditure(store_code, branch_id,page, params))
         }
     }
 }

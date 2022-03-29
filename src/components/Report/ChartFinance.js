@@ -34,10 +34,12 @@ class ChartFinance extends Component {
 
     shouldComponentUpdate(nextProps,nextState){
         if(this.state.datePrime !== nextState.datePrime){
-            const params1 = `date_from=${nextState.datePrime.from}&date_to=${nextState.datePrime.to}`
-            const params2 = `date_from=${nextState.dateCompare.from}&date_to=${nextState.dateCompare.to}`
-            const { store_code } = this.props
             const branch_id = localStorage.getItem("branch_id")
+            
+            const params1 = `date_from=${nextState.datePrime.from}&date_to=${nextState.datePrime.to}&branch_id=${branch_id}`
+            const params2 = `date_from=${nextState.dateCompare.from}&date_to=${nextState.dateCompare.to}&branch_id=${branch_id}`
+            const { store_code } = this.props
+            
             this.props.fetchReportProfit(store_code, branch_id, params1)
             this.props.fetchReportProfitCompare(store_code, branch_id, params2)
         }

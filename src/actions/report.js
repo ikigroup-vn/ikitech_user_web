@@ -185,13 +185,14 @@ export const fetchImportExportStock = (store_code,branch_id,page,params) => {
   };
 };
 
-export const fetchTopTenProduct = (store_code , params = null) => {
+export const fetchTopTenProduct = (store_code,branch_id , params = null) => {
+  console.log("aaaaaaaaaaaaa",branch_id)
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading : "show"
     })
-    reportApi.fetchTopTenProduct(store_code , params).then((res) => {
+    reportApi.fetchTopTenProduct(store_code,branch_id , params).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
         loading : "hide"
@@ -205,13 +206,13 @@ export const fetchTopTenProduct = (store_code , params = null) => {
   };
 };
 
-export const fetchOverview = (store_code , params = null) => {
+export const fetchOverview = (store_code ,branch_id, params = null) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading : "show"
     })
-    reportApi.fetchOverview(store_code , params).then((res) => {
+    reportApi.fetchOverview(store_code ,branch_id, params).then((res) => {
       console.log(res)
       dispatch({
         type: Types.SHOW_LOADING,
@@ -465,22 +466,3 @@ export const uploadImgStore = (file) => {
   };
 };
 
-export const fetchAllBadge = (store_code) => {
-  return (dispatch) => {
-    dispatch({
-      type: Types.SHOW_LOADING,
-      loading : "show"
-    })
-    badgeApi.fetchAllBadge(store_code).then((res) => {
-      dispatch({
-        type: Types.SHOW_LOADING,
-        loading : "hide"
-      })
-      if(res.data.code !== 401)
-      dispatch({
-        type: Types.FETCH_ALL_BADGE,
-        data: res.data.data,
-      });
-    });
-  };
-};

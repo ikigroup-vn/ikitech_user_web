@@ -17,11 +17,7 @@ class Index extends Component {
 
     }
 
-    // componentDidMount() {
-    //     var { store_code, productId, page } = this.props.match.params;
 
-    //     this.props.fetchAllBadge(store_code);
-    // }
 
     componentWillReceiveProps(nextProps) {
         if (this.state.isLoading != true && typeof nextProps.permission.product_list != "undefined") {
