@@ -21,7 +21,8 @@ class SupplierDebt extends Component {
     componentDidMount() {
         const { store_code } = this.props.match.params
         const branch_id = localStorage.getItem("branch_id")
-        this.props.fetchAllSupplierDebt(store_code, branch_id)
+        const params = `branch_id=${branch_id}`
+        this.props.fetchAllSupplierDebt(store_code, branch_id,1,params)
         try {
             document.getElementsByClassName('r-input')[0].placeholder = 'Hôm nay';
         } catch (error) {
@@ -30,9 +31,9 @@ class SupplierDebt extends Component {
     }
     shouldComponentUpdate(nextProps, nextState) {
         if (this.state.txtStart !== nextState.txtStart) {
-            const params = `date=${nextState.txtStart}`
-            const { store_code } = this.props.match.params
             const branch_id = localStorage.getItem("branch_id")
+            const params = `date=${nextState.txtStart}&branch_id=${branch_id}`
+            const { store_code } = this.props.match.params
             this.props.fetchAllSupplierDebt(store_code, branch_id,1, params)
 
         }

@@ -24,7 +24,18 @@ class ReportInventory extends Component {
   componentDidMount() {
     const { store_code } = this.props.match.params
     const branch_id = localStorage.getItem("branch_id")
-    this.props.fetchAllReportInventory(store_code, branch_id)
+    const params = `branch_id=${branch_id}`
+    this.props.fetchAllReportInventory(store_code, branch_id,1,params)
+    try {
+      document.getElementsByClassName('r-input')[0].placeholder = 'Chọn ngày';
+    } catch (error) {
+
+    }
+  }
+  handeOnload = (store_code) => {
+    var branch_id = this.props.currentBranch.id
+    const params = `branch_id=${branch_id}`
+    this.props.fetchAllReportInventory(store_code, branch_id,1,params)
     try {
       document.getElementsByClassName('r-input')[0].placeholder = 'Chọn ngày';
     } catch (error) {
@@ -33,9 +44,9 @@ class ReportInventory extends Component {
   }
   shouldComponentUpdate(nextProps,nextState){
     if(this.state.txtStart !== nextState.txtStart){
-      const params = `date=${nextState.txtStart}`
-      const { store_code } = this.props.match.params
       const branch_id = localStorage.getItem("branch_id")
+      const params = `date=${nextState.txtStart}&branch_id=${branch_id}`
+      const { store_code } = this.props.match.params
       this.props.fetchAllReportInventory(store_code, branch_id,1,params)
 
     }
@@ -121,7 +132,7 @@ class ReportInventory extends Component {
 
           <div id="content-wrapper" className="d-flex flex-column">
             <div id="content">
-              <Topbar store_code={store_code} />
+              <Topbar store_code={store_code} handeOnload = {this.handeOnload} />
 
               <div className="container-fluid">
                 <Alert
@@ -186,6 +197,7 @@ class ReportInventory extends Component {
 const mapStateToProps = (state) => {
   return {
     reportInventory: state.reportReducers.reportInventory,
+    currentBranch: state.branchReducers.branch.currentBranch
   }
 }
 

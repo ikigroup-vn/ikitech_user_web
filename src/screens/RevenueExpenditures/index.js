@@ -281,17 +281,27 @@ class RevenueExpenditures extends Component {
                               </div>
                             </div>
                           </form>
-                          <div>
-                            <h6 style={{ display: "flex" }}>
-                              Tổng thu:{" "}
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <div>
+                              <div>Tổng thu: </div>
+                              <div>Tổng chi: </div>
+                              <div style={{ color: "chocolate" }}>
+                                Tồn cuối kì:{" "}
+                              </div>
+                            </div>
+
+                            <div>
                               <div style={{ paddingLeft: "20px" }}>
                                 {helper.format(
                                   Number(this.props.reportExpenditure.renvenure)
                                 )}
                               </div>
-                            </h6>
-                            <h6 style={{ display: "flex" }}>
-                              Tổng chi:{" "}
+
                               <div style={{ paddingLeft: "20px" }}>
                                 {helper.format(
                                   Number(
@@ -299,13 +309,11 @@ class RevenueExpenditures extends Component {
                                   )
                                 )}
                               </div>
-                            </h6>
-                            <h6 style={{ display: "flex", color: "chocolate" }}>
-                              Tồn cuối kì:{" "}
+
                               <div style={{ paddingLeft: "20px" }}>
                                 {helper.format(Number(total))}
                               </div>
-                            </h6>
+                            </div>
                           </div>
 
                           <div class="dropdown">

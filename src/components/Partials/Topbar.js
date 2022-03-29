@@ -35,15 +35,15 @@ class Topbar extends Component {
       const branch_id = localStorage.getItem("branch_id");
       this.setState({ txtBranch: branch_id });
       const value = nextProps.branchStore[0]?.id;
-
-      const selectedBranch = this.props.branchStore.find(
-        (branch) => branch.id == value
-      );
-      this.props.changeBranch(selectedBranch);
-
-      if (!branch_id) {
-        localStorage.setItem("branch_id", value);
-        this.setState({ txtBranch: value });
+      if (nextProps.branchStore != null && nextProps.branchStore.length > 0) {
+        const selectedBranch = this.props.branchStore.find(
+          (branch) => branch.id == this.state.txtBranch
+        );
+        this.props.changeBranch(selectedBranch);
+        if (!branch_id) {
+          localStorage.setItem("branch_id", value);
+          this.setState({ txtBranch: value });
+        }
       }
     }
   }
@@ -62,7 +62,7 @@ class Topbar extends Component {
         ? []
         : this.props.branchStore;
 
-    const selectedBranch = branchStore.find((branch) => (branch.id = value));
+    const selectedBranch = branchStore.find((branch) => branch.id == value);
     this.props.changeBranch(selectedBranch);
 
     window.location.reload();

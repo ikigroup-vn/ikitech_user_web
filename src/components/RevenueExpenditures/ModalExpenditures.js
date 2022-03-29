@@ -94,15 +94,11 @@ class ModalExpenditures extends Component {
         },
       ],
       listStaff: [],
-      // listSupplier: [],
-      // listCustomer: [],
     };
   }
 
   componentDidMount() {
     var options1 = [];
-    // var options2 = [];
-    // var options3 = [];
 
     var staff = [...this.props.staff];
     // var supplier = [...this.props.supplier];
@@ -112,29 +108,11 @@ class ModalExpenditures extends Component {
       options1 = staff.map((value, index) => {
         return {
           value: value.id,
-          label: value.name,
+          label: `${value.name}  (${value.phone_number})`,
         };
       });
       this.setState({ listStaff: options1 });
     }
-    // if (supplier.length > 0) {
-    //   options2 = supplier.map((value, index) => {
-    //     return {
-    //       value: value.id,
-    //       label: value.name,
-    //     };
-    //   });
-    //   this.setState({ listSupplier: options2 });
-    // }
-    // if (customers.length > 0) {
-    //   options3 = customers.map((value, index) => {
-    //     return {
-    //       value: value.id,
-    //       label: value.name,
-    //     };
-    //   });
-    //   this.setState({ listCustomer: options3 });
-    // }
   }
 
   onChange = (e) => {
@@ -175,41 +153,12 @@ class ModalExpenditures extends Component {
         options1 = staff.map((value, index) => {
           return {
             value: value.id,
-            label: value.name,
+            label: `${value.name}  (${value.phone_number})`,
           };
         });
         this.setState({ listStaff: options1 });
       }
     }
-
-    // if (!shallowEqual(nextProps.supplier, this.props.supplier)) {
-    //   var options2 = [];
-
-    //   var supplier = [...this.props.supplier];
-    //   if (supplier.length > 0) {
-    //     options2 = supplier.map((value, index) => {
-    //       return {
-    //         value: value.id,
-    //         label: value.name,
-    //       };
-    //     });
-    //     this.setState({ listSupplier: options2 });
-    //   }
-    // }
-
-    // if (!shallowEqual(nextProps.customers, this.props.customers)) {
-    //   var options3 = [];
-    //   var customers = [...this.props.customers];
-    //   if (customers.length > 0) {
-    //     options3 = customers.map((value, index) => {
-    //       return {
-    //         value: value.id,
-    //         label: value.name,
-    //       };
-    //     });
-    //     this.setState({ listCustomer: options3 });
-    //   }
-    // }
   }
   onChangeSelect1 = (selectValue) => {
     this.setState({ payment_method: selectValue });
@@ -234,18 +183,11 @@ class ModalExpenditures extends Component {
     const params = `&search=${search}`;
     const res = await this.props.fetchAllCustomer(store_code, page, params);
 
-    // console.log(
-    //   this.props.customers.data,
-    //   this.props.customers.data.map((i) => {
-    //     return { value: i.id, label: i.name };
-    //   }),
-    //   this.props.customers.data.data.length === 20
-    // );
-
     return {
       options: this.props.customers.data.map((i) => {
-        return { value: i.id, label: i.name };
+        return { value: i.id, label: `${i.name}  (${i.phone_number})` };
       }),
+
       hasMore:
         this.props.customers.current_page !== this.props.customers.last_page,
       additional: {
@@ -261,7 +203,7 @@ class ModalExpenditures extends Component {
 
     return {
       options: this.props.supplier.data.map((i) => {
-        return { value: i.id, label: i.name };
+        return { value: i.id, label: `${i.name}  (${i.phone})` };
       }),
       hasMore:
         this.props.supplier.current_page !== this.props.supplier.last_page,
@@ -392,8 +334,7 @@ class ModalExpenditures extends Component {
       allow_accounting,
       description,
       listStaff,
-      // listSupplier,
-      // listCustomer,
+
       listPaymentMethod,
       listType,
       listRecipientGroup,
@@ -497,15 +438,6 @@ class ModalExpenditures extends Component {
                           isSearchable
                           placeholder="-- Chọn người nộp --"
                           value={recipient_references_id}
-                          // options={
-                          //   recipient_group?.value === 0
-                          //     ? listCustomer
-                          //     : recipient_group?.value === 1
-                          //     ? listSupplier
-                          //     : recipient_group?.value === 2
-                          //     ? listStaff
-                          //     : []
-                          // }
                           options={listStaff}
                           name="recipientReferences"
                           onChange={this.onChangeSelect4}
@@ -525,6 +457,7 @@ class ModalExpenditures extends Component {
                           additional={{
                             page: 1,
                           }}
+                          debounceTimeout={500}
                         />
                       </>
                     )}
@@ -541,6 +474,7 @@ class ModalExpenditures extends Component {
                           additional={{
                             page: 1,
                           }}
+                          debounceTimeout={300}
                         />
                       </>
                     )}

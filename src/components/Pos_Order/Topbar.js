@@ -36,10 +36,8 @@ class Topbar extends Component {
 
             if (nextProps.branchStore != null && nextProps.branchStore.length > 0) {
 
-                const branch_id = localStorage.getItem("branch_id")
-
-                console.log("branch_id", branch_id)
-                console.log("currentBranch", this.props.currentBranch)
+                var branch_id = localStorage.getItem("branch_id")
+        
 
                 if (branch_id != null) {
                     this.setState({ branchId: branch_id })
@@ -61,7 +59,6 @@ class Topbar extends Component {
             if (nextProps.listPos.length > 0) {
                 this.props.handleCallbackTab(nextProps.listPos[0]?.id)
             } else {
-                // this.handleCreateTab()
                 if (nextProps.listPos.length == 0) {
                     this.handleCreateTab()
                 }

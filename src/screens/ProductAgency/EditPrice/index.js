@@ -90,10 +90,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
-
-        fetchAllBadge: (store_code) => {
-            dispatch(notificationAction.fetchAllBadge(store_code));
-        },
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Index);

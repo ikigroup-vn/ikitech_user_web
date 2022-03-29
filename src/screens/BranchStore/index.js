@@ -108,6 +108,7 @@ class Branch extends Component {
                                 <br></br>
                                 <div className='card'>
                                 <div className='card-body'>
+                                {listBranch.length >0 ?                                
                                 <div class="table-responsive">
                                     <table class="table  " id="dataTable" width="100%" cellspacing="0">
                                         <thead>
@@ -127,7 +128,10 @@ class Branch extends Component {
 
                                         <tbody>{this.showData(listBranch)}</tbody>
                                     </table>
-                                </div>
+                                </div>:
+                                <div style={{fontSize:"15px",fontWeight:"bold",textAlign:"center"}}>Chi nhánh mặc định</div>
+                                }
+
                                 </div>
                                 </div>
                             </div>

@@ -12,6 +12,9 @@ class ListStore extends Component {
         this.props.handleDelCallBack({ table: "Cửa hàng", id: store_code });
         event.preventDefault();
     }
+    handleSetbranch = () =>{
+        localStorage.setItem('branch_id',"")
+    }
 
     render() {
         const listStore = this.props.data
@@ -20,7 +23,7 @@ class ListStore extends Component {
                 {listStore.map((item, index) => {
                     const logo_url = item.logo_url == null ? Env.IMG_NOT_FOUND : item.logo_url
                     return (
-                        <div class="card list-group-item list-group-item-action list-group-item-light" style={{border:"1px solid #8e8a8a", margin: "10px 0" }}>
+                        <div class="card list-group-item list-group-item-action list-group-item-light" style={{border:"1px solid #8e8a8a", margin: "10px 0" }} onClick={this.handleSetbranch}>
                             <Link to={`/dashboard/${item.store_code}`}>
                             <div class="card-body" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0px" }}>
                                 <div className='wrap-list' style={{ display: "flex", alignItems: "center" }}>

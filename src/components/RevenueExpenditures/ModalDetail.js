@@ -112,19 +112,13 @@ class ModalDetail extends Component {
         },
       ],
       listStaff: [],
-      listSupplier: [],
-      listCustomer: [],
     };
   }
 
   componentDidMount() {
     var options1 = [];
-    var options2 = [];
-    var options3 = [];
 
     var staff = [...this.props.staff];
-    var supplier = [...this.props.supplier];
-    var customers = [...this.props.customers];
 
     if (staff.length > 0) {
       options1 = staff.map((value, index) => {
@@ -134,24 +128,6 @@ class ModalDetail extends Component {
         };
       });
       this.setState({ listStaff: options1 });
-    }
-    if (supplier.length > 0) {
-      options2 = supplier.map((value, index) => {
-        return {
-          value: value.id,
-          label: value.name,
-        };
-      });
-      this.setState({ listSupplier: options2 });
-    }
-    if (customers.length > 0) {
-      options3 = customers.map((value, index) => {
-        return {
-          value: value.id,
-          label: value.name,
-        };
-      });
-      this.setState({ listCustomer: options3 });
     }
   }
 
@@ -178,39 +154,11 @@ class ModalDetail extends Component {
           options1 = staff.map((value, index) => {
             return {
               value: value.id,
-              label: value.name,
+
+              label: `${value.name} + ${value.phone_number}`,
             };
           });
           this.setState({ listStaff: options1 });
-        }
-      }
-
-      if (!shallowEqual(nextProps.supplier, this.props.supplier)) {
-        var options2 = [];
-
-        var supplier = [...this.props.supplier];
-        if (supplier.length > 0) {
-          options2 = supplier.map((value, index) => {
-            return {
-              value: value.id,
-              label: value.name,
-            };
-          });
-          this.setState({ listSupplier: options2 });
-        }
-      }
-
-      if (!shallowEqual(nextProps.customers, this.props.customers)) {
-        var options3 = [];
-        var customers = [...this.props.customers];
-        if (customers.length > 0) {
-          options3 = customers.map((value, index) => {
-            return {
-              value: value.id,
-              label: value.name,
-            };
-          });
-          this.setState({ listCustomer: options3 });
         }
       }
     }
@@ -307,7 +255,7 @@ class ModalDetail extends Component {
                   ></input>
                 </div>
                 <div class="form-group">
-                  <label>Chọn nhóm người nộp</label>
+                  <label>Nhóm người nộp</label>
 
                   <input
                     type="text"
@@ -324,7 +272,7 @@ class ModalDetail extends Component {
                 </div>
                 {revenueExpendituresDetail?.recipient_group !== 3 && (
                   <div class="form-group">
-                    <label>Chọn người nộp</label>
+                    <label>Người nộp</label>
 
                     <input
                       type="text"
