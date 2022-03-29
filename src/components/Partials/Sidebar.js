@@ -113,7 +113,7 @@ class Sidebar extends Component {
   };
   MenuLink_2 = (link) => {
     var result = null;
-    if (link.length > 0) {
+    if (link?.length > 0) {
       var _class = this.props.permission;
 
       result = link.map((link, index) => {
@@ -227,7 +227,7 @@ class Sidebar extends Component {
   checkDisplayTitle = (link) => {
     var result = true;
     var _class = this.props.permission;
-    if (link.length > 0) {
+    if (link?.length > 0) {
       for (const item of link) {
         if (item.isVip == true) {
           return this.props.badges.config_user_vip == null ||
@@ -280,12 +280,12 @@ class Sidebar extends Component {
     return (
       <div className="col-2 col-2-nav">
         <ul
-          className="navbar-nav navbar-main sidebar sidebar-dark accordion" style={{ 
+          className="navbar-nav navbar-main sidebar sidebar-dark accordion"
+          style={{
             overflowX: "hidden",
-            backgroundColor:themeData().backgroundColor
-           }}
+            backgroundColor: themeData().backgroundColor,
+          }}
           id="accordionSidebar"
-        
         >
           <Link
             className="sidebar-brand d-flex align-items-center justify-content-center"
@@ -307,9 +307,12 @@ class Sidebar extends Component {
               />
             </div>
             <div className="sidebar-brand-text">
-
-              <img width="80%" src={themeData().logo} class="img-responsive" alt="Image" />
-
+              <img
+                width="80%"
+                src={themeData().logo}
+                class="img-responsive"
+                alt="Image"
+              />
             </div>
           </Link>
           {this.showMenus(menu)}
