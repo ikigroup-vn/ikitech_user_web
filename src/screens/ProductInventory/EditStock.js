@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { formatNumber } from '../../../ultis/helpers'
-import { shallowEqual } from '../../../ultis/shallowEqual'
+import { formatNumber } from '../../ultis/helpers'
+import { shallowEqual } from '../../ultis/shallowEqual'
 
 class EditStock extends Component {
     constructor(props){
@@ -84,7 +84,6 @@ class EditStock extends Component {
                                     type="text"
                                     class="form-control"
                                     id="customer_copyright"
-                                    name="customer_copyright"
                                     autocomplete="off"
                                     onChange={this.onChange}
                                     value ={cost_of_capital}
@@ -97,7 +96,6 @@ class EditStock extends Component {
                                     type="text"
                                     class="form-control"
                                     id="customer_copyright"
-                                    name="customer_copyright"
                                     autocomplete="off"
                                     onChange={this.onChange}
                                     value ={quantity_in_stock}

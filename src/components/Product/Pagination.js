@@ -11,10 +11,12 @@ class Pagination extends Component {
   }
 
   passPagination = (page) => {
-    var { store_code,  limit ,searchValue } = this.props
-    var params =`&limit=${limit}`
-    console.log(params)
-    this.props.fetchAllProduct(store_code , page,params)    
+    var { store_code,  limit ,searchValue, bonusParam } = this.props
+    var params =`&limit=${limit}${bonusParam??""}`
+
+    const branch_id = localStorage.getItem('branch_id');
+  this.props.fetchAllProductV2(store_code, branch_id, page, params);
+  
     this.props.passNumPage(page)
   }
 
@@ -74,8 +76,8 @@ class Pagination extends Component {
 const mapDispatchToProps = (dispatch, props) => {
   return {
 
-    fetchAllProduct: (store_code , page , params) => {
-      dispatch(productAction.fetchAllProduct(store_code , page,params));
+    fetchAllProductV2: (store_code, branch_id, page, params) => {
+      dispatch(productAction.fetchAllProductV2(store_code, branch_id, page, params));
     },
   };
 };

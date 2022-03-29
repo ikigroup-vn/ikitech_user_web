@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom'
 import { format, formatNumber } from '../../ultis/helpers'
 import * as inventoryAction from '../../actions/inventory'
 import { connect } from 'react-redux';
+import HistoryStock from './HistoryStock';
 import getChannel, { IKITECH } from '../../ultis/channel';
 
 class ShowData extends Component {
     constructor(props) {
         super(props)
         this.state = {
-           
+            show_item: true
         }
     }
 
@@ -44,6 +45,9 @@ class ShowData extends Component {
             sub_element_distribute_name: ""
         }
         this.props.historyInventorys(store_code, branch_id, formData)
+    }
+    handleOnClick = () => {
+        this.setState({ show_item: !this.state.show_item })
     }
 
 
@@ -118,7 +122,7 @@ class ShowData extends Component {
     render() {
         const { product_discount, min_price, max_price, _delete, update, insert, checked, data, per_page, current_page, index, store_code, page, status, status_name, status_stock, discount, historyInventory } = this.props
         const listDistribute = data.inventory?.distributes !== null && data.inventory?.distributes.length > 0 ? data.inventory?.distributes[0] : []
-   
+        const { show_item } = this.state
 
 
         let discount_percent = null;
@@ -150,144 +154,26 @@ class ShowData extends Component {
                             {data.name}
                         </Link>
                     </td>
-
-
                     <td>
-
-                        <div>
-
-                            {min_price === max_price ?
-                                format(Number(discount_percent == null
-                                    ? min_price
-                                    : min_price - min_price * discount_percent * 0.01)) :
-
-
-                                <div>
-
-                                    {
-                                        format(Number(discount_percent == null
-                                            ? min_price
-                                            : min_price - min_price * discount_percent * 0.01))
-
-
-                                    }
-                                    {
-                                        " - "
-                                    }
-                                    {
-                                        format(Number(discount_percent == null
-                                            ? max_price
-                                            : max_price - max_price * discount_percent * 0.01))
-
-
-                                    }
-                                </div>
-
-                            }
-
-
-                        </div>
-
-
-                        {product_discount && <div style={{
-                            float: "left"
-                        }}>
-
-                            {min_price === max_price ?
-                                format(Number(min_price)) :
-                                <div className='row'>
-
-                                    <div style={{
-                                        textDecoration: "line-through"
-                                    }}>
-                                        {
-                                            format(Number(min_price))
-                                        }
-                                        {
-                                            " - "
-                                        }
-                                        {
-                                            format(Number(max_price))
-                                        }
-
-                                    </div>
-                                  
-                                    <div className="discount">&emsp;  -{discount_percent}%</div>
-                                </div>
-
-                            }
-
-
-                        </div>
-                        }
+                       
 
                     </td>
 
-                    {getChannel() == IKITECH && <td>
-                        {" "}
-                        <h5>
-                            <span class={`badge badge-${status}`}>{status_name}</span>
-                        </h5>
-                    </td>}
+                    
+                    
+               
 
-
-
-                    <td
-                        className={
-                            status_stock == -2 || status_stock == -1 ? "show" : "hide"
-                        }
-                    >
-                        {" "}
-                        <h5>
-                            <span
-                                class={`badge badge-${status_stock == -2 ? "danger" : "success"
-                                    }`}
-                            >
-                                {status_stock == -2 ? "Hết hàng" : "Vô hạn"}
-                            </span>
-                        </h5>
-                    </td>
-                    <td
-                        className={
-                            status_stock != -2 && status_stock != -1 ? "show" : "hide"
-                        }
-                    >
-                        {new Intl.NumberFormat().format(status_stock.toString())}
-                    </td>
-                    {getChannel() == IKITECH && <td>{data.view}</td>}
-                    {getChannel() == IKITECH && <td>{data.likes}</td>}
-
-
-                    <td className="btn-voucher">
-                        <Link
-                            to={`/product/edit/${store_code}/${data.id}/${page}`}
-                            class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"
-                                }`}
-                        >
-                            <i class="fa fa-edit"></i> Sửa
-                        </Link>
-                        <Link
-                            to={`/product/create/${store_code}/${data.id}`}
-                            class={`btn btn-primary btn-sm ${insert == true ? "show" : "hide"
-                                }`}
-                        >
-                            <i class="fa fa-copy"></i> Sao chép
-                        </Link>
-                        <button
-                            onClick={(e) =>
-                                this.props.passDataModal(e, store_code, data.id, data.name)
-                            }
-                            data-toggle="modal"
-                            data-target="#removeModal"
-                            class={`btn btn-danger btn-sm ${_delete == true ? "show" : "hide"
-                                }`}
-                        >
-                            <i class="fa fa-trash"></i> Xóa
-                        </button>
-                    </td>
+                 
                 </tr>
 
-         
+                <tr class={`explode ${show_item == true ? "show" : "hide"}`} >
+                    <td colSpan={12}>
+                        <div className='show-distribute'>
+                            {this.showDistribute(listDistribute)}
+                        </div>
+                    </td>
+                </tr>
+                <HistoryStock historyInventory={historyInventory} />
             </>
         )
     }
