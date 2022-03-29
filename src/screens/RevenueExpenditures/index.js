@@ -6,7 +6,7 @@ import Table from "../../components/RevenueExpenditures/Table";
 
 import ModalRevenue from "../../components/RevenueExpenditures/ModalRevenue";
 import ModalExpenditures from "../../components/RevenueExpenditures/ModalExpenditures";
-import Alert from "../../components/Partials/Alert";
+
 import { Redirect, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Loading from "../Loading";
@@ -160,7 +160,7 @@ class RevenueExpenditures extends Component {
 
     var {
       // revenueExpenditures,
-      alert,
+
       staff,
       supplier,
       customers,
@@ -255,7 +255,10 @@ class RevenueExpenditures extends Component {
                       <div className="card-header py-3">
                         <div
                           class="row"
-                          style={{ "justify-content": "space-between" }}
+                          style={{
+                            "justify-content": "space-between",
+                            alignItems: "center",
+                          }}
                         >
                           <form onSubmit={this.searchData}>
                             <div
@@ -278,12 +281,33 @@ class RevenueExpenditures extends Component {
                               </div>
                             </div>
                           </form>
-                          <h5 style={{ display: "flex" }}>
-                            Tồn cuối kì:{" "}
-                            <div style={{ paddingLeft: "20px" }}>
-                              {helper.format(Number(total))}
-                            </div>
-                          </h5>
+                          <div>
+                            <h6 style={{ display: "flex" }}>
+                              Tổng thu:{" "}
+                              <div style={{ paddingLeft: "20px" }}>
+                                {helper.format(
+                                  Number(this.props.reportExpenditure.renvenure)
+                                )}
+                              </div>
+                            </h6>
+                            <h6 style={{ display: "flex" }}>
+                              Tổng chi:{" "}
+                              <div style={{ paddingLeft: "20px" }}>
+                                {helper.format(
+                                  Number(
+                                    this.props.reportExpenditure.expenditure
+                                  )
+                                )}
+                              </div>
+                            </h6>
+                            <h6 style={{ display: "flex", color: "chocolate" }}>
+                              Tồn cuối kì:{" "}
+                              <div style={{ paddingLeft: "20px" }}>
+                                {helper.format(Number(total))}
+                              </div>
+                            </h6>
+                          </div>
+
                           <div class="dropdown">
                             <button
                               style={{
@@ -435,8 +459,8 @@ class RevenueExpenditures extends Component {
                   branch_id={branch_id}
                   revenueExpenditures={reportExpenditure}
                   staff={staff}
-                  supplier={supplier.data}
-                  customers={customers.data}
+                  // supplier={supplier.data}
+                  // customers={customers.data}
                   is_revenue={true}
                 />
               )}
@@ -470,7 +494,7 @@ const mapStateToProps = (state) => {
     //   state.revenueExpendituresReducers.revenueExpenditures
     //     .allRevenueExpenditures,
     auth: state.authReducers.login.authentication,
-    alert: state.revenueExpendituresReducers.alert.alert_create,
+
     permission: state.authReducers.permission.data,
     staff: state.staffReducers.staff.allStaff,
     supplier: state.storeReducers.store.supplier,

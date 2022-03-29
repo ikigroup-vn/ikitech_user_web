@@ -10,6 +10,7 @@
 
 
   <script src="%PUBLIC_URL%/lib/jquery/jquery.min.js"></script>
+  <script src="%PUBLIC_URL%/lib/jquery/jquery-resizable.js"></script>
   <link rel="shortcut icon" href="%PUBLIC_URL%/images/logo_tab.png" />
   <!-- Core plugin JavaScript-->
 
@@ -75,12 +76,19 @@
       display: none;
     }
   </style>
+
+
+<script>
+  $( document ).ready(function() {
+    $(".panel-top").resizable({
+   handleSelector: ".splitter-horizontal",
+   resizeWidth: false
+ });
+});
+  
+</script>
 </head>
-<style>
-  #txtPassword {
-    -webkit-text-security: disc;
-  }
-</style>
+
 
 <body>
   <noscript>You need to enable JavaScript to run this app.</noscript>

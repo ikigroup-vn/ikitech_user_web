@@ -37,6 +37,25 @@ export const fetchAllRevenueExpenditures = (
       });
   };
 };
+export const fetchAllSupplier = (store_code, page, params) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    storeApi.fetchAllSupplier(store_code, page, params).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide",
+      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_ALL_SUPPLIER,
+          data: res.data.data,
+        });
+    });
+  };
+};
 export const fetchRevenueExpendituresById = (
   store_code,
   branch_id,

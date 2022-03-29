@@ -14,6 +14,7 @@ import * as CategoryPAction from "../../../actions/category_product";
 import * as Types from "../../../constants/ActionType";
 import Alert from "../../../components/Partials/Alert";
 import SeoOption from "../../../components/Product/Update/SeoOption";
+import getChannel,{IKITECH} from "../../../ultis/channel";
 
 class ProductEdit extends Component {
   constructor(props) {
@@ -40,11 +41,13 @@ class ProductEdit extends Component {
       var formdata = { ...prevState.form };
       formdata.name = data.txtName;
       formdata.price = data.txtPrice.toString().replace(/,/g, '').replace(/\./g, '');
+      formdata.import_price = data.txtImportPrice.toString().replace(/,/g, '').replace(/\./g, '');
       formdata.barcode = data.txtBarcode;
       formdata.status = data.txtStatus;
       formdata.quantity_in_stock = data.txtQuantityInStock.toString().replace(/,/g, '').replace(/\./g, '');
       formdata.percent_collaborator = data.txtPercentC;
       formdata.sku = data.sku
+      formdata.check_inventory = data.check_inventory
 
       var categories = [];
       var category_children_ids = [];
@@ -208,8 +211,90 @@ class ProductEdit extends Component {
       form.quantity_in_stock = form.list_distribute.length > 0 ? total : form.quantity_in_stock
 
     }
-    var { page } = this.props
-    this.props.updateProduct(store_code, form, productId, page);
+    var { page, currentBranch } = this.props
+    var list_distribute = form.list_distribute ?? []
+
+
+    //Chuẩn hóa distribute
+
+    // list_distribute[0].element_distributes = list_distribute[0].element_distributes.filter((ele) =>
+    //   ele.name != null && ele.name != ""
+    // )
+    // list_distribute[0].element_distributes = list_distribute[0].element_distributes.map((ele) => {
+
+    //   if (ele.sub_element_distributes != null && ele.sub_element_distributes.length > 0) {
+    //     ele.sub_element_distributes = ele.sub_element_distributes.
+    //       filter((sub) =>
+    //         sub.name != null && sub.name != "")
+    //   }
+    //   return ele
+    // })
+
+
+    list_distribute[0].element_distributes = list_distribute[0].element_distributes.map((ele) => {
+      if (ele.id != null) {
+        ele.is_edit = true
+      } else {
+        ele.is_edit = false
+      }
+
+      if (ele.id != null && ele.before_name == null) {
+        ele.before_name = ele.name
+        ele.is_edit = true
+      }
+
+      return ele
+    }
+    )
+    list_distribute[0].element_distributes = list_distribute[0].element_distributes.map((ele) => {
+
+      if (ele != null && ele.sub_element_distributes != null && ele.sub_element_distributes.length > 0) {
+        ele.sub_element_distributes = ele.sub_element_distributes.
+          map((sub) => {
+            if (sub.id != null) {
+              sub.is_edit = true
+            } else {
+              sub.is_edit = false
+            }
+
+            if (sub.id != null && sub.before_name == null) {
+              sub.before_name = sub.name
+              sub.is_edit = true
+            }
+            
+            return sub
+          })
+      }
+      return ele
+    })
+
+    /////
+
+
+    var distributeData = {}
+    form.list_distribute = null
+    this.props.updateProduct(store_code, form, productId, page)
+
+    distributeData = {
+      has_distribute: false,
+      has_sub: false
+    }
+
+    if (list_distribute != null && list_distribute.length > 0 && list_distribute[0].element_distributes != null
+      && list_distribute[0].element_distributes.length > 0
+    ) {
+      distributeData.has_distribute = true
+      distributeData.distribute_name = list_distribute[0].name
+      if (list_distribute[0].element_distributes[0] && list_distribute[0].element_distributes[0].sub_element_distributes != null &&
+        list_distribute[0].element_distributes[0] && list_distribute[0].element_distributes[0].sub_element_distributes.length > 0) {
+        distributeData.has_sub = true
+        distributeData.sub_element_distribute_name = list_distribute[0].sub_element_distribute_name
+
+      }
+    }
+
+    distributeData.element_distributes = list_distribute[0].element_distributes
+    this.props.updateDistribute(store_code, distributeData, productId, currentBranch?.id)
   };
   goBack = (e) => {
     e.preventDefault();
@@ -236,7 +321,7 @@ class ProductEdit extends Component {
           style={{ display: "flex", justifyContent: "space-between" }}
         >
           <h4 className="h4 title_content mb-0 text-gray-800">
-            Chỉnh sửa sản phẩm new
+            Chỉnh sửa sản phẩm {product.name}
           </h4>
         </div>
         <br></br>
@@ -291,7 +376,6 @@ class ProductEdit extends Component {
                 <a
                   style={{ marginLeft: "10px" }}
                   onClick={this.goBack}
-                  class="btn btn-warning"
                   class="btn btn-warning btn-icon-split  btn-sm"
                 >
                   <span class="icon text-white-50">
@@ -363,17 +447,19 @@ class ProductEdit extends Component {
           </div>
         </div>
 
-        <div class="card mb-4">
-          <div class="card-header title_content">Tối ưu SEO</div>
-          <div class="card-body" style={{ padding: "0.8rem" }}>
-            <div class="row">
-              <SeoOption
-                product={product}
-                handleDataFromContent={this.handleDataFromContent}
-              />
-            </div>
-          </div>
-        </div>
+       {
+         getChannel() == IKITECH &&  <div class="card mb-4">
+         <div class="card-header title_content">Tối ưu SEO</div>
+         <div class="card-body" style={{ padding: "0.8rem" }}>
+           <div class="row">
+             <SeoOption
+               product={product}
+               handleDataFromContent={this.handleDataFromContent}
+             />
+           </div>
+         </div>
+       </div>
+       }
         {/* <div class="card mb-4">
           <div class="card-header title_content">Thông tin khuyến mại</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>
@@ -401,7 +487,6 @@ class ProductEdit extends Component {
                 <a
                   style={{ marginLeft: "10px" }}
                   onClick={this.goBack}
-                  class="btn btn-warning"
                   class="btn btn-warning btn-icon-split  btn-sm"
                 >
                   <span class="icon text-white-50">
@@ -428,7 +513,7 @@ const mapStateToProps = (state) => {
     product: state.productReducers.product.productId,
     alert: state.productReducers.alert.alert_uid,
     blogs: state.blogReducers.blog.allBlog,
-
+    currentBranch: state.branchReducers.branch.currentBranch
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -447,6 +532,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     updateProduct: (store_code, product, productId, page) => {
       dispatch(productAction.updateProduct(store_code, product, productId, page));
+    },
+    updateDistribute: (store_code, product, productId, branchId) => {
+      dispatch(productAction.updateDistribute(store_code, product, productId, branchId));
     },
     fetchAllBlog: (id, page) => {
       dispatch(blogAction.fetchAllBlog(id, page));

@@ -4,15 +4,17 @@ import { Link } from "react-router-dom";
 import Alert from "../../components/Partials/Alert";
 import * as Types from "../../constants/ActionType";
 import { connect } from "react-redux";
+import themeData from "../../ultis/theme_data";
+
 class Login extends Component {
 
 
-  componentDidMount(){
+  componentDidMount() {
     this.props.resetPermission({
       type: Types.FETCH_PERMISSION,
-      data : {}
-   })
-   this.props.loadPermission({ type : Types.LOAD_PERMISSION  , data : false})
+      data: {}
+    })
+    this.props.loadPermission({ type: Types.LOAD_PERMISSION, data: false })
 
   }
 
@@ -25,7 +27,11 @@ class Login extends Component {
               <div className="card o-hidden border-0 shadow-lg my-5">
                 <div className="card-body p-0">
                   <div className="row">
-                    <div className="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                    <div className="col-lg-6 d-none d-lg-block bg-login-image"
+                      style={{
+                        backgroundImage: `url(${document.location.origin + themeData().logoLogin})`
+                      }}
+                    ></div>
                     <div className="col-lg-6">
                       <div className="p-5">
                         <Alert
@@ -35,12 +41,12 @@ class Login extends Component {
 
                         <div className="text-center">
                           <h1 className="h4 text-gray-900 mb-4">
-                          IKITECH - Đăng nhập
+                         {themeData().loginTitle} - Đăng nhập
                           </h1>
                         </div>
                         <div className="text-center">
                           <p className="text-gray-900 mb-4">
-                          Xin chào, vui lòng nhập thông tin đăng nhập
+                            Xin chào, vui lòng nhập thông tin đăng nhập
                           </p>
                         </div>
                         <Form></Form>
@@ -51,7 +57,7 @@ class Login extends Component {
                           </Link>
                         </div>
 
-     
+
                       </div>
                     </div>
                   </div>
@@ -72,13 +78,13 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
-      resetPermission: (permissions) => {
-          dispatch(permissions);
-      },
-      loadPermission: (data) => {
-        dispatch(data);
+    resetPermission: (permissions) => {
+      dispatch(permissions);
     },
-    
+    loadPermission: (data) => {
+      dispatch(data);
+    },
+
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Login);

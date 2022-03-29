@@ -14,7 +14,6 @@ import { blogReducers } from "./blog/index";
 import { shipmentReducers } from "./shipment/index";
 import { paymentReducers } from "./payment/index";
 import { customerReducers } from "./customer/index";
-import { revenueExpendituresReducers } from "./revenue_expenditures/index";
 import { userReducers } from "./user/index";
 import { billReducers } from "./bill/index";
 import { chatReducers } from "./chat/index";
@@ -38,9 +37,13 @@ import { agencyReducers } from "./agency";
 import { orderReducers } from "./order_product";
 import { inventoryReducers } from "./inventory";
 import { importStockReducers } from "./ImportStock";
+import { posReducers } from "./pos_order";
+import { branchReducers } from "./branch";
+import { revenueExpendituresReducers } from "./revenue_expenditures/index";
 
 const appReducers = combineReducers({
   authReducers,
+  branchReducers,
   storeReducers,
   storeAReducers,
   categoryPReducers,
@@ -55,7 +58,6 @@ const appReducers = combineReducers({
   shipmentReducers,
   paymentReducers,
   customerReducers,
-
   userReducers,
   billReducers,
   chatReducers,
@@ -77,9 +79,11 @@ const appReducers = combineReducers({
   vipUserReducers,
   agencyReducers,
   orderReducers,
-  revenueExpendituresReducers,
   inventoryReducers,
   importStockReducers,
+  posReducers,
+
+  revenueExpendituresReducers,
 });
 
 export default appReducers;

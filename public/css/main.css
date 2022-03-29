@@ -464,7 +464,7 @@ img {
     position: fixed;
     height: 100%;
     z-index: 1000;
-    background-color: #C12026 !important;
+    background-color: #C12026;
 }
 .col-2-nav{
     flex: 0 0 15.66667% !important;
@@ -1009,7 +1009,48 @@ padding: 0 5px;
     font-size: 20px;
 }
 
+.header-pos {
+    background-color: #cf7a37  !important;
+}
 
+.activess{
+    background-color: white !important;
+    color: black !important;
+    padding: 15px !important;
+    border-radius: 0 !important;
+    font-weight: 500;
+}
+.activesss{
+    background-color: #cf7a37  !important;
+    color:white !important;
+}
+.card-item-pos:hover{
+    background:#cf7a3717;
+    box-shadow: 0px 2px 4px rgb(63 63 63 / 25%);
+}
+.page-item.active_pos .page-link {
+    z-index: 3;
+    color: #fff;
+    background-color: #cf7a37 ;
+    border-color: #cf7a37;
+}
+.btn-pay {
+    width: 63%;
+    font-size: 29px;
+    color: #fff;
+    background-color: #E56F25  ;
+    border-color: #E56F25  ;
+}
+
+.btn-pay:hover {
+    color: #fff;
+    background-color: #9c4d10  ;
+    border-color: #9c4d10  ;
+}
+.card-product-pos:hover {
+    border: 1px solid rgb(128 128 128 / 70%) !important;
+    background-color: #daa48324;
+}
 /* 
 	Ok so you have made it this far, that means you are very keen to on my code. 
 	Anyway I don't really mind it. This is a great way to learn so you actually doing the right thing:)

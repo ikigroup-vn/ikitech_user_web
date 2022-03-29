@@ -134,15 +134,11 @@ class Table extends Component {
             >
               <td>{per_page * (current_page - 1) + (index + 1)}</td>
               <td>{data.code}</td>
-              <td>{data.user != null ? data.user.name : null}</td>
-              {/* <th>STT</th>
-                <th>Mã</th>
-                <th>Tên khách hàng</th>
-                <th>Ngày tạo</th>
-                <th>Loại phiếu</th>
-                <th>Current Money</th>
-                <th>Change Money</th>
-                <th>Tên Action</th> */}
+
+              <td>
+                {data.staff !== null ? data.staff?.name : data.user?.name}
+              </td>
+
               <td>{data.created_at}</td>
               <td>
                 {data.is_revenue ? (
@@ -151,7 +147,12 @@ class Table extends Component {
                   <p style={{ color: "rgb(231 74 59)" }}>Phiếu chi</p>
                 )}
               </td>
-              <td>{data?.current_money}</td>
+              <td>
+                {new Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                }).format(data?.current_money)}
+              </td>
               <td>
                 {new Intl.NumberFormat("vi-VN", {
                   style: "currency",
@@ -196,7 +197,7 @@ class Table extends Component {
               <tr>
                 <th>STT</th>
                 <th>Mã</th>
-                <th>Tên khách hàng</th>
+                <th>Nhân viên</th>
                 <th>Ngày tạo</th>
                 <th>
                   {" "}

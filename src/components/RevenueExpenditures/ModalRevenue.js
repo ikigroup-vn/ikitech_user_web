@@ -8,6 +8,8 @@ import { shallowEqual } from "../../ultis/shallowEqual";
 import { isEmpty } from "../../ultis/helpers";
 import CurrencyInput from "react-currency-input-field";
 import Select from "react-select";
+import { AsyncPaginate } from "react-select-async-paginate";
+import * as customerAction from "../../actions/customer";
 import "./style.css";
 class ModalRevenue extends Component {
   constructor(props) {
@@ -20,7 +22,6 @@ class ModalRevenue extends Component {
       recipient_references_id: null,
       allow_accounting: true,
       description: "",
-
       listPaymentMethod: [
         {
           value: 0,
@@ -88,20 +89,18 @@ class ModalRevenue extends Component {
         },
       ],
       listStaff: [],
-      listSupplier: [],
-      listCustomer: [],
+      // listSupplier: [],
+      // listCustomer: [],
     };
   }
 
   componentDidMount() {
     var options1 = [];
-    var options2 = [];
-    var options3 = [];
-
+    // var options2 = [];
+    // var options3 = [];
     var staff = [...this.props.staff];
-    var supplier = [...this.props.supplier];
-    var customers = [...this.props.customers];
-
+    // var supplier = [...this.props.supplier];
+    // var customers = [...this.props.customers];
     if (staff.length > 0) {
       options1 = staff.map((value, index) => {
         return {
@@ -111,24 +110,24 @@ class ModalRevenue extends Component {
       });
       this.setState({ listStaff: options1 });
     }
-    if (supplier.length > 0) {
-      options2 = supplier.map((value, index) => {
-        return {
-          value: value.id,
-          label: value.name,
-        };
-      });
-      this.setState({ listSupplier: options2 });
-    }
-    if (customers.length > 0) {
-      options3 = customers.map((value, index) => {
-        return {
-          value: value.id,
-          label: value.name,
-        };
-      });
-      this.setState({ listCustomer: options3 });
-    }
+    // if (supplier.length > 0) {
+    //   options2 = supplier.map((value, index) => {
+    //     return {
+    //       value: value.id,
+    //       label: value.name,
+    //     };
+    //   });
+    //   this.setState({ listSupplier: options2 });
+    // }
+    // if (customers.length > 0) {
+    //   options3 = customers.map((value, index) => {
+    //     return {
+    //       value: value.id,
+    //       label: value.name,
+    //     };
+    //   });
+    //   this.setState({ listCustomer: options3 });
+    // }
   }
 
   onChange = (e) => {
@@ -176,34 +175,34 @@ class ModalRevenue extends Component {
       }
     }
 
-    if (!shallowEqual(nextProps.supplier, this.props.supplier)) {
-      var options2 = [];
+    // if (!shallowEqual(nextProps.supplier, this.props.supplier)) {
+    //   var options2 = [];
 
-      var supplier = [...this.props.supplier];
-      if (supplier.length > 0) {
-        options2 = supplier.map((value, index) => {
-          return {
-            value: value.id,
-            label: value.name,
-          };
-        });
-        this.setState({ listSupplier: options2 });
-      }
-    }
+    //   var supplier = [...this.props.supplier];
+    //   if (supplier.length > 0) {
+    //     options2 = supplier.map((value, index) => {
+    //       return {
+    //         value: value.id,
+    //         label: value.name,
+    //       };
+    //     });
+    //     this.setState({ listSupplier: options2 });
+    //   }
+    // }
 
-    if (!shallowEqual(nextProps.customers, this.props.customers)) {
-      var options3 = [];
-      var customers = [...this.props.customers];
-      if (customers.length > 0) {
-        options3 = customers.map((value, index) => {
-          return {
-            value: value.id,
-            label: value.name,
-          };
-        });
-        this.setState({ listCustomer: options3 });
-      }
-    }
+    // if (!shallowEqual(nextProps.customers, this.props.customers)) {
+    //   var options3 = [];
+    //   var customers = [...this.props.customers];
+    //   if (customers.length > 0) {
+    //     options3 = customers.map((value, index) => {
+    //       return {
+    //         value: value.id,
+    //         label: value.name,
+    //       };
+    //     });
+    //     this.setState({ listCustomer: options3 });
+    //   }
+    // }
   }
   onChangeSelect1 = (selectValue) => {
     this.setState({ payment_method: selectValue });
@@ -219,6 +218,47 @@ class ModalRevenue extends Component {
   };
   onChangeSelect4 = (selectValue) => {
     this.setState({ recipient_references_id: selectValue });
+  };
+
+  loadOptions1 = async (search, loadedOptions, { page }) => {
+    const { store_code } = this.props;
+    const params = `&search=${search}`;
+    const res = await this.props.fetchAllCustomer(store_code, page, params);
+
+    // console.log(
+    //   this.props.customers.data,
+    //   this.props.customers.data.map((i) => {
+    //     return { value: i.id, label: i.name };
+    //   }),
+    //   this.props.customers.data.data.length === 20
+    // );
+
+    return {
+      options: this.props.customers.data.map((i) => {
+        return { value: i.id, label: i.name };
+      }),
+      hasMore:
+        this.props.customers.current_page !== this.props.customers.last_page,
+      additional: {
+        page: page + 1,
+      },
+    };
+  };
+  loadOptions2 = async (search, loadedOptions, { page }) => {
+    const { store_code } = this.props;
+    const params = `&search=${search}`;
+    const res = await this.props.fetchAllSupplier(store_code, page, params);
+
+    return {
+      options: this.props.supplier.data.map((i) => {
+        return { value: i.id, label: i.name };
+      }),
+      hasMore:
+        this.props.supplier.current_page !== this.props.supplier.last_page,
+      additional: {
+        page: page + 1,
+      },
+    };
   };
   onSave = async (e) => {
     e.preventDefault();
@@ -334,8 +374,8 @@ class ModalRevenue extends Component {
       allow_accounting,
       description,
       listStaff,
-      listSupplier,
-      listCustomer,
+      // listSupplier,
+      // listCustomer,
       listPaymentMethod,
       listType,
       listRecipientGroup,
@@ -404,7 +444,6 @@ class ModalRevenue extends Component {
                     placeholder="Please enter a number"
                   />
                 </div>
-
                 <div class="form-group">
                   <label>Loại phiếu thu</label>
                   <Select
@@ -431,27 +470,65 @@ class ModalRevenue extends Component {
                 </div>
                 {recipient_group?.value !== 3 && (
                   <div class="form-group">
-                    <label>Chọn người nộp</label>
-                    <Select
-                      isClearable
-                      isSearchable
-                      placeholder="-- Chọn người nộp --"
-                      value={recipient_references_id}
-                      options={
-                        recipient_group?.value === 0
-                          ? listCustomer
-                          : recipient_group?.value === 1
-                          ? listSupplier
-                          : recipient_group?.value === 2
-                          ? listStaff
-                          : []
-                      }
-                      name="recipientReferences"
-                      onChange={this.onChangeSelect4}
-                    />
+                    {recipient_group?.value === 2 && (
+                      <>
+                        <label>Chọn người nộp</label>
+                        <Select
+                          isClearable
+                          isSearchable
+                          placeholder="-- Chọn người nộp --"
+                          value={recipient_references_id}
+                          // options={
+                          //   recipient_group?.value === 0
+                          //     ? listCustomer
+                          //     : recipient_group?.value === 1
+                          //     ? listSupplier
+                          //     : recipient_group?.value === 2
+                          //     ? listStaff
+                          //     : []
+                          // }
+                          options={listStaff}
+                          name="recipientReferences"
+                          onChange={this.onChangeSelect4}
+                        />
+                      </>
+                    )}
+                    {recipient_group?.value === 0 && (
+                      <>
+                        <label>Chọn người nộp</label>
+                        <AsyncPaginate
+                          placeholder="-- Chọn người nộp --"
+                          value={recipient_references_id}
+                          loadOptions={this.loadOptions1}
+                          // loadOptions={this.loadOptions1}
+                          name="recipientReferences1"
+                          onChange={this.onChangeSelect4}
+                          additional={{
+                            page: 1,
+                          }}
+                        />
+                      </>
+                    )}
+                    {recipient_group?.value === 1 && (
+                      <>
+                        <label>Chọn người nộp</label>
+                        <AsyncPaginate
+                          placeholder="-- Chọn người nộp --"
+                          value={recipient_references_id}
+                          loadOptions={this.loadOptions2}
+                          // loadOptions={this.loadOptions1}
+                          name="recipientReferences2"
+                          onChange={this.onChangeSelect4}
+                          additional={{
+                            page: 1,
+                          }}
+                        />
+                      </>
+                    )}
                   </div>
                 )}
                 {recipient_group?.value === 3 && null}
+
                 <div class="form-group">
                   <div
                     class="container d-flex  align-items-center justify-content-between mb-0"
@@ -513,7 +590,16 @@ class ModalRevenue extends Component {
     );
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    // revenueExpenditures:
+    //   state.revenueExpendituresReducers.revenueExpenditures
+    //     .allRevenueExpenditures,
 
+    customers: state.customerReducers.customer.allCustomer,
+    supplier: state.storeReducers.store.supplier,
+  };
+};
 const mapDispatchToProps = (dispatch, props) => {
   return {
     showError: (error) => {
@@ -524,6 +610,14 @@ const mapDispatchToProps = (dispatch, props) => {
         revenueExpendituresAction.createRevenueExpenditures(id, branch_id, data)
       );
     },
+    fetchAllCustomer: (id, page, params) => {
+      dispatch(customerAction.fetchAllCustomer(id, page, params));
+    },
+    fetchAllSupplier: (store_code, page, params) => {
+      dispatch(
+        revenueExpendituresAction.fetchAllSupplier(store_code, page, params)
+      );
+    },
   };
 };
-export default connect(null, mapDispatchToProps)(ModalRevenue);
+export default connect(mapStateToProps, mapDispatchToProps)(ModalRevenue);

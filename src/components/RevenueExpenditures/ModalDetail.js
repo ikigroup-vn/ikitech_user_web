@@ -332,19 +332,9 @@ class ModalDetail extends Component {
                       disabled
                       value={
                         revenueExpendituresDetail?.recipient_group === 0
-                          ? this.state.listCustomer.find((x) => {
-                              return (
-                                x.value ===
-                                revenueExpendituresDetail?.recipient_references_id
-                              );
-                            })?.label
+                          ? revenueExpendituresDetail?.customer.name
                           : revenueExpendituresDetail?.recipient_group === 1
-                          ? this.state.listSupplier.find((x) => {
-                              return (
-                                x.value ===
-                                revenueExpendituresDetail?.recipient_references_id
-                              );
-                            })?.label
+                          ? revenueExpendituresDetail?.supplier.name
                           : revenueExpendituresDetail?.recipient_group === 2
                           ? this.state.listStaff.find((x) => {
                               return (
