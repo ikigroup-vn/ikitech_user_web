@@ -175,6 +175,14 @@ export const ikipos_menu = [
         exact: true,
         to: "/supplier",
       },
+      {
+        name: "Thu chi",
+        display: "hide",
+        icon: "fa-coins",
+        exact: true,
+        to: "/revenue_expenditure",
+        itemHasTabName: "agency",
+      },
 
       // {
       //   name: "Đại lý",
@@ -374,23 +382,6 @@ export const ikipos_menu = [
     ],
   },
 
-  // {
-  //   name: "Lên đơn",
-  //   class : "order_list",
-
-  //   icon: "fa-credit-card",
-  //   exact: true,
-  //   to: "/addorder",
-  // },
-  // {
-  //   name: "Chat với khách hàng",
-  //   class : "chat_list",
-  //   display : "hide",
-  //   icon: "fa fa-comment-alt",
-  //   exact: true,
-  //   to: "/chat",
-  // },
-
   {
     name: "Kho hàng",
 
@@ -447,76 +438,11 @@ export const ikipos_menu = [
   },
 
   {
-    name: "Nhà cung cấp",
-    class: "post_category_list",
-    display: "hide",
-    icon: "fas fa-building",
-    exact: true,
-    to: "/supplier",
-  },
-
-  // {
-  //   name: "Đại lý",
-  //   display : "hide",
-  //   icon: "fa-home",
-  //   exact: true,
-  //   to: "/agency",
-  //   itemHasTabName : "agency"
-  // },
-
-  // {
-  //   name: "Cộng tác viên",
-  //   display : "hide",
-  //   icon: "fa-user",
-  //   exact: true,
-  //   to: "/collaborator",
-  //   itemHasTabName : "collaborator"
-  // },
-  // {
-  //     name: "Chương trình khuyến mại",
-  //     icon: "fas fa-money-bill-alt",
-  //     open: "promotion",
-  //     children: [
-  //         {
-  //             name: "Giảm giá sản phẩm",
-  //             class: "promotion_discount_list",
-  //             display: "hide",
-  //             icon: "fas-usd-circle",
-  //             exact: true,
-  //             to: "/discount",
-  //         },
-  //         {
-  //             name: "Voucher giảm giá hóa đơn",
-  //             class: "promotion_voucher_list",
-  //             display: "hide",
-  //             icon: "fas fa-fw fa-cog",
-  //             exact: true,
-  //             to: "/voucher",
-  //         },
-  //         {
-  //             name: "Combo giảm giá",
-  //             class: "promotion_combo_list",
-  //             display: "hide",
-  //             icon: "fas fa-fw fa-cog",
-  //             exact: true,
-  //             to: "/combo",
-  //         },
-  //     ],
-  // },
-
-  {
     name: "Cài đặt",
 
     icon: "fas fa-cogs",
     open: "setting",
     children: [
-      // {
-      //   name: "Chỉnh sửa giao diện",
-      //   class : "web_theme_edit",
-      //   display : "hide",
-      //   exact: true,
-      //   to: "/theme",
-      // },
       {
         name: "Chi nhánh",
         class: "web_theme_edit",
@@ -573,53 +499,6 @@ export const ikipos_menu = [
       },
     ],
   },
-
-  // {
-  //     name: "Khác",
-  //     icon: "fas fa-th-list",
-  //     open: "another",
-  //     children: [
-  //         {
-  //             name: "Địa chỉ cửa hàng",
-  //             class: "delivery_pick_address_list",
-  //             display: "hide",
-  //             icon: "fas fa-fw fa-cog",
-  //             exact: true,
-  //             to: "/store_address",
-  //         },
-  //         {
-  //             name: "Đơn vị vận chuyển",
-  //             class: "delivery_provider_update",
-
-  //             icon: "fas fa-fw fa-cog",
-  //             exact: true,
-  //             to: "/shipment",
-  //         },
-  //         {
-  //             name: "Phương thức thanh toán",
-  //             class: "payment_list",
-  //             display: "hide",
-  //             icon: "fas fa-fw fa-cog",
-  //             exact: true,
-  //             to: "/payment",
-  //         },
-
-  //         {
-  //             name: "Đánh giá",
-  //             class: "customer_review_list",
-  //             display: "hide",
-  //             icon: "fas fa-fw fa-cog",
-  //             exact: true,
-  //             to: "/review",
-  //         },
-  //         // {
-  //         //   name: "Thông báo",
-  //         //   icon: "fas fa-fw fa-cog",
-  //         //   exact: true,
-  //         //   to: "/notification",
-  //         // },
-  //     ],
-  // },
 
   {
     name: "Báo cáo",
@@ -713,6 +592,7 @@ export const ikipos_menu = [
       },
     ],
   },
+
   {
     name: "Thu chi",
     display: "hide",
@@ -720,14 +600,6 @@ export const ikipos_menu = [
     exact: true,
     to: "/revenue_expenditure",
     itemHasTabName: "agency",
-  },
-  {
-    name: "Nhà cung cấp",
-    class: "post_category_list",
-    display: "hide",
-    icon: "fas fa-building",
-    exact: true,
-    to: "/supplier",
   },
 
   // {
