@@ -14,6 +14,7 @@ import * as blogAction from "../../../actions/blog";
 
 import Alert from "../../../components/Partials/Alert";
 import SeoOption from "../../../components/Product/Create/SeoOption";
+import getChannel,{IKITECH} from "../../../ultis/channel";
 class ProductCreate extends Component {
   constructor(props) {
     super(props);
@@ -358,7 +359,7 @@ class ProductCreate extends Component {
 
         </div>
 
-        <div class="card mb-4">
+{     getChannel() == IKITECH &&      <div class="card mb-4">
           <div class="card-header title_content">Tối ưu SEO</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
@@ -367,6 +368,8 @@ class ProductCreate extends Component {
           </div>
 
         </div>
+
+    }
         {/* <div class="card mb-4">
           <div class="card-header title_content">Thông tin khuyến mại</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>

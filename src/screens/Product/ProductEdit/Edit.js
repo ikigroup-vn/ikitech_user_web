@@ -14,6 +14,7 @@ import * as CategoryPAction from "../../../actions/category_product";
 import * as Types from "../../../constants/ActionType";
 import Alert from "../../../components/Partials/Alert";
 import SeoOption from "../../../components/Product/Update/SeoOption";
+import getChannel,{IKITECH} from "../../../ultis/channel";
 
 class ProductEdit extends Component {
   constructor(props) {
@@ -446,17 +447,19 @@ class ProductEdit extends Component {
           </div>
         </div>
 
-        <div class="card mb-4">
-          <div class="card-header title_content">Tối ưu SEO</div>
-          <div class="card-body" style={{ padding: "0.8rem" }}>
-            <div class="row">
-              <SeoOption
-                product={product}
-                handleDataFromContent={this.handleDataFromContent}
-              />
-            </div>
-          </div>
-        </div>
+       {
+         getChannel() == IKITECH &&  <div class="card mb-4">
+         <div class="card-header title_content">Tối ưu SEO</div>
+         <div class="card-body" style={{ padding: "0.8rem" }}>
+           <div class="row">
+             <SeoOption
+               product={product}
+               handleDataFromContent={this.handleDataFromContent}
+             />
+           </div>
+         </div>
+       </div>
+       }
         {/* <div class="card mb-4">
           <div class="card-header title_content">Thông tin khuyến mại</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>

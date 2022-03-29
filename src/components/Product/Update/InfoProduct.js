@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Select from "react-select";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import { formatNumber } from "../../../ultis/helpers"
+import getChannel, { IKITECH } from "../../../ultis/channel";
 class InfoProduct extends Component {
   constructor(props) {
     super(props);
@@ -225,7 +226,7 @@ class InfoProduct extends Component {
         category_children_ids: product.category_children,
         txtQuantityInStock: _quantity_stock,
         sku: product.sku,
-        check_inventory:product.check_inventory
+        check_inventory: product.check_inventory
       });
 
     }
@@ -376,38 +377,44 @@ class InfoProduct extends Component {
           </div>
         </div>
 
-        <div class="form-group">
-          <label for="product_name">Phần trăm hoa hồng CTV</label>
-          <i style={{
-            display: "block",
-            marginBottom: "5px"
-          }}>Bỏ trống khi sản phẩm không có hoa hồng</i>
-          <input
-            type="text"
-            class="form-control"
-            id="txtEmail"
-            placeholder="Nhập %"
-            autocomplete="off"
-            value={txtPercentC}
-            onChange={this.onChange}
-            name="txtPercentC"
-          />
-        </div>
+        {
+          getChannel() == IKITECH &&
+          <div class="form-group">
+            <label for="product_name">Phần trăm hoa hồng CTV</label>
+            <i style={{
+              display: "block",
+              marginBottom: "5px"
+            }}>Bỏ trống khi sản phẩm không có hoa hồng</i>
+            <input
+              type="text"
+              class="form-control"
+              id="txtEmail"
+              placeholder="Nhập %"
+              autocomplete="off"
+              value={txtPercentC}
+              onChange={this.onChange}
+              name="txtPercentC"
+            />
+          </div>
+        }
 
-        <div class="form-group">
-          <label for="product_name">Trạng thái</label>
+        {
+          getChannel() == IKITECH &&
+          <div class="form-group">
+            <label for="product_name">Trạng thái</label>
 
-          <select
-            id="input"
-            class="form-control"
-            value={txtStatus}
-            onChange={this.onChange}
-            name="txtStatus"
-          >
-            <option value="0">Hiển thị</option>
-            <option value="-1">Tạm ẩn</option>
-          </select>
-        </div>
+            <select
+              id="input"
+              class="form-control"
+              value={txtStatus}
+              onChange={this.onChange}
+              name="txtStatus"
+            >
+              <option value="0">Hiển thị</option>
+              <option value="-1">Tạm ẩn</option>
+            </select>
+          </div>
+        }
 
         <div class="form-group">
           <label for="product_name">Danh mục</label>

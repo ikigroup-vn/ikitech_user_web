@@ -4,6 +4,7 @@ import { format, formatNumber } from '../../ultis/helpers'
 import * as inventoryAction from '../../actions/inventory'
 import { connect } from 'react-redux';
 import HistoryStock from './Modal/HistoryStock';
+import getChannel, { IKITECH } from '../../ultis/channel';
 
 class ShowData extends Component {
     constructor(props) {
@@ -119,9 +120,16 @@ class ShowData extends Component {
     }
 
     render() {
-        const { _delete, update, insert, checked, data, per_page, current_page, index, store_code, page, status, status_name, status_stock, discount, historyInventory } = this.props
+        const { product_discount, min_price, max_price, _delete, update, insert, checked, data, per_page, current_page, index, store_code, page, status, status_name, status_stock, discount, historyInventory } = this.props
         const listDistribute = data.inventory?.distributes !== null && data.inventory?.distributes.length > 0 ? data.inventory?.distributes[0] : []
         const { show_item } = this.state
+
+
+        let discount_percent = null;
+
+        if (product_discount) {
+            discount_percent = product_discount.value;
+        }
 
         return (
             <>
@@ -153,15 +161,86 @@ class ShowData extends Component {
 
                     </td>
 
-                    <td>{format(Number(data.price))}</td>
                     <td>
+
+                        <div>
+
+                            {min_price === max_price ?
+                                format(Number(discount_percent == null
+                                    ? min_price
+                                    : min_price - min_price * discount_percent * 0.01)) :
+
+
+                                <div>
+
+                                    {
+                                        format(Number(discount_percent == null
+                                            ? min_price
+                                            : min_price - min_price * discount_percent * 0.01))
+
+
+                                    }
+                                    {
+                                        " - "
+                                    }
+                                    {
+                                        format(Number(discount_percent == null
+                                            ? max_price
+                                            : max_price - max_price * discount_percent * 0.01))
+
+
+                                    }
+                                </div>
+
+                            }
+
+
+                        </div>
+
+
+                        {product_discount && <div style={{
+                            float: "left"
+                        }}>
+
+                            {min_price === max_price ?
+                                format(Number(min_price)) :
+                                <div className='row'>
+
+                                    <div style={{
+                                        textDecoration: "line-through"
+                                    }}>
+                                        {
+                                            format(Number(min_price))
+                                        }
+                                        {
+                                            " - "
+                                        }
+                                        {
+                                            format(Number(max_price))
+                                        }
+
+                                    </div>
+                                  
+                                    <div className="discount">&emsp;  -{discount_percent}%</div>
+                                </div>
+
+                            }
+
+
+                        </div>
+                        }
+
+                    </td>
+
+                    {getChannel() == IKITECH && <td>
                         {" "}
                         <h5>
                             <span class={`badge badge-${status}`}>{status_name}</span>
                         </h5>
-                    </td>
+                    </td>}
 
-                    <td>{format(Number(discount))}</td>
+
+
                     <td
                         className={
                             status_stock == -2 || status_stock == -1 ? "show" : "hide"
@@ -184,9 +263,9 @@ class ShowData extends Component {
                     >
                         {new Intl.NumberFormat().format(status_stock.toString())}
                     </td>
+                    {getChannel() == IKITECH && <td>{data.view}</td>}
+                    {getChannel() == IKITECH && <td>{data.likes}</td>}
 
-                    <td>{data.view}</td>
-                    <td>{data.likes}</td>
 
                     <td className="btn-voucher">
                         <Link
