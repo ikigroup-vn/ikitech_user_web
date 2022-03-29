@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import * as CategoryPAction from "../../actions/category_product";
 import { connect } from "react-redux";
 import * as helper from "../../ultis/helpers";
-import { compressed } from "../../ultis/helpers"
+import { compressed } from "../../ultis/helpers";
 import { shallowEqual } from "../../ultis/shallowEqual";
-import {isEmpty} from "../../ultis/helpers"
+import { isEmpty } from "../../ultis/helpers";
 import * as Types from "../../constants/ActionType";
 class ModalCreate extends Component {
   constructor(props) {
@@ -12,22 +12,22 @@ class ModalCreate extends Component {
     this.state = {
       txtName: "",
       fileUpload: null,
-      isShowHome : false
+      isShowHome: false,
     };
   }
 
-
   componentDidMount() {
-    console.log("componentDidMount")
-    var _this = this
+    console.log("componentDidMount");
+    var _this = this;
 
-    window.$('#file-category-product').on('fileloaded', function (event, file) {
-      _this.setState({ fileUpload: file })
+    window.$("#file-category-product").on("fileloaded", function (event, file) {
+      _this.setState({ fileUpload: file });
     });
-    window.$('#file-category-product').on('fileremoved', function (event, id, index) {
-      _this.setState({ fileUpload: null })
-    });
-
+    window
+      .$("#file-category-product")
+      .on("fileremoved", function (event, id, index) {
+        _this.setState({ fileUpload: null });
+      });
 
     helper.loadFileInput("file-category-product");
   }
@@ -40,26 +40,25 @@ class ModalCreate extends Component {
       [name]: value,
     });
   };
-  componentWillReceiveProps(nextProps){
-    console.log("componentWillReceiveProps in create")
-    if(!shallowEqual(nextProps.category_product , this.props.category_product))
-    {
-      window.$('.modal').modal('hide');
-      window.$('#file-category-product').fileinput('clear');
+  componentWillReceiveProps(nextProps) {
+    console.log("componentWillReceiveProps in create");
+    if (
+      !shallowEqual(nextProps.category_product, this.props.category_product)
+    ) {
+      window.$(".modal").modal("hide");
+      window.$("#file-category-product").fileinput("clear");
       this.setState({
         txtName: "",
-        isShowHome: false
-      })
+        isShowHome: false,
+      });
     }
   }
   onSave = async (e) => {
     e.preventDefault();
     // window.$('.modal').modal('hide');
 
-    if( this.state.txtName == null || !isEmpty( this.state.txtName))
-    {
+    if (this.state.txtName == null || !isEmpty(this.state.txtName)) {
       this.props.showError({
-
         type: Types.ALERT_UID_STATUS,
         alert: {
           type: "danger",
@@ -67,8 +66,7 @@ class ModalCreate extends Component {
           disable: "show",
           content: "Tên danh mục không được để trống",
         },
-      }
-      )
+      });
       return;
     }
 
@@ -76,27 +74,22 @@ class ModalCreate extends Component {
     if (typeof file !== "undefined" && file != "" && file != null) {
       // window.$('#file-category-product').fileinput('clear');
       const fd = new FormData();
-      fd.append('image', await compressed(file))
-      fd.append('name', this.state.txtName)
-      fd.append('is_show_home',this.state.isShowHome)
+      fd.append("image", await compressed(file));
+      fd.append("name", this.state.txtName);
+      fd.append("is_show_home", this.state.isShowHome);
       this.props.createCategoryP(this.props.store_code, fd);
-      this.setState({fileUpload: null})
-
-
-    }
-    else {
-      window.$('#file-category-product').fileinput('clear');
+      this.setState({ fileUpload: null });
+    } else {
+      window.$("#file-category-product").fileinput("clear");
       const fd = new FormData();
-      fd.append('name', this.state.txtName)
-      fd.append('is_show_home',this.state.isShowHome)
+      fd.append("name", this.state.txtName);
+      fd.append("is_show_home", this.state.isShowHome);
       this.props.createCategoryP(this.props.store_code, fd);
-
     }
-
   };
   render() {
-    console.log("render")
-    var { txtName,isShowHome } = this.state;
+    console.log("render");
+    var { txtName, isShowHome } = this.state;
     return (
       <div
         class="modal fade"
@@ -108,11 +101,17 @@ class ModalCreate extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" >
+            <div class="modal-header">
               <h4 class="modal-title">Thêm danh mục</h4>
 
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
             </div>
             <form
               onSubmit={this.onSave}
@@ -134,20 +133,27 @@ class ModalCreate extends Component {
                     onChange={this.onChange}
                     name="txtName"
                   />
-              <div class="form-check" style={{marginTop:"10px",padding:"0"}}>
-              <label class="form-check-label">
-                <input type="checkbox"
-                name = "even"
-                onChange={() =>this.setState({isShowHome:!isShowHome})}
-                checked ={isShowHome}/> Hiển thị sản phẩm
-              </label>
-            </div>
+                  <div
+                    class="form-check"
+                    style={{ marginTop: "10px", padding: "0" }}
+                  >
+                    <label class="form-check-label">
+                      <input
+                        type="checkbox"
+                        name="even"
+                        onChange={() =>
+                          this.setState({ isShowHome: !isShowHome })
+                        }
+                        checked={isShowHome}
+                      />{" "}
+                      Hiển thị sản phẩm
+                    </label>
+                  </div>
                 </div>
                 <div class="form-group">
                   <label for="product_name">Hình ảnh</label>
                   <div className="file-loading">
                     <input
-
                       id="file-category-product"
                       type="file"
                       className="file"
@@ -170,7 +176,6 @@ class ModalCreate extends Component {
                 </button>
               </div>
             </form>
-
           </div>
         </div>
       </div>
@@ -178,12 +183,10 @@ class ModalCreate extends Component {
   }
 }
 
-
-
 const mapDispatchToProps = (dispatch, props) => {
   return {
     showError: (error) => {
-      dispatch(error)
+      dispatch(error);
     },
     createCategoryP: (id, form) => {
       dispatch(CategoryPAction.createCategoryP(id, form));

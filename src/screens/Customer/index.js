@@ -8,8 +8,8 @@ import { Redirect, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Loading from "../Loading";
 import * as customerAction from "../../actions/customer";
-import Chat from "../../components/Chat"
-import * as Env from "../../ultis/default"
+import Chat from "../../components/Chat";
+import * as Env from "../../ultis/default";
 import NotAccess from "../../components/Partials/NotAccess";
 
 class Customer extends Component {
@@ -17,132 +17,138 @@ class Customer extends Component {
     super(props);
     this.state = {
       showChatBox: "hide",
-      searchValue:""
+      searchValue: "",
     };
   }
 
   handleShowChatBox = (customerId, status) => {
     this.setState({
       showChatBox: status,
-      customerId: customerId
-
-    })
-    var { store_code } = this.props.match.params
+      customerId: customerId,
+    });
+    var { store_code } = this.props.match.params;
     this.props.fetchCustomerId(store_code, customerId);
     this.props.fetchChatId(store_code, customerId);
-  }
+  };
 
   onChangeSearch = (e) => {
     this.setState({ searchValue: e.target.value });
   };
   searchData = (e) => {
-    e.preventDefault()
+    e.preventDefault();
     var { store_code } = this.props.match.params;
     var { searchValue } = this.state;
     var params = `&search=${searchValue}`;
     this.props.fetchAllCustomer(store_code, 1, params);
   };
   componentWillReceiveProps(nextProps) {
-    if (this.state.isLoading != true && typeof nextProps.permission.product_list != "undefined") {
-      var permissions = nextProps.permission
-      var chat_allow = permissions.chat_allow
+    if (
+      this.state.isLoading != true &&
+      typeof nextProps.permission.product_list != "undefined"
+    ) {
+      var permissions = nextProps.permission;
+      var chat_allow = permissions.chat_allow;
 
-      var isShow = permissions.customer_list
-      this.setState({ isLoading: true, isShow, chat_allow })
+      var isShow = permissions.customer_list;
+      this.setState({ isLoading: true, isShow, chat_allow });
     }
   }
 
   componentDidMount() {
-
     this.props.fetchAllCustomer(this.props.match.params.store_code);
   }
   closeChatBox = (status) => {
     this.setState({
       showChatBox: status,
-    })
-
-  }
+    });
+  };
   render() {
-    var { customer, chat, customers } = this.props
+    var { customer, chat, customers } = this.props;
+    console.log(customer, customers);
+    var customerImg =
+      typeof customer.avatar_image == "undefined" ||
+      customer.avatar_image == null
+        ? Env.IMG_NOT_FOUND
+        : customer.avatar_image;
+    var customerId =
+      typeof customer.id == "undefined" || customer.id == null
+        ? null
+        : customer.id;
+    var customerName =
+      typeof customer.name == "undefined" || customer.name == null
+        ? "Trống"
+        : customer.name;
 
-    var customerImg = typeof customer.avatar_image == "undefined" || customer.avatar_image == null ? Env.IMG_NOT_FOUND : customer.avatar_image
-    var customerId = typeof customer.id == "undefined" || customer.id == null ? null : customer.id;
-    var customerName = typeof customer.name == "undefined" || customer.name == null ? "Trống" : customer.name;
-
-    var { store_code } = this.props.match.params
-    var { showChatBox, isShow, chat_allow,searchValue } = this.state
+    var { store_code } = this.props.match.params;
+    var { showChatBox, isShow, chat_allow, searchValue } = this.state;
     if (this.props.auth) {
       return (
         <div id="wrapper">
           <Sidebar store_code={store_code} />
           <div className="col-10 col-10-wrapper">
-
             <div id="content-wrapper" className="d-flex flex-column">
               <div id="content">
                 <Topbar store_code={store_code} />
-                {typeof isShow == "undefined" ? <div style={{ height: "500px" }}></div> :
-                  isShow == true ?
+                {typeof isShow == "undefined" ? (
+                  <div style={{ height: "500px" }}></div>
+                ) : isShow == true ? (
+                  <div className="container-fluid">
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <h4 className="h4 title_content mb-0 text-gray-800">
+                        Khách hàng
+                      </h4>{" "}
+                    </div>
 
-                    <div className="container-fluid">
-
-                      <div
-                        style={{ display: "flex", justifyContent: "space-between" }}
-                      >
-                        <h4 className="h4 title_content mb-0 text-gray-800">
-                          Khách hàng
-                        </h4>{" "}
-
-                      </div>
-
-                      <br></br>
-                      <div className="card shadow mb-4">
-                        <div className="card-header py-3">
+                    <br></br>
+                    <div className="card shadow mb-4">
+                      <div className="card-header py-3">
                         <form onSubmit={this.searchData}>
-                            <div
-                              class="input-group mb-6"
-                              style={{ marginTop: "10px" }}
-                            >
-                              <input
-                                style={{ maxWidth: "400px" }}
-                                type="search"
-                                name="txtSearch"
-                                value={searchValue}
-                                onChange={this.onChangeSearch}
-                                class="form-control"
-                                placeholder="Tìm khách hàng"
-                              />
-                              <div class="input-group-append">
-                                <button
-                                  class="btn btn-primary"
-                                  type="submit"
-
-                                >
-                                  <i class="fa fa-search"></i>
-                                </button>
-                              </div>
-
+                          <div
+                            class="input-group mb-6"
+                            style={{ marginTop: "10px" }}
+                          >
+                            <input
+                              style={{ maxWidth: "400px" }}
+                              type="search"
+                              name="txtSearch"
+                              value={searchValue}
+                              onChange={this.onChangeSearch}
+                              class="form-control"
+                              placeholder="Tìm khách hàng"
+                            />
+                            <div class="input-group-append">
+                              <button class="btn btn-primary" type="submit">
+                                <i class="fa fa-search"></i>
+                              </button>
                             </div>
-                          </form>
-                        </div>
-                        <div className="card-body">
-                          <Table 
-                          chat_allow={chat_allow} 
-                          showChatBox={showChatBox} 
-                          handleShowChatBox={this.handleShowChatBox} 
-                          store_code={store_code} 
-                          handleDelCallBack={this.handleDelCallBack} 
-                          customers={customers} 
-                          />
+                          </div>
+                        </form>
+                      </div>
+                      <div className="card-body">
+                        <Table
+                          chat_allow={chat_allow}
+                          showChatBox={showChatBox}
+                          handleShowChatBox={this.handleShowChatBox}
+                          store_code={store_code}
+                          handleDelCallBack={this.handleDelCallBack}
+                          customers={customers}
+                        />
 
-                          <Pagination
-                            store_code={store_code}
-                            customers={customers}
-                          />
-                        </div>
+                        <Pagination
+                          store_code={store_code}
+                          customers={customers}
+                        />
                       </div>
                     </div>
-                    : <NotAccess />}
-
+                  </div>
+                ) : (
+                  <NotAccess />
+                )}
               </div>
 
               <Footer />
@@ -156,11 +162,10 @@ class Customer extends Component {
               chat={chat}
               store_code={store_code}
               closeChatBox={this.closeChatBox}
-              showChatBox={showChatBox}></Chat>
-
+              showChatBox={showChatBox}
+            ></Chat>
           </div>
         </div>
-
       );
     } else if (this.props.auth === false) {
       return <Redirect to="/login" />;
@@ -181,8 +186,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllCustomer: (id,page,params) => {
-      dispatch(customerAction.fetchAllCustomer(id,page,params));
+    fetchAllCustomer: (id, page, params) => {
+      dispatch(customerAction.fetchAllCustomer(id, page, params));
     },
     fetchCustomerId: (store_code, customerId) => {
       dispatch(customerAction.fetchCustomerId(store_code, customerId));
