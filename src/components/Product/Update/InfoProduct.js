@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Select from "react-select";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import { formatNumber } from "../../../ultis/helpers"
+import getChannel, { IKITECH } from "../../../ultis/channel";
 class InfoProduct extends Component {
   constructor(props) {
     super(props);
@@ -18,7 +19,9 @@ class InfoProduct extends Component {
       txtPercentC: "",
       disabledPrice: false,
       sku: "",
-      isChecked: true
+      isChecked: true,
+      txtImportPrice: "",
+      check_inventory: false
     };
   }
   handleChangeCheckParent(id) {
@@ -42,7 +45,7 @@ class InfoProduct extends Component {
 
       if (this.state.category_children_ids !== null) {
         categories.forEach((category) => {
-  
+
           category.categories_child.forEach((categoryChild) => {
             if (this.state.category_children_ids.map(e => e.id).indexOf(categoryChild.id) > -1) {
               nam = nam + categoryChild.name + ", "
@@ -50,11 +53,11 @@ class InfoProduct extends Component {
           })
         }
         )
-  
+
       }
     }
-    if(nam.length > 0) {
-      nam = nam.substring(0,nam.length-2)
+    if (nam.length > 0) {
+      nam = nam.substring(0, nam.length - 2)
     }
     return nam;
   }
@@ -68,7 +71,7 @@ class InfoProduct extends Component {
     const _value = formatNumber(value);
 
 
-    if (name == "txtPrice" || name == "txtPercentC" || name == "txtQuantityInStock") {
+    if (name == "txtPrice" || name == "txtImportPrice" || name == "txtPercentC" || name == "txtQuantityInStock") {
       if (!isNaN(Number(_value))) {
         value = new Intl.NumberFormat().format(_value);
         value = value.toString().replace(/\./g, ',')
@@ -109,13 +112,13 @@ class InfoProduct extends Component {
       var newList = this.state.category_parent;
       newList.splice(indexHas, 1);
       this.setState({ category_parent: newList });
-      this.state.listCategory.forEach((category1) =>{
-        if(category1.id === category.id){
-          category1.categories_child.forEach(categoryChild1 =>{
+      this.state.listCategory.forEach((category1) => {
+        if (category1.id === category.id) {
+          category1.categories_child.forEach(categoryChild1 => {
             const indexChild = this.state.category_children_ids.map((e) => e.id).indexOf(categoryChild1.id)
-            if(indexChild !== -1){
+            if (indexChild !== -1) {
               const newChild = this.state.category_children_ids.splice(indexChild, 1)
-              console.log("newChild",newChild)
+              console.log("newChild", newChild)
             }
           })
         }
@@ -128,32 +131,32 @@ class InfoProduct extends Component {
   }
 
   handleChangeChild = (categoryChild) => {
-    
+
     var categoryParentOb;
     this.state.listCategory.forEach((category) => {
-     
-      if( category.categories_child != null) {
+
+      if (category.categories_child != null) {
 
         category.categories_child.forEach((categorychild2) => {
 
           if (categorychild2.id === categoryChild.id) {
-          
+
             categoryParentOb = category
           }
         })
       }
-      
+
     })
-       if(categoryParentOb != null) {
-     
+    if (categoryParentOb != null) {
+
       var indexHas = this.state.category_parent.map((e) => e.id).indexOf(categoryParentOb.id);
       if (indexHas !== -1) {
- 
+
       } else {
         this.setState({ category_parent: [...this.state.category_parent, categoryParentOb] });
       }
     }
-   
+
     /////
     var indexHasChild = this.state.category_children_ids.map((e) => e.id).indexOf(categoryChild.id)
     if (indexHasChild !== -1) {
@@ -190,28 +193,31 @@ class InfoProduct extends Component {
     if (!shallowEqual(nextProps.product, this.props.product)) {
       var { product } = { ...nextProps };
       var categories = [];
-        var listcategorynew = []
-        categories = product.categories.map((category, index) => {
+      var listcategorynew = []
+      categories = product.categories.map((category, index) => {
 
-          if (listcategorynew.map(e => e.id).indexOf(category.id) === -1) {
-            listcategorynew.push(category)
-          }
+        if (listcategorynew.map(e => e.id).indexOf(category.id) === -1) {
+          listcategorynew.push(category)
+        }
 
 
-          return { id: category.id, label: category.name };
-        });
-  
-      const price = formatNumber(product.price);
+        return { id: category.id, label: category.name };
+      });
 
+      const price = formatNumber(product.price ?? 0);
       var _price = new Intl.NumberFormat().format(price);
+
+      const import_price = formatNumber(product.import_price ?? 0);
+      var _import_price = new Intl.NumberFormat().format(import_price);
 
       const quantity_stock = product.quantity_in_stock < 0 ? "" : formatNumber(product.quantity_in_stock);
 
       var _quantity_stock = quantity_stock == "" ? "" : new Intl.NumberFormat().format(quantity_stock);
-    
+
       this.setState({
         txtName: product.name,
         txtPrice: _price,
+        txtImportPrice: _import_price,
         disabledPrice: _price == 0 ? true : false,
         txtPercentC: product.percent_collaborator,
         txtBarcode: product.barcode,
@@ -219,12 +225,16 @@ class InfoProduct extends Component {
         category_parent: listcategorynew,
         category_children_ids: product.category_children,
         txtQuantityInStock: _quantity_stock,
-        sku: product.sku
+        sku: product.sku,
+        check_inventory: product.check_inventory
       });
 
     }
   }
-
+  onChangeCheckInventory = (e) => {
+    var { checked } = e.target
+    this.setState({ check_inventory: checked })
+  }
   shouldComponentUpdate(nextProps, nextState) {
     if (
       !shallowEqual(nextState, this.state)
@@ -257,7 +267,9 @@ class InfoProduct extends Component {
       , txtPercentC,
       disabledPrice,
       sku,
-      txtBarcode
+      txtBarcode,
+      txtImportPrice,
+      check_inventory
     } = this.state;
 
     var txtQuantityInStock = txtQuantityInStock == -1 ? "" : txtQuantityInStock
@@ -304,95 +316,120 @@ class InfoProduct extends Component {
             name="txtBarcode"
           />
         </div>
-        <div className="form-group">
-          <label htmlFor="name">Giá</label>
-          <div class="form-group" style={{ display: "flex" }}>
-            <input
-              disabled={disabledPrice}
-              style={{ maxWidth: "420px" }}
-              type="text"
-              class="form-control"
-              id="txtEmail"
-              placeholder="Nhập giá"
-              autocomplete="off"
-              value={txtPrice}
-              onChange={this.onChange}
-              name="txtPrice"
-            />
-            <div class="form-check" style={{ margin: "auto 0" }}>
-              <label class="form-check-label" for="gridCheck">
-                Liên hệ
-              </label>
-              <input style={{ marginLeft: "10px" }} class="form-check-input" checked={disabledPrice} type="checkbox" onChange={this.onChangePrice} />
 
+
+
+        <div className="form-group">
+
+          <div className="row">
+            <div className="col-6">
+
+              <label htmlFor="name"><b>Giá bán lẻ</b></label>
+
+              <div class="form-group" style={{ display: "flex" }}>
+                <input
+                  disabled={disabledPrice}
+                  style={{ maxWidth: "420px" }}
+                  type="text"
+                  class="form-control"
+                  id="txtEmail"
+                  placeholder="Nhập giá bán lẻ"
+                  autocomplete="off"
+                  value={txtPrice}
+                  onChange={this.onChange}
+                  name="txtPrice"
+                />
+
+
+              </div>
             </div>
+
+            <div className="col-6">
+
+              <label htmlFor="name"><b>Giá nhập</b></label>
+
+              <div class="form-group" style={{ display: "flex" }}>
+                <input
+                  style={{ maxWidth: "420px" }}
+                  type="text"
+                  class="form-control"
+                  id="txtEmail"
+                  placeholder="Nhập giá nhập"
+                  autocomplete="off"
+                  value={txtImportPrice}
+                  onChange={this.onChange}
+                  name="txtImportPrice"
+                />
+
+
+
+              </div>
+            </div>
+
           </div>
 
         </div>
-        <div class="form-group">
-          <label for="product_name">Số lượng trong kho</label>
-          <i style={{
-            display: "block",
-            marginBottom: "5px"
-          }}>Bỏ trống khi bán không quan tâm đến số lượng</i>
-          <input
-            type="text"
-            class="form-control"
-            id="txtAddress_detail"
-            placeholder="Nhập số lương"
-            autocomplete="off"
-            value={txtQuantityInStock}
-            onChange={this.onChange}
-            name="txtQuantityInStock"
-          />
-        </div>
-        <div class="form-group">
-          <label for="product_name">Phần trăm hoa hồng CTV</label>
-          <i style={{
-            display: "block",
-            marginBottom: "5px"
-          }}>Bỏ trống khi sản phẩm không có hoa hồng</i>
-          <input
-            type="text"
-            class="form-control"
-            id="txtEmail"
-            placeholder="Nhập %"
-            autocomplete="off"
-            value={txtPercentC}
-            onChange={this.onChange}
-            name="txtPercentC"
-          />
-        </div>
 
         <div class="form-group">
-          <label for="product_name">Trạng thái</label>
-
-          <select
-            id="input"
-            class="form-control"
-            value={txtStatus}
-            onChange={this.onChange}
-            name="txtStatus"
-          >
-            <option value="0">Hiển thị</option>
-            <option value="-1">Tạm ẩn</option>
-          </select>
+          <div class="form-check form-switch">
+            <input onChange={this.onChangeCheckInventory} class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked={check_inventory} />
+            <label class="form-check-label" for="flexSwitchCheckDefault">Theo dõi hàng trong kho</label>
+          </div>
         </div>
+
+        {
+          getChannel() == IKITECH &&
+          <div class="form-group">
+            <label for="product_name">Phần trăm hoa hồng CTV</label>
+            <i style={{
+              display: "block",
+              marginBottom: "5px"
+            }}>Bỏ trống khi sản phẩm không có hoa hồng</i>
+            <input
+              type="text"
+              class="form-control"
+              id="txtEmail"
+              placeholder="Nhập %"
+              autocomplete="off"
+              value={txtPercentC}
+              onChange={this.onChange}
+              name="txtPercentC"
+            />
+          </div>
+        }
+
+        {
+          getChannel() == IKITECH &&
+          <div class="form-group">
+            <label for="product_name">Trạng thái</label>
+
+            <select
+              id="input"
+              class="form-control"
+              value={txtStatus}
+              onChange={this.onChange}
+              name="txtStatus"
+            >
+              <option value="0">Hiển thị</option>
+              <option value="-1">Tạm ẩn</option>
+            </select>
+          </div>
+        }
 
         <div class="form-group">
           <label for="product_name">Danh mục</label>
           <div className="Choose-category-product">
             <div className="wrap_category" style={{ display: "flex" }}>
-              <input type="text" class="form-control" placeholder="--Chọn danh mục--" style={{whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis",paddingRight:"55px", position: "relative" }} value={this.getNameSelected()}></input>
+              <input type="text" class="form-control" placeholder="--Chọn danh mục--" style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", paddingRight: "55px", position: "relative" }} value={this.getNameSelected()}></input>
               <button data-toggle="collapse" data-target="#demo2" class="btn" style={{ position: "absolute", right: "27px" }}><i class="fa fa-plus"></i></button>
             </div>
             <div id="demo2" class="collapse">
               <ul style={{ listStyle: "none", margin: "5px 0" }} class="list-group">
                 {listCategory.map(category => (
-                  <li class="" style={{ cursor: "pointer",paddingLeft:"5px" }} ><input type="checkbox" style={{ marginRight: "10px", width: "30px", height: "15px" }} checked={this.handleChangeCheckParent(category.id)} onChange={() => this.handleChangeParent(category)} />{category.label}
+                  <li class="" style={{ cursor: "pointer", paddingLeft: "5px" }} ><input type="checkbox" style={{ marginRight: "10px", width: "30px", height: "15px" }} checked={this.handleChangeCheckParent(category.id)} onChange={() => this.handleChangeParent(category)} />{category.label}
                     <ul style={{ listStyle: "none", margin: "0px 45px" }} >
                       {(category?.categories_child ?? []).map(categoryChild => (
-                        <li style={{ cursor: "pointer" }} ><input type="checkbox" style={{ marginRight: "10px", width: "30px", height: "15px", marginTop:"3px"}} checked={this.handleChangeCheckChild(categoryChild.id)} onChange={() => this.handleChangeChild(categoryChild)} />{categoryChild.name}</li>
+                        <li style={{ cursor: "pointer" }} ><input type="checkbox" style={{ marginRight: "10px", width: "30px", height: "15px", marginTop: "3px" }} checked={this.handleChangeCheckChild(categoryChild.id)} onChange={() => this.handleChangeChild(categoryChild)} />{categoryChild.name}</li>
                       ))}
                     </ul>
                   </li>

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
+import getChannel, { IKITECH } from "../../../ultis/channel";
 import { handleImageUploadBefore } from "../../../ultis/sun_editor";
 class ContentDetail extends Component {
   constructor(props) {
@@ -85,15 +86,19 @@ class ContentDetail extends Component {
 
         </div>
 
-        <div class="form-group">
-          <label for="product_name">Nội dung cho cộng tác viên</label>
+       {
+         getChannel() == IKITECH &&
 
-          <textarea value={txtContentC}
-            onChange={this.onChange}
-            name="txtContentC" id="input" class="form-control" rows="7" required="required"></textarea>
+         <div class="form-group">
+         <label for="product_name">Nội dung cho cộng tác viên</label>
+
+         <textarea value={txtContentC}
+           onChange={this.onChange}
+           name="txtContentC" id="input" class="form-control" rows="7" required="required"></textarea>
 
 
-        </div>
+       </div>
+       }
       </div>
     );
   }

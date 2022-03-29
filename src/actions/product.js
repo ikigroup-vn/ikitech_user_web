@@ -904,6 +904,41 @@ export const updateProduct = (store_code, data, productId, page) => {
 };
 
 
+export const updateDistribute = (store_code, data, productId, branchId) => {
+
+  return (dispatch) => {
+   
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show"
+    })
+    productApi
+      .updateDistribute(store_code, data, productId,branchId)
+      .then((res) => {
+        console.log(res)
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide"
+        })
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+      
+        
+      })
+      .catch(function (error) {
+       
+       
+      });
+  };
+};
+
 
 export const removeItemImgDis = (data) => {
   return {

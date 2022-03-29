@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import getChannel, { IKITECH } from "../../ultis/channel";
 import { filter_arr, format } from "../../ultis/helpers";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import AlertInfor from "./Modal/AlertInfor";
@@ -10,17 +11,17 @@ class Table extends Component {
     super(props);
     this.state = {
       selected: [],
-      modalElement:{
-        element:"",
-        idProduct:"",
+      modalElement: {
+        element: "",
+        idProduct: "",
       },
-      modalSub:{
-        SubElement:"",
-        idProduct:"",
-        NameElement:"",
-        NameDistribute:""
+      modalSub: {
+        SubElement: "",
+        idProduct: "",
+        NameElement: "",
+        NameDistribute: ""
       },
-      formData:"",
+      formData: "",
     };
   }
 
@@ -34,16 +35,16 @@ class Table extends Component {
     event.preventDefault();
   };
 
-  editStockCallBack = (form) =>{
-    this.setState({formData:form})
+  editStockCallBack = (form) => {
+    this.setState({ formData: form })
   }
 
-  handleCallBackElement =(modalElement) =>{
-    this.setState({modalElement:modalElement})
+  handleCallBackElement = (modalElement) => {
+    this.setState({ modalElement: modalElement })
   }
-  handleCallBackSubElement = (modalSub) =>{
-    console.log("modalSub",modalSub)
-    this.setState({modalSub:modalSub})
+  handleCallBackSubElement = (modalSub) => {
+    console.log("modalSub", modalSub)
+    this.setState({ modalSub: modalSub })
   }
 
   checkSelected = (id) => {
@@ -123,11 +124,21 @@ class Table extends Component {
             ? 0
             : data.product_discount.discount_price;
         var checked = this.checkSelected(data.id);
-        console.log(checked)
+        
+        var min_price = data.min_price
+        var max_price = data.max_price
+        var product_discount = data.product_discount
+
         return (
-            <ShowData _delete ={_delete} update ={update} insert ={insert} checked ={checked} page ={page} status ={status} status_name ={status_name} status_stock ={status_stock}
-            data ={data} per_page ={per_page} current_page ={current_page} index ={index} store_code ={store_code}  discount ={discount} 
-            handleCallBackElement ={this.handleCallBackElement} handleCallBackSubElement ={this.handleCallBackSubElement}/>
+          <ShowData
+            _delete={_delete}
+            passDataModal={this.passDataModal}
+            min_price={min_price}
+            max_price={max_price} 
+            product_discount={product_discount}
+            update={update} insert={insert} checked={checked} page={page} status={status} status_name={status_name} status_stock={status_stock}
+            data={data} per_page={per_page} current_page={current_page} index={index} store_code={store_code} discount={discount}
+            handleCallBackElement={this.handleCallBackElement} handleCallBackSubElement={this.handleCallBackSubElement} />
         );
       });
     } else {
@@ -156,7 +167,7 @@ class Table extends Component {
   };
   render() {
     var { products, store_code } = this.props;
-    var { selected,modalSub,modalElement,formData } = this.state;
+    var { selected, modalSub, modalElement, formData } = this.state;
     var per_page = products.per_page;
     var current_page = products.current_page;
 
@@ -196,30 +207,40 @@ class Table extends Component {
                 />
               </th>
               <th>STT</th>
-              <th>Mã</th>
+              <th>Mã SKU</th>
 
-              <th>Tên</th>
+              <th>Tên sản phẩm</th>
 
               <th>Phân loại</th>
 
-              <th>Giá</th>
+              <th>Giá bán lẻ</th>
 
-              <th>Trạng thái </th>
+              {getChannel() == IKITECH &&
+                  <th>Trạng thái </th>
+              }
 
-              <th>Giảm giá</th>
+            
+
 
               <th>Số lượng tồn kho</th>
 
-              <th>Lượt xem</th>
-              <th>Lượt thích</th>
+              {getChannel() == IKITECH &&
+                <th>Lượt xem</th>
+              }
+
+              {getChannel() == IKITECH &&
+                <th>Lượt thích</th>
+              }
+
+
 
               <th>Hành động</th>
             </tr>
           </thead>
           <tbody>{this.showData(listProduct, per_page, current_page)}</tbody>
         </table>
-        <EditStock store_code ={store_code} modalSub = {modalSub} modalElement ={modalElement} editStockCallBack = {this.editStockCallBack} />
-        <AlertInfor formData ={formData} store_code = {store_code}/>
+        <EditStock store_code={store_code} modalSub={modalSub} modalElement={modalElement} editStockCallBack={this.editStockCallBack} />
+        <AlertInfor formData={formData} store_code={store_code} />
       </div>
     );
   }

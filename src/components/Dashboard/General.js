@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { filter_var } from "../../ultis/helpers"
 import * as notificationAction from "../../actions/notification";
 import { connect } from "react-redux";
+import getChannel, { IKITECH } from "../../ultis/channel";
 
 
 class General extends Component {
@@ -23,7 +24,7 @@ class General extends Component {
     }
 
     render() {
-        var { store, store_code, collaborators , numDiscount , badges } = this.props
+        var { store, store_code, collaborators, numDiscount, badges } = this.props
         var total_collaborators = typeof collaborators.data != "undefined" ? collaborators.data.length : 0
         var total_orders = filter_var(store.total_orders)
         var total_products = filter_var(store.total_products)
@@ -70,44 +71,51 @@ class General extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="col-xl-3 col-md-6 mb-4">
-                    <div className="card border-left-secondary shadow h-100 py-2">
-                        <div className="card-body set-padding">
-                            <div className="row no-gutters align-items-center">
-                                <div className="col mr-2">
-                                    <div >
-                                        <Link className=" font-weight-bold text-secondary text-uppercase mb-1" to={`/posts/${store_code}`}>Bài viết
-                                        </Link>
-                                    </div>
-                                    <div className="h5 mb-0 font-weight-bold text-gray-800">{total_posts}</div>
-                                </div>
-                                <div className="col-auto">
-                                    <i className="fas fa-newspaper fa-2x text-gray-300"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
 
-                <div className="col-xl-3 col-md-6 mb-4">
-                    <div className="card border-left-danger shadow h-100 py-2">
-                        <div className="card-body set-padding">
-                            <div className="row no-gutters align-items-center">
-                                <div className="col mr-2">
-                                    <div >
-                                        <Link className=" font-weight-bold text-danger text-uppercase mb-1" to={`/collaborator/${store_code}`}>Cộng tác viên
-                                        </Link>
+                {
+                    getChannel() == IKITECH &&
+                    <div className="col-xl-3 col-md-6 mb-4">
+                        <div className="card border-left-secondary shadow h-100 py-2">
+                            <div className="card-body set-padding">
+                                <div className="row no-gutters align-items-center">
+                                    <div className="col mr-2">
+                                        <div >
+                                            <Link className=" font-weight-bold text-secondary text-uppercase mb-1" to={`/posts/${store_code}`}>Bài viết
+                                            </Link>
+                                        </div>
+                                        <div className="h5 mb-0 font-weight-bold text-gray-800">{total_posts}</div>
                                     </div>
-                                    <div className="h5 mb-0 font-weight-bold text-gray-800">{total_collaborators}</div>
-                                </div>
-                                <div className="col-auto">
-                                    <i className="fas fa-list fa-2x text-gray-300"></i>
+                                    <div className="col-auto">
+                                        <i className="fas fa-newspaper fa-2x text-gray-300"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className="col-xl-3 col-md-6 mb-4">
+                }
+
+                {getChannel() == IKITECH &&
+                    <div className="col-xl-3 col-md-6 mb-4">
+                        <div className="card border-left-danger shadow h-100 py-2">
+                            <div className="card-body set-padding">
+                                <div className="row no-gutters align-items-center">
+                                    <div className="col mr-2">
+                                        <div >
+                                            <Link className=" font-weight-bold text-danger text-uppercase mb-1" to={`/collaborator/${store_code}`}>Cộng tác viên
+                                            </Link>
+                                        </div>
+                                        <div className="h5 mb-0 font-weight-bold text-gray-800">{total_collaborators}</div>
+                                    </div>
+                                    <div className="col-auto">
+                                        <i className="fas fa-list fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+                {getChannel() == IKITECH && <div className="col-xl-3 col-md-6 mb-4">
                     <div className="card border-left-info shadow h-100 py-2">
                         <div className="card-body set-padding">
                             <div className="row no-gutters align-items-center">
@@ -125,6 +133,7 @@ class General extends Component {
                         </div>
                     </div>
                 </div>
+                }
 
                 <div className="col-xl-3 col-md-6 mb-4">
                     <div className="card border-left-warning shadow h-100 py-2">
@@ -164,23 +173,27 @@ class General extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="col-xl-3 col-md-6 mb-4" >
-                    <div className="card border-left-primary shadow h-100 py-2">
-                        <div className="card-body set-padding">
-                            <div className="row no-gutters align-items-center">
-                                <div className="col mr-2">
-                                    <div className=" font-weight-bold text-primary text-uppercase mb-1">
-                                        <a onClick = {this.fetchNotification}>Thông báo</a>
+                {
+
+                    getChannel() == IKITECH &&
+                    <div className="col-xl-3 col-md-6 mb-4" >
+                        <div className="card border-left-primary shadow h-100 py-2">
+                            <div className="card-body set-padding">
+                                <div className="row no-gutters align-items-center">
+                                    <div className="col mr-2">
+                                        <div className=" font-weight-bold text-primary text-uppercase mb-1">
+                                            <a onClick={this.fetchNotification}>Thông báo</a>
+                                        </div>
+                                        <div className="h5 mb-0 font-weight-bold text-gray-800">{total_unreadNoti}</div>
                                     </div>
-                                    <div className="h5 mb-0 font-weight-bold text-gray-800">{total_unreadNoti}</div>
-                                </div>
-                                <div className="col-auto">
-                                    <i className="fas fa-file-invoice fa-2x text-gray-300"></i>
+                                    <div className="col-auto">
+                                        <i className="fas fa-file-invoice fa-2x text-gray-300"></i>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                }
             </div>
         );
     }
@@ -188,10 +201,10 @@ class General extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        fetchAllNotification: (store_code , page) => {
-            dispatch(notificationAction.fetchAllNotification(store_code , page));
+        fetchAllNotification: (store_code, page) => {
+            dispatch(notificationAction.fetchAllNotification(store_code, page));
         },
-     
+
     };
 };
 export default connect(null, mapDispatchToProps)(General);
