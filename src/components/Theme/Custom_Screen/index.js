@@ -370,6 +370,7 @@ class Custom_Screen extends Component {
                           badges={badges}
                           chooseBanner={this.chooseBanner}
                           banner_type={banner_type}
+                          S
                           v={v}
                         />
                       ))}

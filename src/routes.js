@@ -11,10 +11,10 @@ import ProductCreate_C from "./screens/Product/ProductCreate_C/index";
 import ProductEdit from "./screens/Product/ProductEdit/index";
 import ProductAgencyEdit from "./screens/ProductAgency/EditPrice/index";
 
-import Index from "./screens/index"
+import Index from "./screens/index";
 import Dashboard from "./screens/Dashboard";
 
-import Blog from "./screens/Blog/index"
+import Blog from "./screens/Blog/index";
 import BlogEdit from "./screens/Blog/Edit/index";
 import BlogCreate from "./screens/Blog/Create";
 
@@ -23,6 +23,7 @@ import BillDetail from "./screens/Bill/Detail";
 
 import Customer from "./screens/Customer";
 import CustomerDetail from "./screens/Customer/Detail";
+import RevenueExpenditures from "./screens/RevenueExpenditures";
 import RewardPoint from "./screens/RewardPoint/index";
 
 import Product from "./screens/Product";
@@ -31,7 +32,6 @@ import ProductAgency from "./screens/ProductAgency";
 import Category_P from "./screens/Category_P";
 import Profile from "./screens/Profile";
 import Report from "./screens/Report";
-
 
 import Discount from "./screens/Promotion/Discount/index";
 import DiscountEdit from "./screens/Promotion/Discount/Edit/index";
@@ -45,23 +45,19 @@ import Combo from "./screens/Promotion/Combo/index";
 import ComboEdit from "./screens/Promotion/Combo/Edit/index";
 import ComboCreate from "./screens/Promotion/Combo/Create/index";
 
-
-
-import CategoryB from "./screens/Category_B/index"
+import CategoryB from "./screens/Category_B/index";
 import CategoryBEdit from "./screens/Category_B/Edit/index";
 import CategoryBCreate from "./screens/Category_B/Create";
 
-
-import BannerAds from "./screens/BannerAds/index"
+import BannerAds from "./screens/BannerAds/index";
 import BannerAdsEdit from "./screens/BannerAds/Edit/index";
-import BannerAdsCreate from "./screens/BannerAds/Create"
+import BannerAdsCreate from "./screens/BannerAds/Create";
 
-import Schedule from "./screens/Schedule/index"
+import Schedule from "./screens/Schedule/index";
 import ScheduleEdit from "./screens/Schedule/Edit/index";
 import ScheduleCreate from "./screens/Schedule/Create";
 
-
-import Popup from "./screens/Popup/index"
+import Popup from "./screens/Popup/index";
 import PopupEdit from "./screens/Popup/Edit/index";
 import PopupCreate from "./screens/Popup/Create";
 
@@ -77,30 +73,29 @@ import Shipment from "./screens/Shipment";
 import Payment from "./screens/Payment";
 import PaymentEdit from "./screens/Payment/Edit/index";
 
-
 import Chat from "./screens/Chat";
 import Review from "./screens/Review";
 import Notification from "./screens/Notification";
 
-import StoreACreate from "./screens/Store_Address/StoreACreate"
+import StoreACreate from "./screens/Store_Address/StoreACreate";
 import AuthRegister from "./screens/Auth/AuthRegister";
 import AuthForgot from "./screens/Auth/AuthForgot";
 
 import Home from "./screens/Home/index";
 
-import Collaborator from "./screens/Collaborator/index"
-import Agency from "./screens/Agency/index"
+import Collaborator from "./screens/Collaborator/index";
+import Agency from "./screens/Agency/index";
 
-import Theme from "./screens/Theme/index"
+import Theme from "./screens/Theme/index";
 
-import Decentralization from "./screens/Decentralization/index"
-import DecentralizationCreate from "./screens/Decentralization/Create"
-import DecentralizationEdit from "./screens/Decentralization/Edit"
-import DecentralizationDetail from "./screens/Decentralization/Detail"
+import Decentralization from "./screens/Decentralization/index";
+import DecentralizationCreate from "./screens/Decentralization/Create";
+import DecentralizationEdit from "./screens/Decentralization/Edit";
+import DecentralizationDetail from "./screens/Decentralization/Detail";
 
-import Staff from "./screens/Staff/index"
-import StaffCreate from "./screens/Staff/Create"
-import StaffEdit from "./screens/Staff/Edit"
+import Staff from "./screens/Staff/index";
+import StaffCreate from "./screens/Staff/Create";
+import StaffEdit from "./screens/Staff/Edit";
 import ConfigVip from "./screens/Vip/ConfigVip";
 import BonusStepEdit from "./components/Agency/BonusProgram/BonusStepEdit";
 import ReportAgency from "./components/Agency/ReportAgency/ReportAgency";
@@ -109,13 +104,13 @@ import AddOrder from "./screens/Add_order";
 import Branch from "./screens/BranchStore";
 import Supplier from "./screens/Supplier";
 import Inventory from "./screens/Inventory";
-import CreateInventory from "./screens/Inventory/create"
-import DetailInventory from "./screens/Inventory/detail"
-import EditInventory from "./screens/Inventory/edit"
+import CreateInventory from "./screens/Inventory/create";
+import DetailInventory from "./screens/Inventory/detail";
+import EditInventory from "./screens/Inventory/edit";
 import ImportStock from "./screens/ImportStock";
-import CreateImportStock from "./screens/ImportStock/create"
-import DetailImportStock from "./screens/ImportStock/detail"
-import EditImportStock from "./screens/ImportStock/edit"
+import CreateImportStock from "./screens/ImportStock/create";
+import DetailImportStock from "./screens/ImportStock/detail";
+import EditImportStock from "./screens/ImportStock/edit";
 import ReportInventory from "./screens/Report/ReportInventory";
 import ImportExpostStock from "./screens/Report/import_export/ImportExpostStock";
 import InventoryHistory from "./screens/Report/report_history/InventoryHistory";
@@ -125,9 +120,7 @@ import CustomerDebt from "./screens/Report/report_finance/customer_debt/Customer
 import SupplierDebt from "./screens/Report/report_finance/supplier_debt/SupplierDebt";
 import Expenditure from "./screens/Report/report_finance/revenue_expenditure/Expenditure";
 
-
 const routes = [
-
   {
     path: "/decentralization/index/:store_code",
     exact: true,
@@ -138,13 +131,17 @@ const routes = [
     path: "/decentralization/detail/:store_code/:id",
     exact: true,
 
-    main: ({ match, history }) => <DecentralizationDetail match={match} history={history} />,
+    main: ({ match, history }) => (
+      <DecentralizationDetail match={match} history={history} />
+    ),
   },
   {
     path: "/staff/create/:store_code",
     exact: true,
 
-    main: ({ match, history }) => <StaffCreate match={match} history={history} />,
+    main: ({ match, history }) => (
+      <StaffCreate match={match} history={history} />
+    ),
   },
   {
     path: "/staff/index/:store_code",
@@ -153,55 +150,68 @@ const routes = [
     main: ({ match }) => <Staff match={match} />,
   },
   {
-    path:"/inventory/index/:store_code",
-    exact:true,
+    path: "/inventory/index/:store_code",
+    exact: true,
 
-    main: ({match,history}) => <Inventory match ={match} history = {history}/>,
+    main: ({ match, history }) => <Inventory match={match} history={history} />,
   },
   {
-    path:"/inventory/create/:store_code",
-    exact:true,
+    path: "/inventory/create/:store_code",
+    exact: true,
 
-    main: ({match,history}) => <CreateInventory match ={match} history = {history}/>,
+    main: ({ match, history }) => (
+      <CreateInventory match={match} history={history} />
+    ),
   },
   {
-    path:"/inventory/edit/:store_code/:id",
-    exact:true,
+    path: "/inventory/edit/:store_code/:id",
+    exact: true,
 
-    main: ({match,history}) => <EditInventory match ={match} history = {history}/>,
-  },
-
-
-  {
-    path:"/inventory/detail/:store_code/:id",
-    exact:true,
-
-    main: ({match,history}) => <DetailInventory match ={match} history = {history}/>,
+    main: ({ match, history }) => (
+      <EditInventory match={match} history={history} />
+    ),
   },
 
   {
-    path:"/import_stocks/index/:store_code",
-    exact:true,
+    path: "/inventory/detail/:store_code/:id",
+    exact: true,
 
-    main: ({match,history}) => <ImportStock match ={match} history = {history}/>
+    main: ({ match, history }) => (
+      <DetailInventory match={match} history={history} />
+    ),
+  },
+
+  {
+    path: "/import_stocks/index/:store_code",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <ImportStock match={match} history={history} />
+    ),
   },
   {
-    path:"/import_stock/create/:store_code",
-    exact:true,
+    path: "/import_stock/create/:store_code",
+    exact: true,
 
-    main: ({match,history}) => <CreateImportStock match ={match} history = {history}/>,
+    main: ({ match, history }) => (
+      <CreateImportStock match={match} history={history} />
+    ),
   },
   {
-    path:"/import_stock/edit/:store_code/:id",
-    exact:true,
+    path: "/import_stock/edit/:store_code/:id",
+    exact: true,
 
-    main: ({match,history}) => <EditImportStock match ={match} history = {history}/>,
+    main: ({ match, history }) => (
+      <EditImportStock match={match} history={history} />
+    ),
   },
   {
-    path:"/import_stocks/detail/:store_code/:id",
-    exact:true,
+    path: "/import_stocks/detail/:store_code/:id",
+    exact: true,
 
-    main: ({match,history}) => <DetailImportStock match ={match} history = {history}/>,
+    main: ({ match, history }) => (
+      <DetailImportStock match={match} history={history} />
+    ),
   },
 
   {
@@ -227,15 +237,18 @@ const routes = [
     path: "/decentralization/create/:store_code",
     exact: true,
 
-    main: ({ match, history }) => <DecentralizationCreate match={match} history={history} />,
+    main: ({ match, history }) => (
+      <DecentralizationCreate match={match} history={history} />
+    ),
   },
-
 
   {
     path: "/decentralization/edit/:store_code/:id",
     exact: true,
 
-    main: ({ match, history }) => <DecentralizationEdit match={match} history={history} />,
+    main: ({ match, history }) => (
+      <DecentralizationEdit match={match} history={history} />
+    ),
   },
   {
     path: "/collaborator/:store_code/report/:collaborator_by_customer_id?",
@@ -302,7 +315,7 @@ const routes = [
   {
     path: "/report_profit/:store_code",
     exact: true,
-    
+
     main: ({ match }) => <ReportProfit match={match} />,
   },
   {
@@ -315,13 +328,17 @@ const routes = [
     path: "/agency_bonus_steps/:store_code/create",
     exact: true,
 
-    main: ({ match, history }) => <BonusStepEdit match={match} history={history} />,
+    main: ({ match, history }) => (
+      <BonusStepEdit match={match} history={history} />
+    ),
   },
   {
     path: "/agency_bonus_steps/:store_code/update/:step_id",
     exact: true,
 
-    main: ({ match, history }) => <BonusStepEdit match={match} history={history} />,
+    main: ({ match, history }) => (
+      <BonusStepEdit match={match} history={history} />
+    ),
   },
   {
     path: "/theme/:store_code",
@@ -351,7 +368,9 @@ const routes = [
     path: "/order/detail/:store_code/:order_code",
     exact: true,
 
-    main: ({ match, history }) => <BillDetail match={match} history={history} />,
+    main: ({ match, history }) => (
+      <BillDetail match={match} history={history} />
+    ),
   },
 
   {
@@ -367,7 +386,6 @@ const routes = [
     main: ({ match, history }) => <StoreEdit match={match} history={history} />,
   },
 
-
   {
     path: "/customer/:store_code",
     exact: true,
@@ -378,9 +396,18 @@ const routes = [
     path: "/customer/detail/:store_code/:customerId",
     exact: true,
 
-    main: ({ match, history }) => <CustomerDetail match={match} history={history} />,
+    main: ({ match, history }) => (
+      <CustomerDetail match={match} history={history} />
+    ),
   },
+  {
+    path: "/revenue_expenditure/:store_code",
+    exact: true,
 
+    main: ({ match, history }) => (
+      <RevenueExpenditures match={match} history={history} />
+    ),
+  },
   {
     path: "/reward_point/:store_code",
     exact: true,
@@ -394,9 +421,6 @@ const routes = [
     main: ({ match }) => <Product match={match} />,
   },
 
-
-
-
   {
     path: "/product-agency/index/:store_code/:agency_type_id",
     exact: true,
@@ -407,31 +431,36 @@ const routes = [
     path: "/product-agency/edit-price/:store_code/:productId/:agency_type_id",
     exact: true,
 
-    main: ({ match, history }) => <ProductAgencyEdit match={match} history={history} />,
+    main: ({ match, history }) => (
+      <ProductAgencyEdit match={match} history={history} />
+    ),
   },
-
-
 
   {
     path: "/product/create/:store_code",
     exact: true,
 
-    main: ({ match, history }) => <ProductCreate history={history} match={match} />,
+    main: ({ match, history }) => (
+      <ProductCreate history={history} match={match} />
+    ),
   },
-
 
   {
     path: "/product/edit/:store_code/:productId/:page?",
     exact: true,
 
-    main: ({ match, history }) => <ProductEdit history={history} match={match} />,
+    main: ({ match, history }) => (
+      <ProductEdit history={history} match={match} />
+    ),
   },
 
   {
     path: "/product/create/:store_code/:productId",
     exact: true,
 
-    main: ({ match, history }) => <ProductCreate_C history={history} match={match} />,
+    main: ({ match, history }) => (
+      <ProductCreate_C history={history} match={match} />
+    ),
   },
 
   {
@@ -456,7 +485,7 @@ const routes = [
     path: "/addorder/:store_code",
     exact: true,
 
-    main: ({ match,history}) => <AddOrder match={match} history={history} />,
+    main: ({ match, history }) => <AddOrder match={match} history={history} />,
   },
   {
     path: "/discount/:store_code",
@@ -469,16 +498,19 @@ const routes = [
     path: "/discount/edit/:store_code/:discountId",
     exact: true,
 
-    main: ({ match, history }) => <DiscountEdit match={match} history={history} />,
+    main: ({ match, history }) => (
+      <DiscountEdit match={match} history={history} />
+    ),
   },
 
   {
     path: "/discount/create/:store_code",
     exact: true,
 
-    main: ({ match, history }) => <DiscountCreate match={match} history={history} />,
+    main: ({ match, history }) => (
+      <DiscountCreate match={match} history={history} />
+    ),
   },
-
 
   {
     path: "/combo/:store_code",
@@ -498,15 +530,18 @@ const routes = [
     path: "/combo/create/:store_code",
     exact: true,
 
-    main: ({ match, history }) => <ComboCreate match={match} history={history} />,
+    main: ({ match, history }) => (
+      <ComboCreate match={match} history={history} />
+    ),
   },
-
 
   {
     path: "/voucher/create/:type/:store_code",
     exact: true,
 
-    main: ({ match, history }) => <VoucherCreate match={match} history={history} />,
+    main: ({ match, history }) => (
+      <VoucherCreate match={match} history={history} />
+    ),
   },
 
   {
@@ -520,12 +555,10 @@ const routes = [
     path: "/voucher/edit/:store_code/:voucherId",
     exact: true,
 
-    main: ({ match, history }) => <VoucherEdit match={match} history={history} />,
+    main: ({ match, history }) => (
+      <VoucherEdit match={match} history={history} />
+    ),
   },
-
-
-
-
 
   {
     path: "/login",
@@ -546,7 +579,6 @@ const routes = [
     main: ({ history }) => <AuthRegister history={history} />,
   },
   {
-
     path: "/forgot",
     exact: true,
 
@@ -554,7 +586,6 @@ const routes = [
   },
 
   {
-
     path: "/forgot/otp",
     exact: true,
 
@@ -562,7 +593,6 @@ const routes = [
   },
   /////////////////////////////
   {
-
     path: "/store_address/:store_code",
     exact: true,
 
@@ -570,25 +600,26 @@ const routes = [
   },
 
   {
-
     path: "/store_address/create/:store_code",
     exact: true,
 
-    main: ({ match, history }) => <StoreACreate match={match} history={history} />,
+    main: ({ match, history }) => (
+      <StoreACreate match={match} history={history} />
+    ),
   },
 
   {
     path: "/store_address/edit/:store_code/:storeAId",
     exact: true,
 
-    main: ({ match, history }) => <StoreAEdit match={match} history={history} />,
+    main: ({ match, history }) => (
+      <StoreAEdit match={match} history={history} />
+    ),
   },
 
   //////////////////////////
 
-
   {
-
     path: "/posts/category/:store_code",
     exact: true,
 
@@ -596,61 +627,62 @@ const routes = [
   },
 
   {
-
     path: "/posts/category/create/:store_code",
     exact: true,
 
-    main: ({ match, history }) => <CategoryBCreate match={match} history={history} />,
+    main: ({ match, history }) => (
+      <CategoryBCreate match={match} history={history} />
+    ),
   },
 
   {
     path: "/posts/category/edit/:store_code/:categoryBId",
     exact: true,
 
-    main: ({ match, history }) => <CategoryBEdit match={match} history={history} />,
+    main: ({ match, history }) => (
+      <CategoryBEdit match={match} history={history} />
+    ),
   },
   ////////////////////////
   {
-
     path: "/posts/:store_code",
     exact: true,
 
     main: ({ match }) => <Blog match={match} />,
   },
 
-
   {
-
     path: "/banner_ads/create/:store_code",
     exact: true,
 
-    main: ({ match, history }) => <BannerAdsCreate match={match} history={history} />,
+    main: ({ match, history }) => (
+      <BannerAdsCreate match={match} history={history} />
+    ),
   },
 
   {
     path: "/banner_ads/edit/:store_code/:bannerAdsId",
     exact: true,
 
-    main: ({ match, history }) => <BannerAdsEdit match={match} history={history} />,
+    main: ({ match, history }) => (
+      <BannerAdsEdit match={match} history={history} />
+    ),
   },
   ////////////////////////
   {
-
     path: "/banner_ads/:store_code",
     exact: true,
 
     main: ({ match }) => <BannerAds match={match} />,
   },
 
-
-
-
   {
-
     path: "/posts/create/:store_code",
     exact: true,
 
-    main: ({ match, history }) => <BlogCreate match={match} history={history} />,
+    main: ({ match, history }) => (
+      <BlogCreate match={match} history={history} />
+    ),
   },
 
   {
@@ -662,7 +694,6 @@ const routes = [
 
   ///////////
   {
-
     path: "/shipment/:store_code",
     exact: true,
 
@@ -670,7 +701,6 @@ const routes = [
   },
   ////////////
   {
-
     path: "/payment/:store_code",
     exact: true,
 
@@ -678,15 +708,15 @@ const routes = [
   },
 
   {
-
     path: "/payment/edit/:store_code/:paymentId",
     exact: true,
 
-    main: ({ match, history }) => <PaymentEdit history={history} match={match} />,
+    main: ({ match, history }) => (
+      <PaymentEdit history={history} match={match} />
+    ),
   },
   //////////////////////
   {
-
     path: "/chat/:store_code/:id?",
     exact: true,
 
@@ -702,7 +732,6 @@ const routes = [
 
   //////////////////
   {
-
     path: "/review/:store_code",
     exact: true,
 
@@ -710,14 +739,12 @@ const routes = [
   },
 
   {
-
     path: "/notification/:store_code",
     exact: true,
 
     main: () => <Notification />,
   },
   {
-
     path: "/",
     exact: true,
 
@@ -725,16 +752,13 @@ const routes = [
   },
 
   {
-
     path: "/home",
     exact: true,
 
     main: () => <Home />,
   },
 
-
   {
-
     path: "/notifications/schedule/:store_code",
     exact: true,
 
@@ -742,22 +766,24 @@ const routes = [
   },
 
   {
-
     path: "/notifications/schedule/create/:store_code",
     exact: true,
 
-    main: ({ match, history }) => <ScheduleCreate match={match} history={history} />,
+    main: ({ match, history }) => (
+      <ScheduleCreate match={match} history={history} />
+    ),
   },
 
   {
     path: "/notifications/schedule/edit/:store_code/:scheduleId",
     exact: true,
 
-    main: ({ match, history }) => <ScheduleEdit match={match} history={history} />,
+    main: ({ match, history }) => (
+      <ScheduleEdit match={match} history={history} />
+    ),
   },
 
   {
-
     path: "/popup/:store_code",
     exact: true,
 
@@ -765,11 +791,12 @@ const routes = [
   },
 
   {
-
     path: "/popup/create/:store_code",
     exact: true,
 
-    main: ({ match, history }) => <PopupCreate match={match} history={history} />,
+    main: ({ match, history }) => (
+      <PopupCreate match={match} history={history} />
+    ),
   },
 
   {
@@ -779,15 +806,11 @@ const routes = [
     main: ({ match, history }) => <PopupEdit match={match} history={history} />,
   },
 
-
-
   {
     path: "",
     exact: true,
 
     main: () => <Notfound />,
   },
-
-
 ];
 export default routes;

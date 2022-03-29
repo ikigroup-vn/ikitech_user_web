@@ -15,9 +15,7 @@ import Alert from "../../components/Partials/Alert";
 class BlogEdit extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-
-    }
+    this.state = {};
   }
 
   componentDidMount() {
@@ -25,64 +23,73 @@ class BlogEdit extends Component {
     this.props.fetchAllCategoryB(this.props.match.params.store_code);
 
     // this.props.fetchBlogId(store_code , blogId);
-
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.isLoading != true && typeof nextProps.permission.product_list != "undefined") {
-      var permissions = nextProps.permission
+    if (
+      this.state.isLoading != true &&
+      typeof nextProps.permission.product_list != "undefined"
+    ) {
+      var permissions = nextProps.permission;
 
-      var isShow = permissions.post_add
-      this.setState({ isLoading: true, isShow })
+      var isShow = permissions.post_add;
+      this.setState({ isLoading: true, isShow });
     }
   }
   render() {
     var { store_code } = this.props.match.params;
-    var { history, categories } = this.props
-    var { isShow } = this.state
+    var { history, categories } = this.props;
+    var { isShow } = this.state;
     if (this.props.auth) {
       return (
         <div id="wrapper">
           <Sidebar store_code={store_code} />
           <div className="col-10 col-10-wrapper">
-
             <div id="content-wrapper" className="d-flex flex-column">
               <div id="content">
                 <Topbar store_code={store_code} />
-                {typeof isShow == "undefined" ? <div style={{ height: "500px" }}></div> :
-                  isShow == true ?
+                {typeof isShow == "undefined" ? (
+                  <div style={{ height: "500px" }}></div>
+                ) : isShow == true ? (
+                  <div class="container-fluid">
+                    <Alert
+                      type={Types.ALERT_UID_STATUS}
+                      alert={this.props.alert}
+                    />
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <h4 className="h4 title_content mb-0 text-gray-800">
+                        Tạo bài viết
+                      </h4>
+                    </div>
+                    <br></br>
+                    <div class="card shadow mb-4">
+                      <div class="card-body">
+                        <section class="content">
+                          <div class="row">
+                            <div class="col-md-12 col-xs-12">
+                              <div id="messages"></div>
 
-                    <div class="container-fluid">
-                      <Alert
-                        type={Types.ALERT_UID_STATUS}
-                        alert={this.props.alert}
-                      />
-                      <div
-                        style={{ display: "flex", justifyContent: "space-between" }}
-                      >
-                        <h4 className="h4 title_content mb-0 text-gray-800">
-                          Tạo bài viết
-                        </h4>
-                      </div>
-                      <br></br>
-                      <div class="card shadow mb-4">
-                        <div class="card-body">
-                          <section class="content">
-                            <div class="row">
-                              <div class="col-md-12 col-xs-12">
-                                <div id="messages"></div>
-
-                                <div class="box">
-                                  <Form history={history} categories={categories} store_code={store_code} />
-                                </div>
+                              <div class="box">
+                                <Form
+                                  history={history}
+                                  categories={categories}
+                                  store_code={store_code}
+                                />
                               </div>
                             </div>
-                          </section>
-                        </div>
+                          </div>
+                        </section>
                       </div>
                     </div>
-                    : <NotAccess />}
-
+                  </div>
+                ) : (
+                  <NotAccess />
+                )}
               </div>
 
               <Footer />
@@ -105,7 +112,6 @@ const mapStateToProps = (state) => {
     auth: state.authReducers.login.authentication,
     alert: state.blogReducers.alert.alert_uid,
     permission: state.authReducers.permission.data,
-
   };
 };
 const mapDispatchToProps = (dispatch, props) => {

@@ -1,59 +1,56 @@
 import React, { Component } from "react";
-import * as profileAction from "../../actions/profile"
+import * as profileAction from "../../actions/profile";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import * as userLocalApi from "../../data/local/user"
+import * as userLocalApi from "../../data/local/user";
 import * as dashboardAction from "../../actions/dashboard";
 import history from "../../history";
-import * as Env from "../../ultis/default"
-import Notification from "./Notification"
-import * as helper from "../../ultis/helpers"
+import * as Env from "../../ultis/default";
+import Notification from "./Notification";
+import * as helper from "../../ultis/helpers";
 class Topbar extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isLoadNotification: "",
-      txtBranch:""
-    }
+      txtBranch: "",
+    };
   }
-
 
   componentDidMount() {
     this.props.fetchBranchStore(this.props.store_code);
-    if (!this.props.isExistUser)
-      this.props.fetchUserId();
+    if (!this.props.isExistUser) this.props.fetchUserId();
     if (!this.props.isExsitStore) {
       this.props.fetchAllStore();
       this.props.fetchBranchStore(this.props.store_code);
     }
-    const branchId = localStorage.getItem('branch_id')
-    this.setState({txtBranch:branchId})
-
+    const branchId = localStorage.getItem("branch_id");
+    this.setState({ txtBranch: branchId });
   }
 
   logout = () => {
     userLocalApi.removeToken();
-    history.push("/login")
-
-  }
+    history.push("/login");
+  };
 
   onChange = (e) => {
     var value = e.target.value;
-    localStorage.setItem('branch_id', value);
-    this.setState({txtBranch:value})
-
+    localStorage.setItem("branch_id", value);
+    this.setState({ txtBranch: value });
   };
   showData = (stores) => {
     var result = null;
-    var store_code = typeof this.props.store_code != "undefined" ? this.props.store_code : null
+    var store_code =
+      typeof this.props.store_code != "undefined"
+        ? this.props.store_code
+        : null;
     if (stores.length > 0) {
       result = stores.map((data, index) => {
-        var selected = data.store_code === store_code ? true : false
+        var selected = data.store_code === store_code ? true : false;
         return (
-          <option value={data.id} key={index} selected={selected} >
+          <option value={data.id} key={index} selected={selected}>
             {data.name}
           </option>
-
         );
       });
     } else {
@@ -62,21 +59,39 @@ class Topbar extends Component {
     return result;
   };
 
-  showNotification = (isNotification, isLoadNotification, store_code, disable) => {
+  showNotification = (
+    isNotification,
+    isLoadNotification,
+    store_code,
+    disable
+  ) => {
     if (isNotification == "show")
-      return <Notification isLoadNotification={isLoadNotification} store_code={store_code} disable={disable} />
-  }
+      return (
+        <Notification
+          isLoadNotification={isLoadNotification}
+          store_code={store_code}
+          disable={disable}
+        />
+      );
+  };
 
   render() {
-    var chooseStore = this.props.isHome ? "hide" : "show"
-    var { user, store_code, stores, store, branchStore } = this.props
-    var { isLoadNotification,txtBranch } = this.state
-    var stores = typeof stores == "undefined" ? [] : stores
-    var branchStore = typeof branchStore == "undefined" ? [] : branchStore
-    var name = typeof user.name == "undefined" || user.name == "" || user.name == null ? "Unknown" : user.name
-    var image = typeof user.avatar_image == "undefined" || user.avatar_image == "" || user.avatar_image == null ? Env.IMG_NOT_AVATAR : user.avatar_image
-    var disable = typeof this.props.isHome == "undefined" ? "show" : "hide"
-
+    var chooseStore = this.props.isHome ? "hide" : "show";
+    var { user, store_code, stores, store, branchStore } = this.props;
+    var { isLoadNotification, txtBranch } = this.state;
+    var stores = typeof stores == "undefined" ? [] : stores;
+    var branchStore = typeof branchStore == "undefined" ? [] : branchStore;
+    var name =
+      typeof user.name == "undefined" || user.name == "" || user.name == null
+        ? "Unknown"
+        : user.name;
+    var image =
+      typeof user.avatar_image == "undefined" ||
+      user.avatar_image == "" ||
+      user.avatar_image == null
+        ? Env.IMG_NOT_AVATAR
+        : user.avatar_image;
+    var disable = typeof this.props.isHome == "undefined" ? "show" : "hide";
 
     return (
       <React.Fragment>
@@ -89,18 +104,24 @@ class Topbar extends Component {
               <i className="fa fa-bars"></i>
             </button>
 
-            <div style={{ margin: 'auto' }} className={`nav-item dropdown no-arrow mx-1 ${chooseStore}`}>
-
-              <select id="input" className="form-control border-input" name="store" value={txtBranch} onChange={this.onChange}>
+            <div
+              style={{ margin: "auto" }}
+              className={`nav-item dropdown no-arrow mx-1 ${chooseStore}`}
+            >
+              <select
+                id="input"
+                className="form-control border-input"
+                name="store"
+                value={txtBranch}
+                onChange={this.onChange}
+              >
                 <option value="">-- Chọn chi nhánh --</option>
                 {this.showData(branchStore)}
               </select>
-
             </div>
 
             <ul className="navbar-nav ml-auto">
               <li className="nav-item dropdown no-arrow d-sm-none">
-
                 <div
                   className="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
                   aria-labelledby="searchDropdown"
@@ -124,10 +145,18 @@ class Topbar extends Component {
                 </div>
               </li>
 
-
               <li className="nav-item dropdown no-arrow">
                 <Link className="show-store" to={`/home`}>
-                  <i class='fas fa-store' style={{ marginRight: "10px", marginTop: "23px", fontSize: "20px", color: "#ec0c38" }}></i>{store.name}
+                  <i
+                    class="fas fa-store"
+                    style={{
+                      marginRight: "10px",
+                      marginTop: "23px",
+                      fontSize: "20px",
+                      color: "#ec0c38",
+                    }}
+                  ></i>
+                  {store.name}
                 </Link>
               </li>
 
@@ -155,11 +184,13 @@ class Topbar extends Component {
                   className="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                   aria-labelledby="userDropdown"
                 >
-                  <Link className={`dropdown-item ${disable}`} to={`/profile/${store_code}`}>
+                  <Link
+                    className={`dropdown-item ${disable}`}
+                    to={`/profile/${store_code}`}
+                  >
                     <i className="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                     Thông tin
                   </Link>
-
 
                   <div className={`dropdown-divider ${disable}`}></div>
                   <a
@@ -174,12 +205,16 @@ class Topbar extends Component {
                   </a>
                 </div>
               </li>
-              {this.showNotification(chooseStore, isLoadNotification, store_code, disable)}
+              {this.showNotification(
+                chooseStore,
+                isLoadNotification,
+                store_code,
+                disable
+              )}
             </ul>
           </nav>
         </div>
-      </React.Fragment >
-
+      </React.Fragment>
     );
   }
 }
@@ -201,9 +236,8 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(dashboardAction.fetchAllStore());
     },
     fetchBranchStore: (store_code) => {
-      dispatch(dashboardAction.fetchBranchStore(store_code))
-    }
-
+      dispatch(dashboardAction.fetchBranchStore(store_code));
+    },
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Topbar);
