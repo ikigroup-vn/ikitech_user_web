@@ -129,7 +129,7 @@ class ModalUpdate extends Component {
       >
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
-            <div class="modal-header" >
+            <div class="modal-header" style={{background: "#d0873b"}} >
               <h4 class="modal-title">Chỉnh sửa danh mục</h4>
 
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

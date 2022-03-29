@@ -129,7 +129,7 @@ class ModalUpdateChild extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" >
+            <div class="modal-header" style={{background: "#d0873b"}} >
               <h4 class="modal-title">Chỉnh sửa danh mục con</h4>
 
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>

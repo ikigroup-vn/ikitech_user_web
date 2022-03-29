@@ -119,7 +119,7 @@ class Store extends Component {
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
                     <h4 className="h4 title_content mb-0 text-gray-800">
-                      Sản phẩm</h4>
+                      Danh mục sản phẩm</h4>
                     <a
 
                       data-toggle="modal" data-target="#createModal"
@@ -133,11 +133,7 @@ class Store extends Component {
                   </div>
                   <br></br>
                   <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                      <h6 class="m-0 font-weight-bold text-primary">
-                        Danh sách danh mục
-                      </h6>
-                    </div>
+
                     <div class="card-body">
                       <Table store_code = {store_code} update = {update} _delete = {_delete} category_product={category_product} handleUpdateCallBack={this.handleUpdateCallBack} handleDelCallBack={this.handleDelCallBack} handleDeleteChild={this.handleDeleteChild} handleCreateChild = {this.handleCreateChild} handleUpdateChild = {this.handleUpdateChild} />
                     </div>
