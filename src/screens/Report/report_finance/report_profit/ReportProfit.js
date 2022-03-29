@@ -21,9 +21,9 @@ class ReportProfit extends Component {
     }
     componentDidMount() {
         const { store_code } = this.props.match.params
-        const branch_id = localStorage.getItem("branch_id")
+        const branch_id = localStorage.getItem("branch_id") 
         const time = moment().format("YYYY-MM-DD")
-        const params = `date_from=${time}&date_to=${time}`
+        const params = `date_from=${time}&date_to=${time}&branch_id=${branch_id}`
         this.props.fetchReportProfit(store_code, branch_id, params)
         try {
             document.getElementsByClassName('r-input')[0].placeholder = 'Chọn ngày';
@@ -35,9 +35,9 @@ class ReportProfit extends Component {
 
 
     handleFindItem = () => {
-        const params = `date_from=${this.state.txtStart}&date_to=${this.state.txtEnd}`
-        const { store_code } = this.props.match.params
         const branch_id = localStorage.getItem("branch_id")
+        const params = `date_from=${this.state.txtStart}&date_to=${this.state.txtEnd}&branch_id=${branch_id}`
+        const { store_code } = this.props.match.params
         this.props.fetchReportProfit(store_code, branch_id, params)
     }
 

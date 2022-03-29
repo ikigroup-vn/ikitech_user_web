@@ -27,7 +27,8 @@ class Notification extends Component {
     }
 
     componentDidMount = () => {
-        this.props.fetchAllBadge(this.props.store_code);
+        const branch_id = localStorage.getItem("branch_id")
+         this.props.fetchAllBadge(this.props.store_code,branch_id);
     }
 
     componentDidUpdate() {
@@ -126,8 +127,9 @@ class Notification extends Component {
     };
 
     componentWillReceiveProps(nextProps) {
-        if ((nextProps.isLoadNotification != this.props.isLoadNotification)) {
-            this.props.fetchAllBadge(this.props.store_code);
+        if ((nextProps.isLoadNotification !== this.props.isLoadNotification)) {
+            const branch_id = localStorage.getItem("branch_id")
+            this.props.fetchAllBadge(this.props.store_code,branch_id);
 
         }
 
@@ -232,8 +234,8 @@ const mapDispatchToProps = (dispatch, props) => {
         fetchAllNotification: (store_code, page) => {
             dispatch(notificationAction.fetchAllNotification(store_code, page));
         },
-        fetchAllBadge: (store_code) => {
-            dispatch(notificationAction.fetchAllBadge(store_code));
+        fetchAllBadge: (store_code,branch_id) => {
+            dispatch(notificationAction.fetchAllBadge(store_code,branch_id));
         },
     };
 };

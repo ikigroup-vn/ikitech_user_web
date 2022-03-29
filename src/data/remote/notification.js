@@ -9,3 +9,6 @@ export const fetchAllGeneralSetting = (store_code) => {
 export const readAllNotification = (store_code) => {
   return callApi(`/store/${store_code}/notifications_history/read_all`, "get", null);
 };
+export const updateGeneralSetting = (store_code,data) => {
+  return callApi(`/store/${store_code}/general_settings`, "post", data);
+};

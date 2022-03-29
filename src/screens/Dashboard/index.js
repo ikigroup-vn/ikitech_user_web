@@ -9,7 +9,7 @@ import ChartTopTen from "../../components/Dashboard/ChartTopTen";
 
 import General from "../../components/Dashboard/General";
 import { Redirect } from "react-router-dom";
-import { connect } from "react-redux";
+import { connect, shallowEqual } from "react-redux";
 import Loading from "../Loading";
 import BadgeTable from "../../components/Dashboard/BadgeTable";
 import * as dashboardAction from "../../actions/dashboard";
@@ -24,30 +24,7 @@ class Dashboard extends Component {
       type: ""
     };
   }
-  componentDidMount() {
-    var { store_code } = this.props.match.params
 
-    if (typeof store_code != "undefined" || store_code != null) {
-      var date = helper.getDateForChartMonth()
-
-      this.props.fetchDataId(store_code);
-      this.props.fetchAllBadge(store_code);
-      this.props.fetchTopTenProduct(store_code, `?date_from=${date.from}&date_to=${date.to}`)
-      this.props.fetchOverview(store_code, `?date_from=${date.from}&date_to=${date.to}`)
-      this.props.fetchAllCollaborator(store_code);
-    }
-  }
-
-
-  handeOnload = (store_code) => {
-    var date = helper.getDateForChartMonth()
-
-    this.props.fetchDataId(store_code);
-    this.props.fetchAllBadge(store_code);
-    this.props.fetchTopTenProduct(store_code, `?date_from=${date.from}&date_to=${date.to}`)
-    this.props.fetchOverview(store_code, `?date_from=${date.from}&date_to=${date.to}`)
-    this.props.fetchAllCollaborator(store_code);
-  }
 
   handleGetTypeStore = (type) => {
     this.setState({
@@ -55,17 +32,47 @@ class Dashboard extends Component {
     })
   }
 
+  componentDidMount(){
+    var idBranch = localStorage.getItem("branch_id")
+    var { store_code } = this.props.match.params
+    if (typeof store_code != "undefined" && store_code != null && idBranch !== null) {
+      var date = helper.getDateForChartMonth()
+      this.props.fetchDataId(store_code)
+      this.props.fetchTopTenProduct(store_code,idBranch, `?date_from=${date.from}&date_to=${date.to}`)
+      this.props.fetchOverview(store_code,idBranch, `?date_from=${date.from}&date_to=${date.to}`)
+      this.props.fetchAllCollaborator(store_code);
+    }
+  
+  }
+
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps.permission)
-    if (this.state.isLoading != true && typeof nextProps.permission.product_list != "undefined") {
-      console.log("asdasda")
+
+    if (this.state.isLoading !== true && typeof nextProps.permission.product_list != "undefined") {
       var permissions = nextProps.permission
       var isShow = permissions.report_view
 
       this.setState({ isLoading: true, isShow })
 
+
+
     }
+
+    var { store_code } = this.props.match.params
+    console.log('nextProps.currentBranch',nextProps.currentBranch)
+    console.log('this.props.currentBranch',this.props.currentBranch)
+    if(!shallowEqual(nextProps.currentBranch,this.props.currentBranch) && nextProps.currentBranch != null && this.props.currentBranch !== null && typeof this.props.currentBranch !== "undefined"){
+      console.log("okkkkkkkkkk")
+      if (typeof store_code != "undefined" || store_code != null) {
+        var date = helper.getDateForChartMonth()
+        var idBranch = nextProps.currentBranch.id
+        this.props.fetchDataId(store_code)
+        this.props.fetchTopTenProduct(store_code,idBranch, `?date_from=${date.from}&date_to=${date.to}`)
+        this.props.fetchOverview(store_code,idBranch, `?date_from=${date.from}&date_to=${date.to}`)
+        this.props.fetchAllCollaborator(store_code);
+      }
+    }
+
   }
 
   render() {
@@ -173,6 +180,7 @@ const mapStateToProps = (state) => {
     overview: state.reportReducers.overview,
     collaborators: state.collaboratorReducers.collaborator.allCollaborator,
     permission: state.authReducers.permission.data,
+    currentBranch: state.branchReducers.branch.currentBranch
 
   };
 };
@@ -181,14 +189,11 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchDataId: (id) => {
       dispatch(dashboardAction.fetchDataId(id));
     },
-    fetchAllBadge: (store_code) => {
-      dispatch(dashboardAction.fetchAllBadge(store_code));
+    fetchTopTenProduct: (store_code,branch_id, params) => {
+      dispatch(dashboardAction.fetchTopTenProduct(store_code,branch_id, params));
     },
-    fetchTopTenProduct: (store_code, params) => {
-      dispatch(dashboardAction.fetchTopTenProduct(store_code, params));
-    },
-    fetchOverview: (store_code, params) => {
-      dispatch(dashboardAction.fetchOverview(store_code, params));
+    fetchOverview: (store_code,branch_id, params) => {
+      dispatch(dashboardAction.fetchOverview(store_code,branch_id, params));
     },
     fetchAllCollaborator: (store_code) => {
       dispatch(collaboratorAction.fetchAllCollaborator(store_code));

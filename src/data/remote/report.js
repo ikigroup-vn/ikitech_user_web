@@ -1,12 +1,11 @@
 import callApi from "../../ultis/apiCaller";
 
-export const fetchOverview = (store_code , params) => {
-  return params ? callApi(`/store/${store_code}/report/overview${params}`, "get", null) 
-  :callApi(`/store/${store_code}/report/overview`, "get", null)
+export const fetchOverview = (store_code,branch_id, params) => {
+  return params ? callApi(`/store_v2/${store_code}/${branch_id}/report/overview${params}`, "get", null) 
+  :callApi(`/store_v2/${store_code}/${branch_id}/report/overview`, "get", null)
 };
-export const fetchTopTenProduct = (store_code,params) => {
-  return params ? callApi(`/store/${store_code}/report/top_ten_products${params}`, "get", null) 
-  :callApi(`/store/${store_code}/report/top_ten_products`, "get", null)
+export const fetchTopTenProduct = (store_code,branch_id,params) => {
+  return callApi(`/store_v2/${store_code}/${branch_id}/report/top_ten_products${params}`, "get", null) 
 };
 
 

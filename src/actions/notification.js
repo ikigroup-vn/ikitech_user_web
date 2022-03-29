@@ -56,13 +56,13 @@ export const fetchAllGeneralSetting = (store_code) => {
   };
 };
 
-export const fetchAllBadge = (store_code) => {
+export const fetchAllBadge = (store_code,branch_id) => {
   return (dispatch) => {
     // dispatch({
     //   type: Types.SHOW_LOADING,
     //   loading : "show"
     // })
-    badgeApi.fetchAllBadge(store_code).then((res) => {
+    badgeApi.fetchAllBadge(store_code,branch_id).then((res) => {
       // dispatch({
       //   type: Types.SHOW_LOADING,
       //   loading : "hide"
@@ -77,6 +77,29 @@ export const fetchAllBadge = (store_code) => {
       dispatch({
         type: Types.FETCH_PERMISSION,
         data : typeof res.data.data != "undefined" && res.data.data.decentralization != null  ? res.data.data.decentralization : {}
+      });
+    }
+    });
+  };
+};
+
+export const updateGeneralSetting = (store_code,data) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    notificationApi.updateGeneralSetting(store_code,data).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading : "hide"
+      })
+      
+      if(res.data.code !== 401)
+      {
+      dispatch({
+        type: Types.FETCH_ALL_GENERAL_SETTING,
+        data: res.data.data,
       });
     }
     });

@@ -26,7 +26,8 @@ class Table extends Component {
     this.setState({ statusOrder: value })
     var { statusPayment } = this.state
     var { store_code } = this.props
-    var params = `&order_status_code=${value}&payment_status_code=${statusPayment}`
+    const branch_id = localStorage.getItem("branch_id")
+    var params = `&order_status_code=${value}&payment_status_code=${statusPayment}&branch_id=${branch_id}`
     this.props.onchangeStatusOrder(value)
 
     this.props.fetchAllBill(store_code, 1, params);
@@ -36,7 +37,8 @@ class Table extends Component {
     this.setState({ statusPayment: value })
     var { statusOrder } = this.state
     var { store_code } = this.props
-    var params = `&order_status_code=${statusOrder}&payment_status_code=${value}`
+    const branch_id = localStorage.getItem("branch_id")
+    var params = `&order_status_code=${statusOrder}&payment_status_code=${value}&branch_id=${branch_id}`
     this.props.onchangeStatusPayment(value)
     this.props.fetchAllBill(store_code, 1, params);
   }

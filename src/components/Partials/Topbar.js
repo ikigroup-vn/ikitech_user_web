@@ -34,23 +34,24 @@ class Topbar extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-
-
     if (!shallowEqual(nextProps.branchStore, this.props.branchStore)) {
       const branch_id = localStorage.getItem("branch_id")
       this.setState({ txtBranch: branch_id })
       const value = nextProps.branchStore[0]?.id
-
-      const selectedBranch = this.props.branchStore.find(branch => branch.id == value);
-      this.props.changeBranch(selectedBranch)
-
-      if (!branch_id) {
-        localStorage.setItem('branch_id', value);
-        this.setState({ txtBranch: value })
-   
+      if (nextProps.branchStore != null && nextProps.branchStore.length > 0) {
+        const selectedBranch = this.props.branchStore.find(branch => branch.id ==this.state.txtBranch );
+        console.log("selectedBranch",selectedBranch)
+        this.props.changeBranch(selectedBranch)
+        if (!branch_id) {
+          localStorage.setItem('branch_id', value);
+          this.setState({ txtBranch: value })
+          
+        }
       }
+
     }
   }
+
 
   logout = () => {
     userLocalApi.removeToken();
@@ -64,7 +65,7 @@ class Topbar extends Component {
     this.setState({ txtBranch: value })
     var branchStore = typeof this.props.branchStore == "undefined" ? [] : this.props.branchStore
 
-    const selectedBranch = branchStore.find(branch => branch.id = value);
+    const selectedBranch = branchStore.find(branch => branch.id == value);
     this.props.changeBranch(selectedBranch)
 
     window.location.reload();
