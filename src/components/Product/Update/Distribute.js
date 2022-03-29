@@ -32,9 +32,7 @@ class Distribute extends Component {
     list_distribute[0].element_distributes = list_distribute[0].element_distributes.map((ele) => {
 
 
-
       if (ele.sub_element_distributes != null && ele.sub_element_distributes.length > 0) {
-
 
 
         ele.sub_element_distributes = ele.sub_element_distributes.map((sub) => {

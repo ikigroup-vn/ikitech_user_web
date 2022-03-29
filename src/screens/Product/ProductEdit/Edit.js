@@ -46,6 +46,7 @@ class ProductEdit extends Component {
       formdata.quantity_in_stock = data.txtQuantityInStock.toString().replace(/,/g, '').replace(/\./g, '');
       formdata.percent_collaborator = data.txtPercentC;
       formdata.sku = data.sku
+      formdata.check_inventory = data.check_inventory
 
       var categories = [];
       var category_children_ids = [];
@@ -319,7 +320,7 @@ class ProductEdit extends Component {
           style={{ display: "flex", justifyContent: "space-between" }}
         >
           <h4 className="h4 title_content mb-0 text-gray-800">
-            Chỉnh sửa sản phẩm new
+            Chỉnh sửa sản phẩm {product.name}
           </h4>
         </div>
         <br></br>

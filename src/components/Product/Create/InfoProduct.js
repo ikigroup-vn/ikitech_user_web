@@ -21,7 +21,7 @@ class InfoProduct extends Component {
       disabledPrice: false,
       sku: Math.random().toString().slice(2, 11),
       check_inventory: false,
-      txtCostOfCapital:"",
+      txtCostOfCapital: "",
     };
   }
   handleChangeCheckParent(id) {
@@ -333,7 +333,7 @@ class InfoProduct extends Component {
             <label class="form-check-label" for="flexSwitchCheckDefault">Theo dõi hàng trong kho</label>
           </div>
         </div>
-     {check_inventory &&   <div class="form-group">
+        {check_inventory && <div class="form-group">
           <div className="row">
 
 

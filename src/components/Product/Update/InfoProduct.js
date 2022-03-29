@@ -224,12 +224,16 @@ class InfoProduct extends Component {
         category_parent: listcategorynew,
         category_children_ids: product.category_children,
         txtQuantityInStock: _quantity_stock,
-        sku: product.sku
+        sku: product.sku,
+        check_inventory:product.check_inventory
       });
 
     }
   }
-
+  onChangeCheckInventory = (e) => {
+    var { checked } = e.target
+    this.setState({ check_inventory: checked })
+  }
   shouldComponentUpdate(nextProps, nextState) {
     if (
       !shallowEqual(nextState, this.state)
@@ -263,7 +267,8 @@ class InfoProduct extends Component {
       disabledPrice,
       sku,
       txtBarcode,
-      txtImportPrice
+      txtImportPrice,
+      check_inventory
     } = this.state;
 
     var txtQuantityInStock = txtQuantityInStock == -1 ? "" : txtQuantityInStock
@@ -364,7 +369,12 @@ class InfoProduct extends Component {
 
         </div>
 
-
+        <div class="form-group">
+          <div class="form-check form-switch">
+            <input onChange={this.onChangeCheckInventory} class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked={check_inventory} />
+            <label class="form-check-label" for="flexSwitchCheckDefault">Theo dõi hàng trong kho</label>
+          </div>
+        </div>
 
         <div class="form-group">
           <label for="product_name">Phần trăm hoa hồng CTV</label>
