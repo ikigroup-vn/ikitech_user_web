@@ -40,7 +40,6 @@ class Topbar extends Component {
       const value = nextProps.branchStore[0]?.id
       if (nextProps.branchStore != null && nextProps.branchStore.length > 0) {
         const selectedBranch = this.props.branchStore.find(branch => branch.id ==this.state.txtBranch );
-        console.log("selectedBranch",selectedBranch)
         this.props.changeBranch(selectedBranch)
         if (!branch_id) {
           localStorage.setItem('branch_id', value);

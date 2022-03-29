@@ -35,7 +35,7 @@ class Dashboard extends Component {
   componentDidMount(){
     var idBranch = localStorage.getItem("branch_id")
     var { store_code } = this.props.match.params
-    if (typeof store_code != "undefined" && store_code != null && idBranch !== null) {
+    if (typeof store_code != "undefined" && store_code != null && idBranch != null && typeof idBranch != "undefined" && idBranch != "") {
       var date = helper.getDateForChartMonth()
       this.props.fetchDataId(store_code)
       this.props.fetchTopTenProduct(store_code,idBranch, `?date_from=${date.from}&date_to=${date.to}`)
@@ -51,18 +51,11 @@ class Dashboard extends Component {
     if (this.state.isLoading !== true && typeof nextProps.permission.product_list != "undefined") {
       var permissions = nextProps.permission
       var isShow = permissions.report_view
-
       this.setState({ isLoading: true, isShow })
-
-
-
     }
 
     var { store_code } = this.props.match.params
-    console.log('nextProps.currentBranch',nextProps.currentBranch)
-    console.log('this.props.currentBranch',this.props.currentBranch)
     if(!shallowEqual(nextProps.currentBranch,this.props.currentBranch) && nextProps.currentBranch != null && this.props.currentBranch !== null && typeof this.props.currentBranch !== "undefined"){
-      console.log("okkkkkkkkkk")
       if (typeof store_code != "undefined" || store_code != null) {
         var date = helper.getDateForChartMonth()
         var idBranch = nextProps.currentBranch.id
