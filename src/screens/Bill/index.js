@@ -48,8 +48,8 @@ class Bill extends Component {
     var params_agency = this.state.agency_by_customer_id != null ? `&agency_by_customer_id=${this.state.agency_by_customer_id}` : null
 
     var params = `&search=${searchValue}&order_status_code=${statusOrder}&payment_status_code=${statusPayment}&limit=${numPage}`
-
-    this.props.fetchAllBill(store_code, 1, params, params_agency);
+    const branch_id = localStorage.getItem("branch_id")
+    this.props.fetchAllBill(store_code, 1,branch_id, params, params_agency);
   }
 
   componentDidMount() {
@@ -75,7 +75,8 @@ class Bill extends Component {
       this.setState({ statusOrder: status_order });
     if (status_payment != null)
       this.setState({ statusPayment: status_payment });
-    this.props.fetchAllBill(store_code, 1, params, params_agency);
+      const branch_id = localStorage.getItem("branch_id")
+    this.props.fetchAllBill(store_code, 1,branch_id, params, params_agency);
   }
   handleShowChatBox = (customerId, customerImg, customerName, status) => {
     var { store_code } = this.props.match.params;
@@ -105,15 +106,15 @@ class Bill extends Component {
     var params = `&search=${searchValue}`;
     this.setState({ statusPayment: "", statusOrder: "", numPage: 20 })
     var params_agency = this.state.agency_by_customer_id != null ? `&agency_by_customer_id=${this.state.agency_by_customer_id}` : null
-
-    this.props.fetchAllBill(store_code, 1, params, params_agency);
+    const branch_id = localStorage.getItem("branch_id")
+    this.props.fetchAllBill(store_code, 1,branch_id, params, params_agency);
   };
 
   fetchAllData = () => {
     var { store_code } = this.props.match.params;
     var params_agency = this.state.agency_by_customer_id != null ? `&agency_by_customer_id=${this.state.agency_by_customer_id}` : null
-
-    this.props.fetchAllBill(store_code, 1, null, params_agency);
+    const branch_id = localStorage.getItem("branch_id")
+    this.props.fetchAllBill(store_code, 1,branch_id, null, params_agency);
   };
 
   componentWillReceiveProps(nextProps) {
@@ -145,7 +146,8 @@ class Bill extends Component {
     if(from == null || to ==null){
       params = ""
     }
-    this.props.fetchAllBill(store_code, 1, params, params_agency);
+    const branch_id = localStorage.getItem("branch_id")
+    this.props.fetchAllBill(store_code, 1,branch_id, params, params_agency);
 
 
   }
@@ -323,8 +325,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllBill: (id, page, params, params_agency) => {
-      dispatch(billAction.fetchAllBill(id, page, params, params_agency));
+    fetchAllBill: (id, page,branch_id, params, params_agency) => {
+      dispatch(billAction.fetchAllBill(id, page,branch_id, params, params_agency));
     },
     fetchChatId: (store_code, customerId) => {
       dispatch(billAction.fetchChatId(store_code, customerId));

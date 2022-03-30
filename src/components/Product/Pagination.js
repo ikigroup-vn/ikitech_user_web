@@ -11,8 +11,8 @@ class Pagination extends Component {
   }
 
   passPagination = (page) => {
-    var { store_code,  limit ,searchValue, bonusParam } = this.props
-    var params =`&limit=${limit}${bonusParam??""}`
+    var { store_code,  limit ,searchValue } = this.props
+    var params =`&limit=${limit}`
 
     const branch_id = localStorage.getItem('branch_id');
   this.props.fetchAllProductV2(store_code, branch_id, page, params);

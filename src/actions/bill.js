@@ -6,13 +6,14 @@ import * as uploadApi from "../data/remote/upload";
 import { compressed } from "../ultis/helpers";
 
 import moment from "moment";
-export const fetchAllBill = (store_code, page = 1, params = null, params_agency = null) => {
+export const fetchAllBill = (store_code, page = 1,branch_id, params = null, params_agency = null) => {
+  console.log("branch_id",branch_id)
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING_LAZY,
       loading: "show"
     })
-    billApi.fetchAllBill(store_code, page, params, params_agency).then((res) => {
+    billApi.fetchAllBill(store_code, page,branch_id, params, params_agency).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING_LAZY,
         loading: "hide"

@@ -27,10 +27,10 @@ class Table extends Component {
     var { statusPayment } = this.state
     var { store_code } = this.props
     const branch_id = localStorage.getItem("branch_id")
-    var params = `&order_status_code=${value}&payment_status_code=${statusPayment}&branch_id=${branch_id}`
+    var params = `&order_status_code=${value}&payment_status_code=${statusPayment}`
     this.props.onchangeStatusOrder(value)
 
-    this.props.fetchAllBill(store_code, 1, params);
+    this.props.fetchAllBill(store_code, 1,branch_id, params);
   }
   onchangeStatusPayment = (e) => {
     var { value } = e.target;
@@ -38,9 +38,9 @@ class Table extends Component {
     var { statusOrder } = this.state
     var { store_code } = this.props
     const branch_id = localStorage.getItem("branch_id")
-    var params = `&order_status_code=${statusOrder}&payment_status_code=${value}&branch_id=${branch_id}`
+    var params = `&order_status_code=${statusOrder}&payment_status_code=${value}`
     this.props.onchangeStatusPayment(value)
-    this.props.fetchAllBill(store_code, 1, params);
+    this.props.fetchAllBill(store_code, 1,branch_id, params);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -232,8 +232,8 @@ class Table extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllBill: (id, page, params) => {
-      dispatch(billAction.fetchAllBill(id, page, params));
+    fetchAllBill: (id, page,branch_id, params) => {
+      dispatch(billAction.fetchAllBill(id, page,branch_id, params));
     },
 
   };
