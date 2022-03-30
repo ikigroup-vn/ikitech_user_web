@@ -1,18 +1,34 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-
-import * as customerAction from "../../actions/customer";
+import * as reportAction from "../../actions/report";
+// import * as billAction from "../../actions/bill";
+import * as revenueExpendituresAction from "../../actions/revenue_expenditures";
 class Pagination extends Component {
   constructor(props) {
     super(props);
     this.state = {
       page: 1,
+      // status: null,
+      // isStatus : ""
     };
   }
 
   passPagination = (page) => {
-    console.log("page in customer", page);
-    this.props.fetchAllCustomer(this.props.store_code, page);
+    // var { store_code, status_payment , status_order , limit , searchValue } = this.props
+
+    var {
+      store_code,
+      branch_id,
+      limit,
+      searchValue,
+      revenueExpendituresValue,
+      datePrime,
+    } = this.props;
+    // var params = `&order_status_code=${status_order}&payment_status_code=${status_payment}&limit=${limit}`;
+    var params = `&search=${searchValue}&limit=${limit}&is_revenue=${revenueExpendituresValue}&&date_from=${datePrime.from}&date_to=${datePrime.to}`;
+    console.log(this.props);
+    // this.props.fetchAllRevenueExpenditures(store_code, branch_id, page, params);
+    this.props.fetchReportExpenditure(store_code, branch_id, page, params);
   };
 
   showData = (links) => {
@@ -59,7 +75,7 @@ class Pagination extends Component {
     return (
       <nav aria-label="Page navigation" className="float-pagination">
         <ul class="pagination  tab-pagination pg-blue">
-          {this.showData(this.props.customers.links)}
+          {this.showData(this.props.revenueExpenditures.links)}
         </ul>
       </nav>
     );
@@ -68,8 +84,21 @@ class Pagination extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllCustomer: (store_code, page) => {
-      dispatch(customerAction.fetchAllCustomer(store_code, page));
+    // fetchAllRevenueExpenditures: (id, branch_id, page, params) => {
+    //   dispatch(
+    //     revenueExpendituresAction.fetchAllRevenueExpenditures(
+    //       id,
+    //       branch_id,
+    //       page,
+    //       params
+    //     )
+    //   );
+    // },
+
+    fetchReportExpenditure: (store_code, branch_id, page, params) => {
+      dispatch(
+        reportAction.fetchReportExpenditure(store_code, branch_id, page, params)
+      );
     },
   };
 };

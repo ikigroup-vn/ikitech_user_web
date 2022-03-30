@@ -4,26 +4,26 @@ import { connect } from "react-redux";
 import * as categoryBAction from "../../../actions/category_blog";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import CKEditor from "ckeditor4-react";
-import ModalUpload from "./ModalUpload"
-import * as Env from "../../../ultis/default"
-import {isEmpty} from "../../../ultis/helpers"
+import ModalUpload from "./ModalUpload";
+import * as Env from "../../../ultis/default";
+import { isEmpty } from "../../../ultis/helpers";
 
 class Form extends Component {
   constructor(props) {
     super(props);
     this.state = {
-     txtContent : "",
-     txtTitle : "",
-     image: ""
+      txtContent: "",
+      txtTitle: "",
+      image: "",
     };
   }
-  componentDidMount(){
-    this.props.initialUpload()
+  componentDidMount() {
+    this.props.initialUpload();
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.image !== nextProps.image) {
-      this.setState({ image: nextProps.image })
+      this.setState({ image: nextProps.image });
     }
   }
 
@@ -43,14 +43,12 @@ class Form extends Component {
   };
 
   onSave = (e) => {
-    var {store_code} = this.props
+    var { store_code } = this.props;
     e.preventDefault();
-    var {txtContent , txtTitle , image} = this.state
-    console.log(txtTitle)
-    if(txtTitle == null || !isEmpty(txtTitle))
-    {
+    var { txtContent, txtTitle, image } = this.state;
+    console.log(txtTitle);
+    if (txtTitle == null || !isEmpty(txtTitle)) {
       this.props.showError({
-
         type: Types.ALERT_UID_STATUS,
         alert: {
           type: "danger",
@@ -58,11 +56,10 @@ class Form extends Component {
           disable: "show",
           content: "Tiêu đề không được để trống",
         },
-      }
-      )
+      });
       return;
     }
-    this.props.createCategoryB(store_code,{
+    this.props.createCategoryB(store_code, {
       title: txtTitle,
       description: txtContent,
       image_url: image,
@@ -73,19 +70,16 @@ class Form extends Component {
     history.goBack();
   };
   render() {
-
-    var {txtTitle , txtContent , image} = this.state
+    var { txtTitle, txtContent, image } = this.state;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
 
     return (
       <React.Fragment>
         <form role="form" onSubmit={this.onSave} method="post">
-
           <div class="box-body">
-                        <div class="form-group">
+            <div class="form-group">
               <label for="product_name">Tiêu đề</label>
               <input
-                
                 type="text"
                 class="form-control"
                 id="txtTitle"
@@ -94,7 +88,6 @@ class Form extends Component {
                 placeholder="Nhập tiêu đề bài viết"
                 autocomplete="off"
                 onChange={this.onChange}
-                name="txtTitle"
               />
             </div>
             <div class="form-group">
@@ -102,9 +95,8 @@ class Form extends Component {
               <img src={`${image}`} width="150" height="150" />
             </div>
             <div class="form-group">
-
               <div class="kv-avatar">
-                <div >
+                <div>
                   <button
                     type="button"
                     class="btn btn-primary btn-sm"
@@ -115,25 +107,25 @@ class Form extends Component {
                   </button>
                 </div>
               </div>
-
             </div>
 
-
-
-     
-
-            
             <div class="form-group">
               <label for="product_name">Nội dung mô tả danh mục</label>
-              
-              <textarea name="txtContent" value={txtContent } onChange = {this.onChange} id="input" class="form-control" rows="3"></textarea>
-              
+
+              <textarea
+                name="txtContent"
+                value={txtContent}
+                onChange={this.onChange}
+                id="input"
+                class="form-control"
+                rows="3"
+              ></textarea>
+
               {/* <CKEditor
                 data={txtContent}
                 onChange={this.onChangeDecription}
               /> */}
             </div>
-
           </div>
           <div class="box-footer">
             <button type="submit" class="btn btn-info btn-icon-split btn-sm">
@@ -154,12 +146,9 @@ class Form extends Component {
               <span class="text"> Trở về</span>
             </a>
           </div>
-
         </form>
         <ModalUpload />
-     
       </React.Fragment>
-
     );
   }
 }
@@ -167,22 +156,20 @@ class Form extends Component {
 const mapStateToProps = (state) => {
   return {
     image: state.UploadReducers.categoryBImg.categoryB_img,
-
   };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
     showError: (error) => {
-      dispatch(error)
+      dispatch(error);
     },
-    initialUpload : () =>{
-      dispatch(categoryBAction.initialUpload())
+    initialUpload: () => {
+      dispatch(categoryBAction.initialUpload());
     },
-    createCategoryB : (store_code  , data) =>{
-      dispatch(categoryBAction.createCategoryB(store_code  , data))
-    }
-    
+    createCategoryB: (store_code, data) => {
+      dispatch(categoryBAction.createCategoryB(store_code, data));
+    },
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Form);

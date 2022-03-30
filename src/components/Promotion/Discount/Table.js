@@ -56,7 +56,7 @@ class Table extends Component {
             <td>{data.end_time}</td>
 
             <td>{data.value}</td>
-
+            <td>{data.used}</td>
             <td>
              
                   {!isNaN(Number(set_limit_amount)) ? new Intl.NumberFormat().format(set_limit_amount.toString()) : set_limit_amount }
@@ -115,8 +115,9 @@ class Table extends Component {
               <th>Ngày bắt đầu</th>
               <th>Ngày kết thúc</th>
               <th>Giảm giá</th>
+              <th>SL đơn đã áp dụng</th>
               <th>Giới hạn</th>
-
+            
               <th>Hành động</th>
             </tr>
           </thead>

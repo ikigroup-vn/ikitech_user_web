@@ -28,7 +28,7 @@ class Index extends Component {
     }
 
     render() {
-        var { store_code , discountId} = this.props.match.params;
+        var { store_code, discountId } = this.props.match.params;
         var { history, auth } = this.props;
         var { isShow } = this.state
         return (
@@ -44,7 +44,7 @@ class Index extends Component {
                                     isShow == true ?
 
                                         <Edit
-                                        discountId = {discountId}
+                                            discountId={discountId}
                                             store_code={store_code}
                                             history={history}
                                         />

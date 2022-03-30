@@ -26,6 +26,19 @@ export const fetchAllBill = (store_code, page = 1,branch_id, params = null, para
 
 
     });
+    billApi
+      .fetchAllBill(store_code, page, params, params_agency)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING_LAZY,
+          loading: "hide",
+        });
+        if (res.data.code !== 401)
+          dispatch({
+            type: Types.FETCH_ALL_BILL,
+            data: res.data.data,
+          });
+      });
   };
 };
 
@@ -33,13 +46,13 @@ export const fetchBillId = (store_code, order_code) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     billApi.fetchBillId(store_code, order_code).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
-        loading: "hide"
-      })
+        loading: "hide",
+      });
       if (res.data.code !== 401) {
         dispatch({
           type: Types.FETCH_ID_BILL,
@@ -54,27 +67,33 @@ export const fetchBillId = (store_code, order_code) => {
             });
         });
 
-        billApi.getHistoryDeliveryStatus(store_code, { order_code: res.data.data.order_code }).then((res) => {
-          if (res.data.code === 200)
-            dispatch({
-              type: Types.FETCH_DELIVERY_HISTORY,
-              data: res.data.data,
-            });
-        })
+        billApi
+          .getHistoryDeliveryStatus(store_code, {
+            order_code: res.data.data.order_code,
+          })
+          .then((res) => {
+            if (res.data.code === 200)
+              dispatch({
+                type: Types.FETCH_DELIVERY_HISTORY,
+                data: res.data.data,
+              });
+          });
       }
-
     });
   };
 };
 
 export const fetchBillHistory = (store_code, billId) => {
-
-  if (billId == undefined || billId == null || billId == "undefined" || billId == 0) {
+  if (
+    billId == undefined ||
+    billId == null ||
+    billId == "undefined" ||
+    billId == 0
+  ) {
     return;
   }
 
   return (dispatch) => {
-
     billApi.fetchBillHistory(store_code, billId).then((res) => {
       if (res.data.code !== 401)
         dispatch({
@@ -89,32 +108,90 @@ export const updateStatusOrder = (data, store_code, billId, order_code) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
-    billApi.updateStatusOrder(store_code, data).then((res) => {
-      dispatch({
-        type: Types.SHOW_LOADING,
-        loading: "hide"
-      })
-      dispatch({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "success",
-          title: "Thành công ",
-          disable: "show",
-          content: res.data.msg,
-        },
-      });
-      billApi.fetchBillId(store_code, order_code).then((res) => {
-        if (res.data.code !== 401)
-          dispatch({
-            type: Types.FETCH_ID_BILL,
-            data: res.data.data,
+      loading: "show",
+    });
+    billApi
+      .updateStatusOrder(store_code, data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+        billApi.fetchBillId(store_code, order_code).then((res) => {
+          if (res.data.code !== 401)
+            dispatch({
+              type: Types.FETCH_ID_BILL,
+              data: res.data.data,
+            });
+        });
+        if (
+          billId == undefined ||
+          billId == null ||
+          billId == "undefined" ||
+          billId == 0
+        ) {
+          return;
+        } else {
+          billApi.fetchBillHistory(store_code, billId).then((res) => {
+            if (res.data.code !== 401)
+              dispatch({
+                type: Types.FETCH_BILL_HISTORY,
+                data: res.data.data,
+              });
           });
+        }
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error.response.data.msg,
+          },
+        });
       });
-      if (billId == undefined || billId == null || billId == "undefined" || billId == 0) {
-        return;
-      } else {
+  };
+};
+export const updateStatusPayment = (data, store_code, billId, order_code) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    billApi
+      .updateStatusPayment(store_code, data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+        billApi.fetchBillId(store_code, order_code).then((res) => {
+          if (res.data.code !== 401)
+            dispatch({
+              type: Types.FETCH_ID_BILL,
+              data: res.data.data,
+            });
+        });
         billApi.fetchBillHistory(store_code, billId).then((res) => {
           if (res.data.code !== 401)
             dispatch({
@@ -122,213 +199,166 @@ export const updateStatusOrder = (data, store_code, billId, order_code) => {
               data: res.data.data,
             });
         });
-      }
-
-
-
-    }).catch(function (error) {
-      dispatch({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "danger",
-          title: "Lỗi",
-          disable: "show",
-          content: error.response.data.msg,
-        },
-      });
-    });;
-  };
-};
-export const updateStatusPayment = (data, store_code, billId, order_code) => {
-  return (dispatch) => {
-    dispatch({
-      type: Types.SHOW_LOADING,
-      loading: "show"
-    })
-    billApi.updateStatusPayment(store_code, data).then((res) => {
-      dispatch({
-        type: Types.SHOW_LOADING,
-        loading: "hide"
       })
-      dispatch({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "success",
-          title: "Thành công ",
-          disable: "show",
-          content: res.data.msg,
-        },
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error.response.data.msg,
+          },
+        });
       });
-      billApi.fetchBillId(store_code, order_code).then((res) => {
-        if (res.data.code !== 401)
-          dispatch({
-            type: Types.FETCH_ID_BILL,
-            data: res.data.data,
-          });
-      });
-      billApi.fetchBillHistory(store_code, billId).then((res) => {
-        if (res.data.code !== 401)
-          dispatch({
-            type: Types.FETCH_BILL_HISTORY,
-            data: res.data.data,
-          });
-      });
-
-
-    }).catch(function (error) {
-      dispatch({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "danger",
-          title: "Lỗi",
-          disable: "show",
-          content: error.response.data.msg,
-        },
-      });
-    });;
   };
 };
-
 
 export const sendOrderToDelivery = (data, store_code, billId, order_code) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
-    billApi.sendOrderToDelivery(store_code, {
-      order_code: order_code
-    }).then((res) => {
-      dispatch({
-        type: Types.SHOW_LOADING,
-        loading: "hide"
+      loading: "show",
+    });
+    billApi
+      .sendOrderToDelivery(store_code, {
+        order_code: order_code,
       })
-      dispatch({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "success",
-          title: "Thành công ",
-          disable: "show",
-          content: res.data.msg,
-        },
-      });
-      billApi.fetchBillId(store_code, order_code).then((res) => {
-        if (res.data.code !== 401)
-          dispatch({
-            type: Types.FETCH_ID_BILL,
-            data: res.data.data,
-          });
-      });
-      billApi.fetchBillHistory(store_code, billId).then((res) => {
-        if (res.data.code !== 401)
-          dispatch({
-            type: Types.FETCH_BILL_HISTORY,
-            data: res.data.data,
-          });
-      });
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+        billApi.fetchBillId(store_code, order_code).then((res) => {
+          if (res.data.code !== 401)
+            dispatch({
+              type: Types.FETCH_ID_BILL,
+              data: res.data.data,
+            });
+        });
+        billApi.fetchBillHistory(store_code, billId).then((res) => {
+          if (res.data.code !== 401)
+            dispatch({
+              type: Types.FETCH_BILL_HISTORY,
+              data: res.data.data,
+            });
+        });
 
-      billApi.getHistoryDeliveryStatus(store_code, data).then((res) => {
+        billApi.getHistoryDeliveryStatus(store_code, data).then((res) => {
+          if (res.data.code === 200)
+            dispatch({
+              type: Types.FETCH_DELIVERY_HISTORY,
+              data: res.data.data,
+            });
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error.response.data.msg,
+          },
+        });
+      });
+  };
+};
+
+export const updateOrder = (data, store_code, order_code) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    billApi
+      .updateOrder(data, store_code, order_code)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+        billApi.fetchBillId(store_code, order_code).then((res) => {
+          if (res.data.code !== 401)
+            dispatch({
+              type: Types.FETCH_ID_BILL,
+              data: res.data.data,
+            });
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error.response.data.msg,
+          },
+        });
+      });
+  };
+};
+
+export const getHistoryDeliveryStatus = (data, store_code) => {
+  return (dispatch) => {
+    billApi
+      .getHistoryDeliveryStatus(store_code, data)
+      .then((res) => {
         if (res.data.code === 200)
           dispatch({
             type: Types.FETCH_DELIVERY_HISTORY,
             data: res.data.data,
           });
       })
-
-
-    }).catch(function (error) {
-      dispatch({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "danger",
-          title: "Lỗi",
-          disable: "show",
-          content: error.response.data.msg,
-        },
+      .catch(function (errors) {
+        console.log(errors);
       });
-    });;
-  };
-};
-
-
-export const updateOrder = (data, store_code, order_code) => {
-  return (dispatch) => {
-    dispatch({
-      type: Types.SHOW_LOADING,
-      loading: "show"
-    })
-    billApi.updateOrder(data, store_code, order_code).then((res) => {
-      dispatch({
-        type: Types.SHOW_LOADING,
-        loading: "hide"
-      })
-      dispatch({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "success",
-          title: "Thành công ",
-          disable: "show",
-          content: res.data.msg,
-        },
-      });
-      billApi.fetchBillId(store_code, order_code).then((res) => {
-        if (res.data.code !== 401)
-          dispatch({
-            type: Types.FETCH_ID_BILL,
-            data: res.data.data,
-          });
-      });
-
-    }).catch(function (error) {
-      dispatch({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "danger",
-          title: "Lỗi",
-          disable: "show",
-          content: error.response.data.msg,
-        },
-      });
-    });;
-  };
-};
-
-export const getHistoryDeliveryStatus = (data, store_code) => {
-  return (dispatch) => {
-    billApi.getHistoryDeliveryStatus(store_code, data).then((res) => {
-      if (res.data.code === 200)
-        dispatch({
-          type: Types.FETCH_DELIVERY_HISTORY,
-          data: res.data.data,
-        });
-    }).catch(function (errors) {
-      console.log(errors)
-    });
   };
 };
 
 export const fetchChatId = (store_code, customerId, pag = 1) => {
   return (dispatch) => {
-
-    chatApi.fetchChatId(store_code, customerId, pag).then((res) => {
-
-      if (res.data.code !== 401)
-        dispatch({
-          type: Types.FETCH_ID_CHAT,
-          data: res.data.data,
-        });
-    }).catch(function (errors) {
-      console.log(errors)
-    });
+    chatApi
+      .fetchChatId(store_code, customerId, pag)
+      .then((res) => {
+        if (res.data.code !== 401)
+          dispatch({
+            type: Types.FETCH_ID_CHAT,
+            data: res.data.data,
+          });
+      })
+      .catch(function (errors) {
+        console.log(errors);
+      });
   };
 };
 export const sendMessage = (store_code, customerId, message) => {
-  console.log(store_code, customerId, message)
+  console.log(store_code, customerId, message);
   return (dispatch) => {
     chatApi
       .postMessage(store_code, customerId, { content: message })
       .then((res) => {
-        console.log(res)
+        console.log(res);
         if (res.data.code !== 401) {
           if (res.data.code == 400) {
             dispatch({
@@ -340,8 +370,7 @@ export const sendMessage = (store_code, customerId, message) => {
                 content: res.data.msg,
               },
             });
-          }
-          else {
+          } else {
             dispatch({
               type: Types.FETCH_ID_CHAT_USER,
               data: {
@@ -358,9 +387,7 @@ export const sendMessage = (store_code, customerId, message) => {
       .catch(function (error) {
         dispatch({
           type: Types.FETCH_ID_CHAT_USER,
-          data: {
-
-          },
+          data: {},
         });
         dispatch({
           type: Types.ALERT_UID_STATUS,
@@ -378,7 +405,9 @@ export const sendMessage = (store_code, customerId, message) => {
 function getSizeImg(file, url) {
   return new Promise((resolve, reject) => {
     window.URL = window.URL || window.webkitURL;
-    var width = 0, height = 0, size = 0
+    var width = 0,
+      height = 0,
+      size = 0;
     if (file) {
       var img = new Image();
       img.src = window.URL.createObjectURL(file);
@@ -386,35 +415,31 @@ function getSizeImg(file, url) {
         var _width = img.naturalWidth,
           _height = img.naturalHeight;
         window.URL.revokeObjectURL(img.src);
-        console.log(_width, _height)
-        height = _height
-        width = _width
-        size = file.size
+        console.log(_width, _height);
+        height = _height;
+        width = _width;
+        size = file.size;
         resolve({
           link_images: url,
 
           height: height,
           width: width,
           size: size,
-        })
-
+        });
       };
     }
-  })
-
-
+  });
 }
 
 export const uploadImgChat = function (store_code, customerId, files) {
-
   return async (dispatch) => {
-    var images = []
+    var images = [];
     for (let i = 0; i < files.length; i++) {
-      const fd = new FormData()
-      var _file = await compressed(files[i])
-      fd.append(`image`, _file)
+      const fd = new FormData();
+      var _file = await compressed(files[i]);
+      fd.append(`image`, _file);
       try {
-        var res = await uploadApi.upload(fd)
+        var res = await uploadApi.upload(fd);
 
         if (res.data.code == 400) {
           {
@@ -428,17 +453,15 @@ export const uploadImgChat = function (store_code, customerId, files) {
               },
             });
           }
-        }
-        else {
-          images.push(await getSizeImg(_file, res.data.data))
-
+        } else {
+          images.push(await getSizeImg(_file, res.data.data));
         }
         if (i == files.length - 1) {
-          var link_images = JSON.stringify(images)
+          var link_images = JSON.stringify(images);
           chatApi
             .postMessage(store_code, customerId, { link_images: link_images })
             .then((res) => {
-              console.log(link_images)
+              console.log(link_images);
               if (res.data.code !== 401)
                 if (res.data.code == 400) {
                   dispatch({
@@ -450,8 +473,7 @@ export const uploadImgChat = function (store_code, customerId, files) {
                       content: res.data.msg,
                     },
                   });
-                }
-                else {
+                } else {
                   dispatch({
                     type: Types.FETCH_ID_CHAT_USER,
                     data: {
@@ -463,7 +485,8 @@ export const uploadImgChat = function (store_code, customerId, files) {
                     },
                   });
                 }
-            }).catch(() => {
+            })
+            .catch(() => {
               dispatch({
                 type: Types.ALERT_UID_STATUS,
                 alert: {
@@ -473,11 +496,8 @@ export const uploadImgChat = function (store_code, customerId, files) {
                   content: res.data.msg,
                 },
               });
-            })
-
+            });
         }
-
-
       } catch (error) {
         dispatch({
           type: Types.ALERT_UID_STATUS,
@@ -489,9 +509,6 @@ export const uploadImgChat = function (store_code, customerId, files) {
           },
         });
       }
-
-
     }
-
   };
 };

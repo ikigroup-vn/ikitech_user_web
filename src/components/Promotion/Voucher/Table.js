@@ -61,9 +61,12 @@ class Table extends Component {
             <td>{data.end_time}</td>
 
             <td>{type_discount}</td>
+     
             <td>{data.value_limit_total == null ? null : new Intl.NumberFormat().format(data.value_limit_total.toString())} </td>
 
+      
 
+            <td>{data.used == null ? null : new Intl.NumberFormat().format(data.used.toString())} </td>
             <td>
           
                   {!isNaN(Number(set_limit_amount)) ? new Intl.NumberFormat().format(set_limit_amount.toString()) : set_limit_amount }
@@ -121,7 +124,8 @@ class Table extends Component {
               <th>Ngày bắt đầu</th>
               <th>Ngày kết thúc</th>
               <th>Loại giảm giá</th>
-              <th>Tối thiểu</th>
+              <th>Đơn đạt tối thiểu</th>
+              <th>SL đơn đã áp dụng</th>
               <th>Giới hạn</th>
 
 
