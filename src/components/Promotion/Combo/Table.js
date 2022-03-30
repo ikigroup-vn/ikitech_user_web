@@ -47,13 +47,12 @@ class Table extends Component {
             <td>{data.value_discount == null ? null : new Intl.NumberFormat().format(data.value_discount.toString())} </td>
 
             <td>
-           
-
-                {!isNaN(Number(set_limit_amount)) ? new Intl.NumberFormat().format(set_limit_amount.toString()) : set_limit_amount }
-
+                  {data.used}
+            </td>
+            <td>
                   {set_limit_amount}
             </td>
-
+          
 
             <td className="btn-voucher">
               <Link
@@ -105,6 +104,8 @@ class Table extends Component {
               <th>Ngày kết thúc</th>
               <th>Loại giảm giá</th>
               <th>Giá trị</th>
+
+              <th>SL đơn đã áp dụng</th>
               <th>Giới hạn Combo</th>
 
 

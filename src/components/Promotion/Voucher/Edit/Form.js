@@ -11,8 +11,9 @@ import CKEditor from "ckeditor4-react";
 import ModalUpload from "../ModalUpload"
 import * as Env from "../../../../ultis/default"
 import MomentInput from 'react-moment-input';
-import {formatNumber} from "../../../../ultis/helpers"
-import {isEmpty} from "../../../../ultis/helpers"
+import { formatNumber } from "../../../../ultis/helpers"
+import { isEmpty } from "../../../../ultis/helpers"
+import ConfimUpdateUsed from "../../Discount/Edit/ConfimUpdateUsed";
 
 class Form extends Component {
   constructor(props) {
@@ -38,7 +39,8 @@ class Form extends Component {
       displayError: "hide",
 
       isLoading: false,
-      loadCript: false
+      loadCript: false,
+      form: {}
     };
   }
   componentDidMount() {
@@ -74,7 +76,8 @@ class Form extends Component {
         txtStart: startTime,
         txtEnd: endTime,
         txtValue: voucher.value,
-        txtAmount: voucher.amount == null ? null : new Intl.NumberFormat().format(voucher.amount.toString()),
+        txtAmount: voucher.amount == null ? 0 : new Intl.NumberFormat().format(voucher.amount.toString()),
+        txtLastAmount: voucher.amount == null ? 0 : new Intl.NumberFormat().format(voucher.amount.toString()),
         listProducts: voucher.products,
         txtContent: voucher.description,
         image: voucher.image_url,
@@ -187,8 +190,7 @@ class Form extends Component {
 
     var state = this.state;
     var state = this.state;
-    if(state.txtValueDiscount == null || !isEmpty( state.txtValueDiscount))
-    {
+    if (state.txtValueDiscount == null || !isEmpty(state.txtValueDiscount)) {
       this.props.showError({
 
         type: Types.ALERT_UID_STATUS,
@@ -223,7 +225,7 @@ class Form extends Component {
     var form = {
       name: state.txtName,
       start_time: startTime == "Invalid date" ? null : startTime,
-      end_time: endTime== "Invalid date" ? null : endTime,
+      end_time: endTime == "Invalid date" ? null : endTime,
       amount: state.txtAmount == null ? state.txtAmount : formatNumber(state.txtAmount),
       product_ids: product_ids,
       description: state.txtContent,
@@ -252,7 +254,23 @@ class Form extends Component {
     if (form.product_ids == "") {
       delete form.product_ids
     }
-    this.props.updateVoucher(store_code, form, voucherId)
+
+
+
+    if (this.state.txtLastAmount != this.state.txtAmount && this.state.txtLastAmount != 0
+      && this.state.txtAmount != 0
+    ) {
+      this.setState({
+        form: form
+      })
+      window.$("#confimUpdateUsedModal").modal("show")
+    } else {
+      this.props.updateVoucher(store_code, form, voucherId)
+    }
+
+
+
+
   };
 
   goBack = (e) => {
@@ -260,6 +278,11 @@ class Form extends Component {
     var { history } = this.props;
     history.goBack();
   };
+
+  onOkUpdate = () => {
+    var { store_code, voucherId } = this.props
+    this.props.updateVoucher(store_code, this.state.form, voucherId)
+  }
 
   handleAddProduct = (product, id, type) => {
     console.log(product);
@@ -402,21 +425,21 @@ class Form extends Component {
                 <div class="form-group">
                   <label for="product_name">Thời gian bắt đầu</label>
                   {isLoading == true
-                ?
-                (<MomentInput
-                  defaultValue = {txtStart == "" || txtStart == null ? "" : moment(txtStart , "DD-MM-YYYY HH:mm")}
-                  min={moment()}
-                  format="DD-MM-YYYY HH:mm"
-                  options={true}
-                  enableInputClick={true}
-                  monthSelect={true}
-                  readOnly={true}
-                  translations={
-                    { DATE: "Ngày", TIME: "Giờ", SAVE: "Đóng", HOURS: "Giờ", MINUTES: "Phút" }
-                  }
-                  onSave={() => { }}
-                  onChange={this.onChangeStart}
-                />) : null}
+                    ?
+                    (<MomentInput
+                      defaultValue={txtStart == "" || txtStart == null ? "" : moment(txtStart, "DD-MM-YYYY HH:mm")}
+                      min={moment()}
+                      format="DD-MM-YYYY HH:mm"
+                      options={true}
+                      enableInputClick={true}
+                      monthSelect={true}
+                      readOnly={true}
+                      translations={
+                        { DATE: "Ngày", TIME: "Giờ", SAVE: "Đóng", HOURS: "Giờ", MINUTES: "Phút" }
+                      }
+                      onSave={() => { }}
+                      onChange={this.onChangeStart}
+                    />) : null}
                 </div>
 
               </div>
@@ -431,26 +454,26 @@ class Form extends Component {
                 <div class="form-group">
                   <label for="product_name">Thời gian kết thúc</label>
                   {isLoading == true
-                ?
-              (<MomentInput
+                    ?
+                    (<MomentInput
 
-                defaultValue = {txtEnd == "" || txtEnd == null ? "" : moment(txtEnd , "DD-MM-YYYY HH:mm")}
+                      defaultValue={txtEnd == "" || txtEnd == null ? "" : moment(txtEnd, "DD-MM-YYYY HH:mm")}
 
-                min={moment()}
-                format="DD-MM-YYYY HH:mm"
-                options={true}
-                enableInputClick={true}
-                monthSelect={true}
-                readOnly={true}
+                      min={moment()}
+                      format="DD-MM-YYYY HH:mm"
+                      options={true}
+                      enableInputClick={true}
+                      monthSelect={true}
+                      readOnly={true}
 
-                translations={
-                  { DATE: "Ngày", TIME: "Giờ", SAVE: "Đóng", HOURS: "Giờ", MINUTES: "Phút" }
-                }
-                onSave={() => { }}
-                onChange={this.onChangeEnd}
-              />)
-              : null
-            }
+                      translations={
+                        { DATE: "Ngày", TIME: "Giờ", SAVE: "Đóng", HOURS: "Giờ", MINUTES: "Phút" }
+                      }
+                      onSave={() => { }}
+                      onChange={this.onChangeEnd}
+                    />)
+                    : null
+                  }
                 </div>
 
 
@@ -606,7 +629,6 @@ class Form extends Component {
                 <a
                   style={{ marginLeft: "10px" }}
                   onClick={this.goBack}
-                  class="btn btn-warning"
                   class="btn btn-warning btn-icon-split  btn-sm"
                 >
                   <span class="icon text-white-50">
@@ -621,6 +643,7 @@ class Form extends Component {
         </form>
 
 
+        <ConfimUpdateUsed onOk={this.onOkUpdate} />
         <ModalUpload />
         <ModalListProduct
           vouchers={vouchers}

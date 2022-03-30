@@ -11,8 +11,9 @@ import CKEditor from "ckeditor4-react";
 import ModalUpload from "../ModalUpload"
 import * as Env from "../../../../ultis/default"
 import MomentInput from 'react-moment-input';
-import {formatNumber} from "../../../../ultis/helpers"
-import {isEmpty} from "../../../../ultis/helpers"
+import { formatNumber } from "../../../../ultis/helpers"
+import { isEmpty } from "../../../../ultis/helpers"
+import ConfimUpdateUsed from "../../Discount/Edit/ConfimUpdateUsed";
 
 class Form extends Component {
   constructor(props) {
@@ -59,6 +60,7 @@ class Form extends Component {
         txtStart: startTime,
         txtEnd: endTime,
         txtAmount: combo.amount == null ? null : new Intl.NumberFormat().format(combo.amount.toString()),
+        txtLastAmount: combo.amount == null ? null : new Intl.NumberFormat().format(combo.amount.toString()),
 
         txtValueDiscount: combo.value_discount == null ? null : new Intl.NumberFormat().format(combo.value_discount.toString()),
 
@@ -66,7 +68,8 @@ class Form extends Component {
         listProducts: combo.products_combo,
         image: combo.image_url,
         isLoading: true,
-        loadCript: true
+        loadCript: true,
+        form: {}
       });
     }
     if (this.props.image !== nextProps.image) {
@@ -167,8 +170,7 @@ class Form extends Component {
       return
     }
     var state = this.state;
-    if(state.txtValueDiscount == null || !isEmpty( state.txtValueDiscount))
-    {
+    if (state.txtValueDiscount == null || !isEmpty(state.txtValueDiscount)) {
       this.props.showError({
 
         type: Types.ALERT_UID_STATUS,
@@ -199,7 +201,7 @@ class Form extends Component {
       value_discount: state.txtValueDiscount == null ? state.txtValueDiscount : formatNumber(state.txtValueDiscount),
       name: state.txtName,
       start_time: startTime == "Invalid date" ? null : startTime,
-      end_time: endTime== "Invalid date" ? null : endTime,
+      end_time: endTime == "Invalid date" ? null : endTime,
       combo_products: combo_products,
       description: state.txtContent,
       image_url: state.image,
@@ -213,7 +215,18 @@ class Form extends Component {
       || (typeof amount != "undefined" && amount.replace(/ /g, '').length == 0))
       form.set_limit_amount = false
 
-    this.props.updateCombo(store_code, form, comboId)
+    if (this.state.txtLastAmount != this.state.txtAmount && this.state.txtLastAmount != 0
+      && this.state.txtAmount != 0
+    ) {
+      this.setState({
+        form: form
+      })
+      window.$("#confimUpdateUsedModal").modal("show")
+    } else {
+      this.props.updateCombo(store_code, form, comboId)
+    }
+
+
   };
 
   goBack = (e) => {
@@ -269,6 +282,10 @@ class Form extends Component {
     this.setState({ listProducts: products })
   }
 
+  onOkUpdate = () => {
+    var { store_code, comboId } = this.props
+    this.props.updateCombo(store_code, this.state.form, comboId)
+  }
 
   render() {
     var {
@@ -485,7 +502,6 @@ class Form extends Component {
                 <a
                   style={{ marginLeft: "10px" }}
                   onClick={this.goBack}
-                  class="btn btn-warning"
                   class="btn btn-warning btn-icon-split  btn-sm"
                 >
                   <span class="icon text-white-50">
@@ -500,6 +516,7 @@ class Form extends Component {
         </form>
 
 
+        <ConfimUpdateUsed onOk={this.onOkUpdate} />
         <ModalUpload />
         <ModalListProduct
           combo={combo}
