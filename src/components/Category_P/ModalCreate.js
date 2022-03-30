@@ -101,7 +101,7 @@ class ModalCreate extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" style={{background: "#d0873b"}} >
               <h4 class="modal-title">Thêm danh mục</h4>
 
               <button
@@ -120,9 +120,9 @@ class ModalCreate extends Component {
               method="post"
               id="createForm"
             >
-              <div class="modal-body">
+              <div class="modal-body" style={{padding:" 0 10px"}}>
                 <div class="form-group">
-                  <label for="product_name">Tên danh mục</label>
+                  <div style={{fontWeight: "bold"}} for="product_name">Tên danh mục</div>
                   <input
                     type="text"
                     class="form-control"
@@ -151,7 +151,7 @@ class ModalCreate extends Component {
                   </div>
                 </div>
                 <div class="form-group">
-                  <label for="product_name">Hình ảnh</label>
+                  <label for="product_name" style={{margin: 0}}>Hình ảnh</label>
                   <div className="file-loading">
                     <input
                       id="file-category-product"

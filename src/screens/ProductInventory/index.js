@@ -12,20 +12,18 @@ import ModalDelete from "../../components/Product/Delete/Modal"
 import ModalMultiDelete from "../../components/Product/Delete/MultiDelete"
 import ImportModal from "../../components/Product/Import/index"
 import NotAccess from "../../components/Partials/NotAccess";
-import Tiki from "../../components/Product/Ecomerce/Tiki";
 import { connect } from "react-redux";
 import Loading from "../Loading";
 import * as productAction from "../../actions/product";
 import * as XLSX from 'xlsx';
 import { randomString } from "../../ultis/helpers"
 import Table from "./Table";
+import { shallowEqual } from "../../ultis/shallowEqual";
 
 class ProductInventory extends Component {
 
   constructor(props) {
     super(props);
-
-    const bonusParam = "&check_inventory=true"
     this.state = {
       modal: {
         title: "",
@@ -44,8 +42,9 @@ class ProductInventory extends Component {
       importData: [],
       allow_skip_same_name: false,
       page: 1,
-      numPage: 20
-
+      numPage: 20,
+      listType: "0",
+      listProduct:""
     };
   }
 
@@ -62,19 +61,24 @@ class ProductInventory extends Component {
 
 
   }
+  onChangeType = (e) => {
+    var target = e.target;
+    var value = target.value;
+    this.setState({listType: value});
+
+  }
   onChangeSearch = (e) => {
     this.setState({ searchValue: e.target.value });
   };
   componentDidMount() {
     var { page } = this.props.match.params
     const branch_id = localStorage.getItem('branch_id');
-    var params = `&check_inventory=true`
 
     if (typeof page != "undefined" && page != null && page != "" && !isNaN(Number(page))) {
-      this.props.fetchAllProductV2(this.props.match.params.store_code, branch_id, page, params);
+      this.props.fetchAllProductV2(this.props.match.params.store_code, branch_id, page);
     }
     else {
-      this.props.fetchAllProductV2(this.props.match.params.store_code, branch_id, params);
+      this.props.fetchAllProductV2(this.props.match.params.store_code, branch_id);
     }
   }
 
@@ -95,7 +99,23 @@ class ProductInventory extends Component {
 
     }
   }
+  shouldComponentUpdate(nextProps,nextState){
+    if(!shallowEqual(nextState.listType,this.state.listType)){
+      if(nextState.listType == 1){
+        const listData = this.props.products.data.filter(item => item.check_inventory == true);
+        this.setState({listProduct:listData})
+      }else{
+        this.setState({listProduct:this.props.products.data})
+      }
+    }
+    return true
+  }
 
+  componentWillReceiveProps(nextProps){
+    if(!shallowEqual(nextProps.products,this.props.products)){
+      this.setState({listProduct:nextProps.products.data})
+    }
+  }
   handleDelCallBack = (modal) => {
     this.setState({ modal: modal });
   };
@@ -151,12 +171,13 @@ class ProductInventory extends Component {
   render() {
     if (this.props.auth) {
       var { products, allProductList } = this.props;
+      var {listProduct} = this.state
       var { store_code } = this.props.match.params
       var { searchValue, importData, allow_skip_same_name, page, numPage } = this.state
       var { insert, update, _delete, _import
         , _export, isShow, ecommerce } = this.state
 
-        const bonusParam = "&check_inventory=true"
+      const bonusParam = "&check_inventory=true"
 
       return (
         <div id="wrapper">
@@ -175,104 +196,15 @@ class ProductInventory extends Component {
                     <div class="container-fluid">
                       <div style={{ display: "flex", justifyContent: "space-between" }}>
                         <h4 className="h4 title_content mb-0 text-gray-800">
-                          Sản phẩm
+                          Kho hàng
                         </h4>
-
-
-                        <div style={{ display: "flex" }}>
-                          <div class={`dropdown ${ecommerce == true ? "show" : "hide"}`} style={{
-                            marginRight: "10px"
-                          }}>
-                            <button
-                              style={{
-
-                                border: "0px",
-                                color: "white",
-                                background: "cadetblue",
-                              }}
-                              class="btn btn-secondary dropdown-toggle"
-                              type="button"
-                              id="dropdownMenuButton"
-                              data-toggle="dropdown"
-                              aria-haspopup="true"
-                              aria-expanded="false"
-                            >
-                              Thương mại điện tử
-                            </button>
-                            <div class="dropdown-menu" style={{ width: "100%" }} aria-labelledby="dropdownMenuButton">
-
-
-
-                              <a
-                                data-toggle="modal"
-                                data-target="#showTiki"
-                                class="dropdown-item"
-                              >
-                                <img style={{ maxWidth: "25px", marginRight: "10px" }} src="https://chondeal247.com/wp-content/uploads/2020/11/icon-tiki.png" class="img-responsive" alt="Image" />
-                                <span>TIKI</span>
-                              </a>
-                              <a
-                                data-toggle="modal"
-                                data-target="#showSendo"
-                                class="dropdown-item"
-                              >
-                                <img style={{ maxWidth: "27px", marginRight: "10px" }} src="https://lucas.vn/wp-content/uploads/2019/10/logo-sendo.png" class="img-responsive" alt="Image" />
-                                <span>SENDO</span>                              </a>
-                              <a
-                                data-toggle="modal"
-                                data-target="#showShopee"
-                                class="dropdown-item"
-                              >
-                                <img style={{ maxWidth: "30px", marginRight: "10px" }} src="https://images.pngnice.com/download/2007/Shopee-Logo-PNG-File.png" class="img-responsive" alt="Image" />
-                                <span>SHOPEE</span>                              </a>
-
-                            </div>
-                          </div>
-                          <a
-                            style={{ marginRight: "10px" }}
-                            onClick={this.fetchAllListProduct}
-                            class={`btn btn-danger btn-icon-split btn-sm  ${_export == true ? "show" : "hide"}`}
-                          >
-                            <span class="icon text-white-50">
-                              <i class="fas fa-file-export"></i>
-                            </span>
-                            <span style={{ color: "white" }} class="text">Export Excel</span>
-                          </a>
-                          <a
-                            style={{ marginRight: "10px" }}
-                            onClick={this.showDialogImportExcel}
-                            class={`btn btn-primary btn-icon-split btn-sm  ${_import == true ? "show" : "hide"}`}
-                          >
-                            <span class="icon text-white-50">
-                              <i class="fas fa-file-import"></i>
-                            </span>
-                            <span style={{ color: "white" }} class="text">Import Excel</span>
-                          </a>
-                          <input id="file-excel-import" type="file" name="name" style={{ display: "none" }} onChange={this.onChangeExcel} />
-                          <Link
-                            to={`/product/create/${store_code}`}
-                            class={`btn btn-info btn-icon-split btn-sm ${insert == true ? "show" : "hide"}`}
-                          >
-                            <span class="icon text-white-50">
-                              <i class="fas fa-plus"></i>
-                            </span>
-                            <span class="text">Thêm sản phẩm</span>
-                          </Link>
-                        </div>
 
                       </div>
                       <br></br>
-                      <General products={products} />
                       <Alert
                         type={Types.ALERT_UID_STATUS}
                         alert={this.props.alert}
                       />
-
-
-
-
-
-
                       <div class="card shadow ">
 
 
@@ -309,7 +241,26 @@ class ProductInventory extends Component {
                               </p>
                             </form>
                             <div style={{ display: "flex" }}>
+                              <div style={{ display: "flex" }}>
+                                <span
+                                  style={{
+                                    margin: "20px 10px auto auto"
+                                  }}
+                                >Lọc sản phẩm</span>
+                                <select value={this.state.listType}                                   
+                                style={{
+                                    margin: "auto",
+                                    marginTop: "10px",
+                                    marginRight: "20px",
+                                    width: "180px",
+                                  }} name="txtDiscoutType" id="input" class="form-control" onChange={this.onChangeType} >
+                
+                                  <option value="0" selected>Tất cả sản phẩm</option>
+                                  <option value="1">Sản phẩm được theo dõi</option>
 
+                                </select>
+
+                              </div>
                               <div style={{ display: "flex" }}>
                                 <span
                                   style={{
@@ -344,9 +295,9 @@ class ProductInventory extends Component {
 
 
                         <div class="card-body">
-                          <Table insert={insert} _delete={_delete} update={update} page={page} handleDelCallBack={this.handleDelCallBack} handleMultiDelCallBack={this.handleMultiDelCallBack} store_code={store_code} products={products} />
+                          <Table insert={insert} _delete={_delete} update={update} page={page} handleDelCallBack={this.handleDelCallBack} handleMultiDelCallBack={this.handleMultiDelCallBack} store_code={store_code} products={products} listProductSelect = {listProduct} />
                           <Pagination
-                          bonusParam={bonusParam}
+                            bonusParam={bonusParam}
                             limit={numPage}
                             searchValue={searchValue}
                             passNumPage={this.passNumPage} store_code={store_code} products={products} />
@@ -389,10 +340,6 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
-
-    fetchAllProduct: (store_code, page, params) => {
-      dispatch(productAction.fetchAllProduct(store_code, page, params));
-    },
     fetchAllProductV2: (store_code, branch_id, page, params) => {
       dispatch(productAction.fetchAllProductV2(store_code, branch_id, page, params));
     },

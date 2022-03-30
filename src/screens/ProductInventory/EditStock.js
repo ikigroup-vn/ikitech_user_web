@@ -11,7 +11,8 @@ class EditStock extends Component {
             nameElement:"",
             nameSubElement:"",
             idProduct:"",
-            NameDistribute:""
+            NameDistribute:"",
+            productInven:""
         }
     }
     onChange = (e) =>{
@@ -42,6 +43,16 @@ class EditStock extends Component {
         this.props.editStockCallBack(formdata)
         
     }
+    handleReset = () =>{
+        this.setState({            
+        cost_of_capital:"",
+        quantity_in_stock:"",
+        nameElement:"",
+        nameSubElement:"",
+        idProduct:"",
+        NameDistribute:"",
+        productInven:""})
+    }
 
     componentWillReceiveProps(nextProps,nextState) {
         if (
@@ -66,14 +77,21 @@ class EditStock extends Component {
                 nameElement:nextProps.modalElement.element.name,
             })
         }
+        if(!shallowEqual(nextProps.modalProduct,this.props.modalProduct)){
+            this.setState({
+                cost_of_capital: nextProps.modalProduct.data.inventory?.main_cost_of_capital,
+                quantity_in_stock:nextProps.modalProduct.data.inventory?.main_stock,
+                idProduct:nextProps.modalProduct.data.id
+            })
+        }
 
       }
 
     render() {
         const {cost_of_capital,quantity_in_stock} = this.state
         return (
-            <div class="modal" id="myModal">
-                <div class="modal-dialog">
+            <div class="modal" id="myModal" >
+                <div class="modal-dialog" >
                     <div class="modal-content">
 
                         <div class="modal-body">
@@ -106,7 +124,7 @@ class EditStock extends Component {
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-info" onClick={() =>this.handleEditStock()}  data-dismiss="modal"  data-toggle="modal" data-target="#ModalAlert">Lưu</button>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal" >Đóng</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal" onClick={this.handleReset} >Đóng</button>
                         </div>
 
                     </div>

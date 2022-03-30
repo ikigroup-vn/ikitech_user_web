@@ -48,13 +48,7 @@ export const ikipos_menu = [
                         exact: true,
                         to: "/product/index",
                     },
-                    {
-                        class: "customer_config_point",
-                        display: "hide",
-                        name: "Kho hàng",
-                        exact: true,
-                        to: "/product_inventory/index",
-                    },
+
                     // {
                     //     class: "customer_config_point",
                     //     display: "hide",
@@ -101,6 +95,13 @@ export const ikipos_menu = [
                 icon: "fas fa-store",
                 open: "inventory",
                 children: [
+                    {
+                        class: "customer_config_point",
+                        display: "hide",
+                        name: "Tồn kho",
+                        exact: true,
+                        to: "/product_inventory/index",
+                    },
                     {
                         class: "customer_list",
                         display: "hide",

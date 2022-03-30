@@ -1,10 +1,12 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import getChannel, { IKITECH } from "../../ultis/channel";
 import { filter_arr, format } from "../../ultis/helpers";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import EditStock from "./EditStock";
 import ShowData from "./ShowData";
+import * as productAction from "../../actions/product";
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -20,6 +22,7 @@ class Table extends Component {
         NameElement: "",
         NameDistribute: ""
       },
+      modalProduct:"",
       formData: "",
     };
   }
@@ -42,8 +45,10 @@ class Table extends Component {
     this.setState({ modalElement: modalElement })
   }
   handleCallBackSubElement = (modalSub) => {
-    console.log("modalSub", modalSub)
     this.setState({ modalSub: modalSub })
+  }
+  handleCallBackProduct = (data) =>{
+    this.setState({modalProduct:data})
   }
 
   checkSelected = (id) => {
@@ -60,9 +65,19 @@ class Table extends Component {
     }
   };
   componentWillReceiveProps(nextProps) {
-    if (!shallowEqual(nextProps.products.data, this.props.products.data)) {
+    if (!shallowEqual(nextProps.listProductSelect, this.props.listProductSelect)) {
       this.setState({ selected: [] });
     }
+  }
+
+  shouldComponentUpdate(nextProps,nextState){
+    if(!shallowEqual(nextState.formData,this.state.formData)){
+      const data = nextState.formData
+      const branch_id = localStorage.getItem("branch_id")
+      const {store_code} = this.props
+      this.props.editStock(store_code,branch_id ,data,1)
+    }
+    return true
   }
   onChangeSelected = (e, id) => {
     var { checked } = e.target;
@@ -137,7 +152,7 @@ class Table extends Component {
             product_discount={product_discount}
             update={update} insert={insert} checked={checked} page={page} status={status} status_name={status_name} status_stock={status_stock}
             data={data} per_page={per_page} current_page={current_page} index={index} store_code={store_code} discount={discount}
-            handleCallBackElement={this.handleCallBackElement} handleCallBackSubElement={this.handleCallBackSubElement} />
+            handleCallBackElement={this.handleCallBackElement} handleCallBackSubElement={this.handleCallBackSubElement} handleCallBackProduct = {this.handleCallBackProduct} />
         );
       });
     } else {
@@ -147,10 +162,10 @@ class Table extends Component {
   };
   onChangeSelectAll = (e) => {
     var checked = e.target.checked;
-    var { products } = this.props;
+    var { products,listProductSelect } = this.props;
     var _selected = [...this.state.selected];
 
-    var listProduct = filter_arr(products.data);
+    var listProduct = filter_arr(listProductSelect);
 
     if (listProduct.length > 0) {
       if (checked == false) {
@@ -165,12 +180,12 @@ class Table extends Component {
     }
   };
   render() {
-    var { products, store_code } = this.props;
-    var { selected, modalSub, modalElement, formData } = this.state;
+    var { products, store_code,listProductSelect } = this.props;
+    var { selected, modalSub, modalElement, formData,modalProduct } = this.state;
     var per_page = products.per_page;
     var current_page = products.current_page;
 
-    var listProduct = filter_arr(products.data);
+    var listProduct = filter_arr(listProductSelect);
     var _selected =
       selected.length > 0 && selected.length == listProduct.length
         ? true
@@ -197,29 +212,28 @@ class Table extends Component {
         >
           <thead>
             <tr>
-              <th
-                className={_delete == true ? "show" : "hide"}              >
-                <input
-                  type="checkbox"
-                  checked={_selected}
-                  onChange={this.onChangeSelectAll}
-                />
-              </th>
               <th>STT</th>
-              <th>Mã SKU</th>
-
-              <th>Tên sản phẩm</th>
-
+              <th>Hình ảnh</th>
+              <th style={{width: "36%"}}>Tên sản phẩm</th>
+              <th>Giá vốn</th>
               <th>Tồn kho</th>
+              <th>Hành động</th>
             </tr>
           </thead>
           <tbody>{this.showData(listProduct, per_page, current_page)}</tbody>
         </table>
-        <EditStock store_code={store_code} modalSub={modalSub} modalElement={modalElement} editStockCallBack={this.editStockCallBack} />
+        <EditStock store_code={store_code} modalSub={modalSub} modalElement={modalElement} modalProduct = {modalProduct} editStockCallBack={this.editStockCallBack} />
 
       </div>
     );
   }
 }
 
-export default Table;
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    editStock: (store_code,branch_id,data,page) =>{
+      dispatch(productAction.editStock(store_code, branch_id, data,page))
+    }
+  };
+};
+export default connect(null,mapDispatchToProps) (Table);

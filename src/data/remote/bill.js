@@ -1,13 +1,13 @@
 import callApi from "../../ultis/apiCaller";
 
-export const fetchAllBill = (store_code , page=1 , params , params_agency) => {
+export const fetchAllBill = (store_code , page=1 ,branch_id, params , params_agency) => {
   if(params_agency != null)
   {
     return params ? callApi(`/store/${store_code}/orders?page=${page}${params}${params_agency}`, "get", null) 
     :callApi(`/store/${store_code}/orders?page=${page}${params_agency}`, "get", null)
   }
-  return params ? callApi(`/store/${store_code}/orders?page=${page}${params}`, "get", null) 
-  :callApi(`/store/${store_code}/orders?page=${page}`, "get", null)
+  return params ? callApi(`/store/${store_code}/orders?page=${page}&branch_id=${branch_id}${params}`, "get", null) 
+  :callApi(`/store/${store_code}/orders?page=${page}&branch_id=${branch_id}`, "get", null)
 };
 
 export const fetchBillId = (store_code  , order_code) => {
