@@ -63,6 +63,18 @@ class PostOrder extends Component {
         }
     }
 
+     debounce = (fn, delay)  => {
+        var timer = null;
+        return function() {
+          var context = this,
+            args = arguments;
+          clearTimeout(timer);
+          timer = setTimeout(function() {
+            fn.apply(context, args);
+          }, delay);
+        };
+      }
+    
     componentDidMount() {
         const branch_id = localStorage.getItem('branch_id')
         const limit = this.state.numPage
@@ -386,7 +398,12 @@ class PostOrder extends Component {
                                             </div>
                                             <div class="form-group" style={{ position: "relative" }} >
                                                 <i class='fas fa-pencil-alt' style={{ position: "absolute", top: "11px", left: "6px" }}></i>
-                                                <input class="form-control" rows="5" id="comment" placeholder='Thêm ghi chú' style={{ paddingLeft: "30px", border: 0, borderRadius: 0, borderBottom: "2px solid gray" }} value={this.state.note} data-toggle="modal" data-target="#modalNote"></input>
+                                                <input class="form-control" rows="5" id="comment" placeholder='Thêm ghi chú' 
+                                                style={{ paddingLeft: "30px", border: 0, borderRadius: 0, borderBottom: "2px solid gray" }} 
+                                                value={this.state.note} 
+                                                hj
+                                                // data-toggle="modal" data-target="#modalNote"
+                                                ></input>
                                             </div>
 
                                         </div>
