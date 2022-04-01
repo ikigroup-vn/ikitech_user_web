@@ -36,6 +36,14 @@ class Sidebar extends Component {
         window.$(`.promotion-collapse`).trigger("click");
     }
     if (
+      location.includes("/shift") ||
+      location.includes("/work_schedule") ||
+      location.includes("/work_location")
+    ) {
+      if (window.$(".timekeeping-collapse").attr("aria-expanded") == "false")
+        window.$(`.timekeeping-collapse`).trigger("click");
+    }
+    if (
       location.includes("/store_address") ||
       location.includes("/shipment") ||
       location.includes("/payment") ||

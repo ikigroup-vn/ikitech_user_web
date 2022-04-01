@@ -1,17 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import * as comboAction from "../../../../actions/combo";
+import * as shiftAction from "../../../../actions/shift";
 
 class Modal extends Component {
   onSave = (e) => {
     e.preventDefault();
     window.$(".modal").modal("hide");
-    var { id, store_code } = this.props.modal;
-    this.props.destroyCombo(store_code, id);
+    var { id, store_code, branch_id } = this.props.modal;
+    this.props.destroyShift(store_code, branch_id, id);
   };
 
   render() {
     var { modal } = this.props;
+
     return (
       <div
         class="modal fade"
@@ -43,7 +44,8 @@ class Modal extends Component {
               <div class="modal-body">
                 <input type="hidden" name="remove_id_store" />
                 <div class="alert-remove"></div>
-                Bạn có muốn xóa {modal.table} : {modal.name}
+                <h3>Thông báo!</h3>
+                Bạn có chắc muốn xóa {modal.table} này không?
               </div>
               <div class="modal-footer">
                 <button
@@ -67,8 +69,8 @@ class Modal extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    destroyCombo: (store_code, id) => {
-      dispatch(comboAction.destroyCombo(store_code, id));
+    destroyShift: (store_code, branch_id, id) => {
+      dispatch(shiftAction.destroyShift(store_code, branch_id, id));
     },
   };
 };

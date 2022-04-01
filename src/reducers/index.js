@@ -40,6 +40,7 @@ import { importStockReducers } from "./ImportStock";
 import { posReducers } from "./pos_order";
 import { branchReducers } from "./branch";
 import { revenueExpendituresReducers } from "./revenue_expenditures/index";
+import { shiftReducers } from "./shift/index";
 
 const appReducers = combineReducers({
   authReducers,
@@ -84,6 +85,7 @@ const appReducers = combineReducers({
   posReducers,
 
   revenueExpendituresReducers,
+  shiftReducers,
 });
 
 export default appReducers;

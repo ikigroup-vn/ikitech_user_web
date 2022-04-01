@@ -476,7 +476,7 @@ class ModalExpenditures extends Component {
                           additional={{
                             page: 1,
                           }}
-                          debounceTimeout={300}
+                          debounceTimeout={500}
                           isClearable
                           isSearchable
                         />

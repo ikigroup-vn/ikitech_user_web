@@ -1,0 +1,12 @@
+.rbc-month-view {
+    height: 100vh !important;
+}
+.rbc-calendar {
+    min-height: 580px !important;
+}
+.rbc-allday-cell {
+    display: none !important;
+  }
+  .rbc-toolbar .rbc-toolbar-label{
+      text-transform: uppercase !important;
+  }

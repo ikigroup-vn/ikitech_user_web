@@ -209,6 +209,47 @@ export const ikitech_menu = [
           },
         ],
       },
+      {
+        name: "Chấm công",
+        icon: "fa fa-calendar",
+
+        open: "promotion",
+        // open: "timekeeping",
+
+        children: [
+          {
+            name: "Ca làm việc",
+            class: "promotion_discount_list",
+            display: "hide",
+            icon: "fas fa-clock-nin",
+            exact: true,
+            to: "/shift",
+
+            // class: "timekeeping_shift",
+          },
+          {
+            class: "promotion_voucher_list",
+
+            name: "Lịch làm việc",
+            // class: "timekeeping_work_schedule",
+            display: "hide",
+            icon: "fas fa-fw fa-calendar-days",
+            exact: true,
+            to: "/calendar_shift",
+          },
+          {
+            class: "promotion_combo_list",
+
+            name: "Địa điểm làm việc",
+            // class: "timekeeping_work_location",
+            display: "hide",
+            icon: "fas fa-fw fa-location-dot",
+
+            exact: true,
+            to: "/work_location",
+          },
+        ],
+      },
 
       {
         name: "Cài đặt",
