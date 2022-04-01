@@ -431,40 +431,20 @@ export const updateInfoCart = (store_code, branch_id,id,data) => {
           type: Types.SHOW_LOADING,
           loading : "hide"
         })
-        PosApi
-          .fetchInfoOneCart(store_code,branch_id,id)
-          .then((res) => {
-            if(res.data.code !== 401)
-
-            dispatch({
-              type: Types.FETCH_LIST_CART_ITEM,
-              data: res.data.data,
-            });
-            dispatch({
-              type: Types.ALERT_UID_STATUS,
-              alert: {
-                type: "success",
-                title: "Thành công ",
-                disable: "show",
-                content: res.data.msg,
-              },
-            });
-          })
-          .catch(function (error) {
-            dispatch({
-              type: Types.SHOW_LOADING,
-              loading: "hide"
-            })
-            dispatch({
-              type: Types.ALERT_UID_STATUS,
-              alert: {
-                type: "danger",
-                title: "Lỗi",
-                disable: "show",
-                content: error.response.data.msg,
-              },
-            });
-          });
+        
+        dispatch({
+          type: Types.FETCH_LIST_CART_ITEM,
+          data: res.data.data,
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
       })
       .catch(function (error) {
         dispatch({
