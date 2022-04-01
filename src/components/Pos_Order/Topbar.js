@@ -10,6 +10,7 @@ import ModalBranch from './ModalBranch'
 import ModalKeyboard from './ModalKeyboard'
 import ModalDelete from './ModalDelete'
 import * as branchAction from "../../actions/branch"
+import { removeSignNumber } from '../../ultis/helpers'
 
 class Topbar extends Component {
     constructor(props) {
@@ -37,7 +38,7 @@ class Topbar extends Component {
             if (nextProps.branchStore != null && nextProps.branchStore.length > 0) {
 
                 var branch_id = localStorage.getItem("branch_id")
-        
+
 
                 if (branch_id != null) {
                     this.setState({ branchId: branch_id })
@@ -92,28 +93,33 @@ class Topbar extends Component {
         this.setState({ selectTap: -1, idCart: idCart })
     }
     handleCreateTab = () => {
+
+
+        var nextNum = 1;
+
         if (this.props.listPos.length > 0) {
-            const index = this.props.listPos[0].name
-            let result = index.substring(index.length - 1);
-            var nameLaster = parseInt(result) + 1
-            const namePos = `Đơn hàng ${nameLaster}`
-
-            const nameTab = {
-                name: namePos
+            var listNum = [];
+            for (const pos of this.props.listPos) {
+                var ret = Number((pos['name']).match(/\d+$/));
+                ret = removeSignNumber(ret)
+                listNum.push(ret);
             }
-            const { store_code } = this.props
-            const branch_id = localStorage.getItem("branch_id")
-            this.props.createOneTab(store_code, branch_id, nameTab)
 
-        } else {
-            const namePos = `Đơn hàng 1`
-            const nameTab = {
-                name: namePos
+
+            console.log(listNum)
+            while (listNum.includes(nextNum)) {
+                nextNum = nextNum + 1;
             }
-            const { store_code } = this.props
-            const branch_id = localStorage.getItem("branch_id")
-            this.props.createOneTab(store_code, branch_id, nameTab)
         }
+
+        const namePos = `Hóa đơn ${nextNum}`
+        const branch_id = localStorage.getItem("branch_id")
+        const nameTab = {
+            name: namePos
+        }
+        const { store_code } = this.props
+        this.props.createOneTab(store_code, branch_id, nameTab)
+
 
     }
     handleChooseTab = (id, index) => {
@@ -161,7 +167,7 @@ class Topbar extends Component {
         this.props.changeBranch(selectedBranch)
 
 
-         window.location.reload();
+        window.location.reload();
     }
 
 
@@ -203,7 +209,11 @@ class Topbar extends Component {
                                 <>
                                     <li className={this.state.selectTap === -1 ? "activess nav-item" : 'nav-item'} style={{ display: "flex", alignItems: "center", margin: "0 7px", backgroundColor: "rgb(174 61 52)", color: "white", padding: "8px 10px", borderRadius: "5px" }} >
                                         <div className='tab-item' onClick={() => this.handleChooseTab1(listPos[0].id)} style={{ cursor: "pointer", marginRight: "5px" }}>{listPos[0].name}</div>
-                                        <i class='fa fa-window-close' onClick={() => this.handleDelete(listPos[0].id)} data-toggle="modal" data-target="#removeModal"></i>
+                                        {listPos.length > 1 && <i class='fa fa-window-close'
+                                            onClick={() => this.handleDelete(listPos[0].id)}
+                                            data-toggle="modal" data-target="#removeModal"
+                                        ></i>
+                                        }
                                     </li >
                                     {
                                         listPos.slice(1, listPos.length).map((item, index) => {
