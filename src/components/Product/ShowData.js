@@ -4,7 +4,7 @@ import { format, formatNumber } from '../../ultis/helpers'
 import * as inventoryAction from '../../actions/inventory'
 import { connect } from 'react-redux';
 import getChannel, { IKITECH } from '../../ultis/channel';
-
+import * as Env from "../../ultis/default"
 class ShowData extends Component {
     constructor(props) {
         super(props)
@@ -142,7 +142,9 @@ class ShowData extends Component {
                         />
                     </td>
                     <td>{per_page * (current_page - 1) + (index + 1)}</td>
-
+                    <td>
+                        <img src= {data.images.length >0?data.images[0].image_url : Env.IMG_NOT_FOUND}className="img-responsive" alt="Image" style={{ width:"100%" ,height:"59px",background: "#0000000d"}}  />
+                    </td>
                     <td>{data.sku}</td>
 
                     <td>
@@ -231,29 +233,6 @@ class ShowData extends Component {
                     </td>}
 
 
-
-                    <td
-                        className={
-                            status_stock == -2 || status_stock == -1 ? "show" : "hide"
-                        }
-                    >
-                        {" "}
-                        <h5>
-                            <span
-                                class={`badge badge-${status_stock == -2 ? "danger" : "success"
-                                    }`}
-                            >
-                                {status_stock == -2 ? "Hết hàng" : "Vô hạn"}
-                            </span>
-                        </h5>
-                    </td>
-                    <td
-                        className={
-                            status_stock != -2 && status_stock != -1 ? "show" : "hide"
-                        }
-                    >
-                        {new Intl.NumberFormat().format(status_stock.toString())}
-                    </td>
                     {getChannel() == IKITECH && <td>{data.view}</td>}
                     {getChannel() == IKITECH && <td>{data.likes}</td>}
 

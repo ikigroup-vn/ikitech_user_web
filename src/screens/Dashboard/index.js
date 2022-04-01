@@ -35,13 +35,14 @@ class Dashboard extends Component {
   componentDidMount(){
     var idBranch = localStorage.getItem("branch_id")
     var { store_code } = this.props.match.params
-    if (typeof store_code != "undefined" && store_code != null && idBranch != null && typeof idBranch != "undefined" && idBranch != "") {
+      console.log("aaaaaaaaaaaaaa",idBranch)
       var date = helper.getDateForChartMonth()
-      this.props.fetchDataId(store_code)
-      this.props.fetchTopTenProduct(store_code,idBranch, `?date_from=${date.from}&date_to=${date.to}`)
-      this.props.fetchOverview(store_code,idBranch, `?date_from=${date.from}&date_to=${date.to}`)
-      this.props.fetchAllCollaborator(store_code);
-    }
+      if(idBranch != ""){
+        this.props.fetchDataId(store_code)
+        this.props.fetchTopTenProduct(store_code,idBranch, `?date_from=${date.from}&date_to=${date.to}`)
+        this.props.fetchOverview(store_code,idBranch, `?date_from=${date.from}&date_to=${date.to}`)
+        this.props.fetchAllCollaborator(store_code);
+      }
   
   }
 
@@ -53,16 +54,19 @@ class Dashboard extends Component {
       var isShow = permissions.report_view
       this.setState({ isLoading: true, isShow })
     }
-
     var { store_code } = this.props.match.params
-    if(!shallowEqual(nextProps.currentBranch,this.props.currentBranch) && nextProps.currentBranch != null && this.props.currentBranch !== null && typeof this.props.currentBranch !== "undefined"){
+
+    if(!shallowEqual(nextProps.currentBranch,this.props.currentBranch) ){
       if (typeof store_code != "undefined" || store_code != null) {
-        var date = helper.getDateForChartMonth()
-        var idBranch = nextProps.currentBranch.id
-        this.props.fetchDataId(store_code)
-        this.props.fetchTopTenProduct(store_code,idBranch, `?date_from=${date.from}&date_to=${date.to}`)
-        this.props.fetchOverview(store_code,idBranch, `?date_from=${date.from}&date_to=${date.to}`)
-        this.props.fetchAllCollaborator(store_code);
+        const idBranch = nextProps.currentBranch?.id
+        if(typeof nextProps.currentBranch !== "undefined"){
+          console.log("ccccccccccccc",nextProps.currentBranch)
+          var date = helper.getDateForChartMonth()
+          this.props.fetchDataId(store_code)
+          this.props.fetchTopTenProduct(store_code,idBranch, `?date_from=${date.from}&date_to=${date.to}`)
+          this.props.fetchOverview(store_code,idBranch, `?date_from=${date.from}&date_to=${date.to}`)
+          this.props.fetchAllCollaborator(store_code);
+        }  
       }
     }
 

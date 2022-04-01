@@ -8,6 +8,7 @@ import * as Types from "../../constants/ActionType";
 import * as inventoryAction from "../../actions/inventory"
 import { Link } from 'react-router-dom';
 import Pagination from '../../components/Inventory/Pagination';
+import moment from "moment";
 
 
 class Inventory extends Component {
@@ -38,11 +39,14 @@ class Inventory extends Component {
         var result = null
         if (listInventory) {
             result = listInventory.map((item, index) => {
+                var time =  moment(item.created_at, "YYYY-MM-DD HH:mm:ss").format(
+                    "DD-MM-YYYY"
+                  );
                 return (
                     <tr>
                         <td>{index + 1}</td>
                         <td>{item.code}</td>
-                        <td>{item.branch.name}</td>
+                        <td>{time}</td>
                         <td>{item.reality_exist}</td>
                         <td>{item.existing_branch}</td>
                         <td>{item.deviant}</td>
@@ -84,8 +88,9 @@ class Inventory extends Component {
                                     alert={this.props.alert}
                                 />
                                 <div
-                                    style={{ display: "flex", justifyContent: "flex-end" }}
+                                    style={{ display: "flex", justifyContent: "space-between" }}
                                 >
+                                    <h4 className='title_content text-primary'>Phiếu kiểm kho</h4>
                                     <Link to={`/inventory/create/${store_code}`} class="btn btn-primary btn-sm" >
                                         <i class="fa fa-plus"></i> Tạo phiếu kiểm kho
                                     </Link>
@@ -129,7 +134,7 @@ class Inventory extends Component {
                                                     <tr>
                                                         <th>STT</th>
                                                         <th>Mã phiếu</th>
-                                                        <th>Tên chi nhánh</th>
+                                                        <th>Thời gian</th>
                                                         <th>Tồn thực tế</th>
                                                         <th>Tồn chi nhánh</th>
                                                         <th>Chênh lệch</th>

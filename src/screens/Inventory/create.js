@@ -5,23 +5,23 @@ import Topbar from '../../components/Partials/Topbar';
 import { shallowEqual } from '../../ultis/shallowEqual';
 import * as Types from "../../constants/ActionType";
 import Alert from '../../components/Partials/Alert';
-import Pagination from '../../components/ProductAgency/Pagination';
 import * as productAction from "../../actions/product";
 import CardProduct from '../../components/Inventory/CardProduct';
 import ListInventorySheet from '../../components/Inventory/ListInventory'
 import ModalDetail from '../../components/Inventory/ModalDetail';
 import * as inventoryAction from "../../actions/inventory"
 import history from '../../history';
+import Paginations from '../../components/Inventory/Paginations';
 class CreateInventory extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            change:false,
+            change: false,
             listInventory: [],
             reality_exist_total: 0,
-            existing_branch:0,
-            deviant_total:0,
-            note:"",
+            existing_branch: 0,
+            deviant_total: 0,
+            note: "",
 
             infoProduct: {
                 inventoryProduct: "",
@@ -43,20 +43,20 @@ class CreateInventory extends Component {
     shouldComponentUpdate(nextProps, nextState) {
         var exist_branch = 0
         var reality_total = 0
-        if(nextState.change !== this.state.change){
-            nextState.listInventory.forEach((item) =>{
+        if (nextState.change !== this.state.change) {
+            nextState.listInventory.forEach((item) => {
                 exist_branch = exist_branch + item.stock
                 reality_total = parseInt(reality_total) + parseInt(item.reality_exist)
             })
-            this.setState({existing_branch:exist_branch,deviant_total:nextState.reality_exist_total - exist_branch,reality_exist_total : reality_total})
+            this.setState({ existing_branch: exist_branch, deviant_total: nextState.reality_exist_total - exist_branch, reality_exist_total: reality_total })
         }
-        if(!shallowEqual(this.state.listInventory,nextState.listInventory) || !shallowEqual(nextState.reality_exist_total,this.state.reality_exist_total)){
+        if (!shallowEqual(this.state.listInventory, nextState.listInventory) || !shallowEqual(nextState.reality_exist_total, this.state.reality_exist_total)) {
 
-            nextState.listInventory.forEach((item) =>{
+            nextState.listInventory.forEach((item) => {
                 exist_branch = exist_branch + item.stock
             })
-            console.log("reality_exist_total",nextState.reality_exist_total)
-            this.setState({existing_branch:exist_branch,deviant_total:nextState.reality_exist_total - exist_branch})
+            console.log("reality_exist_total", nextState.reality_exist_total)
+            this.setState({ existing_branch: exist_branch, deviant_total: nextState.reality_exist_total - exist_branch })
         }
 
         return true
@@ -70,37 +70,37 @@ class CreateInventory extends Component {
     }
     handleCallbackPushProduct = (modal) => {
         const index_element = this.state.listInventory.map(e => e.element_id).indexOf(modal.element_id)
-        if(index_element <0){
+        if (index_element < 0) {
             this.setState({ listInventory: [...this.state.listInventory, modal] })
         }
     }
-    handleCallbackQuantity = (modal) =>{
+    handleCallbackQuantity = (modal) => {
         var reality_total = 0
-        this.setState({reality_exist_total:modal.currentQuantity})
+        this.setState({ reality_exist_total: modal.currentQuantity })
         const newInventory = this.state.listInventory
         const index = newInventory.map(e => e.element_id).indexOf(modal.idElement)
-        if( newInventory[index] != null) {
+        if (newInventory[index] != null) {
             newInventory[index].reality_exist = modal.currentQuantity
-            console.log("newInventory",newInventory)
-            newInventory.forEach((item) =>{
+            console.log("newInventory", newInventory)
+            newInventory.forEach((item) => {
                 reality_total = parseInt(reality_total) + parseInt(item.reality_exist)
             })
-            this.setState({ listInventory:newInventory, reality_exist_total:reality_total})    
+            this.setState({ listInventory: newInventory, reality_exist_total: reality_total })
         }
-               
+
     }
 
-    handleDelete = (modal) =>{
-        this.setState({change:!this.state.change})
+    handleDelete = (modal) => {
+        this.setState({ change: !this.state.change })
         const newInventory = this.state.listInventory
         const index = this.state.listInventory.map(e => e.element_id).indexOf(modal.idElement)
         newInventory.splice(index, 1)
-        this.setState({listInventory:newInventory})
+        this.setState({ listInventory: newInventory })
     }
 
 
     CreateSheetInventory = () => {
-        const {store_code} = this.props.match.params
+        const { store_code } = this.props.match.params
         const branch_id = localStorage.getItem('branch_id')
         const formData = {
             note: this.state.note,
@@ -115,15 +115,15 @@ class CreateInventory extends Component {
                     }
                 })
         }
-        this.props.createInventorys(store_code,branch_id,formData)
+        this.props.createInventorys(store_code, branch_id, formData)
         history.goBack()
     }
     onChangeSearch = (e) => {
         this.setState({ searchValue: e.target.value });
     };
 
-    onChange = (e) =>{
-        this.setState({note:e.target.value})
+    onChange = (e) => {
+        this.setState({ note: e.target.value })
     }
     handleOnChange = (e) => {
         var name = e.target.name
@@ -151,7 +151,8 @@ class CreateInventory extends Component {
 
     render() {
         var { store_code } = this.props.match.params
-        var { searchValue, numPage, listInventory,existing_branch,reality_exist_total } = this.state
+        var { searchValue, numPage, listInventory, existing_branch, reality_exist_total } = this.state
+        const { products } = this.props
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
@@ -168,7 +169,7 @@ class CreateInventory extends Component {
                                             </div>
 
                                             <div className='card-bodys' style={{ width: "0 10px", height: "380px", overflowY: "auto" }}>
-                                                <ListInventorySheet store_code={store_code} listInventory={listInventory} handleCallbackQuantity={this.handleCallbackQuantity} handleDelete = {this.handleDelete} />
+                                                <ListInventorySheet store_code={store_code} listInventory={listInventory} handleCallbackQuantity={this.handleCallbackQuantity} handleDelete={this.handleDelete} />
                                             </div>
                                             <div className='voucher-input' style={{ margin: "10px 0px" }}>
 
@@ -191,7 +192,7 @@ class CreateInventory extends Component {
                                             </div>
                                             <div class="form-group">
                                                 <label for="comment">Thêm ghi chú:</label>
-                                                <textarea class="form-control" rows="5" id="comment" style={{height:"50px"}} onChange={this.onChange}></textarea>
+                                                <textarea class="form-control" rows="5" id="comment" style={{ height: "50px" }} onChange={this.onChange}></textarea>
                                             </div>
                                             <button className='btn btn-danger' style={{ marginTop: "20px" }} onClick={() => this.CreateSheetInventory()}>Tạo phiếu kiểm</button>
                                         </div>
@@ -212,7 +213,7 @@ class CreateInventory extends Component {
                                                             value={searchValue}
                                                             onChange={this.onChangeSearch}
                                                             class="form-control"
-                                                            placeholder="Tìm mã đơn, tên, SĐT"
+                                                            placeholder="Tìm kiếm sản phẩm"
                                                         />
                                                         <div class="input-group-append">
                                                             <button
@@ -226,15 +227,15 @@ class CreateInventory extends Component {
 
                                                     </div>
                                                 </form>
+                                                <div className='wrap-pagination'>
+                                                    <Paginations limit={numPage}
+                                                        passNumPage={this.passNumPage} store_code={store_code} products={products} />
+                                                </div>
                                                 <ModalDetail modal={this.state.infoProduct} handleCallbackPushProduct={this.handleCallbackPushProduct} />
                                             </div>
                                             <div className='card-body'>
                                                 <CardProduct store_code={store_code} handleCallbackProduct={this.handleCallbackProduct} />
                                             </div>
-
-                                            {/* <Pagination limit={numPage}
-                                                    searchValue={searchValue}
-                                                    passNumPage={this.passNumPage} store_code={store_code} products={products} /> */}
                                         </div>
                                     </div>
                                 </div>
@@ -260,10 +261,10 @@ const mapDispatchToProps = (dispatch, props) => {
     return {
         fetchAllProductV2: (store_code, branch_id, page, params) => {
             dispatch(productAction.fetchAllProductV2(store_code, branch_id, page, params));
-        
+
         },
-        createInventorys:(store_code,branch_id,data) =>{
-            dispatch(inventoryAction.createInventorys(store_code,branch_id,data))
+        createInventorys: (store_code, branch_id, data) => {
+            dispatch(inventoryAction.createInventorys(store_code, branch_id, data))
         }
     }
 }
