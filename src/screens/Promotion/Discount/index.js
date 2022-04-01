@@ -60,6 +60,8 @@ class Discount extends Component {
     return true;
   }
 
+
+
   componentDidMount() {
     this.props.fetchAllDiscount(this.props.match.params.store_code);
   }
@@ -138,7 +140,7 @@ class Discount extends Component {
                   <div class="card shadow mb-4">
                     <div class="card-header py-3">
                       <h6 class="m-0 font-weight-bold text-primary">
-                        Danh sách danh mục
+                        Danh sách chương trình
                       </h6>
                     </div>
                     <div class="card-body">
@@ -157,6 +159,7 @@ class Discount extends Component {
               </div>
               <ModalDelete modal={modal} />
               <ModalIsEnd modal={modalIsEnd} />
+      
 
               <Footer />
             </div>

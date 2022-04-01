@@ -128,6 +128,16 @@ export const format = (number) => {
     currency: "VND",
   });
 };
+export const formatNoD = (number) => {
+
+  if (number == "") number = 0
+  var number = number.toString().replace(/\./g, ',')
+
+  var number = Number(number == "" ? 0 : number);
+  let dollarUSLocale = Intl.NumberFormat('en-US');
+  return dollarUSLocale.format(number)
+};
+
 export const loadExpandTable = () => {
   window.$(".exploder").unbind("click");
   window.$(".exploder").click(function () {
@@ -159,6 +169,15 @@ export const formatNumber = (value) => {
   return typeof _value !== "undefined"
     ? _value.toString().replace(/\./g, "").replace(/,/g, "").replace(/-/g, "")
     : "";
+};
+
+export const removeSignNumber = (value) => {
+  var _value = value;
+  var numStr = typeof _value !== "undefined"
+    ? _value.toString().replace(/\./g, "").replace(/,/g, "").replace(/-/g, "")
+    : "";
+  var numStr = parseFloat(numStr);
+  return isNaN(numStr) ? 0 : numStr
 };
 
 export const getDateForChartDay = () => {

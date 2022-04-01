@@ -11,8 +11,9 @@ import CKEditor from "ckeditor4-react";
 import ModalUpload from "../ModalUpload"
 import * as Env from "../../../../ultis/default"
 import MomentInput from 'react-moment-input';
-import {formatNumber} from "../../../../ultis/helpers"
-import {isEmpty} from "../../../../ultis/helpers"
+import { formatNumber } from "../../../../ultis/helpers"
+import { isEmpty } from "../../../../ultis/helpers"
+import ConfimUpdateUsed from "./ConfimUpdateUsed";
 
 class Form extends Component {
   constructor(props) {
@@ -23,25 +24,27 @@ class Form extends Component {
       txtEnd: "",
       txtValue: "",
       txtAmount: "",
+      lastAmount: 0,
       listProducts: [],
       txtContent: "",
       image: "",
       displayError: "hide",
 
       isLoading: false,
-      loadCript : false
+      loadCript: false,
+      form:{}
     };
   }
 
-  componentDidUpdate(prevProps , prevState) {
- 
-      try {
-        document.getElementsByClassName('r-input')[0].placeholder = 'Chọn ngày và thời gian';
-        document.getElementsByClassName('r-input')[1].placeholder = 'Chọn ngày và thời gian';
-      } catch (error) {
-        
-      }
-    
+  componentDidUpdate(prevProps, prevState) {
+
+    try {
+      document.getElementsByClassName('r-input')[0].placeholder = 'Chọn ngày và thời gian';
+      document.getElementsByClassName('r-input')[1].placeholder = 'Chọn ngày và thời gian';
+    } catch (error) {
+
+    }
+
   }
   componentWillReceiveProps(nextProps) {
     if (!shallowEqual(nextProps.discount, this.props.discount)) {
@@ -55,11 +58,12 @@ class Form extends Component {
         txtEnd: endTime,
         txtValue: discount.value == null ? null : new Intl.NumberFormat().format(discount.value.toString()),
         txtAmount: discount.amount == null ? null : new Intl.NumberFormat().format(discount.amount.toString()),
+        lastAmount: discount.amount == null ? null : new Intl.NumberFormat().format(discount.amount.toString()),
         listProducts: discount.products,
         txtContent: discount.description,
         image: discount.image_url,
         isLoading: true,
-        loadCript : true
+        loadCript: true
       });
     }
     if (this.props.image !== nextProps.image) {
@@ -78,7 +82,7 @@ class Form extends Component {
         if (name == "txtValue") {
           if (value.length < 3) {
             if (value == 0) {
-              this.setState({ [name]: "" });
+              this.setState({ [name]: 0 });
             }
             else {
               this.setState({ [name]: value });
@@ -88,7 +92,7 @@ class Form extends Component {
         }
         else {
           if (value == 0) {
-            this.setState({ [name]: "" });
+            this.setState({ [name]: 0 });
           }
           else {
             this.setState({ [name]: value });
@@ -146,14 +150,19 @@ class Form extends Component {
     const data = evt.editor.getData();
     this.setState({ txtContent: data });
   };
+
+  onOkUpdate= () => {
+ 
+    var { store_code, discountId } = this.props
+    this.props.updateDiscount(store_code, this.state.form, discountId)
+  }
   onSave = (e) => {
     e.preventDefault();
     if (this.state.displayError == "show") {
       return
     }
     var state = this.state;
-    if(state.txtValue == null || !isEmpty( state.txtValue))
-    {
+    if (state.txtValue == null || !isEmpty(state.txtValue)) {
       this.props.showError({
 
         type: Types.ALERT_UID_STATUS,
@@ -182,7 +191,7 @@ class Form extends Component {
     var form = {
       name: state.txtName,
       start_time: startTime == "Invalid date" ? null : startTime,
-      end_time: endTime== "Invalid date" ? null : endTime,
+      end_time: endTime == "Invalid date" ? null : endTime,
       value: state.txtValue == null ? state.txtValue : formatNumber(state.txtValue),
       amount: state.txtAmount == null ? state.txtAmount : formatNumber(state.txtAmount),
       product_ids: product_ids,
@@ -193,8 +202,21 @@ class Form extends Component {
       delete form.product_ids
     }
     form.set_limit_amount = form.amount == null || form.amount == "" ? false : true
-    console.log(form)
-    this.props.updateDiscount(store_code, form, discountId)
+
+
+    if (this.state.lastAmount != this.state.txtAmount && this.state.lastAmount != 0
+      && this.state.txtAmount != 0
+      ) {
+      this.setState({
+        form:form
+      })
+      window.$("#confimUpdateUsedModal").modal("show")
+    } else {
+      this.props.updateDiscount(store_code, form, discountId)
+    }
+
+
+
   };
   goBack = (e) => {
     e.preventDefault();
@@ -271,7 +293,6 @@ class Form extends Component {
                 placeholder="Nhập tên cửa hàng"
                 autocomplete="off"
                 onChange={this.onChange}
-                name="txtName"
               />
             </div>
             <div class="form-group">
@@ -279,7 +300,7 @@ class Form extends Component {
               {isLoading == true
                 ?
                 (<MomentInput
-                  defaultValue = {txtStart == "" || txtStart == null ? "" : moment(txtStart , "DD-MM-YYYY HH:mm")}
+                  defaultValue={txtStart == "" || txtStart == null ? "" : moment(txtStart, "DD-MM-YYYY HH:mm")}
                   min={moment()}
                   format="DD-MM-YYYY HH:mm"
                   options={true}
@@ -301,25 +322,25 @@ class Form extends Component {
               <label for="product_name">Ngày kết thúc</label>
               {isLoading == true
                 ?
-              (<MomentInput
+                (<MomentInput
 
-                defaultValue = {txtEnd == "" || txtEnd == null ? "" : moment(txtEnd , "DD-MM-YYYY HH:mm")}
+                  defaultValue={txtEnd == "" || txtEnd == null ? "" : moment(txtEnd, "DD-MM-YYYY HH:mm")}
 
-                min={moment()}
-                format="DD-MM-YYYY HH:mm"
-                options={true}
-                enableInputClick={true}
-                monthSelect={true}
-                readOnly={true}
+                  min={moment()}
+                  format="DD-MM-YYYY HH:mm"
+                  options={true}
+                  enableInputClick={true}
+                  monthSelect={true}
+                  readOnly={true}
 
-                translations={
-                  { DATE: "Ngày", TIME: "Giờ", SAVE: "Đóng", HOURS: "Giờ", MINUTES: "Phút" }
-                }
-                onSave={() => { }}
-                onChange={this.onChangeEnd}
-              />)
-              : null
-            }
+                  translations={
+                    { DATE: "Ngày", TIME: "Giờ", SAVE: "Đóng", HOURS: "Giờ", MINUTES: "Phút" }
+                  }
+                  onSave={() => { }}
+                  onChange={this.onChangeEnd}
+                />)
+                : null
+              }
 
             </div>
             <div class={`alert alert-danger ${displayError}`} role="alert">
@@ -373,7 +394,6 @@ class Form extends Component {
             <a
               style={{ marginLeft: "10px" }}
               onClick={this.goBack}
-              class="btn btn-warning"
               class="btn btn-warning btn-icon-split  btn-sm"
             >
               <span class="icon text-white-50">
@@ -386,6 +406,7 @@ class Form extends Component {
         </form>
         <ModalUpload />
 
+        <ConfimUpdateUsed onOk={this.onOkUpdate} />
         <ModalListProduct discount={discount} discounts={discounts} handleAddProduct={this.handleAddProduct} listProducts={listProducts} store_code={store_code} products={products} />
       </React.Fragment>
 

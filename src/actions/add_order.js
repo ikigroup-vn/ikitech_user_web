@@ -516,14 +516,14 @@ export const createOrder = (store_code,data) => {
             });
         })
         .catch(function (error) {
-          console.log('bbbbbbbb')
+
           dispatch({
             type: Types.ALERT_UID_STATUS,
             alert: {
               type: "danger",
               title: "Lỗi",
               disable: "show",
-              content: error.response.data.msg,
+              content: error.response?.data?.msg ?? "",
             },
           });
         });
