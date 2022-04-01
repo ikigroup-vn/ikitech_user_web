@@ -17,7 +17,7 @@ class ModalVoucher extends Component {
     }
     render() {
         var {listVoucher} = this.props
-        console.log("listVoucher",this.props.listVoucher.amount)
+  
         return (
             <div>
                 <div class="modal" id="modalVoucher">

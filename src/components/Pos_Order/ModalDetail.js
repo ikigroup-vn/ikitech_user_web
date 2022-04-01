@@ -1,12 +1,13 @@
 import React, { Component } from 'react'
 import { format } from '../../ultis/helpers'
 import * as Env from "../../ultis/default"
+import { shallowEqual } from '../../ultis/shallowEqual'
 
 class ModalDetail extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            idElement:"",
+            idElement: "",
             distributeName: "",
             distributeValue: "",
             element_distributes: "",
@@ -49,7 +50,7 @@ class ModalDetail extends Component {
                                 this.setState({
                                     elementObject: elments,
                                     messageErr: "",
-                                
+
                                 })
                         }
                     }
@@ -67,7 +68,7 @@ class ModalDetail extends Component {
                                     priceBeforeDiscount: elment.price,
                                     quantityInStock: quatity,
                                     messageErr: "",
-                                    idElement:id,
+                                    idElement: id,
                                 })
                         }
                     } else {
@@ -81,7 +82,7 @@ class ModalDetail extends Component {
                                     afterChoosePrice: elments.cost_of_capital,
                                     quantityInStock: quatity,
                                     messageErr: "",
-                                    idElement:id,
+                                    idElement: id,
                                 })
                         }
                     }
@@ -91,7 +92,7 @@ class ModalDetail extends Component {
 
     }
 
-    handleClickElement = (nameElement, price, index,id) => {
+    handleClickElement = (nameElement, price, index, id) => {
         var { sub_element_distributes } = this.state.elementObject
         if (this.props.modal.discountProduct) {
             var { value } = this.props.modal.discountProduct
@@ -102,7 +103,7 @@ class ModalDetail extends Component {
                 afterChoosePrice: sub_element.price - (sub_element.price * value / 100),
                 priceBeforeDiscount: sub_element.price,
                 quantityInStock: sub_element.stock, messageErr: "",
-                idElement:id,
+                idElement: id,
             })
         } else {
             if (sub_element_distributes) {
@@ -113,11 +114,11 @@ class ModalDetail extends Component {
                     afterChoosePrice: sub_elements.cost_of_capital,
                     priceBeforeDiscount: sub_elements.price,
                     quantityInStock: sub_elements.stock,
-                    idElement:id,
+                    idElement: id,
                     messageErr: ""
                 })
             } else {
-                this.setState({ subElementDistributeSelected: index,idElement:id, element_distributes: nameElement })
+                this.setState({ subElementDistributeSelected: index, idElement: id, element_distributes: nameElement })
             }
 
         }
@@ -133,8 +134,8 @@ class ModalDetail extends Component {
     }
     handleCallback = () => {
         var info = this.props.modal
-        const { distributeName, distributeValue, element_distributes, quantityInStock, idElement,afterChoosePrice,afterPrice } = this.state
-        console.log("info",info)
+        const { distributeName, distributeValue, element_distributes, quantityInStock, idElement, afterChoosePrice, afterPrice } = this.state
+        console.log("info", info)
         if (info.distributeProduct.length === 0) {
             window.$('.modal').modal('hide');
             this.props.handleCallbackPushProduct({
@@ -144,7 +145,7 @@ class ModalDetail extends Component {
                 reality_exist: 0, nameDistribute: distributeName,
                 nameElement: distributeValue,
                 nameSubDistribute: element_distributes,
-                priceProduct:afterPrice,
+                priceProduct: afterPrice,
                 stock: this.props.modal.inventoryProduct.main_stock
             })
             return
@@ -163,7 +164,7 @@ class ModalDetail extends Component {
                 reality_exist: 0, nameDistribute: distributeName,
                 nameElement: distributeValue,
                 nameSubDistribute: element_distributes,
-                priceProduct:afterChoosePrice,
+                priceProduct: afterChoosePrice,
                 stock: quantityInStock
             })
             this.setState({ distributeSelected: -1, messageErr: "", afterChoosePrice: "", element_distributes: "", distributeValue: "" })
@@ -184,7 +185,7 @@ class ModalDetail extends Component {
             nameDistribute: distributeName,
             nameElement: distributeValue,
             nameSubDistribute: element_distributes,
-            priceProduct:afterChoosePrice,
+            priceProduct: afterChoosePrice,
             stock: quantityInStock
         })
         this.setState({
@@ -196,7 +197,12 @@ class ModalDetail extends Component {
     }
     componentWillReceiveProps(nextProps, nextState) {
 
-        this.setState({ quantityInStock: nextProps.modal.inventoryProduct.main_stock })
+
+        if (!shallowEqual(nextProps.modal.inventoryProduct, this.props.modal.inventoryProduct)) {
+
+            this.setState({ quantityInStock: nextProps.modal.inventoryProduct.main_stock })
+        }
+
         if (nextProps.modal.priceProduct !== this.state.afterPrice) {
             this.setState({ afterPrice: nextProps.modal.priceProduct })
         }
@@ -222,8 +228,8 @@ class ModalDetail extends Component {
                             <p class="" style={{ margin: "0px", fontWeight: "bold" }}>Chi tiết sản phẩm</p>
                             <button type="button" class="close" onClick={this.handleClose} data-dismiss="modal">&times;</button>
                         </div>
-                        <div class="modal-body" style={{ position: "relative",marginBottom:"20px" }}>
-                        <button class="btn btn-info" onClick={this.handleCallback} style={{ backgroundColor: "green", position: "absolute", right: "15px", top: "20px", zIndex: "10000" }}>Thêm</button>
+                        <div class="modal-body" style={{ position: "relative", marginBottom: "20px" }}>
+                            <button class="btn btn-info" onClick={this.handleCallback} style={{ backgroundColor: "green", position: "absolute", right: "15px", top: "20px", zIndex: "10000" }}>Thêm</button>
                             <div className='model-card row' style={{ margin: "5px", width: "80%" }}>
                                 <div className='name-voucher col-4' style={{ width: "120px", height: "120px", padding: "8px" }}>
                                     <div style={{ justifyContent: "center", width: "100%", height: "100%", borderRadius: "0.25em", display: "flex", alignItems: "center" }}>
@@ -260,8 +266,8 @@ class ModalDetail extends Component {
                                             </div>
 
                                             <div className='distribute-name'>{itemParent.sub_element_distribute_name}</div>
-                                            <div className='element_distribute_name'>{itemParent.element_distributes &&  itemParent.element_distributes[0].sub_element_distributes.map((itemChild, index) => (
-                                                <button className={index === this.state.subElementDistributeSelected ? "actives" : ""} style={{ border: "1px solid #e4e4e4", borderRadius: "4px", marginRight: '10px', padding: "5px" }} onClick={() => this.handleClickElement(itemChild.name, itemChild.price, index,itemChild.id)}>{itemChild.name}</button>
+                                            <div className='element_distribute_name'>{itemParent.element_distributes && itemParent.element_distributes[0].sub_element_distributes.map((itemChild, index) => (
+                                                <button className={index === this.state.subElementDistributeSelected ? "actives" : ""} style={{ border: "1px solid #e4e4e4", borderRadius: "4px", marginRight: '10px', padding: "5px" }} onClick={() => this.handleClickElement(itemChild.name, itemChild.price, index, itemChild.id)}>{itemChild.name}</button>
                                             ))}</div>
                                         </div>
 

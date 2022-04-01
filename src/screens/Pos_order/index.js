@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { format, formatNumber } from '../../ultis/helpers'
+import ReactDOM from 'react-dom'
+import { format, formatNoD, formatNumber, removeSignNumber } from '../../ultis/helpers'
 import * as productAction from "../../actions/product"
 import { connect } from 'react-redux'
 import CardProduct from '../../components/Pos_Order/CardProduct'
@@ -10,32 +11,33 @@ import Topbar from '../../components/Pos_Order/Topbar'
 import ListItemInCart from '../../components/Pos_Order/ListItemInCart'
 import PertionInfo from '../../components/Pos_Order/PertionInfo'
 import * as OrderAction from '../../actions/add_order';
-import ModalDiscount from '../../components/Pos_Order/ModalDiscount'
 import "./index.css"
-import ModalPayment from '../../components/Pos_Order/ModalPayment'
 import Alert from './Alert'
 import * as Types from "../../constants/ActionType";
 import Pagination from '../../components/Pos_Order/Pagination'
 import ModalUser from '../../components/Pos_Order/ModalUser'
 import KeyboardEventHandler from "react-keyboard-event-handler";
-import ModalNote from '../../components/Pos_Order/ModalNote'
 import ModalVoucher from '../../components/Pos_Order/ModalVoucher'
-
+import { debounce } from 'lodash'
+import { Popover } from 'react-tiny-popover'
 
 class PostOrder extends Component {
     constructor(props) {
         super(props)
+
+        this.hasFocus = false
         this.state = {
+            isPopoverOpen: false,
+
+            listItemCart: {},
             modalUpdateCart: {
                 name: "",
                 phone_number: "",
                 debt: 0,
                 id: 0,
             },
-            modalUpdateDiscount: {
-                txtDiscount: 0,
-                
-            },
+            listSuggestion: [],
+            txtDiscount: 0,
             code: "",
             note: "",
             page: 1,
@@ -45,8 +47,12 @@ class PostOrder extends Component {
             idCart: "",
             checked: false,
             selectPrice: -1,
-            payment_method: 0,
+            exchange: 0,
+            payment_method_id: 0,
             priceCustomer: 0,
+            customerNote: "",
+            totalAfterDiscount: 0,
+            totalFinal: 0,
             infoProduct: {
                 inventoryProduct: "",
                 idProduct: "",
@@ -60,6 +66,120 @@ class PostOrder extends Component {
                 quantityProduct: "",
                 quantityProductWithDistribute: ""
             },
+        }
+
+        this.changeSearch = debounce(this.handleSearch, 1000)
+        this.changeDiscount = debounce(this.handleDiscount, 1000)
+        this.changePaymentMethod = debounce(this.handlePaymentMethod, 200)
+    }
+
+    handleChange = (e) => {
+        const val = e.target.value
+
+        this.setState({
+            customerNote: val
+        })
+
+        this.setState({ value: val }, () => {
+            this.changeSearch(val)
+        })
+    }
+
+    handleSearch = (e) => {
+        this.setState({
+            note: this.state.customerNote
+        })
+    }
+    handleDiscount = (e) => {
+        this.setState({
+
+            txtDiscount: formatNumber(this.state.discount)
+
+        })
+    }
+    handlePaymentMethod = (e) => {
+
+        this.setState({
+            payment_method_id: e
+        })
+    }
+
+    onGetSuggestion = (totalFinal) => {
+        var list = []
+
+        var totalFinal = totalFinal.toString().replace(/\./g, ',');
+
+
+        if (totalFinal != null && totalFinal != "" && totalFinal.length > 0) {
+            const lengthNum = totalFinal.length;
+            const firstNum = parseInt(totalFinal[0]);
+
+
+            list.push(totalFinal)
+
+            //num1
+            list.push(Math.pow(10, lengthNum))
+
+            //num2
+            if (firstNum < 9 && lengthNum > 1) {
+                var firstNewNum = firstNum + 1;
+                list.push(firstNewNum * Math.pow(10, lengthNum - 1))
+            }
+            //num3
+            if (firstNum < 5 && lengthNum > 1) {
+                var firstNewNum = firstNum + 1;
+                var su = 5 * Math.pow(10, lengthNum - 1);
+                if(!list.includes(su)) {
+                    list.push(5 * Math.pow(10, lengthNum - 1))
+                }
+               
+            }
+            //num4
+            if (lengthNum > 2) {
+                const secondNum = parseInt(totalFinal[1]);
+                if (secondNum < 5) {
+                    list.push((firstNum * 10 + 5) * Math.pow(10, lengthNum - 2))
+                }
+            }
+
+            //num5
+            if (lengthNum > 1) {
+                const secondNum = parseInt(totalFinal[1]);
+                if (secondNum < 9) {
+                    list.push((firstNum * 10 + (secondNum + 1)) * Math.pow(10, lengthNum - 2))
+                }
+            }
+
+            //num6
+            if (lengthNum > 3) {
+                const secondNum = parseInt(totalFinal[1]);
+                const thirtNum = parseInt(totalFinal[2]);
+                if (thirtNum < 9) {
+                    list.push(((firstNum * 100) + (secondNum * 10) + (thirtNum + 1)) * Math.pow(10, lengthNum - 3))
+                }
+            }
+        }
+
+        var list = list.filter(this.onlyUnique);
+
+        this.setState({
+            listSuggestion: list
+        })
+    }
+     onlyUnique = (value, index, self) => {
+        return self.indexOf(value) === index;
+      }
+      
+    componentDidUpdate() {
+
+        if (this.state.isPopoverOpen == true && this.hasFocus == false) {
+
+            var refDiscountInput = ReactDOM.findDOMNode(this.refs.refDiscountInput)
+            if (refDiscountInput != null) {
+                refDiscountInput.select()
+                refDiscountInput.focus()
+                this.hasFocus = true
+            }
         }
     }
 
@@ -77,12 +197,25 @@ class PostOrder extends Component {
                 infoProduct: modal
             })
     }
+    setIsPopoverOpen = () => {
+
+
+        const nextIsPopoverOpen = !this.state.isPopoverOpen
+
+        if (nextIsPopoverOpen == true) {
+            this.hasFocus = false
+        } else {
+            this.hasFocus = true
+        }
+        this.setState({
+            isPopoverOpen: nextIsPopoverOpen
+        })
+
+    }
     onChanges = (e) => {
         this.setState({ note: e.target.value })
     }
-    handleCallbackChoosePayment = (modal) => {
-        this.setState({ payment_method: modal })
-    }
+
     handleCallbackPushProduct = (modal) => {
         this.setState({ listPosItem: modal })
     }
@@ -92,31 +225,49 @@ class PostOrder extends Component {
     handleCallbackPertion = (modal) => {
         this.setState({ modalUpdateCart: modal })
     }
-    handleCallbackDiscount = (modal) => {
-        this.setState({ modalUpdateDiscount: modal })
-    }
+
     handleCallbackUser = (modal) => {
         this.setState({ modalUpdateCart: modal })
     }
-    handleCallbackNote = (modal) => {
-        this.setState(modal)
-    }
-    handleCallbackVoucherInput = (modal) =>{
-        this.setState({code:modal})
+
+    handleCallbackVoucherInput = (modal) => {
+        this.setState({ code: modal })
     }
 
     handChange = (e) => {
+
+
+        var name = e.target.name
         var value_text = e.target.value;
         var value = value_text
         const _value = formatNumber(value);
+
         if (!isNaN(Number(_value))) {
             value = new Intl.NumberFormat().format(_value);
             value = value.toString().replace(/\./g, ',')
+
+            var num = 0;
             if (value_text == "") {
-                this.setState({ priceCustomer: "" });
+                num = 0;
             }
             else {
-                this.setState({ priceCustomer: value });
+                num = value;
+            }
+
+            if (name == "discount") {
+
+
+                this.setState({
+                    discount: num,
+                    totalFinal: this.state.totalAfterDiscount - removeSignNumber(num),
+                    priceCustomer: this.state.totalAfterDiscount - removeSignNumber(num),
+                }, () => {
+                    this.changeDiscount(num)
+                })
+
+            } else {
+
+                this.setState({ priceCustomer: num });
             }
 
         }
@@ -127,7 +278,7 @@ class PostOrder extends Component {
         const branch_id = localStorage.getItem("branch_id")
         const { store_code } = this.props.match.params
         const data = {
-            payment_method: this.state.payment_method,
+            payment_method_id: this.state.payment_method_id,
             amount_money: formatNumber(this.state.priceCustomer)
         }
         this.props.paymentOrderPos(store_code, branch_id, this.state.idCart, data)
@@ -144,8 +295,21 @@ class PostOrder extends Component {
 
 
     componentWillReceiveProps(nextProps) {
+
+
+
         if (!shallowEqual(nextProps.listItemCart, this.props.listItemCart)) {
-            this.setState({ priceCustomer: nextProps.listItemCart.info_cart.total_final, selectPrice: -1, namePos: nextProps.listItemCart.name })
+
+            this.setState({
+                listItemCart: nextProps.listItemCart,
+                priceCustomer: nextProps.listItemCart.info_cart.total_final,
+                totalFinal: nextProps.listItemCart.info_cart.total_final,
+                totalAfterDiscount: nextProps.listItemCart.info_cart.total_after_discount,
+                selectPrice: -1,
+                namePos: nextProps.listItemCart.name,
+                customerNote: nextProps.listItemCart.customer_note ?? "",
+                payment_method_id: nextProps.listItemCart.payment_method_id
+            })
             if (nextProps.listItemCart.info_cart.is_use_points !== null) {
                 this.setState({ checked: nextProps.listItemCart.info_cart.is_use_points })
             } else {
@@ -174,28 +338,39 @@ class PostOrder extends Component {
             this.props.fetchInfoOneCart(this.props.match.params.store_code, branch_id, id)
             this.setState({
                 priceCustomer: 0,
-
-                // modalUpdateDiscount: {
-                //     code: ""
-                // }
             })
         }
 
+        if (!shallowEqual(nextState.totalFinal, this.state.totalFinal)) {
+            this.onGetSuggestion(nextState.totalFinal);
+        }
+        if (!shallowEqual(nextState.priceCustomer, this.state.priceCustomer)) {
+            this.setState({
+                exchange: removeSignNumber(nextState.priceCustomer) - removeSignNumber(nextState.totalFinal)
+            })
+        }
+
+
+
         if (!shallowEqual(nextState.modalUpdateCart, this.state.modalUpdateCart) ||
-            !shallowEqual(nextState.modalUpdateDiscount, this.state.modalUpdateDiscount) ||
+            !shallowEqual(nextState.txtDiscount, this.state.txtDiscount) ||
             !shallowEqual(nextState.checked, this.state.checked) ||
-            !shallowEqual(nextState.note, this.state.note)) {
+            !shallowEqual(nextState.note, this.state.note) ||
+            !shallowEqual(nextState.payment_method_id, this.state.payment_method_id)
+
+        ) {
             const branch_id = localStorage.getItem("branch_id")
             const { store_code } = this.props.match.params
             const formData = {
                 customer_name: nextState.modalUpdateCart.name,
                 customer_phone: nextState.modalUpdateCart.phone_number,
-                discount: formatNumber(nextState.modalUpdateDiscount.txtDiscount),
+                discount: formatNumber(nextState.txtDiscount),
                 code_voucher: nextState.code,
                 name: nextState.namePos,
                 customer_note: nextState.note,
                 customer_id: nextState.modalUpdateCart.id,
-                is_use_points: nextState.checked
+                is_use_points: nextState.checked,
+                payment_method_id: nextState.payment_method_id
             }
             this.props.updateInfoCart(store_code, branch_id, nextState.idCart, formData)
         }
@@ -211,6 +386,12 @@ class PostOrder extends Component {
 
         return true
     }
+
+    handleOptionChange = (changeEvent) => {
+        var payment_method_id = parseInt(changeEvent.target.value);
+        this.changePaymentMethod(payment_method_id)
+    }
+
     handleKeyboard = (key) => {
         switch (key) {
             case "f1":
@@ -239,8 +420,8 @@ class PostOrder extends Component {
         return toTenths;
     }
 
-    handleActive = (id, price) => {
-        this.setState({ selectPrice: id, priceCustomer: price })
+    handleActive = (price) => {
+        this.setState({ priceCustomer: price })
     }
 
     handChangeCheckbox = (e) => {
@@ -248,11 +429,13 @@ class PostOrder extends Component {
     }
 
 
+
+
     render() {
         var { store_code } = this.props.match.params
-        var { listItemCart, listPertion, products, listVoucher } = this.props
+        var { listPertion, products, listVoucher } = this.props
         var { code } = this.state
-        var { numPage, priceCustomer } = this.state
+        var { numPage, exchange, priceCustomer, listItemCart, totalFinal, listSuggestion, totalAfterDiscount } = this.state
         var number = new Intl.NumberFormat().format(priceCustomer)
         const length = listItemCart.info_cart?.line_items.length
         // var roundNumber  = this.roundPrice(number,3)
@@ -331,7 +514,7 @@ class PostOrder extends Component {
                                     </div>
                                     <div className="wrap-detail">
                                         <div className='price-info' style={{ margin: "10px 0px", fontSize: "17px", marginLeft: "5px" }}>
-                                            <div className='row' style={{ padding: "3px 0" }}>
+                                            <div className='row item-info'>
                                                 <div className='title-price col-6'>{`Tổng tiền:(${length} sản phẩm)`}</div>
                                                 <span className='col-6' style={{ textAlign: "end" }}>{format(Number(listItemCart.info_cart?.total_before_discount))}</span>
                                             </div>
@@ -344,57 +527,172 @@ class PostOrder extends Component {
                                                     </div>
                                                 </form>
                                             </div>
-                                            <div className='row' style={{ padding: "3px 0" }}>
-                                                <div className='title-price col-8'>Chiết khấu</div>
-                                                <input type="text" name="import_price" id="discount" class=" col-4" value={format(Number(listItemCart.info_cart?.discount))}
-                                                    style={{ height: "28px", width: "100px", textAlign: "right", border: 0, borderRadius: 0, borderBottom: "1px solid rgb(128 128 128 / 71%)" }} data-toggle="modal" data-target="#modalDiscount" ></input>
-                                            </div>
-                                            <div className='row' style={{ padding: "3px 0" }}>
+
+                                            <div className='row item-info'>
                                                 <div className='title-price col-6' >Voucher</div>
-                                                <a className='modal-choose col-6' style={{color:"rgb(232 117 26)",textAlign: "end", fontSize: "13px"}} data-toggle="modal" data-target="#modalVoucher" >
+                                                <a className='modal-choose col-6' style={{ color: "rgb(232 117 26)", textAlign: "end", fontSize: "13px" }} data-toggle="modal" data-target="#modalVoucher" >
                                                     <span className=''>{code ? code : "Chọn hoặc nhập mã"}</span>
                                                 </a>
                                             </div>
 
 
-                                            <div className='row' style={{ padding: "3px 0" }}>
+
+
+                                            <Popover
+                                                positions={['top']}
+                                                onClickOutside={() => this.setIsPopoverOpen(false)}
+                                                isOpen={this.state.isPopoverOpen}
+
+                                                content={<div className='model-discount'>
+
+
+                                                    <div className='row'>
+
+                                                        <div className='txt-discount'>
+                                                            Chiết khấu
+                                                        </div>
+
+
+                                                        <input
+
+                                                            ref='refDiscountInput'
+                                                            onChange={this.handChange}
+                                                            type="text"
+                                                            name="discount" id="discount"
+                                                            class=" col-4 input-discount"
+                                                            value={this.state.discount ?? 0}
+
+
+
+                                                        ></input>
+
+                                                        <div className='type-discount-price'
+
+                                                            style={{
+                                                                backgroundColor: "#cf7a37"
+                                                            }}
+                                                        >
+                                                            VND
+                                                        </div>
+                                                        <div className='type-discount-price'>
+                                                            %
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                }
+
+                                            >
+
+                                                <div className='row item-info'>
+                                                    <div onClick={() => this.setIsPopoverOpen(!this.state.isPopoverOpen)} className='title-price col-8'>Chiết khấu</div>
+                                                    <button onClick={() => this.setIsPopoverOpen(!this.state.isPopoverOpen)}
+                                                        type="text"
+                                                        name="discount" id="discount"
+                                                        class=" col-4"
+                                                        value={this.state.discount}
+                                                        style={{
+                                                            background: "transparent",
+                                                            height: "28px", width: "100px",
+                                                            textAlign: "right",
+                                                            border: 0, borderRadius: 0,
+                                                            borderBottom: "1px solid rgb(128 128 128 / 71%)"
+                                                        }}
+                                                    // data-toggle="modal" data-target="#modalDiscount" 
+                                                    >{this.state.discount ?? 0}</button>
+                                                </div>
+
+                                            </Popover>
+
+                                            <div className='row item-info'>
                                                 <div className='title-price col-6' style={{ color: "black", fontWeight: "500" }} >KHÁCH PHẢI TRẢ</div>
-                                                <span className='col-6' style={{ textAlign: "end", color: "red", fontSize: "22px" }}>{format(Number(listItemCart.info_cart?.total_final))}</span>
+                                                <span className='col-6' style={{ textAlign: "end", color: "red", fontSize: "22px" }}>{formatNoD((totalFinal))}</span>
                                             </div>
+
+
+
+
+
                                             <div className='row' style={{ padding: "10px 0" }}>
                                                 <div className='title-price col-8' style={{ color: "black", fontWeight: "500" }}>Tiền khách đưa</div>
-                                                <input type="text" name="import_price" id="import_prices" class=" col-4" value={this.state.priceCustomer}
+                                                <input type="text" name="import_price" id="import_prices" class=" col-4" value={formatNoD(removeSignNumber(this.state.priceCustomer))}
                                                     style={{ height: "28px", width: "100px", textAlign: "right", border: 0, borderRadius: 0, borderBottom: "1px solid rgb(128 128 128 / 71%)", fontSize: "22px" }} onChange={this.handChange} ></input>
                                             </div>
-                                            {formatNumber(priceCustomer) > 1000 ? <div className='wrap-recomment' style={{ display: "flex", flexDirection: "column", margin: "10px 0" }}>
-                                                <div className='clo-1' style={{ display: "flex", justifyContent: 'space-between', marginBottom: "10px", flexWrap: "wrap" }}>
-                                                    <div className={this.state.selectPrice === 1 ? "activesss item-recomment" : 'item-recomment'} onClick={() => this.handleActive(1, 10000)}>10000</div>
-                                                    <div className={this.state.selectPrice === 2 ? "activesss item-recomment" : 'item-recomment'} onClick={() => this.handleActive(2, 20000)} >20000</div>
-                                                    <div className={this.state.selectPrice === 3 ? "activesss item-recomment" : 'item-recomment'} onClick={() => this.handleActive(3, 50000)} >50000</div>
+
+                                            <div className='row' style={{ display: "flex", flexDirection: "row", margin: "10px 0" }}>
+                                                {listSuggestion.map((suggesionPrice) => <div>
+                                                    <div
+                                                        style={{
+                                                            margin: 3
+                                                        }}
+                                                        className={this.state.priceCustomer === suggesionPrice ?
+                                                            "activesss item-recomment" : 'item-recomment'}
+                                                        onClick={() => this.handleActive(suggesionPrice)}>{formatNoD(suggesionPrice)}</div>
+
                                                 </div>
-                                                <div className='clo-2' style={{ display: "flex", justifyContent: 'space-between', flexWrap: "wrap" }}>
-                                                    <div className={this.state.selectPrice === 4 ? "activesss item-recomment" : 'item-recomment'} onClick={() => this.handleActive(4, 100000)} >100000</div>
-                                                    <div className={this.state.selectPrice === 5 ? "activesss item-recomment" : 'item-recomment'} onClick={() => this.handleActive(5, 200000)} >200000</div>
-                                                    <div className={this.state.selectPrice === 6 ? "activesss item-recomment" : 'item-recomment'} onClick={() => this.handleActive(6, 500000)} >500000</div>
-                                                </div>
-                                            </div> : ""}
+                                                )}
+                                            </div>
+
 
 
                                             <div className='row' style={{ borderTop: "1px solid #80808045", padding: "10px 0" }} >
                                                 <div className='title-price col-6' style={{ color: "black", fontWeight: "500" }}>Tiền thừa trả khách</div>
-                                                <span className='col-6' style={{ textAlign: "end", fontSize: "22px" }}>{format(Number(formatNumber(this.state.priceCustomer) - listItemCart.info_cart?.total_final))}</span>
+                                                <span className='col-6' style={{ textAlign: "end", fontSize: "22px" }}>{formatNoD(exchange)}</span>
                                             </div>
                                             <div class="form-group" style={{ position: "relative" }} >
                                                 <i class='fas fa-pencil-alt' style={{ position: "absolute", top: "11px", left: "6px" }}></i>
-                                                <input class="form-control" rows="5" id="comment" placeholder='Thêm ghi chú' style={{ paddingLeft: "30px", border: 0, borderRadius: 0, borderBottom: "2px solid gray" }} value={this.state.note} data-toggle="modal" data-target="#modalNote"></input>
+                                                <input class="form-control" rows="5" id="comment" placeholder='Thêm ghi chú'
+                                                    style={{ paddingLeft: "30px", border: 0, borderRadius: 0, borderBottom: "2px solid gray" }}
+                                                    value={this.state.customerNote}
+                                                    onChange={this.handleChange}
+
+                                                ></input>
                                             </div>
 
                                         </div>
                                     </div>
                                 </div>
+
+
+                                <div className='row justify-content-around'>
+                                    <div class="form-check">
+                                        <input class="form-check-input" onChange={this.handleOptionChange}
+                                            type="radio" value={0} id="flexRadioDefault1" checked={this.state.payment_method_id == 0} />
+                                        <label class="form-check-label" for="flexRadioDefault1">
+                                            Tiền mặt
+                                        </label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input" onChange={this.handleOptionChange}
+                                            type="radio" value={1} id="flexRadioDefault2" checked={this.state.payment_method_id == 1} />
+                                        <label class="form-check-label" for="flexRadioDefault2">
+                                            Thẻ
+                                        </label>
+                                    </div>
+
+                                    <div class="form-check">
+                                        <input class="form-check-input" onChange={this.handleOptionChange}
+                                            type="radio" value={3} id="flexRadioDefault3" checked={this.state.payment_method_id == 3} />
+                                        <label class="form-check-label" for="flexRadioDefault3">
+                                            Chuyển khoản
+                                        </label>
+                                    </div>
+                                </div>
+
                                 <div className='wrap-buttom' style={{ display: "flex", justifyContent: "space-between", margin: "10px 0" }} >
-                                    <span className='pay-methor' style={{ width: "33%", padding: "25px", textAlign: "center", background: "rgb(110 186 27 / 29%)", color: "black", borderRadius: "5px", cursor: "pointer", fontSize: "18px", fontWeight: "400" }} data-toggle="modal" data-target="#modalPayment">Phương thức thanh toán</span>
-                                    <button className='btn btn-pay' onClick={this.handlePayment}>Thanh toán</button>
+                                    <button className='btn btn-pay'
+
+                                        style={{
+                                            width: "100%",
+                                            padding: "25px",
+                                            textAlign: "center",
+
+                                            borderRadius: "5px",
+                                            cursor: "pointer",
+
+                                        }}
+                                        onClick={this.handlePayment}>Thanh toán</button>
                                 </div>
 
                             </div>
@@ -403,11 +701,8 @@ class PostOrder extends Component {
                         </div>
                         <ModalDetail modal={this.state.infoProduct} handleCallbackPushProduct={this.handleCallbackPushProduct} />
                         <PertionInfo store_code={store_code} listPertion={listPertion} handleCallbackPertion={this.handleCallbackPertion} />
-                        <ModalDiscount handleCallbackDiscount={this.handleCallbackDiscount} />
-                        <ModalPayment handleCallbackChoosePayment={this.handleCallbackChoosePayment} />
                         <ModalUser handleCallbackUser={this.handleCallbackUser} />
-                        <ModalNote handleCallbackNote={this.handleCallbackNote} />
-                        <ModalVoucher listVoucher={listVoucher}  handleCallbackVoucherInput = {this.handleCallbackVoucherInput} />
+                        <ModalVoucher listVoucher={listVoucher} handleCallbackVoucherInput={this.handleCallbackVoucherInput} />
                     </div>
                     <Alert
                         type={Types.ALERT_UID_STATUS}
