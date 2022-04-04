@@ -21,8 +21,8 @@ class HistoryStock extends Component {
             <td>{data.stock}</td>
             <td>
               <div style={{display:"flex",alignItems:"center"}}>
-                <div style={{marginRight:"10px", width:'30%'}}>{data.change}</div>
                 {data.change>0?<i class='fas fa-arrow-circle-up'></i>:<i class='fas fa-arrow-circle-down'></i>}
+                <div style={{marginLeft:"10px", width:'50%'}}>{data.change}</div>
               </div>
             </td>
             <td>{data.type_name}</td>
@@ -41,7 +41,7 @@ class HistoryStock extends Component {
       <div class="modal" id="historyStock">
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
-            <button type="button" style={{ textAlign: "end" }} class="close" data-dismiss="modal">&times;</button>
+            <button type="button" style={{ textAlign: "end",margin:"10px" }} class="close" data-dismiss="modal">&times;</button>
             <div class="title" style={{ padding: "0 1rem", fontWeight: 'bold' }}>
               <div className='title-history'>Lịch sử kho</div>
             </div>

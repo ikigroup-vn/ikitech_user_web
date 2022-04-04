@@ -41,6 +41,9 @@ import { shallowEqual } from '../../ultis/shallowEqual'
      addQuantity = (CartId,idProduct,lineItemId,quantity,distribute) =>{
         this.setState({modalAdd:{CartIds:CartId,productIds:idProduct,lineItemIds:lineItemId,quantity:quantity,distributesProduct:distribute}})
     }
+    addQuantitys = (modal) =>{
+        this.setState({modalAdd:{CartIds:modal.CartId,productIds:modal.idProduct,lineItemIds:modal.lineItemId,quantity:modal.quantity,distributesProduct:modal.distribute}})
+    }
     subQuantity = (CartId,idItem,idProduct,quantity,distribute) =>{
         this.setState({modalSub:{CartIds:CartId,itemIds:idItem,productIds:idProduct,quantity:quantity,distributesProduct:distribute}})
     }
@@ -72,7 +75,7 @@ import { shallowEqual } from '../../ultis/shallowEqual'
             <div className='list-group'>
                 {listItemPos.info_cart?.line_items.map((item,index) =>{
                     return(
-                        <ItemInCart item = {item} index ={index} addQuantity ={this.addQuantity} handleDelete ={this.handleDelete} subQuantity ={this.subQuantity} />
+                        <ItemInCart item = {item} index ={index} addQuantity ={this.addQuantity} handleDelete ={this.handleDelete} subQuantity ={this.subQuantity} addQuantitys = {this.addQuantitys} />
                     )
                 })}
             </div>

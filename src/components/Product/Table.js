@@ -204,21 +204,17 @@ class Table extends Component {
                 />
               </th>
               <th>STT</th>
+              <th style={{width:"8%"}}>Hình ảnh</th>
               <th>Mã SKU</th>
 
               <th>Tên sản phẩm</th>
 
 
-              <th>Giá bán lẻ</th>
+              <th style={{width: "20%"}}>Giá bán lẻ</th>
 
               {getChannel() == IKITECH &&
                   <th>Trạng thái </th>
               }
-
-            
-
-
-              <th>Số lượng tồn kho</th>
 
               {getChannel() == IKITECH &&
                 <th>Lượt xem</th>

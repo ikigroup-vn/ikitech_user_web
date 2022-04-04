@@ -225,9 +225,7 @@ class ModalDetail extends Component {
                             <button type="button" class="close" onClick={this.handleClose} data-dismiss="modal">&times;</button>
                         </div>
                         <div class="modal-body" style={{ position: "relative" }}>
-                            {this.state.quantityInStock === 0 ? <button class="btn btn-secondary" style={{ position: "absolute", right: "15px", top: "20px", zIndex: "100" }}>Hết hàng</button> :
-                                <button class="btn btn-info" onClick={this.handleCallback} style={{ backgroundColor: "green", position: "absolute", right: "15px", top: "20px", zIndex: "100" }}>Thêm</button>
-                            }
+                        <button class="btn btn-info" onClick={this.handleCallback} style={{ backgroundColor: "green", position: "absolute", right: "15px", top: "20px", zIndex: "100" }}>Thêm</button>
                             <div className='model-card row' style={{ margin: "5px", width: "80%" }}>
                                 <div className='name-voucher col-4' style={{ width: "120px", height: "120px", padding: "8px" }}>
                                     <div style={{ justifyContent: "center", width: "100%", height: "100%", borderRadius: "0.25em", display: "flex", alignItems: "center" }}>
@@ -237,7 +235,7 @@ class ModalDetail extends Component {
                                 <div className='info-voucher col-8' style={{ display: "flex", flexDirection: "column", justifyContent: "space-around" }}>
                                     <div>
                                         <div className='value' style={{ fontWeight: "bold" }}>{inforProduct.nameProduct}</div>
-                                        <div className='code' style={{ color: "red" }}><span>{this.state.afterChoosePrice === '' ? inforProduct.discountProduct === null ? format(Number(this.state.afterPrice)) : this.state.minPriceAfterDiscount === this.state.maxPriceAfterDiscount ? `${format(Number(this.state.minPriceAfterDiscount))}` : `${format(Number(this.state.minPriceAfterDiscount))} - ${format(Number(this.state.maxPriceAfterDiscount))}`
+                                        <div className='code' style={{ color: "red" }}><span>{this.state.afterChoosePrice === '' ? inforProduct.discountProduct === null ? this.props.modal.minPriceProduct === this.props.modal.maxPriceProduct ? format(Number(this.props.modal.minPriceProduct)) :`${format(Number(this.props.modal.minPriceProduct))}-${format(Number(this.props.modal.maxPriceProduct))}`  : this.state.minPriceAfterDiscount === this.state.maxPriceAfterDiscount ? `${format(Number(this.state.minPriceAfterDiscount))}` : `${format(Number(this.state.minPriceAfterDiscount))} - ${format(Number(this.state.maxPriceAfterDiscount))}`
                                             : format(Number(this.state.afterChoosePrice))}</span></div>
                                         <div className='before-discout' style={{ display: "flex" }} >
                                             <span style={{ fontSize: "13px", textDecoration: "line-through" }}>{inforProduct.discountProduct !== null ?

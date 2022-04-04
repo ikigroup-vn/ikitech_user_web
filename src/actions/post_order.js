@@ -515,24 +515,62 @@ export const paymentOrderPos = (store_code, branch_id,id,data) => {
 };
 export const fetchVoucher = (store_code, branch_id,id,data) => {
   return (dispatch) => {
-      dispatch({
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    PosApi.fetchVoucher(store_code, branch_id,id,data)
+      .then((res) => {
+        dispatch({
           type: Types.SHOW_LOADING,
-          loading: "show"
-      })
-      PosApi.fetchVoucher(store_code, branch_id,id,data).then((res) => {
+          loading : "hide"
+        })
+        PosApi
+        .fetchInfoOneCart(store_code,branch_id,id)
+        .then((res) => {
+          if(res.data.code !== 401)
+
           dispatch({
-              type: Types.SHOW_LOADING,
-              loading: "hide"
-          })
-          console.log("res",res)
-          if (res.data.code !== 401)
-              dispatch({
-                  type: Types.FETCH_LIST_CART_ITEM,
-                  data: res.data.data,
-              });
+            type: Types.FETCH_LIST_CART_ITEM,
+            data: res.data.data,
+          });
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "success",
+              title: "Thành công ",
+              disable: "show",
+              content: res.data.msg,
+            },
+          });
+        })
+        
+        dispatch({
+          type: Types.FETCH_LIST_CART_ITEM,
+          data: res.data.data,
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error.response.data.msg,
+          },
+        });
       });
-  }
+  };
+};
 
-
-}
 

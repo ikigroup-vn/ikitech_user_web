@@ -666,8 +666,10 @@ a{
   color: white;
 }
 .group-name .active {
-  background-color: yellow;
+ background-color: #f69a51e3  !important;
+ color: white;
 }
 .element_distribute_name .actives {
-  background-color: yellow;
+  background-color:#f69a51e3  !important;
+  color: white;
 }

@@ -53,6 +53,8 @@ class PostOrder extends Component {
             customerNote: "",
             totalAfterDiscount: 0,
             totalFinal: 0,
+            typeDiscount: 0,
+            beforeDiscount: 0,
             infoProduct: {
                 inventoryProduct: "",
                 idProduct: "",
@@ -129,10 +131,10 @@ class PostOrder extends Component {
             if (firstNum < 5 && lengthNum > 1) {
                 var firstNewNum = firstNum + 1;
                 var su = 5 * Math.pow(10, lengthNum - 1);
-                if(!list.includes(su)) {
+                if (!list.includes(su)) {
                     list.push(5 * Math.pow(10, lengthNum - 1))
                 }
-               
+
             }
             //num4
             if (lengthNum > 2) {
@@ -166,10 +168,10 @@ class PostOrder extends Component {
             listSuggestion: list
         })
     }
-     onlyUnique = (value, index, self) => {
+    onlyUnique = (value, index, self) => {
         return self.indexOf(value) === index;
-      }
-      
+    }
+
     componentDidUpdate() {
 
         if (this.state.isPopoverOpen == true && this.hasFocus == false) {
@@ -184,6 +186,10 @@ class PostOrder extends Component {
     }
 
     componentDidMount() {
+        window.$(".panel-top").resizable({
+            handleSelector: ".splitter-horizontal",
+            resizeWidth: false
+        });
         const branch_id = localStorage.getItem('branch_id')
         const limit = this.state.numPage
         const params = `&limit=${limit}`
@@ -220,7 +226,10 @@ class PostOrder extends Component {
         this.setState({ listPosItem: modal })
     }
     handleCallbackTab = (modal) => {
-        this.setState({ idCart: modal })
+        this.setState({
+            idCart: modal,
+
+        })
     }
     handleCallbackPertion = (modal) => {
         this.setState({ modalUpdateCart: modal })
@@ -241,7 +250,8 @@ class PostOrder extends Component {
         var value_text = e.target.value;
         var value = value_text
         const _value = formatNumber(value);
-
+        var totalPrice = this.props.listItemCart.info_cart?.total_before_discount
+        var num1 = totalPrice * value / 100
         if (!isNaN(Number(_value))) {
             value = new Intl.NumberFormat().format(_value);
             value = value.toString().replace(/\./g, ',')
@@ -255,15 +265,26 @@ class PostOrder extends Component {
             }
 
             if (name == "discount") {
+                if (this.state.typeDiscount == 1) {
+                    if (value.length < 3) {
+                        this.setState({
+                            beforeDiscount: value,
+                            totalFinal: this.state.totalAfterDiscount - removeSignNumber(num1),
+                            priceCustomer: this.state.totalAfterDiscount - removeSignNumber(num1)
+                        }, () => {
+                            this.changeDiscount(num1)
+                        })
+                    }
+                } else {
+                    this.setState({
+                        discount: num,
+                        totalFinal: this.state.totalAfterDiscount - removeSignNumber(num),
+                        priceCustomer: this.state.totalAfterDiscount - removeSignNumber(num),
+                    }, () => {
+                        this.changeDiscount(num)
+                    })
+                }
 
-
-                this.setState({
-                    discount: num,
-                    totalFinal: this.state.totalAfterDiscount - removeSignNumber(num),
-                    priceCustomer: this.state.totalAfterDiscount - removeSignNumber(num),
-                }, () => {
-                    this.changeDiscount(num)
-                })
 
             } else {
 
@@ -338,6 +359,7 @@ class PostOrder extends Component {
             this.props.fetchInfoOneCart(this.props.match.params.store_code, branch_id, id)
             this.setState({
                 priceCustomer: 0,
+                // exchange:0
             })
         }
 
@@ -354,11 +376,12 @@ class PostOrder extends Component {
 
         if (!shallowEqual(nextState.modalUpdateCart, this.state.modalUpdateCart) ||
             !shallowEqual(nextState.txtDiscount, this.state.txtDiscount) ||
-            !shallowEqual(nextState.checked, this.state.checked) ||
-            !shallowEqual(nextState.note, this.state.note) ||
-            !shallowEqual(nextState.payment_method_id, this.state.payment_method_id)
+            // !shallowEqual(nextState.checked, this.state.checked) ||
+            !shallowEqual(nextState.note, this.state.note)
+            // !shallowEqual(nextState.payment_method_id, this.state.payment_method_id)
 
         ) {
+            console.log("IIIIIIIIIIIIIIIIII")
             const branch_id = localStorage.getItem("branch_id")
             const { store_code } = this.props.match.params
             const formData = {
@@ -426,6 +449,10 @@ class PostOrder extends Component {
 
     handChangeCheckbox = (e) => {
         this.setState({ checked: !this.state.checked })
+    }
+
+    ChangeTypeDiscount = (type) => {
+        this.setState({ typeDiscount: type, discount: "" })
     }
 
 
@@ -519,19 +546,24 @@ class PostOrder extends Component {
                                                 <span className='col-6' style={{ textAlign: "end" }}>{format(Number(listItemCart.info_cart?.total_before_discount))}</span>
                                             </div>
                                             <div className='row' style={{ padding: "3px 0", justifyContent: "space-between" }}>
-                                                <div className='title-price col-6'>{`Dùng ${listItemCart.info_cart?.total_points_can_use} xu [${format(Number(listItemCart.info_cart?.bonus_points_amount_can_use))}]`}</div>
-                                                <form action="/action_page.php">
-                                                    <div class="custom-control custom-switch">
-                                                        <input type="checkbox" class="custom-control-input" id="switch1" name="example" checked={this.state.checked} onChange={this.handChangeCheckbox} />
-                                                        <label class="custom-control-label" for="switch1"></label>
-                                                    </div>
-                                                </form>
+                                                {this.props.listItemCart.customer?.name ?
+                                                    <>                                                
+                                                    <div className='title-price col-6'>{`Dùng ${listItemCart.info_cart?.total_points_can_use} xu [${format(Number(listItemCart.info_cart?.bonus_points_amount_can_use))}]`}</div>
+                                                        <form action="/action_page.php">
+                                                            <div class="custom-control custom-switch">
+                                                                <input type="checkbox" class="custom-control-input" id="switch1" name="example" checked={this.state.checked} onChange={this.handChangeCheckbox} />
+                                                                <label class="custom-control-label" for="switch1"></label>
+                                                            </div>
+                                                        </form></>
+                                                    : ""
+                                                }
+
                                             </div>
 
                                             <div className='row item-info'>
                                                 <div className='title-price col-6' >Voucher</div>
                                                 <a className='modal-choose col-6' style={{ color: "rgb(232 117 26)", textAlign: "end", fontSize: "13px" }} data-toggle="modal" data-target="#modalVoucher" >
-                                                    <span className=''>{code ? code : "Chọn hoặc nhập mã"}</span>
+                                                    <span className=''>{listItemCart.code_voucher ? listItemCart.code_voucher : "Chọn hoặc nhập mã"}</span>
                                                 </a>
                                             </div>
 
@@ -552,7 +584,6 @@ class PostOrder extends Component {
                                                             Chiết khấu
                                                         </div>
 
-
                                                         <input
 
                                                             ref='refDiscountInput'
@@ -560,21 +591,16 @@ class PostOrder extends Component {
                                                             type="text"
                                                             name="discount" id="discount"
                                                             class=" col-4 input-discount"
-                                                            value={this.state.discount ?? 0}
-
-
+                                                            value={this.state.typeDiscount == 0 ? this.state.discount : this.state.beforeDiscount}
 
                                                         ></input>
 
-                                                        <div className='type-discount-price'
-
-                                                            style={{
-                                                                backgroundColor: "#cf7a37"
-                                                            }}
+                                                        <div className={this.state.typeDiscount == 0 ? "type-discount-price activesss" : "type-discount-price"}
+                                                            onClick={() => this.ChangeTypeDiscount(0)}
                                                         >
                                                             VND
                                                         </div>
-                                                        <div className='type-discount-price'>
+                                                        <div className={this.state.typeDiscount == 1 ? "type-discount-price activesss" : "type-discount-price"} onClick={() => this.ChangeTypeDiscount(1)}>
                                                             %
                                                         </div>
                                                     </div>
@@ -590,7 +616,7 @@ class PostOrder extends Component {
                                                         type="text"
                                                         name="discount" id="discount"
                                                         class=" col-4"
-                                                        value={this.state.discount}
+                                                        value={this.state.typeDiscount == 0 ? this.state.discount : this.state.beforeDiscount}
                                                         style={{
                                                             background: "transparent",
                                                             height: "28px", width: "100px",
@@ -599,7 +625,7 @@ class PostOrder extends Component {
                                                             borderBottom: "1px solid rgb(128 128 128 / 71%)"
                                                         }}
                                                     // data-toggle="modal" data-target="#modalDiscount" 
-                                                    >{this.state.discount ?? 0}</button>
+                                                    >{this.state.typeDiscount == 0 ? this.state.discount : `${this.state.beforeDiscount}%`}</button>
                                                 </div>
 
                                             </Popover>

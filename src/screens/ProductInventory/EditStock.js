@@ -58,6 +58,7 @@ class EditStock extends Component {
         if (
           (!shallowEqual(nextProps.modalSub, this.props.modalSub) )
         ) {
+            console.log("aaaaaaaaaaa")
           this.setState({
             cost_of_capital: nextProps.modalSub.SubElement.cost_of_capital,
             quantity_in_stock:nextProps.modalSub.SubElement.stock,
@@ -68,6 +69,7 @@ class EditStock extends Component {
           })
         }
         if(!shallowEqual(nextProps.modalElement, this.props.modalElement)){
+            console.log("bbbbbbbbbbbb")
             this.setState({
                 cost_of_capital: nextProps.modalElement.element.cost_of_capital,
                 quantity_in_stock:nextProps.modalElement.element.stock,
@@ -78,6 +80,7 @@ class EditStock extends Component {
             })
         }
         if(!shallowEqual(nextProps.modalProduct,this.props.modalProduct)){
+            console.log("ccccccccccccc")
             this.setState({
                 cost_of_capital: nextProps.modalProduct.data.inventory?.main_cost_of_capital,
                 quantity_in_stock:nextProps.modalProduct.data.inventory?.main_stock,

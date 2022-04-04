@@ -37,7 +37,7 @@ class ImportStock extends Component {
         this.props.fetchAllImportStock(store_code, branch_id, 1, params)
     }
 
-    showData = (listImportStock,store_code) => {
+    showData = (listImportStock, store_code) => {
         var result = null
         if (listImportStock) {
             result = listImportStock.map((item, index) => {
@@ -48,7 +48,7 @@ class ImportStock extends Component {
                         <td>{item.code}</td>
                         <td>{format(Number(item.total_final))}</td>
                         <td>{item.supplier?.name}</td>
-                        <td>{item.status===0?"Đặt hàng":item.status===1?"Duyệt":item.status===2?"Nhập kho":item.status===3?"Hoàn thành":item.status===4?"Đã hủy":item.status===5?"Kết thúc":item.status===6?"Trả hàng":""}</td>
+                        <td>{item.status === 0 ? "Đặt hàng" : item.status === 1 ? "Duyệt" : item.status === 2 ? "Nhập kho" : item.status === 3 ? "Hoàn thành" : item.status === 4 ? "Đã hủy" : item.status === 5 ? "Kết thúc" : item.status === 6 ? "Trả hàng" : ""}</td>
                         <td>{datetime}</td>
                         <td>
                             <Link
@@ -85,8 +85,11 @@ class ImportStock extends Component {
                                     alert={this.props.alert}
                                 />
                                 <div
-                                    style={{ display: "flex", justifyContent: "flex-end" }}
+                                    style={{ display: "flex", justifyContent: "space-between" }}
                                 >
+                                    <h4 className="h4 title_content mb-0 text-gray-800">
+                                        Nhập hàng
+                                    </h4>
                                     <Link to={`/import_stock/create/${store_code}`} class="btn btn-primary btn-sm" >
                                         <i class="fa fa-plus"></i> Tạo đơn nhập hàng
                                     </Link>
@@ -95,6 +98,7 @@ class ImportStock extends Component {
                                 <br></br>
                                 <div className='card'>
                                     <div className='card-header py-3' style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+
                                         <form onSubmit={this.searchData}>
                                             <div
                                                 class="input-group mb-6"
@@ -133,15 +137,15 @@ class ImportStock extends Component {
                                                         <th>Tổng tiền</th>
                                                         <th>Nhà cung cấp</th>
                                                         <th>Trạng thái</th>
-                                                        <th>Thời gian</th>
+                                                        <th>Thời gian đặt hàng</th>
                                                         <th>Hành động</th>
                                                     </tr>
                                                 </thead>
 
-                                                <tbody>{this.showData(listImportStock?.data,store_code)}</tbody>
+                                                <tbody>{this.showData(listImportStock?.data, store_code)}</tbody>
                                             </table>
                                         </div>
-                                        <Pagination store_code ={store_code} listImportStock ={listImportStock}/>
+                                        <Pagination store_code={store_code} listImportStock={listImportStock} />
                                     </div>
                                 </div>
 
@@ -161,8 +165,8 @@ const mapStateToProps = (state) => {
 }
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        fetchAllImportStock: (store_code,branch_id,page,params) =>{
-            dispatch(ImportAction.fetchAllImportStock(store_code,branch_id,page,params))
+        fetchAllImportStock: (store_code, branch_id, page, params) => {
+            dispatch(ImportAction.fetchAllImportStock(store_code, branch_id, page, params))
         }
     }
 }

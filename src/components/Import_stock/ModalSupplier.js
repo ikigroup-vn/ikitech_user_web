@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
-import * as OrderAction from '../../actions/add_order';
+import * as dashboardAction from "../../actions/dashboard";
 
 class ModalSupplier extends Component {
     constructor(props) {
@@ -10,7 +10,7 @@ class ModalSupplier extends Component {
         }
     }
     handleOnclicks = (namePertion, phone, id) => {
-        this.props.handleCallbackSupplier({ name: namePertion, phone_number: phone,id_supplier:id })
+        this.props.handleCallbackSupplier({ name: namePertion, phone_number: phone, id_supplier: id })
     }
     onChangeSearchPersion = (e) => {
         this.setState({ searchPersion: e.target.value })
@@ -20,7 +20,7 @@ class ModalSupplier extends Component {
         var { store_code } = this.props
         var { searchPersion } = this.state
         var params = `search=${searchPersion}`
-        this.props.fetchSearchPersion(store_code, params);
+        this.props.fetchAllSupplier(store_code,1,params);
     };
     render() {
         var { supplier } = this.props
@@ -63,20 +63,33 @@ class ModalSupplier extends Component {
                                 </form>
                             </div>
                             <div class="modal-body">
-                                {(supplier.data ?? []).map((item, index) => (
-                                    <div className='model-card row' key={index} style={{ borderRadios: "0.25em", border: "dashed 2px red", position: "relative", margin: "5px" }}>
-                                        <button class="btn btn-info" onClick={() => this.handleOnclicks(item.name, item.phone, item.id)} data-dismiss="modal" style={{ backgroundColor: "green", position: "absolute", right: "3px", top: "3px", zIndex: "100" }}>Chọn</button>
-                                        <div className='col-6'>
-                                            <span style={{ fontWeight: "bold" }}>Tên</span>
-                                            <div className='name-pertion'>{item.name}</div>
-                                        </div>
-                                        <div className='col-6'>
-                                            <span style={{ fontWeight: "bold" }}>SDT</span>
-                                            <div className='phone-pertion'>{item.phone}</div>
-                                        </div>
+                                <div class="table-responsive">
+                                    <table class="table  " id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>STT</th>
+                                                <th>Tên</th>
+                                                <th>SĐT</th>
+                                                <th>Hành động</th>
+                                            </tr>
+                                        </thead>
 
-                                    </div>
-                                ))}
+                                        <tbody>
+                                            {(supplier.data ?? []).map((item, index) => (
+                                                <tr>
+                                                    <td className='index'>{index+1}</td>
+                                                    <td  className='name-pertion'>{item.name}</td>
+                                                    <td className='phone-pertion'>{item.phone}</td>
+                                                    <td style={{textAlign:"center"}}>
+                                                    <button class="btn btn-info" onClick={() => this.handleOnclicks(item.name, item.phone, item.id)} data-dismiss="modal" >Chọn</button>
+                                                    </td>
+                                                </tr>
+                                            )
+                                            )}
+
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -87,7 +100,9 @@ class ModalSupplier extends Component {
 }
 const mapDispatchToProps = (dispatch, props) => {
     return {
-
+        fetchAllSupplier: (store_code,page,params) => {
+            dispatch(dashboardAction.fetchAllSupplier(store_code,page,params))
+        }
     }
 }
 export default connect(null, mapDispatchToProps)(ModalSupplier);

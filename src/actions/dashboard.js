@@ -47,14 +47,14 @@ export const fetchBranchStore = (store_code) => {
   };
 };
 
-export const fetchAllSupplier = (store_code) => {
+export const fetchAllSupplier = (store_code,page,params) => {
   console.log("store_code",store_code)
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading : "show"
     })
-    storeApi.fetchAllSupplier(store_code).then((res) => {
+    storeApi.fetchAllSupplier(store_code,page,params).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
         loading : "hide"

@@ -55,7 +55,7 @@ class Pagination extends Component {
    
 <nav aria-label="Page navigation" className="float-pagination">
   <ul class="pagination  tab-pagination pg-blue">
-    {this.showData(this.props.sheetsInventory.links)}
+    {this.showData(this.props.sheetsInventory?.links)}
   </ul>
 </nav>
         

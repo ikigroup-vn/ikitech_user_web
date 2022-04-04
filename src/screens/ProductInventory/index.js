@@ -55,9 +55,10 @@ class ProductInventory extends Component {
     this.setState({
       numPage
     })
-    var params = `&search=${searchValue ?? ""}&limit=${numPage}${this.bonusParam}`
+    var params = `&search=${searchValue ?? ""}&limit=${numPage}`
+    
     const branch_id = localStorage.getItem('branch_id');
-    this.props.fetchAllProductV2(this.props.match.params.store_code, branch_id, numPage, params);
+    this.props.fetchAllProductV2(this.props.match.params.store_code, branch_id, 1, params);
 
 
   }
@@ -127,7 +128,8 @@ class ProductInventory extends Component {
     var { store_code } = this.props.match.params;
     var { searchValue } = this.state;
     const branch_id = localStorage.getItem('branch_id');
-    var params = `&search=${searchValue ?? ""}${this.bonusParam}`;
+    var params = `&search=${searchValue ?? ""}`;
+    console.log("params",params)
     this.setState({ numPage: 20 })
     this.props.fetchAllProductV2(store_code, branch_id, 1, params);
   };
@@ -196,7 +198,7 @@ class ProductInventory extends Component {
                     <div class="container-fluid">
                       <div style={{ display: "flex", justifyContent: "space-between" }}>
                         <h4 className="h4 title_content mb-0 text-gray-800">
-                          Kho hàng
+                          Tồn kho
                         </h4>
 
                       </div>
@@ -223,7 +225,7 @@ class ProductInventory extends Component {
                                   value={searchValue}
                                   onChange={this.onChangeSearch}
                                   class="form-control"
-                                  placeholder="Tìm mã đơn, tên, SĐT"
+                                  placeholder="Tìm sản phẩm"
                                 />
                                 <div class="input-group-append">
                                   <button
@@ -240,7 +242,7 @@ class ProductInventory extends Component {
                                 <span className="num-total_item" >{products.total}&nbsp;</span><span className="text-total_item" id="user_name">sản phẩm</span>
                               </p>
                             </form>
-                            <div style={{ display: "flex" }}>
+                            <div style={{ display: "flex",padding: "0 20px" }}>
                               <div style={{ display: "flex" }}>
                                 <span
                                   style={{
@@ -252,7 +254,7 @@ class ProductInventory extends Component {
                                     margin: "auto",
                                     marginTop: "10px",
                                     marginRight: "20px",
-                                    width: "180px",
+                                    width: "226px",
                                   }} name="txtDiscoutType" id="input" class="form-control" onChange={this.onChangeType} >
                 
                                   <option value="0" selected>Tất cả sản phẩm</option>
@@ -283,12 +285,6 @@ class ProductInventory extends Component {
                                   <option value="50">50</option>
                                 </select>
                               </div>
-
-
-                              <Pagination limit={numPage}
-                                searchValue={searchValue}
-                                bonusParam={bonusParam}
-                                passNumPage={this.passNumPage} store_code={store_code} products={products} />
                             </div>
                           </div>
                         </div>

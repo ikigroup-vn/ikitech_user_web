@@ -31,11 +31,11 @@ class CardProduct extends Component {
                                 <div class="card-body" style={{padding:'0'}}>
                                 <p class="card-title" style={{margin:'0',overflow:"hidden",whiteSpace:"nowrap",textOverflow:'ellipsis'}}>{data.name}</p>
                                 {data.product_discount?<>
-                                    <p class="card-text" style={{color:"red", margin:"0"}}>{data.min_price===data.max_price?`${format(Number(data.price - data.price* data.product_discount.value/100))}`:`${format(Number(data.min_price - data.min_price * data.product_discount.value/100))} - ${format(Number(data.max_price - data.max_price* data.product_discount.value/100))}`}</p>
+                                    <p class="card-text" style={{color:"red", margin:"0",fontSize:'13px'}}>{data.min_price===data.max_price?`${format(Number(data.price - data.price* data.product_discount.value/100))}`:`${format(Number(data.min_price - data.min_price * data.product_discount.value/100))} - ${format(Number(data.max_price - data.max_price* data.product_discount.value/100))}`}</p>
                                     <p class="card-text" style={{fontSize:"13px",textDecoration:"line-through"}}>{data.min_price===data.max_price?`${format(Number(data.price))}`:`${format(Number(data.min_price))} -${format(Number(data.max_price))}`}</p>
                                 </>:
                                 <>
-                                    <p class="card-text" style={{color:"red"}}>{format(Number(data.price))}</p>
+                                    <p class="card-text" style={{color:"red",fontSize:'13px'}}>{data.max_price === data.min_price ?format(Number(data.price)):`${format(Number(data.min_price))} -${format(Number(data.max_price))}`}</p>
                                     <p class="card-text" style={{fontSize:"13px",textDecoration:"line-through"}}></p>
                                 </>
                             }
@@ -55,7 +55,7 @@ class CardProduct extends Component {
         var {products} = this.props
         var listProducts = filter_arr(products.data)
         return (
-            <div className='show-product' style={{height:"550px",overflow:"hidden",overflowY:"auto"}}>
+            <div className='show-product' style={{height:"686px",overflow:"hidden",overflowY:"auto"}}>
                 <div className='row'>
                     {this.showProduct(listProducts)}
                 </div>
