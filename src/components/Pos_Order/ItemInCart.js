@@ -48,7 +48,6 @@ class ItemInCart extends Component {
     addQuantity(idCart, productId,lineItemId, quantity, distribute,quantityInStock) {
         
         if(this.props.item.distributes_selected !== null&&this.props.item.distributes_selected.length >0){
-            
             this.nameElementDistribute = this.props.item.distributes_selected[0].value 
             this.nameSubElementDistribute =this.props.item.distributes_selected[0].sub_element_distributes
             var maxQuantity = maxQuantityInPos(this.props.item.product,this.nameElementDistribute,this.nameSubElementDistribute)
@@ -92,12 +91,13 @@ class ItemInCart extends Component {
 
 
     }
-    handleOnChange = (e) => {
+    handleOnChange = (e,cartId) => {
         const quantity = e.target.value
         const quantityInStock = this.props.item.product.quantity_in_stock
-        if(this.props.item.distributes_selected){
-            this.nameElementDistribute = this.props.item.distributes_selected[0].value 
-            this.nameSubElementDistribute =this.props.item.distributes_selected[0].sub_element_distributes
+        if(this.props.item.distributes_selected !== null&&this.props.item.distributes_selected.length >0){
+            console.log("aaaaaaaaaaa")
+            this.nameElementDistribute = this.props.item.distributes_selected[0]?.value 
+            this.nameSubElementDistribute =this.props.item.distributes_selected[0]?.sub_element_distributes
             var maxQuantity = maxQuantityInPos(this.props.item.product,this.nameElementDistribute,this.nameSubElementDistribute)
             if(quantity < maxQuantity){
             
@@ -117,7 +117,9 @@ class ItemInCart extends Component {
                 return
             }
         }else{
+            
             if(quantityInStock ===-1){
+               
                 const q = quantity
                 this.setState({
                     currentQuantity: q 
@@ -126,11 +128,13 @@ class ItemInCart extends Component {
                 return
             }
             if(quantity < quantityInStock){
+                console.log("bbbbbbbbbb1",this.props.item.product.id)
                 const q = quantity
                 this.setState({
                     currentQuantity: q 
                 })
-                this.props.addQuantity(this.props.item.id, this.props.item.product.id, q, this.props.item.distributes_selected) 
+                this.props.addQuantitys({CartId:this.props.item.list_cart_id,lineItemId:this.props.item.id, idProduct:this.props.item.product.id, quantity:q, distribute:this.props.item.distributes_selected}) 
+                
                 return
             }
             if(quantity >quantityInStock){

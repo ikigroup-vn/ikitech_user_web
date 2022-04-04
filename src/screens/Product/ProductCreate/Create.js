@@ -46,7 +46,7 @@ class ProductCreate extends Component {
       formdata.check_inventory = data.check_inventory
       formdata.main_cost_of_capital = data.txtCostOfCapital.toString().replace(/,/g, '').replace(/\./g, '');
       formdata.main_stock = data.txtQuantityInStock.toString().replace(/,/g, '').replace(/\./g, '');
-
+      formdata.import_price = data.txtImportPrice.toString().replace(/,/g, '').replace(/\./g, '');
       var categories = [];
       var category_children_ids = [];
       if (data.category_parent.length > 0) {

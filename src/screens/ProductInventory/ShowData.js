@@ -15,12 +15,12 @@ class ShowData extends Component {
 
     handleEditStockElement = (element, distribute) => {
         this.props.handleCallBackElement({
-            element: element, idProduct: this.props.data.id, NameDistribute: distribute
+            element: element, idProduct: this.props.data.id, NameDistribute: distribute, time: Date()
         })
     }
     handleEditSubElement = (subElement, element, distribute) => {
         this.props.handleCallBackSubElement({
-            SubElement: subElement.name, NameElement: element, idProduct: this.props.data.id, NameDistribute: distribute
+            SubElement: subElement.name, NameElement: element, idProduct: this.props.data.id, NameDistribute: distribute, time: Date()
         })
     }
     handleEditStockProduct = (data) => {

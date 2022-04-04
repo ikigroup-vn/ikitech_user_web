@@ -27,8 +27,6 @@ class CreateImportStock extends Component {
             price_total: 0,
             note: "",
             infoSupplier: "",
-            tax: "",
-            discount: "",
             cost: "",
             txtDiscoutType: 0,
             txtValueDiscount: "",
@@ -159,10 +157,11 @@ class CreateImportStock extends Component {
         const { store_code } = this.props.match.params
         const { infoSupplier } = this.state
         const branch_id = localStorage.getItem('branch_id')
+        var affterDiscount = ""
         if(this.state.txtDiscoutType ==0){
-            var affterDiscount = this.state.txtValueDiscount
+            affterDiscount= formatNumber(this.state.txtValueDiscount)
         }else{
-            
+            affterDiscount = (this.state.txtValueDiscount/100)*this.state.price_total 
         }
         const formData = {
             note: this.state.note,
@@ -268,11 +267,11 @@ class CreateImportStock extends Component {
                                                             </select>
                                                             <div class={`form-group ${type_discount_default}`}>
                                                                 <input type="text" name="txtValueDiscount" id="txtValueDiscount" value={txtValueDiscount} placeholder="Nhập giá trị" autocomplete="off"
-                                                                    style={{ height: "28px", width: "100px", textAlign: "right", borderRadius: 0, borderBottom: "1px solid rgb(128 128 128 / 71%)" }} onChange={this.onChange} ></input>
+                                                                    style={{ height: "28px", width: "114px", textAlign: "right", borderRadius: 0, borderBottom: "1px solid rgb(128 128 128 / 71%)" }} onChange={this.onChange} ></input>
                                                             </div>
                                                             <div className={`${type_discount_percent}`}>
                                                                 <input type="text" name="txtValueDiscount" id="txtValueDiscount" value={txtValueDiscount} placeholder="Nhập %" autocomplete="off"
-                                                                    style={{ height: "28px", width: "100px", textAlign: "right", border: 0, borderRadius: 0, borderBottom: "1px solid rgb(128 128 128 / 71%)" }} onChange={this.onChange} ></input>
+                                                                    style={{ height: "28px", width: "114px", textAlign: "right", border: 0, borderRadius: 0, borderBottom: "1px solid rgb(128 128 128 / 71%)" }} onChange={this.onChange} ></input>
                                                             </div>
                                                         </div>
 

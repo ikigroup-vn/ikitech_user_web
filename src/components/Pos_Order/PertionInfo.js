@@ -65,20 +65,33 @@ class PertionInfo extends Component {
                                 </form>
                             </div>
                             <div class="modal-body">
-                                {(listPertion.data ?? []).map((item, index) => (
-                                    <div className='model-card row' key={index} style={{ borderRadios: "0.25em", border: "dashed 2px red", position: "relative", margin: "5px" }}>
-                                        <button class="btn btn-info" onClick={() => this.handleOnclicks(item.name, item.phone_number, item.id,item.debt,item.id)} data-dismiss="modal" style={{ backgroundColor: "green", position: "absolute", right: "3px", top: "3px", zIndex: "100" }}>Chọn</button>
-                                        <div className='col-6'>
-                                            <span style={{ fontWeight: "bold" }}>Tên</span>
-                                            <div className='name-pertion'>{item.name}</div>
-                                        </div>
-                                        <div className='col-6'>
-                                            <span style={{ fontWeight: "bold" }}>SDT</span>
-                                            <div className='phone-pertion'>{item.phone_number}</div>
-                                        </div>
+                                <div class="table-responsive">
+                                    <table class="table  " id="dataTable" width="100%" cellspacing="0">
+                                        <thead>
+                                            <tr>
+                                                <th>STT</th>
+                                                <th>Tên</th>
+                                                <th>SĐT</th>
+                                                <th>Hành động</th>
+                                            </tr>
+                                        </thead>
 
-                                    </div>
-                                ))}
+                                        <tbody>
+                                            {(listPertion.data ?? []).map((item, index) => (
+                                                <tr>
+                                                    <td className='index'>{index+1}</td>
+                                                    <td  className='name-pertion'>{item.name}</td>
+                                                    <td className='phone-pertion'>{item.phone_number}</td>
+                                                    <td style={{textAlign:"center"}}>
+                                                    <button class="btn btn-info" onClick={() => this.handleOnclicks(item.name, item.phone_number, item.id,item.debt,item.id)} data-dismiss="modal">Chọn</button>
+                                                    </td>
+                                                </tr>
+                                            )
+                                            )}
+
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
                             <div class="modal-footer">
                                 <button
