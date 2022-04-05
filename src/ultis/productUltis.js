@@ -82,7 +82,14 @@ export const maxQuantityInPos =(product,distributeName,subDistributeName) =>{
 }
 
 export const findMaxImportPrice = (ProductItem) =>{
-
+    if(ProductItem.distributes.length >0){
+        if(ProductItem.distributes[0].element_distributes.length >0  && ProductItem.distributes[0].element_distributes[0].sub_element_distributes.length >0){
+            console.log("11111111111111")
+        }
+        if(ProductItem.distributes[0].element_distributes.length >0 ){
+            console.log("22222222222222")
+        }
+    }
     console.log("ProductItem",ProductItem)
 
 }
