@@ -25,6 +25,7 @@ class ModalDetail extends Component {
     }
     handleClick = (nameDistribute, nameObject, index, id, quatity) => {
         var { distributes } = this.props.modal.inventoryProduct
+
         this.setState({ distributeSelected: index, subElementDistributeSelected: -1, element_distributes: "", distributeValue: nameDistribute, distributeName: nameObject })
         if (distributes.length > 0) {
             if (distributes[0].element_distributes.length > 0) {

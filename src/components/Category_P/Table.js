@@ -82,8 +82,8 @@ class Table extends Component {
                 <div class="table-body-cell" style={{width:"15%"}}><img src={image_url} className="img-responsive" alt="Image" width="100px" height="100px" /></div>
                 <div class="table-body-cell table-custom" style={{width:"35%"}}>
                   <div className="wrap-conten" style={{display:"flex", justifyContent:"space-between"}}>
-                  <div className="name-category">{data.name}</div>
-                  <div className="button-category btn-group">
+                  <div className="name-category" style={{width: "50%",overflow: "hidden",textOverflow: "ellipsis"}}>{data.name}</div>
+                  <div className="button-category btn-group" style={{height:"30px"}}>
                   <a
                     style={{ marginLeft: "10px",color:"white" }}
                     onClick={(e) => this.passEditFunc(e, data.id, data.name, data.image_url,data.is_show_home)}
@@ -116,9 +116,9 @@ class Table extends Component {
                         <div className="wrap-conten-child" style={{display:"flex",padding:"3px",borderBottom:"1px solid #bdbdbd", justifyContent:"space-between", marginBottom:"5px"}}>
                           <div className="wrap-img-child" style={{display:"flex", alignItems:"center"}}>
                             <img src={image_url_child} className="img-responsive" alt="Image" width="30px" height="30px" style={{marginRight:"10px"}} />
-                            <div className="name-category">{data1.name}</div>
+                            <div className="name-category" style={{width: "50%",overflow: "hidden",textOverflow: "ellipsis"}}>{data1.name}</div>
                           </div>
-                          <div class="button-category btn-group">
+                          <div class="button-category btn-group" style={{height:"30px"}}>
                             <a
                               style={{ marginLeft: "10px",color:"white" }}
                               onClick={(e) => this.editChild(e, data.id, data1.id, data1.name,data1.image_url)}

@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { format } from '../../ultis/helpers'
 import * as Env from "../../ultis/default"
+import { findImportPrice, findImportPriceSub } from '../../ultis/productUltis'
 
 class ModalDetail extends Component {
     constructor(props) {
@@ -20,11 +21,17 @@ class ModalDetail extends Component {
             maxPriceAfterDiscount: "",
             stateDistribute: false,
             messageErr: "",
-            quantityInStock: ""
+            quantityInStock: "",
+            elementDistributeOj:""
         }
     }
+
     handleClick = (nameDistribute, nameObject, index, id, quatity) => {
+        
         var { distributes } = this.props.modal.inventoryProduct
+        var distribute  = this.props.modal.distributeProduct
+        var elementImport =  findImportPrice(distribute,id)
+        console.log("element",elementImport)
         this.setState({ distributeSelected: index, subElementDistributeSelected: -1, element_distributes: "", distributeValue: nameDistribute, distributeName: nameObject })
         if (distributes.length > 0) {
             if (distributes[0].element_distributes.length > 0) {
@@ -49,7 +56,7 @@ class ModalDetail extends Component {
                                 this.setState({
                                     elementObject: elments,
                                     messageErr: "",
-                                
+                                    elementDistributeOj:elementImport
                                 })
                         }
                     }
@@ -78,10 +85,11 @@ class ModalDetail extends Component {
                             if (elments)
                                 this.setState({
                                     elementObject: elments,
-                                    afterChoosePrice: elments.cost_of_capital,
+                                    afterChoosePrice: elementImport.import_price,
                                     quantityInStock: quatity,
                                     messageErr: "",
                                     idElement:id,
+                                    elementDistributeOj:elementImport
                                 })
                         }
                     }
@@ -92,12 +100,15 @@ class ModalDetail extends Component {
     }
 
     handleClickElement = (nameElement, price, index,id) => {
-        var { sub_element_distributes } = this.state.elementObject
+        var sub_element_distribute = this.state.elementObject.sub_element_distributes
+        var {sub_element_distributes} = this.state.elementDistributeOj
+        var subImport = findImportPriceSub(sub_element_distributes,nameElement)
+        console.log("subImport",subImport.import_price)
         if (this.props.modal.discountProduct) {
             var { value } = this.props.modal.discountProduct
             this.setState({ subElementDistributeSelected: index, element_distributes: nameElement })
-            var indexDistribute = sub_element_distributes.map(e => e.name).indexOf(nameElement)
-            var sub_element = sub_element_distributes[indexDistribute]
+            var indexDistribute = sub_element_distribute.map(e => e.name).indexOf(nameElement)
+            var sub_element = sub_element_distribute[indexDistribute]
             this.setState({
                 afterChoosePrice: sub_element.price - (sub_element.price * value / 100),
                 priceBeforeDiscount: sub_element.price,
@@ -105,19 +116,19 @@ class ModalDetail extends Component {
                 idElement:id,
             })
         } else {
-            if (sub_element_distributes) {
+            if (sub_element_distribute) {
                 this.setState({ subElementDistributeSelected: index, element_distributes: nameElement })
-                var indexDistributes = sub_element_distributes.map(e => e.name).indexOf(nameElement)
-                var sub_elements = sub_element_distributes[indexDistributes]
+                var indexDistributes = sub_element_distribute.map(e => e.name).indexOf(nameElement)
+                var sub_elements = sub_element_distribute[indexDistributes]
                 this.setState({
-                    afterChoosePrice: sub_elements?.cost_of_capital,
+                    afterChoosePrice: subImport.import_price,
                     priceBeforeDiscount: sub_elements?.price,
                     quantityInStock: sub_elements?.stock,
                     idElement:id,
                     messageErr: ""
                 })
             } else {
-                this.setState({ subElementDistributeSelected: index,idElement:id, element_distributes: nameElement })
+                this.setState({afterChoosePrice: subImport.import_price, subElementDistributeSelected: index,idElement:id, element_distributes: nameElement,quantityInStock: sub_elements?.stock, })
             }
 
         }

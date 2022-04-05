@@ -178,6 +178,9 @@ class EditInventory extends Component {
                     <div id="content-wrapper" className='d-flex flex-column'>
                         <div id='content'>
                             <Topbar store_code={store_code} />
+                            <h4 className="h4 title_content mb-10 text-gray-800 " style={{paddingLeft:"30px"}}>
+                                        Sửa phiếu kiểm hàng
+                            </h4>
                             <div className='container-fluid'>
                                 <div className='row'>
                                     <div className='col-lg-4 col-xl-4 col-md-12 col-sm-12'>
@@ -231,7 +234,7 @@ class EditInventory extends Component {
                                                             value={searchValue}
                                                             onChange={this.onChangeSearch}
                                                             class="form-control"
-                                                            placeholder="Tìm mã đơn, tên, SĐT"
+                                                            placeholder="Tìm kiếm sản phẩm"
                                                         />
                                                         <div class="input-group-append">
                                                             <button

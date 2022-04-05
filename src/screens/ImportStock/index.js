@@ -43,7 +43,7 @@ class ImportStock extends Component {
             result = listImportStock.map((item, index) => {
                 var datetime = moment(item.created_at, "YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY HH:mm");
                 return (
-                    <tr>
+                    <tr className='wrap-content'>
                         <td>{index + 1}</td>
                         <td>{item.code}</td>
                         <td>{format(Number(item.total_final))}</td>

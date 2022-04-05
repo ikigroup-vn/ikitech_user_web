@@ -2,13 +2,10 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import Sidebar from '../../components/Partials/Sidebar';
 import Topbar from '../../components/Partials/Topbar';
-import { shallowEqual } from '../../ultis/shallowEqual';
 import * as Types from "../../constants/ActionType";
 import Alert from '../../components/Partials/Alert';
-import Pagination from '../../components/ProductAgency/Pagination';
 import * as productAction from "../../actions/product";
 import * as ImportAction from "../../actions/import_stock"
-import history from '../../history';
 import CardProduct from '../../components/Import_stock/CardProduct';
 import ModalDetail from '../../components/Import_stock/ModalDetail';
 import ModalSupplier from '../../components/Import_stock/ModalSupplier';
@@ -16,6 +13,7 @@ import * as dashboardAction from "../../actions/dashboard";
 import ListImportStock from '../../components/Import_stock/ListImportStock';
 import { format } from '../../ultis/helpers';
 import { formatNumber } from "../../ultis/helpers"
+import Paginations from '../../components/Import_stock/Paginations';
 class CreateImportStock extends Component {
     constructor(props) {
         super(props)
@@ -195,12 +193,18 @@ class CreateImportStock extends Component {
         var value = e.target.value
         this.setState({ [name]: value })
     }
+    getAllProduct = () =>{
+        this.setState({searchValue:""})
+        const { store_code } = this.props.match.params
+        const branch_id = localStorage.getItem('branch_id')
+        this.props.fetchAllProductV2(store_code, branch_id); 
+    }
 
     searchData = (e) => {
         e.preventDefault()
         var { store_code } = this.props.match.params;
         var { searchValue } = this.state;
-        var params = `&search=${searchValue}`;
+        var params = `&search=${searchValue}&check_inventory=true`;
         this.setState({ numPage: 20 })
         const branch_id = localStorage.getItem('branch_id')
         this.props.fetchAllProductV2(store_code, branch_id, 1, params);
@@ -212,7 +216,8 @@ class CreateImportStock extends Component {
     componentDidMount() {
         const { store_code } = this.props.match.params
         const branch_id = localStorage.getItem('branch_id')
-        this.props.fetchAllProductV2(store_code, branch_id);
+        const bonusParam = "&check_inventory=true"
+        this.props.fetchAllProductV2(store_code, branch_id,1,bonusParam);
         this.props.fetchAllSupplier(store_code);
     }
 
@@ -223,6 +228,7 @@ class CreateImportStock extends Component {
         var { searchValue, numPage, listImportStock, infoSupplier, price_total, reality_exist_total } = this.state
         var type_discount_default = txtDiscoutType == "0" ? "show" : "hide"
         var type_discount_percent = txtDiscoutType == "1" ? "show" : "hide"
+        const bonusParam = "&check_inventory=true"
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
@@ -287,7 +293,7 @@ class CreateImportStock extends Component {
                                                 <label for="comment">Thêm ghi chú:</label>
                                                 <textarea class="form-control" rows="5" id="comment" style={{ height: "50px" }} onChange={this.onChanges}></textarea>
                                             </div>
-                                            <button className='btn btn-danger' style={{ marginTop: "20px" }} onClick={() => this.createImportStock()}>Tạo đơn nhập</button>
+                                            <button className='btn btn-warning' style={{ marginTop: "20px" }} onClick={() => this.createImportStock()}>Tạo đơn nhập</button>
                                         </div>
                                     </div>
 
@@ -300,7 +306,7 @@ class CreateImportStock extends Component {
                                                         style={{ marginTop: "10px" }}
                                                     >
                                                         <input
-                                                            style={{ maxWidth: "400px" }}
+                                                            style={{ maxWidth: "400px",position:"relative" }}
                                                             type="search"
                                                             name="txtSearch"
                                                             value={searchValue}
@@ -308,18 +314,24 @@ class CreateImportStock extends Component {
                                                             class="form-control"
                                                             placeholder="Tìm sản phẩm"
                                                         />
-                                                        <div class="input-group-append">
-                                                            <button
+            
+                                                        <div class="input-group-append" style={{position:"relative" }}>
+                                                            <button 
                                                                 class="btn btn-warning"
                                                                 type="submit"
-
-                                                            >
+                                                                style={{borderRadius: "3px"}}
+                                                           >
                                                                 <i class="fa fa-search"></i>
                                                             </button>
+                                                           {searchValue?<i class="fas fa-close close-status " style={{position:"absolute",left:"-14px",top:"11px"}} onClick={this.getAllProduct}></i>:""} 
                                                         </div>
 
                                                     </div>
                                                 </form>
+                                                <div className='wrap-pagination'>
+                                                    <Paginations limit={numPage} bonusParam = {bonusParam} 
+                                                        passNumPage={this.passNumPage} store_code={store_code} products={products} />
+                                                </div>
                                                 <ModalDetail modal={this.state.infoProduct} handleCallbackPushProduct={this.handleCallbackPushProduct} />
                                                 <ModalSupplier supplier={supplier} store_code={store_code} handleCallbackSupplier={this.handleCallbackSupplier} />
                                             </div>

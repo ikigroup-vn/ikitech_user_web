@@ -135,7 +135,7 @@ class CreateInventory extends Component {
         e.preventDefault()
         var { store_code } = this.props.match.params;
         var { searchValue } = this.state;
-        var params = `&search=${searchValue}`;
+        var params = `&search=${searchValue}&check_inventory=true`;
         this.setState({ numPage: 20 })
         const branch_id = localStorage.getItem('branch_id')
         this.props.fetchAllProductV2(store_code, branch_id, 1, params);
@@ -146,13 +146,15 @@ class CreateInventory extends Component {
 
     componentDidMount() {
         const branch_id = localStorage.getItem('branch_id')
-        this.props.fetchAllProductV2(this.props.match.params.store_code, branch_id);
+        const params = `&check_inventory=true`
+        this.props.fetchAllProductV2(this.props.match.params.store_code, branch_id,1,params);
     }
 
     render() {
         var { store_code } = this.props.match.params
         var { searchValue, numPage, listInventory, existing_branch, reality_exist_total } = this.state
         const { products } = this.props
+        const bonusParam = "&check_inventory=true"
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
@@ -228,7 +230,7 @@ class CreateInventory extends Component {
                                                     </div>
                                                 </form>
                                                 <div className='wrap-pagination'>
-                                                    <Paginations limit={numPage}
+                                                    <Paginations limit={numPage} bonusParam ={bonusParam}
                                                         passNumPage={this.passNumPage} store_code={store_code} products={products} />
                                                 </div>
                                                 <ModalDetail modal={this.state.infoProduct} handleCallbackPushProduct={this.handleCallbackPushProduct} />

@@ -20,7 +20,7 @@ class ShowData extends Component {
     }
     handleEditSubElement = (subElement, element, distribute) => {
         this.props.handleCallBackSubElement({
-            SubElement: subElement.name, NameElement: element, idProduct: this.props.data.id, NameDistribute: distribute, time: Date()
+            sub:subElement,SubElement: subElement.name, NameElement: element, idProduct: this.props.data.id, NameDistribute: distribute, time: Date()
         })
     }
     handleEditStockProduct = (data) => {
@@ -89,7 +89,7 @@ class ShowData extends Component {
                                         <div className='quantity-distribute' style={{ paddingLeft: '89px' }}>{stock}</div>
                                     </div>
                                     {data.check_inventory === true ?
-                                        <div className='item' style={{ width: '26%', paddingLeft: "0px" }}>
+                                        <div className='item' style={{ width: '29%', paddingLeft: "0px" }}>
                                             <a className='btn btn-warning btn-sm show' data-toggle="modal" style={{ paddingLeft: "10px", color: "white" }} data-target="#myModal" onClick={() => this.handleEditSubElement(listDistribute.element_distributes[_index].sub_element_distributes[index], element.name, listDistribute.name)}><i className='fa fa-edit'></i>Sửa kho</a>
                                             <a className='btn btn-primary btn-sm show' data-toggle="modal" style={{ marginLeft: "10px", color: "white" }}
                                                 data-target="#historyStock"
@@ -97,7 +97,7 @@ class ShowData extends Component {
                                                     listDistribute.element_distributes[_index].sub_element_distributes[index],
                                                     element.name,
                                                     listDistribute.name)}><i className='fa fa-edit'></i>Lịch sử kho</a>
-                                        </div> : <div className='item' style={{ width: '26%', paddingLeft: "40px" }}></div>
+                                        </div> : <div className='item' style={{ width: '29%', paddingLeft: "40px" }}></div>
                                     }
 
                                 </div>
@@ -111,7 +111,7 @@ class ShowData extends Component {
                                 <div className='item' style={{ display: "flex", width: '14%' }}>
                                     <img src={element.image_url != null ? element.image_url : Env.IMG_NOT_FOUND} alt='' width="35px" height="35px" style={{ marginLeft: "70px" }} ></img>
                                 </div>
-                                <div className='item' style={{ display: "flex", width: "41%", justifyContent: "start", paddingLeft: "57px"}}>
+                                <div className='item' style={{ display: "flex", width: "41%", justifyContent: "start", paddingLeft: "72px"}}>
                                     <label style={{color: "#ff8100"}}>Phân loại: </label>
                                     <div className='name-distribute' style={{ marginLeft: "20px" }}>{element.name}</div>
                                 </div>
@@ -119,13 +119,13 @@ class ShowData extends Component {
                                     <div className='price-distribute' style={{ marginLeft: "80px" }}>{format(Number(element.cost_of_capital))}</div>
                                 </div>
                                 <div className='item' style={{ display: "flex", width: "17%" }}>
-                                    <div className='quantity-distribute' style={{ marginLeft: "43px" }}>{element.stock}</div>
+                                    <div className='quantity-distribute' style={{ marginLeft: "52px" }}>{element.stock}</div>
                                 </div>
                                 {data.check_inventory === true ?
-                                    <div className='item' style={{ width: "27%", paddingLeft: "0" }}>
+                                    <div className='item' style={{ width: "29%", paddingLeft: "0" }}>
                                         <a className='btn btn-warning btn-sm show' data-toggle="modal" data-target="#myModal" style={{ color: "white" }} onClick={() => this.handleEditStockElement(element, listDistribute.name)}><i className='fa fa-edit'></i>Sửa kho</a>
                                         <a className='btn btn-primary btn-sm show' data-toggle="modal" style={{ marginLeft: "10px", color: "white" }} data-target="#historyStock" onClick={() => this.historyInventory(element, listDistribute.name)}><i className='fa fa-edit'></i>Lịch sử kho</a>
-                                    </div> : <div className='item' style={{ width: "27%", paddingLeft: "50px" }}></div>
+                                    </div> : <div className='item' style={{ width: "29%", paddingLeft: "50px" }}></div>
                                 }
 
                             </div>

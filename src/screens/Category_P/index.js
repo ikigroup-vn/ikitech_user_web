@@ -118,7 +118,7 @@ class Store extends Component {
                       }}
                     >
                       <h4 className="h4 title_content mb-0 text-gray-800">
-                        Sản phẩm
+                      Danh sách danh mục
                       </h4>
                       <a
                         data-toggle="modal"
@@ -137,11 +137,6 @@ class Store extends Component {
                     </div>
                     <br></br>
                     <div class="card shadow mb-4">
-                      <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">
-                          Danh sách danh mục
-                        </h6>
-                      </div>
                       <div class="card-body">
                         <Table
                           store_code={store_code}

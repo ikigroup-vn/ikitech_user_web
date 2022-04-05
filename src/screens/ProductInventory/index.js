@@ -103,10 +103,17 @@ class ProductInventory extends Component {
   shouldComponentUpdate(nextProps,nextState){
     if(!shallowEqual(nextState.listType,this.state.listType)){
       if(nextState.listType == 1){
-        const listData = this.props.products.data.filter(item => item.check_inventory == true);
-        this.setState({listProduct:listData})
+        // const listData = this.props.products.data.filter(item => item.check_inventory == true);
+        // this.setState({listProduct:listData}
+        const {store_code} = this.props.match.params
+        const branch_id = localStorage.getItem('branch_id');
+        var params = `&check_inventory=true`;
+        this.props.fetchAllProductV2(store_code, branch_id, 1, params);
       }else{
-        this.setState({listProduct:this.props.products.data})
+        // this.setState({listProduct:this.props.products.data})
+        const {store_code} = this.props.match.params
+        const branch_id = localStorage.getItem('branch_id');
+        this.props.fetchAllProductV2(store_code, branch_id, 1);
       }
     }
     return true
@@ -166,19 +173,17 @@ class ProductInventory extends Component {
   }
 
   passNumPage = (page) => {
-    this.setState({ page: page })
+    this.setState({ page: page})
   }
 
 
   render() {
     if (this.props.auth) {
-      var { products, allProductList } = this.props;
+      var { products } = this.props;
       var {listProduct} = this.state
       var { store_code } = this.props.match.params
-      var { searchValue, importData, allow_skip_same_name, page, numPage } = this.state
-      var { insert, update, _delete, _import
-        , _export, isShow, ecommerce } = this.state
-
+      var { searchValue, importData, allow_skip_same_name, page, numPage,listType } = this.state
+      var { insert, update, _delete,  isShow } = this.state
       const bonusParam = "&check_inventory=true"
 
       return (
@@ -293,6 +298,7 @@ class ProductInventory extends Component {
                         <div class="card-body">
                           <Table insert={insert} _delete={_delete} update={update} page={page} handleDelCallBack={this.handleDelCallBack} handleMultiDelCallBack={this.handleMultiDelCallBack} store_code={store_code} products={products} listProductSelect = {listProduct} />
                           <Pagination
+                            listType ={listType}
                             bonusParam={bonusParam}
                             limit={numPage}
                             searchValue={searchValue}

@@ -43,7 +43,7 @@ class Inventory extends Component {
                     "DD-MM-YYYY"
                   );
                 return (
-                    <tr>
+                    <tr className='wrap-content'>
                         <td>{index + 1}</td>
                         <td>{item.code}</td>
                         <td>{time}</td>

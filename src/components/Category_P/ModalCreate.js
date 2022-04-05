@@ -6,6 +6,7 @@ import { compressed } from "../../ultis/helpers";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import { isEmpty } from "../../ultis/helpers";
 import * as Types from "../../constants/ActionType";
+import themeData from "../../ultis/theme_data";
 class ModalCreate extends Component {
   constructor(props) {
     super(props);
@@ -52,6 +53,14 @@ class ModalCreate extends Component {
         isShowHome: false,
       });
     }
+  }
+  handleClear  = () =>{
+    this.setState({
+      txtName: "",
+      fileUpload: null,
+      isShowHome: false,
+    })
+    window.$("#file-category-product").fileinput("clear");
   }
   onSave = async (e) => {
     e.preventDefault();
@@ -101,7 +110,7 @@ class ModalCreate extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{background: "#d0873b"}} >
+            <div class="modal-header" style={{backgroundColor: themeData().backgroundColor}} >
               <h4 class="modal-title">Thêm danh mục</h4>
 
               <button
@@ -109,6 +118,7 @@ class ModalCreate extends Component {
                 class="close"
                 data-dismiss="modal"
                 aria-hidden="true"
+                onClick={this.handleClear}
               >
                 &times;
               </button>
@@ -168,6 +178,7 @@ class ModalCreate extends Component {
                   type="button"
                   class="btn btn-default"
                   data-dismiss="modal"
+                  onClick={this.handleClear}
                 >
                   Đóng
                 </button>

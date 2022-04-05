@@ -45,6 +45,7 @@ class Table extends Component {
     this.setState({ modalElement: modalElement })
   }
   handleCallBackSubElement = (modalSub) => {
+    console.log("modalSub",modalSub)
     this.setState({ modalSub: modalSub })
   }
   handleCallBackProduct = (data) =>{
