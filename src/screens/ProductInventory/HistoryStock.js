@@ -43,7 +43,7 @@ class HistoryStock extends Component {
           <div class="modal-content">
             <button type="button" style={{ textAlign: "end",margin:"10px" }} class="close" data-dismiss="modal">&times;</button>
             <div class="title" style={{ padding: "0 1rem", fontWeight: 'bold' }}>
-              <div className='title-history'>Lịch sử kho</div>
+              <div className='title-history'> Lịch sử kho</div>
             </div>
             <div class="modal-body">
               <table

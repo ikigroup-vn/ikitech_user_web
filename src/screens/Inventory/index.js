@@ -56,7 +56,7 @@ class Inventory extends Component {
                         <td>
                             <Link
                                 to={`/inventory/detail/${store_code}/${item.id}`}
-                                class="btn btn-primary btn-sm"
+                                class="btn btn-primary-no-background btn-sm"
                             >
                                 <i class="fa fa-eye"></i> Xem
                             </Link>

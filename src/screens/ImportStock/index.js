@@ -53,7 +53,7 @@ class ImportStock extends Component {
                         <td>
                             <Link
                                 to={`/import_stocks/detail/${store_code}/${item.id}`}
-                                class="btn btn-primary btn-sm"
+                                class="btn btn-primary-no-background btn-sm"
                             >
                                 <i class="fa fa-eye"></i> Xem
                             </Link>

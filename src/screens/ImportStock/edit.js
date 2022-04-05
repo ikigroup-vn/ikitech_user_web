@@ -81,14 +81,20 @@ class EditImportStock extends Component {
                     reality_exist: item.quantity
                     })
             })
-            this.setState({listImportStock:newImportStock,price_total: total_price,txtValueDiscount:discount,tax:tax,cost:cost,note:note})  
+            this.setState({
+                listImportStock:newImportStock,
+                price_total: total_price,
+                txtValueDiscount:discount
+                ,tax:tax,cost:cost,
+                note:note})  
         }
       }
 
-    handleCallbackProduct = (modal) => {
+    handleCallbackProduct = (modal, product) => {
         this.setState(
             {
-                infoProduct: modal
+                infoProduct: modal,
+                product: product
             })
     }
     // onChange = (e) =>{
@@ -347,7 +353,7 @@ class EditImportStock extends Component {
 
                                                     </div>
                                                 </form>
-                                                <ModalDetail modal={this.state.infoProduct} handleCallbackPushProduct={this.handleCallbackPushProduct} />
+                                                <ModalDetail modal={this.state.infoProduct} product={this.state.product}   handleCallbackPushProduct={this.handleCallbackPushProduct} />
                                                 <ModalSupplier supplier={supplier} handleCallbackSupplier={this.handleCallbackSupplier} />
                                             </div>
                                             <div className='card-body'>
