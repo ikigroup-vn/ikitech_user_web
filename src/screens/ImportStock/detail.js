@@ -100,6 +100,7 @@ class DetailImportStock extends Component {
                                 {itemImportStock.status === 0 || itemImportStock.status === 1 ? <div style={{ display: "flex", justifyContent: "end", marginBottom: "10px" }}>
                                     <Link style={{ marginRight: "10px" }} type="button" to={`/import_stock/edit/${store_code}/${id}`} class="btn btn-primary  btn-sm"><i class="fa fa-edit"></i>&nbsp;Sửa đơn nhập</Link>
                                 </div> : ""}
+
                                 <div class="card card-import">
                                     <div class="row d-flex justify-content-center">
                                         <div class="col-12">

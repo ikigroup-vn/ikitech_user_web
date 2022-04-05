@@ -11,8 +11,7 @@ class Pagination extends Component {
   }
 
   passPagination = (page) => {
-    var { store_code, bonusParam , agency_type_id } = this.props
-    console.log("bonusParam",bonusParam)
+    var { store_code, limit , agency_type_id,bonusParam } = this.props
     const branch_id = localStorage.getItem('branch_id')
     this.props.fetchAllProductV2(store_code, branch_id,page,bonusParam);
 
@@ -68,8 +67,8 @@ class Pagination extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllProductV2: (store_code, branch_id, page,params) => {
-      dispatch(productAction.fetchAllProductV2(store_code, branch_id, page,params));
+    fetchAllProductV2: (store_code, branch_id, page,bonusParam) => {
+      dispatch(productAction.fetchAllProductV2(store_code, branch_id, page,bonusParam));
 
     },
   };

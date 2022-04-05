@@ -257,7 +257,9 @@ class EditImportStock extends Component {
                         <div id='content'>
                             <Topbar store_code={store_code} />
                             <div className='container-fluid'>
-                                
+                                <h4 className="h4 title_content mb-10 text-gray-800">
+                                            Sửa đơn nhập
+                                </h4>
                                 <div className='row'>
                                     <div className='col-lg-4 col-xl-4 col-md-12 col-sm-12'>
                                         <div className='card shadow mb-4' style={{ height: "100%" }}>

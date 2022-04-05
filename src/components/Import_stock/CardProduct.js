@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import * as OrderAction from '../../actions/add_order'
 import * as Env from "../../ultis/default"
 import { filter_arr, format } from '../../ultis/helpers'
+import { findMaxImportPrice } from '../../ultis/productUltis'
 
 class CardProduct extends Component {
     constructor(props){
@@ -23,6 +24,8 @@ class CardProduct extends Component {
         var result = null;
         if(products.length > 0){
             result = products.map((data,index) =>{
+                var ImportPrice = findMaxImportPrice(data)
+                
                 return (
                     <div class="col-sm-3" style={{marginBottom:"10px"}} key={index}>
                         <a data-toggle="modal" data-target="#modalDetails" onClick={() =>this.handleInfoProduct(data.inventory,data.id,data.name,data.images,data.price,data.distributes,data.max_price,data.min_price,data.product_discount,data.quantity_in_stock,data.quantity_in_stock_with_distribute)}>

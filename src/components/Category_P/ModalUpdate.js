@@ -7,6 +7,7 @@ import * as Env from "../../ultis/default"
 import { compressed } from "../../ultis/helpers"
 import { isEmpty } from "../../ultis/helpers"
 import * as Types from "../../constants/ActionType";
+import themeData from "../../ultis/theme_data";
 
 class ModalUpdate extends Component {
   constructor(props) {
@@ -129,7 +130,7 @@ class ModalUpdate extends Component {
       >
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{background: "#d0873b"}} >
+            <div class="modal-header" style={{backgroundColor: themeData().backgroundColor}} >
               <h4 class="modal-title">Chỉnh sửa danh mục</h4>
 
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -164,9 +165,9 @@ class ModalUpdate extends Component {
                     </label>
                   </div>
                 </div>
-                <div className="row">
+                <div className="" style={{display:'flex'}}>
 
-                  <div class="form-group col-6">
+                  <div class="form-group">
                     <label for="product_name">Hình ảnh</label>
                     <div className="file-loading">
                       <input
@@ -177,7 +178,7 @@ class ModalUpdate extends Component {
                       />
                     </div>
                   </div>
-                  <div class="form-group col-6" style={{display:"flex",flexDirection:"column"}}>
+                  <div class="form-group" style={{display:"flex",flexDirection:"column",marginLeft:"20px"}}>
                     <label>Ảnh: &nbsp; </label>
                     <img src={`${image}`} width="150" height="150" />
                   </div>

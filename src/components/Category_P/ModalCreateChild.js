@@ -6,6 +6,7 @@ import { compressed } from "../../ultis/helpers"
 import { shallowEqual } from "../../ultis/shallowEqual";
 import {isEmpty} from "../../ultis/helpers"
 import * as Types from "../../constants/ActionType";
+import themeData from "../../ultis/theme_data";
 class ModalCreateChild extends Component {
   constructor(props) {
     super(props);
@@ -49,6 +50,13 @@ class ModalCreateChild extends Component {
         txtName: ""
       })
     }
+  }
+  handleClear  = () =>{
+    this.setState({
+      txtName: "",
+      fileUpload: null,
+    })
+    window.$("#file-category-product-child").fileinput("clear");
   }
   onSave = async (e) => {
     e.preventDefault();
@@ -104,10 +112,10 @@ class ModalCreateChild extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{background: "#d0873b"}} >
+            <div class="modal-header" style={{backgroundColor: themeData().backgroundColor}} >
               <h4 class="modal-title">Thêm danh mục con</h4>
 
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+              <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onClick={this.handleClear}>&times;</button>
 
             </div>
             <form
@@ -150,6 +158,7 @@ class ModalCreateChild extends Component {
                   type="button"
                   class="btn btn-default"
                   data-dismiss="modal"
+                  onClick={this.handleClear}
                 >
                   Đóng
                 </button>

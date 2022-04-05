@@ -60,10 +60,10 @@ class EditStock extends Component {
         ) {
             console.log("aaaaaaaaaaa")
           this.setState({
-            cost_of_capital: nextProps.modalSub.SubElement.cost_of_capital,
-            quantity_in_stock:nextProps.modalSub.SubElement.stock,
+            cost_of_capital: nextProps.modalSub.sub.cost_of_capital,
+            quantity_in_stock:nextProps.modalSub.sub.stock,
             nameElement:nextProps.modalSub.NameElement,
-            nameSubElement:nextProps.modalSub.SubElement.name,
+            nameSubElement:nextProps.modalSub.SubElement,
             NameDistribute:nextProps.modalSub.NameDistribute,
             idProduct:nextProps.modalSub.idProduct,
           })
@@ -84,7 +84,10 @@ class EditStock extends Component {
             this.setState({
                 cost_of_capital: nextProps.modalProduct.data.inventory?.main_cost_of_capital,
                 quantity_in_stock:nextProps.modalProduct.data.inventory?.main_stock,
-                idProduct:nextProps.modalProduct.data.id
+                idProduct:nextProps.modalProduct.data.id,
+                nameSubElement:"",
+                nameElement:"",
+                NameDistribute:""
             })
         }
 
@@ -126,7 +129,7 @@ class EditStock extends Component {
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-info" onClick={() =>this.handleEditStock()}  data-dismiss="modal"  data-toggle="modal" data-target="#ModalAlert">Lưu</button>
+                            <button type="button" class="btn btn-danger" onClick={() =>this.handleEditStock()}  data-dismiss="modal"  data-toggle="modal" data-target="#ModalAlert">Lưu</button>
                             <button type="button" class="btn btn-danger" data-dismiss="modal" onClick={this.handleReset} >Đóng</button>
                         </div>
 

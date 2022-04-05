@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as inventoryAction from '../../actions/inventory'
+import themeData from "../../ultis/theme_data";
 class ModalDelete extends Component {
     
   onSave = (e) => {
@@ -23,7 +24,8 @@ class ModalDelete extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{ background: "#47d3b0" }}>
+            <div class="modal-header" style={{backgroundColor: themeData().backgroundColor}}>
+              <h4>Thông báo</h4>
               <button
                 type="button"
                 class="close"
@@ -43,7 +45,7 @@ class ModalDelete extends Component {
               <div class="modal-body">
                 <input type="hidden" name="remove_id_store" />
                 <div class="alert-remove"></div>
-                Bạn có muốn xóa 
+                Bạn có muốn xóa phiếu kiểm kho này không
               </div>
               <div class="modal-footer">
                 <button

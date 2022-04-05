@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import * as CategoryPAction from "../../actions/category_product";
 import { connect } from "react-redux";
+import themeData from "../../ultis/theme_data";
 
 class ModalRemove extends Component {
     
@@ -24,7 +25,8 @@ class ModalRemove extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{ background: "#47d3b0" }}>
+            <div class="modal-header" style={{backgroundColor: themeData().backgroundColor}}>
+              <h4>Thông báo</h4>
               <button
                 type="button"
                 class="close"

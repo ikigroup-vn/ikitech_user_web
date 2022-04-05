@@ -26,7 +26,7 @@ class ItemDetail extends Component {
                                 <div className='price-order' style={{ color: "gray", marginRight: "5px" }}>Đơn giá:</div>
                                 <div style={{ marginLeft: "5px", fontWeight: "bold", color: "red" }}>{format(Number(listItem.import_price))}</div>
                             </div>
-                            <div style={{ marginLeft: "5px", color: "red" }}>{format(Number(listItem.import_price * listItem.quantity))}</div>
+                            {/* <div style={{ marginLeft: "5px", color: "red" }}>{format(Number(listItem.import_price * listItem.quantity))}</div> */}
                         </div>
                         <div style={{ display: "flex" }}>
                             <div className='price-order' style={{ color: "gray", marginRight: "5px" }}>Số lượng:</div>
