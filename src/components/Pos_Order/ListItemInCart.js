@@ -58,10 +58,9 @@ import { shallowEqual } from '../../ultis/shallowEqual'
             this.props.destroyOneProduct(store_code,branch_id,nextState.modalDelete.idCarts,formData)
         }
         if(!shallowEqual(nextState.modalAdd,this.state.modalAdd) && nextState.modalAdd.quantity !== "" ){
-            console.log("11111111111")
             var formDataAdd = {line_item_id:nextState.modalAdd.lineItemIds, product_id:nextState.modalAdd.productIds,quantity:nextState.modalAdd.quantity,distributes:nextState.modalAdd.distributesProduct}
             this.props.addQuantityProduct(store_code,branch_id,this.props.idCart,formDataAdd)
-``        }
+        }
         if(!shallowEqual(nextState.modalSub,this.state.modalSub)){
             var formDataSub = {line_item_id:nextState.modalSub.itemIds, product_id:nextState.modalSub.productIds,quantity:nextState.modalSub.quantity,distributes:nextState.modalSub.distributesProduct}
             this.props.subQuantityProduct(store_code,branch_id,nextState.modalSub.CartIds,formDataSub)
