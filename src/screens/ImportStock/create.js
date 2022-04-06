@@ -59,10 +59,11 @@ class CreateImportStock extends Component {
         return true
     }
 
-    handleCallbackProduct = (modal) => {
+    handleCallbackProduct = (modal, product) => {
         this.setState(
             {
-                infoProduct: modal
+                infoProduct: modal,
+                product: product
             })
     }
     // onChange = (e) => {
@@ -111,6 +112,7 @@ class CreateImportStock extends Component {
 
     }
     handleCallbackPushProduct = (modal) => {
+
         this.setState({ change: !this.state.change })
         const index_element = this.state.listImportStock.map(e => e.element_id).indexOf(modal.element_id)
         if (index_element < 0) {
@@ -156,10 +158,10 @@ class CreateImportStock extends Component {
         const { infoSupplier } = this.state
         const branch_id = localStorage.getItem('branch_id')
         var affterDiscount = ""
-        if(this.state.txtDiscoutType ==0){
-            affterDiscount= formatNumber(this.state.txtValueDiscount)
-        }else{
-            affterDiscount = (this.state.txtValueDiscount/100)*this.state.price_total 
+        if (this.state.txtDiscoutType == 0) {
+            affterDiscount = formatNumber(this.state.txtValueDiscount)
+        } else {
+            affterDiscount = (this.state.txtValueDiscount / 100) * this.state.price_total
         }
         const formData = {
             note: this.state.note,
@@ -193,11 +195,11 @@ class CreateImportStock extends Component {
         var value = e.target.value
         this.setState({ [name]: value })
     }
-    getAllProduct = () =>{
-        this.setState({searchValue:""})
+    getAllProduct = () => {
+        this.setState({ searchValue: "" })
         const { store_code } = this.props.match.params
         const branch_id = localStorage.getItem('branch_id')
-        this.props.fetchAllProductV2(store_code, branch_id); 
+        this.props.fetchAllProductV2(store_code, branch_id);
     }
 
     searchData = (e) => {
@@ -217,7 +219,7 @@ class CreateImportStock extends Component {
         const { store_code } = this.props.match.params
         const branch_id = localStorage.getItem('branch_id')
         const bonusParam = "&check_inventory=true"
-        this.props.fetchAllProductV2(store_code, branch_id,1,bonusParam);
+        this.props.fetchAllProductV2(store_code, branch_id, 1, bonusParam);
         this.props.fetchAllSupplier(store_code);
     }
 
@@ -266,8 +268,8 @@ class CreateImportStock extends Component {
                                                     </div>
                                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                                         <div>Chiết khấu:</div>
-                                                        <div className='wrap-discount' style={{display:"flex"}}>
-                                                            <select name="txtDiscoutType" className='form-control' value={txtDiscoutType} id="input" onChange={this.onChangeType} style={{ height: "28px", width: "67px", padding: 0,textAlign:"center",marginRight:"6px" }} >
+                                                        <div className='wrap-discount' style={{ display: "flex" }}>
+                                                            <select name="txtDiscoutType" className='form-control' value={txtDiscoutType} id="input" onChange={this.onChangeType} style={{ height: "28px", width: "67px", padding: 0, textAlign: "center", marginRight: "6px" }} >
                                                                 <option value="0">Giá trị</option>
                                                                 <option value="1">%</option>
                                                             </select>
@@ -299,14 +301,15 @@ class CreateImportStock extends Component {
 
                                     <div className='col-lg-8 col-xl-8 col-md-12 col-sm-12'>
                                         <div className='card shadow mb-4' style={{ height: "100%" }}>
-                                            <div className='card-header py-3' style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                            <div className='card-header py-3' 
+                                            style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                                 <form onSubmit={this.searchData}>
                                                     <div
                                                         class="input-group mb-6"
                                                         style={{ marginTop: "10px" }}
                                                     >
                                                         <input
-                                                            style={{ maxWidth: "400px",position:"relative" }}
+                                                            style={{ maxWidth: "400px", position: "relative" }}
                                                             type="search"
                                                             name="txtSearch"
                                                             value={searchValue}
@@ -314,33 +317,34 @@ class CreateImportStock extends Component {
                                                             class="form-control"
                                                             placeholder="Tìm sản phẩm"
                                                         />
-            
-                                                        <div class="input-group-append" style={{position:"relative" }}>
-                                                            <button 
+
+                                                        <div class="input-group-append" style={{ position: "relative" }}>
+                                                            <button
                                                                 class="btn btn-warning"
                                                                 type="submit"
-                                                                style={{borderRadius: "3px"}}
-                                                           >
+                                                                style={{ borderRadius: "3px" }}
+                                                            >
                                                                 <i class="fa fa-search"></i>
                                                             </button>
-                                                           {searchValue?<i class="fas fa-close close-status " style={{position:"absolute",left:"-14px",top:"11px"}} onClick={this.getAllProduct}></i>:""} 
+                                                            {searchValue ? <i class="fas fa-close close-status " style={{ position: "absolute", left: "-14px", top: "11px" }} onClick={this.getAllProduct}></i> : ""}
                                                         </div>
 
                                                     </div>
                                                 </form>
+
                                                 <div className='wrap-pagination'>
-                                                    <Paginations limit={numPage} bonusParam = {bonusParam} 
+                                                    <Paginations limit={numPage} bonusParam={bonusParam}
                                                         passNumPage={this.passNumPage} store_code={store_code} products={products} />
                                                 </div>
-                                                <ModalDetail modal={this.state.infoProduct} handleCallbackPushProduct={this.handleCallbackPushProduct} />
-                                                <ModalSupplier supplier={supplier} store_code={store_code} handleCallbackSupplier={this.handleCallbackSupplier} />
                                             </div>
                                             <div className='card-body'>
                                                 {products.data?.length > 0 ? <CardProduct store_code={store_code} handleCallbackProduct={this.handleCallbackProduct} /> :
                                                     <div>Không tồn tại sản phẩm</div>
                                                 }
                                             </div>
-
+                                            <ModalDetail product={this.state.product} modal={this.state.infoProduct} handleCallbackPushProduct={this.handleCallbackPushProduct} />
+                                                <ModalSupplier supplier={supplier} store_code={store_code} handleCallbackSupplier={this.handleCallbackSupplier} />
+                                            
                                         </div>
                                     </div>
                                 </div>

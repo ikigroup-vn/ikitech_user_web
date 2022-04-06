@@ -1,13 +1,14 @@
 import React, { Component } from 'react'
 import { format } from '../../ultis/helpers'
 import * as Env from "../../ultis/default"
-import { findImportPrice, findImportPriceSub } from '../../ultis/productUltis'
+import { findImportPrice, findImportPriceSub, findMaxImportPrice, findMinImportPrice } from '../../ultis/productUltis'
+import { shallowEqual } from '../../ultis/shallowEqual'
 
 class ModalDetail extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            idElement:"",
+            idElement: "",
             distributeName: "",
             distributeValue: "",
             element_distributes: "",
@@ -22,16 +23,16 @@ class ModalDetail extends Component {
             stateDistribute: false,
             messageErr: "",
             quantityInStock: "",
-            elementDistributeOj:""
+            elementDistributeOj: ""
         }
     }
 
     handleClick = (nameDistribute, nameObject, index, id, quatity) => {
-        
+
         var { distributes } = this.props.modal.inventoryProduct
-        var distribute  = this.props.modal.distributeProduct
-        var elementImport =  findImportPrice(distribute,id)
-        console.log("element",elementImport)
+        var distribute = this.props.modal.distributeProduct
+        var elementImport = findImportPrice(distribute, id)
+        console.log("element", elementImport)
         this.setState({ distributeSelected: index, subElementDistributeSelected: -1, element_distributes: "", distributeValue: nameDistribute, distributeName: nameObject })
         if (distributes.length > 0) {
             if (distributes[0].element_distributes.length > 0) {
@@ -56,7 +57,7 @@ class ModalDetail extends Component {
                                 this.setState({
                                     elementObject: elments,
                                     messageErr: "",
-                                    elementDistributeOj:elementImport
+                                    elementDistributeOj: elementImport
                                 })
                         }
                     }
@@ -74,7 +75,7 @@ class ModalDetail extends Component {
                                     priceBeforeDiscount: elment.price,
                                     quantityInStock: quatity,
                                     messageErr: "",
-                                    idElement:id,
+                                    idElement: id,
                                 })
                         }
                     } else {
@@ -88,8 +89,8 @@ class ModalDetail extends Component {
                                     afterChoosePrice: elementImport.import_price,
                                     quantityInStock: quatity,
                                     messageErr: "",
-                                    idElement:id,
-                                    elementDistributeOj:elementImport
+                                    idElement: id,
+                                    elementDistributeOj: elementImport
                                 })
                         }
                     }
@@ -99,11 +100,11 @@ class ModalDetail extends Component {
 
     }
 
-    handleClickElement = (nameElement, price, index,id) => {
+    handleClickElement = (nameElement, price, index, id) => {
         var sub_element_distribute = this.state.elementObject.sub_element_distributes
-        var {sub_element_distributes} = this.state.elementDistributeOj
-        var subImport = findImportPriceSub(sub_element_distributes,nameElement)
-        console.log("subImport",subImport.import_price)
+        var { sub_element_distributes } = this.state.elementDistributeOj
+        var subImport = findImportPriceSub(sub_element_distributes, nameElement)
+        console.log("subImport", subImport.import_price)
         if (this.props.modal.discountProduct) {
             var { value } = this.props.modal.discountProduct
             this.setState({ subElementDistributeSelected: index, element_distributes: nameElement })
@@ -113,7 +114,7 @@ class ModalDetail extends Component {
                 afterChoosePrice: sub_element.price - (sub_element.price * value / 100),
                 priceBeforeDiscount: sub_element.price,
                 quantityInStock: sub_element.stock, messageErr: "",
-                idElement:id,
+                idElement: id,
             })
         } else {
             if (sub_element_distribute) {
@@ -124,11 +125,11 @@ class ModalDetail extends Component {
                     afterChoosePrice: subImport.import_price,
                     priceBeforeDiscount: sub_elements?.price,
                     quantityInStock: sub_elements?.stock,
-                    idElement:id,
+                    idElement: id,
                     messageErr: ""
                 })
             } else {
-                this.setState({afterChoosePrice: subImport.import_price, subElementDistributeSelected: index,idElement:id, element_distributes: nameElement,quantityInStock: sub_elements?.stock, })
+                this.setState({ afterChoosePrice: subImport.import_price, subElementDistributeSelected: index, idElement: id, element_distributes: nameElement, quantityInStock: sub_elements?.stock, })
             }
 
         }
@@ -143,8 +144,9 @@ class ModalDetail extends Component {
         })
     }
     handleCallback = () => {
+
         var info = this.props.modal
-        const { distributeName, distributeValue, element_distributes, quantityInStock, idElement,afterChoosePrice,afterPrice } = this.state
+        const { distributeName, distributeValue, element_distributes, quantityInStock, idElement, afterChoosePrice, afterPrice } = this.state
         if (info.distributeProduct.length === 0) {
             window.$('.modal').modal('hide');
             this.props.handleCallbackPushProduct({
@@ -154,9 +156,9 @@ class ModalDetail extends Component {
                 reality_exist: 1, nameDistribute: distributeName,
                 nameElement: distributeValue,
                 nameSubDistribute: element_distributes,
-                priceProduct:afterPrice,
+                priceProduct: afterPrice,
                 stock: this.props.modal.inventoryProduct.main_stock,
-                import_price:0
+                import_price: this.state.minPriceAfterDiscount
             })
             return
         }
@@ -174,9 +176,9 @@ class ModalDetail extends Component {
                 reality_exist: 1, nameDistribute: distributeName,
                 nameElement: distributeValue,
                 nameSubDistribute: element_distributes,
-                priceProduct:afterChoosePrice,
+                priceProduct: afterChoosePrice,
                 stock: quantityInStock,
-                import_price:0
+                import_price: this.state.afterChoosePrice
             })
             this.setState({ distributeSelected: -1, messageErr: "", afterChoosePrice: "", element_distributes: "", distributeValue: "" })
             return
@@ -196,9 +198,9 @@ class ModalDetail extends Component {
             nameDistribute: distributeName,
             nameElement: distributeValue,
             nameSubDistribute: element_distributes,
-            priceProduct:afterChoosePrice,
+            priceProduct: afterChoosePrice,
             stock: quantityInStock,
-            import_price:0
+            import_price: this.state.afterChoosePrice
         })
         this.setState({
             distributeSelected: -1,
@@ -213,15 +215,22 @@ class ModalDetail extends Component {
         if (nextProps.modal.priceProduct !== this.state.afterPrice) {
             this.setState({ afterPrice: nextProps.modal.priceProduct })
         }
-        var { minPriceProduct, maxPriceProduct, discountProduct } = nextProps.modal
-        if (nextProps.modal.minPriceProduct !== this.props.modal.minPriceProduct) {
-            if (discountProduct !== null) {
-                var minPrice = minPriceProduct - (minPriceProduct * discountProduct.value / 100)
-                var maxPrice = maxPriceProduct - (maxPriceProduct * discountProduct.value / 100)
-                this.setState({ minPriceAfterDiscount: minPrice, maxPriceAfterDiscount: maxPrice })
+
+        if (!shallowEqual(this.props.product, nextProps.product)) {
+
+            if (nextProps.product != null) {
+        
+                var maxPrice = findMaxImportPrice(nextProps.product)
+                var minPrice = findMinImportPrice(nextProps.product)
+         
+                this.setState({
+                    minPriceAfterDiscount: minPrice,
+                    maxPriceAfterDiscount: maxPrice
+                })
             }
 
         }
+
 
     }
     render() {
@@ -236,7 +245,8 @@ class ModalDetail extends Component {
                             <button type="button" class="close" onClick={this.handleClose} data-dismiss="modal">&times;</button>
                         </div>
                         <div class="modal-body" style={{ position: "relative" }}>
-                        <button class="btn btn-info" onClick={this.handleCallback} style={{ backgroundColor: "green", position: "absolute", right: "15px", top: "20px", zIndex: "100" }}>Thêm</button>
+                            <button class="btn btn-info" onClick={this.handleCallback} 
+                            style={{ backgroundColor: "green", position: "absolute", right: "15px", top: "20px", zIndex: "100" }}>Thêm</button>
                             <div className='model-card row' style={{ margin: "5px", width: "80%" }}>
                                 <div className='name-voucher col-4' style={{ width: "120px", height: "120px", padding: "8px" }}>
                                     <div style={{ justifyContent: "center", width: "100%", height: "100%", borderRadius: "0.25em", display: "flex", alignItems: "center" }}>
@@ -246,8 +256,11 @@ class ModalDetail extends Component {
                                 <div className='info-voucher col-8' style={{ display: "flex", flexDirection: "column", justifyContent: "space-around" }}>
                                     <div>
                                         <div className='value' style={{ fontWeight: "bold" }}>{inforProduct.nameProduct}</div>
-                                        <div className='code' style={{ color: "red" }}><span>{this.state.afterChoosePrice === '' ? inforProduct.discountProduct === null ? this.props.modal.minPriceProduct === this.props.modal.maxPriceProduct ? format(Number(this.props.modal.minPriceProduct)) :`${format(Number(this.props.modal.minPriceProduct))}-${format(Number(this.props.modal.maxPriceProduct))}`  : this.state.minPriceAfterDiscount === this.state.maxPriceAfterDiscount ? `${format(Number(this.state.minPriceAfterDiscount))}` : `${format(Number(this.state.minPriceAfterDiscount))} - ${format(Number(this.state.maxPriceAfterDiscount))}`
-                                            : format(Number(this.state.afterChoosePrice))}</span></div>
+                                        <div className='code' style={{ color: "red" }}><span>
+                                        Giá nhập:         {this.state.afterChoosePrice === '' ? inforProduct.discountProduct === null ? 
+                                            this.props.modal.minPriceProduct === this.props.modal.maxPriceProduct ? 
+                                            format(Number(this.props.modal.minPriceProduct)) : `${format(Number(this.props.modal.minPriceProduct))}-${format(Number(this.props.modal.maxPriceProduct))}` : this.state.minPriceAfterDiscount === this.state.maxPriceAfterDiscount ? `${format(Number(this.state.minPriceAfterDiscount))}` : `${format(Number(this.state.minPriceAfterDiscount))} - ${format(Number(this.state.maxPriceAfterDiscount))}`
+                                                : format(Number(this.state.afterChoosePrice))}</span></div>
                                         <div className='before-discout' style={{ display: "flex" }} >
                                             <span style={{ fontSize: "13px", textDecoration: "line-through" }}>{inforProduct.discountProduct !== null ?
                                                 this.state.afterChoosePrice === "" ? inforProduct.minPriceProduct === inforProduct.maxPriceProduct ? format(Number(this.state.afterPrice)) : `${format(Number(inforProduct.minPriceProduct))} - ${format(Number(inforProduct.maxPriceProduct))}` : format(Number(this.state.priceBeforeDiscount)) : ""}</span>
@@ -273,8 +286,8 @@ class ModalDetail extends Component {
                                             </div>
 
                                             <div className='distribute-name'>{itemParent.sub_element_distribute_name}</div>
-                                            <div className='element_distribute_name'>{itemParent.element_distributes &&  itemParent.element_distributes[0].sub_element_distributes.map((itemChild, index) => (
-                                                <button className={index === this.state.subElementDistributeSelected ? "actives" : ""} style={{ border: "1px solid #e4e4e4", borderRadius: "4px", marginRight: '10px', padding: "5px" }} onClick={() => this.handleClickElement(itemChild.name, itemChild.price, index,itemChild.id)}>{itemChild.name}</button>
+                                            <div className='element_distribute_name'>{itemParent.element_distributes && itemParent.element_distributes[0].sub_element_distributes.map((itemChild, index) => (
+                                                <button className={index === this.state.subElementDistributeSelected ? "actives" : ""} style={{ border: "1px solid #e4e4e4", borderRadius: "4px", marginRight: '10px', padding: "5px" }} onClick={() => this.handleClickElement(itemChild.name, itemChild.price, index, itemChild.id)}>{itemChild.name}</button>
                                             ))}</div>
                                         </div>
 

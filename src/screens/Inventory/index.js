@@ -35,13 +35,13 @@ class Inventory extends Component {
         const params = `&search=${value}`
         this.props.fetchAllInventory(store_code, branch_id, 1, params)
     }
-    showData = (listInventory,store_code) => {
+    showData = (listInventory, store_code) => {
         var result = null
         if (listInventory) {
             result = listInventory.map((item, index) => {
-                var time =  moment(item.created_at, "YYYY-MM-DD HH:mm:ss").format(
+                var time = moment(item.created_at, "YYYY-MM-DD HH:mm:ss").format(
                     "DD-MM-YYYY"
-                  );
+                );
                 return (
                     <tr className='wrap-content'>
                         <td>{index + 1}</td>
@@ -51,12 +51,12 @@ class Inventory extends Component {
                         <td>{item.existing_branch}</td>
                         <td>{item.deviant}</td>
                         <td>
-                            {item.status === 0 ? <div style={{color:"green"}}>đã kiểm kho</div> : <div style={{color:"#ff6a00"}}>đã cân bằng</div>}
+                            {item.status === 0 ? <div style={{ color: "green" }}>đã kiểm kho</div> : <div style={{ color: "#ff6a00" }}>đã cân bằng</div>}
                         </td>
                         <td>
                             <Link
                                 to={`/inventory/detail/${store_code}/${item.id}`}
-                                class="btn btn-primary btn-sm"
+                                class="btn btn-primary-no-background btn-sm"
                             >
                                 <i class="fa fa-eye"></i> Xem
                             </Link>
@@ -91,9 +91,22 @@ class Inventory extends Component {
                                     style={{ display: "flex", justifyContent: "space-between" }}
                                 >
                                     <h4 className='title_content text-primary'>Phiếu kiểm kho</h4>
-                                    <Link to={`/inventory/create/${store_code}`} class="btn btn-primary btn-sm" >
-                                        <i class="fa fa-plus"></i> Tạo phiếu kiểm kho
+
+
+                                    <Link to={`/inventory/create/${store_code}`} >
+                                        <div
+                                            class="btn btn-info btn-icon-split btn-sm show"
+                                        >
+                                            <span class="icon text-white-50"
+                                            >
+                                                <i class="fas fa-plus"></i></span>
+                                            <span class="text "
+
+                                            >Tạo phiếu kiểm kho</span>
+                                        </div>
+
                                     </Link>
+
                                 </div>
 
                                 <br></br>
@@ -143,10 +156,10 @@ class Inventory extends Component {
                                                     </tr>
                                                 </thead>
 
-                                                <tbody>{this.showData(sheetsInventory?.data,store_code)}</tbody>
+                                                <tbody>{this.showData(sheetsInventory?.data, store_code)}</tbody>
                                             </table>
                                         </div>
-                                        <Pagination store_code ={store_code} sheetsInventory = {sheetsInventory}/>
+                                        <Pagination store_code={store_code} sheetsInventory={sheetsInventory} />
                                     </div>
                                 </div>
 

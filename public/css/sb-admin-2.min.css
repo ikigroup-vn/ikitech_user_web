@@ -2232,6 +2232,17 @@ a.btn.disabled, fieldset:disabled a.btn {
     pointer-events: none
 }
 
+.btn-primary-no-background {
+    color: rgb(210, 117, 29);
+    border-color: #c65712
+}
+
+.btn-primary-no-background:hover {
+    color: #fff;
+    background-color: #c65712;
+    border-color: #c65712
+}
+
 .btn-primary {
     color: #fff;
     background-color: #4e73df;
