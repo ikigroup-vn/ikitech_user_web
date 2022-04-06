@@ -48,7 +48,8 @@ class CardProduct extends Component {
                                 <img src={data.images.length > 0 ? data.images[0].image_url : Env.IMG_NOT_FOUND_2} className="img-responsive" alt="Image" width="100%" height="100px" style={{borderRadius:"2%"}} />
                                 <div class="card-body" style={{ padding: ' 0 5px' }}>
                                     <p class="card-title" style={{ margin: '0', overflow: "hidden", whiteSpace: "nowrap", textOverflow: 'ellipsis' }}>{data.name}</p>
-                                    <p class="card-text" style={{ fontSize: "17px", bottom: "37px",fontWeight:"bold",color:"rgb(174, 61, 52)",textAlign:"end" }}>{format(Number(data.price))}</p>
+                                    <p class="card-text" style={{ fontSize: "12px", bottom: "37px",fontWeight:"bold",color:"rgb(174, 61, 52)",textAlign:"end" }}>{
+                                       data.min_price == data.max_price? format(Number(data.min_price)):`${format(Number(data.min_price))}- ${format(Number(data.max_price))}`}</p>
                                 </div>
                             </div>
                         </a>

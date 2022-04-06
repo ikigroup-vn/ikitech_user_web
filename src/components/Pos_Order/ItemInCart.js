@@ -160,7 +160,7 @@ class ItemInCart extends Component {
                 <div className='wrap-item' style={{ display: "flex",fontSize:"1rem", justifyContent: 'space-between',alignItems:"center" }}>
                     <div className='index'>{index + 1}</div>
                     <div className='info-product' style={{width:"40%",fontWeight:"400",display:"flex",flexDirection:"column"}}>
-                    <div className='name-product'>{item.product.name}</div>
+                    <div className='name-product' style={{overflow: "hidden",whiteSpace: "nowrap",textOverflow: "ellipsis"}}>{item.product.name}</div>
                     <div className='wrap-distributes_selected' style={{fontSize:"12px",fontStyle:"italic"}}>
                             {(item.distributes_selected??[]).map((v, i) => (
                                 <div>{`${v.name}: ${v.value}`}</div>

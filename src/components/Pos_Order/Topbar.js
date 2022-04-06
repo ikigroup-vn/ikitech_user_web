@@ -203,33 +203,35 @@ class Topbar extends Component {
                             </div>
 
                         </li>
-                        {
-
-                            listPos !== null && listPos.length > 0 ?
-                                <>
-                                    <li className={this.state.selectTap === -1 ? "activess nav-item" : 'nav-item'} style={{ display: "flex", alignItems: "center", margin: "0 7px", backgroundColor: "rgb(174 61 52)", color: "white", padding: "8px 10px", borderRadius: "5px" }} >
-                                        <div className='tab-item' onClick={() => this.handleChooseTab1(listPos[0].id)} style={{ cursor: "pointer", marginRight: "5px" }}>{listPos[0].name}</div>
-                                        {listPos.length > 1 && <i class='fa fa-window-close'
-                                            onClick={() => this.handleDelete(listPos[0].id)}
-                                            data-toggle="modal" data-target="#removeModal"
-                                        ></i>
+                        <li class="nav-item">
+                            {
+                                listPos !== null && listPos.length > 0 ?
+                                    <ul class="navbar-nav" style={{ alignItems: "center" }}>
+                                        <li className={this.state.selectTap === -1 ? "activess nav-item" : 'nav-item'} style={{ display: "flex", alignItems: "center", margin: "0 7px", backgroundColor: "rgb(174 61 52)", color: "white", padding: "8px 10px", borderRadius: "5px" }} >
+                                            <div className='tab-item' onClick={() => this.handleChooseTab1(listPos[0].id)} style={{ cursor: "pointer", marginRight: "5px" }}>{listPos[0].name}</div>
+                                            {listPos.length > 1 && <i class='fa fa-window-close'
+                                                onClick={() => this.handleDelete(listPos[0].id)}
+                                                data-toggle="modal" data-target="#removeModal"
+                                            ></i>
+                                            }
+                                        </li >
+                                        {
+                                            listPos.slice(1, listPos.length).map((item, index) => {
+                                                return (
+                                                    <li key={index} className={index === this.state.selectTap ? "activess nav-item" : 'nav-item'} style={{ display: "flex", alignItems: "center", margin: "0 7px", backgroundColor: "rgb(174 61 52)", color: "white", padding: "8px 10px", borderRadius: "5px" }} >
+                                                        <div className='tab-item' onClick={() => this.handleChooseTab(item.id, index)} style={{ cursor: "pointer", marginRight: "5px" }}>{item.name}</div>
+                                                        <i class='fa fa-window-close' onClick={() => this.handleDelete(item.id)} data-toggle="modal" data-target="#removeModal"></i>
+                                                    </li >
+                                                )
+                                            })
                                         }
-                                    </li >
-                                    {
-                                        listPos.slice(1, listPos.length).map((item, index) => {
-                                            return (
-                                                <li key={index} className={index === this.state.selectTap ? "activess nav-item" : 'nav-item'} style={{ display: "flex", alignItems: "center", margin: "0 7px", backgroundColor: "rgb(174 61 52)", color: "white", padding: "8px 10px", borderRadius: "5px" }} >
-                                                    <div className='tab-item' onClick={() => this.handleChooseTab(item.id, index)} style={{ cursor: "pointer", marginRight: "5px" }}>{item.name}</div>
-                                                    <i class='fa fa-window-close' onClick={() => this.handleDelete(item.id)} data-toggle="modal" data-target="#removeModal"></i>
-                                                </li >
-                                            )
-                                        })
-                                    }
-                                </>
-                                : ""
-                        }
+                                    </ul>
+                                    : ""
+                            }
+                        </li>
 
-                        <li className='nav-item' style={{ display: 'flex', alignItems: "center", color: "white", fontSize: "20px", padding: "10px", cursor: "pointer" }} onClick={() => this.handleCreateTab()}>
+
+                        <li className='nav-item' style={{ display: 'flex', alignItems: "center", color: "white", fontSize: "15px", padding: "10px", cursor: "pointer" }} onClick={() => this.handleCreateTab()}>
                             <i class='fas fa-plus' ></i>
                         </li>
                     </ul>

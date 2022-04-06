@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { format } from '../../ultis/helpers'
 import * as Env from "../../ultis/default"
 import { shallowEqual } from '../../ultis/shallowEqual'
+import { findImportPrice } from '../../ultis/productUltis'
 
 class ModalDetail extends Component {
     constructor(props) {
@@ -26,7 +27,10 @@ class ModalDetail extends Component {
     }
     handleClick = (nameDistribute, nameObject, index, id, quatity) => {
         var { distributes } = this.props.modal.inventoryProduct
+        var distribute  = this.props.modal.distributeProduct
         this.setState({ distributeSelected: index, subElementDistributeSelected: -1, element_distributes: "", distributeValue: nameDistribute, distributeName: nameObject })
+        var elementImport =  findImportPrice(distribute,id)
+        console.log("aaaaaaaaaaaaa",elementImport)
         if (distributes.length > 0) {
             if (distributes[0].element_distributes.length > 0) {
                 if (distributes[0].element_distributes[0].sub_element_distributes.length > 0) {
@@ -238,8 +242,9 @@ class ModalDetail extends Component {
                                 </div>
                                 <div className='info-voucher col-8' style={{ display: "flex", flexDirection: "column", justifyContent: "space-around" }}>
                                     <div>
-                                        <div className='value' style={{ fontWeight: "bold" }}>{inforProduct.nameProduct}</div>
-                                        <div className='code' style={{ color: "red" }}><span>{this.state.afterChoosePrice === '' ? inforProduct.discountProduct === null ? format(Number(this.state.afterPrice)) : this.state.minPriceAfterDiscount === this.state.maxPriceAfterDiscount ? `${format(Number(this.state.minPriceAfterDiscount))}` : `${format(Number(this.state.minPriceAfterDiscount))} - ${format(Number(this.state.maxPriceAfterDiscount))}`
+                                        <div className='value' style={{ fontWeight: "bold",width:"220px",overflow: "hidden",whiteSpace: "nowrap",textOverflow: "ellipsis" }}>{inforProduct.nameProduct}</div>
+                                        <div className='code' style={{ color: "red" }}><span>{this.state.afterChoosePrice === '' ? inforProduct.discountProduct === null ?
+                                        this.props.modal.minPriceProduct == this.props.modal.maxPriceProduct? format(Number(this.props.modal.minPriceProduct)):`${format(Number(this.props.modal.minPriceProduct))}-${format(Number(this.props.modal.maxPriceProduct))}` : this.state.minPriceAfterDiscount === this.state.maxPriceAfterDiscount ? `${format(Number(this.state.minPriceAfterDiscount))}` : `${format(Number(this.state.minPriceAfterDiscount))} - ${format(Number(this.state.maxPriceAfterDiscount))}`
                                             : format(Number(this.state.afterChoosePrice))}</span></div>
                                         <div className='before-discout' style={{ display: "flex" }} >
                                             <span style={{ fontSize: "13px", textDecoration: "line-through" }}>{inforProduct.discountProduct !== null ?

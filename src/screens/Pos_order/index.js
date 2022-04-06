@@ -353,25 +353,26 @@ class PostOrder extends Component {
             const id = nextState.idCart
             this.props.addProductInCart(store_code, branch_id, id, formData)
         }
+        if (!shallowEqual(nextState.priceCustomer, this.state.priceCustomer) ) {
+            console.log("change",nextState.totalFinal)
+            this.setState({
+                exchange: removeSignNumber(nextState.priceCustomer) - removeSignNumber(nextState.totalFinal)
+            })
+        }
         if (!shallowEqual(nextState.idCart, this.state.idCart)) {
             const branch_id = localStorage.getItem("branch_id")
             const id = nextState.idCart
             this.props.fetchInfoOneCart(this.props.match.params.store_code, branch_id, id)
             this.setState({
                 priceCustomer: 0,
-                // exchange:0
+                exchange:0,
+                totalFinal:0
             })
         }
 
         if (!shallowEqual(nextState.totalFinal, this.state.totalFinal)) {
             this.onGetSuggestion(nextState.totalFinal);
         }
-        if (!shallowEqual(nextState.priceCustomer, this.state.priceCustomer)) {
-            this.setState({
-                exchange: removeSignNumber(nextState.priceCustomer) - removeSignNumber(nextState.totalFinal)
-            })
-        }
-
 
 
         if (!shallowEqual(nextState.modalUpdateCart, this.state.modalUpdateCart) ||
