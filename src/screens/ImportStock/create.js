@@ -2,19 +2,18 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import Sidebar from '../../components/Partials/Sidebar';
 import Topbar from '../../components/Partials/Topbar';
-import { shallowEqual } from '../../ultis/shallowEqual';
 import * as Types from "../../constants/ActionType";
 import Alert from '../../components/Partials/Alert';
-import Pagination from '../../components/ProductAgency/Pagination';
 import * as productAction from "../../actions/product";
 import * as ImportAction from "../../actions/import_stock"
-import history from '../../history';
 import CardProduct from '../../components/Import_stock/CardProduct';
 import ModalDetail from '../../components/Import_stock/ModalDetail';
 import ModalSupplier from '../../components/Import_stock/ModalSupplier';
 import * as dashboardAction from "../../actions/dashboard";
 import ListImportStock from '../../components/Import_stock/ListImportStock';
 import { format } from '../../ultis/helpers';
+import { formatNumber } from "../../ultis/helpers"
+import Paginations from '../../components/Import_stock/Paginations';
 class CreateImportStock extends Component {
     constructor(props) {
         super(props)
@@ -23,12 +22,12 @@ class CreateImportStock extends Component {
             listImportStock: [],
             reality_exist_total: 0,
             existing_branch: 0,
-            price_total:0,
+            price_total: 0,
             note: "",
             infoSupplier: "",
-            tax:"",
-            discount:"",
-            cost:"",
+            cost: "",
+            txtDiscoutType: 0,
+            txtValueDiscount: "",
             infoProduct: {
                 inventoryProduct: "",
                 idProduct: "",
@@ -53,26 +52,70 @@ class CreateImportStock extends Component {
             console.log("thay doi change")
             nextState.listImportStock.forEach((item) => {
                 reality_total = parseInt(reality_total) + parseInt(item.reality_exist)
-                total_price = parseInt(total_price) + parseInt(item.import_price )* parseInt(item.reality_exist )
+                total_price = parseInt(total_price) + parseInt(item.import_price) * parseInt(item.reality_exist)
             })
-            this.setState({ reality_exist_total: reality_total,price_total: total_price })
+            this.setState({ reality_exist_total: reality_total, price_total: total_price })
         }
         return true
     }
 
-    handleCallbackProduct = (modal) => {
+    handleCallbackProduct = (modal, product) => {
         this.setState(
             {
-                infoProduct: modal
+                infoProduct: modal,
+                product: product
             })
     }
-    onChange = (e) =>{
-        this.setState({[e.target.name]:e.target.value})
+    // onChange = (e) => {
+    //     this.setState({ [e.target.name]: e.target.value })
+    // }
+    onChange = (e) => {
+        var target = e.target;
+        var name = target.name;
+        var value = target.value;
+        const _value = formatNumber(value);
+        if (name == "txtValueDiscount") {
+            if (!isNaN(Number(_value))) {
+                value = new Intl.NumberFormat().format(_value);
+                if ((name == "txtValueDiscount" && this.state.txtDiscoutType == "1")) {
+                    if (value.length < 3) {
+                        if (value == 0) {
+                            this.setState({ [name]: "" });
+                        }
+                        else {
+                            this.setState({ [name]: value });
+
+                        }
+                    }
+                }
+                else {
+                    if (value == 0) {
+                        this.setState({ [name]: "" });
+                    }
+                    else {
+                        this.setState({ [name]: value });
+
+                    }
+                }
+            }
+        }
+        else {
+            this.setState({ [name]: value });
+
+        };
+    };
+    onChangeType = (e) => {
+        var target = e.target;
+        var name = target.name;
+        var value = target.value;
+        this.setState({ [name]: value, txtValueDiscount: "" });
+
     }
     handleCallbackPushProduct = (modal) => {
+
         this.setState({ change: !this.state.change })
         const index_element = this.state.listImportStock.map(e => e.element_id).indexOf(modal.element_id)
-        if(index_element <0){
+        if (index_element < 0) {
             this.setState({ listImportStock: [...this.state.listImportStock, modal] })
         }
     }
@@ -98,7 +141,7 @@ class CreateImportStock extends Component {
         const newInventory = this.state.listImportStock
         const index = newInventory.map(e => e.element_id).indexOf(modal.idElement)
         newInventory[index].import_price = modal.import_price
-        this.setState({ listImportStock: newInventory})
+        this.setState({ listImportStock: newInventory })
     }
 
     handleDelete = (modal) => {
@@ -114,13 +157,18 @@ class CreateImportStock extends Component {
         const { store_code } = this.props.match.params
         const { infoSupplier } = this.state
         const branch_id = localStorage.getItem('branch_id')
+        var affterDiscount = ""
+        if (this.state.txtDiscoutType == 0) {
+            affterDiscount = formatNumber(this.state.txtValueDiscount)
+        } else {
+            affterDiscount = (this.state.txtValueDiscount / 100) * this.state.price_total
+        }
         const formData = {
             note: this.state.note,
             status: 0,
             supplier_id: infoSupplier.id_supplier,
-            tax: this.state.tax,
             cost: this.state.cost,
-            discount: this.state.discount,
+            discount: affterDiscount,
             import_stock_items:
                 this.state.listImportStock.map((item) => {
                     return {
@@ -129,7 +177,7 @@ class CreateImportStock extends Component {
                         distribute_name: item.nameDistribute,
                         element_distribute_name: item.nameElement,
                         sub_element_distribute_name: item.nameSubDistribute,
-                        import_price : item.import_price
+                        import_price: item.import_price
                     }
                 })
         }
@@ -147,12 +195,18 @@ class CreateImportStock extends Component {
         var value = e.target.value
         this.setState({ [name]: value })
     }
+    getAllProduct = () => {
+        this.setState({ searchValue: "" })
+        const { store_code } = this.props.match.params
+        const branch_id = localStorage.getItem('branch_id')
+        this.props.fetchAllProductV2(store_code, branch_id);
+    }
 
     searchData = (e) => {
         e.preventDefault()
         var { store_code } = this.props.match.params;
         var { searchValue } = this.state;
-        var params = `&search=${searchValue}`;
+        var params = `&search=${searchValue}&check_inventory=true`;
         this.setState({ numPage: 20 })
         const branch_id = localStorage.getItem('branch_id')
         this.props.fetchAllProductV2(store_code, branch_id, 1, params);
@@ -164,14 +218,19 @@ class CreateImportStock extends Component {
     componentDidMount() {
         const { store_code } = this.props.match.params
         const branch_id = localStorage.getItem('branch_id')
-        this.props.fetchAllProductV2(store_code, branch_id);
+        const bonusParam = "&check_inventory=true"
+        this.props.fetchAllProductV2(store_code, branch_id, 1, bonusParam);
         this.props.fetchAllSupplier(store_code);
     }
 
     render() {
-        var { supplier } = this.props;
+        var { supplier, products } = this.props;
+        var { txtDiscoutType, txtValueDiscount } = this.state
         var { store_code } = this.props.match.params
         var { searchValue, numPage, listImportStock, infoSupplier, price_total, reality_exist_total } = this.state
+        var type_discount_default = txtDiscoutType == "0" ? "show" : "hide"
+        var type_discount_percent = txtDiscoutType == "1" ? "show" : "hide"
+        const bonusParam = "&check_inventory=true"
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
@@ -180,25 +239,25 @@ class CreateImportStock extends Component {
                         <div id='content'>
                             <Topbar store_code={store_code} />
                             <div className='container-fluid'>
-                                
+
                                 <div className='row'>
                                     <div className='col-lg-4 col-xl-4 col-md-12 col-sm-12'>
                                         <div className='card shadow mb-4' style={{ height: "100%" }}>
                                             <div className='card-header py-3' style={{ padding: "0", display: "flex" }}>
-                                                <button class="btn btn-primary" type="submit" data-toggle="modal" data-target="#supplier"><i class="fas fa-user"></i></button>
+                                                <button class="btn btn-warning" type="submit" data-toggle="modal" data-target="#supplier"><i class="fas fa-user"></i></button>
                                                 <div class="card" style={{ marginLeft: "10px", width: "80%" }}>
                                                     <div class="card-body" style={{ padding: '0px' }}>{infoSupplier ? `${infoSupplier.name}` : 'Chọn nhà cung cấp'}</div>
                                                 </div>
                                             </div>
 
                                             <div className='card-bodys' style={{ width: "0 10px", height: "380px", overflowY: "auto" }}>
-                                                <ListImportStock store_code={store_code} listImportStock={listImportStock} handleCallbackQuantity={this.handleCallbackQuantity} handleDelete={this.handleDelete} handleCallbackPrice = {this.handleCallbackPrice} />
+                                                <ListImportStock store_code={store_code} listImportStock={listImportStock} handleCallbackQuantity={this.handleCallbackQuantity} handleDelete={this.handleDelete} handleCallbackPrice={this.handleCallbackPrice} />
                                             </div>
                                             <div className='voucher-input' style={{ margin: "10px 0px" }}>
 
                                             </div>
                                             <div >
-                                                <div class="card-body" style={{ borderBottom:"1px solid #80808038",borderTop:"1px solid #80808038",padding:"10px 0" }}>
+                                                <div class="card-body" style={{ borderBottom: "1px solid #80808038", borderTop: "1px solid #80808038", padding: "10px 0" }}>
                                                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                                                         <div>Tổng số lượng:</div>
                                                         <div>{reality_exist_total}</div>
@@ -209,21 +268,26 @@ class CreateImportStock extends Component {
                                                     </div>
                                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                                         <div>Chiết khấu:</div>
-                                                        <div style={{ width: "50%" }}>
-                                                            <input type="text" class="form-control" id="usr" name="discount" onChange={this.onChange} />
+                                                        <div className='wrap-discount' style={{ display: "flex" }}>
+                                                            <select name="txtDiscoutType" className='form-control' value={txtDiscoutType} id="input" onChange={this.onChangeType} style={{ height: "28px", width: "67px", padding: 0, textAlign: "center", marginRight: "6px" }} >
+                                                                <option value="0">Giá trị</option>
+                                                                <option value="1">%</option>
+                                                            </select>
+                                                            <div class={`form-group ${type_discount_default}`}>
+                                                                <input type="text" name="txtValueDiscount" id="txtValueDiscount" value={txtValueDiscount} placeholder="Nhập giá trị" autocomplete="off"
+                                                                    style={{ height: "28px", width: "114px", textAlign: "right", borderRadius: 0, borderBottom: "1px solid rgb(128 128 128 / 71%)" }} onChange={this.onChange} ></input>
+                                                            </div>
+                                                            <div className={`${type_discount_percent}`}>
+                                                                <input type="text" name="txtValueDiscount" id="txtValueDiscount" value={txtValueDiscount} placeholder="Nhập %" autocomplete="off"
+                                                                    style={{ height: "28px", width: "114px", textAlign: "right", border: 0, borderRadius: 0, borderBottom: "1px solid rgb(128 128 128 / 71%)" }} onChange={this.onChange} ></input>
+                                                            </div>
                                                         </div>
+
                                                     </div>
                                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "5px" }}>
                                                         <div>Chi phí nhập hàng:</div>
-                                                        <div style={{ width: "50%" }}>
-                                                            <input type="text" name ="cost" class="form-control" id="usr" onChange={this.onChange} />
-                                                        </div>
-                                                    </div>
-                                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "5px"  }}>
-                                                        <div>Thuế:</div>
-                                                        <div style={{ width: "50%" }}>
-                                                            <input type="text" name ="tax" class="form-control" id="usr" onChange={this.onChange} />
-                                                        </div>
+                                                        <input type="text" name="cost" id="usr" class=" col-4" value={this.state.priceCustomer}
+                                                            style={{ height: "28px", width: "100px", textAlign: "right", border: 0, borderRadius: 0, borderBottom: "1px solid rgb(128 128 128 / 71%)" }} onChange={this.onChange} ></input>
                                                     </div>
                                                 </div>
                                             </div>
@@ -231,49 +295,56 @@ class CreateImportStock extends Component {
                                                 <label for="comment">Thêm ghi chú:</label>
                                                 <textarea class="form-control" rows="5" id="comment" style={{ height: "50px" }} onChange={this.onChanges}></textarea>
                                             </div>
-                                            <button className='btn btn-danger' style={{ marginTop: "20px" }} onClick={() => this.createImportStock()}>Tạo đơn nhập</button>
+                                            <button className='btn btn-warning' style={{ marginTop: "20px" }} onClick={() => this.createImportStock()}>Tạo đơn nhập</button>
                                         </div>
                                     </div>
 
                                     <div className='col-lg-8 col-xl-8 col-md-12 col-sm-12'>
                                         <div className='card shadow mb-4' style={{ height: "100%" }}>
-                                            <div className='card-header py-3' style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                            <div className='card-header py-3' 
+                                            style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                                 <form onSubmit={this.searchData}>
                                                     <div
                                                         class="input-group mb-6"
                                                         style={{ marginTop: "10px" }}
                                                     >
                                                         <input
-                                                            style={{ maxWidth: "400px" }}
+                                                            style={{ maxWidth: "400px", position: "relative" }}
                                                             type="search"
                                                             name="txtSearch"
                                                             value={searchValue}
                                                             onChange={this.onChangeSearch}
                                                             class="form-control"
-                                                            placeholder="Tìm mã đơn, tên, SĐT"
+                                                            placeholder="Tìm sản phẩm"
                                                         />
-                                                        <div class="input-group-append">
-                                                            <button
-                                                                class="btn btn-primary"
-                                                                type="submit"
 
+                                                        <div class="input-group-append" style={{ position: "relative" }}>
+                                                            <button
+                                                                class="btn btn-warning"
+                                                                type="submit"
+                                                                style={{ borderRadius: "3px" }}
                                                             >
                                                                 <i class="fa fa-search"></i>
                                                             </button>
+                                                            {searchValue ? <i class="fas fa-close close-status " style={{ position: "absolute", left: "-14px", top: "11px" }} onClick={this.getAllProduct}></i> : ""}
                                                         </div>
 
                                                     </div>
                                                 </form>
-                                                <ModalDetail modal={this.state.infoProduct} handleCallbackPushProduct={this.handleCallbackPushProduct} />
-                                                <ModalSupplier supplier={supplier} handleCallbackSupplier={this.handleCallbackSupplier} />
+
+                                                <div className='wrap-pagination'>
+                                                    <Paginations limit={numPage} bonusParam={bonusParam}
+                                                        passNumPage={this.passNumPage} store_code={store_code} products={products} />
+                                                </div>
                                             </div>
                                             <div className='card-body'>
-                                                <CardProduct store_code={store_code} handleCallbackProduct={this.handleCallbackProduct} />
+                                                {products.data?.length > 0 ? <CardProduct store_code={store_code} handleCallbackProduct={this.handleCallbackProduct} /> :
+                                                    <div>Không tồn tại sản phẩm</div>
+                                                }
                                             </div>
-
-                                            {/* <Pagination limit={numPage}
-                                                    searchValue={searchValue}
-                                                    passNumPage={this.passNumPage} store_code={store_code} products={products} /> */}
+                                            <ModalDetail product={this.state.product} modal={this.state.infoProduct} handleCallbackPushProduct={this.handleCallbackPushProduct} />
+                                                <ModalSupplier supplier={supplier} store_code={store_code} handleCallbackSupplier={this.handleCallbackSupplier} />
+                                            
                                         </div>
                                     </div>
                                 </div>

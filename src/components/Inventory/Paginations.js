@@ -11,21 +11,13 @@ class Pagination extends Component {
   }
 
   passPagination = (page) => {
-    var { store_code, limit, searchValue, bonusParam, listType } = this.props
-    var params
-    if (listType == 1) {
-      params = `&limit=${limit}${bonusParam}`
-    } else {
-      params = `&limit=${limit}`
-    }
-    const branch_id = localStorage.getItem('branch_id');
-    this.props.fetchAllProductV2(store_code, branch_id, page, params);
-    this.props.passNumPage(page)
+    var { store_code, bonusParam , agency_type_id } = this.props
+    console.log("bonusParam",bonusParam)
+    const branch_id = localStorage.getItem('branch_id')
+    this.props.fetchAllProductV2(store_code, branch_id,page,bonusParam);
+
   }
 
-  passNumPage = (page) => {
-    this.setState({ page: page })
-  }
 
   showData = (links) => {
     var result = null;
@@ -35,19 +27,19 @@ class Pagination extends Component {
     }
     if (links.length > 0) {
       result = links.map((data, index) => {
-        var active = data.active == true ? "active" : null;
+        var active = data.active == true ? "active_pos" : null;
         var label = (data.label.includes("&laquo; ") || data.label.includes(" &raquo;"))
           ? data.label.replace("&laquo; Previous", "Trước").replace("Next &raquo;", "Sau")
           : data.label
         if (data.url == null) {
           return (
-            <li class={`page-item ${active} `}><a class="page-link">{label}</a></li>
+            <li class={`page-item ${active} `}><a class="page-link" style={{ padding: "7px" }}>{label}</a></li>
           );
         }
         else {
 
           return (
-            <li class={`page-item ${active} `}><a onClick={() => this.passPagination(data.url.split('?page=')[1])} class="page-link">{label}</a></li>
+            <li class={`page-item ${active} `}><a onClick={() => this.passPagination(data.url.split('?page=')[1])} class="page-link" style={{ padding: "7px" }}>{label}</a></li>
           );
         }
 
@@ -64,7 +56,7 @@ class Pagination extends Component {
 
 
       <nav aria-label="Page navigation" className={`float-pagination ${this.props.style}`}>
-        <ul class="pagination  tab-pagination pg-blue">
+        <ul class="pagination  tab-pagination pg-blue" style={{ justifyContent: "flex-end", padding: "2px", margin: 0 }}>
           {this.showData(links)}
         </ul>
       </nav>
@@ -76,9 +68,9 @@ class Pagination extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
+    fetchAllProductV2: (store_code, branch_id, page,params) => {
+      dispatch(productAction.fetchAllProductV2(store_code, branch_id, page,params));
 
-    fetchAllProductV2: (store_code, branch_id, page, params) => {
-      dispatch(productAction.fetchAllProductV2(store_code, branch_id, page, params));
     },
   };
 };

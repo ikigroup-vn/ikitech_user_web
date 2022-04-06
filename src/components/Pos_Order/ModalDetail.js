@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { format } from '../../ultis/helpers'
 import * as Env from "../../ultis/default"
 import { shallowEqual } from '../../ultis/shallowEqual'
+import { findImportPrice, findImportPriceSub, findTotalStock } from '../../ultis/productUltis'
 
 class ModalDetail extends Component {
     constructor(props) {
@@ -21,12 +22,19 @@ class ModalDetail extends Component {
             maxPriceAfterDiscount: "",
             stateDistribute: false,
             messageErr: "",
-            quantityInStock: ""
+            quantityInStock: "",
+            elementDistributeOj:"",
+            totalStocks:0,
         }
+    }
+    componentDidMount(){
+        console.log("hellllllllo")
     }
     handleClick = (nameDistribute, nameObject, index, id, quatity) => {
         var { distributes } = this.props.modal.inventoryProduct
+        var distribute  = this.props.modal.distributeProduct
         this.setState({ distributeSelected: index, subElementDistributeSelected: -1, element_distributes: "", distributeValue: nameDistribute, distributeName: nameObject })
+        var elementImport =  findImportPrice(distribute,id)
         if (distributes.length > 0) {
             if (distributes[0].element_distributes.length > 0) {
                 if (distributes[0].element_distributes[0].sub_element_distributes.length > 0) {
@@ -50,7 +58,7 @@ class ModalDetail extends Component {
                                 this.setState({
                                     elementObject: elments,
                                     messageErr: "",
-
+                                    elementDistributeOj: elementImport
                                 })
                         }
                     }
@@ -79,10 +87,11 @@ class ModalDetail extends Component {
                             if (elments)
                                 this.setState({
                                     elementObject: elments,
-                                    afterChoosePrice: elments.cost_of_capital,
+                                    afterChoosePrice: elementImport.price,
                                     quantityInStock: quatity,
                                     messageErr: "",
                                     idElement: id,
+                                    elementDistributeOj: elementImport
                                 })
                         }
                     }
@@ -94,6 +103,9 @@ class ModalDetail extends Component {
 
     handleClickElement = (nameElement, price, index, id) => {
         var { sub_element_distributes } = this.state.elementObject
+        var sub_element_distribute = this.state.elementDistributeOj.sub_element_distributes
+        var subImport = findImportPriceSub(sub_element_distribute, nameElement)
+        console.log("subImport", subImport)
         if (this.props.modal.discountProduct) {
             var { value } = this.props.modal.discountProduct
             this.setState({ subElementDistributeSelected: index, element_distributes: nameElement })
@@ -111,14 +123,14 @@ class ModalDetail extends Component {
                 var indexDistributes = sub_element_distributes.map(e => e.name).indexOf(nameElement)
                 var sub_elements = sub_element_distributes[indexDistributes]
                 this.setState({
-                    afterChoosePrice: sub_elements.cost_of_capital,
+                    afterChoosePrice: subImport.price,
                     priceBeforeDiscount: sub_elements.price,
                     quantityInStock: sub_elements.stock,
                     idElement: id,
                     messageErr: ""
                 })
             } else {
-                this.setState({ subElementDistributeSelected: index, idElement: id, element_distributes: nameElement })
+                this.setState({ afterChoosePrice: subImport.price,subElementDistributeSelected: index, idElement: id, element_distributes: nameElement })
             }
 
         }
@@ -130,6 +142,7 @@ class ModalDetail extends Component {
             distributeSelected: -1,
             subElementDistributeSelected: -1,
             messageErr: "",
+            quantityInStock:0
         })
     }
     handleCallback = () => {
@@ -196,11 +209,13 @@ class ModalDetail extends Component {
         })
     }
     componentWillReceiveProps(nextProps, nextState) {
-
-
+        var { inventoryProduct } = nextProps.modal
+        const totalStock = findTotalStock(inventoryProduct)
+        console.log("totalStock",totalStock)
+        this.setState({quantityInStock:totalStock})
         if (!shallowEqual(nextProps.modal.inventoryProduct, this.props.modal.inventoryProduct)) {
-
-            this.setState({ quantityInStock: nextProps.modal.inventoryProduct.main_stock })
+            
+            // this.setState({ quantityInStock: nextProps.modal.inventoryProduct.main_stock })
         }
 
         if (nextProps.modal.priceProduct !== this.state.afterPrice) {
@@ -238,8 +253,9 @@ class ModalDetail extends Component {
                                 </div>
                                 <div className='info-voucher col-8' style={{ display: "flex", flexDirection: "column", justifyContent: "space-around" }}>
                                     <div>
-                                        <div className='value' style={{ fontWeight: "bold" }}>{inforProduct.nameProduct}</div>
-                                        <div className='code' style={{ color: "red" }}><span>{this.state.afterChoosePrice === '' ? inforProduct.discountProduct === null ? format(Number(this.state.afterPrice)) : this.state.minPriceAfterDiscount === this.state.maxPriceAfterDiscount ? `${format(Number(this.state.minPriceAfterDiscount))}` : `${format(Number(this.state.minPriceAfterDiscount))} - ${format(Number(this.state.maxPriceAfterDiscount))}`
+                                        <div className='value' style={{ fontWeight: "bold",width:"220px",overflow: "hidden",whiteSpace: "nowrap",textOverflow: "ellipsis" }}>{inforProduct.nameProduct}</div>
+                                        <div className='code' style={{ color: "red" }}><span>{this.state.afterChoosePrice === '' ? inforProduct.discountProduct === null ?
+                                        this.props.modal.minPriceProduct == this.props.modal.maxPriceProduct? format(Number(this.props.modal.minPriceProduct)):`${format(Number(this.props.modal.minPriceProduct))}-${format(Number(this.props.modal.maxPriceProduct))}` : this.state.minPriceAfterDiscount === this.state.maxPriceAfterDiscount ? `${format(Number(this.state.minPriceAfterDiscount))}` : `${format(Number(this.state.minPriceAfterDiscount))} - ${format(Number(this.state.maxPriceAfterDiscount))}`
                                             : format(Number(this.state.afterChoosePrice))}</span></div>
                                         <div className='before-discout' style={{ display: "flex" }} >
                                             <span style={{ fontSize: "13px", textDecoration: "line-through" }}>{inforProduct.discountProduct !== null ?

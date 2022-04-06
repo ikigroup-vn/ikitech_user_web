@@ -91,7 +91,7 @@
 
 }
 .resp-table-row:hover{
-  background-color: #7fffd463;
+  background-color: #7fffd463 !important;
 }
 .resp-table-row:nth-child(even) {
   background-color: #f2f2f2;
@@ -654,20 +654,25 @@ a{
   background-color: #fcfcfe;
 }
 
-.card-bodys::-webkit-scrollbar {
+/* .card-bodys::-webkit-scrollbar {
   display: none;
-}
-.show-product::-webkit-scrollbar {
+} */
+/* .show-product::-webkit-scrollbar {
   display: none;
-}
+} */
 
 .btnchoose:focus {
   background-color: #f6c23e;
   color: white;
 }
 .group-name .active {
-  background-color: yellow;
+ background-color: #f69a51e3  !important;
+ color: white;
 }
 .element_distribute_name .actives {
-  background-color: yellow;
+  background-color:#f69a51e3  !important;
+  color: white;
+}
+.wrap-content:hover{
+  background-color: #8080801a;
 }

@@ -65,7 +65,7 @@ class Topbar extends Component {
     const selectedBranch = branchStore.find((branch) => branch.id == value);
     this.props.changeBranch(selectedBranch);
 
-    window.location.reload();
+    // window.location.reload();
   };
   showData = (stores) => {
     var result = null;

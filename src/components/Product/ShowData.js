@@ -4,12 +4,12 @@ import { format, formatNumber } from '../../ultis/helpers'
 import * as inventoryAction from '../../actions/inventory'
 import { connect } from 'react-redux';
 import getChannel, { IKITECH } from '../../ultis/channel';
-
+import * as Env from "../../ultis/default"
 class ShowData extends Component {
     constructor(props) {
         super(props)
         this.state = {
-           
+
         }
     }
 
@@ -103,8 +103,11 @@ class ShowData extends Component {
                                     <div className='quantity-distribute' style={{ marginLeft: "20px" }}>{element.stock}</div>
                                 </div>
                                 <div className='col-3' style={{ textAlign: "center" }}>
-                                    <button className='btn btn-primary' data-toggle="modal" data-target="#myModal" onClick={() => this.handleEditStockElement(element, listDistribute.name)}>Sửa kho</button>
-                                    <button className='btn btn-warning' data-toggle="modal" style={{ marginLeft: "10px" }} data-target="#historyStock" onClick={() => this.historyInventory(element, listDistribute.name)}>Lịch sử kho</button>
+                                    <button className='btn btn-primary' data-toggle="modal"
+                                        data-target="#myModal" onClick={() => this.handleEditStockElement(element, listDistribute.name)}>Sửa kho</button>
+                                    <button className='btn btn-warning' data-toggle="modal"
+                                        style={{ marginLeft: "10px" }} data-target="#historyStock"
+                                        onClick={() => this.historyInventory(element, listDistribute.name)}>Lịch sử kho</button>
                                 </div>
                             </div>
                         )
@@ -118,7 +121,7 @@ class ShowData extends Component {
     render() {
         const { product_discount, min_price, max_price, _delete, update, insert, checked, data, per_page, current_page, index, store_code, page, status, status_name, status_stock, discount, historyInventory } = this.props
         const listDistribute = data.inventory?.distributes !== null && data.inventory?.distributes.length > 0 ? data.inventory?.distributes[0] : []
-   
+
 
 
         let discount_percent = null;
@@ -142,7 +145,9 @@ class ShowData extends Component {
                         />
                     </td>
                     <td>{per_page * (current_page - 1) + (index + 1)}</td>
-
+                    <td>
+                        <img src={data.images.length > 0 ? data.images[0].image_url : Env.IMG_NOT_FOUND} className="img-responsive" alt="Image" style={{ width: "100%", height: "59px", background: "#0000000d" }} />
+                    </td>
                     <td>{data.sku}</td>
 
                     <td>
@@ -211,7 +216,7 @@ class ShowData extends Component {
                                         }
 
                                     </div>
-                                  
+
                                     <div className="discount">&emsp;  -{discount_percent}%</div>
                                 </div>
 
@@ -231,29 +236,6 @@ class ShowData extends Component {
                     </td>}
 
 
-
-                    <td
-                        className={
-                            status_stock == -2 || status_stock == -1 ? "show" : "hide"
-                        }
-                    >
-                        {" "}
-                        <h5>
-                            <span
-                                class={`badge badge-${status_stock == -2 ? "danger" : "success"
-                                    }`}
-                            >
-                                {status_stock == -2 ? "Hết hàng" : "Vô hạn"}
-                            </span>
-                        </h5>
-                    </td>
-                    <td
-                        className={
-                            status_stock != -2 && status_stock != -1 ? "show" : "hide"
-                        }
-                    >
-                        {new Intl.NumberFormat().format(status_stock.toString())}
-                    </td>
                     {getChannel() == IKITECH && <td>{data.view}</td>}
                     {getChannel() == IKITECH && <td>{data.likes}</td>}
 
@@ -287,7 +269,7 @@ class ShowData extends Component {
                     </td>
                 </tr>
 
-         
+
             </>
         )
     }

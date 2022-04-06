@@ -105,7 +105,7 @@
 .panel-top {
   flex: 0 0 auto;
   /* only manually resize */
-  height: 328px;
+  height: 232px;
   width: 100%;
   white-space: nowrap;
   color: white;

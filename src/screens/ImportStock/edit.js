@@ -14,7 +14,7 @@ import ModalDetail from '../../components/Import_stock/ModalDetail';
 import ModalSupplier from '../../components/Import_stock/ModalSupplier';
 import * as dashboardAction from "../../actions/dashboard";
 import ListImportStock from '../../components/Import_stock/ListImportStock';
-import { format } from '../../ultis/helpers';
+import { format, formatNumber } from '../../ultis/helpers';
 class EditImportStock extends Component {
     constructor(props) {
         super(props)
@@ -29,6 +29,8 @@ class EditImportStock extends Component {
             tax:"",
             discount:"",
             cost:"",
+            txtDiscoutType: 0,
+            txtValueDiscount: "",
             infoProduct: {
                 inventoryProduct: "",
                 idProduct: "",
@@ -76,21 +78,69 @@ class EditImportStock extends Component {
                     nameSubDistribute:item.sub_element_distribute_name,
                     product_id:item.product.id,
                     import_price : item.import_price,
-                    reality_exist: 1
+                    reality_exist: item.quantity
                     })
             })
-            this.setState({listImportStock:newImportStock,price_total: total_price,discount:discount,tax:tax,cost:cost,note:note})  
+            this.setState({
+                listImportStock:newImportStock,
+                price_total: total_price,
+                txtValueDiscount:discount
+                ,tax:tax,cost:cost,
+                note:note})  
         }
       }
 
-    handleCallbackProduct = (modal) => {
+    handleCallbackProduct = (modal, product) => {
         this.setState(
             {
-                infoProduct: modal
+                infoProduct: modal,
+                product: product
             })
     }
-    onChange = (e) =>{
-        this.setState({[e.target.name]:e.target.value})
+    // onChange = (e) =>{
+    //     this.setState({[e.target.name]:e.target.value})
+    // }
+    onChange = (e) => {
+        var target = e.target;
+        var name = target.name;
+        var value = target.value;
+        const _value = formatNumber(value);
+        if (name == "txtValueDiscount") {
+            if (!isNaN(Number(_value))) {
+                value = new Intl.NumberFormat().format(_value);
+                if ((name == "txtValueDiscount" && this.state.txtDiscoutType == "1")) {
+                    if (value.length < 3) {
+                        if (value == 0) {
+                            this.setState({ [name]: "" });
+                        }
+                        else {
+                            this.setState({ [name]: value });
+
+                        }
+                    }
+                }
+                else {
+                    if (value == 0) {
+                        this.setState({ [name]: "" });
+                    }
+                    else {
+                        this.setState({ [name]: value });
+
+                    }
+                }
+            }
+        }
+        else {
+            this.setState({ [name]: value });
+
+        };
+    };
+    onChangeType = (e) => {
+        var target = e.target;
+        var name = target.name;
+        var value = target.value;
+        this.setState({ [name]: value, txtValueDiscount: "" });
+
     }
     handleCallbackPushProduct = (modal) => {
         this.setState({ change: !this.state.change })
@@ -137,13 +187,19 @@ class EditImportStock extends Component {
         const { store_code,id } = this.props.match.params
         const { infoSupplier } = this.state
         const branch_id = localStorage.getItem('branch_id')
+        var affterDiscount = ""
+        if(this.state.txtDiscoutType ==0){
+            affterDiscount= formatNumber(this.state.txtValueDiscount)
+        }else{
+            affterDiscount = (this.state.txtValueDiscount/100)*this.state.price_total 
+        }
         const formData = {
             note: this.state.note,
             status: 0,
             supplier_id: infoSupplier.id_supplier,
             tax: this.state.tax,
             cost: this.state.cost,
-            discount: this.state.discount,
+            discount: affterDiscount    ,
             import_stock_items:
                 this.state.listImportStock.map((item) => {
                     return {
@@ -194,8 +250,11 @@ class EditImportStock extends Component {
 
     render() {
         var { supplier } = this.props;
+        var { txtDiscoutType, txtValueDiscount } = this.state
+        var type_discount_default = txtDiscoutType == "0" ? "show" : "hide"
+        var type_discount_percent = txtDiscoutType == "1" ? "show" : "hide"
         var { store_code } = this.props.match.params
-        var { searchValue, numPage, listImportStock, infoSupplier, price_total, reality_exist_total,discount,cost,tax } = this.state
+        var { searchValue, numPage, listImportStock, infoSupplier, price_total, reality_exist_total,cost } = this.state
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
@@ -204,7 +263,9 @@ class EditImportStock extends Component {
                         <div id='content'>
                             <Topbar store_code={store_code} />
                             <div className='container-fluid'>
-                                
+                                <h4 className="h4 title_content mb-10 text-gray-800">
+                                            Sửa đơn nhập
+                                </h4>
                                 <div className='row'>
                                     <div className='col-lg-4 col-xl-4 col-md-12 col-sm-12'>
                                         <div className='card shadow mb-4' style={{ height: "100%" }}>
@@ -233,21 +294,25 @@ class EditImportStock extends Component {
                                                     </div>
                                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                                         <div>Chiết khấu:</div>
-                                                        <div style={{ width: "50%" }}>
-                                                            <input type="text" class="form-control" id="usr" value={discount} name="discount" onChange={this.onChange} />
+                                                        <div className='wrap-discount' style={{display:"flex"}}>
+                                                            <select name="txtDiscoutType" className='form-control' value={txtDiscoutType} id="input" onChange={this.onChangeType} style={{ height: "28px", width: "67px", padding: 0,textAlign:"center",marginRight:"6px" }} >
+                                                                <option value="0">Giá trị</option>
+                                                                <option value="1">%</option>
+                                                            </select>
+                                                            <div class={`form-group ${type_discount_default}`}>
+                                                                <input type="text" name="txtValueDiscount" id="txtValueDiscount" value={txtValueDiscount} placeholder="Nhập giá trị" autocomplete="off"
+                                                                    style={{ height: "28px", width: "114px", textAlign: "right", borderRadius: 0, borderBottom: "1px solid rgb(128 128 128 / 71%)" }} onChange={this.onChange} ></input>
+                                                            </div>
+                                                            <div className={`${type_discount_percent}`}>
+                                                                <input type="text" name="txtValueDiscount" id="txtValueDiscount" value={txtValueDiscount} placeholder="Nhập %" autocomplete="off"
+                                                                    style={{ height: "28px", width: "114px", textAlign: "right", border: 0, borderRadius: 0, borderBottom: "1px solid rgb(128 128 128 / 71%)" }} onChange={this.onChange} ></input>
+                                                            </div>
                                                         </div>
+
                                                     </div>
                                                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "5px" }}>
                                                         <div>Chi phí nhập hàng:</div>
-                                                        <div style={{ width: "50%" }}>
-                                                            <input type="text" name ="cost" value={cost} class="form-control" id="usr" onChange={this.onChange} />
-                                                        </div>
-                                                    </div>
-                                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "5px"  }}>
-                                                        <div>Thuế:</div>
-                                                        <div style={{ width: "50%" }}>
-                                                            <input type="text" name ="tax" value={tax} class="form-control" id="usr" onChange={this.onChange} />
-                                                        </div>
+                                                        <input type="text"  class=" col-4" name ="cost" style={{ height: "28px", width: "100px", textAlign: "right",padding:0, border: 0, borderRadius: 0, borderBottom: "1px solid rgb(128 128 128 / 71%)" }} value={cost} id="usr" onChange={this.onChange} />
                                                     </div>
                                                 </div>
                                             </div>
@@ -288,7 +353,7 @@ class EditImportStock extends Component {
 
                                                     </div>
                                                 </form>
-                                                <ModalDetail modal={this.state.infoProduct} handleCallbackPushProduct={this.handleCallbackPushProduct} />
+                                                <ModalDetail modal={this.state.infoProduct} product={this.state.product}   handleCallbackPushProduct={this.handleCallbackPushProduct} />
                                                 <ModalSupplier supplier={supplier} handleCallbackSupplier={this.handleCallbackSupplier} />
                                             </div>
                                             <div className='card-body'>

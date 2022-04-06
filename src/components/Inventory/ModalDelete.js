@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as inventoryAction from '../../actions/inventory'
+import themeData from "../../ultis/theme_data";
 class ModalDelete extends Component {
-    
+
   onSave = (e) => {
     e.preventDefault();
     window.$('.modal').modal('hide');
-    var {store_code,id} = this.props
+    var { store_code, id } = this.props
     const branch_id = localStorage.getItem("branch_id")
-    this.props.deleteItemInventory(store_code,branch_id,id);
+    this.props.deleteItemInventory(store_code, branch_id, id);
   };
 
   render() {
@@ -23,7 +24,8 @@ class ModalDelete extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{ background: "#47d3b0" }}>
+            <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+              <h4 style={{ color: "white" }}>Thông báo</h4>
               <button
                 type="button"
                 class="close"
@@ -43,7 +45,7 @@ class ModalDelete extends Component {
               <div class="modal-body">
                 <input type="hidden" name="remove_id_store" />
                 <div class="alert-remove"></div>
-                Bạn có muốn xóa 
+                Bạn có muốn xóa phiếu kiểm kho này không?
               </div>
               <div class="modal-footer">
                 <button
@@ -53,9 +55,9 @@ class ModalDelete extends Component {
                 >
                   Đóng
                 </button>
-                <button type="submit" class="btn btn-info">
+                <button type="submit" class="btn btn-warning">
                   Xóa
-                  
+
                 </button>
               </div>
             </form>
@@ -69,7 +71,7 @@ class ModalDelete extends Component {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     deleteItemInventory: (store_code, branch_id, id) => {
-        dispatch(inventoryAction.deleteItemInventory(store_code, branch_id, id))
+      dispatch(inventoryAction.deleteItemInventory(store_code, branch_id, id))
     }
   };
 };
