@@ -72,13 +72,13 @@ class InventoryHistory extends Component {
                 {item.type === 0 || item.type === 1 ?
                   <Link
                     to={`/inventory/detail/${store_code}/${item.references_id}`}
-                    class="btn btn-primary btn-sm"
+                    class="btn btn-primary-no-background btn-sm"
                   >
                     <i class="fa fa-eye"></i> Xem
                   </Link> :
                   <Link
                     to={`/import_stocks/detail/${store_code}/${item.references_id}`}
-                    class="btn btn-primary btn-sm"
+                    class="btn btn-primary-no-background btn-sm"
                   >
                     <i class="fa fa-eye"></i> Xem
                   </Link>

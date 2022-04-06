@@ -5,6 +5,7 @@ import * as inventoryAction from '../../actions/inventory'
 import { connect } from 'react-redux';
 import HistoryStock from './HistoryStock';
 import * as Env from "../../ultis/default"
+import themeData from '../../ultis/theme_data';
 class ShowData extends Component {
     constructor(props) {
         super(props)
@@ -20,7 +21,7 @@ class ShowData extends Component {
     }
     handleEditSubElement = (subElement, element, distribute) => {
         this.props.handleCallBackSubElement({
-            sub:subElement,SubElement: subElement.name, NameElement: element, idProduct: this.props.data.id, NameDistribute: distribute, time: Date()
+            sub: subElement, SubElement: subElement.name, NameElement: element, idProduct: this.props.data.id, NameDistribute: distribute, time: Date()
         })
     }
     handleEditStockProduct = (data) => {
@@ -90,13 +91,13 @@ class ShowData extends Component {
                                     </div>
                                     {data.check_inventory === true ?
                                         <div className='item' style={{ width: '29%', paddingLeft: "0px" }}>
-                                            <a className='btn btn-warning btn-sm show' data-toggle="modal" style={{ paddingLeft: "10px", color: "white" }} data-target="#myModal" onClick={() => this.handleEditSubElement(listDistribute.element_distributes[_index].sub_element_distributes[index], element.name, listDistribute.name)}><i className='fa fa-edit'></i>Sửa kho</a>
+                                            <a className='btn btn-warning btn-sm show' data-toggle="modal" style={{ paddingLeft: "10px", color: "white" }} data-target="#myModal" onClick={() => this.handleEditSubElement(listDistribute.element_distributes[_index].sub_element_distributes[index], element.name, listDistribute.name)}><i className='fa fa-edit'></i> Sửa kho</a>
                                             <a className='btn btn-primary btn-sm show' data-toggle="modal" style={{ marginLeft: "10px", color: "white" }}
                                                 data-target="#historyStock"
                                                 onClick={() => this.historyInventorys(
                                                     listDistribute.element_distributes[_index].sub_element_distributes[index],
                                                     element.name,
-                                                    listDistribute.name)}><i className='fa fa-edit'></i>Lịch sử kho</a>
+                                                    listDistribute.name)}><i className='fa fa-history'></i> Lịch sử kho</a>
                                         </div> : <div className='item' style={{ width: '29%', paddingLeft: "40px" }}></div>
                                     }
 
@@ -111,8 +112,8 @@ class ShowData extends Component {
                                 <div className='item' style={{ display: "flex", width: '14%' }}>
                                     <img src={element.image_url != null ? element.image_url : Env.IMG_NOT_FOUND} alt='' width="35px" height="35px" style={{ marginLeft: "70px" }} ></img>
                                 </div>
-                                <div className='item' style={{ display: "flex", width: "41%", justifyContent: "start", paddingLeft: "72px"}}>
-                                    <label style={{color: "#ff8100"}}>Phân loại: </label>
+                                <div className='item' style={{ display: "flex", width: "41%", justifyContent: "start", paddingLeft: "72px" }}>
+                                    <label style={{ color: "#ff8100" }}>Phân loại: </label>
                                     <div className='name-distribute' style={{ marginLeft: "20px" }}>{element.name}</div>
                                 </div>
                                 <div className='item' style={{ display: "flex", width: "17%" }}>
@@ -123,8 +124,8 @@ class ShowData extends Component {
                                 </div>
                                 {data.check_inventory === true ?
                                     <div className='item' style={{ width: "29%", paddingLeft: "0" }}>
-                                        <a className='btn btn-warning btn-sm show' data-toggle="modal" data-target="#myModal" style={{ color: "white" }} onClick={() => this.handleEditStockElement(element, listDistribute.name)}><i className='fa fa-edit'></i>Sửa kho</a>
-                                        <a className='btn btn-primary btn-sm show' data-toggle="modal" style={{ marginLeft: "10px", color: "white" }} data-target="#historyStock" onClick={() => this.historyInventory(element, listDistribute.name)}><i className='fa fa-edit'></i>Lịch sử kho</a>
+                                        <a className='btn btn-warning btn-sm show' data-toggle="modal" data-target="#myModal" style={{ color: "white" }} onClick={() => this.handleEditStockElement(element, listDistribute.name)}><i className='fa fa-edit'></i> Sửa kho</a>
+                                        <a className='btn btn-primary btn-sm show' data-toggle="modal" style={{ marginLeft: "10px", color: "white" }} data-target="#historyStock" onClick={() => this.historyInventory(element, listDistribute.name)}><i className='fa fa-history'></i> Lịch sử kho</a>
                                     </div> : <div className='item' style={{ width: "29%", paddingLeft: "50px" }}></div>
                                 }
 
@@ -155,9 +156,11 @@ class ShowData extends Component {
                         <img src={data.images.length > 0 ? data.images[0].image_url : Env.IMG_NOT_FOUND} alt='' width="40px" height="63px" style={{ width: "73%" }}></img>
                     </td>
                     <td>
-                        <Link to={`/product/edit/${store_code}/${data.id}/${page}`}>
-                            {data.name}
-                        </Link>
+                        {/* <Link to={`/product/edit/${store_code}/${data.id}/${page}`}> */}
+                        <div style={{
+
+                        }}>{data.name}</div>
+                        {/* </Link> */}
                     </td>
                     {data.inventory.distributes.length === 1 ?
                         <>
@@ -176,8 +179,8 @@ class ShowData extends Component {
                             </td>
                             {data.check_inventory === true ?
                                 <td>
-                                    <a className='btn btn-warning btn-sm show' style={{ color: "white" }} data-toggle="modal" data-target="#myModal" onClick={() => this.handleEditStockProduct(data)}><i className='fa fa-edit'></i>Sửa kho</a>
-                                    <a className='btn btn-primary btn-sm show' data-toggle="modal" style={{ marginLeft: "10px", color: "white" }} data-target="#historyStock" onClick={() => this.historyInventoryss()}><i className='fa fa-edit'></i>Lịch sử kho</a>
+                                    <a className='btn btn-warning btn-sm show' style={{ color: "white" }} data-toggle="modal" data-target="#myModal" onClick={() => this.handleEditStockProduct(data)}><i className='fa fa-edit'></i> Sửa kho</a>
+                                    <a className='btn btn-primary btn-sm show' data-toggle="modal" style={{ marginLeft: "10px", color: "white" }} data-target="#historyStock" onClick={() => this.historyInventoryss()}><i className='fa fa-history'></i> Lịch sử kho</a>
 
                                 </td> : <td></td>
                             }

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { format } from "../../ultis/helpers"
 import { connect } from "react-redux";
 import Pagination from "../../components/Bill/Pagination";
-
+import getChannel,{IKITECH} from "../../ultis/channel";
 import * as billAction from "../../actions/bill";
 import { shallowEqual } from "../../ultis/shallowEqual";
 
@@ -127,19 +127,23 @@ class Table extends Component {
             <td className="btn-voucher">
               <Link
                 to={`/order/detail/${store_code}/${data.order_code}`}
-                class="btn btn-success btn-sm"
+                class="btn btn-primary-no-background btn-sm"
               >
                 <i class="fa fa-eye"></i> Xem
               </Link>
-              <button
+             
+              {
+         getChannel() == IKITECH &&  <button
 
-                onClick={() => this.showChatBox(data.customer != null ? data.customer.id : null, data.customer != null ?  data.customer.avatar_image : null,data.customer != null ?  data.customer.name : null, "show")}
-                type="button"
-                class={`btn btn-primary btn-sm ${chat_allow == true ? "show" : "hide"}`}
+         onClick={() => this.showChatBox(data.customer != null ? data.customer.id : null, data.customer != null ?  data.customer.avatar_image : null,data.customer != null ?  data.customer.name : null, "show")}
+         type="button"
+         class={`btn btn-primary btn-sm ${chat_allow == true ? "show" : "hide"}`}
+         
+         >
+         <i class="fa fa-comment-alt"></i> Chat
+         </button>
+       }
 
-              >
-                <i class="fa fa-comment-alt"></i> Chat
-              </button>
             </td>
           </tr>
         );
@@ -239,3 +243,5 @@ const mapDispatchToProps = (dispatch, props) => {
   };
 };
 export default connect(null, mapDispatchToProps)(Table);
+
+
