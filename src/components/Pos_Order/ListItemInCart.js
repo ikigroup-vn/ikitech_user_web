@@ -61,19 +61,19 @@ import { shallowEqual } from '../../ultis/shallowEqual'
             console.log("11111111111")
             var formDataAdd = {line_item_id:nextState.modalAdd.lineItemIds, product_id:nextState.modalAdd.productIds,quantity:nextState.modalAdd.quantity,distributes:nextState.modalAdd.distributesProduct}
             this.props.addQuantityProduct(store_code,branch_id,this.props.idCart,formDataAdd)
-        }
+``        }
         if(!shallowEqual(nextState.modalSub,this.state.modalSub)){
             var formDataSub = {line_item_id:nextState.modalSub.itemIds, product_id:nextState.modalSub.productIds,quantity:nextState.modalSub.quantity,distributes:nextState.modalSub.distributesProduct}
             this.props.subQuantityProduct(store_code,branch_id,nextState.modalSub.CartIds,formDataSub)
         }
         return true
       }
-
     render() {
         var {listItemPos} = this.props
         
         return (
             <div className='list-group'>
+
                 {listItemPos.info_cart?.line_items.map((item,index) =>{
                     return(
                         <ItemInCart item = {item} index ={index} addQuantity ={this.addQuantity} handleDelete ={this.handleDelete} subQuantity ={this.subQuantity} addQuantitys = {this.addQuantitys} />
