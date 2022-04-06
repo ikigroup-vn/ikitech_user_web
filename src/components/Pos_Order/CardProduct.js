@@ -64,7 +64,6 @@ class CardProduct extends Component {
     render() {
         var { products } = this.props
         var listProducts = filter_arr(products.data)
-        console.log("listProducts", listProducts)
         return (
             <div className='show-product' style={{ overflow: "hidden", overflowY: "auto" }}>
                 <div className='row'>

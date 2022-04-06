@@ -95,18 +95,22 @@ export const getTypeProductDistribute = (product) => {
 
         if (distributes != null && distributes.element_distributes != null && distributes.element_distributes.length > 0) {
             const element_distributes = distributes.element_distributes
-
-            for (var ele in element_distributes) {
-                if (ele.sub_element_distributes != null && ele.sub_element_distributes.length > 0) {
-
-                    if (ele.sub_element_distributes != null && ele.sub_element_distributes.length > 0) {
-                        const sub_element_distributes = ele.sub_element_distributes
-                        for (var sub in sub_element_distributes) {
-                            return HAS_SUB
-                        }
-                    }
-                }
+            if (element_distributes[0].sub_element_distributes != null && element_distributes[0].sub_element_distributes.length > 0) {
+                return HAS_SUB
+                
             }
+            // for (var ele in element_distributes) {
+            //     console.log("element_distributes",ele)
+            //     if (ele.sub_element_distributes != null && ele.sub_element_distributes.length > 0) {
+            //         console.log("element_distributes")
+            //         if (ele.sub_element_distributes != null && ele.sub_element_distributes.length > 0) {
+            //             const sub_element_distributes = ele.sub_element_distributes
+            //             for (var sub in sub_element_distributes) {
+            //                 return HAS_SUB
+            //             }
+            //         }
+            //     }
+            // }
             return HAS_ELE
         }
 
@@ -237,6 +241,58 @@ export const findMinImportPrice = (product) => {
 
 
     return min
+
+}
+
+export const findTotalStock = (product) => {
+
+    if (getTypeProductDistribute(product) == HAS_ELE) {
+        var stock = 0
+
+        if (product.distributes != null && product.distributes.length > 0) {
+            const distributes = product.distributes[0];
+
+            if (distributes != null && distributes.element_distributes != null && distributes.element_distributes.length > 0) {
+                const element_distributes = distributes.element_distributes
+                console.log("element_distributes", element_distributes)
+                element_distributes.forEach(ele => {
+                    stock += ele.stock
+                });
+
+
+            }
+        }
+        console.log("co ele")
+        return stock
+    }
+    if (getTypeProductDistribute(product) == HAS_SUB) {
+        console.log("co sub")
+        var stocks = 0
+        if (product.distributes != null && product.distributes.length > 0) {
+            const distributes = product.distributes[0];
+
+            if (distributes != null && distributes.element_distributes != null && distributes.element_distributes.length > 0) {
+                const element_distributes = distributes.element_distributes
+
+                element_distributes.forEach(ele => {
+
+                    if (ele.sub_element_distributes != null && ele.sub_element_distributes.length > 0) {
+                        const sub_element_distributes = ele.sub_element_distributes
+
+                        sub_element_distributes.forEach(sub => {
+                            stocks += sub.stock
+                        });
+
+
+                    }
+                });
+            }
+        }
+
+        return stocks
+    }
+
+    return stock
 
 }
 

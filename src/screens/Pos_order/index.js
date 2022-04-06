@@ -329,7 +329,8 @@ class PostOrder extends Component {
                 selectPrice: -1,
                 namePos: nextProps.listItemCart.name,
                 customerNote: nextProps.listItemCart.customer_note ?? "",
-                payment_method_id: nextProps.listItemCart.payment_method_id
+                payment_method_id: nextProps.listItemCart.payment_method_id,
+                discount: nextProps.listItemCart.discount
             })
             if (nextProps.listItemCart.info_cart.is_use_points !== null) {
                 this.setState({ checked: nextProps.listItemCart.info_cart.is_use_points })
@@ -366,7 +367,7 @@ class PostOrder extends Component {
             this.setState({
                 priceCustomer: 0,
                 exchange:0,
-                totalFinal:0
+                totalFinal:0,
             })
         }
 
@@ -496,7 +497,7 @@ class PostOrder extends Component {
                                         <div className='col-list-order'>
                                             <div className='' style={{ padding: "8px" }}>
                                                 {listItemCart?.info_cart?.line_items.length > 0 ?
-                                                    <ListItemInCart store_code={store_code} listItemPos={listItemCart} /> :
+                                                    <ListItemInCart store_code={store_code} listItemPos={listItemCart} idCart = {this.state.idCart} /> :
                                                     <div className='product-pos' style={{ textAlign: "center", color: "gray", fontSize: "20px", marginTop: "70px" }}>
 
                                                         <img style={{ width: "14%" }} src="../../images/empty_cart.png" alt=''></img>

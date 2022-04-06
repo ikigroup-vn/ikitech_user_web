@@ -180,7 +180,33 @@ class Topbar extends Component {
 
                     <ul class="navbar-nav" style={{ alignItems: "center" }} >
                         <li class="nav-item">
-                            <div className='search-imput' style={{ display: 'flex' }}>
+                            <form onSubmit={this.searchData}>
+                                <div
+                                    class="input-group"
+                                >
+                                <input
+                                    // style={{ maxWidth: "400px", minWidth: "300px", borderRadius: '5px' }}
+                                    type="search"
+                                    name="txtSearch"
+                                    id="serch-product"
+                                    onChange={this.onChangeSearch}
+                                    class="form-control"
+                                    placeholder="Tìm kiếm sản phẩm"
+                                />
+                                    <div class="input-group-append">
+                                        <button
+                                            class=""
+                                            style={{ width: "34px", border: "none",backgroundColor: "white",borderRadius: "3px"}}
+                                            type="submit"
+                                        >
+                                            <i class="fa fa-search"></i>
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </form>
+
+                            {/* <div className='search-imput' style={{ display: 'flex' }}>
                                 <input
                                     style={{ maxWidth: "400px", minWidth: "300px", borderRadius: '5px' }}
                                     type="search"
@@ -200,7 +226,7 @@ class Topbar extends Component {
                                     </button>
                                 </div>
 
-                            </div>
+                            </div> */}
 
                         </li>
                         <li class="nav-item">
