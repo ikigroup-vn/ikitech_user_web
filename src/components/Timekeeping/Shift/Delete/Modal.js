@@ -5,14 +5,16 @@ import * as shiftAction from "../../../../actions/shift";
 class Modal extends Component {
   onSave = (e) => {
     e.preventDefault();
-    window.$(".modal").modal("hide");
+
     var { id, store_code, branch_id } = this.props.modal;
-    this.props.destroyShift(store_code, branch_id, id);
+    console.log(this.props.limit, this.props);
+    var params = `&limit=${this.props.limit}`;
+    this.props.destroyShift(store_code, branch_id, id, params);
   };
 
   render() {
     var { modal } = this.props;
-
+    window.$(".modalEdit").modal("hide");
     return (
       <div
         class="modal fade"
@@ -69,8 +71,8 @@ class Modal extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    destroyShift: (store_code, branch_id, id) => {
-      dispatch(shiftAction.destroyShift(store_code, branch_id, id));
+    destroyShift: (store_code, branch_id, id, params) => {
+      dispatch(shiftAction.destroyShift(store_code, branch_id, id, params));
     },
   };
 };

@@ -46,8 +46,11 @@ import ComboEdit from "./screens/Promotion/Combo/Edit/index";
 import ComboCreate from "./screens/Promotion/Combo/Create/index";
 
 import Shift from "./screens/Timekeeping/Shift/index";
+import WorkLocation from "./screens/Timekeeping/WorkLocation/index";
+import Request from "./screens/Timekeeping/Request/index";
 import CalendarShift from "./screens/Timekeeping/CalendarShift/index";
-
+import CalendarShiftCreate from "./screens/Timekeeping/CalendarShift/Create/index";
+import TimeSheet from "./screens/Timekeeping/TimeSheet/index";
 // import WorkSchedule from "./screens/Timekeeping/WorkSchedule/index";
 // import WorkLocation from "./screens/Timekeeping/WorkLocation/index";
 
@@ -606,6 +609,32 @@ const routes = [
     exact: true,
 
     main: ({ match }) => <CalendarShift match={match} />,
+  },
+  {
+    path: "/work_location/:store_code",
+    exact: true,
+
+    main: ({ match }) => <WorkLocation match={match} />,
+  },
+  {
+    path: "/request/:store_code",
+    exact: true,
+
+    main: ({ match }) => <Request match={match} />,
+  },
+  {
+    path: "/calendar_shift/putALot/:store_code",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <CalendarShiftCreate match={match} history={history} />
+    ),
+  },
+  {
+    path: "/time_sheet/:store_code",
+    exact: true,
+
+    main: ({ match }) => <TimeSheet match={match} />,
   },
   {
     path: "/login",

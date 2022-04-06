@@ -458,6 +458,7 @@ class RevenueExpenditures extends Component {
 
               <Footer />
             </div>
+
             {supplier.data !== undefined &&
               customers.data !== undefined &&
               staff.length !== 0 && (
@@ -469,6 +470,9 @@ class RevenueExpenditures extends Component {
                   // supplier={supplier.data}
                   // customers={customers.data}
                   is_revenue={true}
+                  limit={numPage}
+                  searchValue={searchValue}
+                  datePrime={datePrime}
                 />
               )}
             {supplier.data !== undefined &&
@@ -482,6 +486,9 @@ class RevenueExpenditures extends Component {
                   supplier={supplier.data}
                   customers={customers.data}
                   is_revenue={false}
+                  limit={numPage}
+                  searchValue={searchValue}
+                  datePrime={datePrime}
                 />
               )}
           </div>

@@ -53,7 +53,7 @@ export const fetchShiftId = (store_id, branch_id, id) => {
     });
   };
 };
-export const createShift = (store_code, branch_id, data) => {
+export const createShift = (store_code, branch_id, data, params) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -68,7 +68,7 @@ export const createShift = (store_code, branch_id, data) => {
         });
 
         shiftApi
-          .fetchAllShift(store_code, branch_id, 1, null)
+          .fetchAllShift(store_code, branch_id, 1, params)
           .then((res) => {
             if (res.data.code !== 401)
               dispatch({
@@ -119,7 +119,7 @@ export const createShift = (store_code, branch_id, data) => {
   };
 };
 
-export const updateShift = (store_code, branch_id, data, id) => {
+export const updateShift = (store_code, branch_id, data, id,params) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -134,7 +134,7 @@ export const updateShift = (store_code, branch_id, data, id) => {
         });
 
         shiftApi
-          .fetchAllShift(store_code, branch_id, 1, null)
+          .fetchAllShift(store_code, branch_id, 1, params)
           .then((res) => {
             if (res.data.code !== 401)
               dispatch({
@@ -185,7 +185,7 @@ export const updateShift = (store_code, branch_id, data, id) => {
   };
 };
 
-export const destroyShift = (store_code, branch_id, id) => {
+export const destroyShift = (store_code, branch_id, id,params) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -199,7 +199,7 @@ export const destroyShift = (store_code, branch_id, id) => {
           loading: "hide",
         });
         shiftApi
-          .fetchAllShift(store_code, branch_id, 1, null)
+          .fetchAllShift(store_code, branch_id, 1, params)
           .then((res) => {
             if (res.data.code !== 401)
               dispatch({

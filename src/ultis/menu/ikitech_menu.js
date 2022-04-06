@@ -238,6 +238,16 @@ export const ikitech_menu = [
             to: "/calendar_shift",
           },
           {
+            class: "promotion_voucher_list",
+
+            name: "Bảng công",
+
+            display: "hide",
+            icon: "fas fa-fw fa-calendar-days",
+            exact: true,
+            to: "/time_sheet",
+          },
+          {
             class: "promotion_combo_list",
 
             name: "Địa điểm làm việc",
@@ -247,6 +257,17 @@ export const ikitech_menu = [
 
             exact: true,
             to: "/work_location",
+          },
+          {
+            class: "promotion_combo_list",
+
+            name: "Xử lý yêu cầu",
+            // class: "timekeeping_work_location",
+            display: "hide",
+            icon: "fas fa-fw fa-location-dot",
+
+            exact: true,
+            to: "/request",
           },
         ],
       },

@@ -243,23 +243,28 @@ class Modal extends Component {
     // var recipientReferencesIdValue = recipient_references_id?.value
     //   ? recipient_references_id?.value
     //   : null;
+    var params = `&limit=${this.props.limit}`;
+    this.props.createShift(
+      this.props.store_code,
+      this.props.branch_id,
+      {
+        name,
+        code,
+        end_work_hour: integer_end_work_hour,
+        end_work_minute: integer_end_work_minute,
+        start_work_hour: integer_start_work_hour,
+        start_work_minute: integer_start_work_minute,
+        start_break_hour: integer_start_break_hour,
+        start_break_minute: integer_start_break_minute,
+        end_break_hour: integer_end_break_hour,
+        end_break_minute: integer_end_break_minute,
+        minutes_late_allow: integer_minutes_late_allow,
+        minutes_early_leave_allow: integer_minutes_early_leave_allow,
 
-    this.props.createShift(this.props.store_code, this.props.branch_id, {
-      name,
-      code,
-      end_work_hour: integer_end_work_hour,
-      end_work_minute: integer_end_work_minute,
-      start_work_hour: integer_start_work_hour,
-      start_work_minute: integer_start_work_minute,
-      start_break_hour: integer_start_break_hour,
-      start_break_minute: integer_start_break_minute,
-      end_break_hour: integer_end_break_hour,
-      end_break_minute: integer_end_break_minute,
-      minutes_late_allow: integer_minutes_late_allow,
-      minutes_early_leave_allow: integer_minutes_early_leave_allow,
-
-      days_of_week: new_days_of_week_list,
-    });
+        days_of_week: new_days_of_week_list,
+      },
+      params
+    );
   };
   onChangeStart = (e) => {
     var time = moment(e, "HH:mm").format("HH:mm");
@@ -688,8 +693,8 @@ const mapDispatchToProps = (dispatch, props) => {
     showError: (error) => {
       dispatch(error);
     },
-    createShift: (store_code, branch_id, data) => {
-      dispatch(shiftAction.createShift(store_code, branch_id, data));
+    createShift: (store_code, branch_id, data, params) => {
+      dispatch(shiftAction.createShift(store_code, branch_id, data, params));
     },
   };
 };

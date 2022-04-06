@@ -224,17 +224,27 @@ class Modal extends Component {
         return;
       }
     }
-    var start2 = moment(`${start_break_hour}:${start_break_minute}`, "HH:mm");
-    var end2 = moment(`${end_break_hour}:${end_break_minute}`, "HH:mm");
-
+    var start2 = moment(
+      `${start_break_hour !== null ? start_break_hour : "00"}:${
+        start_break_minute !== null ? start_break_minute : "00"
+      }`,
+      "HH:mm"
+    );
+    var end2 = moment(
+      `${end_break_hour !== null ? end_break_hour : "00"}:${
+        end_break_minute !== null ? end_break_minute : "00"
+      }`,
+      "HH:mm"
+    );
+    console.log(end2, start2, moment(end2, "HH:mm"), moment(start2, "HH:mm"));
     if (end2 != "" && start2 != "") {
       if (
         !moment(start2, "HH:mm").isBefore(moment(end2, "HH:mm")) &&
         !moment(start2, "HH:mm").isSame(
-          moment(moment(`${0}:${0}`, "HH:mm"), "HH:mm")
+          moment(moment(`${"00"}:${"00"}`, "HH:mm"), "HH:mm")
         ) &&
         !moment(end2, "HH:mm").isSame(
-          moment(moment(`${0}:${0}`, "HH:mm"), "HH:mm")
+          moment(moment(`${"00"}:${"00"}`, "HH:mm"), "HH:mm")
         )
       ) {
         this.props.showError({
@@ -264,6 +274,7 @@ class Modal extends Component {
     );
     const filterArr = days_of_week_list.map((e) => e.value);
 
+    var params = `&limit=${this.props.limit}`;
     this.props.updateShift(
       this.props.store_code,
       this.props.branch_id,
@@ -283,7 +294,8 @@ class Modal extends Component {
 
         days_of_week: filterArr,
       },
-      this.props.shift_id
+      this.props.shift_id,
+      params
     );
   };
   onChangeStart = (e) => {
@@ -384,7 +396,7 @@ class Modal extends Component {
     console.log(shiftDetail, "Ádasdasd", this.state);
     return (
       <div
-        class="modal fade"
+        class="modal fade modalEdit"
         tabindex="-1"
         role="dialog"
         id="modalEdit"
@@ -555,17 +567,20 @@ class Modal extends Component {
                       <div class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
                         <h6 style={{ fontWeight: "bold" }}>Ngày trong tuần</h6>
                       </div>
-                      <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 ">
-                        <input
-                          class="form-check-input"
-                          type="checkbox"
-                          id="flexCheckDefault"
-                          checked={isCheck}
-                          onChange={this.handleCheck}
-                        />
-                        <label class="form-check-label" for="flexCheckDefault">
-                          Tất cả
-                        </label>
+                      <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 p-0">
+                        <div class="form-check form-check-inline">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            id="inlineCheckbox1"
+                            value="option1"
+                            checked={isCheck}
+                            onChange={this.handleCheck}
+                          />
+                          <label class="form-check-label" for="inlineCheckbox1">
+                            Tất cả
+                          </label>
+                        </div>
                       </div>
                     </div>
                     <div
@@ -695,6 +710,7 @@ class Modal extends Component {
               </div>
               <div class="modal-footer">
                 <button
+                  type="button"
                   onClick={(e) => {
                     this.handleDelCallBack(
                       e,
@@ -706,10 +722,12 @@ class Modal extends Component {
                   }}
                   data-toggle="modal"
                   data-target="#removeModal"
-                  class={`btn btn-danger btn-sm show`}
-                  type="button"
+                  class={`btn btn-danger btn-icon-split btn-sm`}
                 >
-                  <i class="fa fa-trash"></i> Xóa
+                  <span class="icon text-white-50">
+                    <i class="fa fa-trash"></i>
+                  </span>
+                  <span class="text">Xóa</span>
                 </button>
                 <button
                   type="submit"
@@ -745,8 +763,10 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchShiftId: (store_code, branch_id, shift_id) => {
       dispatch(shiftAction.fetchShiftId(store_code, branch_id, shift_id));
     },
-    updateShift: (store_code, branch_id, data, id) => {
-      dispatch(shiftAction.updateShift(store_code, branch_id, data, id));
+    updateShift: (store_code, branch_id, data, id, params) => {
+      dispatch(
+        shiftAction.updateShift(store_code, branch_id, data, id, params)
+      );
     },
   };
 };

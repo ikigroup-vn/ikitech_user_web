@@ -9,7 +9,6 @@ import Table from "../../../components/Timekeeping/Shift/Table";
 import Pagination from "../../../components/Timekeeping/Shift/Pagination";
 import ModalCreate from "../../../components/Timekeeping/Shift/Create/Modal";
 
-
 import * as shiftAction from "../../../actions/shift";
 import { Redirect, Link } from "react-router-dom";
 import { connect } from "react-redux";
@@ -21,11 +20,10 @@ class Shift extends Component {
   constructor(props) {
     super(props);
     this.state = {
- 
       numPage: 10,
     };
   }
- 
+
   componentDidMount() {
     var { numPage } = this.state;
     var { store_code } = this.props.match.params;
@@ -143,11 +141,10 @@ class Shift extends Component {
                           //     shifts={shifts}
                           //   />
                           <Table
-                          
                             store_code={store_code}
                             branch_id={branch_id}
                             shifts={shifts}
-                            numPage={numPage}
+                            limit={numPage}
                           />
                         )}
                       </div>
@@ -193,12 +190,13 @@ class Shift extends Component {
                   <NotAccess />
                 )}
               </div>
-        
+
               {shifts.data !== undefined && (
                 <ModalCreate
                   store_code={store_code}
                   branch_id={branch_id}
                   shifts={shifts}
+                  limit={numPage}
                 />
               )}
               <Footer />

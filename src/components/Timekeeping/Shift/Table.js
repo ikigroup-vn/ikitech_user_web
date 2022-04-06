@@ -46,34 +46,38 @@ class Table extends Component {
                 })
               }
             >
-              <td>{per_page * (current_page - 1) + (index + 1)}</td>
+              <td style={{ textAlign: "center" }}>
+                {per_page * (current_page - 1) + (index + 1)}
+              </td>
               <td>{data.code}</td>
               <td>{data.name}</td>
-              <td>{`${("0" + data.start_work_hour).slice(-2)}:${(
-                "0" + data.start_work_minute
-              ).slice(-2)}`}</td>
-              <td>{`${("0" + data.end_work_hour).slice(-2)}:${(
-                "0" + data.end_work_minute
-              ).slice(-2)}`}</td>
-              {data.start_break_hour === null &&
+              <td style={{ textAlign: "center" }}>{`${(
+                "0" + data.start_work_hour
+              ).slice(-2)}:${("0" + data.start_work_minute).slice(-2)}`}</td>
+              <td style={{ textAlign: "center" }}>{`${(
+                "0" + data.end_work_hour
+              ).slice(-2)}:${("0" + data.end_work_minute).slice(-2)}`}</td>
+              {/* {data.start_break_hour === null &&
               data.start_break_minute === null ? (
-                <td>00:00</td>
+                <td style={{ textAlign: "center" }}>00:00</td>
               ) : (
-                <td>{`${("0" + data.start_break_hour).slice(-2)}:${(
-                  "0" + data.start_break_minute
-                ).slice(-2)}`}</td>
+                <td style={{ textAlign: "center" }}>{`${(
+                  "0" + data.start_break_hour
+                ).slice(-2)}:${("0" + data.start_break_minute).slice(-2)}`}</td>
               )}
               {data.end_break_hour === null &&
               data.end_break_minute === null ? (
-                <td>00:00</td>
+                <td style={{ textAlign: "center" }}>00:00</td>
               ) : (
-                <td>{`${("0" + data.end_break_hour).slice(-2)}:${(
-                  "0" + data.end_break_minute
-                ).slice(-2)}`}</td>
-              )}
+                <td style={{ textAlign: "center" }}>{`${(
+                  "0" + data.end_break_hour
+                ).slice(-2)}:${("0" + data.end_break_minute).slice(-2)}`}</td>
+              )} */}
 
-              <td>{data.minutes_late_allow}</td>
-              <td>{data.minutes_early_leave_allow}</td>
+              <td style={{ textAlign: "center" }}>{data.minutes_late_allow}</td>
+              <td style={{ textAlign: "center" }}>
+                {data.minutes_early_leave_allow}
+              </td>
               <td>
                 {data.days_of_week_list
                   .sort((a, b) => a - b)
@@ -105,7 +109,7 @@ class Table extends Component {
 
     return (
       <React.Fragment>
-        <div class="table-responsive" style={{ minHeight: 300 }}>
+        <div class="table-responsive" style={{ minHeight: 370 }}>
           <table
             class="table table-border table-hover table-striped"
             id="dataTable"
@@ -120,8 +124,7 @@ class Table extends Component {
 
                 <th>Thời gian bắt đầu</th>
                 <th>Thời gian kết thúc</th>
-                <th>Thời gian nghỉ bắt đầu</th>
-                <th>Thời gian nghỉ kết thúc</th>
+
                 <th>Phút đi trễ cho phép </th>
                 <th>Phút về sớm cho phép</th>
                 <th>Ngày trong tuần</th>
@@ -138,8 +141,9 @@ class Table extends Component {
             branch_id={branch_id}
             shift_id={this.state.idModalShow}
             handleDelCallBack={this.handleDelCallBack}
+            limit={this.props.limit}
           />
-          <ModalDelete modal={modal} />
+          <ModalDelete modal={modal} limit={this.props.limit} />
         </div>
       </React.Fragment>
     );
