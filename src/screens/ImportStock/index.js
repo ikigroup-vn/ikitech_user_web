@@ -90,8 +90,19 @@ class ImportStock extends Component {
                                     <h4 className="h4 title_content mb-0 text-gray-800">
                                         Nhập hàng
                                     </h4>
-                                    <Link to={`/import_stock/create/${store_code}`} class="btn btn-primary btn-sm" >
-                                        <i class="fa fa-plus"></i> Tạo đơn nhập hàng
+
+                                    <Link to={`/import_stock/create/${store_code}`}  >
+                                        <div
+                                            class="btn btn-info btn-icon-split btn-sm show"
+                                        >
+                                            <span class="icon text-white-50"
+                                            >
+                                                <i class="fas fa-plus"></i></span>
+                                            <span class="text "
+
+                                            >Tạo đơn nhập hàng</span>
+                                        </div>
+
                                     </Link>
                                 </div>
 

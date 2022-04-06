@@ -196,7 +196,7 @@ class CreateInventory extends Component {
                                                 <label for="comment">Thêm ghi chú:</label>
                                                 <textarea class="form-control" rows="5" id="comment" style={{ height: "50px" }} onChange={this.onChange}></textarea>
                                             </div>
-                                            <button className='btn btn-danger' style={{ marginTop: "20px" }} onClick={() => this.CreateSheetInventory()}>Tạo phiếu kiểm</button>
+                                            <button className='btn btn-primary btn-sm' style={{ marginTop: "20px" }} onClick={() => this.CreateSheetInventory()}>Tạo phiếu kiểm</button>
                                         </div>
                                     </div>
 
