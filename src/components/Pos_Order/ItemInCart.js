@@ -57,7 +57,7 @@ class ItemInCart extends Component {
                 this.setState({
                     currentQuantity: q 
                 })
-                this.props.addQuantity(idCart, productId,lineItemId, q, distribute) 
+                this.props.addQuantity(productId,lineItemId, q, distribute) 
                 return
             }
             if(quantity >=maxQuantity){
@@ -70,7 +70,7 @@ class ItemInCart extends Component {
                 this.setState({
                     currentQuantity: q 
                 })
-                this.props.addQuantity(idCart, productId,lineItemId, q, distribute) 
+                this.props.addQuantity(productId,lineItemId, q, distribute) 
                 return
             }
             
@@ -79,7 +79,7 @@ class ItemInCart extends Component {
                 this.setState({
                     currentQuantity: q 
                 })
-                this.props.addQuantity(idCart, productId,lineItemId, q, distribute) 
+                this.props.addQuantity(productId,lineItemId, q, distribute) 
                 return
             }
             if(quantity >=quantityInStock){
@@ -105,43 +105,44 @@ class ItemInCart extends Component {
                 this.setState({
                     currentQuantity: q 
                 })
-                this.props.addQuantity(this.props.item.id, this.props.item.product.id, q, this.props.item.distributes_selected) 
+                this.props.addQuantity(this.props.item.product.id,this.props.item.id, q, this.props.item.distributes_selected) 
                 return
             }
             if(quantity >maxQuantity){
                 this.setState({
                     currentQuantity: maxQuantity
                 })
-                this.props.addQuantity(this.props.item.id, this.props.item.product.id, maxQuantity, this.props.item.distributes_selected)
+                this.props.addQuantity(this.props.item.product.id,this.props.item.id, maxQuantity, this.props.item.distributes_selected)
                 this.props.showAlertMaxQuantity()
                 return
             }
         }else{
             
             if(quantityInStock ===-1){
-               
+                console.log("bbbbbbbbbb0")
                 const q = quantity
                 this.setState({
                     currentQuantity: q 
                 })
-                this.props.addQuantity(this.props.item.id, this.props.item.product.id, q, this.props.item.distributes_selected) 
+                this.props.addQuantitys({lineItemId:this.props.item.id, idProduct:this.props.item.product.id, quantity:q, distribute:this.props.item.distributes_selected}) 
                 return
             }
             if(quantity < quantityInStock){
-                console.log("bbbbbbbbbb1",this.props.item.product.id)
+                console.log("bbbbbbbbbb1")
                 const q = quantity
                 this.setState({
                     currentQuantity: q 
                 })
-                this.props.addQuantitys({CartId:this.props.item.list_cart_id,lineItemId:this.props.item.id, idProduct:this.props.item.product.id, quantity:q, distribute:this.props.item.distributes_selected}) 
+                this.props.addQuantitys({lineItemId:this.props.item.id, idProduct:this.props.item.product.id, quantity:q, distribute:this.props.item.distributes_selected}) 
                 
                 return
             }
             if(quantity >quantityInStock){
+                console.log("bbbbbbbbbb2")
                 this.setState({
                     currentQuantity: quantityInStock
                 })
-                this.props.addQuantity(this.props.item.id, this.props.item.product.id, quantityInStock, this.props.item.distributes_selected)
+                this.props.addQuantitys(this.props.item.id, this.props.item.product.id, quantityInStock, this.props.item.distributes_selected)
                 this.props.showAlertMaxQuantity()
                 return
             }
@@ -160,7 +161,7 @@ class ItemInCart extends Component {
                 <div className='wrap-item' style={{ display: "flex",fontSize:"1rem", justifyContent: 'space-between',alignItems:"center" }}>
                     <div className='index'>{index + 1}</div>
                     <div className='info-product' style={{width:"40%",fontWeight:"400",display:"flex",flexDirection:"column"}}>
-                    <div className='name-product'>{item.product.name}</div>
+                    <div className='name-product' style={{overflow: "hidden",whiteSpace: "nowrap",textOverflow: "ellipsis"}}>{item.product.name}</div>
                     <div className='wrap-distributes_selected' style={{fontSize:"12px",fontStyle:"italic"}}>
                             {(item.distributes_selected??[]).map((v, i) => (
                                 <div>{`${v.name}: ${v.value}`}</div>
