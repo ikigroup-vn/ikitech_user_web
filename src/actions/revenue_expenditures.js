@@ -106,7 +106,12 @@ export const fetchReportExpenditure = (store_code, branch_id, page, params) => {
       });
   };
 };
-export const createRevenueExpenditures = (store_code, branch_id, data) => {
+export const createRevenueExpenditures = (
+  store_code,
+  branch_id,
+  data,
+  params
+) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -121,7 +126,7 @@ export const createRevenueExpenditures = (store_code, branch_id, data) => {
         });
 
         storeApi
-          .fetchReportExpenditure(store_code, branch_id, 1, null)
+          .fetchReportExpenditure(store_code, branch_id, 1, params)
           .then((res) => {
             if (res.data.code === 200)
               dispatch({

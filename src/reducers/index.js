@@ -40,7 +40,12 @@ import { importStockReducers } from "./ImportStock";
 import { posReducers } from "./pos_order";
 import { branchReducers } from "./branch";
 import { revenueExpendituresReducers } from "./revenue_expenditures/index";
-
+import { shiftReducers } from "./shift/index";
+import { calendarShiftReducers } from "./calendar_shift/index";
+import { timeSheetReducers } from "./time_sheet/index";
+import { requestMobileReducers } from "./request_mobile/index";
+import { requestRemoteReducers } from "./request_remote/index";
+import { mobileCheckinReducers } from "./mobile_checkin/index";
 const appReducers = combineReducers({
   authReducers,
   branchReducers,
@@ -84,6 +89,12 @@ const appReducers = combineReducers({
   posReducers,
 
   revenueExpendituresReducers,
+  shiftReducers,
+  calendarShiftReducers,
+  timeSheetReducers,
+  requestMobileReducers,
+  requestRemoteReducers,
+  mobileCheckinReducers,
 });
 
 export default appReducers;

@@ -8,7 +8,7 @@ import * as revenueExpendituresAction from "../../actions/revenue_expenditures";
 import { shallowEqual } from "../../ultis/shallowEqual";
 
 import ModalDetail from "../../components/RevenueExpenditures/ModalDetail";
-import $ from "jquery";
+
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -40,26 +40,6 @@ class Table extends Component {
     this.props.fetchReportExpenditure(store_code, branch_id, 1, params);
     // this.props.fetchAllRevenueExpenditures(store_code, branch_id, 1, params);
   };
-
-  // onchangeStatusOrder = (e) => {
-  //   var { value } = e.target;
-  //   this.setState({ statusOrder: value });
-  //   var { statusPayment } = this.state;
-  //   var { store_code } = this.props;
-  //   var params = `&order_status_code=${value}&payment_status_code=${statusPayment}`;
-  //   this.props.onchangeStatusOrder(value);
-
-  //   this.props.fetchAllBill(store_code, 1, params);
-  // };
-  // onchangeStatusPayment = (e) => {
-  //   var { value } = e.target;
-  //   this.setState({ statusPayment: value });
-  //   var { statusOrder } = this.state;
-  //   var { store_code } = this.props;
-  //   var params = `&order_status_code=${statusOrder}&payment_status_code=${value}`;
-  //   this.props.onchangeStatusPayment(value);
-  //   this.props.fetchAllBill(store_code, 1, params);
-  // };
 
   shouldComponentUpdate(nextProps, nextState) {
     if (
@@ -108,18 +88,7 @@ class Table extends Component {
 
     var result = null;
     if (listRevenueExpenditures.length > 0) {
-      // var { chat_allow } = this.props;
       result = listRevenueExpenditures.map((data, index) => {
-        // var _order_status_name =
-        //   data.order_status_code == "WAITING_FOR_PROGRESSING"
-        //     ? "danger"
-        //     : "success";
-        // var _payment_status_code =
-        //   data.payment_status_code == "WAITING_FOR_PROGRESSING" ||
-        //   data.payment_status_code == "UNPAID"
-        //     ? "danger"
-        //     : "success";
-
         return (
           <React.Fragment>
             <tr

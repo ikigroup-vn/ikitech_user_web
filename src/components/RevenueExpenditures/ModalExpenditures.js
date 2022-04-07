@@ -307,6 +307,7 @@ class ModalExpenditures extends Component {
       allow_accounting,
       description,
     });
+    var params = `&search=${this.props.searchValue}&limit=${this.props.limit}&date_from=${this.props.datePrime.from}&date_to=${this.props.datePrime.to}`;
     this.props.createRevenueExpenditures(
       this.props.store_code,
       this.props.branch_id,
@@ -319,7 +320,8 @@ class ModalExpenditures extends Component {
         recipient_references_id: recipientReferencesIdValue,
         allow_accounting,
         description,
-      }
+      },
+      params
     );
   };
 
@@ -476,7 +478,7 @@ class ModalExpenditures extends Component {
                           additional={{
                             page: 1,
                           }}
-                          debounceTimeout={300}
+                          debounceTimeout={500}
                           isClearable
                           isSearchable
                         />
@@ -562,9 +564,14 @@ const mapDispatchToProps = (dispatch, props) => {
     showError: (error) => {
       dispatch(error);
     },
-    createRevenueExpenditures: (id, branch_id, data) => {
+    createRevenueExpenditures: (id, branch_id, data, params) => {
       dispatch(
-        revenueExpendituresAction.createRevenueExpenditures(id, branch_id, data)
+        revenueExpendituresAction.createRevenueExpenditures(
+          id,
+          branch_id,
+          data,
+          params
+        )
       );
     },
     fetchAllCustomer: (id, page, params) => {
