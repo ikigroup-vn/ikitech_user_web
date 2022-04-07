@@ -78,7 +78,7 @@ class Form extends Component {
                 value={datePrime.from + "-" + datePrime.to}
                 onChange={this.onChangeDatePrime}
               />
-              <button type="submit" class="btn btn-info  btn-sm ml-5">
+              <button type="submit" class="btn btn-info  btn-sm ml-5 a ">
                 <span class="text">Chọn ngày</span>
               </button>
             </div>
