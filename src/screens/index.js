@@ -59,7 +59,7 @@ class Store extends Component {
 
     if (this.props.auth) {
 
-      if (this.props.loadingBranch == false && stores != null && typeof stores.store_code != null) {
+      if (this.props.loadingBranch == false && stores != null && typeof stores.store_code != null && getBranchId() != null) {
         var store_code = stores.data[0].store_code;
         return <Redirect to={`/dashboard/${store_code}`} />;
       } else {
