@@ -236,7 +236,7 @@ class ModalEdit extends Component {
                                             </div>
                                             <div class="col-6 box-body-right">
                                                 <div class="form-group">
-                                                    <label for="product_name">Chi tiêt địa chỉ</label>
+                                                    <label for="product_name">Địa chỉ chi tiết</label>
                                                     <input
                                                         type="text"
                                                         class="form-control"
@@ -249,7 +249,7 @@ class ModalEdit extends Component {
                                                     />
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="product_name">Tỉnh</label>
+                                                    <label for="product_name">Tỉnh/thành phố </label>
 
                                                     <select
                                                         id="input"
@@ -263,7 +263,7 @@ class ModalEdit extends Component {
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="product_name">Quận</label>
+                                                    <label for="product_name">Quận/huyện</label>
 
                                                     <select
                                                         id="input"
@@ -277,7 +277,7 @@ class ModalEdit extends Component {
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="product_name">Phường</label>
+                                                    <label for="product_name">Phường/xã</label>
 
                                                     <select
                                                         id="input"
