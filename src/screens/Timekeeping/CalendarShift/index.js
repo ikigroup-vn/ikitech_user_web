@@ -20,6 +20,7 @@ import * as helper from "../../../ultis/helpers";
 import ModalPostDate from "../../../components/Timekeeping/CalendarShift/ModalPostDates";
 // import ModalPut from "../../../components/Timekeeping/CalendarShift/PutALot/Modal";
 import "./style.css";
+import { getBranchId } from "../../../ultis/branchUtils";
 
 class CalendarShift extends Component {
   constructor(props) {
@@ -34,7 +35,7 @@ class CalendarShift extends Component {
 
   componentDidMount() {
     var { store_code } = this.props.match.params;
-    const branch_id = localStorage.getItem("branch_id");
+    const branch_id = getBranchId();
     this.setState({
       datePrime: {
         from: moment().format("YYYY-MM-DD"),
@@ -53,7 +54,7 @@ class CalendarShift extends Component {
       const param = `date_from=${nextState.datePrime.from}&date_to=${nextState.datePrime.to}`;
 
       var { store_code } = this.props.match.params;
-      const branch_id = localStorage.getItem("branch_id");
+      const branch_id = getBranchId();
       this.props.fetchAllCalendarShift(store_code, branch_id, param);
     }
     return true;
@@ -83,7 +84,7 @@ class CalendarShift extends Component {
 
   render() {
     var { store_code } = this.props.match.params;
-    const branch_id = localStorage.getItem("branch_id");
+    const branch_id = getBranchId();
     var { calendarShift } = this.props;
     var {
       isShow,

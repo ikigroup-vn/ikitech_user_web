@@ -6,6 +6,7 @@ import moment from "moment";
 import { shallowEqual } from "../../ultis/shallowEqual"
 import { Link } from "react-router-dom";
 import history from "../../history";
+import { getBranchId } from "../../ultis/branchUtils";
 
 class Notification extends Component {
     constructor(props) {
@@ -128,7 +129,7 @@ class Notification extends Component {
 
     componentWillReceiveProps(nextProps) {
         if ((nextProps.isLoadNotification !== this.props.isLoadNotification)) {
-            const branch_id = localStorage.getItem("branch_id")
+            const branch_id = getBranchId()
             this.props.fetchAllBadge(this.props.store_code,branch_id);
 
         }

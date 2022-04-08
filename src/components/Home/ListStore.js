@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
+import { setBranchId } from '../../ultis/branchUtils'
 import * as Env from "../../ultis/default"
 class ListStore extends Component {
     constructor(props) {
@@ -13,7 +14,7 @@ class ListStore extends Component {
         event.preventDefault();
     }
     handleSetbranch = () =>{
-        localStorage.setItem('branch_id',"")
+        setBranchId("");
     }
 
     render() {

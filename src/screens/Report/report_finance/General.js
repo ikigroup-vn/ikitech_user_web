@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { format } from '../../../ultis/helpers'
 import * as reportAction from "../../../actions/report";
+import { getBranchId } from '../../../ultis/branchUtils';
 
 class General extends Component {
     constructor(props) {
@@ -13,7 +14,7 @@ class General extends Component {
     }
     componentDidMount(){
         const { store_code } = this.props
-        const branch_id = localStorage.getItem("branch_id")
+        const branch_id = getBranchId()
         const params = `branch_id=${branch_id}`
         this.props.fetchAllSupplierDebt(store_code, branch_id,1,params)
         this.props.fetchAllCustomerDebt(store_code, branch_id,1,params)

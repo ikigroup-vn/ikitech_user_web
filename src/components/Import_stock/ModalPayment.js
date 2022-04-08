@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { format } from '../../ultis/helpers'
 import * as ImportAction from "../../actions/import_stock"
+import { getBranchId } from '../../ultis/branchUtils'
 
 class ModalPayment extends Component {
   constructor(props) {
@@ -13,7 +14,7 @@ class ModalPayment extends Component {
   }
   handleChangePayment = async () => {
     const { store_code, id } = this.props
-    const branch_id = localStorage.getItem("branch_id")
+    const branch_id = getBranchId()
     const formData = {
       amount_money: this.props.price,
       payment_method: this.state.method_payment

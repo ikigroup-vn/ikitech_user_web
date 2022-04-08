@@ -22,6 +22,7 @@ import * as reportAction from "../../actions/report";
 import * as helper from "../../ultis/helpers";
 import moment from "moment";
 import ModalPostDate from "../../components/RevenueExpenditures/ModalPostDates";
+import { getBranchId } from "../../ultis/branchUtils";
 class RevenueExpenditures extends Component {
   constructor(props) {
     super(props);
@@ -40,7 +41,7 @@ class RevenueExpenditures extends Component {
     // var { store_code, status_code } = this.props.match.params;
     var { searchValue, numPage, revenueExpendituresValue } = this.state;
     var { store_code } = this.props.match.params;
-    const branch_id = localStorage.getItem("branch_id");
+    const branch_id = getBranchId();
     this.setState({
       datePrime: {
         from: moment().format("DD-MM-YYYY"),
@@ -61,7 +62,7 @@ class RevenueExpenditures extends Component {
       const param = `&search=${searchValue}&limit=${numPage}&is_revenue=${revenueExpendituresValue}&date_from=${nextState.datePrime.from}&date_to=${nextState.datePrime.to}`;
 
       var { store_code } = this.props.match.params;
-      const branch_id = localStorage.getItem("branch_id");
+      const branch_id = getBranchId();
       this.props.fetchReportExpenditure(store_code, branch_id, 1, param);
     }
     return true;
@@ -91,7 +92,7 @@ class RevenueExpenditures extends Component {
   searchData = (e) => {
     e.preventDefault();
     var { store_code } = this.props.match.params;
-    const branch_id = localStorage.getItem("branch_id");
+    const branch_id = getBranchId();
 
     var { searchValue, numPage, revenueExpendituresValue, datePrime } =
       this.state;
@@ -105,7 +106,7 @@ class RevenueExpenditures extends Component {
   onChangeNumPage = (e) => {
     var { store_code } = this.props.match.params;
     var { searchValue, revenueExpendituresValue, datePrime } = this.state;
-    const branch_id = localStorage.getItem("branch_id");
+    const branch_id = getBranchId();
 
     // var { statusOrder, searchValue } = this.state;
 
@@ -125,7 +126,7 @@ class RevenueExpenditures extends Component {
   };
   // fetchAllData = () => {
   //   var { store_code } = this.props.match.params;
-  //   const branch_id = localStorage.getItem("branch_id");
+  //   const branch_id = getBranchId();
 
   //   this.props.fetchAllStaff(store_code);
   //   this.props.fetchAllCustomer(store_code);
@@ -155,7 +156,7 @@ class RevenueExpenditures extends Component {
 
   render() {
     var { store_code } = this.props.match.params;
-    const branch_id = localStorage.getItem("branch_id");
+    const branch_id = getBranchId();
 
     var {
       // revenueExpenditures,

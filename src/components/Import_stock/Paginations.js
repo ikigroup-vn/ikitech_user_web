@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import * as productAction from "../../actions/product";
+import { getBranchId } from "../../ultis/branchUtils";
 class Pagination extends Component {
   constructor(props) {
     super(props);
@@ -12,7 +13,7 @@ class Pagination extends Component {
 
   passPagination = (page) => {
     var { store_code, limit , agency_type_id,bonusParam } = this.props
-    const branch_id = localStorage.getItem('branch_id')
+    const branch_id =getBranchId()
     this.props.fetchAllProductV2(store_code, branch_id,page,bonusParam);
 
   }

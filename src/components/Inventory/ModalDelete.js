@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as inventoryAction from '../../actions/inventory'
+import { getBranchId } from "../../ultis/branchUtils";
 import themeData from "../../ultis/theme_data";
 class ModalDelete extends Component {
 
@@ -8,7 +9,7 @@ class ModalDelete extends Component {
     e.preventDefault();
     window.$('.modal').modal('hide');
     var { store_code, id } = this.props
-    const branch_id = localStorage.getItem("branch_id")
+    const branch_id = getBranchId()
     this.props.deleteItemInventory(store_code, branch_id, id);
   };
 

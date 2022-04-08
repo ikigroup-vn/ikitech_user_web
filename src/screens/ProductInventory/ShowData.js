@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import HistoryStock from './HistoryStock';
 import * as Env from "../../ultis/default"
 import themeData from '../../ultis/theme_data';
+import { getBranchId } from '../../ultis/branchUtils';
 class ShowData extends Component {
     constructor(props) {
         super(props)
@@ -28,7 +29,7 @@ class ShowData extends Component {
         this.props.handleCallBackProduct({ data, time: Date() })
     }
     historyInventorys = (subElement, element, nameDistribute) => {
-        const branch_id = localStorage.getItem("branch_id")
+        const branch_id = getBranchId()
         const { store_code } = this.props
         const formData = {
             product_id: this.props.data.id,
@@ -39,7 +40,7 @@ class ShowData extends Component {
         this.props.historyInventorys(store_code, branch_id, formData)
     }
     historyInventory = (element, nameDistribute) => {
-        const branch_id = localStorage.getItem("branch_id")
+        const branch_id = getBranchId()
         const { store_code } = this.props
         const formData = {
             product_id: this.props.data.id,
@@ -50,7 +51,7 @@ class ShowData extends Component {
         this.props.historyInventorys(store_code, branch_id, formData)
     }
     historyInventoryss = () => {
-        const branch_id = localStorage.getItem("branch_id")
+        const branch_id = getBranchId()
         const { store_code } = this.props
         const formData = {
             product_id: this.props.data.id,

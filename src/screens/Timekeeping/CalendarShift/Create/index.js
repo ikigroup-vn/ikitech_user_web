@@ -11,6 +11,7 @@ import * as Types from "../../../../constants/ActionType";
 import Alert from "../../../../components/Partials/Alert";
 import * as staffAction from "../../../../actions/staff";
 import * as shiftAction from "../../../../actions/shift";
+import { getBranchId } from "../../../../ultis/branchUtils";
 class Index extends Component {
   constructor(props) {
     super(props);
@@ -21,7 +22,7 @@ class Index extends Component {
 
   componentDidMount() {
     var { store_code } = this.props.match.params;
-    const branch_id = localStorage.getItem("branch_id");
+    const branch_id = getBranchId()
     var params = `&limit=${10}`;
     this.props.fetchAllStaff(store_code);
     this.props.fetchAllShift(store_code, branch_id, 1, params);
@@ -37,7 +38,7 @@ class Index extends Component {
 
   render() {
     var { store_code } = this.props.match.params;
-    const branch_id = localStorage.getItem("branch_id");
+    const branch_id = getBranchId();
     var { history, auth, staff, shifts } = this.props;
     var { isShow } = this.state;
     return (

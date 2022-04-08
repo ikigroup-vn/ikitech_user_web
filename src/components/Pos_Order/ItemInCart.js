@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { format } from '../../ultis/helpers'
 import { maxQuantityInPos } from '../../ultis/productUltis'
 import { shallowEqual } from '../../ultis/shallowEqual'
-import * as Types from "../../constants/ActionType";
 import * as OrderAction from '../../actions/add_order';
 import { connect } from 'react-redux';
 class ItemInCart extends Component {
@@ -29,11 +28,6 @@ class ItemInCart extends Component {
             currentQuantity: this.props.item.quantity,
             distribute: this.props.item.product.distributes,
         })
-        if(this.props.item.distributes_selected){
-            // this.nameElementDistribute = this.props.item.distributes_selected[0].value
-            // this.nameSubElementDistribute =this.props.item.distributes_selected[0].sub_element_distributes
-
-        }
 
     }
 
@@ -45,107 +39,42 @@ class ItemInCart extends Component {
         this.props.subQuantity(idCart,id, productId, q, distribute)
     }
 
-    addQuantity(idCart, productId,lineItemId, quantity, distribute,quantityInStock) {
+    addQuantity(productId,lineItemId, quantity, distribute,quantityInStock) {
         
         if(this.props.item.distributes_selected !== null&&this.props.item.distributes_selected.length >0){
-            this.nameElementDistribute = this.props.item.distributes_selected[0].value 
-            this.nameSubElementDistribute =this.props.item.distributes_selected[0].sub_element_distributes
-            var maxQuantity = maxQuantityInPos(this.props.item.product,this.nameElementDistribute,this.nameSubElementDistribute)
-            if(quantity < maxQuantity ){
-            
-                const q = quantity + 1
-                this.setState({
-                    currentQuantity: q 
-                })
-                this.props.addQuantity(productId,lineItemId, q, distribute) 
-                return
-            }
-            if(quantity >=maxQuantity){
-                this.props.showAlertMaxQuantity()
-                return
-            }
+            const q = quantity + 1
+            this.setState({
+                currentQuantity: q 
+            })
+            this.props.addQuantity(productId,lineItemId, q, distribute) 
         }else{
-            if(quantityInStock ===-1){
-                const q = quantity + 1
-                this.setState({
-                    currentQuantity: q 
-                })
-                this.props.addQuantity(productId,lineItemId, q, distribute) 
-                return
-            }
-            
-            if(quantity < quantityInStock){
-                const q = quantity + 1
-                this.setState({
-                    currentQuantity: q 
-                })
-                this.props.addQuantity(productId,lineItemId, q, distribute) 
-                return
-            }
-            if(quantity >=quantityInStock){
-                this.props.showAlertMaxQuantity()
-                return
-            }
+            const q = quantity + 1
+            this.setState({
+                currentQuantity: q 
+            })
+            this.props.addQuantity(productId,lineItemId, q, distribute) 
         }
         
 
 
     }
-    handleOnChange = (e,cartId) => {
+    handleOnChange = (e) => {
         const quantity = e.target.value
-        const quantityInStock = this.props.item.product.quantity_in_stock
         if(this.props.item.distributes_selected !== null&&this.props.item.distributes_selected.length >0){
-            console.log("aaaaaaaaaaa")
-            this.nameElementDistribute = this.props.item.distributes_selected[0]?.value 
-            this.nameSubElementDistribute =this.props.item.distributes_selected[0]?.sub_element_distributes
-            var maxQuantity = maxQuantityInPos(this.props.item.product,this.nameElementDistribute,this.nameSubElementDistribute)
-            if(quantity < maxQuantity){
-            
-                const q = quantity
-                this.setState({
-                    currentQuantity: q 
-                })
-                this.props.addQuantity(this.props.item.product.id,this.props.item.id, q, this.props.item.distributes_selected) 
-                return
-            }
-            if(quantity >maxQuantity){
-                this.setState({
-                    currentQuantity: maxQuantity
-                })
-                this.props.addQuantity(this.props.item.product.id,this.props.item.id, maxQuantity, this.props.item.distributes_selected)
-                this.props.showAlertMaxQuantity()
-                return
-            }
+            const q = quantity
+            this.setState({
+                currentQuantity: q 
+            })
+            this.props.addQuantity(this.props.item.product.id,this.props.item.id, q, this.props.item.distributes_selected) 
+            return
+           
         }else{
+            const q = quantity
+            this.setState({
+                currentQuantity: q 
+            })
+            this.props.addQuantitys({lineItemId:this.props.item.id, idProduct:this.props.item.product.id, quantity:q, distribute:this.props.item.distributes_selected}) 
             
-            if(quantityInStock ===-1){
-                console.log("bbbbbbbbbb0")
-                const q = quantity
-                this.setState({
-                    currentQuantity: q 
-                })
-                this.props.addQuantitys({lineItemId:this.props.item.id, idProduct:this.props.item.product.id, quantity:q, distribute:this.props.item.distributes_selected}) 
-                return
-            }
-            if(quantity < quantityInStock){
-                console.log("bbbbbbbbbb1")
-                const q = quantity
-                this.setState({
-                    currentQuantity: q 
-                })
-                this.props.addQuantitys({lineItemId:this.props.item.id, idProduct:this.props.item.product.id, quantity:q, distribute:this.props.item.distributes_selected}) 
-                
-                return
-            }
-            if(quantity >quantityInStock){
-                console.log("bbbbbbbbbb2")
-                this.setState({
-                    currentQuantity: quantityInStock
-                })
-                this.props.addQuantitys(this.props.item.id, this.props.item.product.id, quantityInStock, this.props.item.distributes_selected)
-                this.props.showAlertMaxQuantity()
-                return
-            }
         }
 
     }
@@ -184,7 +113,7 @@ class ItemInCart extends Component {
                         <div className="" style={{ float: "right", border: "1px solid #9c9898ba", borderRadius: "2px" }}>
                             <button className='btn-sub' onClick={() => this.subQuantity(item.list_cart_id,item.id, item.product.id, currentQuantity, item.distributes_selected)} style={{ width: "20px", border: "none" }}>-</button>
                             <input className='input-quantity' onChange={this.handleOnChange} style={{ width: "40px", textAlign: "center",fontWeight:"400" }} value={currentQuantity}></input>
-                            <button className='btn-add' onClick={() => this.addQuantity(item.list_cart_id, item.product.id,item.id, currentQuantity, item.distributes_selected,item.product.quantity_in_stock)} style={{ width: "20px", border: "none" }}>+</button>
+                            <button className='btn-add' onClick={() => this.addQuantity( item.product.id,item.id, currentQuantity, item.distributes_selected,item.product.quantity_in_stock)} style={{ width: "20px", border: "none" }}>+</button>
                         </div>
                     </div>
                     <div className='cost' style={{width:"10%",fontWeight:"400"}}>{format(Number(item.item_price))}</div>
