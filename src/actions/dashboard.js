@@ -30,10 +30,18 @@ export const fetchBranchStore = (store_code) => {
   console.log("store_code",store_code)
   return (dispatch) => {
     dispatch({
+      type: Types.FETCH_BRANCH_STORE_LOADING,
+    });
+
+    dispatch({
       type: Types.SHOW_LOADING,
       loading : "show"
     })
     storeApi.fetchBranchStore(store_code).then((res) => {
+      dispatch({
+        type: Types.FETCH_BRANCH_STORE_NONE,
+      });
+
       dispatch({
         type: Types.SHOW_LOADING,
         loading : "hide"

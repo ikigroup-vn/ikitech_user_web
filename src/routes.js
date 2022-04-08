@@ -513,7 +513,7 @@ const routes = [
     main: ({ match, history }) => <AddOrder match={match} history={history} />,
   },
   {
-    path: "/pos_order/:store_code",
+    path: "/pos/:store_code",
     exact: true,
 
     main: ({ match, history }) => <PostOrder match={match} history={history} />,

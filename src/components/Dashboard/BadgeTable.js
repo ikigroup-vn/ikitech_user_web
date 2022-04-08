@@ -150,7 +150,7 @@ class BadgeTable extends Component {
                         </span>
                     </p>
                     <p class="" id="delivery_address">
-                        <Link to={`/pos_order/${store_code}`}>Đơn lưu tạm</Link> <span id="user_address">
+                        <Link to={`/pos/${store_code}`}>Đơn lưu tạm</Link> <span id="user_address">
                             <span
 
                                 className={`step num-badge ${statusTemporaryOrder}`}

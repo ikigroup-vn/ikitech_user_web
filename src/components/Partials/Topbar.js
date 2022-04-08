@@ -11,6 +11,8 @@ import Notification from "./Notification";
 import * as helper from "../../ultis/helpers";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import { getBranchId, setBranchId } from "../../ultis/branchUtils";
+import {  Redirect } from "react-router-dom";
+
 class Topbar extends Component {
   constructor(props) {
     super(props);
@@ -66,7 +68,7 @@ class Topbar extends Component {
     const selectedBranch = branchStore.find((branch) => branch.id == value);
     this.props.changeBranch(selectedBranch);
 
-    // window.location.reload();
+    window.location.href = "/";
   };
   showData = (stores) => {
     var result = null;
