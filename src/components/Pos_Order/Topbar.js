@@ -179,6 +179,9 @@ class Topbar extends Component {
                 <nav class="navbar navbar-expand navbar-light bg-white topbar static-top header-pos">
 
                     <ul class="navbar-nav" style={{ alignItems: "center" }} >
+                        <li className='nav-item' style={{ color: "white", cursor: "pointer",marginRight:'10px' }} onClick={this.goBackHome}>
+                            <i class='fas fa-home fa-2x' style={{ fontSize: "22px" }}></i>
+                        </li>
                         <li class="nav-item">
                             <form onSubmit={this.searchData}>
                                 <div
@@ -263,14 +266,14 @@ class Topbar extends Component {
                     </ul>
 
                     <ul className="navbar-nav ml-auto" style={{ display: "flex", alignItems: "center" }}>
-                        <li className="nav-item dropdown no-arrow" style={{ margin: "0 10px" }}>
-                            <div className='wrap-info' data-toggle="modal" data-target="#modalBranch" style={{ display: "flex", color: "white", cursor: "pointer" }}>
+                        <li className="nav-item dropdown no-arrow" style={{ margin: "0 10px" , fontSize: "17px"}}>
+                            {/* <div className='wrap-info' data-toggle="modal" data-target="#modalBranch" style={{ display: "flex", color: "white", cursor: "pointer" }}>
                                 <i class="fa fa-map-marker" aria-hidden="true"></i>
                                 <span className="mr-2 small" style={{ color: "white", marginLeft: "5px" }}>
                                     {currentBranch?.name ?? "Chưa có chi nhánh"}
                                 </span>
 
-                            </div>
+                            </div> */}
                             <div className='wrap-info' style={{ display: "flex", color: "white" }}>
                                 <i class="fa fa-user-o" aria-hidden="true"></i>
                                 <span className="mr-2 small" style={{ color: "white", marginLeft: "5px" }}>
@@ -287,9 +290,7 @@ class Topbar extends Component {
                             }
 
                         </li >
-                        <li className='nav-item' style={{ color: "white", cursor: "pointer" }} onClick={this.goBackHome}>
-                            <i class='fas fa-home fa-2x' style={{ fontSize: "22px" }}></i>
-                        </li>
+
                         <li className='nav-item' style={{ margin: "0 10px" }}>
                             <button className='btn' style={{ color: "white", border: "1px solid" }} data-toggle="modal" data-target="#modalKeyboard">Phím tắt</button>
                         </li>
