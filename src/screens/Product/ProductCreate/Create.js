@@ -22,6 +22,7 @@ class ProductCreate extends Component {
     this.state = {
       form: {},
       total: "",
+      isError: false,
     };
   }
 
@@ -341,6 +342,7 @@ class ProductCreate extends Component {
     //   });
     //   return;
     // }
+    var is_error = false;
     if (typeof form.list_distribute != "undefined") {
       if (typeof form.list_distribute[0] != "undefined") {
         if (typeof form.list_distribute[0].element_distributes != "undefined") {
@@ -371,6 +373,7 @@ class ProductCreate extends Component {
                           Number(price) == 0
                           // !isEmpty(price)
                         ) {
+                          is_error = true;
                           this.props.showError({
                             type: Types.ALERT_UID_STATUS,
                             alert: {
@@ -380,13 +383,17 @@ class ProductCreate extends Component {
                               content: "Vui lòng nhập giá bán lẻ cho phân loại",
                             },
                           });
-                          return;
+                          this.setState({
+                            isError: true,
+                          });
                         }
+
                         if (
                           // import_price == null ||
                           Number(import_price) == 0
                           // !isEmpty(import_price)
                         ) {
+                          is_error = true;
                           this.props.showError({
                             type: Types.ALERT_UID_STATUS,
                             alert: {
@@ -396,7 +403,14 @@ class ProductCreate extends Component {
                               content: "Vui lòng nhập giá nhập cho phân loại",
                             },
                           });
-                          return;
+                          this.setState({
+                            isError: true,
+                          });
+                        } else {
+                          is_error = false;
+                          this.setState({
+                            isError: false,
+                          });
                         }
                       }
                     );
@@ -408,7 +422,9 @@ class ProductCreate extends Component {
         }
       }
     }
-
+    if (this.state.isError || is_error) {
+      return;
+    }
     console.log("final", form);
 
     this.props.postProductV2(store_code, branch_id, form);
