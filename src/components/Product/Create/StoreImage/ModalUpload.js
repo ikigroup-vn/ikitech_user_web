@@ -2,35 +2,27 @@ import React, { Component } from "react";
 import * as productAction from "../../../../actions/product";
 import * as helper from "../../../../ultis/helpers";
 import { connect } from "react-redux";
-import {compressed} from "../../../../ultis/helpers"
+import { compressed } from "../../../../ultis/helpers";
 
 class ModalUpload extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-    };
+    this.state = {};
   }
 
-
-  onSave= async (e) =>{
-    
+  onSave = async (e) => {
     e.preventDefault();
-    window.$('.modal').modal('hide');
+    window.$(".modal").modal("hide");
     var file = this.fileUpload.files[0];
-    if(typeof file !== "undefined" && file != "" && file != null )
-    {
-      window.$('#file-store').fileinput('clear');
+    if (typeof file !== "undefined" && file != "" && file != null) {
+      window.$("#file-store").fileinput("clear");
       const fd = new FormData();
-      fd.append('image' , await compressed(file))
-      this.props.uploadAvataProduct(fd)
+      fd.append("image", await compressed(file));
+      this.props.uploadAvataProduct(fd);
     }
-
-    
-
-  }
+  };
 
   componentDidMount() {
-   
     helper.loadFileInput("file-store");
   }
   render() {
@@ -73,7 +65,7 @@ class ModalUpload extends Component {
                         type="file"
                         className="file"
                         data-overwrite-initial="false"
-                        ref={(ref) => this.fileUpload = ref}
+                        ref={(ref) => (this.fileUpload = ref)}
                       />
                     </div>
                   </div>
@@ -99,10 +91,9 @@ class ModalUpload extends Component {
   }
 }
 
-
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    uploadAvataProduct: ( file) => {
+    uploadAvataProduct: (file) => {
       dispatch(productAction.uploadAvataProduct(file));
     },
   };

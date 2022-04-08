@@ -14,22 +14,22 @@ import * as blogAction from "../../../actions/blog";
 
 import Alert from "../../../components/Partials/Alert";
 import SeoOption from "../../../components/Product/Create/SeoOption";
-import getChannel,{IKITECH} from "../../../ultis/channel";
+import getChannel, { IKITECH } from "../../../ultis/channel";
+import { isEmpty } from "../../../ultis/helpers";
 class ProductCreate extends Component {
   constructor(props) {
     super(props);
     this.state = {
       form: {},
-      total: ""
-    }
-
+      total: "",
+      isError: false,
+    };
   }
 
   componentDidMount() {
     this.props.fetchAllAttributeP(this.props.store_code);
     this.props.fetchAllCategoryP(this.props.store_code);
     this.props.fetchAllBlog(this.props.store_code, 1);
-
   }
 
   handleDataFromInfo = (data) => {
@@ -37,16 +37,31 @@ class ProductCreate extends Component {
       var formdata = { ...prevState.form };
       formdata.name = data.txtName;
 
-      formdata.price = data.txtPrice.toString().replace(/,/g, '').replace(/\./g, '');
+      formdata.price = data.txtPrice
+        .toString()
+        .replace(/,/g, "")
+        .replace(/\./g, "");
       formdata.barcode = data.txtBarcode;
       formdata.status = data.txtStatus;
-      formdata.quantity_in_stock = data.txtQuantityInStock.toString().replace(/,/g, '').replace(/\./g, '');
-      formdata.percent_collaborator = data.txtPercentC
-      formdata.sku = data.sku
-      formdata.check_inventory = data.check_inventory
-      formdata.main_cost_of_capital = data.txtCostOfCapital.toString().replace(/,/g, '').replace(/\./g, '');
-      formdata.main_stock = data.txtQuantityInStock.toString().replace(/,/g, '').replace(/\./g, '');
-      formdata.import_price = data.txtImportPrice.toString().replace(/,/g, '').replace(/\./g, '');
+      formdata.quantity_in_stock = data.txtQuantityInStock
+        .toString()
+        .replace(/,/g, "")
+        .replace(/\./g, "");
+      formdata.percent_collaborator = data.txtPercentC;
+      formdata.sku = data.sku;
+      formdata.check_inventory = data.check_inventory;
+      formdata.main_cost_of_capital = data.txtCostOfCapital
+        .toString()
+        .replace(/,/g, "")
+        .replace(/\./g, "");
+      formdata.main_stock = data.txtQuantityInStock
+        .toString()
+        .replace(/,/g, "")
+        .replace(/\./g, "");
+      formdata.import_price = data.txtImportPrice
+        .toString()
+        .replace(/,/g, "")
+        .replace(/\./g, "");
       var categories = [];
       var category_children_ids = [];
       if (data.category_parent.length > 0) {
@@ -55,47 +70,366 @@ class ProductCreate extends Component {
         });
       }
       if (data.category_children_ids.length > 0) {
-        category_children_ids = data.category_children_ids.map((categoryChild, index) => {
-          return categoryChild.id;
-        });
+        category_children_ids = data.category_children_ids.map(
+          (categoryChild, index) => {
+            return categoryChild.id;
+          }
+        );
       }
       formdata.categories = categories;
       formdata.category_children_ids = category_children_ids;
       return { form: formdata };
     });
   };
+  postProduct = () => {
+    console.log(this.state);
+    var { store_code } = this.props;
+    const branch_id = localStorage.getItem("branch_id");
+    var form = { ...this.state.form };
+    form.index_image_avatar = 0;
 
-  handleDataFromProductImg = (imgs) => {
-    console.log(imgs)
-    this.setState((prevState, props) => {
-      var formdata = { ...prevState.form };
-      formdata.images = imgs;
-      return { form: formdata };
+    if (typeof form.list_distribute != "undefined") {
+      if (typeof form.list_distribute[0] != "undefined") {
+        if (typeof form.list_distribute[0].element_distributes != "undefined") {
+          if (form.list_distribute[0].element_distributes.length > 0) {
+            form.list_distribute[0].element_distributes.forEach(
+              (element, index) => {
+                try {
+                  console.log(element);
+                  const price =
+                    element.price != null
+                      ? element.price
+                          .toString()
+                          .replace(/,/g, "")
+                          .replace(/\./g, "")
+                      : 0;
+                  const import_price =
+                    element.import_price != null
+                      ? element.import_price
+                          .toString()
+                          .replace(/,/g, "")
+                          .replace(/\./g, "")
+                      : 0;
+                  const barcode =
+                    element.barcode != null ? element.barcode.toString() : 0;
+                  const quantity_in_stock =
+                    element.quantity_in_stock != null
+                      ? element.quantity_in_stock
+                          .toString()
+                          .replace(/,/g, "")
+                          .replace(/\./g, "")
+                      : 0;
+                  const cost_of_capital =
+                    element.cost_of_capital != null
+                      ? element.cost_of_capital
+                          .toString()
+                          .replace(/,/g, "")
+                          .replace(/\./g, "")
+                      : 0;
+                  form.list_distribute[0].element_distributes[index].price =
+                    price;
+                  form.list_distribute[0].element_distributes[
+                    index
+                  ].import_price = import_price;
+                  form.list_distribute[0].element_distributes[
+                    index
+                  ].cost_of_capital = cost_of_capital;
+                  form.list_distribute[0].element_distributes[
+                    index
+                  ].quantity_in_stock = quantity_in_stock;
+                  form.list_distribute[0].element_distributes[index].barcode =
+                    barcode;
+                  form.list_distribute[0].element_distributes[index].stock =
+                    quantity_in_stock;
+                  console.log(
+                    price,
+                    form.list_distribute[0].element_distributes[index].price
+                  );
 
-    });
+                  console.log("element form", form);
+                  if (typeof element.sub_element_distributes != "undefined") {
+                    if (element.sub_element_distributes.length > 0) {
+                      element.sub_element_distributes.forEach(
+                        (_element, _index) => {
+                          try {
+                            const price =
+                              _element.price != null
+                                ? _element.price
+                                    .toString()
+                                    .replace(/,/g, "")
+                                    .replace(/\./g, "")
+                                : 0;
+                            const import_price =
+                              _element.import_price != null
+                                ? _element.import_price
+                                    .toString()
+                                    .replace(/,/g, "")
+                                    .replace(/\./g, "")
+                                : 0;
+                            const cost_of_capital =
+                              _element.cost_of_capital != null
+                                ? _element.cost_of_capital
+                                    .toString()
+                                    .replace(/,/g, "")
+                                    .replace(/\./g, "")
+                                : 0;
+                            const barcode =
+                              _element.barcode != null
+                                ? _element.barcode.toString()
+                                : 0;
+                            const quantity_in_stock =
+                              _element.quantity_in_stock != null
+                                ? _element.quantity_in_stock
+                                    .toString()
+                                    .replace(/,/g, "")
+                                    .replace(/\./g, "")
+                                : 0;
 
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[_index].price = price;
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[_index].import_price =
+                              import_price;
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[_index].cost_of_capital =
+                              cost_of_capital;
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[
+                              _index
+                            ].quantity_in_stock = quantity_in_stock;
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[_index].stock =
+                              quantity_in_stock;
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[_index].barcode = barcode;
 
+                            console.log("sub element form", form);
+                          } catch (error) {
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[_index].price = 0;
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[_index].import_price = 0;
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[
+                              _index
+                            ].cost_of_capital = 0;
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[_index].stock = 0;
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[
+                              _index
+                            ].quantity_in_stock = 0;
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[_index].barcode = "";
+                          }
+                        }
+                      );
+                    }
+                  }
+                } catch (error) {
+                  console.log(error);
+                  form.list_distribute[0].element_distributes[index].price = 0;
+                  form.list_distribute[0].element_distributes[
+                    index
+                  ].import_price = 0;
+                  form.list_distribute[0].element_distributes[
+                    index
+                  ].cost_of_capital = 0;
+                  form.list_distribute[0].element_distributes[index].stock = 0;
+                  form.list_distribute[0].element_distributes[
+                    index
+                  ].quantity_in_stock = 0;
+                  form.list_distribute[0].element_distributes[index].barcode =
+                    "";
+                }
+              }
+            );
+          }
+        }
+      }
+    }
+    var total = this.state.total
+      .toString()
+      .replace(/,/g, "")
+      .replace(/\./g, "");
+    if (typeof form.list_distribute != "undefined") {
+      form.quantity_in_stock =
+        form.list_distribute.length > 0 ? total : form.quantity_in_stock;
+    }
+    // this.props.postProduct(store_code, form)
+    console.log("ấdfsdfsdkfjsd", form);
+    if (form.name == null || !isEmpty(form.name)) {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng nhập tên sản phẩm",
+        },
+      });
+      return;
+    }
+    if (form.barcode == null || !isEmpty(form.barcode)) {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng nhập barcode",
+        },
+      });
+      return;
+    }
+    if (form.barcode === form.sku) {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Barcode không thể trùng với mã SKU",
+        },
+      });
+      return;
+    }
+    if (form.price == null || !isEmpty(form.price)) {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng nhập giá bán lẻ",
+        },
+      });
+      return;
+    }
+    if (form.import_price == null || !isEmpty(form.import_price)) {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng nhập giá nhập",
+        },
+      });
+      return;
+    }
+    // if (form.import_price == null || !isEmpty(form.import_price)) {
+    //   this.props.showError({
+    //     type: Types.ALERT_UID_STATUS,
+    //     alert: {
+    //       type: "danger",
+    //       title: "Lỗi",
+    //       disable: "show",
+    //       content: "Vui lòng nhập giá nhập",
+    //     },
+    //   });
+    //   return;
+    // }
+    var is_error = false;
+    if (typeof form.list_distribute != "undefined") {
+      if (typeof form.list_distribute[0] != "undefined") {
+        if (typeof form.list_distribute[0].element_distributes != "undefined") {
+          if (form.list_distribute[0].element_distributes.length > 0) {
+            form.list_distribute[0].element_distributes.forEach(
+              (element, index) => {
+                if (typeof element?.sub_element_distributes != "undefined") {
+                  if (element?.sub_element_distributes.length > 0) {
+                    element?.sub_element_distributes.forEach(
+                      (_element, _index) => {
+                        const price = _element.price
+                          .toString()
+                          .replace(/,/g, "")
+                          .replace(/\./g, "");
+                        const import_price = _element.import_price
+                          .toString()
+                          .replace(/,/g, "")
+                          .replace(/\./g, "");
+                        console.log(
+                          price,
+                          import_price,
+                          Number(import_price),
+                          typeof Number(import_price),
+                          Number(import_price) == 0
+                        );
+                        if (
+                          // price == null ||
+                          Number(price) == 0
+                          // !isEmpty(price)
+                        ) {
+                          is_error = true;
+                          this.props.showError({
+                            type: Types.ALERT_UID_STATUS,
+                            alert: {
+                              type: "danger",
+                              title: "Lỗi",
+                              disable: "show",
+                              content: "Vui lòng nhập giá bán lẻ cho phân loại",
+                            },
+                          });
+                          this.setState({
+                            isError: true,
+                          });
+                        }
+
+                        if (
+                          // import_price == null ||
+                          Number(import_price) == 0
+                          // !isEmpty(import_price)
+                        ) {
+                          is_error = true;
+                          this.props.showError({
+                            type: Types.ALERT_UID_STATUS,
+                            alert: {
+                              type: "danger",
+                              title: "Lỗi",
+                              disable: "show",
+                              content: "Vui lòng nhập giá nhập cho phân loại",
+                            },
+                          });
+                          this.setState({
+                            isError: true,
+                          });
+                        } else {
+                          is_error = false;
+                          this.setState({
+                            isError: false,
+                          });
+                        }
+                      }
+                    );
+                  }
+                }
+              }
+            );
+          }
+        }
+      }
+    }
+    if (this.state.isError || is_error) {
+      return;
+    }
+    console.log("final", form);
+
+    this.props.postProductV2(store_code, branch_id, form);
   };
-  handleDataFromDiscount = (data) => {
-    this.setState((prevState, props) => {
-      var formdata = { ...prevState.form };
-      formdata.list_promotion = data
-      return { form: formdata };
 
-    });
-
-
-  };
-  handleDataFromContent = (data) => {
-    this.setState((prevState, props) => {
-      var formdata = { ...prevState.form };
-      formdata.content_for_collaborator = data.txtContentC
-      formdata.description = data.txtContent
-      formdata.seo_description = data.txtSeoDescription
-      formdata.seo_title = data.txtSeoTitle
-      return { form: formdata };
-    });
-  };
   handleDataFromAttribute = (data) => {
     this.setState((prevState, props) => {
       var formdata = { ...prevState.form };
@@ -117,140 +451,70 @@ class ProductCreate extends Component {
         });
       });
       formdata.list_attribute = listAttribute;
-
+      console.log(listAttribute);
       return { form: formdata };
     });
   };
-
-
 
   handleDataFromDistribute = (data) => {
     this.setState((prevState, props) => {
       var formdata = { ...prevState.form };
       formdata.list_distribute = data;
       return { form: formdata };
-
     });
 
-    console.log("form", this.state.form)
-
-
+    console.log("form", this.state.form);
+  };
+  onChangeQuantityStock = (total) => {
+    this.setState({ total: total });
+  };
+  handleDataFromProductImg = (imgs) => {
+    console.log(imgs);
+    this.setState((prevState, props) => {
+      var formdata = { ...prevState.form };
+      formdata.images = imgs;
+      return { form: formdata };
+    });
   };
   handleDataFromAvatarImg = (data) => {
     this.setState((prevState, props) => {
       var formdata = { ...prevState.form };
-      formdata.index_image_avatar = data.avatar_product
+      formdata.index_image_avatar = data.avatar_product;
       return { form: formdata };
-
     });
-
-
-  };
-  postProduct = () => {
-    console.log(this.state)
-    var { store_code } = this.props;
-    const branch_id = localStorage.getItem('branch_id')
-    var form = { ...this.state.form };
-    form.index_image_avatar = 0
-
-    if (typeof form.list_distribute != "undefined") {
-      if (typeof form.list_distribute[0] != "undefined") {
-
-
-        if (typeof form.list_distribute[0].element_distributes != "undefined") {
-          if (form.list_distribute[0].element_distributes.length > 0) {
-            form.list_distribute[0].element_distributes.forEach((element, index) => {
-              try {
-                console.log(element)
-                const price = element.price != null ? element.price.toString().replace(/,/g, '').replace(/\./g, '') : 0;
-                const import_price = element.import_price != null ? element.import_price.toString().replace(/,/g, '').replace(/\./g, '') : 0;
-                const barcode = element.barcode != null ? element.barcode.toString() : 0;
-                const quantity_in_stock = element.quantity_in_stock != null ? element.quantity_in_stock.toString().replace(/,/g, '').replace(/\./g, '') : 0;
-                const cost_of_capital = element.cost_of_capital != null ? element.cost_of_capital.toString().replace(/,/g, '').replace(/\./g, '') : 0;
-                form.list_distribute[0].element_distributes[index].price = price
-                form.list_distribute[0].element_distributes[index].import_price = import_price
-                form.list_distribute[0].element_distributes[index].cost_of_capital = cost_of_capital
-                form.list_distribute[0].element_distributes[index].quantity_in_stock = quantity_in_stock
-                form.list_distribute[0].element_distributes[index].barcode = barcode
-                form.list_distribute[0].element_distributes[index].stock = quantity_in_stock
-                console.log(price, form.list_distribute[0].element_distributes[index].price)
-
-                console.log("element form", form)
-                if (typeof element.sub_element_distributes != "undefined") {
-                  if (element.sub_element_distributes.length > 0) {
-
-                    element.sub_element_distributes.forEach((_element, _index) => {
-                      try {
-                        const price = _element.price != null ? _element.price.toString().replace(/,/g, '').replace(/\./g, '') : 0;
-                        const import_price = _element.import_price != null ? _element.import_price.toString().replace(/,/g, '').replace(/\./g, '') : 0;
-                        const cost_of_capital = _element.cost_of_capital != null ? _element.cost_of_capital.toString().replace(/,/g, '').replace(/\./g, '') : 0;
-                        const barcode = _element.barcode != null ? _element.barcode.toString() : 0;
-                        const quantity_in_stock = _element.quantity_in_stock != null ? _element.quantity_in_stock.toString().replace(/,/g, '').replace(/\./g, '') : 0;
-
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].price = price
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].import_price = import_price
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].cost_of_capital = cost_of_capital
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].quantity_in_stock = quantity_in_stock
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].stock = quantity_in_stock
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].barcode = barcode
-
-                        console.log("sub element form", form)
-                      } catch (error) {
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].price = 0
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].import_price = 0
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].cost_of_capital = 0
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].stock = 0
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].quantity_in_stock = 0
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].barcode = ""
-                      }
-                    });
-                  }
-
-                }
-
-              } catch (error) {
-                console.log(error)
-                form.list_distribute[0].element_distributes[index].price = 0
-                form.list_distribute[0].element_distributes[index].import_price = 0
-                form.list_distribute[0].element_distributes[index].cost_of_capital = 0
-                form.list_distribute[0].element_distributes[index].stock = 0
-                form.list_distribute[0].element_distributes[index].quantity_in_stock = 0
-                form.list_distribute[0].element_distributes[index].barcode = ""
-              }
-            });
-          }
-        }
-      }
-    }
-    var total = this.state.total.toString().replace(/,/g, '').replace(/\./g, '');
-    if (typeof form.list_distribute != "undefined") {
-      form.quantity_in_stock = form.list_distribute.length > 0 ? total : form.quantity_in_stock
-
-    }
-    // this.props.postProduct(store_code, form)
-    this.props.postProductV2(store_code, branch_id, form)
   };
 
+  handleDataFromContent = (data) => {
+    this.setState((prevState, props) => {
+      var formdata = { ...prevState.form };
+      formdata.content_for_collaborator = data.txtContentC;
+      formdata.description = data.txtContent;
+      formdata.seo_description = data.txtSeoDescription;
+      formdata.seo_title = data.txtSeoTitle;
+      return { form: formdata };
+    });
+  };
+
+  handleDataFromDiscount = (data) => {
+    this.setState((prevState, props) => {
+      var formdata = { ...prevState.form };
+      formdata.list_promotion = data;
+      return { form: formdata };
+    });
+  };
   goBack = (e) => {
     e.preventDefault();
     var { history } = this.props;
     history.goBack();
   };
-
-  onChangeQuantityStock = (total) => {
-    this.setState({ total: total })
-  }
   render() {
     var { store_code } = this.props;
-    var { category_product, attributeP, auth, isShowAttr, isCreate, isRemove } = this.props
-    var { total } = this.state
+    var { category_product, attributeP, auth, isShowAttr, isCreate, isRemove } =
+      this.props;
+    var { total } = this.state;
     return (
-
       <div class="container-fluid">
-        <Alert
-          type={Types.ALERT_UID_STATUS}
-          alert={this.props.alert}
-        />
+        <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
         <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h4 className="h4 title_content mb-0 text-gray-800">
             Tạo mới sản phẩm
@@ -258,17 +522,16 @@ class ProductCreate extends Component {
         </div>
         <br></br>
         <div class="card mb-4">
-          <div class="card-header title_content">
-            Nhập thông tin sản phẩm
-          </div>
+          <div class="card-header title_content">Nhập thông tin sản phẩm</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
               <div class="col-lg-6">
                 <div>
                   <InfoProduct
                     total={total}
-
-                    handleDataFromInfo={this.handleDataFromInfo} category_product={category_product} />
+                    handleDataFromInfo={this.handleDataFromInfo}
+                    category_product={category_product}
+                  />
                 </div>
               </div>
 
@@ -277,7 +540,10 @@ class ProductCreate extends Component {
                 style={{ borderLeft: "0.5px solid #e6dfdf" }}
               >
                 <div>
-                  <StoreImage handleDataFromAvatarImg={this.handleDataFromAvatarImg} handleDataFromProductImg={this.handleDataFromProductImg} />
+                  <StoreImage
+                    handleDataFromAvatarImg={this.handleDataFromAvatarImg}
+                    handleDataFromProductImg={this.handleDataFromProductImg}
+                  />
                 </div>
               </div>
             </div>
@@ -309,7 +575,13 @@ class ProductCreate extends Component {
             </div>
           </div>
         </div>
-        <div class={`card mb-4 ${typeof isShowAttr == "undefined" || isShowAttr == false ? "hide" : ""}`}>
+        <div
+          class={`card mb-4 ${
+            typeof isShowAttr == "undefined" || isShowAttr == false
+              ? "hide"
+              : ""
+          }`}
+        >
           <div class="card-header title_content">Thuộc tính sản phẩm</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
@@ -319,7 +591,6 @@ class ProductCreate extends Component {
                     <Attribute
                       isCreate={isCreate}
                       isRemove={isRemove}
-
                       handleDataFromAttribute={this.handleDataFromAttribute}
                       store_code={store_code}
                       attributeP={attributeP}
@@ -340,7 +611,6 @@ class ProductCreate extends Component {
                   <div class="card-body" style={{ padding: "0.8rem" }}>
                     <Distribute
                       onChangeQuantityStock={this.onChangeQuantityStock}
-
                       handleDataFromDistribute={this.handleDataFromDistribute}
                     />
                   </div>
@@ -353,23 +623,23 @@ class ProductCreate extends Component {
           <div class="card-header title_content">Nội dung chi tiết</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
-              <ContentDetail handleDataFromContent={this.handleDataFromContent} />
+              <ContentDetail
+                handleDataFromContent={this.handleDataFromContent}
+              />
             </div>
           </div>
-
         </div>
 
-{     getChannel() == IKITECH &&      <div class="card mb-4">
-          <div class="card-header title_content">Tối ưu SEO</div>
-          <div class="card-body" style={{ padding: "0.8rem" }}>
-            <div class="row">
-              <SeoOption handleDataFromContent={this.handleDataFromContent} />
+        {getChannel() == IKITECH && (
+          <div class="card mb-4">
+            <div class="card-header title_content">Tối ưu SEO</div>
+            <div class="card-body" style={{ padding: "0.8rem" }}>
+              <div class="row">
+                <SeoOption handleDataFromContent={this.handleDataFromContent} />
+              </div>
             </div>
           </div>
-
-        </div>
-
-    }
+        )}
         {/* <div class="card mb-4">
           <div class="card-header title_content">Thông tin khuyến mại</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>
@@ -385,7 +655,9 @@ class ProductCreate extends Component {
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <button type="button" class="btn btn-primary btn-sm"
+                <button
+                  type="button"
+                  class="btn btn-primary btn-sm"
                   onClick={this.postProduct}
                 >
                   <i class="fa fa-plus"></i>
@@ -407,10 +679,7 @@ class ProductCreate extends Component {
           </div>
         </div>
       </div>
-
-
     );
-
   }
 }
 
@@ -436,14 +705,15 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     postProduct: (store_code, product) => {
       dispatch(productAction.postProduct(store_code, product));
-
     },
     postProductV2: (store_code, branch_id, form) => {
       dispatch(productAction.postProductV2(store_code, branch_id, form));
-
     },
     fetchAllBlog: (id, page) => {
       dispatch(blogAction.fetchAllBlog(id, page));
+    },
+    showError: (error) => {
+      dispatch(error);
     },
   };
 };

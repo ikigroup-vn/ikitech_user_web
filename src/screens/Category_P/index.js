@@ -118,7 +118,7 @@ class Store extends Component {
                       }}
                     >
                       <h4 className="h4 title_content mb-0 text-gray-800">
-                      Danh sách danh mục
+                        Danh sách danh mục
                       </h4>
                       <a
                         data-toggle="modal"
@@ -126,18 +126,27 @@ class Store extends Component {
                         class={`btn btn-info btn-icon-split btn-sm ${
                           insert == true ? "show" : "hide"
                         }`}
+                        style={{ height: "fit-content", width: "fit-content" }}
                       >
                         <span class="icon text-white-50">
                           <i class="fas fa-plus"></i>
                         </span>
-                        <span style={{ color: "white" }} class={`text `}>
+                        <span
+                          style={{
+                            color: "white",
+                          }}
+                          class={`text `}
+                        >
                           Thêm danh mục
                         </span>
                       </a>
                     </div>
                     <br></br>
-                    <div class="card shadow mb-4">
-                      <div class="card-body">
+                    <div
+                      class="card shadow mb-4"
+                      style={{ overflowY: "scroll" }}
+                    >
+                      <div class="card-body card-body123">
                         <Table
                           store_code={store_code}
                           update={update}

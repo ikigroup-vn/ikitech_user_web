@@ -3,12 +3,11 @@ import { connect } from "react-redux";
 import * as productAction from "../../../actions/product";
 
 class Modal extends Component {
-    
   onSave = (e) => {
     e.preventDefault();
-    window.$('.modal').modal('hide');
-    var {id , store_code} = this.props.modal
-    this.props.destroyProduct(store_code , id);
+    window.$(".modal").modal("hide");
+    var { id, store_code } = this.props.modal;
+    this.props.destroyProduct(store_code, id);
   };
 
   render() {
@@ -44,7 +43,7 @@ class Modal extends Component {
               <div class="modal-body">
                 <input type="hidden" name="remove_id_store" />
                 <div class="alert-remove"></div>
-                Bạn có muốn xóa {modal.table} : {modal.name}
+                Bạn có muốn xóa {modal.table}: {modal.name}
               </div>
               <div class="modal-footer">
                 <button
@@ -56,7 +55,6 @@ class Modal extends Component {
                 </button>
                 <button type="submit" class="btn btn-info">
                   Xóa
-                  
                 </button>
               </div>
             </form>
@@ -69,8 +67,8 @@ class Modal extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    destroyProduct: (store_code , id) => {
-      dispatch(productAction.destroyProduct(store_code , id));
+    destroyProduct: (store_code, id) => {
+      dispatch(productAction.destroyProduct(store_code, id));
     },
   };
 };

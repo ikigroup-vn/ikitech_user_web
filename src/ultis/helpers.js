@@ -129,13 +129,12 @@ export const format = (number) => {
   });
 };
 export const formatNoD = (number) => {
-
-  if (number == "") number = 0
-  var number = number.toString().replace(/\./g, ',')
+  if (number == "") number = 0;
+  var number = number.toString().replace(/\./g, ",");
 
   var number = Number(number == "" ? 0 : number);
-  let dollarUSLocale = Intl.NumberFormat('en-US');
-  return dollarUSLocale.format(number)
+  let dollarUSLocale = Intl.NumberFormat("en-US");
+  return dollarUSLocale.format(number);
 };
 
 export const loadExpandTable = () => {
@@ -166,18 +165,27 @@ export const getDateForChartHour = () => {
 
 export const formatNumber = (value) => {
   var _value = value;
+  console.log(value);
   return typeof _value !== "undefined"
-    ? _value.toString().replace(/\./g, "").replace(/,/g, "").replace(/-/g, "")
+    ? _value
+        .toString()
+        .replace(/\./g, "")
+        .toString()
+        .replace(/,/g, "")
+        .toString()
+        .replace(/-/g, "")
+        .toString()
     : "";
 };
 
 export const removeSignNumber = (value) => {
   var _value = value;
-  var numStr = typeof _value !== "undefined"
-    ? _value.toString().replace(/\./g, "").replace(/,/g, "").replace(/-/g, "")
-    : "";
+  var numStr =
+    typeof _value !== "undefined"
+      ? _value.toString().replace(/\./g, "").replace(/,/g, "").replace(/-/g, "")
+      : "";
   var numStr = parseFloat(numStr);
-  return isNaN(numStr) ? 0 : numStr
+  return isNaN(numStr) ? 0 : numStr;
 };
 
 export const getDateForChartDay = () => {

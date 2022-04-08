@@ -7,6 +7,7 @@ import { shallowEqual } from "../../ultis/shallowEqual";
 import { isEmpty } from "../../ultis/helpers";
 import * as Types from "../../constants/ActionType";
 import themeData from "../../ultis/theme_data";
+import "./style.css";
 class ModalCreate extends Component {
   constructor(props) {
     super(props);
@@ -54,14 +55,14 @@ class ModalCreate extends Component {
       });
     }
   }
-  handleClear  = () =>{
+  handleClear = () => {
     this.setState({
       txtName: "",
       fileUpload: null,
       isShowHome: false,
-    })
+    });
     window.$("#file-category-product").fileinput("clear");
-  }
+  };
   onSave = async (e) => {
     e.preventDefault();
     // window.$('.modal').modal('hide');
@@ -110,7 +111,10 @@ class ModalCreate extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{backgroundColor: themeData().backgroundColor}} >
+            <div
+              class="modal-header"
+              style={{ backgroundColor: themeData().backgroundColor }}
+            >
               <h4 class="modal-title">Thêm danh mục</h4>
 
               <button
@@ -130,9 +134,11 @@ class ModalCreate extends Component {
               method="post"
               id="createForm"
             >
-              <div class="modal-body" style={{padding:" 0 10px"}}>
+              <div class="modal-body" style={{ padding: " 0 10px" }}>
                 <div class="form-group">
-                  <div style={{fontWeight: "bold"}} for="product_name">Tên danh mục</div>
+                  <div style={{ fontWeight: "bold" }} for="product_name">
+                    Tên danh mục
+                  </div>
                   <input
                     type="text"
                     class="form-control"
@@ -156,12 +162,14 @@ class ModalCreate extends Component {
                         }
                         checked={isShowHome}
                       />{" "}
-                      Hiển thị sản phẩm
+                      Hiển thị danh mục sản phẩm
                     </label>
                   </div>
                 </div>
                 <div class="form-group">
-                  <label for="product_name" style={{margin: 0}}>Hình ảnh</label>
+                  <label for="product_name" style={{ margin: 0 }}>
+                    Hình ảnh
+                  </label>
                   <div className="file-loading">
                     <input
                       id="file-category-product"
@@ -182,7 +190,11 @@ class ModalCreate extends Component {
                 >
                   Đóng
                 </button>
-                <button type="submit" class="btn btn-info">
+                <button
+                  type="submit"
+                  class="btn"
+                  style={{ background: "rgb(229, 111, 37)", color: "white" }}
+                >
                   Tạo
                 </button>
               </div>

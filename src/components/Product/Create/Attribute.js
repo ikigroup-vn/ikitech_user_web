@@ -5,15 +5,13 @@ import Alert from "../../../components/Partials/Alert";
 import * as Types from "../../../constants/ActionType";
 import { connect } from "react-redux";
 import * as productAction from "../../../actions/product";
-import {shallowEqual} from "../../../ultis/shallowEqual";
+import { shallowEqual } from "../../../ultis/shallowEqual";
 
 class Attribute extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      list_attribute: {
-
-      },
+      list_attribute: {},
     };
   }
 
@@ -21,12 +19,13 @@ class Attribute extends Component {
     var target = e.target;
     var name = target.name;
     var value = target.value;
-    var attribute = {...this.state.list_attribute};
+    console.log("34324324", e.target);
+    var attribute = { ...this.state.list_attribute };
     attribute[data] = {
-      name : data,
-      [name] : value
-    }
-
+      name: data,
+      [name]: value,
+    };
+    console.log("34324324", attribute);
     this.setState({ list_attribute: attribute });
   };
 
@@ -48,25 +47,30 @@ class Attribute extends Component {
       );
     }
   };
-  shouldComponentUpdate(nextProps, nextState){
-    if(!shallowEqual(nextState.list_attribute , this.state.list_attribute))
-    {
-     this.props.handleDataFromAttribute(nextState)
+  shouldComponentUpdate(nextProps, nextState) {
+    if (!shallowEqual(nextState.list_attribute, this.state.list_attribute)) {
+      this.props.handleDataFromAttribute(nextState);
     }
 
-    return true
+    return true;
   }
-  
+
   showData = (attribute) => {
     var result = null;
-    if(typeof attribute == "undefined" )
-    {
-      return null
+    if (typeof attribute == "undefined") {
+      return null;
     }
     if (attribute.length > 0) {
-      var {isRemove} = this.props 
+      var { isRemove } = this.props;
       result = attribute.map((data, index) => {
-       var value = typeof this.state.list_attribute[data] == "undefined" ? '' :  this.state.list_attribute[data][`txt`+data]
+        var value =
+          typeof this.state.list_attribute[data] == "undefined"
+            ? ""
+            : this.state.list_attribute[data][`txt` + data];
+        console.log(
+          this.state?.list_attribute[data],
+          this.state?.list_attribute[data]?.[`txt` + data]
+        );
         return (
           <tr>
             <td>{index + 1}</td>
@@ -80,7 +84,7 @@ class Attribute extends Component {
               <input
                 type="text"
                 autocomplete="off"
-                name={`txt`+data}
+                name={`txt` + data}
                 value={value}
                 onChange={(e) => this.onChange(e, data)}
                 id="input"
@@ -88,7 +92,7 @@ class Attribute extends Component {
                 required="required"
                 pattern=""
                 title=""
-                ref = "asd"
+                ref="asd"
               />
             </td>
             <td>
@@ -97,7 +101,11 @@ class Attribute extends Component {
                 style={{ marginLeft: "10px" }}
                 data-toggle="modal"
                 data-target="#removeModal"
-                class={`btn btn-danger btn-sm ${typeof isRemove == "undefined" || isRemove == false ? "hide" : ""}`}
+                class={`btn btn-danger btn-sm ${
+                  typeof isRemove == "undefined" || isRemove == false
+                    ? "hide"
+                    : ""
+                }`}
               >
                 <i class="fa fa-trash"></i> Xóa
               </button>
@@ -112,13 +120,10 @@ class Attribute extends Component {
   };
 
   render() {
-    var { attributeP, store_code , isCreate , isRemove} = this.props;
+    var { attributeP, store_code, isCreate, isRemove } = this.props;
     return (
       <div class="table-responsive">
-        <Alert
-          type={Types.ALERT_UID_STATUS}
-          alert={this.props.alert}
-        />
+        <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
         <table
           class="table table-striped table-border"
           style={{ color: "black" }}
@@ -137,8 +142,10 @@ class Attribute extends Component {
           data-toggle="modal"
           data-target="#modalCreateA"
           type="button"
-          class={`btn btn-info btn-sm ${typeof isCreate == "undefined" || isCreate == false ? "hide" : ""}`}
-          >
+          class={`btn btn-info btn-sm ${
+            typeof isCreate == "undefined" || isCreate == false ? "hide" : ""
+          }`}
+        >
           <i class="fa fa-plus"></i>
           Thêm thuộc tính
         </button>

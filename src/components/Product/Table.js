@@ -19,7 +19,7 @@ class Table extends Component {
         SubElement: "",
         idProduct: "",
         NameElement: "",
-        NameDistribute: ""
+        NameDistribute: "",
       },
       formData: "",
     };
@@ -27,7 +27,7 @@ class Table extends Component {
 
   passDataModal = (event, store_code, id, name) => {
     this.props.handleDelCallBack({
-      table: "Sản phẩm",
+      table: "sản phẩm",
       id: id,
       store_code: store_code,
       name: name,
@@ -35,14 +35,13 @@ class Table extends Component {
     event.preventDefault();
   };
 
-
   handleCallBackElement = (modalElement) => {
-    this.setState({ modalElement: modalElement })
-  }
+    this.setState({ modalElement: modalElement });
+  };
   handleCallBackSubElement = (modalSub) => {
-    console.log("modalSub", modalSub)
-    this.setState({ modalSub: modalSub })
-  }
+    console.log("modalSub", modalSub);
+    this.setState({ modalSub: modalSub });
+  };
 
   checkSelected = (id) => {
     var selected = [...this.state.selected];
@@ -79,7 +78,7 @@ class Table extends Component {
   handleMultiDelCallBack = (e, data) => {
     var { store_code } = this.props;
     this.props.handleMultiDelCallBack({
-      table: "Sản phẩm",
+      table: "sản phẩm",
       data: data,
       store_code: store_code,
     });
@@ -99,43 +98,55 @@ class Table extends Component {
           data.quantity_in_stock_with_distribute == 0
             ? -2
             : data.quantity_in_stock_with_distribute == -1
-              ? -1
-              : data.quantity_in_stock_with_distribute;
+            ? -1
+            : data.quantity_in_stock_with_distribute;
 
         if (status_stock == null) {
           status_stock = -1;
         }
 
-
         var status =
           data.status == 0
             ? "success"
             : data.status == -1
-              ? "secondary"
-              : data.status == 2
-                ? "danger"
-                : null;
+            ? "secondary"
+            : data.status == 2
+            ? "danger"
+            : null;
         var discount =
           typeof data.product_discount == "undefined" ||
-            data.product_discount == null
+          data.product_discount == null
             ? 0
             : data.product_discount.discount_price;
         var checked = this.checkSelected(data.id);
-        
-        var min_price = data.min_price
-        var max_price = data.max_price
-        var product_discount = data.product_discount
+
+        var min_price = data.min_price;
+        var max_price = data.max_price;
+        var product_discount = data.product_discount;
 
         return (
           <ShowData
             _delete={_delete}
             passDataModal={this.passDataModal}
             min_price={min_price}
-            max_price={max_price} 
+            max_price={max_price}
             product_discount={product_discount}
-            update={update} insert={insert} checked={checked} page={page} status={status} status_name={status_name} status_stock={status_stock}
-            data={data} per_page={per_page} current_page={current_page} index={index} store_code={store_code} discount={discount}
-            handleCallBackElement={this.handleCallBackElement} handleCallBackSubElement={this.handleCallBackSubElement} />
+            update={update}
+            insert={insert}
+            checked={checked}
+            page={page}
+            status={status}
+            status_name={status_name}
+            status_stock={status_stock}
+            data={data}
+            per_page={per_page}
+            current_page={current_page}
+            index={index}
+            store_code={store_code}
+            discount={discount}
+            handleCallBackElement={this.handleCallBackElement}
+            handleCallBackSubElement={this.handleCallBackSubElement}
+          />
         );
       });
     } else {
@@ -175,7 +186,7 @@ class Table extends Component {
         : false;
     var multiDelete = selected.length > 0 ? "show" : "hide";
     var { _delete, update, insert } = this.props;
-    console.log(products)
+    console.log(products);
     return (
       <div>
         <button
@@ -195,8 +206,7 @@ class Table extends Component {
         >
           <thead>
             <tr>
-              <th
-                className={_delete == true ? "show" : "hide"}              >
+              <th className={_delete == true ? "show" : "hide"}>
                 <input
                   type="checkbox"
                   checked={_selected}
@@ -204,27 +214,18 @@ class Table extends Component {
                 />
               </th>
               <th>STT</th>
-              <th style={{width:"8%"}}>Hình ảnh</th>
+              <th style={{ width: "8%" }}>Hình ảnh</th>
               <th>Mã SKU</th>
 
               <th>Tên sản phẩm</th>
 
+              <th style={{ width: "20%" }}>Giá bán lẻ</th>
 
-              <th style={{width: "20%"}}>Giá bán lẻ</th>
+              {getChannel() == IKITECH && <th>Trạng thái </th>}
 
-              {getChannel() == IKITECH &&
-                  <th>Trạng thái </th>
-              }
+              {getChannel() == IKITECH && <th>Lượt xem</th>}
 
-              {getChannel() == IKITECH &&
-                <th>Lượt xem</th>
-              }
-
-              {getChannel() == IKITECH &&
-                <th>Lượt thích</th>
-              }
-
-
+              {getChannel() == IKITECH && <th>Lượt thích</th>}
 
               <th>Hành động</th>
             </tr>
