@@ -5,7 +5,7 @@ import { shallowEqual } from "../../../ultis/shallowEqual";
 import { connect } from "react-redux";
 import Alert from "../../../components/Partials/Alert";
 import * as Types from "../../../constants/ActionType";
-import * as Env from "../../../ultis/default"
+import * as Env from "../../../ultis/default";
 import SortableList, { SortableItem } from "react-easy-sort";
 import arrayMove from "array-move";
 class StoreImage extends Component {
@@ -14,38 +14,36 @@ class StoreImage extends Component {
     this.state = {
       avatar_product: "",
       listImgProduct: [],
-      percent: 0,
-      showBar: false,
-      oldIndex : "",
-      newIndex : "",
+      // percent: 0,
+      // showBar: false,
+      oldIndex: "",
+      newIndex: "",
     };
   }
 
+  // startProgressBar = () => {
+  //   this.setState({
+  //     showBar: true,
+  //     percent: 40
+  //   })
 
-  startProgressBar = () => {
-    this.setState({
-      showBar: true,
-      percent: 40
-    })
+  // }
 
-  }
+  // runProgressBar = () => {
+  //   console.log("runnnnnnnnnnn")
+  //   if (this.state.percent < 100) {
+  //     setTimeout(() => {
+  //       var percent = this.state.percent + 20
+  //       this.setState({ percent: percent });
+  //       this.runProgressBar()
+  //     }, 200);
+  //   }
+  //   else {
+  //     this.setState({ showBar: false, percent: 0 })
 
+  //   }
 
-  runProgressBar = () => {
-    console.log("runnnnnnnnnnn")
-    if (this.state.percent < 100) {
-      setTimeout(() => {
-        var percent = this.state.percent + 20
-        this.setState({ percent: percent });
-        this.runProgressBar()
-      }, 200);
-    }
-    else {
-      this.setState({ showBar: false, percent: 0 })
-
-    }
-
-  }
+  // }
 
   removeImgProduct = () => {
     this.setState({ avatar_product: "" });
@@ -69,13 +67,14 @@ class StoreImage extends Component {
           draggedItemClassName="dragged"
         >
           {images.map((data, index) => (
-
             <SortableItem key={data}>
-              <div style={{ cursor: "grab", marginBottom: "10px" }} className="item col-sm-4 col-md-4 col-lg-4 space-bottom">
+              <div
+                style={{ cursor: "grab", marginBottom: "10px" }}
+                className="item col-sm-4 col-md-4 col-lg-4 space-bottom"
+              >
                 <div className="box">
                   <div
                     style={{ width: "100%" }}
-
                     className={`box-icon`}
                     onClick={(e) => this.removeListFromImg(data)}
                   >
@@ -86,13 +85,16 @@ class StoreImage extends Component {
                     style={{
                       width: "100%",
                       height: "160px",
-                      objectFit: "cover"
+                      objectFit: "cover",
                     }}
                     src={data}
-
                     class="img-responsive"
                   />
-                  <span className={`label-group-img ${index == 0 ? "show" : "hide"}`}>
+                  <span
+                    className={`label-group-img ${
+                      index == 0 ? "show" : "hide"
+                    }`}
+                  >
                     Ảnh đại diện
                   </span>
                 </div>
@@ -100,7 +102,6 @@ class StoreImage extends Component {
             </SortableItem>
           ))}
         </SortableList>
-
       );
     } else {
       result = (
@@ -121,38 +122,39 @@ class StoreImage extends Component {
   };
   componentWillReceiveProps(nextProps) {
     if (nextProps.product_img != this.props.product_img) {
-
       this.setState((prevState, props) => {
         this.setState({ avatar_product: nextProps.product_img });
       });
-
     }
   }
   shouldComponentUpdate(nextProps, nextState) {
-
-
     if (!shallowEqual(nextProps.listImgProduct, this.props.listImgProduct)) {
-      var imgs = [...nextState.listImgProduct]
-      if (nextProps.listImgProduct != null && typeof nextProps.listImgProduct != "undefined" && nextProps.listImgProduct.length > 0) {
-        if (nextState.showBar == true) {
-          this.runProgressBar()
+      var imgs = [...nextState.listImgProduct];
+      if (
+        nextProps.listImgProduct != null &&
+        typeof nextProps.listImgProduct != "undefined" &&
+        nextProps.listImgProduct.length > 0
+      ) {
+        // if (nextState.showBar == true) {
+        //   this.runProgressBar()
 
-        }
-        nextProps.listImgProduct.forEach(img => {
-          imgs.push(img)
+        // }
+        nextProps.listImgProduct.forEach((img) => {
+          imgs.push(img);
         });
       }
       this.setState({ listImgProduct: imgs });
     }
-    if (!shallowEqual(nextState.listImgProduct, this.state.listImgProduct)
-      || nextState.showBar != this.state.showBar
-      || nextState.oldIndex != this.state.oldIndex
-      || nextState.newIndex != this.state.newIndex) {
-      this.props.handleDataFromProductImg(nextState.listImgProduct)
+    if (
+      !shallowEqual(nextState.listImgProduct, this.state.listImgProduct) ||
+      // || nextState.showBar != this.state.showBar
+      nextState.oldIndex != this.state.oldIndex ||
+      nextState.newIndex != this.state.newIndex
+    ) {
+      this.props.handleDataFromProductImg(nextState.listImgProduct);
     }
 
-
-    return true
+    return true;
   }
   showImg = (img) => {
     var image = img == "" || img == null ? Env.IMG_NOT_FOUND : img;
@@ -176,28 +178,23 @@ class StoreImage extends Component {
     this.setState({
       listImgProduct: arrayMove(this.state.listImgProduct, oldIndex, newIndex),
       oldIndex,
-      newIndex
-    })
+      newIndex,
+    });
   };
   render() {
-    var { avatar_product, showBar, percent, listImgProduct } = this.state;
+    var { avatar_product, listImgProduct } = this.state;
 
     return (
       <div class="container-fluid">
-
-        <Alert
-          type={Types.ALERT_UID_STATUS}
-          alert={this.props.alert}
-        />
+        <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
         <div class="row">
-
-          <div >
+          <div>
             <label style={{ fontSize: "20px" }} for="product_name">
-              Ảnh đại diện sản phẩm : <i style={{ fontSize: "14px" }}>(Tối đa 10 hình ảnh)</i>
+              Ảnh đại diện sản phẩm :{" "}
+              <i style={{ fontSize: "14px" }}>(Tối đa 10 hình ảnh)</i>
             </label>
-
           </div>
-          <div class={`w3-light-grey ${showBar == true ? "show" : "hide"}`} style={{
+          {/* <div class={`w3-light-grey ${showBar == true ? "show" : "hide"}`} style={{
             height: "20px",
             width: "100%",
             border: "1px solid"
@@ -208,7 +205,7 @@ class StoreImage extends Component {
               textAlign: "center",
               background: "green"
             }}>{percent + "%"}</div>
-          </div>
+          </div> */}
         </div>
         {this.showListImg(this.state.listImgProduct)}
 
@@ -222,7 +219,11 @@ class StoreImage extends Component {
             <i class="fa fa-plus"></i> Upload ảnh
           </button>
         </div>
-        <ModalUploadListP listImgProduct={listImgProduct} startProgressBar={this.startProgressBar} imgs={this.props.listImgProduct} />
+        <ModalUploadListP
+          listImgProduct={listImgProduct}
+          imgs={this.props.listImgProduct}
+        />
+        {/* <ModalUploadListP listImgProduct={listImgProduct} startProgressBar={this.startProgressBar} imgs={this.props.listImgProduct} /> */}
         <ModalUploadStore />
       </div>
     );

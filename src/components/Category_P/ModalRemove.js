@@ -4,12 +4,11 @@ import { connect } from "react-redux";
 import themeData from "../../ultis/theme_data";
 
 class ModalRemove extends Component {
-    
   onSave = (e) => {
     e.preventDefault();
-    window.$('.modal').modal('hide');
-    var {store_code , modal} = this.props
-    this.props.destroyCategoryP(store_code,modal.id);
+    window.$(".modal").modal("hide");
+    var { store_code, modal } = this.props;
+    this.props.destroyCategoryP(store_code, modal.id);
   };
 
   render() {
@@ -25,7 +24,10 @@ class ModalRemove extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{backgroundColor: themeData().backgroundColor}}>
+            <div
+              class="modal-header"
+              style={{ backgroundColor: themeData().backgroundColor }}
+            >
               <h4>Thông báo</h4>
               <button
                 type="button"
@@ -46,7 +48,7 @@ class ModalRemove extends Component {
               <div class="modal-body">
                 <input type="hidden" name="remove_id_store" />
                 <div class="alert-remove"></div>
-                Bạn có muốn xóa {modal.title} : {modal.name}
+                Bạn có muốn xóa {modal.title}: {modal.name}
               </div>
               <div class="modal-footer">
                 <button
@@ -58,7 +60,6 @@ class ModalRemove extends Component {
                 </button>
                 <button type="submit" class="btn btn-info">
                   Xóa
-                  
                 </button>
               </div>
             </form>
@@ -71,8 +72,8 @@ class ModalRemove extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    destroyCategoryP: (store_code,id) => {
-      dispatch(CategoryPAction.destroyCategoryP(store_code,id));
+    destroyCategoryP: (store_code, id) => {
+      dispatch(CategoryPAction.destroyCategoryP(store_code, id));
     },
   };
 };

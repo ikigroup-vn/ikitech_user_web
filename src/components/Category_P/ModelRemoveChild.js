@@ -4,12 +4,11 @@ import { connect } from "react-redux";
 import themeData from "../../ultis/theme_data";
 
 class ModalRemoveChild extends Component {
-    
   onSave = (e) => {
     e.preventDefault();
-    window.$('.modal').modal('hide');
-    var {store_code , modal} = this.props
-    this.props.destroyCategoryChild(store_code,modal.id,modal.idChild);
+    window.$(".modal").modal("hide");
+    var { store_code, modal } = this.props;
+    this.props.destroyCategoryChild(store_code, modal.id, modal.idChild);
   };
 
   render() {
@@ -25,7 +24,10 @@ class ModalRemoveChild extends Component {
       >
         <div class="modal-dialog " role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor}}>
+            <div
+              class="modal-header"
+              style={{ backgroundColor: themeData().backgroundColor }}
+            >
               <h4>Thông báo</h4>
               <button
                 type="button"
@@ -36,7 +38,8 @@ class ModalRemoveChild extends Component {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <form onSubmit={this.onSave}
+            <form
+              onSubmit={this.onSave}
               role="form"
               action="#"
               method="post"
@@ -45,7 +48,7 @@ class ModalRemoveChild extends Component {
               <div class="modal-body">
                 <input type="hidden" name="remove_id_store" />
                 <div class="alert-remove"></div>
-                Bạn có muốn xóa {modal.title} : {modal.name}
+                Bạn có muốn xóa {modal.title}: {modal.name}
               </div>
               <div class="modal-footer">
                 <button
@@ -69,8 +72,8 @@ class ModalRemoveChild extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    destroyCategoryChild: (store_code,id,idChild) => {
-      dispatch(CategoryPAction.destroyCategoryChild(store_code,id,idChild));
+    destroyCategoryChild: (store_code, id, idChild) => {
+      dispatch(CategoryPAction.destroyCategoryChild(store_code, id, idChild));
     },
   };
 };

@@ -7,79 +7,88 @@ import { compressed, formatStringCharactor } from "../ultis/helpers";
 import { saveAs } from "file-saver";
 import XlsxPopulate from "xlsx-populate";
 
-export const fetchAllProduct = (store_code, page = 1, params , agency_type_id ) => {
+export const fetchAllProduct = (
+  store_code,
+  page = 1,
+  params,
+  agency_type_id
+) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
-    })
-    productApi.fetchAllData(store_code, page, params , agency_type_id).then((res) => {
-      dispatch({
-        type: Types.SHOW_LOADING,
-        loading: "hide"
-      })
-      if (res.data.code !== 401)
-        dispatch({
-          type: Types.FETCH_ALL_PRODUCT,
-          data: res.data.data,
-        });
     });
+    productApi
+      .fetchAllData(store_code, page, params, agency_type_id)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        if (res.data.code !== 401)
+          dispatch({
+            type: Types.FETCH_ALL_PRODUCT,
+            data: res.data.data,
+          });
+      });
   };
 };
 
-export const fetchAllProductV2 = (store_code,branch_id, page = 1, params , agency_type_id ) => {
+export const fetchAllProductV2 = (
+  store_code,
+  branch_id,
+  page = 1,
+  params,
+  agency_type_id
+) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
-    })
-    productApi.fetchAllProductV2(store_code,branch_id, page, params , agency_type_id).then((res) => {
-      dispatch({
-        type: Types.SHOW_LOADING,
-        loading: "hide"
-      })
-
-    
-      if (res.data.code === 200)
-        dispatch({
-          type: Types.FETCH_ALL_PRODUCT,
-          data: res.data.data,
-        });
     });
+    productApi
+      .fetchAllProductV2(store_code, branch_id, page, params, agency_type_id)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+
+        if (res.data.code === 200)
+          dispatch({
+            type: Types.FETCH_ALL_PRODUCT,
+            data: res.data.data,
+          });
+      });
   };
 };
-
-
-
 
 export const fetchAllProductEcommerce = (store_code, page = 1, data) => {
-  console.log(data)
+  console.log(data);
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     productApi.fetchAllProductEcommerce(store_code, page, data).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
-        loading: "hide"
-      })
+        loading: "hide",
+      });
       if (res.data.code !== 401) {
         if (data.provider == "tiki") {
           dispatch({
             type: Types.FETCH_ALL_PRODUCT_TIKI,
             data: res.data.data,
           });
-        }
-        else if (data.provider == "shopee") {
+        } else if (data.provider == "shopee") {
           {
             dispatch({
               type: Types.FETCH_ALL_PRODUCT_SHOPEE,
               data: res.data.data,
             });
           }
-        }
-        else {
+        } else {
           {
             dispatch({
               type: Types.FETCH_ALL_PRODUCT_SENDO,
@@ -88,12 +97,9 @@ export const fetchAllProductEcommerce = (store_code, page = 1, data) => {
           }
         }
       }
-
     });
   };
 };
-
-
 
 function getSheetData(data, header) {
   var fields = Object.keys(data[0]);
@@ -113,12 +119,12 @@ async function saveAsExcel(value) {
   //   { name: "Zach", city: "New York" }
   // ];
   // let header = ["Name", "City"];
-  var data = value.data
-  var data_header = value.header
+  var data = value.data;
+  var data_header = value.header;
   XlsxPopulate.fromBlankAsync().then(async (workbook) => {
     const sheet1 = workbook.sheet(0);
     const sheetData = getSheetData(data, data_header);
-    console.log(sheetData)
+    console.log(sheetData);
     const totalColumns = sheetData[0].length;
 
     sheet1.cell("A1").value(sheetData);
@@ -128,108 +134,111 @@ async function saveAsExcel(value) {
     sheet1.range("A1:" + endColumn + "1").style("fill", "F4D03F");
     range.style("border", true);
     return workbook.outputAsync().then((res) => {
-      console.log(res)
+      console.log(res);
       saveAs(res, "Danh sách sản phẩm.xlsx");
     });
   });
 }
 export const fetchAllListProduct = (store_code, search) => {
-  console.log(search)
+  console.log(search);
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     productApi.fetchAllListProduct(store_code, search).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
-        loading: "hide"
-      })
+        loading: "hide",
+      });
       if (res.data.code !== 401) {
         if (typeof res.data.data != "undefined") {
           if (typeof res.data.data.data != "undefined") {
             if (res.data.data.data.length > 0) {
-              var newArray = []
+              var newArray = [];
 
               for (const item of res.data.data.data) {
-                var newItem = {}
+                var newItem = {};
                 Object.entries(item).forEach(([key, value], index) => {
                   if (key == "full_description") {
-                    if(value != null && value.length < 32000) {
-                      newItem["Mô tả"] = value
+                    if (value != null && value.length < 32000) {
+                      newItem["Mô tả"] = value;
                     } else {
-                      newItem["Mô tả"] = ""
+                      newItem["Mô tả"] = "";
                     }
-                   
                   }
                   if (key == "name") {
-                    newItem["Tên sản phẩm"] = formatStringCharactor(value)
+                    newItem["Tên sản phẩm"] = formatStringCharactor(value);
                     // newItem["Tên sản phẩm"] = value
-
                   }
                   if (key == "sku") {
-                    newItem["Mã SKU"] = value
+                    newItem["Mã SKU"] = value;
                     // newItem["Tên sản phẩm"] = value
-
                   }
                   if (key == "price") {
-                    newItem["Giá"] = value
+                    newItem["Giá"] = value;
                   }
                   if (key == "quantity_in_stock") {
-                    newItem["Tồn kho"] = value == -1 ? "Vô hạn" : value == 0 ? "Hết hàng" : value
+                    newItem["Tồn kho"] =
+                      value == -1 ? "Vô hạn" : value == 0 ? "Hết hàng" : value;
                   }
                   if (key == "categories") {
                     if (Array.isArray(value)) {
                       if (value.length > 0) {
-                        var stringCategory = ''
+                        var stringCategory = "";
                         for (const [index, category] of value.entries()) {
-                          if (category.name != null && typeof category.name != "undefined") {
+                          if (
+                            category.name != null &&
+                            typeof category.name != "undefined"
+                          ) {
                             if (index == value.length - 1) {
-                              stringCategory = stringCategory + formatStringCharactor(category.name)
-                            }
-                            else {
-                              stringCategory = stringCategory + formatStringCharactor(category.name) + ","
+                              stringCategory =
+                                stringCategory +
+                                formatStringCharactor(category.name);
+                            } else {
+                              stringCategory =
+                                stringCategory +
+                                formatStringCharactor(category.name) +
+                                ",";
                             }
                           }
                         }
-                        newItem["Danh mục"] = stringCategory
-
+                        newItem["Danh mục"] = stringCategory;
                       }
                     }
                   }
                   if (key == "images") {
                     if (Array.isArray(value)) {
                       if (value.length > 0) {
-                        var stringImg = ''
+                        var stringImg = "";
                         for (const [index, img] of value.entries()) {
-                          if (img.image_url != null && typeof img.image_url != "undefined") {
+                          if (
+                            img.image_url != null &&
+                            typeof img.image_url != "undefined"
+                          ) {
                             if (index == value.length - 1) {
-                              stringImg = stringImg + img.image_url
-                            }
-                            else {
-                              stringImg = stringImg + img.image_url + ","
+                              stringImg = stringImg + img.image_url;
+                            } else {
+                              stringImg = stringImg + img.image_url + ",";
                             }
                           }
                         }
-                        newItem["Hình ảnh"] = stringImg
-
+                        newItem["Hình ảnh"] = stringImg;
                       }
                     }
                   }
+                });
 
-                })
-
-                newArray.push(newItem)
-
+                newArray.push(newItem);
               }
-              var header = []
+              var header = [];
               if (newArray.length > 0) {
                 Object.entries(newArray[0]).forEach(([key, value], index) => {
-                  header.push(key)
+                  header.push(key);
                 });
               }
-              console.log(header)
-              saveAsExcel({ data: newArray, header: header })
+              console.log(header);
+              saveAsExcel({ data: newArray, header: header });
             }
           }
         }
@@ -238,19 +247,18 @@ export const fetchAllListProduct = (store_code, search) => {
   };
 };
 
-
 export const fetchAllAttributeP = (store_code) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     attributePApi.fetchAllData(store_code).then((res) => {
       if (res.data.code !== 401)
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
       dispatch({
         type: Types.FETCH_ALL_ATTRIBUTE_PRODUCT,
         data: res.data.data,
@@ -263,19 +271,17 @@ export const updateAttributeP = (store_code, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     attributePApi
       .updateAttributeP(store_code, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         attributePApi.fetchAllData(store_code).then((res) => {
-
           if (res.data.code !== 401)
-
             dispatch({
               type: Types.FETCH_ALL_ATTRIBUTE_PRODUCT,
               data: res.data.data,
@@ -320,19 +326,18 @@ export const destroyAttributeP = ($this, store_code, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     attributePApi
 
       .updateAttributeP(store_code, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         attributePApi.fetchAllData(store_code).then((res) => {
           if (res.data.code !== 401)
-
             dispatch({
               type: Types.FETCH_ALL_ATTRIBUTE_PRODUCT,
               data: res.data.data,
@@ -377,19 +382,19 @@ export const destroyAttributeP = ($this, store_code, data) => {
   };
 };
 export const uploadAvataProduct = (file) => {
-  console.log(file)
+  console.log(file);
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     uploadApi
       .upload(file)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.UPLOAD_PRODUCT_IMG,
           data: res.data.data,
@@ -418,19 +423,19 @@ export const uploadAvataProduct = (file) => {
   };
 };
 
-export const editStock = (store_code,branch_id ,data,page=1) => {
+export const editStock = (store_code, branch_id, data, page = 1) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     productApi
-      .editStock(store_code,branch_id ,data)
+      .editStock(store_code, branch_id, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
 
         dispatch({
           type: Types.ALERT_UID_STATUS,
@@ -441,17 +446,19 @@ export const editStock = (store_code,branch_id ,data,page=1) => {
             content: res.data.msg,
           },
         });
-        productApi.fetchAllProductV2(store_code,branch_id, page).then((res) => {
-          dispatch({
-            type: Types.SHOW_LOADING,
-            loading: "hide"
-          })
-          if (res.data.code !== 401)
+        productApi
+          .fetchAllProductV2(store_code, branch_id, page)
+          .then((res) => {
             dispatch({
-              type: Types.FETCH_ALL_PRODUCT,
-              data: res.data.data,
+              type: Types.SHOW_LOADING,
+              loading: "hide",
             });
-        });
+            if (res.data.code !== 401)
+              dispatch({
+                type: Types.FETCH_ALL_PRODUCT,
+                data: res.data.data,
+              });
+          });
       })
       .catch(function (error) {
         dispatch({
@@ -467,24 +474,18 @@ export const editStock = (store_code,branch_id ,data,page=1) => {
   };
 };
 
-
-
-
 export const uploadListImgProduct = function (files) {
   return async (dispatch) => {
-
-    var images = []
+    var images = [];
     for (let i = 0; i < files.length; i++) {
-      const fd = new FormData()
+      const fd = new FormData();
 
-      fd.append(`image`, await compressed(files[i]))
+      fd.append(`image`, await compressed(files[i]));
       try {
-
-        var res = await uploadApi.upload(fd)
-        console.log(res)
+        var res = await uploadApi.upload(fd);
+        console.log(res);
       } catch (error) {
-        console.log(error)
-
+        console.log(error);
 
         dispatch({
           type: Types.ALERT_UID_STATUS,
@@ -497,9 +498,8 @@ export const uploadListImgProduct = function (files) {
         });
       }
       if (res.data.code == 400) {
-        console.log(res.data)
+        console.log(res.data);
         {
-
           dispatch({
             type: Types.ALERT_UID_STATUS,
             alert: {
@@ -510,45 +510,38 @@ export const uploadListImgProduct = function (files) {
             },
           });
         }
-
-      }
-      else {
-        images.push(res.data.data)
-        console.log(images)
-
+      } else {
+        images.push(res.data.data);
+        console.log(images);
       }
       if (i == files.length - 1) {
-
         dispatch({
           type: Types.UPLOAD_ALL_PRODUCT_IMG,
           data: images,
-        })
+        });
       }
     }
-
   };
 };
-
-
 
 export const uploadImgDistribute = (file, imageId, listImages) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     uploadApi
 
       .upload(file)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         var listImg = [...listImages];
         var item = {
           data: res.data.data,
-          index: imageId.index
+          index: imageId.index,
           // key: imageId.key,
           // keyItem: imageId.keyItem,
         };
@@ -581,14 +574,16 @@ export const uploadImgDistribute = (file, imageId, listImages) => {
   };
 };
 
-
-
 export const postProduct = (store_code, data) => {
-
   return (dispatch) => {
-    const _value_price = data.price.toString().replace(/,/g, '');
-    const _value_quantity_in_stock = data.quantity_in_stock.toString().replace(/,/g, '');
-    if (isNaN(Number(_value_price)) || isNaN(Number(_value_quantity_in_stock))) {
+    const _value_price = data.price.toString().replace(/,/g, "");
+    const _value_quantity_in_stock = data.quantity_in_stock
+      .toString()
+      .replace(/,/g, "");
+    if (
+      isNaN(Number(_value_price)) ||
+      isNaN(Number(_value_quantity_in_stock))
+    ) {
       dispatch({
         type: Types.ALERT_UID_STATUS,
         alert: {
@@ -602,15 +597,15 @@ export const postProduct = (store_code, data) => {
     }
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     productApi
       .createProduct(store_code, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -625,13 +620,12 @@ export const postProduct = (store_code, data) => {
       .catch(function (error) {
         var content = "";
         if (typeof error.response.data.msg == "undefined")
-          content = "Vui lòng chọn ảnh và nhập đầy đủ các thông tin"
-        else
-          content = error.response.data.msg
+          content = "Vui lòng chọn ảnh và nhập đầy đủ các thông tin";
+        else content = error.response.data.msg;
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -645,12 +639,16 @@ export const postProduct = (store_code, data) => {
   };
 };
 
-export const postProductV2 = (store_code,branch_id, data) => {
-
+export const postProductV2 = (store_code, branch_id, data) => {
   return (dispatch) => {
-    const _value_price = data.price.toString().replace(/,/g, '');
-    const _value_quantity_in_stock = data.quantity_in_stock.toString().replace(/,/g, '');
-    if (isNaN(Number(_value_price)) || isNaN(Number(_value_quantity_in_stock))) {
+    const _value_price = data.price.toString().replace(/,/g, "");
+    const _value_quantity_in_stock = data.quantity_in_stock
+      .toString()
+      .replace(/,/g, "");
+    if (
+      isNaN(Number(_value_price)) ||
+      isNaN(Number(_value_quantity_in_stock))
+    ) {
       dispatch({
         type: Types.ALERT_UID_STATUS,
         alert: {
@@ -664,15 +662,15 @@ export const postProductV2 = (store_code,branch_id, data) => {
     }
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     productApi
-      .createProductV2(store_code,branch_id, data)
+      .createProductV2(store_code, branch_id, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -687,13 +685,12 @@ export const postProductV2 = (store_code,branch_id, data) => {
       .catch(function (error) {
         var content = "";
         if (typeof error.response.data.msg == "undefined")
-          content = "Vui lòng chọn ảnh và nhập đầy đủ các thông tin"
-        else
-          content = error.response.data.msg
+          content = "Vui lòng chọn ảnh và nhập đầy đủ các thông tin";
+        else content = error.response.data.msg;
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -707,21 +704,20 @@ export const postProductV2 = (store_code,branch_id, data) => {
   };
 };
 
-
 export const postMultiProduct = (store_code, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     productApi
       .createMultiProduct(store_code, data)
       .then((res) => {
-        console.log(res)
+        console.log(res);
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -739,7 +735,6 @@ export const postMultiProduct = (store_code, data) => {
           },
         });
         productApi.fetchAllData(store_code, 1, null).then((res) => {
-
           if (res.data.code !== 401)
             dispatch({
               type: Types.FETCH_ALL_PRODUCT,
@@ -750,13 +745,12 @@ export const postMultiProduct = (store_code, data) => {
       .catch(function (error) {
         var content = "";
         if (typeof error.response.data.msg == "undefined")
-          content = "Vui lòng kiểm tra lại các trường dữ liệu"
-        else
-          content = error.response.data.msg
+          content = "Vui lòng kiểm tra lại các trường dữ liệu";
+        else content = error.response.data.msg;
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -770,13 +764,9 @@ export const postMultiProduct = (store_code, data) => {
   };
 };
 
-
-
-
 export const updateAgencyPrice = (store_code, data, productId, page) => {
-
   return (dispatch) => {
-    const _value_price = data.main_price.toString().replace(/,/g, '');
+    const _value_price = data.main_price.toString().replace(/,/g, "");
     if (isNaN(Number(_value_price))) {
       dispatch({
         type: Types.ALERT_UID_STATUS,
@@ -791,16 +781,16 @@ export const updateAgencyPrice = (store_code, data, productId, page) => {
     }
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     productApi
       .updateAgencyPrice(store_code, data, productId)
       .then((res) => {
-        console.log(res)
+        console.log(res);
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -812,18 +802,16 @@ export const updateAgencyPrice = (store_code, data, productId, page) => {
         });
         // history.push(`/product/index/${store_code}/${page}`);
         history.goBack();
-        
       })
       .catch(function (error) {
         var content = "";
         if (typeof error.response.data.msg == "undefined")
-          content = "Vui lòng chọn ảnh và nhập đầy đủ các thông tin"
-        else
-          content = error.response.data.msg
+          content = "Vui lòng chọn ảnh và nhập đầy đủ các thông tin";
+        else content = error.response.data.msg;
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -838,11 +826,15 @@ export const updateAgencyPrice = (store_code, data, productId, page) => {
 };
 
 export const updateProduct = (store_code, data, productId, page) => {
-
   return (dispatch) => {
-    const _value_price = data.price.toString().replace(/,/g, '');
-    const _value_quantity_in_stock = data.quantity_in_stock.toString().replace(/,/g, '');
-    if (isNaN(Number(_value_price)) || isNaN(Number(_value_quantity_in_stock))) {
+    const _value_price = data.price.toString().replace(/,/g, "");
+    const _value_quantity_in_stock = data.quantity_in_stock
+      .toString()
+      .replace(/,/g, "");
+    if (
+      isNaN(Number(_value_price)) ||
+      isNaN(Number(_value_quantity_in_stock))
+    ) {
       dispatch({
         type: Types.ALERT_UID_STATUS,
         alert: {
@@ -856,16 +848,16 @@ export const updateProduct = (store_code, data, productId, page) => {
     }
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     productApi
       .updateProduct(store_code, data, productId)
       .then((res) => {
-        console.log(res)
+        console.log(res);
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -875,21 +867,19 @@ export const updateProduct = (store_code, data, productId, page) => {
             content: res.data.msg,
           },
         });
-        console.log(page,store_code)
+        console.log(page, store_code);
         history.push(`/product/index/${store_code}/${page}`);
         // history.goBack();
-        
       })
       .catch(function (error) {
         var content = "";
         if (typeof error.response.data.msg == "undefined")
-          content = "Vui lòng chọn ảnh và nhập đầy đủ các thông tin"
-        else
-          content = error.response.data.msg
+          content = "Vui lòng chọn ảnh và nhập đầy đủ các thông tin";
+        else content = error.response.data.msg;
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -903,23 +893,20 @@ export const updateProduct = (store_code, data, productId, page) => {
   };
 };
 
-
 export const updateDistribute = (store_code, data, productId, branchId) => {
-
   return (dispatch) => {
-   
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     productApi
-      .updateDistribute(store_code, data, productId,branchId)
+      .updateDistribute(store_code, data, productId, branchId)
       .then((res) => {
-        console.log(res)
+        console.log(res);
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -929,16 +916,10 @@ export const updateDistribute = (store_code, data, productId, branchId) => {
             content: res.data.msg,
           },
         });
-      
-        
       })
-      .catch(function (error) {
-       
-       
-      });
+      .catch(function (error) {});
   };
 };
-
 
 export const removeItemImgDis = (data) => {
   return {
@@ -948,24 +929,22 @@ export const removeItemImgDis = (data) => {
 };
 
 export const destroyProduct = (store_code, id) => {
-
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     productApi
       .destroyProduct(store_code, id)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         productApi
           .fetchAllData(store_code)
           .then((res) => {
             if (res.data.code !== 401)
-
               dispatch({
                 type: Types.FETCH_ALL_PRODUCT,
                 data: res.data.data,
@@ -1005,28 +984,24 @@ export const destroyProduct = (store_code, id) => {
       });
   };
 };
-
-
-
 
 export const destroyMultiProduct = (store_code, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     productApi
       .destroyMultiProduct(store_code, { list_id: data })
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         productApi
           .fetchAllData(store_code)
           .then((res) => {
             if (res.data.code !== 401)
-
               dispatch({
                 type: Types.FETCH_ALL_PRODUCT,
                 data: res.data.data,
@@ -1067,24 +1042,25 @@ export const destroyMultiProduct = (store_code, data) => {
   };
 };
 
-
-export const fetchProductAgencyPrice = (store_code, id , agency_id) => {
+export const fetchProductAgencyPrice = (store_code, id, agency_id) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
-    productApi.fetchProductAgencyPrice(store_code, id , agency_id).then((res) => {
-      dispatch({
-        type: Types.SHOW_LOADING,
-        loading: "hide"
-      })
-      if (res.data.code !== 401)
-        dispatch({
-          type: Types.FETCH_ID_PRODUCT_AGENCY_PRICE,
-          data: res.data.data,
-        });
+      loading: "show",
     });
+    productApi
+      .fetchProductAgencyPrice(store_code, id, agency_id)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        if (res.data.code !== 401)
+          dispatch({
+            type: Types.FETCH_ID_PRODUCT_AGENCY_PRICE,
+            data: res.data.data,
+          });
+      });
   };
 };
 
@@ -1092,13 +1068,13 @@ export const fetchProductId = (store_code, id) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     productApi.fetchProductId(store_code, id).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
-        loading: "hide"
-      })
+        loading: "hide",
+      });
       if (res.data.code !== 401)
         dispatch({
           type: Types.FETCH_ID_PRODUCT,

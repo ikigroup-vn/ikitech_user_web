@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import * as productAction from "../../../../actions/product";
-import {connect} from "react-redux"
+import { connect } from "react-redux";
 class ModalCreate extends Component {
   constructor(props) {
     super(props);
@@ -20,17 +20,16 @@ class ModalCreate extends Component {
   onSave = (e) => {
     e.preventDefault();
     window.$(".modal").modal("hide");
-    var attribute = [...this.props.attribute]
+    var attribute = [...this.props.attribute];
     attribute.push(this.state.txtName);
     this.props.updateAttributeP(this.props.store_code, {
       list: attribute,
     });
     this.setState({
-      txtName : ""
-    })
+      txtName: "",
+    });
   };
   render() {
-
     var { txtName } = this.state;
     return (
       <div
@@ -44,7 +43,7 @@ class ModalCreate extends Component {
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Thêm danh mục</h4>
+              <h4 class="modal-title">Thêm thuộc tính</h4>
 
               <button
                 type="button"
@@ -69,7 +68,7 @@ class ModalCreate extends Component {
                     type="text"
                     class="form-control"
                     id="txtName"
-                    placeholder="Nhập tên danh mục"
+                    placeholder="Nhập tên thuộc tính"
                     autocomplete="off"
                     value={txtName}
                     onChange={this.onChange}
@@ -98,16 +97,15 @@ class ModalCreate extends Component {
 }
 
 const mapStateToProps = (state) => {
-    return {
-      attributeP : state.attributePReducers.attribute_product.allAttrbute,
-    };
+  return {
+    attributeP: state.attributePReducers.attribute_product.allAttrbute,
   };
-  const mapDispatchToProps = (dispatch, props) => {
-    return {
-  
-        updateAttributeP : (store_code , attribute) => {
-        dispatch(productAction.updateAttributeP(store_code,attribute));
-      },
-    };
+};
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    updateAttributeP: (store_code, attribute) => {
+      dispatch(productAction.updateAttributeP(store_code, attribute));
+    },
   };
-  export default connect(mapStateToProps, mapDispatchToProps)(ModalCreate);
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ModalCreate);
