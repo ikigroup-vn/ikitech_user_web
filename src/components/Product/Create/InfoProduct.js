@@ -90,6 +90,7 @@ class InfoProduct extends Component {
     var value_text = e.target.value;
     var value = value_text;
     const _value = formatNumber(value);
+
     if (
       name == "txtPrice" ||
       name == "txtCostOfCapital" ||
@@ -99,9 +100,11 @@ class InfoProduct extends Component {
     ) {
       if (!isNaN(Number(_value))) {
         value = new Intl.NumberFormat().format(_value);
+        console.log("222222222222", value);
         value = value.toString().replace(/\./g, ",");
-
-        if (name == "txtPercentC") {
+        console.log("333333333", value);
+        console.log(name);
+        if (name === "txtPercentC") {
           if (value.length < 3) {
             if (value_text == "") {
               this.setState({ [name]: "" });
@@ -109,7 +112,8 @@ class InfoProduct extends Component {
               this.setState({ [name]: value });
             }
           }
-        } else {
+        }
+        if (name !== "txtPercentC") {
           if (value_text == "") {
             this.setState({ [name]: "" });
           } else {
@@ -338,7 +342,6 @@ class InfoProduct extends Component {
                   class="form-control"
                   id="txtEmail"
                   placeholder="Nhập giá bán lẻ"
-                  autocomplete="off"
                   value={txtPrice}
                   onChange={this.onChange}
                   name="txtPrice"

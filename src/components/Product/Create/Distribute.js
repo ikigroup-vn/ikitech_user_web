@@ -30,17 +30,25 @@ class Distribute extends Component {
         list_distribute[0].element_distributes[obj.index].name = value;
       } else {
         try {
-          const _value = formatNumber(value);
-          if (!isNaN(Number(_value))) {
-            var data = new Intl.NumberFormat().format(_value);
-            if (obj.name == "quantity_in_stock") {
-              if (value_data == "") {
-                data = "";
-              } else {
-                data = data;
+          if (obj.name == "barcode") {
+            const _value = value.toString();
+
+            list_distribute[0].element_distributes[obj.index][obj.name] =
+              _value;
+          } else {
+            const _value = formatNumber(value);
+            if (!isNaN(Number(_value))) {
+              var data = new Intl.NumberFormat().format(_value);
+              if (obj.name == "quantity_in_stock") {
+                if (value_data == "") {
+                  data = "";
+                } else {
+                  data = data;
+                }
               }
+              list_distribute[0].element_distributes[obj.index][obj.name] =
+                data;
             }
-            list_distribute[0].element_distributes[obj.index][obj.name] = data;
           }
         } catch (error) {
           console.log("asdasdasd");
@@ -553,6 +561,10 @@ class Distribute extends Component {
                   var value_price =
                     list_distribute[0].element_distributes[_index]
                       .sub_element_distributes[index].price;
+
+                  var value_import_price =
+                    list_distribute[0].element_distributes[_index]
+                      .sub_element_distributes[index].import_price;
                   var value_price_main =
                     list_distribute[0].element_distributes[_index]
                       .sub_element_distributes[index].cost_of_capital;
@@ -568,8 +580,14 @@ class Distribute extends Component {
                       : "";
                   const _value =
                     value_price != null ? formatNumber(value_price) : "";
+                  const _value2 =
+                    value_import_price != null
+                      ? formatNumber(value_import_price)
+                      : "";
                   var price =
                     _value == "" ? "" : new Intl.NumberFormat().format(_value);
+                  var import_price =
+                    _value == "" ? "" : new Intl.NumberFormat().format(_value2);
                   var cost_of_capital =
                     _values == ""
                       ? ""
@@ -640,6 +658,12 @@ class Distribute extends Component {
                         </td>
                         <td>
                           <input
+                            type="text"
+                            class="form-control input-sm"
+                            id="input"
+                            placeholder="Nhập barcode"
+                            autocomplete="off"
+                            required="required"
                             value={barcode}
                             onChange={(e) =>
                               this.onChange(e, "SUP", {
@@ -649,11 +673,7 @@ class Distribute extends Component {
                                 title: _element.name,
                               })
                             }
-                            name=""
-                            id="input"
-                            class="form-control"
-                            required="required"
-                            title=""
+                            name="txtBarcode"
                           />
                         </td>
                         <td>
