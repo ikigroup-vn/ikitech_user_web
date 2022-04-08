@@ -44,9 +44,17 @@ class Store extends Component {
           const selectedBranch = this.props.branchStore.find(
             (branch) => branch.id == branch_id
           );
-          this.props.changeBranch(selectedBranch);
+          if (selectedBranch == null) {
+            const value = nextProps.branchStore[0]?.id;
+            this.props.changeBranch(nextProps.branchStore[0]);
+            setBranchId(value)
+          } else {
+            this.props.changeBranch(selectedBranch);
+          }
+
         } else {
           const value = nextProps.branchStore[0]?.id;
+          this.props.changeBranch(nextProps.branchStore[0]);
           setBranchId(value)
         }
       }
