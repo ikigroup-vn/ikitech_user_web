@@ -6,6 +6,7 @@ import Pagination from "../../components/Bill/Pagination";
 import getChannel,{IKITECH} from "../../ultis/channel";
 import * as billAction from "../../actions/bill";
 import { shallowEqual } from "../../ultis/shallowEqual";
+import { getBranchId } from "../../ultis/branchUtils";
 
 class Table extends Component {
   constructor(props) {
@@ -26,7 +27,7 @@ class Table extends Component {
     this.setState({ statusOrder: value })
     var { statusPayment } = this.state
     var { store_code } = this.props
-    const branch_id = localStorage.getItem("branch_id")
+    const branch_id = getBranchId()
     var params = `&order_status_code=${value}&payment_status_code=${statusPayment}`
     this.props.onchangeStatusOrder(value)
 
@@ -37,7 +38,7 @@ class Table extends Component {
     this.setState({ statusPayment: value })
     var { statusOrder } = this.state
     var { store_code } = this.props
-    const branch_id = localStorage.getItem("branch_id")
+    const branch_id = getBranchId()
     var params = `&order_status_code=${statusOrder}&payment_status_code=${value}`
     this.props.onchangeStatusPayment(value)
     this.props.fetchAllBill(store_code, 1,branch_id, params);

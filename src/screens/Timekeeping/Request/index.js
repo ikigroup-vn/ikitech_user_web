@@ -22,6 +22,7 @@ import { shallowEqual } from "../../../ultis/shallowEqual";
 
 import moment from "moment";
 import * as helper from "../../../ultis/helpers";
+import { getBranchId } from "../../../ultis/branchUtils";
 // import ModalPostDate from "../../../components/Timekeeping/CalendarShift/ModalPostDates";
 // import ModalPut from "../../../components/Timekeeping/CalendarShift/PutALot/Modal";
 
@@ -45,7 +46,7 @@ class Request extends Component {
 
   render() {
     var { store_code } = this.props.match.params;
-    const branch_id = localStorage.getItem("branch_id");
+    const branch_id = getBranchId();
     var { isShow, tabId } = this.state;
 
     return (

@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as ImportAction from "../../actions/import_stock"
+import { getBranchId } from "../../ultis/branchUtils";
 class ModalEnd extends Component {
     
   onSave = (e) => {
     e.preventDefault();
     window.$('.modal').modal('hide');
     const { store_code, id } = this.props
-    const branch_id = localStorage.getItem("branch_id")
+    const branch_id = getBranchId()
     const data = { status: 5 }
     this.props.changeStatus(store_code, branch_id, id, data)
   };

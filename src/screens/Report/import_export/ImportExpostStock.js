@@ -13,6 +13,7 @@ import moment from "moment";
 import { shallowEqual } from '../../../ultis/shallowEqual'
 import General from '../General'
 import Pagination from './Pagination'
+import { getBranchId } from '../../../ultis/branchUtils'
 
 class ImportExportStock extends Component {
   constructor(props) {
@@ -24,7 +25,7 @@ class ImportExportStock extends Component {
   }
   componentDidMount() {
     const { store_code } = this.props.match.params
-    const branch_id = localStorage.getItem("branch_id")
+    const branch_id = getBranchId()
     const params = `branch_id=${branch_id}`
     this.props.fetchImportExportStock(store_code, branch_id,1,params)
     try {
@@ -42,7 +43,7 @@ class ImportExportStock extends Component {
   }
 
   handleFindItem = () => {
-    const branch_id = localStorage.getItem("branch_id")
+    const branch_id = getBranchId()
     const params = `date_from=${this.state.txtStart}&date_to=${this.state.txtEnd}&branch_id=${branch_id}`
     const { store_code } = this.props.match.params
     this.props.fetchImportExportStock(store_code, branch_id,1, params)

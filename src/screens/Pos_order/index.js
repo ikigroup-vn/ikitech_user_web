@@ -20,6 +20,7 @@ import KeyboardEventHandler from "react-keyboard-event-handler";
 import ModalVoucher from '../../components/Pos_Order/ModalVoucher'
 import { debounce } from 'lodash'
 import { Popover } from 'react-tiny-popover'
+import { getBranchId } from '../../ultis/branchUtils'
 
 class PostOrder extends Component {
     constructor(props) {
@@ -193,7 +194,7 @@ class PostOrder extends Component {
             handleSelector: ".splitter-horizontal",
             resizeWidth: false
         });
-        const branch_id = localStorage.getItem('branch_id')
+        const branch_id = getBranchId()
         const limit = this.state.numPage
         const params = `&limit=${limit}`
         this.props.fetchAllProductV2(this.props.match.params.store_code, branch_id, params);
@@ -299,7 +300,7 @@ class PostOrder extends Component {
 
     };
     handlePayment = () => {
-        const branch_id = localStorage.getItem("branch_id")
+        const branch_id = getBranchId()
         const { store_code } = this.props.match.params
         const data = {
             payment_method_id: this.state.payment_method_id,
@@ -368,7 +369,7 @@ class PostOrder extends Component {
                 sub_element_distribute_name: nextState.listPosItem.nameSubDistribute
             }
             var { store_code } = this.props.match.params;
-            const branch_id = localStorage.getItem("branch_id")
+            const branch_id = getBranchId()
             const id = nextState.idCart
             this.props.addProductInCart(store_code, branch_id, id, formData)
         }
@@ -380,7 +381,7 @@ class PostOrder extends Component {
         }
         if (!shallowEqual(nextState.idCart, this.state.idCart)) {
             console.log("111111111111111")
-            const branch_id = localStorage.getItem("branch_id")
+            const branch_id = getBranchId()
             const id = nextState.idCart
             this.props.fetchInfoOneCart(this.props.match.params.store_code, branch_id, id)
             this.setState({
@@ -400,7 +401,7 @@ class PostOrder extends Component {
             !shallowEqual(nextState.payment_method_id, this.state.payment_method_id)
 
         ) {
-            const branch_id = localStorage.getItem("branch_id")
+            const branch_id = getBranchId()
             const { store_code } = this.props.match.params
             const formData = {
                 discount: formatNumber(nextState.txtDiscount),
@@ -414,7 +415,7 @@ class PostOrder extends Component {
         }
         
         if (!shallowEqual(nextState.modalUpdateCart, this.state.modalUpdateCart)) {
-            const branch_id = localStorage.getItem("branch_id")
+            const branch_id = getBranchId()
             const { store_code } = this.props.match.params
             const formData = {
                 customer_name: nextState.modalUpdateCart.name,
@@ -427,7 +428,7 @@ class PostOrder extends Component {
         }
 
         if (!shallowEqual(nextState.checkeds, this.state.checkeds) && nextState.haveCheck == true) {
-        const branch_id = localStorage.getItem("branch_id")
+        const branch_id = getBranchId()
         const { store_code } = this.props.match.params
         const formData = {
             name: nextState.namePos,
@@ -439,7 +440,7 @@ class PostOrder extends Component {
 
 
         if (!shallowEqual(nextState.code, this.state.code)) {
-            const branch_id = localStorage.getItem("branch_id")
+            const branch_id = getBranchId()
             const id = nextState.idCart
             const data = {
                 code_voucher: nextState.code
@@ -501,7 +502,7 @@ class PostOrder extends Component {
         })
     }
     handleDeletePersion = () =>{
-        const branch_id = localStorage.getItem("branch_id")
+        const branch_id = getBranchId()
         const { store_code } = this.props.match.params
         const formData = {
             customer_name: "",

@@ -10,6 +10,7 @@ import { MomentInput } from 'react-moment-input'
 import moment from "moment";
 import ProfitTotal from './ProfitTotal'
 import { format } from '../../../../ultis/helpers'
+import { getBranchId } from '../../../../ultis/branchUtils'
 
 class ReportProfit extends Component {
     constructor(props) {
@@ -21,7 +22,7 @@ class ReportProfit extends Component {
     }
     componentDidMount() {
         const { store_code } = this.props.match.params
-        const branch_id = localStorage.getItem("branch_id") 
+        const branch_id = getBranchId() 
         const time = moment().format("YYYY-MM-DD")
         const params = `date_from=${time}&date_to=${time}&branch_id=${branch_id}`
         this.props.fetchReportProfit(store_code, branch_id, params)
@@ -35,7 +36,7 @@ class ReportProfit extends Component {
 
 
     handleFindItem = () => {
-        const branch_id = localStorage.getItem("branch_id")
+        const branch_id = getBranchId()
         const params = `date_from=${this.state.txtStart}&date_to=${this.state.txtEnd}&branch_id=${branch_id}`
         const { store_code } = this.props.match.params
         this.props.fetchReportProfit(store_code, branch_id, params)

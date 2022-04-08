@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import { setBranchId } from '../../ultis/branchUtils';
 import { shallowEqual } from '../../ultis/shallowEqual'
 
 class ModalBranch extends Component {
@@ -34,7 +35,7 @@ class ModalBranch extends Component {
         this.setState({ txtBranch: value, nameBranch: name })
     };
     handleAddBranch = () => {
-        localStorage.setItem('branch_id', this.state.txtBranch);
+        setBranchId(this.state.txtBranch)
         this.props.handleCallbackBrach(this.state.txtBranch)
     }
 

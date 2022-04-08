@@ -11,6 +11,7 @@ import ModalKeyboard from './ModalKeyboard'
 import ModalDelete from './ModalDelete'
 import * as branchAction from "../../actions/branch"
 import { removeSignNumber } from '../../ultis/helpers'
+import { getBranchId, setBranchId } from '../../ultis/branchUtils'
 
 class Topbar extends Component {
     constructor(props) {
@@ -37,15 +38,15 @@ class Topbar extends Component {
 
             if (nextProps.branchStore != null && nextProps.branchStore.length > 0) {
 
-                var branch_id = localStorage.getItem("branch_id")
-
+                var branch_id = getBranchId()
 
                 if (branch_id != null) {
                     this.setState({ branchId: branch_id })
 
                 } else {
                     branch_id = nextProps.branchStore[0]?.id
-                    localStorage.setItem('branch_id', branch_id);
+                    setBranchId(branch_id)
+
                     this.setState({ branchId: branch_id })
 
                 }

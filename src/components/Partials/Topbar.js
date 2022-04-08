@@ -10,6 +10,7 @@ import * as Env from "../../ultis/default";
 import Notification from "./Notification";
 import * as helper from "../../ultis/helpers";
 import { shallowEqual } from "../../ultis/shallowEqual";
+import { getBranchId, setBranchId } from "../../ultis/branchUtils";
 class Topbar extends Component {
   constructor(props) {
     super(props);
@@ -26,13 +27,13 @@ class Topbar extends Component {
       this.props.fetchAllStore();
       this.props.fetchBranchStore(this.props.store_code);
     }
-    const branchId = localStorage.getItem("branch_id");
+    const branchId = getBranchId();
     this.setState({ txtBranch: branchId });
   }
 
   componentWillReceiveProps(nextProps) {
     if (!shallowEqual(nextProps.branchStore, this.props.branchStore)) {
-      const branch_id = localStorage.getItem("branch_id");
+      const branch_id = getBranchId();
       this.setState({ txtBranch: branch_id });
       const value = nextProps.branchStore[0]?.id;
       if (nextProps.branchStore != null && nextProps.branchStore.length > 0) {
@@ -41,7 +42,7 @@ class Topbar extends Component {
         );
         this.props.changeBranch(selectedBranch);
         if (!branch_id) {
-          localStorage.setItem("branch_id", value);
+          setBranchId(value)
           this.setState({ txtBranch: value });
         }
       }
@@ -55,7 +56,7 @@ class Topbar extends Component {
 
   onChange = (e) => {
     var value = e.target.value;
-    localStorage.setItem("branch_id", value);
+    setBranchId(value);
     this.setState({ txtBranch: value });
     var branchStore =
       typeof this.props.branchStore == "undefined"

@@ -21,6 +21,7 @@ import ModalPostDate from "../../../components/Timekeeping/TimeSheet/ModalPostDa
 // import ModalPut from "../../../components/Timekeeping/CalendarShift/PutALot/Modal";
 
 import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
+import { getBranchId } from "../../../ultis/branchUtils";
 class TimeSheet extends Component {
   constructor(props) {
     super(props);
@@ -34,7 +35,7 @@ class TimeSheet extends Component {
 
   componentDidMount() {
     var { store_code } = this.props.match.params;
-    const branch_id = localStorage.getItem("branch_id");
+    const branch_id = getBranchId();
     this.setState({
       datePrime: {
         from: moment().format("YYYY-MM-DD"),
@@ -53,7 +54,7 @@ class TimeSheet extends Component {
       const param = `date_from=${nextState.datePrime.from}&date_to=${nextState.datePrime.to}`;
 
       var { store_code } = this.props.match.params;
-      const branch_id = localStorage.getItem("branch_id");
+      const branch_id = getBranchId();
       this.props.fetchAllTimeSheet(store_code, branch_id, param);
     }
     return true;
@@ -92,7 +93,7 @@ class TimeSheet extends Component {
 
   render() {
     var { store_code } = this.props.match.params;
-    const branch_id = localStorage.getItem("branch_id");
+    const branch_id = getBranchId();
     var { timeSheet } = this.props;
     var {
       isShow,

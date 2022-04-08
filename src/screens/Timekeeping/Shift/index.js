@@ -15,6 +15,7 @@ import { connect } from "react-redux";
 import NotAccess from "../../../components/Partials/NotAccess";
 
 import Loading from "../../Loading";
+import { getBranchId } from "../../../ultis/branchUtils";
 
 class Shift extends Component {
   constructor(props) {
@@ -27,7 +28,7 @@ class Shift extends Component {
   componentDidMount() {
     var { numPage } = this.state;
     var { store_code } = this.props.match.params;
-    const branch_id = localStorage.getItem("branch_id");
+    const branch_id = getBranchId();
     var params = `&limit=${numPage}`;
     this.props.fetchAllShift(store_code, branch_id, 1, params);
   }
@@ -51,7 +52,7 @@ class Shift extends Component {
   onChangeNumPage = (e) => {
     var { store_code } = this.props.match.params;
 
-    const branch_id = localStorage.getItem("branch_id");
+    const branch_id = getBranchId();
 
     var numPage = e.target.value;
     this.setState({
@@ -66,7 +67,7 @@ class Shift extends Component {
   };
   render() {
     var { store_code } = this.props.match.params;
-    const branch_id = localStorage.getItem("branch_id");
+    const branch_id = getBranchId();
 
     var { shifts } = this.props;
 

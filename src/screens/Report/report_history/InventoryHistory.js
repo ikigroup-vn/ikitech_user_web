@@ -11,6 +11,7 @@ import moment from "moment";
 import { Link } from 'react-router-dom'
 import General from '../General'
 import Pagination from './Pagination'
+import { getBranchId } from '../../../ultis/branchUtils'
 
 class InventoryHistory extends Component {
   constructor(props) {
@@ -22,7 +23,7 @@ class InventoryHistory extends Component {
   }
   componentDidMount() {
     const { store_code } = this.props.match.params
-    const branch_id = localStorage.getItem("branch_id")
+    const branch_id = getBranchId()
     const params = `branch_id=${branch_id}`
     this.props.fetchAllInventoryHistory(store_code, branch_id,1,params)
     try {
@@ -35,7 +36,7 @@ class InventoryHistory extends Component {
 
 
   handleFindItem = () => {
-    const branch_id = localStorage.getItem("branch_id")
+    const branch_id = getBranchId()
     const params = `date_from=${this.state.txtStart}&date_to=${this.state.txtEnd}&branch_id=${branch_id}`
     const { store_code } = this.props.match.params
     this.props.fetchAllInventoryHistory(store_code, branch_id,1, params)

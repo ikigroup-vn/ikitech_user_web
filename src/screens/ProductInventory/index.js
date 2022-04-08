@@ -19,6 +19,7 @@ import * as XLSX from 'xlsx';
 import { randomString } from "../../ultis/helpers"
 import Table from "./Table";
 import { shallowEqual } from "../../ultis/shallowEqual";
+import { getBranchId } from "../../ultis/branchUtils";
 
 class ProductInventory extends Component {
 
@@ -57,7 +58,7 @@ class ProductInventory extends Component {
     })
     var params = `&search=${searchValue ?? ""}&limit=${numPage}`
     
-    const branch_id = localStorage.getItem('branch_id');
+    const branch_id = getBranchId();
     this.props.fetchAllProductV2(this.props.match.params.store_code, branch_id, 1, params);
 
 
@@ -73,7 +74,7 @@ class ProductInventory extends Component {
   };
   componentDidMount() {
     var { page } = this.props.match.params
-    const branch_id = localStorage.getItem('branch_id');
+    const branch_id = getBranchId();
 
     if (typeof page != "undefined" && page != null && page != "" && !isNaN(Number(page))) {
       this.props.fetchAllProductV2(this.props.match.params.store_code, branch_id, page);
@@ -106,13 +107,13 @@ class ProductInventory extends Component {
         // const listData = this.props.products.data.filter(item => item.check_inventory == true);
         // this.setState({listProduct:listData}
         const {store_code} = this.props.match.params
-        const branch_id = localStorage.getItem('branch_id');
+        const branch_id = getBranchId();
         var params = `&check_inventory=true`;
         this.props.fetchAllProductV2(store_code, branch_id, 1, params);
       }else{
         // this.setState({listProduct:this.props.products.data})
         const {store_code} = this.props.match.params
-        const branch_id = localStorage.getItem('branch_id');
+        const branch_id = getBranchId();
         this.props.fetchAllProductV2(store_code, branch_id, 1);
       }
     }
@@ -134,7 +135,7 @@ class ProductInventory extends Component {
     e.preventDefault()
     var { store_code } = this.props.match.params;
     var { searchValue } = this.state;
-    const branch_id = localStorage.getItem('branch_id');
+    const branch_id = getBranchId();
     var params = `&search=${searchValue ?? ""}`;
     console.log("params",params)
     this.setState({ numPage: 20 })
@@ -142,7 +143,7 @@ class ProductInventory extends Component {
   };
   fetchAllData = () => {
     var { store_code } = this.props.match.params;
-    const branch_id = localStorage.getItem('branch_id');
+    const branch_id = getBranchId();
     this.props.fetchAllProductV2(store_code, branch_id, 1);
   };
   showDialogImportExcel = () => {

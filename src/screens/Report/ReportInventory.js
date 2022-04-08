@@ -12,6 +12,7 @@ import { MomentInput } from 'react-moment-input'
 import moment from "moment";
 import General from './General'
 import Pagination from './Pagination'
+import { getBranchId } from '../../ultis/branchUtils'
 
 
 class ReportInventory extends Component {
@@ -23,7 +24,7 @@ class ReportInventory extends Component {
   }
   componentDidMount() {
     const { store_code } = this.props.match.params
-    const branch_id = localStorage.getItem("branch_id")
+    const branch_id = getBranchId()
     const params = `branch_id=${branch_id}`
     this.props.fetchAllReportInventory(store_code, branch_id,1,params)
     try {
@@ -44,7 +45,7 @@ class ReportInventory extends Component {
   }
   shouldComponentUpdate(nextProps,nextState){
     if(this.state.txtStart !== nextState.txtStart){
-      const branch_id = localStorage.getItem("branch_id")
+      const branch_id = getBranchId()
       const params = `date=${nextState.txtStart}&branch_id=${branch_id}`
       const { store_code } = this.props.match.params
       this.props.fetchAllReportInventory(store_code, branch_id,1,params)

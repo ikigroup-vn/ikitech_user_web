@@ -3,6 +3,7 @@ import ItemInCart from './ItemInCart'
 import * as posAction from '../../actions/post_order'
 import { connect } from 'react-redux'
 import { shallowEqual } from '../../ultis/shallowEqual'
+import { getBranchId } from '../../ultis/branchUtils'
 
  class ListItemInCart extends Component {
      constructor(props){
@@ -51,7 +52,7 @@ import { shallowEqual } from '../../ultis/shallowEqual'
 
     shouldComponentUpdate(nextProps, nextState) {
         var {store_code} = this.props
-        const branch_id = localStorage.getItem("branch_id")
+        const branch_id = getBranchId()
 
         if (!shallowEqual(nextState.modalDelete, this.state.modalDelete)) {
             

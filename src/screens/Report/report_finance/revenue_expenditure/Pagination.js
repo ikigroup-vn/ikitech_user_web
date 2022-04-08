@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as reportAction from "../../../../actions/report"
+import { getBranchId } from "../../../../ultis/branchUtils";
 class Pagination extends Component {
   constructor(props) {
     super(props);
@@ -11,7 +12,7 @@ class Pagination extends Component {
 
   passPagination = (page) => {
     const params = `date_from=${this.props.txtStart}&date_to=${this.props.txtEnd}`
-    const branch_id = localStorage.getItem("branch_id")
+    const branch_id = getBranchId()
     this.props.fetchReportExpenditure(this.props.store_code,branch_id , page,params)    
 }
 
