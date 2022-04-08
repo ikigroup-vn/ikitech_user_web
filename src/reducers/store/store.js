@@ -4,15 +4,16 @@ var initialState = {
   allStore: [],
   storeID: { store_code: "", name: "", address: "", id_type_of_store: "" },
   type: [],
-  branchStore:[],
-  supplier:[],
+  loadingBranch: true,
+  branchStore: [],
+  supplier: [],
 };
 
 export const store = (state = initialState, action) => {
   let newState = { ...state };
   switch (action.type) {
     case Types.FETCH_ALL_STORE:
-        console.log(action.data)
+      console.log(action.data)
       newState.allStore = action.data;
       return newState;
     case Types.FETCH_ID_STORE:
@@ -23,6 +24,12 @@ export const store = (state = initialState, action) => {
       return newState;
     case Types.FETCH_BRANCH_STORE:
       newState.branchStore = action.data;
+      return newState;
+    case Types.FETCH_BRANCH_STORE_LOADING:
+      newState.loadingBranch = true;
+      return newState;
+    case Types.FETCH_BRANCH_STORE_NONE:
+      newState.loadingBranch = false;
       return newState;
     case Types.FETCH_ALL_SUPPLIER:
       newState.supplier = action.data;

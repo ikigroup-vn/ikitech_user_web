@@ -56,7 +56,7 @@ export const ikitech_menu = [
 
         icon: "fa-file-invoice",
         exact: true,
-        to: "/pos_order",
+        to: "/pos",
       },
       {
         name: "Lên đơn",

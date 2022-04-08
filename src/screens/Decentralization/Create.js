@@ -41,39 +41,39 @@ class Create extends Component {
           <div id="content-wrapper" className="d-flex flex-column">
             <div id="content">
               <Topbar store_code={store_code} />
-              {typeof isShow == "undefined" ?             <div style = {{height : "500px"}}></div> :
- isShow == true ?
+              {typeof isShow == "undefined" ? <div style={{ height: "500px" }}></div> :
+                isShow == true ?
 
-                <div class="container-fluid">
-                  <Alert
-                    type={Types.ALERT_UID_STATUS}
-                    alert={this.props.alert}
-                  />
-                  <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <h4 className="h4 title_content mb-0 text-gray-800">
-                      Thêm nhóm
-                    </h4>
-                  </div>
-                  <br></br>
-                  <div class="card shadow mb-4">
-                    <div class="card-body">
-                      <section class="content">
-                        <div class="row">
-                          <div class="col-md-12 col-xs-12">
-                            <div id="messages"></div>
+                  <div class="container-fluid">
+                    <Alert
+                      type={Types.ALERT_UID_STATUS}
+                      alert={this.props.alert}
+                    />
+                    <div
+                      style={{ display: "flex", justifyContent: "space-between" }}
+                    >
+                      <h4 className="h4 title_content mb-0 text-gray-800">
+                        Thêm nhóm
+                      </h4>
+                    </div>
+                    <br></br>
+                    <div class="card shadow mb-4">
+                      <div class="card-body">
+                        <section class="content">
+                          <div class="row">
+                            <div class="col-md-12 col-xs-12">
+                              <div id="messages"></div>
 
-                            <div class="box">
-                              <Form history={history} store_code={store_code} />
+                              <div class="box">
+                                <Form history={history} store_code={store_code} />
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      </section>
+                        </section>
+                      </div>
                     </div>
                   </div>
-                </div>
-                : <NotAccess />}
+                  : <NotAccess />}
 
             </div>
 

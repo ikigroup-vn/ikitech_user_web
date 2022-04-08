@@ -97,7 +97,7 @@ class Dashboard extends Component {
                   <div className="container-fluid">
                     <div className="d-sm-flex  align-items-center justify-content-between mb-4">
                       <h4 className="h4 title_content mb-0 text-gray-800">
-                        Thông tin chung
+                       Hôm nay
                       </h4>
                     </div>
 

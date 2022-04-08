@@ -86,6 +86,8 @@ class Branch extends Component {
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
+
+
                 <div className="col-10 col-10-wrapper">
 
                     <div id="content-wrapper" className="d-flex flex-column">
@@ -97,9 +99,14 @@ class Branch extends Component {
                                     type={Types.ALERT_UID_STATUS}
                                     alert={this.props.alert}
                                 />
+
+
                                 <div
-                                    style={{ display: "flex", justifyContent: "flex-end" }}
+                                    style={{ display: "flex", justifyContent: "space-between" }}
                                 >
+
+                                    <h4 class="h4 title_content mb-0 text-gray-800">Chi nhánh</h4>
+
                                     <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalAddress">
                                         <i class="fa fa-plus"></i> Thêm chi nhánh
                                     </button>
@@ -107,32 +114,32 @@ class Branch extends Component {
 
                                 <br></br>
                                 <div className='card'>
-                                <div className='card-body'>
-                                {listBranch.length >0 ?                                
-                                <div class="table-responsive">
-                                    <table class="table  " id="dataTable" width="100%" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th>STT</th>
-                                                <th>Tên chi nhánh</th>
+                                    <div className='card-body'>
+                                        {listBranch.length > 0 ?
+                                            <div class="table-responsive">
+                                                <table class="table  " id="dataTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>STT</th>
+                                                            <th>Tên chi nhánh</th>
 
-                                                <th>Mã chi nhánh</th>
-                                                <th>Địa chỉ</th>
-                                                <th>Quận/huyện</th>
+                                                            <th>Mã chi nhánh</th>
+                                                            <th>Địa chỉ</th>
+                                                            <th>Quận/huyện</th>
 
-                                                <th>Thành phố</th>
+                                                            <th>Thành phố</th>
 
-                                                <th>Hành động</th>
-                                            </tr>
-                                        </thead>
+                                                            <th>Hành động</th>
+                                                        </tr>
+                                                    </thead>
 
-                                        <tbody>{this.showData(listBranch)}</tbody>
-                                    </table>
-                                </div>:
-                                <div style={{fontSize:"15px",fontWeight:"bold",textAlign:"center"}}>Chi nhánh mặc định</div>
-                                }
+                                                    <tbody>{this.showData(listBranch)}</tbody>
+                                                </table>
+                                            </div> :
+                                            <div style={{ fontSize: "15px", fontWeight: "bold", textAlign: "center" }}>Chi nhánh mặc định</div>
+                                        }
 
-                                </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
