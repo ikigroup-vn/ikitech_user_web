@@ -3,12 +3,11 @@ import { connect } from "react-redux";
 import * as voucherAction from "../../../../actions/voucher";
 
 class Modal extends Component {
-    
   onSave = (e) => {
     e.preventDefault();
-    window.$('.modal').modal('hide');
-    var {id , store_code} = this.props.modal
-    this.props.updateVoucherIsEnd(store_code, {is_end : true}, id)
+    window.$(".modal").modal("hide");
+    var { id, store_code } = this.props.modal;
+    this.props.updateVoucherIsEnd(store_code, { is_end: true }, id);
   };
 
   render() {
@@ -44,7 +43,7 @@ class Modal extends Component {
               <div class="modal-body">
                 <input type="hidden" name="remove_id_store" />
                 <div class="alert-remove"></div>
-               Bạn có muốn dừng chương trình ID : {modal.id}
+                Bạn có muốn dừng chương trình ID :{modal.id}
               </div>
               <div class="modal-footer">
                 <button
@@ -56,7 +55,6 @@ class Modal extends Component {
                 </button>
                 <button type="submit" class="btn btn-info">
                   Dừng
-                  
                 </button>
               </div>
             </form>
@@ -70,8 +68,8 @@ class Modal extends Component {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     updateVoucherIsEnd: (store_code, voucher, id) => {
-        dispatch(voucherAction.updateVoucherIsEnd(store_code, voucher, id));
-      },
+      dispatch(voucherAction.updateVoucherIsEnd(store_code, voucher, id));
+    },
   };
 };
 export default connect(null, mapDispatchToProps)(Modal);

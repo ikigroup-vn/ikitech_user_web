@@ -3,12 +3,11 @@ import { connect } from "react-redux";
 import * as comboAction from "../../../../actions/combo";
 
 class Modal extends Component {
-    
   onSave = (e) => {
     e.preventDefault();
-    window.$('.modal').modal('hide');
-    var {id , store_code} = this.props.modal
-    this.props.destroyCombo(store_code , id);
+    window.$(".modal").modal("hide");
+    var { id, store_code } = this.props.modal;
+    this.props.destroyCombo(store_code, id);
   };
 
   render() {
@@ -56,7 +55,6 @@ class Modal extends Component {
                 </button>
                 <button type="submit" class="btn btn-info">
                   Xóa
-                  
                 </button>
               </div>
             </form>
@@ -69,8 +67,8 @@ class Modal extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    destroyCombo: (store_code , id) => {
-      dispatch(comboAction.destroyCombo(store_code , id));
+    destroyCombo: (store_code, id) => {
+      dispatch(comboAction.destroyCombo(store_code, id));
     },
   };
 };

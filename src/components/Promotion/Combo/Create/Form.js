@@ -8,11 +8,11 @@ import moment from "moment";
 import Datetime from "react-datetime";
 import ModalListProduct from "./ListProduct";
 import CKEditor from "ckeditor4-react";
-import ModalUpload from "../ModalUpload"
-import * as Env from "../../../../ultis/default"
-import MomentInput from 'react-moment-input';
-import {formatNumber} from "../../../../ultis/helpers"
-import {isEmpty} from "../../../../ultis/helpers"
+import ModalUpload from "../ModalUpload";
+import * as Env from "../../../../ultis/default";
+import MomentInput from "react-moment-input";
+import { formatNumber } from "../../../../ultis/helpers";
+import { isEmpty } from "../../../../ultis/helpers";
 
 class Form extends Component {
   constructor(props) {
@@ -27,24 +27,22 @@ class Form extends Component {
       txtValueDiscount: "",
       listProducts: [],
       image: "",
-      displayError: "hide"
-
+      displayError: "hide",
     };
   }
   componentDidMount() {
-    this.props.initialUpload()
+    this.props.initialUpload();
     try {
-      document.getElementsByClassName('r-input')[0].placeholder = 'Chọn ngày và thời gian';
-      document.getElementsByClassName('r-input')[1].placeholder = 'Chọn ngày và thời gian';
-    } catch (error) {
-
-    }
+      document.getElementsByClassName("r-input")[0].placeholder =
+        "Chọn ngày và thời gian";
+      document.getElementsByClassName("r-input")[1].placeholder =
+        "Chọn ngày và thời gian";
+    } catch (error) {}
   }
 
   componentWillReceiveProps(nextProps) {
-
     if (this.props.image !== nextProps.image) {
-      this.setState({ image: nextProps.image })
+      this.setState({ image: nextProps.image });
     }
   }
 
@@ -61,72 +59,65 @@ class Form extends Component {
     if (name == "txtAmount" || name == "txtValueDiscount") {
       if (!isNaN(Number(_value))) {
         value = new Intl.NumberFormat().format(_value);
-        if ((name == "txtValueDiscount" && this.state.txtDiscoutType == "1")) {
+        if (name == "txtValueDiscount" && this.state.txtDiscoutType == "1") {
           if (value.length < 3) {
             if (value == 0) {
               this.setState({ [name]: "" });
-            }
-            else {
+            } else {
               this.setState({ [name]: value });
-
             }
           }
-        }
-        else {
+        } else {
           if (value == 0) {
             this.setState({ [name]: "" });
-          }
-          else {
+          } else {
             this.setState({ [name]: value });
-
           }
         }
       }
-    }
-    else {
+    } else {
       this.setState({ [name]: value });
-
-    };
+    }
   };
   onChangeType = (e) => {
     var target = e.target;
     var name = target.name;
     var value = target.value;
     this.setState({ [name]: value, txtValueDiscount: "" });
-
-  }
+  };
   onChangeStart = (e) => {
     var time = moment(e, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm");
-    var { txtEnd } = this.state
+    var { txtEnd } = this.state;
     if (e != "" && txtEnd != "") {
-
-      if (!moment(e, 'DD-MM-YYYY HH:mm').isBefore(moment(txtEnd, 'DD-MM-YYYY HH:mm'))) {
-
-        this.setState({ displayError: "show" })
+      if (
+        !moment(e, "DD-MM-YYYY HH:mm").isBefore(
+          moment(txtEnd, "DD-MM-YYYY HH:mm")
+        )
+      ) {
+        this.setState({ displayError: "show" });
+      } else {
+        console.log("hidddeee");
+        this.setState({ displayError: "hide" });
       }
-      else {
-        console.log("hidddeee")
-        this.setState({ displayError: "hide" })
-
-      }
-    } this.setState({
+    }
+    this.setState({
       txtStart: time,
     });
   };
 
   onChangeEnd = (e) => {
     var time = moment(e, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm");
-    var { txtStart } = this.state
+    var { txtStart } = this.state;
 
     if (txtStart != "" && e != "") {
-
-      if (!moment(txtStart, 'DD-MM-YYYY HH:mm').isBefore(moment(e, 'DD-MM-YYYY HH:mm'))) {
-
-        this.setState({ displayError: "show" })
-      }
-      else {
-        this.setState({ displayError: "hide" })
-
+      if (
+        !moment(txtStart, "DD-MM-YYYY HH:mm").isBefore(
+          moment(e, "DD-MM-YYYY HH:mm")
+        )
+      ) {
+        this.setState({ displayError: "show" });
+      } else {
+        this.setState({ displayError: "hide" });
       }
     }
     this.setState({
@@ -137,14 +128,12 @@ class Form extends Component {
   onSave = (e) => {
     e.preventDefault();
     if (this.state.displayError == "show") {
-      return
+      return;
     }
     var state = this.state;
 
-    if(state.txtValueDiscount == null || !isEmpty( state.txtValueDiscount))
-    {
+    if (state.txtValueDiscount == null || !isEmpty(state.txtValueDiscount)) {
       this.props.showError({
-
         type: Types.ALERT_UID_STATUS,
         alert: {
           type: "danger",
@@ -152,41 +141,52 @@ class Form extends Component {
           disable: "show",
           content: "Vui lòng chọn giá trị giảm giá",
         },
-      }
-      )
+      });
       return;
     }
-    var { store_code, comboId } = this.props
+    var { store_code, comboId } = this.props;
 
-    var listProducts = state.listProducts
-    var combo_products = []
+    var listProducts = state.listProducts;
+    var combo_products = [];
     listProducts.forEach((element, index) => {
-      combo_products.push({ quantity: element.quantity, product_id: element.product.id })
-
+      combo_products.push({
+        quantity: element.quantity,
+        product_id: element.product.id,
+      });
     });
-    var startTime = moment(state.txtStart, "DD-MM-YYYY HH:mm").format("YYYY-MM-DD HH:mm:ss");
-    var endTime = moment(state.txtEnd, "DD-MM-YYYY HH:mm").format("YYYY-MM-DD HH:mm:ss");
-
+    var startTime = moment(state.txtStart, "DD-MM-YYYY HH:mm").format(
+      "YYYY-MM-DD HH:mm:ss"
+    );
+    var endTime = moment(state.txtEnd, "DD-MM-YYYY HH:mm").format(
+      "YYYY-MM-DD HH:mm:ss"
+    );
 
     var form = {
-      amount: state.txtAmount == null ? state.txtAmount : formatNumber(state.txtAmount),
-      value_discount: state.txtValueDiscount == null ? state.txtValueDiscount : formatNumber(state.txtValueDiscount),
+      amount:
+        state.txtAmount == null
+          ? state.txtAmount
+          : formatNumber(state.txtAmount),
+      value_discount:
+        state.txtValueDiscount == null
+          ? state.txtValueDiscount
+          : formatNumber(state.txtValueDiscount),
       name: state.txtName,
       start_time: startTime == "Invalid date" ? null : startTime,
-      end_time: endTime== "Invalid date" ? null : endTime,
+      end_time: endTime == "Invalid date" ? null : endTime,
       combo_products: combo_products,
       description: state.txtContent,
       image_url: state.image,
       discount_type: state.txtDiscoutType,
       set_limit_amount: true,
-
-    }
+    };
     var amount = form.amount;
-    if (typeof amount == "undefined"
-      || amount == null
-      || (typeof amount != "undefined" && amount.replace(/ /g, '').length == 0))
-      form.set_limit_amount = false
-    this.props.createCombo(store_code, form, comboId)
+    if (
+      typeof amount == "undefined" ||
+      amount == null ||
+      (typeof amount != "undefined" && amount.replace(/ /g, "").length == 0)
+    )
+      form.set_limit_amount = false;
+    this.props.createCombo(store_code, form, comboId);
   };
 
   goBack = (e) => {
@@ -208,7 +208,7 @@ class Form extends Component {
         });
       }
     } else {
-      var checkExsit = true
+      var checkExsit = true;
       products.forEach((item, index) => {
         if (item.product.id === product.id) {
           checkExsit = false;
@@ -216,32 +216,25 @@ class Form extends Component {
         }
       });
       if (checkExsit == true) {
-        var product = { quantity: 1, product: product }
-        products.push(product)
+        var product = { quantity: 1, product: product };
+        products.push(product);
       }
     }
-    this.setState({ listProducts: products })
+    this.setState({ listProducts: products });
   };
   handleChangeQuantity = (id, quantity, setIncrement = null) => {
     var products = [...this.state.listProducts];
     products.forEach((product, index) => {
-
       if (product.product.id == id) {
-        if (setIncrement == 1)
-          products[index].quantity = product.quantity + 1
+        if (setIncrement == 1) products[index].quantity = product.quantity + 1;
         else if (setIncrement == -1) {
-          if (product.quantity == 1) { }
-          else
-            products[index].quantity = product.quantity - 1
-        }
-        else
-          products[index].quantity = quantity
+          if (product.quantity == 1) {
+          } else products[index].quantity = product.quantity - 1;
+        } else products[index].quantity = quantity;
       }
-
     });
-    this.setState({ listProducts: products })
-  }
-
+    this.setState({ listProducts: products });
+  };
 
   render() {
     var {
@@ -254,30 +247,27 @@ class Form extends Component {
       txtDiscoutType,
       txtValueDiscount,
       image,
-      displayError
+      displayError,
     } = this.state;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
     var { products, store_code, combos } = this.props;
-    var type_discount_default = txtDiscoutType == "0" ? "show" : "hide"
-    var type_discount_percent = txtDiscoutType == "1" ? "show" : "hide"
+    var type_discount_default = txtDiscoutType == "0" ? "show" : "hide";
+    var type_discount_percent = txtDiscoutType == "1" ? "show" : "hide";
 
     console.log(this.state);
     return (
       <React.Fragment>
         <form role="form" onSubmit={this.onSave} method="post">
-
           <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-
               <div class="box-body">
                 <div class="form-group">
                   <label>Ảnh: &nbsp; </label>
                   <img src={`${image}`} width="150" height="150" />
                 </div>
                 <div class="form-group">
-
                   <div class="kv-avatar">
-                    <div >
+                    <div>
                       <button
                         type="button"
                         class="btn btn-primary btn-sm"
@@ -288,7 +278,6 @@ class Form extends Component {
                       </button>
                     </div>
                   </div>
-
                 </div>
 
                 <div class="form-group">
@@ -304,17 +293,9 @@ class Form extends Component {
                     onChange={this.onChange}
                   />
                 </div>
-
-
-
-
-
               </div>
-
-
             </div>
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-
               <div class="box-body">
                 <div class="form-group">
                   <label for="product_name">Thời gian bắt đầu</label>
@@ -325,10 +306,14 @@ class Form extends Component {
                     enableInputClick={true}
                     monthSelect={true}
                     readOnly={true}
-                    translations={
-                      { DATE: "Ngày", TIME: "Giờ", SAVE: "Đóng", HOURS: "Giờ", MINUTES: "Phút" }
-                    }
-                    onSave={() => { }}
+                    translations={{
+                      DATE: "Ngày",
+                      TIME: "Giờ",
+                      SAVE: "Đóng",
+                      HOURS: "Giờ",
+                      MINUTES: "Phút",
+                    }}
+                    onSave={() => {}}
                     onChange={this.onChangeStart}
                   />
                 </div>
@@ -336,25 +321,26 @@ class Form extends Component {
                 <div class="form-group">
                   <label for="product_name">Thời gian kết thúc</label>
                   <MomentInput
-
                     min={moment()}
                     format="DD-MM-YYYY HH:mm"
                     options={true}
                     enableInputClick={true}
                     monthSelect={true}
                     readOnly={true}
-
-                    translations={
-                      { DATE: "Ngày", TIME: "Giờ", SAVE: "Đóng", HOURS: "Giờ", MINUTES: "Phút" }
-                    }
-                    onSave={() => { }}
+                    translations={{
+                      DATE: "Ngày",
+                      TIME: "Giờ",
+                      SAVE: "Đóng",
+                      HOURS: "Giờ",
+                      MINUTES: "Phút",
+                    }}
+                    onSave={() => {}}
                     onChange={this.onChangeEnd}
                   />
-
                 </div>
                 <div class={`alert alert-danger ${displayError}`} role="alert">
-              Thời gian kết thúc phải sau thời gian bắt đầu
-            </div>
+                  Thời gian kết thúc phải sau thời gian bắt đầu
+                </div>
                 <div class="form-group">
                   <label for="product_name">Giới hạn Combo</label>
                   <input
@@ -372,14 +358,17 @@ class Form extends Component {
                 <div class="form-group">
                   <label for="product_name">Loại giảm giá</label>
 
-
-                  <select value={txtDiscoutType} name="txtDiscoutType" id="input" class="form-control" onChange={this.onChangeType} >
+                  <select
+                    value={txtDiscoutType}
+                    name="txtDiscoutType"
+                    id="input"
+                    class="form-control"
+                    onChange={this.onChangeType}
+                  >
                     <option value="">--Loại giảm giá--</option>
                     <option value="0">Giảm giá cố định</option>
                     <option value="1">Giảm giá theo %</option>
-
                   </select>
-
                 </div>
                 <div class={`form-group ${type_discount_default}`}>
                   <input
@@ -406,28 +395,19 @@ class Form extends Component {
                       autocomplete="off"
                       onChange={this.onChange}
                     />
-
                   </div>
-
-
-
                 </div>
-
               </div>
-
-
-
             </div>
-
-
-
           </div>
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-              <div >
-                <Table handleChangeQuantity={this.handleChangeQuantity} handleAddProduct={this.handleAddProduct} products={listProducts}></Table>
-
+              <div>
+                <Table
+                  handleChangeQuantity={this.handleChangeQuantity}
+                  handleAddProduct={this.handleAddProduct}
+                  products={listProducts}
+                ></Table>
               </div>
               <div class="form-group">
                 <label for="product_name">Ghi chú</label>
@@ -441,7 +421,10 @@ class Form extends Component {
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <div class="box-footer">
-                <button type="submit" class="btn btn-info btn-icon-split btn-sm">
+                <button
+                  type="submit"
+                  class="btn btn-info btn-icon-split btn-sm"
+                >
                   <span class="icon text-white-50">
                     <i class="fas fa-save"></i>
                   </span>
@@ -460,9 +443,7 @@ class Form extends Component {
               </div>
             </div>
           </div>
-
         </form>
-
 
         <ModalUpload />
         <ModalListProduct
@@ -470,9 +451,9 @@ class Form extends Component {
           handleAddProduct={this.handleAddProduct}
           listProducts={listProducts}
           store_code={store_code}
-          products={products} />
+          products={products}
+        />
       </React.Fragment>
-
     );
   }
 }
@@ -486,15 +467,14 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     showError: (error) => {
-      dispatch(error)
+      dispatch(error);
     },
     createCombo: (store_code, form, comboId) => {
       dispatch(comboAction.createCombo(store_code, form, comboId));
     },
     initialUpload: () => {
-      dispatch(comboAction.initialUpload())
-    }
-
+      dispatch(comboAction.initialUpload());
+    },
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Form);

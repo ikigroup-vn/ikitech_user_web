@@ -29,26 +29,24 @@ class Chart extends Component {
       reset: "",
       isCompare: false,
       actionChart: "total_final",
-      typeSelect : "Hôm nay"
-
-    }
-
+      typeSelect: "Hôm nay",
+    };
   }
 
-
-
-
   shouldComponentUpdate(nextProps, nextState) {
-    if (!shallowEqual(nextProps.overview, this.props.overview) || this.state.actionChart != nextState.actionChart) {
-      var actionChart = nextState.actionChart
-      console.log(actionChart)
-      var typeChartShow = "PRIME"
+    if (
+      !shallowEqual(nextProps.overview, this.props.overview) ||
+      this.state.actionChart != nextState.actionChart
+    ) {
+      var actionChart = nextState.actionChart;
+      console.log(actionChart);
+      var typeChartShow = "PRIME";
       var time = "";
       var parseNumberTime = 0;
       var chartDataProps = nextProps.overview;
       var chartDataState_prime = { ...this.state.chartDataPrime };
       var chartDataState_compare = { ...this.state.chartDataCompare };
-      var chartData = { ...this.state.chartData }
+      var chartData = { ...this.state.chartData };
       var labels_prime = [];
       var dataSets_prime = [];
       chartDataProps.data_prime_time.charts.forEach((item) => {
@@ -67,8 +65,8 @@ class Chart extends Component {
         }
       });
       chartDataState_prime.datasets[0].data = dataSets_prime;
-      chartDataState_prime.datasets[0].backgroundColor = "#17a2b8"
-      chartDataState_compare.datasets[0].label = "prime_date"
+      chartDataState_prime.datasets[0].backgroundColor = "#17a2b8";
+      chartDataState_compare.datasets[0].label = "prime_date";
 
       chartDataState_prime.labels = labels_prime;
 
@@ -76,7 +74,7 @@ class Chart extends Component {
         var labels_compare = [];
         var dataSets_compare = [];
         chartDataProps.data_compare_time.charts.forEach((item) => {
-          console.log(item)
+          console.log(item);
           dataSets_compare.push(item[actionChart]);
           if (chartDataProps.data_compare_time.type_chart == "hour") {
             time = moment(item.time, "YYYY-MM-DD HH:mm:ss").format("HH");
@@ -93,110 +91,101 @@ class Chart extends Component {
         });
 
         chartDataState_compare.datasets[0].data = dataSets_compare;
-        chartDataState_compare.datasets[0].backgroundColor = "red"
-        chartDataState_compare.datasets[0].label = "compare_date"
+        chartDataState_compare.datasets[0].backgroundColor = "red";
+        chartDataState_compare.datasets[0].label = "compare_date";
 
         chartDataState_compare.labels = labels_compare;
-
       }
-
 
       if (chartDataProps.data_compare_time != null) {
         var dataSets_all_prime = [];
-        var labels_all = [...chartDataState_prime.labels]
-        chartDataState_compare.labels.forEach(item => {
+        var labels_all = [...chartDataState_prime.labels];
+        chartDataState_compare.labels.forEach((item) => {
           var check = false;
           for (const _item of labels_all) {
-            console.log(_item, item, _item == item)
+            console.log(_item, item, _item == item);
             if (item == _item) {
               check = false;
-              break
+              break;
+            } else {
+              check = item;
             }
-            else {
-              check = item
-            }
-
           }
           if (check != false) {
-            console.log(check)
-            labels_all.push(check)
+            console.log(check);
+            labels_all.push(check);
           }
-        })
+        });
         if (chartDataProps.data_compare_time.type_chart == "day") {
           labels_all.sort((a, b) =>
-            moment(a, 'DD/MM').isBefore(moment(b, 'DD/MM')) ? -1 : 1
-
-          )
+            moment(a, "DD/MM").isBefore(moment(b, "DD/MM")) ? -1 : 1
+          );
         }
         if (chartDataProps.data_compare_time.type_chart == "hour") {
           labels_all.sort((a, b) =>
-            moment(a.replace("h", ""), 'HH').isBefore(moment(b.replace("h", ""), 'HH')) ? -1 : 1
-
-          )
+            moment(a.replace("h", ""), "HH").isBefore(
+              moment(b.replace("h", ""), "HH")
+            )
+              ? -1
+              : 1
+          );
         }
         if (chartDataProps.data_compare_time.type_chart == "month") {
           labels_all.sort((a, b) =>
-            moment(a, 'MM/YYYY').isBefore(moment(b, 'MM/YYYY')) ? -1 : 1
-
-          )
+            moment(a, "MM/YYYY").isBefore(moment(b, "MM/YYYY")) ? -1 : 1
+          );
         }
         var dataSets_all_prime = [];
         var dataSets_all_compare = [];
         var check_prime = false;
-        var check_compare = false
-        labels_all.forEach(item => {
-
+        var check_compare = false;
+        labels_all.forEach((item) => {
           for (let [index, _item] of chartDataState_prime.labels.entries()) {
             if (item == _item) {
-              check_prime = true
-              dataSets_all_prime.push(chartDataState_prime.datasets[0].data[index])
-              break
+              check_prime = true;
+              dataSets_all_prime.push(
+                chartDataState_prime.datasets[0].data[index]
+              );
+              break;
+            } else {
             }
-            else {
-            }
-
           }
           if (check_prime == false) {
-            dataSets_all_prime.push(0)
-
+            dataSets_all_prime.push(0);
           }
           for (let [index, _item] of chartDataState_compare.labels.entries()) {
             if (item == _item) {
-              check_compare = true
+              check_compare = true;
 
-              dataSets_all_compare.push(chartDataState_compare.datasets[0].data[index])
-              break
+              dataSets_all_compare.push(
+                chartDataState_compare.datasets[0].data[index]
+              );
+              break;
+            } else {
             }
-            else {
-            }
-
-
           }
           if (check_compare == false) {
-            dataSets_all_compare.push(0)
-
+            dataSets_all_compare.push(0);
           }
-        })
-        typeChartShow = "ALL"
-        chartData.labels = labels_all
-        chartData.datasets[0].data = dataSets_all_prime
-        chartData.datasets[0].backgroundColor = "blue"
-        chartData.datasets[0].label = "prime"
+        });
+        typeChartShow = "ALL";
+        chartData.labels = labels_all;
+        chartData.datasets[0].data = dataSets_all_prime;
+        chartData.datasets[0].backgroundColor = "blue";
+        chartData.datasets[0].label = "prime";
 
-
-
-        chartData.datasets[1].data = dataSets_all_compare
-        chartData.datasets[1].backgroundColor = "red"
-        chartData.datasets[1].label = "compare"
-
-
-
+        chartData.datasets[1].data = dataSets_all_compare;
+        chartData.datasets[1].backgroundColor = "red";
+        chartData.datasets[1].label = "compare";
       }
       this.setState({
-        chartDataPrime: chartDataState_prime, chartDataCompare: chartDataState_compare, chartData: chartData, typeChartShow: typeChartShow
+        chartDataPrime: chartDataState_prime,
+        chartDataCompare: chartDataState_compare,
+        chartData: chartData,
+        typeChartShow: typeChartShow,
       });
     }
-    return true
+    return true;
   }
 
   getChartData() {
@@ -210,9 +199,7 @@ class Chart extends Component {
             data: [],
             backgroundColor: "#17a2b8",
           },
-          {
-
-          }
+          {},
         ],
       },
     });
@@ -227,35 +214,32 @@ class Chart extends Component {
         to: date.to,
         datePrime: {
           from: moment().format("DD-MM-YYYY"),
-          to: moment().format("DD-MM-YYYY")
-        }
-
+          to: moment().format("DD-MM-YYYY"),
+        },
       },
-    })
-
+    });
   }
   onchangeDate = (value) => {
-    var resetId = helper.randomString(10)
-   
-    this.setState({ typeDate: value, reset: resetId })
+    var resetId = helper.randomString(10);
+
+    this.setState({ typeDate: value, reset: resetId });
     // this.props.fetchOverview(store_code, `?date_from=${date.from}&date_to=${date.to}`)
   };
 
-  handleGetDatePost = (date , typeSelect) => {
+  handleGetDatePost = (date, typeSelect) => {
     this.setState({
       datePrime: {
         from: date.datePrime.from,
-        to: date.datePrime.to
+        to: date.datePrime.to,
       },
       dateCompare: {
         from: date.dateCompare?.from ?? null,
-        to: date.dateCompare?.to ?? null
+        to: date.dateCompare?.to ?? null,
       },
-      isCompare:date.dateCompare?.from  != null ? date.isCompare : false,
-      typeSelect : typeSelect
-
-    })
-  }
+      isCompare: date.dateCompare?.from != null ? date.isCompare : false,
+      typeSelect: typeSelect,
+    });
+  };
 
   onchangeDateFromTo = (e) => {
     var from = "";
@@ -272,40 +256,55 @@ class Chart extends Component {
   };
   fromPrime = () => {
     this.setState({
-      typeChartShow: "PRIME"
-    })
-  }
+      typeChartShow: "PRIME",
+    });
+  };
   fromCompare = () => {
     this.setState({
-      typeChartShow: "COMPARE"
-    })
-  }
+      typeChartShow: "COMPARE",
+    });
+  };
   fromAllDate = () => {
     this.setState({
-      typeChartShow: "ALL"
-    })
-  }
+      typeChartShow: "ALL",
+    });
+  };
   showData = () => {
-    var { typeChartShow, chartDataPrime, chartDataCompare, chartData } = this.state
+    var { typeChartShow, chartDataPrime, chartDataCompare, chartData } =
+      this.state;
 
     switch (typeChartShow) {
       case "PRIME":
-        return chartDataPrime
+        return chartDataPrime;
       case "COMPARE":
-        return chartDataCompare
+        return chartDataCompare;
       case "ALL":
-        return chartData
+        return chartData;
       default:
         break;
     }
-  }
+  };
   actionChart = (action) => {
-    this.setState({ actionChart: action })
-  }
+    this.setState({ actionChart: action });
+  };
   render() {
-    var { nameTypeChart, showDateTime, typeDate, reset, dateCompare, datePrime, isCompare, actionChart , typeSelect } = this.state;
+    var {
+      nameTypeChart,
+      showDateTime,
+      typeDate,
+      reset,
+      dateCompare,
+      datePrime,
+      isCompare,
+      actionChart,
+      typeSelect,
+    } = this.state;
     var { overview, badges, store_code } = this.props;
-    console.log(this.state.chartDataCompare, this.state.chartDataPrime, this.state.chartData)
+    console.log(
+      this.state.chartDataCompare,
+      this.state.chartDataPrime,
+      this.state.chartData
+    );
 
     var totalFinal =
       typeof overview.data_prime_time != "undefined"
@@ -320,18 +319,38 @@ class Chart extends Component {
         ? overview.data_prime_time.total_collaborator_reg_count
         : 0;
 
-    var disbleCompare = isCompare == false || isCompare == "hide" ? "hide" : "show"
-    var _textLegendPrime_from = moment(datePrime.from, "YYYY-MM-DD").format("DD-MM-YYYY");
-    var _textLegendPrime_to = moment(datePrime.to, "YYYY-MM-DD").format("DD-MM-YYYY")
-    var _textLegendCompare_from = moment(dateCompare.from, "YYYY-MM-DD").format("DD-MM-YYYY");
-    var _textLegendCompare_to = moment(dateCompare.to, "YYYY-MM-DD").format("DD-MM-YYYY")
+    var disbleCompare =
+      isCompare == false || isCompare == "hide" ? "hide" : "show";
+    var _textLegendPrime_from = moment(datePrime.from, "YYYY-MM-DD").format(
+      "DD-MM-YYYY"
+    );
+    var _textLegendPrime_to = moment(datePrime.to, "YYYY-MM-DD").format(
+      "DD-MM-YYYY"
+    );
+    var _textLegendCompare_from = moment(dateCompare.from, "YYYY-MM-DD").format(
+      "DD-MM-YYYY"
+    );
+    var _textLegendCompare_to = moment(dateCompare.to, "YYYY-MM-DD").format(
+      "DD-MM-YYYY"
+    );
 
-    var textLegendPrime = _textLegendPrime_from == _textLegendPrime_to ? _textLegendPrime_from : _textLegendPrime_from + " đến " + _textLegendPrime_to
-    var textLegendCompare = _textLegendCompare_from == _textLegendCompare_to ? _textLegendCompare_from : _textLegendCompare_from + " đến " + _textLegendCompare_to
+    var textLegendPrime =
+      _textLegendPrime_from == _textLegendPrime_to
+        ? _textLegendPrime_from
+        : _textLegendPrime_from + " đến " + _textLegendPrime_to;
+    var textLegendCompare =
+      _textLegendCompare_from == _textLegendCompare_to
+        ? _textLegendCompare_from
+        : _textLegendCompare_from + " đến " + _textLegendCompare_to;
 
     return (
       <div className="chart">
-        <ModalPostDate reset={reset} handleGetDatePost={this.handleGetDatePost} store_code={store_code} typeDate={typeDate} />
+        <ModalPostDate
+          reset={reset}
+          handleGetDatePost={this.handleGetDatePost}
+          store_code={store_code}
+          typeDate={typeDate}
+        />
 
         <div
           style={{
@@ -421,7 +440,6 @@ class Chart extends Component {
               </a>
             </div>
           </div>
-
         </div>
         <br></br>
         <div class="row">
@@ -446,7 +464,12 @@ class Chart extends Component {
         <br></br>
 
         <div class="row">
-          <div class="col-xl-4 col-lg-4" onClick={() => { this.actionChart("total_final") }}>
+          <div
+            class="col-xl-4 col-lg-4"
+            onClick={() => {
+              this.actionChart("total_final");
+            }}
+          >
             <div class="card card-stats mb-4 mb-xl-0">
               <div class="card-body">
                 <div class="row">
@@ -467,7 +490,12 @@ class Chart extends Component {
               </div>
             </div>
           </div>
-          <div class="col-xl-4 col-lg-4" onClick={() => { this.actionChart("total_order_count") }}>
+          <div
+            class="col-xl-4 col-lg-4"
+            onClick={() => {
+              this.actionChart("total_order_count");
+            }}
+          >
             <div class="card card-stats mb-4 mb-xl-0">
               <div class="card-body">
                 <div class="row">
@@ -489,7 +517,12 @@ class Chart extends Component {
             </div>
           </div>
 
-          <div class="col-xl-4 col-lg-4" onClick={() => { this.actionChart("total_collaborator_reg_count") }}>
+          <div
+            class="col-xl-4 col-lg-4"
+            onClick={() => {
+              this.actionChart("total_collaborator_reg_count");
+            }}
+          >
             <div class="card card-stats mb-4 mb-xl-0">
               <div class="card-body">
                 <div class="row">
@@ -516,7 +549,10 @@ class Chart extends Component {
 
         <br></br>
 
-        <div class="legend" style={{ display: "flex", justifyContent: "center" }}>
+        <div
+          class="legend"
+          style={{ display: "flex", justifyContent: "center" }}
+        >
           {/* <div className={disbleCompare} style={{ display: "flex", justifyContent: "center", margin: "0 20px" }}>
             <div
               onClick={this.fromAllDate}
@@ -530,31 +566,42 @@ class Chart extends Component {
             <span>&nbsp;&nbsp; Tất cả</span>
 
           </div> */}
-          <div style={{ display: "flex", justifyContent: "center", margin: "0 20px" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              margin: "0 20px",
+            }}
+          >
             <div
               onClick={this.fromPrime}
               style={{
                 width: "54px",
                 height: "15px",
                 background: "#17a2b8",
-                margin: "auto"
-
-              }}></div>
+                margin: "auto",
+              }}
+            ></div>
             <span>&nbsp;&nbsp; {textLegendPrime}</span>
-
           </div>
-          <div className={disbleCompare} style={{ display: "flex", justifyContent: "center", margin: "0 20px" }}>
+          <div
+            className={disbleCompare}
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              margin: "0 20px",
+            }}
+          >
             <div
               onClick={this.fromCompare}
               style={{
                 width: "54px",
                 height: "15px",
                 background: "red",
-                margin: "auto"
-
-              }}></div>
+                margin: "auto",
+              }}
+            ></div>
             <span> &nbsp;&nbsp;{textLegendCompare}</span>
-
           </div>
           {/* <button onClick={this.fromAllDate} type="button" class="btn btn-default">tất cả</button>
           <button onClick={this.fromPrime} type="button" class="btn btn-default">from</button>
@@ -570,9 +617,8 @@ class Chart extends Component {
                   ticks: {
                     beginAtZero: true,
                     callback: function (value, index, values) {
-                      if (actionChart == "total_final")
-                        return format(value);
-                      return value
+                      if (actionChart == "total_final") return format(value);
+                      return value;
                     },
                   },
                 },
@@ -580,14 +626,11 @@ class Chart extends Component {
             },
             legend: {
               display: false,
-              onClick: function (event, legendtItem) {
-
-              },
+              onClick: function (event, legendtItem) {},
               position: "bottom",
               labels: {
-                strokeStyle: "red"
-
-              }
+                strokeStyle: "red",
+              },
             },
           }}
         />

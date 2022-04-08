@@ -36,7 +36,6 @@ class RevenueExpenditures extends Component {
       total: 0,
     };
   }
-
   componentDidMount() {
     // var { store_code, status_code } = this.props.match.params;
     var { searchValue, numPage, revenueExpendituresValue } = this.state;
@@ -139,7 +138,7 @@ class RevenueExpenditures extends Component {
   componentWillReceiveProps(nextProps) {
     if (
       this.state.isLoading != true &&
-      typeof nextProps.permission.product_list != "undefined"
+      typeof nextProps.permission.revenue_expenditure != "undefined"
     ) {
       var permissions = nextProps.permission;
       console.log(permissions);
@@ -459,6 +458,7 @@ class RevenueExpenditures extends Component {
 
               <Footer />
             </div>
+
             {supplier.data !== undefined &&
               customers.data !== undefined &&
               staff.length !== 0 && (
@@ -470,6 +470,9 @@ class RevenueExpenditures extends Component {
                   // supplier={supplier.data}
                   // customers={customers.data}
                   is_revenue={true}
+                  limit={numPage}
+                  searchValue={searchValue}
+                  datePrime={datePrime}
                 />
               )}
             {supplier.data !== undefined &&
@@ -483,6 +486,9 @@ class RevenueExpenditures extends Component {
                   supplier={supplier.data}
                   customers={customers.data}
                   is_revenue={false}
+                  limit={numPage}
+                  searchValue={searchValue}
+                  datePrime={datePrime}
                 />
               )}
           </div>
