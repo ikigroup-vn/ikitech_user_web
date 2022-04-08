@@ -285,7 +285,8 @@ class Distribute extends Component {
             var disable_addButton =
               index == _data.element_distributes.length - 1 ? "" : "hide";
 
-            var method = index == 0 ? "removeRow" : "removeRowChild";
+            // var method = index == 0 ? "removeRow" : "removeRowChild";
+            var method = index == 0 ? "removeRowChild" : "removeRowChild";
 
             var visible = index == 0 ? null : "visibled";
             var border = index == 0 ? null : "hide-border";

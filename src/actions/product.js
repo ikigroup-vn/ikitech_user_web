@@ -474,62 +474,158 @@ export const editStock = (store_code, branch_id, data, page = 1) => {
   };
 };
 
-export const uploadListImgProduct = function (files) {
-  return async (dispatch) => {
-    var images = [];
-    for (let i = 0; i < files.length; i++) {
-      const fd = new FormData();
+// export const uploadListImgProduct = function (files) {
+//   return async (dispatch) => {
+//     var images = [];
+//     for (let i = 0; i < files.length; i++) {
+//       const fd = new FormData();
 
-      fd.append(`image`, await compressed(files[i]));
-      try {
-        var res = await uploadApi.upload(fd);
-        console.log(res);
-      } catch (error) {
-        console.log(error);
+//       fd.append(`image`, await compressed(files[i]));
+//       try {
+//         var res = await uploadApi.upload(fd);
+//         console.log(res);
+//       } catch (error) {
+//         console.log(error);
 
+//         dispatch({
+//           type: Types.ALERT_UID_STATUS,
+//           alert: {
+//             type: "danger",
+//             title: "Lỗi",
+//             disable: "hide",
+//             content: error.response.data.msg,
+//           },
+//         });
+//       }
+//       if (res.data.code == 400) {
+//         console.log(res.data);
+//         {
+//           dispatch({
+//             type: Types.ALERT_UID_STATUS,
+//             alert: {
+//               type: "danger",
+//               title: "Lỗi",
+//               disable: "show",
+//               content: res.data.msg,
+//             },
+//           });
+//         }
+//       } else {
+//         images.push(res.data.data);
+//         console.log(images);
+//       }
+//       if (i == files.length - 1) {
+//         dispatch({
+//           type: Types.UPLOAD_ALL_PRODUCT_IMG,
+//           data: images,
+//         });
+//       }
+//     }
+//   };
+// };
+
+export const uploadListImgProduct = function (
+  file,
+  ImgProduct,
+  listImgProduct
+) {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    console.log("11111111", file);
+    uploadApi
+
+      .upload(file)
+      .then((res) => {
+        console.log("222222222", res.data);
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        var listImg = [...listImgProduct];
+        var item = {
+          data: res.data.data,
+          index: ImgProduct.index,
+          // key: imageId.key,
+          // keyItem: imageId.keyItem,
+        };
+        console.log(item, res.date, ImgProduct);
+        listImg[0] = item;
+        dispatch({
+          type: Types.UPLOAD_ALL_PRODUCT_IMG,
+          data: listImg,
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+      })
+      .catch(function (error) {
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
             type: "danger",
             title: "Lỗi",
-            disable: "hide",
+            disable: "show",
             content: error.response.data.msg,
           },
         });
-      }
-      if (res.data.code == 400) {
-        console.log(res.data);
-        {
-          dispatch({
-            type: Types.ALERT_UID_STATUS,
-            alert: {
-              type: "danger",
-              title: "Lỗi",
-              disable: "show",
-              content: res.data.msg,
-            },
-          });
-        }
-      } else {
-        images.push(res.data.data);
-        console.log(images);
-      }
-      if (i == files.length - 1) {
-        dispatch({
-          type: Types.UPLOAD_ALL_PRODUCT_IMG,
-          data: images,
-        });
-      }
-    }
+      });
+    // try {
+    //   var res = await uploadApi.upload(file);
+    //   console.log(res);
+    // } catch (error) {
+    //   console.log(error);
+
+    //   dispatch({
+    //     type: Types.ALERT_UID_STATUS,
+    //     alert: {
+    //       type: "danger",
+    //       title: "Lỗi",
+    //       disable: "hide",
+    //       content: error.response.data.msg,
+    //     },
+    //   });
+    // }
+    // if (res.data.code == 400) {
+    //   console.log(res.data);
+    //   {
+    //     dispatch({
+    //       type: Types.ALERT_UID_STATUS,
+    //       alert: {
+    //         type: "danger",
+    //         title: "Lỗi",
+    //         disable: "show",
+    //         content: res.data.msg,
+    //       },
+    //     });
+    //   }
+    // } else {
+    //   images.push(res.data.data);
+    //   console.log(images);
+    // }
+    // if (i == file.length - 1) {
+    //   dispatch({
+    //     type: Types.UPLOAD_ALL_PRODUCT_IMG,
+    //     data: images,
+    //   });
+    // }
   };
 };
-
 export const uploadImgDistribute = (file, imageId, listImages) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
     });
+    console.log("11111111", file);
     uploadApi
 
       .upload(file)
@@ -538,6 +634,7 @@ export const uploadImgDistribute = (file, imageId, listImages) => {
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
+        console.log("222222222222", res.data);
         var listImg = [...listImages];
         var item = {
           data: res.data.data,
@@ -546,6 +643,7 @@ export const uploadImgDistribute = (file, imageId, listImages) => {
           // keyItem: imageId.keyItem,
         };
         listImg[0] = item;
+        console.log(item, res.data, imageId);
         dispatch({
           type: Types.UPLOAD_ALL_DISTRIBUTE_IMG,
           data: listImg,

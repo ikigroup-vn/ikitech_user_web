@@ -351,7 +351,7 @@ class Product extends Component {
                                 value={searchValue}
                                 onChange={this.onChangeSearch}
                                 class="form-control"
-                                placeholder="Tìm mã đơn, tên, SĐT"
+                                placeholder="Tìm kiếm sản phẩm"
                               />
                               <div class="input-group-append">
                                 <button class="btn btn-primary" type="submit">
