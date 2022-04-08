@@ -48,7 +48,7 @@ class ModalDelete extends Component {
                             <div class="modal-body">
                                 <input type="hidden" name="remove_id_store" />
                                 <div class="alert-remove"></div>
-                                Bạn có muốn xóa
+                                Bạn có muốn xóa chi nhánh {this.props.brand_name}?
                             </div>
                             <div class="modal-footer">
                                 <button

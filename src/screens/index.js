@@ -44,9 +44,17 @@ class Store extends Component {
           const selectedBranch = this.props.branchStore.find(
             (branch) => branch.id == branch_id
           );
-          this.props.changeBranch(selectedBranch);
+          if (selectedBranch == null) {
+            const value = nextProps.branchStore[0]?.id;
+            this.props.changeBranch(nextProps.branchStore[0]);
+            setBranchId(value)
+          } else {
+            this.props.changeBranch(selectedBranch);
+          }
+
         } else {
           const value = nextProps.branchStore[0]?.id;
+          this.props.changeBranch(nextProps.branchStore[0]);
           setBranchId(value)
         }
       }
@@ -59,7 +67,7 @@ class Store extends Component {
 
     if (this.props.auth) {
 
-      if (this.props.loadingBranch == false && stores != null && typeof stores.store_code != null) {
+      if (this.props.loadingBranch == false && stores != null && typeof stores.store_code != null && getBranchId() != null && typeof getBranchId() != "undefined") {
         var store_code = stores.data[0].store_code;
         return <Redirect to={`/dashboard/${store_code}`} />;
       } else {

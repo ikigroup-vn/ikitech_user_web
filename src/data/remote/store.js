@@ -132,6 +132,10 @@ export const createBranchStore = (store_code, data) => {
   return callApi(`/store/${store_code}/branches`, "post", data);
 };
 
+export const updateBranchStore = (store_code, data, id) => {
+  return callApi(`/store/${store_code}/branches/${id}`, "put", data);
+};
+
 export const createSupplier = (store_code, data) => {
   return callApi(`/store/${store_code}/suppliers`, "post", data);
 };

@@ -20,9 +20,10 @@ class Branch extends Component {
             modal: ""
         }
     }
-    handleSetIdBranch = (id) => {
+    handleSetIdBranch = (id,name) => {
         this.setState({
-            id_branch: id
+            id_branch: id,
+            name:name
         })
     }
     handleSetInfor = (item) => {
@@ -47,8 +48,9 @@ class Branch extends Component {
                     <tr>
                         <td>{index + 1}</td>
                         <td>{data.name}</td>
-                        <td>{data.branch_code}</td>
+           
                         <td>{data.address_detail}</td>
+                        <td>{data.wards_name}</td>
                         <td>{data.district_name}</td>
                         <td>{data.province_name}</td>
                         <td>
@@ -61,7 +63,7 @@ class Branch extends Component {
                                 <i class="fa fa-edit"></i> Sửa
                             </button>
                             <button
-                                onClick={() => this.handleSetIdBranch(data.id)}
+                                onClick={() => this.handleSetIdBranch(data.id, data.name)}
                                 style={{ marginLeft: "10px" }}
                                 data-toggle="modal"
                                 data-target="#removeModal"
@@ -82,7 +84,7 @@ class Branch extends Component {
         var { store_code } = this.props.match.params
         var listBranch = this.props.branchStore ? this.props.branchStore : []
         var { id_branch, modal } = this.state
-        var { wards, district, province } = this.props
+        var { wards, district, province,name } = this.props
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
@@ -123,8 +125,9 @@ class Branch extends Component {
                                                             <th>STT</th>
                                                             <th>Tên chi nhánh</th>
 
-                                                            <th>Mã chi nhánh</th>
+                                                          
                                                             <th>Địa chỉ</th>
+                                                            <th>Phường/xã</th>
                                                             <th>Quận/huyện</th>
 
                                                             <th>Thành phố</th>
@@ -145,7 +148,7 @@ class Branch extends Component {
                         </div>
                         <Footer />
                     </div>
-                    <ModalDelete store_code={store_code} id_branch={id_branch} />
+                    <ModalDelete store_code={store_code} id_branch={id_branch} brand_name = {this.state.name} />
                     <ModalCreate store_code={store_code} wards={wards} district={district} province={province} />
                     <ModalEdit store_code={store_code} wards={wards} district={district} province={province} modal={modal} />
                 </div>

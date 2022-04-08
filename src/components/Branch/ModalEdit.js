@@ -19,11 +19,11 @@ class ModalEdit extends Component {
             isLoaded: false,
             listWards: [],
             listDistrict: [],
-            txtName_branch:"",
-            txtPhone_branch:"",
-            txtCode_branch:"",
-            txtPost_branch:"",
-            txtEmail_branch:""
+            txtName_branch: "",
+            txtPhone_branch: "",
+            txtCode_branch: "",
+            txtPost_branch: "",
+            txtEmail_branch: ""
         }
     }
     onChange = (e) => {
@@ -35,6 +35,14 @@ class ModalEdit extends Component {
             [name]: value,
         });
     };
+
+    handleChangeCheckBox = (event) => {
+        this.setState({
+          [event.target.id]: event.target.checked
+        });
+    }
+
+    
     onChangeWards = (e) => {
         this.setState({ txtWards: e.target.value, isLoaded: true })
         var indexWards = this.props.wards.map(e => e.id).indexOf(parseInt(e.target.value))
@@ -70,19 +78,21 @@ class ModalEdit extends Component {
         if (!shallowEqual(nextProps.modal, this.props.modal)) {
             this.props.fetchPlaceDistrict(nextProps.modal.province);
             this.props.fetchPlaceWards(nextProps.modal.district)
+
             this.setState({
-                txtName_branch:nextProps.modal.name ,
-                txtPhone_branch:nextProps.modal.phone,
-                txtEmail_branch:nextProps.modal.email,
-                txtCode_branch:nextProps.modal.branch_code,
-                txtProvince:nextProps.modal.province,
-                txtDistrict:nextProps.modal.district,
-                txtWards:nextProps.modal.wards,
-                txtAddress_detail:nextProps.modal.address_detail,
-                txtPost_branch:nextProps.modal.postcode,
-                
+                id: nextProps.modal.id,
+                txtName_branch: nextProps.modal.name,
+                txtPhone_branch: nextProps.modal.phone,
+                txtEmail_branch: nextProps.modal.email,
+                txtCode_branch: nextProps.modal.branch_code,
+                txtProvince: nextProps.modal.province,
+                txtDistrict: nextProps.modal.district,
+                txtWards: nextProps.modal.wards,
+                txtAddress_detail: nextProps.modal.address_detail,
+                txtPost_branch: nextProps.modal.postcode,
+                is_default: nextProps.modal.is_default,
             })
-          }
+        }
 
         if (nextState.isLoaded === true) {
             this.setState({
@@ -100,8 +110,8 @@ class ModalEdit extends Component {
         }
     }
     handleOnClick = () => {
-        var { txtAddress_detail, txtDistrict, txtProvince, txtWards,txtName_branch,txtPhone_branch,txtCode_branch,txtPost_branch,txtEmail_branch } = this.state
-        const {store_code} = this.props
+        var { txtAddress_detail, txtDistrict, txtProvince, txtWards, txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state
+        const { store_code } = this.props
         const Formdata = {
             name: txtName_branch,
             phone: txtPhone_branch,
@@ -114,7 +124,7 @@ class ModalEdit extends Component {
             postcode: txtPost_branch,
             is_default: true
         }
-        this.props.createBranchStore(store_code,Formdata);
+        this.props.updateBranchStore(store_code, Formdata, this.state.id);
         this.setState({
             provinceName: "",
             districtName: "",
@@ -176,7 +186,7 @@ class ModalEdit extends Component {
     render() {
         var { province } = this.props
         var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards } = this.state;
-        var { txtName_branch,txtPhone_branch,txtCode_branch,txtPost_branch,txtEmail_branch } = this.state;
+        var { txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state;
         return (
             <>
                 {this.state.status &&
@@ -267,7 +277,7 @@ class ModalEdit extends Component {
                                             </div>
                                             <div class="col-6 box-body-right">
                                                 <div class="form-group">
-                                                    <label for="product_name">Chi tiêt địa chỉ</label>
+                                                    <label for="product_name">Địa chỉ chi tiết</label>
                                                     <input
                                                         type="text"
                                                         class="form-control"
@@ -280,7 +290,7 @@ class ModalEdit extends Component {
                                                     />
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="product_name">Tỉnh</label>
+                                                    <label for="product_name">Tỉnh/thành phố </label>
 
                                                     <select
                                                         id="input"
@@ -294,7 +304,7 @@ class ModalEdit extends Component {
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="product_name">Quận</label>
+                                                    <label for="product_name">Quận/huyện</label>
 
                                                     <select
                                                         id="input"
@@ -308,7 +318,7 @@ class ModalEdit extends Component {
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="product_name">Phường</label>
+                                                    <label for="product_name">Phường/xã</label>
 
                                                     <select
                                                         id="input"
@@ -323,8 +333,12 @@ class ModalEdit extends Component {
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="form-check-label" style={{marginLeft:"20px",marginTop:"30px"}}>
-                                                        <input type="checkbox" class="form-check-input" onChange={this.onChange} value=""/>Chi nhánh mặc định
+                                                    <label class="form-check-label" style={{ marginLeft: "20px", marginTop: "30px" }}>
+                                                        <input type="checkbox" class="form-check-input"
+                                                            name="is_default"
+                                                            id="is_default"
+                                                            checked={this.state.is_default}
+                                                            onChange={this.handleChangeCheckBox} value="" />Chi nhánh mặc định
                                                     </label>
                                                 </div>
                                             </div>
@@ -352,6 +366,9 @@ const mapDispatchToProps = (dispatch, props) => {
     return {
         createBranchStore: (id, form) => {
             dispatch(dashboardAction.createBranchStore(id, form));
+        },
+        updateBranchStore: (store_code, form, id) => {
+            dispatch(dashboardAction.updateBranchStore(store_code, form, id));
         },
         fetchPlaceDistrict: (id) => {
             dispatch(placeAction.fetchPlaceDistrict(id));

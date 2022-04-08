@@ -19,13 +19,15 @@ class ModalCreate extends Component {
             isLoaded: false,
             listWards: [],
             listDistrict: [],
-            txtName_branch:"",
-            txtPhone_branch:"",
-            txtCode_branch:"",
-            txtPost_branch:"",
-            txtEmail_branch:""
+            txtName_branch: "",
+            txtPhone_branch: "",
+            txtCode_branch: "",
+            txtPost_branch: "",
+            txtEmail_branch: ""
         }
     }
+
+
     onChange = (e) => {
         var target = e.target;
         var name = target.name;
@@ -84,8 +86,8 @@ class ModalCreate extends Component {
         }
     }
     handleOnClick = () => {
-        var { txtAddress_detail, txtDistrict, txtProvince, txtWards,txtName_branch,txtPhone_branch,txtCode_branch,txtPost_branch,txtEmail_branch } = this.state
-        const {store_code} = this.props
+        var { txtAddress_detail, txtDistrict, txtProvince, txtWards, txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state
+        const { store_code } = this.props
         const Formdata = {
             name: txtName_branch,
             phone: txtPhone_branch,
@@ -98,7 +100,7 @@ class ModalCreate extends Component {
             postcode: txtPost_branch,
             is_default: true
         }
-        this.props.createBranchStore(store_code,Formdata);
+        this.props.createBranchStore(store_code, Formdata);
         this.setState({
             provinceName: "",
             districtName: "",
@@ -111,6 +113,11 @@ class ModalCreate extends Component {
             isLoaded: false,
             listWards: [],
             listDistrict: [],
+            txtName_branch: "",
+            txtPhone_branch: "",
+            txtCode_branch: "",
+            txtPost_branch: "",
+            txtEmail_branch: ""
         })
 
     };
@@ -160,7 +167,7 @@ class ModalCreate extends Component {
     render() {
         var { province } = this.props
         var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards } = this.state;
-        var { txtName_branch,txtPhone_branch,txtCode_branch,txtPost_branch,txtEmail_branch } = this.state;
+        var { txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state;
         return (
             <>
                 {this.state.status &&
@@ -251,7 +258,7 @@ class ModalCreate extends Component {
                                             </div>
                                             <div class="col-6 box-body-right">
                                                 <div class="form-group">
-                                                    <label for="product_name">Chi tiêt địa chỉ</label>
+                                                    <label for="product_name">Địa chỉ chi tiết</label>
                                                     <input
                                                         type="text"
                                                         class="form-control"
@@ -264,7 +271,7 @@ class ModalCreate extends Component {
                                                     />
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="product_name">Tỉnh</label>
+                                                    <label for="product_name">Tỉnh/thành phố </label>
 
                                                     <select
                                                         id="input"
@@ -278,7 +285,7 @@ class ModalCreate extends Component {
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="product_name">Quận</label>
+                                                    <label for="product_name">Quận/huyện</label>
 
                                                     <select
                                                         id="input"
@@ -292,7 +299,7 @@ class ModalCreate extends Component {
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="product_name">Phường</label>
+                                                    <label for="product_name">Phường/xã</label>
 
                                                     <select
                                                         id="input"
@@ -307,19 +314,20 @@ class ModalCreate extends Component {
                                                     </select>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label class="form-check-label" style={{marginLeft:"20px",marginTop:"30px"}}>
-                                                        <input type="checkbox" class="form-check-input" onChange={this.onChange} value=""/>Chi nhánh mặc định
+                                                    <label class="form-check-label" style={{ marginLeft: "20px", marginTop: "30px" }}>
+                                                        <input type="checkbox" class="form-check-input" onChange={this.onChange} value="" />Chi nhánh mặc định
                                                     </label>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="box-footer">
-                                            <a class="btn btn-info btn-icon-split btn-sm" onClick={this.handleOnClick} data-dismiss="modal">
+                                            <a class="btn btn-info  btn-sm" 
+                                            onClick={this.handleOnClick} data-dismiss="modal">
                                                 <span class="icon text-white-50">
                                                     <i class="fas fa-save"></i>
                                                 </span>
-                                                <span class="text">Tạo</span>
+                                                <span class="text" style={{color:"white"}}>Tạo</span>
                                             </a>
                                         </div>
                                     </form>
