@@ -432,6 +432,47 @@ export const updateInfoCart = (store_code, branch_id,id,data) => {
           loading : "hide"
         })
         
+        // dispatch({
+        //   type: Types.FETCH_LIST_CART_ITEM,
+        //   data: res.data.data,
+        // });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error.response.data.msg,
+          },
+        });
+      });
+  };
+};
+
+export const updateInfoCarts = (store_code, branch_id,id,data) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    PosApi.updateInfoCarts(store_code,branch_id,id,data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading : "hide"
+        })
+        
         dispatch({
           type: Types.FETCH_LIST_CART_ITEM,
           data: res.data.data,
@@ -572,5 +613,45 @@ export const fetchVoucher = (store_code, branch_id,id,data) => {
       });
   };
 };
-
+export const handleCreateUsers = (store_code,data) => {
+  console.log("data",data)
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    PosApi.handleCreateUsers(store_code,data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading : "hide"
+        })
+        
+        dispatch({
+          type: Types.FETCH_INFO_CUSTOMER,
+          data: res.data.data,
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error.response.data.msg,
+          },
+        });
+      });
+  };
+};
 

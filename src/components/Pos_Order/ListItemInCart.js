@@ -37,6 +37,7 @@ import { shallowEqual } from '../../ultis/shallowEqual'
      }
      handleDelete = (idCart,productId,lineId,distribute) =>{
          this.setState({modalDelete:{idCarts:idCart,productIds:productId,lineIds:lineId,distributes:distribute}})
+         this.props.handleDelete()
      }
      addQuantity = (idProduct,lineItemId,quantity,distribute) =>{
         this.setState({modalAdd:{CartIds:this.props.idCart,productIds:idProduct,lineItemIds:lineItemId,quantity:quantity,distributesProduct:distribute}})

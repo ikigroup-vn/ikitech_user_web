@@ -14,6 +14,10 @@ class ModalUser extends Component {
     }
     handleAddUser = () =>{
         this.props.handleCallbackUser({name:this.state.txtName,phone_number:this.state.txtPhone,email:this.state.txtEmail})
+        this.setState({txtName:"",txtPhone:"",txtEmail:""})
+    }
+    handleClear = () =>{
+        this.setState({txtName:"",txtPhone:"",txtEmail:""})
     }
     render() {
         return (
@@ -28,15 +32,15 @@ class ModalUser extends Component {
                             <div class="modal-body">
                                 <div class="form-group">
                                     <label for="product_name">Tên</label>
-                                    <input type="text" class="form-control" name="txtName" placeholder="Nhập tên" autocomplete="off" onChange={this.onChange}  />  
+                                    <input type="text" class="form-control" name="txtName" placeholder="Nhập tên" value={this.state.txtName} autocomplete="off" onChange={this.onChange}  />  
                                 </div>
                                 <div class="form-group">
                                     <label for="product_name">Số điện thoại</label>
-                                    <input type="text" class="form-control" name="txtPhone" placeholder="Nhập số điện thoại" autocomplete="off" onChange={this.onChange}  />  
+                                    <input type="text" class="form-control" name="txtPhone" placeholder="Nhập số điện thoại" value={this.state.txtPhone} autocomplete="off" onChange={this.onChange}  />  
                                 </div>
                                 <div class="form-group">
                                     <label for="product_name">Email</label>
-                                    <input type="text" class="form-control" name="txtEmail" placeholder="Nhập email" autocomplete="off" onChange={this.onChange}  />  
+                                    <input type="text" class="form-control" name="txtEmail" placeholder="Nhập email" value={this.state.txtEmail} autocomplete="off" onChange={this.onChange}  />  
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -44,6 +48,7 @@ class ModalUser extends Component {
                                     type="button"
                                     class="btn btn-default"
                                     data-dismiss="modal"
+                                    onClick={this.handleClear}
                                 >
                                     Thoát
                                 </button>

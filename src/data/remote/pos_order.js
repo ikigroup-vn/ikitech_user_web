@@ -34,6 +34,9 @@ export const listPosOrder = (store_code,branch_id) => {
   export const updateInfoCart = (store_code,branch_id,id_cart,data) => {
     return callApi(`/store/${store_code}/carts/${branch_id}/list/${id_cart}`, "put", data);
   };
+  export const updateInfoCarts = (store_code,branch_id,id_cart,data) => {
+    return callApi(`/store/${store_code}/carts/${branch_id}/list/${id_cart}`, "put", data);
+  };
 
   export const paymentOrderPos = (store_code,branch_id,id_cart,data) => {
     return callApi(`/store/${store_code}/carts/${branch_id}/list/${id_cart}/order`, "post", data);
@@ -41,4 +44,8 @@ export const listPosOrder = (store_code,branch_id) => {
 
   export const fetchVoucher = (store_code,branch_id,id_cart,data) => {
     return callApi(`/store/${store_code}/carts/${branch_id}/list/${id_cart}/use_voucher`, "post", data);
+  };
+
+  export const handleCreateUsers = (store_code,data) => {
+    return callApi(`/store/${store_code}/customers`, "post", data);
   };
