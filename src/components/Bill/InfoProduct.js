@@ -146,7 +146,7 @@ class InfoProduct extends Component {
                 <div className="box-header">
                     <span className="box-title ">
                         Mã đơn: <span id="cart_code">{order_code}</span> |
-                        <span id="count">&nbsp; {this.countItem(bill.line_items_at_time)} sản phẩm</span>
+                        <span id="count">&nbsp; {this.countItem(bill?.line_items_at_time ?? [])} sản phẩm</span>
                     </span>
                 </div>
                 <br></br>
