@@ -250,7 +250,7 @@ class Form extends Component {
                 onChange={this.onChangeProvince}
                 name="txtProvince"
               >
-                <option value="">-- Chọn tỉnh --</option>
+                <option value="">-- Chọn tỉnh/thành phố --</option>
                 {this.showProvince(province)}
               </select>
             </div>

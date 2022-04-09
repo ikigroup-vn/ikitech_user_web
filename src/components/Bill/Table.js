@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { format } from "../../ultis/helpers"
 import { connect } from "react-redux";
 import Pagination from "../../components/Bill/Pagination";
-import getChannel,{IKITECH} from "../../ultis/channel";
+import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
 import * as billAction from "../../actions/bill";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import { getBranchId } from "../../ultis/branchUtils";
@@ -31,7 +31,7 @@ class Table extends Component {
     var params = `&order_status_code=${value}&payment_status_code=${statusPayment}`
     this.props.onchangeStatusOrder(value)
 
-    this.props.fetchAllBill(store_code, 1,branch_id, params);
+    this.props.fetchAllBill(store_code, 1, branch_id, params);
   }
   onchangeStatusPayment = (e) => {
     var { value } = e.target;
@@ -41,11 +41,10 @@ class Table extends Component {
     const branch_id = getBranchId()
     var params = `&order_status_code=${statusOrder}&payment_status_code=${value}`
     this.props.onchangeStatusPayment(value)
-    this.props.fetchAllBill(store_code, 1,branch_id, params);
+    this.props.fetchAllBill(store_code, 1, branch_id, params);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    console.log(nextProps.statusPayment, nextState.statusPayment)
 
     if (
       (this.props.statusOrder != nextProps.statusOrder
@@ -71,7 +70,7 @@ class Table extends Component {
 
   }
   countItem = (list) => {
-    console.log(list)
+
     var result = ""
     var length = 0
     if (list.length > 0) {
@@ -81,6 +80,52 @@ class Table extends Component {
     }
     return length
   }
+
+  colorWithPaymentColor = (payment_status_code) => {
+
+
+    if (payment_status_code == "WAITING_FOR_PROGRESSING") {
+      return "warning"
+    }
+    if (payment_status_code == "UNPAID") {
+      return "danger"
+    }
+    if (payment_status_code == "PARTIALLY_PAID") {
+      return "warning"
+    }
+    if (payment_status_code == "REFUNDS") {
+      return "dark"
+    }
+
+    return "success"
+  }
+
+  colorWithOrderStatusColor = (order_status_code) => {
+    if (order_status_code == "WAITING_FOR_PROGRESSING" ||
+      order_status_code == "PACKING" ||
+      order_status_code == "SHIPPING" ||
+      order_status_code == "WAIT_FOR_PAYMENT"
+    ) {
+      return "warning"
+    }
+    if (order_status_code == "DELIVERY_ERROR" ||
+      order_status_code == "DELIVERY_ERROR" ||
+      order_status_code == "CUSTOMER_CANCELLED" ||
+      order_status_code == "USER_CANCELLED" ||
+      order_status_code == "OUT_OF_STOCK"
+    ) {
+      return "danger"
+    }
+    if (order_status_code == "REFUNDS" ||
+      order_status_code == "CUSTOMER_RETURNING" ||
+      order_status_code == "CUSTOMER_HAS_RETURNS"
+    ) {
+      return "dark"
+    }
+
+    return "success"
+  }
+
   showData = (bill, per_page, current_page) => {
     var { store_code } = this.props
     var result = null;
@@ -88,12 +133,12 @@ class Table extends Component {
       var { chat_allow } = this.props
       result = bill.map((data, index) => {
 
-        var _order_status_name = data.order_status_code == "WAITING_FOR_PROGRESSING" ? "danger" : "success"
-        var _payment_status_code = data.payment_status_code == "WAITING_FOR_PROGRESSING" || data.payment_status_code == "UNPAID" ? "danger" : "success"
+        var _order_status_name = this.colorWithOrderStatusColor(data.order_status_code)
+        var _payment_status_code = this.colorWithPaymentColor(data.payment_status_code)
 
         var countItem = this.countItem(data.line_items_at_time)
         console.log(data.customer)
-        var is_collaborator = data.	collaborator_by_customer_id != null ? "check" : "close"
+        var is_collaborator = data.collaborator_by_customer_id != null ? "check" : "close"
 
         return (
           <tr>
@@ -107,8 +152,11 @@ class Table extends Component {
               {data.customer != null ? data.customer.name : null}
 
             </td>
+            {
+              getChannel() == IKITECH &&
+              <td className="status_check"><i class={`fas fa-${is_collaborator} ${is_collaborator + "-status"} `}></i></td>
+            }
 
-            <td className="status_check"><i class={`fas fa-${is_collaborator} ${is_collaborator + "-status"} `}></i></td>
             <td>{countItem}</td>
             <td>{format(data.total_final)}</td>
             <td>{data.created_at}</td>
@@ -132,18 +180,18 @@ class Table extends Component {
               >
                 <i class="fa fa-eye"></i> Xem
               </Link>
-             
-              {
-         getChannel() == IKITECH &&  <button
 
-         onClick={() => this.showChatBox(data.customer != null ? data.customer.id : null, data.customer != null ?  data.customer.avatar_image : null,data.customer != null ?  data.customer.name : null, "show")}
-         type="button"
-         class={`btn btn-primary btn-sm ${chat_allow == true ? "show" : "hide"}`}
-         
-         >
-         <i class="fa fa-comment-alt"></i> Chat
-         </button>
-       }
+              {
+                getChannel() == IKITECH && <button
+
+                  onClick={() => this.showChatBox(data.customer != null ? data.customer.id : null, data.customer != null ? data.customer.avatar_image : null, data.customer != null ? data.customer.name : null, "show")}
+                  type="button"
+                  class={`btn btn-primary btn-sm ${chat_allow == true ? "show" : "hide"}`}
+
+                >
+                  <i class="fa fa-comment-alt"></i> Chat
+                </button>
+              }
 
             </td>
           </tr>
@@ -155,6 +203,56 @@ class Table extends Component {
     return result;
   };
 
+
+  optionsPaymentStatus = (statusPayment) => {
+
+    return <select value={statusPayment || ""} name=""
+      id="input" class="form-control" r
+      equired="required"
+      onChange={this.onchangeStatusPayment}>
+      <option value="">Tất cả</option>
+      <option value="UNPAID">Chưa thanh toán</option>
+      <option value="WAITING_FOR_PROGRESSING">Chờ xử lý</option>
+      <option value="PAID">Đã thanh toán</option>
+      <option value="PARTIALLY_PAID">Đã thanh toán một phần</option>
+      <option value="CUSTOMER_CANCELLED">Đã hủy</option>
+      <option value="REFUNDS">Đã hoàn tiền</option>
+    </select>
+
+  }
+
+  optionOrderStatus = (statusOrder) => {
+
+    if (getChannel() == IKITECH) {
+      return <select value={statusOrder || ""} name="" id="input" class="form-control" required="required" onChange={this.onchangeStatusOrder}>
+        <option value="">Tất cả</option>
+
+        <option value="WAITING_FOR_PROGRESSING">Chờ xử lý</option>
+        <option value="PACKING">Đang chuẩn bị hàng</option>
+        <option value="OUT_OF_STOCK">Hết hàng</option>
+        <option value="USER_CANCELLED">Shop hủy</option>
+        <option value="CUSTOMER_CANCELLED">Khách đã hủy</option>
+        <option value="SHIPPING">Đang giao hàng</option>
+        <option value="DELIVERY_ERROR">Lỗi giao hàng</option>
+        <option value="COMPLETED">Đã hoàn thành</option>
+        <option value="CUSTOMER_RETURNING">Chờ trả hàng</option>
+        <option value="CUSTOMER_HAS_RETURNS">Đã trả hàng</option>
+
+      </select>
+    }
+
+    if (getChannel() == IKIPOS) {
+      return <select value={statusOrder || ""} name="" id="input" class="form-control" required="required" onChange={this.onchangeStatusOrder}>
+        <option value="">Tất cả</option>
+        <option value="USER_CANCELLED">Shop hủy</option>
+        <option value="CUSTOMER_CANCELLED">Khách đã hủy</option>
+        <option value="COMPLETED">Đã hoàn thành</option>
+        <option value="CUSTOMER_HAS_RETURNS">Đã trả hàng</option>
+      </select>
+    }
+
+  }
+
   render() {
 
     var { store_code, bills, numPage } = this.props
@@ -162,7 +260,7 @@ class Table extends Component {
     var per_page = bills.per_page
     var current_page = bills.current_page
     var listBill = typeof bills.data == "undefined" ? [] : bills.data
-    console.log("asdasd" + this.props.statusPayment, statusPayment)
+
     return (
       <React.Fragment>
         <div class="table-responsive">
@@ -172,43 +270,21 @@ class Table extends Component {
                 <th>STT</th>
                 <th>Mã</th>
                 <th>Tên khách hàng</th>
-                <th>Cộng tác viên</th>
+
+                {getChannel() == IKITECH &&
+                  <th>Cộng tác viên</th>
+                }
                 <th>Số sản phẩm</th>
                 <th>Tổng tiền</th>
                 <th>Thời gian đặt</th>
 
                 <th>
 
-                  <select value={statusPayment || ""} name="" id="input" class="form-control" required="required" onChange={this.onchangeStatusPayment}>
-                    <option value="">Tất cả</option>
+                  {this.optionsPaymentStatus(statusPayment)}
 
-                    <option value="UNPAID">Chưa thanh toán</option>
-                    <option value="WAITING_FOR_PROGRESSING">Chờ xử lý</option>
-                    <option value="PAID">Đã thanh toán</option>
-                    <option value="PARTIALLY_PAID">Đã thanh toán một phần</option>
-                    <option value="CUSTOMER_CANCELLED">Đã hủy</option>
-                    <option value="REFUNDS">Đã hoàn tiền</option>
-
-
-                  </select>
-
-                </th>                <th>
-
-                  <select value={statusOrder || ""} name="" id="input" class="form-control" required="required" onChange={this.onchangeStatusOrder}>
-                    <option value="">Tất cả</option>
-
-                    <option value="WAITING_FOR_PROGRESSING">Chờ xử lý</option>
-                    <option value="PACKING">Đang chuẩn bị hàng</option>
-                    <option value="OUT_OF_STOCK">Hết hàng</option>
-                    <option value="USER_CANCELLED">Shop hủy</option>
-                    <option value="CUSTOMER_CANCELLED">Khách đã hủy</option>
-                    <option value="SHIPPING">Đang giao hàng</option>
-                    <option value="DELIVERY_ERROR">Lỗi giao hàng</option>
-                    <option value="COMPLETED">Đã hoàn thành</option>
-                    <option value="CUSTOMER_RETURNING">Chờ trả hàng</option>
-                    <option value="CUSTOMER_HAS_RETURNS">Đã trả hàng</option>
-
-                  </select>
+                </th>
+                <th>
+                  {this.optionOrderStatus(statusOrder)}
 
                 </th>
 
@@ -237,8 +313,8 @@ class Table extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllBill: (id, page,branch_id, params) => {
-      dispatch(billAction.fetchAllBill(id, page,branch_id, params));
+    fetchAllBill: (id, page, branch_id, params) => {
+      dispatch(billAction.fetchAllBill(id, page, branch_id, params));
     },
 
   };

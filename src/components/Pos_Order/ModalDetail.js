@@ -28,7 +28,7 @@ class ModalDetail extends Component {
         }
     }
     componentDidMount(){
-        console.log("hellllllllo")
+
     }
     handleClick = (nameDistribute, nameObject, index, id, quatity) => {
         var { distributes } = this.props.modal.inventoryProduct

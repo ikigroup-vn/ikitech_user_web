@@ -118,7 +118,7 @@ class Supplier extends Component {
                                                 <th>Địa chỉ</th>
                                                 <th>Quận/huyện</th>
 
-                                                <th>Thành phố</th>
+                                                <th>Tỉnh/thành phố</th>
 
                                                 <th>Hành động</th>
                                             </tr>

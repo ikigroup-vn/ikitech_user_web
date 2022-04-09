@@ -11,6 +11,8 @@ import OrderHistory from "./OrderHistory"
 import * as Env from "../../ultis/default"
 import InfoBonusAgency from "./InfoBonusAgency";
 import InfoShipper from "./InfoShipper";
+import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
+import PaymentHistory from "./PaymentHistory";
 
 
 
@@ -60,7 +62,7 @@ class Form extends Component {
     }
 
     render() {
-        var { bill, billHistoty, order_code, store_code, billId, chat, order_allow_change_status } = this.props
+        var { bill, billHistoty, order_code, store_code, billId, chat, order_allow_change_status, historyPay } = this.props
         var { orderData, paymentData, showChatBox } = this.state
         var customerImg = typeof bill.customer == "undefined" || bill.customer == null ? Env.IMG_NOT_FOUND : bill.customer.avatar_image
         var customerId = bill.customer_id
@@ -128,16 +130,35 @@ class Form extends Component {
                                                 <li class="nav-item">
                                                     <a class="nav-link active" data-toggle="tab" href="#duck" role="tab" aria-controls="duck" aria-selected="true">Thông tin khách hàng</a>
                                                 </li>
-                                                <li class="nav-item">
-                                                    <a class="nav-link " data-toggle="tab" href="#chicken" role="tab" aria-controls="chicken" aria-selected="false">Lịch sử trạng thái</a>
-                                                </li>
+
+                                                {
+                                                    getChannel() == IKITECH &&
+                                                    <li class="nav-item">
+                                                        <a class="nav-link " data-toggle="tab" href="#chicken" role="tab" aria-controls="chicken" aria-selected="false">Lịch sử đơn hàng</a>
+                                                    </li>
+                                                }
+                                                {
+                                                    getChannel() == IKIPOS &&
+                                                    <li class="nav-item">
+                                                        <a class="nav-link " data-toggle="tab" href="#chicken" role="tab" aria-controls="chicken" aria-selected="false">Lịch sử thanh toán</a>
+                                                    </li>
+                                                }
+
+
+
 
                                             </ul>
 
                                             <div class="tab-content card" style={{ padding: "10px" }}>
                                                 <InfoCustomer bill={bill} />
-                                                <OrderHistory billHistoty={billHistoty} />
-
+                                                {
+                                                    getChannel() == IKITECH &&
+                                                    <OrderHistory billHistoty={billHistoty} />
+                                                }
+                                                {
+                                                    getChannel() == IKIPOS &&
+                                                    <PaymentHistory historyPay={historyPay} />
+                                                }
 
                                             </div>
                                         </div>
@@ -158,7 +179,7 @@ class Form extends Component {
 
                                 <hr />
 
-                                {bill.from_pos == false  && <div className="card col-12 pl0" id="user_cart_info">
+                                {bill.from_pos == false && <div className="card col-12 pl0" id="user_cart_info">
                                     <InfoShipper
                                         order_allow_change_status={order_allow_change_status}
                                         order_code={order_code}

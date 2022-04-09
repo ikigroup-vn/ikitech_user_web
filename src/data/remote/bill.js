@@ -18,6 +18,10 @@ export const fetchBillHistory = (store_code  , billId) => {
   return callApi(`/store/${store_code}/orders/status_records/${billId}`, "get", null);
 };
 
+export const fetchHistoryPay = (store_code  , order_code) => {
+  return callApi(`/store/${store_code}/orders/history_pay/${order_code}`, "get", null);
+};
+
 export const updateStatusOrder = (store_code , data) =>{
   return callApi(`/store/${store_code}/orders/change_order_status`, "post", data);
 

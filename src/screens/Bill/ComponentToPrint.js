@@ -36,7 +36,7 @@ export default class ComponentToPrint extends Component {
       )
         this.setState({
           customer_name: bill.customer_address.name,
-          customer_address: bill.customer_address.address_detail + ", " + bill.customer_address.wards_name + ", " + bill.customer_address.district_name + ", " + bill.customer_address.province_name,
+          customer_address: bill.customer_address.address_detail ?? "" + ", " + bill.customer_address.wards_name ?? "" + ", " + bill.customer_address.district_name ?? "" + ", " + bill.customer_address.province_name ?? "",
           customer_phone: bill.customer_address.phone,
           order_code: bill.order_code,
           order_date: bill.created_at,
@@ -96,12 +96,12 @@ export default class ComponentToPrint extends Component {
     var { reward_value, reward_name } = bonus_agency_history
 
     var arr = [];
-      arr.push(
-        <tr>
-          <td>{reward_name}</td>
-          <td style={{ textAlign: "end" }}>{format(reward_value) }</td>
-        </tr>
-      );
+    arr.push(
+      <tr>
+        <td>{reward_name}</td>
+        <td style={{ textAlign: "end" }}>{format(reward_value)}</td>
+      </tr>
+    );
 
 
     return arr;
@@ -129,6 +129,9 @@ export default class ComponentToPrint extends Component {
                   {" "}
                   Tên: {state.user_name} - {state.store_name}
                 </span>
+              </p>
+              <p class="" id="info">
+                <span>Chi nhánh: </span>{this.props.currentBranch.name}
               </p>
               <p class="" id="info">
                 <span>Địa chỉ: </span>{store_address}

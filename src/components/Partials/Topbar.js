@@ -11,7 +11,7 @@ import Notification from "./Notification";
 import * as helper from "../../ultis/helpers";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import { getBranchId, setBranchId } from "../../ultis/branchUtils";
-import {  Redirect } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 
 class Topbar extends Component {
   constructor(props) {
@@ -33,21 +33,37 @@ class Topbar extends Component {
     this.setState({ txtBranch: branchId });
   }
 
+
   componentWillReceiveProps(nextProps) {
+
+
     if (!shallowEqual(nextProps.branchStore, this.props.branchStore)) {
       const branch_id = getBranchId();
-      this.setState({ txtBranch: branch_id });
-      const value = nextProps.branchStore[0]?.id;
+
       if (nextProps.branchStore != null && nextProps.branchStore.length > 0) {
-        const selectedBranch = this.props.branchStore.find(
-          (branch) => branch.id == this.state.txtBranch
-        );
-        this.props.changeBranch(selectedBranch);
-        if (!branch_id) {
+        if (branch_id != null) {
+          const selectedBranch = nextProps.branchStore.find(
+            (branch) => branch.id == branch_id
+          );
+
+          if (selectedBranch == null) {
+            const value = nextProps.branchStore[0]?.id;
+            this.setState({ txtBranch: value });
+            this.props.changeBranch(nextProps.branchStore[0]);
+            setBranchId(value)
+          } else {
+            this.props.changeBranch(selectedBranch);
+          }
+
+        } else {
+          const value = nextProps.branchStore[0]?.id;
+          this.props.changeBranch(nextProps.branchStore[0]);
           setBranchId(value)
           this.setState({ txtBranch: value });
         }
       }
+
+
     }
   }
 
@@ -119,8 +135,8 @@ class Topbar extends Component {
         : user.name;
     var image =
       typeof user.avatar_image == "undefined" ||
-      user.avatar_image == "" ||
-      user.avatar_image == null
+        user.avatar_image == "" ||
+        user.avatar_image == null
         ? Env.IMG_NOT_AVATAR
         : user.avatar_image;
     var disable = typeof this.props.isHome == "undefined" ? "show" : "hide";

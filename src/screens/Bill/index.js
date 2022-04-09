@@ -15,6 +15,7 @@ import * as customerAction from "../../actions/customer";
 import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
 import moment from "moment";
 import * as helper from "../../ultis/helpers";
+import { getBranchId } from "../../ultis/branchUtils";
 
 class Bill extends Component {
   constructor(props) {
@@ -52,7 +53,7 @@ class Bill extends Component {
 
     var params = `&search=${searchValue}&order_status_code=${statusOrder}&payment_status_code=${statusPayment}&limit=${numPage}`
     const branch_id = localStorage.getItem("branch_id")
-    this.props.fetchAllBill(store_code, 1,branch_id, params, params_agency);
+    this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
   }
 
   componentDidMount() {
@@ -74,16 +75,16 @@ class Bill extends Component {
       typeof status_code == "undefined"
         ? null
         : status_code != "PAID"
-        ? `&field_by=order_status_code&field_by_value=${status_code}`
-        : `&field_by=payment_status_code&field_by_value=${status_code}`;
+          ? `&field_by=order_status_code&field_by_value=${status_code}`
+          : `&field_by=payment_status_code&field_by_value=${status_code}`;
 
     var status_order = status == "PAID" ? null : status;
     var status_payment = status == "PAID" ? status : null;
     if (status_order != null) this.setState({ statusOrder: status_order });
     if (status_payment != null)
       this.setState({ statusPayment: status_payment });
-      const branch_id = localStorage.getItem("branch_id")
-    this.props.fetchAllBill(store_code, 1,branch_id, params, params_agency);
+    const branch_id = getBranchId()
+    this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
   }
   handleShowChatBox = (customerId, customerImg, customerName, status) => {
     var { store_code } = this.props.match.params;
@@ -113,14 +114,14 @@ class Bill extends Component {
     this.setState({ statusPayment: "", statusOrder: "", numPage: 20 })
     var params_agency = this.state.agency_by_customer_id != null ? `&agency_by_customer_id=${this.state.agency_by_customer_id}` : null
     const branch_id = localStorage.getItem("branch_id")
-    this.props.fetchAllBill(store_code, 1,branch_id, params, params_agency);
+    this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
   };
 
   fetchAllData = () => {
     var { store_code } = this.props.match.params;
     var params_agency = this.state.agency_by_customer_id != null ? `&agency_by_customer_id=${this.state.agency_by_customer_id}` : null
     const branch_id = localStorage.getItem("branch_id")
-    this.props.fetchAllBill(store_code, 1,branch_id, null, params_agency);
+    this.props.fetchAllBill(store_code, 1, branch_id, null, params_agency);
   };
 
   componentWillReceiveProps(nextProps) {
@@ -158,7 +159,7 @@ class Bill extends Component {
       params = "";
     }
     const branch_id = localStorage.getItem("branch_id")
-    this.props.fetchAllBill(store_code, 1,branch_id, params, params_agency);
+    this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
 
 
   }
@@ -198,9 +199,9 @@ class Bill extends Component {
                       }}
                     >
                       <h4 className="h4 title_content mb-0 text-gray-800">
-                        Đơn hàng{" "}
+                       Hóa đơn{" "}
                         {typeof customer.id != "undefined" &&
-                        customer.id == this.state.agency_by_customer_id
+                          customer.id == this.state.agency_by_customer_id
                           ? `của Đại lý ${customer.name}`
                           : null}
                       </h4>{" "}
@@ -343,8 +344,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllBill: (id, page,branch_id, params, params_agency) => {
-      dispatch(billAction.fetchAllBill(id, page,branch_id, params, params_agency));
+    fetchAllBill: (id, page, branch_id, params, params_agency) => {
+      dispatch(billAction.fetchAllBill(id, page, branch_id, params, params_agency));
     },
     fetchChatId: (store_code, customerId) => {
       dispatch(billAction.fetchChatId(store_code, customerId));

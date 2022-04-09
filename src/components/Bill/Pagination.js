@@ -2,22 +2,23 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import * as billAction from "../../actions/bill";
+import { getBranchId } from "../../ultis/branchUtils";
 class Pagination extends Component {
   constructor(props) {
     super(props);
     this.state = {
       page: 1,
       status: null,
-      isStatus : ""
+      isStatus: ""
     }
   }
 
   passPagination = (page) => {
-    var { store_code, status_payment , status_order , limit , searchValue } = this.props
-    var params =`&order_status_code=${status_order}&payment_status_code=${status_payment}&limit=${limit}`
-    console.log(this.props )
+    var { store_code, status_payment, status_order, limit, searchValue } = this.props
+    const branch_id = getBranchId()
+    var params = `&order_status_code=${status_order}&payment_status_code=${status_payment}&limit=${limit}&branch_id=${branch_id}`
     this.props.fetchAllBill(store_code, page, params);
-    
+
   }
 
 

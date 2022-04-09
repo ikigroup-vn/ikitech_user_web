@@ -20,10 +20,10 @@ class Branch extends Component {
             modal: ""
         }
     }
-    handleSetIdBranch = (id,name) => {
+    handleSetIdBranch = (id, name) => {
         this.setState({
             id_branch: id,
-            name:name
+            name: name
         })
     }
     handleSetInfor = (item) => {
@@ -48,7 +48,7 @@ class Branch extends Component {
                     <tr>
                         <td>{index + 1}</td>
                         <td>{data.name}</td>
-           
+
                         <td>{data.address_detail}</td>
                         <td>{data.wards_name}</td>
                         <td>{data.district_name}</td>
@@ -84,7 +84,7 @@ class Branch extends Component {
         var { store_code } = this.props.match.params
         var listBranch = this.props.branchStore ? this.props.branchStore : []
         var { id_branch, modal } = this.state
-        var { wards, district, province,name } = this.props
+        var { wards, district, province, name } = this.props
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
@@ -103,15 +103,30 @@ class Branch extends Component {
                                 />
 
 
-                                <div
+
+
+           <div
                                     style={{ display: "flex", justifyContent: "space-between" }}
+                                > 
+                                <h4 class="h4 title_content mb-0 text-gray-800">Chi nhánh</h4>
+                                
+                                 <a
+
+                                    data-toggle="modal" data-target="#modalAddress"
+                                    class={`btn btn-info btn-icon-split btn-sm ${true ? "show" : "hide"
+                                        }`}
+                                    style={{ marginRight: "1rem" }}
                                 >
-
-                                    <h4 class="h4 title_content mb-0 text-gray-800">Chi nhánh</h4>
-
-                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalAddress">
-                                        <i class="fa fa-plus"></i> Thêm chi nhánh
-                                    </button>
+                                    <span
+                                        class="icon text-white-50"
+                                        style={{ marginRight: 0 }}
+                                    >
+                                        <i class="fas fa-plus"></i>
+                                    </span>
+                                    <span style={{ color: "white" }} class={`text `}>
+                                    Thêm chi nhánh
+                                    </span>
+                                </a>
                                 </div>
 
                                 <br></br>
@@ -125,12 +140,12 @@ class Branch extends Component {
                                                             <th>STT</th>
                                                             <th>Tên chi nhánh</th>
 
-                                                          
+
                                                             <th>Địa chỉ</th>
                                                             <th>Phường/xã</th>
                                                             <th>Quận/huyện</th>
 
-                                                            <th>Thành phố</th>
+                                                            <th>Tỉnh/thành phố</th>
 
                                                             <th>Hành động</th>
                                                         </tr>
@@ -148,7 +163,7 @@ class Branch extends Component {
                         </div>
                         <Footer />
                     </div>
-                    <ModalDelete store_code={store_code} id_branch={id_branch} brand_name = {this.state.name} />
+                    <ModalDelete store_code={store_code} id_branch={id_branch} brand_name={this.state.name} />
                     <ModalCreate store_code={store_code} wards={wards} district={district} province={province} />
                     <ModalEdit store_code={store_code} wards={wards} district={district} province={province} modal={modal} />
                 </div>

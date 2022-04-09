@@ -18,15 +18,12 @@ class Detail extends Component {
         super(props);
         this.state = {
             showChatBox: "show"
-
         }
-
     }
-
     componentDidMount() {
-        var { store_code, order_code, billId} = this.props.match.params
+        var { store_code, order_code, billId } = this.props.match.params
         this.props.fetchBillId(store_code, order_code);
-    
+        this.props.fetchHistoryPay(store_code, order_code);
     }
 
     componentWillReceiveProps(nextProps) {
@@ -34,11 +31,9 @@ class Detail extends Component {
             var { store_code } = this.props.match.params
             var customerId = nextProps.bill.customer_id
 
-            if(nextProps.bill.customer != null) {
+            if (nextProps.bill.customer != null) {
                 this.props.fetchChatId(store_code, customerId);
             }
-           
-
         }
         if (this.state.isLoading != true && typeof nextProps.permission.product_list != "undefined") {
             var permissions = nextProps.permission
@@ -56,8 +51,8 @@ class Detail extends Component {
     };
     render() {
 
-        var { store_code, order_code, billId  } = this.props.match.params
-        var { bill, billHistoty, chat , stores  , badges} = this.props
+        var { store_code, order_code, billId } = this.props.match.params
+        var { bill, billHistoty, chat, stores, badges,historyPay } = this.props
         var { showChatBox, chat_allow, isShow, order_allow_change_status } = this.state
         if (this.props.auth) {
             return (
@@ -84,31 +79,37 @@ class Detail extends Component {
                                                 </h4>{" "}
 
                                                 <div>
-                                                
-                                                <button style = {{marginRight : "10px"}} type="button" onClick={this.goBack} class="btn btn-primary  btn-sm"><i class="fas fa-arrow-left"></i>&nbsp;Quay lại</button>
-                                               
-                                                <ReactToPrint
-          trigger={() => {
-    
-            return   <button type="button"  class="btn btn-danger  btn-sm"><i class="fas fa-print"></i>&nbsp;In hóa đơn</button>;
-          }}
-          content={() => this.componentRef}
-        />
-                <div className = "print-source " style = {{display : "none"}} >
 
-          {
-              stores != null && stores.length > 0 &&
-              <ComponentToPrint badges  = {badges} bill = {bill} store_code = {store_code} stores = {stores} ref={el => (this.componentRef = el)} />
-       
-          }
-       </div>
+                                                    <button style={{ marginRight: "10px" }} type="button" onClick={this.goBack} class="btn btn-primary  btn-sm"><i class="fas fa-arrow-left"></i>&nbsp;Quay lại</button>
 
+                                                    <ReactToPrint
+                                                        trigger={() => {
+
+                                                            return <button type="button" class="btn btn-danger  btn-sm"><i class="fas fa-print"></i>&nbsp;In hóa đơn</button>;
+                                                        }}
+                                                        content={() => this.componentRef}
+                                                    />
+                                                    <div className="print-source " style={{ display: "none" }} >
+
+                                                        {
+                                                            stores != null && stores.length > 0 &&
+                                                            <ComponentToPrint 
+                                                            badges={badges} 
+                                                            bill={bill} 
+                                                            store_code={store_code} 
+                                                            stores={stores} 
+                                                            ref={el => (this.componentRef = el)}
+                                                            currentBranch={this.props.currentBranch}
+                                                             />
+                                                        }
                                                     </div>
+
+                                                </div>
                                             </div>
 
                                             <br></br>
 
-                                            <Form chat_allow = {chat_allow} order_allow_change_status = {order_allow_change_status} showChatBox={showChatBox} chat={chat} billId={billId} order_code={order_code} store_code={store_code} bill={bill} billHistoty={billHistoty}></Form>
+                                            <Form historyPay= {historyPay} chat_allow={chat_allow} order_allow_change_status={order_allow_change_status} showChatBox={showChatBox} chat={chat} billId={billId} order_code={order_code} store_code={store_code} bill={bill} billHistoty={billHistoty}></Form>
 
                                         </div>
                                         : <NotAccess />}
@@ -133,20 +134,22 @@ const mapStateToProps = (state) => {
         bill: state.billReducers.bill.billID,
         auth: state.authReducers.login.authentication,
         billHistoty: state.billReducers.bill.billHistory,
+        historyPay: state.billReducers.bill.historyPay,
         alert: state.billReducers.alert.alert_uid,
         chat: state.chatReducers.chat.chatID,
         permission: state.authReducers.permission.data,
         stores: state.storeReducers.store.allStore,
         badges: state.badgeReducers.allBadge,
-
-
-
+        currentBranch: state.branchReducers.branch.currentBranch,
     };
 };
 const mapDispatchToProps = (dispatch, props) => {
     return {
         fetchBillId: (store_code, billId) => {
             dispatch(billAction.fetchBillId(store_code, billId));
+        },
+        fetchHistoryPay: (store_code, order_code) => {
+            dispatch(billAction.fetchHistoryPay(store_code, order_code));
         },
         fetchBillHistory: (store_code, billId) => {
             dispatch(billAction.fetchBillHistory(store_code, billId));

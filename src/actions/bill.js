@@ -7,39 +7,42 @@ import { compressed } from "../ultis/helpers";
 
 import moment from "moment";
 export const fetchAllBill = (store_code, page = 1,branch_id, params = null, params_agency = null) => {
-  console.log("branch_id",branch_id)
-  return (dispatch) => {
-    dispatch({
-      type: Types.SHOW_LOADING_LAZY,
-      loading: "show"
-    })
-    billApi.fetchAllBill(store_code, page,branch_id, params, params_agency).then((res) => {
+ 
+  if(branch_id != null) {
+    return (dispatch) => {
       dispatch({
         type: Types.SHOW_LOADING_LAZY,
-        loading: "hide"
+        loading: "show"
       })
-      if (res.data.code !== 401)
-        dispatch({
-          type: Types.FETCH_ALL_BILL,
-          data: res.data.data,
-        });
-
-
-    });
-    billApi
-      .fetchAllBill(store_code, page, params, params_agency)
-      .then((res) => {
+      billApi.fetchAllBill(store_code, page,branch_id, params, params_agency).then((res) => {
         dispatch({
           type: Types.SHOW_LOADING_LAZY,
-          loading: "hide",
-        });
+          loading: "hide"
+        })
         if (res.data.code !== 401)
           dispatch({
             type: Types.FETCH_ALL_BILL,
             data: res.data.data,
           });
+  
+  
       });
-  };
+      billApi
+        .fetchAllBill(store_code, page,branch_id,  params, params_agency)
+        .then((res) => {
+          dispatch({
+            type: Types.SHOW_LOADING_LAZY,
+            loading: "hide",
+          });
+          if (res.data.code !== 401)
+            dispatch({
+              type: Types.FETCH_ALL_BILL,
+              data: res.data.data,
+            });
+        });
+    };
+  }
+  
 };
 
 export const fetchBillId = (store_code, order_code) => {
@@ -98,6 +101,27 @@ export const fetchBillHistory = (store_code, billId) => {
       if (res.data.code !== 401)
         dispatch({
           type: Types.FETCH_BILL_HISTORY,
+          data: res.data.data,
+        });
+    });
+  };
+};
+
+export const fetchHistoryPay = (store_code, order_code) => {
+  if (
+    order_code == undefined ||
+    order_code == null ||
+    order_code == "undefined" ||
+    order_code == 0
+  ) {
+    return;
+  }
+
+  return (dispatch) => {
+    billApi.fetchHistoryPay(store_code, order_code).then((res) => {
+      if (res.data.code === 200)
+        dispatch({
+          type: Types.FETCH_ALL_HISTORY_PAY,
           data: res.data.data,
         });
     });

@@ -280,7 +280,7 @@ class ModalCreate extends Component {
                                                         onChange={this.onChangeProvince}
                                                         name="txtProvince"
                                                     >
-                                                        <option value="">-- Chọn tỉnh --</option>
+                                                        <option value="">-- Chọn tỉnh/thành phố --</option>
                                                         {this.showProvince(province)}
                                                     </select>
                                                 </div>
@@ -294,7 +294,7 @@ class ModalCreate extends Component {
                                                         onChange={this.onChangeDistrict}
                                                         name="txtDistrict"
                                                     >
-                                                        <option value="">-- Chọn quận --</option>
+                                                        <option value="">-- Chọn quận/huyện --</option>
                                                         {this.showDistrict(listDistrict)}
                                                     </select>
                                                 </div>
@@ -308,7 +308,7 @@ class ModalCreate extends Component {
                                                         onChange={this.onChangeWards}
                                                         name="txtWards"
                                                     >
-                                                        <option value="">-- Chọn phường --</option>
+                                                        <option value="">-- Chọn phường/xã --</option>
                                                         {this.showWards(listWards)}
 
                                                     </select>

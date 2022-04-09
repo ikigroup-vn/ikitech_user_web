@@ -118,6 +118,19 @@ class InfoProduct extends Component {
         }
         return result;
     };
+
+    countItem = (list) => {
+
+        var result = ""
+        var length = 0
+        if (list.length > 0) {
+          result = list.map((data, index) => {
+            length = data.quantity + length
+          })
+        }
+        return length
+      }
+
     render() {
         var { bill } = this.props;
         var order_code = bill.order_code;
@@ -133,7 +146,7 @@ class InfoProduct extends Component {
                 <div className="box-header">
                     <span className="box-title ">
                         Mã đơn: <span id="cart_code">{order_code}</span> |
-                        <span id="count">&nbsp; {total_product} sản phẩm</span>
+                        <span id="count">&nbsp; {this.countItem(bill.line_items_at_time)} sản phẩm</span>
                     </span>
                 </div>
                 <br></br>

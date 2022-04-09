@@ -35,15 +35,19 @@ class Store extends Component {
 
     }
 
-
     if (!shallowEqual(nextProps.branchStore, this.props.branchStore)) {
       const branch_id = getBranchId();
 
       if (nextProps.branchStore != null && nextProps.branchStore.length > 0) {
+
+
         if (branch_id != null) {
-          const selectedBranch = this.props.branchStore.find(
+          const selectedBranch = nextProps.branchStore.find(
             (branch) => branch.id == branch_id
           );
+
+      
+
           if (selectedBranch == null) {
             const value = nextProps.branchStore[0]?.id;
             this.props.changeBranch(nextProps.branchStore[0]);
@@ -67,7 +71,13 @@ class Store extends Component {
 
     if (this.props.auth) {
 
-      if (this.props.loadingBranch == false && stores != null && typeof stores.store_code != null && getBranchId() != null && typeof getBranchId() != "undefined") {
+      if (this.props.loadingBranch == false &&
+        stores != null &&
+        this.props.currentBranch != null &&
+        this.props.currentBranch.id != null &&
+        typeof stores.store_code != null &&
+        getBranchId() != null &&
+        typeof getBranchId() != "undefined") {
         var store_code = stores.data[0].store_code;
         return <Redirect to={`/dashboard/${store_code}`} />;
       } else {
@@ -92,7 +102,8 @@ const mapStateToProps = (state) => {
     auth: state.authReducers.login.authentication,
     stores: state.storeReducers.store.allStore,
     branchStore: state.storeReducers.store.branchStore,
-    loadingBranch: state.storeReducers.store.loadingBranch
+    loadingBranch: state.storeReducers.store.loadingBranch,
+    currentBranch: state.branchReducers.branch.currentBranch,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {

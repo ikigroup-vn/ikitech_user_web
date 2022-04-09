@@ -299,7 +299,7 @@ class ModalEdit extends Component {
                                                         onChange={this.onChangeProvince}
                                                         name="txtProvince"
                                                     >
-                                                        <option value="">-- Chọn tỉnh --</option>
+                                                        <option value="">-- Chọn tỉnh/thành phố --</option>
                                                         {this.showProvince(province)}
                                                     </select>
                                                 </div>
@@ -313,7 +313,7 @@ class ModalEdit extends Component {
                                                         onChange={this.onChangeDistrict}
                                                         name="txtDistrict"
                                                     >
-                                                        <option value="">-- Chọn quận --</option>
+                                                        <option value="">-- Chọn quận/huyện --</option>
                                                         {this.showDistrict(listDistrict)}
                                                     </select>
                                                 </div>
@@ -327,7 +327,7 @@ class ModalEdit extends Component {
                                                         onChange={this.onChangeWards}
                                                         name="txtWards"
                                                     >
-                                                        <option value="">-- Chọn phường --</option>
+                                                        <option value="">-- Chọn phường/xã --</option>
                                                         {this.showWards(listWards)}
 
                                                     </select>
@@ -345,11 +345,11 @@ class ModalEdit extends Component {
                                         </div>
 
                                         <div class="box-footer">
-                                            <a class="btn btn-info btn-icon-split btn-sm" onClick={this.handleOnClick} data-dismiss="modal">
+                                            <a class="btn btn-info btn-sm" onClick={this.handleOnClick} data-dismiss="modal">
                                                 <span class="icon text-white-50">
                                                     <i class="fas fa-save"></i>
                                                 </span>
-                                                <span class="text">Sửa</span>
+                                                <span class="text" style={{color:"white"}}>Sửa</span>
                                             </a>
                                         </div>
                                     </form>
