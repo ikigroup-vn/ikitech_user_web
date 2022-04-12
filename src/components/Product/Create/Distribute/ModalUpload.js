@@ -2,53 +2,43 @@ import React, { Component } from "react";
 import * as productAction from "../../../../actions/product";
 import { connect } from "react-redux";
 import * as helper from "../../../../ultis/helpers";
-import {compressed} from "../../../../ultis/helpers"
+import { compressed } from "../../../../ultis/helpers";
 
 class ModalUpload extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fileUpload: null
-
+      fileUpload: null,
     };
   }
   componentDidMount() {
+    var _this = this;
 
-    var _this = this
-
-    window.$('#file-distribute').on('fileloaded', function (event, file) {
-      _this.setState({ fileUpload: file })
+    window.$("#file-distribute").on("fileloaded", function (event, file) {
+      _this.setState({ fileUpload: file });
     });
-    window.$('#file-distribute').on('fileremoved', function (event, id, index) {
-      _this.setState({ fileUpload: null })
+    window.$("#file-distribute").on("fileremoved", function (event, id, index) {
+      _this.setState({ fileUpload: null });
     });
 
     helper.loadFileInput("file-distribute");
   }
 
-
-
-  onSave= async (e) =>{
+  onSave = async (e) => {
     e.preventDefault();
-    window.$('.modal').modal('hide');
-    var {ImgDistribute , listImgDistribute} = {...this.props}
-
+    window.$(".modal").modal("hide");
+    var { ImgDistribute, listImgDistribute } = { ...this.props };
 
     var file = this.state.fileUpload;
-    if(typeof file !== "undefined" && file != "" && file != null )
-    {
-      window.$('#file-distribute').fileinput('clear');
+    if (typeof file !== "undefined" && file != "" && file != null) {
+      window.$("#file-distribute").fileinput("clear");
       const fd = new FormData();
-      fd.append('image' , await compressed(file))
-      this.props.uploadImgDistribute(fd, ImgDistribute ,listImgDistribute)
-      this.setState({fileUpload: null})
-
+      fd.append("image", await compressed(file));
+      console.log(fd, ImgDistribute, listImgDistribute);
+      this.props.uploadImgDistribute(fd, ImgDistribute, listImgDistribute);
+      this.setState({ fileUpload: null });
     }
-
-
-
-
-  }
+  };
   render() {
     return (
       <div
@@ -89,7 +79,6 @@ class ModalUpload extends Component {
                         type="file"
                         className="file"
                         data-overwrite-initial="false"
-
                       />
                     </div>
                   </div>
@@ -117,9 +106,10 @@ class ModalUpload extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-
-    uploadImgDistribute: (file , imgId , listImgDistribute) => {
-      dispatch(productAction.uploadImgDistribute(file , imgId , listImgDistribute));
+    uploadImgDistribute: (file, imgId, listImgDistribute) => {
+      dispatch(
+        productAction.uploadImgDistribute(file, imgId, listImgDistribute)
+      );
     },
   };
 };

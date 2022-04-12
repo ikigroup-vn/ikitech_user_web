@@ -134,6 +134,7 @@ class Table extends Component {
             update={update}
             insert={insert}
             checked={checked}
+            onChangeSelected={this.onChangeSelected}
             page={page}
             status={status}
             status_name={status_name}

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Select from "react-select";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import * as helper from "../../../ultis/helpers";
-import { formatNumber } from "../../../ultis/helpers";
+import { formatNumber, removeVietnameseTones } from "../../../ultis/helpers";
 import getChannel, { IKITECH } from "../../../ultis/channel";
 class InfoProduct extends Component {
   constructor(props) {

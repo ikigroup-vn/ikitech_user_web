@@ -15,7 +15,7 @@ import * as blogAction from "../../../actions/blog";
 import Alert from "../../../components/Partials/Alert";
 import SeoOption from "../../../components/Product/Create/SeoOption";
 import getChannel, { IKITECH } from "../../../ultis/channel";
-import { isEmpty } from "../../../ultis/helpers";
+import { isEmpty, removeVietnameseTones } from "../../../ultis/helpers";
 class ProductCreate extends Component {
   constructor(props) {
     super(props);
@@ -41,7 +41,7 @@ class ProductCreate extends Component {
         .toString()
         .replace(/,/g, "")
         .replace(/\./g, "");
-      formdata.barcode = data.txtBarcode;
+      formdata.barcode = removeVietnameseTones(data.txtBarcode);
       formdata.status = data.txtStatus;
       formdata.quantity_in_stock = data.txtQuantityInStock
         .toString()
@@ -111,7 +111,9 @@ class ProductCreate extends Component {
                           .replace(/\./g, "")
                       : 0;
                   const barcode =
-                    element.barcode != null ? element.barcode.toString() : 0;
+                    element.barcode != null
+                      ? removeVietnameseTones(element.barcode)
+                      : 0;
                   const quantity_in_stock =
                     element.quantity_in_stock != null
                       ? element.quantity_in_stock
@@ -138,7 +140,7 @@ class ProductCreate extends Component {
                     index
                   ].quantity_in_stock = quantity_in_stock;
                   form.list_distribute[0].element_distributes[index].barcode =
-                    barcode;
+                    removeVietnameseTones(barcode);
                   form.list_distribute[0].element_distributes[index].stock =
                     quantity_in_stock;
                   console.log(
@@ -175,7 +177,7 @@ class ProductCreate extends Component {
                                 : 0;
                             const barcode =
                               _element.barcode != null
-                                ? _element.barcode.toString()
+                                ? removeVietnameseTones(_element.barcode)
                                 : 0;
                             const quantity_in_stock =
                               _element.quantity_in_stock != null
@@ -207,7 +209,8 @@ class ProductCreate extends Component {
                               quantity_in_stock;
                             form.list_distribute[0].element_distributes[
                               index
-                            ].sub_element_distributes[_index].barcode = barcode;
+                            ].sub_element_distributes[_index].barcode =
+                              removeVietnameseTones(barcode);
 
                             console.log("sub element form", form);
                           } catch (error) {
@@ -425,8 +428,7 @@ class ProductCreate extends Component {
     if (this.state.isError || is_error) {
       return;
     }
-    console.log("final", form);
-
+    console.log("final", form, removeVietnameseTones(form.barcode));
     this.props.postProductV2(store_code, branch_id, form);
   };
 
@@ -516,9 +518,7 @@ class ProductCreate extends Component {
       <div class="container-fluid">
         <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          <h4 className="h4 title_content mb-0 text-gray-800">
-            Tạo mới sản phẩm
-          </h4>
+          <h4 className="h4 title_content mb-0 text-gray-800">Thêm sản phẩm</h4>
         </div>
         <br></br>
         <div class="card mb-4">

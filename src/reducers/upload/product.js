@@ -3,8 +3,7 @@ import * as Types from "../../constants/ActionType";
 var initialState = {
   product_img: "",
   listImgProduct: [],
-  listImgDistribute: []
-
+  listImgDistribute: [],
 };
 
 export const productImg = (state = initialState, action) => {
