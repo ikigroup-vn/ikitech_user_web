@@ -44,6 +44,9 @@ class InfoProduct extends Component {
           }
         }
         else {
+          if (value.length > 14) {
+            return;
+          }
           if (value_text == "") {
             this.setState({ [name]: "" });
           }

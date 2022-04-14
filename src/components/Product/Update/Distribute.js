@@ -81,6 +81,13 @@ class Distribute extends Component {
         try {
 
           const _value = formatNumber(value);
+          if(obj.name == "barcode")
+          {
+            list_distribute[0].element_distributes[obj.index][obj.name] = data;
+
+          }
+          else
+          {
           if (!isNaN(Number(_value))) {
             var data = new Intl.NumberFormat().format(_value)
             if (obj.name == "quantity_in_stock") {
@@ -94,6 +101,7 @@ class Distribute extends Component {
             list_distribute[0].element_distributes[obj.index][obj.name] = data;
 
           }
+        }
 
         } catch (error) {
 
@@ -241,7 +249,7 @@ class Distribute extends Component {
       && typeof list_distribute[0].element_distributes[0].sub_element_distributes != "undefined"
     ) {
       console.log("ccccc")
-
+      list_distribute[0].element_distributes[0].sub_element_distributes = []
       list_distribute[0].sub_element_distribute_name = null
       var newObject = {
         name: null,
@@ -654,6 +662,25 @@ class Distribute extends Component {
 
                       </td>
 
+                      {/* <td>
+                    <input
+                      onChange={(e) =>
+                        this.onChange(e, "SUP", {
+                          name: "quantity_in_stock",
+                          index: _index,
+                        })
+                      }
+                      value={quantity_in_stock}
+                      id="input"
+                      class="form-control"
+                      required="required"
+                      title=""
+                    />
+                  </td> */}
+
+
+
+
 
                     </tr>
                   )
@@ -695,7 +722,21 @@ class Distribute extends Component {
 
                       </td>
 
-
+                      {/* <td>
+                    <input
+                      onChange={(e) =>
+                        this.onChange(e, "PARNET", {
+                          name: "quantity_in_stock",
+                          index: _index,
+                        })
+                      }
+                      value={quantity_in_stock}
+                      id="input"
+                      class="form-control"
+                      required="required"
+                      title=""
+                    />
+                  </td> */}
                     </tr>
                   )
                 }
@@ -760,6 +801,15 @@ class Distribute extends Component {
 
                   </td>
 
+                  {/* <td>
+                    <input
+                      value={quantity_in_stock}
+                      onChange={(e) => this.onChange(e, "PARENT", { name: "quantity_in_stock", index: _index })}
+
+                      name="" id="input" class="form-control" required="required" title="" />
+
+                  </td> */}
+
 
                 </tr>
               )
@@ -819,6 +869,7 @@ class Distribute extends Component {
               <th>Giá bán lẻ</th>
               <th>Giá nhập</th>
               <th>Barcode</th>
+              {/* <th>Tồn kho ban đầu</th> */}
 
 
             </tr>

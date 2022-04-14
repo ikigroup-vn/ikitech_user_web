@@ -12,6 +12,13 @@ export const randomString = (length) => {
   return result;
 };
 
+
+export const  containsSpecialChars = (str)=> {
+  const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+  return specialChars.test(str);
+}
+
+
 export const compressed = (file, maxWitdh = 1024, maxHeight = 1024) => {
   return new Promise((resolve, reject) => {
     new Compressor(file, {
@@ -166,7 +173,7 @@ export const getDateForChartHour = () => {
 export const formatNumber = (value) => {
   var _value = value;
   console.log(value);
-  return typeof _value !== "undefined"
+  return typeof _value !== "undefined" && _value != null
     ? _value
         .toString()
         .replace(/\./g, "")

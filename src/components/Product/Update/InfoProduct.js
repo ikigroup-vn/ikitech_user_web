@@ -18,10 +18,14 @@ class InfoProduct extends Component {
       txtQuantityInStock: "",
       txtPercentC: "",
       disabledPrice: false,
+      icon:true,
+      checkHasDistribute : false,
+
       sku: "",
       isChecked: true,
       txtImportPrice: "",
-      check_inventory: false
+      check_inventory: false,
+      txtCostOfCapital : ""
     };
   }
   handleChangeCheckParent(id) {
@@ -62,7 +66,10 @@ class InfoProduct extends Component {
     return nam;
   }
 
-
+  onChangeCheckHasDitribute = (e) => {
+    this.setState({checkHasDistribute : !this.state.checkHasDistribute});
+    this.props.checkDistribute(!this.state.checkHasDistribute)
+  };
   onChange = (e) => {
     var target = e.target;
     var name = target.name;
@@ -87,6 +94,9 @@ class InfoProduct extends Component {
           }
         }
         else {
+          if (value.length > 14) {
+            return;
+          }
           if (value_text == "") {
             this.setState({ [name]: "" });
           }
@@ -178,6 +188,13 @@ class InfoProduct extends Component {
         this.setState({ txtQuantityInStock: value })
       }
     }
+    console.log(nextProps.product.distributes);
+    if(nextProps.product.distributes != null && this.state.checkHasDistribute == false)
+    {
+      this.setState({checkHasDistribute : true});
+      this.props.checkDistribute(true)
+
+    }
     if (
       !shallowEqual(nextProps.category_product, this.props.category_product)
     ) {
@@ -220,13 +237,15 @@ class InfoProduct extends Component {
         txtImportPrice: _import_price,
         disabledPrice: _price == 0 ? true : false,
         txtPercentC: product.percent_collaborator,
-        txtBarcode: product.barcode,
+        txtBarcode: product.barcode || Math.random().toString().slice(2, 11),
         txtStatus: product.status,
         category_parent: listcategorynew,
         category_children_ids: product.category_children,
         txtQuantityInStock: _quantity_stock,
-        sku: product.sku,
-        check_inventory: product.check_inventory
+        sku: product.sku ||  Math.random().toString().slice(2, 11),
+        
+        check_inventory: product.check_inventory,
+        txtCostOfCapital : product.main_cost_of_capital
       });
 
     }
@@ -254,6 +273,11 @@ class InfoProduct extends Component {
 
     }
   }
+
+  onChangeIcon = () =>
+  {
+    this.setState({icon: !this.state.icon})
+  }
   render() {
     var {
       listCategory,
@@ -269,7 +293,9 @@ class InfoProduct extends Component {
       sku,
       txtBarcode,
       txtImportPrice,
-      check_inventory
+      check_inventory,
+      txtCostOfCapital,
+      checkHasDistribute
     } = this.state;
 
     var txtQuantityInStock = txtQuantityInStock == -1 ? "" : txtQuantityInStock
@@ -299,7 +325,6 @@ class InfoProduct extends Component {
             placeholder="Nhập mã SKU"
             autocomplete="off"
             value={sku}
-            onChange={this.onChange}
             name="sku"
           />
         </div>
@@ -312,11 +337,25 @@ class InfoProduct extends Component {
             placeholder="Nhập barcode"
             autocomplete="off"
             value={txtBarcode}
-            onChange={this.onChange}
             name="txtBarcode"
           />
         </div>
 
+        <div class="form-group">
+          <div class="form-check form-switch">
+            <input
+              onChange={this.onChangeCheckHasDitribute}
+              class="form-check-input"
+              type="checkbox"
+              id="flexSwitchCheckDefault"
+              checked={checkHasDistribute}
+            />
+            <label class="form-check-label" for="flexSwitchCheckDefault">
+              Có phân loại
+            </label>
+          </div>
+        </div>
+        {!checkHasDistribute && (
 
 
         <div className="form-group">
@@ -328,7 +367,6 @@ class InfoProduct extends Component {
 
               <div class="form-group" style={{ display: "flex" }}>
                 <input
-                  disabled={disabledPrice}
                   style={{ maxWidth: "420px" }}
                   type="text"
                   class="form-control"
@@ -368,7 +406,7 @@ class InfoProduct extends Component {
 
           </div>
 
-        </div>
+        </div>)}
 
         <div class="form-group">
           <div class="form-check form-switch">
@@ -376,6 +414,7 @@ class InfoProduct extends Component {
             <label class="form-check-label" for="flexSwitchCheckDefault">Theo dõi hàng trong kho</label>
           </div>
         </div>
+      
 
         {
           getChannel() == IKITECH &&
@@ -421,7 +460,8 @@ class InfoProduct extends Component {
           <div className="Choose-category-product">
             <div className="wrap_category" style={{ display: "flex" }}>
               <input type="text" class="form-control" placeholder="--Chọn danh mục--" style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", paddingRight: "55px", position: "relative" }} value={this.getNameSelected()}></input>
-              <button data-toggle="collapse" data-target="#demo2" class="btn" style={{ position: "absolute", right: "27px" }}><i class="fa fa-plus"></i></button>
+              <button onClick={this.onChangeIcon} data-toggle="collapse" data-target="#demo2" class="btn" style={{ position: "absolute", right: "27px" }}><i                     class={this.state.icon ? "fa fa-plus" : "fa fa-caret-down"}
+></i></button>
             </div>
             <div id="demo2" class="collapse">
               <ul style={{ listStyle: "none", margin: "5px 0" }} class="list-group">
