@@ -127,7 +127,7 @@ export default class ComponentToPrint extends Component {
               <p class="" id="sale_user_name">
                 <span style={{ fontWeight: "500" }}>
                   {" "}
-                  Tên: {state.user_name} - {state.store_name}
+                  Tên: {state.store_name}
                 </span>
               </p>
               <p class="" id="info">
@@ -235,7 +235,8 @@ export default class ComponentToPrint extends Component {
               </div>
 
               <div style={{ fontSize: "14px", position: "absolute", bottom: "5px" }}>
-                Quý khách vui lòng kiểm tra danh sách đơn hàng trước khi nhận hàng. Cảm ơn Quý khách đã tin tưởng sử dụng sản phẩm của {state.store_name}!              </div>
+                <div><center> <i>Quý khách vui lòng kiểm tra danh sách đơn hàng trước khi nhận hàng.</i> </center></div>
+                <div><center> <i>Cảm ơn quý khách đã tin tưởng sử dụng sản phẩm của {state.store_name}! </i></center></div>              </div>
             </div>
 
           </div>

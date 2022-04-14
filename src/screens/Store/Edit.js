@@ -11,7 +11,7 @@ import Loading from "../Loading";
 import * as dashboardAction from "../../actions/dashboard";
 import ModalUpload from "../../components/Store/ModalUpload"
 import * as Env from "../../ultis/default"
-import {isEmpty} from "../../ultis/helpers"
+import { isEmpty } from "../../ultis/helpers"
 
 class StoreEdit extends Component {
   constructor(props) {
@@ -38,11 +38,11 @@ class StoreEdit extends Component {
 
       this.setState({
         txtId: store.store_code,
-        txtName: store.name,
-        txtAddress: store.address,
-        txtType: store.id_type_of_store,
-        image: store.logo_url,
-        txtCareer: store.career,
+        txtName: store.name ?? "",
+        txtAddress: store.address ?? "",
+        txtType: store.id_type_of_store ?? "",
+        image: store.logo_url ?? "",
+        txtCareer: store.career ?? "",
       })
     }
 
@@ -61,7 +61,7 @@ class StoreEdit extends Component {
       if (item.id == typeId) {
         var txtCareer = ""
         if (typeof item.childs != "undefined")
-          txtCareer = item.childs.length > 0 ? item.childs[0].id : ""
+          txtCareer = item.childs.length > 0 ? item.childs[12].id : ""
         this.setState({ careers: item.childs, txtCareer: txtCareer })
         return
       }
@@ -73,8 +73,7 @@ class StoreEdit extends Component {
     var target = e.target;
     var name = target.name;
     var value = target.value;
-    if(name =="txtType")
-    {
+    if (name == "txtType") {
       this.changeCarrea(value)
     }
     this.setState({
@@ -83,24 +82,22 @@ class StoreEdit extends Component {
   };
 
 
-  changeCarrea = (typeId) =>{
-    var {types} = this.props
+  changeCarrea = (typeId) => {
+    var { types } = this.props
 
     for (const item of types) {
-      if(item.id == typeId)
-      {
+      if (item.id == typeId) {
         var txtCareer = ""
-        if(typeof item.childs != "undefined")
-        txtCareer = item.childs.length > 0 ? item.childs[0].id : ""
-        this.setState({txtCareer : txtCareer })
+        if (typeof item.childs != "undefined")
+          txtCareer = item.childs.length > 0 ? item.childs[12].id : ""
+        this.setState({ txtCareer: txtCareer })
       }
     }
   }
 
   onSave = (e) => {
     e.preventDefault();
-    if(this.state.txtName == null || !isEmpty(this.state.txtName))
-    {
+    if (this.state.txtName == null || !isEmpty(this.state.txtName)) {
       this.props.showError({
 
         type: Types.ALERT_UID_STATUS,
@@ -120,7 +117,7 @@ class StoreEdit extends Component {
       address: this.state.txtAddress,
       id_type_of_store: 1,
       logo_url: this.state.image,
-      career : this.state.txtCareer
+      career: this.state.txtCareer
     }, this.props.match.params.store_code);
   };
   goBack = () => {
@@ -143,21 +140,20 @@ class StoreEdit extends Component {
 
 
 
-  showAllCareer = (types,txtType ,txtCareer) => {
+  showAllCareer = (types, txtType, txtCareer) => {
     var result = null
     var _txtCareer = ""
     for (const item of types) {
       if (item.id == txtType) {
-        if (typeof item.childs != "undefined"){
-          if(txtCareer==null)
-          {
-            this.setState({txtCareer :item.childs[0].id })
+        if (typeof item.childs != "undefined") {
+          if (txtCareer == null) {
+            this.setState({ txtCareer: item.childs[0].id })
           }
           _txtCareer = txtCareer == null ? item.childs[0].id : txtCareer
         }
 
         result = item.childs.map((_item, index) => {
-          return <option selected = {_item.id == Number(_txtCareer)} value={_item.id}>{_item.name}</option>;
+          return <option selected={_item.id == Number(_txtCareer)} value={_item.id}>{_item.name}</option>;
         });
 
       }
@@ -176,11 +172,11 @@ class StoreEdit extends Component {
     if (this.props.auth) {
       return (
         <div id="wrapper">
-          <Sidebar store_code = {store_code} />
+          <Sidebar store_code={store_code} />
 
           <div id="content-wrapper" className="d-flex flex-column">
             <div id="content">
-              <Topbar isHome = {true} />
+              <Topbar isHome={true} />
 
               <div class="container-fluid">
                 <Alert
@@ -190,7 +186,11 @@ class StoreEdit extends Component {
                 <div
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  <h4 className="h4 title_content mb-0 text-gray-800">
+                  <h4 className="h4 title_content mb-0 text-gray-800"
+                    style={{
+                      paddingLeft: 25
+                    }}
+                  >
                     Chỉnh sửa cửa hàng
                   </h4>
                 </div>
@@ -229,28 +229,45 @@ class StoreEdit extends Component {
                                   </div>
 
                                 </div>
+
+
                                 <div class="form-group">
                                   <label for="product_name">Mã cửa hàng</label>
-                                  <input
-                                    type="text"
-                                    class="form-control"
-                                    id="txtId"
-                                    placeholder="Nhập mã cửa hàng"
-                                    autocomplete="off"
-                                    value={txtId}
-                                    onChange={this.onChange}
-                                    name="txtId"
-                                    disabled
-                                  />
-                                </div>
+                                  <div class="input-group" style={{
+                                    width: 300
+                                  }}>
+                                    <input
+                                      disabled
+                                      type="text"
+                                      class="form-control"
+                                      id="txtId"
+                                      placeholder="Nhập mã cửa hàng"
+                                      autocomplete="off"
+                                      value={txtId}
+                                      onChange={this.onChange}
+                                      name="txtId"
+                                    />
+                                    <div class="input-group-append">
+                                      <span class="input-group-text" id="basic-addon2">.myiki.vn</span>
+                                    </div>
+                                  </div>
 
+                                </div>
+                                <div class="form-group">
+                                  <strong style={{
+                                    paddingBottom: 8,
+                                    color: "blue",
+                                    fontWeight: 300
+                                  }}>
+                                    (Mã này là tên miền truy cập trang web bán hàng)
+                                  </strong>
+                                </div>
                                 <div class="form-group">
                                   <label for="product_name">Tên cửa hàng</label>
                                   <input
                                     type="text"
                                     class="form-control"
                                     id="txtName"
-                                    name="txtName"
                                     placeholder="Nhập tên cửa hàng"
                                     autocomplete="off"
                                     value={txtName}
@@ -264,7 +281,6 @@ class StoreEdit extends Component {
                                     type="text"
                                     class="form-control"
                                     id="txtAddress"
-                                    name="txtAddress"
                                     placeholder="Nhập địa chỉ"
                                     autocomplete="off"
                                     value={txtAddress}
@@ -288,7 +304,7 @@ class StoreEdit extends Component {
                                   </select>
                                 </div>
                                 <div class={`form-group ${disableCareer}`}>
-                                  <label for="product_name">Nghề nghiệp</label>
+                                  <label for="product_name">Nhóm ngành</label>
 
                                   <select
                                     id="input"
@@ -298,7 +314,7 @@ class StoreEdit extends Component {
                                     name="txtCareer"
                                   >
 
-                                    {this.showAllCareer(types,1, txtCareer)}
+                                    {this.showAllCareer(types, 1, txtCareer)}
                                   </select>
                                 </div>
                               </div>
@@ -313,13 +329,14 @@ class StoreEdit extends Component {
                                 <a
                                   style={{ marginLeft: "10px" }}
                                   onClick={this.goBack}
-                                  class="btn btn-warning"
                                   class="btn btn-warning btn-icon-split btn-sm"
                                 >
                                   <span class="icon text-white-50">
                                     <i class="fas fa-arrow-left"></i>
                                   </span>
-                                  <span class="text"> Trở về</span>
+                                  <span class="text" style={{
+                                    color: "white"
+                                  }}> Trở về</span>
                                 </a>
                               </div>
                             </form>
@@ -331,7 +348,7 @@ class StoreEdit extends Component {
                 </div>
               </div>
             </div>
-            <ModalUpload image = {image}></ModalUpload>
+            <ModalUpload image={image}></ModalUpload>
             <Footer />
           </div>
         </div>

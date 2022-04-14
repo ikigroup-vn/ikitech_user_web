@@ -9,7 +9,7 @@ import "./report.css";
 
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { createStore, applyMiddleware} from 'redux';
+import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import "datatables.net-dt/js/dataTables.dataTables"
 import "datatables.net-dt/css/jquery.dataTables.min.css"
@@ -19,14 +19,20 @@ import appReducers from './reducers/index';
 
 export const store = createStore(
   appReducers,
-  applyMiddleware(thunk) 
+  applyMiddleware(thunk)
 )
 
+if (process.env.NODE_ENV === 'production') {
+  console.log = () => { }
+  console.error = () => { }
+  console.debug = () => { }
+}
+
 ReactDOM.render(
-  
-  <Provider store = {store}>
+
+  <Provider store={store}>
     <App />
-    </Provider>,
+  </Provider>,
   document.getElementById('root')
 );
 

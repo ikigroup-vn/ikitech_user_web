@@ -119,6 +119,7 @@ class Topbar extends Component {
           isLoadNotification={isLoadNotification}
           store_code={store_code}
           disable={disable}
+          branchId={this.state.txtBranch}
         />
       );
   };

@@ -9,10 +9,10 @@ class CardProduct extends Component {
         super(props)
         this.state = {
             product_id: "",
-            isToggle:false
+            isToggle: false
         }
     }
-    handleInfoProduct = (inventory, id, name, image, price, distributes, maxPrice, minPrice, priceDiscount, quayntity, quantityDistribute) => {   
+    handleInfoProduct = (inventory, id, name, image, price, distributes, maxPrice, minPrice, priceDiscount, quayntity, quantityDistribute,product) => {
         if (distributes.length > 0) {
             this.setState({ isToggle: true })
             this.props.handleCallbackProduct({
@@ -20,9 +20,10 @@ class CardProduct extends Component {
                 priceProduct: price, distributeProduct: distributes,
                 minPriceProduct: minPrice, maxPriceProduct: maxPrice, discountProduct: priceDiscount,
                 quantityProduct: quayntity,
-                quantityProductWithDistribute: quantityDistribute
-            })   
-        }else{
+                quantityProductWithDistribute: quantityDistribute,
+                product:product
+            })
+        } else {
             this.setState({ isToggle: false })
             this.props.handleCallbackPushProduct({
                 nameProduct: name,
@@ -31,8 +32,9 @@ class CardProduct extends Component {
                 reality_exist: 0, nameDistribute: "",
                 nameElement: "",
                 nameSubDistribute: "",
-                priceProduct:price,
-                stock: quayntity
+                priceProduct: price,
+                stock: quayntity,
+                product:product
             })
         }
 
@@ -43,13 +45,25 @@ class CardProduct extends Component {
             result = products.map((data, index) => {
                 return (
                     <div class="col-sm-2" style={{ marginBottom: "10px" }}>
-                        <a data-toggle={this.state.isToggle ? "modal" : ""} data-target="#modalDetail" onClick={() => this.handleInfoProduct(data.inventory, data.id, data.name, data.images, data.price, data.distributes, data.max_price, data.min_price, data.product_discount, data.quantity_in_stock, data.quantity_in_stock_with_distribute)}>
-                            <div class="card card-product-pos" style={{border:"1px solid rgb(128 128 128 / 30%)",padding:"0"}}>
-                                <img src={data.images.length > 0 ? data.images[0].image_url : Env.IMG_NOT_FOUND_2} className="img-responsive" alt="Image" width="100%" height="100px" style={{borderRadius:"2%"}} />
+                        <a data-toggle={this.state.isToggle ? "modal" : ""} data-target="#modalDetail"
+                            onClick={() => this.handleInfoProduct(
+                                data.inventory,
+                                data.id,
+                                data.name,
+                                data.images,
+                                data.price, data.distributes,
+                                data.max_price, data.min_price,
+                                data.product_discount,
+                                data.quantity_in_stock,
+                                data.quantity_in_stock_with_distribute,
+                                data
+                            )}>
+                            <div class="card card-product-pos" style={{ border: "1px solid rgb(128 128 128 / 30%)", padding: "0" }}>
+                                <img src={data.images.length > 0 ? data.images[0].image_url : Env.IMG_NOT_FOUND_2} className="img-responsive" alt="Image" width="100%" height="100px" style={{ borderRadius: "2%" }} />
                                 <div class="card-body" style={{ padding: ' 0 5px' }}>
                                     <p class="card-title" style={{ margin: '0', overflow: "hidden", whiteSpace: "nowrap", textOverflow: 'ellipsis' }}>{data.name}</p>
-                                    <p class="card-text" style={{ fontSize: "12px", bottom: "37px",fontWeight:"bold",color:"rgb(174, 61, 52)",textAlign:"end" }}>{
-                                       data.min_price == data.max_price? format(Number(data.min_price)):`${format(Number(data.min_price))}- ${format(Number(data.max_price))}`}</p>
+                                    <p class="card-text" style={{ fontSize: "12px", bottom: "37px", fontWeight: "bold", color: "rgb(174, 61, 52)", textAlign: "end" }}>{
+                                        data.min_price == data.max_price ? format(Number(data.min_price)) : `${format(Number(data.min_price))}- ${format(Number(data.max_price))}`}</p>
                                 </div>
                             </div>
                         </a>
