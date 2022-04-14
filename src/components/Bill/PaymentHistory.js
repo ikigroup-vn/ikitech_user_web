@@ -23,7 +23,7 @@ class PaymentHistory extends Component {
               { formatNoD(history.money) }
             </td>
             <td>
-              {getNamePaymentMethod(history.payment_method)}
+              {getNamePaymentMethod(history.payment_method_id)}
             </td>
 
             <td>

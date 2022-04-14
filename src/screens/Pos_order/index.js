@@ -21,6 +21,7 @@ import ModalVoucher from '../../components/Pos_Order/ModalVoucher'
 import { debounce } from 'lodash'
 import { Popover } from 'react-tiny-popover'
 import { getBranchId } from '../../ultis/branchUtils'
+import * as notificationAction from "../../actions/notification";
 
 class PostOrder extends Component {
     constructor(props) {
@@ -37,7 +38,7 @@ class PostOrder extends Component {
                 debt: 0,
                 id: 0,
             },
-            modalCreateUser:"",
+            modalCreateUser: "",
             listSuggestion: [],
             txtDiscount: 0,
             code: "",
@@ -48,7 +49,7 @@ class PostOrder extends Component {
             listPosItem: [],
             idCart: "",
             checked: false,
-            checkeds:false,
+            checkeds: false,
             selectPrice: -1,
             exchange: 0,
             payment_method_id: 0,
@@ -58,7 +59,7 @@ class PostOrder extends Component {
             totalFinal: 0,
             typeDiscount: 0,
             beforeDiscount: 0,
-            haveCheck:false,
+            haveCheck: false,
             infoProduct: {
                 inventoryProduct: "",
                 idProduct: "",
@@ -120,11 +121,13 @@ class PostOrder extends Component {
             const lengthNum = totalFinal.length;
             const firstNum = parseInt(totalFinal[0]);
 
-
+            //num0
             list.push(totalFinal)
 
             //num1
-            // list.push(Math.pow(10, lengthNum))
+            if (firstNum > 5 && lengthNum > 1) {
+                list.push(Math.pow(10, lengthNum))
+            }
 
             //num2
             if (firstNum < 9 && lengthNum > 1) {
@@ -195,12 +198,21 @@ class PostOrder extends Component {
             resizeWidth: false
         });
         const branch_id = getBranchId()
+
+        this.props.fetchAllPertion(this.props.match.params.store_code)
+        this.props.fetchAllVoucher(this.props.match.params.store_code)
+        this.props.fetchAllBadge(this.props.match.params.store_code, branch_id);
+
+    }
+
+    refreshProductList = () => {
+        const branch_id = getBranchId()
         const limit = this.state.numPage
         const params = `&limit=${limit}`
         this.props.fetchAllProductV2(this.props.match.params.store_code, branch_id, params);
-        this.props.fetchAllPertion(this.props.match.params.store_code)
-        this.props.fetchAllVoucher(this.props.match.params.store_code)
+
     }
+
     handleCallbackProduct = (modal) => {
         this.setState(
             {
@@ -296,9 +308,8 @@ class PostOrder extends Component {
             }
 
         }
+    }
 
-
-    };
     handlePayment = () => {
         const branch_id = getBranchId()
         const { store_code } = this.props.match.params
@@ -309,7 +320,7 @@ class PostOrder extends Component {
         this.props.paymentOrderPos(store_code, branch_id, this.state.idCart, data)
         this.setState({
             priceCustomer: 0,
-            listPosItem:[],
+            listPosItem: [],
             modalUpdateCart: {
                 name: "",
                 phone_number: "",
@@ -322,10 +333,8 @@ class PostOrder extends Component {
 
     componentWillReceiveProps(nextProps) {
 
-
-
         if (!shallowEqual(nextProps.listItemCart, this.props.listItemCart)) {
-            console.log("00000000000")
+
             this.setState({
                 listItemCart: nextProps.listItemCart,
                 priceCustomer: nextProps.listItemCart.info_cart.total_final,
@@ -336,31 +345,31 @@ class PostOrder extends Component {
                 customerNote: nextProps.listItemCart.customer_note ?? "",
                 payment_method_id: nextProps.listItemCart.payment_method_id ?? 0,
                 discount: nextProps.listItemCart.discount,
-                checkeds: nextProps.listItemCart.info_cart.is_use_points !== null? nextProps.listItemCart.info_cart.is_use_points : false
+                checkeds: nextProps.listItemCart.info_cart.is_use_points !== null ? nextProps.listItemCart.info_cart.is_use_points : false
             })
-            
-               
+
+
 
         }
-    if(!shallowEqual(nextProps.inforCustomer,this.props.inforCustomer)){
-        this.setState({ 
+        if (!shallowEqual(nextProps.inforCustomer, this.props.inforCustomer)) {
+            this.setState({
                 modalUpdateCart: {
                     name: nextProps.inforCustomer.name,
                     phone_number: nextProps.inforCustomer.phone_number,
                     debt: nextProps.inforCustomer.debt,
                     id: nextProps.inforCustomer.id,
                 },
-        })
-    }
+            })
+        }
 
     }
     shouldComponentUpdate(nextProps, nextState) {
-        if(!shallowEqual(nextState.modalCreateUser,this.state.modalCreateUser)){
+        if (!shallowEqual(nextState.modalCreateUser, this.state.modalCreateUser)) {
             var { store_code } = this.props.match.params;
-            console.log("modalCreateUser",nextState.modalCreateUser)
-            this.props.handleCreateUsers(store_code,nextState.modalCreateUser)
+
+            this.props.handleCreateUsers(store_code, nextState.modalCreateUser)
         }
-        if (!shallowEqual(nextState.listPosItem, this.state.listPosItem)) {
+        if (!shallowEqual(nextState.listPosItem, this.state.listPosItem) && nextState.listPosItem.product_id != null) {
             const formData = {
                 product_id: nextState.listPosItem.product_id,
                 quantity: 1,
@@ -373,22 +382,24 @@ class PostOrder extends Component {
             const id = nextState.idCart
             this.props.addProductInCart(store_code, branch_id, id, formData)
         }
-        if (!shallowEqual(nextState.priceCustomer, this.state.priceCustomer) ) {
-            console.log("change",nextState.totalFinal)
+        if (!shallowEqual(nextState.priceCustomer, this.state.priceCustomer)) {
+
             this.setState({
                 exchange: removeSignNumber(nextState.priceCustomer) - removeSignNumber(nextState.totalFinal)
             })
         }
         if (!shallowEqual(nextState.idCart, this.state.idCart)) {
-            console.log("111111111111111")
+
             const branch_id = getBranchId()
             const id = nextState.idCart
             this.props.fetchInfoOneCart(this.props.match.params.store_code, branch_id, id)
             this.setState({
-                priceCustomer:0,
-                exchange:0,
-                totalFinal:0,
+                priceCustomer: 0,
+                exchange: 0,
+                totalFinal: 0,
             })
+
+            this.refreshProductList();
         }
 
         if (!shallowEqual(nextState.totalFinal, this.state.totalFinal)) {
@@ -396,7 +407,7 @@ class PostOrder extends Component {
         }
 
 
-        if ( !shallowEqual(nextState.txtDiscount, this.state.txtDiscount) ||
+        if (!shallowEqual(nextState.txtDiscount, this.state.txtDiscount) ||
             !shallowEqual(nextState.note, this.state.note) ||
             !shallowEqual(nextState.payment_method_id, this.state.payment_method_id)
 
@@ -413,7 +424,7 @@ class PostOrder extends Component {
             }
             this.props.updateInfoCart(store_code, branch_id, nextState.idCart, formData)
         }
-        
+
         if (!shallowEqual(nextState.modalUpdateCart, this.state.modalUpdateCart)) {
             const branch_id = getBranchId()
             const { store_code } = this.props.match.params
@@ -422,21 +433,21 @@ class PostOrder extends Component {
                 customer_phone: nextState.modalUpdateCart.phone_number,
                 name: nextState.namePos,
                 customer_id: nextState.modalUpdateCart.id,
-               
+
             }
             this.props.updateInfoCarts(store_code, branch_id, nextState.idCart, formData)
         }
 
         if (!shallowEqual(nextState.checkeds, this.state.checkeds) && nextState.haveCheck == true) {
-        const branch_id = getBranchId()
-        const { store_code } = this.props.match.params
-        const formData = {
-            name: nextState.namePos,
-            customer_id: nextState.modalUpdateCart.id,
-            is_use_points: nextState.checkeds,
+            const branch_id = getBranchId()
+            const { store_code } = this.props.match.params
+            const formData = {
+                name: nextState.namePos,
+                customer_id: nextState.modalUpdateCart.id,
+                is_use_points: nextState.checkeds,
+            }
+            this.props.updateInfoCarts(store_code, branch_id, nextState.idCart, formData)
         }
-        this.props.updateInfoCarts(store_code, branch_id, nextState.idCart, formData)
-    }
 
 
         if (!shallowEqual(nextState.code, this.state.code)) {
@@ -490,18 +501,18 @@ class PostOrder extends Component {
     }
 
     handChangeCheckbox = (e) => {
-        this.setState({ checkeds: !this.state.checkeds, haveCheck:true })
+        this.setState({ checkeds: !this.state.checkeds, haveCheck: true })
     }
 
     ChangeTypeDiscount = (type) => {
         this.setState({ typeDiscount: type, discount: "" })
     }
-    handleDelete = () =>{
+    handleDelete = () => {
         this.setState({
-            listPosItem:[]
+            listPosItem: []
         })
     }
-    handleDeletePersion = () =>{
+    handleDeletePersion = () => {
         const branch_id = getBranchId()
         const { store_code } = this.props.match.params
         const formData = {
@@ -512,8 +523,8 @@ class PostOrder extends Component {
         }
         this.props.updateInfoCarts(store_code, branch_id, this.state.idCart, formData)
     }
-    handleClearVoucher = () =>{
-        this.setState({code:""})
+    handleClearVoucher = () => {
+        this.setState({ code: "" })
     }
 
 
@@ -521,10 +532,11 @@ class PostOrder extends Component {
 
     render() {
         var { store_code } = this.props.match.params
-        var { listPertion, products, listVoucher } = this.props
+        var { listPertion, products, listVoucher, badges } = this.props
+        var { allow_semi_negative } = badges
         var { numPage, exchange, priceCustomer, listItemCart, totalFinal, listSuggestion, totalAfterDiscount } = this.state
         const length = listItemCart.info_cart?.line_items.length
-     
+
 
         return (
             <React.Fragment>
@@ -554,7 +566,7 @@ class PostOrder extends Component {
                                         <div className='col-list-order'>
                                             <div className='' style={{ padding: "8px" }}>
                                                 {listItemCart?.info_cart?.line_items.length > 0 ?
-                                                    <ListItemInCart store_code={store_code} listItemPos={listItemCart} idCart = {this.state.idCart} handleDelete = {this.handleDelete} /> :
+                                                    <ListItemInCart store_code={store_code} listItemPos={listItemCart} idCart={this.state.idCart} handleDelete={this.handleDelete} /> :
                                                     <div className='product-pos' style={{ textAlign: "center", color: "gray", fontSize: "20px", marginTop: "70px" }}>
 
                                                         <img style={{ width: "14%" }} src="../../images/empty_cart.png" alt=''></img>
@@ -595,9 +607,9 @@ class PostOrder extends Component {
                                             <i class='fa fa-search' style={{ position: "absolute", fontSize: "20px", left: "3px", bottom: "10px", cursor: "pointer" }} ></i>
                                             <div style={{ border: 0, borderRadius: 0, borderBottom: "1px solid rgba(128, 128, 128, 0.27)", paddingLeft: "30px", fontWeight: "500", color: "black" }}
                                                 class="form-control" id="form-control" data-toggle="modal" data-target="#modalPertion" >{this.props.listItemCart.customer?.name ? `${this.props.listItemCart.customer.name} (Công nợ: ${format(Number(this.props.listItemCart.customer.debt))} )` : "Thêm khách hàng vào đơn"}</div>
-                                            {this.props.listItemCart.customer?.name ?<i class="fa fa-times" style={{paddingTop:"10px"}} onClick={this.handleDeletePersion}></i>:<i class='fas fa-plus' style={{ position: "absolute", fontSize: "20px", right: "10px", bottom: "10px", cursor: "pointer" }} data-toggle="modal" data-target="#modalUser" ></i>}
-                                            
-                                            
+                                            {this.props.listItemCart.customer?.name ? <i class="fa fa-times" style={{ paddingTop: "10px" }} onClick={this.handleDeletePersion}></i> : <i class='fas fa-plus' style={{ position: "absolute", fontSize: "20px", right: "10px", bottom: "10px", cursor: "pointer" }} data-toggle="modal" data-target="#modalUser" ></i>}
+
+
                                         </div>
                                     </div>
                                     <div className="wrap-detail">
@@ -608,8 +620,8 @@ class PostOrder extends Component {
                                             </div>
                                             <div className='row' style={{ padding: "3px 0", justifyContent: "space-between" }}>
                                                 {this.props.listItemCart.customer?.name ?
-                                                    <>                                                
-                                                    <div className='title-price col-6'>{`Dùng ${listItemCart.info_cart?.total_points_can_use} xu [${format(Number(listItemCart.info_cart?.bonus_points_amount_can_use))}]`}</div>
+                                                    <>
+                                                        <div className='title-price col-6'>{`Dùng ${listItemCart.info_cart?.total_points_can_use} xu [${format(Number(listItemCart.info_cart?.bonus_points_amount_can_use))}]`}</div>
                                                         <form action="/action_page.php">
                                                             <div class="custom-control custom-switch">
                                                                 <input type="checkbox" class="custom-control-input" id="switch1" name="example" checked={this.state.checkeds} onChange={this.handChangeCheckbox} />
@@ -623,12 +635,12 @@ class PostOrder extends Component {
 
                                             <div className='row item-info'>
                                                 <div className='title-price col-6' >Voucher</div>
-                                                <div className='col-6' style={{textAlign: "end"}}>
-                                                    <a className='modal-choose ' style={{ color: "rgb(232 117 26)"  }} data-toggle="modal" data-target="#modalVoucher" >
-                                                    <span className='' style={{fontSize: "13px"}}>{listItemCart.code_voucher ? listItemCart.code_voucher : "Chọn hoặc nhập mã"}</span>
-                                                     
-                                                </a>
-                                                {listItemCart.code_voucher?<i class="fa fa-times" style={{marginLeft:"10px"}} onClick ={this.handleClearVoucher} ></i>:""}
+                                                <div className='col-6' style={{ textAlign: "end" }}>
+                                                    <a className='modal-choose ' style={{ color: "rgb(232 117 26)" }} data-toggle="modal" data-target="#modalVoucher" >
+                                                        <span className='' style={{ fontSize: "13px" }}>{listItemCart.code_voucher ? listItemCart.code_voucher : "Chọn hoặc nhập mã"}</span>
+
+                                                    </a>
+                                                    {listItemCart.code_voucher ? <i class="fa fa-times" style={{ marginLeft: "10px" }} onClick={this.handleClearVoucher} ></i> : ""}
                                                 </div>
                                             </div>
 
@@ -789,7 +801,7 @@ class PostOrder extends Component {
 
 
                         </div>
-                        <ModalDetail modal={this.state.infoProduct} handleCallbackPushProduct={this.handleCallbackPushProduct} />
+                        <ModalDetail allow_semi_negative={allow_semi_negative} modal={this.state.infoProduct} handleCallbackPushProduct={this.handleCallbackPushProduct} />
                         <PertionInfo store_code={store_code} listPertion={listPertion} handleCallbackPertion={this.handleCallbackPertion} />
                         <ModalUser handleCallbackUser={this.handleCallbackUser} />
                         <ModalVoucher listVoucher={listVoucher} handleCallbackVoucherInput={this.handleCallbackVoucherInput} />
@@ -810,8 +822,8 @@ const mapStateToProps = (state) => {
         listItemCart: state.posReducers.pos_reducer.listItemCart,
         listPertion: state.orderReducers.order_product.listPertion,
         listVoucher: state.orderReducers.order_product.listVoucher,
-        inforCustomer:  state.posReducers.pos_reducer.inforCustomer
-
+        inforCustomer: state.posReducers.pos_reducer.inforCustomer,
+        badges: state.badgeReducers.allBadge,
     }
 }
 
@@ -848,9 +860,12 @@ const mapDispatchToProps = (dispatch, props) => {
         fetchAllVoucher: (store_code) => {
             dispatch(OrderAction.fetchAllVoucher(store_code))
         },
-        handleCreateUsers: (store_code,data) => {
-            dispatch(posAction.handleCreateUsers(store_code,data))
-        }
+        handleCreateUsers: (store_code, data) => {
+            dispatch(posAction.handleCreateUsers(store_code, data))
+        },
+        fetchAllBadge: (store_code, branch_id) => {
+            dispatch(notificationAction.fetchAllBadge(store_code, branch_id));
+        },
 
     }
 }

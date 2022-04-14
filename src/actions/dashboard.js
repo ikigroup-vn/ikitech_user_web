@@ -763,6 +763,7 @@ export const uploadImgStore = (file) => {
 };
 
 export const fetchAllBadge = (store_code,branch_id) => {
+  if(branch_id == null) return;
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,

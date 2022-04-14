@@ -28,8 +28,7 @@ class Notification extends Component {
     }
 
     componentDidMount = () => {
-        const branch_id = localStorage.getItem("branch_id")
-         this.props.fetchAllBadge(this.props.store_code,branch_id);
+
     }
 
     componentDidUpdate() {
@@ -131,13 +130,18 @@ class Notification extends Component {
         if ((nextProps.isLoadNotification !== this.props.isLoadNotification)) {
             const branch_id = getBranchId()
             this.props.fetchAllBadge(this.props.store_code,branch_id);
-
         }
 
         if (nextProps.isLoadNotification != this.props.isLoadNotification) {
             window.$(".dropdown>.dropdown-menu").removeClass("show");
-
         }
+
+        if (nextProps.branchId != this.props.branchId) {
+            const branch_id = nextProps.branchId
+            this.props.fetchAllBadge(this.props.store_code,branch_id);
+        }
+
+    
     }
 
 

@@ -32,18 +32,17 @@ class Dashboard extends Component {
     })
   }
 
-  componentDidMount(){
+  componentDidMount() {
     var idBranch = localStorage.getItem("branch_id")
     var { store_code } = this.props.match.params
-      console.log("aaaaaaaaaaaaaa",idBranch)
-      var date = helper.getDateForChartMonth()
-      if(idBranch != ""){
-        this.props.fetchDataId(store_code)
-        this.props.fetchTopTenProduct(store_code,idBranch, `?date_from=${date.from}&date_to=${date.to}`)
-        this.props.fetchOverview(store_code,idBranch, `?date_from=${date.from}&date_to=${date.to}`)
-        this.props.fetchAllCollaborator(store_code);
-      }
-  
+    var date = helper.getDateForChartMonth()
+    if (idBranch != "") {
+      this.props.fetchDataId(store_code)
+      this.props.fetchTopTenProduct(store_code, idBranch, `?date_from=${date.from}&date_to=${date.to}`)
+      this.props.fetchOverview(store_code, idBranch, `?date_from=${date.from}&date_to=${date.to}`)
+      this.props.fetchAllCollaborator(store_code);
+    }
+
   }
 
 
@@ -56,17 +55,16 @@ class Dashboard extends Component {
     }
     var { store_code } = this.props.match.params
 
-    if(!shallowEqual(nextProps.currentBranch,this.props.currentBranch) ){
+    if (!shallowEqual(nextProps.currentBranch, this.props.currentBranch)) {
       if (typeof store_code != "undefined" || store_code != null) {
         const idBranch = nextProps.currentBranch?.id
-        if(typeof nextProps.currentBranch !== "undefined"){
-          console.log("ccccccccccccc",nextProps.currentBranch)
+        if (typeof nextProps.currentBranch !== "undefined") {
           var date = helper.getDateForChartMonth()
           this.props.fetchDataId(store_code)
-          this.props.fetchTopTenProduct(store_code,idBranch, `?date_from=${date.from}&date_to=${date.to}`)
-          this.props.fetchOverview(store_code,idBranch, `?date_from=${date.from}&date_to=${date.to}`)
+          this.props.fetchTopTenProduct(store_code, idBranch, `?date_from=${date.from}&date_to=${date.to}`)
+          this.props.fetchOverview(store_code, idBranch, `?date_from=${date.from}&date_to=${date.to}`)
           this.props.fetchAllCollaborator(store_code);
-        }  
+        }
       }
     }
 
@@ -91,65 +89,65 @@ class Dashboard extends Component {
             <div id="content-wrapper" className="d-flex flex-column">
               <div id="content">
                 <Topbar store_code={store_code} handeOnload={this.handeOnload} />
-                {typeof isShow == "undefined" ?             <div style = {{height : "500px"}}></div> :
- isShow == true ?
+                {typeof isShow == "undefined" ? <div style={{ height: "500px" }}></div> :
+                  isShow == true ?
 
-                  <div className="container-fluid">
-                    <div className="d-sm-flex  align-items-center justify-content-between mb-4">
-                      <h4 className="h4 title_content mb-0 text-gray-800">
-                       Hôm nay
-                      </h4>
-                    </div>
+                    <div className="container-fluid">
+                      <div className="d-sm-flex  align-items-center justify-content-between mb-4">
+                        <h4 className="h4 title_content mb-0 text-gray-800">
+                          Hôm nay
+                        </h4>
+                      </div>
 
-                    <General
-                      badges={badges}
-                      store_code={store_code}
-                      numDiscount={numDiscount}
-                      collaborators={collaborators}
-                      store={this.props.store} />
-                    <br></br>
+                      <General
+                        badges={badges}
+                        store_code={store_code}
+                        numDiscount={numDiscount}
+                        collaborators={collaborators}
+                        store={this.props.store} />
+                      <br></br>
 
 
-                    <div class="row" style={{ display: "flex", justifyContent: "space-between" }}>
-                      <div className="col-lg-3 col-md-12 col-sm-12" style={{ paddingBottom: "15px" }}>
-                        <div class="card shadow mb-4 " style={{ height: "100%" }}>
+                      <div class="row" style={{ display: "flex", justifyContent: "space-between" }}>
+                        <div className="col-lg-3 col-md-12 col-sm-12" style={{ paddingBottom: "15px" }}>
+                          <div class="card shadow mb-4 " style={{ height: "100%" }}>
+                            <div class="card-header py-3">
+                              <h6 class="m-0 title_content font-weight-bold text-primary">
+                                Thông tin chỉ số
+                              </h6>
+                            </div>
+                            <div class="card-body">
+                              <BadgeTable badges={badges} store_code={store_code} />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="card shadow mb-4 col-lg-9 col-md-12 col-sm-12" style={{ height: "100%" }}>
                           <div class="card-header py-3">
                             <h6 class="m-0 title_content font-weight-bold text-primary">
-                              Thông tin chỉ số
+                              Báo cáo doanh thu
                             </h6>
                           </div>
                           <div class="card-body">
-                            <BadgeTable badges={badges} store_code={store_code} />
+
+                            <ChartSales store_code={store_code} overview={overview} />
                           </div>
                         </div>
+
                       </div>
-                      <div class="card shadow mb-4 col-lg-9 col-md-12 col-sm-12" style={{ height: "100%" }}>
+                      <div class="card shadow mb-4 col-12" >
                         <div class="card-header py-3">
                           <h6 class="m-0 title_content font-weight-bold text-primary">
-                            Báo cáo doanh thu
+                            Top 10 sản phẩm
                           </h6>
                         </div>
                         <div class="card-body">
 
-                          <ChartSales store_code={store_code} overview={overview} />
+                          <ChartTopTen topten={topten} store_code={store_code} />
                         </div>
                       </div>
-
                     </div>
-                    <div class="card shadow mb-4 col-12" >
-                      <div class="card-header py-3">
-                        <h6 class="m-0 title_content font-weight-bold text-primary">
-                          Top 10 sản phẩm
-                        </h6>
-                      </div>
-                      <div class="card-body">
 
-                        <ChartTopTen topten={topten} store_code={store_code} />
-                      </div>
-                    </div>
-                  </div>
-
-                  : <NotAccess/>}
+                    : <NotAccess />}
               </div>
 
               <Footer />
@@ -186,11 +184,11 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchDataId: (id) => {
       dispatch(dashboardAction.fetchDataId(id));
     },
-    fetchTopTenProduct: (store_code,branch_id, params) => {
-      dispatch(dashboardAction.fetchTopTenProduct(store_code,branch_id, params));
+    fetchTopTenProduct: (store_code, branch_id, params) => {
+      dispatch(dashboardAction.fetchTopTenProduct(store_code, branch_id, params));
     },
-    fetchOverview: (store_code,branch_id, params) => {
-      dispatch(dashboardAction.fetchOverview(store_code,branch_id, params));
+    fetchOverview: (store_code, branch_id, params) => {
+      dispatch(dashboardAction.fetchOverview(store_code, branch_id, params));
     },
     fetchAllCollaborator: (store_code) => {
       dispatch(collaboratorAction.fetchAllCollaborator(store_code));
