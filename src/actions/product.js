@@ -159,7 +159,16 @@ export const fetchAllListProduct = (store_code, search) => {
 
               for (const item of res.data.data.data) {
                 var newItem = {};
-                Object.entries(item).forEach(([key, value], index) => {
+                var arangeKeyItem = {
+                  images : item.images,
+                  sku : item.sku,
+                  name : item.name,
+                  price : item.price,
+                  quantity_in_stock : item.quantity_in_stock,
+                  categories : item.categories,
+                  full_description : item.full_description
+                }
+                Object.entries(arangeKeyItem).forEach(([key, value], index) => {
                   if (key == "full_description") {
                     if (value != null && value.length < 32000) {
                       newItem["Mô tả"] = value;
@@ -176,7 +185,7 @@ export const fetchAllListProduct = (store_code, search) => {
                     // newItem["Tên sản phẩm"] = value
                   }
                   if (key == "price") {
-                    newItem["Giá"] = value;
+                    newItem["Giá bán lẻ"] = value;
                   }
                   if (key == "quantity_in_stock") {
                     newItem["Tồn kho"] =
@@ -803,6 +812,7 @@ export const postProductV2 = (store_code, branch_id, data) => {
 };
 
 export const postMultiProduct = (store_code, data) => {
+
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,

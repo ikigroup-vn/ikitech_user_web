@@ -23,6 +23,7 @@ class ProductCreate extends Component {
       form: {},
       total: "",
       isError: false,
+      disableDistribute: false,
     };
   }
 
@@ -81,12 +82,22 @@ class ProductCreate extends Component {
       return { form: formdata };
     });
   };
+
+
+  checkDistribute = (status) => {
+    console.log(status);
+    this.setState({ disableDistribute: status })
+  }
+
   postProduct = () => {
-    console.log(this.state);
     var { store_code } = this.props;
     const branch_id = localStorage.getItem("branch_id");
     var form = { ...this.state.form };
     form.index_image_avatar = 0;
+
+
+
+
 
     if (typeof form.list_distribute != "undefined") {
       if (typeof form.list_distribute[0] != "undefined") {
@@ -99,16 +110,16 @@ class ProductCreate extends Component {
                   const price =
                     element.price != null
                       ? element.price
-                          .toString()
-                          .replace(/,/g, "")
-                          .replace(/\./g, "")
+                        .toString()
+                        .replace(/,/g, "")
+                        .replace(/\./g, "")
                       : 0;
                   const import_price =
                     element.import_price != null
                       ? element.import_price
-                          .toString()
-                          .replace(/,/g, "")
-                          .replace(/\./g, "")
+                        .toString()
+                        .replace(/,/g, "")
+                        .replace(/\./g, "")
                       : 0;
                   const barcode =
                     element.barcode != null
@@ -117,16 +128,16 @@ class ProductCreate extends Component {
                   const quantity_in_stock =
                     element.quantity_in_stock != null
                       ? element.quantity_in_stock
-                          .toString()
-                          .replace(/,/g, "")
-                          .replace(/\./g, "")
+                        .toString()
+                        .replace(/,/g, "")
+                        .replace(/\./g, "")
                       : 0;
                   const cost_of_capital =
                     element.cost_of_capital != null
                       ? element.cost_of_capital
-                          .toString()
-                          .replace(/,/g, "")
-                          .replace(/\./g, "")
+                        .toString()
+                        .replace(/,/g, "")
+                        .replace(/\./g, "")
                       : 0;
                   form.list_distribute[0].element_distributes[index].price =
                     price;
@@ -148,7 +159,6 @@ class ProductCreate extends Component {
                     form.list_distribute[0].element_distributes[index].price
                   );
 
-                  console.log("element form", form);
                   if (typeof element.sub_element_distributes != "undefined") {
                     if (element.sub_element_distributes.length > 0) {
                       element.sub_element_distributes.forEach(
@@ -157,23 +167,23 @@ class ProductCreate extends Component {
                             const price =
                               _element.price != null
                                 ? _element.price
-                                    .toString()
-                                    .replace(/,/g, "")
-                                    .replace(/\./g, "")
+                                  .toString()
+                                  .replace(/,/g, "")
+                                  .replace(/\./g, "")
                                 : 0;
                             const import_price =
                               _element.import_price != null
                                 ? _element.import_price
-                                    .toString()
-                                    .replace(/,/g, "")
-                                    .replace(/\./g, "")
+                                  .toString()
+                                  .replace(/,/g, "")
+                                  .replace(/\./g, "")
                                 : 0;
                             const cost_of_capital =
                               _element.cost_of_capital != null
                                 ? _element.cost_of_capital
-                                    .toString()
-                                    .replace(/,/g, "")
-                                    .replace(/\./g, "")
+                                  .toString()
+                                  .replace(/,/g, "")
+                                  .replace(/\./g, "")
                                 : 0;
                             const barcode =
                               _element.barcode != null
@@ -182,9 +192,9 @@ class ProductCreate extends Component {
                             const quantity_in_stock =
                               _element.quantity_in_stock != null
                                 ? _element.quantity_in_stock
-                                    .toString()
-                                    .replace(/,/g, "")
-                                    .replace(/\./g, "")
+                                  .toString()
+                                  .replace(/,/g, "")
+                                  .replace(/\./g, "")
                                 : 0;
 
                             form.list_distribute[0].element_distributes[
@@ -309,29 +319,31 @@ class ProductCreate extends Component {
       });
       return;
     }
-    if (form.price == null || !isEmpty(form.price)) {
-      this.props.showError({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "danger",
-          title: "Lỗi",
-          disable: "show",
-          content: "Vui lòng nhập giá bán lẻ",
-        },
-      });
-      return;
-    }
-    if (form.import_price == null || !isEmpty(form.import_price)) {
-      this.props.showError({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "danger",
-          title: "Lỗi",
-          disable: "show",
-          content: "Vui lòng nhập giá nhập",
-        },
-      });
-      return;
+    if (this.state.checkDistribute == false) {
+      if (form.price == null || !isEmpty(form.price)) {
+        this.props.showError({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: "Vui lòng nhập giá bán lẻ",
+          },
+        });
+        return;
+      }
+      if (form.import_price == null || !isEmpty(form.import_price)) {
+        this.props.showError({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: "Vui lòng nhập giá nhập",
+          },
+        });
+        return;
+      }
     }
     // if (form.import_price == null || !isEmpty(form.import_price)) {
     //   this.props.showError({
@@ -428,7 +440,12 @@ class ProductCreate extends Component {
     if (this.state.isError || is_error) {
       return;
     }
-    console.log("final", form, removeVietnameseTones(form.barcode));
+    if (this.state.checkDistribute == false) {
+      delete form.list_distribute
+    }
+
+
+
     this.props.postProductV2(store_code, branch_id, form);
   };
 
@@ -527,7 +544,7 @@ class ProductCreate extends Component {
             <div class="row">
               <div class="col-lg-6">
                 <div>
-                  <InfoProduct
+                  <InfoProduct checkDistribute={this.checkDistribute}
                     total={total}
                     handleDataFromInfo={this.handleDataFromInfo}
                     category_product={category_product}
@@ -576,11 +593,10 @@ class ProductCreate extends Component {
           </div>
         </div>
         <div
-          class={`card mb-4 ${
-            typeof isShowAttr == "undefined" || isShowAttr == false
-              ? "hide"
-              : ""
-          }`}
+          class={`card mb-4 ${typeof isShowAttr == "undefined" || isShowAttr == false
+            ? "hide"
+            : ""
+            }`}
         >
           <div class="card-header title_content">Thuộc tính sản phẩm</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>
@@ -601,24 +617,26 @@ class ProductCreate extends Component {
             </div>
           </div>
         </div>
-
-        <div class="card mb-4">
-          <div class="card-header title_content">Phân loại sản phẩm </div>
-          <div class="card-body" style={{ padding: "0.8rem" }}>
-            <div class="row">
-              <div class="col-lg-12">
-                <div>
-                  <div class="card-body" style={{ padding: "0.8rem" }}>
-                    <Distribute
-                      onChangeQuantityStock={this.onChangeQuantityStock}
-                      handleDataFromDistribute={this.handleDataFromDistribute}
-                    />
+        {this.state.disableDistribute && (
+          <div class="card mb-4">
+            <div class="card-header title_content">Phân loại sản phẩm </div>
+            <div class="card-body" style={{ padding: "0.8rem" }}>
+              <div class="row">
+                <div class="col-lg-12">
+                  <div>
+                    <div class="card-body" style={{ padding: "0.8rem" }}>
+                      <Distribute
+                        onChangeQuantityStock={this.onChangeQuantityStock}
+                        handleDataFromDistribute={this.handleDataFromDistribute}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
+
         <div class="card mb-4">
           <div class="card-header title_content">Nội dung chi tiết</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>

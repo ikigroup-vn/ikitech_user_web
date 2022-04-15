@@ -187,6 +187,7 @@ class Modal extends Component {
     var { importData } = this.props
     var { type } = this.state
     var newArray = []
+
     if (importData.length > 0) {
       if (Object.keys(type).length > 0) {
         if (this.checkExsit(type) == true) {
@@ -244,8 +245,9 @@ class Modal extends Component {
             newArray.push(newItem)
          
           }
+       
           window.$("#importModal").modal("hide")
-          console.log(newArray)
+        
           this.props.postMultiProduct(this.props.store_code , {
             allow_skip_same_name: this.state.allow_skip_same_name,
             list: newArray

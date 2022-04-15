@@ -143,7 +143,7 @@ class ModalUpdate extends Component {
               method="post"
               id="removeForm"
             >
-              <div class="modal-body">
+              <div class="modal-body" style = {{"maxHeight": "100%"}}>
                 <div class="form-group">
                   <label for="product_name">Tên danh mục</label>
                   <input

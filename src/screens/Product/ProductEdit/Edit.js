@@ -21,9 +21,15 @@ class ProductEdit extends Component {
     super(props);
     this.state = {
       form: {},
-      total: ""
+      total: "",
+            disableDistribute: false,
+
     };
 
+  }
+  checkDistribute = (status) => {
+    console.log(status);
+    this.setState({ disableDistribute: status })
   }
 
   componentDidMount() {
@@ -294,6 +300,11 @@ class ProductEdit extends Component {
     }
 
     distributeData.element_distributes = list_distribute[0].element_distributes
+
+    if (this.state.checkDistribute == false) {
+      delete form.list_distribute
+    }
+
     this.props.updateDistribute(store_code, distributeData, productId, currentBranch?.id)
   };
   goBack = (e) => {
@@ -321,7 +332,7 @@ class ProductEdit extends Component {
           style={{ display: "flex", justifyContent: "space-between" }}
         >
           <h4 className="h4 title_content mb-0 text-gray-800">
-            Chỉnh sửa sản phẩm {product.name}
+            Chỉnh sửa sản phẩm:&nbsp;{product.name}
           </h4>
         </div>
         <br></br>
@@ -334,6 +345,7 @@ class ProductEdit extends Component {
               <div class="col-lg-6">
                 <div>
                   <InfoProduct
+                  checkDistribute={this.checkDistribute}
                     total={total}
                     product={product}
                     handleDataFromInfo={this.handleDataFromInfo}
@@ -413,7 +425,7 @@ class ProductEdit extends Component {
           </div>
         </div>
 
-        <div class="card mb-4">
+        <div class={`card mb-4 ${this.state.disableDistribute == true ? "" : "hide"}`}>
           <div class="card-header title_content">
             Phân loại sản phẩm
           </div>
@@ -435,6 +447,7 @@ class ProductEdit extends Component {
             </div>
           </div>
         </div>
+        
         <div class="card mb-4">
           <div class="card-header title_content">Nội dung chi tiết</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>

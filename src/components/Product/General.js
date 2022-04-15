@@ -12,14 +12,14 @@ class General extends Component {
     var {products} = this.props
     var total_stoking = typeof products.total_stoking == "undefined" ? 0 : products.total_stoking
     var total_out_of_stock = typeof products.total_out_of_stock == "undefined" ? 0 : products.total_out_of_stock
-    var total_hide = typeof products.total_hide == "undefined" ? 0 : products.total_hide
+    // var total_hide = typeof products.total_hide == "undefined" ? 0 : products.total_hide
 
     
     return (
 
         <div className="row">
 
-        <div className="col-xl-4 col-md-6 mb-4">
+        <div className="col-xl-6 col-md-6 mb-6">
             <div className="card border-left-primary shadow h-100 py-2">
                 <div className="card-body set-padding ">
                     <div className="row no-gutters align-items-center">
@@ -36,7 +36,7 @@ class General extends Component {
             </div>
         </div>
 
-        <div className="col-xl-4 col-md-6 mb-4">
+        <div className="col-xl-6 col-md-6 mb-6">
             <div className="card border-left-success shadow h-100 py-2">
                 <div className="card-body set-padding ">
                     <div className="row no-gutters align-items-center">
@@ -52,7 +52,8 @@ class General extends Component {
                 </div>
             </div>
         </div>
-        <div className="col-xl-4 col-md-6 mb-4">
+        <br/>
+        {/* <div className="col-xl-6 col-md-6 mb-6">
             <div className="card border-left-danger shadow h-100 py-2">
                 <div className="card-body set-padding ">
                     <div className="row no-gutters align-items-center">
@@ -67,7 +68,7 @@ class General extends Component {
                     </div>
                 </div>
             </div>
-        </div>
+        </div> */}
      
 
    

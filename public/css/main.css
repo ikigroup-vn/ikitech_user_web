@@ -543,9 +543,16 @@ img {
 }
 
 .modal-body {
-    max-height: 510px;
+    /* max-height: 510px; */
     overflow: auto;
 }
+
+.modal-content{
+
+    bottom: 10px;
+}
+
+
 
 .sticky-footer {
     padding: 1.2rem 0 !important

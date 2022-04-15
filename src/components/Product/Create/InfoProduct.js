@@ -9,24 +9,29 @@ class InfoProduct extends Component {
     super(props);
     this.state = {
       txtName: "",
-      txtBarcode: "",
+      txtBarcode: Math.random().toString().slice(2, 11),
       txtPrice: "",
       txtImportPrice: "",
       sku: Math.random().toString().slice(2, 11),
       check_inventory: false,
       txtQuantityInStock: "",
       txtCostOfCapital: "",
-
+      icon : true,
       txtPercentC: "",
       txtStatus: 0,
       listCategory: [],
       category_parent: [],
       category_children_ids: [],
       txtCategory: [],
-
+      checkHasDistribute : false,
       disabledPrice: false,
     };
   }
+
+
+
+
+
   componentDidMount() {
     var option = [];
     this.setState({ category_parent: [] });
@@ -100,9 +105,7 @@ class InfoProduct extends Component {
     ) {
       if (!isNaN(Number(_value))) {
         value = new Intl.NumberFormat().format(_value);
-        console.log("222222222222", value);
         value = value.toString().replace(/\./g, ",");
-        console.log("333333333", value);
         console.log(name);
         if (name === "txtPercentC") {
           if (value.length < 3) {
@@ -114,6 +117,9 @@ class InfoProduct extends Component {
           }
         }
         if (name !== "txtPercentC") {
+          if (value.length > 14) {
+            return;
+          }
           if (value_text == "") {
             this.setState({ [name]: "" });
           } else {
@@ -137,6 +143,12 @@ class InfoProduct extends Component {
       this.setState({ check_inventory: checked });
     }
   };
+  onChangeCheckHasDitribute = (e) => {
+    this.setState({checkHasDistribute : !this.state.checkHasDistribute});
+    this.props.checkDistribute(!this.state.checkHasDistribute)
+  };
+
+
   handleChangeCheckParent(id) {
     return this.state.category_parent.map((e) => e.id).indexOf(id) > -1;
   }
@@ -265,6 +277,10 @@ class InfoProduct extends Component {
   flipEven() {
     this.setState({ even: !this.state.even });
   }
+  onChangeIcon = () =>
+  {
+    this.setState({icon: !this.state.icon})
+  }
   render() {
     const { inputValue, menuIsOpen } = this.state;
     var {
@@ -284,6 +300,7 @@ class InfoProduct extends Component {
       sku,
       check_inventory,
       txtCostOfCapital,
+      checkHasDistribute
     } = this.state;
 
     return (
@@ -310,7 +327,7 @@ class InfoProduct extends Component {
             placeholder="Nhập mã sản phẩm"
             autocomplete="off"
             value={sku}
-            onChange={this.onChange}
+            // onChange={this.onChange}
             name="sku"
           />
         </div>
@@ -323,10 +340,26 @@ class InfoProduct extends Component {
             placeholder="Nhập barcode"
             autocomplete="off"
             value={txtBarcode}
-            onChange={this.onChange}
+            // onChange={this.onChange}
             name="txtBarcode"
           />
         </div>
+        <div class="form-group">
+          <div class="form-check form-switch">
+            <input
+              onChange={this.onChangeCheckHasDitribute}
+              class="form-check-input"
+              type="checkbox"
+              id="flexSwitchCheckDefault"
+              checked={checkHasDistribute}
+            />
+            <label class="form-check-label" for="flexSwitchCheckDefault">
+              Có phân loại
+            </label>
+          </div>
+        </div>
+        {!checkHasDistribute && (
+
         <div className="form-group">
           <div className="row">
             <div className="col-6">
@@ -370,7 +403,7 @@ class InfoProduct extends Component {
             </div>
           </div>
         </div>
-
+)}
         <div class="form-group">
           <div class="form-check form-switch">
             <input
@@ -485,6 +518,7 @@ class InfoProduct extends Component {
                   value={this.getNameSelected()}
                 ></input>
                 <button
+                onClick = {this.onChangeIcon}
                   data-toggle="collapse"
                   class="btn btn-link btn-collapse btn-accordion-collapse collapsed"
                   id="headingOne"
@@ -494,8 +528,8 @@ class InfoProduct extends Component {
                   style={{ position: "absolute", right: "27px" }}
                 >
                   <i
-                    class="fa"
-                    style={{ fontSize: "0.2px", color: "#abacb4" }}
+                    class={this.state.icon ? "fa fa-plus" : "fa fa-caret-down"}
+                    // style={{ fontSize: "0.2px", color: "#abacb4" }}
                   ></i>
                 </button>
               </div>

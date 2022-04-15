@@ -31,10 +31,10 @@
 [data-toggle="collapse"].btn-accordion-collapse.collapsed .fa:before {
   content: "\f";
 } */
-[data-toggle="collapse"].btn-accordion-collapse .fa:before {   
+/* [data-toggle="collapse"].btn-accordion-collapse .fa:before {   
     content: "\f077";
   }
   
   [data-toggle="collapse"].btn-accordion-collapse.collapsed .fa:before {
     content: "\f078";
-  }
+  } */
