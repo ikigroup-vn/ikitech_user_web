@@ -310,7 +310,7 @@ export const createOrder = (store_code,data) => {
     };
   };
 
-  export const addQuantityProduct = (store_code , data) => {
+  export const updateQuantityLineItem = (store_code , data) => {
 
     return (dispatch) => {
       dispatch({
@@ -318,7 +318,7 @@ export const createOrder = (store_code,data) => {
         loading : "show"
       })
       orderApi
-        .addQuantityProduct(store_code, data)
+        .updateQuantityLineItem(store_code, data)
         .then((res) => {
           dispatch({
             type: Types.SHOW_LOADING,

@@ -7,6 +7,7 @@ import { getBranchId, setBranchId } from "../ultis/branchUtils";
 import { shallowEqual } from "../ultis/shallowEqual";
 import * as dashboardAction from "../actions/dashboard";
 import * as branchAction from "../actions/branch"
+import { getStoreId, setStoreId } from "../ultis/store";
 
 class Store extends Component {
   componentDidMount() {
@@ -18,15 +19,44 @@ class Store extends Component {
 
 
     if (!shallowEqual(nextProps.stores, this.props.stores)) {
+
+      const store_id = getStoreId();
+
       var stores = nextProps.stores
       if (stores.isApi) {
         var listStore = typeof stores.data == "undefined" ? [] : stores.data;
         if (listStore.length > 0) {
-          var store_code = stores.data[0].store_code;
-          this.setState({
-            store_code: store_code
-          })
-          this.props.fetchBranchStore(store_code);
+
+          if (store_id != null) {
+            const selectedStrore = stores.data.find(
+              (store) => store.id == store_id
+            );
+            if (selectedStrore == null) {
+              var store_code = stores.data[0].store_code;
+              this.setState({
+                store_code: store_code
+              })
+              setStoreId(stores.data[0].id)
+              this.props.fetchBranchStore(store_code);
+            } else {
+
+              var store_code = selectedStrore.store_code;
+
+              this.setState({
+                store_code: store_code
+              })
+              this.props.fetchBranchStore(store_code);
+            }
+          } else {
+            var store_code = stores.data[0].store_code;
+            this.setState({
+              store_code: store_code
+            })
+            setStoreId(stores.data[0].id)
+            this.props.fetchBranchStore(store_code);
+          }
+
+
         } else {
           return <Redirect to="/home" />;
         }
@@ -39,15 +69,10 @@ class Store extends Component {
       const branch_id = getBranchId();
 
       if (nextProps.branchStore != null && nextProps.branchStore.length > 0) {
-
-
         if (branch_id != null) {
           const selectedBranch = nextProps.branchStore.find(
             (branch) => branch.id == branch_id
           );
-
-      
-
           if (selectedBranch == null) {
             const value = nextProps.branchStore[0]?.id;
             this.props.changeBranch(nextProps.branchStore[0]);
@@ -77,9 +102,9 @@ class Store extends Component {
         this.props.currentBranch.id != null &&
         typeof stores.store_code != null &&
         getBranchId() != null &&
+        this.state.store_code != null &&
         typeof getBranchId() != "undefined") {
-        var store_code = stores.data[0].store_code;
-        return <Redirect to={`/dashboard/${store_code}`} />;
+        return <Redirect to={`/dashboard/${this.state.store_code}`} />;
       } else {
         return <Loading />;
 

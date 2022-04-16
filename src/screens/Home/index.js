@@ -61,7 +61,7 @@ class Home extends Component {
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   <h4 className="h4 title_content mb-0 text-gray-800">
-                    Cửa hàng
+                  Danh sách cửa hàng
                   </h4>{" "}
                   <Link to="/store/create" class="btn btn-info btn-icon-split btn-sm">
                     <span class="icon text-white-50">
@@ -73,11 +73,7 @@ class Home extends Component {
 
                 <br></br>
                 <div className="card shadow mb-4">
-                  <div className="card-header py-3">
-                    <h6 className="m-0 title_content font-weight-bold text-primary">
-                      Danh sách cửa hàng
-                    </h6>
-                  </div>
+                
                   <div className="card-body">
                     <ListStore handleDelCallBack={this.handleDelCallBack} data={this.props.stores} />
 

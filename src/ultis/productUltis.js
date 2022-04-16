@@ -30,8 +30,57 @@ export const findImportPrice = (distributes, id) => {
     }
 }
 
+export const findPrice = (product, elementDistributeName, subElementDistributeName) => {
+    var type = getTypeProductDistribute(product);
+    if (type == NO_ELE_SUB) {
+        return product.price
+    }
+    if (type == HAS_ELE) {
+        var distributes = product.distributes
+        var element_distributes = distributes[0].element_distributes
+
+        const ele = element_distributes.find(
+            (e) => e.name == elementDistributeName
+        );
+        if (ele != null) {
+            return ele.price
+        }
+
+
+    }
+
+    if (type == HAS_SUB) {
+        var distributes = product.distributes
+
+        if (distributes[0].element_distributes.length > 0) {
+            var element_distributes = distributes[0].element_distributes
+
+            const ele = element_distributes.find(
+                (e) => e.name == elementDistributeName
+            );
+            if (ele != null) {
+
+                const sub_element_distributes = ele.sub_element_distributes
+
+                const sub = sub_element_distributes.find(
+                    (s) => s.name == subElementDistributeName
+                );
+                if (sub != null) {
+                    return sub.price
+                }
+
+
+            }
+
+
+        }
+    }
+    return null;
+
+
+}
+
 export const findImportPriceSub = (sub_element_distributes, nameElement) => {
-    console.log("sub_element_distributes", sub_element_distributes)
     if (sub_element_distributes) {
         var indexDistributes = sub_element_distributes.map(e => e.name).indexOf(nameElement)
         var sub_elements = sub_element_distributes[indexDistributes]
@@ -62,28 +111,66 @@ export const maxQuantityProduct = (product, distributeName, subDistributeName) =
     return product.quantity_in_stock
 }
 
+export const stockOfProduct = (product, elementDistributeName, subElementDistributeName) => {
+    var type = getTypeProductDistribute(product);
+    if (type == NO_ELE_SUB) {
+        return product.inventory.main_stock
+    }
+    if (type == HAS_ELE) {
+        const element_distributes = product.inventory.distributes[0].element_distributes
+        const ele = element_distributes.find(
+            (e) => e.name == elementDistributeName
+        );
+
+        if (ele != null) {
+            return ele.stock
+        }
+    }
+
+    if (type == HAS_SUB) {
+        const element_distributes = product.inventory.distributes[0].element_distributes
+        const ele = element_distributes.find(
+            (e) => e.name == elementDistributeName
+        );
+        if (ele != null) {
+
+            const sub_element_distributes = ele.sub_element_distributes
+
+            const sub = sub_element_distributes.find(
+                (s) => s.name == subElementDistributeName
+            );
+            if (sub != null) {
+                return sub.stock
+            }
+
+        }
+    }
+
+    return null
+}
+
 export const maxQuantityInPos = (product, distributeName, subDistributeName) => {
-    if (distributeName === null && subDistributeName === null) {
+    if (getTypeProductDistribute(product) == NO_ELE_SUB) {
         return product.quantity_in_stock
     }
     var distributes = product.inventory.distributes
-    if (distributes) {
+    if (getTypeProductDistribute(product) == HAS_SUB) {
         if (distributes[0].element_distributes.length > 0 && distributes[0].element_distributes[0].sub_element_distributes.length > 0) {
             var indexElement = distributes[0].element_distributes.map(e => e.name).indexOf(distributeName)
             var indexSub = distributes[0].element_distributes[indexElement].sub_element_distributes.map(e => e.name).indexOf(subDistributeName)
-            console.log("aaaaaa")
             return distributes[0].element_distributes[indexElement].sub_element_distributes[indexSub].stock
         }
+    }
+
+    if (getTypeProductDistribute(product) == HAS_SUB) {
         if (distributes[0].element_distributes.length > 0) {
             var indexElements = distributes[0].element_distributes.map(e => e.name).indexOf(distributeName)
-
-
             return distributes[0].element_distributes[indexElements].stock
         }
 
-    }
 
-    return product.quantity_in_stock
+        return product.quantity_in_stock
+    }
 }
 
 
@@ -97,20 +184,8 @@ export const getTypeProductDistribute = (product) => {
             const element_distributes = distributes.element_distributes
             if (element_distributes[0].sub_element_distributes != null && element_distributes[0].sub_element_distributes.length > 0) {
                 return HAS_SUB
-                
+
             }
-            // for (var ele in element_distributes) {
-            //     console.log("element_distributes",ele)
-            //     if (ele.sub_element_distributes != null && ele.sub_element_distributes.length > 0) {
-            //         console.log("element_distributes")
-            //         if (ele.sub_element_distributes != null && ele.sub_element_distributes.length > 0) {
-            //             const sub_element_distributes = ele.sub_element_distributes
-            //             for (var sub in sub_element_distributes) {
-            //                 return HAS_SUB
-            //             }
-            //         }
-            //     }
-            // }
             return HAS_ELE
         }
 

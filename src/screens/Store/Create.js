@@ -5,13 +5,13 @@ import Footer from "../../components/Partials/Footer";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import * as Types from "../../constants/ActionType";
-
+import { shallowEqual } from "../../ultis/shallowEqual";
 import Alert from "../../components/Partials/Alert";
 import { isEmpty } from "../../ultis/helpers"
-
+import * as Env from "../../ultis/default"
 import Loading from "../Loading";
 import * as dashboardAction from "../../actions/dashboard";
-
+import ModalUpload from "../../components/Store/ModalUpload"
 
 class StoreCreate extends Component {
   constructor(props) {
@@ -57,7 +57,6 @@ class StoreCreate extends Component {
   }
 
 
-
   onSave = (e) => {
     e.preventDefault();
     if (this.state.txtName == null || !isEmpty(this.state.txtName)) {
@@ -79,8 +78,8 @@ class StoreCreate extends Component {
       store_code: this.state.txtId,
       address: this.state.txtAddress,
       id_type_of_store: 1,
-      career: this.state.txtCareer
-
+      career: this.state.txtCareer,
+      logo_url: this.state.image
     });
   };
   goBack = () => {
@@ -94,6 +93,7 @@ class StoreCreate extends Component {
       if (this.isLoading == false) {
         this.isLoading = true
         this.setState({ txtType: types[0].id })
+        this.setState({ txtCareer: types[0].childs[12].id })
         this.fetchAllCareer(types[0].id)
       }
       result = types.map((type, index) => {
@@ -104,6 +104,26 @@ class StoreCreate extends Component {
     }
     return result;
   };
+
+  componentWillReceiveProps(nextProps, nextState) {
+
+
+    if (this.props.image !== nextProps.image) {
+      this.setState({ image: nextProps.image })
+    }
+
+    if (!shallowEqual(nextState.careers, this.state.careers)) {
+      var { careers } = this.state.careers
+
+      if(nextState.careers != null && nextState.careers.length > 0) {
+        this.setState({
+          txtCareer:nextState.careers[12].id,
+        })
+      }
+      
+    }
+
+  }
 
   showAllCareer = (careers) => {
     var result = null;
@@ -118,9 +138,12 @@ class StoreCreate extends Component {
   }
 
   render() {
-    var { txtName, txtId, txtAddress, txtType, txtCareer, careers } = this.state;
+    var { txtName, txtId, txtAddress, txtType, txtCareer, careers, image } = this.state;
+    var image = image == null || image == "" ? Env.IMG_NOT_FOUND : image
     var { types } = this.props
     var disableCareer = txtType == "" ? "hide" : "show"
+
+ 
     if (this.props.auth) {
       return (
         <div id="wrapper">
@@ -156,12 +179,35 @@ class StoreCreate extends Component {
                               method="post"
                             >
                               <div class="box-body">
-                                <div class="form-group">
 
+
+                              <div class="form-group">
+                                  <label>Ảnh: &nbsp; </label>
+                                  <img src={`${image}`} width="150" height="150" />
                                 </div>
                                 <div class="form-group">
+
+                                  <div class="kv-avatar">
+                                    <div >
+                                      <button
+                                        type="button"
+                                        class="btn btn-primary btn-sm"
+                                        data-toggle="modal"
+                                        data-target="#uploadModalProfile"
+                                      >
+                                        <i class="fa fa-plus"></i> Upload ảnh
+                                      </button>
+                                    </div>
+                                  </div>
+
+                                </div>
+
+
+                                <div class="form-group">
                                   <label for="product_name">Mã cửa hàng</label>
-                                  <div class="input-group">
+                                  <div class="input-group" style={{
+                                    width:300
+                                  }}>
                                     <input
                                       type="text"
                                       class="form-control"
@@ -176,11 +222,17 @@ class StoreCreate extends Component {
                                       <span class="input-group-text" id="basic-addon2">.myiki.vn</span>
                                     </div>
                                   </div>
-                                  <strong>
+                                  
+                                </div>
+                                <div class="form-group">
+                                <strong style={{
+                                    paddingBottom:8,
+                                    color:"blue",
+                                    fontWeight: 300
+                                  }}>
                                     (Mã này là tên miền truy cập trang web bán hàng)
                                   </strong>
-                                </div>
-
+                                  </div>
                                 <div class="form-group">
                                   <label for="product_name">Tên cửa hàng</label>
                                   <input
@@ -192,7 +244,6 @@ class StoreCreate extends Component {
                                     autocomplete="off"
                                     value={txtName}
                                     onChange={this.onChange}
-                                    name="txtName"
                                   />
                                 </div>
                                 <div class="form-group">
@@ -201,7 +252,6 @@ class StoreCreate extends Component {
                                     type="text"
                                     class="form-control"
                                     id="txtAddress"
-                                    name="txtAddress"
                                     placeholder="Nhập địa chỉ"
                                     autocomplete="off"
                                     value={txtAddress}
@@ -225,7 +275,7 @@ class StoreCreate extends Component {
                                 </div>
 
                                 <div class={`form-group ${disableCareer}`}>
-                                  <label for="product_name">Nghề nghiệp</label>
+                                  <label for="product_name">Nhóm ngành</label>
 
                                   <select
                                     id="input"
@@ -252,13 +302,14 @@ class StoreCreate extends Component {
                                 <a
                                   style={{ marginLeft: "10px" }}
                                   onClick={this.goBack}
-                                  class="btn btn-warning"
                                   class="btn btn-warning btn-icon-split  btn-sm"
                                 >
                                   <span class="icon text-white-50">
                                     <i class="fas fa-arrow-left"></i>
                                   </span>
-                                  <span class="text"> Trở về</span>
+                                  <span class="text" style={{
+                                    color: "white"
+                                  }}> Trở về</span>
                                 </a>
                               </div>
                             </form>
@@ -270,7 +321,7 @@ class StoreCreate extends Component {
                 </div>
               </div>
             </div>
-
+            <ModalUpload image = {image}></ModalUpload>
             <Footer />
           </div>
         </div>
@@ -288,7 +339,7 @@ const mapStateToProps = (state) => {
     types: state.storeReducers.store.type,
     auth: state.authReducers.login.authentication,
     alert: state.storeReducers.alert.alert_uid,
-
+    image: state.UploadReducers.storeImg.store_img,
 
 
 
