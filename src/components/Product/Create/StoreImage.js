@@ -39,8 +39,8 @@ class StoreImage extends Component {
   };
   showListImg = (images) => {
     console.log(images);
-    // var result = null;
-    // if (images.length > 0) {
+    var result = null;
+    if (images.length > 0) {
     return (
       // <SortableList
       //   onSortEnd={this.onSortEnd}
@@ -97,22 +97,22 @@ class StoreImage extends Component {
       </div>
       // {/* </SortableList> */}
     );
-    // } else {
-    //   result = (
-    //     <div class=" col-sm-4 col-md-3 col-lg-3 space-bottom">
-    //       <div className="box">
-    //         <img
-    //           src={Env.IMG_NOT_FOUND}
-    //           width="128"
-    //           height="128"
-    //           class="img-responsive"
-    //           alt="Image"
-    //         />
-    //       </div>
-    //     </div>
-    //   );
-    // }
-    // return result;
+    } else {
+      result = (
+        <div class=" col-sm-4 col-md-3 col-lg-3 space-bottom">
+          <div className="box">
+            <img
+              src={Env.IMG_NOT_FOUND}
+              width="128"
+              height="128"
+              class="img-responsive"
+              alt="Image"
+            />
+          </div>
+        </div>
+      );
+    }
+    return result;
   };
   componentWillReceiveProps(nextProps) {
     if (nextProps.product_img != this.props.product_img) {
@@ -178,7 +178,7 @@ class StoreImage extends Component {
   //   });
   // };
   render() {
-    var { avatar_product, listImgProduct } = this.state;
+    var { avatar_product, listImgProduct, showBar, percent } = this.state;
     console.log(this.props.listImgProduct);
 
     return (
@@ -187,10 +187,23 @@ class StoreImage extends Component {
         <div class="row">
           <div>
             <label style={{ fontSize: "20px" }} for="product_name">
-              Ảnh đại diện sản phẩm : <i style={{ fontSize: "14px" }}></i>
+              Ảnh  sản phẩm : <i style={{ fontSize: "14px" }}></i>
             </label>
           </div>
+          <div class={`w3-light-grey ${showBar == true ? "show" : "hide"}`} style={{
+            height: "20px",
+            width: "100%",
+            border: "1px solid"
+          }}>
+            <div class="w3-blue" style={{
+              width: percent + "%",
+              color: "white",
+              textAlign: "center",
+              background: "green"
+            }}>{percent + "%"}</div>
+          </div>
         </div>
+        
         {this.showListImg(this.state.listImgProduct)}
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <button

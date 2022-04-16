@@ -20,7 +20,7 @@ class InfoProduct extends Component {
       disabledPrice: false,
       icon:true,
       checkHasDistribute : false,
-
+      isLoadDistribute : false,
       sku: "",
       isChecked: true,
       txtImportPrice: "",
@@ -68,7 +68,8 @@ class InfoProduct extends Component {
 
   onChangeCheckHasDitribute = (e) => {
     this.setState({checkHasDistribute : !this.state.checkHasDistribute});
-    this.props.checkDistribute(!this.state.checkHasDistribute)
+    this.props.checkDistribute(!this.state.checkHasDistribute , this.state.check_inventory)
+    // this.props.checkDistribute(!this.state.checkHasDistribute)
   };
   onChange = (e) => {
     var target = e.target;
@@ -188,13 +189,7 @@ class InfoProduct extends Component {
         this.setState({ txtQuantityInStock: value })
       }
     }
-    console.log(nextProps.product.distributes);
-    if(nextProps.product.distributes != null && this.state.checkHasDistribute == false)
-    {
-      this.setState({checkHasDistribute : true});
-      this.props.checkDistribute(true)
 
-    }
     if (
       !shallowEqual(nextProps.category_product, this.props.category_product)
     ) {
@@ -220,7 +215,7 @@ class InfoProduct extends Component {
 
         return { id: category.id, label: category.name };
       });
-
+      console.log("eeeee");
       const price = formatNumber(product.price ?? 0);
       var _price = new Intl.NumberFormat().format(price);
 
@@ -230,6 +225,11 @@ class InfoProduct extends Component {
       const quantity_stock = product.quantity_in_stock < 0 ? "" : formatNumber(product.quantity_in_stock);
 
       var _quantity_stock = quantity_stock == "" ? "" : new Intl.NumberFormat().format(quantity_stock);
+      var checkHasDistribute = false;
+      if(product.distributes != null)
+      {
+        checkHasDistribute = true
+      }
 
       this.setState({
         txtName: product.name,
@@ -243,16 +243,23 @@ class InfoProduct extends Component {
         category_children_ids: product.category_children,
         txtQuantityInStock: _quantity_stock,
         sku: product.sku ||  Math.random().toString().slice(2, 11),
-        
+        checkHasDistribute,
         check_inventory: product.check_inventory,
         txtCostOfCapital : product.main_cost_of_capital
       });
+
+      this.props.checkDistribute(checkHasDistribute , product.check_inventory)
+
 
     }
   }
   onChangeCheckInventory = (e) => {
     var { checked } = e.target
-    this.setState({ check_inventory: checked })
+    this.setState({
+      check_inventory: checked,
+
+    });
+    this.props.checkDistribute(this.state.checkHasDistribute , !this.state.check_inventory)
   }
   shouldComponentUpdate(nextProps, nextState) {
     if (
@@ -297,7 +304,7 @@ class InfoProduct extends Component {
       txtCostOfCapital,
       checkHasDistribute
     } = this.state;
-
+    console.log(checkHasDistribute);
     var txtQuantityInStock = txtQuantityInStock == -1 ? "" : txtQuantityInStock
     return (
       <div class="card-body" style={{ padding: "0.8rem" }}>
@@ -460,7 +467,7 @@ class InfoProduct extends Component {
           <div className="Choose-category-product">
             <div className="wrap_category" style={{ display: "flex" }}>
               <input type="text" class="form-control" placeholder="--Chọn danh mục--" style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", paddingRight: "55px", position: "relative" }} value={this.getNameSelected()}></input>
-              <button onClick={this.onChangeIcon} data-toggle="collapse" data-target="#demo2" class="btn" style={{ position: "absolute", right: "27px" }}><i                     class={this.state.icon ? "fa fa-plus" : "fa fa-caret-down"}
+              <button onClick={this.onChangeIcon} data-toggle="collapse" data-target="#demo2" class="btn" style={{ position: "absolute", right: "27px" }}><i                     class={this.state.icon ? "fa fa-caret-down" : "fa fa-caret-down"}
 ></i></button>
             </div>
             <div id="demo2" class="collapse">

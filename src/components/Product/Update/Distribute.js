@@ -823,6 +823,8 @@ class Distribute extends Component {
 
   render() {
     var { list_distribute } = this.state;
+    // var openDistribute = disableDistribute == true && disableInventory == true ? "" : "hide";
+
     var disable = ""
     try {
       disable = list_distribute[0].element_distributes[0].sub_element_distributes.length > 0 ? "hide" : "show"

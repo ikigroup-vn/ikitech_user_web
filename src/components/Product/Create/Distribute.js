@@ -237,7 +237,7 @@ class Distribute extends Component {
       && typeof list_distribute[0].element_distributes[0].sub_element_distributes != "undefined"
     ) {
       console.log("ccccc")
-      list_distribute[0].element_distributes[0].sub_element_distributes = []
+      // list_distribute[0].element_distributes[0].sub_element_distributes = []
       list_distribute[0].sub_element_distribute_name = null
       var newObject = {
         name: null,
@@ -331,7 +331,7 @@ class Distribute extends Component {
     list_distribute[0].element_distributes.push(newObject)
     this.setState({ list_distribute: list_distribute });
   };
-  showRows = (list_distribute) => {
+  showRows = (list_distribute , openDistribute) => {
     var result = [];
     if (typeof list_distribute === "undefined") {
       return result;
@@ -391,7 +391,7 @@ class Distribute extends Component {
                   </button>
                 </td>
                 <td
-                  className="btn-img"
+                  className="btn-img i"
                   style={{
                     display: "flex",
                     flexDirection: "column",
@@ -526,7 +526,6 @@ class Distribute extends Component {
                     >
 
 
-
                     </td>
                     <td className="btn-action">
                       <button
@@ -586,7 +585,7 @@ class Distribute extends Component {
     return true;
   }
 
-  showDetail = (list_distribute) => {
+  showDetail = (list_distribute , openDistribute) => {
     console.log(list_distribute)
     var result = []
     if (typeof list_distribute == "undefined" || list_distribute.length == 0) {
@@ -674,7 +673,7 @@ class Distribute extends Component {
                           }
                           value={quantity_in_stock}
                           id="input"
-                          class="form-control"
+                          class={`form-control ${openDistribute}`}
                           required="required"
                           title=""
                         />
@@ -689,7 +688,7 @@ class Distribute extends Component {
                           }
                           value={value_price_main}
                           id="input"
-                          class="form-control"
+                          class={`form-control ${openDistribute}`}
                           required="required"
                           title=""
                         />
@@ -748,7 +747,7 @@ class Distribute extends Component {
                           }
                           value={quantity_in_stock}
                           id="input"
-                          class="form-control"
+                          class={`form-control ${openDistribute}`}
                           required="required"
                           title=""
                         />
@@ -763,7 +762,7 @@ class Distribute extends Component {
                           }
                           value={value_price_main}
                           id="input"
-                          class="form-control"
+                          class={`form-control ${openDistribute}`}
                           required="required"
                           title=""
                         />
@@ -861,7 +860,7 @@ class Distribute extends Component {
                       }
                       name=""
                       id="input"
-                      class="form-control"
+                      class={`form-control ${openDistribute}`}
                       required="required"
                       title=""
                     />
@@ -880,6 +879,9 @@ class Distribute extends Component {
 
   render() {
     var { list_distribute } = this.state;
+    var {disableDistribute , disableInventory} = this.props
+    var openDistribute = disableDistribute == true && disableInventory == true ? "" : "hide";
+    console.log(openDistribute)
     var disable = ""
     try {
       disable = list_distribute[0].element_distributes[0].sub_element_distributes.length > 0 ? "hide" : "show"
@@ -903,8 +905,8 @@ class Distribute extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.showRows(list_distribute)}
-            {this.showRowsSuper(list_distribute)}
+            {this.showRows(list_distribute , openDistribute)}
+            {this.showRowsSuper(list_distribute , openDistribute)}
           </tbody>
         </table>
         <button
@@ -926,14 +928,14 @@ class Distribute extends Component {
               <th>Giá bán lẻ</th>
               <th>Giá nhập</th>
               <th>Barcode</th>
-              <th>Tồn kho ban đầu</th>
-              <th>Giá vốn</th>
+              <th className={openDistribute}>Tồn kho ban đầu</th>
+              <th className= {openDistribute}>Giá vốn</th>
 
 
             </tr>
           </thead>
           <tbody>
-            {this.showDetail(list_distribute)}
+            {this.showDetail(list_distribute , openDistribute)}
           </tbody>
         </table>
 
