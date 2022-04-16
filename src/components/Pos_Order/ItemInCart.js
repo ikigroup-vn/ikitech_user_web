@@ -101,7 +101,7 @@ class ItemInCart extends Component {
         const { currentQuantity } = this.state
 
         const maxQuantity = stockOfProduct(item.product, item.distributes_selected[0]?.value, item.distributes_selected[0]?.sub_element_distributes)
-        const allowAdd = maxQuantity > currentQuantity
+        const allowAdd = true
 
         return (
             <div class="card card-item-pos" style={{ marginBottom: "10px" }} key={index}>
