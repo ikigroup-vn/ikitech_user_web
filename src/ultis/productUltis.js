@@ -121,7 +121,7 @@ export const stockOfProduct = (product, elementDistributeName, subElementDistrib
         const ele = element_distributes.find(
             (e) => e.name == elementDistributeName
         );
-      
+
         if (ele != null) {
             return ele.stock
         }
@@ -150,27 +150,27 @@ export const stockOfProduct = (product, elementDistributeName, subElementDistrib
 }
 
 export const maxQuantityInPos = (product, distributeName, subDistributeName) => {
-    if (distributeName === null && subDistributeName === null) {
+    if (getTypeProductDistribute(product) == NO_ELE_SUB) {
         return product.quantity_in_stock
     }
     var distributes = product.inventory.distributes
-    if (distributes) {
+    if (getTypeProductDistribute(product) == HAS_SUB) {
         if (distributes[0].element_distributes.length > 0 && distributes[0].element_distributes[0].sub_element_distributes.length > 0) {
             var indexElement = distributes[0].element_distributes.map(e => e.name).indexOf(distributeName)
             var indexSub = distributes[0].element_distributes[indexElement].sub_element_distributes.map(e => e.name).indexOf(subDistributeName)
-            console.log("aaaaaa")
             return distributes[0].element_distributes[indexElement].sub_element_distributes[indexSub].stock
         }
+    }
+
+    if (getTypeProductDistribute(product) == HAS_SUB) {
         if (distributes[0].element_distributes.length > 0) {
             var indexElements = distributes[0].element_distributes.map(e => e.name).indexOf(distributeName)
-
-
             return distributes[0].element_distributes[indexElements].stock
         }
 
-    }
 
-    return product.quantity_in_stock
+        return product.quantity_in_stock
+    }
 }
 
 

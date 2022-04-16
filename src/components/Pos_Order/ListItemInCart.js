@@ -61,7 +61,7 @@ import { getBranchId } from '../../ultis/branchUtils'
         }
         if(!shallowEqual(nextState.modalAdd,this.state.modalAdd) && nextState.modalAdd.quantity !== "" ){
             var formDataAdd = {line_item_id:nextState.modalAdd.lineItemIds, product_id:nextState.modalAdd.productIds,quantity:nextState.modalAdd.quantity,distributes:nextState.modalAdd.distributesProduct}
-            this.props.addQuantityProduct(store_code,branch_id,this.props.idCart,formDataAdd)
+            this.props.updateQuantityLineItem(store_code,branch_id,this.props.idCart,formDataAdd)
         }
         if(!shallowEqual(nextState.modalSub,this.state.modalSub)){
             var formDataSub = {line_item_id:nextState.modalSub.itemIds, product_id:nextState.modalSub.productIds,quantity:nextState.modalSub.quantity,distributes:nextState.modalSub.distributesProduct}
@@ -77,7 +77,7 @@ import { getBranchId } from '../../ultis/branchUtils'
 
                 {listItemPos.info_cart?.line_items.map((item,index) =>{
                     return(
-                        <ItemInCart item = {item} index ={index} addQuantity ={this.addQuantity} handleDelete ={this.handleDelete} subQuantity ={this.subQuantity} addQuantitys = {this.addQuantitys} />
+                        <ItemInCart key={item.id} item = {item} index ={index} addQuantity ={this.addQuantity} handleDelete ={this.handleDelete} subQuantity ={this.subQuantity} addQuantitys = {this.addQuantitys} />
                     )
                 })}
             </div>
@@ -88,8 +88,8 @@ import { getBranchId } from '../../ultis/branchUtils'
 
 const mapDispatchToProps =(dispatch,props) =>{
     return {
-        addQuantityProduct: (store_code,branch_id,idCart,data) =>{
-            dispatch(posAction.addQuantityProduct(store_code,branch_id,idCart,data))
+        updateQuantityLineItem: (store_code,branch_id,idCart,data) =>{
+            dispatch(posAction.updateQuantityLineItem(store_code,branch_id,idCart,data))
         },
         destroyOneProduct: (store_code,branch_id,idCart,data) =>{
             dispatch(posAction.destroyOneProduct(store_code,branch_id,idCart,data))

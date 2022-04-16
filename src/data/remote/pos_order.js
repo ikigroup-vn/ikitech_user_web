@@ -20,7 +20,7 @@ export const listPosOrder = (store_code,branch_id) => {
     return callApi(`/store/${store_code}/carts/${branch_id}/list/${id}`, "get", null);
   };
 
-  export const addQuantityProduct = (store_code,branch_id,id_cart,data) => {
+  export const updateQuantityLineItem = (store_code,branch_id,id_cart,data) => {
     return callApi(`/store/${store_code}/carts/${branch_id}/list/${id_cart}/items`, "put", data);
   };
   export const subQuantityProduct = (store_code,branch_id,id_cart,data) => {

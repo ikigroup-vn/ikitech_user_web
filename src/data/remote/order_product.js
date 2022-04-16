@@ -9,7 +9,7 @@ export const fetchAllData = (store_code,data) => {
 export const deleteProduct = (store_code,data) =>{
     return callApi(`/store/${store_code}/pos/carts/items`, "put", data);
   }
-export const addQuantityProduct = (store_code,data) =>{
+export const updateQuantityLineItem = (store_code,data) =>{
     return callApi(`/store/${store_code}/pos/carts/items`, "put", data);
   }
 export const subQuantityProduct = (store_code,data) =>{

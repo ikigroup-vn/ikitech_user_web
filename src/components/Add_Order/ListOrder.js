@@ -45,7 +45,7 @@ import LineItem from './LineItem'
         }
         if(!shallowEqual(nextState.modalAdd,this.state.modalAdd)){
             var formDataAdd = {line_item_id:nextState.modalAdd.itemIds, product_id:nextState.modalAdd.productIds,quantity:nextState.modalAdd.quantity,distributes:nextState.modalAdd.distributesProduct}
-            this.props.addQuantityProduct(store_code,formDataAdd)
+            this.props.updateQuantityLineItem(store_code,formDataAdd)
         }
         if(!shallowEqual(nextState.modalSub,this.state.modalSub)){
             var formDataSub = {line_item_id:nextState.modalSub.itemIds, product_id:nextState.modalSub.productIds,quantity:nextState.modalSub.quantity,distributes:nextState.modalSub.distributesProduct}
@@ -78,8 +78,8 @@ import LineItem from './LineItem'
         destroyOneProduct: (store_code,data) =>{
             dispatch(OrderAction.destroyOneProduct(store_code,data))
         },
-        addQuantityProduct:(store_code,data) =>{
-            dispatch(OrderAction.addQuantityProduct(store_code,data))
+        updateQuantityLineItem:(store_code,data) =>{
+            dispatch(OrderAction.updateQuantityLineItem(store_code,data))
         },
         subQuantityProduct: (store_code,data) =>{
             dispatch(OrderAction.subQuantityProduct(store_code,data))
