@@ -27,9 +27,6 @@ class ItemInCart extends Component {
 
 
     componentWillReceiveProps(nextProps) {
-        console.log("this.props.item.quantity", this.props.item.quantity)
-        console.log("nextProps.satte.quantity", this.state.currentQuantity)
-        console.log("nextProps.item.quantity", nextProps.item.quantity)
         if (!shallowEqual(this.props.item.quantity, nextProps.item.quantity)) {
             this.setState({ currentQuantity: nextProps.item.quantity })
         }
@@ -52,7 +49,7 @@ class ItemInCart extends Component {
         this.setState({
             currentQuantity: q
         })
-        this.props.subQuantity(idCart, id, productId, q, distribute)
+        this.changeQuantity(q)
     }
 
     addQuantity(productId, lineItemId, quantity, distribute, quantityInStock) {
@@ -62,13 +59,13 @@ class ItemInCart extends Component {
             this.setState({
                 currentQuantity: q
             })
-            this.props.addQuantity(productId, lineItemId, q, distribute)
+            this.changeQuantity(q)
         } else {
             const q = quantity + 1
             this.setState({
                 currentQuantity: q
             })
-            this.props.addQuantity(productId, lineItemId, q, distribute)
+            this.changeQuantity(q)
         }
 
 
