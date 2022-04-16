@@ -139,7 +139,7 @@ class ModalUpload extends Component {
               </div> */}
               <div className="modal-body">
                 <form enctype="multipart/form-data">
-                  <div className="form-group upload-list-product">
+                  <div className="form-group ">
                     <div className="file-loading">
                       <input
                         id="file-listp"
@@ -167,7 +167,7 @@ class ModalUpload extends Component {
               </div> */}
               <div class="modal-footer">
                 
-              <button
+              {/* <button
                   onClick={this.showDialog}
                   type="button"
                   class="btn btn-warning"
@@ -180,17 +180,17 @@ class ModalUpload extends Component {
                   <i class="fa fa-upload"></i>
 
                   Upload
-                </button>
-                {/* <button
+                </button> */}
+                <button
                   type="button"
                   class="btn btn-default"
                   data-dismiss="modal"
-                >
+                           >
                   Đóng
                 </button>
                 <button type="submit" class="btn btn-info">
                   Tạo
-                </button> */}
+                </button>
               </div>
             </form>
           </div>

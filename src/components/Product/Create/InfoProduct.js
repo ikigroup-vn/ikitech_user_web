@@ -142,10 +142,12 @@ class InfoProduct extends Component {
     } else {
       this.setState({ check_inventory: checked });
     }
+    this.props.checkDistribute(this.state.checkHasDistribute , !this.state.check_inventory)
+
   };
   onChangeCheckHasDitribute = (e) => {
     this.setState({checkHasDistribute : !this.state.checkHasDistribute});
-    this.props.checkDistribute(!this.state.checkHasDistribute)
+    this.props.checkDistribute(!this.state.checkHasDistribute , this.state.check_inventory)
   };
 
 
@@ -418,7 +420,7 @@ class InfoProduct extends Component {
             </label>
           </div>
         </div>
-        {check_inventory && (
+        {(check_inventory && !checkHasDistribute) && (
           <div class="form-group">
             <div className="row">
               <div className="col-6">
@@ -528,7 +530,7 @@ class InfoProduct extends Component {
                   style={{ position: "absolute", right: "27px" }}
                 >
                   <i
-                    class={this.state.icon ? "fa fa-plus" : "fa fa-caret-down"}
+                    class={this.state.icon ? "fa fa-caret-down" : "fa fa-caret-down"}
                     // style={{ fontSize: "0.2px", color: "#abacb4" }}
                   ></i>
                 </button>

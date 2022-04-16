@@ -22,14 +22,15 @@ class ProductEdit extends Component {
     this.state = {
       form: {},
       total: "",
-            disableDistribute: false,
-
+      disableDistribute: false,
+      disableInventory : false
     };
 
   }
-  checkDistribute = (status) => {
-    console.log(status);
-    this.setState({ disableDistribute: status })
+
+  checkDistribute = (status , _status) => {
+    console.log(status , _status);
+    this.setState({ disableDistribute: status , disableInventory : _status })
   }
 
   componentDidMount() {
@@ -319,7 +320,7 @@ class ProductEdit extends Component {
   render() {
     var { store_code } = this.props;
     var { category_product, attributeP, auth, product, isShowAttr, isCreate, isRemove } = this.props;
-    var { total } = this.state
+    var { total , disableInventory , disableDistribute } = this.state;
     return (
 
 
@@ -373,7 +374,7 @@ class ProductEdit extends Component {
             </div>
           </div>
         </div>
-        <div class="card mb-4">
+        {/* <div class="card mb-4">
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -398,7 +399,7 @@ class ProductEdit extends Component {
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
         <div class={`card mb-4 ${typeof isShowAttr == "undefined" || isShowAttr == false ? "hide" : ""}`}>
           <div class="card-header title_content">
             Thuộc tính sản phẩm
@@ -435,6 +436,8 @@ class ProductEdit extends Component {
                 <div>
                   <div class="card-body" style={{ padding: "0.8rem" }}>
                     <Distribute
+                    disableDistribute  = {disableDistribute}
+                    disableInventory = {disableInventory}
                       onChangeQuantityStock={this.onChangeQuantityStock}
                       product={product}
                       handleDataFromDistribute={
