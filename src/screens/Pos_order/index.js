@@ -604,10 +604,10 @@ class PostOrder extends Component {
                                 <div className='wrap-price'>
                                     <div className='' style={{ padding: "0" }}>
                                         <div class="mb-6" style={{ position: "relative", marginTop: "10px", display: "flex" }}>
-                                            <i class='fa fa-search' style={{ position: "absolute", fontSize: "20px", left: "3px", bottom: "10px", cursor: "pointer" }} ></i>
+                                            <i class='fa fa-user-o' style={{ position: "absolute", fontSize: "20px", left: "3px", bottom: "10px", cursor: "pointer" }} ></i>
                                             <div style={{ border: 0, borderRadius: 0, borderBottom: "1px solid rgba(128, 128, 128, 0.27)", paddingLeft: "30px", fontWeight: "500", color: "black" }}
-                                                class="form-control" id="form-control" data-toggle="modal" data-target="#modalPertion" >{this.props.listItemCart.customer?.name ? `${this.props.listItemCart.customer.name} (Công nợ: ${format(Number(this.props.listItemCart.customer.debt))} )` : "Thêm khách hàng vào đơn"}</div>
-                                            {this.props.listItemCart.customer?.name ? <i class="fa fa-times" style={{ paddingTop: "10px" }} onClick={this.handleDeletePersion}></i> : <i class='fas fa-plus' style={{ position: "absolute", fontSize: "20px", right: "10px", bottom: "10px", cursor: "pointer" }} data-toggle="modal" data-target="#modalUser" ></i>}
+                                                class="form-control" id="form-control" data-toggle="modal" data-target="#modalPertion" >{this.props.listItemCart.customer?.name ? `${this.props.listItemCart.customer.name} (Công nợ: ${format(Number(this.props.listItemCart.customer.debt))} )` : "Chọn khách hàng"}</div>
+                                            {this.props.listItemCart.customer?.name ? <i class="fa fa-times" style={{ paddingTop: "10px" }} onClick={this.handleDeletePersion}></i> : <i class='fa fa-plus-square-o' style={{ position: "absolute", fontSize: "30px", right: "10px", bottom: "10px", cursor: "pointer" }} data-toggle="modal" data-target="#modalUser" ></i>}
 
 
                                         </div>

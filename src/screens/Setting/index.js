@@ -86,12 +86,12 @@ class Setting extends Component {
                                         <div className='wrap-card' style={{ width: "50%",borderRight: "1px solid #80808078" }}>
                                             <div className='wrap-setting' style={{width:"50%", display: "flex", justifyContent: "space-between",padding: "10px 0"}}>
                                                 <div>Thông báo sắp hết hàng</div>
-                                                <form action="/action_page.php">
+                                             
                                                     <div class="custom-control custom-switch">
                                                         <input type="checkbox" class="custom-control-input" id="switch2" name="checked_switch2" checked={this.state.checked_switch2} onChange={this.handChangeCheckbox2} />
                                                         <label class="custom-control-label" for="switch2"></label>
                                                     </div>
-                                                </form>
+                                              
                                             </div>
                                             <div className='wrap-setting' style={{width:"50%", display: "flex", justifyContent: "space-between",padding: "10px 0" }}>
                                                 <div>Cho phép bán âm</div>
@@ -102,10 +102,14 @@ class Setting extends Component {
                                                     </div>
                                                 </form>
                                             </div>
-                                            <div className="form-group">
+                                            <div className='wrap-setting' style={{width:"50%", display: "flex", justifyContent: "space-between",padding: "10px 0" }}>
                                                 <div>Số lượng sản phẩm thông báo gần hết hàng</div>
-                                                <input type="number" class="form-control" name="payment_limit" onChange={this.onChange} value = {this.state.stock} style={{width:"50%",padding: "10px 0"}} />
+                                           
+                                                <input type="number" class="form-control" name="payment_limit" onChange={this.onChange} value = {this.state.stock} style={{width:"100px",padding: "10px 0"}} />
+                                            
                                             </div>
+
+                                         
                                         </div>
                                         <button type="submit" class="btn btn-info btn-icon-split btn-sm" onClick={this.handleUpdate} >
                                             <span class="text">Lưu</span>

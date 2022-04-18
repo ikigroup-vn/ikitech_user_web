@@ -142,7 +142,7 @@ class Topbar extends Component {
         this.props.fetchAllProductV2(store_code, branch_id, 1, params);
     };
     goBackHome = () => {
-        history.push("/");
+        window.location.href = "/";
     }
 
     onChangeSearch = (e) => {
@@ -179,38 +179,45 @@ class Topbar extends Component {
             <div>
                 <nav class="navbar navbar-expand navbar-light bg-white topbar static-top header-pos">
 
-                    <ul class="navbar-nav" style={{ alignItems: "center" }} >
-                        <li className='nav-item' style={{ color: "white", cursor: "pointer",marginRight:'10px' }} onClick={this.goBackHome}>
-                            <i class='fas fa-home fa-2x' style={{ fontSize: "22px" }}></i>
-                        </li>
-                        <li class="nav-item">
-                            <form onSubmit={this.searchData}>
-                                <div
-                                    class="input-group"
-                                >
-                                <input
-                                    // style={{ maxWidth: "400px", minWidth: "300px", borderRadius: '5px' }}
-                                    type="search"
-                                    name="txtSearch"
-                                    id="serch-product"
-                                    onChange={this.onChangeSearch}
-                                    class="form-control"
-                                    placeholder="Tìm kiếm sản phẩm"
-                                />
-                                    <div class="input-group-append">
-                                        <button
-                                            class=""
-                                            style={{ width: "34px", border: "none",backgroundColor: "white",borderRadius: "3px"}}
-                                            type="submit"
-                                        >
-                                            <i class="fa fa-search"></i>
-                                        </button>
+                    <div class="navbar-nav" style={{
+                        alignItems: "center",
+                        width: "100%"
+                    }}
+
+                    >
+
+                        <div className='first-list-top-cart'>
+                            <li className='nav-item' style={{ color: "white", cursor: "pointer", marginRight: '10px' }} onClick={this.goBackHome}>
+                                <i class='fas fa-home fa-2x' style={{ fontSize: "22px" }}></i>
+                            </li>
+                            <li class="nav-item">
+                                <form onSubmit={this.searchData}>
+                                    <div
+                                        class="input-group"
+                                    >
+                                        <input
+                                            // style={{ maxWidth: "400px", minWidth: "300px", borderRadius: '5px' }}
+                                            type="search"
+                                            name="txtSearch"
+                                            id="serch-product"
+                                            onChange={this.onChangeSearch}
+                                            class="form-control"
+                                            placeholder="Tìm kiếm sản phẩm"
+                                        />
+                                        <div class="input-group-append">
+                                            <button
+                                                class=""
+                                                style={{ width: "34px", border: "none", backgroundColor: "white", borderRadius: "3px" }}
+                                                type="submit"
+                                            >
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                        </div>
+
                                     </div>
+                                </form>
 
-                                </div>
-                            </form>
-
-                            {/* <div className='search-imput' style={{ display: 'flex' }}>
+                                {/* <div className='search-imput' style={{ display: 'flex' }}>
                                 <input
                                     style={{ maxWidth: "400px", minWidth: "300px", borderRadius: '5px' }}
                                     type="search"
@@ -232,70 +239,85 @@ class Topbar extends Component {
 
                             </div> */}
 
-                        </li>
-                        <li class="nav-item">
-                            {
-                                listPos !== null && listPos.length > 0 ?
-                                    <ul class="navbar-nav" style={{ alignItems: "center" }}>
-                                        <li className={this.state.selectTap === -1 ? "activess nav-item" : 'nav-item'} style={{ display: "flex", alignItems: "center", margin: "0 7px", backgroundColor: "rgb(174 61 52)", color: "white", padding: "8px 10px", borderRadius: "5px" }} >
-                                            <div className='tab-item' onClick={() => this.handleChooseTab1(listPos[0].id)} style={{ cursor: "pointer", marginRight: "5px" }}>{listPos[0].name}</div>
-                                            {listPos.length > 1 && <i class='fa fa-window-close'
-                                                onClick={() => this.handleDelete(listPos[0].id)}
-                                                data-toggle="modal" data-target="#removeModal"
-                                            ></i>
+                            </li>
+
+                            <li className='nav-item' style={{
+                                 display: 'flex', alignItems: "center", 
+                                 color: "white", fontSize: "15px",
+                                  padding: "10px", 
+                                  paddingLeft:"25px",
+                                  cursor: "pointer" }} onClick={() => this.handleCreateTab()}>
+                                <i class='fas fa-plus' ></i>
+                            </li>
+                        </div>
+                        <div className='cart-list-banner'>
+                            <li class="nav-item">
+
+                                {
+                                    listPos !== null && listPos.length > 0 ?
+                                        <ul class="navbar-nav" style={{ alignItems: "center" }}>
+                                            <li className={this.state.selectTap === -1 ? "activess nav-item" : 'nav-item'} style={{ display: "flex", alignItems: "center", margin: "0 7px", backgroundColor: "rgb(174 61 52)", color: "white", padding: "8px 10px", borderRadius: "5px" }} >
+                                                <div className='tab-item' onClick={() => this.handleChooseTab1(listPos[0].id)} style={{ cursor: "pointer", marginRight: "5px" }}>{listPos[0].name}</div>
+                                                {listPos.length > 1 && <i class='fa fa-window-close'
+                                                    onClick={() => this.handleDelete(listPos[0].id)}
+                                                    data-toggle="modal" data-target="#removeModal"
+                                                ></i>
+                                                }
+                                            </li >
+                                            {
+                                                listPos.slice(1, listPos.length).map((item, index) => {
+                                                    return (
+                                                        <li key={index} className={index === this.state.selectTap ? "activess nav-item" : 'nav-item'} style={{ display: "flex", alignItems: "center", margin: "0 7px", backgroundColor: "rgb(174 61 52)", color: "white", padding: "8px 10px", borderRadius: "5px" }} >
+                                                            <div className='tab-item' onClick={() => this.handleChooseTab(item.id, index)} style={{ cursor: "pointer", marginRight: "5px" }}>{item.name}</div>
+                                                            <i class='fa fa-window-close' onClick={() => this.handleDelete(item.id)} data-toggle="modal" data-target="#removeModal"></i>
+                                                        </li >
+                                                    )
+                                                })
                                             }
-                                        </li >
-                                        {
-                                            listPos.slice(1, listPos.length).map((item, index) => {
-                                                return (
-                                                    <li key={index} className={index === this.state.selectTap ? "activess nav-item" : 'nav-item'} style={{ display: "flex", alignItems: "center", margin: "0 7px", backgroundColor: "rgb(174 61 52)", color: "white", padding: "8px 10px", borderRadius: "5px" }} >
-                                                        <div className='tab-item' onClick={() => this.handleChooseTab(item.id, index)} style={{ cursor: "pointer", marginRight: "5px" }}>{item.name}</div>
-                                                        <i class='fa fa-window-close' onClick={() => this.handleDelete(item.id)} data-toggle="modal" data-target="#removeModal"></i>
-                                                    </li >
-                                                )
-                                            })
-                                        }
-                                    </ul>
-                                    : ""
-                            }
-                        </li>
+                                        </ul>
+                                        : ""
+                                }
+
+                            </li>
+                        </div>
+
+                        <div className='end-list-top-cart'>
 
 
-                        <li className='nav-item' style={{ display: 'flex', alignItems: "center", color: "white", fontSize: "15px", padding: "10px", cursor: "pointer" }} onClick={() => this.handleCreateTab()}>
-                            <i class='fas fa-plus' ></i>
-                        </li>
-                    </ul>
-
-                    <ul className="navbar-nav ml-auto" style={{ display: "flex", alignItems: "center" }}>
-                        <li className="nav-item dropdown no-arrow" style={{ margin: "0 10px" , fontSize: "17px"}}>
-                            {/* <div className='wrap-info' data-toggle="modal" data-target="#modalBranch" style={{ display: "flex", color: "white", cursor: "pointer" }}>
+                            <ul className="navbar-nav ml-auto" style={{ display: "flex", alignItems: "center" }}>
+                                <li className="nav-item dropdown no-arrow" style={{ margin: "0 10px", fontSize: "17px" }}>
+                                    {/* <div className='wrap-info' data-toggle="modal" data-target="#modalBranch" style={{ display: "flex", color: "white", cursor: "pointer" }}>
                                 <i class="fa fa-map-marker" aria-hidden="true"></i>
                                 <span className="mr-2 small" style={{ color: "white", marginLeft: "5px" }}>
                                     {currentBranch?.name ?? "Chưa có chi nhánh"}
                                 </span>
 
                             </div> */}
-                            <div className='wrap-info' style={{ display: "flex", color: "white" }}>
-                                <i class="fa fa-user-o" aria-hidden="true"></i>
-                                <span className="mr-2 small" style={{ color: "white", marginLeft: "5px" }}>
-                                    {user.name}
-                                </span>
-                            </div>
+                                    <div className='wrap-info' style={{ display: "flex", color: "white" }}>
+                                        <i class="fa fa-user-o" aria-hidden="true"></i>
+                                        <span className="mr-2 small" style={{ color: "white", marginLeft: "5px" }}>
+                                            {user.name}
+                                        </span>
+                                    </div>
 
-                        </li>
+                                </li>
 
-                        <li className='nav-item' id='btn-full' style={{ margin: "0 10px", color: "white", cursor: "pointer" }} onClick={this.fullScreen}>
-                            {!this.state.fullScreen ?
-                                <i class='fas fa-expand-arrows-alt fa-2x' style={{ fontSize: "22px" }}></i> :
-                                <i class='fas fa-compress-arrows-alt' style={{ fontSize: "22px" }}></i>
-                            }
+                                <li className='nav-item' id='btn-full' style={{ margin: "0 10px", color: "white", cursor: "pointer" }} onClick={this.fullScreen}>
+                                    {!this.state.fullScreen ?
+                                        <i class='fas fa-expand-arrows-alt fa-2x' style={{ fontSize: "22px" }}></i> :
+                                        <i class='fas fa-compress-arrows-alt' style={{ fontSize: "22px" }}></i>
+                                    }
 
-                        </li >
+                                </li >
 
-                        <li className='nav-item' style={{ margin: "0 10px" }}>
-                            <button className='btn' style={{ color: "white", border: "1px solid" }} data-toggle="modal" data-target="#modalKeyboard">Phím tắt</button>
-                        </li>
-                    </ul>
+                                <li className='nav-item' style={{ margin: "0 10px" }}>
+                                    <button className='btn' style={{ color: "white", border: "1px solid" }} data-toggle="modal" data-target="#modalKeyboard">Phím tắt</button>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+
                 </nav>
                 <ModalBranch currentBranch={currentBranch} branchStore={branchStore} handleCallbackBrach={this.handleCallbackBrach} />
                 <ModalKeyboard />

@@ -54,6 +54,7 @@ class ModalDetail extends Component {
     handleClick = (nameDistribute, nameObject, index, id, quatity) => {
 
         this.setState({
+            distributeName:nameObject,
             distributeSelected: index,
             elementNameSelected: nameDistribute,
         })
@@ -125,17 +126,19 @@ class ModalDetail extends Component {
             idElement,
             afterChoosePrice,
             afterPrice } = this.state
-        console.log("info", info)
+
         if (info.distributeProduct.length === 0) {
             window.$('.modal').modal('hide');
+
 
             this.props.handleCallbackPushProduct({
                 nameProduct: this.props.modal.nameProduct,
                 element_id: this.props.modal.idProduct,
                 product_id: this.props.modal.idProduct,
-                reality_exist: 0, nameDistribute: subElementNameDistributeSelected,
+                reality_exist: 0,
+                nameDistribute: elementNameSelected,
                 nameElement: elementNameSelected,
-                nameSubDistribute: element_distributes,
+                nameSubDistribute: subElementNameDistributeSelected,
                 priceProduct: afterPrice,
                 stock: this.props.modal.inventoryProduct.main_stock
             })
@@ -153,8 +156,8 @@ class ModalDetail extends Component {
                 product_id: this.props.modal.idProduct,
                 element_id: idElement,
                 reality_exist: 0, nameDistribute: distributeName,
-                nameElement: distributeValue,
-                nameSubDistribute: element_distributes,
+                nameElement: elementNameSelected,
+                nameSubDistribute: subElementNameDistributeSelected,
                 priceProduct: afterChoosePrice,
                 stock: quantityInStock
             })
@@ -174,8 +177,8 @@ class ModalDetail extends Component {
             element_id: idElement,
             reality_exist: 0,
             nameDistribute: distributeName,
-            nameElement: distributeValue,
-            nameSubDistribute: element_distributes,
+            nameElement: elementNameSelected,
+            nameSubDistribute: subElementNameDistributeSelected,
             priceProduct: afterChoosePrice,
             stock: quantityInStock
         })
@@ -189,7 +192,7 @@ class ModalDetail extends Component {
     componentWillReceiveProps(nextProps, nextState) {
         var { inventoryProduct } = nextProps.modal
         const totalStock = findTotalStock(inventoryProduct)
-        console.log("totalStock", totalStock)
+
         this.setState({ quantityInStock: totalStock })
         if (!shallowEqual(nextProps.modal.inventoryProduct, this.props.modal.inventoryProduct)) {
 

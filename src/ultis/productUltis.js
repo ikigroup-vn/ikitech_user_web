@@ -189,9 +189,8 @@ export const getTypeProductDistribute = (product) => {
             return HAS_ELE
         }
 
-        return NO_ELE_SUB
-
     }
+    return NO_ELE_SUB
 }
 
 
@@ -370,4 +369,61 @@ export const findTotalStock = (product) => {
     return stock
 
 }
+
+
+export const findTotalStockPos = (product) => {
+    if (getTypeProductDistribute(product) == NO_ELE_SUB) {
+        return product.inventory.main_stock
+    }
+    if (getTypeProductDistribute(product) == HAS_ELE) {
+        var stock = 0
+
+        if (product.inventory.distributes != null && product.inventory.distributes.length > 0) {
+            const distributes = product.inventory.distributes[0];
+
+            if (distributes != null && distributes.element_distributes != null && distributes.element_distributes.length > 0) {
+                const element_distributes = distributes.element_distributes
+    
+                element_distributes.forEach(ele => {
+                    stock += ele.stock
+                });
+
+
+            }
+        }
+        return stock
+    }
+    if (getTypeProductDistribute(product) == HAS_SUB) {
+
+        var stocks = 0
+        if (product.inventory.distributes != null && product.inventory.distributes.length > 0) {
+            const distributes = product.inventory.distributes[0];
+
+            if (distributes != null && distributes.element_distributes != null && distributes.element_distributes.length > 0) {
+                const element_distributes = distributes.element_distributes
+
+                element_distributes.forEach(ele => {
+
+                    if (ele.sub_element_distributes != null && ele.sub_element_distributes.length > 0) {
+                        const sub_element_distributes = ele.sub_element_distributes
+
+                        sub_element_distributes.forEach(sub => {
+                            stocks += sub.stock
+                        });
+
+
+                    }
+                });
+            }
+        }
+
+        return stocks
+    }
+
+
+
+    return stock
+
+}
+
 

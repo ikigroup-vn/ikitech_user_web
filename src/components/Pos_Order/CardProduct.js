@@ -3,6 +3,7 @@ import { connect } from 'react-redux'
 import * as OrderAction from '../../actions/add_order'
 import * as Env from "../../ultis/default"
 import { filter_arr, format } from '../../ultis/helpers'
+import { findTotalStockPos } from '../../ultis/productUltis'
 
 class CardProduct extends Component {
     constructor(props) {
@@ -59,6 +60,8 @@ class CardProduct extends Component {
                                 data
                             )}>
                             <div class="card card-product-pos" style={{ border: "1px solid rgb(128 128 128 / 30%)", padding: "0" }}>
+                               
+                               {data.check_inventory &&  <div class="inventory-tag">{findTotalStockPos(data)}</div>}
                                 <img src={data.images.length > 0 ? data.images[0].image_url : Env.IMG_NOT_FOUND_2} className="img-responsive" alt="Image" width="100%" height="100px" style={{ borderRadius: "2%" }} />
                                 <div class="card-body" style={{ padding: ' 0 5px' }}>
                                     <p class="card-title" style={{ margin: '0', overflow: "hidden", whiteSpace: "nowrap", textOverflow: 'ellipsis' }}>{data.name}</p>

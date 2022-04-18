@@ -20,6 +20,7 @@ class TotalBill extends Component {
         var total_shipping_fee = bill.total_shipping_fee || 0
         var product_discount_amount = bill.product_discount_amount || 0
         var voucher_discount_amount = bill.voucher_discount_amount || 0
+        var bonus_points_amount_used = bill.bonus_points_amount_used || 0
         var discount = bill.discount || 0
         var combo_discount_amount = bill.combo_discount_amount || 0
         console.log(combo_discount_amount, combo_discount_amount > 0)
@@ -65,6 +66,12 @@ class TotalBill extends Component {
                     {voucher_discount_amount > 0 && <div id={`item_fee ${voucher_discount_amount > 0 ? "show" : "hide"}`}>
                         <div className="sale_user_label bold">
                             Giảm giá Voucher :  <span>- {format(voucher_discount_amount)}</span>
+                        </div>
+                    </div>
+                    }
+                     {bonus_points_amount_used > 0 && <div id={`item_fee ${bonus_points_amount_used > 0 ? "show" : "hide"}`}>
+                        <div className="sale_user_label bold">
+                            Sử dụng xu :  <span>- {format(bonus_points_amount_used)}</span>
                         </div>
                     </div>
                     }
