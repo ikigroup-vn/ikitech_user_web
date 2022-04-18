@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import ModalUploadStore from "./StoreImage/ModalUpload";
-import ModalUploadListP from "./StoreImage/ModalUploadList11 copy11";
+import ModalUploadListP from "./StoreImage/ModalUploadList";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 
 import { connect } from "react-redux";
