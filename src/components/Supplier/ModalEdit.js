@@ -19,10 +19,10 @@ class ModalEdit extends Component {
             isLoaded: false,
             listWards: [],
             listDistrict: [],
-            txtName_branch:"",
-            txtPhone_branch:"",
-            txtEmail_branch:"",
-            idSupplier:""
+            txtName_branch: "",
+            txtPhone_branch: "",
+            txtEmail_branch: "",
+            idSupplier: ""
         }
     }
     onChange = (e) => {
@@ -70,16 +70,16 @@ class ModalEdit extends Component {
             this.props.fetchPlaceDistrict(nextProps.modal.province);
             this.props.fetchPlaceWards(nextProps.modal.district)
             this.setState({
-                txtName_branch:nextProps.modal.name ,
-                txtPhone_branch:nextProps.modal.phone,
-                txtEmail_branch:nextProps.modal.email,
-                txtProvince:nextProps.modal.province,
-                txtDistrict:nextProps.modal.district,
-                txtWards:nextProps.modal.wards,
-                txtAddress_detail:nextProps.modal.address_detail,
+                txtName_branch: nextProps.modal.name,
+                txtPhone_branch: nextProps.modal.phone,
+                txtEmail_branch: nextProps.modal.email,
+                txtProvince: nextProps.modal.province,
+                txtDistrict: nextProps.modal.district,
+                txtWards: nextProps.modal.wards,
+                txtAddress_detail: nextProps.modal.address_detail,
                 idSupplier: nextProps.modal.id
             })
-          }
+        }
 
         if (nextState.isLoaded === true) {
             this.setState({
@@ -97,8 +97,8 @@ class ModalEdit extends Component {
         }
     }
     handleOnClick = () => {
-        var { txtAddress_detail, txtDistrict, txtProvince, txtWards,txtName_branch,txtPhone_branch,txtEmail_branch,idSupplier } = this.state
-        const {store_code} = this.props
+        var { txtAddress_detail, txtDistrict, txtProvince, txtWards, txtName_branch, txtPhone_branch, txtEmail_branch, idSupplier } = this.state
+        const { store_code } = this.props
         const Formdata = {
             name: txtName_branch,
             phone: txtPhone_branch,
@@ -107,10 +107,10 @@ class ModalEdit extends Component {
             district: txtDistrict,
             wards: txtWards,
             address_detail: txtAddress_detail,
-            
+
         }
-        console.log("Formdata",Formdata)
-        this.props.editSupplier(store_code,idSupplier,Formdata);
+        console.log("Formdata", Formdata)
+        this.props.editSupplier(store_code, idSupplier, Formdata);
         this.setState({
             provinceName: "",
             districtName: "",
@@ -172,7 +172,7 @@ class ModalEdit extends Component {
     render() {
         var { province } = this.props
         var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards } = this.state;
-        var { txtName_branch,txtPhone_branch,txtCode_branch,txtPost_branch,txtEmail_branch } = this.state;
+        var { txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state;
         return (
             <>
                 {this.state.status &&
@@ -294,16 +294,22 @@ class ModalEdit extends Component {
                                             </div>
                                         </div>
 
-                                        <div class="box-footer">
-                                            <a class="btn btn-info btn-icon-split btn-sm" onClick={this.handleOnClick} data-dismiss="modal">
-                                                <span class="icon text-white-50">
-                                                    <i class="fas fa-save"></i>
-                                                </span>
-                                                <span class="text">Sửa</span>
-                                            </a>
-                                        </div>
+
                                     </form>
                                 </React.Fragment>
+
+                                <div class="modal-footer">
+                                    <button
+                                        type="button"
+                                        class="btn btn-default"
+                                        data-dismiss="modal"
+                                    >
+                                        Đóng
+                                    </button>
+                                    <button type="submit" onClick={this.handleOnClick} class="btn btn-info">
+                                        Sửa
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -314,8 +320,8 @@ class ModalEdit extends Component {
 }
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        editSupplier: (store_code,id, form) => {
-            dispatch(dashboardAction.editSupplier(store_code,id, form));
+        editSupplier: (store_code, id, form) => {
+            dispatch(dashboardAction.editSupplier(store_code, id, form));
         },
         fetchPlaceDistrict: (id) => {
             dispatch(placeAction.fetchPlaceDistrict(id));

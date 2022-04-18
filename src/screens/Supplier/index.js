@@ -10,13 +10,14 @@ import { connect } from 'react-redux';
 import ModalDelete from '../../components/Supplier/ModalDelete';
 import ModalCreate from '../../components/Supplier/ModalCreate';
 import ModalEdit from '../../components/Supplier/ModalEdit';
+import { format, formatNumber } from "../../ultis/helpers";
 
 class Supplier extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            id_supplier:"",
-            modal:""
+            id_supplier: "",
+            modal: ""
         }
     }
 
@@ -32,8 +33,8 @@ class Supplier extends Component {
 
 
     componentDidMount() {
-        const {store_code} = this.props.match.params
-        this.props.fetchAllSupplier(store_code);
+        const { store_code } = this.props.match.params
+        this.props.fetchAllSupplier(store_code,1);
         this.props.fetchPlaceProvince()
     }
     showData = (listSupplier) => {
@@ -47,9 +48,11 @@ class Supplier extends Component {
                         <td>{index + 1}</td>
                         <td>{data.name}</td>
                         <td>{data.phone}</td>
-                        <td>{data.address_detail}</td>
+                        <td>{format(data.debt)}</td>
+                        <td>{data.wards_name}</td>
                         <td>{data.district_name}</td>
                         <td>{data.province_name}</td>
+                   
                         <td>
                             <button
                                 onClick={() => this.handleSetInfor(data)}
@@ -77,11 +80,24 @@ class Supplier extends Component {
         }
         return result;
     };
+    onChangeSearch = (e) => {
+        this.setState({ searchValue: e.target.value });
+    };
+
+    searchData = (e) => {
+        e.preventDefault();
+        var { store_code } = this.props.match.params;
+        var { searchValue } = this.state;
+        var params = `&search=${searchValue}`;
+        this.props.fetchAllSupplier(store_code, 1, params);
+    };
+
     render() {
         var { store_code } = this.props.match.params
         var listSupplier = this.props.supplier.data ? this.props.supplier.data : []
         var { id_supplier, modal } = this.state
         var { wards, district, province } = this.props
+        var { searchValue } = this.state;
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
@@ -96,38 +112,83 @@ class Supplier extends Component {
                                     type={Types.ALERT_UID_STATUS}
                                     alert={this.props.alert}
                                 />
+
                                 <div
-                                    style={{ display: "flex", justifyContent: "flex-end" }}
+                                    style={{
+                                        display: "flex",
+                                        justifyContent: "space-between",
+                                    }}
                                 >
-                                    <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalAddress">
-                                        <i class="fa fa-plus"></i> Thêm nhà cung cấp
-                                    </button>
+                                    <h4 className="h4 title_content mb-0 text-gray-800">
+                                        Nhà cung cấp
+                                    </h4>{" "}
+
+                                    <div
+                                        style={{ display: "flex", justifyContent: "flex-end" }}
+                                    >
+                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalAddress">
+                                            <i class="fa fa-plus"></i> Thêm nhà cung cấp
+                                        </button>
+                                    </div>
+
                                 </div>
 
-                                <br></br>
-                                <div className='card'>
-                                <div className='card-body'>
-                                <div class="table-responsive">
-                                    <table class="table  " id="dataTable" width="100%" cellspacing="0">
-                                        <thead>
-                                            <tr>
-                                                <th>STT</th>
-                                                <th>Tên nhà cung cấp</th>
+                                <div className="card-header py-3">
 
-                                                <th>Số điện thoại</th>
-                                                <th>Địa chỉ</th>
-                                                <th>Quận/huyện</th>
 
-                                                <th>Tỉnh/thành phố</th>
+                                    <br></br>
+                                    <div className='card'>
 
-                                                <th>Hành động</th>
-                                            </tr>
-                                        </thead>
+                                        <form onSubmit={this.searchData}>
+                                            <div
+                                                class="input-group mb-6"
+                                                style={{ marginTop: "10px" }}
+                                            >
+                                                <input
+                                                    style={{ maxWidth: "400px" }}
+                                                    type="search"
+                                                    name="txtSearch"
+                                                    value={searchValue}
+                                                    onChange={this.onChangeSearch}
+                                                    class="form-control"
+                                                    placeholder="Tìm nhà cung cấp"
+                                                />
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-primary" type="submit">
+                                                        <i class="fa fa-search"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
 
-                                        <tbody>{this.showData(listSupplier)}</tbody>
-                                    </table>
-                                </div>
-                                </div>
+
+                                        <div className='card-body'>
+                                            <div class="table-responsive">
+                                                <table class="table  " id="dataTable" width="100%" cellspacing="0">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>STT</th>
+                                                            <th>Tên nhà cung cấp</th>
+
+                                                            <th>Số điện thoại</th>
+
+                                                            <th>Công nợ</th>
+
+                                                            <th>Phường/xã</th>
+                                                            <th>Quận/huyện</th>
+
+                                                            <th>Tỉnh/thành phố</th>
+                                                    
+                                                            <th>Hành động</th>
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody>{this.showData(listSupplier)}</tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+
+                                    </div>
                                 </div>
 
                             </div>
@@ -136,7 +197,7 @@ class Supplier extends Component {
                     </div>
                     <ModalDelete store_code={store_code} id_supplier={id_supplier} />
                     <ModalCreate store_code={store_code} wards={wards} district={district} province={province} />
-                    <ModalEdit store_code={store_code} wards={wards} district={district} province={province} modal={modal}/>
+                    <ModalEdit store_code={store_code} wards={wards} district={district} province={province} modal={modal} />
                 </div>
             </div>
         )
@@ -156,8 +217,8 @@ const mapDispatchToProps = (dispatch, props) => {
         fetchPlaceProvince: () => {
             dispatch(placeAction.fetchPlaceProvince());
         },
-        fetchAllSupplier: (store_code) => {
-            dispatch(dashboardAction.fetchAllSupplier(store_code))
+        fetchAllSupplier: (store_code, page, param) => {
+            dispatch(dashboardAction.fetchAllSupplier(store_code, page, param))
         }
     }
 }

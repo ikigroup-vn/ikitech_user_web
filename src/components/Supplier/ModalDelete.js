@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import * as dashboardAction from "../../actions/dashboard";
+import themeData from '../../ultis/theme_data';
 class ModalDelete extends Component {
     constructor(props) {
         super(props)
@@ -28,7 +29,7 @@ class ModalDelete extends Component {
             >
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
-                        <div class="modal-header" style={{ background: "#47d3b0" }}>
+                        <div class="modal-header" style={{ background: themeData().modalNoti }}>
                             <button
                                 type="button"
                                 class="close"
@@ -48,7 +49,7 @@ class ModalDelete extends Component {
                             <div class="modal-body">
                                 <input type="hidden" name="remove_id_store" />
                                 <div class="alert-remove"></div>
-                                Bạn có muốn xóa
+                                Bạn có muốn xóa nhà cung cấp này không?
                             </div>
                             <div class="modal-footer">
                                 <button
@@ -58,7 +59,7 @@ class ModalDelete extends Component {
                                 >
                                     Đóng
                                 </button>
-                                <button type="submit" class="btn btn-info">
+                                <button type="submit" class="btn btn-yes-pos">
                                     Xóa
 
                                 </button>

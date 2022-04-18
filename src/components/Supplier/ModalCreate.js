@@ -285,17 +285,24 @@ class ModalCreate extends Component {
                                             </div>
                                         </div>
 
-                                        <div class="box-footer">
-                                            <a class="btn btn-info btn-icon-split btn-sm" onClick={this.handleOnClick} data-dismiss="modal">
-                                                <span class="icon text-white-50">
-                                                    <i class="fas fa-save"></i>
-                                                </span>
-                                                <span class="text">Tạo</span>
-                                            </a>
-                                        </div>
+                                    
                                     </form>
                                 </React.Fragment>
                             </div>
+
+                            <div class="modal-footer">
+                                    <button
+                                        type="button"
+                                        class="btn btn-default"
+                                        data-dismiss="modal"
+                                    >
+                                        Đóng
+                                    </button>
+                                    <button type="submit" onClick={this.handleOnClick} data-dismiss="modal" class="btn btn-info">
+                                       Tạo
+                                    </button>
+                                </div>
+
                         </div>
                     </div>
                 </div>

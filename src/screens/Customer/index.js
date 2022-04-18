@@ -100,7 +100,7 @@ class Customer extends Component {
                       }}
                     >
                       <h4 className="h4 title_content mb-0 text-gray-800">
-                        Khách hàng
+                       Danh sách khách hàng
                       </h4>{" "}
                     </div>
 
