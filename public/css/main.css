@@ -152,9 +152,6 @@
     font-weight: 400 !important;
 }
 
-.form-check>input {
-    /* height: unset !important; */
-}
 
 .input-number {
     width: 80px;
