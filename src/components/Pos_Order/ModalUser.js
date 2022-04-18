@@ -39,12 +39,11 @@ class ModalUser extends Component {
         this.setState({ txtName: "", txtPhone: "", txtEmail: "" })
     }
     handleSubmit = (e) => {
+        const errors = this.validator.validate(this.state)
         this.setState({
-            errors: this.validator.validate(this.state),
+            errors: errors,
         });
         
-
-        const {errors} = this.state;
         if( Object.keys(errors).length === 0) {
             this.handleAddUser()
             window.$('.modal').modal('hide');
