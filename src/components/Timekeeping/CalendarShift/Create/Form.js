@@ -246,7 +246,7 @@ class Form extends Component {
                 <DateRangePickerComponent
                   id="daterangepicker"
                   placeholder="Chọn từ ngày... đến ngày..."
-                  format="dd-MM-yyyy"
+                  format="dd/MM/yyyy"
                   onChange={this.onchangeDateFromTo}
                 />
               </div>

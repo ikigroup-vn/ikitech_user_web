@@ -68,7 +68,7 @@ class General extends Component {
                                         <div className="text-gray-800">Quản lý xuất nhập, tồn kho theo sản phẩm</div>
                                     </div>
                                     <div className="col-auto">
-                                        <i className="fas fa-eye-slash fa-2x text-gray-300"></i>
+                                        <i className="fas fa-retweet fa-2x text-gray-300"></i>
                                     </div>
                                 </div>
                             </div>

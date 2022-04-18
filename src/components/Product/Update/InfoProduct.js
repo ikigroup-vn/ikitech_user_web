@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import Select from "react-select";
+import * as helper from "../../../ultis/helpers";
+
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import { formatNumber } from "../../../ultis/helpers"
 import getChannel, { IKITECH } from "../../../ultis/channel";
@@ -109,7 +111,13 @@ class InfoProduct extends Component {
       }
     }
     else {
-
+      if(name == "txtBarcode" || name == "sku")
+      {
+        if(helper.containsSpecialChars(value)){
+          return;
+        }
+          
+      }
       this.setState({ [name]: value });
 
     }
@@ -226,7 +234,7 @@ class InfoProduct extends Component {
 
       var _quantity_stock = quantity_stock == "" ? "" : new Intl.NumberFormat().format(quantity_stock);
       var checkHasDistribute = false;
-      if(product.distributes != null)
+      if(product.distributes != null && product.distributes.length > 0)
       {
         checkHasDistribute = true
       }
@@ -333,6 +341,8 @@ class InfoProduct extends Component {
             autocomplete="off"
             value={sku}
             name="sku"
+            onChange={this.onChange}
+
           />
         </div>
         <div class="form-group">
@@ -345,7 +355,10 @@ class InfoProduct extends Component {
             autocomplete="off"
             value={txtBarcode}
             name="txtBarcode"
+            onChange={this.onChange}
+
           />
+
         </div>
 
         <div class="form-group">

@@ -267,7 +267,11 @@ class Distribute extends Component {
       quantity_in_stock: null,
       import_price: null
     }
-    list_distribute[0].element_distributes[0].sub_element_distributes.push(newObject)
+    list_distribute[0].element_distributes.forEach(element => {
+      typeof element == "object" && element.sub_element_distributes.push(newObject)
+
+    });
+    // list_distribute[0].element_distributes[0].sub_element_distributes.push(newObject)
     this.setState({ list_distribute: list_distribute });
   };
 
@@ -294,6 +298,11 @@ class Distribute extends Component {
   removeRowChild = (key) => {
     var list_distribute = [...this.state.list_distribute];
     list_distribute[0].element_distributes.splice(key, 1)
+    if (list_distribute[0].element_distributes && list_distribute[0].element_distributes.length == 0) {
+      this.setState({ list_distribute: [] });
+      return;
+    }
+
     this.setState({ list_distribute: list_distribute });
   };
 
@@ -319,23 +328,27 @@ class Distribute extends Component {
   };
   addRowChild = () => {
     var list_distribute = [...this.state.list_distribute];
-
+    var sub_element_distributes = []
+    if (list_distribute.length > 0) {
+      sub_element_distributes = list_distribute[0].element_distributes.length > 0 && list_distribute[0].element_distributes[0].sub_element_distributes
+    }
     var newObject = {
       name: null,
       image_url: null,
       price: null,
       quantity_in_stock: null,
-      sub_element_distributes: []
+      sub_element_distributes
 
     }
     list_distribute[0].element_distributes.push(newObject)
     this.setState({ list_distribute: list_distribute });
   };
-  showRows = (list_distribute , openDistribute) => {
+  showRows = (list_distribute, openDistribute) => {
     var result = [];
     if (typeof list_distribute === "undefined") {
       return result;
     }
+
 
     if (list_distribute.length > 0) {
       list_distribute.map((_data) => {
@@ -345,13 +358,16 @@ class Distribute extends Component {
             var disable = index == 0 ? "" : "hide";
             var disable_addButton = index == _data.element_distributes.length - 1 ? "" : "hide";
 
-            var method = index == 0 && _data.element_distributes.length == 1 ? "removeRow" : "removeRowChild";
+            var method = index == 0 && _data.element_distributes.length == 1 ? "removeRowChild" : "removeRowChild";
 
             var visible = index == 0 ? null : "visibled";
             var border = index == 0 ? null : "hide-border";
             var img = data.image_url;
             var status_btn = img == "" || img == null || typeof img == "undefined" ? "show" : "hide";
             var status_img = img == "" || img == null || typeof img == "undefined" ? "hide" : "show";
+
+
+            console.log(method, index, _data.name)
             return (
 
               <tr className={`${border}`}>
@@ -466,6 +482,7 @@ class Distribute extends Component {
           }
           else {
             if (_data.element_distributes[0].sub_element_distributes.length > 0) {
+
               result = _data.element_distributes[0].sub_element_distributes.map((data, index) => {
 
 
@@ -480,7 +497,9 @@ class Distribute extends Component {
                 var status_img = img == "" || img == null || typeof img == "undefined" ? "hide" : "show";
 
                 return (
-
+                  <React.Fragment>
+                    {index ==0 &&                   <h5>Phân loại: </h5>
+}
                   <tr className={`${border}`}>
                     <td>
                       <input
@@ -539,6 +558,7 @@ class Distribute extends Component {
 
                     </td>
                   </tr>
+                  </React.Fragment>
                 )
               })
 
@@ -549,7 +569,7 @@ class Distribute extends Component {
 
 
     }
-    return result;
+    return result
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -585,7 +605,7 @@ class Distribute extends Component {
     return true;
   }
 
-  showDetail = (list_distribute , openDistribute) => {
+  showDetail = (list_distribute, openDistribute) => {
     console.log(list_distribute)
     var result = []
     if (typeof list_distribute == "undefined" || list_distribute.length == 0) {
@@ -842,10 +862,12 @@ class Distribute extends Component {
 
                   <td>
                     <input
+
                       value={quantity_in_stock}
                       onChange={(e) => this.onChange(e, "PARENT", { name: "quantity_in_stock", index: _index })}
 
-                      name="" id="input" class="form-control" required="required" title="" />
+                      name="" id="input" class={`form-control ${openDistribute}`}
+                      required="required" title="" />
 
                   </td>
                   <td>
@@ -854,8 +876,8 @@ class Distribute extends Component {
                       onChange={(e) =>
                         this.onChange(e, "PARENT", {
                           name: "cost_of_capital",
-                          index : _index,
-                         
+                          index: _index,
+
                         })
                       }
                       name=""
@@ -879,7 +901,7 @@ class Distribute extends Component {
 
   render() {
     var { list_distribute } = this.state;
-    var {disableDistribute , disableInventory} = this.props
+    var { disableDistribute, disableInventory } = this.props
     var openDistribute = disableDistribute == true && disableInventory == true ? "" : "hide";
     console.log(openDistribute)
     var disable = ""
@@ -905,8 +927,8 @@ class Distribute extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.showRows(list_distribute , openDistribute)}
-            {this.showRowsSuper(list_distribute , openDistribute)}
+            {this.showRows(list_distribute, openDistribute)}
+            {this.showRowsSuper(list_distribute, openDistribute)}
           </tbody>
         </table>
         <button
@@ -929,13 +951,13 @@ class Distribute extends Component {
               <th>Giá nhập</th>
               <th>Barcode</th>
               <th className={openDistribute}>Tồn kho ban đầu</th>
-              <th className= {openDistribute}>Giá vốn</th>
+              <th className={openDistribute}>Giá vốn</th>
 
 
             </tr>
           </thead>
           <tbody>
-            {this.showDetail(list_distribute , openDistribute)}
+            {this.showDetail(list_distribute, openDistribute)}
           </tbody>
         </table>
 

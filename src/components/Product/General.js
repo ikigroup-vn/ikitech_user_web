@@ -17,7 +17,7 @@ class General extends Component {
     
     return (
 
-        <div className="row">
+        <div className="row" style = {{marginBottom : "20px"}}>
 
         <div className="col-xl-6 col-md-6 mb-6">
             <div className="card border-left-primary shadow h-100 py-2">

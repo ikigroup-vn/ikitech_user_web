@@ -1,6 +1,6 @@
 export const ikipos_menu = [
     {
-        title: "Chức năng",
+        title: "Menu",
         link: [
             {
                 name: "Tổng quan",

@@ -308,7 +308,7 @@ class Sidebar extends Component {
                 src={
                   badges?.config_user_vip?.url_logo_small_image != null
                     ? badges?.config_user_vip?.url_logo_small_image
-                    : "/images/logo_tab.png"
+                    : themeData().logoTab
                 }
                 class="img-responsive"
                 alt="Image"

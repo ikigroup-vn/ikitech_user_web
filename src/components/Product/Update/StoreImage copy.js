@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import ModalUploadStore from "./StoreImage/ModalUpload";
-import ModalUploadListP from "./StoreImage/ModalUploadList";
+import ModalUploadListP from "./StoreImage/ModalUploadList11 copy11";
 import { shallowEqual } from "../../../ultis/shallowEqual";
+
 import { connect } from "react-redux";
-import Alert from "../../../components/Partials/Alert";
+import Alert from "../../Partials/Alert";
 import * as Types from "../../../constants/ActionType";
 import * as Env from "../../../ultis/default"
 import SortableList, { SortableItem } from "react-easy-sort";
@@ -19,6 +20,20 @@ class StoreImage extends Component {
       oldIndex : "",
       newIndex : "",
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (!shallowEqual(nextProps.product, this.props.product)) {
+      var { product } = nextProps;
+
+      var images = [...this.state.listImgProduct];
+      if (product.images.length > 0) {
+        product.images.forEach(image => {
+          images.push(image.image_url)
+        });
+      }
+      this.setState({ listImgProduct: images });
+    }
   }
 
 
@@ -47,6 +62,42 @@ class StoreImage extends Component {
 
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.product_img != this.props.product_img) {
+
+      this.setState({ avatar_product: nextProps.product_img });
+
+    }
+    if (!shallowEqual(nextProps.listImgProduct, this.props.listImgProduct)) {
+      var imgs = [...nextState.listImgProduct]
+      if (nextProps.listImgProduct != null && typeof nextProps.listImgProduct != "undefined" && nextProps.listImgProduct.length > 0) {
+        if (nextState.showBar == true) {
+          this.runProgressBar()
+
+        }
+        nextProps.listImgProduct.forEach(img => {
+          console.log(img)
+          imgs.push(img)
+        });
+      }
+      this.setState({ listImgProduct: imgs });
+    }
+    if (
+      
+      !shallowEqual(nextState.listImgProduct, this.state.listImgProduct) 
+      || nextState.showBar != this.state.showBar 
+      || nextState.oldIndex != this.state.oldIndex 
+      || nextState.newIndex != this.state.newIndex
+
+    ) {
+      this.props.handleDataFromProductImg(nextState);
+    }
+
+
+
+    return true;
+  }
+
   removeImgProduct = () => {
     this.setState({ avatar_product: "" });
   };
@@ -59,6 +110,9 @@ class StoreImage extends Component {
     });
     this.setState({ listImgProduct: listImgProduct });
   };
+  preventDragHandler = (e) => {
+    e.preventDefault();
+  }
   showListImg = (images) => {
     var result = null;
     if (images.length > 0) {
@@ -70,7 +124,7 @@ class StoreImage extends Component {
         >
           {images.map((data, index) => (
 
-            <SortableItem key={data}>
+<SortableItem key={data}>
               <div style={{ cursor: "grab", marginBottom: "10px" }} className="item col-sm-4 col-md-4 col-lg-4 space-bottom">
                 <div className="box">
                   <div
@@ -92,7 +146,7 @@ class StoreImage extends Component {
 
                     class="img-responsive"
                   />
-                  <span className={`label-group-img ${index == 0 ? "show" : "hide"}`}>
+                  <span className = {`label-group-img ${index == 0 ? "show" : "hide"}`}>
                     Ảnh đại diện
                   </span>
                 </div>
@@ -119,41 +173,7 @@ class StoreImage extends Component {
     }
     return result;
   };
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.product_img != this.props.product_img) {
 
-      this.setState((prevState, props) => {
-        this.setState({ avatar_product: nextProps.product_img });
-      });
-
-    }
-  }
-  shouldComponentUpdate(nextProps, nextState) {
-
-
-    if (!shallowEqual(nextProps.listImgProduct, this.props.listImgProduct)) {
-      var imgs = [...nextState.listImgProduct]
-      if (nextProps.listImgProduct != null && typeof nextProps.listImgProduct != "undefined" && nextProps.listImgProduct.length > 0) {
-        if (nextState.showBar == true) {
-          this.runProgressBar()
-
-        }
-        nextProps.listImgProduct.forEach(img => {
-          imgs.push(img)
-        });
-      }
-      this.setState({ listImgProduct: imgs });
-    }
-    if (!shallowEqual(nextState.listImgProduct, this.state.listImgProduct)
-      || nextState.showBar != this.state.showBar
-      || nextState.oldIndex != this.state.oldIndex
-      || nextState.newIndex != this.state.newIndex) {
-      this.props.handleDataFromProductImg(nextState.listImgProduct)
-    }
-
-
-    return true
-  }
   showImg = (img) => {
     var image = img == "" || img == null ? Env.IMG_NOT_FOUND : img;
     var status = img == "" || img == null ? "hide" : "";
@@ -173,14 +193,17 @@ class StoreImage extends Component {
     );
   };
   onSortEnd = (oldIndex, newIndex) => {
+    console.log(oldIndex , newIndex)
     this.setState({
       listImgProduct: arrayMove(this.state.listImgProduct, oldIndex, newIndex),
       oldIndex,
       newIndex
     })
+
+
   };
   render() {
-    var { avatar_product, showBar, percent, listImgProduct } = this.state;
+    var { listImgProduct, showBar, percent, items } = this.state;
 
     return (
       <div class="container-fluid">
@@ -210,7 +233,7 @@ class StoreImage extends Component {
             }}>{percent + "%"}</div>
           </div>
         </div>
-        {this.showListImg(this.state.listImgProduct)}
+        {this.showListImg(listImgProduct)}
 
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <button

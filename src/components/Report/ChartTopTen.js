@@ -7,6 +7,7 @@ import * as helper from "../../ultis/helpers"
 import * as reportAction from "../../actions/report";
 import { connect } from "react-redux";
 import { DateRangePickerComponent } from '@syncfusion/ej2-react-calendars';
+import { getBranchId } from '../../ultis/branchUtils';
 
 
 
@@ -176,7 +177,7 @@ class Chart extends Component {
           }}
         >
           <h5 style={{ display: "flex" }}>
-            TOP 10 HÀNG HÓA BÁN CHẠY  {nameTypeChart}
+            TOP 10 HÀNG HÓA BÁN CHẠY  &nbsp;{nameTypeChart}
 
           </h5>
 
@@ -186,7 +187,7 @@ class Chart extends Component {
               id="daterangepicker"
               placeholder='Chọn từ ngày... đến ngày...'
 
-              format="dd-MM-yyyy"
+              format="dd/MM/yyyy"
               onChange={this.onchangeDateFromTo}
             />
           </div>
@@ -327,9 +328,10 @@ class Chart extends Component {
 }
 
 const mapDispatchToProps = (dispatch, props) => {
+  var branch_id = getBranchId()
   return {
     fetchTopTenProduct: (store_code, params) => {
-      dispatch(reportAction.fetchTopTenProduct(store_code, params));
+      dispatch(reportAction.fetchTopTenProduct(store_code,branch_id, params));
     },
 
   };

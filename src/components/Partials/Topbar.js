@@ -164,7 +164,7 @@ class Topbar extends Component {
                 value={txtBranch}
                 onChange={this.onChange}
               >
-                <option value="">-- Chọn chi nhánh --</option>
+                <option value="" disabled>-- Chọn chi nhánh --</option>
                 {this.showData(branchStore)}
               </select>
             </div>
@@ -173,6 +173,7 @@ class Topbar extends Component {
               <li className="nav-item dropdown no-arrow d-sm-none">
                 <div
                   className="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
+                 
                   aria-labelledby="searchDropdown"
                 >
                   <form className="form-inline mr-auto w-100 navbar-search">
@@ -231,6 +232,7 @@ class Topbar extends Component {
                 </a>
                 <div
                   className="dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                  
                   aria-labelledby="userDropdown"
                 >
                   <Link

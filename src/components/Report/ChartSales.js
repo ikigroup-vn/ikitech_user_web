@@ -10,6 +10,7 @@ import DetailOrder from "./DetailOrder";
 import { connect } from "react-redux";
 import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
 import ModalPostDate from "./ModalPostDate";
+import { getBranchId } from "../../ultis/branchUtils";
 
 class Chart extends Component {
   constructor() {
@@ -377,7 +378,7 @@ class Chart extends Component {
             <DateRangePickerComponent
               id="daterangepicker"
               placeholder="Chọn từ ngày... đến ngày..."
-              format="dd-MM-yyyy"
+              format="dd/MM/yyyy"
               onChange={this.onchangeDateFromTo}
             />
           </div>
@@ -640,9 +641,10 @@ class Chart extends Component {
 }
 
 const mapDispatchToProps = (dispatch, props) => {
+  var branch_id = getBranchId()
   return {
     fetchOverview: (store_code, params) => {
-      dispatch(reportAction.fetchOverview(store_code, params));
+      dispatch(reportAction.fetchOverview(store_code,branch_id, params));
     },
   };
 };

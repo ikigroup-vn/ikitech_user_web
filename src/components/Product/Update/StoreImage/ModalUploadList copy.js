@@ -118,7 +118,8 @@ class ModalUpload extends Component {
             >
               <div className="modal-body">
                 <form enctype="multipart/form-data">
-                  <div className="form-group">
+                  <div className="form-group ">
+                  {/* upload-list-product */}
                     <div className="file-loading">
                       <input
                         id="file-listp"

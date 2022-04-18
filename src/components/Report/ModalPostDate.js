@@ -9,6 +9,7 @@ import FormPostOption from "./PostDate/PostOption"
 import moment from "moment";
 import * as helper from "../../ultis/helpers"
 import { dateToNumber } from "xlsx-populate/lib/dateConverter";
+import { getBranchId } from "../../ultis/branchUtils";
 class ModalPostDate extends Component {
   constructor(props) {
     super(props);
@@ -126,9 +127,10 @@ class ModalPostDate extends Component {
 
 
 const mapDispatchToProps = (dispatch, props) => {
+  var branch_id = getBranchId()
   return {
     fetchOverview: (store_code, params) => {
-      dispatch(reportAction.fetchOverview(store_code, params));
+      dispatch(reportAction.fetchOverview(store_code,branch_id, params));
     },
   };
 };

@@ -279,7 +279,11 @@ class Distribute extends Component {
       quantity_in_stock: null,
       import_price: null
     }
-    list_distribute[0].element_distributes[0].sub_element_distributes.push(newObject)
+    list_distribute[0].element_distributes.forEach(element => {
+      typeof element == "object" && element.sub_element_distributes.push(newObject)
+
+    });
+    // list_distribute[0].element_distributes[0].sub_element_distributes.push(newObject)
     this.setState({ list_distribute: list_distribute });
   };
 
@@ -306,6 +310,11 @@ class Distribute extends Component {
   removeRowChild = (key) => {
     var list_distribute = [...this.state.list_distribute];
     list_distribute[0].element_distributes.splice(key, 1)
+    if (list_distribute[0].element_distributes && list_distribute[0].element_distributes.length == 0) {
+      this.setState({ list_distribute: [] });
+      return;
+    }
+
     this.setState({ list_distribute: list_distribute });
   };
 
@@ -357,7 +366,7 @@ class Distribute extends Component {
             var disable = index == 0 ? "" : "hide";
             var disable_addButton = index == _data.element_distributes.length - 1 ? "" : "hide";
 
-            var method = index == 0 && _data.element_distributes.length == 1 ? "removeRow" : "removeRowChild";
+            var method = index == 0 && _data.element_distributes.length == 1 ? "removeRowChild" : "removeRowChild";
 
             var visible = index == 0 ? null : "visibled";
             var border = index == 0 ? null : "hide-border";
@@ -492,7 +501,9 @@ class Distribute extends Component {
                 var status_img = img == "" || img == null || typeof img == "undefined" ? "hide" : "show";
 
                 return (
-
+                  <React.Fragment>
+                    {index ==0 &&                   <h5>Phân loại: </h5>
+}
                   <tr className={`${border}`}>
                     <td>
                       <input
@@ -552,6 +563,8 @@ class Distribute extends Component {
 
                     </td>
                   </tr>
+                  </React.Fragment>
+
                 )
               })
 

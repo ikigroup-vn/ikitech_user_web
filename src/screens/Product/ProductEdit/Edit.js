@@ -238,42 +238,45 @@ class ProductEdit extends Component {
     // })
 
 
-    list_distribute[0].element_distributes = list_distribute[0].element_distributes.map((ele) => {
-      if (ele.id != null) {
-        ele.is_edit = true
-      } else {
-        ele.is_edit = false
+    if(list_distribute.length > 0)
+    {
+      list_distribute[0].element_distributes = list_distribute[0].element_distributes.map((ele) => {
+        if (ele.id != null) {
+          ele.is_edit = true
+        } else {
+          ele.is_edit = false
+        }
+  
+        if (ele.id != null && ele.before_name == null) {
+          ele.before_name = ele.name
+          ele.is_edit = true
+        }
+  
+        return ele
       }
-
-      if (ele.id != null && ele.before_name == null) {
-        ele.before_name = ele.name
-        ele.is_edit = true
-      }
-
-      return ele
+      )
+      list_distribute[0].element_distributes = list_distribute[0].element_distributes.map((ele) => {
+  
+        if (ele != null && ele.sub_element_distributes != null && ele.sub_element_distributes.length > 0) {
+          ele.sub_element_distributes = ele.sub_element_distributes.
+            map((sub) => {
+              if (sub.id != null) {
+                sub.is_edit = true
+              } else {
+                sub.is_edit = false
+              }
+  
+              if (sub.id != null && sub.before_name == null) {
+                sub.before_name = sub.name
+                sub.is_edit = true
+              }
+  
+              return sub
+            })
+        }
+        return ele
+      })
     }
-    )
-    list_distribute[0].element_distributes = list_distribute[0].element_distributes.map((ele) => {
-
-      if (ele != null && ele.sub_element_distributes != null && ele.sub_element_distributes.length > 0) {
-        ele.sub_element_distributes = ele.sub_element_distributes.
-          map((sub) => {
-            if (sub.id != null) {
-              sub.is_edit = true
-            } else {
-              sub.is_edit = false
-            }
-
-            if (sub.id != null && sub.before_name == null) {
-              sub.before_name = sub.name
-              sub.is_edit = true
-            }
-
-            return sub
-          })
-      }
-      return ele
-    })
 
     /////
 
@@ -300,7 +303,7 @@ class ProductEdit extends Component {
       }
     }
 
-    distributeData.element_distributes = list_distribute[0].element_distributes
+    distributeData.element_distributes = list_distribute.length > 0 ? list_distribute[0].element_distributes : null
 
     if (this.state.checkDistribute == false) {
       delete form.list_distribute

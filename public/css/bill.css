@@ -676,3 +676,10 @@ a{
 .wrap-content:hover{
   background-color: #8080801a;
 }
+
+.item-detail-badges {
+  font-size: 13 !important;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  font-weight: 500 !important;
+}

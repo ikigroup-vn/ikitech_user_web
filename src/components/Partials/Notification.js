@@ -14,6 +14,7 @@ class Notification extends Component {
         this.state = {
             page: 1,
             notifications: {},
+            notification_unread:0,
             type: {
                 NEW_PERIODIC_SETTLEMENT: `/collaborator/${this.props.store_code}/request_payment`,
                 NEW_POST: `/posts/edit/${this.props.store_code}`,
@@ -28,7 +29,10 @@ class Notification extends Component {
     }
 
     componentDidMount = () => {
-
+        var {badges} = this.props
+        this.setState({
+            notification_unread:badges.notification_unread
+        })
     }
 
     componentDidUpdate() {
@@ -182,7 +186,7 @@ class Notification extends Component {
         var { disable, badges } = this.props;
         var { notifications , allow_notification } = this.state
         var { total_unread, list_notification } = notifications
-        var notification_unread = badges.notification_unread
+        var {notification_unread} = this.state
 
         if (typeof list_notification != "undefined")
             var disableLoad = list_notification.last_page == 1 ? false : true

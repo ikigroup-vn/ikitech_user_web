@@ -128,6 +128,13 @@ class InfoProduct extends Component {
         }
       }
     } else {
+      if(name == "txtBarcode" || name == "sku")
+      {
+        if(helper.containsSpecialChars(value)){
+          return;
+        }
+          
+      }
       this.setState({ [name]: value });
     }
   };
@@ -329,7 +336,7 @@ class InfoProduct extends Component {
             placeholder="Nhập mã sản phẩm"
             autocomplete="off"
             value={sku}
-            // onChange={this.onChange}
+            onChange={this.onChange}
             name="sku"
           />
         </div>
@@ -342,7 +349,7 @@ class InfoProduct extends Component {
             placeholder="Nhập barcode"
             autocomplete="off"
             value={txtBarcode}
-            // onChange={this.onChange}
+            onChange={this.onChange}
             name="txtBarcode"
           />
         </div>

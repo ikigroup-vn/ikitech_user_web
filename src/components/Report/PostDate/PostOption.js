@@ -114,9 +114,9 @@ class Form extends Component {
               <DateRangePickerComponent
                 id="daterangepicker"
                 placeholder="Chọn từ ngày... đến ngày..."
-                format="dd-MM-yyyy"
+                format="dd/MM/yyyy"
                 width="100%"
-                value={datePrime.from + "-" + datePrime.to}
+                value={datePrime.from + " đến " + datePrime.to}
                 onChange={this.onChangeDatePrime}
               />
             </div>
@@ -149,9 +149,9 @@ class Form extends Component {
               <DateRangePickerComponent
                 id="daterangepicker"
                 placeholder="Chọn từ ngày... đến ngày..."
-                format="dd-MM-yyyy"
+                format="dd/MM/yyyy"
                 width="100%"
-                value={dateCompare.from + "-" + dateCompare.to}
+                value={dateCompare.from + " đến " + dateCompare.to}
                 onChange={this.onChangeDateCompare}
               />
             </div>

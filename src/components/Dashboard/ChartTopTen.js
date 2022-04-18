@@ -7,6 +7,8 @@ import * as helper from "../../ultis/helpers"
 import * as dashboardAction from "../../actions/dashboard";
 import { connect } from "react-redux";
 import { DateRangePickerComponent } from '@syncfusion/ej2-react-calendars';
+import getChannel, { IKITECH } from '../../ultis/channel';
+import { getBranchId } from '../../ultis/branchUtils';
 
 
 
@@ -158,7 +160,7 @@ class Chart extends Component {
           }}
         >
           <h5 style={{ display: "flex" }}>
-            TOP 10 HÀNG HÓA BÁN CHẠY  {nameTypeChart}
+            TOP 10 HÀNG HÓA BÁN CHẠY  &nbsp;{nameTypeChart}
             <div style={{ paddingLeft: "20px" }}>
 
               <select style={{
@@ -170,8 +172,11 @@ class Chart extends Component {
               }} name="" id="input" class="form-control" required="required" onChange={this.onchangeTypeTop}>
                 <option value="THEO-DOANH-THU">THEO DOANH THU</option>
                 <option value="THEO-SO-LUONG">THEO SỐ LƯỢNG</option>
-                <option value="THEO-SO-DON">THEO SỐ ĐƠN</option>
-                <option value="THEO-LUOT-XEM">THEO LƯỢT XEM</option>
+
+                {
+                  getChannel() == IKITECH && <option value="THEO-LUOT-XEM">THEO LƯỢT XEM</option>
+                }
+
 
               </select>
 
@@ -184,7 +189,7 @@ class Chart extends Component {
               id="daterangepicker"
               placeholder='Chọn từ ngày... đến ngày...'
 
-              format="dd-MM-yyyy"
+              format="dd/MM/yyyy"
               onChange={this.onchangeDateFromTo}
             />
           </div>
@@ -237,9 +242,10 @@ class Chart extends Component {
 }
 
 const mapDispatchToProps = (dispatch, props) => {
+  var branch_id = getBranchId()
   return {
     fetchTopTenProduct: (store_code, params) => {
-      dispatch(dashboardAction.fetchTopTenProduct(store_code, params));
+      dispatch(dashboardAction.fetchTopTenProduct(store_code,branch_id, params));
     },
 
   };
