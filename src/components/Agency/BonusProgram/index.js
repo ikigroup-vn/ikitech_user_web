@@ -121,9 +121,9 @@ class BonusProgram extends Component {
                             <DateRangePickerComponent
                                 id="daterangepicker"
                                 placeholder="Chọn từ ngày... đến ngày..."
-                                format="dd-MM-yyyy"
+                                format="dd/MM/yyyy"
                                 width="100%"
-                                value={start_time + "  -  " + end_time}
+                                value={start_time + " đến " + end_time}
                                 onChange={this.onChangeDatePrime}
                             />
                         </div>

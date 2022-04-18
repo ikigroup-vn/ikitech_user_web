@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import getChannel, { IKITECH } from "../../ultis/channel";
 import * as Env from "../../ultis/default"
 
 class BadgeTable extends Component {
@@ -95,17 +96,19 @@ class BadgeTable extends Component {
                         </span>
                     </p>
 
-                    <p class="">
-                        <Link to={`/review/${store_code}`}>Chưa đánh giá</Link>
-                        <span class="cart_payment_method">
-                              <span
-                              
-                                className={`step num-badge ${statusReview}`}
-                            >
-                                {numReview}
-                            </span>
-                        </span>
-                    </p>
+                   {
+                       getChannel() == IKITECH &&  <p class="">
+                       <Link to={`/review/${store_code}`}>Chưa đánh giá</Link>
+                       <span class="cart_payment_method">
+                             <span
+                             
+                               className={`step num-badge ${statusReview}`}
+                           >
+                               {numReview}
+                           </span>
+                       </span>
+                   </p>
+                   }
      
                 </div>
             </div>

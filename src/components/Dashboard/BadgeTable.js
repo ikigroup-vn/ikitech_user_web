@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import getChannel, { IKIPOS } from "../../ultis/channel";
-import * as Env from "../../ultis/default"
+import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
+import { getDDMMYYYNow, getYYYYMMDDNow } from "../../ultis/date";
+
 
 class BadgeTable extends Component {
     constructor(props) {
@@ -32,6 +33,8 @@ class BadgeTable extends Component {
         return (
             <div class="form-group" style={{ fontSize: "15px" }}>
                 <div class="info-badge" >
+
+
                     <p class="" id="sale_user_name">
                         <Link to={`/order/${store_code}/WAITING_FOR_PROGRESSING`}>Đơn hàng đang chờ xử lý </Link> <span id="user_name">
                             <span
@@ -94,17 +97,20 @@ class BadgeTable extends Component {
                         </span>
                     </p>
 
-                    <p class="">
-                        <Link to={`/review/${store_code}`}>Chưa đánh giá</Link>
-                        <span class="cart_payment_method">
-                            <span
+                    {
+                        getChannel() == IKITECH && <p class="">
+                            <Link to={`/review/${store_code}`}>Chưa đánh giá</Link>
+                            <span class="cart_payment_method">
+                                <span
 
-                                className={`step num-badge ${statusReview}`}
-                            >
-                                {numReview}
+                                    className={`step num-badge ${statusReview}`}
+                                >
+                                    {numReview}
+                                </span>
                             </span>
-                        </span>
-                    </p>
+                        </p>
+                    }
+
 
                 </div>
             </div>
@@ -138,8 +144,8 @@ class BadgeTable extends Component {
         return (
             <div class="form-group" style={{ fontSize: "15px" }}>
                 <div class="info-badge" >
-                    <p class="" id="sale_user_name">
-                        <Link to={`/order/${store_code}`}>Đơn hàng trong ngày </Link> <span id="user_name">
+                    <p class="item-detail-badges" id="sale_user_name">
+                        <Link to={`/order/${store_code}?time_from=${getDDMMYYYNow()}&time_to=${getDDMMYYYNow()}`}>Đơn hàng trong ngày </Link> <span id="user_name">
                             <span
 
                                 className={`step num-badge ${statusTotalOrdersInDay}`}
@@ -159,7 +165,7 @@ class BadgeTable extends Component {
                             </span>
                         </span>
                     </p>
-                    <p class="">
+                    <p class="item-detail-badges">
                         <Link to={`/order/${store_code}/CUSTOMER_HAS_RETURNS`}> Đơn hoàn trả</Link> <span id="user_tel">
                             <span
 
@@ -169,7 +175,7 @@ class BadgeTable extends Component {
                             </span>
                         </span>
                     </p>
-                    <p class="">
+                    <p class="item-detail-badges">
                         <Link to={`/product/index/${store_code}`}> Sản phẩm sắp hết hàng </Link><span id="user_tel">
                             <span
 
@@ -179,7 +185,7 @@ class BadgeTable extends Component {
                             </span>
                         </span>
                     </p>
-                    <p class="">
+                    <p class="item-detail-badges">
                         <Link to={`/discount/${store_code}`}> Giảm giá đang diễn ra </Link><span id="user_note">
                             <span
 
@@ -189,7 +195,7 @@ class BadgeTable extends Component {
                             </span>
                         </span>
                     </p>
-                    <p class="" id="booking_time">
+                    <p class="item-detail-badges" id="booking_time">
                         <Link to={`/voucher/${store_code}`}> Voucher đang diễn ra </Link><span id="booking_time_txt">
                             <span
 
@@ -201,7 +207,7 @@ class BadgeTable extends Component {
                     </p>
 
 
-                    <p class="" id="booking_time">
+                    <p class="item-detail-badges" id="booking_time">
                         <Link to={`/combo/${store_code}`}> Combo đang diễn ra </Link><span id="booking_time_txt">
                             <span
 

@@ -67,7 +67,7 @@ class ModalBranch extends Component {
                                 <div style={{ margin: 'auto' }} className={`nav-item dropdown no-arrow mx-1 `}>
 
                                     <select id="input" className="form-control border-input" name={nameBranch} value={txtBranch} onChange={this.onChange}>
-                                        <option value="">-- Chọn chi nhánh --</option>
+                                        <option value=""  disabled>-- Chọn chi nhánh --</option>
                                         {this.showData(branchStore)}
                                     </select>
 

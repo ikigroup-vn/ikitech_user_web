@@ -109,7 +109,7 @@ class SDateRangePicker extends Component {
                         id="daterangepicker"
                         placeholder='Chọn từ ngày... đến ngày...'
 
-                        format="dd-MM-yyyy"
+                        format="dd/MM/yyyy"
                         onChange={this.onchangeDateFromTo}
                     />
                 </div>

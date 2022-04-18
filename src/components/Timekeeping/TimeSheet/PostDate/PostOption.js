@@ -72,10 +72,10 @@ class Form extends Component {
               <DateRangePickerComponent
                 id="daterangepicker"
                 placeholder="Chọn từ ngày... đến ngày..."
-                format="dd-MM-yyyy"
+                format="dd/MM/yyyy"
                 width="100%"
                 min={new Date()}
-                value={datePrime.from + "-" + datePrime.to}
+                value={datePrime.from + " đến " + datePrime.to}
                 onChange={this.onChangeDatePrime}
               />
               <button type="submit" class="btn btn-info  btn-sm ml-5 a ">

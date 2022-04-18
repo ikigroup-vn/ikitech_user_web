@@ -11,6 +11,7 @@ import * as helper from "../../../ultis/helpers"
 import ChartSales from "./ChartSales";
 import Alert from "../../Partials/Alert";
 import * as customerAction from "../../../actions/customer";
+import { getBranchId } from "../../../ultis/branchUtils";
 
 class ReportCollaborator extends Component {
     constructor(props) {
@@ -120,9 +121,10 @@ const mapStateToProps = (state) => {
     };
 };
 const mapDispatchToProps = (dispatch, props) => {
+    var branch_id = getBranchId()
     return {
         fetchOverview: (store_code, params) => {
-            dispatch(dashboardAction.fetchOverview(store_code, params));
+            dispatch(dashboardAction.fetchOverview(store_code,branch_id, params));
         },
         fetchCustomerId: (store_code, customerId) => {
             dispatch(customerAction.fetchCustomerId(store_code, customerId));

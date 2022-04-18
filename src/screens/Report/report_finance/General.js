@@ -64,7 +64,7 @@ class General extends Component {
                                         
                                     </div>
                                     <div className="col-auto">
-                                        <i className="fas fa-boxes fa-2x text-gray-300"></i>
+                                        <i className="fa fa-file-excel-o fa-2x text-gray-300"></i>
                                     </div>
                                 </div>
                             </div>
@@ -85,7 +85,7 @@ class General extends Component {
                                         <div className="text-gray-800">Tổng công nợ phải thu của khách hàng</div>                                
                                     </div>
                                     <div className="col-auto">
-                                        <i className="fas fa-eye-slash fa-2x text-gray-300"></i>
+                                        <i className="fa fa-plus-square-o fa-2x text-gray-300"></i>
                                     </div>
                                 </div>
                             </div>
@@ -109,7 +109,7 @@ class General extends Component {
                                 
                                     </div>
                                     <div className="col-auto">
-                                        <i className="	fas fa-balance-scale fa-2x text-gray-300"></i>
+                                        <i className="fa fa-minus-square-o fa-2x text-gray-300"></i>
                                     </div>
                                 </div>
                             </div>

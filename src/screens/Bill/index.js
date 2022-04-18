@@ -16,6 +16,8 @@ import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
 import moment from "moment";
 import * as helper from "../../ultis/helpers";
 import { getBranchId } from "../../ultis/branchUtils";
+import history from "../../history";
+
 
 class Bill extends Component {
   constructor(props) {
@@ -31,6 +33,7 @@ class Bill extends Component {
       numPage: 20,
       agency_by_customer_id:
         queryString.parse(window.location.search).agency_by_customer_id || null,
+      paramDate: ""
     };
   }
   closeChatBox = (status) => {
@@ -124,7 +127,34 @@ class Bill extends Component {
     this.props.fetchAllBill(store_code, 1, branch_id, null, params_agency);
   };
 
-  componentWillReceiveProps(nextProps) {
+  getParamDate = () => {
+    const queryParams = new URLSearchParams(window.location.search)
+    const time_from = queryParams.get("time_from")
+    const time_to = queryParams.get("time_to")
+    var params = `&time_from=${time_from}&time_to=${time_to}`;
+    return params;
+  }
+
+  componentWillReceiveProps(nextProps, nextState) {
+
+
+    if (this.state.paramDate != this.getParamDate()) {
+      this.setState({
+        paramDate: this.getParamDate()
+      })
+
+      var { store_code } = this.props.match.params;
+      const branch_id = getBranchId()
+      var params_agency =
+      this.state.agency_by_customer_id != null
+        ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
+        : null;
+      this.props.fetchAllBill(store_code, 1, branch_id, this.getParamDate(), params_agency);
+    }
+
+
+
+
     if (
       this.state.isLoading != true &&
       typeof nextProps.permission.product_list != "undefined"
@@ -138,13 +168,16 @@ class Bill extends Component {
   }
 
   onchangeDateFromTo = (e) => {
+
+
+
     var from = "";
     var { store_code } = this.props.match.params;
 
     var to = "";
     try {
-      from = moment(e.value[0], "DD-MM-YYYY").format("YYYY-MM-DD");
-      to = moment(e.value[1], "DD-MM-YYYY").format("YYYY-MM-DD");
+      from = moment(e.value[0], "DD-MM-YYYY").format("DD-MM-YYYY");
+      to = moment(e.value[1], "DD-MM-YYYY").format("DD-MM-YYYY");
     } catch (error) {
       from = null;
       to = null;
@@ -154,13 +187,13 @@ class Bill extends Component {
         ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
         : null;
 
-    var params = `&time_from=${from}&time_to=${to}`;
+    var params = `?time_from=${from}&time_to=${to}`;
     if (from == null || to == null) {
       params = "";
     }
-    const branch_id = localStorage.getItem("branch_id")
-    this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
 
+
+    history.push(window.location.pathname + params)
 
   }
 
@@ -199,7 +232,7 @@ class Bill extends Component {
                       }}
                     >
                       <h4 className="h4 title_content mb-0 text-gray-800">
-                       Hóa đơn{" "}
+                        Hóa đơn{" "}
                         {typeof customer.id != "undefined" &&
                           customer.id == this.state.agency_by_customer_id
                           ? `của Đại lý ${customer.name}`
@@ -245,7 +278,7 @@ class Bill extends Component {
                               <DateRangePickerComponent
                                 id="daterangepicker"
                                 placeholder="Khoảng thời gian..."
-                                format="dd-MM-yyyy"
+                                format="dd/MM/yyyy"
                                 onChange={this.onchangeDateFromTo}
                               />
                             </p>
