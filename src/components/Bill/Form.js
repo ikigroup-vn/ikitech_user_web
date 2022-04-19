@@ -29,7 +29,9 @@ class Form extends Component {
             orderData: {},
             paymentData: {},
             showChatBox: "show",
-            check : false
+            check : false,
+            css_IKIPOS : "col-lg-9 col-md-8 col-sm-12  pl0 pr8",
+            css_IKITECH : "col-lg-7 col-md-8 col-sm-12  pl0 pr8"
         };
     }
 
@@ -72,7 +74,7 @@ class Form extends Component {
 
     render() {
         var { bill, billHistoty, order_code, store_code, billId, chat, order_allow_change_status, historyPay } = this.props
-        var { orderData, paymentData, showChatBox , check } = this.state
+        var { orderData, paymentData, showChatBox , check , css_IKIPOS , css_IKITECH } = this.state
         var customerImg = typeof bill.customer == "undefined" || bill.customer == null ? Env.IMG_NOT_FOUND : bill.customer.avatar_image
         var customerId = bill.customer_id
         var customerName = typeof bill.customer == "undefined" || bill.customer == null ? "Trống" : bill.customer.name
@@ -129,7 +131,7 @@ class Form extends Component {
                             </div>
                         )}
 
-                        <div className="col-lg-7 col-md-8 col-sm-12  pl0 pr8">
+                        <div className={getChannel() == IKIPOS ? css_IKIPOS : css_IKITECH}>
                             {
                                 getChannel() == IKIPOS ? (<InfoProductPos check = {check} store_code={store_code} bill={bill} />
                                 ) : <InfoProduct store_code={store_code} bill={bill} />

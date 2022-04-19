@@ -362,7 +362,7 @@ class InfoProduct extends Component {
               id="flexSwitchCheckDefault"
               checked={checkHasDistribute}
             />
-            <label class="form-check-label" for="flexSwitchCheckDefault">
+            <label style = {{fontWeight : "750"}} class="form-check-label" for="flexSwitchCheckDefault">
               Có phân loại
             </label>
           </div>
@@ -422,7 +422,7 @@ class InfoProduct extends Component {
               id="flexSwitchCheckDefault"
               checked={check_inventory}
             />
-            <label class="form-check-label" for="flexSwitchCheckDefault">
+            <label style = {{fontWeight : "750"}} class="form-check-label" for="flexSwitchCheckDefault">
               Theo dõi hàng trong kho
             </label>
           </div>

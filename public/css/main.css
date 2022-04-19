@@ -48,7 +48,12 @@
     border-top: 0px !important;
 }
 
-
+.form-input-number{
+    height: 28px !important;
+     line-height:  initial !important;
+     display : flex !important;
+      justify-content : center
+}
   
 
   

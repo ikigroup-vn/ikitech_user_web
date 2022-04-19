@@ -96,7 +96,7 @@ class ProductCreate extends Component {
     var form = { ...this.state.form };
     form.index_image_avatar = 0;
 
-
+    console.log(form.list_distribute);
 
 
 
@@ -283,7 +283,6 @@ class ProductCreate extends Component {
         form.list_distribute.length > 0 ? total : form.quantity_in_stock;
     }
     // this.props.postProduct(store_code, form)
-    console.log("ấdfsdfsdkfjsd", form);
     if (form.name == null || !isEmpty(form.name)) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
@@ -446,7 +445,6 @@ class ProductCreate extends Component {
     }
 
 
-    console.log(form)
     this.props.postProductV2(store_code, branch_id, form);
   };
 

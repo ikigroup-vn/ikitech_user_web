@@ -305,7 +305,8 @@ class ProductEdit extends Component {
 
     distributeData.element_distributes = list_distribute.length > 0 ? list_distribute[0].element_distributes : distributeData
 
-    console.log(distributeData);
+    console.log(distributeData , form);
+
 
     this.props.updateDistribute(store_code, distributeData, productId, currentBranch?.id)
 

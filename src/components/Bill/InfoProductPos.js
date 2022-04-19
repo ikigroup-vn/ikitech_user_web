@@ -148,13 +148,21 @@ class InfoProductPos extends Component {
 
     onChangeInputQuantity = (e, id, max = 1) => {
         var list_refunds = [...this.state.list_refunds];
-
+        var value = Number(e.target.value)
         for (var element of list_refunds) {
             if (element.line_item_id == id) {
-                element.quantity = e.target.value
-                // if (e.target.value > max || e.target.value < 1) {
-                //     return;
-                // }
+                
+                if(e.target.value == "")
+                {
+                    element.quantity = 0
+                }
+                else if (value > max || value < 1 || !Number.isInteger(value)) {
+                    return;
+                }
+                else
+
+                element.quantity = value
+
             }
         }
         this.setState({ list_refunds: [...list_refunds] })
@@ -167,11 +175,12 @@ class InfoProductPos extends Component {
 
             for (var element of list_refunds) {
                 if (element.line_item_id == id) {
+                    console.log(element , max)
+                    if(element.quantity + 1 > max) {
+                        return;
+                    }
                     element.quantity = element.quantity + 1
-                    // if (element.quantity + 1 > max) {
-                    //     return;
 
-                    // }
                 }
             }
         }
@@ -181,10 +190,11 @@ class InfoProductPos extends Component {
                 if (element.line_item_id == id) {
                     console.log(" da vaoaaa")
 
-                    element.quantity = element.quantity - 1
-                    // if (element.quantity - 1 <= 0) {
-                    //     return;
-                    // }
+                    if (element.quantity - 1 <= 0) {
+                        return;
+                    }
+                                        element.quantity = element.quantity - 1
+
                 }
             }
         }
@@ -247,7 +257,18 @@ class InfoProductPos extends Component {
                                                 alignSelf: "center"
                                             }}>
                                                 <label>
-                                                    <input type="checkbox" onChange={(e) => this.check(e, this.getLineItemId(product.id))} />
+                                                    <input  style = {{width : "16px" , height : "16px" }} type="checkbox" onChange={(e) => this.check(e, this.getLineItemId(product.id))} />
+
+                                                </label>
+                                            </div>
+                                        )}
+                                           {check == false || this.getNumQuantity(product.id , list_items) <= 0 && (
+                                            <div class="checkbox" style={{
+                                                marginRight: "10px", marginRight: "10px",
+                                                alignSelf: "center"
+                                            }}>
+                                                <label>
+                                                    <input title="Đã hoàn hết sản phẩm này" disabled style = {{width : "16px" , height : "16px" , cursor : "not-allowed"}} type="checkbox" />
 
                                                 </label>
                                             </div>
@@ -281,7 +302,7 @@ class InfoProductPos extends Component {
                                                 </p>
                                             </div>
 
-                                            <div >
+                                            {/* <div >
                                                 <p class=" bold sale_user_label">
                                                     Tổng số lượng:
 
@@ -290,7 +311,7 @@ class InfoProductPos extends Component {
                                                 </p>
 
 
-                                            </div>
+                                            </div> */}
 
 
 
@@ -316,9 +337,9 @@ class InfoProductPos extends Component {
                                                         {
 
                                                             (<div class="quantity" style={{ display: "flex" }}>
-                                                                <span style={{ height: "35px" }} class="input-quantity input-number-decrement" onClick={() => this.changeQuantity("DECREASE", this.getLineItemId(product.id), this.getCanQuantity(product.id, list_items))}>–</span>
-                                                                <input style={{ height: "35px" }} class="input-number" name="txtQuantity" type="text" value={this.getCanQuantity(product.id, list_items)} onChange={(e) => this.onChangeInputQuantity(e, this.getLineItemId(product.id), this.getCanQuantity(product.id, list_items))} />
-                                                                <span style={{ height: "35px" }} class="input-quantity input-number-increment" onClick={() => this.changeQuantity("INCREASE", this.getLineItemId(product.id), this.getCanQuantity(product.id, list_items))}>+</span></div>)
+                                                                <span  class="input-quantity input-number-decrement form-input-number " onClick={() => this.changeQuantity("DECREASE", this.getLineItemId(product.id), this.getNumQuantity(product.id, list_items))}><span>–</span></span>
+                                                                <input style={{ height: "28px" }} class="input-number" name="txtQuantity" type="text" value={this.getCanQuantity(product.id, list_items)} onChange={(e) => this.onChangeInputQuantity(e, this.getLineItemId(product.id), this.getNumQuantity(product.id, list_items))} />
+                                                                <span  class="input-quantity input-number-increment form-input-number" onClick={() => this.changeQuantity("INCREASE", this.getLineItemId(product.id), this.getNumQuantity(product.id, list_items))}><span>+</span></span></div>)
 
                                                         }
 

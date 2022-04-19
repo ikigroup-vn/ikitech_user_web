@@ -121,8 +121,9 @@ class Distribute extends Component {
         list_distribute[0].element_distributes[obj._index].sub_element_distributes[obj.index][obj.name] = value
       }
       else if (obj.name == "value") {
-        list_distribute[0].element_distributes[obj._index].sub_element_distributes[obj.index].name = value
-
+        list_distribute[0].element_distributes.forEach(element => {
+          element.sub_element_distributes[obj.index].name = value
+        });
       }
       else {
         console.log(type, obj, this.state.list_distribute)
@@ -194,6 +195,28 @@ class Distribute extends Component {
       )
     ) {
       var distributes = [...nextProps.product.distributes];
+      if(distributes && distributes.length > 0)
+      {
+        distributes[0].element_distributes.forEach((element , key) => {
+          if(element.sub_element_distributes.length > 0)
+          {
+            element.sub_element_distributes.forEach((_element , _key) => {
+              if(_element.name == null || _element.name == "")
+              {
+                var count = distributes[0].element_distributes.length
+                var value = "";
+                for (let index = 0; index < count; index++) {
+                  if(distributes[0].element_distributes[index].sub_element_distributes[_key].name != "" && distributes[0].element_distributes[index].sub_element_distributes[_key].name )
+                  value = distributes[0].element_distributes[index].sub_element_distributes[_key].name ;
+                  
+                }
+                 element.sub_element_distributes[_key].name = value;
+              }
+            });
+          }
+        });
+      }
+      console.log(distributes)
       this.props.handleDataFromDistribute(distributes);
 
       this.setState({ list_distribute: distributes });
@@ -340,24 +363,27 @@ class Distribute extends Component {
     this.setState({ ImgDistribute: image });
   };
   addRowChild = () => {
+    console.log("child 2")
     var list_distribute = [...this.state.list_distribute];
     var sub_element_distributes = []
     if (list_distribute.length > 0) {
       sub_element_distributes = list_distribute[0].element_distributes.length > 0 ? list_distribute[0].element_distributes[0].sub_element_distributes : []
     }
-    var newItem = [...sub_element_distributes]
-
+    var newItem = []
+    sub_element_distributes.forEach(element => {
+      newItem.push({...element});
+    });
 
     var newObject = {
       name: null,
       image_url: null,
       price: null,
       quantity_in_stock: null,
-      sub_element_distributes : newItem
+      sub_element_distributes: [...newItem]
 
     }
 
-    list_distribute[0].element_distributes.push({...newObject})
+    list_distribute[0].element_distributes.push({...newObject })
     this.setState({ list_distribute: [...list_distribute] });
   };
   showRows = (list_distribute) => {
