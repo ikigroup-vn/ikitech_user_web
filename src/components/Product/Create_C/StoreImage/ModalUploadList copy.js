@@ -2,17 +2,20 @@ import React, { Component } from "react";
 import * as productAction from "../../../../actions/product";
 import * as helper from "../../../../ultis/helpers";
 import { connect } from "react-redux";
+import { shallowEqual } from "../../../../ultis/shallowEqual";
 import * as Types from "../../../../constants/ActionType";
 
 class ModalUpload extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      selectedFile: "",
       files: [],
       files_copy: [],
-
+      isUploading: false
     };
   }
+
 
   onSave = (e) => {
     e.preventDefault();
@@ -33,21 +36,28 @@ class ModalUpload extends Component {
     }
     else {
       if (this.state.files.length > 0) {
+        var files = [...this.state.files]
         window.$('#file-listp').fileinput('clear');
         this.setState({
           files: [],
           files_copy: [],
         })
-        // this.props.startProgressBar()
-        this.props.uploadListImgProduct(this.state.files)
+
+        this.props.startProgressBar()
+        this.props.uploadListImgProduct(files)
+   
 
       }
     }
+
+
+
   }
+
+
 
   componentDidMount() {
     var _this = this
-
     window.$('#file-listp').on('fileloaded', function (event, file, previewId, fileId, index, reader) {
       var files = [..._this.state.files]
       var files_copy = [..._this.state.files_copy]
@@ -108,7 +118,8 @@ class ModalUpload extends Component {
             >
               <div className="modal-body">
                 <form enctype="multipart/form-data">
-                  <div className="form-group">
+                  <div className="form-group ">
+                  {/* upload-list-product */}
                     <div className="file-loading">
                       <input
                         id="file-listp"
@@ -116,13 +127,13 @@ class ModalUpload extends Component {
                         multiple
                         className="file"
                         data-overwrite-initial="false"
-                        onChange={this.selectFileProduct}
                       />
                     </div>
                   </div>
                 </form>
               </div>
               <div class="modal-footer">
+
               <button
                   type="button"
                   class="btn btn-default"

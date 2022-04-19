@@ -43,7 +43,7 @@ class ModalUpload extends Component {
           files_copy: [],
         })
 
-        this.props.startProgressBar()
+        // this.props.startProgressBar()
         this.props.uploadListImgProduct(files)
    
 

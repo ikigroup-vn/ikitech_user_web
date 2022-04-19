@@ -6,8 +6,8 @@ import * as Types from "../../../constants/ActionType";
 import Alert from "../../Partials/Alert";
 import * as productAction from "../../../actions/product";
 import { shallowEqual } from "../../../ultis/shallowEqual";
-import {formatNumber} from "../../../ultis/helpers"
-import {isEmpty} from "../../../ultis/helpers"
+import { formatNumber } from "../../../ultis/helpers"
+import { isEmpty } from "../../../ultis/helpers"
 
 class Distribute extends Component {
   constructor(props) {
@@ -20,24 +20,74 @@ class Distribute extends Component {
   }
 
   onChange = (e, type, obj) => {
+
+
     var value = e.target.value
     var value_data = value
-    console.log(value)
+
     var list_distribute = [...this.state.list_distribute]
+
+
+
+    list_distribute[0].element_distributes = list_distribute[0].element_distributes.map((ele) => {
+
+
+      if (ele.sub_element_distributes != null && ele.sub_element_distributes.length > 0) {
+
+
+        ele.sub_element_distributes = ele.sub_element_distributes.map((sub) => {
+
+          if (sub.id != null) {
+            sub.is_edit = true
+          }
+
+          if (sub.id != null && sub.before_name == null) {
+            sub.before_name = sub.name
+            sub.is_edit = true
+          }
+
+          if (sub.id == null) {
+            sub.is_edit = false
+          }
+
+          return sub
+        })
+      }
+
+      if (ele.id != null && ele.before_name == null) {
+        ele.before_name = ele.name
+        ele.is_edit = true
+      }
+
+      if (ele.id == null) {
+        ele.is_edit = false
+      }
+
+      return ele
+    })
+
     if (type == "PARENT") {
 
       if (obj.name == "name") {
         list_distribute[0].name = value
       }
+      else if (obj.name == "barcode") {
+        list_distribute[0].element_distributes[obj.index][obj.name] = value;
+      }
       else if (obj.name == "value") {
         list_distribute[0].element_distributes[obj.index].name = value
-
-
       }
       else {
         try {
 
           const _value = formatNumber(value);
+          if(obj.name == "barcode")
+          {
+            list_distribute[0].element_distributes[obj.index][obj.name] = data;
+
+          }
+          else
+          {
           if (!isNaN(Number(_value))) {
             var data = new Intl.NumberFormat().format(_value)
             if (obj.name == "quantity_in_stock") {
@@ -51,20 +101,24 @@ class Distribute extends Component {
             list_distribute[0].element_distributes[obj.index][obj.name] = data;
 
           }
+        }
 
         } catch (error) {
-          console.log("asdasdasd")
+
           list_distribute[0].element_distributes[obj.index][obj.name] = value;
 
         }
       }
 
-      this.setState({ list_distribute: list_distribute })
+      this.setState({ list_distribute: [...list_distribute] })
 
     }
     if (type == "SUP") {
       if (obj.name == "name") {
         list_distribute[0].sub_element_distribute_name = value
+      }
+      else if (obj.name == "barcode") {
+        list_distribute[0].element_distributes[obj._index].sub_element_distributes[obj.index][obj.name] = value
       }
       else if (obj.name == "value") {
         list_distribute[0].element_distributes[obj._index].sub_element_distributes[obj.index].name = value
@@ -94,7 +148,7 @@ class Distribute extends Component {
 
 
         } catch (error) {
-          list_distribute[0].element_distributes[obj._index].sub_element_distributes.push({ name: obj.title })
+          // list_distribute[0].element_distributes[obj._index].sub_element_distributes.push({ name: obj.title })
 
           const _value = formatNumber(value);
           if (!isNaN(Number(_value))) {
@@ -115,7 +169,7 @@ class Distribute extends Component {
         }
       }
       console.log(list_distribute)
-      this.setState({ list_distribute: list_distribute })
+      this.setState({ list_distribute: [...list_distribute] })
 
     }
   }
@@ -126,7 +180,7 @@ class Distribute extends Component {
     if (list_distribute[0].element_distributes.length > 0) {
       if (list_distribute.length > 0) {
         list_distribute[0].element_distributes[index].image_url = null
-        this.setState({ list_distribute: list_distribute });
+        this.setState({ list_distribute: [...list_distribute] });
       }
 
     }
@@ -155,7 +209,7 @@ class Distribute extends Component {
           list_distribute[0].element_distributes[img.index].image_url =
             img.data;
         });
-        this.setState({ list_distribute: list_distribute });
+        this.setState({ list_distribute: [...list_distribute] });
       }
     }
   }
@@ -194,24 +248,25 @@ class Distribute extends Component {
       || (typeof list_distribute[0].name !== "undefined" && list_distribute[0].element_distributes[0].sub_element_distributes.length == 0)
       && typeof list_distribute[0].element_distributes[0].sub_element_distributes != "undefined"
     ) {
-      console.log("ccccc")
-
       list_distribute[0].sub_element_distribute_name = null
       var newObject = {
         name: null,
         image_url: null,
         price: null,
         quantity_in_stock: null,
-
+        import_price: null
       }
-      list_distribute[0].element_distributes[0].sub_element_distributes.push(newObject)
+      list_distribute[0].element_distributes.forEach(element => {
+        typeof element == "object" && element.sub_element_distributes.push({...newObject})
+  
+      });
     }
     else {
       console.log("nott")
     }
 
 
-    this.setState({ list_distribute: list_distribute });
+    this.setState({ list_distribute: [...list_distribute] });
   };
 
 
@@ -223,10 +278,14 @@ class Distribute extends Component {
       image_url: null,
       price: null,
       quantity_in_stock: null,
-
+      import_price: null
     }
-    list_distribute[0].element_distributes[0].sub_element_distributes.push(newObject)
-    this.setState({ list_distribute: list_distribute });
+    list_distribute[0].element_distributes.forEach(element => {
+      typeof element == "object" && element.sub_element_distributes.push({...newObject})
+
+    });
+    // list_distribute[0].element_distributes[0].sub_element_distributes.push(newObject)
+    this.setState({ list_distribute: [...list_distribute] });
   };
 
   removeRow = () => {
@@ -245,14 +304,19 @@ class Distribute extends Component {
       list_distribute[0].element_distributes = []
 
     }
-    this.setState({ list_distribute: list_distribute });
+    this.setState({ list_distribute: [...list_distribute] });
   };
 
 
   removeRowChild = (key) => {
     var list_distribute = [...this.state.list_distribute];
     list_distribute[0].element_distributes.splice(key, 1)
-    this.setState({ list_distribute: list_distribute });
+    if (list_distribute[0].element_distributes && list_distribute[0].element_distributes.length == 0) {
+      this.setState({ list_distribute: [] });
+      return;
+    }
+
+    this.setState({ list_distribute: [...list_distribute] });
   };
 
   removeRowChildSup = (key) => {
@@ -270,40 +334,47 @@ class Distribute extends Component {
 
     });
 
-    this.setState({ list_distribute: list_distribute });
+    this.setState({ list_distribute: [...list_distribute] });
   };
   getIdImg = (e, image) => {
     this.setState({ ImgDistribute: image });
   };
   addRowChild = () => {
     var list_distribute = [...this.state.list_distribute];
+    var sub_element_distributes = []
+    if (list_distribute.length > 0) {
+      sub_element_distributes = list_distribute[0].element_distributes.length > 0 ? list_distribute[0].element_distributes[0].sub_element_distributes : []
+    }
+    var newItem = [...sub_element_distributes]
+
 
     var newObject = {
       name: null,
       image_url: null,
       price: null,
       quantity_in_stock: null,
-      sub_element_distributes: []
+      sub_element_distributes : newItem
 
     }
-    list_distribute[0].element_distributes.push(newObject)
-    this.setState({ list_distribute: list_distribute });
+
+    list_distribute[0].element_distributes.push({...newObject})
+    this.setState({ list_distribute: [...list_distribute] });
   };
   showRows = (list_distribute) => {
     var result = [];
     if (typeof list_distribute === "undefined") {
       return result;
     }
-    console.log(list_distribute.length)
+
     if (list_distribute.length > 0) {
       list_distribute.map((_data) => {
         if (_data.element_distributes.length > 0) {
 
           result = _data.element_distributes.map((data, index) => {
             var disable = index == 0 ? "" : "hide";
-            var disable_addButton = index ==  _data.element_distributes.length-1 ? "" : "hide";
+            var disable_addButton = index == _data.element_distributes.length - 1 ? "" : "hide";
 
-            var method = index == 0 ? "removeRow" : "removeRowChild";
+            var method = index == 0 && _data.element_distributes.length == 1 ? "removeRowChild" : "removeRowChild";
 
             var visible = index == 0 ? null : "visibled";
             var border = index == 0 ? null : "hide-border";
@@ -315,7 +386,7 @@ class Distribute extends Component {
               <tr className={`${border}`}>
                 <td>
                   <input
-                  
+
                     type="text"
                     id="input"
                     class={`form-control ${disable}`}
@@ -337,10 +408,10 @@ class Distribute extends Component {
 
                     required="required"
                   />
-                        <button
+                  <button
                     onClick={this.addRowChild}
 
-                   
+
                     class={`btn btn-success btn-sm ${disable_addButton}`}
                   >
 
@@ -397,7 +468,7 @@ class Distribute extends Component {
                   >
                     <i class="fa fa-trash"></i> Xóa
                   </button>
-            
+
                 </td>
               </tr>
             )
@@ -429,7 +500,7 @@ class Distribute extends Component {
 
                 var disable = index == 0 ? "" : "hide";
                 var method = index == 0 ? "removeRowChildSup" : "removeRowChildSup";
-                var disable_addButton = index == _data.element_distributes[0].sub_element_distributes.length-1 ? "" : "hide";
+                var disable_addButton = index == _data.element_distributes[0].sub_element_distributes.length - 1 ? "" : "hide";
 
                 var visible = index == 0 ? null : "visibled";
                 var border = index == 0 ? null : "hide-border";
@@ -438,7 +509,9 @@ class Distribute extends Component {
                 var status_img = img == "" || img == null || typeof img == "undefined" ? "hide" : "show";
 
                 return (
-
+                  <React.Fragment>
+                    {index ==0 &&                   <h6>Tên phân loại phụ </h6>
+}
                   <tr className={`${border}`}>
                     <td>
                       <input
@@ -466,7 +539,7 @@ class Distribute extends Component {
                         }
                         required="required"
                       />
-                          <button
+                      <button
                         onClick={this.addRowChildSup}
 
                         class={`btn btn-success btn-sm ${disable_addButton}`}
@@ -495,9 +568,11 @@ class Distribute extends Component {
                       >
                         <i class="fa fa-trash"></i> Xóa
                       </button>
-                  
+
                     </td>
                   </tr>
+                  </React.Fragment>
+
                 )
               })
 
@@ -514,24 +589,20 @@ class Distribute extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     this.props.handleDataFromDistribute(nextState.list_distribute);
     var list_distribute = [...nextState.list_distribute]
-    var total = 0
+    var total = null
     try {
-      if(typeof list_distribute[0].element_distributes != "undefined" )
-      {
-        if(list_distribute[0].element_distributes.length > 0)
-        {
-          list_distribute[0].element_distributes.forEach((element,index) => {
-            if(typeof element.sub_element_distributes != "undefined")
-            {
-              if(element.sub_element_distributes.length > 0)
-              {
-                element.sub_element_distributes.forEach((_element,index) => {
-                  const _value = _element.quantity_in_stock != null && isEmpty(_element.quantity_in_stock)  ? formatNumber(_element.quantity_in_stock) : 0;
+      if (typeof list_distribute[0].element_distributes != "undefined") {
+        if (list_distribute[0].element_distributes.length > 0) {
+          list_distribute[0].element_distributes.forEach((element, index) => {
+            if (typeof element.sub_element_distributes != "undefined") {
+              if (element.sub_element_distributes.length > 0) {
+                element.sub_element_distributes.forEach((_element, index) => {
+                  const _value = _element.quantity_in_stock != null && !isEmpty(_element.quantity_in_stock) ? formatNumber(_element.quantity_in_stock) : 0;
                   total = _element.quantity_in_stock !== null ? Number(total) + Number(_value) : 0
                 });
               }
-              else{
-                const _value = element.quantity_in_stock != null && isEmpty(element.quantity_in_stock)  ? formatNumber(element.quantity_in_stock) : 0;
+              else {
+                const _value = element.quantity_in_stock != null && !isEmpty(element.quantity_in_stock) ? formatNumber(element.quantity_in_stock) : 0;
                 total = element.quantity_in_stock !== null ? Number(total) + Number(_value) : 0
               }
             }
@@ -541,9 +612,9 @@ class Distribute extends Component {
 
         }
       }
- 
+
     } catch (error) {
-      
+
     }
     return true;
   }
@@ -563,12 +634,17 @@ class Distribute extends Component {
               try {
                 var value_price = list_distribute[0].element_distributes[_index].sub_element_distributes[index].price
                 var value_quantity_in_stock = list_distribute[0].element_distributes[_index].sub_element_distributes[index].quantity_in_stock
+                var barcode = list_distribute[0].element_distributes[_index].sub_element_distributes[index].barcode
+                var value_import_price = list_distribute[0].element_distributes[_index].sub_element_distributes[index].import_price
 
                 const _value = value_price != null ? formatNumber(value_price) : "";
-                var price =  _value == "" ? "" : new Intl.NumberFormat().format(_value);
+                var price = _value == "" ? "" : new Intl.NumberFormat().format(_value);
 
-                const _value_S = value_quantity_in_stock !== null &&  value_quantity_in_stock !== ""   ? formatNumber(value_quantity_in_stock) : "";
-                var quantity_in_stock = _value_S == "" ? "" :new Intl.NumberFormat().format(_value_S);
+                const _valueI = value_import_price != null ? formatNumber(value_import_price) : "";
+                var import_price = _valueI == "" ? "" : new Intl.NumberFormat().format(_valueI);
+
+                const _value_S = value_quantity_in_stock !== null && value_quantity_in_stock !== "" ? formatNumber(value_quantity_in_stock) : "";
+                var quantity_in_stock = _value_S == "" ? "" : new Intl.NumberFormat().format(_value_S);
 
               } catch (error) {
                 // var price =  _element.price
@@ -591,13 +667,41 @@ class Distribute extends Component {
 
                       </td>
                       <td>
+
                         <input
-                          value={quantity_in_stock}
-                          onChange={(e) => this.onChange(e, "SUP", { name: "quantity_in_stock", index, _index, title: _element.name })}
+                          onChange={(e) => this.onChange(e, "SUP", { name: "import_price", index, _index, title: _element.name })}
+
+                          value={import_price} id="input" class="form-control" required="required" title="" />
+
+                      </td>
+                      <td>
+                        <input
+                          value={barcode}
+                          onChange={(e) => this.onChange(e, "SUP", { name: "barcode", index, _index, title: _element.name })}
 
                           name="" id="input" class="form-control" required="required" title="" />
 
                       </td>
+
+                      {/* <td>
+                    <input
+                      onChange={(e) =>
+                        this.onChange(e, "SUP", {
+                          name: "quantity_in_stock",
+                          index: _index,
+                        })
+                      }
+                      value={quantity_in_stock}
+                      id="input"
+                      class="form-control"
+                      required="required"
+                      title=""
+                    />
+                  </td> */}
+
+
+
+
 
                     </tr>
                   )
@@ -618,17 +722,42 @@ class Distribute extends Component {
                         />
 
                       </td>
+
                       <td>
+
                         <input
-                          onChange={(e) => this.onChange(e, "PARENT", { name: "quantity_in_stock", index: _index })}
-                          value={quantity_in_stock}
+                          onChange={(e) => this.onChange(e, "PARENT", { name: "import_price", index: _index })}
 
-                          id="input" class="form-control"
-
-                          required="required" title="" />
+                          name="" id="input" class="form-control" required="required" title=""
+                          value={import_price}
+                        />
 
                       </td>
 
+                      <td>
+                        <input
+                          value={barcode}
+                          onChange={(e) => this.onChange(e, "PARENT", { name: "barcode", index, _index })}
+
+                          name="" id="input" class="form-control" required="required" title="" />
+
+                      </td>
+
+                      {/* <td>
+                    <input
+                      onChange={(e) =>
+                        this.onChange(e, "PARNET", {
+                          name: "quantity_in_stock",
+                          index: _index,
+                        })
+                      }
+                      value={quantity_in_stock}
+                      id="input"
+                      class="form-control"
+                      required="required"
+                      title=""
+                    />
+                  </td> */}
                     </tr>
                   )
                 }
@@ -637,13 +766,19 @@ class Distribute extends Component {
           }
           else {
             try {
-              const _value = element.price != null ? formatNumber(element.price) : "";
-              var price =_value == "" ? "" : new Intl.NumberFormat().format(_value);
+              var barcode = element.barcode;
 
-              const _value_S = element.quantity_in_stock !== null  && element.quantity_in_stock !== "" ? formatNumber(element.quantity_in_stock) : "";
-              var quantity_in_stock =_value_S == "" ? "" : new Intl.NumberFormat().format(_value_S);
+              const _value = element.price != null ? formatNumber(element.price) : "";
+              var price = _value == "" ? "" : new Intl.NumberFormat().format(_value);
+
+              const _valueI = element.price != null ? formatNumber(element.import_price) : "";
+              var import_price = _valueI == "" ? "" : new Intl.NumberFormat().format(_valueI);
+
+              const _value_S = element.quantity_in_stock !== null && element.quantity_in_stock !== "" ? formatNumber(element.quantity_in_stock) : "";
+              var quantity_in_stock = _value_S == "" ? "" : new Intl.NumberFormat().format(_value_S);
 
             } catch (error) {
+              var barcode = element.barcode;
               var price = element.price
               var quantity_in_stock = element.quantity_in_stock
 
@@ -665,16 +800,37 @@ class Distribute extends Component {
                     />
 
                   </td>
+
                   <td>
+
                     <input
-                      onChange={(e) => this.onChange(e, "PARENT", { name: "quantity_in_stock", index: _index })}
-                      value={quantity_in_stock}
+                      onChange={(e) => this.onChange(e, "PARENT", { name: "import_price", index: _index })}
 
-                      id="input" class="form-control"
-
-                      required="required" title="" />
+                      name="" id="input" class="form-control" required="required" title=""
+                      value={import_price}
+                    />
 
                   </td>
+
+
+                  <td>
+                    <input
+                      value={barcode}
+                      onChange={(e) => this.onChange(e, "PARENT", { name: "barcode", index: _index })}
+
+                      name="" id="input" class="form-control" required="required" title="" />
+
+                  </td>
+
+                  {/* <td>
+                    <input
+                      value={quantity_in_stock}
+                      onChange={(e) => this.onChange(e, "PARENT", { name: "quantity_in_stock", index: _index })}
+
+                      name="" id="input" class="form-control" required="required" title="" />
+
+                  </td> */}
+
 
                 </tr>
               )
@@ -688,11 +844,13 @@ class Distribute extends Component {
 
   render() {
     var { list_distribute } = this.state;
+    // var openDistribute = disableDistribute == true && disableInventory == true ? "" : "hide";
+
     var disable = ""
     try {
-       disable = list_distribute[0].element_distributes[0].sub_element_distributes.length > 0 ? "hide"  : "show"
+      disable = list_distribute[0].element_distributes[0].sub_element_distributes.length > 0 ? "hide" : "show"
     } catch (error) {
-      
+
     }
     return (
       <div class="table-responsive">
@@ -703,7 +861,7 @@ class Distribute extends Component {
         <table class="table table-border">
           <thead>
             <tr>
-              <th>Tên phân loại</th>
+              <th>Tên phân loại chính</th>
               <th>Giá trị</th>
               <th>Hình ảnh (tùy chọn)</th>
 
@@ -724,17 +882,19 @@ class Distribute extends Component {
           <i class="fa fa-plus"></i>
           Thêm phân loại
         </button>
-          <br/>
-        <h4 style = {{fontSize : "15px" , marginTop : "10px" , fontWeight:"500"}} class="label">Danh sách thuộc tính sản phẩm</h4>
-        
-        <table class="table table-hover table-border" style = {{maxWidth : "900px"}}>
+        <br />
+        <h4 style={{ fontSize: "15px", marginTop: "10px", fontWeight: "500" }} class="label">Danh sách thuộc tính sản phẩm</h4>
+
+        <table class="table table-hover table-border" style={{ maxWidth: "900px" }}>
           <thead>
             <tr>
               <th>Tên thuộc tính</th>
-              <th>Giá</th>
+              <th>Giá bán lẻ</th>
+              <th>Giá nhập</th>
               <th>Barcode</th>
-              <th>Tồn kho ban đầu </th>
-              <th>Giá vốn </th>
+              {/* <th>Tồn kho ban đầu</th> */}
+
+
             </tr>
           </thead>
           <tbody>

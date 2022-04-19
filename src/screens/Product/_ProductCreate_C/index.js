@@ -19,11 +19,12 @@ class Index extends Component {
 
     }
 
+
     componentWillReceiveProps(nextProps) {
         if (this.state.isLoading != true && typeof nextProps.permission.product_list != "undefined") {
             var permissions = nextProps.permission
 
-            var isShow = permissions.product_update
+            var isShow = permissions.product_add
             var isShowAttr = permissions.product_attribute_list
             var isCreate = permissions.product_attribute_add
             var isRemove = permissions.product_attribute_remove
@@ -53,8 +54,7 @@ class Index extends Component {
                                             page={page}
                                             history={history}
                                             isShowAttr = {isShowAttr}  isCreate = {isCreate}  isRemove = {isRemove}
-
-                                        />
+                                                                                    />
 
                                         : <NotAccess />}
 

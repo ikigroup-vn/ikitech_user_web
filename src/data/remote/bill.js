@@ -42,3 +42,7 @@ export const getHistoryDeliveryStatus = (store_code , data) =>{
 export const updateOrder = (data,store_code, order_code, ) =>{
   return callApi(`/store/${store_code}/orders/update/${order_code}`, "put", data);
 }
+
+export const postRefund = (data,store_code, branch_id) =>{
+  return callApi(`/store_v2/${store_code}/${branch_id}/pos/refund`, "post", data);
+}

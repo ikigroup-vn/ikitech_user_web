@@ -41,6 +41,8 @@ class ContentDetail extends Component {
     return true
   }
 
+
+
   render() {
     var { txtContent, txtContentC } = this.state;
     console.log(this.state)
@@ -84,17 +86,19 @@ class ContentDetail extends Component {
 
         </div>
 
-        {
-          getChannel() == IKITECH && <div class="form-group">
-            <label for="product_name">Nội dung cho cộng tác viên</label>
+       {
+         getChannel() == IKITECH &&
 
-            <textarea value={txtContentC}
-              onChange={this.onChange}
-              name="txtContentC" id="input" class="form-control" rows="7" required="required"></textarea>
+         <div class="form-group">
+         <label for="product_name">Nội dung cho cộng tác viên</label>
+
+         <textarea value={txtContentC}
+           onChange={this.onChange}
+           name="txtContentC" id="input" class="form-control" rows="7" required="required"></textarea>
 
 
-          </div>
-        }
+       </div>
+       }
       </div>
     );
   }
