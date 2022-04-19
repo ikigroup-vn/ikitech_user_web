@@ -14,7 +14,7 @@ import * as CategoryPAction from "../../../actions/category_product";
 import * as Types from "../../../constants/ActionType";
 import Alert from "../../../components/Partials/Alert";
 import SeoOption from "../../../components/Product/Update/SeoOption";
-import getChannel, { IKITECH } from "../../../ultis/channel";
+import getChannel, { IKITECH ,IKIPOS } from "../../../ultis/channel";
 
 class ProductEdit extends Component {
   constructor(props) {
@@ -291,7 +291,7 @@ class ProductEdit extends Component {
     }
 
     if (list_distribute != null && list_distribute.length > 0 && list_distribute[0].element_distributes != null
-      && list_distribute[0].element_distributes.length > 0
+      && list_distribute[0].element_distributes.length > 0 && this.state.disableDistribute == true
     ) {
       distributeData.has_distribute = true
       distributeData.distribute_name = list_distribute[0].name
@@ -303,13 +303,12 @@ class ProductEdit extends Component {
       }
     }
 
-    distributeData.element_distributes = list_distribute.length > 0 ? list_distribute[0].element_distributes : null
+    distributeData.element_distributes = list_distribute.length > 0 ? list_distribute[0].element_distributes : distributeData
 
-    if (this.state.checkDistribute == false) {
-      delete form.list_distribute
-    }
+    console.log(distributeData);
 
     this.props.updateDistribute(store_code, distributeData, productId, currentBranch?.id)
+
   };
   goBack = (e) => {
     e.preventDefault();
@@ -403,7 +402,7 @@ class ProductEdit extends Component {
             </div>
           </div>
         </div> */}
-        <div class={`card mb-4 ${typeof isShowAttr == "undefined" || isShowAttr == false ? "hide" : ""}`}>
+        <div class={`card mb-4 ${typeof isShowAttr == "undefined" || isShowAttr == false || getChannel() == IKIPOS ? "hide" : ""}`}>
           <div class="card-header title_content">
             Thuộc tính sản phẩm
           </div>

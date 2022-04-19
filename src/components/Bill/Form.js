@@ -6,6 +6,8 @@ import Chat from "../Chat"
 import OrderStatus from "./OrderStatus"
 import TotalBill from "./TotalBill";
 import InfoProduct from "./InfoProduct"
+import InfoProductPos from "./InfoProductPos"
+
 import InfoCustomer from "./InfoCustomer"
 import OrderHistory from "./OrderHistory"
 import * as Env from "../../ultis/default"
@@ -69,7 +71,6 @@ class Form extends Component {
         var customerName = typeof bill.customer == "undefined" || bill.customer == null ? "Trống" : bill.customer.name
 
 
-
         return (
             <React.Fragment>
                 <ModalOrder
@@ -88,38 +89,45 @@ class Form extends Component {
                 />
                 <section className="content">
                     <div className="row">
-                        <div className="col-lg-2 col-md-4 col-sm-12 ">
-                            <div className="row" id="sale_nav_container">
-                                <div className="" style={{ width: "100%" }}>
+                        {getChannel == IKIPOS && (
+                            <div className="col-lg-2 col-md-4 col-sm-12 ">
+                                <div className="row" id="sale_nav_container">
+                                    <div className="" style={{ width: "100%" }}>
 
-                                    <aside class="side-menu">
-                                        <OrderStatus
-                                            order_allow_change_status={order_allow_change_status}
-                                            handleUpdateStatusOrder={this.handleUpdateStatusOrder}
-                                            billId={billId}
-                                            order_code={order_code}
-                                            store_code={store_code}
-                                            bill={bill} />
+                                        <aside class="side-menu">
+                                            <OrderStatus
+                                                order_allow_change_status={order_allow_change_status}
+                                                handleUpdateStatusOrder={this.handleUpdateStatusOrder}
+                                                billId={billId}
+                                                order_code={order_code}
+                                                store_code={store_code}
+                                                bill={bill} />
 
-                                    </aside>
-                                </div>
+                                        </aside>
+                                    </div>
 
-                                <div className="" style={{ width: "100%", marginTop: "-5px" }}>
+                                    <div className="" style={{ width: "100%", marginTop: "-5px" }}>
 
-                                    <aside class="side-menu">
-                                        <PaymentStatus
-                                            order_allow_change_status={order_allow_change_status}
+                                        <aside class="side-menu">
+                                            <PaymentStatus
+                                                order_allow_change_status={order_allow_change_status}
 
-                                            handleUpdateStatusPayment={this.handleUpdateStatusPayment}
-                                            bill={bill} />
-                                    </aside>
+                                                handleUpdateStatusPayment={this.handleUpdateStatusPayment}
+                                                bill={bill} />
+                                        </aside>
+                                    </div>
+
                                 </div>
 
                             </div>
+                        )}
 
-                        </div>
                         <div className="col-lg-7 col-md-8 col-sm-12  pl0 pr8">
-                            <InfoProduct store_code={store_code} bill={bill} />
+                            {
+                                getChannel() == IKIPOS ? (<InfoProductPos store_code={store_code} bill={bill} />
+                                ) : <InfoProduct store_code={store_code} bill={bill} />
+
+                            }
                             <InfoBonusAgency store_code={store_code} bill={bill} />
 
                             <div style={{ marginTop: "10px" }} className=" tab">

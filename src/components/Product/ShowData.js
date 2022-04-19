@@ -220,6 +220,7 @@ class ShowData extends Component {
       status_stock,
       discount,
       historyInventory,
+      distributes
     } = this.props;
     const listDistribute =
       data.inventory?.distributes !== null &&
@@ -232,7 +233,7 @@ class ShowData extends Component {
     if (product_discount) {
       discount_percent = product_discount.value;
     }
-
+    console.log(distributes)
     return (
       <>
         <tr>
@@ -278,7 +279,12 @@ class ShowData extends Component {
                       : min_price - min_price * discount_percent * 0.01
                   )
                 )
-              ) : (
+              ) : distributes && distributes.length == 0 ? format(
+                Number(
+                  discount_percent == null
+                    ? min_price
+                    : min_price - min_price * discount_percent * 0.01
+                )) :(
                 <div>
                   {format(
                     Number(

@@ -123,7 +123,7 @@ class Table extends Component {
         var min_price = data.min_price;
         var max_price = data.max_price;
         var product_discount = data.product_discount;
-
+        var distributes = data.distributes
         return (
           <ShowData
             _delete={_delete}
@@ -145,6 +145,7 @@ class Table extends Component {
             index={index}
             store_code={store_code}
             discount={discount}
+            distributes = {distributes}
             handleCallBackElement={this.handleCallBackElement}
             handleCallBackSubElement={this.handleCallBackSubElement}
           />

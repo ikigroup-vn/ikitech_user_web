@@ -187,10 +187,10 @@ export const fetchAllListProduct = (store_code, search) => {
                   if (key == "price") {
                     newItem["Giá bán lẻ"] = value;
                   }
-                  if (key == "quantity_in_stock") {
-                    newItem["Tồn kho"] =
-                      value == -1 ? "Vô hạn" : value == 0 ? "Hết hàng" : value;
-                  }
+                  // if (key == "quantity_in_stock") {
+                  //   newItem["Tồn kho"] =
+                  //     value == -1 ? "Vô hạn" : value == 0 ? "Hết hàng" : value;
+                  // }
                   if (key == "categories") {
                     if (Array.isArray(value)) {
                       if (value.length > 0) {

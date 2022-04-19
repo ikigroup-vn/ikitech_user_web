@@ -14,7 +14,7 @@ import * as blogAction from "../../../actions/blog";
 
 import Alert from "../../../components/Partials/Alert";
 import SeoOption from "../../../components/Product/Create/SeoOption";
-import getChannel, { IKITECH } from "../../../ultis/channel";
+import getChannel, { IKITECH  , IKIPOS} from "../../../ultis/channel";
 import { isEmpty, removeVietnameseTones } from "../../../ultis/helpers";
 class ProductCreate extends Component {
   constructor(props) {
@@ -446,7 +446,7 @@ class ProductCreate extends Component {
     }
 
 
-
+    console.log(form)
     this.props.postProductV2(store_code, branch_id, form);
   };
 
@@ -594,7 +594,7 @@ class ProductCreate extends Component {
           </div>
         </div> */}
         <div
-          class={`card mb-4 ${typeof isShowAttr == "undefined" || isShowAttr == false
+          class={`card mb-4 ${typeof isShowAttr == "undefined" || isShowAttr == false || getChannel() == IKIPOS
             ? "hide"
             : ""
             }`}
