@@ -240,9 +240,14 @@ export const getDateForChartYear = () => {
   };
 };
 export const removeVietnameseTones = (str) => {
-  return str
+
+  try {
+    return str = false ? null : str
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .replace(/\s/g, "")
     .trim();
+  } catch (error) {
+    return str
+  }
 };

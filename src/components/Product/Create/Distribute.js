@@ -20,7 +20,7 @@ class Distribute extends Component {
   }
 
   onChange = (e, type, obj) => {
-
+    console.log(type, obj ,[...this.state.list_distribute]);
 
     var value = e.target.value
     var value_data = value
@@ -67,7 +67,6 @@ class Distribute extends Component {
     })
 
     if (type == "PARENT") {
-
       if (obj.name == "name") {
         list_distribute[0].name = value
       }
@@ -108,14 +107,18 @@ class Distribute extends Component {
         }
       }
 
-      this.setState({ list_distribute: list_distribute })
+      this.setState({ list_distribute: [...list_distribute] })
+      return;
 
     }
     if (type == "SUP") {
+      console.log(type, obj ,list_distribute);
+
       if (obj.name == "name") {
         list_distribute[0].sub_element_distribute_name = value
       }
       else if (obj.name == "barcode") {
+
         list_distribute[0].element_distributes[obj._index].sub_element_distributes[obj.index][obj.name] = value
       }
       else if (obj.name == "value") {
@@ -123,7 +126,6 @@ class Distribute extends Component {
 
       }
       else {
-        console.log(type, obj, this.state.list_distribute)
         try {
 
           const _value = formatNumber(value);
@@ -137,17 +139,17 @@ class Distribute extends Component {
                 data = data
               }
             }
+            console.log(data , obj._index , obj.index ,obj.name )
             list_distribute[0].element_distributes[obj._index].sub_element_distributes[obj.index][obj.name]
               = data;
-
+        
           }
 
 
 
 
         } catch (error) {
-          list_distribute[0].element_distributes[obj._index].sub_element_distributes.push({ name: obj.title })
-
+          // list_distribute[0].element_distributes[obj._index].sub_element_distributes.push({ name: obj.title })
           const _value = formatNumber(value);
           if (!isNaN(Number(_value))) {
             var data = new Intl.NumberFormat().format(_value)
@@ -166,8 +168,8 @@ class Distribute extends Component {
 
         }
       }
-      console.log(list_distribute)
-      this.setState({ list_distribute: list_distribute })
+      console.log(obj._index)
+      this.setState({ list_distribute: [...list_distribute] })
 
     }
   }
@@ -178,7 +180,7 @@ class Distribute extends Component {
     if (list_distribute[0].element_distributes.length > 0) {
       if (list_distribute.length > 0) {
         list_distribute[0].element_distributes[index].image_url = null
-        this.setState({ list_distribute: list_distribute });
+        this.setState({ list_distribute: [...list_distribute] });
       }
 
     }
@@ -191,22 +193,20 @@ class Distribute extends Component {
     ) {
       var listImg = [...nextProps.listImgDistribute];
       var list_distribute = [...this.state.list_distribute]
-      console.log(listImg)
       if (listImg.length > 0) {
         listImg.forEach((img) => {
           list_distribute[0].element_distributes[img.index].image_url =
             img.data;
         });
-        this.setState({ list_distribute: list_distribute });
+        this.setState({ list_distribute: [...list_distribute] });
       }
     }
   }
 
   addRow = () => {
+    console.log("main nha")
     var list_distribute = [...this.state.list_distribute];
-    console.log(list_distribute)
     if (list_distribute.length == 0) {
-      console.log("aaaa")
       list_distribute = [{ element_distributes: [] }]
       list_distribute[0].name = null
       var newObject = {
@@ -216,10 +216,9 @@ class Distribute extends Component {
         quantity_in_stock: null,
         sub_element_distributes: []
       }
-      list_distribute[0].element_distributes.push(newObject)
+      list_distribute[0].element_distributes.push({...newObject})
     }
     else if (typeof list_distribute[0].name == "undefined") {
-      console.log("bbbbb")
 
       list_distribute[0].name = null
       var newObject = {
@@ -229,14 +228,15 @@ class Distribute extends Component {
         quantity_in_stock: null,
         sub_element_distributes: []
       }
-      list_distribute[0].element_distributes.push(newObject)
+      list_distribute[0].element_distributes.push({...newObject})
 
     }
     else if (typeof list_distribute[0].sub_element_distribute_name == "undefined"
       || (typeof list_distribute[0].name !== "undefined" && list_distribute[0].element_distributes[0].sub_element_distributes.length == 0)
       && typeof list_distribute[0].element_distributes[0].sub_element_distributes != "undefined"
     ) {
-      console.log("ccccc")
+      console.log("main nha hehe")
+
       // list_distribute[0].element_distributes[0].sub_element_distributes = []
       list_distribute[0].sub_element_distribute_name = null
       var newObject = {
@@ -246,18 +246,24 @@ class Distribute extends Component {
         quantity_in_stock: null,
         import_price: null
       }
-      list_distribute[0].element_distributes[0].sub_element_distributes.push(newObject)
+      list_distribute[0].element_distributes.forEach(element => {
+        typeof element == "object" && element.sub_element_distributes.push({...newObject})
+  
+      });
+      // li
+      // list_distribute[0].element_distributes[0].sub_element_distributes.push({...newObject})
     }
     else {
-      console.log("nott")
     }
 
 
-    this.setState({ list_distribute: list_distribute });
+    this.setState({ list_distribute: [...list_distribute] });
   };
 
 
   addRowChildSup = () => {
+    console.log("child sup")
+
     var list_distribute = [...this.state.list_distribute];
 
     var newObject = {
@@ -266,18 +272,19 @@ class Distribute extends Component {
       price: null,
       quantity_in_stock: null,
       import_price: null
+
+
     }
     list_distribute[0].element_distributes.forEach(element => {
-      typeof element == "object" && element.sub_element_distributes.push(newObject)
+      typeof element == "object" && element.sub_element_distributes.push({...newObject})
 
     });
     // list_distribute[0].element_distributes[0].sub_element_distributes.push(newObject)
-    this.setState({ list_distribute: list_distribute });
+    this.setState({ list_distribute: [...list_distribute] });
   };
 
   removeRow = () => {
     var list_distribute = [...this.state.list_distribute];
-    console.log(list_distribute)
     if (typeof list_distribute[0].sub_element_distribute_name !== "undefined" && list_distribute[0].element_distributes[0].sub_element_distributes.length > 0) {
       list_distribute[0].name = list_distribute[0].sub_element_distribute_name
 
@@ -286,12 +293,11 @@ class Distribute extends Component {
 
     }
     else {
-      console.log("asdas")
       delete list_distribute[0].name
       list_distribute[0].element_distributes = []
 
     }
-    this.setState({ list_distribute: list_distribute });
+    this.setState({ list_distribute: [...list_distribute] });
   };
 
 
@@ -303,11 +309,10 @@ class Distribute extends Component {
       return;
     }
 
-    this.setState({ list_distribute: list_distribute });
+    this.setState({ list_distribute: [...list_distribute] });
   };
 
   removeRowChildSup = (key) => {
-    console.log(key)
     var list_distribute = [...this.state.list_distribute];
     list_distribute[0].element_distributes.forEach((element, _key) => {
       if (element.sub_element_distributes.length > 0) {
@@ -321,27 +326,32 @@ class Distribute extends Component {
 
     });
 
-    this.setState({ list_distribute: list_distribute });
+    this.setState({ list_distribute: [...list_distribute] });
   };
   getIdImg = (e, image) => {
     this.setState({ ImgDistribute: image });
   };
   addRowChild = () => {
+    console.log("child 2")
     var list_distribute = [...this.state.list_distribute];
     var sub_element_distributes = []
     if (list_distribute.length > 0) {
-      sub_element_distributes = list_distribute[0].element_distributes.length > 0 && list_distribute[0].element_distributes[0].sub_element_distributes
+      sub_element_distributes = list_distribute[0].element_distributes.length > 0 ? list_distribute[0].element_distributes[0].sub_element_distributes : []
     }
+    var newItem = [...sub_element_distributes]
+
+
     var newObject = {
       name: null,
       image_url: null,
       price: null,
       quantity_in_stock: null,
-      sub_element_distributes
+      sub_element_distributes : newItem
 
     }
-    list_distribute[0].element_distributes.push(newObject)
-    this.setState({ list_distribute: list_distribute });
+
+    list_distribute[0].element_distributes.push({...newObject})
+    this.setState({ list_distribute: [...list_distribute] });
   };
   showRows = (list_distribute, openDistribute) => {
     var result = [];
@@ -367,7 +377,6 @@ class Distribute extends Component {
             var status_img = img == "" || img == null || typeof img == "undefined" ? "hide" : "show";
 
 
-            console.log(method, index, _data.name)
             return (
 
               <tr className={`${border}`}>
@@ -498,7 +507,7 @@ class Distribute extends Component {
 
                 return (
                   <React.Fragment>
-                    {index ==0 &&                   <h5>Phân loại: </h5>
+                    {index ==0 &&                   <h6>Tên phân loại phụ </h6>
 }
                   <tr className={`${border}`}>
                     <td>
@@ -593,7 +602,6 @@ class Distribute extends Component {
               }
             }
           });
-          console.log(total)
           this.props.onChangeQuantityStock(total)
 
         }
@@ -606,7 +614,6 @@ class Distribute extends Component {
   }
 
   showDetail = (list_distribute, openDistribute) => {
-    console.log(list_distribute)
     var result = []
     if (typeof list_distribute == "undefined" || list_distribute.length == 0) {
       return result
@@ -616,7 +623,6 @@ class Distribute extends Component {
         if (typeof element.sub_element_distributes != "undefined") {
           if (list_distribute[0].element_distributes[0].sub_element_distributes.length > 0) {
             list_distribute[0].element_distributes[0].sub_element_distributes.forEach((_element, index) => {
-              console.log(element.sub_element_distributes)
               try {
                 var value_price = list_distribute[0].element_distributes[_index].sub_element_distributes[index].price
                 var value_quantity_in_stock = list_distribute[0].element_distributes[_index].sub_element_distributes[index].quantity_in_stock
@@ -648,7 +654,7 @@ class Distribute extends Component {
 
               } catch (error) {
                 // var price =  _element.price
-                // var quantity_in_stock = _element.quantity_in_stock
+                var quantity_in_stock = _element.quantity_in_stock
 
               }
               if (element.name != null && element.name != "" && typeof element.name != "undefined") {
@@ -677,7 +683,7 @@ class Distribute extends Component {
                       <td>
                         <input
                           value={barcode}
-                          onChange={(e) => this.onChange(e, "SUP", { name: "barcode", index, _index, title: _element.name })}
+                          onChange={(e) => this.onChange(e, "SUP", { name: "barcode", index,  _index, title: _element.name })}
 
                           name="" id="input" class="form-control" required="required" title="" />
 
@@ -688,7 +694,8 @@ class Distribute extends Component {
                           onChange={(e) =>
                             this.onChange(e, "SUP", {
                               name: "quantity_in_stock",
-                              index: _index,
+                              index, _index,
+                              title: _element.name
                             })
                           }
                           value={quantity_in_stock}
@@ -703,7 +710,8 @@ class Distribute extends Component {
                           onChange={(e) =>
                             this.onChange(e, "SUP", {
                               name: "cost_of_capital",
-                              index: _index,
+                              index, _index,
+                                                            title: _element.name
                             })
                           }
                           value={value_price_main}
@@ -903,7 +911,7 @@ class Distribute extends Component {
     var { list_distribute } = this.state;
     var { disableDistribute, disableInventory } = this.props
     var openDistribute = disableDistribute == true && disableInventory == true ? "" : "hide";
-    console.log(openDistribute)
+    console.log(list_distribute)
     var disable = ""
     try {
       disable = list_distribute[0].element_distributes[0].sub_element_distributes.length > 0 ? "hide" : "show"
@@ -919,7 +927,7 @@ class Distribute extends Component {
         <table class="table table-border">
           <thead>
             <tr>
-              <th>Tên phân loại</th>
+              <th>Tên phân loại chính</th>
               <th>Giá trị</th>
               <th>Hình ảnh (tùy chọn)</th>
 

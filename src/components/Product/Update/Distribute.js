@@ -502,7 +502,7 @@ class Distribute extends Component {
 
                 return (
                   <React.Fragment>
-                    {index ==0 &&                   <h5>Phân loại: </h5>
+                    {index ==0 &&                   <h6>Tên phân loại phụ </h6>
 }
                   <tr className={`${border}`}>
                     <td>
@@ -853,7 +853,7 @@ class Distribute extends Component {
         <table class="table table-border">
           <thead>
             <tr>
-              <th>Tên phân loại</th>
+              <th>Tên phân loại chính</th>
               <th>Giá trị</th>
               <th>Hình ảnh (tùy chọn)</th>
 

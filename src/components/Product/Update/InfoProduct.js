@@ -431,7 +431,7 @@ class InfoProduct extends Component {
         <div class="form-group">
           <div class="form-check form-switch">
             <input onChange={this.onChangeCheckInventory} class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked={check_inventory} />
-            <label class="form-check-label" for="flexSwitchCheckDefault">Theo dõi hàng trong kho</label>
+            <label class="form-check-label" for="flexSwitchCheckDefault">Theo dõi hàng trong kho <strong>(<i>Vui lòng vào kho hàng để cập nhật số lượng tồn kho và giá vốn</i></strong>)</label>
           </div>
         </div>
       
