@@ -235,7 +235,6 @@ class Distribute extends Component {
       || (typeof list_distribute[0].name !== "undefined" && list_distribute[0].element_distributes[0].sub_element_distributes.length == 0)
       && typeof list_distribute[0].element_distributes[0].sub_element_distributes != "undefined"
     ) {
-      console.log("main nha hehe")
 
       // list_distribute[0].element_distributes[0].sub_element_distributes = []
       list_distribute[0].sub_element_distribute_name = null

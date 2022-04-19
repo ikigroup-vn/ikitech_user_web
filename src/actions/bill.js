@@ -4,7 +4,7 @@ import * as billApi from "../data/remote/bill";
 import * as chatApi from "../data/remote/chat";
 import * as uploadApi from "../data/remote/upload";
 import { compressed } from "../ultis/helpers";
-
+import {getBranchId} from "../ultis/branchUtils"
 import moment from "moment";
 export const fetchAllBill = (store_code, page = 1,branch_id, params = null, params_agency = null) => {
  
@@ -534,5 +534,48 @@ export const uploadImgChat = function (store_code, customerId, files) {
         });
       }
     }
+  };
+};
+
+
+export const postRefund = (data,store_code , branch = getBranchId()) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    billApi
+      .postRefund(data,store_code,branch)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading : "hide"
+        })
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+        history.goBack();
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide"
+        })
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error.response.data.msg,
+          },
+        });
+      });
   };
 };

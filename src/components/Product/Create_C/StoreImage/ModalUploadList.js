@@ -43,7 +43,7 @@ class ModalUpload extends Component {
           files_copy: [],
         })
 
-        this.props.startProgressBar()
+        // this.props.startProgressBar()
         this.props.uploadListImgProduct(files)
    
 
@@ -118,7 +118,7 @@ class ModalUpload extends Component {
             >
               <div className="modal-body">
                 <form enctype="multipart/form-data">
-                  <div className="form-group upload-list-product">
+                  <div className="form-group">
                     <div className="file-loading">
                       <input
                         id="file-listp"
@@ -133,19 +133,15 @@ class ModalUpload extends Component {
               </div>
               <div class="modal-footer">
 
-                <button
-                  onClick={this.showDialog}
+              <button
                   type="button"
-                  class="btn btn-warning"
-                >
-
-                  <i class="fa fa-plus"></i>
-                  Thêm ảnh
+                  class="btn btn-default"
+                  data-dismiss="modal"
+                           >
+                  Đóng
                 </button>
                 <button type="submit" class="btn btn-info">
-                  <i class="fa fa-upload"></i>
-
-                  Upload
+                  Tạo
                 </button>
               </div>
             </form>

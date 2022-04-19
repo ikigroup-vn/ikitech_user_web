@@ -10,7 +10,7 @@ class ContentDetail extends Component {
     this.state = {
       list_promotion: [],
       openModal : false,
-      item : {}, 
+      item : {},
       index : null
     };
 

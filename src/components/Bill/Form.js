@@ -5,6 +5,8 @@ import ModalPayment from "./ModalPayment";
 import Chat from "../Chat"
 import OrderStatus from "./OrderStatus"
 import TotalBill from "./TotalBill";
+import TotalBillPos from "./TotalBillPos";
+
 import InfoProduct from "./InfoProduct"
 import InfoProductPos from "./InfoProductPos"
 
@@ -26,7 +28,8 @@ class Form extends Component {
         this.state = {
             orderData: {},
             paymentData: {},
-            showChatBox: "show"
+            showChatBox: "show",
+            check : false
         };
     }
 
@@ -63,14 +66,18 @@ class Form extends Component {
         this.setState({ paymentData: payment })
     }
 
+    check = (status) =>{
+        this.setState({check : status})
+    }
+
     render() {
         var { bill, billHistoty, order_code, store_code, billId, chat, order_allow_change_status, historyPay } = this.props
-        var { orderData, paymentData, showChatBox } = this.state
+        var { orderData, paymentData, showChatBox , check } = this.state
         var customerImg = typeof bill.customer == "undefined" || bill.customer == null ? Env.IMG_NOT_FOUND : bill.customer.avatar_image
         var customerId = bill.customer_id
         var customerName = typeof bill.customer == "undefined" || bill.customer == null ? "Trống" : bill.customer.name
 
-
+        console.log(store_code)
         return (
             <React.Fragment>
                 <ModalOrder
@@ -124,7 +131,7 @@ class Form extends Component {
 
                         <div className="col-lg-7 col-md-8 col-sm-12  pl0 pr8">
                             {
-                                getChannel() == IKIPOS ? (<InfoProductPos store_code={store_code} bill={bill} />
+                                getChannel() == IKIPOS ? (<InfoProductPos check = {check} store_code={store_code} bill={bill} />
                                 ) : <InfoProduct store_code={store_code} bill={bill} />
 
                             }
@@ -178,10 +185,21 @@ class Form extends Component {
                         <div className="col-lg-3 pr8 col-md-12   col-sm-12">
                             <div className="row">
                                 <div className="card col-12 pl0" id="user_cart_info">
-                                    <TotalBill
-                                        order_allow_change_status={order_allow_change_status}
+                                    {
+                                        getChannel() == IKITECH ?
+                                            (
+                                                <TotalBill
+                                                    order_allow_change_status={order_allow_change_status}
 
-                                        handleUpdateStatusOrder={this.handleUpdateStatusOrder} bill={bill} />
+                                                    handleUpdateStatusOrder={this.handleUpdateStatusOrder} bill={bill} />
+                                            ) : <TotalBillPos
+                                                store_code = {store_code}
+                                                check = {this.check}
+                                                order_allow_change_status={order_allow_change_status}
+
+                                                handleUpdateStatusOrder={this.handleUpdateStatusOrder} bill={bill} />
+                                    }
+
 
                                 </div>
 

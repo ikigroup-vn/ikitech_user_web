@@ -91,24 +91,12 @@ class ModalCreate extends Component {
               method="post"
               id="createForm"
             >
-              <div class="modal-body">
-                <div class="form-group">
-                  <label for="product_name">Nội dung khuyến mại</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="content"
-                    placeholder="Nhập tên danh mục"
-                    autocomplete="off"
-                    value={content}
-                    onChange={this.onChange}
-                    name="content"
-                  />
-                </div>
-                <div class="form-group">
-                  <label for="product_name">Danh mục</label>
+              <div class="modal-body" style = {{    "min-height": "450px"
+}}>
+              <div class="form-group">
+                  <label for="product_name">Bài viết</label>
                   <Select
-                    placeholder="-- Chọn danh mục --"
+                    placeholder="-- Chọn bài viết --"
                     value={txtBlogs}
                     isClearable
                     isSearchable
@@ -117,6 +105,20 @@ class ModalCreate extends Component {
                     onChange={this.onChangeSelect}
                   />
                 </div>
+                <div class="form-group">
+                  <label for="product_name">Nội dung khuyến mại</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="content"
+                    placeholder="Nhập nội dung"
+                    autocomplete="off"
+                    value={content}
+                    onChange={this.onChange}
+                    name="content"
+                  />
+                </div>
+    
               
               </div>
 
