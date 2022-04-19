@@ -469,6 +469,7 @@ class PostOrder extends Component {
     }
 
     handleKeyboard = (key) => {
+
         switch (key) {
             case "f1":
                 this.handlePayment();
@@ -604,10 +605,17 @@ class PostOrder extends Component {
                                 <div className='wrap-price'>
                                     <div className='' style={{ padding: "0" }}>
                                         <div class="mb-6" style={{ position: "relative", marginTop: "10px", display: "flex" }}>
-                                            <i class='fa fa-user-o' style={{ position: "absolute", fontSize: "20px", left: "3px", bottom: "10px", cursor: "pointer" }} ></i>
-                                            <div style={{ border: 0, borderRadius: 0, borderBottom: "1px solid rgba(128, 128, 128, 0.27)", paddingLeft: "30px", fontWeight: "500", color: "black" }}
-                                                class="form-control" id="form-control" data-toggle="modal" data-target="#modalPertion" >{this.props.listItemCart.customer?.name ? `${this.props.listItemCart.customer.name} (Công nợ: ${format(Number(this.props.listItemCart.customer.debt))} )` : "Chọn khách hàng"}</div>
-                                            {this.props.listItemCart.customer?.name ? <i class="fa fa-times" style={{ paddingTop: "10px" }} onClick={this.handleDeletePersion}></i> : <i class='fa fa-plus-square-o' style={{ position: "absolute", fontSize: "30px", right: "10px", bottom: "10px", cursor: "pointer" }} data-toggle="modal" data-target="#modalUser" ></i>}
+                                            <i class='fa fa-user-o' data-toggle="modal" data-target="#modalPertion"  style={{ position: "absolute", fontSize: "20px", left: "3px", bottom: "10px", cursor: "pointer" }} ></i>
+                                            <div class="form-control customer-pos-select" id="form-control" data-toggle="modal" data-target="#modalPertion" >{this.props.listItemCart.customer?.name ? `${this.props.listItemCart.customer.name} (Công nợ: ${format(Number(this.props.listItemCart.customer.debt))} )` : "Chọn khách hàng"}</div>
+                                            {this.props.listItemCart.customer?.name ? <i class="fa fa-times" style={{ paddingTop: "10px" }} 
+                                            onClick={this.handleDeletePersion}></i> : <i class='fa fa-plus-square-o' 
+                                            style={{ 
+                                                position: "absolute", 
+                                                fontSize: "30px", 
+                                                right: "10px", 
+                                                bottom: "10px", 
+                                                cursor: "pointer" 
+                                                }} data-toggle="modal" data-target="#modalUser" ></i>}
 
 
                                         </div>
@@ -662,14 +670,12 @@ class PostOrder extends Component {
                                                         </div>
 
                                                         <input
-
                                                             ref='refDiscountInput'
                                                             onChange={this.handChange}
                                                             type="text"
                                                             name="discount" id="discount"
-                                                            class=" col-4 input-discount"
+                                                            class=" col-4 input-discount text-input-pos"
                                                             value={this.state.typeDiscount == 0 ? this.state.discount : this.state.beforeDiscount}
-
                                                         ></input>
 
                                                         <div className={this.state.typeDiscount == 0 ? "type-discount-price activesss" : "type-discount-price"}
@@ -692,15 +698,8 @@ class PostOrder extends Component {
                                                     <button onClick={() => this.setIsPopoverOpen(!this.state.isPopoverOpen)}
                                                         type="text"
                                                         name="discount" id="discount"
-                                                        class=" col-4"
+                                                        class="col-4 button-discount-pos"
                                                         value={this.state.typeDiscount == 0 ? this.state.discount : this.state.beforeDiscount}
-                                                        style={{
-                                                            background: "transparent",
-                                                            height: "28px", width: "100px",
-                                                            textAlign: "right",
-                                                            border: 0, borderRadius: 0,
-                                                            borderBottom: "1px solid rgb(128 128 128 / 71%)"
-                                                        }}
                                                     // data-toggle="modal" data-target="#modalDiscount" 
                                                     >{this.state.typeDiscount == 0 ? this.state.discount : `${this.state.beforeDiscount}%`}</button>
                                                 </div>
@@ -718,8 +717,8 @@ class PostOrder extends Component {
 
                                             <div className='row' style={{ padding: "10px 0" }}>
                                                 <div className='title-price col-8' style={{ color: "black", fontWeight: "500" }}>Tiền khách đưa</div>
-                                                <input type="text" name="import_price" id="import_prices" class=" col-4" value={formatNoD(removeSignNumber(this.state.priceCustomer))}
-                                                    style={{ height: "28px", width: "100px", textAlign: "right", border: 0, borderRadius: 0, borderBottom: "1px solid rgb(128 128 128 / 71%)", fontSize: "22px" }} onChange={this.handChange} ></input>
+                                                <input type="text" name="import_price" id="import_prices" class="col-4 text-input-pos" value={formatNoD(removeSignNumber(this.state.priceCustomer))}
+                                                     onChange={this.handChange} ></input>
                                             </div>
 
                                             <div className='row' style={{ display: "flex", flexDirection: "row", margin: "10px 0" }}>

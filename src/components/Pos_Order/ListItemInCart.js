@@ -61,10 +61,27 @@ class ListItemInCart extends Component {
         }
         if (!shallowEqual(nextState.modalAdd, this.state.modalAdd) && nextState.modalAdd.quantity !== "") {
             var formDataAdd = { line_item_id: nextState.modalAdd.lineItemIds, product_id: nextState.modalAdd.productIds, quantity: nextState.modalAdd.quantity, distributes: nextState.modalAdd.distributesProduct }
+            formDataAdd = {
+                distribute_name: formDataAdd?.distributes[0]?.name,
+                element_distribute_name: formDataAdd?.distributes[0]?.value,
+                sub_element_distribute_name: formDataAdd?.distributes[0]?.sub_element_distributes,
+                line_item_id: formDataAdd.line_item_id,
+                product_id: formDataAdd.product_id,
+                quantity: formDataAdd.quantity,
+            }
             this.props.updateQuantityLineItem(store_code, branch_id, this.props.idCart, formDataAdd)
         }
         if (!shallowEqual(nextState.modalSub, this.state.modalSub)) {
             var formDataSub = { line_item_id: nextState.modalSub.itemIds, product_id: nextState.modalSub.productIds, quantity: nextState.modalSub.quantity, distributes: nextState.modalSub.distributesProduct }
+            formDataSub = {
+                distribute_name: formDataSub?.distributes[0]?.name,
+                element_distribute_name: formDataSub?.distributes[0]?.value,
+                sub_element_distribute_name: formDataSub?.distributes[0]?.sub_element_distributes,
+                line_item_id: formDataSub.line_item_id,
+                product_id: formDataSub.product_id,
+                quantity: formDataSub.quantity,
+            }
+
             this.props.subQuantityProduct(store_code, branch_id, nextState.modalSub.CartIds, formDataSub)
         }
         return true

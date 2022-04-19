@@ -286,13 +286,17 @@ class Topbar extends Component {
 
                             <ul className="navbar-nav ml-auto" style={{ display: "flex", alignItems: "center" }}>
                                 <li className="nav-item dropdown no-arrow" style={{ margin: "0 10px", fontSize: "17px" }}>
-                                    {/* <div className='wrap-info' data-toggle="modal" data-target="#modalBranch" style={{ display: "flex", color: "white", cursor: "pointer" }}>
+                                    <div className='wrap-info' data-toggle="modal" data-target="#modalBranch" style={{ display: "flex", color: "white", cursor: "pointer" }}>
                                 <i class="fa fa-map-marker" aria-hidden="true"></i>
-                                <span className="mr-2 small" style={{ color: "white", marginLeft: "5px" }}>
+                                <span className="mr-2 small" style={{ color: "white", marginLeft: "5px",
+                                 textOverflow: "ellipsis",
+                                 whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                 }}>
                                     {currentBranch?.name ?? "Chưa có chi nhánh"}
                                 </span>
 
-                            </div> */}
+                            </div>
                                     <div className='wrap-info' style={{ display: "flex", color: "white" }}>
                                         <i class="fa fa-user-o" aria-hidden="true"></i>
                                         <span className="mr-2 small" style={{ color: "white", marginLeft: "5px" }}>
