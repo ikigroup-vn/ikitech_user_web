@@ -2,7 +2,7 @@ import * as Types from "../../constants/ActionType"
 
 var initialState = {
   listPosOrder: [],
-  listItemCart: [],
+  oneCart: [],
   loadingCart: true,
   inforCustomer:""
 };
@@ -18,7 +18,7 @@ export const pos_reducer = (state = initialState, action) => {
       newState.loadingCart = true;
       return newState;
     case Types.FETCH_LIST_CART_ITEM:
-      newState.listItemCart = action.data;
+      newState.oneCart = action.data;
       return newState;
       case Types.FETCH_INFO_CUSTOMER:
         newState.inforCustomer = action.data;

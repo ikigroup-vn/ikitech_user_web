@@ -22,6 +22,8 @@ import { debounce } from 'lodash'
 import { Popover } from 'react-tiny-popover'
 import { getBranchId } from '../../ultis/branchUtils'
 import * as notificationAction from "../../actions/notification";
+import { AsyncPaginate } from "react-select-async-paginate";
+import * as customerApi from "../../data/remote/customer";
 
 class PostOrder extends Component {
     constructor(props) {
@@ -31,7 +33,7 @@ class PostOrder extends Component {
         this.state = {
             isPopoverOpen: false,
 
-            listItemCart: {},
+            oneCart: {},
             modalUpdateCart: {
                 name: "",
                 phone_number: "",
@@ -175,6 +177,8 @@ class PostOrder extends Component {
             listSuggestion: list
         })
     }
+
+
     onlyUnique = (value, index, self) => {
         return self.indexOf(value) === index;
     }
@@ -219,6 +223,7 @@ class PostOrder extends Component {
                 infoProduct: modal
             })
     }
+
     setIsPopoverOpen = () => {
 
 
@@ -234,6 +239,7 @@ class PostOrder extends Component {
         })
 
     }
+
     onChanges = (e) => {
         this.setState({ note: e.target.value })
     }
@@ -241,12 +247,14 @@ class PostOrder extends Component {
     handleCallbackPushProduct = (modal) => {
         this.setState({ listPosItem: modal })
     }
+
     handleCallbackTab = (modal) => {
         this.setState({
             idCart: modal,
 
         })
     }
+
     handleCallbackPertion = (modal) => {
         this.setState({ modalUpdateCart: modal })
     }
@@ -266,7 +274,7 @@ class PostOrder extends Component {
         var value_text = e.target.value;
         var value = value_text
         const _value = formatNumber(value);
-        var totalPrice = this.props.listItemCart.info_cart?.total_before_discount
+        var totalPrice = this.props.oneCart.info_cart?.total_before_discount
         var num1 = totalPrice * value / 100
         if (!isNaN(Number(_value))) {
             value = new Intl.NumberFormat().format(_value);
@@ -333,19 +341,19 @@ class PostOrder extends Component {
 
     componentWillReceiveProps(nextProps) {
 
-        if (!shallowEqual(nextProps.listItemCart, this.props.listItemCart)) {
+        if (!shallowEqual(nextProps.oneCart, this.props.oneCart)) {
 
             this.setState({
-                listItemCart: nextProps.listItemCart,
-                priceCustomer: nextProps.listItemCart.info_cart.total_final,
-                totalFinal: nextProps.listItemCart.info_cart.total_final,
-                totalAfterDiscount: nextProps.listItemCart.info_cart.total_after_discount,
+                oneCart: nextProps.oneCart,
+                priceCustomer: nextProps.oneCart.info_cart.total_final,
+                totalFinal: nextProps.oneCart.info_cart.total_final,
+                totalAfterDiscount: nextProps.oneCart.info_cart.total_after_discount,
                 selectPrice: -1,
-                namePos: nextProps.listItemCart.name,
-                customerNote: nextProps.listItemCart.customer_note ?? "",
-                payment_method_id: nextProps.listItemCart.payment_method_id ?? 0,
-                discount: nextProps.listItemCart.discount,
-                checkeds: nextProps.listItemCart.info_cart.is_use_points !== null ? nextProps.listItemCart.info_cart.is_use_points : false
+                namePos: nextProps.oneCart.name,
+                customerNote: nextProps.oneCart.customer_note ?? "",
+                payment_method_id: nextProps.oneCart.payment_method_id ?? 0,
+                discount: nextProps.oneCart.discount,
+                checkeds: nextProps.oneCart.info_cart.is_use_points !== null ? nextProps.oneCart.info_cart.is_use_points : false
             })
 
 
@@ -363,6 +371,7 @@ class PostOrder extends Component {
         }
 
     }
+
     shouldComponentUpdate(nextProps, nextState) {
         if (!shallowEqual(nextState.modalCreateUser, this.state.modalCreateUser)) {
             var { store_code } = this.props.match.params;
@@ -429,10 +438,10 @@ class PostOrder extends Component {
             const branch_id = getBranchId()
             const { store_code } = this.props.match.params
             const formData = {
-                customer_name: nextState.modalUpdateCart.name,
-                customer_phone: nextState.modalUpdateCart.phone_number,
+                customer_name: nextState.modalUpdateCart.customer_name,
+                customer_phone: nextState.modalUpdateCart.customer_phone,
                 name: nextState.namePos,
-                customer_id: nextState.modalUpdateCart.id,
+                customer_id: nextState.modalUpdateCart.customer_id,
 
             }
             this.props.updateInfoCarts(store_code, branch_id, nextState.idCart, formData)
@@ -508,11 +517,13 @@ class PostOrder extends Component {
     ChangeTypeDiscount = (type) => {
         this.setState({ typeDiscount: type, discount: "" })
     }
+
     handleDelete = () => {
         this.setState({
             listPosItem: []
         })
     }
+
     handleDeletePersion = () => {
         const branch_id = getBranchId()
         const { store_code } = this.props.match.params
@@ -524,19 +535,63 @@ class PostOrder extends Component {
         }
         this.props.updateInfoCarts(store_code, branch_id, this.state.idCart, formData)
     }
+
     handleClearVoucher = () => {
         this.setState({ code: "" })
     }
 
+    onChangeSelect4 = (selectValue) => {
 
+
+        var customer = selectValue?.customer
+        if (selectValue != null && customer != null) {
+            this.handleCallbackPertion(
+                {
+                    customer_phone: customer.phone_number,
+                    customer_id: customer.id,
+                    customer_name: customer.name
+                }
+            )
+        }
+
+        // this.setState({ select_customer_id: selectValue });
+
+
+    };
+
+    loadCustomers = async (search, loadedOptions, { page }) => {
+
+        var { store_code } = this.props.match.params
+        const params = `&search=${search}`;
+        const res = await customerApi
+            .fetchAllCustomer(store_code, page, params);
+
+        if (res.status != 200) {
+            return {
+                options: [],
+                hasMore: false,
+            }
+        }
+
+        return {
+            options: res.data.data.data.map((i) => {
+                return { value: i.id, label: `${i.name}  (${i.phone_number})`, customer: i };
+            }),
+
+            hasMore: res.data.data.data.length == 20,
+            additional: {
+                page: page + 1,
+            },
+        };
+    };
 
 
     render() {
         var { store_code } = this.props.match.params
         var { listPertion, products, listVoucher, badges } = this.props
         var { allow_semi_negative } = badges
-        var { numPage, exchange, priceCustomer, listItemCart, totalFinal, listSuggestion, totalAfterDiscount } = this.state
-        const length = listItemCart.info_cart?.line_items.length
+        var { numPage, exchange, priceCustomer, oneCart, totalFinal, listSuggestion, totalAfterDiscount, select_customer_id } = this.state
+        const length = oneCart.info_cart?.line_items.length
 
 
         return (
@@ -551,7 +606,7 @@ class PostOrder extends Component {
                         <div className="row-post">
 
                             <div className='col-list-pos' >
-                                {listItemCart?.info_cart?.line_items.length > 0 &&
+                                {oneCart?.info_cart?.line_items.length > 0 &&
                                     <div className='wap-list'>
                                         <div style={{ marginLeft: "10px" }}>STT</div>
                                         <div style={{ width: "40%" }}>Tên sản phẩm</div>
@@ -566,8 +621,8 @@ class PostOrder extends Component {
                                     <div className="panel-top">
                                         <div className='col-list-order'>
                                             <div className='' style={{ padding: "8px" }}>
-                                                {listItemCart?.info_cart?.line_items.length > 0 ?
-                                                    <ListItemInCart store_code={store_code} listItemPos={listItemCart} idCart={this.state.idCart} handleDelete={this.handleDelete} /> :
+                                                {oneCart?.info_cart?.line_items.length > 0 ?
+                                                    <ListItemInCart store_code={store_code} listItemPos={oneCart} idCart={this.state.idCart} handleDelete={this.handleDelete} /> :
                                                     <div className='product-pos' style={{ textAlign: "center", color: "gray", fontSize: "20px", marginTop: "70px" }}>
 
                                                         <img style={{ width: "14%" }} src="../../images/empty_cart.png" alt=''></img>
@@ -604,32 +659,105 @@ class PostOrder extends Component {
                             <div className='row-payman'>
                                 <div className='wrap-price'>
                                     <div className='' style={{ padding: "0" }}>
-                                        <div class="mb-6" style={{ position: "relative", marginTop: "10px", display: "flex" }}>
-                                            <i class='fa fa-user-o' data-toggle="modal" data-target="#modalPertion"  style={{ position: "absolute", fontSize: "20px", left: "3px", bottom: "10px", cursor: "pointer" }} ></i>
-                                            <div class="form-control customer-pos-select" id="form-control" data-toggle="modal" data-target="#modalPertion" >{this.props.listItemCart.customer?.name ? `${this.props.listItemCart.customer.name} (Công nợ: ${format(Number(this.props.listItemCart.customer.debt))} )` : "Chọn khách hàng"}</div>
-                                            {this.props.listItemCart.customer?.name ? <i class="fa fa-times" style={{ paddingTop: "10px" }} 
-                                            onClick={this.handleDeletePersion}></i> : <i class='fa fa-plus-square-o' 
-                                            style={{ 
-                                                position: "absolute", 
-                                                fontSize: "30px", 
-                                                right: "10px", 
-                                                bottom: "10px", 
-                                                cursor: "pointer" 
-                                                }} data-toggle="modal" data-target="#modalUser" ></i>}
 
+
+
+                                        <div style={{
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            alignItems: "center"
+                                        }}>
+                                            <i class='fa fa-user-o' data-toggle="modal" data-target="#modalPertion" style={{
+
+                                                fontSize: "20px", left: "3px", bottom: "10px", cursor: "pointer",
+                                                margin: 10
+                                            }} ></i>
+
+
+                                            <div style={{
+                                                flex: 1
+                                            }}>
+
+
+                                                {this.props.oneCart.customer?.name ?
+
+
+                                                    <div style={{
+                                                        display: "flex"
+                                                    }}>
+
+
+                                                        <div
+                                                            class="form-control customer-pos-select" >
+
+                                                            {this.props.oneCart.customer?.name ?
+                                                                `${this.props.oneCart.customer.name} 
+                                            (Công nợ: ${format(Number(this.props.oneCart.customer.debt))} )
+                                            ` :
+                                                                "Chọn khách hàng"} *
+
+                                                        </div>
+
+                                                        <i class="fa fa-times-circle" style={{ paddingTop: "10px", color: "red" }}
+                                                            onClick={this.handleDeletePersion}></i>
+                                                    </div>
+
+                                                    :
+                                                    <div style={{
+                                                        display: "flex",
+                                                        justifyContent: "center",
+                                                        alignItems: "center"
+                                                    }}>
+                                                        <div style={{
+                                                            flex: 1
+                                                        }}>
+
+
+                                                            <AsyncPaginate
+                                                                placeholder="Tìm khách hàng"
+                                                                value={select_customer_id}
+                                                                loadOptions={this.loadCustomers}
+                                                                name="recipientReferences1"
+                                                                onChange={this.onChangeSelect4}
+                                                                additional={{
+                                                                    page: 1,
+                                                                }}
+                                                                debounceTimeout={500}
+                                                                isClearable
+                                                                isSearchable
+                                                            />
+
+                                                        </div>
+
+
+
+                                                        <i class='fa fa-plus-square-o'
+                                                            style={{
+                                                                margin: 10,
+                                                                fontSize: "30px",
+
+                                                                cursor: "pointer"
+                                                            }} data-toggle="modal" data-target="#modalUser" ></i>
+
+                                                    </div>
+
+                                                }
+
+                                            </div>
 
                                         </div>
+
                                     </div>
                                     <div className="wrap-detail">
                                         <div className='price-info' style={{ margin: "10px 0px", fontSize: "17px", marginLeft: "5px" }}>
                                             <div className='row item-info'>
                                                 <div className='title-price col-6'>{`Tổng tiền:(${length} sản phẩm)`}</div>
-                                                <span className='col-6' style={{ textAlign: "end" }}>{format(Number(listItemCart.info_cart?.total_before_discount))}</span>
+                                                <span className='col-6' style={{ textAlign: "end" }}>{format(Number(oneCart.info_cart?.total_before_discount))}</span>
                                             </div>
                                             <div className='row' style={{ padding: "3px 0", justifyContent: "space-between" }}>
-                                                {this.props.listItemCart.customer?.name ?
+                                                {this.props.oneCart.customer?.name ?
                                                     <>
-                                                        <div className='title-price col-6'>{`Dùng ${listItemCart.info_cart?.total_points_can_use} xu [${format(Number(listItemCart.info_cart?.bonus_points_amount_can_use))}]`}</div>
+                                                        <div className='title-price col-6'>{`Dùng ${oneCart.info_cart?.total_points_can_use} xu [${format(Number(oneCart.info_cart?.bonus_points_amount_can_use))}]`}</div>
                                                         <form action="/action_page.php">
                                                             <div class="custom-control custom-switch">
                                                                 <input type="checkbox" class="custom-control-input" id="switch1" name="example" checked={this.state.checkeds} onChange={this.handChangeCheckbox} />
@@ -645,10 +773,10 @@ class PostOrder extends Component {
                                                 <div className='title-price col-6' >Voucher</div>
                                                 <div className='col-6' style={{ textAlign: "end" }}>
                                                     <a className='modal-choose ' style={{ color: "rgb(232 117 26)" }} data-toggle="modal" data-target="#modalVoucher" >
-                                                        <span className='' style={{ fontSize: "13px" }}>{listItemCart.code_voucher ? listItemCart.code_voucher : "Chọn hoặc nhập mã"}</span>
+                                                        <span className='' style={{ fontSize: "13px" }}>{oneCart.code_voucher ? oneCart.code_voucher : "Chọn hoặc nhập mã"}</span>
 
                                                     </a>
-                                                    {listItemCart.code_voucher ? <i class="fa fa-times" style={{ marginLeft: "10px" }} onClick={this.handleClearVoucher} ></i> : ""}
+                                                    {oneCart.code_voucher ? <i class="fa fa-times" style={{ marginLeft: "10px" }} onClick={this.handleClearVoucher} ></i> : ""}
                                                 </div>
                                             </div>
 
@@ -659,10 +787,7 @@ class PostOrder extends Component {
                                                 positions={['top']}
                                                 onClickOutside={() => this.setIsPopoverOpen(false)}
                                                 isOpen={this.state.isPopoverOpen}
-
                                                 content={<div className='model-discount'>
-
-
                                                     <div className='row'>
 
                                                         <div className='txt-discount'>
@@ -718,7 +843,7 @@ class PostOrder extends Component {
                                             <div className='row' style={{ padding: "10px 0" }}>
                                                 <div className='title-price col-8' style={{ color: "black", fontWeight: "500" }}>Tiền khách đưa</div>
                                                 <input type="text" name="import_price" id="import_prices" class="col-4 text-input-pos" value={formatNoD(removeSignNumber(this.state.priceCustomer))}
-                                                     onChange={this.handChange} ></input>
+                                                    onChange={this.handChange} ></input>
                                             </div>
 
                                             <div className='row' style={{ display: "flex", flexDirection: "row", margin: "10px 0" }}>
@@ -733,7 +858,6 @@ class PostOrder extends Component {
                                                 </div>
                                                 )}
                                             </div>
-
 
 
                                             <div className='row' style={{ borderTop: "1px solid #80808045", padding: "10px 0" }} >
@@ -788,10 +912,8 @@ class PostOrder extends Component {
                                             width: "100%",
                                             padding: "25px",
                                             textAlign: "center",
-
                                             borderRadius: "5px",
                                             cursor: "pointer",
-
                                         }}
                                         onClick={this.handlePayment}>Thanh toán</button>
                                 </div>
@@ -801,7 +923,7 @@ class PostOrder extends Component {
 
                         </div>
                         <ModalDetail allow_semi_negative={allow_semi_negative} modal={this.state.infoProduct} handleCallbackPushProduct={this.handleCallbackPushProduct} />
-                        <PertionInfo store_code={store_code} listPertion={listPertion} handleCallbackPertion={this.handleCallbackPertion} />
+                        {/* <PertionInfo store_code={store_code} listPertion={listPertion} handleCallbackPertion={this.handleCallbackPertion} /> */}
                         <ModalUser handleCallbackUser={this.handleCallbackUser} />
                         <ModalVoucher listVoucher={listVoucher} handleCallbackVoucherInput={this.handleCallbackVoucherInput} />
                     </div>
@@ -818,11 +940,12 @@ class PostOrder extends Component {
 const mapStateToProps = (state) => {
     return {
         products: state.productReducers.product.allProduct,
-        listItemCart: state.posReducers.pos_reducer.listItemCart,
+        oneCart: state.posReducers.pos_reducer.oneCart,
         listPertion: state.orderReducers.order_product.listPertion,
         listVoucher: state.orderReducers.order_product.listVoucher,
         inforCustomer: state.posReducers.pos_reducer.inforCustomer,
         badges: state.badgeReducers.allBadge,
+        customers: state.customerReducers.customer.allCustomer,
     }
 }
 
@@ -865,6 +988,7 @@ const mapDispatchToProps = (dispatch, props) => {
         fetchAllBadge: (store_code, branch_id) => {
             dispatch(notificationAction.fetchAllBadge(store_code, branch_id));
         },
+
 
     }
 }

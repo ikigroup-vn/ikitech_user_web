@@ -280,6 +280,7 @@ class Topbar extends Component {
 
                             </li>
                         </div>
+                        
 
                         <div className='end-list-top-cart'>
 
