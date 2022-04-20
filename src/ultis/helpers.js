@@ -13,7 +13,7 @@ export const randomString = (length) => {
 };
 
 
-export const  containsSpecialChars = (str)=> {
+export const containsSpecialChars = (str) => {
   const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
   return specialChars.test(str);
 }
@@ -136,12 +136,12 @@ export const format = (number) => {
   });
 };
 export const formatNoD = (number) => {
-  if (number == "") number = 0;
+  if (number == "" || number == null) number = 0;
   var number = number.toString().replace(/\./g, ",");
+   number = parseInt(number);
 
-  var number = Number(number == "" ? 0 : number);
   let dollarUSLocale = Intl.NumberFormat("en-US");
-  return dollarUSLocale.format(number);
+  return dollarUSLocale.format((number ?? 0));
 };
 
 export const loadExpandTable = () => {
@@ -175,13 +175,13 @@ export const formatNumber = (value) => {
   console.log(value);
   return typeof _value !== "undefined" && _value != null
     ? _value
-        .toString()
-        .replace(/\./g, "")
-        .toString()
-        .replace(/,/g, "")
-        .toString()
-        .replace(/-/g, "")
-        .toString()
+      .toString()
+      .replace(/\./g, "")
+      .toString()
+      .replace(/,/g, "")
+      .toString()
+      .replace(/-/g, "")
+      .toString()
     : "";
 };
 
@@ -243,10 +243,10 @@ export const removeVietnameseTones = (str) => {
 
   try {
     return str = false ? null : str
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/\s/g, "")
-    .trim();
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .replace(/\s/g, "")
+      .trim();
   } catch (error) {
     return str
   }

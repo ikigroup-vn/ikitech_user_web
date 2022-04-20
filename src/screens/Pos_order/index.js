@@ -344,6 +344,7 @@ class PostOrder extends Component {
         if (!shallowEqual(nextProps.oneCart, this.props.oneCart)) {
 
             this.setState({
+                code: nextProps.oneCart.code_voucher,
                 oneCart: nextProps.oneCart,
                 priceCustomer: nextProps.oneCart.info_cart.total_final,
                 totalFinal: nextProps.oneCart.info_cart.total_final,
@@ -440,10 +441,10 @@ class PostOrder extends Component {
             const branch_id = getBranchId()
             const { store_code } = this.props.match.params
             const formData = {
-                customer_name: nextState.oneCart.customer_name,
-                customer_phone: nextState.oneCart.customer_phone,
+                customer_name: nextState.modalUpdateCart.customer_name ?? nextState.oneCart.customer_name,
+                customer_phone: nextState.modalUpdateCart.customer_phone ?? nextState.oneCart.customer_phone,
+                customer_id: nextState.modalUpdateCart.customer_id ?? nextState.oneCart.customer_id,
                 name: nextState.namePos,
-                customer_id: nextState.oneCart.customer_id,
                 is_use_points: nextState.checkeds,
             }
             this.props.updateInfoCarts(store_code, branch_id, nextState.idCart, formData)
@@ -558,8 +559,6 @@ class PostOrder extends Component {
                 }
             )
         }
-
-        // this.setState({ select_customer_id: selectValue });
 
 
     };
@@ -782,6 +781,8 @@ class PostOrder extends Component {
 
                                                     </a>
                                                     {oneCart.code_voucher ? <i class="fa fa-times" style={{ marginLeft: "10px" }} onClick={this.handleClearVoucher} ></i> : ""}
+                                              
+                                                   {oneCart?.info_cart?.voucher_discount_amount > 0 && <span className='col-6' style={{ textAlign: "end" }}>-{formatNoD((oneCart?.info_cart?.voucher_discount_amount))}</span> }
                                                 </div>
                                             </div>
 
@@ -835,6 +836,7 @@ class PostOrder extends Component {
                                                 </div>
 
                                             </Popover>
+
 
                                             <div className='row item-info'>
                                                 <div className='title-price col-6' style={{ color: "black", fontWeight: "500" }} >KHÁCH PHẢI TRẢ</div>
