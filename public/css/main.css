@@ -43,7 +43,10 @@
 .nav-fill {
     border-bottom: 0px !important;
 }
-
+.hover-order:hover{
+    background-color: rgb(234, 198, 131);
+    cursor: pointer;
+}
 .tab-content {
     border-top: 0px !important;
 }

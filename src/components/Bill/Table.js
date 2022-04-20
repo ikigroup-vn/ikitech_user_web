@@ -1,4 +1,5 @@
-import React, { Component, Fragment } from "react";
+
+import React, {Component, Fragment } from "react";
 import { Link } from "react-router-dom";
 import { format } from "../../ultis/helpers"
 import { connect } from "react-redux";
@@ -7,6 +8,7 @@ import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
 import * as billAction from "../../actions/bill";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import { getBranchId } from "../../ultis/branchUtils";
+import history from "../../history";
 
 class Table extends Component {
   constructor(props) {
@@ -14,7 +16,7 @@ class Table extends Component {
     this.state = {
       statusOrder: "",
       statusPayment: "",
-      isLoading: false
+      isLoading: false,
     }
   }
 
@@ -126,6 +128,10 @@ class Table extends Component {
     return "success"
   }
 
+  changePage = (store_code , order_code) => {
+history.push(`/order/detail/${store_code}/${order_code}`)
+  }
+
   showData = (bill, per_page, current_page) => {
     var { store_code } = this.props
     var result = null;
@@ -141,7 +147,8 @@ class Table extends Component {
         var is_collaborator = data.collaborator_by_customer_id != null ? "check" : "close"
 
         return (
-          <tr>
+          <tr className="hover-order" onClick={() => this.changePage(store_code , data.order_code)}>
+          
             <td>{(per_page * (current_page - 1)) + (index + 1)}</td>
             <td>
               {data.order_code}
@@ -165,21 +172,25 @@ class Table extends Component {
               <span class={`badge badge-${_payment_status_code}`}>
                 {data.payment_status_name}
               </span>
-            </h5></td>            <td style={{ maxWidth: "20px" }}> <h5>
-              <span class={`badge badge-${_order_status_name}`}>
-                {data.order_status_name}
-              </span>
             </h5></td>
+            {getChannel() == IKITECH &&
+              <td style={{ maxWidth: "20px" }}> <h5>
+                <span class={`badge badge-${_order_status_name}`}>
+                  {data.order_status_name}
+                </span>
+              </h5></td>
+            }
 
 
 
-            <td className="btn-voucher">
-              <Link
+
+{getChannel() == IKITECH &&     <td className="btn-voucher">
+              {/* <Link
                 to={`/order/detail/${store_code}/${data.order_code}`}
                 class="btn btn-primary-no-background btn-sm"
               >
                 <i class="fa fa-eye"></i> Xem
-              </Link>
+              </Link> */}
 
               {
                 getChannel() == IKITECH && <button
@@ -194,6 +205,7 @@ class Table extends Component {
               }
 
             </td>
+      }
           </tr>
         );
       });
@@ -212,10 +224,17 @@ class Table extends Component {
       onChange={this.onchangeStatusPayment}>
       <option value="">Tất cả</option>
       <option value="UNPAID">Chưa thanh toán</option>
-      <option value="WAITING_FOR_PROGRESSING">Chờ xử lý</option>
+    {
+      getChannel() == IKITECH && (
+        <React.Fragment>
+        <option value="WAITING_FOR_PROGRESSING">Chờ xử lý</option>
+        <option value="CUSTOMER_CANCELLED">Đã hủy</option>
+        </React.Fragment>
+      )
+    }
+
       <option value="PAID">Đã thanh toán</option>
       <option value="PARTIALLY_PAID">Đã thanh toán một phần</option>
-      <option value="CUSTOMER_CANCELLED">Đã hủy</option>
       <option value="REFUNDS">Đã hoàn tiền</option>
     </select>
 
@@ -276,20 +295,20 @@ class Table extends Component {
                 }
                 <th>Số sản phẩm</th>
                 <th>Tổng tiền</th>
-                <th>Thời gian đặt</th>
+                <th>Thời gian tạo đơn</th>
 
                 <th>
 
                   {this.optionsPaymentStatus(statusPayment)}
 
                 </th>
-                <th>
+                {getChannel() == IKITECH && <th>
                   {this.optionOrderStatus(statusOrder)}
 
-                </th>
+                </th>}
 
 
-                <th>Hành động</th>
+                {getChannel() == IKITECH && <th>Hành động</th>}
 
 
               </tr>
@@ -299,13 +318,13 @@ class Table extends Component {
           </table>
 
         </div>
-        <Pagination
+        {/* <Pagination
           limit={numPage}
           status_payment={statusPayment}
           store_code={store_code}
           bills={bills}
           status_order={statusOrder}
-        />
+        /> */}
       </React.Fragment>
     );
   }

@@ -20,3 +20,8 @@ import callApi from "../../ultis/apiCaller";
   export const chooseMethorPayment = (store_code,branch_id,id,data) => {
     return  callApi(`/store/${store_code}/${branch_id}/inventory/import_stocks/${id}/payment`, "put", data)
   };
+
+  
+export const postRefund = (id , data,store_code, branch_id) =>{
+  return callApi(`/store/${store_code}/${branch_id}}/inventory/import_stocks/${id}/refund`, "post", data);
+}

@@ -46,3 +46,7 @@ export const updateOrder = (data,store_code, order_code, ) =>{
 export const postRefund = (data,store_code, branch_id) =>{
   return callApi(`/store_v2/${store_code}/${branch_id}/pos/refund`, "post", data);
 }
+export const postCashRefund = (order_code , data,store_code, branch_id) =>{
+  return callApi(`/store_v2/${store_code}/${branch_id}/orders/pay_order/${order_code}`, "post", data);
+}
+

@@ -327,7 +327,7 @@ class InfoProductPos extends Component {
                                             }
 
                                             {
-                                                check == true && this.getNumQuantity(product.id , list_items) > 0 && (
+                                                check == true && this.getNumQuantity(product.id , list_items) > 0 ? (
                                                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                                                         <p class=" bold sale_user_label">
 
@@ -344,7 +344,16 @@ class InfoProductPos extends Component {
                                                         }
 
                                                     </div>
-                                                )
+                                                ) : <div >
+                                                <p class=" bold sale_user_label">
+                                                    Tổng số lượng:
+
+                                                    <span id="total_selected">x{product.quantity}</span>
+
+                                                </p>
+
+
+                                            </div> 
                                             }
                                             <div>
                                                 <p class=" bold sale_user_label">
