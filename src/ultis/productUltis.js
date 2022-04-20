@@ -372,13 +372,18 @@ export const findTotalStock = (product) => {
 
 
 export const findTotalStockPos = (product) => {
+
+    if(product == null || product.inventory == null) {
+        return 0;
+    }
+
     if (getTypeProductDistribute(product) == NO_ELE_SUB) {
         return product.inventory.main_stock
     }
     if (getTypeProductDistribute(product) == HAS_ELE) {
         var stock = 0
 
-        if (product.inventory.distributes != null && product.inventory.distributes.length > 0) {
+        if (product?.inventory?.distributes != null && product.inventory.distributes.length > 0) {
             const distributes = product.inventory.distributes[0];
 
             if (distributes != null && distributes.element_distributes != null && distributes.element_distributes.length > 0) {
@@ -396,7 +401,7 @@ export const findTotalStockPos = (product) => {
     if (getTypeProductDistribute(product) == HAS_SUB) {
 
         var stocks = 0
-        if (product.inventory.distributes != null && product.inventory.distributes.length > 0) {
+        if (product?.inventory?.distributes != null && product.inventory.distributes.length > 0) {
             const distributes = product.inventory.distributes[0];
 
             if (distributes != null && distributes.element_distributes != null && distributes.element_distributes.length > 0) {

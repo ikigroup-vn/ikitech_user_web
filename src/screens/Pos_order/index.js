@@ -429,7 +429,9 @@ class PostOrder extends Component {
                 name: nextState.namePos,
                 customer_note: nextState.note,
                 payment_method_id: nextState.payment_method_id,
-                customer_id: nextState.modalUpdateCart.id,
+                customer_name: nextState.oneCart.customer_name,
+                customer_phone: nextState.oneCart.customer_phone,
+                customer_id: nextState.oneCart.customer_id,
             }
             this.props.updateInfoCart(store_code, branch_id, nextState.idCart, formData)
         }
@@ -438,11 +440,11 @@ class PostOrder extends Component {
             const branch_id = getBranchId()
             const { store_code } = this.props.match.params
             const formData = {
-                customer_name: nextState.modalUpdateCart.customer_name,
-                customer_phone: nextState.modalUpdateCart.customer_phone,
+                customer_name: nextState.oneCart.customer_name,
+                customer_phone: nextState.oneCart.customer_phone,
                 name: nextState.namePos,
-                customer_id: nextState.modalUpdateCart.customer_id,
-
+                customer_id: nextState.oneCart.customer_id,
+                is_use_points: nextState.checkeds,
             }
             this.props.updateInfoCarts(store_code, branch_id, nextState.idCart, formData)
         }
@@ -452,8 +454,11 @@ class PostOrder extends Component {
             const { store_code } = this.props.match.params
             const formData = {
                 name: nextState.namePos,
-                customer_id: nextState.modalUpdateCart.id,
+
                 is_use_points: nextState.checkeds,
+                customer_name: nextState.oneCart.customer_name,
+                customer_phone: nextState.oneCart.customer_phone,
+                customer_id: nextState.oneCart.customer_id,
             }
             this.props.updateInfoCarts(store_code, branch_id, nextState.idCart, formData)
         }
