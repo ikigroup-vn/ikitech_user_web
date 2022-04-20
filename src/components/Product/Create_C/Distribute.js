@@ -121,11 +121,11 @@ class Distribute extends Component {
         list_distribute[0].element_distributes[obj._index].sub_element_distributes[obj.index][obj.name] = value
       }
       else if (obj.name == "value") {
-        list_distribute[0].element_distributes[obj._index].sub_element_distributes[obj.index].name = value
-
+        list_distribute[0].element_distributes.forEach(element => {
+          element.sub_element_distributes[obj.index].name = value
+        });
       }
       else {
-        console.log(type, obj, this.state.list_distribute)
         try {
 
           const _value = formatNumber(value);
@@ -168,7 +168,6 @@ class Distribute extends Component {
 
         }
       }
-      console.log(list_distribute)
       this.setState({ list_distribute: [...list_distribute] })
 
     }
@@ -194,7 +193,27 @@ class Distribute extends Component {
       )
     ) {
       var distributes = [...nextProps.product.distributes];
-      this.props.handleDataFromDistribute(distributes);
+      if(distributes && distributes.length > 0)
+      {
+        distributes[0].element_distributes.forEach((element , key) => {
+          if(element.sub_element_distributes.length > 0)
+          {
+            element.sub_element_distributes.forEach((_element , _key) => {
+              if(_element.name == null || _element.name == "")
+              {
+                var count = distributes[0].element_distributes.length
+                var value = "";
+                for (let index = 0; index < count; index++) {
+                  if(distributes[0].element_distributes[index].sub_element_distributes[_key].name != "" && distributes[0].element_distributes[index].sub_element_distributes[_key].name )
+                  value = distributes[0].element_distributes[index].sub_element_distributes[_key].name ;
+                  
+                }
+                 element.sub_element_distributes[_key].name = value;
+              }
+            });
+          }
+        });
+      }      this.props.handleDataFromDistribute(distributes);
 
       this.setState({ list_distribute: distributes });
     }
@@ -203,7 +222,6 @@ class Distribute extends Component {
     ) {
       var listImg = [...nextProps.listImgDistribute];
       var list_distribute = [...this.state.list_distribute]
-      console.log(listImg)
       if (listImg.length > 0) {
         listImg.forEach((img) => {
           list_distribute[0].element_distributes[img.index].image_url =
@@ -216,9 +234,7 @@ class Distribute extends Component {
 
   addRow = () => {
     var list_distribute = [...this.state.list_distribute];
-    console.log(list_distribute)
     if (list_distribute.length == 0) {
-      console.log("aaaa")
       list_distribute = [{ element_distributes: [] }]
       list_distribute[0].name = null
       var newObject = {
@@ -231,7 +247,6 @@ class Distribute extends Component {
       list_distribute[0].element_distributes.push(newObject)
     }
     else if (typeof list_distribute[0].name == "undefined") {
-      console.log("bbbbb")
 
       list_distribute[0].name = null
       var newObject = {
@@ -260,9 +275,9 @@ class Distribute extends Component {
         typeof element == "object" && element.sub_element_distributes.push({...newObject})
   
       });
+      
     }
     else {
-      console.log("nott")
     }
 
 
@@ -290,7 +305,6 @@ class Distribute extends Component {
 
   removeRow = () => {
     var list_distribute = [...this.state.list_distribute];
-    console.log(list_distribute)
     if (typeof list_distribute[0].sub_element_distribute_name !== "undefined" && list_distribute[0].element_distributes[0].sub_element_distributes.length > 0) {
       list_distribute[0].name = list_distribute[0].sub_element_distribute_name
 
@@ -299,7 +313,6 @@ class Distribute extends Component {
 
     }
     else {
-      console.log("asdas")
       delete list_distribute[0].name
       list_distribute[0].element_distributes = []
 
@@ -320,7 +333,6 @@ class Distribute extends Component {
   };
 
   removeRowChildSup = (key) => {
-    console.log(key)
     var list_distribute = [...this.state.list_distribute];
     list_distribute[0].element_distributes.forEach((element, _key) => {
       if (element.sub_element_distributes.length > 0) {
@@ -345,19 +357,21 @@ class Distribute extends Component {
     if (list_distribute.length > 0) {
       sub_element_distributes = list_distribute[0].element_distributes.length > 0 ? list_distribute[0].element_distributes[0].sub_element_distributes : []
     }
-    var newItem = [...sub_element_distributes]
-
+    var newItem = []
+    sub_element_distributes.forEach(element => {
+      newItem.push({...element});
+    });
 
     var newObject = {
       name: null,
       image_url: null,
       price: null,
       quantity_in_stock: null,
-      sub_element_distributes : newItem
+      sub_element_distributes: [...newItem]
 
     }
 
-    list_distribute[0].element_distributes.push({...newObject})
+    list_distribute[0].element_distributes.push({...newObject })
     this.setState({ list_distribute: [...list_distribute] });
   };
   showRows = (list_distribute) => {
@@ -607,7 +621,6 @@ class Distribute extends Component {
               }
             }
           });
-          console.log(total)
           this.props.onChangeQuantityStock(total)
 
         }
@@ -620,7 +633,6 @@ class Distribute extends Component {
   }
 
   showDetail = (list_distribute) => {
-    console.log(list_distribute)
     var result = []
     if (typeof list_distribute == "undefined" || list_distribute.length == 0) {
       return result
@@ -630,7 +642,6 @@ class Distribute extends Component {
         if (typeof element.sub_element_distributes != "undefined") {
           if (list_distribute[0].element_distributes[0].sub_element_distributes.length > 0) {
             list_distribute[0].element_distributes[0].sub_element_distributes.forEach((_element, index) => {
-              console.log(element.sub_element_distributes)
               try {
                 var value_price = list_distribute[0].element_distributes[_index].sub_element_distributes[index].price
                 var value_quantity_in_stock = list_distribute[0].element_distributes[_index].sub_element_distributes[index].quantity_in_stock

@@ -115,6 +115,7 @@ class Distribute extends Component {
       console.log(type, obj ,list_distribute);
 
       if (obj.name == "name") {
+
         list_distribute[0].sub_element_distribute_name = value
       }
       else if (obj.name == "barcode") {
@@ -122,7 +123,10 @@ class Distribute extends Component {
         list_distribute[0].element_distributes[obj._index].sub_element_distributes[obj.index][obj.name] = value
       }
       else if (obj.name == "value") {
-        list_distribute[0].element_distributes[obj._index].sub_element_distributes[obj.index].name = value
+        list_distribute[0].element_distributes.forEach(element => {
+          element.sub_element_distributes[obj.index].name = value
+        });
+        // list_distribute[0].element_distributes[obj._index].sub_element_distributes[obj.index].name = value
 
       }
       else {
@@ -337,19 +341,21 @@ class Distribute extends Component {
     if (list_distribute.length > 0) {
       sub_element_distributes = list_distribute[0].element_distributes.length > 0 ? list_distribute[0].element_distributes[0].sub_element_distributes : []
     }
-    var newItem = [...sub_element_distributes]
-
+    var newItem = []
+    sub_element_distributes.forEach(element => {
+      newItem.push({...element});
+    });
 
     var newObject = {
       name: null,
       image_url: null,
       price: null,
       quantity_in_stock: null,
-      sub_element_distributes : newItem
+      sub_element_distributes: [...newItem]
 
     }
 
-    list_distribute[0].element_distributes.push({...newObject})
+    list_distribute[0].element_distributes.push({...newObject })
     this.setState({ list_distribute: [...list_distribute] });
   };
   showRows = (list_distribute, openDistribute) => {

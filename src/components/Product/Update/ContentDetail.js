@@ -49,7 +49,7 @@ class ContentDetail extends Component {
     return (
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="form-group">
-          <label for="product_name">Mô tả sản phẩm</label>
+        <label for="product_name">&nbsp;&nbsp;Mô tả sản phẩm</label>
           <SunEditor
             onImageUploadBefore={handleImageUploadBefore}
             setContents={txtContent}
