@@ -128,7 +128,7 @@
     width: 100%;
     white-space: nowrap;
     color: white;
-    height: calc(100% - 420px);
+    height: calc(100% - 415px);
 }
 
 .controller-top {
@@ -434,6 +434,7 @@ pre {
 }
 
 .icon-trash-pos {
+    cursor: pointer;
     flex: 0 0 auto;
     color: #111111;
     padding: 12px;

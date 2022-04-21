@@ -251,7 +251,9 @@ class ModalDetail extends Component {
                                 </div>
                                 <div className='info-voucher col-8' style={{ display: "flex", flexDirection: "column", justifyContent: "space-around" }}>
                                     <div>
-                                        <div className='value' style={{ fontWeight: "bold", width: "220px", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{inforProduct.nameProduct}</div>
+                                        <div className='value' style={{ fontWeight: "bold", width: "220px", 
+                                      
+                                        textOverflow: "ellipsis" }}>{inforProduct.nameProduct}</div>
 
 
                                         <div className='code' style={{ color: "red" }}><span>{this.state.afterChoosePrice === '' ? inforProduct.discountProduct === null ?
@@ -336,7 +338,7 @@ class ModalDetail extends Component {
 
 
                         <div onClick={allowBuy ? this.handleCallback : null} class="button-handle-choose-detail-ok" style={{
-                              backgroundColor: allowBuy ? "#E56F25" : "grey",
+                            backgroundColor: allowBuy ? "#E56F25" : "grey",
                         }}>
                             <center style={{
                                 paddingTop: 10,

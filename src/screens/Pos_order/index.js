@@ -345,8 +345,7 @@ class PostOrder extends Component {
 
     componentWillReceiveProps(nextProps) {
 
-        if (!shallowEqual(nextProps.oneCart, this.props.oneCart)) {
-
+        if (!shallowEqual(nextProps.oneCart, this.props.oneCart) && this.props.loadingHandleChangeQuantity == false) {
             this.setState({
                 code: nextProps.oneCart.code_voucher,
                 oneCart: nextProps.oneCart,
@@ -360,9 +359,6 @@ class PostOrder extends Component {
                 discount: nextProps.oneCart.discount,
                 checkeds: nextProps.oneCart.info_cart.is_use_points !== null ? nextProps.oneCart.info_cart.is_use_points : false
             })
-
-
-
         }
         if (!shallowEqual(nextProps.inforCustomer, this.props.inforCustomer)) {
             this.setState({
@@ -903,7 +899,7 @@ class PostOrder extends Component {
 
 
                                             <div className='row' style={{ borderTop: "1px solid #80808045", padding: "10px 0" }} >
-                                                <div className='title-price col-6' style={{ color: exchange < 0  ? "red" : "black", fontWeight: "500" }}>
+                                                <div className='title-price col-6' style={{ color: exchange < 0 ? "red" : "black", fontWeight: "500" }}>
                                                     {exchange < 0 ? "Khách còn thiếu" : "Tiền thừa trả khách"}
                                                 </div>
                                                 <span className='col-6' style={{ textAlign: "end", fontSize: "22px" }}>{formatNoD(Math.abs(exchange))}</span>
@@ -987,6 +983,7 @@ const mapStateToProps = (state) => {
     return {
         products: state.productReducers.product.allProduct,
         oneCart: state.posReducers.pos_reducer.oneCart,
+        loadingHandleChangeQuantity:state.posReducers.pos_reducer.loadingHandleChangeQuantity,
         listPertion: state.orderReducers.order_product.listPertion,
         listVoucher: state.orderReducers.order_product.listVoucher,
         inforCustomer: state.posReducers.pos_reducer.inforCustomer,
