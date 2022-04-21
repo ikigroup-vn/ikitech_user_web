@@ -13,6 +13,9 @@ import { shallowEqual } from "../../ultis/shallowEqual";
 import NotAccess from "../../components/Partials/NotAccess";
 import ReactToPrint from 'react-to-print';
 import ComponentToPrint from "./ComponentToPrint"
+import ComponentToPrintPos from "./ComponentToPrintPos"
+import getChannel, { IKITECH , IKIPOS } from "../../ultis/channel";
+
 class Detail extends Component {
     constructor(props) {
         super(props);
@@ -24,6 +27,8 @@ class Detail extends Component {
         var { store_code, order_code, billId } = this.props.match.params
         this.props.fetchBillId(store_code, order_code);
         this.props.fetchHistoryPay(store_code, order_code);
+
+        
     }
 
     componentWillReceiveProps(nextProps) {
@@ -33,6 +38,9 @@ class Detail extends Component {
 
             if (nextProps.bill.customer != null) {
                 this.props.fetchChatId(store_code, customerId);
+                const branch_id = localStorage.getItem("branch_id")
+                this.props.fetchAllBill(store_code, 1, branch_id, null, `&phone_number=${nextProps.bill.phone_number}`);
+
             }
         }
         if (this.state.isLoading != true && typeof nextProps.permission.product_list != "undefined") {
@@ -52,8 +60,9 @@ class Detail extends Component {
     render() {
 
         var { store_code, order_code, billId } = this.props.match.params
-        var { bill, billHistoty, chat, stores, badges,historyPay } = this.props
+        var { bill, billHistoty, chat, stores, badges,historyPay , bills , currentBranch } = this.props
         var { showChatBox, chat_allow, isShow, order_allow_change_status } = this.state
+        console.log(this.props.currentBranch)
         if (this.props.auth) {
             return (
                 <div id="wrapper">
@@ -92,8 +101,19 @@ class Detail extends Component {
                                                     <div className="print-source " style={{ display: "none" }} >
 
                                                         {
-                                                            stores != null && stores.length > 0 &&
+                                                           getChannel() == IKITECH && currentBranch != null && stores.length  > 0 &&
                                                             <ComponentToPrint 
+                                                            badges={badges} 
+                                                            bill={bill} 
+                                                            store_code={store_code} 
+                                                            stores={stores} 
+                                                            ref={el => (this.componentRef = el)}
+                                                            currentBranch={this.props.currentBranch}
+                                                             />
+                                                        }
+                                                           {
+                                                           getChannel() == IKIPOS && currentBranch != null && stores.length  > 0 &&
+                                                            <ComponentToPrintPos 
                                                             badges={badges} 
                                                             bill={bill} 
                                                             store_code={store_code} 
@@ -109,7 +129,7 @@ class Detail extends Component {
 
                                             <br></br>
 
-                                            <Form historyPay= {historyPay} chat_allow={chat_allow} order_allow_change_status={order_allow_change_status} showChatBox={showChatBox} chat={chat} billId={billId} order_code={order_code} store_code={store_code} bill={bill} billHistoty={billHistoty}></Form>
+                                            <Form bills = {bills} historyPay= {historyPay} chat_allow={chat_allow} order_allow_change_status={order_allow_change_status} showChatBox={showChatBox} chat={chat} billId={billId} order_code={order_code} store_code={store_code} bill={bill} billHistoty={billHistoty}></Form>
 
                                         </div>
                                         : <NotAccess />}
@@ -131,6 +151,8 @@ class Detail extends Component {
 
 const mapStateToProps = (state) => {
     return {
+        bills: state.billReducers.bill.allBill,
+
         bill: state.billReducers.bill.billID,
         auth: state.authReducers.login.authentication,
         billHistoty: state.billReducers.bill.billHistory,
@@ -157,6 +179,9 @@ const mapDispatchToProps = (dispatch, props) => {
         fetchChatId: (store_code, customerId) => {
             dispatch(billAction.fetchChatId(store_code, customerId));
         },
+        fetchAllBill: (id, page, branch_id, params, params_agency) => {
+            dispatch(billAction.fetchAllBill(id, page, branch_id, params, params_agency));
+          },
 
     };
 };

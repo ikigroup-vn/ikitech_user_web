@@ -4,7 +4,7 @@ import * as Env from "../../ultis/default"
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import * as billAction from "../../actions/bill"
-
+import { shallowEqual } from "../../ultis/shallowEqual"
 
 class InfoProductPos extends Component {
     constructor(props) {
@@ -79,7 +79,7 @@ class InfoProductPos extends Component {
 
     }
 
-    getNumQuantity = (id, list_items)=>{
+    getNumQuantity = (id, list_items) => {
         for (const element of list_items) {
             if (element.product && element.product.id == id) {
                 if (element.is_refund == false) {
@@ -123,6 +123,32 @@ class InfoProductPos extends Component {
         return 1;
     }
 
+    postTotalRefund = (list) => {
+        var list_refunds = [...list];
+        var newArray = [];
+        list_refunds.forEach(element => {
+            if (element.check == true) {
+                var item = { ...element };
+                delete item.check;
+                newArray.push(element)
+            }
+        });
+
+        var { bill } = this.props;
+        var order_code = bill.order_code;
+        var data = {
+            order_code: order_code,
+            refund_line_items: newArray
+        }
+        var { store_code } = this.props
+
+        this.props.getCalculate(store_code, data)
+
+    }
+
+
+
+
     check = (e, id) => {
         console.log(id)
         var list_refunds = [...this.state.list_refunds];
@@ -132,7 +158,18 @@ class InfoProductPos extends Component {
                 element.check = e.target.checked
             }
         }
+        var newArray = [];
+        list_refunds.forEach(element => {
+            if (element.check == true) {
+                var item = { ...element };
+                delete item.check;
+                newArray.push(element)
+            }
+        });
+
+
         this.setState({ list_refunds: [...list_refunds] })
+        this.postTotalRefund(list_refunds)
     }
 
     getLineItemId = (product_id) => {
@@ -151,9 +188,8 @@ class InfoProductPos extends Component {
         var value = Number(e.target.value)
         for (var element of list_refunds) {
             if (element.line_item_id == id) {
-                
-                if(e.target.value == "")
-                {
+
+                if (e.target.value == "") {
                     element.quantity = 0
                 }
                 else if (value > max || value < 1 || !Number.isInteger(value)) {
@@ -161,11 +197,13 @@ class InfoProductPos extends Component {
                 }
                 else
 
-                element.quantity = value
+                    element.quantity = value
 
             }
         }
         this.setState({ list_refunds: [...list_refunds] })
+        this.postTotalRefund(list_refunds)
+
     }
 
 
@@ -175,8 +213,8 @@ class InfoProductPos extends Component {
 
             for (var element of list_refunds) {
                 if (element.line_item_id == id) {
-                    console.log(element , max)
-                    if(element.quantity + 1 > max) {
+                    console.log(element, max)
+                    if (element.quantity + 1 > max) {
                         return;
                     }
                     element.quantity = element.quantity + 1
@@ -193,22 +231,23 @@ class InfoProductPos extends Component {
                     if (element.quantity - 1 <= 0) {
                         return;
                     }
-                                        element.quantity = element.quantity - 1
+                    element.quantity = element.quantity - 1
 
                 }
             }
         }
         console.log(list_refunds)
         this.setState({ list_refunds: [...list_refunds] })
+        this.postTotalRefund(list_refunds)
+
 
     }
 
-    post = () =>{
+    post = () => {
         var list_refunds = [...this.state.list_refunds]
         var newArray = [];
         list_refunds.forEach(element => {
-            if(element.check == true)
-            {
+            if (element.check == true) {
                 var item = element;
                 delete item.check;
                 newArray.push(element)
@@ -217,18 +256,54 @@ class InfoProductPos extends Component {
         var { bill } = this.props;
         var order_code = bill.order_code;
         var data = {
-            order_code : order_code,
-            refund_line_items : newArray
+            order_code: order_code,
+            refund_line_items: newArray
         }
         var { store_code } = this.props
 
-        if(newArray.length > 0)
-        {
-            this.props.postRefund(data , store_code)
+        if (newArray.length > 0) {
+            this.props.postRefund(data, store_code)
         }
 
     }
-    shoListProduct = (products, product_discount_amount, list_items) => {
+
+    getPriceForBill = (id) => {
+        var list_items = filter_arr(this.props.bill.line_items);
+
+        for (const item of list_items) {
+            if (item.id == id) {
+                return item.after_discount || item.price
+            }
+        }
+    }
+
+    checkExsitProduct = (id) => {
+        var list_items = filter_arr(this.props.bill.line_items);
+
+        for (const item of list_items) {
+            if (item.product.id == id) {
+                return true
+            }
+        }
+        return false
+    }
+
+
+    getTotalRefund = () => {
+        var { list_refunds } = this.state
+        var total = 0;
+        list_refunds.forEach(element => {
+            if (element.check == true) {
+                total = total + (this.getPriceForBill(element.line_item_id) * element.quantity)
+            }
+        });
+        return total;
+
+    }
+
+
+
+    shoListProduct = (products, product_discount_amount, list_items, total_final) => {
         var result = null;
         var { check } = this.props
         if (products.length > 0) {
@@ -245,148 +320,203 @@ class InfoProductPos extends Component {
                 console.log(this.getCanQuantity(product.id, list_items))
                 return (
                     <React.Fragment>
-                        <li className={`${line_list_product} row`} style={{ display: "flex", marginBottom: "10px" }}>
+                        {this.checkExsitProduct(product.id) == true &&
+                            <li className={`${line_list_product} row`} style={{ display: "flex", marginBottom: "10px" }}>
 
-                            <li className="cart_item cart_item_change col-lg-3 col-md-12 col-sm-12 ">
-                                <div className="panel panel-default mb0" style={{}}>
-                                    <div className="panel-body pd0" style={{ display: "flex" }}>
+                                <li className="cart_item cart_item_change col-lg-3 col-md-12 col-sm-12 ">
+                                    <div className="panel panel-default mb0" style={{}}>
+                                        <div className="panel-body pd0" style={{ display: "flex" }}>
 
-                                        {check == true && this.getNumQuantity(product.id , list_items) > 0 && (
-                                            <div class="checkbox" style={{
-                                                marginRight: "10px", marginRight: "10px",
-                                                alignSelf: "center"
-                                            }}>
-                                                <label>
-                                                    <input  style = {{width : "16px" , height : "16px" }} type="checkbox" onChange={(e) => this.check(e, this.getLineItemId(product.id))} />
+                                            {check == true && this.getNumQuantity(product.id, list_items) > 0 && (
+                                                <div class="checkbox" style={{
+                                                    marginRight: "10px", marginRight: "10px",
+                                                    alignSelf: "center"
+                                                }}>
+                                                    <label>
+                                                        <input style={{ width: "16px", height: "16px" }} type="checkbox" onChange={(e) => this.check(e, this.getLineItemId(product.id))} />
 
-                                                </label>
-                                            </div>
-                                        )}
-                                           {check == false || this.getNumQuantity(product.id , list_items) <= 0 && (
-                                            <div class="checkbox" style={{
-                                                marginRight: "10px", marginRight: "10px",
-                                                alignSelf: "center"
-                                            }}>
-                                                <label>
-                                                    <input title="Đã hoàn hết sản phẩm này" disabled style = {{width : "16px" , height : "16px" , cursor : "not-allowed"}} type="checkbox" />
+                                                    </label>
+                                                </div>
+                                            )}
+                                            {check == false || this.getNumQuantity(product.id, list_items) <= 0 && (
+                                                <div class="checkbox" style={{
+                                                    marginRight: "10px", marginRight: "10px",
+                                                    alignSelf: "center"
+                                                }}>
+                                                    <label>
+                                                        <input title="Đã hoàn hết sản phẩm này" disabled style={{ width: "16px", height: "16px", cursor: "not-allowed" }} type="checkbox" />
 
-                                                </label>
-                                            </div>
-                                        )}
+                                                    </label>
+                                                </div>
+                                            )}
 
-                                        <Link to={`/product/edit/${store_code}/${product.id}`}>
-                                            <img
-                                                data-toggle="tooltip"
-                                                title={product.name}
-                                                className="cart_item_img"
-                                                style={{ width: "120px", maxHeight: "120px" }}
-                                                src={product_img}
-                                            />
-                                        </Link>
-                                    </div>
-                                </div>
-                            </li>
-
-                            <li className="cart_item cart_item_change col-lg-8 col-md-12 col-sm-12">
-                                <div class="col-xs-12 pl0" id="user_cart_info">
-                                    <div class="box box-warning cart_wrapper mb0">
-                                        <div class="box-body  pt0">
-                                            <div>
-
-                                                <p class="bold_name sale_user_label" style={{ fontWeight: "500" }}>
-                                                    Tên sản phẩm:
-                                                    <Link to={`/product/edit/${store_code}/${product.id}`}>
-
-                                                        <span>&nbsp;{product.name}</span>
-                                                    </Link>
-                                                </p>
-                                            </div>
-
-                                            {/* <div >
-                                                <p class=" bold sale_user_label">
-                                                    Tổng số lượng:
-
-                                                    <span id="total_selected">x{product.quantity}</span>
-
-                                                </p>
-
-
-                                            </div> */}
-
-
-
-                                            {
-                                                this.getRefund(product.id, list_items) == true && (
-                                                    <div>
-                                                        <p class=" bold sale_user_label" style={{ color: "red" }}>
-                                                            Đã hoàn tiền số lượng:
-                                                            <span id="total_selected">x{this.refund}</span>
-                                                        </p>
-                                                    </div>
-                                                )
-                                            }
-
-                                            {
-                                                check == true && this.getNumQuantity(product.id , list_items) > 0 ? (
-                                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                                        <p class=" bold sale_user_label">
-
-                                                            Số lượng hoàn:
-
-                                                        </p>
-                                                        {
-
-                                                            (<div class="quantity" style={{ display: "flex" }}>
-                                                                <span  class="input-quantity input-number-decrement form-input-number " onClick={() => this.changeQuantity("DECREASE", this.getLineItemId(product.id), this.getNumQuantity(product.id, list_items))}><span>–</span></span>
-                                                                <input style={{ height: "28px" }} class="input-number" name="txtQuantity" type="text" value={this.getCanQuantity(product.id, list_items)} onChange={(e) => this.onChangeInputQuantity(e, this.getLineItemId(product.id), this.getNumQuantity(product.id, list_items))} />
-                                                                <span  class="input-quantity input-number-increment form-input-number" onClick={() => this.changeQuantity("INCREASE", this.getLineItemId(product.id), this.getNumQuantity(product.id, list_items))}><span>+</span></span></div>)
-
-                                                        }
-
-                                                    </div>
-                                                ) : <div >
-                                                <p class=" bold sale_user_label">
-                                                    Tổng số lượng:
-
-                                                    <span id="total_selected">x{product.quantity}</span>
-
-                                                </p>
-
-
-                                            </div> 
-                                            }
-                                            <div>
-                                                <p class=" bold sale_user_label">
-                                                    Giá sản phẩm:
-                                                    <span class={`cart_payment_method ${showTagDelPrice != 0 || (product.before_price == product.after_discount || product.before_discount_price == product.after_discount) ? "show" : "hide"}`}>
-                                                        {format(product.before_price || product.before_discount_price)}
-                                                    </span>
-                                                    <del class={`cart_payment_method ${showTagDelPrice == 0 && ((product.before_price != product.after_discount && typeof product.before_price != "undefined") || (product.before_discount_price != product.after_discount && typeof product.before_discount_price != "undefined")) ? "show" : "hide"}`}>
-                                                        {format(product.before_price || product.before_discount_price)}
-                                                    </del>
-                                                </p>
-                                            </div>
-                                            <div className={`${showTagDelPrice == 0 && ((product.before_price != product.after_discount && typeof product.before_price != "undefined") || (product.before_discount_price != product.after_discount && typeof product.before_discount_price != "undefined")) ? "show" : "hide"}`}>
-                                                <p class="bold sale_user_label">
-                                                    Giá sau khuyển mại:
-                                                    <span class={`cart_payment_method `}>
-                                                        {format(product.after_discount)}
-                                                    </span>
-                                                </p>
-                                            </div>
-                                            {this.showListDistribute(product.distributes_selected)}
+                                            <Link to={`/product/edit/${store_code}/${product.id}`}>
+                                                <img
+                                                    data-toggle="tooltip"
+                                                    title={product.name}
+                                                    className="cart_item_img"
+                                                    style={{ width: "120px", maxHeight: "120px" }}
+                                                    src={product_img}
+                                                />
+                                            </Link>
                                         </div>
                                     </div>
-                                </div>
+                                </li>
+
+                                <li className="cart_item cart_item_change col-lg-8 col-md-12 col-sm-12">
+                                    <div class="col-xs-12 pl0" id="user_cart_info">
+                                        <div class="box box-warning cart_wrapper mb0">
+                                            <div class="box-body  pt0">
+                                                <div>
+
+                                                    <p class="bold_name sale_user_label" style={{ fontWeight: "500" }}>
+                                                        Tên sản phẩm:
+                                                        <Link to={`/product/edit/${store_code}/${product.id}`}>
+
+                                                            <span>&nbsp;{product.name}</span>
+                                                        </Link>
+                                                    </p>
+                                                </div>
+
+                                                {/* <div >
+                                              <p class=" bold sale_user_label">
+                                                  Tổng số lượng:
+
+                                                  <span id="total_selected">x{product.quantity}</span>
+
+                                              </p>
+
+
+                                          </div> */}
+
+
+
+                                                {
+                                                    this.getRefund(product.id, list_items) > 0 && (
+                                                        <div>
+                                                            <p class=" bold sale_user_label" style={{ color: "red" }}>
+                                                                Đã hoàn tiền số lượng:
+                                                                <span id="total_selected">x{this.refund}</span>
+                                                            </p>
+                                                        </div>
+                                                    )
+                                                }
+
+                                                {
+                                                    check == true && this.getNumQuantity(product.id, list_items) > 0 ? (
+                                                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                                            <p class=" bold sale_user_label">
+
+                                                                Số lượng hoàn:
+
+                                                            </p>
+                                                            {
+
+                                                                (<div class="quantity" style={{ display: "flex" }}>
+                                                                    <span class="input-quantity input-number-decrement form-input-number " onClick={() => this.changeQuantity("DECREASE", this.getLineItemId(product.id), this.getNumQuantity(product.id, list_items))}><span>–</span></span>
+                                                                    <input style={{ height: "28px" }} class="input-number" name="txtQuantity" type="text" value={this.getCanQuantity(product.id, list_items)} onChange={(e) => this.onChangeInputQuantity(e, this.getLineItemId(product.id), this.getNumQuantity(product.id, list_items))} />
+                                                                    <span class="input-quantity input-number-increment form-input-number" onClick={() => this.changeQuantity("INCREASE", this.getLineItemId(product.id), this.getNumQuantity(product.id, list_items))}><span>+</span></span></div>)
+
+                                                            }
+
+                                                        </div>
+                                                    ) : <div >
+                                                        <p class=" bold sale_user_label">
+                                                            Tổng số lượng:
+
+                                                            <span id="total_selected">x{product.quantity}</span>
+
+                                                        </p>
+
+
+                                                    </div>
+                                                }
+                                                <div>
+                                                    <p class=" bold sale_user_label">
+                                                        Giá sản phẩm:
+                                                        <span class={`cart_payment_method ${showTagDelPrice != 0 || (product.before_price == product.after_discount || product.before_discount_price == product.after_discount) ? "show" : "hide"}`}>
+                                                            {format(product.before_price || product.before_discount_price)}
+                                                        </span>
+                                                        <del class={`cart_payment_method ${showTagDelPrice == 0 && ((product.before_price != product.after_discount && typeof product.before_price != "undefined") || (product.before_discount_price != product.after_discount && typeof product.before_discount_price != "undefined")) ? "show" : "hide"}`}>
+                                                            {format(product.before_price || product.before_discount_price)}
+                                                        </del>
+                                                    </p>
+                                                </div>
+                                                <div className={`${showTagDelPrice == 0 && ((product.before_price != product.after_discount && typeof product.before_price != "undefined") || (product.before_discount_price != product.after_discount && typeof product.before_discount_price != "undefined")) ? "show" : "hide"}`}>
+                                                    <p class="bold sale_user_label">
+                                                        Giá sau khuyển mại:
+                                                        <span class={`cart_payment_method `}>
+                                                            {format(product.after_discount)}
+                                                        </span>
+                                                    </p>
+                                                </div>
+                                                {this.showListDistribute(product.distributes_selected)}
+
+
+
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
                             </li>
-                        </li>
+                        }
+
+                        {index == products.length - 1 && (
+                            <li className={`${line_list_product} row`} style={{ display: "flex", marginBottom: "10px" }}>
+
+                                <li className="cart_item cart_item_change col-lg-3 col-md-12 col-sm-12 ">
+                                </li>
+
+                                <li className="cart_item cart_item_change col-lg-8 col-md-12 col-sm-12">
+                                    <React.Fragment>
+                                        <div style={{ marginTop: "10px" }} className="">
+                                            <p class="bold sale_user_label" style={{ color: "green" }}>
+                                                Tổng tiền:
+                                                <span class={`cart_payment_method `}>
+                                                    {format(total_final)}
+                                                </span>
+                                            </p>
+                                        </div>
+
+                                    </React.Fragment>
+                                </li>
+                            </li>
+
+
+                        )}
+                        {index == products.length - 1 && check == true && (
+                            <li className={`${line_list_product} row`} style={{ display: "flex", marginBottom: "10px" }}>
+
+                                <li className="cart_item cart_item_change col-lg-3 col-md-12 col-sm-12 ">
+                                </li>
+
+                                <li className="cart_item cart_item_change col-lg-8 col-md-12 col-sm-12">
+                                    <React.Fragment>
+                                        <div className="">
+                                            <p class="bold sale_user_label" style={{ color: "red" }}>
+                                                Tổng tiền hoàn: {this.props.calculate.total_refund_current_in_time ? format(this.props.calculate.total_refund_current_in_time) : "0đ"}
+                                                <span class={`cart_payment_method `}>
+                                                </span>
+                                            </p>
+                                        </div>
+
+                                    </React.Fragment>
+                                </li>
+                            </li>
+
+                        )}
+
 
                         {index == products.length - 1 && check == true && (
-                            <div style={{ display: "flex" }}>
+                            <React.Fragment>
 
-                                <button onClick = {this.post} style={{ "margin": "auto" }} type="button" class="btn btn-success">Thực hiện</button>
+                                <div style={{ display: "flex" }}>
 
-                            </div>
+                                    <button onClick={this.post} style={{ "margin": "auto" }} type="button" class="btn btn-success">Thực hiện</button>
+
+                                </div>
+                            </React.Fragment>
                         )}
                     </React.Fragment>
 
@@ -411,7 +541,7 @@ class InfoProductPos extends Component {
     }
 
     render() {
-        var { bill } = this.props;
+        var { bill, bills, calculate , store_code } = this.props;
         var order_code = bill.order_code;
         var total_product =
             Array.isArray(bill.line_items_at_time) == true
@@ -421,18 +551,19 @@ class InfoProductPos extends Component {
         var list_items = filter_arr(bill.line_items);
 
         var { product_discount_amount } = bill
-        console.log(this.state.list_refunds)
+        var total_final = bill.total_final
+        console.log(bills)
         return (
             <div className="card box box-warning cart_wrapper mb0">
                 <div className="box-header">
                     <span className="box-title ">
-                        Mã đơn: <span id="cart_code">{order_code}</span> 
-                      
+                        Mã đơn: #<span id="cart_code">{bill.order_code}</span>
+
                     </span>
                     {
                         bill.order_code_refund != null && (
                             <span style={{ color: "red", display: "block" }}>
-                                Đã hoàn tiền từ đơn: <span id="cart_code">{bill.order_code_refund}</span>
+                                Đã hoàn tiền từ đơn: <span id="cart_code"><a href={`/order/detail/${store_code}/${bill.order_code_refund}`} >#{bill.order_code_refund}</a> </span>
 
                             </span>
                         )
@@ -444,19 +575,30 @@ class InfoProductPos extends Component {
                     id="sale_cart_container"
                     className="box-body  no-padding cart_items"
                 >
-                    {this.shoListProduct(listProduct, product_discount_amount, list_items)}
+                    {this.shoListProduct(listProduct, product_discount_amount, list_items, total_final)}
                 </ul>
             </div>
         );
     }
 }
+const mapStateToProps = (state) => {
+    return {
+        calculate: state.billReducers.bill.calculate,
+
+
+    };
+};
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        postRefund: (data, store_code ) => {
+        postRefund: (data, store_code) => {
             dispatch(billAction.postRefund(data, store_code));
         },
-    
+        getCalculate: (store_code, data) => {
+            dispatch(billAction.getCalculate(store_code, data));
+
+        }
+
     };
 };
-export default connect(null, mapDispatchToProps)(InfoProductPos);
+export default connect(mapStateToProps, mapDispatchToProps)(InfoProductPos);

@@ -164,7 +164,7 @@ history.push(`/order/detail/${store_code}/${order_code}`)
               <td className="status_check"><i class={`fas fa-${is_collaborator} ${is_collaborator + "-status"} `}></i></td>
             }
 
-            <td>{countItem}</td>
+            <td style ={{textAlign : "center"}}>{countItem}</td>
             <td>{format(data.total_final)}</td>
             <td>{data.created_at}</td>
 
@@ -293,7 +293,7 @@ history.push(`/order/detail/${store_code}/${order_code}`)
                 {getChannel() == IKITECH &&
                   <th>Cộng tác viên</th>
                 }
-                <th>Số sản phẩm</th>
+                <th style ={{textAlign : "center"}}>Số sản phẩm</th>
                 <th>Tổng tiền</th>
                 <th>Thời gian tạo đơn</th>
 

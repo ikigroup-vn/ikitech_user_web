@@ -50,3 +50,8 @@ export const postCashRefund = (order_code , data,store_code, branch_id) =>{
   return callApi(`/store_v2/${store_code}/${branch_id}/orders/pay_order/${order_code}`, "post", data);
 }
 
+
+
+export const getCalculate = (store_code , data, branch_id) =>{
+  return callApi(`/store_v2/${store_code}/${branch_id}/pos/refund/calculate`, "post", data);
+}

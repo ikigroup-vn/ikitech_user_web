@@ -55,10 +55,21 @@ class ItemDetail extends Component {
     }
 
 
+    componentDidMount()
+    {
+        var list_refunds = [...this.props.list_refund]
+        var quantity = this.getQuantity(list_refunds)
+        var value = this.getValue(list_refunds).value;
+        var total_value = this.getValue(list_refunds).total_value;
+        var discount = this.props.discount
 
+        this.setState({ list_refunds, quantity, total_value, discount, value }) 
+    }
 
-    componentWillReceiveProps(nextProps) {
+    shouldComponentUpdate(nextProps , nextState) {
+        console.log(nextProps.list_refund, this.props.list_refund)
         if (!shallowEqual(nextProps.list_refund, this.props.list_refund)) {
+            console.log("da vao")
             var list_refunds = [...nextProps.list_refund]
             var quantity = this.getQuantity(list_refunds)
             var value = this.getValue(list_refunds).value;
@@ -68,6 +79,8 @@ class ItemDetail extends Component {
             this.setState({ list_refunds, quantity, total_value, discount, value })
 
         }
+
+        return true
     }
 
 

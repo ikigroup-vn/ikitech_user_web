@@ -5,7 +5,8 @@ var initialState = {
   billID: {},
   billHistory: [],
   historyDeliveryStatus: [],
-  historyPay: []
+  historyPay: [],
+  calculate : {}
 
 };
 
@@ -27,6 +28,9 @@ export const bill = (state = initialState, action) => {
     case Types.FETCH_ALL_HISTORY_PAY:
       newState.historyPay = action.data;
       return newState;
+      case Types.GET_CALCULATE:
+        newState.calculate = action.data;
+        return newState;
     default:
       return newState;
   }
