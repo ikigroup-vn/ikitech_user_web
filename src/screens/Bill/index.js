@@ -283,7 +283,60 @@ class Bill extends Component {
                               />
                             </p>
                           </form>
-                          <div style={{ display: "flex" }}>
+                          {/* <div style={{ display: "flex" }}>
+                            <div style={{ display: "flex" }}>
+                              <span
+                                style={{
+                                  margin: "20px 10px auto auto",
+                                }}
+                              >
+                                Hiển thị
+                              </span>
+                              <select
+                                style={{
+                                  margin: "auto",
+                                  marginTop: "10px",
+                                  marginRight: "20px",
+                                  width: "70px",
+                                }}
+                                onChange={this.onChangeNumPage}
+                                value={numPage}
+                                name="numPage"
+                                class="form-control"
+                              >
+                                <option value="10">10</option>
+                                <option value="20" selected>
+                                  20
+                                </option>
+                                <option value="50">50</option>
+                              </select>
+                            </div>
+
+                            <Pagination
+                              searchValue={searchValue}
+                              limit={numPage}
+                              status_payment={statusPayment}
+                              store_code={store_code}
+                              bills={bills}
+                              status_order={statusOrder}
+                            />
+                          </div> */}
+                        </div>
+                      </div>
+
+                      <div className="card-body">
+                        <Table
+                          chat_allow={chat_allow}
+                          onchangeStatusOrder={this.onchangeStatusOrder}
+                          onchangeStatusPayment={this.onchangeStatusPayment}
+                          numPage={numPage}
+                          statusOrder={statusOrder}
+                          statusPayment={statusPayment}
+                          handleShowChatBox={this.handleShowChatBox}
+                          store_code={store_code}
+                          bills={bills}
+                        />
+                                    <div style={{ display: "flex" , justifyContent : "end" }}>
                             <div style={{ display: "flex" }}>
                               <span
                                 style={{
@@ -321,21 +374,6 @@ class Bill extends Component {
                               status_order={statusOrder}
                             />
                           </div>
-                        </div>
-                      </div>
-
-                      <div className="card-body">
-                        <Table
-                          chat_allow={chat_allow}
-                          onchangeStatusOrder={this.onchangeStatusOrder}
-                          onchangeStatusPayment={this.onchangeStatusPayment}
-                          numPage={numPage}
-                          statusOrder={statusOrder}
-                          statusPayment={statusPayment}
-                          handleShowChatBox={this.handleShowChatBox}
-                          store_code={store_code}
-                          bills={bills}
-                        />
                       </div>
                     </div>
                   </div>

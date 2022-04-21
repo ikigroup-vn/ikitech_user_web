@@ -579,3 +579,47 @@ export const postRefund = (data,store_code , branch = getBranchId()) => {
       });
   };
 };
+
+
+
+export const postCashRefund = (order_code , data,store_code , branch = getBranchId()) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    billApi
+      .postCashRefund(order_code,data,store_code,branch)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading : "hide"
+        })
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+        history.goBack();
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide"
+        })
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error.response.data.msg,
+          },
+        });
+      });
+  };
+};

@@ -1,6 +1,7 @@
 import * as Type from "../constants/ActionType"
 import * as importStock from "../data/remote/import_stock"
 import history from "../history"
+import {getBranchId} from "../ultis/branchUtils"
 
 export const fetchAllImportStock = (store_code,branch_id,page,params) =>{
     return (dispatch) =>{
@@ -228,5 +229,47 @@ export const createImportStocks = (store_code, branch_id, id) => {
               });
             });
         })
+    };
+  };
+
+  export const postRefund = (id , data,store_code , branch = getBranchId()) => {
+    return (dispatch) => {
+      dispatch({
+        type: Type.SHOW_LOADING,
+        loading : "show"
+      })
+      importStock
+        .postRefund(id ,data,store_code,branch)
+        .then((res) => {
+          dispatch({
+            type: Type.SHOW_LOADING,
+            loading : "hide"
+          })
+          dispatch({
+            type: Type.ALERT_UID_STATUS,
+            alert: {
+              type: "success",
+              title: "Thành công ",
+              disable: "show",
+              content: res.data.msg,
+            },
+          });
+          history.goBack();
+        })
+        .catch(function (error) {
+          dispatch({
+            type: Type.SHOW_LOADING,
+            loading: "hide"
+          })
+          dispatch({
+            type: Type.ALERT_UID_STATUS,
+            alert: {
+              type: "danger",
+              title: "Lỗi",
+              disable: "show",
+              content: error.response.data.msg,
+            },
+          });
+        });
     };
   };

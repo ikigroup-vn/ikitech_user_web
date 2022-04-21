@@ -217,9 +217,11 @@ class Form extends Component {
 
                                 </div>
                                 }
-
-                                <Chat
-                                    customerName={customerName} showChatBox={showChatBox} customerImg={customerImg} customerId={customerId} chat={chat} store_code={store_code} />
+{
+    getChannel() == IKITECH &&  <Chat
+    customerName={customerName} showChatBox={showChatBox} customerImg={customerImg} customerId={customerId} chat={chat} store_code={store_code} />
+}
+                               
                             </div>
                         </div>
                     </div>

@@ -15,7 +15,7 @@ import ModalPayment from '../../components/Import_stock/ModalPayment'
 import ModalDelete from '../../components/Import_stock/ModalDelete'
 import ModalEnd from '../../components/Import_stock/ModalEnd'
 import { format } from '../../ultis/helpers'
-
+import ItemDetailRefund from "../../components/Import_stock/ItemDetailRefund"
 class DetailImportStock extends Component {
     constructor(props) {
         super(props)
@@ -24,7 +24,9 @@ class DetailImportStock extends Component {
             isActive2: false,
             isActive3: false,
             statusFinal: "",
-            total_price: 0
+            total_price: 0,
+            check: false,
+            list_refund : []
         }
     }
     componentDidMount() {
@@ -75,14 +77,28 @@ class DetailImportStock extends Component {
         }
 
     }
-
+    changeStatus = (status) => {
+        this.setState({ check: status });
+    }
+    getRefund = (list_refund) =>{
+        this.setState({list_refund})
+    }
+    checked = (list) =>{
+        var count = 0
+        list.forEach(element => {
+            if(element.check == true)
+            count = count + 1
+        });
+        return count
+    }
     render() {
         const { store_code, id } = this.props.match.params
         const { itemImportStock } = this.props
-        const { statusFinal } = this.state
+        const { statusFinal , check ,list_refund } = this.state
         const import_stock_items = this.props.itemImportStock.import_stock_items ? this.props.itemImportStock.import_stock_items : []
         const date = moment(itemImportStock.updated_at, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD")
         const total = this.state.total_price - itemImportStock.discount + itemImportStock.cost
+        console.log(this.checked(list_refund))
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
@@ -188,8 +204,8 @@ class DetailImportStock extends Component {
                                             <div className='card-body' >
                                                 <div style={{ marginBottom: "10px", borderRadius: "5px" }}>
                                                     {
-                                                        import_stock_items.map(item => (
-                                                            <ItemDetail listItem={item} />
+                                                        import_stock_items.map((item,index) => (
+                                                            <ItemDetail getRefund = {this.getRefund} id={id} store_code={store_code} index = {index} listItems = {import_stock_items} status = {itemImportStock.status} check = {check} listItem={item} />
                                                         ))
                                                     }
                                                 </div>
@@ -231,8 +247,8 @@ class DetailImportStock extends Component {
                                                         :
                                                         itemImportStock.status === 2 ? <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                                             <button class="btn btn-danger" style={{ marginTop: "20px" }} data-toggle="modal" data-target="#payment" >Hoàn thành</button>
-                                                            <a className="cancel" style={{ marginTop: "20px" }} onClick={() => this.handleChangeStatus(6)} >Hoàn trả nhà cung cấp</a>
-                                                            <a className="cancel" style={{ marginTop: "20px" }} data-toggle="modal" data-target="#endModal" >Kết thúc đơn nhập</a>
+                                                            <button className="cancel btn btn-success" style={{ marginTop: "20px" }}  onClick={() => { this.changeStatus(true) }} >Hoàn trả nhà cung cấp</button>
+                                                            <button className="cancel btn btn-secondary" style={{ marginTop: "20px" }} data-toggle="modal" data-target="#endModal" >Kết thúc đơn nhập</button>
                                                         </div> : ""
 
                                                 }
@@ -267,7 +283,16 @@ class DetailImportStock extends Component {
                                                         {itemImportStock.payment_status === 0 ? <div style={{color:"red"}}>Chưa thanh toán</div> : <div style={{color:"green"}}>Đã thanh toán</div>}
                                                     </div>
                                                 </div>
+                                           
+                                            
+                                                {
+                                               check == true && this.checked(this.state.list_refund) > 0 && <ItemDetailRefund id={id} store_code={store_code} listItems = {import_stock_items} list_refund = {this.state.list_refund}  discount = {itemImportStock.discount}></ItemDetailRefund>
+                                           } 
+                                           
+                                           
                                             </div>
+                                        
+
                                         </div>
                                     </div>
                                 </div>
