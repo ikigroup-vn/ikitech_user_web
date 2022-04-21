@@ -176,7 +176,7 @@ class Topbar extends Component {
         var { listPos, branchStore, user, store_code, currentBranch } = this.props;
         var { idCart } = this.state
         return (
-            <div>
+            <div  className='controller-top'>
                 <nav class="navbar navbar-expand navbar-light bg-white topbar static-top header-pos">
 
                     <div class="navbar-nav" style={{

@@ -21,7 +21,7 @@ class ModalUser extends Component {
             {
                 field: 'txtPhone',
                 method: 'isLength',
-                args: [{ min: 9 }],
+                args: [{ min: 10 }],
                 validWhen: true,
                 message: 'Số điện thoại không hợp lệ.',
             },

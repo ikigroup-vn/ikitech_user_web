@@ -204,6 +204,14 @@ export const getDateForChartDay = () => {
   };
 };
 
+export const stringToInit = (value) => {
+  var _value = value;
+  var numStr = _value ;
+  var numStr = parseFloat(numStr);
+  return isNaN(numStr) ? 0 : numStr;
+}
+
+
 export const getDateForChartWeek = () => {
   console.log(moment().day());
   if (moment().day() == 0) {

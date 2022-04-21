@@ -3,6 +3,7 @@ import { format } from '../../ultis/helpers'
 import * as Env from "../../ultis/default"
 import { shallowEqual } from '../../ultis/shallowEqual'
 import { findImportPrice, findImportPriceSub, findPrice, findTotalStock, stockOfProduct } from '../../ultis/productUltis'
+import themeData from "../../ultis/theme_data";
 
 class ModalDetail extends Component {
     constructor(props) {
@@ -44,8 +45,8 @@ class ModalDetail extends Component {
             this.setState({
                 afterChoosePrice: price,
                 // priceBeforeDiscount: sub_elements.price,
-                afterPrice:price,
-                priceBeforeDiscount:price,
+                afterPrice: price,
+                priceBeforeDiscount: price,
 
                 quantityInStock: stock,
                 // idElement: id,
@@ -69,13 +70,13 @@ class ModalDetail extends Component {
 
 
         this.setState({
-        
+
             subElementDistributeSelected: index,
             subElementNameDistributeSelected: nameElement
         })
 
         this.handleNewPriceOrStock(this.state.elementNameSelected, nameElement)
-      
+
         // var { sub_element_distributes } = this.state.elementObject
         // var sub_element_distribute = this.state.elementDistributeOj.sub_element_distributes
         // var subImport = findImportPriceSub(sub_element_distribute, nameElement)
@@ -219,7 +220,7 @@ class ModalDetail extends Component {
     }
 
 
-    
+
 
     render() {
         var { allow_semi_negative } = this.props
@@ -237,17 +238,11 @@ class ModalDetail extends Component {
                 <div class="modal-dialog">
                     <div class="modal-content" >
                         <div className='model-header-modal' style={{ display: 'flex', justifyContent: "space-between", margin: "10px 15px" }}>
-                            <p class="" style={{ margin: "0px", fontWeight: "bold" }}>Chi tiết sản phẩm</p>
+                            <p class="" style={{ margin: "0px", fontWeight: "500" }}>Chọn phân loại sản phẩm</p>
                             <button type="button" class="close" onClick={this.handleClose} data-dismiss="modal">&times;</button>
                         </div>
                         <div class="modal-body" style={{ position: "relative", marginBottom: "20px" }}>
-                            <button class="btn btn-info" onClick={allowBuy ? this.handleCallback : null} style={{
-                                backgroundColor: allowBuy ? "green" : "grey",
-                                position: "absolute",
-                                right: "15px",
-                                top: "20px",
-                                zIndex: "10000"
-                            }}>Thêm</button>
+
                             <div className='model-card row' style={{ margin: "5px", width: "80%" }}>
                                 <div className='name-voucher col-4' style={{ width: "120px", height: "120px", padding: "8px" }}>
                                     <div style={{ justifyContent: "center", width: "100%", height: "100%", borderRadius: "0.25em", display: "flex", alignItems: "center" }}>
@@ -257,8 +252,8 @@ class ModalDetail extends Component {
                                 <div className='info-voucher col-8' style={{ display: "flex", flexDirection: "column", justifyContent: "space-around" }}>
                                     <div>
                                         <div className='value' style={{ fontWeight: "bold", width: "220px", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{inforProduct.nameProduct}</div>
-                                       
-                                       
+
+
                                         <div className='code' style={{ color: "red" }}><span>{this.state.afterChoosePrice === '' ? inforProduct.discountProduct === null ?
                                             this.props.modal.minPriceProduct == this.props.modal.maxPriceProduct ?
                                                 format(Number(this.props.modal.minPriceProduct))
@@ -274,34 +269,14 @@ class ModalDetail extends Component {
                                             <div className='persen-discount' style={{ fontSize: "13px", marginLeft: "10px" }}>{inforProduct.discountProduct !== null ? `- ${inforProduct.discountProduct.value}%` : ""}</div>
                                         </div>
 
-                                        {product?.check_inventory && <div className='quantity-product' style={{ fontWeight: "bold", fontSize: "13px" }}>
-                                            Còn lại {this.state.quantityInStock} sản phẩm
+                                        {product?.check_inventory && <div className='quantity-product'
+                                            style={{ fontSize: "13px", color: "grey" }}>
+                                            Tồn kho hiện tại {this.state.quantityInStock} sản phẩm
                                         </div>
                                         }
 
                                     </div>
-                                    <div>
 
-                                        <div className='distribute'>
-                                            {this.state.messageErr && (
-                                                <div className='show-err' style={{ color: "red" }}>{this.state.messageErr}</div>
-                                            )}
-                                            <div className='wrap-distribute'>
-                                                <div className='' style={{ display: "flex" }}>
-                                                    <div className='distribute-name'>{itemParent.name}</div>
-                                                </div>
-                                                <div className='group-name'>{itemParent.element_distributes && itemParent.element_distributes.map((itemChild, index) => {
-                                                    return <button className={index === this.state.distributeSelected ? "active" : ''} style={{ border: "1px solid #e4e4e4", borderRadius: "4px", marginRight: '10px', padding: "5px" }} onClick={() => this.handleClick(itemChild.name, itemParent.name, index, itemChild.id, itemChild.stock)}>{itemChild.name}</button>
-                                                })}</div>
-                                            </div>
-
-                                            <div className='distribute-name'>{itemParent.sub_element_distribute_name}</div>
-                                            <div className='element_distribute_name'>{itemParent.element_distributes && itemParent.element_distributes[0].sub_element_distributes.map((itemChild, index) => (
-                                                <button className={index === this.state.subElementDistributeSelected ? "actives" : ""} style={{ border: "1px solid #e4e4e4", borderRadius: "4px", marginRight: '10px', padding: "5px" }} onClick={() => this.handleClickSubElement(itemChild.name, itemChild.price, index, itemChild.id)}>{itemChild.name}</button>
-                                            ))}</div>
-                                        </div>
-
-                                    </div>
 
                                     {
                                         !allowBuy && <div style={{ paddingTop: 20, color: "red" }}>
@@ -315,6 +290,60 @@ class ModalDetail extends Component {
                                 </div>
                             </div>
                         </div>
+
+
+                        <hr />
+                        <div>
+                            {this.state.messageErr && (
+                                <div className='show-err' style={{ color: "red", paddingLeft: 30 }}><center>{this.state.messageErr}</center></div>
+                            )}
+                            <div className='distribute-pos'>
+
+                                <div className='row'>
+                                    <div className='col-3'>
+                                        <div className='distribute-name-pos'>{itemParent.name}</div>
+                                    </div>
+
+                                    <div className='col-9'>
+                                        <div className='group-name'>{itemParent.element_distributes && itemParent.element_distributes.map((itemChild, index) => {
+                                            return <button
+                                                className={index === this.state.distributeSelected ? "item-distribute-name distribute-active" : 'item-distribute-name'}
+                                                onClick={() => this.handleClick(itemChild.name, itemParent.name, index, itemChild.id, itemChild.stock)}>{itemChild.name}</button>
+                                        })}</div>
+                                    </div>
+
+
+
+
+                                </div>
+
+                                <div className='row'>
+                                    <div className='col-3'>
+                                        <div className='distribute-name-pos'>{itemParent.sub_element_distribute_name}</div>
+                                    </div>
+                                    <div className='col-9'>
+                                        <div className='element_distribute_name'>{itemParent.element_distributes && itemParent.element_distributes[0].sub_element_distributes.map((itemChild, index) => (
+                                            <button className={index === this.state.subElementDistributeSelected ? "item-distribute-name distribute-active" : "item-distribute-name"}
+                                                onClick={() => this.handleClickSubElement(itemChild.name, itemChild.price, index, itemChild.id)}>{itemChild.name}</button>
+                                        ))}</div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+
+                        <div onClick={allowBuy ? this.handleCallback : null} class="button-handle-choose-detail-ok" style={{
+                              backgroundColor: allowBuy ? "#E56F25" : "grey",
+                        }}>
+                            <center style={{
+                                paddingTop: 10,
+                                backgroundColor: allowBuy ? "#E56F25" : "grey",
+                            }}>Thêm vào hóa đơn</center> </div>
+
+
                     </div>
                 </div>
             </div>
