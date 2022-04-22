@@ -24,6 +24,7 @@ import { getBranchId } from '../../ultis/branchUtils'
 import * as notificationAction from "../../actions/notification";
 import { AsyncPaginate } from "react-select-async-paginate";
 import * as customerApi from "../../data/remote/customer";
+import PanelBottom from './PanelBottom'
 
 class PostOrder extends Component {
     constructor(props) {
@@ -661,32 +662,26 @@ class PostOrder extends Component {
 
                                     <div className="splitter-horizontal">
 
-                                        <svg class="MuiSvgIcon-root jss4100" focusable="false"
-                                            viewBox="0 0 24 24" aria-hidden="true"
-                                            style={{
-                                                transform: "rotate(90deg)"
-                                            }}
-                                        >
-                                            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg>
-
-                                    </div>
-
-                                    <div className="panel-bottom">
-                                        <div className='col-list-product' style={{ borderRadius: "0", display: "flex", flexDirection: "column" }}>
-                                            <div className='card-pos-body' style={{ overflow: "hidden" }}>
-
-                                                <CardProduct
-                                                    store_code={store_code}
-                                                    handleCallbackProduct={this.handleCallbackProduct}
-                                                    handleCallbackPushProduct={this.handleCallbackPushProduct}
-                                                />
-                                            </div>
-                                            <div className='wrap-pagination'>
-                                                <Pagination limit={numPage}
-                                                    passNumPage={this.passNumPage} store_code={store_code} products={products} />
-                                            </div>
+                                        <div class="button-show-hide-control">
+                                            <svg className="button-show-hide-control-circle" focusable="false"
+                                                viewBox="0 0 24 24" aria-hidden="true"
+                                                style={{
+                                                    transform: "rotate(90deg)"
+                                                }}
+                                            >
+                                                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg>
                                         </div>
+
                                     </div>
+
+                                    <PanelBottom 
+                                    
+                                    limit={numPage}
+                                passNumPage={this.passNumPage} store_code={store_code} products={products} 
+                                    handleCallbackProduct={this.handleCallbackProduct}
+                                        handleCallbackPushProduct={this.handleCallbackPushProduct} />
+
+
                                 </div>
 
                             </div>

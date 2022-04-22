@@ -121,11 +121,13 @@
 
 .panel-bottom {
     flex: 1 1 auto;
-    z-index: 2;
+    z-index: 1;
     /* resizable */
-    padding: 10px 0px 0px 0px;
+    padding: 0px 0px 0px 0px;
 
 }
+
+
 
 .panel-top {
     flex: 0 0 auto;
@@ -149,9 +151,34 @@
     z-index: 2;
     height: 5px;
     background: #e5e5e5;
-
+    display: flex;
+    justify-content: center;
 }
 
+.button-show-hide-control {
+    top: -8px;
+    position: relative;
+    border: 1px solid;
+    z-index: 999;
+    background: #fff;
+    transition: bottom 0.5s;
+    border-color: #0964CF;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+}
+
+.button-show-hide-control-circle {
+    color: #0964CF;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+}
 
 
 pre {

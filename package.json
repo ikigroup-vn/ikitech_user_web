@@ -2,7 +2,7 @@
   "name": "sahashop",
   "version": "0.1.0",
   "private": true,
-  "dependencies": { 
+  "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^18.0.0",
     "@ckeditor/ckeditor5-build-decoupled-document": "^20.0.0",
     "@ckeditor/ckeditor5-essentials": "^20.0.0",
@@ -37,6 +37,7 @@
     "react-chartjs-2": "^2.11.1",
     "react-color": "^2.19.3",
     "react-currency-input-field": "^3.6.4",
+
     "react-datetime": "^3.0.4",
     "react-dom": "^17.0.2",
     "react-draft-wysiwyg": "1.14.7",
@@ -48,7 +49,7 @@
     "react-redux": "^7.2.0",
     "react-resize-panel": "^0.3.5",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "4.0.3", 
+    "react-scripts": "4.0.3",
     "react-select-async-paginate": "^0.6.1",
     "react-shallow-compare": "^1.0.3",
     "react-slick": "^0.28.1",

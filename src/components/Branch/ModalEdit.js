@@ -184,6 +184,8 @@ class ModalEdit extends Component {
 
     }
     render() {
+
+    
         var { province } = this.props
         var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards } = this.state;
         var { txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state;
