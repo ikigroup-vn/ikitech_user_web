@@ -2,32 +2,33 @@ import React, { Component } from "react";
 import { filter_var, filter_arr, format } from "../../ultis/helpers";
 import getNamePaymentMethod from "../../ultis/payment_method";
 import { formatNoD } from "../../ultis/helpers";
-
+import {Link} from "react-router-dom"
 class PaymentHistory extends Component {
   constructor(props) {
     super(props);
   }
 
 
-  showHistory = (historys) => {
+  showHistory = (bills) => {
     var result = null;
-    if (historys.length > 0) {
-      result = historys.map((history, index) => {
+    var {store_code} = this.props
+    if (bills.length > 0) {
+      result = bills.map((bill, index) => {
 
 
         return (
           <tr>
-            <td>{index + 1}</td>
+            <td><a href={`/order/detail/${store_code}/${bill.order_code}`} >{bill.order_code}</a></td>
 
             <td>
-              { formatNoD(history.money) }
+              { formatNoD(bill.total_final) }
             </td>
             <td>
-              {getNamePaymentMethod(history.payment_method_id)}
+            {bill.payment_status_name}
             </td>
 
             <td>
-              {history.updated_at}
+              {bill.updated_at}
             </td>
 
           </tr>
@@ -41,7 +42,8 @@ class PaymentHistory extends Component {
 
   render() {
 
-    var { historyPay } = this.props
+    var { historyPay , bills } = this.props
+    console.log(bills)
     return (
       <div class="tab-pane " id="chicken" role="tabpanel" aria-labelledby="chicken-tab">
 
@@ -49,16 +51,16 @@ class PaymentHistory extends Component {
           <table class="table table-hover table-bordered  table-border">
             <thead>
               <tr>
-                <th>STT</th>
+                <th>Mã đơn hàng</th>
 
                 <th>Số tiền</th>
-                <th>Phương thức thanh toán</th>
+                <th>Trạng thái</th>
                 <th>Thời gian</th>
 
               </tr>
             </thead>
             <tbody>
-              {this.showHistory(historyPay)}
+              {this.showHistory(bills)}
             </tbody>
           </table>
         </div>

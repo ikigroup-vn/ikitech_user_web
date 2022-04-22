@@ -11,6 +11,8 @@ import InfoProduct from "./InfoProduct"
 import InfoProductPos from "./InfoProductPos"
 
 import InfoCustomer from "./InfoCustomer"
+import InfoCustomerPos from "./InfoCustomerPos"
+
 import OrderHistory from "./OrderHistory"
 import * as Env from "../../ultis/default"
 import InfoBonusAgency from "./InfoBonusAgency";
@@ -73,7 +75,7 @@ class Form extends Component {
     }
 
     render() {
-        var { bill, billHistoty, order_code, store_code, billId, chat, order_allow_change_status, historyPay } = this.props
+        var { bill, billHistoty, order_code, store_code, billId, chat, order_allow_change_status, historyPay ,bills } = this.props
         var { orderData, paymentData, showChatBox , check , css_IKIPOS , css_IKITECH } = this.state
         var customerImg = typeof bill.customer == "undefined" || bill.customer == null ? Env.IMG_NOT_FOUND : bill.customer.avatar_image
         var customerId = bill.customer_id
@@ -133,7 +135,7 @@ class Form extends Component {
 
                         <div className={getChannel() == IKIPOS ? css_IKIPOS : css_IKITECH}>
                             {
-                                getChannel() == IKIPOS ? (<InfoProductPos check = {check} store_code={store_code} bill={bill} />
+                                getChannel() == IKIPOS ? (<InfoProductPos check = {check} store_code={store_code} bills = {bills} bill={bill} />
                                 ) : <InfoProduct store_code={store_code} bill={bill} />
 
                             }
@@ -167,14 +169,22 @@ class Form extends Component {
                                             </ul>
 
                                             <div class="tab-content card" style={{ padding: "10px" }}>
-                                                <InfoCustomer bill={bill} />
+                                                {
+                                                    getChannel() == IKITECH &&
+                                                    <InfoCustomer bill={bill} bills = {bills} store_code = {store_code} />
+                                                }
+                                                       {
+                                                    getChannel() == IKIPOS &&
+                                                    <InfoCustomerPos bill={bill} bills = {bills} store_code = {store_code} />
+                                                }
                                                 {
                                                     getChannel() == IKITECH &&
                                                     <OrderHistory billHistoty={billHistoty} />
                                                 }
+                                               
                                                 {
-                                                    getChannel() == IKIPOS &&
-                                                    <PaymentHistory historyPay={historyPay} />
+                                                    getChannel() == IKIPOS && bills.data && bills.data.length > 0 &&
+                                                    <PaymentHistory bills  = {bills.data} historyPay={historyPay} />
                                                 }
 
                                             </div>

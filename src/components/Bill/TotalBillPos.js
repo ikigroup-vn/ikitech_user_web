@@ -1,5 +1,6 @@
 import { data } from "jquery";
 import React, { Component } from "react";
+import getChannel, { IKITECH , IKIPOS } from "../../ultis/channel";
 import { filter_var, filter_arr, format } from "../../ultis/helpers";
 import Modal from "./ModalPaymentPos";
 class TotalBill extends Component {
@@ -47,7 +48,7 @@ class TotalBill extends Component {
         return (
             <div className="box box-warning cart_wrapper mb0">
 
-<Modal remaining_amount  = {bill.remaining_amount} order_code = {bill.order_code} store_code = {this.props.store_code} ></Modal>
+                <Modal remaining_amount={bill.remaining_amount} order_code={bill.order_code} store_code={this.props.store_code} ></Modal>
                 <div class="card-header py-3"><h6 class="m-0 title_content font-weight-bold text-primary">Tổng tiền</h6></div>
 
                 <div
@@ -57,8 +58,8 @@ class TotalBill extends Component {
                     <br />
                     <div>
                         <p className="sale_user_label bold">
-                            Tạm tính:{" "}
-                            <span id="total_selected">{format(bill.total_before_discount || 0)}</span>
+                            Khách phải trả:{" "}
+                            <span id="total_selected">{format(bill.total_final || 0)}</span>
                         </p>
                     </div>
                     {total_shipping_fee > 0 && <div id="item_fee">
@@ -92,7 +93,7 @@ class TotalBill extends Component {
                     </div>
                     }
 
-                    {bill.bonus_points_amount_used > 0 && <div>
+                    {bill.bonus_points_amount_used != null && bill.bonus_points_amount_used != 0 && <div>
                         <p className="sale_user_label bold">
                             Giảm giá xu:{" "}
                             <span className="cart_payment_method">
@@ -103,29 +104,60 @@ class TotalBill extends Component {
                     }
                     {bill.order_code_refund && <div>
                         <p className="sale_user_label bold">
-                            Đã hoàn:{" "}
+                            Đã thanh toán:{" "}
                             <span className="cart_payment_method">
-                                {format(bill.total_money_refund)}
+                                {format(bill.total_final - bill.remaining_amount )}
                             </span>
                         </p>
                     </div>}
-                    <div>
+                    {/* <div>
                         <p className="sale_user_label bold">
                             Còn lại:{" "}
                             <span className="cart_payment_method">
                                 {format(bill.remaining_amount)}
                             </span>
                         </p>
-                    </div>
-                    <div>
-                        <p className="sale_user_label bold">
-                            Tổng tiền:{" "}
-                            <span className="cart_payment_method">
-                                {format(total_final
-                                )}
-                            </span>
-                        </p>
-                    </div>
+                    </div> */}
+                    {
+                        getChannel() == IKITECH && (
+                            <div>
+                                <p className="sale_user_label bold">
+                                    Tổng tiền:{" "}
+                                    <span className="cart_payment_method">
+                                        {format(total_final
+                                        )}
+                                    </span>
+                                </p>
+                            </div>
+                        )
+                    }
+                    {
+                        getChannel() == IKIPOS && (
+                            <React.Fragment>
+                            {/* <div>
+                                <p className="sale_user_label bold">
+                                    Đã thanh toán:{" "}
+                                    <span className="cart_payment_method">
+                                        {format(bill.total_money_refund)}
+
+                                    </span>
+                                </p>
+                            </div> */}
+
+<div>
+<p className="sale_user_label bold">
+    Còn lại:{" "}
+    <span className="cart_payment_method">
+    {format(bill.remaining_amount)}
+
+    </span>
+</p>
+</div>
+</React.Fragment>
+
+                        )
+                    }
+
                     <div style={{ textAlign: "center" }}>
                         {
                             bill.payment_status_code == "UNPAID" || bill.payment_status_code == "PARTIALLY_PAID" ?
@@ -138,7 +170,7 @@ class TotalBill extends Component {
                                     id="sale_btn_accepted"
                                     className={`sale_btn_action sale_btn_action_10 btn btn-secondary w100p `}
 
-                                    
+
 
                                 > Thanh toán còn lại
                                 </a>)

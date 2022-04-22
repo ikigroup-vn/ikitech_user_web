@@ -9,6 +9,38 @@ export default class ComponentToPrint extends Component {
     this.state = {};
   }
 
+  componentDidMount()
+  {
+  
+      var stores = this.props.stores;
+      (stores ?? []).forEach((element, index) => {
+        if (element.store_code == this.props.store_code) {
+          this.setState({
+            user_name: stores[index].user.name,
+            store_name: stores[index].name,
+            user_phone: stores[index].user.phone_number,
+          });
+        }
+      });
+    
+  
+      var bill = this.props.bill;
+      if (
+        typeof bill.customer_address != "undefined" &&
+        bill.customer_address != null
+      )
+        this.setState({
+          customer_name: bill.customer_address.name,
+         
+          customer_address: bill.customer_address.address_detail != null && bill.customer_address.wards != null ? ( bill.customer_address.address_detail ?? "" + ", " + bill.customer_address.wards_name ?? "" + ", " + bill.customer_address.district_name ?? "" + ", " + bill.customer_address.province_name ?? "") : "",   customer_phone: bill.customer_address.phone,
+          order_code: bill.order_code,
+          order_date: bill.created_at,
+          total_final: bill.total_final,
+
+        });
+    
+  }
+
   componentWillReceiveProps(nextProps) {
     if (
       !shallowEqual(this.props.stores, nextProps.stores) ||
@@ -36,7 +68,7 @@ export default class ComponentToPrint extends Component {
       )
         this.setState({
           customer_name: bill.customer_address.name,
-          customer_address: bill.customer_address.address_detail ?? "" + ", " + bill.customer_address.wards_name ?? "" + ", " + bill.customer_address.district_name ?? "" + ", " + bill.customer_address.province_name ?? "",
+          customer_address: bill.customer_address.address_detail != null && bill.customer_address.wards != null ? ( bill.customer_address.address_detail ?? "" + ", " + bill.customer_address.wards_name ?? "" + ", " + bill.customer_address.district_name ?? "" + ", " + bill.customer_address.province_name ?? "") : "",
           customer_phone: bill.customer_address.phone,
           order_code: bill.order_code,
           order_date: bill.created_at,
@@ -102,13 +134,14 @@ export default class ComponentToPrint extends Component {
 
   render() {
     var state = this.state;
-    var { bill, badges } = this.props;
+    console.log(state)
+    var { bill, badges , currentBranch } = this.props;
     var total_product =
       Array.isArray(bill.line_items_at_time) == true
         ? bill.line_items_at_time.length
         : 0;
-    var store_address = typeof badges.address_pickup == "undefined" ? null : badges.address_pickup == null ? null : badges.address_pickup.address_detail + ", " +
-      badges.address_pickup.wards_name + ", " + badges.address_pickup.district_name + ", " + badges.address_pickup.province_name
+    var store_address = typeof currentBranch !== "undefined" &&  currentBranch !== null  ?  currentBranch.address_detail + ", " +
+    currentBranch.wards_name + ", " + currentBranch.district_name + ", " +currentBranch.province_name : null
     return (
       <div className="parent" style={{ margin: "30px" }}>
         <p className="order_code">Mã đơn hàng : {state.order_code}</p>
@@ -130,7 +163,7 @@ export default class ComponentToPrint extends Component {
                 <span>Địa chỉ: </span>{store_address}
               </p>
               <p class="" id="info">
-                <span>Số điện thoại:</span> {state.user_phone}
+                <span>Số điện thoại:</span> {currentBranch.phone}
               </p>
             </div>
           </div>

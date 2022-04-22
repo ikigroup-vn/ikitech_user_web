@@ -174,8 +174,12 @@ class ProductEdit extends Component {
               try {
                 const price = element.price != null ? element.price.toString().replace(/,/g, '').replace(/\./g, '') : 0;
                 const barcode = element.barcode != null ? element.barcode.toString() : 0;
+                
                 const quantity_in_stock = element.quantity_in_stock != null ? element.quantity_in_stock.toString().replace(/,/g, '').replace(/\./g, '') : 0;
+                const import_price = element.import_price != null ? element.import_price.toString().replace(/,/g, '').replace(/\./g, '') : 0;
                 form.list_distribute[0].element_distributes[index].price = price
+                form.list_distribute[0].element_distributes[index].import_price = import_price
+
                 form.list_distribute[0].element_distributes[index].quantity_in_stock = quantity_in_stock
                 form.list_distribute[0].element_distributes[index].barcode = barcode
                 if (typeof element.sub_element_distributes != "undefined") {
@@ -186,7 +190,8 @@ class ProductEdit extends Component {
                         const price = _element.price != null ? _element.price.toString().replace(/,/g, '').replace(/\./g, '') : 0;
                         const barcode = _element.barcode != null ? _element.barcode.toString() : "";
                         const quantity_in_stock = _element.quantity_in_stock != null ? _element.quantity_in_stock.toString().replace(/,/g, '').replace(/\./g, '') : 0;
-
+                        const import_price = _element.import_price != null ? _element.import_price.toString().replace(/,/g, '').replace(/\./g, '') : 0;
+                          form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].import_price = import_price
                         form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].price = price
                         form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].quantity_in_stock = quantity_in_stock
                         form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].barcode = barcode

@@ -198,8 +198,19 @@ class DetailImportStock extends Component {
                                 <div className='row'>
                                     <div className='col-6'>
                                         <div className='card'>
-                                            <div className='card-header py-3' style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                                Thông tin đơn hàng
+                                            <div className='card-header py-3' style={{ justifyContent: "space-between", alignItems: "center" }}>
+<span>
+Thông tin đơn hàng #{itemImportStock.code}
+
+</span>
+                                                {
+                        itemImportStock.import_stock_code_refund != null && (
+                            <span style={{ color: "red", display: "block" }}>
+                                Đã hoàn tiền từ đơn: <span id="cart_code">#{itemImportStock.import_stock_code_refund }</span>
+
+                            </span>
+                        )
+                    }
                                             </div>
                                             <div className='card-body' >
                                                 <div style={{ marginBottom: "10px", borderRadius: "5px" }}>

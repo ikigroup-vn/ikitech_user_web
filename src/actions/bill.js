@@ -86,6 +86,41 @@ export const fetchBillId = (store_code, order_code) => {
   };
 };
 
+
+export const getCalculate = (store_code, data , branch_id=getBranchId()) => {
+  return (dispatch) => {
+
+      billApi
+      .getCalculate(store_code, data , branch_id=getBranchId())
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING_LAZY,
+          loading: "hide",
+        });
+        console.log(res)
+        if (res.data.code !== 401)
+          dispatch({
+            type: Types.GET_CALCULATE,
+            data: res.data.data,
+          });
+          else
+          dispatch({
+            type: Types.GET_CALCULATE,
+            data: {},
+          });
+
+      }).catch(function(error){
+        dispatch({
+          type: Types.GET_CALCULATE,
+          data: {},
+        });
+      }); 
+  
+  };
+};
+
+
+
 export const fetchBillHistory = (store_code, billId) => {
   if (
     billId == undefined ||
