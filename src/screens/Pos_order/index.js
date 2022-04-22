@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import { format, formatNoD, formatNumber, removeSignNumber } from '../../ultis/helpers'
+import { format, formatNoD, formatNumber, removeSignNumber, stringToInit } from '../../ultis/helpers'
 import * as productAction from "../../actions/product"
 import { connect } from 'react-redux'
 import CardProduct from '../../components/Pos_Order/CardProduct'
@@ -62,6 +62,7 @@ class PostOrder extends Component {
             typeDiscount: 0,
             beforeDiscount: 0,
             haveCheck: false,
+            percentDiscount: 0,
             infoProduct: {
                 inventoryProduct: "",
                 idProduct: "",
@@ -197,10 +198,7 @@ class PostOrder extends Component {
     }
 
     componentDidMount() {
-        window.$(".panel-top").resizable({
-            handleSelector: ".splitter-horizontal",
-            resizeWidth: false
-        });
+
         const branch_id = getBranchId()
 
         this.props.fetchAllPertion(this.props.match.params.store_code)
@@ -290,20 +288,26 @@ class PostOrder extends Component {
 
             if (name == "discount") {
                 if (this.state.typeDiscount == 1) {
-                    if (value.length < 3) {
+
+                    if (value.length < 3 || value == 100) {
+
+
+                        var discount = stringToInit(this.state.totalAfterDiscount * (stringToInit(value) / 100)).toFixed(0)
+
                         this.setState({
-                            beforeDiscount: value,
-                            totalFinal: this.state.totalAfterDiscount - removeSignNumber(num1),
-                            priceCustomer: this.state.totalAfterDiscount - removeSignNumber(num1)
+                            percentDiscount: value,
+                            discount: discount,
+                            totalFinal: this.state.totalAfterDiscount - stringToInit(discount),
+                            priceCustomer: this.state.totalAfterDiscount - stringToInit(discount),
                         }, () => {
-                            this.changeDiscount(num1)
+                            this.changeDiscount(discount)
                         })
                     }
                 } else {
                     this.setState({
                         discount: num,
-                        totalFinal: this.state.totalAfterDiscount - removeSignNumber(num),
-                        priceCustomer: this.state.totalAfterDiscount - removeSignNumber(num),
+                        totalFinal: this.state.totalAfterDiscount - stringToInit(num),
+                        priceCustomer: this.state.totalAfterDiscount - stringToInit(num),
                     }, () => {
                         this.changeDiscount(num)
                     })
@@ -341,9 +345,9 @@ class PostOrder extends Component {
 
     componentWillReceiveProps(nextProps) {
 
-        if (!shallowEqual(nextProps.oneCart, this.props.oneCart)) {
-
+        if (!shallowEqual(nextProps.oneCart, this.props.oneCart) && this.props.loadingHandleChangeQuantity == false) {
             this.setState({
+                code: nextProps.oneCart.code_voucher,
                 oneCart: nextProps.oneCart,
                 priceCustomer: nextProps.oneCart.info_cart.total_final,
                 totalFinal: nextProps.oneCart.info_cart.total_final,
@@ -355,9 +359,6 @@ class PostOrder extends Component {
                 discount: nextProps.oneCart.discount,
                 checkeds: nextProps.oneCart.info_cart.is_use_points !== null ? nextProps.oneCart.info_cart.is_use_points : false
             })
-
-
-
         }
         if (!shallowEqual(nextProps.inforCustomer, this.props.inforCustomer)) {
             this.setState({
@@ -440,10 +441,10 @@ class PostOrder extends Component {
             const branch_id = getBranchId()
             const { store_code } = this.props.match.params
             const formData = {
-                customer_name: nextState.oneCart.customer_name,
-                customer_phone: nextState.oneCart.customer_phone,
+                customer_name: nextState.modalUpdateCart.customer_name ?? nextState.oneCart.customer_name,
+                customer_phone: nextState.modalUpdateCart.customer_phone ?? nextState.oneCart.customer_phone,
+                customer_id: nextState.modalUpdateCart.customer_id ?? nextState.oneCart.customer_id,
                 name: nextState.namePos,
-                customer_id: nextState.oneCart.customer_id,
                 is_use_points: nextState.checkeds,
             }
             this.props.updateInfoCarts(store_code, branch_id, nextState.idCart, formData)
@@ -520,6 +521,15 @@ class PostOrder extends Component {
     }
 
     ChangeTypeDiscount = (type) => {
+
+        if (type != this.state.typeDiscount) {
+
+            this.hasFocus = false
+
+
+        }
+
+
         this.setState({ typeDiscount: type, discount: "" })
     }
 
@@ -530,15 +540,13 @@ class PostOrder extends Component {
     }
 
     handleDeletePersion = () => {
-        const branch_id = getBranchId()
-        const { store_code } = this.props.match.params
-        const formData = {
-            customer_name: "",
-            customer_phone: "",
-            name: this.state.namePos,
-            customer_id: "",
-        }
-        this.props.updateInfoCarts(store_code, branch_id, this.state.idCart, formData)
+        this.handleCallbackPertion(
+            {
+                customer_phone: "",
+                customer_id: "",
+                customer_name: ""
+            }
+        )
     }
 
     handleClearVoucher = () => {
@@ -558,8 +566,6 @@ class PostOrder extends Component {
                 }
             )
         }
-
-        // this.setState({ select_customer_id: selectValue });
 
 
     };
@@ -607,19 +613,21 @@ class PostOrder extends Component {
                         onKeyEvent={(key, e) => this.handleKeyboard(key)}
                     />
                     <Topbar store_code={store_code} handleCallbackTab={this.handleCallbackTab} />
-                    <div>
+                    <div className='overview-cart'>
                         <div className="row-post">
 
                             <div className='col-list-pos' >
-                                {oneCart?.info_cart?.line_items.length > 0 &&
-                                    <div className='wap-list'>
+                                {/* {oneCart?.info_cart?.line_items.length > 0 &&
+                                    <div className='wap-list' style={{
+                                        marginTop:8
+                                    }}>
                                         <div style={{ marginLeft: "10px" }}>STT</div>
                                         <div style={{ width: "40%" }}>Tên sản phẩm</div>
                                         <div>Số lượng</div>
                                         <div style={{ width: "11%" }}>Đơn giá</div>
                                         <div style={{ width: "13%" }}>Thành tiền</div>
                                     </div>
-                                }
+                                } */}
 
                                 <div className="panel-container-vertical">
 
@@ -756,7 +764,7 @@ class PostOrder extends Component {
                                     <div className="wrap-detail">
                                         <div className='price-info' style={{ margin: "10px 0px", fontSize: "17px", marginLeft: "5px" }}>
                                             <div className='row item-info'>
-                                                <div className='title-price col-6'>{`Tổng tiền:(${length} sản phẩm)`}</div>
+                                                <div className='title-price col-6'>{`Tổng tiền: (${length} sản phẩm)`}</div>
                                                 <span className='col-6' style={{ textAlign: "end" }}>{format(Number(oneCart.info_cart?.total_before_discount))}</span>
                                             </div>
                                             <div className='row' style={{ padding: "3px 0", justifyContent: "space-between" }}>
@@ -781,11 +789,32 @@ class PostOrder extends Component {
                                                         <span className='' style={{ fontSize: "13px" }}>{oneCart.code_voucher ? oneCart.code_voucher : "Chọn hoặc nhập mã"}</span>
 
                                                     </a>
-                                                    {oneCart.code_voucher ? <i class="fa fa-times" style={{ marginLeft: "10px" }} onClick={this.handleClearVoucher} ></i> : ""}
+                                                    {oneCart.code_voucher ? <i class="fa fa-times-circle" style={{ marginLeft: "10px", color: "red" }} onClick={this.handleClearVoucher} ></i> : ""}
+
+
                                                 </div>
                                             </div>
 
+                                            {oneCart?.info_cart?.product_discount_amount > 0 && <div className='row item-info'>
+                                                <div className='item-discount-name col-6'>Giảm giá sản phẩm</div>
+                                                <span className='col-6' style={{ textAlign: "end" }}>-{formatNoD((oneCart?.info_cart?.product_discount_amount))}</span>
+                                            </div>
+                                            }
 
+                                            {oneCart?.info_cart?.voucher_discount_amount > 0 && <div className='row item-info'>
+                                                <div className='item-discount-name col-6'>Giảm voucher</div>
+                                                <span className='col-6' style={{ textAlign: "end" }}>-{formatNoD((oneCart?.info_cart?.voucher_discount_amount))}</span>
+                                            </div>
+                                            }
+
+                                            {oneCart?.info_cart?.combo_discount_amount > 0 && <div className='row item-info'>
+                                                <div className='item-discount-name col-6'>Giảm combo</div>
+                                                <span className='col-6' style={{ textAlign: "end" }}>-{formatNoD((oneCart?.info_cart?.combo_discount_amount))}</span>
+                                            </div>
+                                            }
+
+
+                                            <hr style={{ width: "100%" }} />
 
 
                                             <Popover
@@ -804,8 +833,8 @@ class PostOrder extends Component {
                                                             onChange={this.handChange}
                                                             type="text"
                                                             name="discount" id="discount"
-                                                            class=" col-4 input-discount text-input-pos"
-                                                            value={this.state.typeDiscount == 0 ? this.state.discount : this.state.beforeDiscount}
+                                                            class=" col-4 input-discount"
+                                                            value={this.state.typeDiscount == 0 ? this.state.discount : this.state.percentDiscount}
                                                         ></input>
 
                                                         <div className={this.state.typeDiscount == 0 ? "type-discount-price activesss" : "type-discount-price"}
@@ -813,7 +842,8 @@ class PostOrder extends Component {
                                                         >
                                                             VND
                                                         </div>
-                                                        <div className={this.state.typeDiscount == 1 ? "type-discount-price activesss" : "type-discount-price"} onClick={() => this.ChangeTypeDiscount(1)}>
+                                                        <div className={this.state.typeDiscount == 1 ? "type-discount-price activesss" : "type-discount-price"}
+                                                            onClick={() => this.ChangeTypeDiscount(1)}>
                                                             %
                                                         </div>
                                                     </div>
@@ -831,10 +861,13 @@ class PostOrder extends Component {
                                                         class="col-4 button-discount-pos"
                                                         value={this.state.typeDiscount == 0 ? this.state.discount : this.state.beforeDiscount}
                                                     // data-toggle="modal" data-target="#modalDiscount" 
-                                                    >{this.state.typeDiscount == 0 ? this.state.discount : `${this.state.beforeDiscount}%`}</button>
+                                                    >
+                                                        {formatNoD(this.state.discount)}
+                                                    </button>
                                                 </div>
 
                                             </Popover>
+
 
                                             <div className='row item-info'>
                                                 <div className='title-price col-6' style={{ color: "black", fontWeight: "500" }} >KHÁCH PHẢI TRẢ</div>
@@ -846,8 +879,8 @@ class PostOrder extends Component {
 
 
                                             <div className='row' style={{ padding: "10px 0" }}>
-                                                <div className='title-price col-8' style={{ color: "black", fontWeight: "500" }}>Tiền khách đưa</div>
-                                                <input type="text" name="import_price" id="import_prices" class="col-4 text-input-pos" value={formatNoD(removeSignNumber(this.state.priceCustomer))}
+                                                <div className='title-price col-6' style={{ color: "black", fontWeight: "500" }}>Tiền khách đưa</div>
+                                                <input type="text" name="import_price" id="import_prices" class="col-6 text-input-pos" value={formatNoD(removeSignNumber(this.state.priceCustomer))}
                                                     onChange={this.handChange} ></input>
                                             </div>
 
@@ -866,9 +899,13 @@ class PostOrder extends Component {
 
 
                                             <div className='row' style={{ borderTop: "1px solid #80808045", padding: "10px 0" }} >
-                                                <div className='title-price col-6' style={{ color: "black", fontWeight: "500" }}>Tiền thừa trả khách</div>
-                                                <span className='col-6' style={{ textAlign: "end", fontSize: "22px" }}>{formatNoD(exchange)}</span>
+                                                <div className='title-price col-6' style={{ color: exchange < 0 ? "red" : "black", fontWeight: "500" }}>
+                                                    {exchange < 0 ? "Khách còn thiếu" : "Tiền thừa trả khách"}
+                                                </div>
+                                                <span className='col-6' style={{ textAlign: "end", fontSize: "22px" }}>{formatNoD(Math.abs(exchange))}</span>
                                             </div>
+
+
                                             <div class="form-group" style={{ position: "relative" }} >
                                                 <i class='fas fa-pencil-alt' style={{ position: "absolute", top: "11px", left: "6px" }}></i>
                                                 <input class="form-control" rows="5" id="comment" placeholder='Thêm ghi chú'
@@ -946,6 +983,7 @@ const mapStateToProps = (state) => {
     return {
         products: state.productReducers.product.allProduct,
         oneCart: state.posReducers.pos_reducer.oneCart,
+        loadingHandleChangeQuantity:state.posReducers.pos_reducer.loadingHandleChangeQuantity,
         listPertion: state.orderReducers.order_product.listPertion,
         listVoucher: state.orderReducers.order_product.listVoucher,
         inforCustomer: state.posReducers.pos_reducer.inforCustomer,

@@ -13,7 +13,7 @@ class CardProduct extends Component {
             isToggle: false
         }
     }
-    handleInfoProduct = (inventory, id, name, image, price, distributes, maxPrice, minPrice, priceDiscount, quayntity, quantityDistribute,product) => {
+    handleInfoProduct = (inventory, id, name, image, price, distributes, maxPrice, minPrice, priceDiscount, quayntity, quantityDistribute, product) => {
         if (distributes.length > 0) {
             this.setState({ isToggle: true })
             this.props.handleCallbackProduct({
@@ -22,7 +22,7 @@ class CardProduct extends Component {
                 minPriceProduct: minPrice, maxPriceProduct: maxPrice, discountProduct: priceDiscount,
                 quantityProduct: quayntity,
                 quantityProductWithDistribute: quantityDistribute,
-                product:product
+                product: product
             })
         } else {
             this.setState({ isToggle: false })
@@ -35,7 +35,7 @@ class CardProduct extends Component {
                 nameSubDistribute: "",
                 priceProduct: price,
                 stock: quayntity,
-                product:product
+                product: product
             })
         }
 
@@ -59,13 +59,16 @@ class CardProduct extends Component {
                                 data.quantity_in_stock_with_distribute,
                                 data
                             )}>
-                            <div class="card card-product-pos" style={{ border: "1px solid rgb(128 128 128 / 30%)", padding: "0" }}>
-                               
-                               {data.check_inventory &&  <div class="inventory-tag">{findTotalStockPos(data)}</div>}
-                                <img src={data.images.length > 0 ? data.images[0].image_url : Env.IMG_NOT_FOUND_2} className="img-responsive" alt="Image" width="100%" height="100px" style={{ borderRadius: "2%" }} />
+                            <div class="card card-product-pos">
+
+                                {data.check_inventory && <div class="inventory-tag">SL: {findTotalStockPos(data)}</div>}
+                                {data.product_discount && <div class="discount-tag">{data.product_discount.value}%</div>}
+
+                                <img src={data.images.length > 0 ? data.images[0].image_url : Env.IMG_NOT_FOUND_2} className="img-responsive image-product" alt="Image" width="100%" height="100px" />
+                                
                                 <div class="card-body" style={{ padding: ' 0 5px' }}>
                                     <p class="card-title" style={{ margin: '0', overflow: "hidden", whiteSpace: "nowrap", textOverflow: 'ellipsis' }}>{data.name}</p>
-                                    <p class="card-text" style={{ fontSize: "12px", bottom: "37px", fontWeight: "bold", color: "rgb(174, 61, 52)", textAlign: "end" }}>{
+                                    <p class="card-text price">{
                                         data.min_price == data.max_price ? format(Number(data.min_price)) : `${format(Number(data.min_price))}- ${format(Number(data.max_price))}`}</p>
                                 </div>
                             </div>
@@ -82,7 +85,7 @@ class CardProduct extends Component {
         var { products } = this.props
         var listProducts = filter_arr(products.data)
         return (
-            <div className='show-product' style={{ overflow: "hidden", overflowY: "auto" }}>
+            <div className='show-product-pos' style={{ overflow: "hidden", overflowY: "auto" }}>
                 <div className='row'>
                     {this.showProduct(listProducts)}
                 </div>

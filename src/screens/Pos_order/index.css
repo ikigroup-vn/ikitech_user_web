@@ -1,12 +1,13 @@
 .pos-modal {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     color: rgba(0, 0, 0, 0.87);
+    overflow: hidden;
 }
 
 .col-list-pos {
     float: left;
     width: calc(100% - 452px);
-    height: calc(100vh - 50px);
+    height: calc(100vh - 80px);
     background: #fff;
 }
 
@@ -113,29 +114,37 @@
     border: none;
 }
 
+.panel-bottom {
+    flex: 1 1 auto;
+    z-index: 2;
+    /* resizable */
+    padding: 10px 0px 0px 0px;
+
+}
+
 .panel-top {
     flex: 0 0 auto;
     /* only manually resize */
-    height: 275px;
     width: 100%;
     white-space: nowrap;
     color: white;
+    height: calc(100% - 415px);
+}
+
+.controller-top {
+    height: 50px;
+}
+
+.overview-cart {
+    height: calc(100vh - 50px);
 }
 
 .splitter-horizontal {
     flex: 0 0 auto;
     z-index: 2;
-    height: 9px;
-    background: url(https://raw.githubusercontent.com/RickStrahl/jquery-resizable/master/assets/hsizegrip.png) center center no-repeat #e5e5e5;
-    cursor: row-resize;
-}
+    height: 5px;
+    background: #e5e5e5;
 
-.panel-bottom {
-    flex: 1 1 auto;
-    z-index: 2;
-    /* resizable */
-    padding: 10px;
-    min-height: 200px;
 }
 
 
@@ -240,6 +249,22 @@ pre {
     padding: 0 5px;
 }
 
+.discount-tag {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: 25px;
+    height: 30px;
+    color: #f57224;
+    font-size: 12px;
+    font-weight: 400;
+    text-align: center;
+    background-color: #ffe600;
+    padding-top: 2px;
+    clip-path: polygon(0% 0%, 100% 0, 100% 100%, 50% 90%, 0 100%);
+}
+
 .voucher-pos-item {
     position: relative;
     margin: 5p;
@@ -290,12 +315,13 @@ pre {
 
 .text-input-pos {
     height: 28px;
-    width: 100px;
+    width: 150px;
     text-align: right;
     border: 0;
     border-radius: 0;
     border-bottom: 1px solid rgb(128 128 128 / 71%);
-    font-size: 22px;
+    font-size: 28px;
+    font-weight: 400;
 }
 
 .text-input-pos:hover {
@@ -314,4 +340,124 @@ pre {
 
 .button-discount-pos:hover {
     border-bottom: 2px solid rgb(255, 221, 2);
+}
+
+.card-product-pos {
+    border: 1px solid rgba(128, 128, 128, 0.3);
+    padding: 0px;
+    border-radius: 2%;
+    height: 160px;
+}
+
+.card-product-pos:hover {
+    border: 1px solid #dacf57 !important;
+    background-color: #fffef3;
+    border-radius: 2%;
+}
+
+.card-product-pos .price {
+    font-size: 15px;
+    bottom: 37px;
+    font-weight: 500;
+    color: rgb(174, 61, 52);
+    text-align: end;
+}
+
+
+.card-product-pos .image-product {
+    border-radius: 2%;
+    background-color: #fffef3;
+
+}
+
+.show-product-pos {
+    padding: 10px;
+    overflow: hidden auto;
+    height: 360px;
+}
+
+
+.button-handle-choose-detail-ok {
+
+    background: white;
+    border: 1px solid;
+    width: 100%;
+    font-size: 16px;
+    height: 50px;
+    background-color: #ff3945;
+    color: white;
+    border-radius: 0.25em;
+    justify-items: center;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.button-handle-choose-detail-ok:hover {
+    opacity: 0.9;
+}
+
+.distribute-pos {
+    padding: 20px;
+    padding-top: 20px;
+}
+
+.distribute-name-pos {
+    color: #757575;
+    width: 110px;
+    text-transform: capitalize;
+    flex-shrink: 0;
+    align-items: center;
+}
+
+.item-distribute-name {
+    border-radius: 2px;
+    border: 1px solid rgba(0, 0, 0, .09);
+    color: rgba(0, 0, 0, .8);
+    position: relative;
+    background: #fff;
+    padding: 0.25rem 0.75rem;
+    margin: 0 8px 8px 0;
+}
+
+.item-distribute-name:hover {
+    color: #ee4d2d;
+    color: var(--brand-primary-color, #ee4d2d);
+    border-color: #ee4d2d;
+    border-color: var(--brand-primary-color, #ee4d2d);
+}
+
+.distribute-active {
+    color: #ee4d2d;
+    color: var(--brand-primary-color, #ee4d2d);
+    border-color: #ee4d2d;
+    border-color: var(--brand-primary-color, #ee4d2d);
+}
+
+.icon-trash-pos {
+    cursor: pointer;
+    flex: 0 0 auto;
+    color: #111111;
+    padding: 12px;
+    overflow: visible;
+    font-size: 23px;
+    text-align: center;
+    transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+    border-radius: 50%;
+    position: absolute;
+    right: 0;
+    top: 2px;
+}
+
+.icon-trash-pos:hover {
+    background-color: rgba(0, 0, 0, 0.04);
+}
+
+.past-price-pos {
+    font-size: 13px;
+    text-decoration: line-through;
+    color: #757575;
+}
+
+.item-discount-name {
+    color: #757575;
 }

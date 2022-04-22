@@ -4,7 +4,8 @@ var initialState = {
   listPosOrder: [],
   oneCart: [],
   loadingCart: true,
-  inforCustomer:""
+  inforCustomer: "",
+  loadingHandleChangeQuantity: false
 };
 
 export const pos_reducer = (state = initialState, action) => {
@@ -17,12 +18,20 @@ export const pos_reducer = (state = initialState, action) => {
     case Types.FETCH_LIST_POS_ORDER_LOADING:
       newState.loadingCart = true;
       return newState;
+
+    case Types.LOADING_CHANGE_QUANTITY_LINE_ITEM:
+      newState.loadingHandleChangeQuantity = true;
+      return newState;
+    case Types.NONE_CHANGE_QUANTITY_LINE_ITEM:
+      newState.loadingHandleChangeQuantity = false;
+      return newState;
+
     case Types.FETCH_LIST_CART_ITEM:
       newState.oneCart = action.data;
       return newState;
-      case Types.FETCH_INFO_CUSTOMER:
-        newState.inforCustomer = action.data;
-        return newState;
+    case Types.FETCH_INFO_CUSTOMER:
+      newState.inforCustomer = action.data;
+      return newState;
     default:
       return newState;
   }

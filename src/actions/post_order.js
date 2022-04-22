@@ -35,27 +35,18 @@ export const addProductInCart = (store_code, branch_id, id_cart, data) => {
     PosApi
       .addProductInCart(store_code, branch_id, id_cart, data)
       .then((res) => {
-        console.log("res", res)
         dispatch({
-          type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
-        PosApi.fetchInfoOneCart(store_code, branch_id, id_cart).then((res) => {
-          if (res.data.code === 200)
-
-            dispatch({
-              type: Types.FETCH_LIST_CART_ITEM,
-              data: res.data.data,
-            });
-          dispatch({
-            type: Types.ALERT_UID_STATUS,
-            alert: {
-              type: "success",
-              title: "Thành công ",
-              disable: "show",
-              content: res.data.msg,
-            },
-          });
+          type: Types.FETCH_LIST_CART_ITEM,
+          data: res.data.data,
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
         });
       })
       .catch(function (error) {
@@ -234,91 +225,34 @@ export const updateQuantityLineItem = (store_code, branch_id, id_cart, data) => 
 
   return (dispatch) => {
     dispatch({
-      type: Types.SHOW_LOADING,
-      loading: "show"
+      type: Types.LOADING_CHANGE_QUANTITY_LINE_ITEM,
     })
     PosApi
       .updateQuantityLineItem(store_code, branch_id, id_cart, data)
       .then((res) => {
 
-        
-        dispatch({
-          type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
-        PosApi
-          .fetchInfoOneCart(store_code, branch_id, id_cart)
-          .then((res) => {
-            if (res.data.code !== 401)
 
-              dispatch({
-                type: Types.FETCH_LIST_CART_ITEM,
-                data: res.data.data,
-              });
-            dispatch({
-              type: Types.ALERT_UID_STATUS,
-              alert: {
-                type: "success",
-                title: "Thành công ",
-                disable: "show",
-                content: res.data.msg,
-              },
-            });
-          })
-          .catch(function (error) {
-            dispatch({
-              type: Types.SHOW_LOADING,
-              loading: "hide"
-            })
-            dispatch({
-              type: Types.ALERT_UID_STATUS,
-              alert: {
-                type: "danger",
-                title: "Lỗi",
-                disable: "show",
-                content: error.response.data.msg,
-              },
-            });
-          });
+        dispatch({
+          type: Types.NONE_CHANGE_QUANTITY_LINE_ITEM,
+        })
+        dispatch({
+          type: Types.FETCH_LIST_CART_ITEM,
+          data: res.data.data,
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
       })
       .catch(function (error) {
-
-
-        PosApi
-        .fetchInfoOneCart(store_code, branch_id, id_cart)
-        .then((res) => {
-          if (res.data.code !== 401)
-
-            dispatch({
-              type: Types.FETCH_LIST_CART_ITEM,
-              data: res.data.data,
-            });
-          dispatch({
-            type: Types.ALERT_UID_STATUS,
-            alert: {
-              type: "success",
-              title: "Thành công ",
-              disable: "show",
-              content: res.data.msg,
-            },
-          });
+        dispatch({
+          type: Types.NONE_CHANGE_QUANTITY_LINE_ITEM,
         })
-        .catch(function (error) {
-          dispatch({
-            type: Types.SHOW_LOADING,
-            loading: "hide"
-          })
-          dispatch({
-            type: Types.ALERT_UID_STATUS,
-            alert: {
-              type: "danger",
-              title: "Lỗi",
-              disable: "show",
-              content: error.response.data.msg,
-            },
-          });
-        });
-        
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -336,52 +270,32 @@ export const subQuantityProduct = (store_code, branch_id, id_cart, data) => {
   console.log("id_cart", id_cart)
   return (dispatch) => {
     dispatch({
-      type: Types.SHOW_LOADING,
-      loading: "show"
+      type: Types.LOADING_CHANGE_QUANTITY_LINE_ITEM,
     })
     PosApi
       .subQuantityProduct(store_code, branch_id, id_cart, data)
       .then((res) => {
         dispatch({
-          type: Types.SHOW_LOADING,
-          loading: "hide"
+          type: Types.NONE_CHANGE_QUANTITY_LINE_ITEM,
         })
-        PosApi
-          .fetchInfoOneCart(store_code, branch_id, id_cart)
-          .then((res) => {
-            if (res.data.code !== 401)
-
-              dispatch({
-                type: Types.FETCH_LIST_CART_ITEM,
-                data: res.data.data,
-              });
-            dispatch({
-              type: Types.ALERT_UID_STATUS,
-              alert: {
-                type: "success",
-                title: "Thành công ",
-                disable: "show",
-                content: res.data.msg,
-              },
-            });
-          })
-          .catch(function (error) {
-            dispatch({
-              type: Types.SHOW_LOADING,
-              loading: "hide"
-            })
-            dispatch({
-              type: Types.ALERT_UID_STATUS,
-              alert: {
-                type: "danger",
-                title: "Lỗi",
-                disable: "show",
-                content: error.response.data.msg,
-              },
-            });
-          });
+        dispatch({
+          type: Types.FETCH_LIST_CART_ITEM,
+          data: res.data.data,
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
       })
       .catch(function (error) {
+        dispatch({
+          type: Types.NONE_CHANGE_QUANTITY_LINE_ITEM,
+        })
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -409,40 +323,19 @@ export const destroyOneProduct = (store_code, branch_id, id_cart, data) => {
           type: Types.SHOW_LOADING,
           loading: "hide"
         })
-        PosApi
-          .fetchInfoOneCart(store_code, branch_id, id_cart)
-          .then((res) => {
-            if (res.data.code !== 401)
-
-              dispatch({
-                type: Types.FETCH_LIST_CART_ITEM,
-                data: res.data.data,
-              });
-            dispatch({
-              type: Types.ALERT_UID_STATUS,
-              alert: {
-                type: "success",
-                title: "Thành công ",
-                disable: "show",
-                content: res.data.msg,
-              },
-            });
-          })
-          .catch(function (error) {
-            dispatch({
-              type: Types.SHOW_LOADING,
-              loading: "hide"
-            })
-            dispatch({
-              type: Types.ALERT_UID_STATUS,
-              alert: {
-                type: "danger",
-                title: "Lỗi",
-                disable: "show",
-                content: error.response.data.msg,
-              },
-            });
-          });
+        dispatch({
+          type: Types.FETCH_LIST_CART_ITEM,
+          data: res.data.data,
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
       })
       .catch(function (error) {
         dispatch({
@@ -471,10 +364,11 @@ export const updateInfoCart = (store_code, branch_id, id, data) => {
           loading: "hide"
         })
 
-        // dispatch({
-        //   type: Types.FETCH_LIST_CART_ITEM,
-        //   data: res.data.data,
-        // });
+        dispatch({
+          type: Types.FETCH_LIST_CART_ITEM,
+          data: res.data.data,
+        });
+
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -586,26 +480,6 @@ export const fetchVoucher = (store_code, branch_id, id, data) => {
           type: Types.SHOW_LOADING,
           loading: "hide"
         })
-        PosApi
-          .fetchInfoOneCart(store_code, branch_id, id)
-          .then((res) => {
-            if (res.data.code !== 401)
-
-              dispatch({
-                type: Types.FETCH_LIST_CART_ITEM,
-                data: res.data.data,
-              });
-            dispatch({
-              type: Types.ALERT_UID_STATUS,
-              alert: {
-                type: "success",
-                title: "Thành công ",
-                disable: "show",
-                content: res.data.msg,
-              },
-            });
-          })
-
         dispatch({
           type: Types.FETCH_LIST_CART_ITEM,
           data: res.data.data,
