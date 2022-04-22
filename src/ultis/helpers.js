@@ -67,7 +67,7 @@ export const formatStringCharactor = (data) => {
 };
 
 export const isEmpty = (data) => {
-  if (data == null) return false;
+  if (data == null || typeof data == "undefined") return false;
   return data.toString().replace(/ /g, "").length > 0;
 };
 
@@ -170,6 +170,7 @@ export const getDateForChartHour = () => {
   };
 };
 
+
 export const formatNumber = (value) => {
   var _value = value;
   console.log(value);
@@ -184,6 +185,15 @@ export const formatNumber = (value) => {
       .toString()
     : "";
 };
+
+export const getQueryParams = (name) =>{
+  return new URLSearchParams(
+    window ? window.location.search : {}
+  ).get(name);
+}
+
+
+
 
 export const removeSignNumber = (value) => {
   var _value = value;

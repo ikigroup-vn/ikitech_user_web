@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import * as rewardPointAtion from "../../actions/reward_point"
 import { connect } from "react-redux";
+import themeData from "../../ultis/theme_data";
 
 
 class ModalReset extends Component {
@@ -28,8 +29,8 @@ class ModalReset extends Component {
     >
       <div class="modal-dialog" role="document">
         <div class="modal-content">
-          <div class="modal-header" style={{ background: "white" }}>
-            <button
+        <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+              <h4 style={{ color: "white" }}>Thông báo</h4>            <button
               type="button"
               class="close"
               data-dismiss="modal"
@@ -48,7 +49,7 @@ class ModalReset extends Component {
             <div class="modal-body">
               <input type="hidden" name="remove_id_store" />
               <div class="alert-remove"></div>
-              Các cài đặt điểm thưởng sẽ trở lại mặt định. Bạn có muốn tiếp tục?
+              Các cài đặt điểm thưởng sẽ trở lại mặc định. Bạn có muốn tiếp tục?
             </div>
             <div class="modal-footer">
               <button

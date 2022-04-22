@@ -4,6 +4,8 @@ import Topbar from "../../components/Partials/Topbar";
 import Footer from "../../components/Partials/Footer";
 import { Redirect, Link } from "react-router-dom";
 import Form from "../../components/RewardPoint/Form"
+import FormPos from "../../components/RewardPoint/FormPos"
+
 import { connect } from "react-redux";
 import Loading from "../Loading";
 import * as rewardPointAction from "../../actions/reward_point";
@@ -11,7 +13,7 @@ import Alert from "../../components/Partials/Alert";
 import * as Types from "../../constants/ActionType";
 import ModalReset from "../../components/RewardPoint/ModalReset"
 import NotAccess from "../../components/Partials/NotAccess";
-
+import getChannel , {IKITECH , IKIPOS} from "../../ultis/channel";
 class RewardPoint extends Component {
   constructor(props) {
     super(props);
@@ -58,7 +60,7 @@ class RewardPoint extends Component {
                       style={{ display: "flex", justifyContent: "space-between" }}
                     >
                       <h4 className="h4 title_content mb-0 text-gray-800">
-                        Điểm thưởng
+                        Xu thưởng khách hàng
                       </h4>{" "}
 
                     </div>
@@ -67,7 +69,8 @@ class RewardPoint extends Component {
                     <div className="card shadow mb-4">
 
                       <div className="card-body">
-                        <Form rewardPoints={rewardPoints} store_code={store_code} ></Form>
+                        {getChannel() == IKITECH ?    <Form rewardPoints={rewardPoints} store_code={store_code} ></Form> :     <FormPos rewardPoints={rewardPoints} store_code={store_code} ></FormPos>}
+                    
 
                       </div>
                     </div>

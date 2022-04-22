@@ -136,7 +136,7 @@ export const ikipos_menu = [
                     {
                         class: "customer_config_point",
                         display: "hide",
-                        name: "Điểm thưởng",
+                        name: "Xu thưởng",
                         exact: true,
                         to: "/reward_point",
                     },

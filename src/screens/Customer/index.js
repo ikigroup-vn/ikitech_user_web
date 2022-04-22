@@ -11,15 +11,39 @@ import * as customerAction from "../../actions/customer";
 import Chat from "../../components/Chat";
 import * as Env from "../../ultis/default";
 import NotAccess from "../../components/Partials/NotAccess";
-
+import {getQueryParams} from "../../ultis/helpers"
+import ModalCreate from "../../components/Customer/ModalCreate"
+import getChannel , {IKIPOS ,IKITECH} from "../../ultis/channel";
+import * as placeAction from "../../actions/place";
+import ModalEdit from "../../components/Customer/ModalEdit"
 class Customer extends Component {
   constructor(props) {
     super(props);
     this.state = {
       showChatBox: "hide",
       searchValue: "",
+      paginate : 1,
+      openModal : false,
+      openModalEdit : false,
+
+      id_customer : "",
+      modal : ""
     };
   }
+
+  openModal = () =>{
+    this.setState({openModal : true})
+  }
+  resetModal = () =>{
+    this.setState({openModal : false})
+
+  }
+  resetModalEdit = () =>{
+    this.setState({openModalEdit : false})
+
+  }
+
+
 
   handleShowChatBox = (customerId, status) => {
     this.setState({
@@ -55,13 +79,31 @@ class Customer extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchAllCustomer(this.props.match.params.store_code);
+    var pag = getQueryParams("pag") || 1
+    
+    this.props.fetchAllCustomer(this.props.match.params.store_code , pag);
+    this.props.fetchPlaceProvince()
+
   }
+
+  handleSetIdCustomer = (id) => {
+    this.setState({
+        id_supplier: id
+    })
+}
+
+handleSetInfor = (item) => {
+  this.setState({ modal: item })
+}
+
   closeChatBox = (status) => {
     this.setState({
       showChatBox: status,
     });
   };
+  getPaginate = (num) =>{
+    this.setState({paginate : num})
+  }
   render() {
     var { customer, chat, customers } = this.props;
     console.log(customer, customers);
@@ -80,11 +122,16 @@ class Customer extends Component {
         : customer.name;
 
     var { store_code } = this.props.match.params;
-    var { showChatBox, isShow, chat_allow, searchValue } = this.state;
+    var { showChatBox, isShow, chat_allow, searchValue , paginate , openModal , modal , openModalEdit } = this.state;
+    var { wards, district, province } = this.props
+
     if (this.props.auth) {
       return (
         <div id="wrapper">
           <Sidebar store_code={store_code} />
+          <ModalCreate resetModal = {this.resetModal} openModal = {openModal} store_code={store_code} wards={wards} district={district} province={province} />
+          <ModalEdit openModalEdit= {openModalEdit} resetModal = {this.resetModalEdit} store_code={store_code} wards={wards} district={district} province={province} modal={modal} />
+
           <div className="col-10 col-10-wrapper">
             <div id="content-wrapper" className="d-flex flex-column">
               <div id="content">
@@ -102,6 +149,24 @@ class Customer extends Component {
                       <h4 className="h4 title_content mb-0 text-gray-800">
                        Danh sách khách hàng
                       </h4>{" "}
+                      {getChannel() == "IKIPOS" && <a
+                        data-toggle="modal"
+                        data-target="#modalCreateCustomer"
+                        class="btn btn-info btn-icon-split btn-sm"
+                        style={{ height: "fit-content", width: "fit-content" }}
+                      >
+                        <span class="icon text-white-50">
+                          <i class="fas fa-plus"></i>
+                        </span>
+                        <span
+                          style={{
+                            color: "white",
+                          }}
+                          class={`text `}
+                        >
+                          Thêm khách hàng
+                        </span>
+                      </a>}
                     </div>
 
                     <br></br>
@@ -131,6 +196,8 @@ class Customer extends Component {
                       </div>
                       <div className="card-body">
                         <Table
+                    handleSetInfor = {this.handleSetInfor}
+                        paginate = {paginate}
                           chat_allow={chat_allow}
                           showChatBox={showChatBox}
                           handleShowChatBox={this.handleShowChatBox}
@@ -140,6 +207,8 @@ class Customer extends Component {
                         />
 
                         <Pagination
+                        getPaginate = {this.getPaginate}
+
                           store_code={store_code}
                           customers={customers}
                         />
@@ -182,6 +251,9 @@ const mapStateToProps = (state) => {
     customer: state.customerReducers.customer.customerID,
     chat: state.chatReducers.chat.chatID,
     permission: state.authReducers.permission.data,
+    wards: state.placeReducers.wards,
+    province: state.placeReducers.province,
+    district: state.placeReducers.district
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -195,6 +267,10 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchChatId: (store_code, customerId) => {
       dispatch(customerAction.fetchChatId(store_code, customerId));
     },
+    fetchPlaceProvince: () => {
+      dispatch(placeAction.fetchPlaceProvince());
+  },
+    
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Customer);

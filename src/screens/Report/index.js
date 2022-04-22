@@ -7,6 +7,8 @@ import ChartTopTen from "../../components/Report/ChartTopTen";
 
 
 import General from "../../components/Report/General";
+import GeneralPos from "../../components/Report/GeneralPos";
+
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import Loading from "../Loading";
@@ -17,7 +19,7 @@ import * as helper from "../../ultis/helpers"
 import Alert from "../../components/Partials/Alert";
 import * as Types from "../../constants/ActionType";
 import NotAccess from "../../components/Partials/NotAccess";
-
+import getChannel , {IKIPOS , IKITECH} from "../../ultis/channel"
 class Report extends Component {
 
   constructor(props) {
@@ -105,11 +107,16 @@ class Report extends Component {
                           </div>
                           <div class="card-body">
 
-                            <General
+                              {getChannel() == IKITECH && <General
                               store_code={store_code}
                               numDiscount={numDiscount}
                               collaborators={collaborators}
-                              store={this.props.store} />
+                              store={this.props.store} />}
+                                            {getChannel() == IKIPOS && <GeneralPos
+                               badges={badges}
+                               store_code={store_code}
+                            
+                                />}
                           </div>
                         </div>
 
