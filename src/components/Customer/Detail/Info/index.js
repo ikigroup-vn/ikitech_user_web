@@ -5,210 +5,350 @@ import Loading from "../../../../screens/Loading";
 import * as customerAction from "../../../../actions/customer";
 import * as Env from "../../../../ultis/default";
 import moment from "moment";
-import {getQueryParams} from "../../../../ultis/helpers"
-
+import { getQueryParams } from "../../../../ultis/helpers"
+import * as placeAction from "../../../../actions/place";
+import { shallowEqual } from '../../../../ultis/shallowEqual';
+import history from "../../../../history";
 class Customer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      id: "",
-      txtUserName: "",
-      txtAreaCode: "",
-      txtPhone: "",
-      txtEmail: "",
-      txtName: "",
-      txtDateOfBirth: "",
-      txtAvarta: "",
-      txtPoints: "",
-      txtSex: "",
-      txtIsCollaborator: "",
-      txtDefault_address: "",
-      showChatBox: "hide",
-      openModal : false
-    };
+      provinceName: "",
+      districtName: "",
+      wardsName: "",
+      txtAddress_detail: "",
+      txtCountry: 1,
+      txtProvince: "",
+      txtDistrict: "",
+      txtWards: "",
+      isLoaded: false,
+      goFirst : true,
+      listWards: [],
+      listDistrict: [],
+      txtName_branch: "",
+      txtPhone_branch: "",
+      txtEmail_branch: "",
+      idCustomer: ""
+    }
   }
+  onChange = (e) => {
+    var target = e.target;
+    var name = target.name;
+    var value = target.value;
 
+    this.setState({
+      [name]: value,
+    });
+  };
 
+  componentWillMount()
+  {
+    if (typeof this.props.customer.id != "undefined") {
+      
+      this.setState({
+        txtName_branch: this.props.customer.name,
+        txtPhone_branch: this.props.customer.phone_number,
+        txtEmail_branch: this.props.customer.email,
+        txtProvince: this.props.customer.province,
+        txtDistrict: this.props.customer.district,
+        txtWards: this.props.customer.wards,
+        txtAddress_detail: this.props.customer.address_detail,
+        idCustomer: this.props.customer.id,
+        goFirst : false
+      })
+    }
 
+    if (this.state.isLoaded === true) {
+      this.setState({
+        listWards: this.props.wards,
+        listDistrict: this.props.district,
+        isLoaded: false
+      })
+    }
 
+    if (this.props.wards) {
+      this.setState({
+        listWards: this.props.wards,
+        listDistrict: this.props.district
+      })
+    }
+
+  }
 
 
   componentDidMount() {
     var { store_code, customerId } = this.props;
     this.props.fetchCustomerId(store_code, customerId);
-    this.props.fetchChatId(store_code, customerId);
+    this.props.fetchPlaceProvince()
+
   }
 
-  componentWillReceiveProps(nextProps) {
-    var { customer } = nextProps;
-    console.log(customer.date_of_birth);
-    this.setState({
-      id: customer.id,
-      txtUserName: customer.username,
-      txtAreaCode: customer.area_code,
-      txtPhone: customer.phone_number,
-      txtEmail: customer.email,
-      txtName: customer.name,
-      txtDateOfBirth:
-        customer.date_of_birth != null && customer.date_of_birth != ""
-          ? moment(customer.date_of_birth, "YYYY-MM-DD HH:mm:ss").format(
-              "DD-MM-YYYY"
-            )
-          : null,
-      txtAvarta: customer.avatar_image,
-      txtPoints: customer.points,
-      txtSex: customer.sex,
-      txtIsCollaborator: customer.is_collaborator,
-      txtDefault_address: customer.default_address,
-    });
-    if (
-      this.state.isLoading != true &&
-      typeof nextProps.permission.product_list != "undefined"
-    ) {
-      var permissions = nextProps.permission;
-      var chat_allow = permissions.chat_allow;
 
-      var isShow = permissions.customer_list;
-      this.setState({ isLoading: true, isShow, chat_allow });
+
+
+  onChangeWards = (e) => {
+    this.setState({ txtWards: e.target.value, isLoaded: true })
+    var indexWards = this.props.wards.map(e => e.id).indexOf(parseInt(e.target.value))
+    if (indexWards !== -1) {
+      var nameWards = this.props.wards[indexWards].name
+      this.setState({ wardsName: nameWards })
+    }
+  }
+  goBack = () => {
+    var { store_code } = this.props;
+    history.replace(`/customer/${store_code}/?pag=${getQueryParams("pag")}`);
+  };
+  onChangeProvince = (e) => {
+    this.setState({ txtProvince: e.target.value, isLoaded: true })
+    this.props.fetchPlaceDistrict(e.target.value);
+    var indexProvince = this.props.province.map(e => e.id).indexOf(parseInt(e.target.value))
+    if (indexProvince !== -1) {
+      var nameProvince = this.props.province[indexProvince].name
+      this.setState({ provinceName: nameProvince })
+    }
+  }
+  onChangeDistrict = (e) => {
+    this.setState({ txtDistrict: e.target.value })
+    this.props.fetchPlaceWards(e.target.value)
+    var indexDistrict = this.props.district.map(e => e.id).indexOf(parseInt(e.target.value))
+    if (indexDistrict !== -1) {
+      var nameDistrict = this.props.district[indexDistrict].name
+      this.setState({ districtName: nameDistrict })
     }
   }
 
+  componentWillReceiveProps(nextProps, nextState) {
+    if (!shallowEqual(nextProps.customer, this.props.customer)) {
+      this.props.fetchPlaceDistrict(nextProps.customer.province);
+      this.props.fetchPlaceWards(nextProps.customer.district)
+      this.setState({
+        txtName_branch: nextProps.customer.name,
+        txtPhone_branch: nextProps.customer.phone_number,
+        txtEmail_branch: nextProps.customer.email,
+        txtProvince: nextProps.customer.province,
+        txtDistrict: nextProps.customer.district,
+        txtWards: nextProps.customer.wards,
+        txtAddress_detail: nextProps.customer.address_detail,
+        idCustomer: nextProps.customer.id,
+        goFirst : false
+      })
+    }
+
+    if (nextState.isLoaded === true) {
+      this.setState({
+        listWards: nextProps.wards,
+        listDistrict: nextProps.district,
+        isLoaded: false
+      })
+    }
+
+    if (!shallowEqual(nextProps.wards, this.props.wards) || !shallowEqual(this.props.district, nextProps.district)) {
+      this.setState({
+        listWards: nextProps.wards,
+        listDistrict: nextProps.district
+      })
+    }
+
+
+ 
+  }
+  handleOnClick = (e) => {
+    e.preventDefault()
+    var { txtAddress_detail, txtDistrict, txtProvince, txtWards, txtName_branch, txtPhone_branch, txtEmail_branch, idCustomer } = this.state
+    const { store_code } = this.props
+    const Formdata = {
+      name: txtName_branch,
+      phone_number: txtPhone_branch,
+      email: txtEmail_branch,
+      province: txtProvince,
+      district: txtDistrict,
+      wards: txtWards,
+      address_detail: txtAddress_detail,
+
+    }
+    console.log("Formdata", Formdata)
+    this.props.editCustomer(store_code, idCustomer, Formdata);
+
+
+  };
+  showProvince = (places) => {
+    var result = null;
+    if (places.length > 0) {
+      result = places.map((data, index) => {
+
+        return (
+          <option value={data.id}>{data.name}</option>
+        )
+
+      })
+    }
+    return result
+
+  }
+  showWards = (places) => {
+    var result = null;
+    if (places.length > 0) {
+      result = places.map((data, index) => {
+
+        return (
+          <option value={data.id}>{data.name}</option>
+        )
+
+      })
+    }
+    return result
+
+  }
+
+  
   goBack = () => {
-    var { history } = this.props;
     var { store_code } = this.props;
 
  
     history.replace(`/customer/${store_code}/?pag=${getQueryParams("pag")}`);
   };
 
-  closeChatBox = () => {
-    this.setState({
-      showChatBox: "show",
-    });
-  };
-  render() {
-    var { store_code } = this.props;
-    var { showChatBox, isShow, chat_allow } = this.state;
-    var { chat } = this.props;
+  showDistrict = (places) => {
+    var result = null;
+    if (places.length > 0) {
+      result = places.map((data, index) => {
 
-    var {
-      id,
-      txtPhone,
-      txtEmail,
-      txtName,
-      txtDateOfBirth,
-      txtAvarta,
-      txtPoints,
-      txtSex,
-      txtIsCollaborator,
-      txtDefault_address,
-    } = this.state;
-    var txtAvarta =
-      txtAvarta == null || txtAvarta == "" ? Env.IMG_NOT_FOUND : txtAvarta;
+        return (
+          <option value={data.id}>{data.name}</option>
+        )
 
-    var txtDateOfBirth =
-      txtDateOfBirth == null || txtDateOfBirth == ""
-        ? "Chưa cập nhật"
-        : txtDateOfBirth;
-    var txtSex = txtSex == null || txtSex == "" ? "Trống" : txtSex;
-
-    var txtIsCollaborator =
-      txtIsCollaborator == null || txtIsCollaborator == "" ? "Không" : "Có";
-    var txtSex = txtSex == 1 ? "Nam" : txtSex == 2 ? "Nữ" : "Khác";
-    var address_default = "";
-    if (typeof txtDefault_address === "object" && txtDefault_address !== null) {
-      if (
-        txtDefault_address.address_detail !== null &&
-        txtDefault_address.address_detail !== ""
-      ) {
-        address_default =
-          address_default + txtDefault_address.address_detail + ", ";
-      }
-      if (
-        txtDefault_address.wards_name !== null &&
-        txtDefault_address.wards_name !== ""
-      ) {
-        address_default =
-          address_default + txtDefault_address.wards_name + ", ";
-      }
-      if (
-        txtDefault_address.district_name !== null &&
-        txtDefault_address.district_name !== ""
-      ) {
-        address_default =
-          address_default + txtDefault_address.district_name + ", ";
-      }
-      if (
-        txtDefault_address.province_name !== null &&
-        txtDefault_address.province_name !== ""
-      ) {
-        address_default = address_default + txtDefault_address.province_name;
-      }
+      })
     }
-    if (this.props.auth) {
-      return (
-        <div className="card-body">
-        <table class="table table-bordered table-condensed table-hovered">
-          <tbody>
-            <tr>
-              <th>Ảnh đại diện</th>
-              <td>
-                <img
-                  src={`${txtAvarta}`}
-                  width="100px"
-                  height="100px"
-                  class="img-responsive"
-                  alt="Image"
-                />
-              </td>
-            </tr>
+    return result
 
-            <tr>
-              <th>Tên người dùng</th>
-              <td>{txtName}</td>
-            </tr>
+  }
+  render() {
+    var { province } = this.props
+    var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards } = this.state;
+    var { txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state;
+    return (
+      <form role="form" method="post">
+        <div class="box-body">
 
-            <tr>
-              <th>Số điện thoại</th>
-              <td>{txtPhone}</td>
-            </tr>
-            <tr>
-              <th>Email</th>
-              <td>{txtEmail}</td>
-            </tr>
-         
-          
-            <tr>
-              <th>Địa chỉ</th>
-              <td>{address_default}</td>
-            </tr>
-            <tr>
-              <th>Điểm</th>
-              <td>{txtPoints || 0}</td>
-            </tr>
-         
-         
-          </tbody>
-        </table>
+       
+          <div class="form-group">
+            <label for="product_name">Tên khách hàng</label>
+            <input
+              type="text"
+              class="form-control"
+              id="txtName_branch"
+              placeholder="Nhập tên khách hàng"
+              autocomplete="off"
+              value={txtName_branch || ""}
+              onChange={this.onChange}
+              name="txtName_branch"
+            />
+          </div>
+          <div class="form-group">
+            <label for="product_name">Số điện thoại</label>
+            <input
+              type="text"
+              class="form-control"
+              id="txtPhone_branch"
+              placeholder="Nhập số điện thoại"
+              autocomplete="off"
+              value={txtPhone_branch || ""}
+              onChange={this.onChange}
+              name="txtPhone_branch"
+            />
+          </div>
+          <div class="form-group">
+            <label for="product_name">Email</label>
+            <input
+              type="text"
+              class="form-control"
+              id="txtEmail_branch"
+              placeholder="Nhập email"
+              autocomplete="off"
+              value={txtEmail_branch || ""}
+              onChange={this.onChange}
+              name="txtEmail_branch"
+            />
+          </div>
+        </div>
+          <div class="form-group">
+            <label for="product_name">Địa chỉ chi tiết</label>
+            <input
+              type="text"
+              class="form-control"
+              id="txtAddress_detail"
+              placeholder="Nhập chi tiết địa chỉ"
+              autocomplete="off"
+              value={txtAddress_detail || ""}
+              onChange={this.onChange}
+              name="txtAddress_detail"
+            />
+          </div>
+          <div class="form-group">
+            <label for="product_name">Tỉnh/thành phố </label>
+
+            <select
+              id="input"
+              class="form-control"
+              value={txtProvince || ""}
+              onChange={this.onChangeProvince}
+              name="txtProvince"
+            >
+              <option value="">-- Chọn tỉnh/thành phố --</option>
+              {this.showProvince(province)}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="product_name">Quận/huyện</label>
+
+            <select
+              id="input"
+              class="form-control"
+              value={txtDistrict || ""}
+              onChange={this.onChangeDistrict}
+              name="txtDistrict"
+            >
+              <option value="">-- Chọn quận/huyện --</option>
+              {this.showDistrict(listDistrict)}
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="product_name">Phường/xã</label>
+
+            <select
+              id="input"
+              class="form-control"
+              value={txtWards || ""}
+              onChange={this.onChangeWards}
+              name="txtWards"
+            >
+              <option value="">-- Chọn phường/xã --</option>
+              {this.showWards(listWards)}
+
+            </select>
+          </div>
 
         <div class="box-footer">
-          <button
-          style = {{marginTop : "10px"}}
-            onClick={this.goBack}
-            type="button"
-            class="btn btn-primary btn-sm"
-          >
-            <i class="fa fa-arrow-left"></i>
-            Trở về
+          <button onClick={this.handleOnClick}  class="btn btn-info btn-icon-split btn-sm">
+            <span class="icon text-white-50">
+              <i class="fas fa-save"></i>
+            </span>
+            <span class="text">Lưu</span>
           </button>
+          <a
+            style={{ marginLeft: "10px" }}
+            onClick={this.goBack}
+            class="btn btn-warning btn-icon-split  btn-sm"
+          >
+            <span class="icon text-white-50">
+              <i class="fas fa-arrow-left"></i>
+            </span>
+            <span class="text"> Trở về</span>
+          </a>
         </div>
-      </div>
-      );
-    } else if (this.props.auth === false) {
-      return <Redirect to="/login" />;
-    } else {
-      return <Loading />;
-    }
+      </form>
+    );
+
   }
 }
 
@@ -219,6 +359,9 @@ const mapStateToProps = (state) => {
     state,
     chat: state.chatReducers.chat.chatID,
     permission: state.authReducers.permission.data,
+    wards: state.placeReducers.wards,
+    province: state.placeReducers.province,
+    district: state.placeReducers.district
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -226,8 +369,20 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchCustomerId: (store_code, customerId) => {
       dispatch(customerAction.fetchCustomerId(store_code, customerId));
     },
-    fetchChatId: (store_code, customerId) => {
-      dispatch(customerAction.fetchChatId(store_code, customerId));
+    editCustomer: (store_code, id, form, funcModal) => {
+      dispatch(customerAction.editCustomer(store_code, id, form, funcModal));
+    },
+    fetchPlaceDistrict: (id) => {
+      dispatch(placeAction.fetchPlaceDistrict(id));
+    },
+    fetchPlaceWards: (id) => {
+      dispatch(placeAction.fetchPlaceWards(id));
+    },
+    fetchPlaceDistrict_Wards: (id) => {
+      dispatch(placeAction.fetchPlaceDistrict_Wards(id));
+    },
+    fetchPlaceProvince: () => {
+      dispatch(placeAction.fetchPlaceProvince());
     },
   };
 };

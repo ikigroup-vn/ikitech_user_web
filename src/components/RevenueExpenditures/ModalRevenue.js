@@ -94,7 +94,11 @@ class ModalRevenue extends Component {
 
   componentDidMount() {
     var options1 = [];
+    if(this.props.customer)
+    {
+      this.setState({recipient_group : this.state.listRecipientGroup[0] , recipient_references_id : {value : this.props.customer.id , label: this.props.customer.name}  })
 
+    }
     var staff = [...this.props.staff];
 
     if (staff.length > 0) {
@@ -152,6 +156,7 @@ class ModalRevenue extends Component {
         this.setState({ listStaff: options1 });
       }
     }
+
   }
   onChangeSelect1 = (selectValue) => {
     this.setState({ payment_method: selectValue });
@@ -287,8 +292,16 @@ class ModalRevenue extends Component {
     var recipientReferencesIdValue = recipient_references_id?.value
       ? recipient_references_id?.value
       : null;
-    var params = `&search=${this.props.searchValue}&limit=${this.props.limit}&date_from=${this.props.datePrime.from}&date_to=${this.props.datePrime.to}`;
+      if(this.props.notDate == true)
+      {
+        var params = `&recipient_group=0&recipient_references_id=${this.props.customer.id}`;
+      }
+      else
+      {
+        var params = `&search=${this.props.searchValue}&limit=${this.props.limit}&date_from=${this.props.datePrime.from}&date_to=${this.props.datePrime.to}`;
 
+      }
+  
     this.props.createRevenueExpenditures(
       this.props.store_code,
       this.props.branch_id,
@@ -302,7 +315,10 @@ class ModalRevenue extends Component {
         allow_accounting,
         description,
       },
-      params
+      params , function()
+      {
+        window.$('.modal').modal('hide')
+      }
     );
   };
 
@@ -323,6 +339,11 @@ class ModalRevenue extends Component {
       listRecipientGroup,
     } = this.state;
 
+
+    console.log(   recipient_group,
+      recipient_references_id,
+      listRecipientGroup,
+      )
     return (
       <div
         class="modal fade"
@@ -544,13 +565,15 @@ const mapDispatchToProps = (dispatch, props) => {
     showError: (error) => {
       dispatch(error);
     },
-    createRevenueExpenditures: (id, branch_id, data, params) => {
+    createRevenueExpenditures: (id, branch_id, data, params , funcModal ,  getForId = true) => {
       dispatch(
         revenueExpendituresAction.createRevenueExpenditures(
           id,
           branch_id,
           data,
-          params
+          params,
+          funcModal,
+          getForId
         )
       );
     },

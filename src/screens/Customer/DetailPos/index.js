@@ -58,7 +58,7 @@ class DetailPos extends Component {
                       >
                         <TabList>
                             <Tab>
-                              <i class="fa fa-cogs"></i>
+                              <i class="fa fa-user"></i>
                               <span style={{ fontSize: "0.8rem" }}>
                                 Thông tin KH
                               </span>
@@ -70,7 +70,7 @@ class DetailPos extends Component {
                               </span>
                             </Tab>
                             <Tab>
-                              <i class="fa fa-cogs"></i>
+                              <i class="fa fa-list"></i>
                               <span style={{ fontSize: "0.8rem" }}>
                                 Lịch sử mua hàng
                               </span>
@@ -85,12 +85,13 @@ class DetailPos extends Component {
                             />
                           </TabPanel>
                           <TabPanel>
-                            <OrderHistory
+                         
+                              <CustomerDebt
                               store_code={store_code}
                             />
                           </TabPanel>
                           <TabPanel>
-                            <CustomerDebt
+                          <OrderHistory
                               store_code={store_code}
                             />
                           </TabPanel>

@@ -25,13 +25,7 @@ class Footer extends Component {
     }
 
 
-    destroyBanner = (e, id, title) => {
-        this.setState({ modalremove: { title: "banner", id: id, _title: title } });
-    }
 
-    updateBanner = (e, id, title, img) => {
-        this.setState({ modalupdate: { title: "banner", id: id, _title: title, image_url: img } });
-    }
     showBills = (listBills) => {
         var result = null;
         var {store_code} = this.props
@@ -42,9 +36,9 @@ class Footer extends Component {
             result = listBills.map((bill, index) => {
 
                 return (
-                    <tr>
+                    <tr style={{cursor : "pointer"}}>
                         <td>{index+1}</td>
-                        <td><Link href={`/order/detail/${store_code}/${bill.order_code}`} >{bill.order_code}</Link></td>
+                        <td><Link to={`/order/detail/${store_code}/${bill.order_code}`} >{bill.order_code}</Link></td>
 
                         <td>
                             {formatNoD(bill.total_final)}
@@ -67,33 +61,14 @@ class Footer extends Component {
         return result;
     };
 
-    onSave = (e) => {
-        e.preventDefault();
-        var { store_code } = this.props
-        var theme = this.state
-        var form = {
 
-            carousel_app_images: "",
-        }
-        this.props.updateTheme(store_code, form);
-    }
     render() {
         var { store_code, bills } = this.props
         var listBills = bills.data
         return (
             <div className="support">
-                <a
-                    style={{ float: "right" }}
-
-                    data-toggle="modal" data-target="#createModal"
-                    class="btn btn-info btn-icon-split btn-sm"
-                >
-                    <span class="icon text-white-50">
-                        <i class="fas fa-plus"></i>
-                    </span>
-                    <span class="text">Thêm Banner</span>
-                </a>
-                <form role="form" onSubmit={this.onSave} >
+          
+                <form role="form" >
 
                     <div class="box-body">
                         <div style={{
@@ -108,7 +83,7 @@ class Footer extends Component {
 
 
                         <div className="form-group">
-                            <label htmlFor="name">Danh sách lịch sử</label>
+                            <label htmlFor="name">Danh sách</label>
 
                             <div class="table-responsive">
                                 <table class="table table-hover table-border">
@@ -116,7 +91,7 @@ class Footer extends Component {
                                         <tr>
                                             <th>STT</th>
                                             <th>Mã đơn</th>
-                                            <th>Giá</th>
+                                            <th>Số tiền</th>
                                             <th>Trạng thái</th>
                                             <th>Ngày tạo</th>
                                         </tr>
