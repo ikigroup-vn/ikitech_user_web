@@ -18,3 +18,9 @@ export const fetchAllCustomer = (
 export const fetchCustomerId = (store_code, blogId) => {
   return callApi(`/store/${store_code}/customers/${blogId}`, "get", null);
 };
+export const createCustomer = (store_code, data) => {
+  return callApi(`/store/${store_code}/customers`, "post", data);
+};
+export const editCustomer = (store_code, id, data) => {
+  return callApi(`/store/${store_code}/customers/${id}`, "put", data);
+};

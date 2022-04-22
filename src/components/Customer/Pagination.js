@@ -13,6 +13,7 @@ class Pagination extends Component {
   passPagination = (page) => {
     console.log("page in customer", page);
     this.props.fetchAllCustomer(this.props.store_code, page);
+    this.props.getPaginate(page)
   };
 
   showData = (links) => {

@@ -64,3 +64,149 @@ export const fetchCustomerId = (store_code, customerId) => {
     });
   };
 };
+
+export const createCustomer = (store_code,id , funcModal = null) => {
+
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    customerApi
+      .createCustomer(store_code,id)
+      .then((res) => {
+        if(res.data.success && funcModal != null)
+        {
+          console.log("da vao r")
+          funcModal()
+        }
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading : "hide"
+        })
+        customerApi
+          .fetchAllCustomer(store_code)
+          .then((res) => {
+            if(res.data.code !== 401)
+
+            dispatch({
+              type: Types.FETCH_ALL_CUSTOMER,
+              data: res.data.data,
+            });
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "success",
+                title: "Thành công ",
+                disable: "show",
+                content: res.data.msg,
+              },
+            });
+          })
+          .catch(function (error) {
+            dispatch({
+              type: Types.SHOW_LOADING,
+              loading: "hide"
+            })
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "danger",
+                title: "Lỗi",
+                disable: "show",
+                content: error.response.data.msg,
+              },
+            });
+          });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide"
+        })
+    
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error.response.data.msg,
+          },
+        });
+      });
+  };
+};
+
+export const editCustomer = (store_code,id,data , funcModal = null) => {
+
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    customerApi
+      .editCustomer(store_code,id,data)
+      .then((res) => {
+        if(res.data.success && funcModal != null)
+        {
+          console.log("da vao r")
+          funcModal()
+        }
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading : "hide"
+        })
+        customerApi
+          .fetchAllCustomer(store_code)
+          .then((res) => {
+            if(res.data.code !== 401)
+
+            dispatch({
+              type: Types.FETCH_ALL_CUSTOMER,
+              data: res.data.data,
+            });
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "success",
+                title: "Thành công ",
+                disable: "show",
+                content: res.data.msg,
+              },
+            });
+          })
+          .catch(function (error) {
+            dispatch({
+              type: Types.SHOW_LOADING,
+              loading: "hide"
+            })
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "danger",
+                title: "Lỗi",
+                disable: "show",
+                content: error.response.data.msg,
+              },
+            });
+          });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide"
+        })
+    
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error.response.data.msg,
+          },
+        });
+      });
+  };
+};

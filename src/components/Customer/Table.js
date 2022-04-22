@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -8,9 +9,12 @@ class Table extends Component {
   showChatBox = (customerId, status) => {
     this.props.handleShowChatBox(customerId, status);
   };
+  handleSetInfor = (item) => {
+    this.props.handleSetInfor(item)
+  }
 
   showData = (customer) => {
-    var { store_code } = this.props;
+    var { store_code, paginate } = this.props;
     var result = null;
     if (customer.length > 0) {
       var { chat_allow } = this.props;
@@ -22,34 +26,46 @@ class Table extends Component {
 
             <td>{data.name}</td>
             <td>{data.points || 0}</td>
-
-            <td>
+            {getChannel() == IKITECH && <td>
               {data.is_collaborator == null ||
-              data.is_collaborator == "" ||
-              data.is_collaborator == false
+                data.is_collaborator == "" ||
+                data.is_collaborator == false
                 ? "Không"
                 : "Có"}
-            </td>
+            </td>}
+
+
             <td>{data.phone_number}</td>
 
             <td>{data.email == null ? "Chưa cập nhật" : data.email}</td>
 
             <td className="btn-voucher">
               <Link
-                to={`/customer/detail/${store_code}/${data.id}`}
+                to={`/customer/detail/${store_code}/${data.id}?pag=${paginate}`}
                 class="btn btn-success btn-sm"
               >
                 <i class="fa fa-eye"></i> Xem
               </Link>
+              {getChannel() == IKITECH ? <button
+                style={{ marginLeft: "10px" }}
 
-              <button
                 onClick={() => this.showChatBox(data.id, "show")}
-                class={`btn btn-primary btn-sm ${
-                  chat_allow == true ? "show" : "hide"
-                }`}
+                class={`btn btn-primary btn-sm ${chat_allow == true ? "show" : "hide"
+                  }`}
               >
                 <i class="fa fa-comment-alt"></i> Chat
-              </button>
+              </button> : <button
+                data-toggle="modal"
+                data-target="#modalEditCustomer"
+                onClick={() => this.handleSetInfor(data)}
+
+                style={{ marginLeft: "10px" }}
+                class={`btn btn-primary btn-sm ${chat_allow == true ? "show" : "hide"
+                  }`}
+              >
+                <i class="fa fa-edit"></i> Sửa
+              </button>}
+
             </td>
           </tr>
         );
@@ -77,8 +93,9 @@ class Table extends Component {
             <tr>
               <th>STT</th>
               <th>Họ tên</th>
-              <th>Điểm</th>
-              <th>Cộng tác viên</th>
+              <th>Xu</th>
+              {getChannel() == IKITECH && <th>Cộng tác viên</th>}
+
               <th>Số điện thoại</th>
               <th>Gmail</th>
               <th>Hành động</th>
