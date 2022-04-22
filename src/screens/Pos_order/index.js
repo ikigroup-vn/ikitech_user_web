@@ -983,7 +983,7 @@ const mapStateToProps = (state) => {
     return {
         products: state.productReducers.product.allProduct,
         oneCart: state.posReducers.pos_reducer.oneCart,
-        loadingHandleChangeQuantity:state.posReducers.pos_reducer.loadingHandleChangeQuantity,
+        loadingHandleChangeQuantity: state.posReducers.pos_reducer.loadingHandleChangeQuantity,
         listPertion: state.orderReducers.order_product.listPertion,
         listVoucher: state.orderReducers.order_product.listVoucher,
         inforCustomer: state.posReducers.pos_reducer.inforCustomer,

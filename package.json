@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@atlaskit/select": "^15.2.11",
     "@ckeditor/ckeditor5-build-classic": "^18.0.0",
     "@ckeditor/ckeditor5-build-decoupled-document": "^20.0.0",
     "@ckeditor/ckeditor5-essentials": "^20.0.0",

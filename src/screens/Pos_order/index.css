@@ -11,6 +11,11 @@
     background: #fff;
 }
 
+.group-controller-first {
+    width: calc(100% - 436px);
+    display: flex;
+}
+
 .row-payman {
     height: calc(100vh - 50px);
     display: flex;
@@ -216,7 +221,7 @@ pre {
 }
 
 .first-list-top-cart {
-    width: 350px;
+    width: 550px;
     display: flex;
     align-content: center;
     flex-wrap: nowrap;
@@ -461,3 +466,4 @@ pre {
 .item-discount-name {
     color: #757575;
 }
+
