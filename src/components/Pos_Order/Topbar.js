@@ -12,9 +12,12 @@ import * as productApi from "../../data/remote/product";
 import ModalBranch from './ModalBranch'
 import ModalKeyboard from './ModalKeyboard'
 import ModalDelete from './ModalDelete'
-import AtlaskitSelect from "@atlaskit/select";
+import { filter_arr, format } from '../../ultis/helpers'
+import { findTotalStockPos } from '../../ultis/productUltis'
+import * as Env from "../../ultis/default"
 
-import {  withAsyncPaginate } from "react-select-async-paginate";
+import { AsyncPaginate } from "react-select-async-paginate";
+import CardProduct from './CardProduct'
 
 
 
@@ -30,7 +33,7 @@ class Topbar extends Component {
             branchId: ""
         }
 
-      
+
     }
     componentDidMount() {
         const { store_code } = this.props
@@ -201,7 +204,11 @@ class Topbar extends Component {
 
         return {
             options: res.data.data.data.map((i) => {
-                return { value: i.id, label: `${i.name}  (${i.phone_number})`, customer: i };
+                return {
+                    value: i.id,
+                    label: `${i.name}`,
+                    product: i
+                };
             }),
 
             hasMore: res.data.data.data.length == 20,
@@ -211,18 +218,51 @@ class Topbar extends Component {
         };
     };
 
+    handleInfoProduct = (inventory, id, name, image, price, distributes, maxPrice, minPrice, priceDiscount, quayntity, quantityDistribute, product) => {
 
+        if (distributes.length > 0) {
+            window.$("#modalDetail").modal("show");
+            this.setState({ isToggle: true })
+            this.props.handleCallbackProduct({
+                inventoryProduct: inventory, idProduct: id, nameProduct: name, imageProduct: image,
+                priceProduct: price, distributeProduct: distributes,
+                minPriceProduct: minPrice, maxPriceProduct: maxPrice, discountProduct: priceDiscount,
+                quantityProduct: quayntity,
+                quantityProductWithDistribute: quantityDistribute,
+                product: product
+            })
+        } else {
+            this.setState({ isToggle: false })
+            this.props.handleCallbackPushProduct({
+                nameProduct: name,
+                element_id: "",
+                product_id: id,
+                reality_exist: 0, nameDistribute: "",
+                nameElement: "",
+                nameSubDistribute: "",
+                priceProduct: price,
+                stock: quayntity,
+                product: product
+            })
+        }
+
+    }
     onChangeProduct = (selectValue) => {
 
 
-        var customer = selectValue?.customer
-        if (selectValue != null && customer != null) {
-            this.handleCallbackPertion(
-                {
-                    customer_phone: customer.phone_number,
-                    customer_id: customer.id,
-                    customer_name: customer.name
-                }
+        if (selectValue != null && selectValue.product != null) {
+            var data = selectValue?.product
+            this.handleInfoProduct(
+                data.inventory,
+                data.id,
+                data.name,
+                data.images,
+                data.price, data.distributes,
+                data.max_price, data.min_price,
+                data.product_discount,
+                data.quantity_in_stock,
+                data.quantity_in_stock_with_distribute,
+                data
             )
         }
 
@@ -233,8 +273,13 @@ class Topbar extends Component {
         var { listPos, branchStore, user, store_code, currentBranch } = this.props;
         var { idCart, selected_product_id } = this.state
 
-        const CustomAsyncPaginate = withAsyncPaginate(AtlaskitSelect);
-        
+        const formatOptionLabel = ({ value, label, product }) => {
+
+            return <CardProduct isItemSearch={true} product={product} />
+        };
+
+
+
         return (
             <div className='controller-top'>
                 <nav class="navbar navbar-expand navbar-light bg-white topbar static-top header-pos">
@@ -246,7 +291,6 @@ class Topbar extends Component {
 
                     >
 
-
                         <div className='group-controller-first'>
 
                             <div className='first-list-top-cart'>
@@ -257,11 +301,11 @@ class Topbar extends Component {
                                     style={{ flex: 1 }}
                                 >
 
-
-                                    <CustomAsyncPaginate
+                                    <AsyncPaginate
                                         placeholder="(F3) Tìm kiếm sản phẩm"
-                                        value={selected_product_id}
+                                         value={null}
                                         loadOptions={this.loadProducts}
+                                        formatOptionLabel={formatOptionLabel}
                                         name="recipientReferences1"
                                         onChange={this.onChangeProduct}
                                         additional={{
@@ -275,68 +319,6 @@ class Topbar extends Component {
                                         isSearchable
                                     />
 
-                                    {/* <form onSubmit={this.searchData}>
-                                        <div
-                                            class="input-group"
-                                        >
-
-                                            <AsyncPaginate
-                                                placeholder="(F3) Tìm kiếm sản phẩm"
-                                                value={selected_product_id}
-                                                loadOptions={this.loadProducts}
-                                                name="recipientReferences1"
-                                                onChange={this.onChangeProduct}
-                                                additional={{
-                                                    page: 1,
-                                                }}
-                                                debounceTimeout={500}
-                                                isClearable
-                                                isSearchable
-                                            />
-
-                                            <input
-
-                                                type="search"
-                                                name="txtSearch"
-                                                id="serch-product"
-                                                onChange={this.onChangeSearch}
-                                                class="form-control"
-                                                placeholder="(F3) Tìm kiếm sản phẩm"
-                                            />
-                                            <div class="input-group-append">
-                                                <button
-                                                    class=""
-                                                    style={{ width: "34px", border: "none", backgroundColor: "white", borderRadius: "3px" }}
-                                                    type="submit"
-                                                >
-                                                    <i class="fa fa-search"></i>
-                                                </button>
-                                            </div>
-
-                                        </div>
-                                    </form> */}
-
-                                    {/* <div className='search-imput' style={{ display: 'flex' }}>
-                                <input
-                                    style={{ maxWidth: "400px", minWidth: "300px", borderRadius: '5px' }}
-                                    type="search"
-                                    name="txtSearch"
-                                    id="serch-product"
-                                    onChange={this.onChangeSearch}
-                                    class="form-control"
-                                    placeholder="Tìm kiếm sản phẩm"
-                                />
-                                <div class="input-group-append" style={{ position: "absolute", left: "273px" }}>
-                                    <button
-                                        class="btn"
-                                        type="submit"
-                                        onClick={this.searchData}
-                                    >
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                </div>
-
-                            </div> */}
 
                                 </li>
 

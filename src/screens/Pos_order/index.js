@@ -46,7 +46,7 @@ class PostOrder extends Component {
             code: "",
             note: "",
             page: 1,
-            numPage: 12,
+            numPage: 6,
             namePos: "",
             listPosItem: [],
             idCart: "",
@@ -216,6 +216,8 @@ class PostOrder extends Component {
     }
 
     handleCallbackProduct = (modal) => {
+
+
         this.setState(
             {
                 infoProduct: modal
@@ -243,6 +245,7 @@ class PostOrder extends Component {
     }
 
     handleCallbackPushProduct = (modal) => {
+
         this.setState({ listPosItem: modal })
     }
 
@@ -304,6 +307,7 @@ class PostOrder extends Component {
                         })
                     }
                 } else {
+                    var num = removeSignNumber(num)
                     this.setState({
                         discount: num,
                         totalFinal: this.state.totalAfterDiscount - stringToInit(num),
@@ -612,7 +616,12 @@ class PostOrder extends Component {
                         handleKeys={["f1", "f6", "f2", "f4", "f5"]}
                         onKeyEvent={(key, e) => this.handleKeyboard(key)}
                     />
-                    <Topbar store_code={store_code} handleCallbackTab={this.handleCallbackTab} />
+                    <Topbar
+                        store_code={store_code}
+                        handleCallbackTab={this.handleCallbackTab}
+                        handleCallbackProduct={this.handleCallbackProduct}
+                        handleCallbackPushProduct={this.handleCallbackPushProduct}
+                    />
                     <div className='overview-cart'>
                         <div className="row-post">
 
@@ -651,13 +660,26 @@ class PostOrder extends Component {
                                     </div>
 
                                     <div className="splitter-horizontal">
+
+                                        <svg class="MuiSvgIcon-root jss4100" focusable="false"
+                                            viewBox="0 0 24 24" aria-hidden="true"
+                                            style={{
+                                                transform: "rotate(90deg)"
+                                            }}
+                                        >
+                                            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg>
+
                                     </div>
 
                                     <div className="panel-bottom">
                                         <div className='col-list-product' style={{ borderRadius: "0", display: "flex", flexDirection: "column" }}>
                                             <div className='card-pos-body' style={{ overflow: "hidden" }}>
 
-                                                <CardProduct store_code={store_code} handleCallbackProduct={this.handleCallbackProduct} handleCallbackPushProduct={this.handleCallbackPushProduct} />
+                                                <CardProduct
+                                                    store_code={store_code}
+                                                    handleCallbackProduct={this.handleCallbackProduct}
+                                                    handleCallbackPushProduct={this.handleCallbackPushProduct}
+                                                />
                                             </div>
                                             <div className='wrap-pagination'>
                                                 <Pagination limit={numPage}

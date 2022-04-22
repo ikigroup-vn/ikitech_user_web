@@ -133,7 +133,7 @@
     width: 100%;
     white-space: nowrap;
     color: white;
-    height: calc(100% - 415px);
+    height: calc(100% - 200px);
 }
 
 .controller-top {
@@ -327,6 +327,7 @@ pre {
     border-bottom: 1px solid rgb(128 128 128 / 71%);
     font-size: 28px;
     font-weight: 400;
+    padding-bottom: 7px;
 }
 
 .text-input-pos:hover {
@@ -467,3 +468,32 @@ pre {
     color: #757575;
 }
 
+
+.product-name-pos-search-top-bar {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    /* number of lines to show */
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.product-price-pos-search-top-bar {
+    font-size: 14px;
+
+    font-weight: 500;
+    color: rgb(174, 61, 52);
+    text-align: center;
+    margin-bottom: -2px;
+}
+
+.product-stock-pos-search-top-bar {
+    font-size: 13px;
+    font-weight: 500;
+    color: grey;
+    text-align: center;
+    margin-bottom: -2px;
+}
