@@ -39,13 +39,14 @@ class Table extends Component {
 
             <td>{data.email == null ? "Chưa cập nhật" : data.email}</td>
 
-            <td className="btn-voucher">
-              <Link
+            <td className="">
+              {getChannel() == IKITECH && <Link
                 to={`/customer/detail/${store_code}/${data.id}?pag=${paginate}`}
                 class="btn btn-success btn-sm"
               >
                 <i class="fa fa-eye"></i> Xem
-              </Link>
+              </Link> }
+              
               {getChannel() == IKITECH ? <button
                 style={{ marginLeft: "10px" }}
 
@@ -54,17 +55,15 @@ class Table extends Component {
                   }`}
               >
                 <i class="fa fa-comment-alt"></i> Chat
-              </button> : <button
-                data-toggle="modal"
-                data-target="#modalEditCustomer"
-                onClick={() => this.handleSetInfor(data)}
+              </button> : <Link
+                to={`/customer/detail/${store_code}/${data.id}?pag=${paginate}`}
 
                 style={{ marginLeft: "10px" }}
                 class={`btn btn-primary btn-sm ${chat_allow == true ? "show" : "hide"
                   }`}
               >
                 <i class="fa fa-edit"></i> Sửa
-              </button>}
+              </Link>}
 
             </td>
           </tr>

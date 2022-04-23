@@ -9,6 +9,7 @@ export const fetchAllRevenueExpenditures = (
   page = 1,
   params = null
 ) => {
+  console.log("asda")
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -110,7 +111,9 @@ export const createRevenueExpenditures = (
   store_code,
   branch_id,
   data,
-  params
+  params,
+  funcModal,
+  getForCustomer
 ) => {
   return (dispatch) => {
     dispatch({
@@ -120,12 +123,36 @@ export const createRevenueExpenditures = (
     revenueExpendituresApi
       .createRevenueExpenditures(store_code, branch_id, data)
       .then((res) => {
+        if(res.data.success && funcModal ){
+          funcModal()
+        }
+
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
-
-        storeApi
+        if(getForCustomer)
+        {
+          revenueExpendituresApi
+          .fetchAllRevenueExpenditures(store_code, branch_id, 1, params)
+          .then((res) => {
+            dispatch({
+              type: Types.SHOW_LOADING,
+              loading: "hide",
+            });
+            // dispatch({
+            //   type: Types.SHOW_LOADING_LAZY,
+            //   loading: "hide",
+            // });
+            if (res.data.code !== 401)
+              dispatch({
+                type: Types.FETCH_ALL_REVENUE_EXPENDITURES,
+                data: res.data.data,
+              });
+          });        }
+        else
+        {
+          storeApi
           .fetchReportExpenditure(store_code, branch_id, 1, params)
           .then((res) => {
             if (res.data.code === 200)
@@ -144,6 +171,8 @@ export const createRevenueExpenditures = (
               },
             });
           });
+        }
+        
       })
       .catch(function (error) {
         dispatch({
