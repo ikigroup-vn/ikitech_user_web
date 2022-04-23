@@ -84,6 +84,12 @@ export const createCustomer = (store_code,id , funcModal = null) => {
           type: Types.SHOW_LOADING,
           loading : "hide"
         })
+        dispatch({
+          type: Types.CREATED_CUSTOMER,
+          isFromPosAndSave : id.isFromPosAndSave == null ? false : id.isFromPosAndSave,
+          data: res.data.data,
+        })
+        
         customerApi
           .fetchAllCustomer(store_code)
           .then((res) => {

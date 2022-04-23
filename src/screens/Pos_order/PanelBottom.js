@@ -2,10 +2,13 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as Types from "../../constants/ActionType"
 
+import DatePicker from "react-datepicker";
 import CardProduct from "../../components/Pos_Order/CardProduct";
 import Pagination from '../../components/Pos_Order/Pagination'
 import * as placeAction from "../../actions/place";
 import { shallowEqual } from "../../ultis/shallowEqual";
+import * as dashboardAction from "../../actions/customer";
+
 
 class PanelBottom extends Component {
 
@@ -14,12 +17,15 @@ class PanelBottom extends Component {
 
 
         this.state = {
-            selectedDate: '2015-07-20',
+            startDate: new Date(),
+            selectedDate: '2022-07-20',
             listWards: [],
             listDistrict: [],
             txtProvince: "",
             txtDistrict: "",
             txtWards: "",
+            txtName: "",
+            txtEmail: ""
         }
 
     }
@@ -79,6 +85,10 @@ class PanelBottom extends Component {
         }
     }
 
+    onChangeSex = (e) => {
+        this.setState({ txtSex: e.target.value })
+    }
+
     onChangeProvince = (e) => {
         if (this.state.txtProvince != e.target.value) {
             this.setState({ txtProvince: e.target.value, isLoaded: true })
@@ -118,6 +128,67 @@ class PanelBottom extends Component {
             })
         }
 
+        if (!shallowEqual(nextProps.oneCart, this.props.oneCart)
+
+            &&
+            !shallowEqual(nextProps.oneCart.customer_id, this.props.oneCart.customer_id)
+        ) {
+
+
+            if (nextProps.oneCart.customer_id == null || nextProps.oneCart.customer == null) {
+                this.setState({
+                    txtProvince: "",
+                    txtDistrict: "",
+                    txtWards: "",
+                    txtName: "",
+                    txtEmail: "",
+                    txtSex: 0,
+                    txtAddressDetail: "",
+                    txtPhoneNumber: "",
+                    txtEmail: ""
+                })
+            } else {
+
+                if (nextProps.oneCart.customer != null) {
+
+                    if (nextProps.oneCart.customer.province != null) {
+                        this.props.fetchPlaceDistrict(nextProps.oneCart.customer.province);
+                    }
+                    if (nextProps.oneCart.customer.district != null) {
+                        this.props.fetchPlaceDistrict_Wards(nextProps.oneCart.customer.district)
+                    }
+
+                    this.setState({
+                        txtProvince: nextProps.oneCart.customer.province,
+                        txtDistrict: nextProps.oneCart.customer.district,
+                        txtWards: nextProps.oneCart.customer.wards,
+                        txtName: nextProps.oneCart.customer.name,
+                        txtEmail: nextProps.oneCart.customer.email,
+                        txtPhoneNumber: nextProps.oneCart.customer.phone_number,
+                        txtSex: nextProps.oneCart.customer.sex,
+                        txtAddressDetail: nextProps.oneCart.customer.address_detail,
+                        txtEmail: nextProps.oneCart.customer.email
+                    })
+                }
+
+            }
+
+
+        }
+
+
+        if (!shallowEqual(nextProps.customerCreated, this.props.customerCreated) && nextProps.isFromPosAndSave == true) {
+
+            this.props.handleCallbackPertion(
+                {
+                    customer_phone: nextProps.customerCreated.phone_number,
+                    customer_id: nextProps.customerCreated.id,
+                    customer_name: nextProps.customerCreated.name
+                }
+            )
+
+        }
+
     }
 
     onChange = (e) => {
@@ -130,11 +201,69 @@ class PanelBottom extends Component {
         });
     };
 
+    onSaveCustomer = () => {
+
+        var { txtAddressDetail, txtSex, txtProvince, txtDistrict, txtWards, listDistrict, listWards, txtEmail, txtEmail, txtPhoneNumber, txtName } = this.state;
+
+        var { store_code } = this.props
+        this.props.createCustomer(store_code, {
+            name: txtName,
+            phone_number: txtPhoneNumber,
+            email: txtEmail,
+            address_detail: txtAddressDetail,
+            province: txtProvince,
+            district: txtDistrict,
+            wards: txtWards,
+            sex: txtSex,
+            isFromPosAndSave: true
+        })
+    }
+
+    setStartDate = (date) => {
+        this.setState({
+            startDate: date
+        })
+    }
+
+    getListYear = () => {
+
+        var list = [];
+        var maxYear = (new Date()).getFullYear()
+
+        for (var i = 1922; i < maxYear; i++) {
+
+            list.push(i)
+        }
+        return list
+
+    }
     buildTabCustomer = () => {
 
         var { province } = this.props
 
-        var { txtAddressDetail, txtProvince, txtDistrict, txtWards, listDistrict, listWards, txtEmail, txtEmail, txtPhoneNumber, txtName } = this.state;
+        var { startDate, txtAddressDetail, txtSex, txtProvince, txtDistrict, txtWards, listDistrict, listWards, txtEmail, txtEmail, txtPhoneNumber, txtName } = this.state;
+
+
+        const ExampleCustomTimeInput = ({ date, value, onChange }) => (
+            <input value={value} type="text" placeholder="Ngày sinh" class="tbDatePicker form-control customerInfo px-1" id="customerBirthday"
+                autocomplete="new-password" />
+        );
+
+        const years = this.getListYear();
+        const months = [
+            "Tháng 1",
+            "Tháng 2",
+            "Tháng 3",
+            "Tháng 4",
+            "Tháng 5",
+            "Tháng 6",
+            "Tháng 7",
+            "Tháng 8",
+            "Tháng 9",
+            "Tháng 10",
+            "Tháng 11",
+            "Tháng 12",
+        ];
 
         return <div style={{
             padding: 20
@@ -232,7 +361,7 @@ class PanelBottom extends Component {
                             name="txtDistrict"
                             id="customerDistrictLocationId"
                             tabindex="-1" aria-hidden="true" data-select2-id="customerDistrictLocationId">
-                            <option value="">- Quận huyện -</option><option value="370">Quận Hải Châu</option>
+                            <option value="">- Quận huyện -</option>
                             {this.showDistrict(listDistrict)}
 
                         </select>
@@ -250,7 +379,7 @@ class PanelBottom extends Component {
                             name="txtWards"
                             class="form-control select-has-search-box customerInfo select2-hidden-accessible" id="customerWardLocationId" tabindex="-1"
                             aria-hidden="true" data-select2-id="customerWardLocationId">
-                            <option value="">- Phường xã -</option><option value="7908">Phường Tam Thuận</option>
+                            <option value="">- Phường xã -</option>
                             {this.showWards(listWards)}
 
                         </select>
@@ -261,17 +390,75 @@ class PanelBottom extends Component {
                 </div>
                 <div class="col-md-3 col-6">
                     <div class="input-group mb-2">
-                        <select class="form-control customerInfo px-1" id="customerGender">
+                        <select
+                            value={txtSex || ""}
+                            onChange={this.onChangeSex}
+                            name="txtSex"
+                            class="form-control customerInfo px-1" id="customerGender">
                             <option value="">- Giới tính -</option>
                             <option value="1">Nam</option>
                             <option value="2">Nữ</option>
-                            <option value="3">Khác</option>
+                            <option value="0">Khác</option>
                         </select>
 
 
+                        <DatePicker
+                             showTimeInput
+                             customTimeInput={<ExampleCustomTimeInput />}
+                            renderCustomHeader={({
+                                date,
+                                changeYear,
+                                changeMonth,
+                                decreaseMonth,
+                                increaseMonth,
+                                prevMonthButtonDisabled,
+                                nextMonthButtonDisabled,
+                            }) => (
+                                <div
+                                    style={{
+                                        margin: 10,
+                                        display: "flex",
+                                        justifyContent: "center",
+                                    }}
+                                >
+                                    <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
+                                        {"<"}
+                                    </button>
+                                    <select
+                                        value={(date.getFullYear())}
+                                        onChange={({ target: { value } }) => changeYear(value)}
+                                    >
+                                        {years.map((option) => (
+                                            <option key={option} value={option}>
+                                                {option}
+                                            </option>
+                                        ))}
+                                    </select>
 
-                        <input data-minyear="1920" type="text" placeholder="Ngày sinh" class="tbDatePicker form-control customerInfo px-1" id="customerBirthday"
-                            autocomplete="new-password" />
+                                    <select
+                                        value={months[(date.getMonth())]}
+                                        onChange={({ target: { value } }) =>
+                                            changeMonth(months.indexOf(value))
+                                        }
+                                    >
+                                        {months.map((option) => (
+                                            <option key={option} value={option}>
+                                                {option}
+                                            </option>
+                                        ))}
+                                    </select>
+
+                                    <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
+                                        {">"}
+                                    </button>
+                                </div>
+                            )}
+                            selected={startDate}
+                            onChange={(date) => this.setStartDate(date)}
+                        />
+
+
+
                     </div>
                     {/* <div class="input-group mb-2">
                         <input type="text" class="form-control customerInfo p-1" title="Email" placeholder="Email" id="customerEmail" autocomplete="new-password" />
@@ -293,8 +480,9 @@ class PanelBottom extends Component {
 
                 </div>
                 <div class="col-md-2 col-6">
-
-                    <button id="btnSaveCustomer" class="btn btn-yes-pos mt-2 mb-md-0 mb-2"> <i class="fa fa-user-o" aria-hidden="true"></i> Lưu thông tin</button>
+                    <button id="btnSaveCustomer"
+                        onClick={this.onSaveCustomer}
+                        class="btn btn-yes-pos mt-2 mb-md-0 mb-2"> <i class="fa fa-user-o" aria-hidden="true"></i> Lưu thông tin</button>
                 </div>
             </div>
         </div>
@@ -308,30 +496,28 @@ class PanelBottom extends Component {
         return (
             <div className="panel-bottom">
 
-
-
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link" id="tab-javascript" data-toggle="tab"
+                        <a class="nav-link " id="tab-javascript" data-toggle="tab"
                             href="#content-javascript"
-                            role="tab" aria-controls="content-javascript" aria-selected="false">
+                            role="tab" aria-controls="content-javascript" aria-selected="true">
                             Danh sách sản phẩm
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" id="tab-css" data-toggle="tab"
+                        <a class="nav-link active" id="tab-css" data-toggle="tab"
                             href="#content-css"
                             role="tab" aria-controls="content-css" aria-selected="false">
                             Khách hàng
                         </a>
                     </li>
-                    <li class="nav-item">
+                    {/* <li class="nav-item">
                         <a class="nav-link active " id="tab-bootstrap" data-toggle="tab"
                             href="#content-bootstrap"
                             role="tab" aria-controls="content-bootstrap" aria-selected="true">
                             Combo đang diễn ra
                         </a>
-                    </li>
+                    </li> */}
                 </ul>
 
                 <div class="tab-content" id="myTabContent">
@@ -355,14 +541,14 @@ class PanelBottom extends Component {
                         </div>
 
                     </div>
-                    <div class="tab-pane fade" id="content-css"
+                    <div class="tab-pane fade show active" id="content-css"
                         role="tabpanel" aria-labelledby="tab-css">
                         {this.buildTabCustomer()}
                     </div>
-                    <div class="tab-pane fade show active" id="content-bootstrap"
+                    {/* <div class="tab-pane fade show active" id="content-bootstrap"
                         role="tabpanel" aria-labelledby="tab-bootstrap">
                         Bootstrap is a free front-end framework for faster and easier web development...
-                    </div>
+                    </div> */}
                 </div>
 
 
@@ -376,7 +562,10 @@ const mapStateToProps = (state) => {
     return {
         wards: state.placeReducers.wards,
         province: state.placeReducers.province,
-        district: state.placeReducers.district
+        district: state.placeReducers.district,
+        customerCreated: state.customerReducers.customer.customerCreated,
+        isFromPosAndSave: state.customerReducers.customer.isFromPosAndSave,
+        oneCart: state.posReducers.pos_reducer.oneCart,
     }
 }
 
@@ -393,6 +582,9 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         fetchPlaceProvince: () => {
             dispatch(placeAction.fetchPlaceProvince());
+        },
+        createCustomer: (store_code, form, funcModal) => {
+            dispatch(dashboardAction.createCustomer(store_code, form, funcModal));
         },
     }
 }

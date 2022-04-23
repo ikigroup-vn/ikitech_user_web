@@ -11,6 +11,7 @@ import Topbar from '../../components/Pos_Order/Topbar'
 import ListItemInCart from '../../components/Pos_Order/ListItemInCart'
 import PertionInfo from '../../components/Pos_Order/PertionInfo'
 import * as OrderAction from '../../actions/add_order';
+import "react-datepicker/dist/react-datepicker.css";
 import "./index.css"
 import Alert from './Alert'
 import * as Types from "../../constants/ActionType";
@@ -33,6 +34,7 @@ class PostOrder extends Component {
         this.hasFocus = false
         this.state = {
             isPopoverOpen: false,
+            isShowPanelBottom: true,
 
             oneCart: {},
             modalUpdateCart: {
@@ -575,6 +577,12 @@ class PostOrder extends Component {
 
     };
 
+    onChangeIsShowPanelBottom = () => {
+        this.setState({
+            isShowPanelBottom: !this.state.isShowPanelBottom
+        })
+    }
+
     loadCustomers = async (search, loadedOptions, { page }) => {
 
         var { store_code } = this.props.match.params
@@ -641,7 +649,9 @@ class PostOrder extends Component {
 
                                 <div className="panel-container-vertical">
 
-                                    <div className="panel-top">
+                                    <div className="panel-top" style={{
+                                        height: this.state.isShowPanelBottom ?  "calc(100% - 225px)" : "calc(100% - 0px)"
+                                    }}>
                                         <div className='col-list-order'>
                                             <div className='' style={{ padding: "8px" }}>
                                                 {oneCart?.info_cart?.line_items.length > 0 ?
@@ -660,13 +670,15 @@ class PostOrder extends Component {
                                         </div>
                                     </div>
 
-                                    <div className="splitter-horizontal">
+                                    <div className="splitter-horizontal" style={{
+                                          top:!this.state.isShowPanelBottom ? -20 : 0
+                                    }}>
 
-                                        <div class="button-show-hide-control">
+                                        <div class="button-show-hide-control" onClick={this.onChangeIsShowPanelBottom}>
                                             <svg className="button-show-hide-control-circle" focusable="false"
                                                 viewBox="0 0 24 24" aria-hidden="true"
                                                 style={{
-                                                    transform: "rotate(90deg)"
+                                                    transform:this.state.isShowPanelBottom ? "rotate(90deg)" : "rotate(269deg)"
                                                 }}
                                             >
                                                 <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg>
@@ -674,11 +686,11 @@ class PostOrder extends Component {
 
                                     </div>
 
-                                    <PanelBottom 
-                                    
-                                    limit={numPage}
-                                passNumPage={this.passNumPage} store_code={store_code} products={products} 
-                                    handleCallbackProduct={this.handleCallbackProduct}
+                                    <PanelBottom
+                                        limit={numPage}
+                                        passNumPage={this.passNumPage} store_code={store_code} products={products}
+                                        handleCallbackProduct={this.handleCallbackProduct}
+                                        handleCallbackPertion={this.handleCallbackPertion}
                                         handleCallbackPushProduct={this.handleCallbackPushProduct} />
 
 

@@ -2,8 +2,10 @@ import * as Types from "../../constants/ActionType";
 
 var initialState = {
   allCustomer: [],
-  customerID: {  },
+  customerID: {},
   type: [],
+  isFromPosAndSave: false,
+  customerCreated: {}
 };
 
 export const customer = (state = initialState, action) => {
@@ -15,7 +17,12 @@ export const customer = (state = initialState, action) => {
     case Types.FETCH_ID_CUSTOMER:
       newState.customerID = action.data;
       return newState;
-   
+    case Types.CREATED_CUSTOMER:
+      newState.isFromPosAndSave = action.isFromPosAndSave;
+      newState.customerCreated = action.data;
+      return newState;
+
+
     default:
       return newState;
   }
