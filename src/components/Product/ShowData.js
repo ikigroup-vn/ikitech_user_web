@@ -235,9 +235,8 @@ class ShowData extends Component {
     }
     console.log(distributes)
     return (
-      <>
-        <tr>
-          <td className={_delete == true ? "show" : "hide"}>
+        <tr className="hover-product">
+          <td   className={`${_delete == true ? "show" : "hide"} `}>
             {" "}
             <input
               style={{
@@ -375,7 +374,6 @@ class ShowData extends Component {
             </button>
           </td>
         </tr>
-      </>
     );
   }
 }

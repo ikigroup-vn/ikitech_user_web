@@ -5,8 +5,8 @@ class Table extends Component {
   constructor(props) {
     super(props);
   }
-  handleDelCallBack = (event, store_code, id , name) => {
-    this.props.handleDelCallBack({ table: "Chương trình", id: id, store_code: store_code , name});
+  handleDelCallBack = (event, store_code, id, name , is_end) => {
+    this.props.handleDelCallBack({ table: "Chương trình", id: id, store_code: store_code, name ,is_end });
     event.preventDefault();
   }
 
@@ -14,8 +14,27 @@ class Table extends Component {
     this.props.handleIsEndCallback({ id: id, store_code: store_code });
     event.preventDefault();
   }
+  showListProduct = (products) => {
+    console.log(products);
+    var result = null
+    if (products.length > 0) {
+      result = products.map((data, index) => {
+
+        return (
+          <h6  style={{ display: "inline-block" , marginRight : "7px"}}><span
+          style={{ display: "inline-block", maxWidth: "240px" ,  whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis" }}
+  
+          class="badge badge-success">{data.name}</span></h6>
+        )
+      })
+
+    }
+    return result
+  }
   showData = (vouchers, per_page, current_page) => {
-    var vouchers  = this.props.is_end == 0 ? vouchers : vouchers.data
+    var vouchers = this.props.is_end == 0 ? vouchers : vouchers.data
 
     var result = null;
     var { store_code } = this.props.params;
@@ -23,7 +42,7 @@ class Table extends Component {
       return result;
     }
     if (vouchers.length > 0) {
-      var {update , _delete} = this.props
+      var { update, _delete } = this.props
 
       result = vouchers.map((data, index) => {
         var set_limit_amount =
@@ -43,45 +62,37 @@ class Table extends Component {
             <td class={showCurrentPage ? "hide" : "show"}>{index + 1}</td>
 
             <td class={showCurrentPage ? "show" : "hide"}>{(per_page * (current_page - 1)) + (index + 1)}</td>
-            <td>{data.code}</td>
 
             <td>{data.name}</td>
             <td>{type_voucher}</td>
-            <td>
-              {" "}
-              <h5>
-                <span class={`badge badge-${status_show_voucher}`}>
-                  {is_show_voucher}
-                </span>
-              </h5>
-            </td>
-
+    
             <td>{data.start_time}</td>
 
             <td>{data.end_time}</td>
 
-            <td>{type_discount}</td>
-     
-            <td>{data.value_limit_total == null ? null : new Intl.NumberFormat().format(data.value_limit_total.toString())} </td>
 
-      
-
-            <td>{data.used == null ? null : new Intl.NumberFormat().format(data.used.toString())} </td>
+         
             <td>
-          
-                  {!isNaN(Number(set_limit_amount)) ? new Intl.NumberFormat().format(set_limit_amount.toString()) : set_limit_amount }
-               
-            </td>
 
+              {!isNaN(Number(set_limit_amount)) ? new Intl.NumberFormat().format(set_limit_amount.toString()) + "%" : set_limit_amount}
+
+            </td >  
+               <td style={{ maxWidth: "250px" }}>
+
+            {this.showListProduct(data.products || [])}
+
+</td>
+            
             <td className="btn-voucher">
-              <Link
+              {this.props.is_end == 0 && <Link
                 to={`/voucher/edit/${store_code}/${data.id}`}
                 class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
               >
-                <i class="fa fa-eye"></i> Sửa
-              </Link>
+                <i class="fa fa-edit"></i> Sửa
+              </Link>}
+
               <button
-                onClick={(e) => this.handleDelCallBack(e, store_code, data.id , data.name)}
+                onClick={(e) => this.handleDelCallBack(e, store_code, data.id, data.name , this.props.is_end)}
                 data-toggle="modal"
                 data-target="#removeModal"
                 class={`btn btn-danger btn-sm ${_delete == true ? "show" : "hide"}`}
@@ -116,18 +127,14 @@ class Table extends Component {
           <thead>
             <tr>
               <th>STT</th>
-              <th>Mã Code</th>
               <th>Tên</th>
               <th>Loại voucher</th>
-              <th>Trạng thái</th>
 
               <th>Ngày bắt đầu</th>
               <th>Ngày kết thúc</th>
-              <th>Loại giảm giá</th>
               <th>Đơn đạt tối thiểu</th>
-              <th>SL đơn đã áp dụng</th>
-              <th>Giới hạn</th>
-
+         
+              <th style={{ maxWidth: "250px" }}>Áp dụng sản phẩm</th>
 
               <th>Hành động</th>
             </tr>

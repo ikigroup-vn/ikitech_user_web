@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Redirect, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Loading from "../../../../screens/Loading";
-import * as customerAction from "../../../../actions/customer";
+import * as dashboardAction from "../../../../actions/dashboard";
 import * as Env from "../../../../ultis/default";
 import moment from "moment";
 import { getQueryParams } from "../../../../ultis/helpers"
@@ -11,7 +11,7 @@ import { shallowEqual } from '../../../../ultis/shallowEqual';
 import history from "../../../../history";
 import MomentInput from 'react-moment-input';
 
-class Customer extends Component {
+class Supplier extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -30,9 +30,7 @@ class Customer extends Component {
       txtName_branch: "",
       txtPhone_branch: "",
       txtEmail_branch: "",
-      idCustomer: "",
-      txtDateOfBirth: "",
-      txtSex: "",
+      idSupplier: "",
 
 
     }
@@ -48,25 +46,19 @@ class Customer extends Component {
   };
 
   componentWillMount() {
-    if (typeof this.props.customer.id != "undefined") {
+    if (typeof this.props.supplier.id != "undefined") {
 
       this.setState({
-        txtName_branch: this.props.customer.name,
-        txtPhone_branch: this.props.customer.phone_number,
-        txtEmail_branch: this.props.customer.email,
-        txtProvince: this.props.customer.province,
-        txtDistrict: this.props.customer.district,
-        txtWards: this.props.customer.wards,
-        txtAddress_detail: this.props.customer.address_detail,
-        idCustomer: this.props.customer.id,
+        txtName_branch: this.props.supplier.name,
+        txtPhone_branch: this.props.supplier.phone,
+        txtEmail_branch: this.props.supplier.email,
+        txtProvince: this.props.supplier.province,
+        txtDistrict: this.props.supplier.district,
+        txtWards: this.props.supplier.wards,
+        txtAddress_detail: this.props.supplier.address_detail,
+        idSupplier: this.props.supplier.id,
         goFirst: false,
-        txtDateOfBirth:
-          this.props.customer.date_of_birth != null && this.props.customer.date_of_birth != ""
-            ? moment(this.props.customer.date_of_birth, "YYYY-MM-DD HH:mm:ss").format(
-              "DD-MM-YYYY"
-            )
-            : null,
-        txtSex: this.props.customer.sex,
+       
       })
     }
 
@@ -89,8 +81,8 @@ class Customer extends Component {
 
 
   componentDidMount() {
-    var { store_code, customerId } = this.props;
-    this.props.fetchCustomerId(store_code, customerId);
+    var { store_code, supplierId } = this.props;
+    this.props.fetchSupplierId(store_code, supplierId);
     this.props.fetchPlaceProvince()
 
   }
@@ -108,7 +100,7 @@ class Customer extends Component {
   }
   goBack = () => {
     var { store_code } = this.props;
-    history.replace(`/customer/${store_code}/?pag=${getQueryParams("pag")}`);
+    history.replace(`/supplier/${store_code}/?pag=${getQueryParams("pag")}`);
   };
   onChangeProvince = (e) => {
     this.setState({ txtProvince: e.target.value, isLoaded: true })
@@ -130,26 +122,20 @@ class Customer extends Component {
   }
 
   componentWillReceiveProps(nextProps, nextState) {
-    if (!shallowEqual(nextProps.customer, this.props.customer)) {
-      this.props.fetchPlaceDistrict(nextProps.customer.province);
-      this.props.fetchPlaceWards(nextProps.customer.district)
+    if (!shallowEqual(nextProps.supplier, this.props.supplier)) {
+      this.props.fetchPlaceDistrict(nextProps.supplier.province);
+      this.props.fetchPlaceWards(nextProps.supplier.district)
       this.setState({
-        txtName_branch: nextProps.customer.name,
-        txtPhone_branch: nextProps.customer.phone_number,
-        txtEmail_branch: nextProps.customer.email,
-        txtProvince: nextProps.customer.province,
-        txtDistrict: nextProps.customer.district,
-        txtWards: nextProps.customer.wards,
-        txtAddress_detail: nextProps.customer.address_detail,
-        idCustomer: nextProps.customer.id,
+        txtName_branch: nextProps.supplier.name,
+        txtPhone_branch: nextProps.supplier.phone,
+        txtEmail_branch: nextProps.supplier.email,
+        txtProvince: nextProps.supplier.province,
+        txtDistrict: nextProps.supplier.district,
+        txtWards: nextProps.supplier.wards,
+        txtAddress_detail: nextProps.supplier.address_detail,
+        idSupplier: nextProps.supplier.id,
         goFirst: false,
-        txtDateOfBirth:
-          nextProps.customer.date_of_birth != null && this.props.customer.date_of_birth != ""
-            ? moment(this.props.customer.date_of_birth, "YYYY-MM-DD HH:mm:ss").format(
-              "DD-MM-YYYY"
-            )
-            : null,
-        txtSex: nextProps.customer.sex,
+  
       })
     }
 
@@ -173,24 +159,21 @@ class Customer extends Component {
   }
   handleOnClick = (e) => {
     e.preventDefault()
-    var { txtAddress_detail, txtDistrict, txtProvince, txtWards, txtName_branch, txtPhone_branch, txtEmail_branch, idCustomer, txtDateOfBirth, txtSex } = this.state
+    var { txtAddress_detail, txtDistrict, txtProvince, txtWards, txtName_branch, txtPhone_branch, txtEmail_branch, idSupplier } = this.state
     const { store_code } = this.props
     const Formdata = {
       name: txtName_branch,
-      phone_number: txtPhone_branch,
+      phone: txtPhone_branch,
       email: txtEmail_branch,
       province: txtProvince,
       district: txtDistrict,
       wards: txtWards,
       address_detail: txtAddress_detail,
-      sex : txtSex,
-      date_of_birth :  moment(txtDateOfBirth, "DD-MM-YYYY").format(
-        "YYYY-MM-DD"
-      )
+
 
     }
     console.log("Formdata", Formdata)
-    this.props.editCustomer(store_code, idCustomer, Formdata);
+    this.props.editSupplier(store_code, idSupplier, Formdata);
 
 
   };
@@ -222,33 +205,12 @@ class Customer extends Component {
     return result
 
   }
-  onChangeSex = (e) => {
-    this.setState({ txtSex: e.target.value })
-  }
-  onChangeStart = (e) => {
-    var time = moment(e, "DD-MM-YYYY").format("DD-MM-YYYY");
-    var { txtDateOfBirth } = this.state;
-    if (e != "" && txtDateOfBirth != "") {
-      if (
-        !moment(e, "DD-MM-YYYY").isBefore(
-          moment(txtDateOfBirth, "DD-MM-YYYY")
-        )
-      ) {
-        // this.setState({ displayError: "show" });
-      } else {
-        console.log("hidddeee");
-        // this.setState({ displayError: "hide" });
-      }
-    }
-    this.setState({
-      txtDateOfBirth: time,
-    });
-  };
+
   goBack = () => {
     var { store_code } = this.props;
 
 
-    history.replace(`/customer/${store_code}/?pag=${getQueryParams("pag")}`);
+    history.replace(`/supplier/${store_code}/?pag=${getQueryParams("pag")}`);
   };
 
   showDistrict = (places) => {
@@ -267,61 +229,30 @@ class Customer extends Component {
   }
   render() {
     var { province } = this.props
-    var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards, txtDateOfBirth, txtSex } = this.state;
+    var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards } = this.state;
     var { txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state;
 
-    console.log(txtDateOfBirth, txtSex)
+    console.log(this.props.supplier)
     return (
       <form role="form" method="post">
         <div class="box-body">
 
 
           <div class="form-group">
-            <label for="product_name">Tên khách hàng</label>
+            <label for="product_name">Tên Nhà cung cấp</label>
             <input
               type="text"
               class="form-control"
               id="txtName_branch"
-              placeholder="Nhập tên khách hàng"
+              placeholder="Nhập tên Nhà cung cấp"
               autocomplete="off"
               value={txtName_branch || ""}
               onChange={this.onChange}
               name="txtName_branch"
             />
           </div>
-          <div class="form-group">
-            <label for="product_name">Ngày sinh</label>
-            <MomentInput
-                      defaultValue={txtDateOfBirth == "" || txtDateOfBirth == null ? "" : moment(txtDateOfBirth, "DD-MM-YYYY")}
-                      format="DD-MM-YYYY"
-              options={true}
-              enableInputClick={true}
-              monthSelect={true}
-              readOnly={true}
-              translations={{
-                DATE: "Ngày",
-                TIME: "Giờ",
-                SAVE: "Đóng",
-                HOURS: "Giờ",
-                MINUTES: "Phút",
-              }}
-              onSave={() => { }}
-              onChange={this.onChangeStart}
-            />
-          </div>
-          <div class="form-group">
-            <label for="product_name">Giới tính</label>
-            <select
-              value={txtSex}
-              onChange={this.onChangeSex}
-              name="txtSex"
-              class="form-control customerInfo px-1" id="customerGender">
-              <option>- Giới tính -</option>
-              <option value="1">Nam</option>
-              <option value="2">Nữ</option>
-              <option value="0">Khác</option>
-            </select>
-          </div>
+       
+    
           <div class="form-group">
             <label for="product_name">Số điện thoại</label>
             <input
@@ -445,7 +376,7 @@ class Customer extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    customer: state.customerReducers.customer.customerID,
+    supplier: state.storeReducers.store.supplierID,
     auth: state.authReducers.login.authentication,
     state,
     chat: state.chatReducers.chat.chatID,
@@ -457,11 +388,11 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchCustomerId: (store_code, customerId) => {
-      dispatch(customerAction.fetchCustomerId(store_code, customerId));
+    fetchSupplierId: (store_code, supplierId) => {
+      dispatch(dashboardAction.fetchSupplierId(store_code, supplierId));
     },
-    editCustomer: (store_code, id, form, funcModal) => {
-      dispatch(customerAction.editCustomer(store_code, id, form, funcModal));
+    editSupplier: (store_code, id, form, funcModal) => {
+      dispatch(dashboardAction.editSupplier(store_code, id, form, funcModal));
     },
     fetchPlaceDistrict: (id) => {
       dispatch(placeAction.fetchPlaceDistrict(id));
@@ -477,4 +408,4 @@ const mapDispatchToProps = (dispatch, props) => {
     },
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Customer);
+export default connect(mapStateToProps, mapDispatchToProps)(Supplier);

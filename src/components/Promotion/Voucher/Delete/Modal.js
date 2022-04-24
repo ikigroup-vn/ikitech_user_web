@@ -1,14 +1,15 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as voucherAction from "../../../../actions/voucher";
+import themeData from "../../../../ultis/theme_data";
 
 class Modal extends Component {
     
   onSave = (e) => {
     e.preventDefault();
     window.$('.modal').modal('hide');
-    var {id , store_code} = this.props.modal
-    this.props.destroyVoucher(store_code , id);
+    var {id , store_code , is_end} = this.props.modal
+    this.props.destroyVoucher(store_code , id , is_end);
   };
 
   render() {
@@ -24,8 +25,8 @@ class Modal extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{ background: "#47d3b0" }}>
-              <button
+          <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+              <h4 style={{ color: "white" }}>Thông báo</h4>              <button
                 type="button"
                 class="close"
                 data-dismiss="modal"
@@ -44,7 +45,7 @@ class Modal extends Component {
               <div class="modal-body">
                 <input type="hidden" name="remove_id_store" />
                 <div class="alert-remove"></div>
-                Bạn có muốn xóa {modal.table} : {modal.name}
+                Bạn có muốn xóa chương trình khuyến mãi này không ?
               </div>
               <div class="modal-footer">
                 <button
@@ -69,8 +70,8 @@ class Modal extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    destroyVoucher: (store_code , id) => {
-      dispatch(voucherAction.destroyVoucher(store_code , id));
+    destroyVoucher: (store_code , id , is_end) => {
+      dispatch(voucherAction.destroyVoucher(store_code , id , is_end));
     },
   };
 };

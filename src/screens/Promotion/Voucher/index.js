@@ -112,7 +112,7 @@ class Voucher extends Component {
                         <Link
                           style={{ marginRight: "10px" }}
                           to={`/voucher/create/store/${params.store_code}`}
-                          class={`btn btn-warning btn-icon-split btn-sm ${insert == true ? "show" : "hide"}`}                       >
+                          class={`btn btn-warning btn-icon-split ${insert == true ? "show" : "hide"}`}                       >
                           <span class="icon text-white-50">
                             <i class="fas fa-plus"></i>
                           </span>
@@ -120,7 +120,7 @@ class Voucher extends Component {
                         </Link>
                         <Link
                           to={`/voucher/create/product/${params.store_code}`}
-                          class={`btn btn-info btn-icon-split btn-sm ${insert == true ? "show" : "hide"}`}                       >
+                          class={`btn btn-info btn-icon-split  ${insert == true ? "show" : "hide"}`}                       >
                           <span class="icon text-white-50">
                             <i class="fas fa-plus"></i>
                           </span>
@@ -130,10 +130,8 @@ class Voucher extends Component {
                     </div>
 
                     <div class="form-group">
-                      <label for="input" class="col-sm-2 control-label">
-                        Trạng thái:
-                      </label>
-                      <div class="col-sm-2" style={{ paddingLeft: "0px" }}>
+               
+                      <div class="col-sm-3" style={{ paddingLeft: "0px" }}>
                         <select
                           name="is_end"
                           id="input"
@@ -151,7 +149,7 @@ class Voucher extends Component {
                     <div class="card shadow mb-4">
                       <div class="card-header py-3">
                         <h6 class="m-0 font-weight-bold text-primary">
-                          Danh sách danh mục
+                          Danh sách Voucher
                         </h6>
                       </div>
                       <div class="card-body">

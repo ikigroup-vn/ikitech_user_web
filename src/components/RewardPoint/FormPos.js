@@ -25,7 +25,7 @@ class Form extends Component {
     var name = target.name;
     var value = target.value;
 
-    const _value = value.replace(/,/g, '').replace(/-/g, '');
+    const _value = value.replace(/,/g, '').replace(/\./g, "");
     if (!isNaN(Number(_value))) {
       value = new Intl.NumberFormat().format(_value);
       if (name == "percent_refund") {
@@ -111,16 +111,16 @@ class Form extends Component {
     var form = {
       allow_use_point_order,
       is_set_order_max_point,
-      money_a_point: money_a_point == null ? money_a_point : money_a_point.toString().replace(/,/g, '').replace(/-/g, ''),
-      order_max_point: order_max_point == null ? order_max_point : order_max_point.toString().replace(/,/g, '').replace(/-/g, ''),
-      percent_refund: percent_refund == null ? percent_refund : percent_refund.toString().replace(/,/g, '').replace(/-/g, ''),
+      money_a_point: money_a_point == null ? money_a_point : money_a_point.toString().replace(/,/g, '').replace(/\./g, ""),
+      order_max_point: order_max_point == null ? order_max_point : order_max_point.toString().replace(/,/g, '').replace(/\./g, ""),
+      percent_refund: percent_refund == null ? percent_refund : percent_refund.toString().replace(/,/g, '').replace(/\./g, ""),
     
     }
 
     if (is_set_order_max_point == false)
       form.order_max_point = null
     else
-      form.order_max_point = order_max_point == null ? order_max_point : order_max_point.toString().replace(/,/g, '').replace(/-/g, '')
+      form.order_max_point = order_max_point == null ? order_max_point : order_max_point.toString().replace(/,/g, '').replace(/\./g, "")
 
 
       if(form.allow_use_point_order == true)
@@ -228,7 +228,7 @@ class Form extends Component {
                     ( Ví dụ: {new Intl.NumberFormat().format(ex.toString())} VNĐ hoàn {percent_refund == null || percent_refund == "" ? 0 : percent_refund}%
                     =&nbsp;
                     {percent_refund == null ? 0 : new Intl.NumberFormat().format((ex * percent_refund / 100).toString())}&nbsp;VNĐ =&nbsp;
-                    {percent_refund == null || money_a_point == null || percent_refund == "" || money_a_point == "" ? 0 : new Intl.NumberFormat().format(((ex * percent_refund / 100) / Number(money_a_point.toString().replace(/,/g, '').replace(/-/g, ''))).toString())} Xu )
+                    {percent_refund == null || money_a_point == null || percent_refund == "" || money_a_point == "" ? 0 : new Intl.NumberFormat().format(((ex * percent_refund / 100) / Number(money_a_point.toString().replace(/,/g, '').replace(/\./g, ""))).toString())} Xu )
                   </i>
                 </p>
               </div>

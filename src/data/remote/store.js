@@ -143,3 +143,6 @@ export const createSupplier = (store_code, data) => {
 export const editSupplier = (store_code, id, data) => {
   return callApi(`/store/${store_code}/suppliers/${id}`, "put", data);
 };
+export const fetchSupplierId = (store_code, supplier) => {
+  return callApi(`/store/${store_code}/suppliers/${supplier}`, "get", null);
+};

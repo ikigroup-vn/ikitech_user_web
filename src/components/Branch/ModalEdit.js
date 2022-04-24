@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import * as dashboardAction from "../../actions/dashboard";
 import * as placeAction from "../../actions/place";
 import { shallowEqual } from '../../ultis/shallowEqual';
+import {isEmail , isEmpty , isPhone} from "../../ultis/helpers"
 
 class ModalEdit extends Component {
     constructor(props) {
@@ -23,7 +24,9 @@ class ModalEdit extends Component {
             txtPhone_branch: "",
             txtCode_branch: "",
             txtPost_branch: "",
-            txtEmail_branch: ""
+            txtEmail_branch: "",
+            error_email : {status : false , text : ""},
+            error_phone : {status : false , text : ""}
         }
     }
     onChange = (e) => {
@@ -112,6 +115,30 @@ class ModalEdit extends Component {
     handleOnClick = () => {
         var { txtAddress_detail, txtDistrict, txtProvince, txtWards, txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state
         const { store_code } = this.props
+        var error = false
+        if(!isEmail(txtEmail_branch) && isEmpty(txtEmail_branch))
+        {
+            error = true
+            this.setState({error_email : {text : "Email không đúng định dạng" , status : true}})
+        }
+        else
+        {
+            this.setState({error_email : {text : "Email không đúng định dạng" , status : false} , error_phone : {text : "Email không đúng định dạng" , status : false}})
+
+        }
+        if(!isPhone(txtPhone_branch))
+        {
+            error = true
+            this.setState({error_phone : {text : "SDT không đúng định dạng" , status : true}})
+
+        }
+        else
+        {
+            this.setState({error_phone : {text : "Email không đúng định dạng" , status : false}})
+
+        }
+        if(error == true)
+        return;
         const Formdata = {
             name: txtName_branch,
             phone: txtPhone_branch,
@@ -124,7 +151,9 @@ class ModalEdit extends Component {
             postcode: txtPost_branch,
             is_default: true
         }
-        this.props.updateBranchStore(store_code, Formdata, this.state.id);
+        this.props.updateBranchStore(store_code, Formdata, this.state.id , function () {
+            window.$(".modal").modal("hide");
+        });
         this.setState({
             provinceName: "",
             districtName: "",
@@ -187,7 +216,7 @@ class ModalEdit extends Component {
 
     
         var { province } = this.props
-        var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards } = this.state;
+        var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards , error_email , error_phone  } = this.state;
         var { txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state;
         return (
             <>
@@ -235,6 +264,8 @@ class ModalEdit extends Component {
                                                         onChange={this.onChange}
                                                         name="txtPhone_branch"
                                                     />
+                                                    {error_phone.status && <div className="validation" style={{ display: 'block' }}>{error_phone.text}</div>}
+
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="product_name">Email</label>
@@ -248,6 +279,8 @@ class ModalEdit extends Component {
                                                         onChange={this.onChange}
                                                         name="txtEmail_branch"
                                                     />
+                                                    {error_email.status && <div className="validation" style={{ display: 'block' }}>{error_phone.text}</div>}
+
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="product_name">Mã chi nhánh</label>
@@ -347,7 +380,7 @@ class ModalEdit extends Component {
                                         </div>
 
                                         <div class="box-footer">
-                                            <a class="btn btn-info btn-sm" onClick={this.handleOnClick} data-dismiss="modal">
+                                            <a class="btn btn-info btn-sm" onClick={this.handleOnClick} >
                                                 <span class="icon text-white-50">
                                                     <i class="fas fa-save"></i>
                                                 </span>
@@ -369,8 +402,8 @@ const mapDispatchToProps = (dispatch, props) => {
         createBranchStore: (id, form) => {
             dispatch(dashboardAction.createBranchStore(id, form));
         },
-        updateBranchStore: (store_code, form, id) => {
-            dispatch(dashboardAction.updateBranchStore(store_code, form, id));
+        updateBranchStore: (store_code, form, id , funcModal) => {
+            dispatch(dashboardAction.updateBranchStore(store_code, form, id , funcModal));
         },
         fetchPlaceDistrict: (id) => {
             dispatch(placeAction.fetchPlaceDistrict(id));

@@ -18,20 +18,20 @@ class ModalUpload extends Component {
     e.preventDefault();
     window.$('.modal').modal('hide');
 
-    if (this.props.listImgProduct.length + this.state.files.length > 10) {
-      this.props.checkNumImg(
-        {
-          type: Types.ALERT_UID_STATUS,
-          alert: {
-            type: "danger",
-            title: "Lỗi ",
-            disable: "show",
-            content: "Chỉ được chọn tối đa 10 hình ảnh",
-          },
-        }
-      )
-    }
-    else {
+    // if (this.props.listImgProduct.length + this.state.files.length > 10) {
+    //   this.props.checkNumImg(
+    //     {
+    //       type: Types.ALERT_UID_STATUS,
+    //       alert: {
+    //         type: "danger",
+    //         title: "Lỗi ",
+    //         disable: "show",
+    //         content: "Chỉ được chọn tối đa 10 hình ảnh",
+    //       },
+    //     }
+    //   )
+    // }
+    // else {
       if (this.state.files.length > 0) {
         window.$('#file-listp').fileinput('clear');
         this.setState({
@@ -43,7 +43,7 @@ class ModalUpload extends Component {
 
       }
     }
-  }
+  // }
 
   componentDidMount() {
     var _this = this

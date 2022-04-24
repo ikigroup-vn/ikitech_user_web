@@ -9,9 +9,10 @@ import CKEditor from "ckeditor4-react";
 import ModalUpload from "../ModalUpload";
 import * as Env from "../../../../ultis/default"
 import MomentInput from 'react-moment-input';
-import {formatNumber} from "../../../../ultis/helpers"
-import {isEmpty} from "../../../../ultis/helpers"
+import { formatNumber } from "../../../../ultis/helpers"
+import { isEmpty } from "../../../../ultis/helpers"
 import * as Types from "../../../../constants/ActionType";
+import getChannel, { IKIPOS, IKITECH } from "../../../../ultis/channel";
 
 class Form extends Component {
   constructor(props) {
@@ -23,9 +24,10 @@ class Form extends Component {
       txtValue: "",
       txtAmount: "",
       listProducts: [],
+      saveListProducts : [],
       txtContent: "",
       image: "",
-      displayError : "hide"
+      displayError: "hide"
     };
   }
   componentDidMount() {
@@ -34,7 +36,7 @@ class Form extends Component {
       document.getElementsByClassName('r-input')[0].placeholder = 'Chọn ngày và thời gian';
       document.getElementsByClassName('r-input')[1].placeholder = 'Chọn ngày và thời gian';
     } catch (error) {
-      
+
     }
 
   }
@@ -91,14 +93,13 @@ class Form extends Component {
     var { txtEnd } = this.state
     if (e != "" && txtEnd != "") {
 
-      if(!moment(e, 'DD-MM-YYYY HH:mm').isBefore(moment(txtEnd, 'DD-MM-YYYY HH:mm'))){
+      if (!moment(e, 'DD-MM-YYYY HH:mm').isBefore(moment(txtEnd, 'DD-MM-YYYY HH:mm'))) {
 
-        this.setState({displayError : "show"})
+        this.setState({ displayError: "show" })
       }
-      else
-      {
+      else {
         console.log("hidddeee")
-        this.setState({displayError : "hide"})
+        this.setState({ displayError: "hide" })
 
       }
     }
@@ -113,13 +114,12 @@ class Form extends Component {
 
     if (txtStart != "" && e != "") {
 
-      if(!moment(txtStart, 'DD-MM-YYYY HH:mm').isBefore(moment(e, 'DD-MM-YYYY HH:mm'))){
+      if (!moment(txtStart, 'DD-MM-YYYY HH:mm').isBefore(moment(e, 'DD-MM-YYYY HH:mm'))) {
 
-        this.setState({displayError : "show"})
+        this.setState({ displayError: "show" })
       }
-      else
-      {
-        this.setState({displayError : "hide"})
+      else {
+        this.setState({ displayError: "hide" })
 
       }
     }
@@ -131,13 +131,11 @@ class Form extends Component {
     console.log("dadassss")
 
     e.preventDefault();
-    if(this.state.displayError == "show")
-    {
+    if (this.state.displayError == "show") {
       return
     }
     var state = this.state;
-    if(state.txtValue == null || !isEmpty( state.txtValue))
-    {
+    if (state.txtValue == null || !isEmpty(state.txtValue)) {
       this.props.showError({
 
         type: Types.ALERT_UID_STATUS,
@@ -152,7 +150,7 @@ class Form extends Component {
       return;
     }
     var { store_code } = this.props
-    var listProducts = state.listProducts
+    var listProducts = state.saveListProducts
     var product_ids = ""
     listProducts.forEach((element, index) => {
       if (listProducts.length == index + 1)
@@ -166,7 +164,7 @@ class Form extends Component {
     var form = {
       name: state.txtName,
       start_time: startTime == "Invalid date" ? null : startTime,
-      end_time: endTime== "Invalid date" ? null : endTime,
+      end_time: endTime == "Invalid date" ? null : endTime,
       value: state.txtValue == null ? state.txtValue : formatNumber(state.txtValue),
       amount: state.txtAmount == null ? state.txtAmount : formatNumber(state.txtAmount),
       product_ids: product_ids,
@@ -187,7 +185,7 @@ class Form extends Component {
     history.goBack();
   };
 
-  handleAddProduct = (product, id, type) => {
+  handleAddProduct = (product, id, type , onSave = null) => {
     console.log(product);
     var products = [...this.state.listProducts];
 
@@ -211,10 +209,19 @@ class Form extends Component {
         products.push(product)
       }
     }
+    if(onSave == true)
+    this.setState({ listProducts: products , saveListProducts : products })
+    else
     this.setState({ listProducts: products })
   };
+
+  onSaveProduct = () =>{
+    this.setState({saveListProducts : [...this.state.listProducts]})
+  }
+
+
   render() {
-    var { txtName, txtStart, txtEnd, txtValue, txtAmount, listProducts, txtContent, image , displayError } = this.state;
+    var { txtName, txtStart, txtEnd, txtValue, txtAmount, listProducts, txtContent, image, displayError  ,saveListProducts} = this.state;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
     var { products, store_code, discounts } = this.props;
     return (
@@ -222,26 +229,32 @@ class Form extends Component {
         <form role="form" onSubmit={this.onSave} method="post">
 
           <div class="box-body">
-            <div class="form-group">
-              <label>Ảnh: &nbsp; </label>
-              <img src={`${image}`} width="150" height="150" />
-            </div>
-            <div class="form-group">
+            {
+              getChannel() == IKITECH && (
+                <React.Fragment>
+                  <div class="form-group">
+                    <label>Ảnh: &nbsp; </label>
+                    <img src={`${image}`} width="150" height="150" />
+                  </div>
+                  <div class="form-group">
 
-              <div class="kv-avatar">
-                <div >
-                  <button
-                    type="button"
-                    class="btn btn-primary btn-sm"
-                    data-toggle="modal"
-                    data-target="#uploadModalDiscount"
-                  >
-                    <i class="fa fa-plus"></i> Upload ảnh
-                  </button>
-                </div>
-              </div>
+                    <div class="kv-avatar">
+                      <div >
+                        <button
+                          type="button"
+                          class="btn btn-primary btn-sm"
+                          data-toggle="modal"
+                          data-target="#uploadModalDiscount"
+                        >
+                          <i class="fa fa-plus"></i> Upload ảnh
+                        </button>
+                      </div>
+                    </div>
 
-            </div>
+                  </div>
+                </React.Fragment>
+              )}
+
 
             <div class="form-group">
               <label for="product_name">Tên chương trình</label>
@@ -250,7 +263,6 @@ class Form extends Component {
                 class="form-control"
                 id="txtName"
                 value={txtName}
-                name="txtName"
                 placeholder="Nhập tên chương trình"
                 autocomplete="off"
                 onChange={this.onChange}
@@ -299,19 +311,25 @@ class Form extends Component {
               Thời gian kết thúc phải sau thời gian bắt đầu
             </div>
             <div class="form-group">
-              <label for="product_name">Giảm giá</label>
-              <input
-                type="text"
+              <label for="product_name">Giảm giá (%)</label>
+              <div class="input-group">
+
+                <input type="text"
                 class="form-control"
                 id="txtValue"
                 name="txtValue"
                 value={txtValue}
                 placeholder="nhập giảm giá"
                 autocomplete="off"
-                onChange={this.onChange}
-              />
+                onChange={this.onChange} />
+                <div class="input-group-append">
+                  <span class="input-group-text" id="basic-addon2">%</span>
+                </div>
+              </div>
+     
             </div>
-
+            {
+              getChannel() == IKITECH &&
             <div class="form-group">
               <label for="product_name">Giới hạn đặt hàng</label>
               <input
@@ -325,16 +343,20 @@ class Form extends Component {
                 onChange={this.onChange}
               />
             </div>
+  }
 
 
-            <Table handleAddProduct={this.handleAddProduct} products={listProducts}></Table>
-            <div class="form-group">
-              <label for="product_name">Mô tả</label>
-              <CKEditor
-                data={txtContent}
-                onChange={this.onChangeDecription}
-              />
-            </div>
+            <Table handleAddProduct={this.handleAddProduct} products={saveListProducts}></Table>
+            {
+              getChannel() == IKITECH &&
+              <div class="form-group">
+                <label for="product_name">Mô tả</label>
+                <CKEditor
+                  data={txtContent}
+                  onChange={this.onChangeDecription}
+                />
+              </div>
+            }
           </div>
           <div class="box-footer">
             <button type="submit" class="btn btn-info btn-icon-split btn-sm">
@@ -344,12 +366,11 @@ class Form extends Component {
               <span class="text">Tạo</span>
             </button>
             <a
-              style={{ marginLeft: "10px" }}
+              style={{ marginLeft: "10px" , color : "white" }}
               onClick={this.goBack}
-              class="btn btn-warning"
               class="btn btn-warning btn-icon-split  btn-sm"
             >
-              <span class="icon text-white-50">
+              <span style = {{color : "white"}} class="icon text-white-50">
                 <i class="fas fa-arrow-left"></i>
               </span>
               <span class="text"> Trở về</span>
@@ -359,6 +380,7 @@ class Form extends Component {
         </form>
         <ModalUpload />
         <ModalListProduct
+        onSaveProduct = {this.onSaveProduct}
           discounts={discounts}
           handleAddProduct={this.handleAddProduct}
           listProducts={listProducts}

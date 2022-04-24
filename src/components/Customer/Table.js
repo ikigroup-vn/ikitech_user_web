@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
+import history from "../../history";
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -12,7 +13,11 @@ class Table extends Component {
   handleSetInfor = (item) => {
     this.props.handleSetInfor(item)
   }
+  changePage = (store_code , customerId) => {
+    var {  paginate } = this.props;
 
+    history.push(`/customer/detail/${store_code}/${customerId}?pag=${paginate}`)
+      }
   showData = (customer) => {
     var { store_code, paginate } = this.props;
     var result = null;
@@ -21,7 +26,7 @@ class Table extends Component {
 
       result = customer.map((data, index) => {
         return (
-          <tr>
+          <tr className="hover-product" onClick={() => this.changePage(store_code , data.id)}>
             <td>{index + 1}</td>
 
             <td>{data.name}</td>

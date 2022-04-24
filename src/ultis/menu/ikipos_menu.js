@@ -164,13 +164,12 @@ export const ikipos_menu = [
                 name: "Chấm công",
                 icon: "fa fa-calendar",
         
-                open: "promotion",
-                // open: "timekeeping",
+                // open: "promotion",
+                open: "timekeeping",
         
                 children: [
                   {
                     name: "Ca làm việc",
-                    class: "promotion_discount_list",
                     display: "hide",
                     icon: "fas fa-clock-nin",
                     exact: true,
@@ -179,7 +178,6 @@ export const ikipos_menu = [
                     // class: "timekeeping_shift",
                   },
                   {
-                    class: "promotion_voucher_list",
         
                     name: "Lịch làm việc",
                     // class: "timekeeping_work_schedule",
@@ -189,7 +187,6 @@ export const ikipos_menu = [
                     to: "/calendar_shift",
                   },
                   {
-                    class: "promotion_voucher_list",
         
                     name: "Bảng công",
         
@@ -199,7 +196,6 @@ export const ikipos_menu = [
                     to: "/time_sheet",
                   },
                   {
-                    class: "promotion_combo_list",
         
                     name: "Địa điểm làm việc",
                     // class: "timekeeping_work_location",
@@ -210,7 +206,6 @@ export const ikipos_menu = [
                     to: "/work_location",
                   },
                   {
-                    class: "promotion_combo_list",
         
                     name: "Xử lý yêu cầu",
                     // class: "timekeeping_work_location",
@@ -222,6 +217,39 @@ export const ikipos_menu = [
                   },
                 ],
               },
+
+
+              {
+                name: "Chương trình khuyến mại",
+                icon: "fas fa-money-bill-alt",
+                open: "promotion",
+                children: [
+                    {
+                        name: "Giảm giá sản phẩm",
+                        class: "promotion_discount_list",
+                        display: "hide",
+                        icon: "fas-usd-circle",
+                        exact: true,
+                        to: "/discount",
+                    },
+                    {
+                        name: "Voucher giảm giá hóa đơn",
+                        class: "promotion_voucher_list",
+                        display: "hide",
+                        icon: "fas fa-fw fa-cog",
+                        exact: true,
+                        to: "/voucher",
+                    },
+                    {
+                        name: "Combo giảm giá",
+                        class: "promotion_combo_list",
+                        display: "hide",
+                        icon: "fas fa-fw fa-cog",
+                        exact: true,
+                        to: "/combo",
+                    },
+                ],
+            },
             {
                 name: "Cài đặt",
 
@@ -258,30 +286,7 @@ export const ikipos_menu = [
                         exact: true,
                         to: "/decentralization/index",
                     },
-                    {
-                        name: "Giảm giá sản phẩm",
-                        class: "promotion_discount_list",
-                        display: "hide",
-                        icon: "fas-usd-circle",
-                        exact: true,
-                        to: "/discount",
-                    },
-                    {
-                        name: "Voucher giảm giá hóa đơn",
-                        class: "promotion_voucher_list",
-                        display: "hide",
-                        icon: "fas fa-fw fa-cog",
-                        exact: true,
-                        to: "/voucher",
-                    },
-                    {
-                        name: "Combo giảm giá",
-                        class: "promotion_combo_list",
-                        display: "hide",
-                        icon: "fas fa-fw fa-cog",
-                        exact: true,
-                        to: "/combo",
-                    },
+                
                     {
                         name: "Cài đặt chung",
                         class: "web_theme_edit",

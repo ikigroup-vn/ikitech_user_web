@@ -77,8 +77,29 @@ class ListProduct extends Component {
         var checked = this.checkExsit(list, data.id)
         var disaled = this.checkDisable(discounts, data.id, list);
         var background_disable = disaled == true ? "#55b8c3" : "white"
+        const {
+          product_discount,
+          min_price,
+          max_price,
+          _delete,
+          update,
+          insert,
+          per_page,
+          current_page,
+          store_code,
+          page,
+          status_stock,
+          discount,
+          historyInventory,
+          distributes
+        } = data;
+        let discount_percent = null;
+
+        if (product_discount) {
+          discount_percent = product_discount.value;
+        }
         return (
-          <tr style={{ background: background_disable }}>
+          <tr className={disaled == true ? "" : "hover-product"} style = {{background : background_disable}}>
             <td>
 
               <div class="checkbox">
@@ -93,11 +114,69 @@ class ListProduct extends Component {
 
             </td>
 
-            <td>{data.id}</td>
+            <td>{data.sku}</td>
 
             <td>{data.name}</td>
+            <td>     <div>
+              {min_price === max_price ? (
+                format(
+                  Number(
+                    discount_percent == null
+                      ? min_price
+                      : min_price - min_price * discount_percent * 0.01
+                  )
+                )
+              ) : distributes && distributes.length == 0 ? format(
+                Number(
+                  discount_percent == null
+                    ? min_price
+                    : min_price - min_price * discount_percent * 0.01
+                )) :(
+                <div>
+                  {format(
+                    Number(
+                      discount_percent == null
+                        ? min_price
+                        : min_price - min_price * discount_percent * 0.01
+                    )
+                  )}
+                  {" - "}
+                  {format(
+                    Number(
+                      discount_percent == null
+                        ? max_price
+                        : max_price - max_price * discount_percent * 0.01
+                    )
+                  )}
+                </div>
+              )}
+            </div>
 
-            <td>{format(data.price)}</td>
+            {product_discount && (
+              <div
+                style={{
+                  float: "left",
+                }}
+              >
+                {min_price === max_price ? (
+                  format(Number(min_price))
+                ) : (
+                  <div className="row">
+                    <div
+                      style={{
+                        textDecoration: "line-through",
+                      }}
+                    >
+                      {format(Number(min_price))}
+                      {" - "}
+                      {format(Number(max_price))}
+                    </div>
+
+                    <div className="discount">&emsp; -{discount_percent}%</div>
+                  </div>
+                )}
+              </div>
+            )}</td>
             <td> <h5>
               <span class={`badge badge-${status}`}>
                 {status_name}
@@ -142,11 +221,10 @@ class ListProduct extends Component {
                 <thead>
                   <tr>
                     <th></th>
-                    <th>Mã</th>
+                    <th>Mã SKU</th>
                     <th>Tên</th>
                     <th>Giá</th>
                     <th>Trạng thái</th>
-                    <th>Giảm giá</th>
                   </tr>
                 </thead>
 

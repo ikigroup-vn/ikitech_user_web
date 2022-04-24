@@ -3,6 +3,9 @@ import { connect } from 'react-redux';
 import * as dashboardAction from "../../actions/customer";
 import * as placeAction from "../../actions/place";
 import { shallowEqual } from '../../ultis/shallowEqual';
+import Validator from '../../ultis/validator';
+import {isEmail , isEmpty} from "../../ultis/helpers"
+import themeData from "../../ultis/theme_data";
 
 class ModalCreate extends Component {
     constructor(props) {
@@ -22,8 +25,26 @@ class ModalCreate extends Component {
             txtName_branch: "",
             txtPhone_branch: "",
             txtEmail_branch: "",
+            errors: {},
 
         }
+        const rules = [
+            {
+                field: 'txtName_branch',
+                method: 'isEmpty',
+                validWhen: false,
+                message: 'Tên không được để trống.',
+            },
+      
+            {
+                field: 'txtPhone_branch',
+                method: 'isLength',
+                args: [{ min: 10 }],
+                validWhen: true,
+                message: 'Số điện thoại không hợp lệ.',
+            },
+        ];
+        this.validator = new Validator(rules);
     }
     onChange = (e) => {
         var target = e.target;
@@ -100,28 +121,38 @@ class ModalCreate extends Component {
                 listDistrict: [],
                 txtName_branch: "",
                 txtPhone_branch: "",
-                txtEmail_branch: ""
+                txtEmail_branch: "",
+                
             })
             this.props.resetModal()
+  
         }
 
     }
     handleOnClick = () => {
-        var { txtAddress_detail, txtDistrict, txtProvince, txtWards, txtName_branch, txtPhone_branch, txtEmail_branch } = this.state
-        const { store_code } = this.props
-        const Formdata = {
-            name: txtName_branch,
-            phone_number: txtPhone_branch,
-            email: txtEmail_branch,
-            province: txtProvince,
-            district: txtDistrict,
-            wards: txtWards,
-            address_detail: txtAddress_detail,
+        const errors = this.validator.validate(this.state)
+        this.setState({
+            errors: errors,
+        });
+        console.log(Object.keys(errors));
+        if (Object.keys(errors).length === 0 && ( !isEmpty(this.state.txtEmail_branch) || (isEmail(this.state.txtEmail_branch) && isEmpty(this.state.txtEmail_branch)) )) {
+            var { txtAddress_detail, txtDistrict, txtProvince, txtWards, txtName_branch, txtPhone_branch, txtEmail_branch } = this.state
+            const { store_code } = this.props
+            const Formdata = {
+                name: txtName_branch,
+                phone_number: txtPhone_branch,
+                email: txtEmail_branch,
+                province: txtProvince,
+                district: txtDistrict,
+                wards: txtWards,
+                address_detail: txtAddress_detail,
+            }
+
+            this.props.createCustomer(store_code, Formdata, function () {
+                window.$(".modal").modal("hide");
+            }); 
         }
 
-        this.props.createCustomer(store_code, Formdata, function () {
-            window.$(".modal").modal("hide");
-        });
         // this.setState({
         //     provinceName: "",
         //     districtName: "",
@@ -185,8 +216,9 @@ class ModalCreate extends Component {
     }
     render() {
         var { province } = this.props
-        var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards } = this.state;
+        var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards , errors } = this.state;
         var { txtName_branch, txtPhone_branch, txtEmail_branch } = this.state;
+        console.log(isEmail(txtEmail_branch) , isEmpty())
         return (
             <>
                 {this.state.status &&
@@ -199,8 +231,8 @@ class ModalCreate extends Component {
                 <div class="modal" id="modalCreateCustomer">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
-                            <div className='model-header-modal' style={{ display: 'flex', justifyContent: "space-between", margin: "10px 15px" }}>
-                                <p class="" style={{ margin: "0px", fontWeight: "bold" }}>Tạo khách hàng</p>
+                            <div className='model-header-modal'  style={{ display: 'flex', justifyContent: "space-between",   backgroundColor: themeData().backgroundColor }}>
+                             <h4 style={{ color: "white" , margin : "10px" }}>Tạo khách hàng</h4>
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
@@ -208,20 +240,7 @@ class ModalCreate extends Component {
                                     <form role="form" >
                                         <div className='row'>
                                             <div className='col-6 box-body-left'>
-                                                <div class="form-group">
-                                                    <label for="product_name" style={{ margin: 0 }}>
-                                                        Hình ảnh
-                                                    </label>
-                                                    <div className="file-loading">
-                                                        <input
-                                                            id="file-category-product"
-                                                            type="file"
-                                                            className="file"
-                                                            data-overwrite-initial="false"
-                                                            data-min-file-count="2"
-                                                        />
-                                                    </div>
-                                                </div>
+
                                                 <div class="form-group">
                                                     <label for="product_name">Tên khách hàng</label>
                                                     <input
@@ -234,6 +253,8 @@ class ModalCreate extends Component {
                                                         onChange={this.onChange}
                                                         name="txtName_branch"
                                                     />
+                                                    {errors.txtName_branch && <div className="validation" style={{ display: 'block' }}>{errors.txtName_branch}</div>}
+
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="product_name">Số điện thoại</label>
@@ -247,6 +268,7 @@ class ModalCreate extends Component {
                                                         onChange={this.onChange}
                                                         name="txtPhone_branch"
                                                     />
+                                                    {errors.txtPhone_branch && <div className="validation" style={{ display: 'block' }}>{errors.txtPhone_branch}</div>}
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="product_name">Email</label>
@@ -260,6 +282,8 @@ class ModalCreate extends Component {
                                                         onChange={this.onChange}
                                                         name="txtEmail_branch"
                                                     />
+                                                    {!isEmail(txtEmail_branch) && isEmpty(txtEmail_branch) && <div className="validation" style={{ display: 'block' }}>Email không đúng định dạng</div>}
+
                                                 </div>
                                             </div>
                                             <div class="col-6 box-body-right">
@@ -335,7 +359,7 @@ class ModalCreate extends Component {
                                 >
                                     Đóng
                                 </button>
-                                <button type="submit" onClick={this.handleOnClick} class="btn btn-info">
+                                <button type="submit"  style={{ backgroundColor: themeData().backgroundColor }} onClick={this.handleOnClick} class="btn btn-info">
                                     Tạo
                                 </button>
                             </div>

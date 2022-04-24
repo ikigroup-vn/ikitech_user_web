@@ -58,7 +58,10 @@
       justify-content : center
 }
   
-
+.hover-product:hover{
+    background: rgb(229, 111, 37) !important;
+    color : white !important
+}
   
 .on-off>.checkbox {
     display: none;
@@ -396,11 +399,16 @@ ul {
     color: #10a0b5!important;
     font-weight: 500!important
 }
-
+.color-white {
+    color: white !important;
+}
 .form-group > label {
     font-weight: 500;
 }
-
+.tab-pos .react-tabs__tab--selected
+{
+background-color: rgb(229, 111, 37) !important;
+}
 .card-body {
     font-size: 14px;
     color: black
@@ -461,7 +469,7 @@ img {
 }
 
 .tab-pagination > .active > .page-link {
-    background-color: #C12026 !important
+    background-color:  rgb(229, 111, 37) !important;
 }
 
 .navbar-main {

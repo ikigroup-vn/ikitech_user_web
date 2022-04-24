@@ -8,9 +8,9 @@ import Alert from "../../../components/Partials/Alert";
 import { connect } from "react-redux";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
-import OrderHistory from "../../../components/Customer/Detail/OrderHistory";
-import Info from "../../../components/Customer/Detail/Info";
-import CustomerDebt from "../../../components/Customer/Detail/CustomerDebt";
+import OrderHistory from "../../../components/Supplier/Detail/OrderHistory";
+import Info from "../../../components/Supplier/Detail/Info";
+import SupplierDebt from "../../../components/Supplier/Detail/SupplierDebt";
 
 
 import * as themeAction from "../../../actions/theme";
@@ -28,7 +28,7 @@ class DetailPos extends Component {
   }
 
   render() {
-    var { store_code , customerId } = this.props.match.params;
+    var { store_code , supplierId } = this.props.match.params;
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
@@ -46,7 +46,7 @@ class DetailPos extends Component {
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
                     <h4 className="h4 title_content mb-0 text-gray-800">
-                      Thông tin khách hàng
+                      Thông tin Nhà cung cấp
                     </h4>
                   </div>
                   <br></br>
@@ -80,13 +80,13 @@ class DetailPos extends Component {
 
                           <TabPanel>
                             <Info
-                            customerId = {customerId}
+                            supplierId = {supplierId}
                               store_code={store_code}
                             />
                           </TabPanel>
                           <TabPanel>
                          
-                              <CustomerDebt
+                              <SupplierDebt
                               store_code={store_code}
                             />
                           </TabPanel>

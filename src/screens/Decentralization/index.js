@@ -85,7 +85,7 @@ class Decentralization extends Component {
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   <h4 className="h4 title_content mb-0 text-gray-800">
-                  Quản lý nhóm
+                  Cài đặt phân quyền
                   </h4>{" "}
                   <Link to={`/decentralization/create/${store_code}`}
                       class={`btn btn-info btn-icon-split btn-sm ${insert == true ? "show" : "hide"}`}
@@ -93,7 +93,7 @@ class Decentralization extends Component {
                     <span class="icon text-white-50">
                       <i class="fas fa-plus"></i>
                     </span>
-                    <span class="text">Thêm nhóm </span>
+                    <span class="text">Thêm phân quyền</span>
                   </Link>
                 </div>
 
@@ -101,7 +101,7 @@ class Decentralization extends Component {
                 <div className="card shadow mb-4">
                   <div className="card-header py-3">
                     <h6 className="m-0 title_content font-weight-bold text-primary">
-                      Danh sách nhóm
+                      Danh sách phân quyền
                     </h6>
                   </div>
                   <div className="card-body">

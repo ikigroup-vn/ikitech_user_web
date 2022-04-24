@@ -107,22 +107,21 @@ class Discount extends Component {
                   <div
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
-                    <h3 class="h3 title_content mb-2 text-gray-800">Chương trình giảm giá</h3>
+                    <h3 class="h3 title_content mb-2 text-gray-800">Giảm giá sản phẩm</h3>
+                    
                     <Link
                       to={`/discount/create/${params.store_code}`}
-                      class={`btn btn-info btn-icon-split btn-sm ${insert == true ? "show" : "hide"}`}                  >
+                      class={`btn btn-info btn-icon-split  ${insert == true ? "show" : "hide"}`}                  >
                       <span class="icon text-white-50">
                         <i class="fas fa-plus"></i>
                       </span>
-                      <span class="text">Thêm chương trình</span>
+                      <span class="text">Tạo giảm giá</span>
                     </Link>
                   </div>
 
                   <div class="form-group">
-                    <label for="input" class="col-sm-2 control-label">
-                      Trạng thái:
-                    </label>
-                    <div class="col-sm-2" style={{ paddingLeft: "0px" }}>
+                 
+                    <div class="col-sm-3" style={{ paddingLeft: "0px" }}>
                       <select
                         name="is_end"
                         id="input"

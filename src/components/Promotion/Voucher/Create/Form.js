@@ -6,14 +6,14 @@ import Table from "./Table";
 import { shallowEqual } from "../../../../ultis/shallowEqual";
 import moment from "moment";
 import Datetime from "react-datetime";
-import ModalListProduct from "./ListProduct";
+import ModalListProduct from "../../Discount/Create/ListProduct";
 import CKEditor from "ckeditor4-react";
 import ModalUpload from "../ModalUpload";
 import * as Env from "../../../../ultis/default"
 import MomentInput from 'react-moment-input';
 import {formatNumber} from "../../../../ultis/helpers"
 import {isEmpty} from "../../../../ultis/helpers"
-
+import getChannel , {IKIPOS , IKITECH} from "../../../../ultis/channel"
 class Form extends Component {
   constructor(props) {
     super(props);
@@ -33,7 +33,9 @@ class Form extends Component {
       is_type_discount: "hide",
       is_limit: "hide",
       limit: 'hide',
-      displayError: "hide"
+      displayError: "hide",
+      saveListProducts : [],
+
 
     };
   }
@@ -48,7 +50,9 @@ class Form extends Component {
 
 
   }
-
+  onSaveProduct = () =>{
+    this.setState({saveListProducts : [...this.state.listProducts]})
+  }
   componentWillReceiveProps(nextProps) {
     if (this.props.image !== nextProps.image) {
       this.setState({ image: nextProps.image })
@@ -158,7 +162,7 @@ class Form extends Component {
     }
     var { store_code, type } = this.props
 
-    var listProducts = state.listProducts
+    var listProducts = state.saveListProducts
     var product_ids = ""
     listProducts.forEach((element, index) => {
       if (listProducts.length == index + 1)
@@ -212,7 +216,7 @@ class Form extends Component {
     history.goBack();
   };
 
-  handleAddProduct = (product, id, type) => {
+  handleAddProduct = (product, id, type , onSave = null) => {
     console.log(product);
     var products = [...this.state.listProducts];
 
@@ -236,8 +240,11 @@ class Form extends Component {
         products.push(product)
       }
     }
+    if(onSave == true)
+    this.setState({ listProducts: products , saveListProducts : products })
+    else
     this.setState({ listProducts: products })
-  };
+    };
 
   setTypeDiscount = (e) => {
     var value = e.target.value
@@ -281,7 +288,8 @@ class Form extends Component {
       is_type_discount,
       is_limit,
       limit,
-      displayError
+      displayError,
+      saveListProducts
     } = this.state;
     console.log(this.state);
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
@@ -295,7 +303,11 @@ class Form extends Component {
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 
               <div class="box-body">
-                <div class="form-group">
+              {getChannel() == IKITECH && 
+              
+              (
+                <React.Fragment>
+                            <div class="form-group">
                   <label>Ảnh: &nbsp; </label>
                   <img src={`${image}`} width="150" height="150" />
                 </div>
@@ -315,6 +327,8 @@ class Form extends Component {
                   </div>
 
                 </div>
+                </React.Fragment>
+              )}
 
                 <div class="form-group">
                   <label for="product_name">Tên chương trình</label>
@@ -403,7 +417,7 @@ class Form extends Component {
                     id="txtValueLimitTotal"
                     name="txtValueLimitTotal"
                     value={txtValueLimitTotal}
-                    placeholder="Nhập giá trị đơn hàng tiền tối thiểu"
+                    placeholder="Nhập giá trị tối thiểu của đơn hàng"
                     autocomplete="off"
                     onChange={this.onChange}
                   />
@@ -419,7 +433,7 @@ class Form extends Component {
                     id="txtAmount"
                     name="txtAmount"
                     value={txtAmount}
-                    placeholder="Số lượng mã phiểu có thẻ sử dụng"
+                    placeholder="Số lượng mã phiểu có thể sử dụng"
                     autocomplete="off"
                     onChange={this.onChange}
                   />
@@ -488,7 +502,7 @@ class Form extends Component {
                       id="txtMaxValueDiscount"
                       name="txtMaxValueDiscount"
                       value={txtMaxValueDiscount}
-                      placeholder="Nhập giá trị bạn muốn giản"
+                      placeholder="Nhập giá trị bạn muốn giảm"
                       autocomplete="off"
                       onChange={this.onChange}
                     />
@@ -509,16 +523,17 @@ class Form extends Component {
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
               <div className={`${disableOfType}`} >
-                <Table handleAddProduct={this.handleAddProduct} products={listProducts}></Table>
+              <Table handleAddProduct={this.handleAddProduct} products={saveListProducts}></Table>
 
               </div>
-              <div class="form-group">
+              {getChannel == IKITECH &&   <div class="form-group">
                 <label for="product_name">Mô tả</label>
                 <CKEditor
                   data={txtContent}
                   onChange={this.onChangeDecription}
                 />
-              </div>
+              </div> }
+       
             </div>
           </div>
           <div class="row">
@@ -533,7 +548,6 @@ class Form extends Component {
                 <a
                   style={{ marginLeft: "10px" }}
                   onClick={this.goBack}
-                  class="btn btn-warning"
                   class="btn btn-warning btn-icon-split  btn-sm"
                 >
                   <span class="icon text-white-50">
@@ -550,7 +564,9 @@ class Form extends Component {
 
         <ModalUpload />
         <ModalListProduct
-          vouchers={vouchers}
+                onSaveProduct = {this.onSaveProduct}
+
+          discounts={vouchers}
           handleAddProduct={this.handleAddProduct}
           listProducts={listProducts}
           store_code={store_code}

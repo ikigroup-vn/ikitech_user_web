@@ -21,7 +21,7 @@ class Table extends Component {
 
 
   removeItem = (id) => {
-    this.props.handleAddProduct(null, id, "remove")
+    this.props.handleAddProduct(null, id, "remove" , true)
   }
 
   decrement = (id) => {
@@ -74,18 +74,18 @@ class Table extends Component {
     return (
       <React.Fragment>
         <div class="form-group">
-          <label for="product_name">Sản phẩm : </label>
+          <label for="product_name">Sản phẩm được áp dụng</label>
 
           <button
             type="button"
+            class="btn btn-primary-no-background btn-sm"
+
             style={{ marginLeft: "10px" }}
             data-toggle="modal"
             data-target="#showListProduct"
           >
-            <span class="icon text-white-50">
-              <i class="fas fa-plus" style={{ color: "black" }}></i>
-            </span>
-            <span class="text">Chọn sản phẩm</span>
+              <i class="fas fa-plus" ></i>
+            <span class="text">&nbsp;Chọn sản phẩm</span>
           </button>
         </div>
         <div class="form-group">
@@ -94,7 +94,7 @@ class Table extends Component {
           <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
             <div class="table-responsive">
               <table class="table table-border table-hover">
-                <thead className="thead-quantity">
+                <thead className="">
                   <tr>
                     <th>STT</th>
                     <th>Mã sản phẩm</th>

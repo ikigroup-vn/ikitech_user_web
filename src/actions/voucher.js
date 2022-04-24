@@ -212,7 +212,7 @@ export const createVoucher = (store_code, voucher) => {
   };
 };
 
-export const destroyVoucher = (store_code, id) => {
+export const destroyVoucher = (store_code, id , is_end) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -225,35 +225,56 @@ export const destroyVoucher = (store_code, id) => {
           type: Types.SHOW_LOADING,
           loading: "hide"
         })
-        voucherApi.fetchAllVoucher(store_code)
-          .then((res) => {
-            if(res.data.code !== 401)
 
-            dispatch({
-              type: Types.FETCH_ALL_VOUCHER,
-              data: res.data.data,
+
+          if(is_end == 1)
+          {
+            voucherApi.fetchAllVoucherEnd(store_code, 1).then((res) => {
+              dispatch({
+                type: Types.SHOW_LOADING,
+                loading: "hide"
+              })
+              if(res.data.code !== 401)
+              dispatch({
+                type: Types.FETCH_ALL_VOUCHER,
+                data: res.data.data,
+              });
             });
-            dispatch({
-              type: Types.ALERT_UID_STATUS,
-              alert: {
-                type: "success",
-                title: "Thành công ",
-                disable: "show",
-                content: res.data.msg,
-              },
+          }
+          else
+          {
+            voucherApi.fetchAllVoucher(store_code)
+            .then((res) => {
+              if(res.data.code !== 401)
+  
+              dispatch({
+                type: Types.FETCH_ALL_VOUCHER,
+                data: res.data.data,
+              });
+              dispatch({
+                type: Types.ALERT_UID_STATUS,
+                alert: {
+                  type: "success",
+                  title: "Thành công ",
+                  disable: "show",
+                  content: res.data.msg,
+                },
+              });
+            })
+            .catch(function (error) {
+              dispatch({
+                type: Types.ALERT_UID_STATUS,
+                alert: {
+                  type: "danger",
+                  title: "Lỗi",
+                  disable: "show",
+                  content: error.response.data.msg,
+                },
+              });
             });
-          })
-          .catch(function (error) {
-            dispatch({
-              type: Types.ALERT_UID_STATUS,
-              alert: {
-                type: "danger",
-                title: "Lỗi",
-                disable: "show",
-                content: error.response.data.msg,
-              },
-            });
-          });
+          }
+
+      
       })
       .catch(function (error) {
         dispatch({

@@ -41,7 +41,11 @@ class Table extends Component {
 
 
 
-            <td>
+            <td style = {{
+              display: "flex",
+              justifyContent: "space-around"
+          
+            }}>
               <Link
                 to={`/staff/edit/${store_code}/${data.id}`}
                 class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
@@ -50,7 +54,6 @@ class Table extends Component {
               </Link>
               <button
               onClick = {(e)=>this.passDataModal(e,data.id,data.name)}
-                style={{ marginLeft: "10px" }}
                 data-toggle="modal"
                 data-target="#removeModal"
                 class={`btn btn-danger btn-sm ${_delete == true ? "show" : "hide"}`}

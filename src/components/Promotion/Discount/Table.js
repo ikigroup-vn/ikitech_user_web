@@ -6,8 +6,8 @@ class Table extends Component {
   constructor(props) {
     super(props);
   }
-  handleDelCallBack = (event, store_code, id , name) => {
-    this.props.handleDelCallBack({ table: "Chương trình", id: id, store_code: store_code ,name });
+  handleDelCallBack = (event, store_code, id, name) => {
+    this.props.handleDelCallBack({ table: "Chương trình", id: id, store_code: store_code, name });
     event.preventDefault();
   }
 
@@ -15,8 +15,29 @@ class Table extends Component {
     this.props.handleIsEndCallback({ id: id, store_code: store_code });
     event.preventDefault();
   }
+
+  showListProduct = (products) => {
+    console.log(products);
+    var result = null
+    if (products.length > 0) {
+      result = products.map((data, index) => {
+
+        return (
+          <h6  style={{ display: "inline-block" , marginRight : "7px"}}><span
+          style={{ display: "inline-block", maxWidth: "240px" ,  whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis" }}
+  
+          class="badge badge-success">{data.name}</span></h6>
+        )
+      })
+
+    }
+    return result
+  }
+
   showData = (discounts, per_page, current_page) => {
-    var discounts  = this.props.is_end == 0 ? discounts : discounts.data
+    var discounts = this.props.is_end == 0 ? discounts : discounts.data
     var result = null;
     var { store_code } = this.props.params;
     if (typeof discounts === "undefined") {
@@ -24,7 +45,7 @@ class Table extends Component {
     }
     if (discounts.length > 0) {
 
-      var {update , _delete} = this.props
+      var { update, _delete } = this.props
 
       result = discounts.map((data, index) => {
         var set_limit_amount =
@@ -36,42 +57,34 @@ class Table extends Component {
         var disableIsEnd = this.props.is_end ? "hide" : "show"
         return (
           <tr>
-            <td class = {showCurrentPage ? "hide" : "show"}>{index + 1}</td>
+            <td class={showCurrentPage ? "hide" : "show"}>{index + 1}</td>
 
-            <td class = {showCurrentPage ? "show" : "hide"}>{(per_page * (current_page - 1)) + (index + 1)}</td>
+            <td class={showCurrentPage ? "show" : "hide"}>{(per_page * (current_page - 1)) + (index + 1)}</td>
 
-            <td>{data.id}</td>
 
             <td>{data.name}</td>
 
-            <td>
-
-              <img src={image_url} className="img-responsive" alt="Image" width="100px" height="100px" />
-
-
-            </td>
 
             <td>{data.start_time}</td>
 
             <td>{data.end_time}</td>
 
-            <td>{data.value}</td>
-            <td>{data.used}</td>
             <td>
-             
-                  {!isNaN(Number(set_limit_amount)) ? new Intl.NumberFormat().format(set_limit_amount.toString()) : set_limit_amount }
-           
+
+              {!isNaN(Number(set_limit_amount)) ? new Intl.NumberFormat().format(set_limit_amount.toString()) + "%" : set_limit_amount}
+
             </td>
+            <td style={{ maxWidth: "300px" }}> {this.showListProduct(data.products || [])}</td>
 
             <td>
               <Link
                 to={`/discount/edit/${store_code}/${data.id}`}
                 class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
               >
-                <i class="fa fa-eye"></i> Sửa
+                <i class="fa fa-edit"></i> Sửa
               </Link>
               <button
-                onClick={(e) => this.handleDelCallBack(e, store_code, data.id , data.name)}
+                onClick={(e) => this.handleDelCallBack(e, store_code, data.id, data.name)}
                 style={{ marginLeft: "10px" }}
                 data-toggle="modal"
                 data-target="#removeModal"
@@ -80,7 +93,7 @@ class Table extends Component {
                 <i class="fa fa-trash"></i> Xóa
               </button>
               <button
-                onClick={(e) => this.handleIsEndCallback(e, store_code, data.id,data.name)}
+                onClick={(e) => this.handleIsEndCallback(e, store_code, data.id, data.name)}
                 style={{ marginLeft: "10px" }}
                 data-toggle="modal"
                 data-target="#isEndModal"
@@ -108,16 +121,12 @@ class Table extends Component {
           <thead>
             <tr>
               <th>STT</th>
-              <th>Mã</th>
               <th>Tên</th>
-              <th>Hình ảnh</th>
 
               <th>Ngày bắt đầu</th>
               <th>Ngày kết thúc</th>
               <th>Giảm giá</th>
-              <th>SL đơn đã áp dụng</th>
-              <th>Giới hạn</th>
-            
+              <th style={{ maxWidth: "300px" }}>Áp dụng sản phẩm</th>
               <th>Hành động</th>
             </tr>
           </thead>

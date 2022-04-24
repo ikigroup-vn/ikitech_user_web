@@ -14,7 +14,9 @@ class Table extends Component {
     this.props.handleIsEndCallback({ id: id, store_code: store_code });
     event.preventDefault();
   }
+
   showData = (combos, per_page, current_page) => {
+    console.log("davao")
     var combos  = this.props.is_end == 0 ? combos : combos.data
     var result = null;
     var { store_code } = this.props.params;
@@ -39,28 +41,25 @@ class Table extends Component {
             <td class={showCurrentPage ? "hide" : "show"}>{index + 1}</td>
 
             <td class={showCurrentPage ? "show" : "hide"}>{(per_page * (current_page - 1)) + (index + 1)}</td>
-            <td>{data.id}</td>
             <td>{data.name}</td>
             <td>{data.start_time}</td>
             <td>{data.end_time}</td>
             <td>{type_discount}</td>
             <td>{data.value_discount == null ? null : new Intl.NumberFormat().format(data.value_discount.toString())} </td>
 
-            <td>
-                  {data.used}
-            </td>
-            <td>
-                  {set_limit_amount}
-            </td>
-          
+              <td>
+              {this.showListProduct(data.products_combo || [])}
+
+              </td>
 
             <td className="btn-voucher">
-              <Link
+              {data.is_end  != true &&      <Link
                 to={`/combo/edit/${store_code}/${data.id}`}
                 class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
               >
-                <i class="fa fa-eye"></i> Sửa
-              </Link>
+                <i class="fa fa-edit"></i> Sửa
+              </Link> }
+         
               <button
                 onClick={(e) => this.handleDelCallBack(e, store_code, data.id , data.name)}
                 data-toggle="modal"
@@ -86,6 +85,25 @@ class Table extends Component {
     }
     return result;
   };
+    showListProduct = (products) => {
+    console.log(products);
+    var result = null
+    if (products.length > 0) {
+      result = products.map((data, index) => {
+
+        return (
+          <h6  style={{ display: "inline-block" , marginRight : "7px"}}><span
+          style={{ display: "inline-block", maxWidth: "240px" ,  whiteSpace: "nowrap",
+          overflow: "hidden",
+          textOverflow: "ellipsis" }}
+  
+          class="badge badge-success">{data.product.name}</span></h6>
+        )
+      })
+
+    }
+    return result
+  }
 
   render() {
     var { combos, is_end } = this.props;
@@ -97,7 +115,6 @@ class Table extends Component {
           <thead>
             <tr>
               <th>STT</th>
-              <th>Mã</th>
               <th>Tên</th>
 
               <th>Ngày bắt đầu</th>
@@ -105,8 +122,8 @@ class Table extends Component {
               <th>Loại giảm giá</th>
               <th>Giá trị</th>
 
-              <th>SL đơn đã áp dụng</th>
-              <th>Giới hạn Combo</th>
+  
+              <th style={{ maxWidth: "300px" }}>Áp dụng sản phẩm</th>
 
 
               <th>Hành động</th>

@@ -36,12 +36,12 @@ class Table extends Component {
 
 
             <td>
-            <Link
+            {/* <Link
                 to={`/decentralization/detail/${store_code}/${item.id}`}
                 class="btn btn-primary btn-sm"
               >
                 <i class="fa fa-eye"></i> Xem
-              </Link>
+              </Link> */}
               <Link
                               style={{ marginLeft: "10px" }}
 

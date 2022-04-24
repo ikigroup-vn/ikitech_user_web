@@ -14,7 +14,7 @@ import * as blogAction from "../../../actions/blog";
 
 import Alert from "../../../components/Partials/Alert";
 import SeoOption from "../../../components/Product/Create/SeoOption";
-import getChannel, { IKITECH  , IKIPOS} from "../../../ultis/channel";
+import getChannel, { IKITECH, IKIPOS } from "../../../ultis/channel";
 import { isEmpty, removeVietnameseTones } from "../../../ultis/helpers";
 class ProductCreate extends Component {
   constructor(props) {
@@ -24,7 +24,7 @@ class ProductCreate extends Component {
       total: "",
       isError: false,
       disableDistribute: false,
-      disableInventory : false
+      disableInventory: false
     };
   }
 
@@ -85,9 +85,9 @@ class ProductCreate extends Component {
   };
 
 
-  checkDistribute = (status , _status) => {
-    console.log(status , _status);
-    this.setState({ disableDistribute: status , disableInventory : _status })
+  checkDistribute = (status, _status) => {
+    console.log(status, _status);
+    this.setState({ disableDistribute: status, disableInventory: _status })
   }
 
   postProduct = () => {
@@ -529,7 +529,7 @@ class ProductCreate extends Component {
     var { store_code } = this.props;
     var { category_product, attributeP, auth, isShowAttr, isCreate, isRemove } =
       this.props;
-    var { total , disableInventory , disableDistribute } = this.state;
+    var { total, disableInventory, disableDistribute } = this.state;
     return (
       <div class="container-fluid">
         <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
@@ -625,8 +625,8 @@ class ProductCreate extends Component {
                   <div>
                     <div class="card-body" style={{ padding: "0.8rem" }}>
                       <Distribute
-                        disableDistribute  = {disableDistribute}
-                        disableInventory = {disableInventory}
+                        disableDistribute={disableDistribute}
+                        disableInventory={disableInventory}
                         onChangeQuantityStock={this.onChangeQuantityStock}
                         handleDataFromDistribute={this.handleDataFromDistribute}
                       />
@@ -675,24 +675,18 @@ class ProductCreate extends Component {
             <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <button
-                  type="button"
                   class="btn btn-primary btn-sm"
                   onClick={this.postProduct}
                 >
-                  <i class="fa fa-plus"></i>
-                  Tạo
+                  <i class="fa fa-plus"></i> Tạo
                 </button>
-
                 <a
                   style={{ marginLeft: "10px" }}
-                  onClick={this.goBack}
-                  class="btn btn-warning btn-icon-split  btn-sm"
+                  onClick={this.goBack} class={`btn btn-warning btn-sm color-white `}
                 >
-                  <span class="icon text-white-50">
-                    <i class="fas fa-arrow-left"></i>
-                  </span>
-                  <span class="text"> Trở về</span>
+                  <i class="fa fa-arrow-left"></i> Trở về
                 </a>
+          
               </div>
             </div>
           </div>

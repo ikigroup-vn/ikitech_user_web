@@ -21,7 +21,7 @@ import * as XLSX from "xlsx";
 import { randomString } from "../../ultis/helpers";
 import Shopee from "../../components/Product/Ecomerce/Shopee";
 import Sendo from "../../components/Product/Ecomerce/Sendo";
-import getChannel, { IKITECH ,IKIPOS } from "../../ultis/channel";
+import getChannel, { IKITECH, IKIPOS } from "../../ultis/channel";
 
 class Product extends Component {
   constructor(props) {
@@ -199,97 +199,95 @@ class Product extends Component {
                       <h4 className="h4 title_content mb-0 text-gray-800">
                         Sản phẩm
                       </h4>
-                        
+
                       <div style={{ display: "flex" }}>
                         {
                           getChannel() == IKITECH && (
                             <div
-                            class={`dropdown ${
-                              ecommerce == true ? "show" : "hide"
-                            }`}
-                            style={{
-                              marginRight: "10px",
-                            }}
-                          >
-                            <button
+                              class={`dropdown ${ecommerce == true ? "show" : "hide"
+                                }`}
                               style={{
-                                border: "0px",
-                                color: "white",
-                                background: "cadetblue",
+                                marginRight: "10px",
                               }}
-                              class="btn btn-secondary dropdown-toggle"
-                              type="button"
-                              id="dropdownMenuButton"
-                              data-toggle="dropdown"
-                              aria-haspopup="true"
-                              aria-expanded="false"
                             >
-                              Thương mại điện tử
-                            </button>
-                            <div
-                              class="dropdown-menu"
-                              style={{ width: "100%" }}
-                              aria-labelledby="dropdownMenuButton"
-                            >
-                              <a
-                                data-toggle="modal"
-                                data-target="#showTiki"
-                                class="dropdown-item"
+                              <button
+                                style={{
+                                  border: "0px",
+                                  color: "white",
+                                  background: "cadetblue",
+                                }}
+                                class="btn btn-secondary dropdown-toggle"
+                                type="button"
+                                id="dropdownMenuButton"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
                               >
-                                <img
-                                  style={{
-                                    maxWidth: "25px",
-                                    marginRight: "10px",
-                                  }}
-                                  src="https://chondeal247.com/wp-content/uploads/2020/11/icon-tiki.png"
-                                  class="img-responsive"
-                                  alt="Image"
-                                />
-                                <span>TIKI</span>
-                              </a>
-                              <a
-                                data-toggle="modal"
-                                data-target="#showSendo"
-                                class="dropdown-item"
+                                Thương mại điện tử
+                              </button>
+                              <div
+                                class="dropdown-menu"
+                                style={{ width: "100%" }}
+                                aria-labelledby="dropdownMenuButton"
                               >
-                                <img
-                                  style={{
-                                    maxWidth: "27px",
-                                    marginRight: "10px",
-                                  }}
-                                  src="https://lucas.vn/wp-content/uploads/2019/10/logo-sendo.png"
-                                  class="img-responsive"
-                                  alt="Image"
-                                />
-                                <span>SENDO</span>{" "}
-                              </a>
-                              <a
-                                data-toggle="modal"
-                                data-target="#showShopee"
-                                class="dropdown-item"
-                              >
-                                <img
-                                  style={{
-                                    maxWidth: "30px",
-                                    marginRight: "10px",
-                                  }}
-                                  src="https://images.pngnice.com/download/2007/Shopee-Logo-PNG-File.png"
-                                  class="img-responsive"
-                                  alt="Image"
-                                />
-                                <span>SHOPEE</span>{" "}
-                              </a>
+                                <a
+                                  data-toggle="modal"
+                                  data-target="#showTiki"
+                                  class="dropdown-item"
+                                >
+                                  <img
+                                    style={{
+                                      maxWidth: "25px",
+                                      marginRight: "10px",
+                                    }}
+                                    src="https://chondeal247.com/wp-content/uploads/2020/11/icon-tiki.png"
+                                    class="img-responsive"
+                                    alt="Image"
+                                  />
+                                  <span>TIKI</span>
+                                </a>
+                                <a
+                                  data-toggle="modal"
+                                  data-target="#showSendo"
+                                  class="dropdown-item"
+                                >
+                                  <img
+                                    style={{
+                                      maxWidth: "27px",
+                                      marginRight: "10px",
+                                    }}
+                                    src="https://lucas.vn/wp-content/uploads/2019/10/logo-sendo.png"
+                                    class="img-responsive"
+                                    alt="Image"
+                                  />
+                                  <span>SENDO</span>{" "}
+                                </a>
+                                <a
+                                  data-toggle="modal"
+                                  data-target="#showShopee"
+                                  class="dropdown-item"
+                                >
+                                  <img
+                                    style={{
+                                      maxWidth: "30px",
+                                      marginRight: "10px",
+                                    }}
+                                    src="https://images.pngnice.com/download/2007/Shopee-Logo-PNG-File.png"
+                                    class="img-responsive"
+                                    alt="Image"
+                                  />
+                                  <span>SHOPEE</span>{" "}
+                                </a>
+                              </div>
                             </div>
-                          </div>
                           )
                         }
-                
+
                         <a
                           style={{ marginRight: "10px" }}
                           onClick={this.fetchAllListProduct}
-                          class={`btn btn-danger btn-icon-split btn-sm  ${
-                            _export == true ? "show" : "hide"
-                          }`}
+                          class={`btn btn-danger btn-icon-split btn-sm  ${_export == true ? "show" : "hide"
+                            }`}
                         >
                           <span class="icon text-white-50">
                             <i class="fas fa-file-export"></i>
@@ -301,9 +299,8 @@ class Product extends Component {
                         <a
                           style={{ marginRight: "10px" }}
                           onClick={this.showDialogImportExcel}
-                          class={`btn btn-primary btn-icon-split btn-sm  ${
-                            _import == true ? "show" : "hide"
-                          }`}
+                          class={`btn btn-primary btn-icon-split btn-sm  ${_import == true ? "show" : "hide"
+                            }`}
                         >
                           <span class="icon text-white-50">
                             <i class="fas fa-file-import"></i>
@@ -321,9 +318,8 @@ class Product extends Component {
                         />
                         <Link
                           to={`/product/create/${store_code}`}
-                          class={`btn btn-info btn-icon-split btn-sm ${
-                            insert == true ? "show" : "hide"
-                          }`}
+                          class={`btn btn-info btn-icon-split btn-sm ${insert == true ? "show" : "hide"
+                            }`}
                         >
                           <span class="icon text-white-50">
                             <i class="fas fa-plus"></i>
@@ -333,7 +329,8 @@ class Product extends Component {
                       </div>
                     </div>
                     <br></br>
-                    <General products={products} />
+                    {getChannel() == IKITECH && <General products={products} />
+                    }
                     <Alert
                       type={Types.ALERT_UID_STATUS}
                       alert={this.props.alert}

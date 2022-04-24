@@ -24,6 +24,8 @@ import BillDetail from "./screens/Bill/Detail";
 import Customer from "./screens/Customer";
 import CustomerDetail from "./screens/Customer/Detail";
 import CustomerDetailPos from "./screens/Customer/DetailPos/index";
+import SupplierDetailPos from "./screens/Supplier/DetailPos/index";
+
 
 import RevenueExpenditures from "./screens/RevenueExpenditures";
 import RewardPoint from "./screens/RewardPoint/index";
@@ -133,7 +135,7 @@ import Expenditure from "./screens/Report/report_finance/revenue_expenditure/Exp
 import PostOrder from "./screens/Pos_order";
 import Setting from "./screens/Setting";
 import ProductInventory from "./screens/ProductInventory";
-import getChannel , {IKIPOS , IKITECH} from "./ultis/channel";
+import getChannel, { IKIPOS, IKITECH } from "./ultis/channel";
 const routes = [
   {
     path: "/decentralization/index/:store_code",
@@ -309,6 +311,14 @@ const routes = [
     main: ({ match }) => <SupplierDebt match={match} />,
   },
   {
+    path: "/supplier/detail/:store_code/:supplierId",
+    exact: true,
+
+    main: ({ match, history }) => 
+      <SupplierDetailPos match={match} history={history} />
+    },
+
+  {
     path: "/expenditure/:store_code",
     exact: true,
 
@@ -417,8 +427,8 @@ const routes = [
     exact: true,
 
     main: ({ match, history }) => (
-      getChannel() == IKITECH ? 
-      <CustomerDetail match={match} history={history} /> : <CustomerDetailPos match={match} history={history} />
+      getChannel() == IKITECH ?
+        <CustomerDetail match={match} history={history} /> : <CustomerDetailPos match={match} history={history} />
     ),
   },
   {

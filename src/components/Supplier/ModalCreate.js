@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import * as dashboardAction from "../../actions/dashboard";
 import * as placeAction from "../../actions/place";
 import { shallowEqual } from '../../ultis/shallowEqual';
+import {isEmail , isEmpty , isPhone} from "../../ultis/helpers"
 
 class ModalCreate extends Component {
     constructor(props) {
@@ -23,7 +24,9 @@ class ModalCreate extends Component {
             txtPhone_branch:"",
             txtCode_branch:"",
             txtPost_branch:"",
-            txtEmail_branch:""
+            txtEmail_branch:"",
+            error_email : {status : false , text : ""},
+            error_phone : {status : false , text : ""}
         }
     }
     onChange = (e) => {
@@ -82,24 +85,8 @@ class ModalCreate extends Component {
                 listDistrict: nextProps.district
             })
         }
-    }
-    handleOnClick = () => {
-        var { txtAddress_detail, txtDistrict, txtProvince, txtWards,txtName_branch,txtPhone_branch,txtCode_branch,txtPost_branch,txtEmail_branch } = this.state
-        const {store_code} = this.props
-        const Formdata = {
-            name: txtName_branch,
-            phone: txtPhone_branch,
-            email: txtEmail_branch,
-            branch_code: txtCode_branch,
-            province: txtProvince,
-            district: txtDistrict,
-            wards: txtWards,
-            address_detail: txtAddress_detail,
-            postcode: txtPost_branch,
-            is_default: true
-        }
-        this.props.createSupplier(store_code,Formdata);
-        this.setState({
+        if (nextProps.openModal == true) {
+       this.setState({
             provinceName: "",
             districtName: "",
             wardsName: "",
@@ -115,6 +102,68 @@ class ModalCreate extends Component {
             txtPhone_branch:"",
             txtEmail_branch:""
         })
+            this.props.resetModal()
+
+        }
+    }
+    handleOnClick = () => {
+        var { txtAddress_detail, txtDistrict, txtProvince, txtWards,txtName_branch,txtPhone_branch,txtCode_branch,txtPost_branch,txtEmail_branch } = this.state
+        const {store_code} = this.props
+        var error = false
+        if(!isEmail(txtEmail_branch) && isEmpty(txtEmail_branch))
+        {
+            error = true
+            this.setState({error_email : {text : "Email không đúng định dạng" , status : true}})
+        }
+        else
+        {
+            this.setState({error_email : {text : "Email không đúng định dạng" , status : false} , error_phone : {text : "Email không đúng định dạng" , status : false}})
+
+        }
+        if(!isPhone(txtPhone_branch))
+        {
+            error = true
+            this.setState({error_phone : {text : "SDT không đúng định dạng" , status : true}})
+
+        }
+        else
+        {
+            this.setState({error_phone : {text : "Email không đúng định dạng" , status : false}})
+
+        }
+        if(error == true)
+        return;
+        const Formdata = {
+            name: txtName_branch,
+            phone: txtPhone_branch,
+            email: txtEmail_branch,
+            branch_code: txtCode_branch,
+            province: txtProvince,
+            district: txtDistrict,
+            wards: txtWards,
+            address_detail: txtAddress_detail,
+            postcode: txtPost_branch,
+            is_default: true
+        }
+        this.props.createSupplier(store_code,Formdata,function () {
+            window.$(".modal").modal("hide");
+        });
+        // this.setState({
+        //     provinceName: "",
+        //     districtName: "",
+        //     wardsName: "",
+        //     txtAddress_detail: "",
+        //     txtCountry: 1,
+        //     txtProvince: "",
+        //     txtDistrict: "",
+        //     txtWards: "",
+        //     isLoaded: false,
+        //     listWards: [],
+        //     listDistrict: [],
+        //     txtName_branch:"",
+        //     txtPhone_branch:"",
+        //     txtEmail_branch:""
+        // })
 
     };
     showProvince = (places) => {
@@ -162,7 +211,7 @@ class ModalCreate extends Component {
     }
     render() {
         var { province } = this.props
-        var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards } = this.state;
+        var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards ,  error_email , error_phone  } = this.state;
         var { txtName_branch,txtPhone_branch,txtEmail_branch } = this.state;
         return (
             <>
@@ -210,6 +259,9 @@ class ModalCreate extends Component {
                                                         onChange={this.onChange}
                                                         name="txtPhone_branch"
                                                     />
+                                                     {error_phone.status && <div className="validation" style={{ display: 'block' }}>{error_phone.text}</div>}
+
+
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="product_name">Email</label>
@@ -223,6 +275,8 @@ class ModalCreate extends Component {
                                                         onChange={this.onChange}
                                                         name="txtEmail_branch"
                                                     />
+                                                      {error_email.status && <div className="validation" style={{ display: 'block' }}>{error_phone.text}</div>}
+
                                                 </div>
                                             </div>
                                             <div class="col-6 box-body-right">
@@ -298,7 +352,7 @@ class ModalCreate extends Component {
                                     >
                                         Đóng
                                     </button>
-                                    <button type="submit" onClick={this.handleOnClick} data-dismiss="modal" class="btn btn-info">
+                                    <button type="submit" onClick={this.handleOnClick}  class="btn btn-info">
                                        Tạo
                                     </button>
                                 </div>
@@ -312,8 +366,8 @@ class ModalCreate extends Component {
 }
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        createSupplier: (id, form) => {
-            dispatch(dashboardAction.createSupplier(id, form));
+        createSupplier: (id, form , funcModal) => {
+            dispatch(dashboardAction.createSupplier(id, form,funcModal));
         },
         fetchPlaceDistrict: (id) => {
             dispatch(placeAction.fetchPlaceDistrict(id));

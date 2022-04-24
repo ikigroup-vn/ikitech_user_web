@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Pagination from "../../../Product/Pagination"
-import {format} from "../../../../ultis/helpers"
+import { format } from "../../../../ultis/helpers"
+import themeData from "../../../../ultis/theme_data";
+
 class ListProduct extends Component {
   constructor(props) {
     super(props);
@@ -22,7 +24,7 @@ class ListProduct extends Component {
       this.props.handleAddProduct(null, data.id, "remove")
 
   }
-  
+
   passNumPage = (page) => {
     this.setState({ page: page })
   }
@@ -49,12 +51,16 @@ class ListProduct extends Component {
             return true
           }
         }
-        
+
       }
     }
     return false
   }
+  onSaveProduct = () => {
+    this.props.onSaveProduct()
+    window.$(".modal").modal("hide");
 
+  }
   showData = (products, list, combos) => {
     var result = null;
     if (typeof products === "undefined") {
@@ -68,8 +74,29 @@ class ListProduct extends Component {
         var checked = this.checkExsit(list, data.id)
         var disaled = this.checkDisable(combos, data.id, list);
         var background_disable = disaled == true ? "#55b8c3" : "white"
+        const {
+          product_discount,
+          min_price,
+          max_price,
+          _delete,
+          update,
+          insert,
+          per_page,
+          current_page,
+          store_code,
+          page,
+          status_stock,
+          discount,
+          historyInventory,
+          distributes
+        } = data;
+        let discount_percent = null;
+
+        if (product_discount) {
+          discount_percent = product_discount.value;
+        }
         return (
-          <tr style={{ background: background_disable }}>
+          <tr className={disaled == true ? "" : "hover-product"} style={{ background: background_disable }}>
             <td>
 
               <div class="checkbox">
@@ -84,19 +111,76 @@ class ListProduct extends Component {
 
             </td>
 
-            <td>{data.id}</td>
+            <td>{data.sku}</td>
 
             <td>{data.name}</td>
 
-            <td>{format(data.price)}</td>
-            <td> <h5>
+            <td>     <div>
+              {min_price === max_price ? (
+                format(
+                  Number(
+                    discount_percent == null
+                      ? min_price
+                      : min_price - min_price * discount_percent * 0.01
+                  )
+                )
+              ) : distributes && distributes.length == 0 ? format(
+                Number(
+                  discount_percent == null
+                    ? min_price
+                    : min_price - min_price * discount_percent * 0.01
+                )) : (
+                <div>
+                  {format(
+                    Number(
+                      discount_percent == null
+                        ? min_price
+                        : min_price - min_price * discount_percent * 0.01
+                    )
+                  )}
+                  {" - "}
+                  {format(
+                    Number(
+                      discount_percent == null
+                        ? max_price
+                        : max_price - max_price * discount_percent * 0.01
+                    )
+                  )}
+                </div>
+              )}
+            </div>
+
+              {product_discount && (
+                <div
+                  style={{
+                    float: "left",
+                  }}
+                >
+                  {min_price === max_price ? (
+                    format(Number(min_price))
+                  ) : (
+                    <div className="row">
+                      <div
+                        style={{
+                          textDecoration: "line-through",
+                        }}
+                      >
+                        {format(Number(min_price))}
+                        {" - "}
+                        {format(Number(max_price))}
+                      </div>
+
+                      <div className="discount">&emsp; -{discount_percent}%</div>
+                    </div>
+                  )}
+                </div>
+              )}</td>            <td> <h5>
               <span class={`badge badge-${status}`}>
                 {status_name}
               </span>
             </h5></td>
 
 
-            <td>{data.has_in_combo}</td>
 
 
           </tr>
@@ -122,22 +206,28 @@ class ListProduct extends Component {
       >
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content" style={{ maxHeight: "630px" }}>
-          <div class="modal-header" style ={{background : "white"}}>
-              <i style = {{color : "red"}}> Những sản phẩm được tô đậm là những sản phẩm đang nằm trong các chương trình khuyến mại khác! Vui lòng xóa nếu muốn thêm vào chương trình này</i>
+            <div class="modal-header" style={{ background: "white" }}>
+
+            <div>
+            <h4 style={{ color: "black", display: "block" }}>Chọn sản phẩm</h4>
+
+             <i style = {{color : "red"}}> Những sản phẩm được tô đậm là những sản phẩm đang nằm trong các chương trình khuyến mại khác! Vui lòng xóa nếu muốn thêm vào chương trình này</i>
+              
+             </div>
+
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
             </div>
-
+     
             <div class="table-responsive">
               <table class="table table-hover table-border">
                 <thead>
                   <tr>
                     <th></th>
-                    <th>Mã</th>
+                    <th>Mã SKU</th>
                     <th>Tên</th>
                     <th>Giá</th>
                     <th>Trạng thái</th>
-                    <th>Giảm giá</th>
                   </tr>
                 </thead>
 
@@ -145,18 +235,28 @@ class ListProduct extends Component {
               </table>
             </div>
 
-            <div  class="group-pagination_flex col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
-              <Pagination style = "float-fix" store_code={store_code} products={products} passNumPage={this.passNumPage} limit={this.state.numPage} />
-              <button
+            <div class="group-pagination_flex col-xs-12 col-sm-12 col-md-12 col-lg-12" style={{ display: "flex", justifyContent: "space-between" }}>
 
+              <Pagination style="float-fix" store_code={store_code} products={products} passNumPage={this.passNumPage} limit={this.state.numPage} />
+              <div style={{ marginTop: "10px" }}>
+                <button
+                  style={{
+                    border: "1px solid",
+                    marginRight: "10px"
+                  }}
                   type="button"
-                  class="btn btn-primary pagination-btn"
+                  class="btn btn-default"
                   data-dismiss="modal"
                 >
-                  Đóng
+                  Hủy
                 </button>
+                <button style={{ backgroundColor: themeData().backgroundColor }} onClick={this.onSaveProduct} class="btn btn-info">
+                  Xác nhận
+                </button>
+              </div>
             </div>
+
 
           </div>
         </div>

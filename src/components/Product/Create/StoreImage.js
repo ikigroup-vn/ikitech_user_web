@@ -193,7 +193,7 @@ class StoreImage extends Component {
 
           <div >
             <label style={{ fontSize: "20px" }} for="product_name">
-            Ảnh sản phẩm (Tối đa 10 hình ảnh)
+            Ảnh sản phẩm 
             </label>
 
           </div>

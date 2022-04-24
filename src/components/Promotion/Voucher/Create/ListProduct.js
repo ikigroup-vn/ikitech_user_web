@@ -71,7 +71,7 @@ class ListProduct extends Component {
         var background_disable = disaled == true ? "#55b8c3" : "white"
 
         return (
-          <tr style = {{background : background_disable}}>
+          <tr className={disaled == true ? "" : "hover-product"} style = {{background : background_disable}}>
             <td>
 
               <div class="checkbox">

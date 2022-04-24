@@ -9,15 +9,22 @@ import * as Types from "../../constants/ActionType";
 import { connect } from 'react-redux';
 import ModalDelete from '../../components/Supplier/ModalDelete';
 import ModalCreate from '../../components/Supplier/ModalCreate';
+import Pagination from "../../components/Supplier/Pagination";
+import {getQueryParams} from "../../ultis/helpers"
+
 import ModalEdit from '../../components/Supplier/ModalEdit';
 import { format, formatNumber } from "../../ultis/helpers";
-
+import history from "../../history";
+import { Link } from "react-router-dom"
 class Supplier extends Component {
     constructor(props) {
         super(props)
         this.state = {
             id_supplier: "",
-            modal: ""
+            modal: "",
+            openModal: false,
+            paginate : 1
+
         }
     }
 
@@ -30,21 +37,35 @@ class Supplier extends Component {
     handleSetInfor = (item) => {
         this.setState({ modal: item })
     }
+    openModal = () => {
+        this.setState({ openModal: true })
+    }
+    resetModal = () => {
+        this.setState({ openModal: false })
 
+    }
 
+    changePage = (store_code, supplierId) => {
+        var { paginate } = this.props;
+
+        history.push(`/supplier/detail/${store_code}/${supplierId}?pag=${paginate}`)
+    }
     componentDidMount() {
+        var pag = getQueryParams("pag") || 1
+
         const { store_code } = this.props.match.params
-        this.props.fetchAllSupplier(store_code,1);
+        this.props.fetchAllSupplier(store_code, pag);
         this.props.fetchPlaceProvince()
     }
     showData = (listSupplier) => {
         var result = null;
+        var { store_code } = this.props.match.params
         if (listSupplier.length > 0) {
 
             result = listSupplier.map((data, index) => {
 
                 return (
-                    <tr>
+                    <tr className="hover-product" onClick={() => this.changePage(store_code, data.id)}>
                         <td>{index + 1}</td>
                         <td>{data.name}</td>
                         <td>{data.phone}</td>
@@ -52,16 +73,16 @@ class Supplier extends Component {
                         <td>{data.wards_name}</td>
                         <td>{data.district_name}</td>
                         <td>{data.province_name}</td>
-                   
+
                         <td>
-                            <button
-                                onClick={() => this.handleSetInfor(data)}
-                                class="btn btn-warning btn-sm"
-                                data-toggle="modal"
-                                data-target="#modalEdit"
+                            <Link
+                                to={`/supplier/detail/${store_code}/${data.id}`}
+
+                                style={{ marginLeft: "10px" }}
+                                class={`btn btn-primary btn-sm `}
                             >
                                 <i class="fa fa-edit"></i> Sửa
-                            </button>
+                            </Link>
                             <button
                                 onClick={() => this.handleSetIdBranch(data.id)}
                                 style={{ marginLeft: "10px" }}
@@ -83,7 +104,9 @@ class Supplier extends Component {
     onChangeSearch = (e) => {
         this.setState({ searchValue: e.target.value });
     };
-
+    getPaginate = (num) =>{
+        this.setState({paginate : num})
+      }
     searchData = (e) => {
         e.preventDefault();
         var { store_code } = this.props.match.params;
@@ -95,8 +118,8 @@ class Supplier extends Component {
     render() {
         var { store_code } = this.props.match.params
         var listSupplier = this.props.supplier.data ? this.props.supplier.data : []
-        var { id_supplier, modal } = this.state
-        var { wards, district, province } = this.props
+        var { id_supplier, modal, openModal } = this.state
+        var { wards, district, province , supplier } = this.props
         var { searchValue } = this.state;
         return (
             <div id="wrapper">
@@ -113,6 +136,9 @@ class Supplier extends Component {
                                     alert={this.props.alert}
                                 />
 
+
+
+
                                 <div
                                     style={{
                                         display: "flex",
@@ -123,80 +149,103 @@ class Supplier extends Component {
                                         Nhà cung cấp
                                     </h4>{" "}
 
-                                    <div
-                                        style={{ display: "flex", justifyContent: "flex-end" }}
+
+                                    <a
+                                        onClick={this.openModal}
+
+                                        data-toggle="modal"
+                                        data-target="#modalAddress"
+                                        class={`btn btn-info btn-icon-split btn-sm `}
                                     >
-                                        <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#modalAddress">
-                                            <i class="fa fa-plus"></i> Thêm nhà cung cấp
-                                        </button>
-                                    </div>
+                                        <span
+                                            class="icon text-white-50"
+                                            style={{ marginRight: 0 }}
+                                        >
+                                            <i class="fas fa-plus"></i>
+                                        </span>
+                                        <span style={{ color: "white" }} class={`text `}>
+                                            Thêm nhà cung cấp
+                                        </span>
+                                    </a>
+
 
                                 </div>
 
-                                <div className="card-header py-3">
+                                <br></br>
+                                <div className="card shadow ">
+                                    <div className="card-header py-3">
 
 
-                                    <br></br>
-                                    <div className='card'>
+                                        <br></br>
+                                        <div className='card'>
 
-                                        <form onSubmit={this.searchData}>
-                                            <div
-                                                class="input-group mb-6"
-                                                style={{ marginTop: "10px" }}
-                                            >
-                                                <input
-                                                    style={{ maxWidth: "400px" }}
-                                                    type="search"
-                                                    name="txtSearch"
-                                                    value={searchValue}
-                                                    onChange={this.onChangeSearch}
-                                                    class="form-control"
-                                                    placeholder="Tìm nhà cung cấp"
-                                                />
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-primary" type="submit">
-                                                        <i class="fa fa-search"></i>
-                                                    </button>
+                                            <form onSubmit={this.searchData}>
+                                                <div
+                                                    class="input-group mb-6"
+                                                    style={{ marginTop: "10px" }}
+                                                >
+                                                    <input
+                                                        style={{ maxWidth: "400px" }}
+                                                        type="search"
+                                                        name="txtSearch"
+                                                        value={searchValue}
+                                                        onChange={this.onChangeSearch}
+                                                        class="form-control"
+                                                        placeholder="Tìm nhà cung cấp"
+                                                    />
+                                                    <div class="input-group-append">
+                                                        <button class="btn btn-primary" type="submit">
+                                                            <i class="fa fa-search"></i>
+                                                        </button>
+                                                    </div>
                                                 </div>
+                                            </form>
+
+
+                                            <div className='card-body'>
+                                                <div class="table-responsive">
+                                                    <table class="table  " id="dataTable" width="100%" cellspacing="0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>STT</th>
+                                                                <th>Tên nhà cung cấp</th>
+
+                                                                <th>Số điện thoại</th>
+
+                                                                <th>Công nợ</th>
+
+                                                                <th>Phường/xã</th>
+                                                                <th>Quận/huyện</th>
+
+                                                                <th>Tỉnh/thành phố</th>
+
+                                                                <th>Hành động</th>
+                                                            </tr>
+                                                        </thead>
+
+                                                        <tbody>{this.showData(listSupplier)}</tbody>
+                                                    </table>
+                                                </div>
+
+                                                <Pagination
+                                                    getPaginate={this.getPaginate}
+
+                                                    store_code={store_code}
+                                                    suppliers={supplier}
+                                                />
                                             </div>
-                                        </form>
 
-
-                                        <div className='card-body'>
-                                            <div class="table-responsive">
-                                                <table class="table  " id="dataTable" width="100%" cellspacing="0">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>STT</th>
-                                                            <th>Tên nhà cung cấp</th>
-
-                                                            <th>Số điện thoại</th>
-
-                                                            <th>Công nợ</th>
-
-                                                            <th>Phường/xã</th>
-                                                            <th>Quận/huyện</th>
-
-                                                            <th>Tỉnh/thành phố</th>
-                                                    
-                                                            <th>Hành động</th>
-                                                        </tr>
-                                                    </thead>
-
-                                                    <tbody>{this.showData(listSupplier)}</tbody>
-                                                </table>
-                                            </div>
                                         </div>
-
                                     </div>
-                                </div>
 
+                                </div>
                             </div>
                         </div>
+
                         <Footer />
                     </div>
                     <ModalDelete store_code={store_code} id_supplier={id_supplier} />
-                    <ModalCreate store_code={store_code} wards={wards} district={district} province={province} />
+                    <ModalCreate openModal={openModal} resetModal={this.resetModal} store_code={store_code} wards={wards} district={district} province={province} />
                     <ModalEdit store_code={store_code} wards={wards} district={district} province={province} modal={modal} />
                 </div>
             </div>

@@ -34,7 +34,7 @@ class Form extends Component {
 
 
   onChangeDate = (e) => {
-    var time = moment(e, "DD-MM-YYYY HH:mm:ss").format("YYYY-MM-DD");
+    var time = moment(e , "DD-MM-YYYY").format("DD-MM-YYYY");
     this.setState({
       txtDateOfBirth: time,
     });
@@ -54,7 +54,7 @@ class Form extends Component {
   {
     if (!shallowEqual(nextProps.user, this.props.user) || this.state.id == "") {
       var { user } = nextProps
-      var txtDateOfBirth = user.date_of_birth !== null ? moment(user.date_of_birth, "DD-MM-YYYY").format("YYYY-MM-DD") : ""
+      var txtDateOfBirth = user.date_of_birth !== null ? moment(user.date_of_birth, "YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY") : ""
 
       this.setState({
         id: user.id,
@@ -80,11 +80,11 @@ class Form extends Component {
 
   onSave = (e) => {
     e.preventDefault();
-    var user = this.state
+    var user = {...this.state}
     var form = {
       name : user.txtName,
       avatar_image : user.image,
-      date_of_birth : user.txtDateOfBirth,
+      date_of_birth : moment(user.txtDateOfBirth , "DD-MM-YYYY").format("YYYY-MM-DD HH:mm:ss"),
       sex : user.txtSex
     }
     console.log(this.state)
@@ -106,7 +106,7 @@ class Form extends Component {
 
     console.log(this.state)
     var image = image == null || image == "" ? Env.IMG_NOT_FOUND : image
-    var txtSex = txtSex == null || txtSex == "" ? "" : txtSex
+    var txtSex = txtSex === null || txtSex === "" ? "" : txtSex
 
     var txtCreateStore = moment(txtCreateStore, "YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY");
 
@@ -115,7 +115,7 @@ class Form extends Component {
     var isAnother = txtSex == "0" ? true : false
 
 
-
+console.log(txtSex)
     return (
      
      <React.Fragment>
@@ -189,7 +189,7 @@ class Form extends Component {
 
               </div>
               <div className="form-group">
-                <label htmlFor="phone">Số cửa hàng</label>
+                <label htmlFor="phone">Số cửa hàng tối đa được tạo</label>
                 <input disabled type="number" className="form-control" value={txtNumStore} id="txtCreateStore" name="txtCreateStore" autoComplete="off" />
 
               </div>

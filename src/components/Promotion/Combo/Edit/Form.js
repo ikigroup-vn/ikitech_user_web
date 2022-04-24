@@ -6,7 +6,7 @@ import Table from "./Table";
 import { shallowEqual } from "../../../../ultis/shallowEqual";
 import moment from "moment";
 import Datetime from "react-datetime";
-import ModalListProduct from "./ListProduct";
+import ModalListProduct from "../Create/ListProduct";
 import CKEditor from "ckeditor4-react";
 import ModalUpload from "../ModalUpload"
 import * as Env from "../../../../ultis/default"
@@ -14,6 +14,7 @@ import MomentInput from 'react-moment-input';
 import { formatNumber } from "../../../../ultis/helpers"
 import { isEmpty } from "../../../../ultis/helpers"
 import ConfimUpdateUsed from "../../Discount/Edit/ConfimUpdateUsed";
+import getChannel, { IKIPOS, IKITECH } from "../../../../ultis/channel";
 
 class Form extends Component {
   constructor(props) {
@@ -28,6 +29,8 @@ class Form extends Component {
       txtValueDiscount: "",
       listProducts: [],
       image: "",
+      saveListProducts: [],
+
       displayError: "hide",
 
       isLoading: false,
@@ -63,9 +66,12 @@ class Form extends Component {
         txtLastAmount: combo.amount == null ? null : new Intl.NumberFormat().format(combo.amount.toString()),
 
         txtValueDiscount: combo.value_discount == null ? null : new Intl.NumberFormat().format(combo.value_discount.toString()),
+        saveListProducts: combo.products,
 
         txtDiscoutType: combo.discount_type,
         listProducts: combo.products_combo,
+        saveListProducts: combo.products_combo,
+
         image: combo.image_url,
         isLoading: true,
         loadCript: true,
@@ -186,7 +192,7 @@ class Form extends Component {
     }
     var { store_code, comboId } = this.props
 
-    var listProducts = state.listProducts
+    var listProducts = state.saveListProducts
     var combo_products = []
     listProducts.forEach((element, index) => {
       combo_products.push({ quantity: element.quantity, product_id: element.product.id })
@@ -235,7 +241,7 @@ class Form extends Component {
     history.goBack();
   };
 
-  handleAddProduct = (product, id, type) => {
+  handleAddProduct = (product, id, type , onSave) => {
     var products = [...this.state.listProducts];
     console.log(products);
 
@@ -260,8 +266,14 @@ class Form extends Component {
         products.push(product)
       }
     }
-    this.setState({ listProducts: products })
+    if (onSave == true)
+      this.setState({ listProducts: products, saveListProducts: products })
+    else
+      this.setState({ listProducts: products })
   };
+  onSaveProduct = () =>{
+    this.setState({saveListProducts : [...this.state.listProducts]})
+  }
   handleChangeQuantity = (id, quantity, setIncrement = null) => {
     var products = [...this.state.listProducts];
     products.forEach((product, index) => {
@@ -279,7 +291,7 @@ class Form extends Component {
       }
 
     });
-    this.setState({ listProducts: products })
+    this.setState({ listProducts: products , saveListProducts : products })
   }
 
   onOkUpdate = () => {
@@ -298,6 +310,8 @@ class Form extends Component {
       txtDiscoutType,
       txtValueDiscount,
       image,
+      saveListProducts,
+
       displayError, isLoading
     } = this.state;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
@@ -314,26 +328,32 @@ class Form extends Component {
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 
               <div class="box-body">
-                <div class="form-group">
-                  <label>Ảnh: &nbsp; </label>
-                  <img src={`${image}`} width="150" height="150" />
-                </div>
-                <div class="form-group">
+                {
+                  getChannel() == IKITECH && (
+                    <React.Fragment>
+                      <div class="form-group">
+                        <label>Ảnh: &nbsp; </label>
+                        <img src={`${image}`} width="150" height="150" />
+                      </div>
+                      <div class="form-group">
 
-                  <div class="kv-avatar">
-                    <div >
-                      <button
-                        type="button"
-                        class="btn btn-primary btn-sm"
-                        data-toggle="modal"
-                        data-target="#uploadModalCombo"
-                      >
-                        <i class="fa fa-plus"></i> Upload ảnh
-                      </button>
-                    </div>
-                  </div>
+                        <div class="kv-avatar">
+                          <div >
+                            <button
+                              type="button"
+                              class="btn btn-primary btn-sm"
+                              data-toggle="modal"
+                              data-target="#uploadModalCombo"
+                            >
+                              <i class="fa fa-plus"></i> Upload ảnh
+                            </button>
+                          </div>
+                        </div>
 
-                </div>
+                      </div>
+
+                    </React.Fragment>
+                  )}
 
                 <div class="form-group">
                   <label for="product_name">Tên chương trình</label>
@@ -478,16 +498,19 @@ class Form extends Component {
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
               <div >
-                <Table handleChangeQuantity={this.handleChangeQuantity} handleAddProduct={this.handleAddProduct} products={listProducts}></Table>
+                <Table handleChangeQuantity={this.handleChangeQuantity} handleAddProduct={this.handleAddProduct} products={saveListProducts}></Table>
 
               </div>
-              <div class="form-group">
-                <label for="product_name">Ghi chú</label>
-                <CKEditor
-                  data={txtContent}
-                  onChange={this.onChangeDecription}
-                />
-              </div>
+              {getChannel() == IKITECH &&
+
+                <div class="form-group">
+                  <label for="product_name">Ghi chú</label>
+                  <CKEditor
+                    data={txtContent}
+                    onChange={this.onChangeDecription}
+                  />
+                </div>
+              }
             </div>
           </div>
           <div class="row">
@@ -519,6 +542,8 @@ class Form extends Component {
         <ConfimUpdateUsed onOk={this.onOkUpdate} />
         <ModalUpload />
         <ModalListProduct
+                 onSaveProduct={this.onSaveProduct}
+
           combo={combo}
           combos={combos}
           handleAddProduct={this.handleAddProduct}

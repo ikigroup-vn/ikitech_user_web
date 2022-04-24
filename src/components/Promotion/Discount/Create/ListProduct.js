@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Pagination from "../../../../components/Product/Pagination"
-import { filter_arr , format } from "../../../../ultis/helpers";
+import { filter_arr, format } from "../../../../ultis/helpers";
+import themeData from "../../../../ultis/theme_data";
 
 class ListProduct extends Component {
   constructor(props) {
@@ -23,7 +24,7 @@ class ListProduct extends Component {
       this.props.handleAddProduct(null, data.id, "remove")
 
   }
-  
+
   passNumPage = (page) => {
     this.setState({ page: page })
   }
@@ -47,14 +48,18 @@ class ListProduct extends Component {
             return true
           }
         }
-        
+
       }
     }
     return false
   }
-  
-  
-  showData = (products, list , discounts) => {
+
+  onSaveProduct = () => {
+    this.props.onSaveProduct()
+    window.$(".modal").modal("hide");
+  }
+
+  showData = (products, list, discounts) => {
     var result = null;
     if (typeof products === "undefined") {
       return result;
@@ -65,30 +70,109 @@ class ListProduct extends Component {
         var status_name = data.status == 0 ? "Còn hàng" : data.status == 1 ? "Đã ẩn" : data.status == 2 ? "Hết hàng" : null
         var status = data.status == 0 ? "success" : data.status == 1 ? "secondary" : data.status == 2 ? "danger" : null
         var checked = this.checkExsit(list, data.id);
-        var disaled = this.checkDisable(discounts , data.id);
+        var disaled = this.checkDisable(discounts, data.id);
         var background_disable = disaled == true ? "#55b8c3" : "white"
+        const {
+          product_discount,
+          min_price,
+          max_price,
+          _delete,
+          update,
+          insert,
+          per_page,
+          current_page,
+          store_code,
+          page,
+          status_stock,
+          discount,
+          historyInventory,
+          distributes
+        } = data;
+        let discount_percent = null;
 
+        if (product_discount) {
+          discount_percent = product_discount.value;
+        }
         return (
-          <tr style = {{background : background_disable}}>
+          <tr className={disaled == true ? "" : "hover-product"} style={{ background: background_disable }}>
             <td>
 
               <div class="checkbox">
                 <label>
-                  <input type="checkbox" 
-                  disabled = {disaled}
-                  checked={checked} 
-                  onChange={this.onChange} 
-                  value={JSON.stringify(data)} />
+                  <input type="checkbox"
+                    disabled={disaled}
+                    checked={checked}
+                    onChange={this.onChange}
+                    value={JSON.stringify(data)} />
                 </label>
               </div>
 
             </td>
 
-            <td>{data.id}</td>
+            <td>{data.sku}</td>
 
             <td>{data.name}</td>
 
-            <td>{format(data.price)}</td>
+            <td>     <div>
+              {min_price === max_price ? (
+                format(
+                  Number(
+                    discount_percent == null
+                      ? min_price
+                      : min_price - min_price * discount_percent * 0.01
+                  )
+                )
+              ) : distributes && distributes.length == 0 ? format(
+                Number(
+                  discount_percent == null
+                    ? min_price
+                    : min_price - min_price * discount_percent * 0.01
+                )) : (
+                <div>
+                  {format(
+                    Number(
+                      discount_percent == null
+                        ? min_price
+                        : min_price - min_price * discount_percent * 0.01
+                    )
+                  )}
+                  {" - "}
+                  {format(
+                    Number(
+                      discount_percent == null
+                        ? max_price
+                        : max_price - max_price * discount_percent * 0.01
+                    )
+                  )}
+                </div>
+              )}
+            </div>
+
+              {product_discount && (
+                <div
+                  style={{
+                    float: "left",
+                  }}
+                >
+                  {min_price === max_price ? (
+                    format(Number(min_price))
+                  ) : (
+                    <div className="row">
+                      <div
+                        style={{
+                          textDecoration: "line-through",
+                        }}
+                      >
+                        {format(Number(min_price))}
+                        {" - "}
+                        {format(Number(max_price))}
+                      </div>
+
+                      <div className="discount">&emsp; -{discount_percent}%</div>
+                    </div>
+                  )}
+                </div>
+              )}</td>
             <td> <h5>
               <span class={`badge badge-${status}`}>
                 {status_name}
@@ -96,7 +180,6 @@ class ListProduct extends Component {
             </h5></td>
 
 
-            <td>{data.has_in_discount}</td>
 
 
           </tr>
@@ -109,7 +192,7 @@ class ListProduct extends Component {
   };
 
   render() {
-    var { products, store_code, listProducts , discounts } = this.props
+    var { products, store_code, listProducts, discounts } = this.props
     console.log(discounts);
     return (
       <div
@@ -121,42 +204,55 @@ class ListProduct extends Component {
         data-backdrop="static"
       >
         <div class="modal-dialog modal-lg" role="document">
-          <div class="modal-content" style = {{maxHeight : "630px"}}>
-            <div class="modal-header" style ={{background : "white"}}>
-              <i style = {{color : "red"}}> Những sản phẩm được tô đậm là những sản phẩm đang nằm trong các chương trình khuyến mại khác! Vui lòng xóa nếu muốn thêm vào chương trình này</i>
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <div class="modal-content" style={{ maxHeight: "630px" }}>
+            <div class="modal-header" style={{ background: "white" }}>
+            <div>
+            <h4 style={{ color: "black", display: "block" }}>Chọn sản phẩm</h4>
+
+             <i style = {{color : "red"}}> Những sản phẩm được tô đậm là những sản phẩm đang nằm trong các chương trình khuyến mại khác! Vui lòng xóa nếu muốn thêm vào chương trình này</i>
+              
+             </div>
+
+                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
             </div>
 
             <div class="table-responsive">
-              <table class="table  table-hover table-border" style = {{color : "black"}}>
+              <table class="table  table-hover table-border" style={{ color: "black" }}>
                 <thead>
                   <tr>
                     <th></th>
-                    <th>Mã</th>
+                    <th>Mã SKU</th>
                     <th>Tên</th>
                     <th>Giá</th>
                     <th>Trạng thái</th>
-                    <th>Giảm giá</th>
                   </tr>
                 </thead>
 
-                <tbody>{this.showData(products.data, listProducts , discounts)}</tbody>
+                <tbody>{this.showData(products.data, listProducts, discounts)}</tbody>
               </table>
             </div>
 
-            <div  class="group-pagination_flex col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="group-pagination_flex col-xs-12 col-sm-12 col-md-12 col-lg-12" style={{ display: "flex", justifyContent: "space-between" }}>
 
-<Pagination style = "float-fix" store_code={store_code} products={products} passNumPage={this.passNumPage} limit={this.state.numPage} />
-<button
-
-    type="button"
-    class="btn btn-primary pagination-btn"
-    data-dismiss="modal"
-  >
-    Đóng
-  </button>
-</div>
+              <Pagination style="float-fix" store_code={store_code} products={products} passNumPage={this.passNumPage} limit={this.state.numPage} />
+              <div style={{ marginTop: "10px" }}>
+                <button
+                  style={{
+                    border: "1px solid",
+                    marginRight: "10px"
+                  }}
+                  type="button"
+                  class="btn btn-default"
+                  data-dismiss="modal"
+                >
+                  Hủy
+                </button>
+                <button style={{ backgroundColor: themeData().backgroundColor }} onClick={this.onSaveProduct} class="btn btn-info">
+                  Xác nhận
+                </button>
+              </div>
+            </div>
 
           </div>
         </div>

@@ -211,7 +211,7 @@ export const deleteSupplier = (store_code,id) => {
   };
 };
 
-export const updateBranchStore = (store_code,data,id) => {
+export const updateBranchStore = (store_code,data,id , funcModal = null) => {
 
   return (dispatch) => {
     dispatch({
@@ -221,6 +221,11 @@ export const updateBranchStore = (store_code,data,id) => {
     storeApi
       .updateBranchStore(store_code,data,id)
       .then((res) => {
+        if(res.data.success && funcModal != null)
+        {
+          console.log("da vao r")
+          funcModal()
+        }
         dispatch({
           type: Types.SHOW_LOADING,
           loading : "hide"
@@ -279,7 +284,7 @@ export const updateBranchStore = (store_code,data,id) => {
   };
 };
 
-export const createBranchStore = (store_code,id) => {
+export const createBranchStore = (store_code,id,funcModal = null) => {
 
   return (dispatch) => {
     dispatch({
@@ -289,6 +294,11 @@ export const createBranchStore = (store_code,id) => {
     storeApi
       .createBranchStore(store_code,id)
       .then((res) => {
+        if(res.data.success && funcModal != null)
+        {
+          console.log("da vao r")
+          funcModal()
+        }
         dispatch({
           type: Types.SHOW_LOADING,
           loading : "hide"
@@ -347,7 +357,7 @@ export const createBranchStore = (store_code,id) => {
   };
 };
 
-export const createSupplier = (store_code,id) => {
+export const createSupplier = (store_code,id, funcModal = null) => {
 
   return (dispatch) => {
     dispatch({
@@ -357,6 +367,11 @@ export const createSupplier = (store_code,id) => {
     storeApi
       .createSupplier(store_code,id)
       .then((res) => {
+        if(res.data.success && funcModal != null)
+        {
+          console.log("da vao r")
+          funcModal()
+        }
         dispatch({
           type: Types.SHOW_LOADING,
           loading : "hide"
@@ -415,7 +430,27 @@ export const createSupplier = (store_code,id) => {
   };
 };
 
-export const editSupplier = (store_code,id,data) => {
+export const fetchSupplierId = (store_code, supplierId) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    storeApi.fetchSupplierId(store_code, supplierId).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide",
+      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_ID_SUPPLIER,
+          data: res.data.data,
+        });
+    });
+  };
+};
+
+export const editSupplier = (store_code,id,data,funcModal) => {
 
   return (dispatch) => {
     dispatch({
@@ -425,6 +460,11 @@ export const editSupplier = (store_code,id,data) => {
     storeApi
       .editSupplier(store_code,id,data)
       .then((res) => {
+        if(res.data.success && funcModal != null)
+        {
+          console.log("da vao r")
+          funcModal()
+        }
         dispatch({
           type: Types.SHOW_LOADING,
           loading : "hide"
@@ -587,7 +627,7 @@ export const createStore = (data) => {
   };
 };
 
-export const updateStore = (data, id) => {
+export const updateStore = (data, id , funcModal) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -596,6 +636,7 @@ export const updateStore = (data, id) => {
     storeApi
       .updateStore(data, id)
       .then((res) => {
+
         console.log(res)
         dispatch({
           type: Types.SHOW_LOADING,

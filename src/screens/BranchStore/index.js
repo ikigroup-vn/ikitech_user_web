@@ -17,7 +17,9 @@ class Branch extends Component {
         super(props)
         this.state = {
             id_branch: "",
-            modal: ""
+            modal: "",
+            openModal : false,
+
         }
     }
     handleSetIdBranch = (id, name) => {
@@ -29,6 +31,14 @@ class Branch extends Component {
     handleSetInfor = (item) => {
         this.setState({ modal: item })
     }
+
+    openModal = () =>{
+        this.setState({openModal : true})
+      }
+      resetModal = () =>{
+        this.setState({openModal : false})
+    
+      }
 
     componentDidMount() {
         this.props.fetchBranchStore(this.props.store_code);
@@ -83,7 +93,7 @@ class Branch extends Component {
     render() {
         var { store_code } = this.props.match.params
         var listBranch = this.props.branchStore ? this.props.branchStore : []
-        var { id_branch, modal } = this.state
+        var { id_branch, modal , openModal } = this.state
         var { wards, district, province, name } = this.props
         return (
             <div id="wrapper">
@@ -111,7 +121,7 @@ class Branch extends Component {
                                 <h4 class="h4 title_content mb-0 text-gray-800">Chi nhánh</h4>
                                 
                                  <a
-
+    onClick={this.openModal}
                                     data-toggle="modal" data-target="#modalAddress"
                                     class={`btn btn-info btn-icon-split btn-sm ${true ? "show" : "hide"
                                         }`}
@@ -164,7 +174,7 @@ class Branch extends Component {
                         <Footer />
                     </div>
                     <ModalDelete store_code={store_code} id_branch={id_branch} brand_name={this.state.name} />
-                    <ModalCreate store_code={store_code} wards={wards} district={district} province={province} />
+                    <ModalCreate openModal = {openModal} resetModal = {this.resetModal} store_code={store_code} wards={wards} district={district} province={province} />
                     <ModalEdit store_code={store_code} wards={wards} district={district} province={province} modal={modal} />
                 </div>
             </div>

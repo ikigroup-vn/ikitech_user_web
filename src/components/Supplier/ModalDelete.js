@@ -15,7 +15,7 @@ class ModalDelete extends Component {
         window.$('.modal').modal('hide');
         var id = this.props.id_supplier;
         var { store_code } = this.props
-        this.props.deleteSupplier(store_code,id);
+        this.props.deleteSupplier(store_code, id);
     };
     render() {
         return (
@@ -29,8 +29,8 @@ class ModalDelete extends Component {
             >
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
-                        <div class="modal-header" style={{ background: themeData().modalNoti }}>
-                            <button
+                        <div className='model-header-modal' style={{ display: 'flex', justifyContent: "space-between", backgroundColor: themeData().backgroundColor }}>
+                            <h4 style={{ color: "white", margin: "10px" }}>Thông báo</h4>                            <button
                                 type="button"
                                 class="close"
                                 data-dismiss="modal"

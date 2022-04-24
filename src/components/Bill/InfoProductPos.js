@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import * as billAction from "../../actions/bill"
 import { shallowEqual } from "../../ultis/shallowEqual"
-
+import * as Types from "../../constants/ActionType"
 class InfoProductPos extends Component {
     constructor(props) {
         super(props);
@@ -16,7 +16,13 @@ class InfoProductPos extends Component {
         this.refund = 0;
 
     }
-
+    componentWillMount()
+    {
+        this.props.resetCalculate({
+            type: Types.GET_CALCULATE,
+            data: {},
+        })
+    }
 
 
     componentWillReceiveProps(nextProps) {
@@ -462,7 +468,7 @@ class InfoProductPos extends Component {
                             </li>
                         }
 
-                        {index == products.length - 1 && (
+                        {/* {index == products.length - 1 && (
                             <li className={`${line_list_product} row`} style={{ display: "flex", marginBottom: "10px" }}>
 
                                 <li className="cart_item cart_item_change col-lg-3 col-md-12 col-sm-12 ">
@@ -484,7 +490,7 @@ class InfoProductPos extends Component {
                             </li>
 
 
-                        )}
+                        )} */}
                         {index == products.length - 1 && check == true && (
                             <li className={`${line_list_product} row`} style={{ display: "flex", marginBottom: "10px" }}>
 
@@ -596,6 +602,10 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         getCalculate: (store_code, data) => {
             dispatch(billAction.getCalculate(store_code, data));
+
+        },
+        resetCalculate : (data) =>{
+            dispatch(data);
 
         }
 

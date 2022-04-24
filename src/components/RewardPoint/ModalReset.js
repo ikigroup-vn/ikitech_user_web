@@ -59,7 +59,7 @@ class ModalReset extends Component {
               >
                 Đóng
               </button>
-              <button type="submit" class="btn btn-info">
+              <button type="submit" style={{ backgroundColor: themeData().backgroundColor }} class="btn btn-info">
                 Đồng ý
                 
               </button>

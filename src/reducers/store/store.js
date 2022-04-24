@@ -7,6 +7,8 @@ var initialState = {
   loadingBranch: true,
   branchStore: [],
   supplier: [],
+  supplierID: {},
+
 };
 
 export const store = (state = initialState, action) => {
@@ -34,6 +36,9 @@ export const store = (state = initialState, action) => {
     case Types.FETCH_ALL_SUPPLIER:
       newState.supplier = action.data;
       return newState;
+      case Types.FETCH_ID_SUPPLIER:
+        newState.supplierID = action.data;
+        return newState;
     default:
       return newState;
   }

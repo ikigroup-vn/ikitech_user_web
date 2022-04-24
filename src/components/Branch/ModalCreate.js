@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import * as dashboardAction from "../../actions/dashboard";
 import * as placeAction from "../../actions/place";
 import { shallowEqual } from '../../ultis/shallowEqual';
-
+import {isEmail , isEmpty , isPhone} from "../../ultis/helpers"
 class ModalCreate extends Component {
     constructor(props) {
         super(props);
@@ -23,7 +23,9 @@ class ModalCreate extends Component {
             txtPhone_branch: "",
             txtCode_branch: "",
             txtPost_branch: "",
-            txtEmail_branch: ""
+            txtEmail_branch: "",
+            error_email : {status : false , text : ""},
+            error_phone : {status : false , text : ""}
         }
     }
 
@@ -84,9 +86,56 @@ class ModalCreate extends Component {
                 listDistrict: nextProps.district
             })
         }
+        if (nextProps.openModal == true) {
+            this.setState({
+                provinceName: "",
+                districtName: "",
+                wardsName: "",
+                txtAddress_detail: "",
+                txtCountry: 1,
+                txtProvince: "",
+                txtDistrict: "",
+                txtWards: "",
+                isLoaded: false,
+                listWards: [],
+                listDistrict: [],
+                txtName_branch: "",
+                txtPhone_branch: "",
+                txtCode_branch: "",
+                txtPost_branch: "",
+                txtEmail_branch: ""
+            })
+            this.props.resetModal()
+
+        }
     }
     handleOnClick = () => {
         var { txtAddress_detail, txtDistrict, txtProvince, txtWards, txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state
+        var error = false
+        if(!isEmail(txtEmail_branch) && isEmpty(txtEmail_branch))
+        {
+            error = true
+            this.setState({error_email : {text : "Email không đúng định dạng" , status : true}})
+        }
+        else
+        {
+            this.setState({error_email : {text : "Email không đúng định dạng" , status : false} , error_phone : {text : "Email không đúng định dạng" , status : false}})
+
+        }
+        if(!isPhone(txtPhone_branch))
+        {
+            error = true
+            this.setState({error_phone : {text : "SDT không đúng định dạng" , status : true}})
+
+        }
+        else
+        {
+            this.setState({error_phone : {text : "Email không đúng định dạng" , status : false}})
+
+        }
+        if(error == true)
+        return;
+
         const { store_code } = this.props
         const Formdata = {
             name: txtName_branch,
@@ -100,25 +149,28 @@ class ModalCreate extends Component {
             postcode: txtPost_branch,
             is_default: true
         }
-        this.props.createBranchStore(store_code, Formdata);
-        this.setState({
-            provinceName: "",
-            districtName: "",
-            wardsName: "",
-            txtAddress_detail: "",
-            txtCountry: 1,
-            txtProvince: "",
-            txtDistrict: "",
-            txtWards: "",
-            isLoaded: false,
-            listWards: [],
-            listDistrict: [],
-            txtName_branch: "",
-            txtPhone_branch: "",
-            txtCode_branch: "",
-            txtPost_branch: "",
-            txtEmail_branch: ""
+        
+        this.props.createBranchStore(store_code, Formdata, function () {
+            window.$(".modal").modal("hide");
         })
+        // this.setState({
+        //     provinceName: "",
+        //     districtName: "",
+        //     wardsName: "",
+        //     txtAddress_detail: "",
+        //     txtCountry: 1,
+        //     txtProvince: "",
+        //     txtDistrict: "",
+        //     txtWards: "",
+        //     isLoaded: false,
+        //     listWards: [],
+        //     listDistrict: [],
+        //     txtName_branch: "",
+        //     txtPhone_branch: "",
+        //     txtCode_branch: "",
+        //     txtPost_branch: "",
+        //     txtEmail_branch: ""
+        // })
 
     };
     showProvince = (places) => {
@@ -166,7 +218,7 @@ class ModalCreate extends Component {
     }
     render() {
         var { province } = this.props
-        var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards } = this.state;
+        var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards , error_email , error_phone } = this.state;
         var { txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state;
         return (
             <>
@@ -214,6 +266,8 @@ class ModalCreate extends Component {
                                                         onChange={this.onChange}
                                                         name="txtPhone_branch"
                                                     />
+                                                    {error_phone.status && <div className="validation" style={{ display: 'block' }}>{error_phone.text}</div>}
+
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="product_name">Email</label>
@@ -227,6 +281,8 @@ class ModalCreate extends Component {
                                                         onChange={this.onChange}
                                                         name="txtEmail_branch"
                                                     />
+                                                    {error_email.status && <div className="validation" style={{ display: 'block' }}>{error_phone.text}</div>}
+
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="product_name">Mã chi nhánh</label>
@@ -322,12 +378,12 @@ class ModalCreate extends Component {
                                         </div>
 
                                         <div class="box-footer">
-                                            <a class="btn btn-info  btn-sm" 
-                                            onClick={this.handleOnClick} data-dismiss="modal">
+                                            <a class="btn btn-info  btn-sm" style = {{float: "right"}}
+                                                onClick={this.handleOnClick} >
                                                 <span class="icon text-white-50">
                                                     <i class="fas fa-save"></i>
                                                 </span>
-                                                <span class="text" style={{color:"white"}}>Tạo</span>
+                                                <span class="text" style={{ color: "white" }}>Tạo</span>
                                             </a>
                                         </div>
                                     </form>
@@ -342,8 +398,8 @@ class ModalCreate extends Component {
 }
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        createBranchStore: (id, form) => {
-            dispatch(dashboardAction.createBranchStore(id, form));
+        createBranchStore: (id, form, funcModal) => {
+            dispatch(dashboardAction.createBranchStore(id, form, funcModal));
         },
         fetchPlaceDistrict: (id) => {
             dispatch(placeAction.fetchPlaceDistrict(id));

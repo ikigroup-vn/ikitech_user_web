@@ -104,6 +104,11 @@ class ModalExpenditures extends Component {
       this.setState({recipient_group : this.state.listRecipientGroup[0] , recipient_references_id : {value : this.props.customer.id , label: this.props.customer.name}  })
 
     }
+    if(this.props.supplierID)
+    {
+      this.setState({recipient_group : this.state.listRecipientGroup[1] , recipient_references_id : {value : this.props.supplierID.id , label: this.props.supplierID.name}  })
+
+    }
     var staff = [...this.props.staff];
     // var supplier = [...this.props.supplier];
     // var customers = [...this.props.customers];
@@ -311,9 +316,13 @@ class ModalExpenditures extends Component {
       allow_accounting,
       description,
     });
-    if(this.props.notDate == true)
+    if(this.props.notDate == true && this.props.customer)
     {
       var params = `&recipient_group=0&recipient_references_id=${this.props.customer.id}`;
+    }
+    else if(this.props.notDate == true && this.props.supplierID)
+    {
+      var params = `&recipient_group=1&recipient_references_id=${this.props.supplierID.id}`;
     }
     else
     {

@@ -1,8 +1,11 @@
 import { data } from "jquery";
 import React, { Component } from "react";
-import getChannel, { IKITECH , IKIPOS } from "../../ultis/channel";
+import getChannel, { IKITECH, IKIPOS } from "../../ultis/channel";
 import { filter_var, filter_arr, format } from "../../ultis/helpers";
 import Modal from "./ModalPaymentPos";
+import * as Types from "../../constants/ActionType"
+import { connect } from "react-redux";
+
 class TotalBill extends Component {
     constructor(props) {
         super(props);
@@ -11,9 +14,14 @@ class TotalBill extends Component {
         }
     }
 
+    
 
     changeStatus = (status) => {
         this.setState({ check: status });
+        this.props.resetCalculate({
+            type: Types.GET_CALCULATE,
+            data: {},
+        })
         this.props.check(status)
     }
 
@@ -58,8 +66,8 @@ class TotalBill extends Component {
                     <br />
                     <div>
                         <p className="sale_user_label bold">
-                            Khách phải trả:{" "}
-                            <span id="total_selected">{format(bill.total_final || 0)}</span>
+                            Tạm tính:{" "}
+                            <span id="total_selected">{format(bill.total_before_discount || 0)}</span>
                         </p>
                     </div>
                     {total_shipping_fee > 0 && <div id="item_fee">
@@ -106,7 +114,7 @@ class TotalBill extends Component {
                         <p className="sale_user_label bold">
                             Đã thanh toán:{" "}
                             <span className="cart_payment_method">
-                                {format(bill.total_final - bill.remaining_amount )}
+                                {format(bill.total_final - bill.remaining_amount)}
                             </span>
                         </p>
                     </div>}
@@ -118,23 +126,22 @@ class TotalBill extends Component {
                             </span>
                         </p>
                     </div> */}
-                    {
-                        getChannel() == IKITECH && (
-                            <div>
-                                <p className="sale_user_label bold">
-                                    Tổng tiền:{" "}
-                                    <span className="cart_payment_method">
-                                        {format(total_final
-                                        )}
-                                    </span>
-                                </p>
-                            </div>
-                        )
-                    }
+
+                    <div>
+                        <p className="sale_user_label bold">
+                            Tổng tiền:{" "}
+                            <span className="cart_payment_method">
+                                {format(total_final
+                                )}
+                            </span>
+                        </p>
+                    </div>
+                    
+
                     {
                         getChannel() == IKIPOS && (
                             <React.Fragment>
-                            {/* <div>
+                                {/* <div>
                                 <p className="sale_user_label bold">
                                     Đã thanh toán:{" "}
                                     <span className="cart_payment_method">
@@ -144,16 +151,16 @@ class TotalBill extends Component {
                                 </p>
                             </div> */}
 
-<div>
-<p className="sale_user_label bold">
-    Còn lại:{" "}
-    <span className="cart_payment_method">
-    {format(bill.remaining_amount)}
+                                <div>
+                                    <p className="sale_user_label bold">
+                                        Còn nợ:{" "}
+                                        <span className="cart_payment_method">
+                                            {format(bill.remaining_amount)}
 
-    </span>
-</p>
-</div>
-</React.Fragment>
+                                        </span>
+                                    </p>
+                                </div>
+                            </React.Fragment>
 
                         )
                     }
@@ -221,4 +228,14 @@ class TotalBill extends Component {
     }
 }
 
-export default TotalBill;
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+  
+        resetCalculate : (data) =>{
+            dispatch(data);
+
+        }
+
+    };
+};
+export default connect(null, mapDispatchToProps)(TotalBill);
