@@ -526,3 +526,10 @@ pre {
     margin-bottom: -2px;
 }
 
+
+.day-of-birth-pos {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    flex:1;
+
+}
