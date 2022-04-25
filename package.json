@@ -13,6 +13,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
+    "@yazanaabed/react-autocomplete": "^0.2.7",
     "axios": "^0.19.2",
     "chart.js": "2.9.4",
     "ckeditor4-react": "^1.4.2",

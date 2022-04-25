@@ -44,17 +44,23 @@ export const fetchPlaceDistrict_Wards = (id) =>{
           type: Types.FETCH_PLACE_DISTRICT,
           data : res.data.data
         });
-        placeApi
-        .fetchPlaceWards(res.data.data[0].id)
-        .then((res) => {
-          console.log(res)
-          if(res.data.code !== 401)
-          dispatch({
-            type: Types.FETCH_PLACE_WARDS,
-            data : res.data.data
+
+        if(res.data.data.length > 0) {
+          placeApi
+          .fetchPlaceWards(res.data.data[0].id)
+          .then((res) => {
+            console.log(res)
+            if(res.data.code !== 401)
+            dispatch({
+              type: Types.FETCH_PLACE_WARDS,
+              data : res.data.data
+            });
           });
-        });
-      }
+        }}
+       
+
+
+  
       });
   };
 }
