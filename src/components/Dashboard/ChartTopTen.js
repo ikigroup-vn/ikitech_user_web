@@ -17,15 +17,6 @@ class Chart extends Component {
   constructor() {
     super();
     this.state = {
-      chartData: {},
-      nameTypeChart: "THÁNG NÀY",
-      showDateTime: "hide",
-      typeTop: "THEO-DOANH-THU"
-    };
-  }
-
-  getChartData() {
-    this.setState({
       chartData: {
         labels: [],
         datasets: [
@@ -36,58 +27,82 @@ class Chart extends Component {
           },
         ],
       },
-    });
+      nameTypeChart: "THÁNG NÀY",
+      showDateTime: "hide",
+      typeTop: "THEO-DOANH-THU"
+    };
   }
 
+  // getChartData() {
+  //   this.setState({
+  //     chartData: {
+  //       labels: [],
+  //       datasets: [
+  //         {
+  //           label: "Doanh thu",
+  //           data: [],
+  //           backgroundColor: "#17a2b8",
+  //         },
+  //       ],
+  //     },
+  //   });
+  // }
+  componentWillMount()
+  {
 
+        this.loadData(this.props.topten ,this.state.chartData , this.state.typeTop )
+  }
+  
+  loadData = (topten , chartData , typeTop) =>{
+    var chartDataProps = { ...topten };
+    var chartDataState = { ...chartData };
+    var labels = [];
+    var dataSets = [];
+    var typeTop = typeTop
+    var action = "total_price"
+    var label = "Doanh thu"
+    if (typeTop == "THEO-DOANH-THU") {
+      action = "total_price"
+      label = "Doanh thu"
+    }
+    if (typeTop == "THEO-SO-LUONG") {
+      action = "total_items"
+      label = "Số lượng"
+
+    }
+    if (typeTop == "THEO-SO-DON") {
+      action = "number_of_orders"
+      label = "Số đơn"
+
+    }
+    if (typeTop == "THEO-LUOT-XEM") {
+      action = "view"
+      label = "Lượt xem"
+
+    }
+
+    chartDataProps[action].forEach(item => {
+      dataSets.push(item[action]);
+      labels.push(item.product.name)
+    });
+    chartDataState.datasets[0].data = dataSets
+    chartDataState.labels = labels
+    chartDataState.datasets[0].label = label
+    this.setState({ chartData: chartDataState });
+  }
 
   shouldComponentUpdate(nextProps, nextState) {
     if (!shallowEqual(this.props.topten, nextProps.topten) ||
       this.state.typeTop != nextState.typeTop) {
-      console.log(this.state.typeTop, nextState.typeTop)
-      var chartDataProps = { ...nextProps.topten };
-      var chartDataState = { ...nextState.chartData };
-      var labels = [];
-      var dataSets = [];
-      var typeTop = nextState.typeTop
-      var action = "total_price"
-      var label = "Doanh thu"
-      if (typeTop == "THEO-DOANH-THU") {
-        action = "total_price"
-        label = "Doanh thu"
-      }
-      if (typeTop == "THEO-SO-LUONG") {
-        action = "total_items"
-        label = "Số lượng"
-
-      }
-      if (typeTop == "THEO-SO-DON") {
-        action = "number_of_orders"
-        label = "Số đơn"
-
-      }
-      if (typeTop == "THEO-LUOT-XEM") {
-        action = "view"
-        label = "Lượt xem"
-
-      }
-
-      chartDataProps[action].forEach(item => {
-        dataSets.push(item[action]);
-        labels.push(item.product.name)
-      });
-      chartDataState.datasets[0].data = dataSets
-      chartDataState.labels = labels
-      chartDataState.datasets[0].label = label
-      this.setState({ chartData: chartDataState });
+        this.loadData(nextProps.topten ,nextState.chartData , nextState.typeTop )
     }
     return true
   }
 
-  componentDidMount() {
-    this.getChartData();
+  // componentDidMount() {
+  //   this.getChartData();
 
-  }
+  // }
 
   onchangeTypeTop = (e) => {
     this.setState({

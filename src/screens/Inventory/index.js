@@ -9,6 +9,7 @@ import * as inventoryAction from "../../actions/inventory"
 import { Link } from 'react-router-dom';
 import Pagination from '../../components/Inventory/Pagination';
 import moment from "moment";
+import history from "../../history";
 
 
 class Inventory extends Component {
@@ -35,6 +36,11 @@ class Inventory extends Component {
         const params = `&search=${value}`
         this.props.fetchAllInventory(store_code, branch_id, 1, params)
     }
+    changePage = (store_code , order_code) => {
+        history.push(`/inventory/detail/${store_code}/${order_code}`)
+          }
+
+
     showData = (listInventory, store_code) => {
         var result = null
         if (listInventory) {
@@ -43,7 +49,7 @@ class Inventory extends Component {
                     "DD-MM-YYYY"
                 );
                 return (
-                    <tr className='wrap-content'>
+                    <tr className="hover-product" onClick={() => this.changePage(store_code , item.id)}>
                         <td>{index + 1}</td>
                         <td>{item.code}</td>
                         <td>{time}</td>
@@ -53,14 +59,7 @@ class Inventory extends Component {
                         <td>
                             {item.status === 0 ? <div style={{ color: "green" }}>đã kiểm kho</div> : <div style={{ color: "#ff6a00" }}>đã cân bằng</div>}
                         </td>
-                        <td>
-                            <Link
-                                to={`/inventory/detail/${store_code}/${item.id}`}
-                                class="btn btn-primary-no-background btn-sm"
-                            >
-                                <i class="fa fa-eye"></i> Xem
-                            </Link>
-                        </td>
+                    
                     </tr>
                 )
             })
@@ -152,7 +151,6 @@ class Inventory extends Component {
                                                         <th>Tồn chi nhánh</th>
                                                         <th>Chênh lệch</th>
                                                         <th>Trạng thái</th>
-                                                        <th>Hành động</th>
                                                     </tr>
                                                 </thead>
 

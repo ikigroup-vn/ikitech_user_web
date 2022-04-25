@@ -166,7 +166,6 @@ class Form extends Component {
                     class="form-control"
                     id="txtTitle"
                     value={txtTitle}
-                    name="txtName"
                     placeholder="Nhập tên bài viết"
                     autocomplete="off"
                     onChange={this.onChange}
@@ -301,7 +300,6 @@ class Form extends Component {
             <a
               style={{ marginLeft: "10px" }}
               onClick={this.goBack}
-              class="btn btn-warning"
               class="btn btn-warning btn-icon-split  btn-sm"
             >
               <span class="icon text-white-50">

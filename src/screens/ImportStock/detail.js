@@ -16,6 +16,8 @@ import ModalDelete from '../../components/Import_stock/ModalDelete'
 import ModalEnd from '../../components/Import_stock/ModalEnd'
 import { format } from '../../ultis/helpers'
 import ItemDetailRefund from "../../components/Import_stock/ItemDetailRefund"
+import history from "../../history";
+
 class DetailImportStock extends Component {
     constructor(props) {
         super(props)
@@ -26,7 +28,7 @@ class DetailImportStock extends Component {
             statusFinal: "",
             total_price: 0,
             check: false,
-            list_refund : []
+            list_refund: []
         }
     }
     componentDidMount() {
@@ -80,21 +82,21 @@ class DetailImportStock extends Component {
     changeStatus = (status) => {
         this.setState({ check: status });
     }
-    getRefund = (list_refund) =>{
-        this.setState({list_refund})
+    getRefund = (list_refund) => {
+        this.setState({ list_refund })
     }
-    checked = (list) =>{
+    checked = (list) => {
         var count = 0
         list.forEach(element => {
-            if(element.check == true)
-            count = count + 1
+            if (element.check == true)
+                count = count + 1
         });
         return count
     }
     render() {
         const { store_code, id } = this.props.match.params
         const { itemImportStock } = this.props
-        const { statusFinal , check ,list_refund } = this.state
+        const { statusFinal, check, list_refund } = this.state
         const import_stock_items = this.props.itemImportStock.import_stock_items ? this.props.itemImportStock.import_stock_items : []
         const date = moment(itemImportStock.updated_at, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD")
         const total = this.state.total_price - itemImportStock.discount + itemImportStock.cost
@@ -113,9 +115,12 @@ class DetailImportStock extends Component {
                                     type={Types.ALERT_UID_STATUS}
                                     alert={this.props.alert}
                                 />
-                                {itemImportStock.status === 0 || itemImportStock.status === 1 ? <div style={{ display: "flex", justifyContent: "end", marginBottom: "10px" }}>
-                                    <Link style={{ marginRight: "10px" }} type="button" to={`/import_stock/edit/${store_code}/${id}`} class="btn btn-primary  btn-sm"><i class="fa fa-edit"></i>&nbsp;Sửa đơn nhập</Link>
-                                </div> : ""}
+                                <div style={{ display: "flex", justifyContent: "end", marginBottom: "10px" }}>
+                                    <button style={{ marginRight: "10px" }} type="button" onClick={() => { history.goBack() }} class="btn btn-warning  btn-sm"><i class="fa fa-arrow-left"></i>&nbsp;Trở về</button>
+
+                                    {itemImportStock.status === 0 || itemImportStock.status === 1 ? <Link style={{ marginRight: "10px" }} type="button" to={`/import_stock/edit/${store_code}/${id}`} class="btn btn-primary  btn-sm"><i class="fa fa-edit"></i>&nbsp;Sửa đơn nhập</Link>
+                                        : ""}
+                                </div>
 
                                 <div class="card card-import">
                                     <div class="row d-flex justify-content-center">
@@ -150,11 +155,11 @@ class DetailImportStock extends Component {
                                         {this.state.isActive2 ?
                                             <div class="row d-flex icon-content"> <img class="icon" src="https://manmo3h.com/app/webroot/upload/admin/images/icon/icon7.png" />
                                                 <div class="d-flex flex-column">
-                                                    <p class="font-weight-bold" style={{ margin: "0" }}>Nhập kho</p>
+                                                    <p class="font-weight-bold" style={{ margin: "0", width: "43px", height: "43px" }}>Nhập kho</p>
                                                     <div className='time-history'>{itemImportStock.change_status_history[2].time_handle}</div>
                                                 </div>
                                             </div> :
-                                            <div class="row d-flex icon-content"> <img class="icon" src="https://manmo3h.com/app/webroot/upload/admin/images/icon/icon7.png" />
+                                            <div class="row d-flex icon-content"> <img style={{ width: "43px", height: "43px" }} class="icon" src="https://manmo3h.com/app/webroot/upload/admin/images/icon/icon7.png" />
                                                 <div class="d-flex flex-column">
                                                     <p class="font-weight-bold" style={{ margin: "0" }}>Nhập kho</p>
                                                 </div>
@@ -199,24 +204,24 @@ class DetailImportStock extends Component {
                                     <div className='col-6'>
                                         <div className='card'>
                                             <div className='card-header py-3' style={{ justifyContent: "space-between", alignItems: "center" }}>
-<span>
-Thông tin đơn hàng #{itemImportStock.code}
+                                                <span>
+                                                    Thông tin đơn hàng #{itemImportStock.code}
 
-</span>
+                                                </span>
                                                 {
-                        itemImportStock.import_stock_code_refund != null && (
-                            <span style={{ color: "red", display: "block" }}>
-                                Đã hoàn tiền từ đơn: <span id="cart_code">#{itemImportStock.import_stock_code_refund }</span>
+                                                    itemImportStock.import_stock_code_refund != null && (
+                                                        <span style={{ color: "red", display: "block" }}>
+                                                            Đã hoàn tiền từ đơn: <span id="cart_code"><a href={`/import_stocks/detail/${store_code}/${itemImportStock.id}`} >#{itemImportStock.import_stock_code_refund}</a></span>
 
-                            </span>
-                        )
-                    }
+                                                        </span>
+                                                    )
+                                                }
                                             </div>
                                             <div className='card-body' >
                                                 <div style={{ marginBottom: "10px", borderRadius: "5px" }}>
                                                     {
-                                                        import_stock_items.map((item,index) => (
-                                                            <ItemDetail getRefund = {this.getRefund} id={id} store_code={store_code} index = {index} listItems = {import_stock_items} status = {itemImportStock.status} check = {check} listItem={item} />
+                                                        import_stock_items.map((item, index) => (
+                                                            <ItemDetail getRefund={this.getRefund} id={id} store_code={store_code} index={index} listItems={import_stock_items} status={itemImportStock.status} check={check} listItem={item} />
                                                         ))
                                                     }
                                                 </div>
@@ -247,25 +252,26 @@ Thông tin đơn hàng #{itemImportStock.code}
                                                     </div>
                                                 </div> : ""}
 
+
                                                 {itemImportStock.status === 0 ? <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                                     <button class="btn btn-danger" style={{ marginTop: "20px" }} onClick={() => this.handleChangeStatus(1)} >Duyệt</button>
-                                                    <a className="cancel" style={{ marginTop: "20px" }} data-toggle="modal" data-target="#removeModal" >Hủy đơn nhập</a>
+                                                    <button className="cancel btn btn-secondary" style={{ marginTop: "20px" }} data-toggle="modal" data-target="#removeModal" >Hủy đơn nhập</button>
                                                 </div> :
                                                     itemImportStock.status === 1 ? <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                                         <button class="btn btn-danger" style={{ marginTop: "20px" }} onClick={() => this.handleChangeStatus(2)}>Nhập kho</button>
-                                                        <a className="cancel" style={{ marginTop: "20px" }} data-toggle="modal" data-target="#removeModal" >Hủy đơn nhập</a>
+                                                        <button className="cancel btn btn-secondary" style={{ marginTop: "20px" }} data-toggle="modal" data-target="#removeModal" >Hủy đơn nhập</button>
                                                     </div>
                                                         :
                                                         itemImportStock.status === 2 ? <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                                             <button class="btn btn-danger" style={{ marginTop: "20px" }} data-toggle="modal" data-target="#payment" >Hoàn thành</button>
-                                                            <button className="cancel btn btn-success" style={{ marginTop: "20px" }}  onClick={() => { this.changeStatus(true) }} >Hoàn trả nhà cung cấp</button>
+                                                            <button className="cancel btn btn-success" style={{ marginTop: "20px" }} onClick={() => { this.changeStatus(true) }} >Hoàn trả nhà cung cấp</button>
                                                             <button className="cancel btn btn-secondary" style={{ marginTop: "20px" }} data-toggle="modal" data-target="#endModal" >Kết thúc đơn nhập</button>
                                                         </div> : ""
 
                                                 }
                                                 <ModalDelete store_code={store_code} id={id} />
                                                 <ModalEnd store_code={store_code} id={id} />
-                                                <ModalPayment store_code={store_code} id={id} price={itemImportStock.total_final} remaining_amount ={itemImportStock.remaining_amount}/>
+                                                <ModalPayment store_code={store_code} id={id} price={itemImportStock.total_final} remaining_amount={itemImportStock.remaining_amount} />
                                             </div>
 
                                         </div>
@@ -289,22 +295,54 @@ Thông tin đơn hàng #{itemImportStock.code}
                                                         <div>Chi nhánh:</div>
                                                         <div>{itemImportStock.branch?.name}</div>
                                                     </div>
+
                                                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                                                         <div>Trạng thái:</div>
-                                                        {itemImportStock.payment_status === 0 ? <div style={{color:"red"}}>Chưa thanh toán</div> : <div style={{color:"green"}}>Đã thanh toán</div>}
+
+                                                        {itemImportStock.import_stock_code_refund == null ?
+                                                            itemImportStock.payment_status === 0 ? <div style={{ color: "red" }}>Chưa thanh toán</div> : <div style={{ color: "green" }}>Đã thanh toán</div>
+                                                            : <div style={{ color: "green" }}>Đã hoàn trả</div>
+                                                        }
                                                     </div>
+
                                                 </div>
-                                           
-                                            
-                                                {
-                                               check == true && this.checked(this.state.list_refund) > 0 && <ItemDetailRefund id={id} store_code={store_code} listItems = {import_stock_items} list_refund = {this.state.list_refund}  discount = {itemImportStock.discount}></ItemDetailRefund>
-                                           } 
-                                           
-                                           
+
+
+
+
+
                                             </div>
-                                        
+
 
                                         </div>
+                                        <div class="card" style={{ marginTop: "10px" }}>
+
+                                            <div class="">
+                                                <div class="card-body" >
+                                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                                        <div>Tiền hàng</div>
+                                                        <div>{format(Number(this.state.total_price))}</div>
+                                                    </div>
+                                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                                        <div>Chiết khấu</div>
+                                                        <div>{format(Number(itemImportStock.discount))}</div>
+                                                    </div>
+                                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                                        <div>Chi phí nhập hàng</div>
+                                                        <div>{format(Number(itemImportStock.cost))}</div>
+                                                    </div>
+                                                    <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                                        <div>Tổng tiền</div>
+                                                        <div>{format(Number(itemImportStock.total_final))}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        {
+                                            check == true && this.checked(this.state.list_refund) > 0 && <ItemDetailRefund id={id} store_code={store_code} listItems={import_stock_items} list_refund={this.state.list_refund} discount={itemImportStock.discount}></ItemDetailRefund>
+                                        }
                                     </div>
                                 </div>
                             </div>

@@ -76,22 +76,23 @@ class ShowData extends Component {
                             const cost_of_capital = listDistribute.element_distributes[_index].sub_element_distributes[index]?.cost_of_capital
                             const stock = listDistribute.element_distributes[_index].sub_element_distributes[index]?.stock
                             result.push(
-                                <div className='wrap-item' style={{ display: "flex", padding: "10px", justifyContent: "space-between" }}>
-                                    <div className='item' style={{ display: "flex", width: '14%' }}>
-                                        <img src={element.image_url != null ? element.image_url : Env.IMG_NOT_FOUND} alt='' width="35px" height="35px" style={{ marginLeft: "70px" }} ></img>
-                                    </div>
-                                    <div className='item' style={{ display: "flex", width: "33%" }}>
-                                        <label style={{ paddingLeft: '63px', color: "#ff8100" }}>Phân loại: </label>
-                                        <div className='name-distribute' style={{ marginLeft: "20px" }}>{element.name},{sub_element.name}</div>
-                                    </div>
-                                    <div className='item' style={{ display: "flex", width: "20%" }}>
-                                        <div className='price-distribute' style={{ paddingLeft: '154px' }}>{format(Number(cost_of_capital))}</div>
-                                    </div>
-                                    <div className='item' style={{ display: "flex", width: "20%" }}>
-                                        <div className='quantity-distribute' style={{ paddingLeft: '89px' }}>{stock}</div>
-                                    </div>
+                                <tr className='wrap-item hover-product' >
+                                    <td></td>
+                                    <td className='item' >
+                                        <img src={element.image_url != null ? element.image_url : Env.IMG_NOT_FOUND} alt='' width="40px" height="63px"  ></img>
+                                    </td>
+                                    <td className='item' style = {{display : "flex"}}>
+                                        <label style = {{color:"#ff8100"}}>&nbsp;Phân loại: </label>
+                                        <div className='name-distribute' >{element.name},{sub_element.name}</div>
+                                    </td>
+                                    <td className='item' >
+                                        {format(Number(cost_of_capital))}
+                                    </td>
+                                    <td className='item' >
+                                        {stock}
+                                    </td>
                                     {data.check_inventory === true ?
-                                        <div className='item' style={{ width: '29%', paddingLeft: "0px" }}>
+                                        <td className='item' >
                                             <a className='btn btn-warning btn-sm show' data-toggle="modal" style={{ paddingLeft: "10px", color: "white" }} data-target="#myModal" onClick={() => this.handleEditSubElement(listDistribute.element_distributes[_index].sub_element_distributes[index], element.name, listDistribute.name)}><i className='fa fa-edit'></i> Sửa kho</a>
                                             <a className='btn btn-primary btn-sm show' data-toggle="modal" style={{ marginLeft: "10px", color: "white" }}
                                                 data-target="#historyStock"
@@ -99,38 +100,40 @@ class ShowData extends Component {
                                                     listDistribute.element_distributes[_index].sub_element_distributes[index],
                                                     element.name,
                                                     listDistribute.name)}><i className='fa fa-history'></i> Lịch sử kho</a>
-                                        </div> : <div className='item' style={{ width: '29%', paddingLeft: "40px" }}></div>
+                                        </td> : <td className='item' ></td>
                                     }
 
-                                </div>
+                                </tr>
                             )
 
                         })
                     }
                     else {
                         result.push(
-                            <div className='wrap-item' style={{ display: "flex", padding: "10px", justifyContent: "space-between" }}>
-                                <div className='item' style={{ display: "flex", width: '14%' }}>
-                                    <img src={element.image_url != null ? element.image_url : Env.IMG_NOT_FOUND} alt='' width="35px" height="35px" style={{ marginLeft: "70px" }} ></img>
-                                </div>
-                                <div className='item' style={{ display: "flex", width: "41%", justifyContent: "start", paddingLeft: "72px" }}>
-                                    <label style={{ color: "#ff8100" }}>Phân loại: </label>
-                                    <div className='name-distribute' style={{ marginLeft: "20px" }}>{element.name}</div>
-                                </div>
-                                <div className='item' style={{ display: "flex", width: "17%" }}>
-                                    <div className='price-distribute' style={{ marginLeft: "80px" }}>{format(Number(element.cost_of_capital))}</div>
-                                </div>
-                                <div className='item' style={{ display: "flex", width: "17%" }}>
-                                    <div className='quantity-distribute' style={{ marginLeft: "52px" }}>{element.stock}</div>
-                                </div>
+                            <tr className='wrap-item hover-product' >
+                                <td></td>
+
+                                <td className='item' >
+                                    <img src={element.image_url != null ? element.image_url : Env.IMG_NOT_FOUND} alt='' width="40px" height="63px" ></img>
+                                </td>
+                                <td className='item'  style = {{display : "flex"}}>
+                                    <label style={{ color: "#ff8100" }}>&nbsp;Phân loại: </label>
+                                    <div className='name-distribute' >{element.name}</div>
+                                </td>
+                                <td className='item' >
+                                    <div className='price-distribute' >{format(Number(element.cost_of_capital))}</div>
+                                </td>
+                                <td className='item' >
+                                    <div className='quantity-distribute' >{element.stock}</div>
+                                </td>
                                 {data.check_inventory === true ?
-                                    <div className='item' style={{ width: "29%", paddingLeft: "0" }}>
+                                    <td className='item'>
                                         <a className='btn btn-warning btn-sm show' data-toggle="modal" data-target="#myModal" style={{ color: "white" }} onClick={() => this.handleEditStockElement(element, listDistribute.name)}><i className='fa fa-edit'></i> Sửa kho</a>
                                         <a className='btn btn-primary btn-sm show' data-toggle="modal" style={{ marginLeft: "10px", color: "white" }} data-target="#historyStock" onClick={() => this.historyInventory(element, listDistribute.name)}><i className='fa fa-history'></i> Lịch sử kho</a>
-                                    </div> : <div className='item' style={{ width: "29%", paddingLeft: "50px" }}></div>
+                                    </td> : <td className='item' ></td>
                                 }
 
-                            </div>
+                            </tr>
                         )
                     }
                 }
@@ -151,10 +154,10 @@ class ShowData extends Component {
 
         return (
             <>
-                <tr style={{ background: "#e3e6f04d" }}>
+                <tr className = "hover-product" style={{ background: "#e3e6f04d" }}>
                     <td>{per_page * (current_page - 1) + (index + 1)}</td>
                     <td>
-                        <img src={data.images.length > 0 ? data.images[0].image_url : Env.IMG_NOT_FOUND} alt='' width="40px" height="63px" style={{ width: "73%" }}></img>
+                        <img src={data.images.length > 0 ? data.images[0].image_url : Env.IMG_NOT_FOUND} alt='' width="40px" height="63px" ></img>
                     </td>
                     <td>
                         {/* <Link to={`/product/edit/${store_code}/${data.id}/${page}`}> */}
@@ -194,13 +197,13 @@ class ShowData extends Component {
 
                 </tr>
 
-                <tr class={`explode ${data.inventory?.distributes.length > 0 ? "show" : "hide"}`} >
+                {/* <tr class={`explode ${data.inventory?.distributes.length > 0 ? "show" : "hide"}`} >
                     <td colSpan={12}>
-                        <div className='show-distribute'>
-                            {this.showDistribute(listDistribute, data)}
-                        </div>
+                        <div className='show-distribute'> */}
+                {this.showDistribute(listDistribute, data)}
+                {/* </div>
                     </td>
-                </tr>
+                </tr> */}
                 <HistoryStock historyInventory={historyInventory} />
             </>
         )

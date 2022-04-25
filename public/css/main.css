@@ -58,9 +58,13 @@
       justify-content : center
 }
   
+.import-stock  .css-b62m3t-container{
+    width : 100%
+}
 .hover-product:hover{
-    background: rgb(229, 111, 37) !important;
-    color : white !important
+    background: rgba(0,0,0,.05) !important;
+    cursor: pointer;
+    /* color : #dddddd !important */
 }
   
 .on-off>.checkbox {

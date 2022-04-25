@@ -11,6 +11,7 @@ import moment from 'moment';
 import { format } from '../../ultis/helpers'
 import Pagination from '../../components/Import_stock/Pagination';
 
+import history from "../../history";
 
 class ImportStock extends Component {
     constructor(props) {
@@ -36,6 +37,9 @@ class ImportStock extends Component {
         const params = `&search=${value}`
         this.props.fetchAllImportStock(store_code, branch_id, 1, params)
     }
+    changePage = (store_code , order_code) => {
+        history.push(`/import_stocks/detail/${store_code}/${order_code}`)
+          }
 
     showData = (listImportStock, store_code) => {
         var result = null
@@ -43,21 +47,14 @@ class ImportStock extends Component {
             result = listImportStock.map((item, index) => {
                 var datetime = moment(item.created_at, "YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY HH:mm");
                 return (
-                    <tr className='wrap-content'>
+                    <tr className="hover-product" onClick={() => this.changePage(store_code , item.id)}>
                         <td>{index + 1}</td>
                         <td>{item.code}</td>
                         <td>{format(Number(item.total_final))}</td>
                         <td>{item.supplier?.name}</td>
                         <td>{item.status === 0 ? "Đặt hàng" : item.status === 1 ? "Duyệt" : item.status === 2 ? "Nhập kho" : item.status === 3 ? "Hoàn thành" : item.status === 4 ? "Đã hủy" : item.status === 5 ? "Kết thúc" : item.status === 6 ? "Trả hàng" : ""}</td>
                         <td>{datetime}</td>
-                        <td>
-                            <Link
-                                to={`/import_stocks/detail/${store_code}/${item.id}`}
-                                class="btn btn-primary-no-background btn-sm"
-                            >
-                                <i class="fa fa-eye"></i> Xem
-                            </Link>
-                        </td>
+                    
                     </tr>
                 )
             })
@@ -149,7 +146,6 @@ class ImportStock extends Component {
                                                         <th>Nhà cung cấp</th>
                                                         <th>Trạng thái</th>
                                                         <th>Thời gian đặt hàng</th>
-                                                        <th>Hành động</th>
                                                     </tr>
                                                 </thead>
 

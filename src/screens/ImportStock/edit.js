@@ -15,6 +15,9 @@ import ModalSupplier from '../../components/Import_stock/ModalSupplier';
 import * as dashboardAction from "../../actions/dashboard";
 import ListImportStock from '../../components/Import_stock/ListImportStock';
 import { format, formatNumber } from '../../ultis/helpers';
+import * as storeAction from "../../data/remote/store";
+import { AsyncPaginate } from "react-select-async-paginate";
+
 class EditImportStock extends Component {
     constructor(props) {
         super(props)
@@ -27,6 +30,8 @@ class EditImportStock extends Component {
             note: "",
             infoSupplier: "",
             tax:"",
+            select_supplier : null,
+
             discount:"",
             cost:"",
             txtDiscoutType: 0,
@@ -66,7 +71,7 @@ class EditImportStock extends Component {
     componentWillReceiveProps(nextProps) {
         var total_price = 0
         if(!shallowEqual(nextProps.itemImportStock,this.props.itemImportStock)){
-            const {discount,cost,tax,note} = nextProps.itemImportStock
+            const {discount,cost,tax,note , supplier} = nextProps.itemImportStock
             const newImportStock = this.state.listImportStock
             nextProps.itemImportStock.import_stock_items.forEach(item =>{
                 total_price = parseInt(total_price) + parseInt(item.import_price)
@@ -84,7 +89,8 @@ class EditImportStock extends Component {
             this.setState({
                 listImportStock:newImportStock,
                 price_total: total_price,
-                txtValueDiscount:discount
+                txtValueDiscount:discount,
+                select_supplier : supplier ? {value : supplier.id , label : `${supplier.name} (${supplier.phone})` , supplier : supplier} : null
                 ,tax:tax,cost:cost,
                 note:note})  
         }
@@ -185,7 +191,7 @@ class EditImportStock extends Component {
 
     updateImportStock = () => {
         const { store_code,id } = this.props.match.params
-        const { infoSupplier } = this.state
+        const { select_supplier } = this.state
         const branch_id = localStorage.getItem('branch_id')
         var affterDiscount = ""
         if(this.state.txtDiscoutType ==0){
@@ -196,7 +202,7 @@ class EditImportStock extends Component {
         const formData = {
             note: this.state.note,
             status: 0,
-            supplier_id: infoSupplier.id_supplier,
+            supplier_id: select_supplier ? select_supplier.value : null,
             tax: this.state.tax,
             cost: this.state.cost,
             discount: affterDiscount    ,
@@ -247,14 +253,46 @@ class EditImportStock extends Component {
         this.props.fetchAllSupplier(store_code);
         this.props.fetchDetailImportStock(store_code, branch_id, id)
     }
+    loadSuppliers = async (search, loadedOptions, { page }) => {
+        console.log("vaooooooooooooooooooo")
+        var { store_code } = this.props.match.params
+        const params = `&search=${search}`;
+        const res = await storeAction
+            .fetchAllSupplier(store_code, page, params);
+        console.log(res);
+        if (res.status != 200) {
+            return {
+                options: [],
+                hasMore: false,
+            }
+        }
 
+        return {
+            options: res.data.data.data.map((i) => {
+                return { value: i.id, label: `${i.name}  (${i.phone})`, supplier: i };
+            }),
+
+            hasMore: res.data.data.data.length == 20,
+            additional: {
+                page: page + 1,
+            },
+        };
+    };
+    onChangeSelect4 = (selectValue) => {
+        console.log(selectValue)
+        
+                var supplier = selectValue?.supplier
+                if (selectValue != null && supplier != null) {
+                    this.setState({select_supplier : selectValue})
+                }
+            }
     render() {
         var { supplier } = this.props;
         var { txtDiscoutType, txtValueDiscount } = this.state
         var type_discount_default = txtDiscoutType == "0" ? "show" : "hide"
         var type_discount_percent = txtDiscoutType == "1" ? "show" : "hide"
         var { store_code } = this.props.match.params
-        var { searchValue, numPage, listImportStock, infoSupplier, price_total, reality_exist_total,cost } = this.state
+        var { searchValue, numPage, listImportStock, infoSupplier, price_total, reality_exist_total,cost , select_supplier} = this.state
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
@@ -270,10 +308,47 @@ class EditImportStock extends Component {
                                     <div className='col-lg-4 col-xl-4 col-md-12 col-sm-12'>
                                         <div className='card shadow mb-4' style={{ height: "100%" }}>
                                             <div className='card-header py-3' style={{ padding: "0", display: "flex" }}>
-                                                <button class="btn btn-primary" type="submit" data-toggle="modal" data-target="#supplier"><i class="fas fa-user"></i></button>
-                                                <div class="card" style={{ marginLeft: "10px", width: "80%" }}>
-                                                    <div class="card-body" style={{ padding: '0px' }}>{infoSupplier ? `${infoSupplier.name}` : 'Chọn nhà cung cấp'}</div>
+                                            <div className='import-stock' style={{
+                                                    display: "flex",
+                                                
+                                                    width : "100%"
+                                                }}>
+                                                    <i class='fa fa-user-o' data-toggle="modal" data-target="#modalPertion" style={{
+
+                                                        fontSize: "20px", left: "3px", bottom: "10px", cursor: "pointer",
+                                                        margin: 10
+                                                    }} ></i>
+
+
+
+
+
+
+
+                                                            <AsyncPaginate
+                                                                placeholder="Tìm khách hàng"
+                                                                value={select_supplier}
+                                                                loadOptions={this.loadSuppliers}
+                                                                name="recipientReferences1"
+                                                                onChange={this.onChangeSelect4}
+                                                                additional={{
+                                                                    page: 1,
+                                                                }}
+                                                                debounceTimeout={500}
+                                                                isClearable
+                                                                isSearchable
+                                                            />
+
+
+
+
+                                                      
+
+
+
+
                                                 </div>
+
                                             </div>
 
                                             <div className='card-bodys' style={{ width: "0 10px", height: "380px", overflowY: "auto" }}>

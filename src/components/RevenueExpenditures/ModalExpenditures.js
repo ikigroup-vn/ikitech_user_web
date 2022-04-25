@@ -316,9 +316,15 @@ class ModalExpenditures extends Component {
       allow_accounting,
       description,
     });
+    var funcModal = null
     if(this.props.notDate == true && this.props.customer)
     {
       var params = `&recipient_group=0&recipient_references_id=${this.props.customer.id}`;
+      funcModal = function()
+      {
+        window.$('.modal').modal('hide')
+      }
+    
     }
     else if(this.props.notDate == true && this.props.supplierID)
     {
@@ -342,11 +348,7 @@ class ModalExpenditures extends Component {
         allow_accounting,
         description,
       },
-      params,function()
-      {
-        window.$('.modal').modal('hide')
-      }
-    );
+      params,funcModal)
   };
 
   render() {
@@ -443,11 +445,11 @@ class ModalExpenditures extends Component {
                   />
                 </div>
                 <div class="form-group">
-                  <label>Chọn nhóm người nộp</label>
+                  <label>Chọn nhóm người nhận</label>
                   <Select
                     isClearable
                     isSearchable
-                    placeholder="-- Chọn nhóm người nộp --"
+                    placeholder="-- Chọn nhóm người nhận --"
                     value={recipient_group}
                     options={listRecipientGroup}
                     name="recipientGroup"
@@ -458,11 +460,11 @@ class ModalExpenditures extends Component {
                   <div class="form-group">
                     {recipient_group?.value === 2 && (
                       <>
-                        <label>Chọn người nộp</label>
+                        <label>Chọn người nhận</label>
                         <Select
                           isClearable
                           isSearchable
-                          placeholder="-- Chọn người nộp --"
+                          placeholder="-- Chọn người nhận --"
                           value={recipient_references_id}
                           options={listStaff}
                           name="recipientReferences"

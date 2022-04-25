@@ -143,7 +143,7 @@ class General extends Component {
                             <div className="row no-gutters align-items-center">
                                 <div className="col mr-2">
                                     <div>
-                                        <Link className=" font-weight-bold text-warning text-uppercase mb-1" to={`/order/${store_code}`}>    Đơn hoàn trả
+                                        <Link className=" font-weight-bold text-warning text-uppercase mb-1" to={`/order/${store_code}/CUSTOMER_HAS_RETURNS`}>    Đơn hoàn trả
 
                                         </Link>
 

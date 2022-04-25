@@ -10,6 +10,7 @@ import ItemDetail from '../../components/Inventory/ItemDetail'
 import moment from 'moment'
 import ModalDelete from '../../components/Inventory/ModalDelete'
 import { Link } from 'react-router-dom'
+import history from "../../history";
 
 class DetailInventory extends Component {
     constructor(props) {
@@ -32,7 +33,7 @@ class DetailInventory extends Component {
         const { store_code } = this.props.match.params
         const { itemInventory } = this.props
         const tally_sheet_items = this.props.itemInventory.tally_sheet_items ? this.props.itemInventory.tally_sheet_items : []
-        const date = moment(itemInventory.updated_at, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD")
+        const date = moment(itemInventory.updated_at, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD HH:mm")
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
@@ -48,6 +49,8 @@ class DetailInventory extends Component {
                                     alert={this.props.alert}
                                 />
                                 <div style={{ display: "flex", justifyContent: "end" }}>
+                                 <button style={{ marginRight: "10px" }} type="button" onClick = {()=>{history.goBack()}}  class="btn btn-warning  btn-sm"><i class="fa fa-arrow-left"></i>&nbsp;Trở về</button>
+
                                     {itemInventory.status === 0 ? <Link style={{ marginRight: "10px" }} type="button" to={`/inventory/edit/${store_code}/${itemInventory.id}`} class="btn btn-primary  btn-sm"><i class="fa fa-edit"></i>&nbsp;Sửa phiếu kiểm hàng</Link> : ""}
                                     <button type="button" class="btn btn-danger  btn-sm" data-toggle="modal" data-target="#removeModal" ><i class="fa fa-trash"></i>&nbsp;Xóa phiếu kiểm hàng</button>
                                 </div>
@@ -56,34 +59,19 @@ class DetailInventory extends Component {
                                     <div className='col-6'>
                                         <div className='card'>
                                             <div className='card-header py-3' style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                                Phiếu kiểm hàng
+                                                Phiếu kiểm hàng:&nbsp;#{itemInventory.code}
                                             </div>
                                             <div className='card-body'>
                                                 {tally_sheet_items.map((item) => (
                                                     <ItemDetail listItem={item} />
                                                 ))}
-                                                <div class="card">
-                                                    <div class="card-body" style={{ padding: "0" }}>
-                                                        <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                                            <div>SL tồn thực tế:</div>
-                                                            <div>{itemInventory.reality_exist}</div>
-                                                        </div>
-                                                        <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                                            <div>SL tồn chi nhánh:</div>
-                                                            <div>{itemInventory.existing_branch}</div>
-                                                        </div>
-                                                        <div style={{ display: "flex", justifyContent: "space-between" }}>
-                                                            <div>SL chênh lệch:</div>
-                                                            <div>{itemInventory.deviant}</div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                {itemInventory.note?                                                <div>
-                                                    <label style={{fontWeight:"bold", marginTop:"5px"}}>Ghi chú</label>
+                                      
+                                                {itemInventory.note ? <div>
+                                                    <label style={{ fontWeight: "bold", marginTop: "5px" }}>Ghi chú</label>
                                                     <div class="card">
-                                                        <div class="card-body" style={{padding:"0"}}>{itemInventory.note}</div>
+                                                        <div class="card-body" style={{ padding: "0" }}>{itemInventory.note}</div>
                                                     </div>
-                                                </div>:""}
+                                                </div> : ""}
 
                                                 {itemInventory.status === 0 ? <button class="btn btn-danger" style={{ marginTop: "20px" }} onClick={() => this.handleBalance(itemInventory.id)}>Cân bằng kho</button> : ""}
 
@@ -114,10 +102,47 @@ class DetailInventory extends Component {
                                                         <div>Trạng thái:</div>
                                                         <div>{itemInventory.status === 0 ? "Đã kiểm kho" : "Đã cân bằng"}</div>
                                                     </div>
+                                                    {
+                                                        itemInventory.status !== 0  && (
+                                                            <React.Fragment>
+                                                                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                                                    <div>Cân bằng kho ngày:</div>
+                                                                    <div>{date}</div>
+                                                                </div>
+                                                                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                                                    <div>Số lượng cân bằng:</div>
+                                                                    <div>{itemInventory.deviant}</div>
+                                                                </div>
+
+                                                            </React.Fragment>
+                                                        )
+                                                    }
+
                                                 </div>
                                             </div>
                                             <ModalDelete id={itemInventory.id} store_code={store_code} />
                                         </div>
+                                        <div class="card" style = {{marginTop: "10px"}}>
+
+                                                    <div class="card-body" >
+                                                    <div class="">
+
+                                                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                                            <div>SL tồn thực tế:</div>
+                                                            <div>{itemInventory.reality_exist}</div>
+                                                        </div>
+                                                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                                            <div>SL tồn chi nhánh:</div>
+                                                            <div>{itemInventory.existing_branch}</div>
+                                                        </div>
+                                                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                                            <div>SL chênh lệch:</div>
+                                                            <div>{itemInventory.deviant}</div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                </div>
+
                                     </div>
                                 </div>
                             </div>

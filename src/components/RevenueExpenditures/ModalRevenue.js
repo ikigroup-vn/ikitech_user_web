@@ -297,13 +297,25 @@ class ModalRevenue extends Component {
     var recipientReferencesIdValue = recipient_references_id?.value
       ? recipient_references_id?.value
       : null;
+
+
+    var funcModal = null
       if(this.props.notDate == true && this.props.customer)
       {
         var params = `&recipient_group=0&recipient_references_id=${this.props.customer.id}`;
+        funcModal =  function()
+      {
+        window.$('.modal').modal('hide')
+      }
+    
       }
       else if(this.props.notDate == true && this.props.supplierID)
       {
         var params = `&recipient_group=1&recipient_references_id=${this.props.supplierID.id}`;
+        funcModal =  function()
+        {
+          window.$('.modal').modal('hide')
+        }
       }
       else
       {
@@ -324,10 +336,7 @@ class ModalRevenue extends Component {
         allow_accounting,
         description,
       },
-      params , function()
-      {
-        window.$('.modal').modal('hide')
-      }
+      params , funcModal
     );
   };
 

@@ -7,6 +7,7 @@ import { shallowEqual } from "../../ultis/shallowEqual"
 import { Link } from "react-router-dom";
 import history from "../../history";
 import { getBranchId } from "../../ultis/branchUtils";
+import ReactDOM from 'react-dom';
 
 class Notification extends Component {
     constructor(props) {
@@ -14,7 +15,7 @@ class Notification extends Component {
         this.state = {
             page: 1,
             notifications: {},
-            notification_unread:0,
+            notification_unread: 0,
             type: {
                 NEW_PERIODIC_SETTLEMENT: `/collaborator/${this.props.store_code}/request_payment`,
                 NEW_POST: `/posts/edit/${this.props.store_code}`,
@@ -29,11 +30,32 @@ class Notification extends Component {
     }
 
     componentDidMount = () => {
-        var {badges} = this.props
+        var { badges } = this.props
         this.setState({
-            notification_unread:badges.notification_unread
+            notification_unread: badges.notification_unread
         })
+        document.addEventListener('mousedown', this.handleClickOutside, true);
     }
+
+    handleClickOutside = event => {
+    try {
+        if (window.$(".dropdown>.dropdown-menu").hasClass("show")) {
+            const domNode = ReactDOM.findDOMNode(this);
+
+            if (!domNode || !domNode.contains(event.target)) {
+                {
+                    window.$(".dropdown>.dropdown-menu").removeClass("show");
+
+                }
+            }
+        }
+    } catch (error) {
+        console.log(error)
+    }
+    }
+
+
+
 
     componentDidUpdate() {
         if (this.state.isLoading != true && typeof this.props.permission.product_list != "undefined") {
@@ -133,7 +155,7 @@ class Notification extends Component {
     componentWillReceiveProps(nextProps) {
         if ((nextProps.isLoadNotification !== this.props.isLoadNotification)) {
             const branch_id = getBranchId()
-            this.props.fetchAllBadge(this.props.store_code,branch_id);
+            this.props.fetchAllBadge(this.props.store_code, branch_id);
         }
 
         if (nextProps.isLoadNotification != this.props.isLoadNotification) {
@@ -142,10 +164,10 @@ class Notification extends Component {
 
         if (nextProps.branchId != this.props.branchId) {
             const branch_id = nextProps.branchId
-            this.props.fetchAllBadge(this.props.store_code,branch_id);
+            this.props.fetchAllBadge(this.props.store_code, branch_id);
         }
 
-    
+
     }
 
 
@@ -184,9 +206,9 @@ class Notification extends Component {
     }
     render() {
         var { disable, badges } = this.props;
-        var { notifications , allow_notification } = this.state
+        var { notifications, allow_notification } = this.state
         var { total_unread, list_notification } = notifications
-        var {notification_unread} = this.state
+        var { notification_unread } = this.state
 
         if (typeof list_notification != "undefined")
             var disableLoad = list_notification.last_page == 1 ? false : true
@@ -243,8 +265,8 @@ const mapDispatchToProps = (dispatch, props) => {
         fetchAllNotification: (store_code, page) => {
             dispatch(notificationAction.fetchAllNotification(store_code, page));
         },
-        fetchAllBadge: (store_code,branch_id) => {
-            dispatch(notificationAction.fetchAllBadge(store_code,branch_id));
+        fetchAllBadge: (store_code, branch_id) => {
+            dispatch(notificationAction.fetchAllBadge(store_code, branch_id));
         },
     };
 };

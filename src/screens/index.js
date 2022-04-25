@@ -10,6 +10,13 @@ import * as branchAction from "../actions/branch"
 import { getStoreId, setStoreId } from "../ultis/store";
 
 class Store extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+        store_code : ""
+    }
+
+}
   componentDidMount() {
     this.props.fetchAllStore();
 
@@ -99,7 +106,7 @@ class Store extends Component {
       if (this.props.loadingBranch == false &&
         stores != null &&
         this.props.currentBranch != null &&
-        this.props.currentBranch.id != null &&
+        this.props.currentBranch.id != null && stores != null &&
         typeof stores.store_code != null &&
         getBranchId() != null &&
         this.state.store_code != null &&

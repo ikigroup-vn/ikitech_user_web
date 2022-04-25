@@ -55,18 +55,17 @@ class ItemDetail extends Component {
     }
 
 
-    componentDidMount()
-    {
+    componentDidMount() {
         var list_refunds = [...this.props.list_refund]
         var quantity = this.getQuantity(list_refunds)
         var value = this.getValue(list_refunds).value;
         var total_value = this.getValue(list_refunds).total_value;
         var discount = this.props.discount
 
-        this.setState({ list_refunds, quantity, total_value, discount, value }) 
+        this.setState({ list_refunds, quantity, total_value, discount, value })
     }
 
-    shouldComponentUpdate(nextProps , nextState) {
+    shouldComponentUpdate(nextProps, nextState) {
         console.log(nextProps.list_refund, this.props.list_refund)
         if (!shallowEqual(nextProps.list_refund, this.props.list_refund)) {
             console.log("da vao")
@@ -97,8 +96,8 @@ class ItemDetail extends Component {
         var { id, store_code } = this.props;
         var data = {
             refund_line_items: newArray,
-            refund_money_paid : {
-                amount_money : this.state.total_value, payment_method : 0
+            refund_money_paid: {
+                amount_money: this.state.total_value, payment_method: 0
             }
         }
 
@@ -116,29 +115,44 @@ class ItemDetail extends Component {
             <React.Fragment>
                 <br></br>
 
+                <div className='card'>
+                    <div className='card-header py-3' style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                        Chi tiết hoàn trả
+                    </div>
+                    <div className='card-body'>
+                        <div class="">
+                            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                <div>Tổng số lượng</div>
+                                <div>{format(Number(quantity))}</div>
+                            </div>
+                            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                <div>Giá trị trả hàng</div>
+                                <div>{format(Number(value))}</div>
+                            </div>
+                            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                <div>Chiết khấu</div>
+                                <div>{format(Number(discount))}</div>
+                            </div>
 
-                <h4>Chi tiết hoàn trả</h4>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <div>Tổng số lượng</div>
-                    <div>{format(Number(quantity))}</div>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <div>Giá trị trả hàng</div>
-                    <div>{format(Number(value))}</div>
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <div>Chiết khấu</div>
-                    <div>{format(Number(discount))}</div>
+                            <div style={{ display: "flex", justifyContent: "space-between" }}>
+                                <div>Tổng giá trị hàng trả</div>
+                                <div>{format(Number(total_value))}</div>
+                            </div>
+                            <div style={{ display: "flex" }}>
+
+                                <button onClick={this.post} style={{ "margin": "auto" }} type="button" class="btn btn-success">Thực hiện</button>
+                            </div>
+                        </div>
+
+
+
+
+
+                    </div>
+
+
                 </div>
 
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                    <div>Tổng giá trị hàng trả</div>
-                    <div>{format(Number(total_value))}</div>
-                </div>
-                <div style={{ display: "flex" }}>
-
-                    <button onClick={this.post} style={{ "margin": "auto" }} type="button" class="btn btn-success">Thực hiện</button>
-                </div>
 
 
 
