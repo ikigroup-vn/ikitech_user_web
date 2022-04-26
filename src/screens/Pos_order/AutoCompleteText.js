@@ -37,22 +37,27 @@ export default class AutoCompleteText extends React.Component {
 
     findSuggestion = (text, items = []) => {
         let suggestions = []
-        const regex = new RegExp(`^${text}`, 'i');
 
-        var item2 = items.length == 0 ? this.state.items : items
-        suggestions = item2.sort().filter(v => regex.test(v.phone_number))
+        try {
+            const regex = new RegExp(`^${text}`, 'i');
 
-        var newSug = []
-        suggestions.forEach(element => {
-            var p1 = element.phone_number.indexOf(text);
-            newSug.push({
-                ...element,
-                p1: p1,
-                p2: p1 + text.length
-            })
-        });
-
-
+            var item2 = items.length == 0 ? this.state.items : items
+            suggestions = item2.sort().filter(v => regex.test(v.phone_number))
+    
+            var newSug = []
+            suggestions.forEach(element => {
+                var p1 = element.phone_number.indexOf(text);
+                newSug.push({
+                    ...element,
+                    p1: p1,
+                    p2: p1 + text.length
+                })
+            });
+    
+        } catch (err) {
+            return suggestions
+        }
+    
 
         return newSug
     }

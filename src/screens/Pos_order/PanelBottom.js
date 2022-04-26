@@ -12,6 +12,7 @@ import { format } from '../../ultis/helpers'
 import Autocomplete from 'react-autocomplete';
 import AutoCompleteText from "./AutoCompleteText";
 import * as customerAction from "../../actions/customer";
+import Select, { OnChangeValue, StylesConfig } from 'react-select';
 
 class PanelBottom extends Component {
 
@@ -21,6 +22,8 @@ class PanelBottom extends Component {
 
         this.state = {
             isDisabledButton: false,
+            isOpenProvince: false,
+            isOpenDistrict: false,
             startDate: new Date(),
             selectedDate: null,
             listWards: [],
@@ -51,6 +54,38 @@ class PanelBottom extends Component {
         return result
 
     }
+
+    optionsProvince = (places) => {
+        var list = []
+        if (places.length > 0) {
+            list = places.map((data, index) => {
+                return { value: data, label: data.name }
+            })
+        }
+        return list
+    }
+
+    optionsWards = (places) => {
+        var list = []
+        if (places.length > 0) {
+            list = places.map((data, index) => {
+                return { value: data, label: data.name }
+            })
+        }
+        return list
+    }
+
+    optionsDistrict = (places) => {
+        var list = []
+        if (places.length > 0) {
+            list = places.map((data, index) => {
+                return { value: data, label: data.name }
+            })
+        }
+        return list
+
+    }
+
     showWards = (places) => {
         var result = null;
         if (places.length > 0) {
@@ -110,6 +145,45 @@ class PanelBottom extends Component {
 
         }
     }
+    onChangeProvince2 = (selectValue) => {
+
+        this.toggleOpenProvince();
+
+        if (selectValue != null && selectValue.value != null) {
+            var data = selectValue.value
+            this.setState({ txtProvince: data.id, isLoaded: true })
+            this.onSelectChangeProvinceById(data.id)
+
+            this.props.fetchPlaceDistrict(data.id);
+
+        }
+    }
+    onChangeDistrict2 = (selectValue) => {
+
+        this.toggleOpenDistrict();
+
+        if (selectValue != null && selectValue.value != null) {
+            var data = selectValue.value
+            this.setState({ txtWards: data.id, isLoaded: true })
+            this.onSelectChangeDistrictById(data.id)
+
+            this.props.fetchPlaceWards(data.id);
+
+        }
+    }
+    onChangeWards2 = (selectValue) => {
+
+        this.toggleOpenWards();
+
+        if (selectValue != null && selectValue.value != null) {
+            var data = selectValue.value
+
+            this.setState({ txtWards: data.id, isLoaded: true })
+            this.onSelectChangeWardsById(data.id)
+
+
+        }
+    }
     onChangeDistrict = (e) => {
         this.setState({ txtDistrict: e.target.value })
         this.props.fetchPlaceWards(e.target.value)
@@ -122,12 +196,15 @@ class PanelBottom extends Component {
 
     componentWillReceiveProps(nextProps, nextState) {
         if (!shallowEqual(this.props.district, nextProps.district)) {
+          
             this.setState({
                 listDistrict: nextProps.district
             })
         }
 
         if (!shallowEqual(nextProps.wards, this.props.wards)) {
+
+          
             this.setState({
                 listWards: nextProps.wards,
             })
@@ -154,6 +231,9 @@ class PanelBottom extends Component {
                     isDisabledButton: false,
                     selectedDate: ""
                 })
+                this.onSelectChangeProvinceById("")
+                this.onSelectChangeDistrictById("")
+                this.onSelectChangeWardsById("")
             } else {
 
                 if (nextProps.oneCart.customer != null) {
@@ -179,9 +259,30 @@ class PanelBottom extends Component {
                             txtAddressDetail: customer.address_detail,
                             txtEmail: customer.email,
                             selectedDate: customer == null || customer.date_of_birth == null ? "" : new Date(customer.date_of_birth),
-                            isDisabledButton: customer.is_passersby
+                            isDisabledButton: customer.is_passersby,
+
+                            districtName: customer.district_name,
+                            wardsName: customer.wards_name,
+                            provinceName: customer.province_name,
+                            valueProvince: {
+                                label: customer.province_name,
+                                value: customer.province
+                            },
+
+                            valueDistrict: {
+                                label: customer.district_name,
+                                value: customer.district
+                            },
+                           
+                            valueWards: {
+                                label: customer.wards_name,
+                                value: customer.wards
+                            },
                         }
                     )
+                    // this.onSelectChangeProvinceById(customer.province)
+                    // this.onSelectChangeDistrictById(customer.district)
+                    // this.onSelectChangeWardsById(customer.wards)
                 }
 
             }
@@ -222,7 +323,7 @@ class PanelBottom extends Component {
 
     onSaveCustomer = () => {
 
-        var { txtAddressDetail, isDisabledButton, selectedDate, txtSex, txtProvince, txtDistrict, txtWards, listDistrict, listWards, txtEmail, txtEmail, txtPhoneNumber, txtName } = this.state;
+        var { provinceName, isOpenProvince, txtAddressDetail, isDisabledButton, selectedDate, txtSex, txtProvince, txtDistrict, txtWards, listDistrict, listWards, txtEmail, txtEmail, txtPhoneNumber, txtName } = this.state;
 
         var { store_code } = this.props
         this.props.createCustomer(store_code, {
@@ -301,11 +402,97 @@ class PanelBottom extends Component {
         this.props.onSeletedCustomer(cus)
     }
 
+
+    toggleOpenProvince = () => {
+
+        this.setState((state) => ({ isOpenProvince: !state.isOpenProvince }));
+    };
+    toggleOpenDistrict = () => {
+
+        this.setState((state) => ({ isOpenDistrict: !state.isOpenDistrict }));
+    };
+    toggleOpenWards = () => {
+        this.setState((state) => ({ isOpenWards: !state.isOpenWards }));
+    };
+
+
+    onSelectChangeProvinceById = (idProvince, list = null) => {
+
+        var pro = (list ?? this.props.province).find((ele) => ele.id == idProvince)
+
+        if (pro != null) {
+            this.setState({
+                valueProvince: {
+                    label: pro.name,
+                    value: pro
+                },
+                provinceName: pro.name,
+                txtProvince: pro.id,
+                listWards: [],
+                listDistrict: [],
+                txtDistrict: "",
+                txtWards:"",
+                districtName: "",
+                wardsName: "",
+
+            });
+        }
+
+    };
+
+    onSelectChangeDistrictById = (idDistrict, list = null) => {
+
+        var pro = (list ?? this.props.district).find((ele) => ele.id == idDistrict)
+
+        if (pro != null) {
+            this.setState({
+                valueDistrict: {
+                    label: pro.name,
+                    value: pro
+                },
+                districtName: pro.name,
+                txtDistrict: pro.id,
+                listWards: [],
+                wardsName: "",
+                txtWards:"",
+            });
+        }
+
+    };
+
+    onSelectChangeWardsById = (idWards, list = null) => {
+
+        var pro = (list ?? this.props.wards).find((ele) => ele.id == idWards)
+
+
+        if (pro != null) {
+            this.setState({
+                valueWards: {
+                    label: pro.name,
+                    value: pro
+                },
+                wardsName: pro.name,
+                txtWards: pro.id,
+            });
+        }
+
+    };
+
+
+
     buildTabCustomer = () => {
 
         var { province } = this.props
 
-        var { startDate, isDisabledButton, selectedDate, txtAddressDetail, txtSex, txtProvince, txtDistrict, txtWards, listDistrict, listWards, txtEmail, txtEmail, txtPhoneNumber, txtName } = this.state;
+        var { valueProvince, valueDistrict, valueWards, isOpenProvince,
+            isOpenDistrict,
+            isOpenWards,
+            isDisabledButton, provinceName,
+            districtName, wardsName,
+            selectedDate, txtAddressDetail,
+            txtSex, txtProvince, txtDistrict,
+            txtWards, listDistrict, listWards,
+            txtEmail, txtEmail, txtPhoneNumber, txtName } = this.state;
 
 
         // const ExampleCustomTimeInput = ({ date, value, onChange }) => (
@@ -341,6 +528,20 @@ class PanelBottom extends Component {
             "Tháng 11",
             "Tháng 12",
         ];
+
+        const customStylesProvince = {
+            control: (provided) => ({
+                ...provided,
+                minWidth: document.getElementById('customerProvinceId') == null ? 150 : document.getElementById('customerProvinceId').offsetWidth,
+                zIndex: 4,
+                top: -9
+            }),
+            // menu: (provided) => ({ 
+            //     ...provided,
+            //     top:-88
+            //  }),
+
+        }
 
         return <div style={{
             padding: 20
@@ -397,68 +598,174 @@ class PanelBottom extends Component {
 
                 </div>
                 <div class="col-md-3 col-6">
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text px-2" title="Thành phố">
-                                <i class="fa fa-map-marker" aria-hidden="true"></i>
-                            </span>
-                        </div>
-
-                        <select class="form-control select-has-search-box select2-hidden-accessible"
-                            id="customerCityLocationId"
-                            value={txtProvince || ""}
-                            onChange={this.onChangeProvince}
-                            name="txtProvince"
-                            disabled={isDisabledButton}
-                            tabindex="-1" aria-hidden="true"
-                            data-select2-id="customerCityLocationId">
-                            <option value="" data-select2-id="71">- Thành phố -</option>
-                            {this.showProvince(province)}
-                        </select>
 
 
-                    </div>
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text px-2" title="Quận huyện">
-                                <i class="fa fa-map-marker" aria-hidden="true"></i>
-                            </span>
-                        </div>
-                        <select class="form-control select-has-search-box customerInfo select2-hidden-accessible"
-                            value={txtDistrict || ""}
-                            onChange={this.onChangeDistrict}
-                            name="txtDistrict"
-                            disabled={isDisabledButton}
-                            id="customerDistrictLocationId"
-                            tabindex="-1" aria-hidden="true" data-select2-id="customerDistrictLocationId">
-                            <option value="">- Quận huyện -</option>
-                            {this.showDistrict(listDistrict)}
+                    <Dropdown
+                        menuPlacement="top"
+                        isOpen={isOpenProvince}
+                        onClose={this.toggleOpenProvince}
+                        target={
+                            <div class="input-group mb-2"
 
-                        </select>
+                                id="customerProvinceId"
 
-                    </div>
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text px-2" title="Phường xã">
-                                <i class="fa fa-map-marker" aria-hidden="true"></i>
-                            </span>
-                        </div>
-                        <select
-                            value={txtWards || ""}
-                            onChange={this.onChangeWards}
-                            name="txtWards"
-                            disabled={isDisabledButton}
-                            class="form-control select-has-search-box customerInfo select2-hidden-accessible" id="customerWardLocationId" tabindex="-1"
-                            aria-hidden="true" data-select2-id="customerWardLocationId">
-                            <option value="">- Phường xã -</option>
-                            {this.showWards(listWards)}
+                                onClick={() => {
+                                    this.toggleOpenProvince();
+                                }}
+                            >
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text px-2" title="Thành phố">
+                                        <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                    </span>
+                                </div>
 
-                        </select>
+                                <select
+                                    style={{
+                                        background: isDisabledButton ? "#eaecf4" : "white"
+                                    }}
+                                    onClick={() => {
+                                        this.toggleOpenProvince();
+                                    }}
+                                    disabled={true}
+                                    value={""}
+                                    class="form-control select-has-search-box select2-hidden-accessible"
+                                    onChange={this.onChangeProvince2}
+                                    name="txtProvince"
+                                    tabindex="-1" aria-hidden="true"
+                                    data-select2-id="customerCityLocationId">
+                                    <option value="" data-select2-id="71">{provinceName == "" || provinceName == null ? "- Tỉnh Thành phố -" : provinceName}</option>
+                                    {/* {this.showProvince(province)} */}
+                                </select>
+
+                            </div>
+                        }
+                    ><Select
+
+                            menuPlacement="top"
+                            backspaceRemovesValue={false}
+                            //    components={{ DropdownIndicator, IndicatorSeparator: null }}
+                            controlShouldRenderValue={false}
+                            hideSelectedOptions={false}
+                            isClearable={false}
+                            menuIsOpen
+                            onChange={this.onChangeProvince2}
+                            options={this.optionsProvince(province)}
+                            placeholder="Tìm kiếm..."
+                            noOptionsMessage={() => 'Không tìm thấy kết quả'}
+                            styles={customStylesProvince}
+                            tabSelectsValue={false}
+                            value={valueProvince}
+                        />
+                    </Dropdown>
 
 
-                    </div>
+                    <Dropdown
+                        menuPlacement="top"
+                        isOpen={isOpenDistrict}
+                        onClose={this.toggleOpenDistrict}
+                        target={
+                            <div class="input-group mb-2" onClick={() => {
+                                this.toggleOpenDistrict();
+                            }}>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text px-2" title="Quận huyện">
+                                        <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <select class="form-control select-has-search-box customerInfo select2-hidden-accessible"
+                                    style={{
+                                        background: isDisabledButton ? "#eaecf4" : "white"
+                                    }}
+                                    onClick={() => {
+                                        this.toggleOpenDistrict();
+                                    }}
+                                    disabled={true}
+                                    value={""}
+                                    onChange={this.onChangeDistrict2}
+                                    name="txtDistrict"
+                                    id="customerDistrictLocationId"
+                                    tabindex="-1" aria-hidden="true" data-select2-id="customerDistrictLocationId">
+                                    <option value=""> {districtName == null || districtName == "" ? "- Quận huyện -" : districtName}</option>
+                                    {/* {this.showDistrict(listDistrict)} */}
 
+                                </select>
+
+                            </div>
+                        }
+                    ><Select
+
+                            menuPlacement="top"
+                            backspaceRemovesValue={false}
+                            //    components={{ DropdownIndicator, IndicatorSeparator: null }}
+                            controlShouldRenderValue={false}
+                            hideSelectedOptions={false}
+                            isClearable={false}
+                            menuIsOpen
+                            onChange={this.onChangeDistrict2}
+                            options={this.optionsDistrict(listDistrict)}
+                            placeholder="Tìm kiếm..."
+                            noOptionsMessage={() => 'Không tìm thấy kết quả'}
+                            styles={customStylesProvince}
+                            tabSelectsValue={false}
+                            value={valueDistrict}
+                        />
+                    </Dropdown>
+
+
+                    <Dropdown
+                        menuPlacement="top"
+                        isOpen={isOpenWards}
+                        onClose={this.toggleOpenWards}
+                        target={
+                            <div class="input-group mb-2" onClick={() => {
+                                this.toggleOpenWards();
+                            }}>
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text px-2" title="Phường xã">
+                                        <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                    </span>
+                                </div>
+                                <select
+                                    style={{
+                                        background: isDisabledButton ? "#eaecf4" : "white"
+                                    }}
+                                    onClick={() => {
+                                        this.toggleOpenWards();
+                                    }}
+                                    disabled={true}
+                                    value={""}
+                                    onChange={this.onChangeWards2}
+                                    name="txtWards"
+                                    class="form-control select-has-search-box customerInfo select2-hidden-accessible" id="customerWardLocationId" tabindex="-1"
+                                    aria-hidden="true" data-select2-id="customerWardLocationId">
+                                    <option value="">{wardsName == null || wardsName == "" ? "- Phường xã -" : wardsName}</option>
+                                    {/* {this.showWards(listWards)} */}
+
+                                </select>
+
+
+                            </div>
+                        }
+                    ><Select
+
+                            menuPlacement="top"
+                            backspaceRemovesValue={false}
+                            //    components={{ DropdownIndicator, IndicatorSeparator: null }}
+                            controlShouldRenderValue={false}
+                            hideSelectedOptions={false}
+                            isClearable={false}
+                            menuIsOpen
+                            onChange={this.onChangeWards2}
+                            options={this.optionsWards(listWards)}
+                            placeholder="Tìm kiếm..."
+                            noOptionsMessage={() => 'Không tìm thấy kết quả'}
+                            styles={customStylesProvince}
+                            tabSelectsValue={false}
+                            value={valueWards}
+                        />
+                    </Dropdown>
                 </div>
+
                 <div class="col-md-3 col-6">
                     <div class="input-group mb-2">
                         <select
@@ -476,7 +783,6 @@ class PanelBottom extends Component {
 
                         <div className="day-of-birth-pos">
                             <DatePicker
-                                showTimeInput
 
                                 customInput={<ExampleCustomInput />}
                                 placeholderText="Ngày sinh"
@@ -693,6 +999,71 @@ class PanelBottom extends Component {
     }
 }
 
+class Dropdown extends React.Component {
+
+    constructor(props) {
+        super(props)
+    }
+    render() {
+        var { children,
+            isOpen,
+            target,
+            onClose } = this.props
+        return <div style={{ position: 'relative' }}>
+
+            {isOpen ? <Menu>{children}</Menu> : null}
+            {isOpen ? <Blanket onClick={onClose} /> : null}
+
+            {target}
+        </div>;
+    }
+}
+
+class Blanket extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+    render() {
+
+        return <div
+            style={{
+                bottom: 0,
+                left: 0,
+                top: 0,
+                right: 0,
+                position: 'fixed',
+                zIndex: 1,
+            }}
+            {...this.props}
+        />
+
+    };
+
+}
+
+class Menu extends React.Component {
+    constructor(props) {
+        super(props)
+    }
+    render() {
+
+        var { shadow } = this.props
+        return (
+            <div
+                style={{
+                    backgroundColor: 'white',
+                    borderRadius: 4,
+                    boxShadow: `0 0 0 1px ${shadow}, 0 4px 11px ${shadow}`,
+                    marginTop: 8,
+                    position: 'absolute',
+                    zIndex: 3,
+                }}
+                {...this.props}
+            />
+        );
+    };
+
+}
 
 const mapStateToProps = (state) => {
     return {

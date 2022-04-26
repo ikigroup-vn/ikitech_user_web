@@ -43,7 +43,7 @@ class Chart extends Component {
     var chartDataState = { ...this.state.chartData };
     var labels = [];
     var dataSets = [];
-    chartDataProps.data_prime_time.charts.forEach((item) => {
+    (chartDataProps?.data_prime_time?.charts ?? []).forEach((item) => {
       dataSets.push(item.total_final);
       if (chartDataProps.data_prime_time.type_chart == "hour") {
         time = moment(item.time, "YYYY-MM-DD HH:mm:ss").format("HH");

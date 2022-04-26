@@ -494,19 +494,28 @@ class PostOrder extends Component {
     handleKeyboard = (key) => {
 
         switch (key) {
-            case "f1":
+            case "f9":
                 this.handlePayment();
                 break;
             case "f4":
-                document.getElementById("phone_number_customer").select()
-                document.getElementById("phone_number_customer").focus();
+
+                if (document.getElementById("phone_number_customer") != null) {
+                    document.getElementById("phone_number_customer").select()
+                    document.getElementById("phone_number_customer").focus();
+                }
                 break;
             case "f8":
-                document.getElementById("import_prices").select()
-                document.getElementById("import_prices").focus();
+                if (document.getElementById("phone_number_customer") != null) {
+                    document.getElementById("import_prices").select()
+                    document.getElementById("import_prices").focus();
+                }
+
                 break;
             case "f6":
-                document.getElementById("discount").click();
+                if (document.getElementById("discount") != null) {
+                    document.getElementById("discount").click();
+                }
+
                 break;
             default:
                 return;

@@ -343,7 +343,7 @@ class Topbar extends Component {
 
                                     <div>
                                         <AsyncPaginate
-
+                                            autoFocus
                                             selectRef={(ref) => {
                                                 this.refSearchProduct = ref;
                                             }}
