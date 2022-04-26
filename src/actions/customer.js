@@ -85,12 +85,24 @@ export const createCustomer = (store_code,id , funcModal = null) => {
           loading : "hide"
         })
         dispatch({
+          type: Types.ALERT_UID_STATUS,
+          tryShow:true,
+          alert: {
+            tryShow:true,
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+        dispatch({
           type: Types.CREATED_CUSTOMER,
           isFromPosAndSave : id.isFromPosAndSave == null ? false : id.isFromPosAndSave,
           data: res.data.data,
         })
         
-        customerApi
+        if(id.isFromPosAndSave != true) {
+          customerApi
           .fetchAllCustomer(store_code)
           .then((res) => {
             if(res.data.code !== 401)
@@ -98,15 +110,6 @@ export const createCustomer = (store_code,id , funcModal = null) => {
             dispatch({
               type: Types.FETCH_ALL_CUSTOMER,
               data: res.data.data,
-            });
-            dispatch({
-              type: Types.ALERT_UID_STATUS,
-              alert: {
-                type: "success",
-                title: "Thành công ",
-                disable: "show",
-                content: res.data.msg,
-              },
             });
           })
           .catch(function (error) {
@@ -124,6 +127,10 @@ export const createCustomer = (store_code,id , funcModal = null) => {
               },
             });
           });
+        }
+       
+
+
       })
       .catch(function (error) {
         dispatch({

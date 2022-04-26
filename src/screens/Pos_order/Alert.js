@@ -38,7 +38,7 @@ class Alert extends Component {
     var { alert } = this.props;
     var disable = typeof alert.disable == "undefined" ? "hide" : alert.disable
 
-    if(alert.type=="success") {
+    if(alert.type=="success" && alert.tryShow != true) {
       return ""
     }
     return (

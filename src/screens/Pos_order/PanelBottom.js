@@ -196,7 +196,7 @@ class PanelBottom extends Component {
 
     componentWillReceiveProps(nextProps, nextState) {
         if (!shallowEqual(this.props.district, nextProps.district)) {
-          
+
             this.setState({
                 listDistrict: nextProps.district
             })
@@ -204,7 +204,7 @@ class PanelBottom extends Component {
 
         if (!shallowEqual(nextProps.wards, this.props.wards)) {
 
-          
+
             this.setState({
                 listWards: nextProps.wards,
             })
@@ -229,7 +229,11 @@ class PanelBottom extends Component {
                     txtPhoneNumber: "",
                     txtEmail: "",
                     isDisabledButton: false,
-                    selectedDate: ""
+                    selectedDate: "",
+
+                    districtName: "",
+                    wardsName: "",
+                    provinceName: "",
                 })
                 this.onSelectChangeProvinceById("")
                 this.onSelectChangeDistrictById("")
@@ -273,7 +277,7 @@ class PanelBottom extends Component {
                                 label: customer.district_name,
                                 value: customer.district
                             },
-                           
+
                             valueWards: {
                                 label: customer.wards_name,
                                 value: customer.wards
@@ -431,7 +435,7 @@ class PanelBottom extends Component {
                 listWards: [],
                 listDistrict: [],
                 txtDistrict: "",
-                txtWards:"",
+                txtWards: "",
                 districtName: "",
                 wardsName: "",
 
@@ -454,7 +458,7 @@ class PanelBottom extends Component {
                 txtDistrict: pro.id,
                 listWards: [],
                 wardsName: "",
-                txtWards:"",
+                txtWards: "",
             });
         }
 

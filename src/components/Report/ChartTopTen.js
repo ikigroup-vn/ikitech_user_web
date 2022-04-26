@@ -70,7 +70,7 @@ class Chart extends Component {
 
       }
 
-      chartDataProps[action].forEach(item => {
+      (chartDataProps[action] ?? []).forEach(item => {
         dataSets.push(item[action]);
         labels.push(item.product.name)
       });

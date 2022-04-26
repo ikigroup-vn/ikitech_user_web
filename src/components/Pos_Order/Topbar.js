@@ -415,41 +415,48 @@ class Topbar extends Component {
                                 <i class='fas fa-plus' ></i>
                             </li>
 
-                            <ul className="navbar-nav ml-auto" style={{ display: "flex", alignItems: "center" }}>
-                                <li className="nav-item dropdown no-arrow" style={{ margin: "0 10px", fontSize: "17px" }}>
-                                    <div className='wrap-info' data-toggle="modal" data-target="#modalBranch" style={{ display: "flex", color: "white", cursor: "pointer" }}>
-                                        <i class="fa fa-map-marker" aria-hidden="true"></i>
-                                        <span className="mr-2 small" style={{
-                                            color: "white", marginLeft: "5px",
-                                            textOverflow: "ellipsis",
-                                            whiteSpace: "nowrap",
-                                            overflow: "hidden",
-                                        }}>
-                                            {currentBranch?.name ?? "Chưa có chi nhánh"}
-                                        </span>
+                            <div style={{
+                                paddingLeft: 50
+                            }}>
+                                <ul className="navbar-nav ml-auto" style={{
+                                    display: "flex", alignItems: "center", justifyContent: "space-between",
 
-                                    </div>
-                                    <div className='wrap-info' style={{ display: "flex", color: "white" }}>
-                                        <i class="fa fa-user-o" aria-hidden="true"></i>
-                                        <span className="mr-2 small" style={{ color: "white", marginLeft: "5px" }}>
-                                            {user.name}
-                                        </span>
-                                    </div>
+                                }}>
+                                    <li className="nav-item dropdown no-arrow" style={{ margin: "0 10px", fontSize: "17px" }}>
+                                        <div className='wrap-info' data-toggle="modal" data-target="#modalBranch" style={{ display: "flex", color: "white", cursor: "pointer" }}>
+                                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                            <span className="mr-2 small" style={{
+                                                color: "white", marginLeft: "5px",
+                                                textOverflow: "ellipsis",
+                                                whiteSpace: "nowrap",
+                                                overflow: "hidden",
+                                            }}>
+                                                {currentBranch?.name ?? "Chưa có chi nhánh"}
+                                            </span>
 
-                                </li>
+                                        </div>
+                                        <div className='wrap-info' style={{ display: "flex", color: "white" }}>
+                                            <i class="fa fa-user-o" aria-hidden="true"></i>
+                                            <span className="mr-2 small" style={{ color: "white", marginLeft: "5px" }}>
+                                                {user.name}
+                                            </span>
+                                        </div>
 
-                                <li className='nav-item' id='btn-full' style={{ margin: "0 10px", color: "white", cursor: "pointer" }} onClick={this.fullScreen}>
-                                    {!this.state.fullScreen ?
-                                        <i class='fas fa-expand-arrows-alt fa-2x' style={{ fontSize: "22px" }}></i> :
-                                        <i class='fas fa-compress-arrows-alt' style={{ fontSize: "22px" }}></i>
-                                    }
+                                    </li>
 
-                                </li >
+                                    <li className='nav-item' id='btn-full' style={{ margin: "0 10px", color: "white", cursor: "pointer" }} onClick={this.fullScreen}>
+                                        {!this.state.fullScreen ?
+                                            <i class='fas fa-expand-arrows-alt fa-2x' style={{ fontSize: "22px" }}></i> :
+                                            <i class='fas fa-compress-arrows-alt' style={{ fontSize: "22px" }}></i>
+                                        }
 
-                                <li className='nav-item' style={{ margin: "0 10px" }}>
-                                    <button className='btn' style={{ color: "white", border: "1px solid" }} data-toggle="modal" data-target="#modalKeyboard">Phím tắt</button>
-                                </li>
-                            </ul>
+                                    </li >
+
+                                    <li className='nav-item' style={{ margin: "0 10px" }}>
+                                        <button className='btn' style={{ color: "white", border: "1px solid" }} data-toggle="modal" data-target="#modalKeyboard">Phím tắt</button>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
 
