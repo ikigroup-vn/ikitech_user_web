@@ -496,18 +496,16 @@ class PostOrder extends Component {
         switch (key) {
             case "f1":
                 this.handlePayment();
-
-                break;
-            case "f5":
-                document.getElementById("serch-product").click();
-                break;
-            case "f6":
-                document.getElementById("import_prices").click();
-                break;
-            case "f2":
-                document.getElementById("form-control").click();
                 break;
             case "f4":
+                document.getElementById("phone_number_customer").select()
+                document.getElementById("phone_number_customer").focus();
+                break;
+            case "f8":
+                document.getElementById("import_prices").select()
+                document.getElementById("import_prices").focus();
+                break;
+            case "f6":
                 document.getElementById("discount").click();
                 break;
             default:
@@ -533,8 +531,6 @@ class PostOrder extends Component {
         if (type != this.state.typeDiscount) {
 
             this.hasFocus = false
-
-
         }
 
 
@@ -559,6 +555,19 @@ class PostOrder extends Component {
 
     handleClearVoucher = () => {
         this.setState({ code: "" })
+    }
+
+    onSeletedCustomer = (customer) => {
+
+        if (customer != null) {
+            this.handleCallbackPertion(
+                {
+                    customer_phone: customer.phone_number,
+                    customer_id: customer.id,
+                    customer_name: customer.name
+                }
+            )
+        }
     }
 
     onChangeSelect4 = (selectValue) => {
@@ -623,7 +632,7 @@ class PostOrder extends Component {
             <React.Fragment>
                 <div className='pos-modal'>
                     <KeyboardEventHandler
-                        handleKeys={["f1", "f6", "f2", "f4", "f5"]}
+                        handleKeys={["f9", "f4", "f3", "f6", "f8"]}
                         onKeyEvent={(key, e) => this.handleKeyboard(key)}
                     />
                     <Topbar
@@ -651,7 +660,7 @@ class PostOrder extends Component {
                                 <div className="panel-container-vertical">
 
                                     <div className="panel-top" style={{
-                                        height: this.state.isShowPanelBottom ?  "calc(100% - 225px)" : "calc(100% - 0px)"
+                                        height: this.state.isShowPanelBottom ? "calc(100% - 225px)" : "calc(100% - 0px)"
                                     }}>
                                         <div className='col-list-order'>
                                             <div className='' style={{ padding: "8px" }}>
@@ -672,14 +681,14 @@ class PostOrder extends Component {
                                     </div>
 
                                     <div className="splitter-horizontal" style={{
-                                          top:!this.state.isShowPanelBottom ? -20 : 0
+                                        top: !this.state.isShowPanelBottom ? -20 : 0
                                     }}>
 
                                         <div class="button-show-hide-control" onClick={this.onChangeIsShowPanelBottom}>
                                             <svg className="button-show-hide-control-circle" focusable="false"
                                                 viewBox="0 0 24 24" aria-hidden="true"
                                                 style={{
-                                                    transform:this.state.isShowPanelBottom ? "rotate(90deg)" : "rotate(269deg)"
+                                                    transform: this.state.isShowPanelBottom ? "rotate(90deg)" : "rotate(269deg)"
                                                 }}
                                             >
                                                 <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"></path></svg>
@@ -691,6 +700,7 @@ class PostOrder extends Component {
                                         limit={numPage}
                                         passNumPage={this.passNumPage} store_code={store_code} products={products}
                                         handleCallbackProduct={this.handleCallbackProduct}
+                                        onSeletedCustomer={this.onSeletedCustomer}
                                         handleCallbackPertion={this.handleCallbackPertion}
                                         handleCallbackPushProduct={this.handleCallbackPushProduct} />
 
@@ -705,7 +715,7 @@ class PostOrder extends Component {
 
 
 
-                                        <div style={{
+                                        {/* <div style={{
                                             display: "flex",
                                             justifyContent: "center",
                                             alignItems: "center"
@@ -788,7 +798,7 @@ class PostOrder extends Component {
 
                                             </div>
 
-                                        </div>
+                                        </div> */}
 
                                     </div>
                                     <div className="wrap-detail">
@@ -884,7 +894,7 @@ class PostOrder extends Component {
                                             >
 
                                                 <div className='row item-info'>
-                                                    <div onClick={() => this.setIsPopoverOpen(!this.state.isPopoverOpen)} className='title-price col-8'>Chiết khấu</div>
+                                                    <div onClick={() => this.setIsPopoverOpen(!this.state.isPopoverOpen)} className='title-price col-8'>Chiết khấu (F6)</div>
                                                     <button onClick={() => this.setIsPopoverOpen(!this.state.isPopoverOpen)}
                                                         type="text"
                                                         name="discount" id="discount"
@@ -908,9 +918,13 @@ class PostOrder extends Component {
 
 
 
-                                            <div className='row' style={{ padding: "10px 0" }}>
-                                                <div className='title-price col-6' style={{ color: "black", fontWeight: "500" }}>Tiền khách đưa</div>
-                                                <input type="text" name="import_price" id="import_prices" class="col-6 text-input-pos" value={formatNoD(removeSignNumber(this.state.priceCustomer))}
+                                            <div className='row' style={{ padding: "4px 0" }}>
+                                                <div className='title-price col-6' style={{
+                                                    color: "black",
+                                                    fontWeight: "500"
+                                                }}>Tiền khách đưa (F8)</div>
+                                                <input type="text" name="import_price" id="import_prices"
+                                                    class="col-6 text-input-pos" value={formatNoD(removeSignNumber(this.state.priceCustomer))}
                                                     onChange={this.handChange} ></input>
                                             </div>
 
@@ -987,7 +1001,7 @@ class PostOrder extends Component {
                                             borderRadius: "5px",
                                             cursor: "pointer",
                                         }}
-                                        onClick={this.handlePayment}>Thanh toán</button>
+                                        onClick={this.handlePayment}>Thanh toán (F9)</button>
                                 </div>
 
                             </div>

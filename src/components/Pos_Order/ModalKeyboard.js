@@ -14,13 +14,13 @@ class ModalKeyboard extends Component {
                             <div class="modal-body">
                                 <div className='wrap-note' style={{ display: "flex",justifyContent:"space-between",padding:"0 37px" }}>
                                     <div className='note-col1'>
-                                        <div className='item-note' style={{ display: "flex", justifyContent: "space-between" }}>
-                                            <div className='button-note '><p>F1</p></div>
+                                        <div className='item-note' style={{ display: "flex", justifyContent: "space-between" }}> 
+                                            <div className='button-note '><p>F9</p></div>
                                             <div className='content-note' style={{ marginLeft: "20px" }}>Thanh toán đơn hàng</div>
                                         </div>
                                         <div className='item-note' style={{ display: "flex", justifyContent: "space-between" }}>
-                                            <div className='button-note'><p>F2</p></div>
-                                            <div className='content-note' style={{ marginLeft: "20px" }}>Tìm kiếm khách hàng</div>
+                                            <div className='button-note'><p>F4</p></div>
+                                            <div className='content-note' style={{ marginLeft: "20px" }}>Tìm kiếm SĐT khách hàng</div>
                                         </div>
                                         <div className='item-note' style={{ display: "flex", justifyContent: "space-between" }}>
                                             <div className='button-note'><p>F3</p></div>
@@ -31,15 +31,12 @@ class ModalKeyboard extends Component {
                                     <div className='note-col2'>
               
                                         <div className='item-note' style={{ display: "flex", justifyContent: "space-between" }}>
-                                            <div className='button-note'><p>F4</p></div>
+                                            <div className='button-note'><p>F6</p></div>
                                             <div className='content-note' style={{ marginLeft: "20px" }}>Nhập chiết khấu đơn hàng</div>
                                         </div>
+                                      
                                         <div className='item-note' style={{ display: "flex", justifyContent: "space-between" }}>
-                                            <div className='button-note'><p>F5</p></div>
-                                            <div className='content-note' style={{ marginLeft: "20px" }}>Chọn hình thức thanh toán</div>
-                                        </div>
-                                        <div className='item-note' style={{ display: "flex", justifyContent: "space-between" }}>
-                                            <div className='button-note'><p>F6</p></div>
+                                            <div className='button-note'><p>F8</p></div>
                                             <div className='content-note' style={{ marginLeft: "20px" }}>Nhập tiền khách đưa</div>
                                         </div>
                                     </div>

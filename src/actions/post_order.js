@@ -59,22 +59,10 @@ export const addProductInCart = (store_code, branch_id, id_cart, data) => {
             content: error.response.data.msg,
           },
         });
+
+
+        
       })
-      .catch(function (error) {
-        dispatch({
-          type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
-        dispatch({
-          type: Types.ALERT_UID_STATUS,
-          alert: {
-            type: "danger",
-            title: "Lỗi",
-            disable: "show",
-            content: error.response.data.msg,
-          },
-        });
-      });
   };
 };
 export const deleteOneCart = (store_code, branch_id, id_cart) => {
@@ -250,6 +238,15 @@ export const updateQuantityLineItem = (store_code, branch_id, id_cart, data) => 
         });
       })
       .catch(function (error) {
+        PosApi.fetchInfoOneCart(store_code, branch_id, id_cart).then((res) => {
+          if (res.data.code == 200)
+            dispatch({
+              type: Types.FETCH_LIST_CART_ITEM,
+              data: res.data.data,
+            });
+        });
+
+
         dispatch({
           type: Types.NONE_CHANGE_QUANTITY_LINE_ITEM,
         })

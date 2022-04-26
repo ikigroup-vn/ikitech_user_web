@@ -15,14 +15,17 @@ import ModalDelete from './ModalDelete'
 import { filter_arr, format } from '../../ultis/helpers'
 import { findTotalStockPos } from '../../ultis/productUltis'
 import * as Env from "../../ultis/default"
-
+import KeyboardEventHandler from "react-keyboard-event-handler";
 import { AsyncPaginate } from "react-select-async-paginate";
 import CardProduct from './CardProduct'
+import history from '../../history'
 
 
 
 
 class Topbar extends Component {
+
+
     constructor(props) {
         super(props)
         this.state = {
@@ -33,6 +36,7 @@ class Topbar extends Component {
             branchId: ""
         }
 
+        this.refSearchProduct = React.createRef()
 
     }
     componentDidMount() {
@@ -41,6 +45,8 @@ class Topbar extends Component {
         this.props.listPosOrder(store_code, branch_id)
         this.props.fetchBranchStore(this.props.store_code);
         this.props.fetchUserId();
+
+
 
     }
     componentWillReceiveProps(nextProps) {
@@ -153,7 +159,9 @@ class Topbar extends Component {
         this.props.fetchAllProductV2(store_code, branch_id, 1, params);
     };
     goBackHome = () => {
-        window.location.href = "/";
+        var { store_code } = this.props;
+        history.push(`/dashboard/${store_code}`)
+        // window.location.href = "/";
     }
 
     onChangeSearch = (e) => {
@@ -269,6 +277,20 @@ class Topbar extends Component {
 
     };
 
+    handleKeyboard = (key) => {
+
+        switch (key) {
+            case "f3":
+                if (this.refSearchProduct != null) {
+                    this.refSearchProduct.focus()
+                }
+
+                break;
+            default:
+                return;
+        }
+    };
+
     render() {
         var { listPos, branchStore, user, store_code, currentBranch } = this.props;
         var { idCart, selected_product_id } = this.state
@@ -278,10 +300,28 @@ class Topbar extends Component {
             return <CardProduct isItemSearch={true} product={product} />
         };
 
+        const customStyles = {
+            menu: styles => ({
+                ...styles,
+                width: '600px',
 
+            }),
+            option: (provided, state) => ({
+                ...provided,
+                borderBottom: '1px dotted pink',
+                color: state.isSelected ? 'red' : 'blue',
+                padding: 20,
+
+            }),
+        }
 
         return (
             <div className='controller-top'>
+
+                <KeyboardEventHandler
+                    handleKeys={["f3"]}
+                    onKeyEvent={(key, e) => this.handleKeyboard(key)}
+                />
                 <nav class="navbar navbar-expand navbar-light bg-white topbar static-top header-pos">
 
                     <div class="navbar-nav" style={{
@@ -301,23 +341,29 @@ class Topbar extends Component {
                                     style={{ flex: 1 }}
                                 >
 
-                                    <AsyncPaginate
-                                        placeholder="(F3) Tìm kiếm sản phẩm"
-                                         value={null}
-                                        loadOptions={this.loadProducts}
-                                        formatOptionLabel={formatOptionLabel}
-                                        name="recipientReferences1"
-                                        onChange={this.onChangeProduct}
-                                        additional={{
-                                            page: 1,
-                                        }}
-                                        styles={{
-                                            width: "100%"
-                                        }}
-                                        debounceTimeout={500}
-                                        isClearable
-                                        isSearchable
-                                    />
+                                    <div>
+                                        <AsyncPaginate
+
+                                            selectRef={(ref) => {
+                                                this.refSearchProduct = ref;
+                                            }}
+                                            noOptionsMessage={() => 'Không tìm thấy sản phẩm nào'}
+                                            loadingMessage={() => 'Đang tìm...'}   //minor type-O here
+                                            placeholder="(F3) Tìm kiếm sản phẩm"
+                                            value={null}
+                                            loadOptions={this.loadProducts}
+                                            formatOptionLabel={formatOptionLabel}
+                                            id="recipientReferences1"
+                                            onChange={this.onChangeProduct}
+                                            additional={{
+                                                page: 1,
+                                            }}
+                                            styles={customStyles}
+                                            debounceTimeout={500}
+                                            isClearable
+                                            isSearchable
+                                        />
+                                    </div>
 
 
                                 </li>

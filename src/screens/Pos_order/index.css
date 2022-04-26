@@ -533,3 +533,14 @@ pre {
     flex:1;
 
 }
+
+
+.autocomplete-input-item {
+    overflow: hidden; 
+    text-overflow: ellipsis;
+}
+
+.autocomplete-input-item.active {
+    background-color: #eee;
+}
+

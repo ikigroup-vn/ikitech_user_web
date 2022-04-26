@@ -9,8 +9,9 @@ import * as dashboardAction from "../../actions/customer";
 import { getDDMMYYYDate } from "../../ultis/date";
 import * as OrderAction from '../../actions/add_order';
 import { format } from '../../ultis/helpers'
-import { Autocomplete } from "@yazanaabed/react-autocomplete";
-
+import Autocomplete from 'react-autocomplete';
+import AutoCompleteText from "./AutoCompleteText";
+import * as customerAction from "../../actions/customer";
 
 class PanelBottom extends Component {
 
@@ -213,6 +214,12 @@ class PanelBottom extends Component {
         });
     };
 
+    onChangeNum = (p) => {
+        this.setState({
+            txtPhoneNumber: p,
+        });
+    }
+
     onSaveCustomer = () => {
 
         var { txtAddressDetail, isDisabledButton, selectedDate, txtSex, txtProvince, txtDistrict, txtWards, listDistrict, listWards, txtEmail, txtEmail, txtPhoneNumber, txtName } = this.state;
@@ -284,6 +291,16 @@ class PanelBottom extends Component {
 
     }
 
+    onSearchCustomer = (va) => {
+        var { store_code } = this.props;
+        var params = `&search=${va}`;
+        this.props.fetchAllCustomer(store_code, 1, params);
+    }
+
+    onSeletedCustomer = (cus) => {
+        this.props.onSeletedCustomer(cus)
+    }
+
     buildTabCustomer = () => {
 
         var { province } = this.props
@@ -330,79 +347,21 @@ class PanelBottom extends Component {
         }}>
             <div class="row">
                 <div class="col-md-4 col-6">
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text px-2" title="Điện thoại (F4)">
-                                <i class="fa fa-solid fa-phone"></i>
-                            </span>
-                        </div>
-           
-
-                        <Autocomplete
-          onChange={selection => this.onSelectedItemChanged(selection)}
-        >
-          {({
-              getContainerProps,
-              getItemProps,
-              getInputProps,
-              getMenuProps,
-              inputValue,
-              isOpen,
-              highlightedIndex
-            }) => {
-            let itemsFiltered = this.filterItemsBySearchInput(inputValue);
-
-            return (
-              <div
-                {...getContainerProps({ 
-                   // className: styles.dropdownContainer 
-                })}
-              >
 
 
-                            <input type="text" class="form-control customerInfo"
-                                placeholder="Điện thoại (F4)" data-startsuggest="6" id="customerMobile"
-                                value={txtPhoneNumber || ""}
-                                onChange={this.onChange}
-                                name="txtPhoneNumber"
-                                disabled={isDisabledButton}
-                                autocomplete="new-password" />
-                   
-{isOpen ? (
-                  <ul {...getMenuProps({ 
-                    //  className: styles.menuDropdown 
-                   })}>
-                    {itemsFiltered.map((item, index) => (
-                      <li {...getItemProps({ item, index })}>
-                        <div
-                        //   className={
-                        //     //  styles.dropdownItem
-                        //     }
-                          style={{
-                            backgroundColor:
-                              highlightedIndex === index ? "#e0f4ea" : ""
-                          }}
-                        >
-                          {index}
-                          {item.username}
-                        </div>
-                      </li>
-                    ))}
 
-                    {/* {!itemsFiltered.length ? (
-                      <li className={styles.noItemsFound}>
-                        <h1 className={styles.notFoundTitle}>Not found.</h1>
-                      </li>
-                    ) : null} */}
-                  </ul>
-                ) : null}
-              </div>
-            );
-          }}
-        </Autocomplete>
+                    <AutoCompleteText type="text" class="form-control customerInfo"
+                        placeholder="Điện thoại (F4)" data-startsuggest="6" id="customerMobile"
+                        value={txtPhoneNumber || ""}
+                        onChange={this.onChangeNum}
+                        name="txtPhoneNumber"
 
-
-                    </div>
+                        onSearch={this.onSearchCustomer}
+                        icon="fa fa-solid fa-phone"
+                        items={this.props.customers?.data ?? []}
+                        onSelected={this.onSeletedCustomer}
+                        disabled={isDisabledButton}
+                        autocomplete="new-password" />
 
 
 
@@ -737,6 +696,7 @@ class PanelBottom extends Component {
 
 const mapStateToProps = (state) => {
     return {
+        customers: state.customerReducers.customer.allCustomer,
         wards: state.placeReducers.wards,
         province: state.placeReducers.province,
         district: state.placeReducers.district,
@@ -766,6 +726,9 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         fetchAllCombo: (store_code) => {
             dispatch(OrderAction.fetchAllCombo(store_code));
+        },
+        fetchAllCustomer: (id, page, params) => {
+            dispatch(customerAction.fetchAllCustomer(id, page, params));
         },
     }
 }

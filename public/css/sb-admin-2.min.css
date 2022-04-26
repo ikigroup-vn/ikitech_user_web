@@ -3069,7 +3069,7 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
 }
 
 .dropdown-item.active, .dropdown-item:active {
-    color: #fff;
+    color: #fff !important;
     text-decoration: none;
     background-color: #4e73df
 }
