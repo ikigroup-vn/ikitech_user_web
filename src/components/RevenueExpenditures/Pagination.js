@@ -23,11 +23,25 @@ class Pagination extends Component {
       searchValue,
       revenueExpendituresValue,
       datePrime,
+      recipient_group,
+      recipient_references_id
     } = this.props;
+    var params = null
+    console.log( recipient_group,
+      recipient_references_id)
     // var params = `&order_status_code=${status_order}&payment_status_code=${status_payment}&limit=${limit}`;
-    var params = `&search=${searchValue}&limit=${limit}&is_revenue=${revenueExpendituresValue}&&date_from=${datePrime.from}&date_to=${datePrime.to}`;
-    console.log(this.props);
+    if(typeof recipient_group !="undefined" && recipient_references_id)
+    params = `recipient_group=${recipient_group}&recipient_references_id=${recipient_references_id}`;
+    else
+    params = `search=${searchValue}&limit=${limit}&is_revenue=${revenueExpendituresValue || null}`;
+
+    if(datePrime)
+    params = params + `&date_from=${datePrime?.from}&date_to=${datePrime?.to}`
+    if(typeof recipient_group !="undefined" && recipient_references_id)
+    this.props.fetchAllRevenueExpenditures(store_code, branch_id, page, `&recipient_group=${recipient_group}&recipient_references_id=${recipient_references_id}`);
+      else
     // this.props.fetchAllRevenueExpenditures(store_code, branch_id, page, params);
+  
     this.props.fetchReportExpenditure(store_code, branch_id, page, params);
   };
 
@@ -84,16 +98,16 @@ class Pagination extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    // fetchAllRevenueExpenditures: (id, branch_id, page, params) => {
-    //   dispatch(
-    //     revenueExpendituresAction.fetchAllRevenueExpenditures(
-    //       id,
-    //       branch_id,
-    //       page,
-    //       params
-    //     )
-    //   );
-    // },
+    fetchAllRevenueExpenditures: (id, branch_id, page, params) => {
+      dispatch(
+        revenueExpendituresAction.fetchAllRevenueExpenditures(
+          id,
+          branch_id,
+          page,
+          params
+        )
+      );
+    },
 
     fetchReportExpenditure: (store_code, branch_id, page, params) => {
       dispatch(

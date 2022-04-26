@@ -112,10 +112,10 @@ class Discount extends Component {
                     <Link
                       to={`/discount/create/${params.store_code}`}
                       class={`btn btn-info btn-icon-split  ${insert == true ? "show" : "hide"}`}                  >
-                      <span class="icon text-white-50">
+                      <span style = {{display : "flex" , margin : "auto"}} class="icon text-white-50">
                         <i class="fas fa-plus"></i>
                       </span>
-                      <span class="text">Tạo giảm giá</span>
+                      <span style = {{margin : "auto"}} class="text">Tạo giảm giá</span>
                     </Link>
                   </div>
 

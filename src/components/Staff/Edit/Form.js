@@ -91,6 +91,7 @@ class Form extends Component {
             sex: item.sex,
             address: item.address,
             salary: _salary,
+            branch_id : item.branch_id,
             id_decentralization: typeof item.decentralization != "undefined" && item.decentralization != null ? item.decentralization.id : null,
           })
         }
@@ -110,6 +111,7 @@ class Form extends Component {
       salary,
       id_decentralization,
       password,
+      branch_id
     } = this.state;
     if (username == null || !isEmpty(username)) {
       this.props.showError({
@@ -170,6 +172,7 @@ class Form extends Component {
       email,
       name,
       sex,
+      branch_id,
       address,
       salary: formatNumber(salary),
       id_decentralization,

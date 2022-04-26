@@ -359,22 +359,18 @@ class Form extends Component {
             }
           </div>
           <div class="box-footer">
-            <button type="submit" class="btn btn-info btn-icon-split btn-sm">
-              <span class="icon text-white-50">
-                <i class="fas fa-save"></i>
-              </span>
-              <span class="text">Tạo</span>
-            </button>
-            <a
-              style={{ marginLeft: "10px" , color : "white" }}
-              onClick={this.goBack}
-              class="btn btn-warning btn-icon-split  btn-sm"
-            >
-              <span style = {{color : "white"}} class="icon text-white-50">
-                <i class="fas fa-arrow-left"></i>
-              </span>
-              <span class="text"> Trở về</span>
-            </a>
+          <button type = "submit" class="btn btn-info   btn-sm">
+                  <i class="fas fa-save"></i>  Tạo
+
+                </button>
+                <button
+                  style={{ marginLeft: "10px" }}
+                  onClick={this.goBack}
+                  class="btn btn-warning   btn-sm"
+                >
+                  <i class="fas fa-arrow-left"></i> Trở về
+
+                </button>
           </div>
 
         </form>

@@ -163,13 +163,14 @@ export const editCustomer = (store_code,id,data , funcModal = null) => {
           type: Types.SHOW_LOADING,
           loading : "hide"
         })
-        customerApi
-          .fetchAllCustomer(store_code)
-          .then((res) => {
-            if(res.data.code !== 401)
-
+        customerApi.fetchCustomerId(store_code, id).then((res) => {
+          dispatch({
+            type: Types.SHOW_LOADING,
+            loading: "hide",
+          });
+          if (res.data.code !== 401)
             dispatch({
-              type: Types.FETCH_ALL_CUSTOMER,
+              type: Types.FETCH_ID_CUSTOMER,
               data: res.data.data,
             });
             dispatch({
@@ -181,22 +182,7 @@ export const editCustomer = (store_code,id,data , funcModal = null) => {
                 content: res.data.msg,
               },
             });
-          })
-          .catch(function (error) {
-            dispatch({
-              type: Types.SHOW_LOADING,
-              loading: "hide"
-            })
-            dispatch({
-              type: Types.ALERT_UID_STATUS,
-              alert: {
-                type: "danger",
-                title: "Lỗi",
-                disable: "show",
-                content: error.response.data.msg,
-              },
-            });
-          });
+        });
       })
       .catch(function (error) {
         dispatch({

@@ -80,7 +80,10 @@ class Chart extends Component {
       label = "Lượt xem"
 
     }
-
+    if(typeof chartDataProps[action] == "undefined")
+    {
+    return;
+    }
     chartDataProps[action].forEach(item => {
       dataSets.push(item[action]);
       labels.push(item.product.name)

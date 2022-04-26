@@ -22,6 +22,7 @@ import { randomString } from "../../ultis/helpers";
 import Shopee from "../../components/Product/Ecomerce/Shopee";
 import Sendo from "../../components/Product/Ecomerce/Sendo";
 import getChannel, { IKITECH, IKIPOS } from "../../ultis/channel";
+import {getQueryParams} from "../../ultis/helpers"
 
 class Product extends Component {
   constructor(props) {
@@ -63,6 +64,12 @@ class Product extends Component {
   componentDidMount() {
     var { page } = this.props.match.params;
     const branch_id = localStorage.getItem("branch_id");
+    var is_near_out_of_stock = getQueryParams("is_near_out_of_stock")
+    var params = null
+    if(is_near_out_of_stock)
+    {
+      params = params + `&is_near_out_of_stock=true`
+    }
     if (
       typeof page != "undefined" &&
       page != null &&
@@ -72,12 +79,15 @@ class Product extends Component {
       this.props.fetchAllProductV2(
         this.props.match.params.store_code,
         branch_id,
-        page
+        page,
+        params
       );
     } else {
       this.props.fetchAllProductV2(
         this.props.match.params.store_code,
-        branch_id
+        branch_id,
+        1,
+        params
       );
     }
   }

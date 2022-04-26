@@ -17,7 +17,7 @@ import moment from "moment";
 import * as helper from "../../ultis/helpers";
 import { getBranchId } from "../../ultis/branchUtils";
 import history from "../../history";
-
+import {getQueryParams} from "../../ultis/helpers"
 
 class Bill extends Component {
   constructor(props) {
@@ -61,6 +61,9 @@ class Bill extends Component {
 
   componentDidMount() {
     var { store_code, status_code } = this.props.match.params;
+    var from = getQueryParams("from")
+    var to = getQueryParams("from")
+
 
     if (
       this.props.customer.id !== this.state.agency_by_customer_id &&
@@ -80,6 +83,10 @@ class Bill extends Component {
         : status_code != "PAID"
           ? `&field_by=order_status_code&field_by_value=${status_code}`
           : `&field_by=payment_status_code&field_by_value=${status_code}`;
+    if(from && to)
+    {
+      params = params + `&time_from=${moment(from, "DD-MM-YYYY").format("YYYY-MM-DD")}&time_to=${moment(to, "DD-MM-YYYY").format("YYYY-MM-DD")}`
+    }
 
     var status_order = status == "PAID" ? null : status;
     var status_payment = status == "PAID" ? status : null;

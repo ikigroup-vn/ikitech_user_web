@@ -57,6 +57,10 @@
      display : flex !important;
       justify-content : center
 }
+.group-btn-table{
+    display: flex;
+    justify-content: space-around;
+}
   
 .import-stock  .css-b62m3t-container{
     width : 100%
@@ -682,7 +686,7 @@ img {
 }
 
 .form-group>select {
-    height: 35px !important;
+    /* height: 35px !important; */
 }
 
 .form-group {

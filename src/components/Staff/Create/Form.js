@@ -6,6 +6,7 @@ import { shallowEqual } from "../../../ultis/shallowEqual";
 import ModalUpload from "./ModalUpload";
 import * as Env from "../../../ultis/default";
 import { isEmpty, isEmail, isPhone , formatNumber } from "../../../ultis/helpers";
+import { getBranchId } from "../../../ultis/branchUtils"
 
 class Form extends Component {
   constructor(props) {
@@ -139,7 +140,7 @@ class Form extends Component {
       return;
     }
 
-    this.props.createStaff(store_code, {
+    this.props.createStaff(store_code , {
       username: store_code + "_" + username,
       phone_number,
       email,
@@ -149,6 +150,7 @@ class Form extends Component {
       salary : formatNumber(salary),
       id_decentralization,
       password,
+      branch_id :  getBranchId()
     });
   };
   goBack = () => {
@@ -326,7 +328,6 @@ class Form extends Component {
             <a
               style={{ marginLeft: "10px" }}
               onClick={this.goBack}
-              class="btn btn-warning"
               class="btn btn-warning btn-icon-split  btn-sm"
             >
               <span class="icon text-white-50">
@@ -352,7 +353,7 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(error);
     },
 
-    createStaff: (store_code, data) => {
+    createStaff: (store_code ,  data) => {
       dispatch(staffAction.createStaff(store_code, data));
     },
   };

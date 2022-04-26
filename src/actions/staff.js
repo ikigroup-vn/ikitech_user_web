@@ -44,7 +44,7 @@ export const fetchStaffId = (store_code , staffId) => {
 
 
 
-export const createStaff = (store_code,data) => {
+export const createStaff = (store_code , data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,

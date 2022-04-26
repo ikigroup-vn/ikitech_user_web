@@ -4,6 +4,8 @@ import * as dashboardAction from "../../actions/dashboard";
 import * as placeAction from "../../actions/place";
 import { shallowEqual } from '../../ultis/shallowEqual';
 import {isEmail , isEmpty , isPhone} from "../../ultis/helpers"
+import Validator from '../../ultis/validator';
+import themeData from "../../ultis/theme_data";
 
 class ModalCreate extends Component {
     constructor(props) {
@@ -26,8 +28,27 @@ class ModalCreate extends Component {
             txtPost_branch:"",
             txtEmail_branch:"",
             error_email : {status : false , text : ""},
-            error_phone : {status : false , text : ""}
+            error_phone : {status : false , text : ""},
+            errors: {},
+
         }
+        const rules = [
+            {
+                field: 'txtName_branch',
+                method: 'isEmpty',
+                validWhen: false,
+                message: 'Tên không được để trống.',
+            },
+
+            {
+                field: 'txtPhone_branch',
+                method: 'isLength',
+                args: [{ min: 10, max: 12 }],
+                validWhen: true,
+                message: 'Số điện thoại không hợp lệ.',
+            },
+        ];
+        this.validator = new Validator(rules);
     }
     onChange = (e) => {
         var target = e.target;
@@ -107,9 +128,19 @@ class ModalCreate extends Component {
         }
     }
     handleOnClick = () => {
+        const errors = this.validator.validate(this.state)
+
         var { txtAddress_detail, txtDistrict, txtProvince, txtWards,txtName_branch,txtPhone_branch,txtCode_branch,txtPost_branch,txtEmail_branch } = this.state
         const {store_code} = this.props
         var error = false
+        this.setState({
+            errors: errors,
+        });
+        if (Object.keys(errors).length > 0)
+        {
+            error = true
+
+        }
         if(!isEmail(txtEmail_branch) && isEmpty(txtEmail_branch))
         {
             error = true
@@ -117,7 +148,7 @@ class ModalCreate extends Component {
         }
         else
         {
-            this.setState({error_email : {text : "Email không đúng định dạng" , status : false} , error_phone : {text : "Email không đúng định dạng" , status : false}})
+            this.setState({error_email : {text : "" , status : false} })
 
         }
         if(!isPhone(txtPhone_branch))
@@ -128,7 +159,7 @@ class ModalCreate extends Component {
         }
         else
         {
-            this.setState({error_phone : {text : "Email không đúng định dạng" , status : false}})
+            this.setState({error_phone : {text : "" , status : false}})
 
         }
         if(error == true)
@@ -211,7 +242,7 @@ class ModalCreate extends Component {
     }
     render() {
         var { province } = this.props
-        var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards ,  error_email , error_phone  } = this.state;
+        var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards ,  error_email , error_phone , errors } = this.state;
         var { txtName_branch,txtPhone_branch,txtEmail_branch } = this.state;
         return (
             <>
@@ -225,8 +256,8 @@ class ModalCreate extends Component {
                 <div class="modal" id="modalAddress">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
-                            <div className='model-header-modal' style={{ display: 'flex', justifyContent: "space-between", margin: "10px 15px" }}>
-                                <p class="" style={{ margin: "0px", fontWeight: "bold" }}>Tạo nhà cung cấp</p>
+                        <div className='model-header-modal' style={{ display: 'flex', justifyContent: "space-between", backgroundColor: themeData().backgroundColor }}>
+                                <h4 style={{ color: "white", margin: "10px" }}>Tạo nhà cung cấp</h4>
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
@@ -246,6 +277,8 @@ class ModalCreate extends Component {
                                                         onChange={this.onChange}
                                                         name="txtName_branch"
                                                     />
+                                                    {errors.txtName_branch && <div className="validation" style={{ display: 'block' }}>{errors.txtName_branch}</div>}
+
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="product_name">Số điện thoại</label>
@@ -275,7 +308,7 @@ class ModalCreate extends Component {
                                                         onChange={this.onChange}
                                                         name="txtEmail_branch"
                                                     />
-                                                      {error_email.status && <div className="validation" style={{ display: 'block' }}>{error_phone.text}</div>}
+                                                      {error_email.status && <div className="validation" style={{ display: 'block' }}>{error_email.text}</div>}
 
                                                 </div>
                                             </div>
@@ -345,17 +378,17 @@ class ModalCreate extends Component {
                             </div>
 
                             <div class="modal-footer">
-                                    <button
-                                        type="button"
-                                        class="btn btn-default"
-                                        data-dismiss="modal"
-                                    >
-                                        Đóng
-                                    </button>
-                                    <button type="submit" onClick={this.handleOnClick}  class="btn btn-info">
-                                       Tạo
-                                    </button>
-                                </div>
+                                <button
+                                    type="button"
+                                    class="btn btn-default"
+                                    data-dismiss="modal"
+                                >
+                                    Đóng
+                                </button>
+                                <button type="submit" style={{ backgroundColor: themeData().backgroundColor }} onClick={this.handleOnClick} class="btn btn-info">
+                                    Tạo
+                                </button>
+                            </div>
 
                         </div>
                     </div>

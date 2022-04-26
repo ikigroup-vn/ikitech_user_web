@@ -22,7 +22,7 @@ class Form extends Component {
       txtStart: "",
       txtEnd: "",
       txtAmount: "",
-      txtDiscountType: "",
+      txtDiscountType: 0,
       txtValueDiscount: "",
       txtCode: "",
       txtMaxValueDiscount: "",
@@ -375,16 +375,6 @@ class Form extends Component {
                   />
 
                 </div>
-
-              </div>
-
-
-            </div>
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-
-              <div class="box-body">
-
-
                 <div class="form-group">
                   <label for="product_name">Thời gian kết thúc</label>
                   <MomentInput
@@ -403,6 +393,17 @@ class Form extends Component {
                     onChange={this.onChangeEnd}
                   />
                 </div>
+
+              </div>
+
+
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+
+              <div class="box-body">
+
+
+         
 
                 <div class={`alert alert-danger ${displayError}`} role="alert">
               Thời gian kết thúc phải sau thời gian bắt đầu
@@ -443,7 +444,6 @@ class Form extends Component {
                   <label for="product_name">Loại giảm giá</label>
 
                   <select name="" id="input" class="form-control" onChange={this.setTypeDiscount} >
-                    <option value="">--Loại giảm giá--</option>
                     <option value="0">Giảm giá cố định</option>
                     <option value="1">Giảm giá theo %</option>
 
@@ -539,22 +539,18 @@ class Form extends Component {
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <div class="box-footer">
-                <button type="submit" class="btn btn-info btn-icon-split btn-sm">
-                  <span class="icon text-white-50">
-                    <i class="fas fa-save"></i>
-                  </span>
-                  <span class="text">Tạo</span>
+              <button type = "submit" class="btn btn-info   btn-sm">
+                  <i class="fas fa-save"></i>  Tạo
+
                 </button>
-                <a
+                <button
                   style={{ marginLeft: "10px" }}
                   onClick={this.goBack}
-                  class="btn btn-warning btn-icon-split  btn-sm"
+                  class="btn btn-warning   btn-sm"
                 >
-                  <span class="icon text-white-50">
-                    <i class="fas fa-arrow-left"></i>
-                  </span>
-                  <span class="text"> Trở về</span>
-                </a>
+                  <i class="fas fa-arrow-left"></i> Trở về
+
+                </button>
               </div>
             </div>
           </div>

@@ -285,9 +285,9 @@ class Customer extends Component {
   }
   
   onChangeDate = (e) => {
-    var time = moment(e, "DD-MM-YYYY").format("DD-MM-YYYY");
+    // var time = moment(e, "DD-MM-YYYY").format("DD-MM-YYYY");
     this.setState({
-      txtDateOfBirth: time,
+      txtDateOfBirth: e,
     });
   };
   render() {
@@ -322,7 +322,7 @@ class Customer extends Component {
                     placeholder: "Chưa cập nhật",
                   }}
                   initialValue={txtDateOfBirth}
-
+                  value = {txtDateOfBirth}
                   onChange={this.onChangeDate}
                   dateFormat="DD-MM-YYYY"
                   timeFormat={false}

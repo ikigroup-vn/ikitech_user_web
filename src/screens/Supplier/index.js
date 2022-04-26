@@ -45,9 +45,10 @@ class Supplier extends Component {
 
     }
 
-    changePage = (store_code, supplierId) => {
+    changePage = (e,store_code, supplierId) => {
         var { paginate } = this.props;
 
+        if(e.target.name !== "toggle")
         history.push(`/supplier/detail/${store_code}/${supplierId}?pag=${paginate}`)
     }
     componentDidMount() {
@@ -65,7 +66,7 @@ class Supplier extends Component {
             result = listSupplier.map((data, index) => {
 
                 return (
-                    <tr className="hover-product" onClick={() => this.changePage(store_code, data.id)}>
+                    <tr className="hover-product" onClick={(e) => this.changePage(e,store_code, data.id)}>
                         <td>{index + 1}</td>
                         <td>{data.name}</td>
                         <td>{data.phone}</td>
@@ -74,12 +75,12 @@ class Supplier extends Component {
                         <td>{data.district_name}</td>
                         <td>{data.province_name}</td>
 
-                        <td>
+                        <td className = "group-btn-table">
                             <Link
                                 to={`/supplier/detail/${store_code}/${data.id}`}
 
                                 style={{ marginLeft: "10px" }}
-                                class={`btn btn-primary btn-sm `}
+                                class={`btn btn-warning btn-sm `}
                             >
                                 <i class="fa fa-edit"></i> Sửa
                             </Link>
@@ -87,6 +88,7 @@ class Supplier extends Component {
                                 onClick={() => this.handleSetIdBranch(data.id)}
                                 style={{ marginLeft: "10px" }}
                                 data-toggle="modal"
+                                name = "toggle"
                                 data-target="#removeModal"
                                 class="btn btn-danger btn-sm"
                             >

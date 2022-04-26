@@ -23,7 +23,7 @@ class Form extends Component {
       txtEnd: "",
       txtAmount: "",
       txtContent: "",
-      txtDiscoutType: "",
+      txtDiscoutType: 0,
       txtValueDiscount: "",
       listProducts: [],
       image: "", saveListProducts: [],
@@ -228,7 +228,7 @@ class Form extends Component {
     else
       this.setState({ listProducts: products })
   };
-  
+
   handleChangeQuantity = (id, quantity, setIncrement = null) => {
     var products = [...this.state.listProducts];
     products.forEach((product, index) => {
@@ -307,10 +307,6 @@ class Form extends Component {
                     onChange={this.onChange}
                   />
                 </div>
-              </div>
-            </div>
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-              <div class="box-body">
                 <div class="form-group">
                   <label for="product_name">Thời gian bắt đầu</label>
                   <MomentInput
@@ -355,6 +351,11 @@ class Form extends Component {
                 <div class={`alert alert-danger ${displayError}`} role="alert">
                   Thời gian kết thúc phải sau thời gian bắt đầu
                 </div>
+              </div>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+              <div class="box-body">
+
                 <div class="form-group">
                   <label for="product_name">Giới hạn Combo</label>
                   <input
@@ -363,7 +364,7 @@ class Form extends Component {
                     id="txtAmount"
                     name="txtAmount"
                     value={txtAmount}
-                    placeholder="Số lượng mã phiểu có thẻ sử dụng"
+                    placeholder="Số lượng mã phiểu có thể sử dụng"
                     autocomplete="off"
                     onChange={this.onChange}
                   />
@@ -379,7 +380,6 @@ class Form extends Component {
                     class="form-control"
                     onChange={this.onChangeType}
                   >
-                    <option value="">--Loại giảm giá--</option>
                     <option value="0">Giảm giá cố định</option>
                     <option value="1">Giảm giá theo %</option>
                   </select>
@@ -405,7 +405,7 @@ class Form extends Component {
                       id="txtValueDiscount"
                       name="txtValueDiscount"
                       value={txtValueDiscount}
-                      placeholder="Nhập giá trị bạn muốn giản (%)"
+                      placeholder="Nhập giá trị bạn muốn giảm (%)"
                       autocomplete="off"
                       onChange={this.onChange}
                     />
@@ -437,25 +437,18 @@ class Form extends Component {
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <div class="box-footer">
-                <button
-                  type="submit"
-                  class="btn btn-info btn-icon-split btn-sm"
-                >
-                  <span class="icon text-white-50">
-                    <i class="fas fa-save"></i>
-                  </span>
-                  <span class="text">Lưu thay đổi</span>
+                <button type = "submit" class="btn btn-info   btn-sm">
+                  <i class="fas fa-save"></i>  Tạo
+
                 </button>
-                <a
+                <button
                   style={{ marginLeft: "10px" }}
                   onClick={this.goBack}
-                  class="btn btn-warning btn-icon-split  btn-sm"
+                  class="btn btn-warning   btn-sm"
                 >
-                  <span class="icon text-white-50">
-                    <i class="fas fa-arrow-left"></i>
-                  </span>
-                  <span class="text"> Trở về</span>
-                </a>
+                  <i class="fas fa-arrow-left"></i> Trở về
+
+                </button>
               </div>
             </div>
           </div>
