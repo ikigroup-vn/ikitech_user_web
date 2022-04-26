@@ -39,12 +39,12 @@ class Notification extends Component {
 
     handleClickOutside = event => {
     try {
-        if (window.$(".dropdown>.dropdown-menu").hasClass("show")) {
+        if (window.$(".dropdown .menu-notification").hasClass("show")) {
             const domNode = ReactDOM.findDOMNode(this);
 
             if (!domNode || !domNode.contains(event.target)) {
                 {
-                    window.$(".dropdown>.dropdown-menu").removeClass("show");
+                    window.$(".dropdown .menu-notification").removeClass("show");
 
                 }
             }
@@ -74,7 +74,7 @@ class Notification extends Component {
 
     }
     closeDialog = (e) => {
-        window.$(".dropdown>.dropdown-menu").removeClass("show");
+        window.$(".dropdown .menu-notification").removeClass("show");
     }
     onchangeRouter = (back, value, to) => {
         const location = window.location.pathname;
@@ -222,7 +222,7 @@ class Notification extends Component {
                 <div style={{
                     maxHeight: "600px",
                     overflow: "auto"
-                }} class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                }} class="dropdown-list dropdown-menu menu-notification dropdown-menu-right shadow animated--grow-in"
                     aria-labelledby="messagesDropdown">
                     <div>
                         <h5 style={{ fontSize: "13px" }} class="dropdown-header">

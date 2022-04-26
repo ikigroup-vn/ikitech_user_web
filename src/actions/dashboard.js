@@ -11,23 +11,23 @@ export const fetchAllStore = () => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
     storeApi.fetchAllData().then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
-        loading : "hide"
+        loading: "hide"
       })
-      if(res.data.code !== 401)
-      dispatch({
-        type: Types.FETCH_ALL_STORE,
-        data: res.data.data,
-      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_ALL_STORE,
+          data: res.data.data,
+        });
     });
   };
 };
 export const fetchBranchStore = (store_code) => {
-  console.log("store_code",store_code)
+  console.log("store_code", store_code)
   return (dispatch) => {
     dispatch({
       type: Types.FETCH_BRANCH_STORE_LOADING,
@@ -35,7 +35,7 @@ export const fetchBranchStore = (store_code) => {
 
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
     storeApi.fetchBranchStore(store_code).then((res) => {
       dispatch({
@@ -44,61 +44,61 @@ export const fetchBranchStore = (store_code) => {
 
       dispatch({
         type: Types.SHOW_LOADING,
-        loading : "hide"
+        loading: "hide"
       })
-      if(res.data.code !== 401)
-      dispatch({
-        type: Types.FETCH_BRANCH_STORE,
-        data: res.data.data,
-      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_BRANCH_STORE,
+          data: res.data.data,
+        });
     });
   };
 };
 
-export const fetchAllSupplier = (store_code,page,params) => {
-  console.log("store_code",store_code)
+export const fetchAllSupplier = (store_code, page, params) => {
+  console.log("store_code", store_code)
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
-    storeApi.fetchAllSupplier(store_code,page,params).then((res) => {
+    storeApi.fetchAllSupplier(store_code, page, params).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
-        loading : "hide"
+        loading: "hide"
       })
-      if(res.data.code !== 401)
-      dispatch({
-        type: Types.FETCH_ALL_SUPPLIER,
-        data: res.data.data,
-      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_ALL_SUPPLIER,
+          data: res.data.data,
+        });
     });
   };
 };
 
-export const deleteBranchStore = (store_code,id) => {
+export const deleteBranchStore = (store_code, id) => {
 
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
     storeApi
-      .deleteBranchStore(store_code,id)
+      .deleteBranchStore(store_code, id)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
+          loading: "hide"
         })
         storeApi
           .fetchBranchStore(store_code)
           .then((res) => {
-            if(res.data.code !== 401)
+            if (res.data.code !== 401)
 
-            dispatch({
-              type: Types.FETCH_BRANCH_STORE,
-              data: res.data.data,
-            });
+              dispatch({
+                type: Types.FETCH_BRANCH_STORE,
+                data: res.data.data,
+              });
             dispatch({
               type: Types.ALERT_UID_STATUS,
               alert: {
@@ -130,7 +130,7 @@ export const deleteBranchStore = (store_code,id) => {
           type: Types.SHOW_LOADING,
           loading: "hide"
         })
-    
+
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -143,29 +143,29 @@ export const deleteBranchStore = (store_code,id) => {
       });
   };
 };
-export const deleteSupplier = (store_code,id) => {
+export const deleteSupplier = (store_code, id) => {
 
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
     storeApi
-      .deleteSupplier(store_code,id)
+      .deleteSupplier(store_code, id)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
+          loading: "hide"
         })
         storeApi
           .fetchAllSupplier(store_code)
           .then((res) => {
-            if(res.data.code !== 401)
+            if (res.data.code !== 401)
 
-            dispatch({
-              type: Types.FETCH_ALL_SUPPLIER,
-              data: res.data.data,
-            });
+              dispatch({
+                type: Types.FETCH_ALL_SUPPLIER,
+                data: res.data.data,
+              });
             dispatch({
               type: Types.ALERT_UID_STATUS,
               alert: {
@@ -197,7 +197,7 @@ export const deleteSupplier = (store_code,id) => {
           type: Types.SHOW_LOADING,
           loading: "hide"
         })
-    
+
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -211,34 +211,33 @@ export const deleteSupplier = (store_code,id) => {
   };
 };
 
-export const updateBranchStore = (store_code,data,id , funcModal = null) => {
+export const updateBranchStore = (store_code, data, id, $this, funcModal = null) => {
 
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
     storeApi
-      .updateBranchStore(store_code,data,id)
+      .updateBranchStore(store_code, data, id)
       .then((res) => {
-        if(res.data.success && funcModal != null)
-        {
+        if (res.data.success && funcModal != null) {
           console.log("da vao r")
           funcModal()
         }
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
+          loading: "hide"
         })
         storeApi
           .fetchBranchStore(store_code)
           .then((res) => {
-            if(res.data.code !== 401)
+            if (res.data.code !== 401)
 
-            dispatch({
-              type: Types.FETCH_BRANCH_STORE,
-              data: res.data.data,
-            });
+              dispatch({
+                type: Types.FETCH_BRANCH_STORE,
+                data: res.data.data,
+              });
             dispatch({
               type: Types.ALERT_UID_STATUS,
               alert: {
@@ -270,48 +269,51 @@ export const updateBranchStore = (store_code,data,id , funcModal = null) => {
           type: Types.SHOW_LOADING,
           loading: "hide"
         })
-    
-        dispatch({
-          type: Types.ALERT_UID_STATUS,
-          alert: {
-            type: "danger",
-            title: "Lỗi",
-            disable: "show",
-            content: error.response.data.msg,
-          },
-        });
+        if ($this && error.response && error.response.data.msg_code == "NAME_ALREADY_EXISTS") {
+          $this.setState({ error_name: { text: error.response.data.msg, status: true } })
+        }
+        else {
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "danger",
+              title: "Lỗi",
+              disable: "show",
+              content: error.response.data.msg,
+            },
+          });
+        }
       });
   };
 };
 
-export const createBranchStore = (store_code,id,funcModal = null) => {
+export const createBranchStore = (store_code, id, $this, funcModal = null) => {
 
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
     storeApi
-      .createBranchStore(store_code,id)
+      .createBranchStore(store_code, id)
       .then((res) => {
-        if(res.data.success && funcModal != null)
-        {
+        if (res.data.success && funcModal != null) {
           console.log("da vao r")
           funcModal()
         }
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
+          loading: "hide"
         })
         storeApi
           .fetchBranchStore(store_code)
           .then((res) => {
-            if(res.data.code !== 401)
+            if (res.data.code !== 401)
 
-            dispatch({
-              type: Types.FETCH_BRANCH_STORE,
-              data: res.data.data,
-            });
+              dispatch({
+                type: Types.FETCH_BRANCH_STORE,
+                data: res.data.data,
+              });
             dispatch({
               type: Types.ALERT_UID_STATUS,
               alert: {
@@ -343,48 +345,52 @@ export const createBranchStore = (store_code,id,funcModal = null) => {
           type: Types.SHOW_LOADING,
           loading: "hide"
         })
-    
-        dispatch({
-          type: Types.ALERT_UID_STATUS,
-          alert: {
-            type: "danger",
-            title: "Lỗi",
-            disable: "show",
-            content: error.response.data.msg,
-          },
-        });
+
+        if ($this && error.response && error.response.data.msg_code == "NAME_ALREADY_EXISTS") {
+          $this.setState({ error_name: { text: error.response.data.msg, status: true } })
+        }
+        else {
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "danger",
+              title: "Lỗi",
+              disable: "show",
+              content: error.response.data.msg,
+            },
+          });
+        }
       });
   };
 };
 
-export const createSupplier = (store_code,id, funcModal = null) => {
+export const createSupplier = (store_code, id, funcModal = null) => {
 
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
     storeApi
-      .createSupplier(store_code,id)
+      .createSupplier(store_code, id)
       .then((res) => {
-        if(res.data.success && funcModal != null)
-        {
+        if (res.data.success && funcModal != null) {
           console.log("da vao r")
           funcModal()
         }
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
+          loading: "hide"
         })
         storeApi
           .fetchAllSupplier(store_code)
           .then((res) => {
-            if(res.data.code !== 401)
+            if (res.data.code !== 401)
 
-            dispatch({
-              type: Types.FETCH_ALL_SUPPLIER,
-              data: res.data.data,
-            });
+              dispatch({
+                type: Types.FETCH_ALL_SUPPLIER,
+                data: res.data.data,
+              });
             dispatch({
               type: Types.ALERT_UID_STATUS,
               alert: {
@@ -416,7 +422,7 @@ export const createSupplier = (store_code,id, funcModal = null) => {
           type: Types.SHOW_LOADING,
           loading: "hide"
         })
-    
+
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -450,34 +456,33 @@ export const fetchSupplierId = (store_code, supplierId) => {
   };
 };
 
-export const editSupplier = (store_code,id,data,funcModal) => {
+export const editSupplier = (store_code, id, data, funcModal) => {
 
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
     storeApi
-      .editSupplier(store_code,id,data)
+      .editSupplier(store_code, id, data)
       .then((res) => {
-        if(res.data.success && funcModal != null)
-        {
+        if (res.data.success && funcModal != null) {
           console.log("da vao r")
           funcModal()
         }
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
+          loading: "hide"
         })
         storeApi
           .fetchAllSupplier(store_code)
           .then((res) => {
-            if(res.data.code !== 401)
+            if (res.data.code !== 401)
 
-            dispatch({
-              type: Types.FETCH_ALL_SUPPLIER,
-              data: res.data.data,
-            });
+              dispatch({
+                type: Types.FETCH_ALL_SUPPLIER,
+                data: res.data.data,
+              });
             dispatch({
               type: Types.ALERT_UID_STATUS,
               alert: {
@@ -509,7 +514,7 @@ export const editSupplier = (store_code,id,data,funcModal) => {
           type: Types.SHOW_LOADING,
           loading: "hide"
         })
-    
+
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -523,43 +528,43 @@ export const editSupplier = (store_code,id,data,funcModal) => {
   };
 };
 
-export const fetchTopTenProduct = (store_code ,branch_id, params) => {
-  console.log("branch_id",branch_id)
+export const fetchTopTenProduct = (store_code, branch_id, params) => {
+  console.log("branch_id", branch_id)
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
-    reportApi.fetchTopTenProduct(store_code ,branch_id, params).then((res) => {
+    reportApi.fetchTopTenProduct(store_code, branch_id, params).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
-        loading : "hide"
+        loading: "hide"
       })
-      if(res.data.code !== 401)
-      dispatch({
-        type: Types.FETCH_TOPTEN_REPORT,
-        data: res.data.data,
-      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_TOPTEN_REPORT,
+          data: res.data.data,
+        });
     });
   };
 };
 
-export const fetchOverview = (store_code ,branch_id, params) => {
+export const fetchOverview = (store_code, branch_id, params) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
-    reportApi.fetchOverview(store_code ,branch_id, params).then((res) => {
+    reportApi.fetchOverview(store_code, branch_id, params).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
-        loading : "hide"
+        loading: "hide"
       })
-      if(res.data.code !== 401)
-      dispatch({
-        type: Types.FETCH_OVERVIEW_REPORT,
-        data: res.data.data,
-      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_OVERVIEW_REPORT,
+          data: res.data.data,
+        });
     });
   };
 };
@@ -570,18 +575,18 @@ export const fetchDataId = (id) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
     storeApi.fetchDataId(id).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
-        loading : "hide"
+        loading: "hide"
       })
-      if(res.data.code !== 401)
-      dispatch({
-        type: Types.FETCH_ID_STORE,
-        data: res.data.data,
-      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_ID_STORE,
+          data: res.data.data,
+        });
     });
   };
 };
@@ -589,14 +594,14 @@ export const createStore = (data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
     storeApi
       .createStore(data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
+          loading: "hide"
         })
         dispatch({
           type: Types.ALERT_UID_STATUS,
@@ -627,11 +632,11 @@ export const createStore = (data) => {
   };
 };
 
-export const updateStore = (data, id , funcModal) => {
+export const updateStore = (data, id, funcModal) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
     storeApi
       .updateStore(data, id)
@@ -640,7 +645,7 @@ export const updateStore = (data, id , funcModal) => {
         console.log(res)
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
+          loading: "hide"
         })
         dispatch({
           type: Types.ALERT_UID_STATUS,
@@ -656,7 +661,7 @@ export const updateStore = (data, id , funcModal) => {
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
+          loading: "hide"
         })
         dispatch({
           type: Types.ALERT_UID_STATUS,
@@ -674,18 +679,18 @@ export const fetchAllTypeStore = () => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
     typeStoreApi.fetchAllData().then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
-        loading : "hide"
+        loading: "hide"
       })
-      if(res.data.code !== 401)
-      dispatch({
-        type: Types.FETCH_ALL_TYPESTORE,
-        data: res.data.data,
-      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_ALL_TYPESTORE,
+          data: res.data.data,
+        });
     });
   };
 };
@@ -694,24 +699,24 @@ export const destroyStore = (id) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
     storeApi
       .destroyStore(id)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
+          loading: "hide"
         })
         storeApi
           .fetchAllData()
           .then((res) => {
-            if(res.data.code !== 401)
+            if (res.data.code !== 401)
 
-            dispatch({
-              type: Types.FETCH_ALL_STORE,
-              data: res.data.data,
-            });
+              dispatch({
+                type: Types.FETCH_ALL_STORE,
+                data: res.data.data,
+              });
             dispatch({
               type: Types.ALERT_UID_STATUS,
               alert: {
@@ -743,7 +748,7 @@ export const destroyStore = (id) => {
           type: Types.SHOW_LOADING,
           loading: "hide"
         })
-    
+
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -762,14 +767,14 @@ export const uploadImgStore = (file) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
     uploadApi
       .upload(file)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
+          loading: "hide"
         })
         dispatch({
           type: Types.UPLOAD_STORE_IMG,
@@ -803,23 +808,23 @@ export const uploadImgStore = (file) => {
   };
 };
 
-export const fetchAllBadge = (store_code,branch_id) => {
-  if(branch_id == null) return;
+export const fetchAllBadge = (store_code, branch_id) => {
+  if (branch_id == null) return;
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
-    badgeApi.fetchAllBadge(store_code,branch_id).then((res) => {
+    badgeApi.fetchAllBadge(store_code, branch_id).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
-        loading : "hide"
+        loading: "hide"
       })
-      if(res.data.code !== 401)
-      dispatch({
-        type: Types.FETCH_ALL_BADGE,
-        data: res.data.data,
-      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_ALL_BADGE,
+          data: res.data.data,
+        });
     });
   };
 };

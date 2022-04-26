@@ -4,8 +4,11 @@ import * as dashboardAction from "../../actions/customer";
 import * as placeAction from "../../actions/place";
 import { shallowEqual } from '../../ultis/shallowEqual';
 import Validator from '../../ultis/validator';
-import {isEmail , isEmpty} from "../../ultis/helpers"
+import { isEmail, isEmpty } from "../../ultis/helpers"
 import themeData from "../../ultis/theme_data";
+import Datetime from "react-datetime";
+import * as Types from "../../constants/ActionType";
+import moment from "moment";
 
 class ModalCreate extends Component {
     constructor(props) {
@@ -24,8 +27,12 @@ class ModalCreate extends Component {
             listDistrict: [],
             txtName_branch: "",
             txtPhone_branch: "",
+            txtSex: "",
+
             txtEmail_branch: "",
             errors: {},
+            error_email: { status: false, text: "" },
+
 
         }
         const rules = [
@@ -35,16 +42,22 @@ class ModalCreate extends Component {
                 validWhen: false,
                 message: 'Tên không được để trống.',
             },
-      
+
             {
                 field: 'txtPhone_branch',
                 method: 'isLength',
-                args: [{ min: 10 }],
+                args: [{ min: 10, max: 12 }],
                 validWhen: true,
                 message: 'Số điện thoại không hợp lệ.',
             },
         ];
         this.validator = new Validator(rules);
+    }
+    listErrors = () => {
+        return {
+            error_email: { status: false, text: "" },
+
+        }
     }
     onChange = (e) => {
         var target = e.target;
@@ -122,21 +135,57 @@ class ModalCreate extends Component {
                 txtName_branch: "",
                 txtPhone_branch: "",
                 txtEmail_branch: "",
-                
+
             })
             this.props.resetModal()
-  
+
         }
 
     }
+    onChangeGender = (e) => {
+        var target = e.target;
+        var name = target.name;
+        var value = target.value;
+    
+        this.setState({
+          [name]: value,
+        });
+      }
+    
     handleOnClick = () => {
         const errors = this.validator.validate(this.state)
+        var { txtEmail_branch } = this.state
+        if(moment(this.state.txtDateOfBirth, "DD-MM-YYYY").format("YYYY-MM-DD HH:mm:ss") == "Invalid date")
+        {
+          this.props.showErrors(
+                {
+                  type: Types.ALERT_UID_STATUS,
+                  alert: {
+                    type: "danger",
+                    title: "Lỗi ",
+                    disable: "show",
+                    content: "Ngày sinh không đúng định dạng (DD-MM-YYYY)",
+                  },
+                }
+              )
+              return;
+        }
         this.setState({
             errors: errors,
         });
-        console.log(Object.keys(errors));
-        if (Object.keys(errors).length === 0 && ( !isEmpty(this.state.txtEmail_branch) || (isEmail(this.state.txtEmail_branch) && isEmpty(this.state.txtEmail_branch)) )) {
-            var { txtAddress_detail, txtDistrict, txtProvince, txtWards, txtName_branch, txtPhone_branch, txtEmail_branch } = this.state
+        var error = false
+
+        if (!isEmail(txtEmail_branch) && isEmpty(txtEmail_branch)) {
+            error = true
+            this.setState({ error_email: { text: "Email không đúng định dạng", status: true } })
+        }
+        else {
+            this.setState({ error_email: { text: "", status: false } })
+
+        }
+
+        if (Object.keys(errors).length === 0 && (!isEmpty(this.state.txtEmail_branch) || (isEmail(this.state.txtEmail_branch) && isEmpty(this.state.txtEmail_branch)))) {
+            var { txtAddress_detail, txtDistrict, txtProvince, txtWards, txtName_branch, txtPhone_branch, txtEmail_branch,txtDateOfBirth,txtSex } = this.state
             const { store_code } = this.props
             const Formdata = {
                 name: txtName_branch,
@@ -146,11 +195,13 @@ class ModalCreate extends Component {
                 district: txtDistrict,
                 wards: txtWards,
                 address_detail: txtAddress_detail,
+                date_of_birth: moment(txtDateOfBirth, "DD-MM-YYYY").format("YYYY-MM-DD HH:mm:ss"),
+                sex: txtSex
             }
 
             this.props.createCustomer(store_code, Formdata, function () {
                 window.$(".modal").modal("hide");
-            }); 
+            });
         }
 
         // this.setState({
@@ -213,12 +264,23 @@ class ModalCreate extends Component {
         }
         return result
 
+        
     }
+    onChangeDate = (e) => {
+        var time = moment(e, "DD-MM-YYYY").format("DD-MM-YYYY");
+        this.setState({
+          txtDateOfBirth: time,
+        });
+      };
     render() {
         var { province } = this.props
-        var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards , errors } = this.state;
+        var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards, errors, error_email,txtSex ,txtDateOfBirth} = this.state;
         var { txtName_branch, txtPhone_branch, txtEmail_branch } = this.state;
-        console.log(isEmail(txtEmail_branch) , isEmpty())
+        var isMale = txtSex == "1" ? true : false
+        var isFemail = txtSex == "2" ? true : false
+        var isAnother = txtSex == "0" ? true : false
+    
+        console.log(isEmail(txtEmail_branch), isEmpty())
         return (
             <>
                 {this.state.status &&
@@ -231,8 +293,8 @@ class ModalCreate extends Component {
                 <div class="modal" id="modalCreateCustomer">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
-                            <div className='model-header-modal'  style={{ display: 'flex', justifyContent: "space-between",   backgroundColor: themeData().backgroundColor }}>
-                             <h4 style={{ color: "white" , margin : "10px" }}>Tạo khách hàng</h4>
+                            <div className='model-header-modal' style={{ display: 'flex', justifyContent: "space-between", backgroundColor: themeData().backgroundColor }}>
+                                <h4 style={{ color: "white", margin: "10px" }}>Tạo khách hàng</h4>
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
@@ -282,9 +344,41 @@ class ModalCreate extends Component {
                                                         onChange={this.onChange}
                                                         name="txtEmail_branch"
                                                     />
-                                                    {!isEmail(txtEmail_branch) && isEmpty(txtEmail_branch) && <div className="validation" style={{ display: 'block' }}>Email không đúng định dạng</div>}
+                                                    {error_email.status && <div className="validation" style={{ display: 'block' }}>{error_email.text}</div>}
 
                                                 </div>
+                                                <div className="form-group">
+                                                    <label htmlFor="fname">Ngày sinh</label>
+                                                    {txtDateOfBirth !== "" && <Datetime
+                                                        inputProps={{
+                                                            placeholder: "Chưa cập nhật",
+                                                        }}
+                                                        initialValue={txtDateOfBirth}
+
+                                                        onChange={this.onChangeDate}
+                                                        dateFormat="DD-MM-YYYY"
+                                                        timeFormat={false}
+                                                    />}
+                                                </div>
+                                                <div className="form-group gender">
+                                                    <label htmlFor="gender">Giới tính</label>
+                                                    <div className="radio" onChange={this.onChangeGender}>
+                                                        <label>
+                                                            <input type="radio" name="txtSex" checked={isMale} className="male" id="male" value="1" />
+                                                            Nam
+                                                        </label>
+                                                        <label>
+                                                            <input type="radio" name="txtSex" checked={isFemail} className="male" id="female" value="2" />
+                                                            Nữ
+                                                        </label>
+                                                        <label>
+                                                            <input type="radio" name="txtSex" checked={isAnother} className="male" id="another" value="0" />
+                                                            Khác
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+
                                             </div>
                                             <div class="col-6 box-body-right">
                                                 <div class="form-group">
@@ -359,7 +453,7 @@ class ModalCreate extends Component {
                                 >
                                     Đóng
                                 </button>
-                                <button type="submit"  style={{ backgroundColor: themeData().backgroundColor }} onClick={this.handleOnClick} class="btn btn-info">
+                                <button type="submit" style={{ backgroundColor: themeData().backgroundColor }} onClick={this.handleOnClick} class="btn btn-info">
                                     Tạo
                                 </button>
                             </div>

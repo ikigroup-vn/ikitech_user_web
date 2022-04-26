@@ -458,8 +458,7 @@ class ProductEdit extends Component {
             </div>
           </div>
         </div>
-        
-        <div class="card mb-4">
+        {getChannel() == IKITECH &&                 <div class="card mb-4">
           <div class="card-header title_content">Nội dung chi tiết</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
@@ -469,7 +468,8 @@ class ProductEdit extends Component {
               />
             </div>
           </div>
-        </div>
+        </div>}
+
 
         {
           getChannel() == IKITECH && <div class="card mb-4">

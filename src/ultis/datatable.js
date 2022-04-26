@@ -23,8 +23,12 @@ export default function(){
                 "previous": 'Trước'
             }
         },
-        "bDestroy": true
-
-
+        "bDestroy": true,
+        // "aoColumnDefs": [
+        //     { "bSortable": false, "aTargets": [ "_all" ] } //disable ordering events and takeout the icon
+        //    ]
+        "columnDefs": [
+            { "orderable": false, "targets": 0 }
+          ]
     }
 }
