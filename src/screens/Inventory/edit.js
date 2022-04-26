@@ -9,9 +9,11 @@ import Pagination from '../../components/ProductAgency/Pagination';
 import * as productAction from "../../actions/product";
 import CardProduct from '../../components/Inventory/CardProduct';
 import ListInventorySheet from '../../components/Inventory/ListInventory'
-import ModalDetail from '../../components/Inventory/ModalDetail';
+import ModalDetail from '../../components/Import_stock/ModalDetail';
 import * as inventoryAction from "../../actions/inventory"
 import history from '../../history';
+import Paginations from '../../components/Inventory/Paginations';
+
 class EditInventory extends Component {
     constructor(props) {
         super(props)
@@ -171,6 +173,8 @@ class EditInventory extends Component {
         var { products } = this.props;
         var { store_code } = this.props.match.params
         var { searchValue, numPage, listInventory,existing_branch,reality_exist_total } = this.state
+        const bonusParam = "&check_inventory=true"
+
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
@@ -248,6 +252,10 @@ class EditInventory extends Component {
 
                                                     </div>
                                                 </form>
+                                                <div className='wrap-pagination'>
+                                                    <Paginations limit={numPage} bonusParam ={bonusParam}
+                                                        passNumPage={this.passNumPage} store_code={store_code} products={products} />
+                                                </div>
                                                 <ModalDetail modal={this.state.infoProduct} handleCallbackPushProduct={this.handleCallbackPushProduct} />
                                             </div>
                                             <div className='card-body'>

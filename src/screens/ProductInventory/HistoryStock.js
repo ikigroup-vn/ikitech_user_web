@@ -1,5 +1,7 @@
 import moment from 'moment';
 import React, { Component } from 'react'
+import { filter_arr, format } from "../../ultis/helpers";
+
 class HistoryStock extends Component {
   constructor(props) {
     super(props)
@@ -18,10 +20,12 @@ class HistoryStock extends Component {
         return (
           <tr>
             <td> {index + 1}</td>
-            <td>{data.stock}</td>
+            <td>{format(data.stock)}</td>
+            <td>{format(data.cost_of_capital)}</td>
+
             <td>
               <div style={{display:"flex",alignItems:"center"}}>
-                {data.change>0?<i class='fas fa-arrow-circle-up'></i>:<i class='fas fa-arrow-circle-down'></i>}
+                {data.change>0?<i class='fas fa-arrow-circle-up' style ={{color : "green"}}></i>:<i class='fas fa-arrow-circle-down' style ={{color : "red"}}></i>}
                 <div style={{marginLeft:"10px", width:'50%'}}>{data.change}</div>
               </div>
             </td>
@@ -57,6 +61,8 @@ class HistoryStock extends Component {
                     <th>STT</th>
 
                     <th>Số lượng kho</th>
+                    <th>Giá vốn</th>
+
 
                     <th>Thay đổi</th>
 

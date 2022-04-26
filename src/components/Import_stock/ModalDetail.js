@@ -104,8 +104,9 @@ class ModalDetail extends Component {
         var sub_element_distribute = this.state.elementObject.sub_element_distributes
         var { sub_element_distributes } = this.state.elementDistributeOj
         var subImport = findImportPriceSub(sub_element_distributes, nameElement)
-        console.log("subImport", subImport.import_price)
-        if (this.props.modal.discountProduct) {
+        if (typeof subImport == "undefined") {
+            return;
+        } if (this.props.modal.discountProduct) {
             var { value } = this.props.modal.discountProduct
             this.setState({ subElementDistributeSelected: index, element_distributes: nameElement })
             var indexDistribute = sub_element_distribute.map(e => e.name).indexOf(nameElement)
@@ -219,10 +220,10 @@ class ModalDetail extends Component {
         if (!shallowEqual(this.props.product, nextProps.product)) {
 
             if (nextProps.product != null) {
-        
+
                 var maxPrice = findMaxImportPrice(nextProps.product)
                 var minPrice = findMinImportPrice(nextProps.product)
-         
+
                 this.setState({
                     minPriceAfterDiscount: minPrice,
                     maxPriceAfterDiscount: maxPrice
@@ -245,8 +246,8 @@ class ModalDetail extends Component {
                             <button type="button" class="close" onClick={this.handleClose} data-dismiss="modal">&times;</button>
                         </div>
                         <div class="modal-body" style={{ position: "relative" }}>
-                            <button class="btn btn-info" onClick={this.handleCallback} 
-                            style={{ backgroundColor: "green", position: "absolute", right: "15px", top: "20px", zIndex: "100" }}>Thêm</button>
+                            <button class="btn btn-info" onClick={this.handleCallback}
+                                style={{ backgroundColor: "green", position: "absolute", right: "15px", top: "20px", zIndex: "100" }}>Thêm</button>
                             <div className='model-card row' style={{ margin: "5px", width: "80%" }}>
                                 <div className='name-voucher col-4' style={{ width: "120px", height: "120px", padding: "8px" }}>
                                     <div style={{ justifyContent: "center", width: "100%", height: "100%", borderRadius: "0.25em", display: "flex", alignItems: "center" }}>
@@ -257,9 +258,9 @@ class ModalDetail extends Component {
                                     <div>
                                         <div className='value' style={{ fontWeight: "bold" }}>{inforProduct.nameProduct}</div>
                                         <div className='code' style={{ color: "red" }}><span>
-                                        Giá nhập:         {this.state.afterChoosePrice === '' ? inforProduct.discountProduct === null ? 
-                                            this.props.modal.minPriceProduct === this.props.modal.maxPriceProduct ? 
-                                            format(Number(this.props.modal.minPriceProduct)) : `${format(Number(this.props.modal.minPriceProduct))}-${format(Number(this.props.modal.maxPriceProduct))}` : this.state.minPriceAfterDiscount === this.state.maxPriceAfterDiscount ? `${format(Number(this.state.minPriceAfterDiscount))}` : `${format(Number(this.state.minPriceAfterDiscount))} - ${format(Number(this.state.maxPriceAfterDiscount))}`
+                                            Giá nhập:         {this.state.afterChoosePrice === '' ? inforProduct.discountProduct === null ?
+                                                this.props.modal.minPriceProduct === this.props.modal.maxPriceProduct ?
+                                                    format(Number(this.props.modal.minPriceProduct)) : `${format(Number(this.props.modal.minPriceProduct))}-${format(Number(this.props.modal.maxPriceProduct))}` : this.state.minPriceAfterDiscount === this.state.maxPriceAfterDiscount ? `${format(Number(this.state.minPriceAfterDiscount))}` : `${format(Number(this.state.minPriceAfterDiscount))} - ${format(Number(this.state.maxPriceAfterDiscount))}`
                                                 : format(Number(this.state.afterChoosePrice))}</span></div>
                                         <div className='before-discout' style={{ display: "flex" }} >
                                             <span style={{ fontSize: "13px", textDecoration: "line-through" }}>{inforProduct.discountProduct !== null ?

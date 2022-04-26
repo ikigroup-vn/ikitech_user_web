@@ -8,7 +8,7 @@ import Alert from '../../components/Partials/Alert';
 import * as productAction from "../../actions/product";
 import CardProduct from '../../components/Inventory/CardProduct';
 import ListInventorySheet from '../../components/Inventory/ListInventory'
-import ModalDetail from '../../components/Inventory/ModalDetail';
+import ModalDetail from '../../components/Import_stock/ModalDetail';
 import * as inventoryAction from "../../actions/inventory"
 import history from '../../history';
 import Paginations from '../../components/Inventory/Paginations';
@@ -62,10 +62,13 @@ class CreateInventory extends Component {
         return true
     }
 
-    handleCallbackProduct = (modal) => {
+    handleCallbackProduct = (modal,product) => {
         this.setState(
             {
-                infoProduct: modal
+                infoProduct: modal,
+                product: product
+
+
             })
     }
     handleCallbackPushProduct = (modal) => {
@@ -147,7 +150,7 @@ class CreateInventory extends Component {
     componentDidMount() {
         const branch_id = localStorage.getItem('branch_id')
         const params = `&check_inventory=true`
-        this.props.fetchAllProductV2(this.props.match.params.store_code, branch_id,1,params);
+        this.props.fetchAllProductV2(this.props.match.params.store_code, branch_id, 1, params);
     }
 
     render() {
@@ -230,14 +233,15 @@ class CreateInventory extends Component {
                                                     </div>
                                                 </form>
                                                 <div className='wrap-pagination'>
-                                                    <Paginations limit={numPage} bonusParam ={bonusParam}
+                                                    <Paginations limit={numPage} bonusParam={bonusParam}
                                                         passNumPage={this.passNumPage} store_code={store_code} products={products} />
                                                 </div>
-                                                <ModalDetail modal={this.state.infoProduct} handleCallbackPushProduct={this.handleCallbackPushProduct} />
+                                                <ModalDetail product={this.state.product} modal={this.state.infoProduct} handleCallbackPushProduct={this.handleCallbackPushProduct} />
                                             </div>
                                             <div className='card-body'>
-                                                <CardProduct store_code={store_code} handleCallbackProduct={this.handleCallbackProduct} />
-                                            </div>
+                                                {products.data?.length > 0 ? <CardProduct store_code={store_code} handleCallbackProduct={this.handleCallbackProduct} /> :
+                                                    <div>Không tồn tại sản phẩm</div>
+                                                }                                            </div>
                                         </div>
                                     </div>
                                 </div>

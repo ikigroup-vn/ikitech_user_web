@@ -147,7 +147,7 @@ history.push(`/order/detail/${store_code}/${order_code}`)
         var is_collaborator = data.collaborator_by_customer_id != null ? "check" : "close"
 
         return (
-          <tr className="hover-order" onClick={() => this.changePage(store_code , data.order_code)}>
+          <tr className="hover-product" onClick={() => this.changePage(store_code , data.order_code)}>
           
             <td>{(per_page * (current_page - 1)) + (index + 1)}</td>
             <td>
@@ -287,7 +287,7 @@ history.push(`/order/detail/${store_code}/${order_code}`)
             <thead>
               <tr>
                 <th>STT</th>
-                <th>Mã</th>
+                <th>Mã đơn</th>
                 <th>Tên khách hàng</th>
 
                 {getChannel() == IKITECH &&

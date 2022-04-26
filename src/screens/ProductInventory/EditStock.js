@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { formatNumber } from '../../ultis/helpers'
 import { shallowEqual } from '../../ultis/shallowEqual'
+import themeData from "../../ultis/theme_data";
 
 class EditStock extends Component {
     constructor(props) {
@@ -100,9 +101,18 @@ class EditStock extends Component {
             <div class="modal" id="myModal" >
                 <div class="modal-dialog" >
                     <div class="modal-content">
-
+                        <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+                            <h4 style={{ color: "white" }}>Chỉnh sửa kho hoặc giá vốn</h4>
+                            <button
+                                type="button"
+                                class="close"
+                                data-dismiss="modal"
+                                aria-label="Close"
+                            >
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
                         <div class="modal-body">
-                            <h4>Chỉnh sửa kho hoặc giá vốn</h4>
                             <div class="form-group">
                                 <label for="product_name">Giá vốn</label>
                                 <input
@@ -130,16 +140,17 @@ class EditStock extends Component {
                         </div>
 
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-info"
-                                onClick={() => this.handleEditStock()}
-                                data-dismiss="modal" data-toggle="modal"
-                                data-target="#ModalAlert">Lưu
-                            </button>
+
                             <button
                                 type="button"
                                 class="btn btn-default"
                                 data-dismiss="modal"
                                 onClick={this.handleReset} >Đóng
+                            </button>
+                            <button type="button" class="btn btn-warning"
+                                onClick={() => this.handleEditStock()}
+                                data-dismiss="modal" data-toggle="modal"
+                                data-target="#ModalAlert">Lưu
                             </button>
                         </div>
 

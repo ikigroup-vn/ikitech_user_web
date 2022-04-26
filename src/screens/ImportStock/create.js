@@ -5,15 +5,20 @@ import Topbar from '../../components/Partials/Topbar';
 import * as Types from "../../constants/ActionType";
 import Alert from '../../components/Partials/Alert';
 import * as productAction from "../../actions/product";
+import * as dashboardAction from "../../actions/dashboard";
+
+import * as storeAction from "../../data/remote/store";
+
 import * as ImportAction from "../../actions/import_stock"
 import CardProduct from '../../components/Import_stock/CardProduct';
 import ModalDetail from '../../components/Import_stock/ModalDetail';
 import ModalSupplier from '../../components/Import_stock/ModalSupplier';
-import * as dashboardAction from "../../actions/dashboard";
 import ListImportStock from '../../components/Import_stock/ListImportStock';
 import { format } from '../../ultis/helpers';
 import { formatNumber } from "../../ultis/helpers"
 import Paginations from '../../components/Import_stock/Paginations';
+import { AsyncPaginate } from "react-select-async-paginate";
+
 class CreateImportStock extends Component {
     constructor(props) {
         super(props)
@@ -28,7 +33,9 @@ class CreateImportStock extends Component {
             cost: "",
             txtDiscoutType: 0,
             txtValueDiscount: "",
-            infoProduct: {
+            modalUpdateCart: null,
+            select_supplier : null,
+            select_supplier_id: null, infoProduct: {
                 inventoryProduct: "",
                 idProduct: "",
                 nameProduct: "",
@@ -155,7 +162,7 @@ class CreateImportStock extends Component {
 
     createImportStock = () => {
         const { store_code } = this.props.match.params
-        const { infoSupplier } = this.state
+        const { select_supplier } = this.state
         const branch_id = localStorage.getItem('branch_id')
         var affterDiscount = ""
         if (this.state.txtDiscoutType == 0) {
@@ -166,7 +173,7 @@ class CreateImportStock extends Component {
         const formData = {
             note: this.state.note,
             status: 0,
-            supplier_id: infoSupplier.id_supplier,
+            supplier_id: select_supplier ? select_supplier.value : null,
             cost: this.state.cost,
             discount: affterDiscount,
             import_stock_items:
@@ -214,23 +221,66 @@ class CreateImportStock extends Component {
     passNumPage = (page) => {
         this.setState({ page: page })
     }
+    handleCallbackPertion = (modal) => {
+        this.setState({ modalUpdateCart: modal })
+    }
+    onChangeSelect4 = (selectValue) => {
+console.log(selectValue)
+
+        var supplier = selectValue?.supplier
+        if (selectValue != null && supplier != null) {
+            this.setState({select_supplier : selectValue})
+        }
+    }
+
+
+
+
+    loadSuppliers = async (search, loadedOptions, { page }) => {
+        console.log("vaooooooooooooooooooo")
+        var { store_code } = this.props.match.params
+        const params = `&search=${search}`;
+        const res = await storeAction
+            .fetchAllSupplier(store_code, page, params);
+        console.log(res);
+        if (res.status != 200) {
+            return {
+                options: [],
+                hasMore: false,
+            }
+        }
+
+        return {
+            options: res.data.data.data.map((i) => {
+                return { value: i.id, label: `${i.name}  (${i.phone})`, supplier: i };
+            }),
+
+            hasMore: res.data.data.data.length == 20,
+            additional: {
+                page: page + 1,
+            },
+        };
+    };
+
 
     componentDidMount() {
         const { store_code } = this.props.match.params
         const branch_id = localStorage.getItem('branch_id')
         const bonusParam = "&check_inventory=true"
         this.props.fetchAllProductV2(store_code, branch_id, 1, bonusParam);
-        this.props.fetchAllSupplier(store_code);
+        // this.props.fetchAllSupplier(store_code);
     }
 
     render() {
         var { supplier, products } = this.props;
-        var { txtDiscoutType, txtValueDiscount } = this.state
+        var { txtDiscoutType, txtValueDiscount, select_supplier_id ,select_supplier} = this.state
         var { store_code } = this.props.match.params
         var { searchValue, numPage, listImportStock, infoSupplier, price_total, reality_exist_total } = this.state
         var type_discount_default = txtDiscoutType == "0" ? "show" : "hide"
         var type_discount_percent = txtDiscoutType == "1" ? "show" : "hide"
         const bonusParam = "&check_inventory=true"
+
+        console.log(select_supplier_id)
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
@@ -244,10 +294,53 @@ class CreateImportStock extends Component {
                                     <div className='col-lg-4 col-xl-4 col-md-12 col-sm-12'>
                                         <div className='card shadow mb-4' style={{ height: "100%" }}>
                                             <div className='card-header py-3' style={{ padding: "0", display: "flex" }}>
-                                                <button class="btn btn-warning" type="submit" data-toggle="modal" data-target="#supplier"><i class="fas fa-user"></i></button>
-                                                <div class="card" style={{ marginLeft: "10px", width: "80%" }}>
-                                                    <div class="card-body" style={{ padding: '0px' }}>{infoSupplier ? `${infoSupplier.name}` : 'Chọn nhà cung cấp'}</div>
+                                                <div className='import-stock' style={{
+                                                    display: "flex",
+                                                
+                                                    width : "100%"
+                                                }}>
+                                                    <i class='fa fa-user-o' data-toggle="modal" data-target="#modalPertion" style={{
+
+                                                        fontSize: "20px", left: "3px", bottom: "10px", cursor: "pointer",
+                                                        margin: 10
+                                                    }} ></i>
+
+
+
+
+
+
+
+                                                            <AsyncPaginate
+                                                                placeholder="Tìm khách hàng"
+                                                                value={select_supplier}
+                                                                loadOptions={this.loadSuppliers}
+                                                                name="recipientReferences1"
+                                                                onChange={this.onChangeSelect4}
+                                                                additional={{
+                                                                    page: 1,
+                                                                }}
+                                                                debounceTimeout={500}
+                                                                isClearable
+                                                                isSearchable
+                                                            />
+
+
+
+
+                                                      
+
+
+
+
                                                 </div>
+
+
+
+                                                {/* <button class="btn btn-warning" type="submit" data-toggle="modal" data-target="#supplier"><i class="fas fa-user"></i></button> */}
+                                                {/* <div class="card" style={{ marginLeft: "10px", width: "80%" }}>
+                                                    <div class="card-body" style={{ padding: '0px' }}>{infoSupplier ? `${infoSupplier.name}` : 'Chọn nhà cung cấp'}</div>
+                                                </div> */}
                                             </div>
 
                                             <div className='card-bodys' style={{ width: "0 10px", height: "380px", overflowY: "auto" }}>
@@ -301,8 +394,8 @@ class CreateImportStock extends Component {
 
                                     <div className='col-lg-8 col-xl-8 col-md-12 col-sm-12'>
                                         <div className='card shadow mb-4' style={{ height: "100%" }}>
-                                            <div className='card-header py-3' 
-                                            style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                            <div className='card-header py-3'
+                                                style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                                 <form onSubmit={this.searchData}>
                                                     <div
                                                         class="input-group mb-6"
@@ -343,8 +436,8 @@ class CreateImportStock extends Component {
                                                 }
                                             </div>
                                             <ModalDetail product={this.state.product} modal={this.state.infoProduct} handleCallbackPushProduct={this.handleCallbackPushProduct} />
-                                                <ModalSupplier supplier={supplier} store_code={store_code} handleCallbackSupplier={this.handleCallbackSupplier} />
-                                            
+                                            <ModalSupplier supplier={supplier} store_code={store_code} handleCallbackSupplier={this.handleCallbackSupplier} />
+
                                         </div>
                                     </div>
                                 </div>

@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { format } from '../../ultis/helpers'
 import * as Env from "../../ultis/default"
+import { findImportPrice, findImportPriceSub, findMaxImportPrice, findMinImportPrice } from '../../ultis/productUltis'
 
+import { shallowEqual } from '../../ultis/shallowEqual'
 class ModalDetail extends Component {
     constructor(props) {
         super(props)
@@ -118,7 +120,7 @@ class ModalDetail extends Component {
                     messageErr: ""
                 })
             } else {
-                this.setState({ subElementDistributeSelected: index, idElement: id, element_distributes: nameElement })
+                this.setState({ subElementDistributeSelected: index, idElement: id, element_distributes: nameElement ,  quantityInStock: sub_elements?.stock })
             }
 
         }
@@ -207,6 +209,20 @@ class ModalDetail extends Component {
                 var minPrice = minPriceProduct - (minPriceProduct * discountProduct.value / 100)
                 var maxPrice = maxPriceProduct - (maxPriceProduct * discountProduct.value / 100)
                 this.setState({ minPriceAfterDiscount: minPrice, maxPriceAfterDiscount: maxPrice })
+            }
+
+        }
+        if (!shallowEqual(this.props.product, nextProps.product)) {
+
+            if (nextProps.product != null) {
+        
+                var maxPrice = findMaxImportPrice(nextProps.product)
+                var minPrice = findMinImportPrice(nextProps.product)
+         
+                this.setState({
+                    minPriceAfterDiscount: minPrice,
+                    maxPriceAfterDiscount: maxPrice
+                })
             }
 
         }
