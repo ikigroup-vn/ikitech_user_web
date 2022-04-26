@@ -6,6 +6,7 @@ import ModalUpload from "./ModalUpload"
 import moment from "moment";
 import Datetime from "react-datetime";
 import * as Env from "../../ultis/default"
+import * as Types from "../../constants/ActionType";
 
 class Form extends Component {
   constructor(props) {
@@ -34,7 +35,7 @@ class Form extends Component {
 
 
   onChangeDate = (e) => {
-    var time = moment(e , "DD-MM-YYYY").format("DD-MM-YYYY");
+    var time = moment(e, "DD-MM-YYYY").format("DD-MM-YYYY");
     this.setState({
       txtDateOfBirth: time,
     });
@@ -50,8 +51,7 @@ class Form extends Component {
   }
 
 
-  componentWillReceiveProps(nextProps)
-  {
+  componentWillReceiveProps(nextProps) {
     if (!shallowEqual(nextProps.user, this.props.user) || this.state.id == "") {
       var { user } = nextProps
       var txtDateOfBirth = user.date_of_birth !== null ? moment(user.date_of_birth, "YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY") : ""
@@ -69,7 +69,7 @@ class Form extends Component {
       })
     }
 
-    if (this.props.image !== nextProps.image  ) {
+    if (this.props.image !== nextProps.image) {
       this.setState({ image: nextProps.image })
     }
   }
@@ -80,12 +80,30 @@ class Form extends Component {
 
   onSave = (e) => {
     e.preventDefault();
-    var user = {...this.state}
+
+    if(moment(this.state.txtDateOfBirth, "DD-MM-YYYY").format("YYYY-MM-DD HH:mm:ss") == "Invalid date")
+    {
+      this.props.showErrors(
+            {
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "danger",
+                title: "Lỗi ",
+                disable: "show",
+                content: "Ngày sinh không đúng định dạng (DD-MM-YYYY)",
+              },
+            }
+          )
+          return;
+    }
+  
+
+    var user = { ...this.state }
     var form = {
-      name : user.txtName,
-      avatar_image : user.image,
-      date_of_birth : moment(user.txtDateOfBirth , "DD-MM-YYYY").format("YYYY-MM-DD HH:mm:ss"),
-      sex : user.txtSex
+      name: user.txtName,
+      avatar_image: user.image,
+      date_of_birth: moment(user.txtDateOfBirth, "DD-MM-YYYY").format("YYYY-MM-DD HH:mm:ss"),
+      sex: user.txtSex
     }
     console.log(this.state)
     this.props.updateUser(form);
@@ -115,10 +133,10 @@ class Form extends Component {
     var isAnother = txtSex == "0" ? true : false
 
 
-console.log(txtSex)
+    console.log(txtSex)
     return (
-     
-     <React.Fragment>
+
+      <React.Fragment>
         <form role="form" onSubmit={this.onSave} >
 
           <div class="box-body">
@@ -173,15 +191,16 @@ console.log(txtSex)
               </div>
               <div className="form-group">
                 <label htmlFor="fname">Ngày sinh</label>
-                <Datetime
+                {txtDateOfBirth !== "" && <Datetime
                   inputProps={{
                     placeholder: "Chưa cập nhật",
                   }}
-                  value={txtDateOfBirth}
+                  initialValue={txtDateOfBirth}
+
                   onChange={this.onChangeDate}
                   dateFormat="DD-MM-YYYY"
                   timeFormat={false}
-                />
+                />}
               </div>
               <div className="form-group">
                 <label htmlFor="lname">Số điện thoại</label>
@@ -219,7 +238,7 @@ console.log(txtSex)
 
           </div>
         </form>
-      
+
         <ModalUpload></ModalUpload>
       </React.Fragment>
 
@@ -238,8 +257,11 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, props) => {
   return {
 
-    updateUser : (form) =>{
+    updateUser: (form) => {
       dispatch(profileAtion.updateUser(form))
+    },
+    showErrors: (alert) => {
+      dispatch(alert)
     }
 
   };

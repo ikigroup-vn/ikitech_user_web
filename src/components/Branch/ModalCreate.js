@@ -3,7 +3,10 @@ import { connect } from 'react-redux';
 import * as dashboardAction from "../../actions/dashboard";
 import * as placeAction from "../../actions/place";
 import { shallowEqual } from '../../ultis/shallowEqual';
-import {isEmail , isEmpty , isPhone} from "../../ultis/helpers"
+import { isEmail, isEmpty, isPhone } from "../../ultis/helpers"
+import Validator from '../../ultis/validator';
+import themeData from "../../ultis/theme_data";
+
 class ModalCreate extends Component {
     constructor(props) {
         super(props);
@@ -24,11 +27,31 @@ class ModalCreate extends Component {
             txtCode_branch: "",
             txtPost_branch: "",
             txtEmail_branch: "",
-            error_email : {status : false , text : ""},
-            error_phone : {status : false , text : ""}
+            error_email: { status: false, text: "" },
+            error_phone: { status: false, text: "" },
+            error_name: { status: false, text: "" },
+
+            errors: {},
+        }
+        const rules = [
+            {
+                field: 'txtName_branch',
+                method: 'isEmpty',
+                validWhen: false,
+                message: 'Tên không được để trống.',
+            },
+
+        ];
+        this.validator = new Validator(rules);
+    }
+    listErrors = () => {
+        return {
+            error_email: { status: false, text: "" },
+            error_phone: { status: false, text: "" },
+            error_name: { status: false, text: "" },
+
         }
     }
-
 
     onChange = (e) => {
         var target = e.target;
@@ -103,38 +126,44 @@ class ModalCreate extends Component {
                 txtPhone_branch: "",
                 txtCode_branch: "",
                 txtPost_branch: "",
-                txtEmail_branch: ""
+                txtEmail_branch: "",
+                ...this.listErrors()
+
             })
             this.props.resetModal()
 
         }
     }
     handleOnClick = () => {
+        const errors = this.validator.validate(this.state)
+
         var { txtAddress_detail, txtDistrict, txtProvince, txtWards, txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state
         var error = false
-        if(!isEmail(txtEmail_branch) && isEmpty(txtEmail_branch))
-        {
+        this.setState({
+            errors: errors,
+        });
+        if (Object.keys(errors).length > 0) {
             error = true
-            this.setState({error_email : {text : "Email không đúng định dạng" , status : true}})
         }
-        else
-        {
-            this.setState({error_email : {text : "Email không đúng định dạng" , status : false} , error_phone : {text : "Email không đúng định dạng" , status : false}})
-
-        }
-        if(!isPhone(txtPhone_branch))
-        {
+        if (!isEmail(txtEmail_branch) && isEmpty(txtEmail_branch)) {
             error = true
-            this.setState({error_phone : {text : "SDT không đúng định dạng" , status : true}})
+            this.setState({ error_email: { text: "Email không đúng định dạng", status: true } })
+        }
+        else {
+            this.setState({ error_email: { text: "", status: false } })
 
         }
-        else
-        {
-            this.setState({error_phone : {text : "Email không đúng định dạng" , status : false}})
+        if (!isPhone(txtPhone_branch)) {
+            error = true
+            this.setState({ error_phone: { text: "SDT không đúng định dạng", status: true } })
 
         }
-        if(error == true)
-        return;
+        else {
+            this.setState({ error_phone: { text: "", status: false } })
+
+        }
+        if (error == true)
+            return;
 
         const { store_code } = this.props
         const Formdata = {
@@ -149,28 +178,11 @@ class ModalCreate extends Component {
             postcode: txtPost_branch,
             is_default: true
         }
-        
-        this.props.createBranchStore(store_code, Formdata, function () {
+
+        this.props.createBranchStore(store_code, Formdata, this, function () {
             window.$(".modal").modal("hide");
         })
-        // this.setState({
-        //     provinceName: "",
-        //     districtName: "",
-        //     wardsName: "",
-        //     txtAddress_detail: "",
-        //     txtCountry: 1,
-        //     txtProvince: "",
-        //     txtDistrict: "",
-        //     txtWards: "",
-        //     isLoaded: false,
-        //     listWards: [],
-        //     listDistrict: [],
-        //     txtName_branch: "",
-        //     txtPhone_branch: "",
-        //     txtCode_branch: "",
-        //     txtPost_branch: "",
-        //     txtEmail_branch: ""
-        // })
+
 
     };
     showProvince = (places) => {
@@ -218,7 +230,7 @@ class ModalCreate extends Component {
     }
     render() {
         var { province } = this.props
-        var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards , error_email , error_phone } = this.state;
+        var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards, error_email, error_phone, errors, error_name } = this.state;
         var { txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state;
         return (
             <>
@@ -232,8 +244,8 @@ class ModalCreate extends Component {
                 <div class="modal" id="modalAddress">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
-                            <div className='model-header-modal' style={{ display: 'flex', justifyContent: "space-between", margin: "10px 15px" }}>
-                                <p class="" style={{ margin: "0px", fontWeight: "bold" }}>Tạo chi nhánh cửa hàng</p>
+                            <div className='model-header-modal' style={{ display: 'flex', justifyContent: "space-between", backgroundColor: themeData().backgroundColor }}>
+                                <h4 style={{ color: "white", margin: "10px" }}>Thêm chi nhánh</h4>
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
@@ -253,6 +265,9 @@ class ModalCreate extends Component {
                                                         onChange={this.onChange}
                                                         name="txtName_branch"
                                                     />
+                                                    {errors.txtName_branch && <div className="validation" style={{ display: 'block' }}>{errors.txtName_branch}</div>}
+                                                    {error_name.status && <div className="validation" style={{ display: 'block' }}>{error_name.text}</div>}
+
                                                 </div>
                                                 <div class="form-group">
                                                     <label for="product_name">Số điện thoại</label>
@@ -281,7 +296,7 @@ class ModalCreate extends Component {
                                                         onChange={this.onChange}
                                                         name="txtEmail_branch"
                                                     />
-                                                    {error_email.status && <div className="validation" style={{ display: 'block' }}>{error_phone.text}</div>}
+                                                    {error_email.status && <div className="validation" style={{ display: 'block' }}>{error_email.text}</div>}
 
                                                 </div>
                                                 <div class="form-group">
@@ -377,17 +392,22 @@ class ModalCreate extends Component {
                                             </div>
                                         </div>
 
-                                        <div class="box-footer">
-                                            <a class="btn btn-info  btn-sm" style = {{float: "right"}}
-                                                onClick={this.handleOnClick} >
-                                                <span class="icon text-white-50">
-                                                    <i class="fas fa-save"></i>
-                                                </span>
-                                                <span class="text" style={{ color: "white" }}>Tạo</span>
-                                            </a>
-                                        </div>
+
+
                                     </form>
                                 </React.Fragment>
+                            </div>
+                            <div class="modal-footer">
+                                <button
+                                    type="button"
+                                    class="btn btn-default"
+                                    data-dismiss="modal"
+                                >
+                                    Đóng
+                                </button>
+                                <button type="submit" style={{ backgroundColor: themeData().backgroundColor }} onClick={this.handleOnClick} class="btn btn-info">
+                                    Tạo
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -398,8 +418,8 @@ class ModalCreate extends Component {
 }
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        createBranchStore: (id, form, funcModal) => {
-            dispatch(dashboardAction.createBranchStore(id, form, funcModal));
+        createBranchStore: (id, form, $this, funcModal) => {
+            dispatch(dashboardAction.createBranchStore(id, form, $this, funcModal));
         },
         fetchPlaceDistrict: (id) => {
             dispatch(placeAction.fetchPlaceDistrict(id));

@@ -64,7 +64,7 @@ class Table extends Component {
                 to={`/customer/detail/${store_code}/${data.id}?pag=${paginate}`}
 
                 style={{ marginLeft: "10px" }}
-                class={`btn btn-primary btn-sm ${chat_allow == true ? "show" : "hide"
+                class={`btn btn-warning btn-sm ${chat_allow == true ? "show" : "hide"
                   }`}
               >
                 <i class="fa fa-edit"></i> Sửa

@@ -26,18 +26,18 @@ class Setting extends Component {
         this.setState({ stock: e.target.value })
     }
 
-    handleUpdate = () =>{
+    handleUpdate = () => {
         const { store_code } = this.props.match.params
         const formData = {
-            noti_near_out_stock: this.state.checked_switch2 ,
-            allow_semi_negative : this.state.checked_switch3,
+            noti_near_out_stock: this.state.checked_switch2,
+            allow_semi_negative: this.state.checked_switch3,
             noti_stock_count_near: this.state.stock
         }
-        this.props.updateGeneralSetting(store_code,formData)
+        this.props.updateGeneralSetting(store_code, formData)
     }
 
-    componentWillReceiveProps = (nextProps) =>{
-        if(nextProps.generalSetting!==this.props.generalSetting){
+    componentWillReceiveProps = (nextProps) => {
+        if (nextProps.generalSetting !== this.props.generalSetting) {
             console.log('helllo')
             this.setState({
                 checked_switch3: nextProps.generalSetting.allow_semi_negative,
@@ -79,21 +79,21 @@ class Setting extends Component {
 
                                 <br></br>
                                 <div className="card shadow mb-4">
-                                <div class="card-header title_content">
-                          Thông tin cài đặt
-                        </div>
+                                    <div class="card-header title_content">
+                                        Thông tin cài đặt
+                                    </div>
                                     <div className="card-body">
-                                        <div className='wrap-card' style={{ width: "50%",borderRight: "1px solid #80808078" }}>
-                                            <div className='wrap-setting' style={{width:"50%", display: "flex", justifyContent: "space-between",padding: "10px 0"}}>
+                                        <div className='wrap-card' >
+                                            <div className='wrap-setting' style={{ maxWidth: "430px", display: "flex", justifyContent: "space-between", padding: "10px 0" }}>
                                                 <div>Thông báo sắp hết hàng</div>
-                                             
-                                                    <div class="custom-control custom-switch">
-                                                        <input type="checkbox" class="custom-control-input" id="switch2" name="checked_switch2" checked={this.state.checked_switch2} onChange={this.handChangeCheckbox2} />
-                                                        <label class="custom-control-label" for="switch2"></label>
-                                                    </div>
-                                              
+
+                                                <div class="custom-control custom-switch">
+                                                    <input type="checkbox" class="custom-control-input" id="switch2" name="checked_switch2" checked={this.state.checked_switch2} onChange={this.handChangeCheckbox2} />
+                                                    <label class="custom-control-label" for="switch2"></label>
+                                                </div>
+
                                             </div>
-                                            <div className='wrap-setting' style={{width:"50%", display: "flex", justifyContent: "space-between",padding: "10px 0" }}>
+                                            <div className='wrap-setting' style={{ maxWidth: "430px", display: "flex", justifyContent: "space-between", padding: "10px 0" }}>
                                                 <div>Cho phép bán âm</div>
                                                 <form action="/action_page.php">
                                                     <div class="custom-control custom-switch">
@@ -102,17 +102,20 @@ class Setting extends Component {
                                                     </div>
                                                 </form>
                                             </div>
-                                            <div className='wrap-setting' style={{width:"50%", display: "flex", justifyContent: "space-between",padding: "10px 0" }}>
+                                            <div className='wrap-setting' style={{ maxWidth: "430px", display: "flex", justifyContent: "space-between", padding: "10px 0" }}>
                                                 <div>Số lượng sản phẩm thông báo gần hết hàng</div>
-                                           
-                                                <input type="number" class="form-control" name="payment_limit" onChange={this.onChange} value = {this.state.stock} style={{width:"100px",padding: "10px 0"}} />
-                                            
+
+                                                <input type="number" class="form-control" name="payment_limit" onChange={this.onChange} value={this.state.stock} style={{ width: "100px" }} />
+
                                             </div>
 
-                                         
+
                                         </div>
-                                        <button type="submit" class="btn btn-info btn-icon-split btn-sm" onClick={this.handleUpdate} >
-                                            <span class="text">Lưu</span>
+                                        <button
+                                            class="btn btn-primary btn-sm"
+                                            onClick={this.handleUpdate}
+                                        >
+                                            <i class="fa fa-save"></i> Lưu
                                         </button>
                                     </div>
                                 </div>
@@ -138,8 +141,8 @@ const mapDispatchToProps = (dispatch, props) => {
         fetchAllGeneralSetting: (store_code) => {
             dispatch(SettingAction.fetchAllGeneralSetting(store_code));
         },
-        updateGeneralSetting: (store_code,data) =>{
-            dispatch(SettingAction.updateGeneralSetting(store_code,data))
+        updateGeneralSetting: (store_code, data) => {
+            dispatch(SettingAction.updateGeneralSetting(store_code, data))
         }
     }
 }

@@ -293,24 +293,18 @@ class StoreCreate extends Component {
                               </div>
 
                               <div class="box-footer">
-                                <button class="btn btn-info btn-icon-split  btn-sm">
-                                  <span class="icon text-white-50">
-                                    <i class="fas fa-save"></i>
-                                  </span>
-                                  <span class="text">Tạo</span>
+                                <button class="btn btn-info   btn-sm">
+                                    <i class="fas fa-save"></i>  Tạo
+                               
                                 </button>
-                                <a
+                                <button
                                   style={{ marginLeft: "10px" }}
                                   onClick={this.goBack}
-                                  class="btn btn-warning btn-icon-split  btn-sm"
+                                  class="btn btn-warning   btn-sm"
                                 >
-                                  <span class="icon text-white-50">
-                                    <i class="fas fa-arrow-left"></i>
-                                  </span>
-                                  <span class="text" style={{
-                                    color: "white"
-                                  }}> Trở về</span>
-                                </a>
+                                    <i class="fas fa-arrow-left"></i> Trở về
+                                
+                                </button>
                               </div>
                             </form>
                           </div>

@@ -55,7 +55,7 @@ class Branch extends Component {
                 var decentralization = typeof data.decentralization != "undefined" && data.decentralization != null ? data.decentralization.name : ""
 
                 return (
-                    <tr>
+                    <tr className="hover-product">
                         <td>{index + 1}</td>
                         <td>{data.name}</td>
 

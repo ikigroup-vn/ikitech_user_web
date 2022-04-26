@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as staffAction from "../../../actions/staff";
+import themeData from "../../../ultis/theme_data";
 
 class Modal extends Component {
     
@@ -25,7 +26,8 @@ class Modal extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{ background: "#47d3b0" }}>
+          <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+              <h4 style={{ color: "white" }}>Thông báo</h4>
               <button
                 type="button"
                 class="close"
@@ -45,7 +47,7 @@ class Modal extends Component {
               <div class="modal-body">
                 <input type="hidden" name="remove_id_store" />
                 <div class="alert-remove"></div>
-                Bạn có muốn xóa {modal.table} : {modal.name}
+                Bạn có muốn xóa nhân viên này không ?
               </div>
               <div class="modal-footer">
                 <button
@@ -55,7 +57,7 @@ class Modal extends Component {
                 >
                   Đóng
                 </button>
-                <button type="submit" class="btn btn-info">
+                <button type="submit" class="btn btn-warning">
                   Xóa
                   
                 </button>

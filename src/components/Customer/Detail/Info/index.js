@@ -10,6 +10,8 @@ import * as placeAction from "../../../../actions/place";
 import { shallowEqual } from '../../../../ultis/shallowEqual';
 import history from "../../../../history";
 import MomentInput from 'react-moment-input';
+import * as Types from "../../../../constants/ActionType";
+import Datetime from "react-datetime";
 
 class Customer extends Component {
   constructor(props) {
@@ -144,8 +146,8 @@ class Customer extends Component {
         idCustomer: nextProps.customer.id,
         goFirst: false,
         txtDateOfBirth:
-          nextProps.customer.date_of_birth != null && this.props.customer.date_of_birth != ""
-            ? moment(this.props.customer.date_of_birth, "YYYY-MM-DD HH:mm:ss").format(
+          nextProps.customer.date_of_birth != null && nextProps.customer.date_of_birth != ""
+            ? moment(nextProps.customer.date_of_birth, "YYYY-MM-DD HH:mm:ss").format(
               "DD-MM-YYYY"
             )
             : null,
@@ -173,6 +175,21 @@ class Customer extends Component {
   }
   handleOnClick = (e) => {
     e.preventDefault()
+    if(moment(this.state.txtDateOfBirth, "DD-MM-YYYY").format("YYYY-MM-DD HH:mm:ss") == "Invalid date")
+    {
+      this.props.showErrors(
+            {
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "danger",
+                title: "Lỗi ",
+                disable: "show",
+                content: "Ngày sinh không đúng định dạng (DD-MM-YYYY)",
+              },
+            }
+          )
+          return;
+    }
     var { txtAddress_detail, txtDistrict, txtProvince, txtWards, txtName_branch, txtPhone_branch, txtEmail_branch, idCustomer, txtDateOfBirth, txtSex } = this.state
     const { store_code } = this.props
     const Formdata = {
@@ -264,7 +281,15 @@ class Customer extends Component {
     }
     return result
 
+
   }
+  
+  onChangeDate = (e) => {
+    var time = moment(e, "DD-MM-YYYY").format("DD-MM-YYYY");
+    this.setState({
+      txtDateOfBirth: time,
+    });
+  };
   render() {
     var { province } = this.props
     var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards, txtDateOfBirth, txtSex } = this.state;
@@ -289,7 +314,22 @@ class Customer extends Component {
               name="txtName_branch"
             />
           </div>
-          <div class="form-group">
+
+          <div className="form-group">
+                <label htmlFor="fname">Ngày sinh</label>
+                {txtDateOfBirth !== "" && <Datetime
+                  inputProps={{
+                    placeholder: "Chưa cập nhật",
+                  }}
+                  initialValue={txtDateOfBirth}
+
+                  onChange={this.onChangeDate}
+                  dateFormat="DD-MM-YYYY"
+                  timeFormat={false}
+                />}
+              </div>
+
+          {/* <div class="form-group">
             <label for="product_name">Ngày sinh</label>
             <MomentInput
                       defaultValue={txtDateOfBirth == "" || txtDateOfBirth == null ? "" : moment(txtDateOfBirth, "DD-MM-YYYY")}
@@ -308,7 +348,7 @@ class Customer extends Component {
               onSave={() => { }}
               onChange={this.onChangeStart}
             />
-          </div>
+          </div> */}
           <div class="form-group">
             <label for="product_name">Giới tính</label>
             <select
@@ -475,6 +515,9 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchPlaceProvince: () => {
       dispatch(placeAction.fetchPlaceProvince());
     },
+    showErrors: (alert) => {
+      dispatch(alert)
+    }
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Customer);

@@ -2,8 +2,11 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux';
 import * as dashboardAction from "../../actions/dashboard";
 import * as placeAction from "../../actions/place";
+import Validator from '../../ultis/validator';
 import { shallowEqual } from '../../ultis/shallowEqual';
 import {isEmail , isEmpty , isPhone} from "../../ultis/helpers"
+import themeData from "../../ultis/theme_data";
+
 
 class ModalEdit extends Component {
     constructor(props) {
@@ -26,8 +29,30 @@ class ModalEdit extends Component {
             txtPost_branch: "",
             txtEmail_branch: "",
             error_email : {status : false , text : ""},
-            error_phone : {status : false , text : ""}
+            error_phone : {status : false , text : ""},
+            error_name : {status : false , text : ""},
+
+            errors: {},
+
         }
+        const rules = [
+            {
+                field: 'txtName_branch',
+                method: 'isEmpty',
+                validWhen: false,
+                message: 'Tên không được để trống.',
+            },
+     
+        ];
+        this.validator = new Validator(rules);
+    }
+    listErrors = () =>{
+     return {
+        error_email : {status : false , text : ""},
+        error_phone : {status : false , text : ""},
+        error_name : {status : false , text : ""},
+
+     }
     }
     onChange = (e) => {
         var target = e.target;
@@ -44,6 +69,8 @@ class ModalEdit extends Component {
           [event.target.id]: event.target.checked
         });
     }
+
+    
 
     
     onChangeWards = (e) => {
@@ -113,9 +140,18 @@ class ModalEdit extends Component {
         }
     }
     handleOnClick = () => {
+        const errors = this.validator.validate(this.state)
+
         var { txtAddress_detail, txtDistrict, txtProvince, txtWards, txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state
         const { store_code } = this.props
-        var error = false
+        var error = false;
+        this.setState({
+            errors: errors,
+        });
+        if(Object.keys(errors).length > 0)
+        {
+            error = true
+        }
         if(!isEmail(txtEmail_branch) && isEmpty(txtEmail_branch))
         {
             error = true
@@ -123,7 +159,7 @@ class ModalEdit extends Component {
         }
         else
         {
-            this.setState({error_email : {text : "Email không đúng định dạng" , status : false} , error_phone : {text : "Email không đúng định dạng" , status : false}})
+            this.setState({error_email : {text : "" , status : false}})
 
         }
         if(!isPhone(txtPhone_branch))
@@ -134,7 +170,7 @@ class ModalEdit extends Component {
         }
         else
         {
-            this.setState({error_phone : {text : "Email không đúng định dạng" , status : false}})
+            this.setState({error_phone : {text : "" , status : false}})
 
         }
         if(error == true)
@@ -151,7 +187,7 @@ class ModalEdit extends Component {
             postcode: txtPost_branch,
             is_default: true
         }
-        this.props.updateBranchStore(store_code, Formdata, this.state.id , function () {
+        this.props.updateBranchStore(store_code, Formdata, this.state.id , this,  function () {
             window.$(".modal").modal("hide");
         });
         this.setState({
@@ -166,7 +202,9 @@ class ModalEdit extends Component {
             isLoaded: false,
             listWards: [],
             listDistrict: [],
+            ...this.listErrors()
         })
+        
 
     };
     showProvince = (places) => {
@@ -216,7 +254,7 @@ class ModalEdit extends Component {
 
     
         var { province } = this.props
-        var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards , error_email , error_phone  } = this.state;
+        var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards , error_email , error_phone ,errors , error_name  } = this.state;
         var { txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state;
         return (
             <>
@@ -230,8 +268,8 @@ class ModalEdit extends Component {
                 <div class="modal" id="modalEdit">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
-                            <div className='model-header-modal' style={{ display: 'flex', justifyContent: "space-between", margin: "10px 15px" }}>
-                                <p class="" style={{ margin: "0px", fontWeight: "bold" }}>Chỉnh sửa chi nhánh</p>
+                        <div className='model-header-modal' style={{ display: 'flex', justifyContent: "space-between", backgroundColor: themeData().backgroundColor }}>
+                                <h4 style={{ color: "white", margin: "10px" }}>Chỉnh sửa chi nhánh</h4>
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
@@ -251,7 +289,11 @@ class ModalEdit extends Component {
                                                         onChange={this.onChange}
                                                         name="txtName_branch"
                                                     />
+                                                    {errors.txtName_branch && <div className="validation" style={{ display: 'block' }}>{errors.txtName_branch}</div>}
+                                                {error_name.status && <div className="validation" style={{ display: 'block' }}>{error_name.text}</div>}
+
                                                 </div>
+                                                
                                                 <div class="form-group">
                                                     <label for="product_name">Số điện thoại</label>
                                                     <input
@@ -279,7 +321,7 @@ class ModalEdit extends Component {
                                                         onChange={this.onChange}
                                                         name="txtEmail_branch"
                                                     />
-                                                    {error_email.status && <div className="validation" style={{ display: 'block' }}>{error_phone.text}</div>}
+                                                    {error_email.status && <div className="validation" style={{ display: 'block' }}>{error_email.text}</div>}
 
                                                 </div>
                                                 <div class="form-group">
@@ -379,18 +421,24 @@ class ModalEdit extends Component {
                                             </div>
                                         </div>
 
-                                        <div class="box-footer">
-                                            <a class="btn btn-info btn-sm" onClick={this.handleOnClick} >
-                                                <span class="icon text-white-50">
-                                                    <i class="fas fa-save"></i>
-                                                </span>
-                                                <span class="text" style={{color:"white"}}>Sửa</span>
-                                            </a>
-                                        </div>
                                     </form>
                                 </React.Fragment>
                             </div>
+                            
+                                        <div class="modal-footer">
+                                        <button
+                                                type="button"
+                                                class="btn btn-default"
+                                                data-dismiss="modal"
+                                            >
+                                                Đóng
+                                            </button>
+                                            <button type="submit" style={{ backgroundColor: themeData().backgroundColor }} onClick={this.handleOnClick} class="btn btn-info">
+                                                Lưu
+                                            </button>
+                                        </div>
                         </div>
+
                     </div>
                 </div>
             </>
@@ -402,8 +450,8 @@ const mapDispatchToProps = (dispatch, props) => {
         createBranchStore: (id, form) => {
             dispatch(dashboardAction.createBranchStore(id, form));
         },
-        updateBranchStore: (store_code, form, id , funcModal) => {
-            dispatch(dashboardAction.updateBranchStore(store_code, form, id , funcModal));
+        updateBranchStore: (store_code, form, id ,$this, funcModal) => {
+            dispatch(dashboardAction.updateBranchStore(store_code, form, id , $this, funcModal));
         },
         fetchPlaceDistrict: (id) => {
             dispatch(placeAction.fetchPlaceDistrict(id));
