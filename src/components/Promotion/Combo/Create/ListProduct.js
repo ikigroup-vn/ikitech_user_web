@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import Pagination from "../../../Product/Pagination"
 import { format } from "../../../../ultis/helpers"
 import themeData from "../../../../ultis/theme_data";
+import * as productAction from "../../../../actions/product";
 
 class ListProduct extends Component {
   constructor(props) {
@@ -175,10 +176,10 @@ class ListProduct extends Component {
                   )}
                 </div>
               )}</td>            <td> <h5>
-              <span class={`badge badge-${status}`}>
-                {status_name}
-              </span>
-            </h5></td>
+                <span class={`badge badge-${status}`}>
+                  {status_name}
+                </span>
+              </h5></td>
 
 
 
@@ -191,10 +192,25 @@ class ListProduct extends Component {
     }
     return result;
   };
+  onChangeSearch = (e) => {
+    this.setState({ searchValue: e.target.value });
+  };
+  passNumPage = (page) => {
+    this.setState({ page: page })
+  }
+  searchData = (e) => {
+    e.preventDefault();
+    var { store_code } = this.props;
+    var { searchValue } = this.state;
+    const branch_id = localStorage.getItem("branch_id");
+    var params = `&search=${searchValue}`;
+    this.props.fetchAllProductV2(store_code, branch_id, 1, params);
+  };
+
 
   render() {
     var { products, store_code, listProducts, combos } = this.props
-    console.log(products, store_code, listProducts, combos);
+    var { searchValue } = this.state
     return (
       <div
         class="modal fade"
@@ -208,17 +224,38 @@ class ListProduct extends Component {
           <div class="modal-content" style={{ maxHeight: "630px" }}>
             <div class="modal-header" style={{ background: "white" }}>
 
-            <div>
-            <h4 style={{ color: "black", display: "block" }}>Chọn sản phẩm</h4>
+              <div>
+                <h4 style={{ color: "black", display: "block" }}>Chọn sản phẩm</h4>
 
-             <i style = {{color : "red"}}> Những sản phẩm được tô đậm là những sản phẩm đang nằm trong các chương trình khuyến mại khác! Vui lòng xóa nếu muốn thêm vào chương trình này</i>
-              
-             </div>
+                <i style={{ color: "red" }}> Những sản phẩm được tô đậm là những sản phẩm đang nằm trong các chương trình khuyến mại khác! Vui lòng xóa nếu muốn thêm vào chương trình này</i>
+
+              </div>
 
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
             </div>
-     
+            <form style={{ marginTop: "10px" }} onSubmit={this.searchData}>
+              <div
+                class="input-group mb-6"
+                style={{ padding: "0 20px" }}
+              >
+                <input
+                  style={{ maxWidth: "280px", minWidth: "150px" }}
+                  type="search"
+                  name="txtSearch"
+                  value={searchValue}
+                  onChange={this.onChangeSearch}
+                  class="form-control"
+                  placeholder="Tìm kiếm sản phẩm"
+                />
+                <div class="input-group-append">
+                  <button class="btn btn-primary" type="submit">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </div>
+              </div>
+
+            </form>
             <div class="table-responsive">
               <table class="table table-hover table-border">
                 <thead>
@@ -269,7 +306,11 @@ class ListProduct extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-
+    fetchAllProductV2: (store_code, branch_id, page, params) => {
+      dispatch(
+        productAction.fetchAllProductV2(store_code, branch_id, page, params)
+      );
+    },
   };
 };
 export default connect(null, mapDispatchToProps)(ListProduct);

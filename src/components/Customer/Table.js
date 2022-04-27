@@ -2,6 +2,9 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
 import history from "../../history";
+import { filter_arr, format } from "../../ultis/helpers";
+import Pagination from "../../components/RevenueExpenditures/Pagination";
+
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -30,7 +33,8 @@ class Table extends Component {
             <td>{index + 1}</td>
 
             <td>{data.name}</td>
-            <td>{data.points || 0}</td>
+            <td>{data.points ? new Intl.NumberFormat().format(data.points)
+ : 0}</td>
             {getChannel() == IKITECH && <td>
               {data.is_collaborator == null ||
                 data.is_collaborator == "" ||
@@ -85,6 +89,8 @@ class Table extends Component {
       typeof this.props.customers.data == "undefined"
         ? []
         : this.props.customers.data;
+
+      var store_code = this.props;
     return (
       <div class="table-responsive">
         <table
@@ -108,6 +114,9 @@ class Table extends Component {
 
           <tbody>{this.showData(customers)}</tbody>
         </table>
+
+      
+                      
       </div>
     );
   }

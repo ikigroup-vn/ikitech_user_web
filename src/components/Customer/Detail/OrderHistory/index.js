@@ -8,6 +8,8 @@ import * as billAction from "../../../../actions/bill";
 import { getBranchId } from "../../../../ultis/branchUtils"
 import * as Env from "../../../../ultis/default"
 import {Link} from "react-router-dom"
+import Pagination from "../../../../components/Bill/Pagination";
+
 class Footer extends Component {
     constructor(props) {
         super(props);
@@ -63,7 +65,7 @@ class Footer extends Component {
 
 
     render() {
-        var { store_code, bills } = this.props
+        var { store_code, bills , customer } = this.props
         var listBills = bills.data
         return (
             <div className="support">
@@ -101,7 +103,13 @@ class Footer extends Component {
                                     </tbody>
                                 </table>
                             </div>
-
+                            <Pagination
+                            hasPhone  = {true}
+                            phone = {customer.phone_number}
+                              store_code={store_code}
+                              bills={bills}
+                            />
+                        
                         </div>
 
                     </div>

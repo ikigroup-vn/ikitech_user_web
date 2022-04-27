@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import history from "../../../history"
 
 class Table extends Component {
   constructor(props) {
@@ -33,6 +34,12 @@ class Table extends Component {
     }
     return result
   }
+
+  changePage = (e,store_code, supplierId) => {
+
+    if(e.target.name !== "toggle")
+    history.push(`/voucher/edit/${store_code}/${supplierId}`)
+}
   showData = (vouchers, per_page, current_page) => {
     var vouchers = this.props.is_end == 0 ? vouchers : vouchers.data
 
@@ -58,7 +65,7 @@ class Table extends Component {
         var disableIsEnd = this.props.is_end == 0 ? "show" : "hide"
 
         return (
-          <tr>
+          <tr className = "hover-product" onClick={(e) => this.changePage(e,store_code, data.id)}>
             <td class={showCurrentPage ? "hide" : "show"}>{index + 1}</td>
 
             <td class={showCurrentPage ? "show" : "hide"}>{(per_page * (current_page - 1)) + (index + 1)}</td>
@@ -73,17 +80,13 @@ class Table extends Component {
 
          
             <td>
+              {data.value_limit_total && new Intl.NumberFormat().format(data.value_limit_total)}
 
-              {!isNaN(Number(set_limit_amount)) ? new Intl.NumberFormat().format(set_limit_amount.toString()) + "%" : set_limit_amount}
+              {/* {!isNaN(Number(set_limit_amount)) ? new Intl.NumberFormat().format(set_limit_amount.toString()) + "%" : set_limit_amount} */}
 
             </td >  
-               <td style={{ maxWidth: "250px" }}>
-
-            {this.showListProduct(data.products || [])}
-
-</td>
-            
-            <td className="btn-voucher">
+      
+            <td className="group-btn-table">
               {this.props.is_end == 0 && <Link
                 to={`/voucher/edit/${store_code}/${data.id}`}
                 class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
@@ -94,6 +97,8 @@ class Table extends Component {
               <button
                 onClick={(e) => this.handleDelCallBack(e, store_code, data.id, data.name , this.props.is_end)}
                 data-toggle="modal"
+                name= "toggle"
+
                 data-target="#removeModal"
                 class={`btn btn-danger btn-sm ${_delete == true ? "show" : "hide"}`}
               >
@@ -102,6 +107,8 @@ class Table extends Component {
               <button
                 onClick={(e) => this.handleIsEndCallback(e, store_code, data.id)}
                 data-toggle="modal"
+                name= "toggle"
+
                 data-target="#isEndModal"
                 class={`btn btn-primary btn-sm ${disableIsEnd} ${_delete == true ? "show" : "hide"}`}
               >
@@ -134,7 +141,6 @@ class Table extends Component {
               <th>Ngày kết thúc</th>
               <th>Đơn đạt tối thiểu</th>
          
-              <th style={{ maxWidth: "250px" }}>Áp dụng sản phẩm</th>
 
               <th>Hành động</th>
             </tr>

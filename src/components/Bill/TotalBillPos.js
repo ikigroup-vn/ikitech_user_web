@@ -127,7 +127,8 @@ class TotalBill extends Component {
                         </p>
                     </div> */}
 
-                    <div>
+                    {
+                        total_final > 0 &&         <div>
                         <p className="sale_user_label bold">
                             Tổng tiền:{" "}
                             <span className="cart_payment_method">
@@ -137,6 +138,8 @@ class TotalBill extends Component {
                         </p>
                     </div>
                     
+                    }
+             
 
                     {
                         getChannel() == IKIPOS && (

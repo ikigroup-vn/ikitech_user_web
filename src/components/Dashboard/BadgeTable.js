@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
 import { getDDMMYYYNow, getYYYYMMDDNow } from "../../ultis/date";
+import moment from "moment";
 
 
 class BadgeTable extends Component {
@@ -166,7 +167,7 @@ class BadgeTable extends Component {
                         </span>
                     </p>
                     <p class="item-detail-badges">
-                        <Link to={`/order/${store_code}/CUSTOMER_HAS_RETURNS`}> Đơn hoàn trả</Link> <span id="user_tel">
+                        <Link  to={`/order/${store_code}/CUSTOMER_HAS_RETURNS?from=${moment().format("DD-MM-YYYY")}&to=${moment().format("DD-MM-YYYY")}`}> Đơn hoàn trả</Link> <span id="user_tel">
                             <span
 
                                 className={`step num-badge ${statusOrdersRefunds}`}
@@ -176,7 +177,7 @@ class BadgeTable extends Component {
                         </span>
                     </p>
                     <p class="item-detail-badges">
-                        <Link to={`/product/index/${store_code}`}> Sản phẩm sắp hết hàng </Link><span id="user_tel">
+                        <Link to={`/product/index/${store_code}?is_near_out_of_stock=true`}> Sản phẩm sắp hết hàng </Link><span id="user_tel">
                             <span
 
                                 className={`step num-badge ${statusTotalProductOrDiscountNearlyOutStock}`}

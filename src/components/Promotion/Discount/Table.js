@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import * as Env from "../../../ultis/default"
+import history from "../../../history"
 
 class Table extends Component {
   constructor(props) {
@@ -35,6 +36,11 @@ class Table extends Component {
     }
     return result
   }
+  changePage = (e,store_code, supplierId) => {
+
+    if(e.target.name !== "toggle")
+    history.push(`/discount/edit/${store_code}/${supplierId}`)
+}
 
   showData = (discounts, per_page, current_page) => {
     var discounts = this.props.is_end == 0 ? discounts : discounts.data
@@ -56,7 +62,7 @@ class Table extends Component {
         var showCurrentPage = typeof per_page != "undefined" && per_page != null ? true : false
         var disableIsEnd = this.props.is_end ? "hide" : "show"
         return (
-          <tr>
+          <tr className = "hover-product" onClick={(e) => this.changePage(e,store_code, data.id)}>
             <td class={showCurrentPage ? "hide" : "show"}>{index + 1}</td>
 
             <td class={showCurrentPage ? "show" : "hide"}>{(per_page * (current_page - 1)) + (index + 1)}</td>
@@ -76,7 +82,7 @@ class Table extends Component {
             </td>
             <td style={{ maxWidth: "300px" }}> {this.showListProduct(data.products || [])}</td>
 
-            <td>
+            <td className="group-btn-table">
               <Link
                 to={`/discount/edit/${store_code}/${data.id}`}
                 class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
@@ -88,6 +94,7 @@ class Table extends Component {
                 style={{ marginLeft: "10px" }}
                 data-toggle="modal"
                 data-target="#removeModal"
+                name= "toggle"
                 class={`btn btn-danger btn-sm ${_delete == true ? "show" : "hide"}`}
               >
                 <i class="fa fa-trash"></i> Xóa
@@ -96,6 +103,8 @@ class Table extends Component {
                 onClick={(e) => this.handleIsEndCallback(e, store_code, data.id, data.name)}
                 style={{ marginLeft: "10px" }}
                 data-toggle="modal"
+                name= "toggle"
+
                 data-target="#isEndModal"
                 class={`btn btn-primary btn-sm ${disableIsEnd} ${_delete == true ? "show" : "hide"}`}
               >

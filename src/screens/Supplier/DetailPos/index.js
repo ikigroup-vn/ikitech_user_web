@@ -60,7 +60,7 @@ class DetailPos extends Component {
                             <Tab>
                               <i class="fa fa-user"></i>
                               <span style={{ fontSize: "0.8rem" }}>
-                                Thông tin KH
+                                Thông tin NCC
                               </span>
                             </Tab>
                             <Tab>
@@ -72,7 +72,7 @@ class DetailPos extends Component {
                             <Tab>
                               <i class="fa fa-history"></i>
                               <span style={{ fontSize: "0.8rem" }}>
-                                Lịch sử mua hàng
+                                Lịch sử nhập hàng
                               </span>
                             </Tab>
                     

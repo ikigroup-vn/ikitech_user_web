@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-
+import history from "../../../history"
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -14,7 +14,11 @@ class Table extends Component {
     this.props.handleIsEndCallback({ id: id, store_code: store_code });
     event.preventDefault();
   }
+  changePage = (e,store_code, supplierId) => {
 
+    if(e.target.name !== "toggle")
+    history.push(`/combo/edit/${store_code}/${supplierId}`)
+}
   showData = (combos, per_page, current_page) => {
     console.log("davao")
     var combos  = this.props.is_end == 0 ? combos : combos.data
@@ -37,7 +41,7 @@ class Table extends Component {
 
 
         return (
-          <tr>
+          <tr className = "hover-product" onClick={(e) => this.changePage(e,store_code, data.id)}>
             <td class={showCurrentPage ? "hide" : "show"}>{index + 1}</td>
 
             <td class={showCurrentPage ? "show" : "hide"}>{(per_page * (current_page - 1)) + (index + 1)}</td>
@@ -52,7 +56,7 @@ class Table extends Component {
 
               </td>
 
-            <td className="btn-voucher">
+            <td className="group-btn-table">
               {data.is_end  != true &&      <Link
                 to={`/combo/edit/${store_code}/${data.id}`}
                 class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
@@ -64,6 +68,8 @@ class Table extends Component {
                 onClick={(e) => this.handleDelCallBack(e, store_code, data.id , data.name)}
                 data-toggle="modal"
                 data-target="#removeModal"
+                name= "toggle"
+
                 class={`btn btn-danger btn-sm ${_delete == true ? "show" : "hide"}`}
               >
                 <i class="fa fa-trash"></i> Xóa
@@ -71,6 +77,8 @@ class Table extends Component {
               <button
                 onClick={(e) => this.handleIsEndCallback(e, store_code, data.id)}
                 data-toggle="modal"
+                name= "toggle"
+
                 data-target="#isEndModal"
                 class={`btn btn-primary btn-sm ${disableIsEnd} ${_delete == true ? "show" : "hide"}`}
               >
