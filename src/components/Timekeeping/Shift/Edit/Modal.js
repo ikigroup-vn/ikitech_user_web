@@ -721,7 +721,7 @@ class Modal extends Component {
                 </div>
               </div>
               <div class="modal-footer">
-              <button
+              {/* <button
               class="btn btn-danger"
                    type="button"
                    onClick={(e) => {
@@ -737,7 +737,7 @@ class Modal extends Component {
                    data-target="#removeModal"
                 >
                   Xóa
-                </button>
+                </button> */}
                 <button type="submit" class="btn btn-warning">
                   Lưu
 

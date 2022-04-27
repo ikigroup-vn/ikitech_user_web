@@ -22,6 +22,7 @@ class ModalPostDate extends Component {
   };
   componentWillReceiveProps(nextProps) {
     if (this.props.typeDate !== nextProps.typeDate) {
+      console.log("vo day ne")
       if (nextProps.typeDate == "DAY") {
         var datePrime = {
           from: moment().format("YYYY-MM-DD"),
@@ -44,7 +45,10 @@ class ModalPostDate extends Component {
 
       var { store_code } = this.props;
       const branch_id = localStorage.getItem("branch_id");
+
       this.props.fetchAllCalendarShift(store_code, branch_id, param);
+      this.props.handleGetDatePost({ datePrime }, nextProps.typeDate);
+
     }
   }
   onSave = (e) => {
@@ -116,16 +120,23 @@ class ModalPostDate extends Component {
             reset={reset}
             handlePostDate={this.handlePostDate}
             isDay={isDay}
+            typeDate = {typeDate}
+
           />
           <FormPostMonth
             reset={reset}
             handlePostDate={this.handlePostDate}
             isMonth={isMonth}
+            typeDate = {typeDate}
+
           />
           <FormPostWeek
             reset={reset}
             handlePostDate={this.handlePostDate}
             isWeek={isWeek}
+
+            typeDate = {typeDate}
+
           />
         </form>
         {/* </div> */}

@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import themeData from "../../../../ultis/theme_data";
+import * as staffAction from "../../../../actions/staff";
 
 import { filter_arr, format } from "../../../../ultis/helpers";
 
@@ -8,9 +10,22 @@ class ListStaff extends Component {
     super(props);
     this.state = {
       numPage: 10,
+      searchValue: "",
+
     };
   }
+  onChangeSearch = (e) => {
+    this.setState({ searchValue: e.target.value });
+  };
 
+  searchData = (e) => {
+    e.preventDefault();
+    var { store_code } = this.props;
+    var { searchValue } = this.state;
+    const branch_id = localStorage.getItem("branch_id");
+    var params = `&search=${searchValue}`;
+    this.props.fetchAllShift(store_code, branch_id, 1, params);
+  }; 
   onChange = (e) => {
     var { value, checked } = e.target;
     console.log(checked);
@@ -29,6 +44,11 @@ class ListStaff extends Component {
     }
     return false;
   };
+  onSaveStaff = () => {
+    this.props.onSaveStaff()
+    window.$(".modal").modal("hide");
+  }
+
 
   showData = (staffs, list) => {
     console.log("dfasufbasdbfasdkjfbasdkf", staffs, list);
@@ -40,7 +60,7 @@ class ListStaff extends Component {
       result = staffs.map((data, index) => {
         var decentralization =
           typeof data.decentralization != "undefined" &&
-          data.decentralization != null
+            data.decentralization != null
             ? data.decentralization.name
             : "";
         var checked = this.checkExsit(list, data.id);
@@ -72,7 +92,7 @@ class ListStaff extends Component {
               }).format(data.salary)}
             </td>
             <td>{decentralization}</td>
-            <td style={{ textAlign: "center" }}>
+            {/* <td style={{ textAlign: "center" }}>
               {data.online ? (
                 <>
                   <span
@@ -102,7 +122,7 @@ class ListStaff extends Component {
                   <span>Offline</span>
                 </>
               )}
-            </td>
+            </td> */}
           </tr>
         );
       });
@@ -113,7 +133,7 @@ class ListStaff extends Component {
   };
 
   render() {
-    var { staffs, store_code, listStaff } = this.props;
+    var { staffs, store_code, listStaff,searchValue  } = this.props;
     console.log("stafff", staffs);
     return (
       <div
@@ -126,10 +146,9 @@ class ListStaff extends Component {
       >
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content" style={{ maxHeight: "630px" }}>
-            <div class="modal-header" style={{ background: "white" }}>
+            <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
               <h4
                 class="modal-title"
-                style={{ color: "black", fontWeight: "bold" }}
               >
                 Nhân viên
               </h4>
@@ -143,6 +162,28 @@ class ListStaff extends Component {
               </button>
             </div>
 
+            <form style={{marginTop : "10px"}} onSubmit={this.searchData}>
+              <div
+                class="input-group mb-6"
+                style={{ padding: "0 20px" }}
+              >
+                <input
+                  style={{ maxWidth: "280px", minWidth: "150px" }}
+                  type="search"
+                  name="txtSearch"
+                  value={searchValue}
+                  onChange={this.onChangeSearch}
+                  class="form-control"
+                  placeholder="Tìm kiếm chấm môn"
+                />
+                <div class="input-group-append">
+                  <button class="btn btn-primary" type="submit">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </div>
+              </div>
+        
+            </form>
             <div class="table-responsive">
               <table
                 class="table  table-hover table-border"
@@ -156,24 +197,43 @@ class ListStaff extends Component {
                     <th>Số điện thoại</th>
                     <th>Lương</th>
                     <th>Phân quyền</th>
-                    <th>Trạng thái</th>
+                    {/* <th>Trạng thái</th> */}
                   </tr>
                 </thead>
 
                 <tbody>{this.showData(staffs, listStaff)}</tbody>
               </table>
             </div>
-            <div class="d-flex align-items-center justify-content-end p-3">
-              <div>
+            <div class="group-pagination_flex col-xs-12 col-sm-12 col-md-12 col-lg-12" style={{ display: "flex", justifyContent: "end" }}>
+
+              {/* <Pagination
+                style="float-fix"
+                store_code={store_code}
+                shifts={shifts}
+                limit={this.state.numPage}
+                branch_id={this.props.branch_id}
+              /> */}
+              <div style={{ marginTop: "10px" , marginBottom: "10px" }}>
                 <button
+                  style={{
+                    border: "1px solid",
+                    marginRight: "10px"
+                  }}
                   type="button"
-                  class="btn btn-primary pagination-btn mr-0 ml-auto"
+                  class="btn btn-default"
                   data-dismiss="modal"
                 >
-                  Đóng
+                  Hủy
+                </button>
+                <button style={{ backgroundColor: themeData().backgroundColor }} onClick={this.onSaveStaff} class="btn btn-info">
+                  Xác nhận
                 </button>
               </div>
             </div>
+
+
+
+         
           </div>
         </div>
       </div>
@@ -181,7 +241,19 @@ class ListStaff extends Component {
   }
 }
 
-const mapDispatchToProps = (dispatch, props) => {
-  return {};
+const mapStateToProps = (state) => {
+  return {
+
+    staff: state.staffReducers.staff.allStaff,
+  };
 };
-export default connect(null, mapDispatchToProps)(ListStaff);
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    fetchAllStaff: (id) => {
+      dispatch(staffAction.fetchAllStaff(id));
+    },
+
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ListStaff);

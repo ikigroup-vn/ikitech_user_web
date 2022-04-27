@@ -28,6 +28,16 @@ class Form extends Component {
     if (this.props.reset != nextProps.reset && nextProps.isOption == "show") {
       this.initialState();
     }
+    if (this.props.typeDate != nextProps.typeDate) {
+      var now = {
+        from: moment().format("DD-MM-YYYY"),
+        to: moment().format("DD-MM-YYYY"),
+      };
+      this.setState({
+        datePrime: now,
+        dayNowFrom_prime: now,
+      });
+    }
   }
   shouldComponentUpdate(nextProps, nextState) {
     if (!shallowEqual(nextState, this.state))

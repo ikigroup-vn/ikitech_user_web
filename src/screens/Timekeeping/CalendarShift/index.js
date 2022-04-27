@@ -51,6 +51,7 @@ class CalendarShift extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     if (this.state.datePrime !== nextState.datePrime) {
+      console.log("vo day")
       const param = `date_from=${nextState.datePrime.from}&date_to=${nextState.datePrime.to}`;
 
       var { store_code } = this.props.match.params;
@@ -59,15 +60,21 @@ class CalendarShift extends Component {
     }
     return true;
   }
-  handleGetDatePost = (date, typeSelect) => {
-    this.setState({
+  handleGetDatePost = (date, typeDate) => {
+    var typeSelect =
+    typeDate == "DAY"
+      ? "Ngày"
+      : typeDate == "WEEK"
+      ? "Tuần"
+      : typeDate == "MONTH"
+      ? "Tháng"
+      : "";    this.setState({
       datePrime: {
         from: date.datePrime.from,
         to: date.datePrime.to,
       },
 
-      typeSelect: typeSelect,
-    });
+      typeDate: typeDate, typeSelect: typeSelect    });
   };
   onchangeDate = (value) => {
     var resetId = helper.randomString(10);
@@ -94,6 +101,7 @@ class CalendarShift extends Component {
 
       datePrime,
     } = this.state;
+    console.log(datePrime)
     if (this.props.auth) {
       return (
         <div id="wrapper">
