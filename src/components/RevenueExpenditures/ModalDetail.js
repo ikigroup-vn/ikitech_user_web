@@ -9,6 +9,8 @@ import { isEmpty } from "../../ultis/helpers";
 import CurrencyInput from "react-currency-input-field";
 import Select from "react-select";
 import "./style.css";
+import themeData from "../../ultis/theme_data";
+
 class ModalDetail extends Component {
   constructor(props) {
     super(props);
@@ -179,7 +181,7 @@ class ModalDetail extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
               <h4 class="modal-title">{revenueExpendituresDetail?.code}</h4>
 
               <button

@@ -23,6 +23,8 @@ import * as helper from "../../ultis/helpers";
 import moment from "moment";
 import ModalPostDate from "../../components/RevenueExpenditures/ModalPostDates";
 import { getBranchId } from "../../ultis/branchUtils";
+import { filter_var, filter_arr, format } from "../../ultis/helpers";
+
 class RevenueExpenditures extends Component {
   constructor(props) {
     super(props);
@@ -281,7 +283,33 @@ class RevenueExpenditures extends Component {
                               </div>
                             </div>
                           </form>
+
                           <div
+                          style = {{maxWidth : "240px"}}
+                    className="box-body table-responsive pt0"
+                >
+
+                    <br />
+                    <div>
+                        <p className="sale_user_label bold">
+                            Tỏng thu:{" "}
+                            <span id="total_selected">{format(this.props.reportExpenditure.renvenure)}</span>
+                        </p>
+                        <p className="sale_user_label bold">
+                            Tổng chi:{" "}
+                            <span id="total_selected">-{format(this.props.reportExpenditure.expenditure)}</span>
+                        </p>
+                        <p className="sale_user_label bold" style = {{color : "red"}}>
+                            Tồn cuối kì:{" "}
+                            <span id="total_selected">{format(total)}</span>
+                        </p>
+                    </div>
+            
+        
+
+                </div>
+
+                          {/* <div
                             style={{
                               display: "flex",
                               justifyContent: "space-between",
@@ -314,7 +342,7 @@ class RevenueExpenditures extends Component {
                                 {helper.format(Number(total))}
                               </div>
                             </div>
-                          </div>
+                          </div> */}
 
                           <div class="dropdown">
                             <button
@@ -460,9 +488,9 @@ class RevenueExpenditures extends Component {
               <Footer />
             </div>
 
-            {supplier.data !== undefined &&
-              customers.data !== undefined &&
-              staff.length !== 0 && (
+            {supplier.data &&
+              customers.data  &&
+              staff && (
                 <ModalRevenue
                   store_code={store_code}
                   branch_id={branch_id}
@@ -476,9 +504,9 @@ class RevenueExpenditures extends Component {
                   datePrime={datePrime}
                 />
               )}
-            {supplier.data !== undefined &&
-              customers.data !== undefined &&
-              staff.length !== 0 && (
+            {supplier.data  &&
+              customers.data  &&
+              staff && (
                 <ModalExpenditures
                   store_code={store_code}
                   branch_id={branch_id}

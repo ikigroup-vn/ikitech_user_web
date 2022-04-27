@@ -676,7 +676,13 @@ img {
 .table>tbody>tr>.btn-action>div {
     margin-bottom: 10px;
 }
+table.dataTable thead .sorting{
+    background: initial !important;
+}
 
+.table-responsive table.dataTable thead .sorting_asc{
+    background-image: none !important;
+}
 .form-group>input {
     height: 35px;
 }
