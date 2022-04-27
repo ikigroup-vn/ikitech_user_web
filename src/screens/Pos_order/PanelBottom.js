@@ -13,6 +13,7 @@ import Autocomplete from 'react-autocomplete';
 import AutoCompleteText from "./AutoCompleteText";
 import * as customerAction from "../../actions/customer";
 import Select, { OnChangeValue, StylesConfig } from 'react-select';
+import { debounce } from 'lodash'
 
 class PanelBottom extends Component {
 
@@ -35,7 +36,11 @@ class PanelBottom extends Component {
             txtEmail: ""
         }
 
+    
+
     }
+  
+
     componentDidMount() {
         this.props.fetchPlaceProvince()
         this.props.fetchAllCombo(this.props.store_code)
@@ -156,6 +161,9 @@ class PanelBottom extends Component {
 
             this.props.fetchPlaceDistrict(data.id);
 
+
+            this.toggleOpenDistrict();
+
         }
     }
     onChangeDistrict2 = (selectValue) => {
@@ -168,6 +176,9 @@ class PanelBottom extends Component {
             this.onSelectChangeDistrictById(data.id)
 
             this.props.fetchPlaceWards(data.id);
+
+
+            this.toggleOpenWards();
 
         }
     }
@@ -195,6 +206,11 @@ class PanelBottom extends Component {
     }
 
     componentWillReceiveProps(nextProps, nextState) {
+
+
+  
+        this.props.onNewChange(this.state)
+
         if (!shallowEqual(this.props.district, nextProps.district)) {
 
             this.setState({
@@ -308,6 +324,9 @@ class PanelBottom extends Component {
         }
 
     }
+
+
+
 
     onChange = (e) => {
         var target = e.target;
@@ -644,7 +663,10 @@ class PanelBottom extends Component {
                             </div>
                         }
                     ><Select
-
+                            ref={(ref) => {
+                                this.refSearchProvince = ref;
+                            }}
+                            autoFocus
                             menuPlacement="top"
                             backspaceRemovesValue={false}
                             //    components={{ DropdownIndicator, IndicatorSeparator: null }}
@@ -697,7 +719,10 @@ class PanelBottom extends Component {
                             </div>
                         }
                     ><Select
-
+                            ref={(ref) => {
+                                this.refSearchDistrict = ref;
+                            }}
+                            autoFocus
                             menuPlacement="top"
                             backspaceRemovesValue={false}
                             //    components={{ DropdownIndicator, IndicatorSeparator: null }}
@@ -751,7 +776,10 @@ class PanelBottom extends Component {
                             </div>
                         }
                     ><Select
-
+                            ref={(ref) => {
+                                this.refSearchWards = ref;
+                            }}
+                            autoFocus
                             menuPlacement="top"
                             backspaceRemovesValue={false}
                             //    components={{ DropdownIndicator, IndicatorSeparator: null }}
@@ -778,7 +806,7 @@ class PanelBottom extends Component {
                             onChange={this.onChangeSex}
                             name="txtSex"
                             class="form-control customerInfo px-1" id="customerGender">
-                            <option value="">- Giới tính -</option>
+                            <option value="" disabled>- Giới tính -</option>
                             <option value="1">Nam</option>
                             <option value="2">Nữ</option>
                             <option value="0">Khác</option>
@@ -867,7 +895,7 @@ class PanelBottom extends Component {
                             value={txtAddressDetail || ""}
                             onChange={this.onChange}
                             name="txtAddressDetail"
-                            class="form-control txtAutoHeight customerInfo" placeholder="Địa chỉ" id="customerAddress"></textarea>
+                            class="form-control txtAutoHeight customerInfo" placeholder="Địa chỉ chi tiết" id="customerAddress"></textarea>
                     </div>
 
                 </div>

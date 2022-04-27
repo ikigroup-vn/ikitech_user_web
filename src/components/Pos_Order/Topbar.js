@@ -304,14 +304,14 @@ class Topbar extends Component {
             menu: styles => ({
                 ...styles,
                 width: '600px',
-
+               
             }),
             option: (provided, state) => ({
                 ...provided,
                 borderBottom: '1px dotted pink',
-                color: state.isSelected ? 'red' : 'blue',
+                fontWeight: 200,
                 padding: 20,
-
+                color: "black",
             }),
         }
 
@@ -334,9 +334,7 @@ class Topbar extends Component {
                         <div className='group-controller-first'>
 
                             <div className='first-list-top-cart'>
-                                <li className='nav-item' style={{ color: "white", cursor: "pointer", marginRight: '10px' }} onClick={this.goBackHome}>
-                                    <i class='fas fa-home fa-2x' style={{ fontSize: "22px" }}></i>
-                                </li>
+
                                 <li class="nav-item"
                                     style={{ flex: 1 }}
                                 >
@@ -403,8 +401,6 @@ class Topbar extends Component {
                         </div>
 
                         <div className='end-list-top-cart'>
-
-
                             <li className='nav-item' style={{
                                 display: 'flex', alignItems: "center",
                                 color: "white", fontSize: "15px",
@@ -451,6 +447,10 @@ class Topbar extends Component {
                                         }
 
                                     </li >
+                                   
+                                    <li className='nav-item' style={{ margin: "0 10px",color: "white", cursor: "pointer", marginRight: '10px' }} onClick={this.goBackHome}>
+                                        <i class='fas fa-home fa-2x' style={{ fontSize: "22px" }}></i>
+                                    </li>
 
                                     <li className='nav-item' style={{ margin: "0 10px" }}>
                                         <button className='btn' style={{ color: "white", border: "1px solid" }} data-toggle="modal" data-target="#modalKeyboard">Phím tắt</button>

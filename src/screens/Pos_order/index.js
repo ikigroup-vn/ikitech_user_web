@@ -85,6 +85,13 @@ class PostOrder extends Component {
         this.changeSearch = debounce(this.handleSearch, 1000)
         this.changeDiscount = debounce(this.handleDiscount, 1000)
         this.changePaymentMethod = debounce(this.handlePaymentMethod, 200)
+        this.changeNewState = debounce(this.handleNewState, 1000)
+    }
+
+    handleNewState = (newState) => {
+        // const branch_id = getBranchId()
+        // const { store_code } = this.props.match.params
+        // this.props.updateInfoCarts(store_code, branch_id, this.state.idCart, this.getFormData(newState))
     }
 
     handleChange = (e) => {
@@ -381,6 +388,23 @@ class PostOrder extends Component {
 
     }
 
+
+    getFormData = (newState) => {
+
+        var formdata = {
+            customer_name:newState.txtName ?? this.state.customer_name,
+            customer_phone:newState.txtPhoneNumber ?? this.state.customer_phone,
+            name: this.state.namePos,
+            is_use_points: this.state.checkeds,
+
+            province:newState.txtProvince ?? this.state.txtProvince,
+            district:newState.txtDistrict ?? this.state.txtDistrict,
+            wards:newState.txtWards ?? this.state.txtWards
+        }
+
+        return formdata
+    }
+
     shouldComponentUpdate(nextProps, nextState) {
         if (!shallowEqual(nextState.modalCreateUser, this.state.modalCreateUser)) {
             var { store_code } = this.props.match.params;
@@ -455,7 +479,7 @@ class PostOrder extends Component {
                 name: nextState.namePos,
                 is_use_points: nextState.checkeds,
             }
-            this.props.updateInfoCarts(store_code, branch_id, nextState.idCart, formData)
+            this.props.updateInfoCarts(store_code, branch_id, nextState.idCart, this.getFormData())
         }
 
         if (!shallowEqual(nextState.checkeds, this.state.checkeds) && nextState.haveCheck == true) {
@@ -628,6 +652,16 @@ class PostOrder extends Component {
         };
     };
 
+    onNewChange = (state) => {
+
+
+        this.changeNewState({
+            ...this.state,
+            ...state,
+
+        })
+    }
+
 
     render() {
         var { store_code } = this.props.match.params
@@ -671,23 +705,52 @@ class PostOrder extends Component {
                                     <div className="panel-top" style={{
                                         height: this.state.isShowPanelBottom ? "calc(100% - 225px)" : "calc(100% - 0px)"
                                     }}>
-                                        <div className='col-list-order'>
-                                            <div className='' style={{ padding: "8px" }}>
-                                                {oneCart?.info_cart?.line_items.length > 0 ?
-                                                    <ListItemInCart store_code={store_code} listItemPos={oneCart} idCart={this.state.idCart} handleDelete={this.handleDelete} /> :
-                                                    <div className='product-pos' style={{ textAlign: "center", color: "gray", fontSize: "20px", marginTop: "70px" }}>
+                                        {oneCart?.info_cart?.line_items.length > 0 &&
 
-                                                        <img style={{ width: "14%" }} src="../../images/empty_cart.png" alt=''></img>
-                                                        <div className='title-list-pos ' style={{ color: "black" }}>
-                                                            Đơn hàng của bạn chưa có sản phẩm nào
-                                                        </div>
+                                            <div className='col-list-order'>
+                                                <div className='' style={{ padding: "8px" }}>
+
+                                                    <ListItemInCart store_code={store_code} listItemPos={oneCart} idCart={this.state.idCart} handleDelete={this.handleDelete} />
+
+
+                                                </div>
+
+                                            </div>
+                                        }
+
+                                        {oneCart?.info_cart?.line_items.length == 0 && <div className='col-list-order'>
+                                            <div className='' style={{
+                                                width: "100%;",
+                                                height: "100%",
+                                                alignContent: "center",
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                alignItems: "center",
+                                            }}>
+
+                                                <div className='product-pos' style={{
+                                                    textAlign: "center",
+                                                    color: "gray",
+                                                    fontSize: "20px",
+                                                    marginTop: "70px"
+                                                }}>
+
+                                                    <img style={{
+                                                        width: "50%"
+                                                    }} src="../../images/empty_cart.png" alt=''></img>
+                                                    <div className='title-list-pos ' style={{ color: "black" }}>
+                                                        Đơn hàng của bạn chưa có sản phẩm nào
                                                     </div>
-                                                }
+                                                </div>
+
 
                                             </div>
 
                                         </div>
+                                        }
+
                                     </div>
+
 
                                     <div className="splitter-horizontal" style={{
                                         top: !this.state.isShowPanelBottom ? -20 : 0
@@ -711,6 +774,7 @@ class PostOrder extends Component {
                                         handleCallbackProduct={this.handleCallbackProduct}
                                         onSeletedCustomer={this.onSeletedCustomer}
                                         handleCallbackPertion={this.handleCallbackPertion}
+                                        onNewChange={this.onNewChange}
                                         handleCallbackPushProduct={this.handleCallbackPushProduct} />
 
 
@@ -819,7 +883,9 @@ class PostOrder extends Component {
                                             <div className='row' style={{ padding: "3px 0", justifyContent: "space-between" }}>
                                                 {this.props.oneCart.customer?.name ?
                                                     <>
-                                                        <div className='title-price col-6'>{`Dùng ${oneCart.info_cart?.total_points_can_use} xu [${format(Number(oneCart.info_cart?.bonus_points_amount_can_use))}]`}</div>
+                                                        <div className='title-price' style={{
+                                                            paddingLeft: 16
+                                                        }}>{`Dùng ${oneCart.info_cart?.total_points_can_use} xu [${format(Number(oneCart.info_cart?.bonus_points_amount_can_use))}]`}</div>
                                                         <form action="/action_page.php">
                                                             <div class="custom-control custom-switch">
                                                                 <input type="checkbox" class="custom-control-input" id="switch1" name="example" checked={this.state.checkeds} onChange={this.handChangeCheckbox} />
