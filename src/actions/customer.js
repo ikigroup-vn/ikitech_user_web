@@ -123,7 +123,7 @@ export const createCustomer = (store_code,id , funcModal = null) => {
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -144,7 +144,7 @@ export const createCustomer = (store_code,id , funcModal = null) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -203,7 +203,7 @@ export const editCustomer = (store_code,id,data , funcModal = null) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });

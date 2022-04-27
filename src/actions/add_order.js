@@ -39,7 +39,7 @@ export const createOrder = (store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -54,7 +54,7 @@ export const createOrder = (store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -99,7 +99,7 @@ export const createOrderBill = (store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -114,7 +114,7 @@ export const createOrderBill = (store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -220,7 +220,7 @@ export const fetchAllOrder = (store_code, data) => {
           type: "danger",
           title: "Lỗi",
           disable: "show",
-          content: error.response.data.msg,
+          content: error?.response?.data?.msg,
         },
       });
     });
@@ -291,7 +291,7 @@ export const destroyOneProduct = (store_code, data) => {
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -303,7 +303,7 @@ export const destroyOneProduct = (store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -348,7 +348,7 @@ export const updateQuantityLineItem = (store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -389,7 +389,7 @@ export const subQuantityProduct = (store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -471,7 +471,7 @@ export const fetchAllVoucher = (store_code) => {
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });

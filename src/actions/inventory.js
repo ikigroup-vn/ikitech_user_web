@@ -109,7 +109,7 @@ export const createInventorys = (store_code,branch_id,data) => {
               type: "danger",
               title: "Lỗi",
               disable: "show",
-              content: error.response.data.msg,
+              content: error?.response?.data?.msg,
             },
           });
         })
@@ -124,7 +124,7 @@ export const createInventorys = (store_code,branch_id,data) => {
               type: "danger",
               title: "Lỗi",
               disable: "show",
-              content: error.response.data.msg,
+              content: error?.response?.data?.msg,
             },
           });
         });
@@ -192,7 +192,7 @@ export const handleBalanceInventory = (store_code,branch_id,id) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -207,7 +207,7 @@ export const handleBalanceInventory = (store_code,branch_id,id) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -250,7 +250,7 @@ export const deleteItemInventory = (store_code, branch_id, id) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });

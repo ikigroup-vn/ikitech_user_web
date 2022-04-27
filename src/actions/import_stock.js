@@ -84,7 +84,7 @@ export const createImportStocks = (store_code, branch_id, id) => {
               type: "danger",
               title: "Lỗi",
               disable: "show",
-              content: error.response.data.msg,
+              content: error?.response?.data?.msg,
             },
           });
         });
@@ -127,7 +127,7 @@ export const createImportStocks = (store_code, branch_id, id) => {
               type: "danger",
               title: "Lỗi",
               disable: "show",
-              content: error.response.data.msg,
+              content: error?.response?.data?.msg,
             },
           });
         });
@@ -181,7 +181,7 @@ export const createImportStocks = (store_code, branch_id, id) => {
               type: "danger",
               title: "Lỗi",
               disable: "show",
-              content: error.response.data.msg,
+              content: error?.response?.data?.msg,
             },
           });
         });
@@ -224,7 +224,7 @@ export const createImportStocks = (store_code, branch_id, id) => {
                   type: "danger",
                   title: "Lỗi",
                   disable: "show",
-                  content: error.response.data.msg,
+                  content: error?.response?.data?.msg,
                 },
               });
             });
@@ -267,7 +267,7 @@ export const createImportStocks = (store_code, branch_id, id) => {
               type: "danger",
               title: "Lỗi",
               disable: "show",
-              content: error.response.data.msg,
+              content: error?.response?.data?.msg,
             },
           });
         });

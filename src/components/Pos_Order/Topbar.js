@@ -304,7 +304,7 @@ class Topbar extends Component {
             menu: styles => ({
                 ...styles,
                 width: '600px',
-               
+
             }),
             option: (provided, state) => ({
                 ...provided,
@@ -374,8 +374,13 @@ class Topbar extends Component {
                                     {
                                         listPos !== null && listPos.length > 0 ?
                                             <ul class="navbar-nav" style={{ alignItems: "center" }}>
-                                                <li className={this.state.selectTap === -1 ? "activess nav-item" : 'nav-item'} style={{ display: "flex", alignItems: "center", margin: "0 7px", backgroundColor: "rgb(174 61 52)", color: "white", padding: "8px 10px", borderRadius: "5px" }} >
-                                                    <div className='tab-item' onClick={() => this.handleChooseTab1(listPos[0].id)} style={{ cursor: "pointer", marginRight: "5px" }}>{listPos[0].name}</div>
+                                                <li 
+                                                 onClick={() => this.handleChooseTab1(listPos[0].id)}
+                                                className={this.state.selectTap === -1 ? "activess nav-item item-cart-list" : 'nav-item item-cart-list'} 
+                                              >
+                                                    <div className='tab-item' 
+                                                    style={{ marginRight: "5px" }}
+                                                    >{listPos[0].name}</div>
                                                     {listPos.length > 1 && <i class='fa fa-window-close'
                                                         onClick={() => this.handleDelete(listPos[0].id)}
                                                         data-toggle="modal" data-target="#removeModal"
@@ -385,9 +390,14 @@ class Topbar extends Component {
                                                 {
                                                     listPos.slice(1, listPos.length).map((item, index) => {
                                                         return (
-                                                            <li key={index} className={index === this.state.selectTap ? "activess nav-item" : 'nav-item'} style={{ display: "flex", alignItems: "center", margin: "0 7px", backgroundColor: "rgb(174 61 52)", color: "white", padding: "8px 10px", borderRadius: "5px" }} >
-                                                                <div className='tab-item' onClick={() => this.handleChooseTab(item.id, index)} style={{ cursor: "pointer", marginRight: "5px" }}>{item.name}</div>
-                                                                <i class='fa fa-window-close' onClick={() => this.handleDelete(item.id)} data-toggle="modal" data-target="#removeModal"></i>
+                                                            <li  onClick={() => this.handleChooseTab(item.id, index)}  
+                                                            key={index} className={index === this.state.selectTap ? "activess nav-item item-cart-list" : 'nav-item item-cart-list'} 
+                                                            >
+                                                                <div className='tab-item' 
+                                                               
+                                                                style={{  marginRight: "5px" }}>{item.name}</div>
+                                                                <i class='fa fa-window-close' 
+                                                                onClick={() => this.handleDelete(item.id)} data-toggle="modal" data-target="#removeModal"></i>
                                                             </li >
                                                         )
                                                     })
@@ -401,13 +411,7 @@ class Topbar extends Component {
                         </div>
 
                         <div className='end-list-top-cart'>
-                            <li className='nav-item' style={{
-                                display: 'flex', alignItems: "center",
-                                color: "white", fontSize: "15px",
-                                padding: "10px",
-                                paddingLeft: "25px",
-                                cursor: "pointer"
-                            }} onClick={() => this.handleCreateTab()}>
+                            <li className='nav-item add-cart' onClick={() => this.handleCreateTab()}>
                                 <i class='fas fa-plus' ></i>
                             </li>
 
@@ -442,17 +446,17 @@ class Topbar extends Component {
 
                                     <li className='nav-item' id='btn-full' style={{ margin: "0 10px", color: "white", cursor: "pointer" }} onClick={this.fullScreen}>
                                         {!this.state.fullScreen ?
-                                            <i class='fas fa-expand-arrows-alt fa-2x' style={{ fontSize: "22px" }}></i> :
-                                            <i class='fas fa-compress-arrows-alt' style={{ fontSize: "22px" }}></i>
+                                            <i class='fas fa-expand-arrows-alt fa-2x  add-cart'></i> :
+                                            <i class='fas fa-compress-arrows-alt  add-cart'></i>
                                         }
 
                                     </li >
-                                   
-                                    <li className='nav-item' style={{ margin: "0 10px",color: "white", cursor: "pointer", marginRight: '10px' }} onClick={this.goBackHome}>
-                                        <i class='fas fa-home fa-2x' style={{ fontSize: "22px" }}></i>
+
+                                    <li className='nav-item' style={{ margin: "0 0px", color: "white", cursor: "pointer", marginRight: '10px' }} onClick={this.goBackHome}>
+                                        <i class='fas fa-home fa-2x  add-cart'></i>
                                     </li>
 
-                                    <li className='nav-item' style={{ margin: "0 10px" }}>
+                                    <li className='nav-item' style={{ margin: "0 0px" }}>
                                         <button className='btn' style={{ color: "white", border: "1px solid" }} data-toggle="modal" data-target="#modalKeyboard">Phím tắt</button>
                                     </li>
                                 </ul>

@@ -42,12 +42,12 @@ class PostOrder extends Component {
                 name: "",
                 phone_number: "",
                 debt: 0,
-                id: 0,
+                is_use_points: 0,
             },
             modalCreateUser: "",
             listSuggestion: [],
             txtDiscount: 0,
-            code: "",
+            code_voucher: "",
             note: "",
             page: 1,
             numPage: 6,
@@ -55,7 +55,7 @@ class PostOrder extends Component {
             listPosItem: [],
             idCart: "",
             checked: false,
-            checkeds: false,
+            is_use_points: false,
             selectPrice: -1,
             exchange: 0,
             payment_method_id: 0,
@@ -84,14 +84,31 @@ class PostOrder extends Component {
 
         this.changeSearch = debounce(this.handleSearch, 1000)
         this.changeDiscount = debounce(this.handleDiscount, 1000)
-        this.changePaymentMethod = debounce(this.handlePaymentMethod, 200)
+        this.changePaymentMethod = debounce(this.handlePaymentMethod, 0)
         this.changeNewState = debounce(this.handleNewState, 1000)
     }
 
+
     handleNewState = (newState) => {
-        // const branch_id = getBranchId()
-        // const { store_code } = this.props.match.params
-        // this.props.updateInfoCarts(store_code, branch_id, this.state.idCart, this.getFormData(newState))
+
+
+        if (this.props.oneCart.id == newState.cartId) {
+            this.setState({
+                modalUpdateCart: {
+                    cartId: newState.cartId,
+                    customer_name: newState.txtName,
+                    customer_phone: newState.txtPhoneNumber,
+                    customer_email: newState.txtEmail,
+                    customer_sex: newState.txtSex,
+                    customer_date_of_birth: newState.selectedDate,
+                    address_detail: newState.txtAddressDetail,
+                    province: newState.txtProvince,
+                    district: newState.txtDistrict,
+                    wards: newState.txtWards,
+                },
+            })
+        }
+
     }
 
     handleChange = (e) => {
@@ -112,16 +129,25 @@ class PostOrder extends Component {
         })
     }
     handleDiscount = (e) => {
+
         this.setState({
-
-            txtDiscount: formatNumber(this.state.discount)
-
+            ...this.state,
+            txtDiscount: formatNumber(this.state.discount),
+            modalUpdateCart: {
+                ...this.state.modalUpdateCart,
+                discount: formatNumber(this.state.discount),
+            }
         })
     }
     handlePaymentMethod = (e) => {
 
         this.setState({
-            payment_method_id: e
+            ...this.state,
+            payment_method_id: e,
+            modalUpdateCart: {
+                ...this.state.modalUpdateCart,
+                payment_method_id: e
+            }
         })
     }
 
@@ -267,16 +293,35 @@ class PostOrder extends Component {
         })
     }
 
-    handleCallbackPertion = (modal) => {
-        this.setState({ modalUpdateCart: modal })
-    }
 
     handleCallbackUser = (modal) => {
         this.setState({ modalCreateUser: modal })
     }
 
-    handleCallbackVoucherInput = (modal) => {
-        this.setState({ code: modal })
+
+    handleClearVoucher = () => {
+        const branch_id = getBranchId()
+        const id = this.state.idCart
+        const data = {
+            code_voucher: ""
+        }
+        this.props.fetchVoucher(this.props.match.params.store_code, branch_id, id, data)
+        this.setState({
+            code_voucher: ""
+        })
+    }
+
+    handleCallbackVoucherInput = (code_voucher) => {
+
+        const branch_id = getBranchId()
+        const id = this.state.idCart
+        const data = {
+            code_voucher: code_voucher
+        }
+        this.props.fetchVoucher(this.props.match.params.store_code, branch_id, id, data)
+        this.setState({
+            code_voucher: code_voucher
+        })
     }
 
     handChange = (e) => {
@@ -362,7 +407,7 @@ class PostOrder extends Component {
 
         if (!shallowEqual(nextProps.oneCart, this.props.oneCart) && this.props.loadingHandleChangeQuantity == false) {
             this.setState({
-                code: nextProps.oneCart.code_voucher,
+                code_voucher: nextProps.oneCart.code_voucher,
                 oneCart: nextProps.oneCart,
                 priceCustomer: nextProps.oneCart.info_cart.total_final,
                 totalFinal: nextProps.oneCart.info_cart.total_final,
@@ -372,7 +417,7 @@ class PostOrder extends Component {
                 customerNote: nextProps.oneCart.customer_note ?? "",
                 payment_method_id: nextProps.oneCart.payment_method_id ?? 0,
                 discount: nextProps.oneCart.discount,
-                checkeds: nextProps.oneCart.info_cart.is_use_points !== null ? nextProps.oneCart.info_cart.is_use_points : false
+                is_use_points: nextProps.oneCart.info_cart.is_use_points !== null ? nextProps.oneCart.info_cart.is_use_points : false
             })
         }
         if (!shallowEqual(nextProps.inforCustomer, this.props.inforCustomer)) {
@@ -389,28 +434,7 @@ class PostOrder extends Component {
     }
 
 
-    getFormData = (newState) => {
-
-        var formdata = {
-            customer_name:newState.txtName ?? this.state.customer_name,
-            customer_phone:newState.txtPhoneNumber ?? this.state.customer_phone,
-            name: this.state.namePos,
-            is_use_points: this.state.checkeds,
-
-            province:newState.txtProvince ?? this.state.txtProvince,
-            district:newState.txtDistrict ?? this.state.txtDistrict,
-            wards:newState.txtWards ?? this.state.txtWards
-        }
-
-        return formdata
-    }
-
     shouldComponentUpdate(nextProps, nextState) {
-        if (!shallowEqual(nextState.modalCreateUser, this.state.modalCreateUser)) {
-            var { store_code } = this.props.match.params;
-
-            this.props.handleCreateUsers(store_code, nextState.modalCreateUser)
-        }
         if (!shallowEqual(nextState.listPosItem, this.state.listPosItem) && nextState.listPosItem.product_id != null) {
             const formData = {
                 product_id: nextState.listPosItem.product_id,
@@ -449,63 +473,23 @@ class PostOrder extends Component {
         }
 
 
-        if (!shallowEqual(nextState.txtDiscount, this.state.txtDiscount) ||
-            !shallowEqual(nextState.note, this.state.note) ||
-            !shallowEqual(nextState.payment_method_id, this.state.payment_method_id)
 
-        ) {
+        if (!shallowEqual(nextState.modalUpdateCart, this.state.modalUpdateCart)
+            && nextState.modalUpdateCart?.cartId == this.state.modalUpdateCart.cartId
+            && nextState.modalUpdateCart?.cartId == nextProps.oneCart?.id) {
+
             const branch_id = getBranchId()
             const { store_code } = this.props.match.params
             const formData = {
-                discount: formatNumber(nextState.txtDiscount),
-                code_voucher: nextState.code,
-                name: nextState.namePos,
-                customer_note: nextState.note,
-                payment_method_id: nextState.payment_method_id,
-                customer_name: nextState.oneCart.customer_name,
-                customer_phone: nextState.oneCart.customer_phone,
-                customer_id: nextState.oneCart.customer_id,
+                ...this.state.modalUpdateCart,
+                ...nextState.modalUpdateCart,
+                noUpdateUI: true
             }
-            this.props.updateInfoCart(store_code, branch_id, nextState.idCart, formData)
-        }
 
-        if (!shallowEqual(nextState.modalUpdateCart, this.state.modalUpdateCart)) {
-            const branch_id = getBranchId()
-            const { store_code } = this.props.match.params
-            const formData = {
-                customer_name: nextState.modalUpdateCart.customer_name ?? nextState.oneCart.customer_name,
-                customer_phone: nextState.modalUpdateCart.customer_phone ?? nextState.oneCart.customer_phone,
-                customer_id: nextState.modalUpdateCart.customer_id ?? nextState.oneCart.customer_id,
-                name: nextState.namePos,
-                is_use_points: nextState.checkeds,
-            }
-            this.props.updateInfoCarts(store_code, branch_id, nextState.idCart, this.getFormData())
-        }
-
-        if (!shallowEqual(nextState.checkeds, this.state.checkeds) && nextState.haveCheck == true) {
-            const branch_id = getBranchId()
-            const { store_code } = this.props.match.params
-            const formData = {
-                name: nextState.namePos,
-
-                is_use_points: nextState.checkeds,
-                customer_name: nextState.oneCart.customer_name,
-                customer_phone: nextState.oneCart.customer_phone,
-                customer_id: nextState.oneCart.customer_id,
-            }
             this.props.updateInfoCarts(store_code, branch_id, nextState.idCart, formData)
         }
 
 
-        if (!shallowEqual(nextState.code, this.state.code)) {
-            const branch_id = getBranchId()
-            const id = nextState.idCart
-            const data = {
-                code_voucher: nextState.code
-            }
-            this.props.fetchVoucher(this.props.match.params.store_code, branch_id, id, data)
-
-        }
 
         return true
     }
@@ -556,7 +540,15 @@ class PostOrder extends Component {
     }
 
     handChangeCheckbox = (e) => {
-        this.setState({ checkeds: !this.state.checkeds, haveCheck: true })
+
+        this.setState({
+            ...this.state,
+            is_use_points: !this.state.is_use_points,
+            modalUpdateCart: {
+                ...this.state.modalUpdateCart,
+                is_use_points: !this.state.is_use_points,
+            }
+        })
     }
 
     ChangeTypeDiscount = (type) => {
@@ -576,49 +568,6 @@ class PostOrder extends Component {
         })
     }
 
-    handleDeletePersion = () => {
-        this.handleCallbackPertion(
-            {
-                customer_phone: "",
-                customer_id: "",
-                customer_name: ""
-            }
-        )
-    }
-
-    handleClearVoucher = () => {
-        this.setState({ code: "" })
-    }
-
-    onSeletedCustomer = (customer) => {
-
-        if (customer != null) {
-            this.handleCallbackPertion(
-                {
-                    customer_phone: customer.phone_number,
-                    customer_id: customer.id,
-                    customer_name: customer.name
-                }
-            )
-        }
-    }
-
-    onChangeSelect4 = (selectValue) => {
-
-
-        var customer = selectValue?.customer
-        if (selectValue != null && customer != null) {
-            this.handleCallbackPertion(
-                {
-                    customer_phone: customer.phone_number,
-                    customer_id: customer.id,
-                    customer_name: customer.name
-                }
-            )
-        }
-
-
-    };
 
     onChangeIsShowPanelBottom = () => {
         this.setState({
@@ -653,7 +602,6 @@ class PostOrder extends Component {
     };
 
     onNewChange = (state) => {
-
 
         this.changeNewState({
             ...this.state,
@@ -773,9 +721,9 @@ class PostOrder extends Component {
                                         passNumPage={this.passNumPage} store_code={store_code} products={products}
                                         handleCallbackProduct={this.handleCallbackProduct}
                                         onSeletedCustomer={this.onSeletedCustomer}
-                                        handleCallbackPertion={this.handleCallbackPertion}
                                         onNewChange={this.onNewChange}
-                                        handleCallbackPushProduct={this.handleCallbackPushProduct} />
+                                        handleCallbackPushProduct={this.handleCallbackPushProduct}
+                                    />
 
 
                                 </div>
@@ -888,7 +836,7 @@ class PostOrder extends Component {
                                                         }}>{`Dùng ${oneCart.info_cart?.total_points_can_use} xu [${format(Number(oneCart.info_cart?.bonus_points_amount_can_use))}]`}</div>
                                                         <form action="/action_page.php">
                                                             <div class="custom-control custom-switch">
-                                                                <input type="checkbox" class="custom-control-input" id="switch1" name="example" checked={this.state.checkeds} onChange={this.handChangeCheckbox} />
+                                                                <input type="checkbox" class="custom-control-input" id="switch1" name="example" checked={this.state.is_use_points} onChange={this.handChangeCheckbox} />
                                                                 <label class="custom-control-label" for="switch1"></label>
                                                             </div>
                                                         </form></>
@@ -927,7 +875,11 @@ class PostOrder extends Component {
                                                 <span className='col-6' style={{ textAlign: "end" }}>-{formatNoD((oneCart?.info_cart?.combo_discount_amount))}</span>
                                             </div>
                                             }
-
+                                            {oneCart?.info_cart?.bonus_points_amount_used > 0 && <div className='row item-info'>
+                                                <div className='item-discount-name col-6'>Giảm khi dùng xu</div>
+                                                <span className='col-6' style={{ textAlign: "end" }}>-{formatNoD((oneCart?.info_cart?.bonus_points_amount_used))}</span>
+                                            </div>
+                                            }
 
                                             <hr style={{ width: "100%" }} />
 
@@ -1143,9 +1095,6 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         fetchAllVoucher: (store_code) => {
             dispatch(OrderAction.fetchAllVoucher(store_code))
-        },
-        handleCreateUsers: (store_code, data) => {
-            dispatch(posAction.handleCreateUsers(store_code, data))
         },
         fetchAllBadge: (store_code, branch_id) => {
             dispatch(notificationAction.fetchAllBadge(store_code, branch_id));

@@ -100,7 +100,7 @@ export const updateVoucher = (store_code, voucher, id) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -145,7 +145,7 @@ export const updateVoucherIsEnd = (store_code, voucher, id) => {
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -162,7 +162,7 @@ export const updateVoucherIsEnd = (store_code, voucher, id) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -205,7 +205,7 @@ export const createVoucher = (store_code, voucher) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -268,7 +268,7 @@ export const destroyVoucher = (store_code, id , is_end) => {
                   type: "danger",
                   title: "Lỗi",
                   disable: "show",
-                  content: error.response.data.msg,
+                  content: error?.response?.data?.msg,
                 },
               });
             });
@@ -287,7 +287,7 @@ export const destroyVoucher = (store_code, id , is_end) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -324,7 +324,7 @@ export const uploadImgVoucher = (file) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });

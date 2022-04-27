@@ -108,7 +108,7 @@ export const sendMessage = (store_code, customerId, message) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });

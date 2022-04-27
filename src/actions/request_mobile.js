@@ -71,7 +71,7 @@ export const updateStatus = (store_code, branch_id, id, data) => {
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -87,7 +87,7 @@ export const updateStatus = (store_code, branch_id, id, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });

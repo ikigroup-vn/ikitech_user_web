@@ -121,7 +121,7 @@ export const registerOTP = (form) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -169,7 +169,7 @@ export const login = (form) => {
               type: "danger",
               title: "Lỗi",
               disable: "show",
-              content: error.response.data.msg,
+              content: error?.response?.data?.msg,
             },
           });
         }
@@ -263,7 +263,7 @@ export const forgotOTP = (form) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -311,7 +311,7 @@ export const sendOTP = (phone_number) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -359,7 +359,7 @@ export const sendOTPToEmail = (email) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });

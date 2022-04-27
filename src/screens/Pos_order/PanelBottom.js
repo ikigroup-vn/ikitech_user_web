@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import DatePicker from "react-datepicker";
 import CardProduct from "../../components/Pos_Order/CardProduct";
 import Pagination from '../../components/Pos_Order/Pagination'
+import Dropdown from './component/Dropdown'
 import * as placeAction from "../../actions/place";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import * as dashboardAction from "../../actions/customer";
@@ -36,10 +37,11 @@ class PanelBottom extends Component {
             txtEmail: ""
         }
 
-    
+        this.onChangeNum = debounce(this.handleChangeNum, 0)
+        this.onSearchCustomer = debounce(this.handleSearchCustomer, 500)
 
     }
-  
+
 
     componentDidMount() {
         this.props.fetchPlaceProvince()
@@ -205,11 +207,14 @@ class PanelBottom extends Component {
         }
     }
 
+    componentWillUpdate(nextProps, nextState) {
+
+        this.props.onNewChange(nextState)
+    }
+
     componentWillReceiveProps(nextProps, nextState) {
 
 
-  
-        this.props.onNewChange(this.state)
 
         if (!shallowEqual(this.props.district, nextProps.district)) {
 
@@ -226,102 +231,71 @@ class PanelBottom extends Component {
             })
         }
 
-        if (!shallowEqual(nextProps.oneCart, this.props.oneCart)
-
-            &&
-            !shallowEqual(nextProps.oneCart.customer_id, this.props.oneCart.customer_id)
-        ) {
+        if (!shallowEqual(nextProps.oneCart, this.props.oneCart)) {
 
 
-            if (nextProps.oneCart.customer_id == null || nextProps.oneCart.customer == null) {
-                this.setState({
-                    txtProvince: "",
-                    txtDistrict: "",
-                    txtWards: "",
-                    txtName: "",
-                    txtEmail: "",
-                    txtSex: 0,
-                    txtAddressDetail: "",
-                    txtPhoneNumber: "",
-                    txtEmail: "",
-                    isDisabledButton: false,
-                    selectedDate: "",
-
-                    districtName: "",
-                    wardsName: "",
-                    provinceName: "",
-                })
-                this.onSelectChangeProvinceById("")
-                this.onSelectChangeDistrictById("")
-                this.onSelectChangeWardsById("")
-            } else {
-
-                if (nextProps.oneCart.customer != null) {
-
-                    if (nextProps.oneCart.customer.province != null) {
-                        this.props.fetchPlaceDistrict(nextProps.oneCart.customer.province);
-                    }
-                    if (nextProps.oneCart.customer.district != null) {
-                        this.props.fetchPlaceDistrict_Wards(nextProps.oneCart.customer.district)
-                    }
-
-                    const customer = nextProps.oneCart.customer
-                    this.setState(
-                        {
-                            ...this.state,
-                            txtProvince: customer.province,
-                            txtDistrict: customer.district,
-                            txtWards: customer.wards,
-                            txtName: customer.name,
-                            txtEmail: customer.email,
-                            txtPhoneNumber: customer.phone_number,
-                            txtSex: customer.sex,
-                            txtAddressDetail: customer.address_detail,
-                            txtEmail: customer.email,
-                            selectedDate: customer == null || customer.date_of_birth == null ? "" : new Date(customer.date_of_birth),
-                            isDisabledButton: customer.is_passersby,
-
-                            districtName: customer.district_name,
-                            wardsName: customer.wards_name,
-                            provinceName: customer.province_name,
-                            valueProvince: {
-                                label: customer.province_name,
-                                value: customer.province
-                            },
-
-                            valueDistrict: {
-                                label: customer.district_name,
-                                value: customer.district
-                            },
-
-                            valueWards: {
-                                label: customer.wards_name,
-                                value: customer.wards
-                            },
-                        }
-                    )
-                    // this.onSelectChangeProvinceById(customer.province)
-                    // this.onSelectChangeDistrictById(customer.district)
-                    // this.onSelectChangeWardsById(customer.wards)
-                }
-
+            if (nextProps.oneCart.province != null) {
+                this.props.fetchPlaceDistrict(nextProps.oneCart.province);
+            }
+            if (nextProps.oneCart.district != null) {
+                this.props.fetchPlaceDistrict_Wards(nextProps.oneCart.district)
             }
 
+            const customer = nextProps.oneCart?.customer
+            const oneCart = nextProps.oneCart
 
-        }
-
-
-        if (!shallowEqual(nextProps.customerCreated, this.props.customerCreated) && nextProps.isFromPosAndSave == true) {
-
-            this.props.handleCallbackPertion(
+            this.setState(
                 {
-                    customer_phone: nextProps.customerCreated.phone_number,
-                    customer_id: nextProps.customerCreated.id,
-                    customer_name: nextProps.customerCreated.name
+                    ...this.state,
+                    cartId: oneCart.id,
                 }
             )
 
+            if (oneCart.noUpdateUI != true) {
+
+                this.setState(
+                    {
+                        ...this.state,
+                        cartId: oneCart.id,
+                        txtProvince: oneCart.province ?? "",
+                        txtDistrict: oneCart.district ?? "",
+                        txtWards: oneCart.wards ?? "",
+                        txtName: oneCart.customer_name ?? "",
+                        txtEmail: oneCart.customer_email ?? "",
+                        txtPhoneNumber: oneCart.customer_phone ?? "",
+                        txtSex: oneCart.customer_sex ?? "",
+                        txtAddressDetail: oneCart.address_detail ?? "",
+                        selectedDate: oneCart == null || oneCart.customer_date_of_birth == null ? "" : new Date(oneCart.customer_date_of_birth),
+                        isDisabledButton: oneCart == null || oneCart.customer == null ? false : oneCart.customer.is_passersby,
+
+                        districtName: oneCart.district_name,
+                        wardsName: oneCart.wards_name,
+                        provinceName: oneCart.province_name,
+                        valueProvince: {
+                            label: oneCart.province_name,
+                            value: oneCart.province
+                        },
+
+                        valueDistrict: {
+                            label: oneCart.district_name,
+                            value: oneCart.district
+                        },
+
+                        valueWards: {
+                            label: oneCart.wards_name,
+                            value: oneCart.wards
+                        },
+                    }
+                )
+            }
+
+
+            // this.onSelectChangeProvinceById(customer.province)
+            // this.onSelectChangeDistrictById(customer.district)
+            // this.onSelectChangeWardsById(customer.wards)
+
         }
+
 
     }
 
@@ -338,7 +312,7 @@ class PanelBottom extends Component {
         });
     };
 
-    onChangeNum = (p) => {
+    handleChangeNum = (p) => {
         this.setState({
             txtPhoneNumber: p,
         });
@@ -415,14 +389,48 @@ class PanelBottom extends Component {
 
     }
 
-    onSearchCustomer = (va) => {
+    handleSearchCustomer = (va) => {
         var { store_code } = this.props;
         var params = `&search=${va}`;
         this.props.fetchAllCustomer(store_code, 1, params);
     }
 
     onSeletedCustomer = (cus) => {
-        this.props.onSeletedCustomer(cus)
+        this.setState(
+            {
+                ...this.state,
+                txtProvince: cus.province ?? "",
+                txtDistrict: cus.district ?? "",
+                txtWards: cus.wards ?? ""
+                ,
+                txtName: cus.name ?? "",
+                txtEmail: cus.email ?? "",
+                txtPhoneNumber: cus.phone_number ?? "",
+
+                txtSex: cus.sex ?? "",
+                txtAddressDetail: cus.address_detail ?? "",
+                selectedDate: cus == null || cus.customer_date_of_birth == null ? "" : new Date(cus.customer_date_of_birth),
+                isDisabledButton: cus == null ? false : cus.is_passersby,
+
+                districtName: cus.district_name,
+                wardsName: cus.wards_name,
+                provinceName: cus.province_name,
+                valueProvince: {
+                    label: cus.province_name,
+                    value: cus.province
+                },
+
+                valueDistrict: {
+                    label: cus.district_name,
+                    value: cus.district
+                },
+
+                valueWards: {
+                    label: cus.wards_name,
+                    value: cus.wards
+                },
+            }
+        )
     }
 
 
@@ -579,7 +587,6 @@ class PanelBottom extends Component {
                         value={txtPhoneNumber || ""}
                         onChange={this.onChangeNum}
                         name="txtPhoneNumber"
-
                         onSearch={this.onSearchCustomer}
                         icon="fa fa-solid fa-phone"
                         items={this.props.customers?.data ?? []}
@@ -902,7 +909,7 @@ class PanelBottom extends Component {
                 <div class="col-md-2 col-6">
                     <button id="btnSaveCustomer"
                         onClick={this.onSaveCustomer}
-                        class="btn btn-yes-pos mt-2 mb-md-0 mb-2"> <i class="fa fa-user-o" aria-hidden="true"></i> Lưu thông tin</button>
+                        class="btn btn-yes-pos"> <i class="fa fa-user-o" aria-hidden="true"></i> Lưu thông tin</button>
                 </div>
             </div>
         </div >
@@ -1031,71 +1038,8 @@ class PanelBottom extends Component {
     }
 }
 
-class Dropdown extends React.Component {
 
-    constructor(props) {
-        super(props)
-    }
-    render() {
-        var { children,
-            isOpen,
-            target,
-            onClose } = this.props
-        return <div style={{ position: 'relative' }}>
 
-            {isOpen ? <Menu>{children}</Menu> : null}
-            {isOpen ? <Blanket onClick={onClose} /> : null}
-
-            {target}
-        </div>;
-    }
-}
-
-class Blanket extends React.Component {
-    constructor(props) {
-        super(props)
-    }
-    render() {
-
-        return <div
-            style={{
-                bottom: 0,
-                left: 0,
-                top: 0,
-                right: 0,
-                position: 'fixed',
-                zIndex: 1,
-            }}
-            {...this.props}
-        />
-
-    };
-
-}
-
-class Menu extends React.Component {
-    constructor(props) {
-        super(props)
-    }
-    render() {
-
-        var { shadow } = this.props
-        return (
-            <div
-                style={{
-                    backgroundColor: 'white',
-                    borderRadius: 4,
-                    boxShadow: `0 0 0 1px ${shadow}, 0 4px 11px ${shadow}`,
-                    marginTop: 8,
-                    position: 'absolute',
-                    zIndex: 3,
-                }}
-                {...this.props}
-            />
-        );
-    };
-
-}
 
 const mapStateToProps = (state) => {
     return {

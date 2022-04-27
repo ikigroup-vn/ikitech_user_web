@@ -385,8 +385,8 @@ pre {
 }
 
 .card-product-pos:hover {
-    border: 1px solid #dacf57 !important;
-    background-color: #fffef3;
+    border: 2px solid #dacf57 !important;
+    background-color: #f9f4e6;
     border-radius: 2%;
 }
 
@@ -401,7 +401,7 @@ pre {
 
 .card-product-pos .image-product {
     border-radius: 2%;
-    background-color: #fffef3;
+    background-color: #f9f4e6;
 
 }
 
@@ -532,13 +532,13 @@ pre {
 .day-of-birth-pos {
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
-    flex:1;
+    flex: 1;
 
 }
 
 
 .autocomplete-input-item {
-    overflow: hidden; 
+    overflow: hidden;
     text-overflow: ellipsis;
 }
 
@@ -546,3 +546,30 @@ pre {
     background-color: #eee;
 }
 
+.add-cart {
+    display: flex;
+    align-items: center;
+    color: white;
+    font-size: 20px;
+    padding: 15px;
+    cursor: pointer
+}
+
+.add-cart:hover {
+    background-color: rgba(255, 255, 255, 0.187);
+}
+
+.item-cart-list {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    margin: 0 7px;
+    background-color: rgb(174 61 52);
+    color: white;
+    padding: 7px 12px;
+    border-radius: 5px;
+}
+
+.item-cart-list:hover {
+    background-color: rgb(142, 51, 44);
+}
