@@ -10,6 +10,8 @@ import moment from "moment";
 import * as helper from "../../ultis/helpers";
 import { dateToNumber } from "xlsx-populate/lib/dateConverter";
 import { getBranchId } from "../../ultis/branchUtils";
+import themeData from "../../ultis/theme_data";
+
 class ModalPostDate extends Component {
   constructor(props) {
     super(props);
@@ -82,8 +84,8 @@ class ModalPostDate extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{ background: "white" }}>
-              <h4 class="modal-title" style={{ color: "black" }}>
+            <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+              <h4 class="modal-title" >
                 Chọn ngày
               </h4>
 
@@ -140,7 +142,7 @@ class ModalPostDate extends Component {
                 >
                   Đóng
                 </button>
-                <button type="submit" class="btn btn-info">
+                <button type="submit" class="btn btn-warning">
                   Lưu
                 </button>
               </div>

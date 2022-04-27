@@ -9,18 +9,22 @@ import { isEmpty } from "../../../../ultis/helpers";
 import moment from "moment";
 import MomentInput from "react-moment-input";
 import "./style.css";
+import themeData from "../../../../ultis/theme_data";
+import { randomString } from "../../../../ultis/helpers"
 class Modal extends Component {
   constructor(props) {
     super(props);
     this.state = {
       name: "",
-      code: "",
+      code: randomString(8),
       start_work_hour: 0,
       start_work_minute: 0,
       end_work_hour: 0,
       end_work_minute: 0,
       start_break_hour: 0,
       start_break_minute: 0,
+      icon :false,
+
       end_break_hour: 0,
       end_break_minute: 0,
       minutes_late_allow: 0,
@@ -68,7 +72,7 @@ class Modal extends Component {
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   onChange = (e) => {
     var target = e.target;
@@ -98,7 +102,6 @@ class Modal extends Component {
         minutes_late_allow: 0,
         minutes_early_leave_allow: 0,
         days_of_week_list: [],
-
         isCheck: false,
       });
     }
@@ -140,18 +143,18 @@ class Modal extends Component {
       });
       return;
     }
-    if (code == null || !isEmpty(code)) {
-      this.props.showError({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "danger",
-          title: "Lỗi",
-          disable: "show",
-          content: "Mã ca không được để trống",
-        },
-      });
-      return;
-    }
+    // if (code == null || !isEmpty(code)) {
+    //   this.props.showError({
+    //     type: Types.ALERT_UID_STATUS,
+    //     alert: {
+    //       type: "danger",
+    //       title: "Lỗi",
+    //       disable: "show",
+    //       content: "Mã ca không được để trống",
+    //     },
+    //   });
+    //   return;
+    // }
     if (days_of_week_list.length === 0) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
@@ -328,14 +331,18 @@ class Modal extends Component {
       });
     }
   };
-  handleCheck = () => {
+  onChangeIcon = () =>
+  {
+    this.setState({icon: !this.state.icon})
+  }
+  handleCheck = (e) => {
     if (this.state.days_of_week_list.length === 7) {
       this.setState({
-        days_of_week_list: [],
+        days_of_week_list: [], isCheck: e.target.checked
       });
     } else {
       this.setState({
-        days_of_week_list: [...this.state.list_days_of_week_list],
+        days_of_week_list: [...this.state.list_days_of_week_list], isCheck: e.target.checked
       });
     }
   };
@@ -372,7 +379,7 @@ class Modal extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
               <h4 class="modal-title">Thêm ca chấm công</h4>
 
               <button
@@ -405,7 +412,7 @@ class Modal extends Component {
                     onChange={this.onChange}
                   />
                 </div>
-                <div class="form-group">
+                {/* <div class="form-group">
                   <label>Mã ca</label>
                   <input
                     type="text"
@@ -417,7 +424,7 @@ class Modal extends Component {
                     autocomplete="off"
                     onChange={this.onChange}
                   />
-                </div>
+                </div> */}
                 <div class="form-group">
                   <label for="product_name">Thời gian ca</label>
 
@@ -443,9 +450,9 @@ class Modal extends Component {
                     onSave={this.onChangeStart}
                     onChange={this.onChangeStart}
                     style={{ marginBottom: "0.5rem" }}
-                    // onChange={(date) => {
-                    //   console.log(date);
-                    // }}
+                  // onChange={(date) => {
+                  //   console.log(date);
+                  // }}
                   />
 
                   <MomentInput
@@ -496,9 +503,9 @@ class Modal extends Component {
                     onSave={this.onChangeStart2}
                     onChange={this.onChangeStart2}
                     style={{ marginBottom: "0.5rem" }}
-                    // onChange={(date) => {
-                    //   console.log(date);
-                    // }}
+                  // onChange={(date) => {
+                  //   console.log(date);
+                  // }}
                   />
 
                   <MomentInput
@@ -521,7 +528,7 @@ class Modal extends Component {
                     }}
                     onSave={this.onChangeEnd2}
                     onChange={this.onChangeEnd2}
-                    // onChange={this.onChangeEnd}
+                  // onChange={this.onChangeEnd}
                   />
                 </div>
 
@@ -552,15 +559,14 @@ class Modal extends Component {
                         return (
                           <button
                             type="button"
-                            class={`btn btn-primary btn-day ${
-                              days_of_week_list.some(
-                                (e) =>
-                                  Object.entries(e).toString() ===
-                                  Object.entries(value).toString()
-                              )
+                            class={`btn btn-primary btn-day ${days_of_week_list.some(
+                              (e) =>
+                                Object.entries(e).toString() ===
+                                Object.entries(value).toString()
+                            )
                                 ? "active"
                                 : ""
-                            }`}
+                              }`}
                             index={value.id}
                             onClick={() => {
                               this.handleDayClick(value);
@@ -576,12 +582,14 @@ class Modal extends Component {
                 <div id="accordion">
                   <div>
                     <button
+                                    onClick = {this.onChangeIcon}
+
                       id="headingOne"
                       class="btn btn-link btn-collapse btn-accordion-collapse"
-                      data-toggle="collapse"
-                      data-target="#collapseOne"
-                      aria-expanded="false"
-                      aria-controls="collapseOne"
+                      // data-toggle="collapse"
+                      // data-target="#collapseOne"
+                      // aria-expanded="false"
+                      // aria-controls="collapseOne"
                       type="button"
                       style={{
                         width: "100%",
@@ -600,19 +608,22 @@ class Modal extends Component {
                         class="mb-0 f-flex"
                         style={{ fontWeight: "bold", position: "relative" }}
                       >
-                        <span>Cài đặt nâng cao</span>
+                        <span>Cài đặt nâng cao</span>        <i
+                    class={this.state.icon ? "fa fa-caret-down" : "fa fa-caret-up"}
+                    // style={{ fontSize: "0.2px", color: "#abacb4" }}
+                  ></i>
 
-                        <i
+                        {/* <i
                           class="fa"
                           aria-hidden="true"
                           style={{ position: "absolute", right: 0 }}
-                        ></i>
+                        ></i> */}
                       </h6>
                     </button>
 
                     <div
                       id="collapseOne"
-                      class="collapse show"
+                      class={`collapse ${this.state.icon ? "show" : "hide"}`}
                       aria-labelledby="headingOne"
                       data-parent="#accordion"
                     >
@@ -671,14 +682,17 @@ class Modal extends Component {
               </div>
               <div class="modal-footer">
                 <button
-                  type="submit"
-                  class="btn btn-info btn-icon-split btn-sm"
+                  type="button"
+                  class="btn btn-default"
+                  data-dismiss="modal"
                 >
-                  <span class="icon text-white-50">
-                    <i class="fas fa-save"></i>
-                  </span>
-                  <span class="text">Lưu</span>
+                  Đóng
                 </button>
+                <button type="submit" class="btn btn-warning">
+                  Tạo
+
+                </button>
+
               </div>
             </form>
           </div>

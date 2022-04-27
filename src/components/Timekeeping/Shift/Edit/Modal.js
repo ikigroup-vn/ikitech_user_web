@@ -14,6 +14,7 @@ import "../Create/style.css";
 
 // import CurrencyInput from "react-currency-input-field";
 // import Select from "react-select";
+import themeData from "../../../../ultis/theme_data";
 
 class Modal extends Component {
   constructor(props) {
@@ -29,6 +30,8 @@ class Modal extends Component {
       start_break_minute: 0,
       end_break_hour: 0,
       end_break_minute: 0,
+      icon :false,
+
       minutes_late_allow: 0,
       minutes_early_leave_allow: 0,
       days_of_week_list: [],
@@ -107,6 +110,8 @@ class Modal extends Component {
         end_break_hour: 0,
         end_break_minute: 0,
         minutes_late_allow: 0,
+        icon :false,
+
         minutes_early_leave_allow: 0,
         days_of_week_list: [],
 
@@ -128,10 +133,12 @@ class Modal extends Component {
         start_break_hour: shiftDetail?.start_break_hour,
         start_break_minute: shiftDetail?.start_break_minute,
         end_break_hour: shiftDetail?.end_break_hour,
+        icon :shiftDetail?.minutes_late_allow > 0 || shiftDetail?.minutes_early_leave_allow >0 ? true : false ,
+
         end_break_minute: shiftDetail?.end_break_minute,
         minutes_late_allow: shiftDetail?.minutes_late_allow,
         minutes_early_leave_allow: shiftDetail?.minutes_early_leave_allow,
-
+        isCheck : shiftDetail?.days_of_week_list.length == 7 ?true : false,
         days_of_week_list: this.state.list_days_of_week_list.filter((e) => {
           return shiftDetail?.days_of_week_list?.includes(e.value);
         }),
@@ -360,17 +367,21 @@ class Modal extends Component {
       });
     }
   };
-  handleCheck = () => {
+  handleCheck = (e) => {
     if (this.state.days_of_week_list.length === 7) {
       this.setState({
-        days_of_week_list: [],
+        days_of_week_list: [], isCheck : e.target.checked
       });
     } else {
       this.setState({
-        days_of_week_list: [...this.state.list_days_of_week_list],
+        days_of_week_list: [...this.state.list_days_of_week_list], isCheck : e.target.checked
       });
     }
   };
+  onChangeIcon = () =>
+  {
+    this.setState({icon: !this.state.icon})
+  }
   render() {
     const { shiftDetail, shift_id } = this.props;
 
@@ -405,7 +416,7 @@ class Modal extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header">
+          <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
               <h4 class="modal-title">Sửa ca chấm công</h4>
 
               <button
@@ -439,7 +450,7 @@ class Modal extends Component {
                   />
                 </div>
 
-                <div class="form-group">
+                {/* <div class="form-group">
                   <label>Mã ca</label>
                   <input
                     type="text"
@@ -451,7 +462,7 @@ class Modal extends Component {
                     autocomplete="off"
                     onChange={this.onChange}
                   />
-                </div>
+                </div> */}
                 <div class="form-group">
                   <label for="product_name">Thời gian ca</label>
 
@@ -615,12 +626,14 @@ class Modal extends Component {
                 <div id="accordion">
                   <div>
                     <button
+                                                        onClick = {this.onChangeIcon}
+
                       id="headingOne"
                       class="btn btn-link btn-collapse btn-accordion-collapse"
-                      data-toggle="collapse"
-                      data-target="#collapseOne"
-                      aria-expanded="false"
-                      aria-controls="collapseOne"
+                      // data-toggle="collapse"
+                      // data-target="#collapseOne"
+                      // aria-expanded="false"
+                      // aria-controls="collapseOne"
                       type="button"
                       style={{
                         width: "100%",
@@ -639,19 +652,18 @@ class Modal extends Component {
                         class="mb-0 f-flex"
                         style={{ fontWeight: "bold", position: "relative" }}
                       >
-                        <span>Cài đặt nâng cao</span>
+                        <span>Cài đặt nâng cao</span>  <i
+                    class={this.state.icon ? "fa fa-caret-down" : "fa fa-caret-up"}
+                    // style={{ fontSize: "0.2px", color: "#abacb4" }}
+                  ></i>
 
-                        <i
-                          class="fa"
-                          aria-hidden="true"
-                          style={{ position: "absolute", right: 0 }}
-                        ></i>
+                       
                       </h6>
                     </button>
 
                     <div
                       id="collapseOne"
-                      class="collapse show"
+                      class={`collapse ${this.state.icon ? "show" : "hide"}`}
                       aria-labelledby="headingOne"
                       data-parent="#accordion"
                     >
@@ -709,35 +721,29 @@ class Modal extends Component {
                 </div>
               </div>
               <div class="modal-footer">
-                <button
-                  type="button"
-                  onClick={(e) => {
-                    this.handleDelCallBack(
-                      e,
-                      this.props.store_code,
-                      this.props.branch_id,
-                      shiftDetail.id,
-                      shiftDetail.name
-                    );
-                  }}
-                  data-toggle="modal"
-                  data-target="#removeModal"
-                  class={`btn btn-danger btn-icon-split btn-sm`}
+              <button
+              class="btn btn-danger"
+                   type="button"
+                   onClick={(e) => {
+                     this.handleDelCallBack(
+                       e,
+                       this.props.store_code,
+                       this.props.branch_id,
+                       shiftDetail.id,
+                       shiftDetail.name
+                     );
+                   }}
+                   data-toggle="modal"
+                   data-target="#removeModal"
                 >
-                  <span class="icon text-white-50">
-                    <i class="fa fa-trash"></i>
-                  </span>
-                  <span class="text">Xóa</span>
+                  Xóa
                 </button>
-                <button
-                  type="submit"
-                  class="btn btn-info btn-icon-split btn-sm"
-                >
-                  <span class="icon text-white-50">
-                    <i class="fas fa-save"></i>
-                  </span>
-                  <span class="text">Sửa</span>
+                <button type="submit" class="btn btn-warning">
+                  Lưu
+
                 </button>
+            
+     
                 {/* <button type="submit" class="btn btn-info">
                         Tạo
                       </button> */}

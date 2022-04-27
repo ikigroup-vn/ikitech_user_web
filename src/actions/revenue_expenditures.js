@@ -123,7 +123,7 @@ export const createRevenueExpenditures = (
     revenueExpendituresApi
       .createRevenueExpenditures(store_code, branch_id, data)
       .then((res) => {
-        if(res.data.success && funcModal ){
+        if (res.data.success && funcModal) {
           funcModal()
         }
 
@@ -131,48 +131,51 @@ export const createRevenueExpenditures = (
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
-        if(getForCustomer)
-        {
-          revenueExpendituresApi
-          .fetchAllRevenueExpenditures(store_code, branch_id, 1, params)
-          .then((res) => {
-            dispatch({
-              type: Types.SHOW_LOADING,
-              loading: "hide",
-            });
-            // dispatch({
-            //   type: Types.SHOW_LOADING_LAZY,
-            //   loading: "hide",
-            // });
-            if (res.data.code !== 401)
-              dispatch({
-                type: Types.FETCH_ALL_REVENUE_EXPENDITURES,
-                data: res.data.data,
-              });
-          });        }
-        else
-        {
-          storeApi
-          .fetchReportExpenditure(store_code, branch_id, 1, params)
-          .then((res) => {
-            if (res.data.code === 200)
-              dispatch({
-                type: Types.FETCH_REPORT_EXPENDITURE,
-                data: res.data.data,
-              });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
 
-            dispatch({
-              type: Types.ALERT_UID_STATUS,
-              alert: {
-                type: "success",
-                title: "Thành công ",
-                disable: "show",
-                content: res.data.msg,
-              },
+
+        if (getForCustomer) {
+          console.log(getForCustomer)
+          revenueExpendituresApi
+            .fetchAllRevenueExpenditures(store_code, branch_id, 1, params)
+            .then((res) => {
+              dispatch({
+                type: Types.SHOW_LOADING,
+                loading: "hide",
+              });
+              // dispatch({
+              //   type: Types.SHOW_LOADING_LAZY,
+              //   loading: "hide",
+              // });
+              if (res.data.code !== 401)
+                dispatch({
+                  type: Types.FETCH_ALL_REVENUE_EXPENDITURES,
+                  data: res.data.data,
+                });
             });
-          });
         }
-        
+        else {
+          storeApi
+            .fetchReportExpenditure(store_code, branch_id, 1, params)
+            .then((res) => {
+              if (res.data.code === 200)
+                dispatch({
+                  type: Types.FETCH_REPORT_EXPENDITURE,
+                  data: res.data.data,
+                });
+
+          
+            });
+        }
+
       })
       .catch(function (error) {
         dispatch({

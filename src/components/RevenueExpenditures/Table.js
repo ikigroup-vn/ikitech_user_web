@@ -103,12 +103,6 @@ class Table extends Component {
             >
               <td>{per_page * (current_page - 1) + (index + 1)}</td>
               <td>{data.code}</td>
-
-              <td>
-                {data.staff !== null ? data.staff?.name : data.user?.name}
-              </td>
-
-              <td>{data.created_at}</td>
               <td>
                 {data.is_revenue ? (
                   <p style={{ color: " rgb(54 185 204)" }}>Phiếu thu</p>
@@ -120,14 +114,22 @@ class Table extends Component {
                 {new Intl.NumberFormat("vi-VN", {
                   style: "currency",
                   currency: "VND",
-                }).format(data?.current_money)}
+                }).format(data?.change_money)}
               </td>
               <td>
                 {new Intl.NumberFormat("vi-VN", {
                   style: "currency",
                   currency: "VND",
-                }).format(data?.change_money)}
+                }).format(data?.current_money)}
               </td>
+        
+              <td>
+                {data.staff !== null ? data.staff?.name : data.user?.name}
+              </td>
+
+              <td>{data.created_at}</td>
+        
+    
               <td>{data?.type_action_name}</td>
             </tr>
           </React.Fragment>
@@ -166,8 +168,6 @@ class Table extends Component {
               <tr>
                 <th>STT</th>
                 <th>Mã</th>
-                <th>Nhân viên</th>
-                <th>Ngày tạo</th>
                 <th>
                   {" "}
                   <div style={{ display: "flex" }}>
@@ -185,9 +185,13 @@ class Table extends Component {
                     </select>
                   </div>
                 </th>
-                <th>Số tiền hiện tại</th>
                 <th>Số tiền thay đổi</th>
-                <th>Hành động</th>
+
+                <th>Số nợ hiện tại</th>
+                <th>Nhân viên</th>
+                <th>Ngày tạo</th>
+
+                <th>Trạng thái</th>
               </tr>
             </thead>
 

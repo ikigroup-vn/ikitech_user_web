@@ -4,6 +4,7 @@ import { shallowEqual } from "../../../ultis/shallowEqual";
 import $ from "jquery";
 import ModalEdit from "./Edit/Modal";
 import ModalDelete from "./Delete/Modal";
+import { connect } from "react-redux";
 
 class Table extends Component {
   constructor(props) {
@@ -92,6 +93,42 @@ class Table extends Component {
                   .join("")
                   .slice(0, -2)}
               </td>
+              <td style={{
+                display: "flex",
+                justifyContent: "space-around"
+
+              }}>
+                <button
+                  class={`btn btn-warning btn-sm `}
+                  data-toggle="modal"
+                  data-target="#modalEdit"
+                  name = ""
+                  onClick={() =>
+                    
+                    this.setState({
+                      idModalShow: data.id,
+                    })
+                  }
+                >
+                  <i class="fa fa-edit"></i> Sửa
+                </button>
+                <button
+                  onClick={(e) => {
+                    this.handleDelCallBack(
+                      e,
+                      this.props.store_code,
+                      this.props.branch_id,
+                      this.props.shiftDetail.id,
+                      this.props.shiftDetail.name
+                    );
+                  }}
+                  data-toggle="modal"
+                  data-target="#removeModal"
+                  class={`btn btn-danger btn-sm`}
+                >
+                  <i class="fa fa-trash"></i> Xóa
+                </button>
+              </td>
             </tr>
           </React.Fragment>
         );
@@ -128,6 +165,8 @@ class Table extends Component {
                 <th>Phút đi trễ cho phép </th>
                 <th>Phút về sớm cho phép</th>
                 <th>Ngày trong tuần</th>
+                <th>Hành động</th>
+
               </tr>
             </thead>
 
@@ -150,4 +189,14 @@ class Table extends Component {
   }
 }
 
-export default Table;
+const mapStateToProps = (state) => {
+  return {
+    shiftDetail: state.shiftReducers.shift.shiftId,
+  };
+};
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Table);

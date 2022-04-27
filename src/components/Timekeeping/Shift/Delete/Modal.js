@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as shiftAction from "../../../../actions/shift";
+import themeData from "../../../../ultis/theme_data";
 
 class Modal extends Component {
   onSave = (e) => {
@@ -26,7 +27,9 @@ class Modal extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{ background: "#47d3b0" }}>
+          <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+          <h4 class="modal-title">Thông báo</h4>
+
               <button
                 type="button"
                 class="close"
@@ -46,8 +49,7 @@ class Modal extends Component {
               <div class="modal-body">
                 <input type="hidden" name="remove_id_store" />
                 <div class="alert-remove"></div>
-                <h3>Thông báo!</h3>
-                Bạn có chắc muốn xóa {modal.table} này không?
+                Bạn có muốn xóa ca chấm công này không ?
               </div>
               <div class="modal-footer">
                 <button
@@ -57,7 +59,7 @@ class Modal extends Component {
                 >
                   Đóng
                 </button>
-                <button type="submit" class="btn btn-info">
+                <button type="submit" class="btn btn-warning">
                   Xóa
                 </button>
               </div>

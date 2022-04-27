@@ -11,6 +11,8 @@ import { AsyncPaginate } from "react-select-async-paginate";
 import * as customerAction from "../../actions/customer";
 import Select from "react-select";
 import "./style.css";
+import themeData from "../../ultis/theme_data";
+
 class ModalExpenditures extends Component {
   constructor(props) {
     super(props);
@@ -278,7 +280,7 @@ class ModalExpenditures extends Component {
           type: "danger",
           title: "Lỗi",
           disable: "show",
-          content: "Nhóm người nộp không được để trống",
+          content: "Nhóm người nhận không được để trống",
         },
       });
       return;
@@ -316,22 +318,30 @@ class ModalExpenditures extends Component {
       allow_accounting,
       description,
     });
-    var funcModal = null
+    var funcModal = null;
+    var getForId = null
     if(this.props.notDate == true && this.props.customer)
     {
+      getForId = true
       var params = `&recipient_group=0&recipient_references_id=${this.props.customer.id}`;
-      funcModal = function()
-      {
+      funcModal = function () {
         window.$('.modal').modal('hide')
       }
-    
     }
     else if(this.props.notDate == true && this.props.supplierID)
     {
-      var params = `&recipient_group=1&recipient_references_id=${this.props.supplierID.id}`;
+      getForId = true
+      funcModal = function () {
+        window.$('.modal').modal('hide')
+      }
+      var params = `&recipient_group=1&recipient_references_id=${this.props.supplierID.id || 0}`;
     }
     else
     {
+      getForId = false
+      funcModal = function () {
+        window.$('.modal').modal('hide')
+      }
       var params = `&search=${this.props.searchValue}&limit=${this.props.limit}&date_from=${this.props.datePrime.from}&date_to=${this.props.datePrime.to}`;
     }
    
@@ -379,7 +389,7 @@ class ModalExpenditures extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
               <h4 class="modal-title">Thêm phiếu chi</h4>
 
               <button
@@ -437,7 +447,7 @@ class ModalExpenditures extends Component {
                   <Select
                     isClearable
                     isSearchable
-                    placeholder="-- Chọn loại phiếu thu --"
+                    placeholder="-- Chọn loại phiếu chi --"
                     value={type}
                     options={listType}
                     name="listType"
@@ -474,9 +484,9 @@ class ModalExpenditures extends Component {
                     )}
                     {recipient_group?.value === 0 && (
                       <>
-                        <label>Chọn người nộp</label>
+                        <label>Chọn người nhận</label>
                         <AsyncPaginate
-                          placeholder="-- Chọn người nộp --"
+                          placeholder="-- Chọn người nhận --"
                           value={recipient_references_id}
                           loadOptions={this.loadOptions1}
                           // loadOptions={this.loadOptions1}
@@ -493,9 +503,9 @@ class ModalExpenditures extends Component {
                     )}
                     {recipient_group?.value === 1 && (
                       <>
-                        <label>Chọn người nộp</label>
+                        <label>Chọn người nhận</label>
                         <AsyncPaginate
-                          placeholder="-- Chọn người nộp --"
+                          placeholder="-- Chọn người nhận --"
                           value={recipient_references_id}
                           loadOptions={this.loadOptions2}
                           // loadOptions={this.loadOptions1}
@@ -564,7 +574,7 @@ class ModalExpenditures extends Component {
                 >
                   Đóng
                 </button>
-                <button type="submit" class="btn btn-info">
+                <button type="submit" class="btn btn-warning">
                   Tạo
                 </button>
               </div>
@@ -591,7 +601,7 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(error);
     },
     createRevenueExpenditures: (id, branch_id, data, params,funcModal,
-      getForId = true) => {
+      getForId = null) => {
       dispatch(
         revenueExpendituresAction.createRevenueExpenditures(
           id,
