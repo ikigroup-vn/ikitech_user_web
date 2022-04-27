@@ -61,7 +61,7 @@ export const addProductInCart = (store_code, branch_id, id_cart, data) => {
         });
 
 
-        
+
       })
   };
 };
@@ -439,8 +439,21 @@ export const paymentOrderPos = (store_code, branch_id, id, data) => {
       type: Types.SHOW_LOADING,
       loading: "show"
     })
+    dispatch({
+      type: Types.POS_ORDER_PAYMENT_LOADING,
+      loadingOrder: true
+    })
     PosApi.paymentOrderPos(store_code, branch_id, id, data)
       .then((res) => {
+        dispatch({
+          type: Types.POS_ORDER_PAYMENT_SUCCESS,
+          data: {
+            orderAfterPayment: res.data.data,
+            loadingOrder: false,
+            allowAutoPrint: data.allowAutoPrint
+          }
+        })
+
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide"

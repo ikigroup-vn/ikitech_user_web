@@ -5,12 +5,38 @@ var initialState = {
   oneCart: [],
   loadingCart: true,
   inforCustomer: "",
-  loadingHandleChangeQuantity: false
+  loadingHandleChangeQuantity: false,
+  orderAfterPayment: {},
+  loadingOrder: false,
+  allowAutoPrint: false
 };
 
 export const pos_reducer = (state = initialState, action) => {
   let newState = { ...state };
   switch (action.type) {
+
+    case Types.POS_ORDER_PAYMENT_LOADING:
+      newState.orderAfterPayment = {};
+      newState.loadingOrder = true;
+      return newState;
+
+    case Types.POS_ORDER_PAYMENT_SUCCESS:
+      newState.orderAfterPayment = action.data.orderAfterPayment;
+      newState.loadingOrder = false;
+      newState.allowAutoPrint = action.data.allowAutoPrint;
+      return newState;
+
+    case Types.POS_ORDER_PAYMENT_FAILD:
+      newState.orderAfterPayment = {};
+      newState.loadingOrder = false;
+      newState.allowAutoPrint = false;
+      return newState;
+
+    case Types.POS_ORDER_PAYMENT_LOADING:
+      newState.orderAfterPayment = action.data;
+      newState.loadingOrder = action.data;
+      newState.allowAutoPrint = false;
+      return newState;
     case Types.FETCH_LIST_POS_ORDER:
       newState.listPosOrder = action.data;
       newState.loadingCart = false;

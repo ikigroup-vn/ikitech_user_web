@@ -136,6 +136,7 @@ import PostOrder from "./screens/Pos_order";
 import Setting from "./screens/Setting";
 import ProductInventory from "./screens/ProductInventory";
 import getChannel, { IKIPOS, IKITECH } from "./ultis/channel";
+import PrintOrderScreen from "./screens/Bill/PrintOrderScreen";
 const routes = [
   {
     path: "/decentralization/index/:store_code",
@@ -314,9 +315,9 @@ const routes = [
     path: "/supplier/detail/:store_code/:supplierId",
     exact: true,
 
-    main: ({ match, history }) => 
+    main: ({ match, history }) =>
       <SupplierDetailPos match={match} history={history} />
-    },
+  },
 
   {
     path: "/expenditure/:store_code",
@@ -400,6 +401,15 @@ const routes = [
 
     main: ({ match, history }) => (
       <BillDetail match={match} history={history} />
+    ),
+  },
+
+  {
+    path: "/order/print/:store_code/:order_code",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <PrintOrderScreen match={match} history={history} />
     ),
   },
 

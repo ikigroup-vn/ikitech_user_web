@@ -26,6 +26,7 @@ import * as notificationAction from "../../actions/notification";
 import { AsyncPaginate } from "react-select-async-paginate";
 import * as customerApi from "../../data/remote/customer";
 import PanelBottom from './PanelBottom'
+import history from '../../history'
 
 
 class PostOrder extends Component {
@@ -387,7 +388,8 @@ class PostOrder extends Component {
         const { store_code } = this.props.match.params
         const data = {
             payment_method_id: this.state.payment_method_id,
-            amount_money: formatNumber(this.state.priceCustomer)
+            amount_money: formatNumber(this.state.priceCustomer),
+            allowAutoPrint: true
         }
         this.props.paymentOrderPos(store_code, branch_id, this.state.idCart, data)
         this.setState({
@@ -454,6 +456,15 @@ class PostOrder extends Component {
                 exchange: removeSignNumber(nextState.priceCustomer) - removeSignNumber(nextState.totalFinal)
             })
         }
+
+        if (this.props.loadingOrder == false && nextProps.loadingOrder == false) {
+            if (nextProps.allowAutoPrint == true && this.printed != true) {
+                this.props.disablePrint();
+                history.push('/order/print/chinhbv/' + this.props.orderAfterPayment.order_code + "?defaultHrefBack=" + btoa(window.location.pathname))
+
+            }
+        }
+
         if (!shallowEqual(nextState.idCart, this.state.idCart)) {
 
             const branch_id = getBranchId()
@@ -1054,6 +1065,11 @@ const mapStateToProps = (state) => {
     return {
         products: state.productReducers.product.allProduct,
         oneCart: state.posReducers.pos_reducer.oneCart,
+
+        orderAfterPayment: state.posReducers.pos_reducer.orderAfterPayment,
+        loadingOrder: state.posReducers.pos_reducer.loadingOrder,
+        allowAutoPrint: state.posReducers.pos_reducer.allowAutoPrint,
+
         loadingHandleChangeQuantity: state.posReducers.pos_reducer.loadingHandleChangeQuantity,
         listPertion: state.orderReducers.order_product.listPertion,
         listVoucher: state.orderReducers.order_product.listVoucher,
@@ -1080,6 +1096,12 @@ const mapDispatchToProps = (dispatch, props) => {
         fetchAllPertion: (store_code) => {
             dispatch(OrderAction.fetchAllPertion(store_code))
         },
+        disablePrint: () => {
+            dispatch({
+                type: Types.POS_ORDER_PAYMENT_FAILD,
+            })
+        },
+
 
         updateInfoCart: (store_code, branch_id, id_cart, data) => {
             dispatch(posAction.updateInfoCart(store_code, branch_id, id_cart, data))
