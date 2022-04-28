@@ -12,6 +12,7 @@ import * as staffAction from "../../actions/staff";
 import NotAccess from "../../components/Partials/NotAccess";
 
 import Alert from "../../components/Partials/Alert";
+import {getBranchId} from "../../ultis/branchUtils"
 
 class Edit extends Component {
   constructor(props) {
@@ -22,10 +23,14 @@ class Edit extends Component {
   
   }
   componentDidMount() {
+    var params = `?branch_id=${getBranchId()}`
+
     var {store_code , id } = this.props.match.params;
-    this.props.fetchAllStaff(store_code);
+    this.props.fetchAllStaff(this.props.match.params.store_code , null , params , null );
     this.props.fetchAllDecentralization(store_code);
   }
+
+
 
   componentWillReceiveProps(nextProps) {
     if (this.state.isLoading != true && typeof nextProps.permission.product_list != "undefined") {
@@ -39,7 +44,7 @@ class Edit extends Component {
     var { id, store_code } = this.props.match.params;
     var {history,decentralization,staff} = this.props;
     var {isShow} = this.state
-
+    console.log(staff)
       return (
         <div id="wrapper">
           <Sidebar store_code={store_code} />
@@ -71,7 +76,8 @@ class Edit extends Component {
                           <div id="messages"></div>
 
                           <div class="box">
-                      <Form history = {history} id = {id} staff = {staff} decentralization = {decentralization}  store_code = {store_code}/>
+                            {staff?.length > 0 &&                       <Form history = {history} id = {id} staff = {staff} decentralization = {decentralization}  store_code = {store_code}/>
+}
                           </div>
                         </div>
                       </div>
@@ -107,8 +113,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllStaff: (id) => {
-      dispatch(staffAction.fetchAllStaff(id));
+    fetchAllStaff: (id , page , params , branch_id) => {
+      dispatch(staffAction.fetchAllStaff(id , page , params , branch_id));
     },
     fetchAllDecentralization: (id) => {
       dispatch(decentralizationAction.fetchAllDecentralization(id));

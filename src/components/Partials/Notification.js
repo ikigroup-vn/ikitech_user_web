@@ -76,9 +76,12 @@ class Notification extends Component {
     closeDialog = (e) => {
         window.$(".dropdown .menu-notification").removeClass("show");
     }
-    onchangeRouter = (back, value, to) => {
+    onchangeRouter = (back, value, to , type) => {
         const location = window.location.pathname;
-
+        if(type == "GOOD_NIGHT_USER" || type == "COUNT_ORDER_END_DAY")
+        {
+            return;
+        }
         if (location == back) {
 
         }
@@ -116,9 +119,9 @@ class Notification extends Component {
                             ? "Hôm qua " + moment(created_at, "YYYY-MM-DD HH:mm:ss").format("HH:mm") : datetime
                 var type = this.state.type
                 var to = type[data.type] || "/"
-                console.log(to)
+                console.log(listNotification)
                 return (
-                    <a onClick={() => this.onchangeRouter(`${to}/${data.references_value}`, data.references_value, to)} key={index} class="dropdown-item d-flex align-items-center " >
+                    <a onClick={() => this.onchangeRouter(`${to}/${data.references_value}`, data.references_value, to , data.type)} key={index} class="dropdown-item d-flex align-items-center " >
                         {/* // <Link key={index} class="dropdown-item d-flex align-items-center " to={`${to}/${data.references_value}`}> */}
 
                         <div style={{ width: "100%" }}>
