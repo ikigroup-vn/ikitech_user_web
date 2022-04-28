@@ -41,6 +41,7 @@ export const fetchAllProductV2 = (
   params,
   agency_type_id
 ) => {
+  console.log([params])
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,

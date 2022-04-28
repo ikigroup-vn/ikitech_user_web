@@ -339,7 +339,7 @@ class Form extends Component {
                 id="txtTitle"
                 value={salary_one_hour}
                 name="salary_one_hour"
-                placeholder="Nhập lương tháng"
+                placeholder="Lương theo giờ"
                 autocomplete="off"
                 onChange={this.onChange}
               />

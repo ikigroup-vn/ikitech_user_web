@@ -256,7 +256,16 @@ class Table extends Component {
               (this.props.typeDate == "OPTION" &&
                 this.props.datePrime.from === this.props.datePrime.to) ? (
                 <td>
-                  <a
+                     <button    data-toggle="modal"
+                    data-target="#modalDetail" type = "button"     onClick={(e) => {
+                      this.setState({
+                        dataDetail: data,
+                      });
+                    }} class="btn btn-info   btn-sm">
+                  <i class="fas fa-save"></i>  Tạo
+
+                </button>
+                  {/* <a
                     data-toggle="modal"
                     data-target="#modalDetail"
                     class={`btn btn-info btn-icon-split btn-sm ${
@@ -278,7 +287,7 @@ class Table extends Component {
                     >
                       Thêm bớt công
                     </span>
-                  </a>
+                  </a> */}
                 </td>
               ) : (
                 <td></td>

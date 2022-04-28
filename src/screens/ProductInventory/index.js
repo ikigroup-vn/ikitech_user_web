@@ -20,6 +20,7 @@ import { randomString } from "../../ultis/helpers"
 import Table from "./Table";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import { getBranchId } from "../../ultis/branchUtils";
+import { getQueryParams } from "../../ultis/helpers"
 
 class ProductInventory extends Component {
 
@@ -45,42 +46,67 @@ class ProductInventory extends Component {
       page: 1,
       numPage: 20,
       listType: "0",
-      listProduct:""
+      listProduct: "",
+      is_near_out_of_stock : false
     };
   }
 
   onChangeNumPage = (e) => {
     var { store_code } = this.props.match.params;
-    var { searchValue } = this.state
+    var { searchValue , listType , is_near_out_of_stock  } = this.state
     var numPage = e.target.value
     this.setState({
       numPage
     })
     var params = `&search=${searchValue ?? ""}&limit=${numPage}`
-    
+    if(is_near_out_of_stock)
+    params = params + `&is_near_out_of_stock=true`
+    if(listType==1)
+    params = params + `&check_inventory=true`
+
     const branch_id = getBranchId();
+    console.log(params);
     this.props.fetchAllProductV2(this.props.match.params.store_code, branch_id, 1, params);
 
+  }
 
+  paramNearStock = (status) =>{
+    this.setState({is_near_out_of_stock : status})
   }
   onChangeType = (e) => {
     var target = e.target;
     var value = target.value;
-    this.setState({listType: value});
+    this.setState({ listType: value });
 
   }
   onChangeSearch = (e) => {
     this.setState({ searchValue: e.target.value });
   };
+
+
+
+
+
   componentDidMount() {
     var { page } = this.props.match.params
     const branch_id = getBranchId();
+    var is_near_out_of_stock = getQueryParams("is_near_out_of_stock")
+    var status = getQueryParams("status")
 
+    var params = null
+    if (is_near_out_of_stock) {
+      params = params + `&is_near_out_of_stock=true`
+    }
+    if (is_near_out_of_stock) {
+      params = params + `&status=${status}`
+    }
     if (typeof page != "undefined" && page != null && page != "" && !isNaN(Number(page))) {
-      this.props.fetchAllProductV2(this.props.match.params.store_code, branch_id, page);
+      this.props.fetchAllProductV2(this.props.match.params.store_code, branch_id, page, params
+      );
     }
     else {
-      this.props.fetchAllProductV2(this.props.match.params.store_code, branch_id);
+      this.props.fetchAllProductV2(this.props.match.params.store_code, branch_id, params
+      );
     }
   }
 
@@ -101,28 +127,29 @@ class ProductInventory extends Component {
 
     }
   }
-  shouldComponentUpdate(nextProps,nextState){
-    if(!shallowEqual(nextState.listType,this.state.listType)){
-      if(nextState.listType == 1){
+  shouldComponentUpdate(nextProps, nextState) {
+    if (!shallowEqual(nextState.listType, this.state.listType)) {
+      if (nextState.listType == 1) {
         // const listData = this.props.products.data.filter(item => item.check_inventory == true);
         // this.setState({listProduct:listData}
-        const {store_code} = this.props.match.params
+        const { store_code } = this.props.match.params
         const branch_id = getBranchId();
         var params = `&check_inventory=true`;
         this.props.fetchAllProductV2(store_code, branch_id, 1, params);
-      }else{
-        // this.setState({listProduct:this.props.products.data})
-        const {store_code} = this.props.match.params
-        const branch_id = getBranchId();
-        this.props.fetchAllProductV2(store_code, branch_id, 1);
-      }
+      } 
+      // else {
+      //   // this.setState({listProduct:this.props.products.data})
+      //   const { store_code } = this.props.match.params
+      //   const branch_id = getBranchId();
+      //   this.props.fetchAllProductV2(store_code, branch_id, 1);
+      // }
     }
     return true
   }
 
-  componentWillReceiveProps(nextProps){
-    if(!shallowEqual(nextProps.products,this.props.products)){
-      this.setState({listProduct:nextProps.products.data})
+  componentWillReceiveProps(nextProps) {
+    if (!shallowEqual(nextProps.products, this.props.products)) {
+      this.setState({ listProduct: nextProps.products.data })
     }
   }
   handleDelCallBack = (modal) => {
@@ -137,7 +164,7 @@ class ProductInventory extends Component {
     var { searchValue } = this.state;
     const branch_id = getBranchId();
     var params = `&search=${searchValue ?? ""}`;
-    console.log("params",params)
+    console.log("params", params)
     this.setState({ numPage: 20 })
     this.props.fetchAllProductV2(store_code, branch_id, 1, params);
   };
@@ -174,18 +201,26 @@ class ProductInventory extends Component {
   }
 
   passNumPage = (page) => {
-    this.setState({ page: page})
+    this.setState({ page: page })
   }
 
 
   render() {
     if (this.props.auth) {
-      var { products } = this.props;
-      var {listProduct} = this.state
+      var { products, badges } = this.props;
+      var { listProduct , is_near_out_of_stock , listType } = this.state
       var { store_code } = this.props.match.params
-      var { searchValue, importData, allow_skip_same_name, page, numPage,listType } = this.state
-      var { insert, update, _delete,  isShow } = this.state
+      var { searchValue, importData, allow_skip_same_name, page, numPage } = this.state
+      var { insert, update, _delete, isShow } = this.state
+      const branch_id = getBranchId();
+
       const bonusParam = "&check_inventory=true"
+
+      var params = `&search=${searchValue ?? ""}&limit=${numPage}`
+      if(is_near_out_of_stock)
+      params = params + `&is_near_out_of_stock=true`
+      if(listType==1)
+      params = params + `&check_inventory=true`
 
       return (
         <div id="wrapper">
@@ -202,6 +237,9 @@ class ProductInventory extends Component {
                   isShow == true ?
 
                     <div class="container-fluid">
+                      <General  paramNearStock = {this.paramNearStock} store_code = {store_code} branch_id = {branch_id}  badges={badges} products={this.props.products} />
+
+
                       <div style={{ display: "flex", justifyContent: "space-between" }}>
                         <h4 className="h4 title_content mb-0 text-gray-800">
                           Tồn kho
@@ -248,21 +286,21 @@ class ProductInventory extends Component {
                                 <span className="num-total_item" >{products.total}&nbsp;</span><span className="text-total_item" id="user_name">sản phẩm</span>
                               </p>
                             </form>
-                            <div style={{ display: "flex",padding: "0 20px" }}>
+                            <div style={{ display: "flex", padding: "0 20px" }}>
                               <div style={{ display: "flex" }}>
                                 <span
                                   style={{
                                     margin: "20px 10px auto auto"
                                   }}
                                 >Lọc sản phẩm</span>
-                                <select value={this.state.listType}                                   
-                                style={{
+                                <select value={this.state.listType}
+                                  style={{
                                     margin: "auto",
                                     marginTop: "10px",
                                     marginRight: "20px",
                                     width: "226px",
                                   }} name="txtDiscoutType" id="input" class="form-control" onChange={this.onChangeType} >
-                
+
                                   <option value="0" selected>Tất cả sản phẩm</option>
                                   <option value="1">Sản phẩm được theo dõi</option>
 
@@ -297,9 +335,10 @@ class ProductInventory extends Component {
 
 
                         <div class="card-body">
-                          <Table insert={insert} _delete={_delete} update={update} page={page} handleDelCallBack={this.handleDelCallBack} handleMultiDelCallBack={this.handleMultiDelCallBack} store_code={store_code} products={products} listProductSelect = {listProduct} />
+                          <Table insert={insert} _delete={_delete} update={update} page={page} handleDelCallBack={this.handleDelCallBack} handleMultiDelCallBack={this.handleMultiDelCallBack} store_code={store_code} products={products} listProductSelect={listProduct} />
                           <Pagination
-                            listType ={listType}
+                          params = {params}
+                            listType={listType}
                             bonusParam={bonusParam}
                             limit={numPage}
                             searchValue={searchValue}
@@ -338,6 +377,7 @@ const mapStateToProps = (state) => {
     alert: state.productReducers.alert.alert_success,
     allProductList: state.productReducers.product.allProductList,
     permission: state.authReducers.permission.data,
+    badges: state.badgeReducers.allBadge,
 
   };
 };

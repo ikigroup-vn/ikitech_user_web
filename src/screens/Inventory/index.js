@@ -10,7 +10,9 @@ import { Link } from 'react-router-dom';
 import Pagination from '../../components/Inventory/Pagination';
 import moment from "moment";
 import history from "../../history";
+import General from "../../components/Product/General";
 
+import * as productAction from "../../actions/product";
 
 class Inventory extends Component {
     constructor(props) {
@@ -23,6 +25,8 @@ class Inventory extends Component {
         const { store_code } = this.props.match.params
         const branch_id = localStorage.getItem('branch_id')
         this.props.fetchAllInventory(store_code, branch_id)
+
+      
     }
     onChangeSearch = (e) => {
         this.setState({ searchValue: e.target.value });
@@ -70,7 +74,7 @@ class Inventory extends Component {
     }
     render() {
         const { store_code } = this.props.match.params
-        const { sheetsInventory } = this.props
+        const { sheetsInventory  , badges } = this.props
         const { searchValue } = this.state
         return (
             <div id="wrapper">
@@ -82,6 +86,8 @@ class Inventory extends Component {
                             <Topbar store_code={store_code} />
 
                             <div className="container-fluid">
+                 
+
                                 <Alert
                                     type={Types.ALERT_UID_STATUS}
                                     alert={this.props.alert}
@@ -173,13 +179,21 @@ class Inventory extends Component {
 const mapStateToProps = (state) => {
     return {
         sheetsInventory: state.inventoryReducers.inventory_reducer.sheetsInventory,
+        badges: state.badgeReducers.allBadge,
+        products: state.productReducers.product.allProduct,
+
     }
 }
 const mapDispatchToProps = (dispatch, props) => {
     return {
         fetchAllInventory: (store_code, branch_id, page, pagram) => {
             dispatch(inventoryAction.fetchAllInventory(store_code, branch_id, page, pagram))
-        }
+        },
+            fetchAllProductV2: (store_code, branch_id, page, params) => {
+      dispatch(
+        productAction.fetchAllProductV2(store_code, branch_id, page, params)
+      );
+    },
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Inventory)

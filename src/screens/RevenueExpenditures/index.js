@@ -292,7 +292,7 @@ class RevenueExpenditures extends Component {
                     <br />
                     <div>
                         <p className="sale_user_label bold">
-                            Tỏng thu:{" "}
+                            Tổng thu:{" "}
                             <span id="total_selected">{format(this.props.reportExpenditure.renvenure)}</span>
                         </p>
                         <p className="sale_user_label bold">

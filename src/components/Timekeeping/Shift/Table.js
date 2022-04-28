@@ -52,7 +52,6 @@ class Table extends Component {
               <td style={{ textAlign: "center" }}>
                 {per_page * (current_page - 1) + (index + 1)}
               </td>
-              <td>{data.code}</td>
               <td>{data.name}</td>
               <td style={{ textAlign: "center" }}>{`${(
                 "0" + data.start_work_hour
@@ -95,11 +94,7 @@ class Table extends Component {
                   .join("")
                   .slice(0, -2)}
               </td>
-              <td style={{
-                display: "flex",
-                justifyContent: "space-around"
-
-              }}>
+              <td className="group-btn-table">
                 <button
                   class={`btn btn-warning btn-sm `}
                   data-toggle="modal"
@@ -170,7 +165,6 @@ class Table extends Component {
             <thead>
               <tr>
                 <th>STT</th>
-                <th>Mã</th>
                 <th>Tên ca</th>
 
                 <th>Thời gian bắt đầu</th>

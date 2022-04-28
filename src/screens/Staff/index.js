@@ -116,7 +116,7 @@ class Staff extends Component {
 
               <Footer />
             </div>
-            <ModalDelete store_code={store_code} modal={this.state.modal} />
+            <ModalDelete params = {`?branch_id=${getBranchId()}`} store_code={store_code} modal={this.state.modal} />
           </div>
         </div>
 

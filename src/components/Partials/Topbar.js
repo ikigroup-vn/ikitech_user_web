@@ -10,7 +10,7 @@ import * as Env from "../../ultis/default";
 import Notification from "./Notification";
 import * as helper from "../../ultis/helpers";
 import { shallowEqual } from "../../ultis/shallowEqual";
-import { getBranchId, setBranchId } from "../../ultis/branchUtils";
+import { getBranchId, setBranchId ,getBranchName , setBranchName} from "../../ultis/branchUtils";
 import { Redirect } from "react-router-dom";
 
 class Topbar extends Component {
@@ -39,6 +39,8 @@ class Topbar extends Component {
 
     if (!shallowEqual(nextProps.branchStore, this.props.branchStore)) {
       const branch_id = getBranchId();
+      const branch_name = getBranchName();
+
 
       if (nextProps.branchStore != null && nextProps.branchStore.length > 0) {
         if (branch_id != null) {
@@ -48,17 +50,24 @@ class Topbar extends Component {
 
           if (selectedBranch == null) {
             const value = nextProps.branchStore[0]?.id;
+            const name = nextProps.branchStore[0]?.name;
+
             this.setState({ txtBranch: value });
             this.props.changeBranch(nextProps.branchStore[0]);
             setBranchId(value)
+            setBranchName(name)
           } else {
             this.props.changeBranch(selectedBranch);
           }
 
         } else {
           const value = nextProps.branchStore[0]?.id;
+          const name = nextProps.branchStore[0]?.name;
+
           this.props.changeBranch(nextProps.branchStore[0]);
           setBranchId(value)
+          setBranchName(name)
+
           this.setState({ txtBranch: value });
         }
       }
@@ -106,6 +115,17 @@ class Topbar extends Component {
     }
     return result;
   };
+
+  getNameBranch = (stores) =>{
+    var result = ""
+    if(stores && stores.length > 0)
+    {
+       var item = stores.filter(store => store.store_code == this.props.store_code);
+       result = item.length > 0 ? item[0].name : ""
+    }
+
+    return result
+  }
 
   showNotification = (
     isNotification,
@@ -206,7 +226,9 @@ class Topbar extends Component {
                       color: "#ec0c38",
                     }}
                   ></i>
-                  {store.name}
+                  {
+                    stores?.length > 0 && this.getNameBranch(stores)
+                  }
                 </Link>
               </li>
 

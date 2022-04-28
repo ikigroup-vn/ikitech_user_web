@@ -87,7 +87,7 @@ export const createStaff = (store_code , data) => {
 };
 
 
-export const destroyStaff = (store_code, id) => {
+export const destroyStaff = (store_code, id , page , params , branch_id) => {
   
   return (dispatch) => {
     dispatch({
@@ -101,7 +101,7 @@ export const destroyStaff = (store_code, id) => {
           type: Types.SHOW_LOADING,
           loading : "hide"
         })
-        staffApi.fetchAllStaff(store_code)
+        staffApi.fetchAllStaff(store_code , page,params , branch_id)
           .then((res) => {
             if(res.data.code !== 401)
 

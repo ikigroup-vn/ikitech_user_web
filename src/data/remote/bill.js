@@ -1,13 +1,26 @@
 import callApi from "../../ultis/apiCaller";
 
 export const fetchAllBill = (store_code , page=1 ,branch_id, params , params_agency) => {
-  if(params_agency != null)
-  {
-    return params ? callApi(`/store/${store_code}/orders?page=${page}${params}${params_agency}`, "get", null) 
-    :callApi(`/store/${store_code}/orders?page=${page}${params_agency}`, "get", null)
-  }
-  return params ? callApi(`/store/${store_code}/orders?page=${page}&branch_id=${branch_id}${params}`, "get", null) 
-  :callApi(`/store/${store_code}/orders?page=${page}&branch_id=${branch_id}`, "get", null)
+  var stringURL = `/store/${store_code}/orders?page=${page}`
+
+  if(branch_id)
+  stringURL = stringURL + `&branch_id=${branch_id}`
+  if(params)
+  stringURL = stringURL + params
+  if(params_agency)
+  stringURL = stringURL + params_agency
+  
+  // if(branch_id == null)
+  // {
+  //   return params ? callApi(`/store/${store_code}/orders?page=${page}${params}${params_agency}`, "get", null) 
+  //   :callApi(`/store/${store_code}/orders?page=${page}${params_agency}`, "get", null)
+  // }
+  // return params ? callApi(`/store/${store_code}/orders?page=${page}&branch_id=${branch_id}${params}${params_agency}`, "get", null) 
+  // :callApi(`/store/${store_code}/orders?page=${page}&branch_id=${branch_id}${params_agency}`, "get", null)
+
+
+  return callApi(stringURL, "get", null) 
+
 };
 
 export const fetchBillId = (store_code  , order_code) => {
