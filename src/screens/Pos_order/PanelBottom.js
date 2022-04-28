@@ -333,6 +333,7 @@ class PanelBottom extends Component {
             wards: txtWards,
             sex: txtSex,
             isFromPosAndSave: true,
+            is_update:true,
             date_of_birth: selectedDate
         })
     }

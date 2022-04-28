@@ -12,9 +12,6 @@ import * as productApi from "../../data/remote/product";
 import ModalBranch from './ModalBranch'
 import ModalKeyboard from './ModalKeyboard'
 import ModalDelete from './ModalDelete'
-import { filter_arr, format } from '../../ultis/helpers'
-import { findTotalStockPos } from '../../ultis/productUltis'
-import * as Env from "../../ultis/default"
 import KeyboardEventHandler from "react-keyboard-event-handler";
 import { AsyncPaginate } from "react-select-async-paginate";
 import CardProduct from './CardProduct'
