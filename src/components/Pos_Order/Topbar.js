@@ -444,7 +444,7 @@ class Topbar extends Component {
 
                                     </li>
 
-                                    <li className='nav-item' id='btn-full' style={{ margin: "0 10px", color: "white", cursor: "pointer" }} onClick={this.fullScreen}>
+                                    <li className='nav-item' id='btn-full' style={{  color: "white", cursor: "pointer" }} onClick={this.fullScreen}>
                                         {!this.state.fullScreen ?
                                             <i class='fas fa-expand-arrows-alt fa-2x  add-cart'></i> :
                                             <i class='fas fa-compress-arrows-alt  add-cart'></i>
@@ -452,7 +452,8 @@ class Topbar extends Component {
 
                                     </li >
 
-                                    <li className='nav-item' style={{ margin: "0 0px", color: "white", cursor: "pointer", marginRight: '10px' }} onClick={this.goBackHome}>
+                                    <li className='nav-item' style={{ color: "white", cursor: "pointer", 
+                                    marginRight: '10px' }} onClick={this.goBackHome}>
                                         <i class='fas fa-home fa-2x  add-cart'></i>
                                     </li>
 
