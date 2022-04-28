@@ -57,10 +57,10 @@ class Modal extends Component {
 
       this.setState({
         listStaff: data2.staff_work,
+        isCheck :  data2.staff_work?.length == this.props.staff?.length ? true : false,
         listAllStaff: this.props.staff.map((e) => {
           return { name: e.name, id: e.id, avatar_image: e.avatar_image };
         }),
-        isCheck: false,
       });
     }
   }
@@ -77,18 +77,20 @@ class Modal extends Component {
     } = this.state;
     const { data2, data } = this.props;
 
-    if (listStaff.length === 0) {
-      this.props.showError({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "danger",
-          title: "Lỗi",
-          disable: "show",
-          content: "Chưa chọn nhân viên trong ca",
-        },
-      });
-      return;
-    }
+    console.log(listStaff)
+
+    // if (listStaff.length === 0) {
+    //   this.props.showError({
+    //     type: Types.ALERT_UID_STATUS,
+    //     alert: {
+    //       type: "danger",
+    //       title: "Lỗi",
+    //       disable: "show",
+    //       content: "Chưa chọn nhân viên trong ca",
+    //     },
+    //   });
+    //   return;
+    // }
 
     var arr = listStaff.map((e) => {
       return e.id;
@@ -108,6 +110,7 @@ class Modal extends Component {
   };
 
   handleStaffClick = (value) => {
+    console.log(this.props.datePrime.from , this.props.datePrime.to)
     if (
       this.state.listStaff?.some(
         (e) => Object.entries(e).toString() === Object.entries(value).toString()
@@ -130,18 +133,31 @@ class Modal extends Component {
       });
     }
   };
-  handleCheck = () => {
-    if (this.state.listStaff.length === this.state.listAllStaff.length) {
+  handleCheck = (e) => {
+    if(e.target.checked == false)
+    {
       this.setState({
         listStaff: [],
-        isCheck: !this.state.isCheck,
-      });
-    } else {
-      this.setState({
-        listStaff: [...this.state.listAllStaff],
-        isCheck: !this.state.isCheck,
+        isCheck: e.target.checked,
       });
     }
+    else{
+      this.setState({
+        listStaff: [...this.state.listAllStaff],
+        isCheck: e.target.checked,
+      });
+    }
+    // if (this.state.listStaff.length === this.state.listAllStaff.length) {
+    //   this.setState({
+    //     listStaff: [],
+    //     isCheck: !this.state.isCheck,
+    //   });
+    // } else {
+    //   this.setState({
+    //     listStaff: [...this.state.listAllStaff],
+    //     isCheck: !this.state.isCheck,
+    //   });
+    // }
   };
   render() {
     const { data2, data, staff } = this.props;
@@ -218,7 +234,7 @@ class Modal extends Component {
                             for="flexCheckDefault"
                             style={{ position: "absolute", right: "3.2rem" }}
                           >
-                            Toàn chi nhánh
+                            Tất cả nhân viên
                           </label>
                           <input
                             class="form-check-input"

@@ -74,7 +74,7 @@ class Table extends Component {
       var newArr = arr.map((e) => {
         return {
           day: weekday[new Date(e).getDay()],
-          date: new Date(e).getDate(),
+          date: moment(e).format("DD-MM-YYYY"),
         };
       });
 
@@ -159,7 +159,10 @@ class Table extends Component {
                 })
               }>{}</td> */}
 
-              <td>{data.shift.name}</td>
+              <td >
+                <span style = {{fontWeight : "500"}}>{data.shift.name}</span>  ( {moment(`${data.shift.start_work_hour}:${data.shift.start_work_minute}` , "HH:mm").format("HH:mm")} - {moment(`${data.shift.end_work_hour}:${data.shift.end_work_minute}` , "HH:mm").format("HH:mm")})
+               
+              </td>
 
               {data.staff_in_time.map((data2) => {
                 return (
@@ -246,7 +249,7 @@ class Table extends Component {
           >
             <tbody>
               <tr>
-                <td>Lịch</td>
+                <td style = {{fontWeight : "500"}}>Lịch</td>
                 {/* {console.log(
                   calendarShift,
                   calendarShift?.map((value) => {
@@ -260,7 +263,7 @@ class Table extends Component {
 
                 {this.state.arrDate?.map((e) => {
                   return (
-                    <td>
+                    <td style = {{fontWeight : "500"}}>
                       {e.day}, {e.date}
                     </td>
                   );

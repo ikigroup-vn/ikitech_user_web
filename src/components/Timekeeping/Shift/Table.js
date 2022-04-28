@@ -24,6 +24,8 @@ class Table extends Component {
     this.setState({ modal: modal });
   };
 
+
+
   showData = (shifts, per_page, current_page) => {
     var { store_code, branch_id } = this.props;
     var result = null;
@@ -38,14 +40,14 @@ class Table extends Component {
         return (
           <React.Fragment>
             <tr
-              data-toggle="modal"
-              data-target="#modalEdit"
-              style={{ cursor: "pointer" }}
-              onClick={() =>
-                this.setState({
-                  idModalShow: data.id,
-                })
-              }
+            // data-toggle="modal"
+            // data-target="#modalEdit"
+            // style={{ cursor: "pointer" }}
+            // onClick={() =>
+            //   this.setState({
+            //     idModalShow: data.id,
+            //   })
+            // }
             >
               <td style={{ textAlign: "center" }}>
                 {per_page * (current_page - 1) + (index + 1)}
@@ -102,9 +104,9 @@ class Table extends Component {
                   class={`btn btn-warning btn-sm `}
                   data-toggle="modal"
                   data-target="#modalEdit"
-                  name = ""
+                  name=""
                   onClick={() =>
-                    
+
                     this.setState({
                       idModalShow: data.id,
                     })
@@ -113,15 +115,27 @@ class Table extends Component {
                   <i class="fa fa-edit"></i> Sửa
                 </button>
                 <button
+                  // onClick={(e) => {
+                  //   this.handleDelCallBack(
+                  //     e,
+                  //     this.props.store_code,
+                  //     this.props.branch_id,
+                  //     this.props.shiftDetail.id,
+                  //     this.props.shiftDetail.name
+                  //   );
+                  // }}
                   onClick={(e) => {
                     this.handleDelCallBack(
-                      e,
-                      this.props.store_code,
-                      this.props.branch_id,
-                      this.props.shiftDetail.id,
-                      this.props.shiftDetail.name
+
+                      {
+                        store_code: this.props.store_code,
+                        branch_id: this.props.branch_id,
+                        id: data.id,
+                        name: data.name
+                      }
                     );
                   }}
+                  name="delete"
                   data-toggle="modal"
                   data-target="#removeModal"
                   class={`btn btn-danger btn-sm`}
@@ -196,7 +210,7 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    
+
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Table);

@@ -9,8 +9,9 @@ class Table extends Component {
   }
 
   removeItem = (id) => {
-    this.props.handleAddStaff(null, id, "remove");
+    this.props.handleAddStaff(null, id, "remove" , true);
   };
+
 
   showData = (staffs) => {
     var result = null;
@@ -127,29 +128,19 @@ class Table extends Component {
           </>
         )}
         <div
-          class="form-group d-flex align-items-center my-3 justify-content-center"
+          class={`form-group d-flex align-items-center my-3 ${staffs.length > 0 ? "justify-content-center" : null}`}
           data-toggle="modal"
           data-target="#showListStaff"
           style={{ cursor: "pointer" }}
         >
-          <button
+      <button
             type="button"
-            style={{
-              outline: "none",
-              borderRadius: "50%",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              border: "1px solid #C12026",
-              padding: "0.3rem 0.4rem",
-              marginRight: "1rem",
-            }}
+            class="btn btn-primary-no-background btn-sm"
+
           >
-            <i class="fas fa-plus" style={{ color: "#C12026" }}></i>
+            <i class="fas fa-plus" ></i>
+            <span class="text">&nbsp;Thêm nhân viên</span>
           </button>
-          <span class="text" style={{ color: "#C12026" }}>
-            Thêm nhân viên
-          </span>
         </div>
       </React.Fragment>
     );

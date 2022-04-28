@@ -18,10 +18,30 @@ class ModalPostDate2 extends Component {
   }
 
   handlePostDate = (date) => {
-    this.setState({
-      datePrime: date.datePrime,
-    });
+    // this.setState({
+    //   datePrime: date.datePrime,
+    // });
+    var  datePrime  = date.datePrime;
+
+    var datePrime = {
+      from: moment(datePrime.from, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      to: moment(datePrime.to, "DD-MM-YYYY").format("YYYY-MM-DD"),
+    };
+
+    var { typeDate } = this.props;
+    var typeSelect =
+      typeDate == "DAY"
+        ? "Ngày"
+        : typeDate == "WEEK"
+        ? "Tuần"
+        : typeDate == "MONTH"
+        ? "Tháng"
+        : "Tùy chọn";
+
+    this.props.handleGetDatePost({ datePrime }, typeSelect);
   };
+
+  
 
   onSave = (e) => {
     e.preventDefault();
@@ -82,35 +102,43 @@ class ModalPostDate2 extends Component {
           id="removeForm"
         > */}
         {/* <div className="modal-body"> */}
-        <div class="d-flex">
+        <div class="d-flex" style = {{marginLeft : "20px"}}>
           <FormPostDay2
             reset={reset}
             handlePostDate={this.handlePostDate}
+            handleChangeDate
             isDay={isDay}
+            typeDate = {typeDate}
           />
           <FormPostMonth2
             reset={reset}
             handlePostDate={this.handlePostDate}
             isMonth={isMonth}
+            typeDate = {typeDate}
+
           />
           <FormPostWeek2
             reset={reset}
             handlePostDate={this.handlePostDate}
             isWeek={isWeek}
+            typeDate = {typeDate}
+
           />
           <FormPostOption2
             reset={reset}
             handlePostDate={this.handlePostDate}
             isOption={isOption}
+            typeDate = {typeDate}
+
           />
 
-          <button
+          {/* <button
             type="button"
             class="btn btn-info  btn-sm"
             onClick={this.onSave}
           >
             <span class="text">Chọn ngày</span>
-          </button>
+          </button> */}
         </div>
         {/* </div> */}
         {/* <div class="modal-footer">

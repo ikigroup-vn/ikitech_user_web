@@ -20,6 +20,8 @@ class Form extends Component {
     this.state = {
       isCheck: false,
       listStaff: [],
+      saveListShift: [],
+      saveListStaff: [],
 
       listShift: [],
       typeSelect: "Ngày",
@@ -30,7 +32,7 @@ class Form extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.setState({
       datePrime: {
         from: moment().format("YYYY-MM-DD"),
@@ -56,10 +58,10 @@ class Form extends Component {
       value == "DAY"
         ? "Ngày"
         : value == "WEEK"
-        ? "Tuần"
-        : value == "MONTH"
-        ? "Tháng"
-        : "Tùy chọn";
+          ? "Tuần"
+          : value == "MONTH"
+            ? "Tháng"
+            : "Tùy chọn";
     this.setState({ typeDate: value, reset: resetId, typeSelect: typeSelect });
   };
   onChange = (e) => {
@@ -92,10 +94,15 @@ class Form extends Component {
     var to = moment(e.value[1], "DD-MM-YYYY").format("YYYY-MM-DD");
   };
 
+
+
+
+
+
   onSave = async (e) => {
     e.preventDefault();
     // window.$('.modal').modal('hide');
-
+    console.log(this.state.datePrime.from, this.state.datePrime.to)
     const {
       listStaff,
 
@@ -166,7 +173,7 @@ class Form extends Component {
     var { history } = this.props;
     history.goBack();
   };
-  handleAddShift = (shift, id, type) => {
+  handleAddShift = (shift, id, type, onSave = null) => {
     var shifts = [...this.state.listShift];
 
     if (type == "remove") {
@@ -189,9 +196,22 @@ class Form extends Component {
         shifts.push(shift);
       }
     }
-    this.setState({ listShift: shifts });
+    if (onSave == true)
+      this.setState({ saveListShift: shifts, listShift: shifts })
+    else
+      this.setState({ listShift: shifts })
   };
-  handleAddStaff = (staff, id, type) => {
+
+
+  onSaveShift = () => {
+    this.setState({ saveListShift: [...this.state.listShift] })
+  }
+
+  onSaveStaff = () => {
+    this.setState({ saveListStaff: [...this.state.listStaff] })
+  }
+
+  handleAddStaff = (staff, id, type, onSave = null) => {
     var staffs = [...this.state.listStaff];
 
     if (type == "remove") {
@@ -214,27 +234,39 @@ class Form extends Component {
         staffs.push(staff);
       }
     }
-    this.setState({ listStaff: staffs });
-  };
+    if (onSave == true)
+      this.setState({ saveListStaff: staffs, listStaff: staffs })
+    else
+      this.setState({ listStaff: staffs })
+  
 
-  render() {
-    const {
-      listStaff,
-      isCheck,
-      listShift,
-      typeSelect,
-      typeDate,
-      reset,
 
-      datePrime,
-    } = this.state;
-    const { store_code, staff, shifts } = this.props;
-    const branch_id = localStorage.getItem("branch_id");
 
-    return (
-      <React.Fragment>
-        <form role="form" onSubmit={this.onSave} method="post">
-          <div class="box-body">
+};
+
+render() {
+  const {
+    listStaff,
+    isCheck,
+    listShift,
+    typeSelect,
+    typeDate,
+    reset,
+    saveListShift,
+    saveListStaff,
+
+    datePrime,
+  } = this.state;
+  const { store_code, staff, shifts } = this.props;
+  const branch_id = localStorage.getItem("branch_id");
+
+  return (
+    <React.Fragment>
+      <form role="form" onSubmit={this.onSave} method="post">
+        <div class="box-body">
+          <div class="form-group">
+            <label for="product_name">Thời gian :</label>
+
             <div
               class="row"
               style={{
@@ -304,6 +336,7 @@ class Form extends Component {
                 </div>
               </div>
               <ModalPostDate2
+                style={{ marginLeft: "20px" }}
                 reset={reset}
                 handleGetDatePost={this.handleGetDatePost}
                 store_code={store_code}
@@ -311,55 +344,57 @@ class Form extends Component {
               />
             </div>
           </div>
-          <div class="box-body">
-            <Table
-              handleAddShift={this.handleAddShift}
-              shifts={listShift}
-            ></Table>
-          </div>
 
-          <div class="box-body">
-            <Table2
-              handleAddStaff={this.handleAddStaff}
-              staffs={listStaff}
-            ></Table2>
-          </div>
+        </div>
+        <div class="box-body">
+          <Table
+            handleAddShift={this.handleAddShift}
+            shifts={saveListShift}
+          ></Table>
+        </div>
 
-          <div class="box-footer">
-            <button type="submit" class="btn btn-info btn-icon-split btn-sm">
-              <span class="icon text-white-50">
-                <i class="fas fa-save"></i>
-              </span>
-              <span class="text">Lưu</span>
-            </button>
-            <a
-              style={{ marginLeft: "10px" }}
-              onClick={this.goBack}
-              class="btn btn-warning btn-icon-split  btn-sm"
-            >
-              <span class="icon text-white-50">
-                <i class="fas fa-arrow-left"></i>
-              </span>
-              <span class="text"> Trở về</span>
-            </a>
-          </div>
-        </form>
-        <ModalListShift
-          handleAddShift={this.handleAddShift}
-          listShift={listShift}
-          store_code={this.props.store_code}
-          shifts={shifts}
-          branch_id={branch_id}
-        />
-        <ModalListStaff
-          handleAddStaff={this.handleAddStaff}
-          listStaff={listStaff}
-          store_code={this.props.store_code}
-          staffs={staff}
-        />
-      </React.Fragment>
-    );
-  }
+        <div class="box-body">
+          <Table2
+            handleAddStaff={this.handleAddStaff}
+            staffs={saveListStaff}
+          ></Table2>
+        </div>
+
+        <div class="box-footer">
+        <button type = "submit" class="btn btn-info   btn-sm">
+                  <i class="fas fa-save"></i>  Tạo
+
+                </button>
+                <button
+                  style={{ marginLeft: "10px" }}
+                  onClick={this.goBack}
+                  class="btn btn-warning   btn-sm"
+                >
+                  <i class="fas fa-arrow-left"></i> Trở về
+
+                </button>
+     
+        </div>
+      </form>
+      <ModalListShift
+        onSaveShift={this.onSaveShift}
+
+        handleAddShift={this.handleAddShift}
+        listShift={listShift}
+        store_code={this.props.store_code}
+        shifts={shifts}
+        branch_id={branch_id}
+      />
+      <ModalListStaff
+      onSaveStaff = {this.onSaveStaff}
+        handleAddStaff={this.handleAddStaff}
+        listStaff={listStaff}
+        store_code={this.props.store_code}
+        staffs={staff}
+      />
+    </React.Fragment>
+  );
+}
 }
 
 const mapDispatchToProps = (dispatch, props) => {

@@ -2,15 +2,30 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Pagination from "../../Shift/Pagination";
 import { filter_arr, format } from "../../../../ultis/helpers";
+import themeData from "../../../../ultis/theme_data";
+import * as shiftAction from "../../../../actions/shift";
 
 class ListShift extends Component {
   constructor(props) {
     super(props);
     this.state = {
       numPage: 10,
+      searchValue: "",
+
     };
   }
+  onChangeSearch = (e) => {
+    this.setState({ searchValue: e.target.value });
+  };
 
+  searchData = (e) => {
+    e.preventDefault();
+    var { store_code } = this.props;
+    var { searchValue } = this.state;
+    const branch_id = localStorage.getItem("branch_id");
+    var params = `&search=${searchValue}`;
+    this.props.fetchAllShift(store_code, branch_id, 1, params);
+  }; 
   onChange = (e) => {
     var { value, checked } = e.target;
     console.log(checked);
@@ -29,6 +44,10 @@ class ListShift extends Component {
     }
     return false;
   };
+  onSaveShift = () => {
+    this.props.onSaveShift()
+    window.$(".modal").modal("hide");
+  }
 
   showData = (products, list) => {
     var result = null;
@@ -87,7 +106,7 @@ class ListShift extends Component {
 
   render() {
     var { shifts, store_code, listShift } = this.props;
-    console.log(shifts, listShift);
+    var { searchValue } = this.state
     return (
       <div
         class="modal fade"
@@ -99,10 +118,10 @@ class ListShift extends Component {
       >
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content" style={{ maxHeight: "630px" }}>
-            <div class="modal-header" style={{ background: "white" }}>
+          <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
               <h4
                 class="modal-title"
-                style={{ color: "black", fontWeight: "bold" }}
+                // style={{ color: "black", fontWeight: "bold" }}
               >
                 Ca chấm công
               </h4>
@@ -115,6 +134,29 @@ class ListShift extends Component {
                 &times;
               </button>
             </div>
+
+            <form style={{marginTop : "10px"}} onSubmit={this.searchData}>
+              <div
+                class="input-group mb-6"
+                style={{ padding: "0 20px" }}
+              >
+                <input
+                  style={{ maxWidth: "280px", minWidth: "150px" }}
+                  type="search"
+                  name="txtSearch"
+                  value={searchValue}
+                  onChange={this.onChangeSearch}
+                  class="form-control"
+                  placeholder="Tìm kiếm chấm môn"
+                />
+                <div class="input-group-append">
+                  <button class="btn btn-primary" type="submit">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </div>
+              </div>
+        
+            </form>
 
             <div class="table-responsive">
               <table
@@ -134,34 +176,53 @@ class ListShift extends Component {
                 <tbody>{this.showData(shifts?.data, listShift)}</tbody>
               </table>
             </div>
-            <div class="d-flex align-items-center justify-content-between px-3">
-              <div>
-                <Pagination
+            <div class="group-pagination_flex col-xs-12 col-sm-12 col-md-12 col-lg-12" style={{ display: "flex", justifyContent: "space-between" }}>
+
+            <Pagination
                   style="float-fix"
                   store_code={store_code}
                   shifts={shifts}
                   limit={this.state.numPage}
                   branch_id={this.props.branch_id}
                 />
-              </div>
-              <div>
+              <div style={{ marginTop: "10px" }}>
                 <button
+                  style={{
+                    border: "1px solid",
+                    marginRight: "10px"
+                  }}
                   type="button"
-                  class="btn btn-primary pagination-btn"
+                  class="btn btn-default"
                   data-dismiss="modal"
                 >
-                  Đóng
+                  Hủy
+                </button>
+                <button style={{ backgroundColor: themeData().backgroundColor }} onClick={this.onSaveShift} class="btn btn-info">
+                  Xác nhận
                 </button>
               </div>
             </div>
+
           </div>
         </div>
       </div>
     );
   }
 }
+const mapStateToProps = (state) => {
+  return {
+
+    shifts: state.shiftReducers.shift.allShift,
+  };
+};
 
 const mapDispatchToProps = (dispatch, props) => {
-  return {};
+  return {
+  
+    fetchAllShift: (store_code, branch_id, page, params) => {
+      dispatch(shiftAction.fetchAllShift(store_code, branch_id, page, params));
+    },
+  };
 };
-export default connect(null, mapDispatchToProps)(ListShift);
+export default connect(mapStateToProps, mapDispatchToProps)(ListShift);
+

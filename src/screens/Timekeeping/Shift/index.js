@@ -117,8 +117,8 @@ class Shift extends Component {
                         <span
                           style={{ color: "white", margin: "0 0.75rem" }}
                           class={`text `}
-                        >
-                          Thêm ca
+                        > Thêm ca
+                          
                         </span>
                       </a>
                     </div>
@@ -149,7 +149,7 @@ class Shift extends Component {
                           />
                         )}
                       </div>
-                      <div style={{ display: "flex" }}>
+                      <div style={{ display: "flex"  , justifyContent : "end" , marginRight : "20px"}}>
                         <div style={{ display: "flex" }}>
                           <span
                             style={{
