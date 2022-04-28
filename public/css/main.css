@@ -61,6 +61,18 @@
     display: flex;
     justify-content: space-around;
 }
+
+
+#dataTable_filter{
+    float: left !important;
+}
+.dataTables_length{
+    float: right !important;
+}
+
+.dataTables_paginate .current{
+    background: rgb(229, 111, 37) !important;
+}
   
 .import-stock  .css-b62m3t-container{
     width : 100%

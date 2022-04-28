@@ -14,6 +14,7 @@ import { connect } from "react-redux";
 import Loading from "../Loading";
 import * as staffAction from "../../actions/staff";
 import config from "../../ultis/datatable"
+import {getBranchId} from "../../ultis/branchUtils"
 class Staff extends Component {
   constructor(props) {
     super(props);
@@ -31,7 +32,9 @@ class Staff extends Component {
   };
 
   componentDidMount() {
-    this.props.fetchAllStaff(this.props.match.params.store_code);
+    var params = `?branch_id=${getBranchId()}`
+
+    this.props.fetchAllStaff(this.props.match.params.store_code , null , params , null );
   }
   componentWillReceiveProps(nextProps) {
     $("#dataTable").DataTable().destroy();
@@ -137,8 +140,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllStaff: (id) => {
-      dispatch(staffAction.fetchAllStaff(id));
+    fetchAllStaff: (id , page , params , branch_id) => {
+      dispatch(staffAction.fetchAllStaff(id , page , params , branch_id));
     },
   };
 };

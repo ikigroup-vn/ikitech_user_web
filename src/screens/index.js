@@ -3,11 +3,11 @@ import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import Loading from "./Loading";
 import * as action from "../actions/index";
-import { getBranchId, setBranchId } from "../ultis/branchUtils";
+import { getBranchId, setBranchId , setBranchName , getBranchName} from "../ultis/branchUtils";
 import { shallowEqual } from "../ultis/shallowEqual";
 import * as dashboardAction from "../actions/dashboard";
 import * as branchAction from "../actions/branch"
-import { getStoreId, setStoreId } from "../ultis/store";
+import { getStoreId, setStoreId  } from "../ultis/store";
 
 class Store extends Component {
   constructor(props) {
@@ -74,24 +74,35 @@ class Store extends Component {
 
     if (!shallowEqual(nextProps.branchStore, this.props.branchStore)) {
       const branch_id = getBranchId();
+      const branch_name = getBranchName();
 
       if (nextProps.branchStore != null && nextProps.branchStore.length > 0) {
-        if (branch_id != null) {
+        if (branch_id != null && branch_name != null) {
           const selectedBranch = nextProps.branchStore.find(
             (branch) => branch.id == branch_id
           );
           if (selectedBranch == null) {
             const value = nextProps.branchStore[0]?.id;
+            const name = nextProps.branchStore[0]?.name;
+
             this.props.changeBranch(nextProps.branchStore[0]);
             setBranchId(value)
+            setBranchName(name)
+
+
+
           } else {
             this.props.changeBranch(selectedBranch);
           }
 
         } else {
           const value = nextProps.branchStore[0]?.id;
+          const name = nextProps.branchStore[0]?.name;
+
           this.props.changeBranch(nextProps.branchStore[0]);
           setBranchId(value)
+          setBranchName(name)
+
         }
       }
 
@@ -108,7 +119,7 @@ class Store extends Component {
         this.props.currentBranch != null &&
         this.props.currentBranch.id != null && stores != null &&
         typeof stores.store_code != null &&
-        getBranchId() != null &&
+        getBranchId() != null && getBranchName() != null &&
         this.state.store_code != null &&
         typeof getBranchId() != "undefined") {
         return <Redirect to={`/dashboard/${this.state.store_code}`} />;

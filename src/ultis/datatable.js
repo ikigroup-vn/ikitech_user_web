@@ -24,11 +24,14 @@ export default function(){
             }
         },
         "bDestroy": true,
-        // "aoColumnDefs": [
-        //     { "bSortable": false, "aTargets": [ "_all" ] } //disable ordering events and takeout the icon
-        //    ]
-        "columnDefs": [
-            { "orderable": false, "targets": 0 }
-          ]
+        "aoColumnDefs": [
+            { "bSortable": false, "aTargets": [ "_all" ] } //disable ordering events and takeout the icon
+           ]
+    //     "columnDefs": [ {
+    //         "targets": 'no-sort',
+    //         "orderable": false,
+    //   } ]
+
+          
     }
 }

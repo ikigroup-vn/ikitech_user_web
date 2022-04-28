@@ -48,8 +48,8 @@ class General extends Component {
                                     <div className="h5 mb-0 font-weight-bold text-gray-800">{format(badges.total_final_in_day)}</div>
                                 </div>
                                 <div className="col-auto">
-                                    <i className="fas fa-boxes fa-2x text-gray-300"></i>
-                                </div>
+                                <i class="fas fa-money-bill text-gray-300 fa-2x"></i>
+                                                                </div>
                             </div>
                         </div>
                     </div>
@@ -152,7 +152,8 @@ class General extends Component {
                                     <div className="h5 mb-0 font-weight-bold text-gray-800">{badges.orders_refunds}</div>
                                 </div>
                                 <div className="col-auto">
-                                    <i className="fas fa-user fa-2x text-gray-300"></i>
+                                    <i className="fa-money-bill-transfer fa-2x text-gray-300"></i>
+                                    {/* <i class="fa-solid fa-money-bill-transfer"></i> */}
                                 </div>
                             </div>
                         </div>

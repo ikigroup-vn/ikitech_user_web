@@ -2,13 +2,13 @@ import * as Types from "../constants/ActionType";
 import history from "../history";
 import * as staffApi from "../data/remote/staff";
 
-export const fetchAllStaff = (store_code , page=1 , params) => {
+export const fetchAllStaff = (store_code , page=1 , params , branch_id) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading : "show"
     })
-    staffApi.fetchAllStaff(store_code , page,params).then((res) => {
+    staffApi.fetchAllStaff(store_code , page,params , branch_id).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
         loading : "hide"
