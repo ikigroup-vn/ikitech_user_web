@@ -7,6 +7,7 @@ import ComponentA6Bill from "./ComponentA6Bill";
 import { useReactToPrint } from 'react-to-print';
 import ReactToPrint from 'react-to-print';
 import history from "../../history";
+// import './bill.css'
 
 class PrintOrderScreen extends Component {
     constructor(props) {
@@ -52,7 +53,7 @@ class PrintOrderScreen extends Component {
         // }
 
         if (!shallowEqual(this.state.isShow, nextState.isShow) && nextState.isShow == true) {
-            this.onPrint();
+            this.printIframe("receipt")
         }
 
         if (this.state.isLoading != true) {
@@ -70,7 +71,18 @@ class PrintOrderScreen extends Component {
     onPrint = () => {
         window.print();
     }
+     printIframe = (id) => {
+        console.log(id)
+        const iframe = document.frames
+            ? document.frames[id]
+            : document.getElementById(id);
+        const iframeWindow = iframe.contentWindow || iframe;
 
+        iframe.focus();
+        iframeWindow.print();
+
+        return false;
+    };
     render() {
 
         var { store_code, order_code, billId } = this.props.match.params
@@ -86,6 +98,30 @@ class PrintOrderScreen extends Component {
                 isShow: true
             })
         }
+
+
+
+        return <div>
+         
+            <iframe
+                id="receipt"
+                src="https://dev.doapp.vn/api/store/print/bill/290422W2ABAFIL"
+                // style={{ display: 'none' }}
+                title="Receipt"
+                style={{
+                    position: "fixed",
+                    top: 0, left: 0,
+                    bottom: 0,
+                    right: 0,
+                    width: "100%",
+                    height: "100%",
+                    border: "none",
+                    margin: 0, padding: 0,
+                    overflow: "hidden",
+                    zIndex: 0,
+                }}
+            />
+        </div>
 
         return (
             <div>
