@@ -148,6 +148,7 @@ export default class ComponentA6Bill extends Component {
                 ? bill.line_items_at_time.length
                 : 0;
         var store_address = ""
+        
         return (
             <div className="bill-A6">
 

@@ -123,7 +123,7 @@ class Store extends Component {
         this.state.store_code != null &&
         typeof getBranchId() != "undefined") {
         return <Redirect to={`/dashboard/${this.state.store_code}`} />;
-      } if(stores != null && stores.length ==0) {
+      } if(stores != null && stores.length ==0 && this.props.loadingBranch == false) {
         return <Redirect to={`/home`} />;
       }
       

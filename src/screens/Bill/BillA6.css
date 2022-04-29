@@ -34,7 +34,7 @@
 .bill-price-left {
     float: right;
     justify-content: end;
-    flex:5;
+    flex: 5;
     text-align: end;
 }
 
