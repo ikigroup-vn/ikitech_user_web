@@ -11,6 +11,8 @@ import moment from "moment";
 import ProfitTotal from './ProfitTotal'
 import { format } from '../../../../ultis/helpers'
 import { getBranchId } from '../../../../ultis/branchUtils'
+import history from '../../../../history'
+import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
 
 class ReportProfit extends Component {
     constructor(props) {
@@ -48,13 +50,33 @@ class ReportProfit extends Component {
             txtStart: time,
         });
     };
+    onchangeDateFromTo = (e) => {
+
+        var from = "";
+        var to = "";
+        try {
+          from = moment(e.value[0], "DD-MM-YYYY").format("YYYY-MM-DD");
+          to = moment(e.value[1], "DD-MM-YYYY").format("YYYY-MM-DD");
+        } catch (error) {
+          from = null;
+          to = null;
+        }
+      
+        const branch_id = getBranchId()
+        const params = `date_from=${from}&date_to=${to}&branch_id=${branch_id}`
+        const { store_code } = this.props.match.params
+        this.props.fetchReportProfit(store_code, branch_id, params)
+    
+      }
     onChangeEnd = (e) => {
         var time = moment(e, "DD-MM-YYYY").format("YYYY-MM-DD")
         this.setState({
             txtEnd: time,
         });
     };
-
+    goBack = () => {
+            history.goBack();
+    };
     render() {
         var { store_code } = this.props.match.params
         const reportProfit = this.props.reportProfit
@@ -72,14 +94,24 @@ class ReportProfit extends Component {
                                     type={Types.ALERT_UID_STATUS}
                                     alert={this.props.alert}
                                 />
-                                <div className='stock-title text-success'>
+                                <div className='stock-title text-success' style = {{display:"flex" , justifyContent : "space-between"}}>
                                     <h4>Báo cáo lãi lỗ</h4>
+                                    <button style={{ marginBottom: "10px" }} type="button" onClick={this.goBack} class="btn btn-warning  btn-sm"><i class="fas fa-arrow-left"></i>&nbsp;Quay lại</button>
+
                                 </div>
+                               
                                 <ProfitTotal reportProfit ={reportProfit} />
                                 <div className='card'>
                                     <div className='card-header py-3'>
                                         <div className='wap-header' style={{ display: 'flex' }}>
-                                            <div class="form-group" style={{ display: "flex", alignItems: "center" }}>
+                                        <DateRangePickerComponent
+                                id="daterangepicker"
+                                placeholder="Khoảng thời gian..."
+                                format="dd/MM/yyyy"
+                                onChange={this.onchangeDateFromTo}
+                              />
+                                            {/* <div class="form-group" style={{ display: "flex", alignItems: "center" }}>
+                                                
                                                 <label for="product_name" style={{ marginRight: "20px" }}>Ngày bắt đầu</label>
                                                 <MomentInput
                                                     placeholder="Chọn thời gian"
@@ -110,8 +142,8 @@ class ReportProfit extends Component {
                                                     onSave={() => { }}
                                                     onChange={this.onChangeEnd}
                                                 />
-                                            </div>
-                                            <button className='btn btn-primary btn-sm' style={{ marginLeft: "20px", marginBottom: "10px" }} onClick={this.handleFindItem}>Tìm kiếm</button>
+                                            </div> */}
+                                            {/* <button className='btn btn-primary btn-sm' style={{ marginLeft: "20px", marginBottom: "10px" }} onClick={this.handleFindItem}>Tìm kiếm</button> */}
 
                                         </div>
 

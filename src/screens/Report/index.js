@@ -12,6 +12,8 @@ import GeneralPos from "../../components/Report/GeneralPos";
 import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import Loading from "../Loading";
+import BadgeTablePos from "../../components/Dashboard/BadgeTable";
+
 import BadgeTable from "../../components/Report/BadgeTable";
 import * as reportAction from "../../actions/report";
 import * as collaboratorAction from "../../actions/collaborator";
@@ -93,7 +95,8 @@ class Report extends Component {
                               </h6>
                             </div>
                             <div class="card-body">
-                              <BadgeTable overview={overview} badges={badges} store_code={store_code} />
+                              {getChannel() == IKITECH ? <BadgeTable overview={overview} badges={badges} store_code={store_code} /> : <BadgeTablePos overview={overview} badges={badges} store_code={store_code} />}
+                              
                             </div>
                           </div>
 

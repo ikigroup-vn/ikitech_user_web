@@ -9,6 +9,7 @@ import { connect } from "react-redux";
 import { DateRangePickerComponent } from '@syncfusion/ej2-react-calendars';
 import { getBranchId } from '../../ultis/branchUtils';
 
+import getChannel , {IKIPOS , IKITECH} from "../../ultis/channel"
 
 
 class Chart extends Component {
@@ -16,16 +17,7 @@ class Chart extends Component {
   constructor() {
     super();
     this.state = {
-      chartData: {},
-      nameTypeChart: "THÁNG NÀY",
-      showDateTime: "hide",
-      typeTop: "THEO-DOANH-THU"
-    };
-  }
-
-  getChartData() {
-    this.setState({
-      chartData: {
+      chartData:  {
         labels: [],
         datasets: [
           {
@@ -35,7 +27,56 @@ class Chart extends Component {
           },
         ],
       },
+      nameTypeChart: "THÁNG NÀY",
+      showDateTime: "hide",
+      typeTop: "THEO-DOANH-THU"
+    };
+  }
+
+  getData = (topten ,chartData, typeTop) =>{
+    var chartDataProps = { ...topten };
+    var chartDataState = { ...chartData };
+    var labels = [];
+    var dataSets = [];
+    var typeTop = typeTop
+    var action = "total_price"
+    var label = "Doanh thu"
+    if (typeTop == "THEO-DOANH-THU") {
+      action = "total_price"
+      label = "Doanh thu"
+    }
+    if (typeTop == "THEO-SO-LUONG") {
+      action = "total_items"
+      label = "Số lượng"
+
+    }
+    if (typeTop == "THEO-SO-DON") {
+      action = "number_of_orders"
+      label = "Số đơn"
+
+    }
+    if (typeTop == "THEO-LUOT-XEM") {
+      action = "view"
+      label = "Lượt xem"
+
+    }
+
+
+
+    chartDataProps[action].forEach(item => {
+      dataSets.push(item[action]);
+      labels.push(item.product.name)
     });
+    chartDataState.datasets[0].data = dataSets
+    chartDataState.labels = labels
+    chartDataState.datasets[0].label = label
+    this.setState({ chartData: chartDataState });
+  }
+
+  componentWillMount()
+  {
+    this.getData(this.props.topten ,this.state.chartData, this.state.typeTop)
+
   }
 
 
@@ -43,49 +84,16 @@ class Chart extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     if (!shallowEqual(this.props.topten, nextProps.topten) ||
       this.state.typeTop != nextState.typeTop) {
-      var chartDataProps = { ...nextProps.topten };
-      var chartDataState = { ...nextState.chartData };
-      var labels = [];
-      var dataSets = [];
-      var typeTop = nextState.typeTop
-      var action = "total_price"
-      var label = "Doanh thu"
-      if (typeTop == "THEO-DOANH-THU") {
-        action = "total_price"
-        label = "Doanh thu"
-      }
-      if (typeTop == "THEO-SO-LUONG") {
-        action = "total_items"
-        label = "Số lượng"
+        this.getData(nextProps.topten ,nextState.chartData, nextState.typeTop)
 
-      }
-      if (typeTop == "THEO-SO-DON") {
-        action = "number_of_orders"
-        label = "Số đơn"
-
-      }
-      if (typeTop == "THEO-LUOT-XEM") {
-        action = "view"
-        label = "Lượt xem"
-
-      }
-
-      chartDataProps[action].forEach(item => {
-        dataSets.push(item[action]);
-        labels.push(item.product.name)
-      });
-      chartDataState.datasets[0].data = dataSets
-      chartDataState.labels = labels
-      chartDataState.datasets[0].label = label
-      this.setState({ chartData: chartDataState });
     }
     return true
   }
 
-  componentDidMount() {
-    this.getChartData();
+  // componentDidMount() {
+  //   this.getChartData();
 
-  }
+  // }
 
   onchangeTypeTop = (value) => {
     this.setState({
@@ -221,7 +229,7 @@ class Chart extends Component {
                   </div>
                   <div class="col-auto">
                     <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
-                      <i class="fas fa-users"></i>
+                    <i class="fas fa-percent"></i>
                     </div>
                   </div>
                 </div>
@@ -251,7 +259,9 @@ class Chart extends Component {
               </div>
             </div>
           </div>
-          <div class="col-xl-3 col-lg-3" onClick = {() =>{this.onchangeTypeTop("THEO-SO-DON")}}>
+
+          {
+            getChannel() == IKITECH &&   <div class="col-xl-3 col-lg-3" onClick = {() =>{this.onchangeTypeTop("THEO-SO-DON")}}>
             <div class="card card-stats mb-4 mb-xl-0">
               <div class="card-body">
                 <div class="row">
@@ -272,8 +282,10 @@ class Chart extends Component {
             </div>
           </div>
 
+          }
+        
 
-          <div class="col-xl-3 col-lg-3" onClick = {() =>{this.onchangeTypeTop("THEO-LUOT-XEM")}}>
+          {getChannel() == IKITECH &&           <div class="col-xl-3 col-lg-3" onClick = {() =>{this.onchangeTypeTop("THEO-LUOT-XEM")}}>
             <div class="card card-stats mb-4 mb-xl-0">
               <div class="card-body">
                 <div class="row">
@@ -292,7 +304,7 @@ class Chart extends Component {
                 </p>
               </div>
             </div>
-          </div>
+          </div>}
 
         </div>
 

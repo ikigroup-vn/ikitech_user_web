@@ -12,6 +12,9 @@ import { Link } from 'react-router-dom'
 import General from '../General'
 import Pagination from './Pagination'
 import { getBranchId } from '../../../ultis/branchUtils'
+import {formatNoD} from "../../../ultis/helpers"
+import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
+import history from "../../../history";
 
 class InventoryHistory extends Component {
   constructor(props) {
@@ -26,6 +29,8 @@ class InventoryHistory extends Component {
     const branch_id = getBranchId()
     const params = `branch_id=${branch_id}`
     this.props.fetchAllInventoryHistory(store_code, branch_id,1,params)
+    this.props.fetchImportExportStock(store_code, branch_id,1,params)
+
     try {
       document.getElementsByClassName('r-input')[0].placeholder = 'Chọn ngày';
       document.getElementsByClassName('r-input')[1].placeholder = 'Chọn ngày';
@@ -54,6 +59,35 @@ class InventoryHistory extends Component {
       txtEnd: time,
     });
   };
+
+  onchangeDateFromTo = (e) => {
+
+    var from = "";
+    var to = "";
+    try {
+      from = moment(e.value[0], "DD-MM-YYYY").format("YYYY-MM-DD");
+      to = moment(e.value[1], "DD-MM-YYYY").format("YYYY-MM-DD");
+    } catch (error) {
+      from = null;
+      to = null;
+    }
+
+    const branch_id = getBranchId()
+    const params = `date_from=${from}&date_to=${to}&branch_id=${branch_id}`
+    const { store_code } = this.props.match.params
+    this.props.fetchAllInventoryHistory(store_code, branch_id,1, params)
+
+  }
+
+  changePage = (store_code , id , type) => {
+    if(type === 0 || type === 1)
+      history.push(`/inventory/detail/${store_code}/${id}`)
+      else
+      history.push(`/import_stocks/detail/${store_code}/${id}`)
+
+      
+    
+}
   showData = (listReportHistory, store_code) => {
     var result = null
     if (listReportHistory) {
@@ -61,15 +95,17 @@ class InventoryHistory extends Component {
         const date = moment(item.created_at, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD")
         return (
           <>
-            <tr>
+            <tr className = "hover-product" onClick = {()=>this.changePage(store_code ,item.references_id , item.type  )}>
               <td>{index + 1}</td>
               <td>{item.references_value}</td>
               <td>{item.product?.name}</td>
               <td>{item.stock}</td>
-              <td>{item.change}</td>
+              <td>{formatNoD(item.change)}</td>
+              <td>{formatNoD(item.change_money)}</td>
+
               <td>{item.type_name}</td>
               <td>{date}</td>
-              <td>
+              {/* <td>
                 {item.type === 0 || item.type === 1 ?
                   <Link
                     to={`/inventory/detail/${store_code}/${item.references_id}`}
@@ -85,7 +121,7 @@ class InventoryHistory extends Component {
                   </Link>
 
                 }
-              </td>
+              </td> */}
             </tr>
           </>
         )
@@ -99,6 +135,8 @@ class InventoryHistory extends Component {
   render() {
     var { store_code } = this.props.match.params
     const { reportHistory } = this.props
+    const { reportInventory , reportImportExport} = this.props
+    const {import_total_amount ,  export_total_amount,  import_count_stock,  export_count_stock} = reportImportExport
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
@@ -113,14 +151,31 @@ class InventoryHistory extends Component {
                   type={Types.ALERT_UID_STATUS}
                   alert={this.props.alert}
                 />
-                <General store_code={store_code} />
+                <General reportImportExport = {reportImportExport} reportInventory = {reportInventory} store_code = {store_code}/>
                 <div className='card'>
                   <div className='card-header py-3' style={{ display: 'flex', justifyContent: "space-between" }}>
                     <div className='stock-title text-success'>
                       <h4>Sổ kho</h4>
                     </div>
+                    <div>
+                        <p className="sale_user_label bold">
+                        Giá trị nhập kho:{" "}
+                            <span id="total_selected">{formatNoD(import_total_amount)} - SL: {formatNoD(import_count_stock)} </span>
+                        </p>
+                        <p className="sale_user_label bold">
+                        Giá trị xuất kho:{" "}
+                            <span id="total_selected">{formatNoD(export_total_amount)} - SL: {formatNoD(export_count_stock)}</span>
+                        </p>
+                   
+                    </div>
                     <div className='wap-header' style={{display:'flex'}}>
-                      <div class="form-group" style={{ display: "flex", alignItems: "center" }}>
+                    <DateRangePickerComponent
+                                id="daterangepicker"
+                                placeholder="Khoảng thời gian..."
+                                format="dd/MM/yyyy"
+                                onChange={this.onchangeDateFromTo}
+                              />
+                      {/* <div class="form-group" style={{ display: "flex", alignItems: "center" }}>
                         <label for="product_name" style={{ marginRight: "20px" }}>Ngày bắt đầu</label>
                         <MomentInput
                           placeholder="Chọn thời gian"
@@ -135,8 +190,8 @@ class InventoryHistory extends Component {
                           onSave={() => { }}
                           onChange={this.onChangeStart}
                         />
-                      </div>
-                      <div class="form-group" style={{ display: "flex", alignItems: "center", marginLeft: "20px" }}>
+                      </div> */}
+                      {/* <div class="form-group" style={{ display: "flex", alignItems: "center", marginLeft: "20px" }}>
                         <label for="product_name" style={{ marginRight: "20px" }}>Ngày kết thúc</label>
                         <MomentInput
                           placeholder="Chọn thời gian"
@@ -151,8 +206,8 @@ class InventoryHistory extends Component {
                           onSave={() => { }}
                           onChange={this.onChangeEnd}
                         />
-                      </div>
-                      <button className='btn btn-primary btn-sm' style={{ marginLeft: "20px", marginBottom: "10px" }} onClick={this.handleFindItem}>Tìm kiếm</button>
+                      </div> */}
+                      {/* <button className='btn btn-primary btn-sm' style={{ marginLeft: "20px", marginBottom: "10px" }} onClick={this.handleFindItem}>Tìm kiếm</button> */}
 
                     </div>
 
@@ -167,9 +222,11 @@ class InventoryHistory extends Component {
                             <th>Tên sản phẩm</th>
                             <th>SL tồn kho</th>
                             <th>SL thay đổi </th>
+                            <th>Giá vốn thay đổi </th>
+
                             <th>Trạng thái</th>
                             <th>Thời gian</th>
-                            <th>Hành động</th>
+                            {/* <th>Hành động</th> */}
                           </tr>
                         </thead>
 
@@ -193,6 +250,8 @@ class InventoryHistory extends Component {
 const mapStateToProps = (state) => {
   return {
     reportHistory: state.reportReducers.reportHistory,
+    reportInventory: state.reportReducers.reportInventory,
+    reportImportExport : state.reportReducers.reportImportExport,
   }
 }
 
@@ -200,6 +259,9 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
       fetchAllInventoryHistory: (store_code, branch_id,page, params) => {
         dispatch(reportAction.fetchAllInventoryHistory(store_code, branch_id,page, params))
+      },
+      fetchImportExportStock: (store_code, branch_id,page,params) => {
+        dispatch(reportAction.fetchImportExportStock(store_code, branch_id,page,params))
       }
   }
 }

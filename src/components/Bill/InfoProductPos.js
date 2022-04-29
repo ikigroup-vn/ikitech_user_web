@@ -327,7 +327,7 @@ class InfoProductPos extends Component {
                 return (
                     <React.Fragment>
                         {this.checkExsitProduct(product.id) == true &&
-                            <li className={`${line_list_product} row`} style={{ display: "flex", marginBottom: "10px" }}>
+                            <li className={`${line_list_product} row`} style={{ display: "flex", marginBottom: "10px"   }}>
 
                                 <li className="cart_item cart_item_change col-lg-3 col-md-12 col-sm-12 ">
                                     <div className="panel panel-default mb0" style={{}}>
@@ -417,7 +417,7 @@ class InfoProductPos extends Component {
                                                     </div>
                                                 }
                                                 <div>
-                                                    <p class=" bold sale_user_label">
+                                                    <p class=" bold sale_user_label" style = {{paddingTop : "3px"}}>
                                                         Giá sản phẩm:
                                                         <span class={`cart_payment_method ${showTagDelPrice != 0 || (product.before_price == product.after_discount || product.before_discount_price == product.after_discount) ? "show" : "hide"}`}>
                                                             {format(product.before_price || product.before_discount_price)}
@@ -605,6 +605,7 @@ class InfoProductPos extends Component {
                 <ul
                     id="sale_cart_container"
                     className="box-body  no-padding cart_items"
+                    style = {{margin : "0 20px"}}
                 >
                     {this.shoListProduct(listProduct, product_discount_amount, list_items, total_final)}
                 </ul>
