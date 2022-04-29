@@ -222,7 +222,7 @@ class CreateInventory extends Component {
                                                         />
                                                         <div class="input-group-append">
                                                             <button
-                                                                class="btn btn-primary"
+                                                                class="btn btn-warning"
                                                                 type="submit"
 
                                                             >

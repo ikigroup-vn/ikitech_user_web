@@ -192,8 +192,7 @@ class ModalCreate extends Component {
                 </button>
                 <button
                   type="submit"
-                  class="btn"
-                  style={{ background: "rgb(229, 111, 37)", color: "white" }}
+                  class="btn btn-warning"
                 >
                   Tạo
                 </button>

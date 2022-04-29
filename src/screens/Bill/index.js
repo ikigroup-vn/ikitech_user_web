@@ -145,7 +145,7 @@ class Bill extends Component {
   componentWillReceiveProps(nextProps, nextState) {
 
 
-    if (this.state.paramDate != this.getParamDate()) {
+    if (this.state.paramDate != this.getParamDate() && this.state.paramDate.from != null) {
       this.setState({
         paramDate: this.getParamDate()
       })
@@ -219,6 +219,7 @@ class Bill extends Component {
       numPage,
       chat_allow,
       isShow,
+      paramDate
     } = this.state;
     if (this.props.auth) {
       return (
@@ -373,6 +374,7 @@ class Bill extends Component {
                             </div>
 
                             <Pagination
+                            paramDate = {paramDate}
                               searchValue={searchValue}
                               limit={numPage}
                               status_payment={statusPayment}

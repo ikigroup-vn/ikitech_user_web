@@ -14,10 +14,12 @@ class Pagination extends Component {
     var { store_code, limit, searchValue, bonusParam, listType } = this.props
     var params
     if (listType == 1) {
-      params = `&limit=${limit}${bonusParam}`
+      // params = `&limit=${limit}${bonusParam}`
     } else {
       params = `&limit=${limit}`
     }
+    if(params)
+    params = this.props.params
     const branch_id = localStorage.getItem('branch_id');
     this.props.fetchAllProductV2(store_code, branch_id, page, params);
     this.props.passNumPage(page)

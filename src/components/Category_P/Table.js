@@ -122,8 +122,7 @@ class Table extends Component {
                     {data.name}
                   </div>
                   <div
-                    className="button-category btn-group"
-                    style={{ height: "30px" }}
+                    className="group-btn-table"
                   >
                     <a
                       style={{ marginLeft: "10px", color: "white" }}

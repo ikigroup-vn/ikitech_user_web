@@ -21,7 +21,7 @@ class HistoryStock extends Component {
           <tr>
             <td> {index + 1}</td>
             <td>{format(data.stock)}</td>
-            <td>{format(data.cost_of_capital)}</td>
+            <td>{data.cost_of_capital}</td>
 
             <td>
               <div style={{display:"flex",alignItems:"center"}}>

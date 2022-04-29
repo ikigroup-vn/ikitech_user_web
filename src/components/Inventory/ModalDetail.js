@@ -230,6 +230,7 @@ class ModalDetail extends Component {
     }
     render() {
         var inforProduct = this.props.modal
+        console.log(nextProps.modal.inventoryProduct)
         var itemParent = inforProduct && inforProduct.inventoryProduct && inforProduct.inventoryProduct.distributes !== null && inforProduct.inventoryProduct.distributes.length > 0 ? inforProduct.inventoryProduct.distributes[0] : []
         return (
             <div class="modal" id="modalDetail">

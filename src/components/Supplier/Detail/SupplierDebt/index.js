@@ -14,12 +14,15 @@ import { getBranchId } from "../../../../ultis/branchUtils"
 import * as Env from "../../../../ultis/default"
 import ModalDetail from "../../../RevenueExpenditures/ModalDetail";
 import * as helper from "../../../../ultis/helpers"
+import { filter_arr, format } from "../../../../ultis/helpers";
+import * as Types from "../../../../constants/ActionType"
 
 import { Link } from "react-router-dom"
 class Footer extends Component {
     constructor(props) {
         super(props);
         this.state = {
+          isLoadRevenueExpenditures: false
 
         }
     }
@@ -87,8 +90,23 @@ class Footer extends Component {
     
           this.setState({ total: nextProps.reportExpenditure.reserve });
         }
+        if (nextProps.status_revenue == true) {
+          this.setState({ isLoadRevenueExpenditures: true })
+          this.props.resetStatusRevenueExpenditures({
+            type: Types.RESET_STATUS_LOADING,
+            data: false
+          })
+        }
       }
-
+      componentWillUnmount()
+      {
+        if (this.status_revenue === true) {
+          this.props.resetStatusRevenueExpenditures({
+            type: Types.RESET_STATUS_LOADING,
+            data: false
+          })
+        }
+      }
     componentDidMount() {
         var { supplierID, store_code } = this.props
         this.props.fetchAllRevenueExpenditures(store_code, getBranchId(), 1, `&recipient_group=1&recipient_references_id=${supplierID.id}`);
@@ -136,7 +154,7 @@ class Footer extends Component {
                             })
                         }>
                         <td>{index + 1}</td>
-                        <td><Link to={`/order/detail/${store_code}/${revenue.code}`} >{revenue.code}</Link></td>
+                        <td>{revenue.code}</td>
 
                         <td>
                             {formatNoD(revenue.change_money)}
@@ -253,7 +271,7 @@ class Footer extends Component {
 
 
                         <div className="form-group">
-                            <label htmlFor="name">Danh sách</label>
+                        <label htmlFor="name">Nợ nhà cung cấp:&nbsp;{supplierID.debt > 0 ? format(supplierID.debt || 0) : 0}</label>
 
                             <div class="table-responsive">
                                 <table class="table table-hover table-border">
@@ -267,7 +285,10 @@ class Footer extends Component {
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {this.showRevenues(revenueExpenditures.data)}
+                                    {
+                      this.state.isLoadRevenueExpenditures == true && this.showRevenues(revenueExpenditures.data)
+
+                    }
                                     </tbody>
                                 </table>
                             </div>
@@ -343,7 +364,9 @@ const mapStateToProps = (state) => {
         bills: state.billReducers.bill.allBill,
 
         theme: state.themeReducers.theme,
-
+        status_revenue:
+        state.revenueExpendituresReducers.revenueExpenditures
+          .status,
     };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -377,6 +400,9 @@ const mapDispatchToProps = (dispatch, props) => {
                 )
             );
         },
+        resetStatusRevenueExpenditures: (status) => {
+          dispatch(status)
+        }
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Footer);

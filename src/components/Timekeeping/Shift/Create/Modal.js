@@ -90,7 +90,6 @@ class Modal extends Component {
 
       this.setState({
         name: "",
-        code: "",
         start_work_hour: 0,
         start_work_minute: 0,
         end_work_hour: 0,

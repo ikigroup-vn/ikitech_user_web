@@ -9,6 +9,8 @@ import { isEmpty } from "../../../../ultis/helpers";
 import moment from "moment";
 import MomentInput from "react-moment-input";
 import "../Create/style.css";
+import { randomString } from "../../../../ultis/helpers"
+
 // import { compressed } from "../../ultis/helpers";
 // import * as helper from "../../ultis/helpers";
 
@@ -21,7 +23,7 @@ class Modal extends Component {
     super(props);
     this.state = {
       name: "",
-      code: "",
+      code: randomString(8),
       start_work_hour: 0,
       start_work_minute: 0,
       end_work_hour: 0,
@@ -100,7 +102,6 @@ class Modal extends Component {
       const { shiftDetail, shift_id } = this.props;
       this.setState({
         name: "",
-        code: "",
         start_work_hour: 0,
         start_work_minute: 0,
         end_work_hour: 0,
@@ -191,16 +192,8 @@ class Modal extends Component {
       return;
     }
     if (code == null || !isEmpty(code)) {
-      this.props.showError({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "danger",
-          title: "Lỗi",
-          disable: "show",
-          content: "Mã ca không được để trống",
-        },
-      });
-      return;
+      code = randomString(8)
+
     }
     if (days_of_week_list.length === 0) {
       this.props.showError({
