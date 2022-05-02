@@ -22,6 +22,7 @@ class PrintOrderScreen extends Component {
         this.props.fetchBillId(store_code, order_code);
 
 
+     ///   window.$("div").empty();
 
         window.addEventListener('afterprint', event => {
             //    var =  defaultHrefBack
@@ -53,7 +54,7 @@ class PrintOrderScreen extends Component {
         // }
 
         if (!shallowEqual(this.state.isShow, nextState.isShow) && nextState.isShow == true) {
-            this.printIframe("receipt")
+          //  this.printIframe("receipt")
         }
 
         if (this.state.isLoading != true) {
@@ -72,13 +73,21 @@ class PrintOrderScreen extends Component {
         window.print();
     }
      printIframe = (id) => {
-        console.log(id)
-        const iframe = document.frames
+        // console.log(id)
+        const frame = document.frames
             ? document.frames[id]
             : document.getElementById(id);
-        const iframeWindow = iframe.contentWindow || iframe;
+  
 
-        iframe.focus();
+
+
+
+        // const frame = document.getElementById(id);
+        frame.contentWindow.postMessage({}, 'http://dev.doapp.vn/api/store/print/bill/290422W2ABAFIL');
+        frame.focus();
+       // frame.print();
+      const iframeWindow = frame.contentWindow || frame
+      frame.focus();
         iframeWindow.print();
 
         return false;
@@ -101,27 +110,32 @@ class PrintOrderScreen extends Component {
 
 
 
-        return <div>
+        // return <div>
          
-            <iframe
-                id="receipt"
-                src="https://dev.doapp.vn/api/store/print/bill/290422W2ABAFIL"
-                // style={{ display: 'none' }}
-                title="Receipt"
-                style={{
-                    position: "fixed",
-                    top: 0, left: 0,
-                    bottom: 0,
-                    right: 0,
-                    width: "100%",
-                    height: "100%",
-                    border: "none",
-                    margin: 0, padding: 0,
-                    overflow: "hidden",
-                    zIndex: 0,
-                }}
-            />
-        </div>
+        //  <div onClick={()=>{
+        //       this.printIframe("receipt")
+        //  }}>In</div>
+
+       
+        //     <iframe
+        //         id="receipt"
+        //         src="http://dev.doapp.vn/api/store/print/bill/290422W2ABAFIL"
+        //         // style={{ display: 'none' }}
+        //         title="Receipt"
+        //         // style={{
+        //         //     position: "fixed",
+        //         //     top: 0, left: 0,
+        //         //     bottom: 0,
+        //         //     right: 0,
+        //         //     width: "100%",
+        //         //     height: "100%",
+        //         //     border: "none",
+        //         //     margin: 0, padding: 0,
+        //         //     overflow: "hidden",
+        //         //     zIndex: 0,
+        //         // }}
+        //     />
+        // </div>
 
         return (
             <div>
