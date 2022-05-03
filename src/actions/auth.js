@@ -8,7 +8,7 @@ export const register = (form) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
     userApi
       .checkExsitEmailPhone({
@@ -18,7 +18,7 @@ export const register = (form) => {
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
+          loading: "hide"
         })
         if (
           res.data.data[0].value == false &&
@@ -42,7 +42,7 @@ export const register = (form) => {
               content: content,
             },
           });
-          
+
           history.push("/register/otp");
         } else {
           var content = "";
@@ -79,14 +79,14 @@ export const registerOTP = (form) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
     userApi
       .postRegister(form)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
+          loading: "hide"
         })
         if (
           typeof res.data.success !== "undefined" &&
@@ -128,24 +128,72 @@ export const registerOTP = (form) => {
   };
 };
 
+
+
+
+
+export const changePassword = (form, funcModal = null) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show"
+    })
+    userApi
+      .changePassword(form)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide"
+        })
+        if (res.data.success && funcModal != null) {
+          funcModal()
+        }
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công",
+            disable: "show",
+            content: "Thay đổi mật khẩu thành công",
+          },
+        });
+      })
+      .catch(function (error) {
+        if (typeof error.response.data.msg !== "undefined") {
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "danger",
+              title: "Lỗi",
+              disable: "show",
+              content: error?.response?.data?.msg,
+            },
+          });
+        }
+
+      });
+  };
+};
+
+
 export const login = (form) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
     userApi
       .postLogin(form)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
+          loading: "hide"
         })
-                if (
+        if (
           typeof res.data.success !== "undefined" &&
           res.data.success == true
         ) {
-          userLocalApi.setToken( res.data.data.token)
+          userLocalApi.setToken(res.data.data.token)
 
           history.push("/");
         } else {
@@ -161,8 +209,7 @@ export const login = (form) => {
         }
       })
       .catch(function (error) {
-        if(typeof error.response.data.msg !== "undefined")
-        {
+        if (typeof error.response.data.msg !== "undefined") {
           dispatch({
             type: Types.ALERT_UID_STATUS,
             alert: {
@@ -173,46 +220,65 @@ export const login = (form) => {
             },
           });
         }
-   
+
       });
   };
 };
 
-export const forgot = (form) => 
-{
+export const forgot = (form) => {
+  var data = {}
+  if (form.txtPhone == "")
+    data = { email: form.txtEmail }
+  else
+    data = { phone_number: form.txtPhone }
+
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
-    userApi.checkExsitEmailPhone({phone_number : form.txtPhone, email: form.txtPhone})
-    .then((res) => {
-      dispatch({
-        type: Types.SHOW_LOADING,
-        loading : "hide"
-      })
-      if (res.data.data[0].value == true || res.data.data[1].value == true) {
+    userApi.checkExsitEmailPhone(data)
+      .then((res) => {
         dispatch({
-          type: Types.USER_PHONE_FORGOT,
-          user: {
-            phone_number: form.txtPhone,
-          },
-        });
-        history.push("/forgot/otp");
-      } else {
-        dispatch({
-          type: Types.ALERT_UID_STATUS,
-          alert: {
-            type: "danger",
-            title: "Lỗi",
-            disable: "show",
-            content: "Số điện thoại không tồn tại",
-          },
-        });
-      }
-    }).catch(function(error) {
-      console.log(error.response)
-    });
+          type: Types.SHOW_LOADING,
+          loading: "hide"
+        })
+        if (res.data.data[0].value == true || res.data.data[1].value == true) {
+          dispatch({
+            type: Types.USER_PHONE_FORGOT,
+            user: {
+              phone_number: form.txtPhone,
+              email: form.txtEmail
+            },
+          });
+          history.push("/forgot/otp");
+        } else {
+          if (form.txtPhone == "") {
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "danger",
+                title: "Lỗi",
+                disable: "show",
+                content: "Email không tồn tại",
+              },
+            });
+          }
+          else {
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "danger",
+                title: "Lỗi",
+                disable: "show",
+                content: "Số điện thoại không tồn tại",
+              },
+            });
+          }
+        }
+      }).catch(function (error) {
+        console.log(error.response)
+      });
   };
 };
 
@@ -220,14 +286,14 @@ export const forgotOTP = (form) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
     userApi
       .postResetPassword(form)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
+          loading: "hide"
         })
         if (
           typeof res.data.success !== "undefined" &&
@@ -275,7 +341,7 @@ export const sendOTP = (phone_number) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
     userApi
       .sendOtp({
@@ -285,7 +351,7 @@ export const sendOTP = (phone_number) => {
         console.log(res)
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
+          loading: "hide"
         })
         if (
           typeof res.data.success !== "undefined" &&
@@ -323,7 +389,7 @@ export const sendOTPToEmail = (email) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
     userApi
       .sendOtpToEmail({
@@ -333,7 +399,7 @@ export const sendOTPToEmail = (email) => {
         console.log(res)
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
+          loading: "hide"
         })
         if (
           typeof res.data.success !== "undefined" &&
