@@ -169,7 +169,7 @@ export const updateTheme = (store_code, theme) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -214,7 +214,7 @@ function loadBanner(dispatch, store_code, data) {
           type: "danger",
           title: "Lỗi",
           disable: "show",
-          content: error.response.data.msg,
+          content: error?.response?.data?.msg,
         },
       });
     });

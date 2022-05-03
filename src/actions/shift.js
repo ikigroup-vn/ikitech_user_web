@@ -96,7 +96,7 @@ export const createShift = (store_code, branch_id, data, params) => {
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -112,7 +112,7 @@ export const createShift = (store_code, branch_id, data, params) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -162,7 +162,7 @@ export const updateShift = (store_code, branch_id, data, id,params) => {
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -178,7 +178,7 @@ export const updateShift = (store_code, branch_id, data, id,params) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -227,7 +227,7 @@ export const destroyShift = (store_code, branch_id, id,params) => {
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -243,7 +243,7 @@ export const destroyShift = (store_code, branch_id, id,params) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });

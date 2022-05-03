@@ -86,7 +86,7 @@ export const updateAllRequestPayment = (store_code) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -101,7 +101,7 @@ export const updateAllRequestPayment = (store_code) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -155,7 +155,7 @@ export const updateCollaborator = (store_code, id, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -170,7 +170,7 @@ export const updateCollaborator = (store_code, id, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -220,7 +220,7 @@ export const updateRequestPayment = (store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -235,7 +235,7 @@ export const updateRequestPayment = (store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -366,7 +366,7 @@ export const createStep = (store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -377,7 +377,7 @@ export const createStep = (store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -424,7 +424,7 @@ export const destroyStep = (store_code, id) => {
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -436,7 +436,7 @@ export const destroyStep = (store_code, id) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -482,7 +482,7 @@ export const updateStep = (store_code, id, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -497,7 +497,7 @@ export const updateStep = (store_code, id, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -542,7 +542,7 @@ export const updateConfig = (store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -557,7 +557,7 @@ export const updateConfig = (store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });

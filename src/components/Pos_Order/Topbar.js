@@ -12,17 +12,17 @@ import * as productApi from "../../data/remote/product";
 import ModalBranch from './ModalBranch'
 import ModalKeyboard from './ModalKeyboard'
 import ModalDelete from './ModalDelete'
-import { filter_arr, format } from '../../ultis/helpers'
-import { findTotalStockPos } from '../../ultis/productUltis'
-import * as Env from "../../ultis/default"
-
+import KeyboardEventHandler from "react-keyboard-event-handler";
 import { AsyncPaginate } from "react-select-async-paginate";
 import CardProduct from './CardProduct'
+import history from '../../history'
 
 
 
 
 class Topbar extends Component {
+
+
     constructor(props) {
         super(props)
         this.state = {
@@ -33,6 +33,7 @@ class Topbar extends Component {
             branchId: ""
         }
 
+        this.refSearchProduct = React.createRef()
 
     }
     componentDidMount() {
@@ -41,6 +42,8 @@ class Topbar extends Component {
         this.props.listPosOrder(store_code, branch_id)
         this.props.fetchBranchStore(this.props.store_code);
         this.props.fetchUserId();
+
+
 
     }
     componentWillReceiveProps(nextProps) {
@@ -153,7 +156,9 @@ class Topbar extends Component {
         this.props.fetchAllProductV2(store_code, branch_id, 1, params);
     };
     goBackHome = () => {
-        window.location.href = "/";
+        var { store_code } = this.props;
+        history.push(`/dashboard/${store_code}`)
+        // window.location.href = "/";
     }
 
     onChangeSearch = (e) => {
@@ -269,6 +274,20 @@ class Topbar extends Component {
 
     };
 
+    handleKeyboard = (key) => {
+
+        switch (key) {
+            case "f3":
+                if (this.refSearchProduct != null) {
+                    this.refSearchProduct.focus()
+                }
+
+                break;
+            default:
+                return;
+        }
+    };
+
     render() {
         var { listPos, branchStore, user, store_code, currentBranch } = this.props;
         var { idCart, selected_product_id } = this.state
@@ -278,10 +297,28 @@ class Topbar extends Component {
             return <CardProduct isItemSearch={true} product={product} />
         };
 
+        const customStyles = {
+            menu: styles => ({
+                ...styles,
+                width: '600px',
 
+            }),
+            option: (provided, state) => ({
+                ...provided,
+                borderBottom: '1px dotted pink',
+                fontWeight: 200,
+                padding: 20,
+                color: "black",
+            }),
+        }
 
         return (
             <div className='controller-top'>
+
+                <KeyboardEventHandler
+                    handleKeys={["f3"]}
+                    onKeyEvent={(key, e) => this.handleKeyboard(key)}
+                />
                 <nav class="navbar navbar-expand navbar-light bg-white topbar static-top header-pos">
 
                     <div class="navbar-nav" style={{
@@ -294,30 +331,34 @@ class Topbar extends Component {
                         <div className='group-controller-first'>
 
                             <div className='first-list-top-cart'>
-                                <li className='nav-item' style={{ color: "white", cursor: "pointer", marginRight: '10px' }} onClick={this.goBackHome}>
-                                    <i class='fas fa-home fa-2x' style={{ fontSize: "22px" }}></i>
-                                </li>
+
                                 <li class="nav-item"
                                     style={{ flex: 1 }}
                                 >
 
-                                    <AsyncPaginate
-                                        placeholder="(F3) Tìm kiếm sản phẩm"
-                                         value={null}
-                                        loadOptions={this.loadProducts}
-                                        formatOptionLabel={formatOptionLabel}
-                                        name="recipientReferences1"
-                                        onChange={this.onChangeProduct}
-                                        additional={{
-                                            page: 1,
-                                        }}
-                                        styles={{
-                                            width: "100%"
-                                        }}
-                                        debounceTimeout={500}
-                                        isClearable
-                                        isSearchable
-                                    />
+                                    <div>
+                                        <AsyncPaginate
+                                            autoFocus
+                                            selectRef={(ref) => {
+                                                this.refSearchProduct = ref;
+                                            }}
+                                            noOptionsMessage={() => 'Không tìm thấy sản phẩm nào'}
+                                            loadingMessage={() => 'Đang tìm...'}   //minor type-O here
+                                            placeholder="(F3) Tìm kiếm sản phẩm"
+                                            value={null}
+                                            loadOptions={this.loadProducts}
+                                            formatOptionLabel={formatOptionLabel}
+                                            id="recipientReferences1"
+                                            onChange={this.onChangeProduct}
+                                            additional={{
+                                                page: 1,
+                                            }}
+                                            styles={customStyles}
+                                            debounceTimeout={500}
+                                            isClearable
+                                            isSearchable
+                                        />
+                                    </div>
 
 
                                 </li>
@@ -330,8 +371,13 @@ class Topbar extends Component {
                                     {
                                         listPos !== null && listPos.length > 0 ?
                                             <ul class="navbar-nav" style={{ alignItems: "center" }}>
-                                                <li className={this.state.selectTap === -1 ? "activess nav-item" : 'nav-item'} style={{ display: "flex", alignItems: "center", margin: "0 7px", backgroundColor: "rgb(174 61 52)", color: "white", padding: "8px 10px", borderRadius: "5px" }} >
-                                                    <div className='tab-item' onClick={() => this.handleChooseTab1(listPos[0].id)} style={{ cursor: "pointer", marginRight: "5px" }}>{listPos[0].name}</div>
+                                                <li 
+                                                 onClick={() => this.handleChooseTab1(listPos[0].id)}
+                                                className={this.state.selectTap === -1 ? "activess nav-item item-cart-list" : 'nav-item item-cart-list'} 
+                                              >
+                                                    <div className='tab-item' 
+                                                    style={{ marginRight: "5px" }}
+                                                    >{listPos[0].name}</div>
                                                     {listPos.length > 1 && <i class='fa fa-window-close'
                                                         onClick={() => this.handleDelete(listPos[0].id)}
                                                         data-toggle="modal" data-target="#removeModal"
@@ -341,9 +387,14 @@ class Topbar extends Component {
                                                 {
                                                     listPos.slice(1, listPos.length).map((item, index) => {
                                                         return (
-                                                            <li key={index} className={index === this.state.selectTap ? "activess nav-item" : 'nav-item'} style={{ display: "flex", alignItems: "center", margin: "0 7px", backgroundColor: "rgb(174 61 52)", color: "white", padding: "8px 10px", borderRadius: "5px" }} >
-                                                                <div className='tab-item' onClick={() => this.handleChooseTab(item.id, index)} style={{ cursor: "pointer", marginRight: "5px" }}>{item.name}</div>
-                                                                <i class='fa fa-window-close' onClick={() => this.handleDelete(item.id)} data-toggle="modal" data-target="#removeModal"></i>
+                                                            <li  onClick={() => this.handleChooseTab(item.id, index)}  
+                                                            key={index} className={index === this.state.selectTap ? "activess nav-item item-cart-list" : 'nav-item item-cart-list'} 
+                                                            >
+                                                                <div className='tab-item' 
+                                                               
+                                                                style={{  marginRight: "5px" }}>{item.name}</div>
+                                                                <i class='fa fa-window-close' 
+                                                                onClick={() => this.handleDelete(item.id)} data-toggle="modal" data-target="#removeModal"></i>
                                                             </li >
                                                         )
                                                     })
@@ -357,53 +408,57 @@ class Topbar extends Component {
                         </div>
 
                         <div className='end-list-top-cart'>
-
-
-                            <li className='nav-item' style={{
-                                display: 'flex', alignItems: "center",
-                                color: "white", fontSize: "15px",
-                                padding: "10px",
-                                paddingLeft: "25px",
-                                cursor: "pointer"
-                            }} onClick={() => this.handleCreateTab()}>
+                            <li className='nav-item add-cart' onClick={() => this.handleCreateTab()}>
                                 <i class='fas fa-plus' ></i>
                             </li>
 
-                            <ul className="navbar-nav ml-auto" style={{ display: "flex", alignItems: "center" }}>
-                                <li className="nav-item dropdown no-arrow" style={{ margin: "0 10px", fontSize: "17px" }}>
-                                    <div className='wrap-info' data-toggle="modal" data-target="#modalBranch" style={{ display: "flex", color: "white", cursor: "pointer" }}>
-                                        <i class="fa fa-map-marker" aria-hidden="true"></i>
-                                        <span className="mr-2 small" style={{
-                                            color: "white", marginLeft: "5px",
-                                            textOverflow: "ellipsis",
-                                            whiteSpace: "nowrap",
-                                            overflow: "hidden",
-                                        }}>
-                                            {currentBranch?.name ?? "Chưa có chi nhánh"}
-                                        </span>
+                            <div style={{
+                                paddingLeft: 50
+                            }}>
+                                <ul className="navbar-nav ml-auto" style={{
+                                    display: "flex", alignItems: "center", justifyContent: "space-between",
 
-                                    </div>
-                                    <div className='wrap-info' style={{ display: "flex", color: "white" }}>
-                                        <i class="fa fa-user-o" aria-hidden="true"></i>
-                                        <span className="mr-2 small" style={{ color: "white", marginLeft: "5px" }}>
-                                            {user.name}
-                                        </span>
-                                    </div>
+                                }}>
+                                    <li className="nav-item dropdown no-arrow" style={{ margin: "0 10px", fontSize: "17px" }}>
+                                        <div className='wrap-info' data-toggle="modal" data-target="#modalBranch" style={{ display: "flex", color: "white", cursor: "pointer" }}>
+                                            <i class="fa fa-map-marker" aria-hidden="true"></i>
+                                            <span className="mr-2 small" style={{
+                                                color: "white", marginLeft: "5px",
+                                                textOverflow: "ellipsis",
+                                                whiteSpace: "nowrap",
+                                                overflow: "hidden",
+                                            }}>
+                                                {currentBranch?.name ?? "Chưa có chi nhánh"}
+                                            </span>
 
-                                </li>
+                                        </div>
+                                        <div className='wrap-info' style={{ display: "flex", color: "white" }}>
+                                            <i class="fa fa-user-o" aria-hidden="true"></i>
+                                            <span className="mr-2 small" style={{ color: "white", marginLeft: "5px" }}>
+                                                {user.name}
+                                            </span>
+                                        </div>
 
-                                <li className='nav-item' id='btn-full' style={{ margin: "0 10px", color: "white", cursor: "pointer" }} onClick={this.fullScreen}>
-                                    {!this.state.fullScreen ?
-                                        <i class='fas fa-expand-arrows-alt fa-2x' style={{ fontSize: "22px" }}></i> :
-                                        <i class='fas fa-compress-arrows-alt' style={{ fontSize: "22px" }}></i>
-                                    }
+                                    </li>
 
-                                </li >
+                                    <li className='nav-item' id='btn-full' style={{  color: "white", cursor: "pointer" }} onClick={this.fullScreen}>
+                                        {!this.state.fullScreen ?
+                                            <i class='fas fa-expand-arrows-alt fa-2x  add-cart'></i> :
+                                            <i class='fas fa-compress-arrows-alt  add-cart'></i>
+                                        }
 
-                                <li className='nav-item' style={{ margin: "0 10px" }}>
-                                    <button className='btn' style={{ color: "white", border: "1px solid" }} data-toggle="modal" data-target="#modalKeyboard">Phím tắt</button>
-                                </li>
-                            </ul>
+                                    </li >
+
+                                    <li className='nav-item' style={{ color: "white", cursor: "pointer", 
+                                    marginRight: '10px' }} onClick={this.goBackHome}>
+                                        <i class='fas fa-home fa-2x  add-cart'></i>
+                                    </li>
+
+                                    <li className='nav-item' style={{ margin: "0 0px" }}>
+                                        <button className='btn' style={{ color: "white", border: "1px solid" }} data-toggle="modal" data-target="#modalKeyboard">Phím tắt</button>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
 

@@ -95,7 +95,7 @@ export const putOne = (store_code, branch_id, data, params) => {
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -111,7 +111,7 @@ export const putOne = (store_code, branch_id, data, params) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -161,7 +161,7 @@ export const putALot = (store_code, branch_id, data, params) => {
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -177,7 +177,7 @@ export const putALot = (store_code, branch_id, data, params) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });

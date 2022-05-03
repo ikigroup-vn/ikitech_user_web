@@ -60,7 +60,7 @@ export const createSchedule = (store_code,data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -105,7 +105,7 @@ export const destroySchedule = (store_code, id) => {
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -121,7 +121,7 @@ export const destroySchedule = (store_code, id) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -163,7 +163,7 @@ export const updateSchedule = (scheduleId, schedule, store_code) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -211,7 +211,7 @@ export const updateScheduleStatus = (scheduleId, schedule, store_code) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -226,7 +226,7 @@ export const updateScheduleStatus = (scheduleId, schedule, store_code) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });

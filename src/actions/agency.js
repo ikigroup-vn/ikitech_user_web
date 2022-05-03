@@ -187,7 +187,7 @@ export const addBonusSteps = (store_code, data) => {
           type: "danger",
           title: "Lỗi",
           disable: "show",
-          content: error.response.data.msg,
+          content: error?.response?.data?.msg,
         },
       });
     });
@@ -236,7 +236,7 @@ export const updateBonusSteps = (store_code, id, data) => {
           type: "danger",
           title: "Lỗi",
           disable: "show",
-          content: error.response.data.msg,
+          content: error?.response?.data?.msg,
         },
       });
     });
@@ -326,7 +326,7 @@ export const updateAllRequestPayment = (store_code) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -341,7 +341,7 @@ export const updateAllRequestPayment = (store_code) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -395,7 +395,7 @@ export const updateAgency = (store_code, id, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -410,7 +410,7 @@ export const updateAgency = (store_code, id, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -460,7 +460,7 @@ export const updateRequestPayment = (store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -475,7 +475,7 @@ export const updateRequestPayment = (store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -610,7 +610,7 @@ export const createAgencyType = (store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -621,7 +621,7 @@ export const createAgencyType = (store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -671,7 +671,7 @@ export const createStep = (store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -682,7 +682,7 @@ export const createStep = (store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -730,7 +730,7 @@ export const destroyType = (store_code, id) => {
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -742,7 +742,7 @@ export const destroyType = (store_code, id) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -789,7 +789,7 @@ export const destroyStep = (store_code, id) => {
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -801,7 +801,7 @@ export const destroyStep = (store_code, id) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -849,7 +849,7 @@ export const updateAgencyType = (store_code, id, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -864,7 +864,7 @@ export const updateAgencyType = (store_code, id, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -908,7 +908,7 @@ export const updateStep = (store_code, id, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -923,7 +923,7 @@ export const updateStep = (store_code, id, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -968,7 +968,7 @@ export const updateConfig = (store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -983,7 +983,7 @@ export const updateConfig = (store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });

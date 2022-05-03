@@ -56,25 +56,13 @@ export const addProductInCart = (store_code, branch_id, id_cart, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
+
+
+
       })
-      .catch(function (error) {
-        dispatch({
-          type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
-        dispatch({
-          type: Types.ALERT_UID_STATUS,
-          alert: {
-            type: "danger",
-            title: "Lỗi",
-            disable: "show",
-            content: error.response.data.msg,
-          },
-        });
-      });
   };
 };
 export const deleteOneCart = (store_code, branch_id, id_cart) => {
@@ -116,7 +104,7 @@ export const deleteOneCart = (store_code, branch_id, id_cart) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -131,7 +119,7 @@ export const deleteOneCart = (store_code, branch_id, id_cart) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -177,7 +165,7 @@ export const createOneTab = (store_code, branch_id, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -192,7 +180,7 @@ export const createOneTab = (store_code, branch_id, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -250,6 +238,15 @@ export const updateQuantityLineItem = (store_code, branch_id, id_cart, data) => 
         });
       })
       .catch(function (error) {
+        PosApi.fetchInfoOneCart(store_code, branch_id, id_cart).then((res) => {
+          if (res.data.code == 200)
+            dispatch({
+              type: Types.FETCH_LIST_CART_ITEM,
+              data: res.data.data,
+            });
+        });
+
+
         dispatch({
           type: Types.NONE_CHANGE_QUANTITY_LINE_ITEM,
         })
@@ -259,7 +256,7 @@ export const updateQuantityLineItem = (store_code, branch_id, id_cart, data) => 
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -302,7 +299,7 @@ export const subQuantityProduct = (store_code, branch_id, id_cart, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -344,7 +341,7 @@ export const destroyOneProduct = (store_code, branch_id, id_cart, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -386,7 +383,7 @@ export const updateInfoCart = (store_code, branch_id, id, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -406,9 +403,12 @@ export const updateInfoCarts = (store_code, branch_id, id, data) => {
           loading: "hide"
         })
 
+        var data2 = res.data.data
+        data2.noUpdateUI = data.noUpdateUI
+
         dispatch({
           type: Types.FETCH_LIST_CART_ITEM,
-          data: res.data.data,
+          data: data2,
         });
         dispatch({
           type: Types.ALERT_UID_STATUS,
@@ -427,7 +427,7 @@ export const updateInfoCarts = (store_code, branch_id, id, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -439,8 +439,21 @@ export const paymentOrderPos = (store_code, branch_id, id, data) => {
       type: Types.SHOW_LOADING,
       loading: "show"
     })
+    dispatch({
+      type: Types.POS_ORDER_PAYMENT_LOADING,
+      loadingOrder: true
+    })
     PosApi.paymentOrderPos(store_code, branch_id, id, data)
       .then((res) => {
+        dispatch({
+          type: Types.POS_ORDER_PAYMENT_SUCCESS,
+          data: {
+            orderAfterPayment: res.data.data,
+            loadingOrder: false,
+            allowAutoPrint: data.allowAutoPrint
+          }
+        })
+
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide"
@@ -462,7 +475,7 @@ export const paymentOrderPos = (store_code, branch_id, id, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -501,51 +514,11 @@ export const fetchVoucher = (store_code, branch_id, id, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
   };
 };
-export const handleCreateUsers = (store_code, data) => {
-  console.log("data", data)
-  return (dispatch) => {
-    dispatch({
-      type: Types.SHOW_LOADING,
-      loading: "show"
-    })
-    PosApi.handleCreateUsers(store_code, data)
-      .then((res) => {
-        dispatch({
-          type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
 
-        dispatch({
-          type: Types.FETCH_INFO_CUSTOMER,
-          data: res.data.data,
-        });
-        dispatch({
-          type: Types.ALERT_UID_STATUS,
-          alert: {
-            type: "success",
-            title: "Thành công ",
-            disable: "show",
-            content: res.data.msg,
-          },
-        });
-      })
-      .catch(function (error) {
-        dispatch({
-          type: Types.ALERT_UID_STATUS,
-          alert: {
-            type: "danger",
-            title: "Lỗi",
-            disable: "show",
-            content: error.response.data.msg,
-          },
-        });
-      });
-  };
-};
 

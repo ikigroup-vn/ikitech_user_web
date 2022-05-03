@@ -43,7 +43,7 @@ class Form extends Component {
               className="form-control form-control-user"
               id="exampleInputEmail"
               aria-describedby="emailHelp"
-              placeholder="Nhập số điện thoại, Email hoặc tài khoản nhân viên..."
+              placeholder="SĐT, Email hoặc tài khoản nhân viên"
               autocomplete="off"
               value={txtPhone}
               onChange={this.onChange}

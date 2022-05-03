@@ -120,7 +120,7 @@ export const deleteBranchStore = (store_code, id) => {
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -137,7 +137,7 @@ export const deleteBranchStore = (store_code, id) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -187,7 +187,7 @@ export const deleteSupplier = (store_code, id) => {
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -204,7 +204,7 @@ export const deleteSupplier = (store_code, id) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -259,7 +259,7 @@ export const updateBranchStore = (store_code, data, id, $this, funcModal = null)
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -279,7 +279,7 @@ export const updateBranchStore = (store_code, data, id, $this, funcModal = null)
               type: "danger",
               title: "Lỗi",
               disable: "show",
-              content: error.response.data.msg,
+              content: error?.response?.data?.msg,
             },
           });
         }
@@ -335,7 +335,7 @@ export const createBranchStore = (store_code, id, $this, funcModal = null) => {
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -356,7 +356,7 @@ export const createBranchStore = (store_code, id, $this, funcModal = null) => {
               type: "danger",
               title: "Lỗi",
               disable: "show",
-              content: error.response.data.msg,
+              content: error?.response?.data?.msg,
             },
           });
         }
@@ -412,7 +412,7 @@ export const createSupplier = (store_code, id, funcModal = null) => {
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -429,7 +429,7 @@ export const createSupplier = (store_code, id, funcModal = null) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -504,7 +504,7 @@ export const editSupplier = (store_code, id, data, funcModal) => {
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -521,7 +521,7 @@ export const editSupplier = (store_code, id, data, funcModal) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -625,7 +625,7 @@ export const createStore = (data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -669,7 +669,7 @@ export const updateStore = (data, id, funcModal) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -738,7 +738,7 @@ export const destroyStore = (id) => {
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -755,7 +755,7 @@ export const destroyStore = (id) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -801,7 +801,7 @@ export const uploadImgStore = (file) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });

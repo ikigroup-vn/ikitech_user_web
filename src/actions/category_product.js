@@ -59,7 +59,7 @@ export const createCategoryP = (store_code,data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -74,7 +74,7 @@ export const createCategoryP = (store_code,data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -119,7 +119,7 @@ export const createCategoryChild = (store_code,id,data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -134,7 +134,7 @@ export const createCategoryChild = (store_code,id,data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -175,7 +175,7 @@ export const sortCategory = (store_code,data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -190,7 +190,7 @@ export const sortCategory = (store_code,data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -242,7 +242,7 @@ export const updateCategoryP = (store_code,id,data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -257,7 +257,7 @@ export const updateCategoryP = (store_code,id,data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -306,7 +306,7 @@ export const updateCategoryChild = (store_code,id,idChild,data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -321,7 +321,7 @@ export const updateCategoryChild = (store_code,id,idChild,data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -371,7 +371,7 @@ export const destroyCategoryP = (store_code , id) => {
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -383,7 +383,7 @@ export const destroyCategoryP = (store_code , id) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -433,7 +433,7 @@ export const destroyCategoryChild = (store_code , id,idChild) => {
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -445,7 +445,7 @@ export const destroyCategoryChild = (store_code , id,idChild) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });

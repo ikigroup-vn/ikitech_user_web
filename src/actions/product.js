@@ -314,7 +314,7 @@ export const updateAttributeP = (store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -325,7 +325,7 @@ export const updateAttributeP = (store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -374,7 +374,7 @@ export const destroyAttributeP = ($this, store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       })
@@ -385,7 +385,7 @@ export const destroyAttributeP = ($this, store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -426,7 +426,7 @@ export const uploadAvataProduct = (file) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -477,7 +477,7 @@ export const editStock = (store_code, branch_id, data, page = 1) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -503,7 +503,7 @@ export const uploadListImgProduct = function (files) {
             type: "danger",
             title: "Lỗi",
             disable: "hide",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       }
@@ -584,7 +584,7 @@ export const uploadListImgProduct = function (files) {
 //             type: "danger",
 //             title: "Lỗi",
 //             disable: "show",
-//             content: error.response.data.msg,
+//             content: error?.response?.data?.msg,
 //           },
 //         });
 //       });
@@ -600,7 +600,7 @@ export const uploadListImgProduct = function (files) {
 //     //       type: "danger",
 //     //       title: "Lỗi",
 //     //       disable: "hide",
-//     //       content: error.response.data.msg,
+//     //       content: error?.response?.data?.msg,
 //     //     },
 //     //   });
 //     // }
@@ -675,7 +675,7 @@ export const uploadImgDistribute = (file, imageId, listImages) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -1075,7 +1075,7 @@ export const destroyProduct = (store_code, id) => {
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -1087,7 +1087,7 @@ export const destroyProduct = (store_code, id) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -1132,7 +1132,7 @@ export const destroyMultiProduct = (store_code, data) => {
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -1144,7 +1144,7 @@ export const destroyMultiProduct = (store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });

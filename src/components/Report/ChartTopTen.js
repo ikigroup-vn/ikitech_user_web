@@ -86,6 +86,7 @@ class Chart extends Component {
       this.state.typeTop != nextState.typeTop) {
         this.getData(nextProps.topten ,nextState.chartData, nextState.typeTop)
 
+
     }
     return true
   }

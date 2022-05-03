@@ -14,6 +14,7 @@ export const alert = (state = initialState, action) => {
   switch (action.type) {
     case Types.ALERT_UID_STATUS:
       newState.alert_create = action.alert;
+      newState.tryShow = action.tryShow
       return newState;
     default:
       return newState;

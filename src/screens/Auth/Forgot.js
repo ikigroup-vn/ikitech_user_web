@@ -25,7 +25,7 @@ class Forgot extends Component {
                                     <Alert type = {Types.ALERT_UID_STATUS} alert = {this.props.alert} />
 
                                         <h1 className="h4 text-gray-900 mb-2">Quên mật khẩu?</h1>
-                                        <p className="mb-4">Vui lòng nhập số điện thoại mà bạn đã đăng kí !</p>
+                                        <p className="mb-4">Vui lòng nhập số điện thoại hoặc email mà bạn đã đăng kí!</p>
                                     </div>
                                     <Form/>
                                     <hr></hr>

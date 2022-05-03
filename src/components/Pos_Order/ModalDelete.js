@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as posAction from '../../actions/post_order'
+import themeData from "../../ultis/theme_data";
 class ModalDelete extends Component {
     
   onSave = (e) => {
@@ -24,8 +25,10 @@ class ModalDelete extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{ background: "#47d3b0" }}>
-              <h4>Đóng đơn hàng </h4>
+            <div class="modal-header" style={{ background: themeData().backgroundColor }}>
+              <h4 style={{
+                color:"white"
+              }}>Đóng đơn hàng </h4>
               <button
                 type="button"
                 class="close"
@@ -55,7 +58,7 @@ class ModalDelete extends Component {
                 >
                   Đóng
                 </button>
-                <button type="submit" class="btn btn-info">
+                <button type="submit" class="btn btn-yes-pos">
                   Xóa
                   
                 </button>

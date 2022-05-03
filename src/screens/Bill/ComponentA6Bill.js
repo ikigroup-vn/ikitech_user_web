@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import { filter_arr, format } from "../../ultis/helpers";
 import './BillA6.css'
-export default class Component70Bill extends Component {
+export default class ComponentA6Bill extends Component {
     constructor(props) {
         super(props);
         this.state = {};
@@ -147,8 +147,7 @@ export default class Component70Bill extends Component {
             Array.isArray(bill.line_items_at_time) == true
                 ? bill.line_items_at_time.length
                 : 0;
-        var store_address = typeof badges.address_pickup == "undefined" ? null : badges.address_pickup == null ? null : badges.address_pickup.address_detail + ", " +
-            badges.address_pickup.wards_name + ", " + badges.address_pickup.district_name + ", " + badges.address_pickup.province_name
+        var store_address = ""
         return (
             <div className="bill-A6">
 

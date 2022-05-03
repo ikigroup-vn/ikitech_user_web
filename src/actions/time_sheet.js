@@ -79,7 +79,7 @@ export const bonusLessCheckinCheckout = (
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -95,7 +95,7 @@ export const bonusLessCheckinCheckout = (
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });

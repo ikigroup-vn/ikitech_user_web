@@ -234,7 +234,7 @@ export const fetchOverview = (store_code ,branch_id, params = null) => {
           type: "danger",
           title: "Lỗi",
           disable: "show",
-          content: error.response.data.msg,
+          content: error?.response?.data?.msg,
         },
       });
     }
@@ -294,7 +294,7 @@ export const createStore = (data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -336,7 +336,7 @@ export const updateStore = (data, id) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -405,7 +405,7 @@ export const destroyStore = (id) => {
                 type: "danger",
                 title: "Lỗi",
                 disable: "show",
-                content: error.response.data.msg,
+                content: error?.response?.data?.msg,
               },
             });
           });
@@ -417,7 +417,7 @@ export const destroyStore = (id) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -459,7 +459,7 @@ export const uploadImgStore = (file) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });

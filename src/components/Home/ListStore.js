@@ -20,10 +20,20 @@ class ListStore extends Component {
     }
 
     render() {
-        const listStore = this.props.data
+        var listStore = this.props.data
+        if(listStore != null && listStore.data != null) {
+            listStore =  listStore?.data
+        } else {
+            listStore = listStore
+        }
+
+        if(listStore.length == 0) {
+          return  <div>Hãy thêm cửa hàng và bắt đầu kinh doanh!</div>
+        }
+
         return (
             <div className='list-group'>
-                {listStore.map((item, index) => {
+                {(listStore??[]).map((item, index) => {
                     const logo_url = item.logo_url == null ? Env.IMG_NOT_FOUND : item.logo_url
                     return (
                         <div class="card list-group-item list-group-item-action list-group-item-light" 

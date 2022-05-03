@@ -33,6 +33,7 @@
     "query-string": "^7.1.1",
     "react": "^17.0.2",
     "react-app-polyfill": "^2.0.0",
+    "react-autocomplete": "^1.8.1",
     "react-big-calendar": "^0.40.0",
     "react-chartjs-2": "^2.11.1",
     "react-color": "^2.19.3",

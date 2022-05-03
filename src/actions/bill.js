@@ -216,7 +216,7 @@ export const updateStatusOrder = (data, store_code, billId, order_code) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -266,7 +266,7 @@ export const updateStatusPayment = (data, store_code, billId, order_code) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -327,7 +327,7 @@ export const sendOrderToDelivery = (data, store_code, billId, order_code) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -371,7 +371,7 @@ export const updateOrder = (data, store_code, order_code) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -454,7 +454,7 @@ export const sendMessage = (store_code, customerId, message) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -564,7 +564,7 @@ export const uploadImgChat = function (store_code, customerId, files) {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       }
@@ -608,7 +608,7 @@ export const postRefund = (data,store_code , branch = getBranchId()) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });
@@ -652,7 +652,7 @@ export const postCashRefund = (order_code , data,store_code , branch = getBranch
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error.response.data.msg,
+            content: error?.response?.data?.msg,
           },
         });
       });

@@ -1,5 +1,5 @@
 .bill-A6 {
-    width: 96mm;
+    width: 100%;
     /* height: 72mm; */
     background: white;
     line-height: 12.5px;
@@ -8,7 +8,7 @@
     font-size: 13xpx;
     font-weight: 500;
     overflow: hidden;
-    margin: 2px auto auto auto;
+    margin: 2px auto auto 2px;
 }
 
 .bill-A6 * {

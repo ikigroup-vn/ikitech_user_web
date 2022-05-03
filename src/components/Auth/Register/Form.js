@@ -121,7 +121,7 @@ class Form extends Component {
             </div>
             <div className="col-sm-6">
               <input
-                type="number"
+                type="text"
                 className="form-control form-control-user"
                 id="exampleLastName"
                 placeholder="Số điện thoại"
@@ -162,7 +162,7 @@ class Form extends Component {
                 type="text"
                 className="form-control form-control-user"
                 id="txtPassword"
-                placeholder="Nhập lại mật khâu"
+                placeholder="Nhập lại mật khẩu"
                 autocomplete="off"
                 name="txtCPassword"
                 value={txtCPassword}
