@@ -137,12 +137,12 @@ class ProductInventory extends Component {
         var params = `&check_inventory=true`;
         this.props.fetchAllProductV2(store_code, branch_id, 1, params);
       } 
-      // else {
-      //   // this.setState({listProduct:this.props.products.data})
-      //   const { store_code } = this.props.match.params
-      //   const branch_id = getBranchId();
-      //   this.props.fetchAllProductV2(store_code, branch_id, 1);
-      // }
+      else {
+        // this.setState({listProduct:this.props.products.data})
+        const { store_code } = this.props.match.params
+        const branch_id = getBranchId();
+        this.props.fetchAllProductV2(store_code, branch_id, 1);
+      }
     }
     return true
   }
@@ -150,6 +150,15 @@ class ProductInventory extends Component {
   componentWillReceiveProps(nextProps) {
     if (!shallowEqual(nextProps.products, this.props.products)) {
       this.setState({ listProduct: nextProps.products.data })
+    }
+    if (
+      this.state.isLoading != true &&
+      typeof nextProps.permission.inventory_list != "undefined"
+    ) {
+      var permissions = nextProps.permission;
+
+      var isShow = permissions.inventory_list;
+      this.setState({ isLoading: true, isShow });
     }
   }
   handleDelCallBack = (modal) => {
@@ -301,7 +310,7 @@ class ProductInventory extends Component {
                                     width: "226px",
                                   }} name="txtDiscoutType" id="input" class="form-control" onChange={this.onChangeType} >
 
-                                  <option value="0" selected>Tất cả sản phẩm</option>
+                                  <option value="0">Tất cả sản phẩm</option>
                                   <option value="1">Sản phẩm được theo dõi</option>
 
                                 </select>

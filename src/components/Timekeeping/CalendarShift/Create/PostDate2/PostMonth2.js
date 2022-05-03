@@ -48,8 +48,8 @@ class Form extends Component {
     // };
     // var datePrime = monthNowFrom_prime;
     var now = {
-      from: moment().format("DD-MM-YYYY"),
-      to: moment().endOf("month").format("DD-MM-YYYY"),
+      from: moment().startOf("month").format("DD-MM-YY"),
+        to: moment().endOf("month").format("DD-MM-YY"),
     };
     this.setState({
       datePrime: now,
@@ -66,8 +66,8 @@ class Form extends Component {
     }
     if (this.props.typeDate != nextProps.typeDate) {
       var now = {
-        from: moment().format("DD-MM-YYYY"),
-        to: moment().format("DD-MM-YYYY"),
+        from: moment().startOf("month").format("DD-MM-YY"),
+        to: moment().endOf("month").format("DD-MM-YY"),
       };
       this.setState({
         datePrime: now,

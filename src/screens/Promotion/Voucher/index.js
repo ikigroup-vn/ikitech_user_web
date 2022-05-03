@@ -53,6 +53,9 @@ class Voucher extends Component {
         case 1:
           this.props.fetchAllVoucherEnd(store_code);
           break;
+          case 2:
+            this.props.fetchAllVoucher(store_code);
+            break;
         default:
           break;
       }
@@ -66,15 +69,10 @@ class Voucher extends Component {
   componentDidUpdate() {
     if (this.state.isLoading != true && typeof this.props.permission.product_list != "undefined") {
       var permissions = this.props.permission
-      var insert = permissions.promotion_voucher_add
-      var update = permissions.promotion_voucher_update
-      var _delete = permissions.promotion_voucher_end
-      var isShow = permissions.promotion_voucher_list
+      var isShow = permissions.promotion
 
 
-
-
-      this.setState({ isLoading: true, insert, update, _delete, isShow })
+      this.setState({ isLoading: true, insert : true, update : true, _delete : true ,isShow})
 
     }
   }
@@ -141,6 +139,8 @@ class Voucher extends Component {
                           onChange={this.onChange}
                         >
                           <option value="0">Chuẩn bị và đang diễn ra</option>
+                          <option value="2">Đang diễn ra</option>
+
                           <option value="1">Đã kết thúc</option>
                         </select>
                       </div>

@@ -14,7 +14,7 @@ class Pagination extends Component {
   }
 
   passPagination = (page) => {
-    var { store_code, status_payment, status_order, limit, searchValue ,hasPhone , phone , paramDate } = this.props
+    var { store_code, status_payment, status_order, limit, searchValue ,hasPhone , phone , time_to, time_from } = this.props
     const branch_id = getBranchId()
     var params = null
     if(hasPhone)
@@ -22,10 +22,15 @@ class Pagination extends Component {
     else
      params = `&order_status_code=${status_order}&payment_status_code=${status_payment}&limit=${limit}&branch_id=${branch_id}`
 
-     if(paramDate != "" && paramDate != null)
+     if(time_to != "" && time_to != null)
      {
-       params = params + paramDate
+       params = params+ `&time_to=${time_to}`;
+
      }
+     if(time_from != "" && time_from != null)
+     {
+      params = params + `&time_from=${time_from}`;
+    }
     this.props.fetchAllBill(store_code, page, params);
 
   }

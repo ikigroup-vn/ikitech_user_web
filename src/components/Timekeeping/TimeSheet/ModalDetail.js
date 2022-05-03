@@ -9,6 +9,7 @@ import { isEmpty } from "../../../ultis/helpers";
 
 // import { compressed } from "../../ultis/helpers";
 // import * as helper from "../../ultis/helpers";
+import themeData from "../../../ultis/theme_data";
 
 // import CurrencyInput from "react-currency-input-field";
 // import Select from "react-select";
@@ -102,12 +103,12 @@ class ModalDetail extends Component {
       this.setState({
         staff_name: dataDetail.staff.name,
         staff_id: dataDetail.staff.id,
-        reason: dataDetail?.keeping_histories[0]?.reason,
+        reason: dataDetail?.keeping_histories[dataDetail?.keeping_histories.length - 1]?.reason,
         checkin_date: checkin_date,
         checkout_date: checkout_date,
         checkin_hour: checkin_hour,
         checkout_hour: checkout_hour,
-        is_bonus: dataDetail?.keeping_histories[0]?.is_bonus,
+        is_bonus: dataDetail?.keeping_histories[dataDetail?.keeping_histories.length - 1]?.is_bonus,
       });
     }
   }
@@ -254,8 +255,8 @@ class ModalDetail extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Thêm bớt công</h4>
+          <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+              <h4 style={{ color: "white" }}>Thêm bớt công</h4>
 
               <button
                 type="button"
@@ -287,7 +288,7 @@ class ModalDetail extends Component {
                   />
                 </div>
                 <div class="form-group">
-                  <label>Ngày checkin</label>
+                  <label>Ngày yêu cầu</label>
                   <input
                     type="text"
                     class="form-control"
@@ -326,7 +327,7 @@ class ModalDetail extends Component {
                     onChange={this.onChangeStart}
                   />
                 </div>
-                <div class="form-group">
+                {/* <div class="form-group">
                   <label>Ngày checkout</label>
                   <input
                     type="text"
@@ -341,7 +342,7 @@ class ModalDetail extends Component {
                     disabled
                     onChange={this.onChange}
                   />
-                </div>
+                </div> */}
                 <div class="form-group">
                   <label for="product_name">Thời gian checkout</label>
 
@@ -416,14 +417,16 @@ class ModalDetail extends Component {
                 </div>
               </div>
               <div class="modal-footer">
-                <button
-                  type="submit"
-                  class="btn btn-info btn-icon-split btn-sm"
+              <button
+                  type="button"
+                  class="btn btn-default"
+                  data-dismiss="modal"
                 >
-                  <span class="icon text-white-50">
-                    <i class="fas fa-save"></i>
-                  </span>
-                  <span class="text">Sửa</span>
+                  Đóng
+                </button>
+                <button type="submit" class="btn btn-warning">
+                  Lưu
+                  
                 </button>
               </div>
             </form>

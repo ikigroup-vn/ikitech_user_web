@@ -39,7 +39,17 @@ class Branch extends Component {
         this.setState({openModal : false})
     
       }
-
+      componentWillReceiveProps(nextProps) {
+        if (
+          this.state.isLoading != true &&
+          typeof nextProps.permission.branch_list != "undefined"
+        ) {
+          var permissions = nextProps.permission;
+    
+          var isShow = permissions.branch_list;
+          this.setState({ isLoading: true, isShow });
+        }
+      }
     componentDidMount() {
         this.props.fetchBranchStore(this.props.store_code);
         this.props.fetchPlaceProvince()
@@ -93,7 +103,7 @@ class Branch extends Component {
     render() {
         var { store_code } = this.props.match.params
         var listBranch = this.props.branchStore ? this.props.branchStore : []
-        var { id_branch, modal , openModal } = this.state
+        var { id_branch, modal , openModal , isShow } = this.state
         var { wards, district, province, name } = this.props
         return (
             <div id="wrapper">
@@ -105,6 +115,7 @@ class Branch extends Component {
                     <div id="content-wrapper" className="d-flex flex-column">
                         <div id="content">
                             <Topbar store_code={store_code} />
+                            {typeof isShow == "undefined" ? <div></div> : isShow == true ?
 
                             <div className="container-fluid">
                                 <Alert
@@ -170,6 +181,8 @@ class Branch extends Component {
                                     </div>
                                 </div>
                             </div>
+                                                                          : <NotAccess />}
+
                         </div>
                         <Footer />
                     </div>
@@ -187,7 +200,9 @@ const mapStateToProps = (state) => {
         branchStore: state.storeReducers.store.branchStore,
         wards: state.placeReducers.wards,
         province: state.placeReducers.province,
-        district: state.placeReducers.district
+        district: state.placeReducers.district,
+        permission: state.authReducers.permission.data,
+
     }
 }
 const mapDispatchToProps = (dispatch, props) => {

@@ -7,6 +7,8 @@ import Topbar from '../../../components/Partials/Topbar'
 import General from './General'
 import * as Types from "../../../constants/ActionType"
 import ChartFinance from '../../../components/Report/ChartFinance'
+import NotAccess from "../../../components/Partials/NotAccess";
+import { connect } from "react-redux";
 
  class ReportFinance extends Component {
      constructor(props){
@@ -18,9 +20,17 @@ import ChartFinance from '../../../components/Report/ChartFinance'
     handleCallbackProfit = (modal) =>{
       this.setState({profitToltal:modal})
     }
+    componentWillReceiveProps(nextProps) {
+      if (this.state.isLoading != true && typeof nextProps.permission.report_finance != "undefined") {
+        var permissions = nextProps.permission
+  
+        var isShow = permissions.report_finance
+        this.setState({ isLoading: true, isShow })
+      }
+    }
   render() {
       const {store_code} = this.props.match.params
-      const {profitToltal} = this.state
+      const {profitToltal , isShow} = this.state
     return (
         <div id="wrapper">
         <Sidebar store_code={store_code} />
@@ -29,7 +39,8 @@ import ChartFinance from '../../../components/Report/ChartFinance'
           <div id="content-wrapper" className="d-flex flex-column">
             <div id="content">
               <Topbar store_code={store_code} />
-
+              {typeof isShow == "undefined" ? <div style={{ height: "500px" }}></div> :
+                  isShow == true ?
               <div className="container-fluid">
                 <Alert
                   type={Types.ALERT_UID_STATUS}
@@ -46,6 +57,8 @@ import ChartFinance from '../../../components/Report/ChartFinance'
                     </div>
                   </div>
                 </div>
+                                    : <NotAccess />}
+
               </div>
 
             </div>
@@ -57,5 +70,13 @@ import ChartFinance from '../../../components/Report/ChartFinance'
     )
   }
 }
+const mapStateToProps = (state) => {
+  return {
 
-export default ReportFinance
+    permission: state.authReducers.permission.data,
+
+
+  };
+};
+
+export default connect(mapStateToProps, null)(ReportFinance);

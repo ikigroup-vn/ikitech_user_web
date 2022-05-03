@@ -11,17 +11,17 @@ class Pagination extends Component {
   }
 
   passPagination = (page) => {
-    var { store_code, limit, searchValue, bonusParam, listType } = this.props
-    var params
-    if (listType == 1) {
-      // params = `&limit=${limit}${bonusParam}`
-    } else {
-      params = `&limit=${limit}`
-    }
+    var { store_code, limit, searchValue, bonusParam, listType, params } = this.props
+    // if (listType == 1) {
+    //   // params = `&limit=${limit}${bonusParam}`
+    // } else {
+    //   params = `&limit=${limit}`
+    // }
+    var param = ""
     if(params)
-    params = this.props.params
+    param = params
     const branch_id = localStorage.getItem('branch_id');
-    this.props.fetchAllProductV2(store_code, branch_id, page, params);
+    this.props.fetchAllProductV2(store_code, branch_id, page, param);
     this.props.passNumPage(page)
   }
 

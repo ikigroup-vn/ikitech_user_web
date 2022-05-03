@@ -141,13 +141,13 @@ class RevenueExpenditures extends Component {
   componentWillReceiveProps(nextProps) {
     if (
       this.state.isLoading != true &&
-      typeof nextProps.permission.revenue_expenditure != "undefined"
+      typeof nextProps.permission.add_revenue != "undefined"
     ) {
       var permissions = nextProps.permission;
-      console.log(permissions);
-      var isShow = permissions.revenue_expenditure;
+      var add_revenue = permissions.add_revenue;
+      var add_expenditure = permissions.add_expenditure
 
-      this.setState({ isLoading: true, isShow });
+      this.setState({ isLoading: true, isShow : true , add_revenue , add_expenditure });
     }
     if (this.props.reportExpenditure !== nextProps.reportExpenditure) {
       const { datePrime } = this.state;
@@ -184,6 +184,8 @@ class RevenueExpenditures extends Component {
       reset,
       total,
       datePrime,
+      add_revenue,
+      add_expenditure
     } = this.state;
 
     if (this.props.auth) {
@@ -218,7 +220,7 @@ class RevenueExpenditures extends Component {
                           data-toggle="modal"
                           data-target="#modalRevenue"
                           class={`btn btn-info btn-icon-split btn-sm ${
-                            true ? "show" : "hide"
+                            add_revenue == true ? "show" : "hide"
                           }`}
                           style={{ marginRight: "1rem" }}
                         >
@@ -236,7 +238,7 @@ class RevenueExpenditures extends Component {
                           data-toggle="modal"
                           data-target="#modalExpenditures"
                           class={`btn btn-danger btn-icon-split btn-sm ${
-                            true ? "show" : "hide"
+                            add_expenditure == true ? "show" : "hide"
                           }`}
                         >
                           <span

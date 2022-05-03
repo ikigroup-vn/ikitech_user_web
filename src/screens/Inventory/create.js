@@ -8,7 +8,7 @@ import Alert from '../../components/Partials/Alert';
 import * as productAction from "../../actions/product";
 import CardProduct from '../../components/Inventory/CardProduct';
 import ListInventorySheet from '../../components/Inventory/ListInventory'
-import ModalDetail from '../../components/Import_stock/ModalDetail';
+import ModalDetail from '../../components/Inventory/ModalDetail';
 import * as inventoryAction from "../../actions/inventory"
 import history from '../../history';
 import Paginations from '../../components/Inventory/Paginations';
@@ -146,7 +146,13 @@ class CreateInventory extends Component {
     passNumPage = (page) => {
         this.setState({ page: page })
     }
-
+    handleCallbackPrice = (modal) => {
+        this.setState({ change: !this.state.change })
+        const newInventory = this.state.listInventory
+        const index = newInventory.map(e => e.element_id).indexOf(modal.idElement)
+        newInventory[index].import_price = modal.import_price
+        this.setState({ listImportStock: newInventory })
+    }
     componentDidMount() {
         const branch_id = localStorage.getItem('branch_id')
         const params = `&check_inventory=true`
@@ -174,7 +180,7 @@ class CreateInventory extends Component {
                                             </div>
 
                                             <div className='card-bodys' style={{ width: "0 10px", height: "380px", overflowY: "auto" }}>
-                                                <ListInventorySheet store_code={store_code} listInventory={listInventory} handleCallbackQuantity={this.handleCallbackQuantity} handleDelete={this.handleDelete} />
+                                                <ListInventorySheet store_code={store_code} listInventory={listInventory} handleCallbackQuantity={this.handleCallbackQuantity} handleCallbackPrice = {this.handleCallbackPrice} handleDelete={this.handleDelete} />
                                             </div>
                                             <div className='voucher-input' style={{ margin: "10px 0px" }}>
 
@@ -199,7 +205,7 @@ class CreateInventory extends Component {
                                                 <label for="comment">Thêm ghi chú:</label>
                                                 <textarea class="form-control" rows="5" id="comment" style={{ height: "50px" }} onChange={this.onChange}></textarea>
                                             </div>
-                                            <button className='btn btn-primary btn-sm' style={{ marginTop: "20px" }} onClick={() => this.CreateSheetInventory()}>Tạo phiếu kiểm</button>
+                                            <button className='btn btn-warning btn-sm' style={{ marginTop: "20px" }} onClick={() => this.CreateSheetInventory()}>Tạo phiếu kiểm</button>
                                         </div>
                                     </div>
 

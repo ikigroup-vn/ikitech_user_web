@@ -99,11 +99,7 @@ class ListProduct extends Component {
             <td>{data.name}</td>
 
             <td>{format(data.price)}</td>
-            <td> <h5>
-              <span class={`badge badge-${status}`}>
-                {status_name}
-              </span>
-            </h5></td>
+      
 
 
             <td>{data.has_in_combo}</td>

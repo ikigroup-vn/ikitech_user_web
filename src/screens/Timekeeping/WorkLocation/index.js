@@ -48,7 +48,7 @@ class WorkLocation extends Component {
                         Vui lòng tải app để quản lý địa chỉ chấm công
                       </h1>
 
-                      <Link to="/home" style={{ fontSize: "1rem" }}>
+                      <Link to={`/dashboard/${store_code}`} style={{ fontSize: "1rem" }}>
                         &larr; Trở về trang chủ
                       </Link>
                     </div>

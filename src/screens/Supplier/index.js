@@ -11,6 +11,7 @@ import ModalDelete from '../../components/Supplier/ModalDelete';
 import ModalCreate from '../../components/Supplier/ModalCreate';
 import Pagination from "../../components/Supplier/Pagination";
 import {getQueryParams} from "../../ultis/helpers"
+import NotAccess from "../../components/Partials/NotAccess";
 
 import ModalEdit from '../../components/Supplier/ModalEdit';
 import { format, formatNumber } from "../../ultis/helpers";
@@ -44,7 +45,17 @@ class Supplier extends Component {
         this.setState({ openModal: false })
 
     }
-
+    componentWillReceiveProps(nextProps) {
+        if (
+          this.state.isLoading != true &&
+          typeof nextProps.permission.supplier != "undefined"
+        ) {
+          var permissions = nextProps.permission;
+    
+          var isShow = permissions.supplier;
+          this.setState({ isLoading: true, isShow });
+        }
+      }
     changePage = (e,store_code, supplierId) => {
         var { paginate } = this.props;
 
@@ -120,7 +131,7 @@ class Supplier extends Component {
     render() {
         var { store_code } = this.props.match.params
         var listSupplier = this.props.supplier.data ? this.props.supplier.data : []
-        var { id_supplier, modal, openModal } = this.state
+        var { id_supplier, modal, openModal , isShow } = this.state
         var { wards, district, province , supplier } = this.props
         var { searchValue } = this.state;
         return (
@@ -131,7 +142,7 @@ class Supplier extends Component {
                     <div id="content-wrapper" className="d-flex flex-column">
                         <div id="content">
                             <Topbar store_code={store_code} />
-
+                            {typeof isShow == "undefined" ? <div></div> : isShow == true ?
                             <div className="container-fluid">
                                 <Alert
                                     type={Types.ALERT_UID_STATUS}
@@ -242,6 +253,8 @@ class Supplier extends Component {
 
                                 </div>
                             </div>
+                                              : <NotAccess />}
+
                         </div>
 
                         <Footer />
@@ -260,7 +273,9 @@ const mapStateToProps = (state) => {
         supplier: state.storeReducers.store.supplier,
         wards: state.placeReducers.wards,
         province: state.placeReducers.province,
-        district: state.placeReducers.district
+        district: state.placeReducers.district,
+        permission: state.authReducers.permission.data,
+
     }
 }
 const mapDispatchToProps = (dispatch, props) => {

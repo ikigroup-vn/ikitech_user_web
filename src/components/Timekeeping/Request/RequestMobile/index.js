@@ -80,6 +80,7 @@ class RequestMobile extends Component {
           store_code={store_code}
           branch_id={branch_id}
         />
+ 
       </div>
     );
   }

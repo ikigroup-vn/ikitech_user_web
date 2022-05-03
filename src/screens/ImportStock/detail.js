@@ -218,14 +218,14 @@ class DetailImportStock extends Component {
                                                 }
                                             </div>
                                             <div className='card-body' >
-                                                <div style={{ marginBottom: "10px", borderRadius: "5px" }}>
+                                                <div style={{ marginBottom: "10px" }}>
                                                     {
                                                         import_stock_items.map((item, index) => (
                                                             <ItemDetail getRefund={this.getRefund} id={id} store_code={store_code} index={index} listItems={import_stock_items} status={itemImportStock.status} check={check} listItem={item} />
                                                         ))
                                                     }
                                                 </div>
-                                                <div class="">
+                                                {/* <div class="">
                                                     <div class="card-body" style={{ padding: "0" }}>
                                                         <div style={{ display: "flex", justifyContent: "space-between" }}>
                                                             <div>Tiền hàng</div>
@@ -244,7 +244,7 @@ class DetailImportStock extends Component {
                                                             <div>{format(Number(itemImportStock.total_final))}</div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> */}
                                                 {itemImportStock.note ? <div>
                                                     <label style={{ fontWeight: "bold", marginTop: "5px" }}>Ghi chú</label>
                                                     <div class="card">

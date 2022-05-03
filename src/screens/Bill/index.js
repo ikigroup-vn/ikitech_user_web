@@ -33,7 +33,8 @@ class Bill extends Component {
       numPage: 20,
       agency_by_customer_id:
         queryString.parse(window.location.search).agency_by_customer_id || null,
-      paramDate: ""
+      time_from: "",
+      time_to : ""
     };
   }
   closeChatBox = (status) => {
@@ -86,6 +87,7 @@ class Bill extends Component {
     if(from && to)
     {
       params = params + `&time_from=${moment(from, "DD-MM-YYYY").format("YYYY-MM-DD")}&time_to=${moment(to, "DD-MM-YYYY").format("YYYY-MM-DD")}`
+      this.setState({time_from : from, time_to : to})
     }
 
     var status_order = status == "PAID" ? null : status;
@@ -145,19 +147,19 @@ class Bill extends Component {
   componentWillReceiveProps(nextProps, nextState) {
 
 
-    if (this.state.paramDate != this.getParamDate() && this.state.paramDate.from != null) {
-      this.setState({
-        paramDate: this.getParamDate()
-      })
+    // if (this.state.paramDate != this.getParamDate() && this.state.paramDate.from != null) {
+    //   this.setState({
+    //     paramDate: this.getParamDate()
+    //   })
 
-      var { store_code } = this.props.match.params;
-      const branch_id = getBranchId()
-      var params_agency =
-      this.state.agency_by_customer_id != null
-        ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
-        : null;
-      this.props.fetchAllBill(store_code, 1, branch_id, this.getParamDate(), params_agency);
-    }
+    //   var { store_code } = this.props.match.params;
+    //   const branch_id = getBranchId()
+    //   var params_agency =
+    //   this.state.agency_by_customer_id != null
+    //     ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
+    //     : null;
+    //   this.props.fetchAllBill(store_code, 1, branch_id, this.getParamDate(), params_agency);
+    // }
 
 
 
@@ -183,8 +185,8 @@ class Bill extends Component {
 
     var to = "";
     try {
-      from = moment(e.value[0], "DD-MM-YYYY").format("DD-MM-YYYY");
-      to = moment(e.value[1], "DD-MM-YYYY").format("DD-MM-YYYY");
+      from = moment(e.value[0], "DD-MM-YYYY").format("YYYY-MM-DD");
+      to = moment(e.value[1], "DD-MM-YYYY").format("YYYY-MM-DD");
     } catch (error) {
       from = null;
       to = null;
@@ -194,13 +196,20 @@ class Bill extends Component {
         ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
         : null;
 
-    var params = `?time_from=${from}&time_to=${to}`;
-    if (from == null || to == null) {
-      params = "";
+    var params = ``;
+    if(to != "" && to != null)
+    {
+      params = params +`&time_to=${to}`;
+
     }
+    if(from != "" && from != null)
+    {
+     params = params +`&time_from=${from}`;
+   }
+    const branch_id = getBranchId()
 
-
-    history.push(window.location.pathname + params)
+    this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
+    this.setState({time_from : from, time_to : to})
 
   }
 
@@ -219,8 +228,11 @@ class Bill extends Component {
       numPage,
       chat_allow,
       isShow,
-      paramDate
+      time_from,
+      time_to
     } = this.state;
+    console.log(time_from,
+      time_to)
     if (this.props.auth) {
       return (
         <div id="wrapper">
@@ -374,7 +386,9 @@ class Bill extends Component {
                             </div>
 
                             <Pagination
-                            paramDate = {paramDate}
+                            time_from = {time_from}
+                            time_to = {time_to}
+
                               searchValue={searchValue}
                               limit={numPage}
                               status_payment={statusPayment}

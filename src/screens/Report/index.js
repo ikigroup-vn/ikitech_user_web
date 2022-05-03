@@ -53,7 +53,7 @@ class Report extends Component {
     if (this.state.isLoading != true && typeof nextProps.permission.product_list != "undefined") {
       var permissions = nextProps.permission
 
-      var isShow = permissions.report_view
+      var isShow = permissions.report_overview
       this.setState({ isLoading: true, isShow })
     }
   }
