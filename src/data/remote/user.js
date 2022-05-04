@@ -12,6 +12,11 @@ export const postLogin = (form) => {
   return callApi("/login", "post", form);
 };
 
+export const changePassword = (form) => {
+  return callApi("/change_password", "post", form);
+};
+
+
 export const postResetPassword = (form) =>{
     return callApi("/reset_password", "post", form);
 }

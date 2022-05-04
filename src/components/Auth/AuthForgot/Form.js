@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as Types from "../../../constants/ActionType";
-import { isEmail } from "../../../ultis/helpers"
+import { isEmail , isPhone } from "../../../ultis/helpers"
 import * as auth from "../../../actions/auth";
 class Form extends Component {
   constructor(props) {
@@ -21,8 +21,8 @@ class Form extends Component {
       type: Types.ALERT_UID_STATUS,
       alert,
     });
-
-    if(isEmail(this.props.phone_number)) {
+    console.log(this.props)
+    if(isEmail(this.props.formData?.formData.email)) {
       this.onSendOtpToEmail();
     } else {
       this.onSendOtp();
@@ -35,7 +35,7 @@ class Form extends Component {
     var { formData } = { ...this.props };
     if (this.state.canSendOtp == true) {
       this.startTimer();
-      this.props.sendOTPToEmail(formData.formData.phone_number);
+      this.props.sendOTPToEmail(formData.formData.email);
    
     }
   };
@@ -84,15 +84,15 @@ class Form extends Component {
     this.props.forgotOTP({
       password: this.state.txtPassword,
       otp: this.state.txtOTP,
-      email_or_phone_number : this.props.phone_number,
-      otp_from:isEmail(this.props.phone_number) ? "email" : "phone"
+      email_or_phone_number : this.props.phone_number == "" ? this.props.email :  this.props.phone_number,
+      otp_from:isEmail(this.props.email) ? "email" : "phone"
     });
   };
   goBack = (e) => {
     e.preventDefault();
     var { history } = this.props;
 
-        history.goBack();
+    history.push("/forgot?redirect_forgot=true");
   };
   render() {
       

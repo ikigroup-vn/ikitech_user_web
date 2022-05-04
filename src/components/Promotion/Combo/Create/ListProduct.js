@@ -4,6 +4,7 @@ import Pagination from "../../../Product/Pagination"
 import { format } from "../../../../ultis/helpers"
 import themeData from "../../../../ultis/theme_data";
 import * as productAction from "../../../../actions/product";
+import * as Env from "../../../../ultis/default";
 
 class ListProduct extends Component {
   constructor(props) {
@@ -111,7 +112,18 @@ class ListProduct extends Component {
               </div>
 
             </td>
-
+            <td>
+            <img
+              src={
+                data.images.length > 0
+                  ? data.images[0].image_url
+                  : Env.IMG_NOT_FOUND
+              }
+              className="img-responsive"
+              alt="Image"
+              style={{ width: "100%", height: "59px", background: "#0000000d" }}
+            />
+          </td>
             <td>{data.sku}</td>
 
             <td>{data.name}</td>
@@ -175,11 +187,7 @@ class ListProduct extends Component {
                     </div>
                   )}
                 </div>
-              )}</td>            <td> <h5>
-                <span class={`badge badge-${status}`}>
-                  {status_name}
-                </span>
-              </h5></td>
+              )}</td>           
 
 
 
@@ -260,11 +268,12 @@ class ListProduct extends Component {
               <table class="table table-hover table-border">
                 <thead>
                   <tr>
-                    <th></th>
+                    <th>Hình ảnh</th>
                     <th>Mã SKU</th>
-                    <th>Tên</th>
+
+                    <th>Mã SKU</th>
+                    <th>Tên sản phẩm</th>
                     <th>Giá</th>
-                    <th>Trạng thái</th>
                   </tr>
                 </thead>
 

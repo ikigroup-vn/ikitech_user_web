@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import * as Env from "../../../ultis/default"
 import history from "../../../history"
-
+import moment from "moment"
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -24,26 +24,63 @@ class Table extends Component {
       result = products.map((data, index) => {
 
         return (
-          <h6  style={{ display: "inline-block" , marginRight : "7px"}}><span
-          style={{ display: "inline-block", maxWidth: "240px" ,  whiteSpace: "nowrap",
-          overflow: "hidden",
-          textOverflow: "ellipsis" }}
-  
-          class="badge badge-success">{data.name}</span></h6>
+          <h6 style={{ display: "inline-block", marginRight: "7px" }}><span
+            style={{
+              display: "inline-block", maxWidth: "240px", whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis"
+            }}
+
+            class="badge badge-success">{data.name}</span></h6>
         )
       })
 
     }
     return result
   }
-  changePage = (e,store_code, supplierId) => {
+  changePage = (e, store_code, supplierId) => {
 
-    if(e.target.name !== "toggle")
-    history.push(`/discount/edit/${store_code}/${supplierId}`)
-}
+    if (e.target.name !== "toggle")
+      history.push(`/discount/edit/${store_code}/${supplierId}`)
+  }
+
+
+
+  filterColDiscount = (data) => {
+    var is_end = this.props.is_end
+    var now = moment().format("DD-MM-YYYY HH:mm:ss")
+    var start_time = moment(data.start_time, "YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY HH:mm:ss")
+    var end_time = moment(data.end_time, "YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY HH:mm:ss")
+
+    console.log(is_end , moment(now).isAfter(moment(start_time)) && moment(now).isBefore(moment(end_time)))
+
+    if (is_end == 0) {
+      if(moment(now).isBefore(moment(start_time)) || moment(now).isAfter(moment(end_time)) )
+      {
+        return true;
+      }
+      else
+      {
+        return false
+      }
+    }
+    else if (is_end == 2) {
+      if(moment(now).isAfter(moment(start_time)) && moment(now).isBefore(moment(end_time)) )
+      {
+        return true;
+      }
+      else
+      {
+        return false
+      }
+    }
+    else {
+      return true
+    }
+  }
 
   showData = (discounts, per_page, current_page) => {
-    var discounts = this.props.is_end == 0 ? discounts : discounts.data
+    var discounts = this.props.is_end == 0 || this.props.is_end == 2  ? discounts : discounts.data
     var result = null;
     var { store_code } = this.props.params;
     if (typeof discounts === "undefined") {
@@ -61,58 +98,61 @@ class Table extends Component {
           data.image_url == null || data.image_url == "" ? Env.IMG_NOT_FOUND : data.image_url
         var showCurrentPage = typeof per_page != "undefined" && per_page != null ? true : false
         var disableIsEnd = this.props.is_end ? "hide" : "show"
-        return (
-          <tr className = "hover-product" onClick={(e) => this.changePage(e,store_code, data.id)}>
-            <td class={showCurrentPage ? "hide" : "show"}>{index + 1}</td>
-
-            <td class={showCurrentPage ? "show" : "hide"}>{(per_page * (current_page - 1)) + (index + 1)}</td>
-
-
-            <td>{data.name}</td>
-
-
-            <td>{data.start_time}</td>
-
-            <td>{data.end_time}</td>
-
-            <td>
-
-              {!isNaN(Number(set_limit_amount)) ? new Intl.NumberFormat().format(set_limit_amount.toString()) + "%" : set_limit_amount}
-
-            </td>
-            <td style={{ maxWidth: "300px" }}> {this.showListProduct(data.products || [])}</td>
-
-            <td className="group-btn-table">
-              <Link
-                to={`/discount/edit/${store_code}/${data.id}`}
-                class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
-              >
-                <i class="fa fa-edit"></i> Sửa
-              </Link>
-              <button
-                onClick={(e) => this.handleDelCallBack(e, store_code, data.id, data.name)}
-                style={{ marginLeft: "10px" }}
-                data-toggle="modal"
-                data-target="#removeModal"
-                name= "toggle"
-                class={`btn btn-danger btn-sm ${_delete == true ? "show" : "hide"}`}
-              >
-                <i class="fa fa-trash"></i> Xóa
-              </button>
-              <button
-                onClick={(e) => this.handleIsEndCallback(e, store_code, data.id, data.name)}
-                style={{ marginLeft: "10px" }}
-                data-toggle="modal"
-                name= "toggle"
-
-                data-target="#isEndModal"
-                class={`btn btn-primary btn-sm ${disableIsEnd} ${_delete == true ? "show" : "hide"}`}
-              >
-                <i class="fa fa-clock-o"></i> Kết thúc
-              </button>
-            </td>
-          </tr>
-        );
+        if(this.filterColDiscount(data) == true)
+        {
+          return (
+            <tr className="hover-product" onClick={(e) => this.changePage(e, store_code, data.id)}>
+              <td class={showCurrentPage ? "hide" : "show"}>{index + 1}</td>
+  
+              <td class={showCurrentPage ? "show" : "hide"}>{(per_page * (current_page - 1)) + (index + 1)}</td>
+  
+  
+              <td>{data.name}</td>
+  
+  
+              <td>{data.start_time}</td>
+  
+              <td>{data.end_time}</td>
+  
+              <td>
+  
+                {!isNaN(Number(set_limit_amount)) ? new Intl.NumberFormat().format(set_limit_amount.toString()) + "%" : set_limit_amount}
+  
+              </td>
+              <td style={{ maxWidth: "300px" }}> {this.showListProduct(data.products || [])}</td>
+  
+              <td className="group-btn-table">
+                <Link
+                  to={`/discount/edit/${store_code}/${data.id}`}
+                  class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
+                >
+                  <i class="fa fa-edit"></i> Sửa
+                </Link>
+                <button
+                  onClick={(e) => this.handleDelCallBack(e, store_code, data.id, data.name)}
+                  style={{ marginLeft: "10px" }}
+                  data-toggle="modal"
+                  data-target="#removeModal"
+                  name="toggle"
+                  class={`btn btn-danger btn-sm ${_delete == true ? "show" : "hide"}`}
+                >
+                  <i class="fa fa-trash"></i> Xóa
+                </button>
+                <button
+                  onClick={(e) => this.handleIsEndCallback(e, store_code, data.id, data.name)}
+                  style={{ marginLeft: "10px" }}
+                  data-toggle="modal"
+                  name="toggle"
+  
+                  data-target="#isEndModal"
+                  class={`btn btn-primary btn-sm ${disableIsEnd} ${_delete == true ? "show" : "hide"}`}
+                >
+                  <i class="fa fa-clock-o"></i> Kết thúc
+                </button>
+              </td>
+            </tr>
+          );
+        }
       });
     } else {
       return result;

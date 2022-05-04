@@ -9,6 +9,10 @@ class Form extends Component {
     this.state = {
       txtPhone: "",
       txtPassword: "",
+      toggle : false,
+      iconShow : "fa fa-fw fa-eye",
+      iconHide : "fa fa-fw fa-eye-slash",
+
     };
   }
 
@@ -32,8 +36,11 @@ class Form extends Component {
   redirectRegister = () =>{
     history.push("/register")
   }
+  togglePassword = () =>{
+    this.setState({toggle : !this.state.toggle})
+  }
   render() {
-    var { txtPhone, txtPassword } = this.state;
+    var { txtPhone, txtPassword , toggle , iconHide , iconShow } = this.state;
     return (
       <React.Fragment>
         <form onSubmit={this.onSave} className="user">
@@ -52,15 +59,22 @@ class Form extends Component {
           </div>
           <div className="form-group">
             <input
-              type="text"
+              type={toggle == true ? "text" : "password"}
               className="form-control form-control-user"
-              id="txtPassword"
+              // id="txtPassword"
               placeholder="Nhập mật khẩu"
               autocomplete="off"
               value={txtPassword}
               onChange={this.onChange}
               name="txtPassword"
             />
+            <span onClick = {this.togglePassword} toggle="#password-field" class={toggle ? iconShow : iconHide} style={{
+               float: "right",
+               marginRight: "10px",
+               marginTop: "-30px",
+               position: "relative",
+               zIndex: "2"
+            }}></span>
           </div>
 
           <div className="group-button" style = {{display:"flex" , justifyContent : "space-between"}}>

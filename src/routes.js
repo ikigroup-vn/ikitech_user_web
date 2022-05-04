@@ -13,6 +13,7 @@ import ProductAgencyEdit from "./screens/ProductAgency/EditPrice/index";
 
 import Index from "./screens/index";
 import Dashboard from "./screens/Dashboard";
+import Accountant from "./screens/Accountant";
 
 import Blog from "./screens/Blog/index";
 import BlogEdit from "./screens/Blog/Edit/index";
@@ -192,6 +193,14 @@ const routes = [
 
     main: ({ match, history }) => (
       <EditInventory match={match} history={history} />
+    ),
+  },
+  {
+    path: "/accountant/:store_code",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <Accountant match={match} history={history} />
     ),
   },
 

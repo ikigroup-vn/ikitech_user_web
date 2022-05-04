@@ -53,6 +53,9 @@ class Discount extends Component {
         case 1:
           this.props.fetchAllDiscountEnd(store_code);
           break;
+        case 2:
+          this.props.fetchAllDiscount(store_code);
+          break;
         default:
           break;
       }
@@ -69,14 +72,10 @@ class Discount extends Component {
   componentDidUpdate() {
     if (this.state.isLoading != true && typeof this.props.permission.product_list != "undefined") {
       var permissions = this.props.permission
-      var isShow = permissions.promotion_discount_list
-      var insert = permissions.promotion_discount_add
-      var update = permissions.promotion_discount_update
-      var _delete = permissions.promotion_discount_end
+      var isShow = permissions.promotion
 
 
-
-      this.setState({ isLoading: true, insert, update, _delete , isShow })
+      this.setState({ isLoading: true, insert : true, update : true, _delete : true ,isShow})
 
     }
   }
@@ -86,7 +85,7 @@ class Discount extends Component {
     var { discounts } = this.props;
     var { store_code } = this.props.match.params
     var displayPag = is_end == 0 ? "hide" : null;
-    var { insert, update, _delete , isShow} = this.state
+    var { insert, update, _delete, isShow } = this.state
     if (this.props.auth) {
       return (
         <div id="wrapper">
@@ -112,7 +111,9 @@ class Discount extends Component {
                     <Link
                       to={`/discount/create/${params.store_code}`}
                       class={`btn btn-info btn-icon-split  ${insert == true ? "show" : "hide"}`}                  >
-                      <span style = {{display : "flex" , margin : "auto"}} class="icon text-white-50">
+                      <span style = {{display : "flex" , margin : "auto" , height: "100%",
+    "justify-content": "center",
+    "align-items": "center"}} class="icon text-white-50">
                         <i class="fas fa-plus"></i>
                       </span>
                       <span style = {{margin : "auto"}} class="text">Tạo giảm giá</span>
@@ -130,7 +131,9 @@ class Discount extends Component {
                         value={is_end}
                         onChange={this.onChange}
                       >
-                        <option value="0">Chuẩn bị và đang diễn ra</option>
+                        <option value="0">Chuẩn bị diễn ra</option>
+                        <option value="2">Đang diễn ra</option>
+
                         <option value="1">Đã kết thúc</option>
                       </select>
                     </div>
@@ -153,17 +156,17 @@ class Discount extends Component {
                     </div>
                   </div>
                 </div>
-                                                                                                        : <NotAccess/>}
+              : <NotAccess />}
 
-              </div>
-              <ModalDelete modal={modal} />
-              <ModalIsEnd modal={modalIsEnd} />
-      
-
-              <Footer />
             </div>
+            <ModalDelete modal={modal} />
+            <ModalIsEnd modal={modalIsEnd} />
+
+
+            <Footer />
           </div>
         </div>
+        </div >
 
       );
     } else if (this.props.auth === false) {

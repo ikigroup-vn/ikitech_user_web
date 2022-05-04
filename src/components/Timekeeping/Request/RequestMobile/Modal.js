@@ -1,16 +1,18 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as requestMobileAction from "../../../../actions/request_mobile";
+import themeData from "../../../../ultis/theme_data";
+
 class Modal extends Component {
   onSave = (e) => {
     e.preventDefault();
     window.$(".modal").modal("hide");
 
-    var { id } = this.props.modal;
+    var { id ,status } = this.props.modal;
     var { store_code, branch_id } = this.props;
     // this.props.updateVoucherIsEnd(store_code, {is_end : true}, id)
     this.props.updateStatus(store_code, branch_id, id, {
-      status: 1,
+      status: status,
     });
   };
 
@@ -35,8 +37,8 @@ class Modal extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{ background: "#47d3b0" }}>
-              <button
+          <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+              <h4 style={{ color: "white" }}>Thông báo</h4>              <button
                 type="button"
                 class="close"
                 data-dismiss="modal"
@@ -55,9 +57,7 @@ class Modal extends Component {
               <div class="modal-body">
                 <input type="hidden" name="remove_id_store" />
                 <div class="alert-remove"></div>
-                Bạn có muốn phê duyệt yêu cầu của thiết bị: {
-                  modal.name
-                } (id {modal.id}) ?
+                {modal.type == 1 ? "Bạn có muốn phê duyệt yêu cầu của thiết bị này không?" : "Bạn có muốn hủy yêu cầu của thiết bị này không?"}
               </div>
               <div class="modal-footer">
                 <button
@@ -67,8 +67,8 @@ class Modal extends Component {
                 >
                   Đóng
                 </button>
-                <button type="submit" class="btn btn-info">
-                  Phê duyệt
+                <button type="submit" class="btn btn-warning">
+                  Xác nhận
                 </button>
               </div>
             </form>

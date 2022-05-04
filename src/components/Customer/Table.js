@@ -33,7 +33,12 @@ class Table extends Component {
             <td>{index + 1}</td>
 
             <td>{data.name}</td>
+            <td>{data.phone_number}</td>
+
+<td>{data.email == null ? "Chưa cập nhật" : data.email}</td>
             <td>{data.points ? new Intl.NumberFormat().format(data.points)
+ : 0}</td>
+        <td>{data.debt ? new Intl.NumberFormat().format(data.debt)
  : 0}</td>
             {getChannel() == IKITECH && <td>
               {data.is_collaborator == null ||
@@ -44,9 +49,7 @@ class Table extends Component {
             </td>}
 
 
-            <td>{data.phone_number}</td>
-
-            <td>{data.email == null ? "Chưa cập nhật" : data.email}</td>
+           
 
             <td className="">
               {getChannel() == IKITECH && <Link
@@ -103,11 +106,14 @@ class Table extends Component {
             <tr>
               <th>STT</th>
               <th>Họ tên</th>
-              <th>Xu</th>
-              {getChannel() == IKITECH && <th>Cộng tác viên</th>}
+
 
               <th>Số điện thoại</th>
               <th>Gmail</th>
+              <th>Xu</th>
+              <th>Số nợ hiện tại</th>
+
+              {getChannel() == IKITECH && <th>Cộng tác viên</th>}
               <th>Hành động</th>
             </tr>
           </thead>

@@ -10,6 +10,7 @@ class AuthForgot extends Component {
     super(props);
     this.state = {
       txtPhone: "",
+      txtEmail : "",
       redirect: false,
       formData: "",
     };
@@ -19,8 +20,9 @@ class AuthForgot extends Component {
   checkExsitPhoneNumber() {
     var formData = this.props.user;
     var phone_number = this.props.user.phone_number;
+    var email = this.props.user.email;
 
-    if (phone_number !== "") {
+    if (phone_number !== "" || email != "") {
       this.state.redirect = true;
       this.state.formData = formData;
     }
@@ -30,12 +32,13 @@ class AuthForgot extends Component {
     if (formData !== false) {
       this.setState({
         txtPhone: formData.phone_number,
+        txtEmail : formData.email
       });
     }
   }
 
   render() {
-    var { txtPhone, redirect } = this.state;
+    var { txtPhone, redirect , txtEmail } = this.state;
     var { history } = this.props;
     var{state} = this
     if (redirect === false) {
@@ -63,10 +66,10 @@ class AuthForgot extends Component {
                             Xác minh tài khoản?
                           </h1>
                           <p className="mb-4">
-                            Vui lòng nhập mã xác nhận từ <br />  {txtPhone}
+                            Vui lòng nhập mã xác nhận từ <br />  {txtPhone == "" ? txtEmail : txtPhone}
                           </p>
                         </div>
-                        <Form formData={state} phone_number={txtPhone} history={history} />
+                        <Form formData={state} phone_number={txtPhone} email = {txtEmail} history={history} />
                         <hr></hr>
                       </div>
                     </div>

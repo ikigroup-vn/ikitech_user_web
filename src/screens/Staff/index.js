@@ -43,12 +43,10 @@ class Staff extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.state.isLoading != true && typeof this.props.permission.product_list != "undefined") {
       var permissions = this.props.permission
-      var insert = permissions.staff_add
-      var update = permissions.staff_update
-      var _delete = permissions.staff_remove
+ 
       var isShow = permissions.staff_list
 
-      this.setState({ isLoading: true, insert, update, _delete, isShow })
+      this.setState({ isLoading: true, insert : true, update : true, _delete : true, isShow })
 
     }
     $("#dataTable").DataTable(

@@ -94,7 +94,7 @@ class Sidebar extends Component {
                 <Link
                   className={`collapse-item  ${active} ${
                     _class[link.class] == true ||
-                    typeof link.class == "undefined"
+                    typeof link.class == "undefined" || link.class == null
                       ? "show"
                       : "hide"
                   }`}
@@ -190,7 +190,7 @@ class Sidebar extends Component {
                       this.props.badges.config_user_vip != null &&
                       typeof this.props.badges.config_user_vip !=
                         "undefined") ||
-                    typeof link.class == "undefined"
+                    typeof link.class == "undefined" || link.class == null
                       ? "show"
                       : "hide"
                   }`}
@@ -234,6 +234,7 @@ class Sidebar extends Component {
 
   checkDisplayTitle = (link) => {
     var result = true;
+    console.log(link);
     var _class = this.props.permission;
     if (link?.length > 0) {
       for (const item of link) {
@@ -243,7 +244,7 @@ class Sidebar extends Component {
             ? true
             : false;
         }
-        if (typeof item.class == "undefined") {
+        if (typeof item.class == "undefined" || item.class == null ) {
           return false;
         } else {
           if (_class[item.class] == true) {

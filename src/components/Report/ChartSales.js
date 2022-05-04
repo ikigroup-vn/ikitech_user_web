@@ -5,12 +5,15 @@ import { format } from "../../ultis/helpers";
 import moment from "moment";
 import * as helper from "../../ultis/helpers";
 import * as reportAction from "../../actions/report";
+import DetailPaymentPos from "./DetailPaymentPos";
+import DetailOrderPos from "./DetailOrderPos";
 import DetailPayment from "./DetailPayment";
 import DetailOrder from "./DetailOrder";
 import { connect } from "react-redux";
 import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
 import ModalPostDate from "./ModalPostDate";
 import { getBranchId } from "../../ultis/branchUtils";
+import getChannel , {IKIPOS , IKITECH} from "../../ultis/channel"
 
 class Chart extends Component {
   constructor() {
@@ -32,6 +35,7 @@ class Chart extends Component {
       actionChart: "total_final",
       typeSelect: "Hôm nay",
     };
+    
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -413,7 +417,7 @@ class Chart extends Component {
                 onClick={() => this.onchangeDate("WEEK")}
                 class="dropdown-item"
               >
-                Tuàn{" "}
+                Tuần{" "}
               </a>
               <a
                 data-toggle="modal"
@@ -445,28 +449,39 @@ class Chart extends Component {
         <br></br>
         <div class="row">
           <div
-            class="col-xs-4  col-sm-12 col-md-12 col-lg-4"
+            class={`col-xs-${getChannel() == IKITECH  ? "4" : "6"}  col-sm-12 col-md-12 col-lg-${getChannel() == IKITECH  ? "4" : "6"} `}
             style={{ borderRight: "1px solid #c0bfbf" }}
           >
-            <DetailPayment
+              {getChannel() == IKITECH ?  <DetailPayment
               overview={overview}
               badges={badges}
               store_code={store_code}
-            />
+            /> :  <DetailPaymentPos
+            overview={overview}
+            badges={badges}
+            store_code={store_code}
+          />}
+                              
+           
           </div>
-          <div class="col-xs-8 col-sm-12 col-md-12 col-lg-8">
-            <DetailOrder
+          <div class={`col-xs-${getChannel() == IKITECH  ? "8" : "6"}  col-sm-12 col-md-12 col-lg-${getChannel() == IKITECH  ? "8" : "6"}`}>
+          {getChannel() == IKITECH ?   <DetailOrder
               overview={overview}
               badges={badges}
               store_code={store_code}
-            />
+            /> :   <DetailOrderPos
+            overview={overview}
+            badges={badges}
+            store_code={store_code}
+          />}
+           
           </div>
         </div>
         <br></br>
 
         <div class="row">
           <div
-            class="col-xl-4 col-lg-4"
+            class={`${getChannel() == IKITECH ? "col-xl-4 col-lg-4" : "col-xl-6 col-lg-6"}`}
             onClick={() => {
               this.actionChart("total_final");
             }}
@@ -492,7 +507,7 @@ class Chart extends Component {
             </div>
           </div>
           <div
-            class="col-xl-4 col-lg-4"
+            class={`${getChannel() == IKITECH ? "col-xl-4 col-lg-4" : "col-xl-6 col-lg-6"}`}
             onClick={() => {
               this.actionChart("total_order_count");
             }}
@@ -517,8 +532,8 @@ class Chart extends Component {
               </div>
             </div>
           </div>
-
-          <div
+            {
+              getChannel() == IKITECH &&     <div
             class="col-xl-4 col-lg-4"
             onClick={() => {
               this.actionChart("total_collaborator_reg_count");
@@ -544,6 +559,8 @@ class Chart extends Component {
               </div>
             </div>
           </div>
+            }
+      
         </div>
 
         <br></br>
@@ -579,7 +596,7 @@ class Chart extends Component {
               style={{
                 width: "54px",
                 height: "15px",
-                background: "#17a2b8",
+                background: "blue",
                 margin: "auto",
               }}
             ></div>

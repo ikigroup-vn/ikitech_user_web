@@ -1,23 +1,30 @@
 import React, { Component } from 'react'
+import { format, formatNumber } from '../../ultis/helpers'
 import { shallowEqual } from '../../ultis/shallowEqual'
 
-class ItemInventory extends Component {
+class ItemImportStock extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            currentQuantity: 0,
+            currentQuantity: 1,
             distribute: "",
-            maxQuantityDistribute: "",
-            deviant: 0,
-            item: ""
-
+            item: "",
+            import_price: 0
         }
         this.nameElementDistribute = ""
         this.nameSubElementDistribute = ""
     }
     componentWillReceiveProps(nextProps) {
-        if (!shallowEqual(this.props.item.quantity, nextProps.item.quantity)) {
-            this.setState({ currentQuantity: nextProps.item.quantity, item: nextProps.item })
+
+
+        if (!shallowEqual(this.props.item.quantity, nextProps.item.quantity) ||
+            !shallowEqual(this.props.item.import_price, nextProps.item.import_price)
+        ) {
+            this.setState({
+                currentQuantity: nextProps.item.quantity,
+                import_price: nextProps.item.import_price,
+                item: nextProps.item
+            })
         }
 
     }
@@ -26,41 +33,45 @@ class ItemInventory extends Component {
         if (!shallowEqual(this.state.currentQuantity, nextState.currentQuantity)) {
             this.props.handleCallbackQuantity({ currentQuantity: nextState.currentQuantity, idElement: elementId })
         }
-
-        if (!shallowEqual(this.state.currentQuantity, nextProps.item.reality_exist)) {
-            this.setState({ currentQuantity: nextProps.item.reality_exist })
+        if (!shallowEqual(this.state.import_price, nextState.import_price)) {
+            this.props.handleCallbackPrice({ import_price: nextState.import_price, idElement: elementId })
         }
 
         if (!shallowEqual(this.state.item, nextState.item)) {
-            this.setState({ currentQuantity: nextState.item.reality_exist, deviant: nextState.item.reality_exist - nextState.item.stock })
+            this.setState({ currentQuantity: nextState.item.reality_exist })
+        }
+        if (!shallowEqual(this.state.currentQuantity, nextProps.item.reality_exist)) {
+            this.setState({ currentQuantity: nextProps.item.reality_exist })
+        }
+        if (!shallowEqual(this.state.import_price, nextProps.item.import_price)) {
+            this.setState({ import_price: nextProps.item.import_price })
         }
         return true
     }
     componentDidMount = () => {
 
-        this.setState({ item: this.props.item, deviant: 0 - this.props.item.stock })
+        this.setState({ item: this.props.item })
+    }
+    onChange = (e) => {
+        this.setState({ import_price: e.target.value })
     }
 
     subQuantity() {
         const q = this.state.currentQuantity - 1 < 0 ? 0 : this.state.currentQuantity - 1
-        const d = q - this.props.item.stock 
         this.setState({
-            currentQuantity: q,
-            deviant: d
+            currentQuantity: q
         })
     }
 
     addQuantity() {
         const q = this.state.currentQuantity + 1
-        const d = q - this.props.item.stock 
-        this.setState({ currentQuantity: q, deviant: d })
+        this.setState({ currentQuantity: q })
     }
     handleDelete(id) {
         this.props.handleDelete({ idElement: id })
     }
     handleOnChange = (e) => {
-        const d = this.props.item.stock - e.target.value
-        this.setState({ currentQuantity: e.target.value, deviant: d })
+        this.setState({ currentQuantity: e.target.value })
     }
 
     render() {
@@ -114,4 +125,4 @@ class ItemInventory extends Component {
     }
 }
 
-export default ItemInventory;
+export default ItemImportStock;

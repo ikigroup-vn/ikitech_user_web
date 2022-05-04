@@ -53,6 +53,9 @@ class Combo extends Component {
         case 1:
           this.props.fetchAllComboEnd(store_code);
           break;
+          case 2:
+            this.props.fetchAllCombo(store_code);
+            break;
         default:
           break;
       }
@@ -66,14 +69,12 @@ class Combo extends Component {
   componentDidUpdate() {
     if (this.state.isLoading != true && typeof this.props.permission.product_list != "undefined") {
       var permissions = this.props.permission
-      var insert = permissions.promotion_combo_add
-      var update = permissions.promotion_combo_update
-      var _delete = permissions.promotion_combo_end
+  
     
-      var isShow = permissions.promotion_combo_list
+      var isShow = permissions.promotion
 
 
-      this.setState({ isLoading: true, insert, update, _delete ,isShow})
+      this.setState({ isLoading: true, insert : true, update : true, _delete : true ,isShow})
 
     }
   }
@@ -110,7 +111,9 @@ class Combo extends Component {
                     to = {`/combo/create/${params.store_code}`}
                     class={`btn btn-info btn-icon-split  ${insert == true ? "show" : "hide"}`}        
                                   >
-                    <span  style = {{display : "flex" , margin : "auto"}} class="icon text-white-50">
+                    <span  style = {{display : "flex" , margin : "auto" , height: "100%",
+    "justify-content": "center",
+    "align-items": "center"}} class="icon text-white-50">
                       <i class="fas fa-plus"></i>
                     </span>
                     <span style = {{margin : "auto"}} class="text">Tạo combo giảm giá</span>
@@ -129,6 +132,8 @@ class Combo extends Component {
                       onChange={this.onChange}
                     >
                       <option value="0">Chuẩn bị và đang diễn ra</option>
+                      <option value="2">Đang diễn ra</option>
+
                       <option value="1">Đã kết thúc</option>
                     </select>
                   </div>

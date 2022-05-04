@@ -4,7 +4,7 @@ export const ikipos_menu = [
         link: [
             {
                 name: "Tổng quan",
-                class: "report_view",
+                class: null,
 
                 to: "/dashboard",
                 icon: "fa fa-eye",
@@ -13,7 +13,7 @@ export const ikipos_menu = [
             },
             {
                 name: "Bán hàng tại quầy",
-                class: "order_list",
+                class: "create_order_pos",
 
                 icon: "fa-credit-card",
                 exact: true,
@@ -35,14 +35,14 @@ export const ikipos_menu = [
                 open: "inventory",
                 children: [
                     {
-                        class: "customer_list",
+                        class: "product_category_list",
                         display: "hide",
                         name: "Danh mục sản phẩm",
                         exact: true,
                         to: "/product/category",
                     },
                     {
-                        class: "customer_config_point",
+                        class: "product_list",
                         display: "hide",
                         name: "Sản phẩm",
                         exact: true,
@@ -66,21 +66,21 @@ export const ikipos_menu = [
                 open: "report",
                 children: [
                     {
-                        class: "order_list",
+                        class: "report_overview",
                         display: "hide",
                         name: "Báo cáo chung",
                         exact: true,
                         to: "/report",
                     },
                     {
-                        class: "customer_config_point",
+                        class: "report_inventory",
                         display: "hide",
                         name: "Báo cáo kho ",
                         exact: true,
                         to: "/report_inventory",
                     },
                     {
-                        class: "customer_list",
+                        class: "report_finance",
                         display: "hide",
                         name: "Báo cáo tài chính",
                         exact: true,
@@ -96,21 +96,21 @@ export const ikipos_menu = [
                 open: "inventory",
                 children: [
                     {
-                        class: "customer_config_point",
+                        class: "inventory_list",
                         display: "hide",
                         name: "Tồn kho",
                         exact: true,
                         to: "/product_inventory/index",
                     },
                     {
-                        class: "customer_list",
+                        class: "inventory_tally_sheet",
                         display: "hide",
                         name: "Phiếu kiểm kho",
                         exact: true,
                         to: "/inventory/index",
                     },
                     {
-                        class: "customer_config_point",
+                        class: "inventory_import",
                         display: "hide",
                         name: "Nhập hàng",
                         exact: true,
@@ -145,7 +145,7 @@ export const ikipos_menu = [
 
             {
                 name: "Nhà cung cấp",
-                class: "post_category_list",
+                class: "supplier",
                 display: "hide",
                 icon: "fas fa-building",
                 exact: true,
@@ -154,21 +154,31 @@ export const ikipos_menu = [
             {
                 name: "Thu chi",
                 display: "hide",
-                icon: "fa-coins",
+                icon: "fa fa-money",
                 exact: true,
                 to: "/revenue_expenditure",
+                itemHasTabName: "agency",
+            },
+            {
+                class : "revenue_expenditure",
+                name: "Kế toán",
+                display: "hide",
+                icon: "fa-coins",
+                exact: true,
+                to: "/accountant",
                 itemHasTabName: "agency",
             },
 
             {
                 name: "Chấm công",
                 icon: "fa fa-calendar",
-        
+                class  : "timekeeping",
                 // open: "promotion",
                 open: "timekeeping",
         
                 children: [
                   {
+                      class: "timekeeping",
                     name: "Ca làm việc",
                     display: "hide",
                     icon: "fas fa-clock-nin",
@@ -180,7 +190,7 @@ export const ikipos_menu = [
                   {
         
                     name: "Lịch làm việc",
-                    // class: "timekeeping_work_schedule",
+                    class  : "timekeeping",
                     display: "hide",
                     icon: "fas fa-fw fa-calendar-days",
                     exact: true,
@@ -189,7 +199,8 @@ export const ikipos_menu = [
                   {
         
                     name: "Bảng công",
-        
+                    class  : "timekeeping",
+
                     display: "hide",
                     icon: "fas fa-fw fa-calendar-days",
                     exact: true,
@@ -198,7 +209,7 @@ export const ikipos_menu = [
                   {
         
                     name: "Địa điểm làm việc",
-                    // class: "timekeeping_work_location",
+                    class  : "timekeeping",
                     display: "hide",
                     icon: "fas fa-fw fa-location-dot",
         
@@ -208,7 +219,7 @@ export const ikipos_menu = [
                   {
         
                     name: "Xử lý yêu cầu",
-                    // class: "timekeeping_work_location",
+                    class  : "timekeeping",
                     display: "hide",
                     icon: "fas fa-fw fa-location-dot",
         
@@ -220,13 +231,14 @@ export const ikipos_menu = [
 
 
               {
+                  class : "promotion",
                 name: "Chương trình khuyến mại",
                 icon: "fas fa-money-bill-alt",
                 open: "promotion",
                 children: [
                     {
                         name: "Giảm giá sản phẩm",
-                        class: "promotion_discount_list",
+                        class: "promotion",
                         display: "hide",
                         icon: "fas-usd-circle",
                         exact: true,
@@ -234,7 +246,7 @@ export const ikipos_menu = [
                     },
                     {
                         name: "Voucher giảm giá hóa đơn",
-                        class: "promotion_voucher_list",
+                        class: "promotion",
                         display: "hide",
                         icon: "fas fa-fw fa-cog",
                         exact: true,
@@ -242,7 +254,7 @@ export const ikipos_menu = [
                     },
                     {
                         name: "Combo giảm giá",
-                        class: "promotion_combo_list",
+                        class: "promotion",
                         display: "hide",
                         icon: "fas fa-fw fa-cog",
                         exact: true,
@@ -265,7 +277,7 @@ export const ikipos_menu = [
                     // },
                     {
                         name: "Chi nhánh",
-                        class: "web_theme_edit",
+                        class: "branch_list",
                         display: "hide",
                         exact: true,
                         to: "/branch/index",
@@ -289,7 +301,7 @@ export const ikipos_menu = [
                 
                     {
                         name: "Cài đặt chung",
-                        class: "web_theme_edit",
+                        class: "config_setting",
                         display: "hide",
                         exact: true,
                         to: "/setting/index",

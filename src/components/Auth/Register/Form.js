@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import * as Types from "../../../constants/ActionType"
 import * as auth from "../../../actions/auth"
 import { isEmpty , isPhone , isEmail , isSpecialCharactor } from "../../../ultis/helpers"
+import {getQueryParams} from "../../../ultis/helpers"
+
 class Form extends Component {
   constructor(props) {
     super(props);
@@ -16,6 +18,24 @@ class Form extends Component {
       txtCPassword: "",
     };
   }
+
+  componentWillMount()
+  {
+    var redirect_register = getQueryParams("redirect_register")
+    if(redirect_register && typeof this.props.user.phone_number != "undefined")
+    {
+      var {user} = this.props
+      this.setState({
+        txtName: user.name,
+        txtPhone: user.phone_number,
+        txtEmail: user.email,
+        txtPassword: user.password,
+        txtCPassword: user.password,
+      })
+    }
+  }
+
+
 
   onChange = (e) => {
     var target = e.target;
@@ -184,7 +204,9 @@ class Form extends Component {
 
 const mapStateToProps = state => {
   return {
-    products: state.products
+    products: state.products,
+    user: state.authReducers.register.user
+
   }
 }
 

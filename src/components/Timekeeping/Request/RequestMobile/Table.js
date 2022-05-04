@@ -29,7 +29,7 @@ class Table extends Component {
     }
     return true;
   }
-  handleIsEndCallback = (event, store_code, name, id) => {
+  handleIsEndCallback = (event, store_code, name, id , status) => {
     window.$(".modalDetail").modal("hide");
     window.$("#modalDetail").removeClass("in");
     window.$(".modal-backdrop").remove();
@@ -38,8 +38,9 @@ class Table extends Component {
       name: name,
       id: id,
       store_code: store_code,
+      status
     });
-    // event.preventDefault();
+    event.preventDefault();
   };
   showData = (listRequestMobile) => {
     var { store_code, branch_id, requestMobile } = this.props;
@@ -50,7 +51,7 @@ class Table extends Component {
         return (
           <React.Fragment>
             <tr>
-              <td>{data.id}</td>
+              <td>{data.device_id}</td>
               <td
                 style={{ cursor: "pointer" }}
                 data-toggle="modal"
@@ -79,14 +80,35 @@ class Table extends Component {
                         e,
                         store_code,
                         data.name,
-                        data.id
+                        data.id, 1
                       );
                     }}
                     data-toggle="modal"
                     data-target="#isEndModal"
                     class={`btn btn-primary btn-sm`}
                   >
-                    <i class="fa fa-clock-o"></i> Phê duyệt
+                    <i class="fa fa-check"></i> Phê duyệt
+                  </button>
+                  <button
+                  style = {{marginLeft : "15px"}}
+                    type="button"
+                    onClick={(e) => {
+                      window.$(".modalDetail").modal("hide");
+                      window.$("#modalDetail").removeClass("in");
+                      window.$(".modal-backdrop").remove();
+                      window.$("#modalDetail").hide();
+                      this.handleIsEndCallback(
+                        e,
+                        store_code,
+                        data.name,
+                        data.id , 2
+                      );
+                    }}
+                    data-toggle="modal"
+                    data-target="#isEndModal"
+                    class={`btn btn-danger btn-sm`}
+                  >
+                    <i class="fa fa-times"></i> Hủy
                   </button>
                 </td>
               ) : (

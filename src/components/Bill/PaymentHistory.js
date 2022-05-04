@@ -15,16 +15,17 @@ class PaymentHistory extends Component {
     if (bills.length > 0) {
       result = bills.map((bill, index) => {
 
+        var textPayment = bill.payment_method_id == 0 ? "Tiền mặt" : bill.payment_method_id == 1 ? "Quẹt thẻ"  : "Chuyển khoản"
 
         return (
           <tr>
-            <td><a href={`/order/detail/${store_code}/${bill.order_code}`} >{bill.order_code}</a></td>
+            {/* <td><a href={`/order/detail/${store_code}/${bill.order_code}`} >{bill.order_code}</a></td> */}
 
             <td>
-              { formatNoD(bill.total_final) }
+              { formatNoD(bill.money) }
             </td>
             <td>
-            {bill.payment_status_name}
+            {textPayment}
             </td>
 
             <td>
@@ -51,16 +52,16 @@ class PaymentHistory extends Component {
           <table class="table table-hover table-bordered  table-border">
             <thead>
               <tr>
-                <th>Mã đơn hàng</th>
+                {/* <th>Mã đơn hàng</th> */}
 
-                <th>Số tiền</th>
-                <th>Trạng thái</th>
+                <th>Số tiền trả</th>
+                <th>Phương thức thanh toán</th>
                 <th>Thời gian</th>
 
               </tr>
             </thead>
             <tbody>
-              {this.showHistory(bills)}
+              {this.showHistory(historyPay)}
             </tbody>
           </table>
         </div>

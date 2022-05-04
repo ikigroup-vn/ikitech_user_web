@@ -87,7 +87,7 @@
     cursor: pointer;
     /* color : #dddddd !important */
 }
-#dataTable_wrapper tr:hover{
+#dataTable_wrapper tbody tr:hover{
     background: rgba(0,0,0,.05) !important;
     cursor: pointer;
 }
@@ -520,7 +520,13 @@ img {
 .card-header {
     background-color: white;
 }
-
+.table-staff #dataTable_paginate
+{
+    float : left !important
+}
+.table-staff{
+    margin-top: 15px;
+}
 .space-bottom {
     padding-bottom: 10px;
 }

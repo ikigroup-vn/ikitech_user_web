@@ -140,7 +140,7 @@ class Footer extends Component {
   updateBanner = (e, id, title, img) => {
     this.setState({ modalupdate: { title: "banner", id: id, _title: title, image_url: img } });
   }
-  showRevenues = (listBills) => {
+  showRevenues = (listBills , per_page , current_page) => {
     var result = null;
     var { store_code } = this.props
 
@@ -148,29 +148,44 @@ class Footer extends Component {
       return result
     }
     if (listBills.length > 0) {
-      result = listBills.map((revenue, index) => {
+      result = listBills.map((data, index) => {
 
         return (
           <tr style={{ cursor: "pointer" }} data-toggle="modal"
             data-target="#modalDetail"
             onClick={() =>
               this.setState({
-                idModalShow: revenue.id,
+                idModalShow: data.id,
               })
             }>
-            <td>{index + 1}</td>
-            <td>{revenue.code}</td>
+               <td>{per_page * (current_page - 1) + (index + 1)}</td>
+              <td>{data.code}</td>
+              <td>
+                {data.is_revenue ? (
+                  <p style={{ color: " rgb(54 185 204)" }}>Phiếu thu</p>
+                ) : (
+                  <p style={{ color: "rgb(231 74 59)" }}>Phiếu chi</p>
+                )}
+              </td>
+              <td>
+                {new Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                }).format(data?.change_money)}
+              </td>
+              <td>
+                {new Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                }).format(data?.current_money)}
+              </td>
+        
+          
 
-            <td>
-              {formatNoD(revenue.change_money)}
-            </td>
-            <td>
-              {revenue.type_action_name}
-            </td>
-
-            <td>
-              {revenue.updated_at}
-            </td>
+              <td>{data.created_at}</td>
+        
+    
+              <td>{data?.type_action_name}</td>
 
           </tr>
 
@@ -212,8 +227,8 @@ class Footer extends Component {
       customers,
       reportExpenditure,
     } = this.props;
-    console.log(customer);
-    return (
+    var per_page = revenueExpenditures.per_page;
+    var current_page = revenueExpenditures.current_page;    return (
       <div className="support">
         <div
           style={{
@@ -280,16 +295,21 @@ class Footer extends Component {
                 <table class="table table-hover table-border">
                   <thead>
                     <tr>
-                      <th>STT</th>
-                      <th>Mã đơn</th>
-                      <th>Số tiền</th>
-                      <th>Mô tả</th>
-                      <th>Ngày tạo</th>
+                    <th>STT</th>
+                <th>Mã</th>
+                <th>
+                 Loại phiếu</th>
+                <th>Số tiền thay đổi</th>
+
+                <th>Số nợ hiện tại</th>
+                <th>Ngày tạo</th>
+
+                <th>Trạng thái</th>
                     </tr>
                   </thead>
                   <tbody>
                     {
-                      this.state.isLoadRevenueExpenditures == true && this.showRevenues(revenueExpenditures.data)
+                      this.state.isLoadRevenueExpenditures == true && this.showRevenues(revenueExpenditures.data , per_page, current_page)
 
                     }
                   </tbody>

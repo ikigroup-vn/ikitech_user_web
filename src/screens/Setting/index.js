@@ -6,6 +6,7 @@ import Sidebar from '../../components/Partials/Sidebar'
 import Topbar from '../../components/Partials/Topbar'
 import * as Types from "../../constants/ActionType";
 import * as SettingAction from "../../actions/notification";
+import NotAccess from "../../components/Partials/NotAccess";
 
 class Setting extends Component {
     constructor(props) {
@@ -45,6 +46,15 @@ class Setting extends Component {
                 stock: nextProps.generalSetting.noti_stock_count_near
             })
         }
+        if (
+            this.state.isLoading != true &&
+            typeof nextProps.permission.branch_list != "undefined"
+          ) {
+            var permissions = nextProps.permission;
+      
+            var isShow = permissions.config_setting;
+            this.setState({ isLoading: true, isShow });
+          }
     }
 
     componentDidMount() {
@@ -54,6 +64,7 @@ class Setting extends Component {
 
     render() {
         const { store_code } = this.props.match.params
+        var {isShow} = this.state
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
@@ -62,7 +73,7 @@ class Setting extends Component {
                     <div id="content-wrapper" className="d-flex flex-column">
                         <div id="content">
                             <Topbar store_code={store_code} />
-
+                            {typeof isShow == "undefined" ? <div></div> : isShow == true ?
                             <div className="container-fluid">
                                 <Alert
                                     type={Types.ALERT_UID_STATUS}
@@ -120,6 +131,8 @@ class Setting extends Component {
                                     </div>
                                 </div>
                             </div>
+                                                                                                      : <NotAccess />}
+
                         </div>
 
                         <Footer />
@@ -132,7 +145,9 @@ class Setting extends Component {
 }
 const mapStateToProps = (state) => {
     return {
-        generalSetting: state.notificationReducers.generalSetting
+        generalSetting: state.notificationReducers.generalSetting,
+        permission: state.authReducers.permission.data,
+
     }
 }
 

@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { isEmail, isPhone } from "../../../ultis/helpers"
+import {getQueryParams} from "../../../ultis/helpers"
 
 import * as auth from "../../../actions/auth";
 
@@ -8,8 +10,25 @@ class Form extends Component {
     super(props);
     this.state = {
       txtPhone: "",
+      txtEmail: "",
+      txtFormat: ""
     };
   }
+
+
+  componentWillMount()
+  {
+    var redirect_forgot = getQueryParams("redirect_forgot")
+    console.log(redirect_forgot ,  this.props.user)
+    if(redirect_forgot && ( typeof this.props.user.phone_number != "undefined" || typeof this.props.user.email != "undefined"))
+    {
+      var {user} = this.props
+      this.setState({
+        txtFormat: user.phone_number == "" ? user.email : user.phone_number,
+      })
+    }
+  }
+
 
   onChange = (e) => {
     var target = e.target;
@@ -23,11 +42,20 @@ class Form extends Component {
 
   onSave = (e) => {
     e.preventDefault();
-    this.props.forgot(this.state);
+    var { txtPhone, txtEmail, txtFormat } = this.state
+    if (isEmail(txtFormat))
+      this.props.forgot({ txtPhone: "", txtEmail: txtFormat });
+    else if (isPhone(txtFormat)) {
+      this.props.forgot({ txtPhone: txtFormat, txtEmail: "" });
+    }
+    else {
+      this.props.forgot({ txtPhone: txtFormat, txtEmail: "" });
+
+    }
   };
 
   render() {
-    var { txtPhone } = this.state;
+    var { txtPhone, txtFormat } = this.state;
     var { products } = this.props;
     console.log(products);
     return (
@@ -41,8 +69,8 @@ class Form extends Component {
               aria-describedby="emailHelp"
               placeholder="Nhập số điện thoại hoặc Email"
               autocomplete="off"
-              name="txtPhone"
-              value={txtPhone}
+              name="txtFormat"
+              value={txtFormat}
               onChange={this.onChange}
             />
           </div>
@@ -54,6 +82,12 @@ class Form extends Component {
     );
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    alert: state.authReducers.alert.alert_forgotOTP,
+    user: state.authReducers.forgot.user,
+  };
+};
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
@@ -62,4 +96,4 @@ const mapDispatchToProps = (dispatch, props) => {
     },
   };
 };
-export default connect(null, mapDispatchToProps)(Form);
+export default connect(mapStateToProps, mapDispatchToProps)(Form);

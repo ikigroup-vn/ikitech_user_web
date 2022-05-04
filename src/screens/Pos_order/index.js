@@ -28,6 +28,7 @@ import * as customerApi from "../../data/remote/customer";
 import PanelBottom from './PanelBottom'
 import history from '../../history'
 
+import NotAccess from "../../components/Partials/NotAccess";
 
 class PostOrder extends Component {
     constructor(props) {
@@ -433,6 +434,16 @@ class PostOrder extends Component {
             })
         }
 
+        if (
+            this.state.isLoading != true &&
+            typeof nextProps.permission.branch_list != "undefined"
+          ) {
+            var permissions = nextProps.permission;
+      
+            var isShow = permissions.create_order_pos;
+            this.setState({ isLoading: true, isShow });
+          }
+
     }
 
 
@@ -628,12 +639,14 @@ class PostOrder extends Component {
         var { store_code } = this.props.match.params
         var { listPertion, products, listVoucher, badges } = this.props
         var { allow_semi_negative } = badges
-        var { numPage, exchange, priceCustomer, oneCart, totalFinal, listSuggestion, totalAfterDiscount, select_customer_id } = this.state
+        var { numPage, exchange, priceCustomer, oneCart, totalFinal, listSuggestion, totalAfterDiscount, select_customer_id , isShow} = this.state
         const length = oneCart.info_cart?.line_items.length
 
 
         return (
             <React.Fragment>
+                                            {typeof isShow == "undefined" ? <div></div> : isShow == true ?
+
                 <div className='pos-modal'>
                     <KeyboardEventHandler
                         handleKeys={["f9", "f4", "f3", "f6", "f8"]}
@@ -1059,6 +1072,8 @@ class PostOrder extends Component {
                     />
 
                 </div>
+                                                                                                                      : <NotAccess />}
+
             </React.Fragment >
         )
     }
@@ -1078,6 +1093,8 @@ const mapStateToProps = (state) => {
         inforCustomer: state.posReducers.pos_reducer.inforCustomer,
         badges: state.badgeReducers.allBadge,
         customers: state.customerReducers.customer.allCustomer,
+        permission: state.authReducers.permission.data,
+
     }
 }
 

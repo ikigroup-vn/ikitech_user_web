@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import themeData from "../../../../ultis/theme_data";
 import * as staffAction from "../../../../actions/staff";
+import config from "../../../../ultis/datatable"
+import $ from "jquery";
 
 import { filter_arr, format } from "../../../../ultis/helpers";
 
@@ -25,7 +27,7 @@ class ListStaff extends Component {
     const branch_id = localStorage.getItem("branch_id");
     var params = `&search=${searchValue}`;
     this.props.fetchAllShift(store_code, branch_id, 1, params);
-  }; 
+  };
   onChange = (e) => {
     var { value, checked } = e.target;
     console.log(checked);
@@ -48,8 +50,21 @@ class ListStaff extends Component {
     this.props.onSaveStaff()
     window.$(".modal").modal("hide");
   }
+  componentWillReceiveProps(nextProps) {
+    $("#dataTable").DataTable().destroy();
+  }
 
+  componentDidUpdate(prevProps, prevState) {
 
+    $("#dataTable").DataTable(
+      config()
+    );
+
+    $("#dataTable").DataTable(config());
+
+    window.$(".dataTables_info").hide()
+
+  }
   showData = (staffs, list) => {
     console.log("dfasufbasdbfasdkjfbasdkf", staffs, list);
     var result = null;
@@ -133,7 +148,7 @@ class ListStaff extends Component {
   };
 
   render() {
-    var { staffs, store_code, listStaff,searchValue  } = this.props;
+    var { staffs, store_code, listStaff, searchValue } = this.props;
     console.log("stafff", staffs);
     return (
       <div
@@ -162,7 +177,7 @@ class ListStaff extends Component {
               </button>
             </div>
 
-            <form style={{marginTop : "10px"}} onSubmit={this.searchData}>
+            {/* <form style={{marginTop : "10px"}} onSubmit={this.searchData}>
               <div
                 class="input-group mb-6"
                 style={{ padding: "0 20px" }}
@@ -174,7 +189,7 @@ class ListStaff extends Component {
                   value={searchValue}
                   onChange={this.onChangeSearch}
                   class="form-control"
-                  placeholder="Tìm kiếm chấm môn"
+                  placeholder="Tìm kiếm nhân viên"
                 />
                 <div class="input-group-append">
                   <button class="btn btn-primary" type="submit">
@@ -183,12 +198,9 @@ class ListStaff extends Component {
                 </div>
               </div>
         
-            </form>
-            <div class="table-responsive">
-              <table
-                class="table  table-hover table-border"
-                style={{ color: "black" }}
-              >
+            </form> */}
+            <div class="table-responsive table-staff">
+              <table style = {{marginTop : "15px"}} class="table pag-staff-datatable " id="dataTable" width="100%" cellspacing="0">
                 <thead>
                   <tr>
                     <th></th>
@@ -213,7 +225,7 @@ class ListStaff extends Component {
                 limit={this.state.numPage}
                 branch_id={this.props.branch_id}
               /> */}
-              <div style={{ marginTop: "10px" , marginBottom: "10px" }}>
+              <div style={{ marginTop: "10px", marginBottom: "10px" }}>
                 <button
                   style={{
                     border: "1px solid",
@@ -233,7 +245,7 @@ class ListStaff extends Component {
 
 
 
-         
+
           </div>
         </div>
       </div>

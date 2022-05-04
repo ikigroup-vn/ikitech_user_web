@@ -130,6 +130,7 @@ class Table extends Component {
                       }
                     );
                   }}
+                  style = {{marginLeft: "7px"}}
                   name="delete"
                   data-toggle="modal"
                   data-target="#removeModal"

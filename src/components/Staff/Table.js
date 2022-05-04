@@ -113,7 +113,7 @@ class Table extends Component {
                             <th>Số điện thoại</th>
 
               <th>Email</th>
-              <th>Lương tháng</th>
+              <th>Lương theo giờ</th>
 
               <th>Vai trò</th>
               <th>Trạng thái</th>

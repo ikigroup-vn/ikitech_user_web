@@ -89,7 +89,7 @@ class Detail extends Component {
 
                                                 <div>
 
-                                                    <button style={{ marginRight: "10px" }} type="button" onClick={this.goBack} class="btn btn-primary  btn-sm"><i class="fas fa-arrow-left"></i>&nbsp;Quay lại</button>
+                                                    <button style={{ marginRight: "10px" }} type="button" onClick={this.goBack} class="btn btn-warning  btn-sm"><i class="fas fa-arrow-left"></i>&nbsp;Quay lại</button>
 
                                                     <ReactToPrint
                                                         trigger={() => {

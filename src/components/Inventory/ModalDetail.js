@@ -199,7 +199,7 @@ class ModalDetail extends Component {
     }
     componentWillReceiveProps(nextProps, nextState) {
 
-        this.setState({ quantityInStock: nextProps.modal.inventoryProduct?.main_stock ?? 0 })
+        this.setState({ quantityInStock: nextProps.modal.quantityProductWithDistribute == 0 ? nextProps.modal.inventoryProduct?.main_stock  : nextProps.modal.quantityProductWithDistribute})
         if (nextProps.modal.priceProduct !== this.state.afterPrice) {
             this.setState({ afterPrice: nextProps.modal.priceProduct })
         }
@@ -230,10 +230,11 @@ class ModalDetail extends Component {
     }
     render() {
         var inforProduct = this.props.modal
-        console.log(nextProps.modal.inventoryProduct)
         var itemParent = inforProduct && inforProduct.inventoryProduct && inforProduct.inventoryProduct.distributes !== null && inforProduct.inventoryProduct.distributes.length > 0 ? inforProduct.inventoryProduct.distributes[0] : []
+
+        console.log(inforProduct);
         return (
-            <div class="modal" id="modalDetail">
+            <div class="modal" id="modalDetails">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div className='model-header-modal' style={{ display: 'flex', justifyContent: "space-between", margin: "10px 15px" }}>
