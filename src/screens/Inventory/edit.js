@@ -161,6 +161,13 @@ class EditInventory extends Component {
     passNumPage = (page) => {
         this.setState({ page: page })
     }
+    handleCallbackPrice = (modal) => {
+        this.setState({ change: !this.state.change })
+        const newInventory = this.state.listInventory
+        const index = newInventory.map(e => e.element_id).indexOf(modal.idElement)
+        newInventory[index].import_price = modal.import_price
+        this.setState({ listImportStock: newInventory })
+    }
 
     componentDidMount() {
         const branch_id = localStorage.getItem('branch_id')
@@ -194,7 +201,7 @@ class EditInventory extends Component {
                                             </div>
 
                                             <div className='card-bodys' style={{ width: "0 10px", height: "380px", overflowY: "auto" }}>
-                                                <ListInventorySheet store_code={store_code} listInventory={listInventory} handleCallbackQuantity={this.handleCallbackQuantity} handleDelete = {this.handleDelete} />
+                                                <ListInventorySheet  store_code={store_code} listInventory={listInventory} handleCallbackQuantity={this.handleCallbackQuantity} handleCallbackPrice = {this.handleCallbackPrice} handleDelete = {this.handleDelete} />
                                             </div>
                                             <div className='voucher-input' style={{ margin: "10px 0px" }}>
 

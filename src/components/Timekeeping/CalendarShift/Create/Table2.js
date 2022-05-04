@@ -40,7 +40,7 @@ class Table extends Component {
               }).format(data.salary)}
             </td>
             <td>{decentralization}</td>
-            <td style={{ textAlign: "center" }}>
+            {/* <td style={{ textAlign: "center" }}>
               {data.online ? (
                 <>
                   <span
@@ -70,7 +70,7 @@ class Table extends Component {
                   <span>Offline</span>
                 </>
               )}
-            </td>
+            </td> */}
 
             <td style={{ textAlign: "center" }}>
               <button
@@ -108,9 +108,9 @@ class Table extends Component {
                       <th>Tên nhân viên</th>
                       <th>Tên đăng nhập</th>
                       <th>Số điện thoại</th>
-                      <th>Lương</th>
+                      <th>Lương theo giờ</th>
                       <th>Phân quyền</th>
-                      <th>Trạng thái</th>
+                      {/* <th>Trạng thái</th> */}
 
                       <th>Hành động</th>
                     </tr>

@@ -63,8 +63,12 @@ class ReportProfit extends Component {
         }
       
         const branch_id = getBranchId()
-        const params = `date_from=${from}&date_to=${to}&branch_id=${branch_id}`
+        var params = `branch_id=${branch_id}`
         const { store_code } = this.props.match.params
+        if (from, to) { 
+           params = `&date_from=${from}&date_to=${to}`
+        }   
+    
         this.props.fetchReportProfit(store_code, branch_id, params)
     
       }
@@ -148,13 +152,13 @@ class ReportProfit extends Component {
                                         </div>
 
                                     </div>
-                                    <div className='card-body'>
+                                    <div className='card-body info-report'>
                                         <div className='row'>
                                             <div className='col-6'>
                                                 <div class="form-group" style={{ fontSize: "15px", borderRight:"1px solid" }}>
                                                     <div class="info-badge  badge-report" style={{width:"95%"}} >
-                                                        <p class="" style={{ display: "flex", justifyContent: "space-between" }}>
-                                                            <p> Doanh thu bán hàng: </p>
+                                                        <p class="title" style={{ display: "flex", justifyContent: "space-between" , fontWeight : "500"}}>
+                                                            <p > Doanh thu bán hàng (1): </p>
                                                             <span id="user_tel">
                                                                 <span className="total-final">{format(Number(reportProfit.sales_revenue))}</span>
                                                             </span>
@@ -189,22 +193,29 @@ class ReportProfit extends Component {
                                                                 <span className="total-final">{format(Number(reportProfit.discount))}</span>
                                                             </span>
                                                         </p>
-                                                        <p class="" style={{ display: "flex", justifyContent: "space-between" }}>
-                                                            <p> Chi phí bán hàng: </p>
+                                                        <p class="title" style={{ display: "flex", justifyContent: "space-between" , fontWeight : "500"}}>
+                                                            <p> Chi phí khác (4): </p>
                                                             <span id="user_tel">
-                                                                <span className="total-final">{format(Number(reportProfit.selling_expenses))}</span>
+                                                                <span className="total-final">{format(Number(reportProfit.other_costs))}</span>
                                                             </span>
                                                         </p>
+                                                   
                                                     </div>
 
                                                 </div></div>
                                             <div className='col-6'>
                                                 <div class="form-group" style={{ fontSize: "15px" }}>
                                                     <div class="info-badge  badge-report" >
+                                                    <p class="title" style={{ display: "flex", justifyContent: "space-between" , fontWeight : "500" }}>
+                                                            <p> Chi phí bán hàng (2): </p>
+                                                            <span id="user_tel">
+                                                                <span className="total-final">{format(Number(reportProfit.cost_of_sales))}</span>
+                                                            </span>
+                                                        </p>
                                                         <p class="" style={{ display: "flex", justifyContent: "space-between" }}>
                                                             <p> Giá vốn hàng hóa: </p>
                                                             <span id="user_tel">
-                                                                <span className="total-final">{format(Number(reportProfit.real_money_for_sale))}</span>
+                                                                <span className="total-final">{format(Number(reportProfit.selling_expenses))}</span>
                                                             </span>
                                                         </p>
                                                         <p class="" style={{ display: "flex", justifyContent: "space-between" }}>
@@ -219,6 +230,12 @@ class ReportProfit extends Component {
                                                                 <span className="total-final">{format(Number(reportProfit.partner_delivery_fee))}</span>
                                                             </span>
                                                         </p>
+                                                        <p class="title" style={{ display: "flex", justifyContent: "space-between" , fontWeight : "500"}}>
+                                                            <p > Thu nhập khác (3): </p>
+                                                            <span id="user_tel">
+                                                                <span className="total-final">{format(Number(reportProfit.other_costs))}</span>
+                                                            </span>
+                                                        </p>
                                                         <p class="" style={{ display: "flex", justifyContent: "space-between" }}>
                                                             <p> Phiếu thu tự tạo: </p>
                                                             <span id="user_tel">
@@ -231,14 +248,9 @@ class ReportProfit extends Component {
                                                                 <span className="total-final">{format(Number(reportProfit.customer_return))}</span>
                                                             </span>
                                                         </p>
-                                                        <p class="" style={{ display: "flex", justifyContent: "space-between" }}>
-                                                            <p> Chi phí khác: </p>
-                                                            <span id="user_tel">
-                                                                <span className="total-final">{format(Number(reportProfit.other_costs))}</span>
-                                                            </span>
-                                                        </p>
-                                                        <p class="" style={{ display: "flex", justifyContent: "space-between" }}>
-                                                            <p> Lợi nhuận: </p>
+                                                 
+                                                        <p class="title" style={{ display: "flex", justifyContent: "space-between", fontWeight : "500"}}>
+                                                            <p> Lợi nhuận (1-2+3-4): </p>
                                                             <span id="user_tel">
                                                                 <span className="total-final">{format(Number(reportProfit.profit))}</span>
                                                             </span>

@@ -335,16 +335,17 @@ class Modal extends Component {
     this.setState({icon: !this.state.icon})
   }
   handleCheck = (e) => {
-    if (this.state.days_of_week_list.length === 7) {
-      this.setState({
-        days_of_week_list: [], isCheck: e.target.checked
-      });
-    } else {
+    if (e.target.checked == true) {
       this.setState({
         days_of_week_list: [...this.state.list_days_of_week_list], isCheck: e.target.checked
       });
     }
-  };
+    else {
+      this.setState({
+        days_of_week_list: [], isCheck: e.target.checked
+      });
+  }
+}
   render() {
     const {
       name,

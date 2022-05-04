@@ -20,7 +20,7 @@ class ProfitTotal extends Component {
                                 <div className="row no-gutters align-items-center">
                                     <div className="col mr-2">
                                         <div className=" font-weight-bold text-primary text-uppercase mb-1">
-                                            Doanh thu bán hàng</div>
+                                            Doanh thu bán hàng (1)</div>
                                             <div className="h5 mb-0 font-weight-bold text-gray-800">{format(Number(reportProfit.sales_revenue))}</div>
                                     </div>
                                     <div className="col-auto">
@@ -38,8 +38,8 @@ class ProfitTotal extends Component {
                                 <div className="row no-gutters align-items-center">
                                     <div className="col mr-2">
                                         <div className=" font-weight-bold text-success text-uppercase mb-1">
-                                            Chi phí bán hàng</div>
-                                            <div className="h5 mb-0 font-weight-bold text-gray-800">{format(Number(reportProfit.profit))}</div>
+                                            Chi phí bán hàng (2)</div>
+                                            <div className="h5 mb-0 font-weight-bold text-gray-800">{format(Number(reportProfit.selling_expenses))}</div>
                                     </div>
                                     <div className="col-auto">
                                         <i className="fas fa-boxes fa-2x text-gray-300"></i>
@@ -54,7 +54,7 @@ class ProfitTotal extends Component {
                                 <div className="row no-gutters align-items-center">
                                     <div className="col mr-2">
                                         <div className=" font-weight-bold text-danger text-uppercase mb-1">
-                                            Lợi nhuận khác</div>
+                                            Lợi nhuận khác (3-4)</div>
                                             <div className="h5 mb-0 font-weight-bold text-gray-800">{format(Number(reportProfit.other_income))}</div>
                                     </div>
                                     <div className="col-auto">

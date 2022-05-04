@@ -82,7 +82,7 @@ class Table extends Component {
         arrDate: newArr,
       });
     }
-    if (!shallowEqual(prevProps.typeDate, this.props.typeDate)) {
+    if (!shallowEqual(prevProps.typeDate, this.props.typeDate  )) {
       var arr = [];
       if (this.props.typeDate == "DAY") {
         var datePrime = {
@@ -100,6 +100,13 @@ class Table extends Component {
         var datePrime = {
           from: moment().startOf("month").format("YYYY-MM-DD"),
           to: moment().endOf("month").format("YYYY-MM-DD"),
+        };
+      }
+      if(typeof datePrime == "undefined")
+      {
+        var datePrime = {
+          from: moment().format("YYYY-MM-DD"),
+          to: moment().format("YYYY-MM-DD"),
         };
       }
       var dateFrom = new Date(datePrime.from);

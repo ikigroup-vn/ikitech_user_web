@@ -77,7 +77,17 @@
     background-color: #dddfeb    !important;
 }
 
+.label-value{
+    min-width: 290px;
+}
 
+.info-report .info-badge>p:not(.title){
+    /* margin-left: 15px; */
+}
+
+.group-time .wap-header{ 
+    display: block !important;
+}
   
 .import-stock  .css-b62m3t-container{
     width : 100%

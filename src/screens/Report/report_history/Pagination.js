@@ -11,8 +11,19 @@ class Pagination extends Component {
   }
 
   passPagination = (page) => {
+    var {time_from , time_to} = this.props
     const branch_id = getBranchId()
-    const params = `branch_id=${branch_id}`
+    var params = `branch_id=${branch_id}`
+    
+    if(time_to != "" && time_to != null)
+    {
+      params = params+ `&date_to=${time_to}`;
+
+    }
+    if(time_from != "" && time_from != null)
+    {
+     params = params + `&date_from=${time_from}`;
+   }
     this.props.fetchAllInventoryHistory(this.props.store_code,branch_id , page,params)    
 }
 

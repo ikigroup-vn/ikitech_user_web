@@ -373,8 +373,23 @@ export const findTotalStock = (product) => {
 
 export const findTotalStockPos = (product) => {
 
-    if(product == null || product.inventory == null) {
-        return 0;
+    if(typeof product.inventoryProduct != "undefined")
+    {
+        if(product == null || product.inventoryProduct == null) {
+            return 0;
+        }
+        else
+        {
+            product.inventory = product.inventoryProduct
+            product.distributes = product.distributeProduct
+
+        }
+    }
+    else
+    {
+        if(product == null || product.inventory == null) {
+            return 0;
+        }
     }
 
     if (getTypeProductDistribute(product) == NO_ELE_SUB) {

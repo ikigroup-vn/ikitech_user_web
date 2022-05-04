@@ -55,15 +55,15 @@ class Form extends Component {
       // afterMonth_prime,
 
       datePrime: {
-        from: moment().startOf("month").format("DD-MM-YY"),
-        to: moment().endOf("month").format("DD-MM-YY"),
+        from: moment().startOf("month").format("DD-MM-YYYY"),
+        to: moment().endOf("month").format("DD-MM-YYYY"),
       },
     });
   };
 
-  componentDidMount() {
-    this.initialState();
-  }
+  // componentDidMount() {
+  //   this.initialState();
+  // }
   componentWillReceiveProps(nextProps) {
     if (this.props.reset != nextProps.reset && nextProps.isMonth == "show") {
       this.initialState();

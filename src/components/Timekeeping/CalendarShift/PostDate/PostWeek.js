@@ -15,9 +15,9 @@ class Form extends Component {
     };
   }
 
-  componentDidMount() {
-    this.initialState();
-  }
+  // componentDidMount() {
+  //   this.initialState();
+  // }
   componentWillReceiveProps(nextProps) {
     if (this.props.reset != nextProps.reset && nextProps.isWeek == "show") {
       this.initialState();
@@ -65,8 +65,8 @@ class Form extends Component {
       // afterWeek_prime,
       // datePrime,
       datePrime: {
-        from: moment().startOf("isoWeek").format("DD-MM-YY"),
-        to: moment().endOf("isoWeek").format("DD-MM-YY"),
+        from: moment().startOf("isoWeek").format("DD-MM-YYYY"),
+        to: moment().endOf("isoWeek").format("DD-MM-YYYY"),
       },
     });
   };

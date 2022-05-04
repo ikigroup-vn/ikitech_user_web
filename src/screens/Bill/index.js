@@ -207,7 +207,7 @@ class Bill extends Component {
      params = params +`&time_from=${from}`;
    }
     const branch_id = getBranchId()
-
+   console.log(from , to , params)
     this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
     this.setState({time_from : from, time_to : to})
 
@@ -265,7 +265,7 @@ class Bill extends Component {
                       <div className="card-header py-3">
                         <div
                           class="row"
-                          style={{ "justify-content": "space-between" }}
+                          // style={{ "justify-content": "space-between" }}
                         >
                           <form onSubmit={this.searchData}>
                             <div
@@ -287,22 +287,9 @@ class Bill extends Component {
                                 </button>
                               </div>
                             </div>
-                            <p class="total-item" id="sale_user_name">
-                              <span className="num-total_item">
-                                {bills.total}&nbsp;
-                              </span>
-                              <span className="text-total_item" id="user_name">
-                                hóa đơn
-                              </span>{" "}
-                              &nbsp;&nbsp;
-                              <DateRangePickerComponent
-                                id="daterangepicker"
-                                placeholder="Khoảng thời gian..."
-                                format="dd/MM/yyyy"
-                                onChange={this.onchangeDateFromTo}
-                              />
-                            </p>
-                          </form>
+                            </form>
+
+            
                           {/* <div style={{ display: "flex" }}>
                             <div style={{ display: "flex" }}>
                               <span
@@ -342,7 +329,24 @@ class Bill extends Component {
                             />
                           </div> */}
                         </div>
+                        <p class="total-item" id="sale_user_name">
+                              <span className="num-total_item">
+                                {bills.total}&nbsp;
+                              </span>
+                              <span className="text-total_item" id="user_name">
+                                hóa đơn
+                              </span>{" "}
+                              &nbsp;&nbsp;
+                              <DateRangePickerComponent
+                                id="daterangepicker"
+                                placeholder="Khoảng thời gian..."
+                                format="dd/MM/yyyy"
+                                onChange={this.onchangeDateFromTo}
+                              />
+                            </p>
                       </div>
+
+
 
                       <div className="card-body">
                         <Table

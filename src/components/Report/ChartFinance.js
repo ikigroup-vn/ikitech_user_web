@@ -10,7 +10,7 @@ class ChartFinance extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      chartDataPrime: { labels: [], datasets: [{}] },
+      chartDataPrime: { labels: [], datasets: [{backgroundColor : "blue"}] },
       datePrime: "",
       dateCompare: "",
       typeDate: "",
