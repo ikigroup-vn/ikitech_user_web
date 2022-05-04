@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import history from "../../../history"
+import moment from "moment"
 
 class Table extends Component {
   constructor(props) {
@@ -40,6 +41,38 @@ class Table extends Component {
     if(e.target.name !== "toggle")
     history.push(`/voucher/edit/${store_code}/${supplierId}`)
 }
+filterColDiscount = (data) => {
+  var is_end = this.props.is_end
+  var now = moment().format("DD-MM-YYYY HH:mm:ss")
+  var start_time = moment(data.start_time, "YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY HH:mm:ss")
+  var end_time = moment(data.end_time, "YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY HH:mm:ss")
+
+  console.log(is_end , moment(now).isAfter(moment(start_time)) && moment(now).isBefore(moment(end_time)))
+
+  if (is_end == 0) {
+    if(moment(now).isBefore(moment(start_time)) || moment(now).isAfter(moment(end_time)) )
+    {
+      return true;
+    }
+    else
+    {
+      return false
+    }
+  }
+  else if (is_end == 2) {
+    if(moment(now).isAfter(moment(start_time)) && moment(now).isBefore(moment(end_time)) )
+    {
+      return true;
+    }
+    else
+    {
+      return false
+    }
+  }
+  else {
+    return true
+  }
+}
   showData = (vouchers, per_page, current_page) => {
     var vouchers = this.props.is_end == 0 ? vouchers : vouchers.data
 
@@ -63,7 +96,8 @@ class Table extends Component {
         var showCurrentPage = typeof per_page != "undefined" && per_page != null ? true : false
 
         var disableIsEnd = this.props.is_end == 0 ? "show" : "hide"
-
+        if(this.filterColDiscount(data) == true)
+        {
         return (
           <tr className = "hover-product" onClick={(e) => this.changePage(e,store_code, data.id)}>
             <td class={showCurrentPage ? "hide" : "show"}>{index + 1}</td>
@@ -117,6 +151,7 @@ class Table extends Component {
             </td>
           </tr>
         );
+              }
       });
     } else {
       return result;

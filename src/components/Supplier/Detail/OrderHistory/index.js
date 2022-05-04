@@ -41,7 +41,7 @@ class Footer extends Component {
                 return (
                     <tr style={{cursor : "pointer"}}>
                         <td>{index+1}</td>
-                        <td><Link to={`/import_stocks/detail/${store_code}/${importStock.code}`} >{importStock.code}</Link></td>
+                        <td><Link to={`/import_stocks/detail/${store_code}/${importStock.id}`} >{importStock.code}</Link></td>
 
                         <td>
                             {formatNoD(importStock.total_final)}

@@ -24,12 +24,13 @@ class Form extends Component {
     }
     if (this.props.typeDate != nextProps.typeDate) {
       var now = {
-        from: moment().format("DD-MM-YYYY"),
-        to: moment().format("DD-MM-YYYY"),
+        from: moment().startOf("isoWeek").format("DD-MM-YY"),
+        to: moment().endOf("isoWeek").format("DD-MM-YY"),
       };
+      console.log( now)
       this.setState({
         datePrime: now,
-        dayNowFrom_prime: now,
+        weekNowFrom_prime: now,
       });
     }
   }
@@ -69,7 +70,7 @@ class Form extends Component {
     //   datePrime
     // );
     var now = {
-      from: moment().format("DD-MM-YY"),
+      from: moment().startOf("isoWeek").format("DD-MM-YY"),
       to: moment().endOf("isoWeek").format("DD-MM-YY"),
     };
     this.setState({

@@ -178,13 +178,15 @@ class Form extends Component {
                                                     <InfoCustomerPos bill={bill} bills = {bills} store_code = {store_code} />
                                                 }
                                               
-                                                    <OrderHistory billHistoty={billHistoty} />
-                                                
+                                                    {/* <OrderHistory billHistoty={billHistoty} /> */}
+                                                    {
+                                                    getChannel() == IKITECH && bills.data && bills.data.length > 0 &&
+                                                    <OrderHistory billHistoty={billHistoty} />                                                 }
                                                
-                                                {/* {
-                                                    getChannel() == "" && bills.data && bills.data.length > 0 &&
+                                                {
+                                                    getChannel() == IKIPOS && bills.data && bills.data.length > 0 &&
                                                     <PaymentHistory bills  = {bills.data} historyPay={historyPay} />
-                                                } */}
+                                                }
 
                                             </div>
                                         </div>

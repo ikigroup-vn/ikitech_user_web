@@ -31,10 +31,17 @@ export const fetchAllRevenueExpenditures = (
         //   loading: "hide",
         // });
         if (res.data.code !== 401)
+        {
           dispatch({
             type: Types.FETCH_ALL_REVENUE_EXPENDITURES,
             data: res.data.data,
           });
+          dispatch({
+            type: Types.RESET_STATUS_LOADING,
+            data: true,
+          });
+        }
+      
       });
   };
 };

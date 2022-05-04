@@ -96,7 +96,7 @@ class Form extends Component {
     e.preventDefault();
 
     var { history } = this.props;
-    history.goBack();
+    history.push("/register?redirect_register=true");
   };
   render() {
     var { txtOTP } = this.state;

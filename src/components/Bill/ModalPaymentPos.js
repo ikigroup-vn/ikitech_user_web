@@ -10,7 +10,8 @@ class Modal extends Component {
     this.state = {
       remaining_amount: 0,
       balance: 0,
-      cash: 0
+      cash: 0,
+      payment_method_id : 3
     }
   }
 
@@ -34,7 +35,7 @@ class Modal extends Component {
     value = Number(formatNumber(value))
     var {remaining_amount} = this.state
     console.log(remaining_amount , value , isNaN(Number(value)))
-    if(remaining_amount - value < 0 || value > remaining_amount || isNaN(Number(value)) )
+    if(isNaN(Number(value)) )
     {
       return;
     }
@@ -44,7 +45,7 @@ class Modal extends Component {
 
   onSave = (e) =>{
     e.preventDefault()
-    var {cash} = this.state
+    var {cash , payment_method_id , remaining_amount} = this.state
     if(cash == "" || cash == 0)
     {
       this.props.showError({
@@ -57,18 +58,48 @@ class Modal extends Component {
         }, 
       });
     }
+    else if(payment_method_id == null)
+    {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Chưa chọn phương thức thanh toán",
+        }, 
+      });
+    }
+    else if(cash - remaining_amount > 0 )
+    {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Số tiền thanh toán không thể lớn hơn số tiền còn lại",
+        }, 
+      });
+    }
     else
     {
       var {order_code ,store_code} = this.props
       window.$(".modal").modal("hide");
       
-      this.props.postCashRefund(order_code , {order_code : order_code , amount_money : cash} , store_code)
+      this.props.postCashRefund(order_code , {order_code : order_code , amount_money : cash , payment_method_id} , store_code)
     }
   }
 
+
+  paymentMethod = (id) =>{
+    this.setState({payment_method_id : id})
+  }
+
   render() {
-    var { cash, balance, remaining_amount } = this.state;
-    console.log(this.state , this.props.remaining_amount);
+    var { cash, balance, remaining_amount , payment_method_id } = this.state;
+    var textPayment = payment_method_id == 0 ? "Tiền mặt" : payment_method_id == 1 ? "Quẹt thẻ"  : "Chuyển khoản"
+    var price = cash - remaining_amount
     return (
       <div
         class="modal fade"
@@ -119,12 +150,11 @@ class Modal extends Component {
                     <label for="product_name">Khách hàng đưa</label>
                     <div class="input-group mb-3">
                       <div class="input-group-prepend">
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tiền mặt</button>
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{textPayment}</button>
                         <div class="dropdown-menu">
-                          <a class="dropdown-item" href="#">Chuyển khoản</a>
-                          <a class="dropdown-item" href="#">Tiền mặt</a>
-                          <a class="dropdown-item" href="#">Quẹt thẻ</a>
-                          <a class="dropdown-item" href="#">COD</a>
+                          <a class="dropdown-item" onClick = {()=>this.paymentMethod(3)}>Chuyển khoản</a>
+                          <a class="dropdown-item" onClick = {()=>this.paymentMethod(0)}>Tiền mặt</a>
+                          <a class="dropdown-item" onClick = {()=>this.paymentMethod(1)}>Quẹt thẻ</a>
 
                         </div>
                       </div>
@@ -139,7 +169,7 @@ class Modal extends Component {
                   
                   </div>
                   <div class="form-group">
-                    <label for="product_name">Tiền thừa</label>
+                    <label for="product_name" >{price >= 0 ? "Tiền thừa" : "Còn nợ"}</label>
                     <input
                       type="text"
                       class="form-control"
@@ -148,7 +178,6 @@ class Modal extends Component {
                       name="txtName"
                       placeholder="Tiền thừa của KH"
                       autocomplete="off"
-                      onChange={this.onChange}
                     />
                   </div>
                 </div>

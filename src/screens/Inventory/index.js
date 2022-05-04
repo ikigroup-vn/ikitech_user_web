@@ -10,7 +10,10 @@ import { Link } from 'react-router-dom';
 import Pagination from '../../components/Inventory/Pagination';
 import moment from "moment";
 import history from "../../history";
+import General from "../../components/Product/General";
+import NotAccess from "../../components/Partials/NotAccess";
 
+import * as productAction from "../../actions/product";
 
 class Inventory extends Component {
     constructor(props) {
@@ -23,6 +26,8 @@ class Inventory extends Component {
         const { store_code } = this.props.match.params
         const branch_id = localStorage.getItem('branch_id')
         this.props.fetchAllInventory(store_code, branch_id)
+
+      
     }
     onChangeSearch = (e) => {
         this.setState({ searchValue: e.target.value });
@@ -40,7 +45,36 @@ class Inventory extends Component {
         history.push(`/inventory/detail/${store_code}/${order_code}`)
           }
 
+          componentWillReceiveProps(nextProps, nextState) {
 
+
+            // if (this.state.paramDate != this.getParamDate() && this.state.paramDate.from != null) {
+            //   this.setState({
+            //     paramDate: this.getParamDate()
+            //   })
+        
+            //   var { store_code } = this.props.match.params;
+            //   const branch_id = getBranchId()
+            //   var params_agency =
+            //   this.state.agency_by_customer_id != null
+            //     ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
+            //     : null;
+            //   this.props.fetchAllBill(store_code, 1, branch_id, this.getParamDate(), params_agency);
+            // }
+        
+        
+        
+        
+            if (
+              this.state.isLoading != true &&
+              typeof nextProps.permission.inventory_tally_sheet != "undefined"
+            ) {
+              var permissions = nextProps.permission;
+              var isShow = permissions.inventory_tally_sheet;
+        
+              this.setState({ isLoading: true, isShow });
+            }
+          }
     showData = (listInventory, store_code) => {
         var result = null
         if (listInventory) {
@@ -70,8 +104,8 @@ class Inventory extends Component {
     }
     render() {
         const { store_code } = this.props.match.params
-        const { sheetsInventory } = this.props
-        const { searchValue } = this.state
+        const { sheetsInventory  , badges } = this.props
+        const { searchValue , isShow} = this.state
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
@@ -80,8 +114,12 @@ class Inventory extends Component {
                     <div id="content-wrapper" className="d-flex flex-column">
                         <div id="content">
                             <Topbar store_code={store_code} />
-
+                            {typeof isShow == "undefined" ? (
+                  <div style={{ height: "500px" }}></div>
+                ) : isShow == true ? (
                             <div className="container-fluid">
+                 
+
                                 <Alert
                                     type={Types.ALERT_UID_STATUS}
                                     alert={this.props.alert}
@@ -162,6 +200,9 @@ class Inventory extends Component {
                                 </div>
 
                             </div>
+                                ) : (
+                                    <NotAccess />
+                                  )}
                         </div>
                         <Footer />
                     </div>
@@ -173,13 +214,23 @@ class Inventory extends Component {
 const mapStateToProps = (state) => {
     return {
         sheetsInventory: state.inventoryReducers.inventory_reducer.sheetsInventory,
+        badges: state.badgeReducers.allBadge,
+        products: state.productReducers.product.allProduct,
+        permission: state.authReducers.permission.data,
+
+
     }
 }
 const mapDispatchToProps = (dispatch, props) => {
     return {
         fetchAllInventory: (store_code, branch_id, page, pagram) => {
             dispatch(inventoryAction.fetchAllInventory(store_code, branch_id, page, pagram))
-        }
+        },
+            fetchAllProductV2: (store_code, branch_id, page, params) => {
+      dispatch(
+        productAction.fetchAllProductV2(store_code, branch_id, page, params)
+      );
+    },
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Inventory)

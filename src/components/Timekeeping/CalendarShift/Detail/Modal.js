@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import * as calendarShiftAction from "../../../../actions/calendar_shift";
 import * as staffAction from "../../../../actions/staff";
 import { connect } from "react-redux";
+import themeData from "../../../../ultis/theme_data";
 
 import * as Types from "../../../../constants/ActionType";
 
@@ -175,7 +176,7 @@ class Modal extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header">
+          <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
               <div>
                 <h4
                   class="modal-title"
@@ -278,12 +279,16 @@ class Modal extends Component {
                 </div>
               </div>
               <div class="modal-footer">
-                <button
-                  type="submit"
-                  class="btn btn-info btn-icon-split btn-sm btn-block"
-                  style={{ padding: "0.4rem 0", fontSize: "1.2rem" }}
+              <button
+                  type="button"
+                  class="btn btn-default"
+                  data-dismiss="modal"
                 >
+                  Đóng
+                </button>
+                <button type="submit" class="btn btn-info">
                   Lưu
+
                 </button>
               </div>
             </form>

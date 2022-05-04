@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 // import * as revenueExpendituresAction from "../../actions/revenue_expenditures";
 import { shallowEqual } from "../../../ultis/shallowEqual";
-
+import { formatNoD } from "../../../ultis/helpers";
 import moment from "moment";
 // import ModalDetail from "../../components/RevenueExpenditures/ModalDetail";
 import ModalDetail from "./ModalDetail";
@@ -151,97 +151,104 @@ class Table extends Component {
             >
               <td>{data.staff.name}</td>
               {this.props.typeDate == "DAY" ||
-              (this.props.typeDate == "OPTION" &&
-                this.props.datePrime.from === this.props.datePrime.to &&
-                data?.keeping_histories.length !== 0) ? (
-                <td>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      background: "lightgreen",
-                      width: "fit-content",
-                      padding: "0.5rem 1rem",
-                      borderRadius: "0.5rem",
-                      marginBottom: "0.5rem",
-                    }}
-                  >
-                    <div>
-                      <span
-                        style={{
-                          background: "green",
-                          padding: "0.02rem 0.5rem",
-                          borderRadius: "50%",
-                          marginRight: "0.3rem",
-                          color: "green",
-                        }}
-                      ></span>
-                      <span style={{ color: "green", fontWeight: "bold" }}>
-                        Vào làm:{" "}
-                      </span>
-                      <span style={{ fontWeight: "bold" }}>
-                        {moment(data?.keeping_histories[0]?.time_check).format(
-                          "HH:mm:ss"
-                        )}
-                      </span>
-                    </div>
-                    <div>
-                      {data?.keeping_histories[0]?.remote_timekeeping ? (
+                (this.props.typeDate == "OPTION" &&
+                  this.props.datePrime.from === this.props.datePrime.to &&
+                  data?.keeping_histories.length !== 0) ? (
+                <React.Fragment>
+
+                  <td>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        background: "lightgreen",
+                        width: "fit-content",
+                        padding: "0.5rem 1rem",
+                        borderRadius: "0.5rem",
+                        marginBottom: "0.5rem",
+                      }}
+                    >
+                      <div>
                         <span
                           style={{
-                            color: "red",
-                            fontWeight: "bold",
-                            fontSize: "0.7rem",
+                            background: "green",
+                            padding: "0.02rem 0.5rem",
+                            borderRadius: "50%",
+                            marginRight: "0.3rem",
+                            color: "green",
                           }}
-                        >
-                          (Từ xa){" "}
+                        ></span>
+                        <span style={{ color: "green", fontWeight: "bold" }}>
+                          Vào làm:{" "}
                         </span>
-                      ) : (
-                        <span></span>
-                      )}
+                        <span style={{ fontWeight: "bold" }}>
+                          {moment(data?.keeping_histories[0]?.time_check).format(
+                            "HH:mm:ss"
+                          )}
+                        </span>
+                      </div>
+                      <div>
+                        {data?.keeping_histories[0]?.remote_timekeeping ? (
+                          <span
+                            style={{
+                              color: "red",
+                              fontWeight: "bold",
+                              fontSize: "0.7rem",
+                            }}
+                          >
+                            (Từ xa){" "}
+                          </span>
+                        ) : (
+                          <span></span>
+                        )}
 
-                      <span style={{ color: "gray" }}>
-                        {data?.keeping_histories[0]?.reason
-                          ? `Lý do: ${data?.keeping_histories[0]?.reason}`
-                          : ""}
-                      </span>
+                        <span style={{ color: "gray" }}>
+                          {data?.keeping_histories[0]?.reason
+                            ? `Lý do: ${data?.keeping_histories[0]?.reason}`
+                            : ""}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      background: "lightgoldenrodyellow",
-                      width: "fit-content",
-                      padding: "0.5rem 1rem",
-                      borderRadius: "0.5rem",
-                    }}
-                  >
-                    <div>
-                      <span
-                        style={{
-                          background: "orange",
-                          padding: "0.02rem 0.5rem",
-                          borderRadius: "50%",
-                          marginRight: "0.3rem",
-                          color: "orange",
-                        }}
-                      ></span>
-                      <span style={{ color: "orange", fontWeight: "bold" }}>
-                        Tan làm:{" "}
-                      </span>
-                      <span style={{ fontWeight: "bold" }}>
-                        {moment(
-                          data?.keeping_histories[
-                            data?.keeping_histories.length - 1
-                          ]?.time_check
-                        ).format("HH:mm:ss")}
-                      </span>
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        background: "lightgoldenrodyellow",
+                        width: "fit-content",
+                        padding: "0.5rem 1rem",
+                        borderRadius: "0.5rem",
+                      }}
+                    >
+                      <div>
+                        <span
+                          style={{
+                            background: "orange",
+                            padding: "0.02rem 0.5rem",
+                            borderRadius: "50%",
+                            marginRight: "0.3rem",
+                            color: "orange",
+                          }}
+                        ></span>
+                        <span style={{ color: "orange", fontWeight: "bold" }}>
+                          Tan làm:{" "}
+                        </span>
+                        <span style={{ fontWeight: "bold" }}>
+                          {moment(
+                            data?.keeping_histories[
+                              data?.keeping_histories.length - 1
+                            ]?.time_check
+                          ).format("HH:mm:ss")}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </td>
+                  </td>
+                 
+                </React.Fragment>
+
               ) : (
-                <td></td>
+                <React.Fragment>
+                  <td></td>
+                </React.Fragment>
               )}
 
               {data.total_seconds !== 0 ? (
@@ -252,11 +259,23 @@ class Table extends Component {
               ) : (
                 <td>0 giờ 0 phút</td>
               )}
+               <td>
+                    {formatNoD(data.salary_one_hour)}đ/h
+                  </td>
               {this.props.typeDate == "DAY" ||
-              (this.props.typeDate == "OPTION" &&
-                this.props.datePrime.from === this.props.datePrime.to) ? (
+                (this.props.typeDate == "OPTION" &&
+                  this.props.datePrime.from === this.props.datePrime.to) ? (
                 <td>
-                  <a
+                  <button data-toggle="modal"
+                    data-target="#modalDetail" type="button" onClick={(e) => {
+                      this.setState({
+                        dataDetail: data,
+                      });
+                    }} class="btn btn-info   btn-sm">
+                    <i class="fas fa-plus"></i>  Thêm bớt công
+
+                  </button>
+                  {/* <a
                     data-toggle="modal"
                     data-target="#modalDetail"
                     class={`btn btn-info btn-icon-split btn-sm ${
@@ -278,7 +297,7 @@ class Table extends Component {
                     >
                       Thêm bớt công
                     </span>
-                  </a>
+                  </a> */}
                 </td>
               ) : (
                 <td></td>
@@ -318,16 +337,22 @@ class Table extends Component {
                 <td>Nhân viên</td>
                 {console.log("133131", this.props.datePrime)}
                 {this.props.typeDate == "DAY" ||
-                (this.props.typeDate == "OPTION" &&
-                  this.props.datePrime.from === this.props.datePrime.to) ? (
-                  <td>Vào/Tan ca</td>
+                  (this.props.typeDate == "OPTION" &&
+                    this.props.datePrime.from === this.props.datePrime.to) ? (
+                  <React.Fragment>
+                    <td>Vào/Tan ca</td>
+                  </React.Fragment>
                 ) : (
-                  <td></td>
+                  <React.Fragment>
+                    <td></td>
+                  </React.Fragment>
                 )}
                 <td>Số giờ làm</td>
+                <td>Số tiền làm theo giờ</td>
+
                 {this.props.typeDate == "DAY" ||
-                (this.props.typeDate == "OPTION" &&
-                  this.props.datePrime.from === this.props.datePrime.to) ? (
+                  (this.props.typeDate == "OPTION" &&
+                    this.props.datePrime.from === this.props.datePrime.to) ? (
                   <td>Hành động</td>
                 ) : (
                   <td></td>

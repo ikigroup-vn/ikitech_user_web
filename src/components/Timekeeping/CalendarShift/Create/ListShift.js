@@ -147,7 +147,7 @@ class ListShift extends Component {
                   value={searchValue}
                   onChange={this.onChangeSearch}
                   class="form-control"
-                  placeholder="Tìm kiếm chấm môn"
+                  placeholder="Tìm kiếm ca chấm công"
                 />
                 <div class="input-group-append">
                   <button class="btn btn-primary" type="submit">

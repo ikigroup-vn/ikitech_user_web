@@ -14,12 +14,15 @@ import { getBranchId } from "../../../../ultis/branchUtils"
 import * as Env from "../../../../ultis/default"
 import ModalDetail from "../../../RevenueExpenditures/ModalDetail";
 import * as helper from "../../../../ultis/helpers"
+import { filter_arr, format } from "../../../../ultis/helpers";
+import * as Types from "../../../../constants/ActionType"
 
 import { Link } from "react-router-dom"
 class Footer extends Component {
     constructor(props) {
         super(props);
         this.state = {
+          isLoadRevenueExpenditures: false
 
         }
     }
@@ -87,8 +90,23 @@ class Footer extends Component {
     
           this.setState({ total: nextProps.reportExpenditure.reserve });
         }
+        if (nextProps.status_revenue == true) {
+          this.setState({ isLoadRevenueExpenditures: true })
+          this.props.resetStatusRevenueExpenditures({
+            type: Types.RESET_STATUS_LOADING,
+            data: false
+          })
+        }
       }
-
+      componentWillUnmount()
+      {
+        if (this.status_revenue === true) {
+          this.props.resetStatusRevenueExpenditures({
+            type: Types.RESET_STATUS_LOADING,
+            data: false
+          })
+        }
+      }
     componentDidMount() {
         var { supplierID, store_code } = this.props
         this.props.fetchAllRevenueExpenditures(store_code, getBranchId(), 1, `&recipient_group=1&recipient_references_id=${supplierID.id}`);
@@ -117,7 +135,7 @@ class Footer extends Component {
     updateBanner = (e, id, title, img) => {
         this.setState({ modalupdate: { title: "banner", id: id, _title: title, image_url: img } });
     }
-    showRevenues = (listBills) => {
+    showRevenues = (listBills, per_page, current_page) => {
         var result = null;
         var { store_code } = this.props
 
@@ -125,29 +143,44 @@ class Footer extends Component {
             return result
         }
         if (listBills.length > 0) {
-            result = listBills.map((revenue, index) => {
+            result = listBills.map((data, index) => {
 
                 return (
                     <tr style={{ cursor: "pointer" }} data-toggle="modal"
                         data-target="#modalDetail"
                         onClick={() =>
                             this.setState({
-                                idModalShow: revenue.id,
+                                idModalShow: data.id,
                             })
                         }>
-                        <td>{index + 1}</td>
-                        <td><Link to={`/order/detail/${store_code}/${revenue.code}`} >{revenue.code}</Link></td>
+                        <td>{per_page * (current_page - 1) + (index + 1)}</td>
+              <td>{data.code}</td>
+              <td>
+                {data.is_revenue ? (
+                  <p style={{ color: " rgb(54 185 204)" }}>Phiếu thu</p>
+                ) : (
+                  <p style={{ color: "rgb(231 74 59)" }}>Phiếu chi</p>
+                )}
+              </td>
+              <td>
+                {new Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                }).format(data?.change_money)}
+              </td>
+              <td>
+                {new Intl.NumberFormat("vi-VN", {
+                  style: "currency",
+                  currency: "VND",
+                }).format(data?.current_money)}
+              </td>
+        
+          
 
-                        <td>
-                            {formatNoD(revenue.change_money)}
-                        </td>
-                        <td>
-                            {revenue.type_action_name}
-                        </td>
-
-                        <td>
-                            {revenue.updated_at}
-                        </td>
+              <td>{data.created_at}</td>
+        
+    
+              <td>{data?.type_action_name}</td>
 
                     </tr>
 
@@ -181,6 +214,8 @@ class Footer extends Component {
             total,
             datePrime,
           } = this.state;
+          var per_page = revenueExpenditures.per_page;
+          var current_page = revenueExpenditures.current_page; 
         var {
             // revenueExpenditures,
       
@@ -253,21 +288,29 @@ class Footer extends Component {
 
 
                         <div className="form-group">
-                            <label htmlFor="name">Danh sách</label>
+                        <label htmlFor="name">Nợ nhà cung cấp:&nbsp;{supplierID.debt > 0 ? format(supplierID.debt || 0) : 0}</label>
 
                             <div class="table-responsive">
                                 <table class="table table-hover table-border">
                                     <thead>
                                         <tr>
-                                            <th>STT</th>
-                                            <th>Mã đơn</th>
-                                            <th>Số tiền</th>
-                                            <th>Mô tả</th>
-                                            <th>Ngày tạo</th>
+                                        <th>STT</th>
+                <th>Mã</th>
+                <th>
+                 Loại phiếu</th>
+                <th>Số tiền thay đổi</th>
+
+                <th>Số nợ hiện tại</th>
+                <th>Ngày tạo</th>
+
+                <th>Trạng thái</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {this.showRevenues(revenueExpenditures.data)}
+                                    {
+                      this.state.isLoadRevenueExpenditures == true && this.showRevenues(revenueExpenditures.data, per_page, current_page)
+
+                    }
                                     </tbody>
                                 </table>
                             </div>
@@ -343,7 +386,9 @@ const mapStateToProps = (state) => {
         bills: state.billReducers.bill.allBill,
 
         theme: state.themeReducers.theme,
-
+        status_revenue:
+        state.revenueExpendituresReducers.revenueExpenditures
+          .status,
     };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -377,6 +422,9 @@ const mapDispatchToProps = (dispatch, props) => {
                 )
             );
         },
+        resetStatusRevenueExpenditures: (status) => {
+          dispatch(status)
+        }
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Footer);

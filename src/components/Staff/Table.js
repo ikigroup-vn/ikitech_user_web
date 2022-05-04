@@ -38,7 +38,37 @@ class Table extends Component {
             <td>{data.email}</td>
             <td>{data.salary != null ? format(data.salary) : ""}</td>
             <td>{decentralization}</td>
-
+ <td style={{ textAlign: "center" }}>
+              {data.online ? (
+                <>
+                  <span
+                    style={{
+                      background: "green",
+                      padding: "0.005px 8px",
+                      borderRadius: "50%",
+                      marginRight: "0.3rem",
+                    }}
+                  >
+                    {" "}
+                  </span>
+                  <span>Online</span>
+                </>
+              ) : (
+                <>
+                  <span
+                    style={{
+                      background: "red",
+                      padding: "0.005px 8px",
+                      borderRadius: "50%",
+                      marginRight: "0.3rem",
+                    }}
+                  >
+                    {" "}
+                  </span>
+                  <span>Offline</span>
+                </>
+              )}
+            </td>
 
 
             <td style = {{
@@ -83,9 +113,10 @@ class Table extends Component {
                             <th>Số điện thoại</th>
 
               <th>Email</th>
-              <th>Lương tháng</th>
+              <th>Lương theo giờ</th>
 
               <th>Vai trò</th>
+              <th>Trạng thái</th>
 
               <th>Hành động</th>
             </tr>

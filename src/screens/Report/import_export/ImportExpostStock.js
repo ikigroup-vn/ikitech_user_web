@@ -4,6 +4,8 @@ import Alert from '../../../components/Partials/Alert'
 import Footer from '../../../components/Partials/Footer'
 import Sidebar from '../../../components/Partials/Sidebar'
 import Topbar from '../../../components/Partials/Topbar'
+import ShowLoading from '../../../components/Partials/ShowLoading'
+
 import * as Types from "../../../constants/ActionType";
 import * as reportAction from "../../../actions/report";
 import * as Env from "../../../ultis/default"
@@ -14,6 +16,8 @@ import { shallowEqual } from '../../../ultis/shallowEqual'
 import General from '../General'
 import Pagination from './Pagination'
 import { getBranchId } from '../../../ultis/branchUtils'
+import {formatNoD} from "../../../ultis/helpers"
+import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
 
 class ImportExportStock extends Component {
   constructor(props) {
@@ -28,6 +32,8 @@ class ImportExportStock extends Component {
     const branch_id = getBranchId()
     const params = `branch_id=${branch_id}`
     this.props.fetchImportExportStock(store_code, branch_id,1,params)
+
+
     try {
       document.getElementsByClassName('r-input')[0].placeholder = 'Chọn ngày';
       document.getElementsByClassName('r-input')[1].placeholder = 'Chọn ngày';
@@ -61,6 +67,28 @@ class ImportExportStock extends Component {
       txtEnd: time,
     });
   };
+  onchangeDateFromTo = (e) => {
+
+    var from = "";
+    var to = "";
+    try {
+      from = moment(e.value[0], "DD-MM-YYYY").format("YYYY-MM-DD");
+      to = moment(e.value[1], "DD-MM-YYYY").format("YYYY-MM-DD");
+    } catch (error) {
+      from = null;
+      to = null;
+    }
+
+
+
+
+    const branch_id = getBranchId()
+    const params = `date_from=${from}&date_to=${to}&branch_id=${branch_id}`
+    const { store_code } = this.props.match.params
+    this.props.fetchImportExportStock(store_code, branch_id,1, params)
+
+  }
+
   showDistribute = (listDistribute) => {
     var result = []
     if (typeof listDistribute == "undefined" || listDistribute.length === 0) {
@@ -70,7 +98,7 @@ class ImportExportStock extends Component {
       listDistribute[0].element_distributes.map((element, _index) => {
         result.push(
           <tr class="explode" style={{ backgroundColor: "#f8f9fc" }} >
-            <td colSpan={12}>
+            <td colSpan={7}>
               <div className='show-distribute'>
                 <div className='row' style={{ padding: "10px" }}>
                   <div className='col-4' style={{ display: "flex" }}>
@@ -131,6 +159,9 @@ class ImportExportStock extends Component {
   render() {
     var { store_code } = this.props.match.params
     const { reportImportExport } = this.props
+    const { reportInventory } = this.props
+    const {total_amount_end ,  total_amount_begin,  import_total_amount,  export_total_amount} = reportImportExport
+
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
@@ -145,14 +176,43 @@ class ImportExportStock extends Component {
                   type={Types.ALERT_UID_STATUS}
                   alert={this.props.alert}
                 />
-                <General store_code={store_code} />
+                <General reportImportExport = {reportImportExport} reportInventory = {reportInventory} store_code = {store_code}/>
                 <div className='card'>
                   <div className='card-header py-3' style={{ display: 'flex',justifyContent: "space-between" }}>
                     <div className='stock-title'>
                       <h4 style={{color:"red"}}>Xuất nhập tồn</h4>
                     </div>
+                    
+                    <div>
+                        <p className="sale_user_label bold">
+                        Tồn kho cuối kỳ:{" "}
+                            <span id="total_selected">{formatNoD(total_amount_end)}</span>
+                        </p>
+                        <p className="sale_user_label bold">
+                        Tồn kho đầu kỳ:{" "}
+                            <span id="total_selected">{formatNoD(total_amount_begin)}</span>
+                        </p>
+                        <p className="sale_user_label bold">
+
+                        Nhập trong kỳ:{" "}
+                            <span id="total_selected">{formatNoD(import_total_amount)}</span>
+                        </p>
+                        <p className="sale_user_label bold">
+
+                           Xuất trong kỳ:{" "}
+                            <span id="total_selected">{formatNoD(export_total_amount)}</span>
+                        </p>
+                   
+                    </div>
+            
                     <div className='wap-header' style={{ display: 'flex' }}>
-                      <div class="form-group" style={{ display: "flex", alignItems: "center" }}>
+                    <DateRangePickerComponent
+                                id="daterangepicker"
+                                placeholder="Khoảng thời gian..."
+                                format="dd/MM/yyyy"
+                                onChange={this.onchangeDateFromTo}
+                              />
+                      {/* <div class="form-group" style={{ display: "flex", alignItems: "center" }}>
                         <label for="product_name" style={{ marginRight: "20px" }}>Ngày bắt đầu</label>
                         <MomentInput
                           placeholder="Chọn thời gian"
@@ -183,8 +243,10 @@ class ImportExportStock extends Component {
                           onSave={() => { }}
                           onChange={this.onChangeEnd}
                         />
-                      </div>
-                      <button className='btn btn-primary btn-sm' style={{ marginLeft: "20px", marginBottom: "10px" }} onClick={this.handleFindItem}>Tìm kiếm</button>
+                      </div> */}
+                     
+                      {/* <button className='btn btn-primary btn-sm' style={{ marginLeft: "20px", marginBottom: "10px" }} onClick={this.handleFindItem}>Tìm kiếm</button>
+                    */}
                     </div>
                   </div>
                   <div className='card-body'>
@@ -201,8 +263,11 @@ class ImportExportStock extends Component {
                             <th>Giá suất kho</th>
                           </tr>
                         </thead>
+                        {typeof reportImportExport.data != "undefined" ?
+                                                    <tbody>{this.showData(reportImportExport.data)}</tbody>
 
-                        <tbody>{this.showData(reportImportExport.data)}</tbody>
+                            : <ShowLoading></ShowLoading>
+                          }
                       </table>
                     </div>
                     <Pagination store_code ={store_code} reportImportExport = {reportImportExport}/>
@@ -222,6 +287,7 @@ class ImportExportStock extends Component {
 const mapStateToProps = (state) => {
   return {
     reportImportExport: state.reportReducers.reportImportExport,
+    reportInventory: state.reportReducers.reportInventory,
   }
 }
 
@@ -229,6 +295,9 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     fetchImportExportStock: (store_code, branch_id,page, params) => {
       dispatch(reportAction.fetchImportExportStock(store_code, branch_id,page, params))
+    },
+    fetchImportExportStock: (store_code, branch_id,page,params) => {
+      dispatch(reportAction.fetchImportExportStock(store_code, branch_id,page,params))
     }
   }
 }

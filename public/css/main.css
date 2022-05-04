@@ -73,6 +73,11 @@
 .dataTables_paginate .current{
     background: rgb(229, 111, 37) !important;
 }
+.dataTables_paginate a:not(.active):hover{
+    background-color: #dddfeb    !important;
+}
+
+
   
 .import-stock  .css-b62m3t-container{
     width : 100%
@@ -82,7 +87,10 @@
     cursor: pointer;
     /* color : #dddddd !important */
 }
-  
+#dataTable_wrapper tbody tr:hover{
+    background: rgba(0,0,0,.05) !important;
+    cursor: pointer;
+}
 .on-off>.checkbox {
     display: none;
   }
@@ -512,7 +520,13 @@ img {
 .card-header {
     background-color: white;
 }
-
+.table-staff #dataTable_paginate
+{
+    float : left !important
+}
+.table-staff{
+    margin-top: 15px;
+}
 .space-bottom {
     padding-bottom: 10px;
 }

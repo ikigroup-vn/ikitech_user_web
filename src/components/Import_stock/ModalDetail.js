@@ -212,7 +212,9 @@ class ModalDetail extends Component {
     }
     componentWillReceiveProps(nextProps, nextState) {
 
-        this.setState({ quantityInStock: nextProps.modal.quantityProductWithDistribute })
+        // this.setState({ quantityInStock: nextProps.modal.quantityProductWithDistribute })
+        this.setState({ quantityInStock: nextProps.modal.quantityProductWithDistribute == 0 ? nextProps.modal.inventoryProduct?.main_stock  : nextProps.modal.quantityProductWithDistribute})
+
         if (nextProps.modal.priceProduct !== this.state.afterPrice) {
             this.setState({ afterPrice: nextProps.modal.priceProduct })
         }

@@ -10,6 +10,7 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import { format } from '../../ultis/helpers'
 import Pagination from '../../components/Import_stock/Pagination';
+import NotAccess from "../../components/Partials/NotAccess";
 
 import history from "../../history";
 
@@ -28,7 +29,36 @@ class ImportStock extends Component {
     onChangeSearch = (e) => {
         this.setState({ searchValue: e.target.value });
     };
+    componentWillReceiveProps(nextProps, nextState) {
 
+
+        // if (this.state.paramDate != this.getParamDate() && this.state.paramDate.from != null) {
+        //   this.setState({
+        //     paramDate: this.getParamDate()
+        //   })
+    
+        //   var { store_code } = this.props.match.params;
+        //   const branch_id = getBranchId()
+        //   var params_agency =
+        //   this.state.agency_by_customer_id != null
+        //     ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
+        //     : null;
+        //   this.props.fetchAllBill(store_code, 1, branch_id, this.getParamDate(), params_agency);
+        // }
+    
+    
+    
+    
+        if (
+          this.state.isLoading != true &&
+          typeof nextProps.permission.inventory_import != "undefined"
+        ) {
+          var permissions = nextProps.permission;
+          var isShow = permissions.inventory_import;
+    
+          this.setState({ isLoading: true, isShow });
+        }
+      }
     searchData = (e) => {
         e.preventDefault()
         const { store_code } = this.props.match.params
@@ -66,7 +96,7 @@ class ImportStock extends Component {
     render() {
         const { store_code } = this.props.match.params
         const { listImportStock } = this.props
-        const { searchValue } = this.state
+        const { searchValue , isShow } = this.state
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
@@ -75,7 +105,9 @@ class ImportStock extends Component {
                     <div id="content-wrapper" className="d-flex flex-column">
                         <div id="content">
                             <Topbar store_code={store_code} />
-
+                            {typeof isShow == "undefined" ? (
+                  <div style={{ height: "500px" }}></div>
+                ) : isShow == true ? (
                             <div className="container-fluid">
                                 <Alert
                                     type={Types.ALERT_UID_STATUS}
@@ -157,6 +189,9 @@ class ImportStock extends Component {
                                 </div>
 
                             </div>
+                                 ) : (
+                                    <NotAccess />
+                                  )}
                         </div>
                         <Footer />
                     </div>
@@ -168,6 +203,8 @@ class ImportStock extends Component {
 const mapStateToProps = (state) => {
     return {
         listImportStock: state.importStockReducers.import_reducer.listImportStock,
+        permission: state.authReducers.permission.data,
+
     }
 }
 const mapDispatchToProps = (dispatch, props) => {

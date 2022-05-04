@@ -33,7 +33,7 @@ class Pagination extends Component {
     if(typeof recipient_group !="undefined" && recipient_references_id)
     params = `recipient_group=${recipient_group}&recipient_references_id=${recipient_references_id}`;
     else
-    params = `search=${searchValue}&limit=${limit}&is_revenue=${revenueExpendituresValue || null}`;
+    params = `search=${searchValue}&limit=${limit}&is_revenue=${revenueExpendituresValue || ""}`;
 
     if(datePrime)
     params = params + `&date_from=${datePrime?.from}&date_to=${datePrime?.to}`

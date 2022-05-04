@@ -378,7 +378,7 @@ class Form extends Component {
                 id="txtTitle"
                 value={salary_one_hour}
                 name="salary_one_hour"
-                placeholder="Nhập lương tháng"
+                placeholder="Lương theo giờ"
                 autocomplete="off"
                 onChange={this.onChange}
               />
@@ -390,6 +390,7 @@ class Form extends Component {
 
                 </button>
                 <button
+                type = "button"
                   style={{ marginLeft: "10px" }}
                   onClick={this.goBack}
                   class="btn btn-warning   btn-sm"

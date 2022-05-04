@@ -48,11 +48,11 @@ class Dashboard extends Component {
 
   componentWillReceiveProps(nextProps) {
 
-    if (this.state.isLoading !== true && typeof nextProps.permission.product_list != "undefined") {
-      var permissions = nextProps.permission
-      var isShow = permissions.report_view
-      this.setState({ isLoading: true, isShow })
-    }
+    // if (this.state.isLoading !== true && typeof nextProps.permission.product_list != "undefined") {
+    //   var permissions = nextProps.permission
+    //   var isShow = permissions.report_view
+    //   this.setState({ isLoading: true, isShow })
+    // }
     var { store_code } = this.props.match.params
 
     if (!shallowEqual(nextProps.currentBranch, this.props.currentBranch)) {
@@ -89,8 +89,7 @@ class Dashboard extends Component {
             <div id="content-wrapper" className="d-flex flex-column">
               <div id="content">
                 <Topbar store_code={store_code} handeOnload={this.handeOnload} />
-                {typeof isShow == "undefined" ? <div style={{ height: "500px" }}></div> :
-                  isShow == true ?
+             
 
                     <div className="container-fluid">
                       <div className="d-sm-flex  align-items-center justify-content-between mb-4">
@@ -147,7 +146,6 @@ class Dashboard extends Component {
                       </div>
                     </div>
 
-                    : <NotAccess />}
               </div>
 
               <Footer />

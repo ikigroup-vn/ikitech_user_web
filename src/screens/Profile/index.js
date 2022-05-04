@@ -9,6 +9,7 @@ import Loading from "../Loading";
 import * as profileAction from "../../actions/profile";
 import Alert from "../../components/Partials/Alert";
 import * as Types from "../../constants/ActionType";
+import Modal from "../../components/Auth/ChangePassword/Modal"
 class Profile extends Component {
   constructor(props) {
     super(props);
@@ -24,7 +25,6 @@ class Profile extends Component {
   render() {
     var {store_code} = this.props.match.params
     var {user} = this.props
-    console.log(user)
     if (this.props.auth) {
       return (
         <div id="wrapper">
@@ -40,14 +40,34 @@ class Profile extends Component {
                   alert={this.props.alert}
 
                 />
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <h4 className="h4 title_content mb-0 text-gray-800">
-                    Hồ sơ
-                  </h4>{" "}
-                
-                </div>
+                 <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <h4 className="h4 title_content mb-0 text-gray-800">
+                       Hồ sơ
+                      </h4>
+                      <a
+                        data-toggle="modal"
+                        data-target="#changePassword"
+                        class={`btn btn-info btn-icon-split btn-sm `}
+                        style={{ height: "fit-content", width: "fit-content" }}
+                      >
+                        <span class="icon text-white-50">
+                          <i class="fas fa-plus"></i>
+                        </span>
+                        <span
+                          style={{
+                            color: "white",
+                          }}
+                          class={`text `}
+                        >
+                          Thay đổi mật khẩu
+                        </span>
+                      </a>
+                    </div>
 
                 <br></br>
                 <div className="card shadow mb-4">
@@ -63,7 +83,7 @@ class Profile extends Component {
                 </div>
               </div>
             </div>
-
+                          <Modal></Modal>
             <Footer />
           </div>
         </div>

@@ -155,7 +155,7 @@ class ModalCreate extends Component {
     handleOnClick = () => {
         const errors = this.validator.validate(this.state)
         var { txtEmail_branch } = this.state
-        if(moment(this.state.txtDateOfBirth, "DD-MM-YYYY").format("YYYY-MM-DD HH:mm:ss") == "Invalid date")
+        if(isEmpty(this.state.txtDateOfBirth) && moment(this.state.txtDateOfBirth, "DD-MM-YYYY").format("YYYY-MM-DD HH:mm:ss") == "Invalid date")
         {
           this.props.showErrors(
                 {
@@ -479,6 +479,9 @@ const mapDispatchToProps = (dispatch, props) => {
         fetchPlaceDistrict_Wards: (id) => {
             dispatch(placeAction.fetchPlaceDistrict_Wards(id));
         },
+        showErrors : (alert) =>{
+            dispatch(alert);
+        }
     }
 }
 

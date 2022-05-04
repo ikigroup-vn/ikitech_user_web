@@ -10,7 +10,7 @@ import { MomentInput } from 'react-moment-input'
 import moment from 'moment'
 import { format } from '../../../../ultis/helpers'
 import Pagination from './Pagination'
-
+import history from '../../../../history'
 class CustomerDebt extends Component {
     constructor(props) {
         super(props)
@@ -52,7 +52,7 @@ class CustomerDebt extends Component {
           result = listCustomerDebt.map((item, index) => {
             return (
               <>
-                <tr>
+                <tr className = "hover-product">
                   <td>{index + 1}</td>
                   <td>{item.name}</td>
                   <td>{item.phone_number}</td>
@@ -67,7 +67,9 @@ class CustomerDebt extends Component {
         }
         return result
       }
-    
+      goBack = () => {
+            history.goBack();
+    };
     render() {
         const { store_code } = this.props.match.params
         const {custommerDebt} = this.props
@@ -88,7 +90,11 @@ class CustomerDebt extends Component {
 
                                 <div className='card'>
                                     <div className='card-header py-3' style={{ display: "flex", justifyContent: "space-between" }} >
-                                        <div className='stock-title text-primary'>
+                                        <div className='stock-title text-primary' style={{
+                                                display: "flex",
+                                                justifyContent: "space-between",
+                                                width: "100%"
+                                        }}>
                                             <h4 style={{display:"flex"}}>Công nợ phải thu khách hàng
                                             <div style={{ paddingLeft: "20px" }}>
                                                     <i class="fas fa-arrow-circle-right"></i>
@@ -102,8 +108,14 @@ class CustomerDebt extends Component {
                                                     </span>
                                                 </div>
                                             </h4>
+                                           < button style={{ marginRight: "10px" }} type="button" onClick={this.goBack} class="btn btn-warning  btn-sm"><i class="fas fa-arrow-left"></i>&nbsp;Quay lại</button>
+
                                         </div>
-                                        <div class="form-group" style={{ display: "flex", alignItems: "center", marginRight: "100px" }}>
+                                 
+
+                                    </div>
+                                           
+                                    <div class="form-group" style={{ display: "flex", alignItems: "center", marginTop: "10px" }}>
                                             <label for="product_name" style={{ marginRight: "20px" }}>Thời gian</label>
                                             <MomentInput
                                                 placeholder="Chọn thời gian"
@@ -119,8 +131,6 @@ class CustomerDebt extends Component {
                                                 onChange={this.onChangeStart}
                                             />
                                         </div>
-
-                                    </div>
                                     <div className='card-body' style={{height:"500px"}}>
                                         <div class="table-responsive">
                                             <table class="table  " id="dataTable" width="100%" cellspacing="0">

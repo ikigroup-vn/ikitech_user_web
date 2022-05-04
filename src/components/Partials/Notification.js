@@ -24,6 +24,7 @@ class Notification extends Component {
                 CUSTOMER_CANCELLED_ORDER: `/order/detail/${this.props.store_code}`,
                 CUSTOMER_PAID: `/order/detail/${this.props.store_code}`,
                 NEW_ORDER: `/order/detail/${this.props.store_code}`,
+                REFUND_ORDER : `/order/detail/${this.props.store_code}`
             }
         }
 
@@ -58,9 +59,9 @@ class Notification extends Component {
 
 
     componentDidUpdate() {
-        if (this.state.isLoading != true && typeof this.props.permission.product_list != "undefined") {
+        if (this.state.isLoading != true && typeof this.props.permission.notification_schedule_list != "undefined") {
             var permissions = this.props.permission
-            var allow_notification = permissions.notification_to_stote
+            var allow_notification = permissions.notification_schedule_list
 
             this.setState({ isLoading: true, allow_notification })
 

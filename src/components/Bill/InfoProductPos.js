@@ -327,34 +327,12 @@ class InfoProductPos extends Component {
                 return (
                     <React.Fragment>
                         {this.checkExsitProduct(product.id) == true &&
-                            <li className={`${line_list_product} row`} style={{ display: "flex", marginBottom: "10px" }}>
+                            <li className={`${line_list_product} row`} style={{ display: "flex", marginBottom: "10px"   }}>
 
                                 <li className="cart_item cart_item_change col-lg-3 col-md-12 col-sm-12 ">
                                     <div className="panel panel-default mb0" style={{}}>
                                         <div className="panel-body pd0" style={{ display: "flex" }}>
 
-                                            {check == true && this.getNumQuantity(product.id, list_items) > 0 && (
-                                                <div class="checkbox" style={{
-                                                    marginRight: "10px", marginRight: "10px",
-                                                    alignSelf: "center"
-                                                }}>
-                                                    <label>
-                                                        <input style={{ width: "16px", height: "16px" }} type="checkbox" onChange={(e) => this.check(e, this.getLineItemId(product.id))} />
-
-                                                    </label>
-                                                </div>
-                                            )}
-                                            {check == false || this.getNumQuantity(product.id, list_items) <= 0 && (
-                                                <div class="checkbox" style={{
-                                                    marginRight: "10px", marginRight: "10px",
-                                                    alignSelf: "center"
-                                                }}>
-                                                    <label>
-                                                        <input title="Đã hoàn hết sản phẩm này" disabled style={{ width: "16px", height: "16px", cursor: "not-allowed" }} type="checkbox" />
-
-                                                    </label>
-                                                </div>
-                                            )}
 
                                             <Link to={`/product/edit/${store_code}/${product.id}`}>
                                                 <img
@@ -369,10 +347,11 @@ class InfoProductPos extends Component {
                                     </div>
                                 </li>
 
-                                <li className="cart_item cart_item_change col-lg-8 col-md-12 col-sm-12">
+                                <li className="cart_item cart_item_change col-lg-9 col-md-12 col-sm-12">
                                     <div class="col-xs-12 pl0" id="user_cart_info">
-                                        <div class="box box-warning cart_wrapper mb0">
-                                            <div class="box-body  pt0">
+                                        <div class="box box-warning cart_wrapper mb0" style = {{    display: "flex",
+    justifyContent: "space-between"}}>
+                                            <div class="box-body  pt0" style = {{flex : "2"}}>
                                                 <div>
 
                                                     <p class="bold_name sale_user_label" style={{ fontWeight: "500" }}>
@@ -438,7 +417,7 @@ class InfoProductPos extends Component {
                                                     </div>
                                                 }
                                                 <div>
-                                                    <p class=" bold sale_user_label">
+                                                    <p class=" bold sale_user_label" style = {{paddingTop : "3px"}}>
                                                         Giá sản phẩm:
                                                         <span class={`cart_payment_method ${showTagDelPrice != 0 || (product.before_price == product.after_discount || product.before_discount_price == product.after_discount) ? "show" : "hide"}`}>
                                                             {format(product.before_price || product.before_discount_price)}
@@ -462,7 +441,52 @@ class InfoProductPos extends Component {
 
 
                                             </div>
+                                            {check == true && this.getNumQuantity(product.id, list_items) > 0 && (
+                                                <div class="checkbox" style={{
+                                                    marginRight: "10px", marginRight: "10px",marginLeft : "20px",
+                                                    alignSelf: "center"
+                                                }}>
+                                                    <label>
+                                                        <input style={{ width: "16px", height: "16px" }} type="checkbox" onChange={(e) => this.check(e, this.getLineItemId(product.id))} />
+
+                                                    </label>
+                                                </div>
+                                            )}
+                                            {check == false || this.getNumQuantity(product.id, list_items) <= 0 && (
+                                                <div class="checkbox" style={{
+                                                    marginRight: "10px", marginRight: "10px",marginLeft : "20px",
+                                                    alignSelf: "center"
+                                                }}>
+                                                    <label>
+                                                        <input title="Đã hoàn hết sản phẩm này" disabled style={{ width: "16px", height: "16px", cursor: "not-allowed" }} type="checkbox" />
+
+                                                    </label>
+                                                </div>
+                                            )}
                                         </div>
+                                        
+                                        {/* {check == true && this.getNumQuantity(product.id, list_items) > 0 && (
+                                                <div class="checkbox" style={{
+                                                    marginRight: "10px", marginRight: "10px",
+                                                    alignSelf: "center"
+                                                }}>
+                                                    <label>
+                                                        <input style={{ width: "16px", height: "16px" }} type="checkbox" onChange={(e) => this.check(e, this.getLineItemId(product.id))} />
+
+                                                    </label>
+                                                </div>
+                                            )}
+                                            {check == false || this.getNumQuantity(product.id, list_items) <= 0 && (
+                                                <div class="checkbox" style={{
+                                                    marginRight: "10px", marginRight: "10px",
+                                                    alignSelf: "center"
+                                                }}>
+                                                    <label>
+                                                        <input title="Đã hoàn hết sản phẩm này" disabled style={{ width: "16px", height: "16px", cursor: "not-allowed" }} type="checkbox" />
+
+                                                    </label>
+                                                </div>
+                                            )} */}
                                     </div>
                                 </li>
                             </li>
@@ -508,22 +532,23 @@ class InfoProductPos extends Component {
                                         </div>
 
                                     </React.Fragment>
+                                    {index == products.length - 1 && check == true && this.props.calculate.total_refund_current_in_time > 0 && (
+                            <React.Fragment>
+
+                                <div style={{ display: "flex" , justifyContent : "end" }}>
+
+                                    <button onClick={this.post}  type="button" class="btn btn-success">Hoàn tiền</button>
+
+                                </div>
+                            </React.Fragment>
+                        )}
                                 </li>
                             </li>
 
                         )}
 
 
-                        {index == products.length - 1 && check == true && (
-                            <React.Fragment>
-
-                                <div style={{ display: "flex" }}>
-
-                                    <button onClick={this.post} style={{ "margin": "auto" }} type="button" class="btn btn-success">Thực hiện</button>
-
-                                </div>
-                            </React.Fragment>
-                        )}
+                   
                     </React.Fragment>
 
                 );
@@ -580,6 +605,7 @@ class InfoProductPos extends Component {
                 <ul
                     id="sale_cart_container"
                     className="box-body  no-padding cart_items"
+                    style = {{margin : "0 20px"}}
                 >
                     {this.shoListProduct(listProduct, product_discount_amount, list_items, total_final)}
                 </ul>

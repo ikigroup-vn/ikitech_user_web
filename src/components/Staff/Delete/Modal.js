@@ -9,8 +9,8 @@ class Modal extends Component {
     e.preventDefault();
     window.$('.modal').modal('hide');
     var staff_id = this.props.modal.id;
-    var {store_code} = this.props
-    this.props.destroyStaff(store_code,staff_id );
+    var {store_code, page,params,branch_id} = this.props
+    this.props.destroyStaff(store_code,staff_id , 1,params,null );
   };
 
   render() {
@@ -72,8 +72,8 @@ class Modal extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    destroyStaff: (store_code,staff_id) => {
-      dispatch(staffAction.destroyStaff(store_code,staff_id));
+    destroyStaff: (store_code,staff_id , page,params,branch_id) => {
+      dispatch(staffAction.destroyStaff(store_code,staff_id, page,params,branch_id));
     },
   };
 };

@@ -10,6 +10,9 @@ import { MomentInput } from "react-moment-input";
 import moment from "moment";
 import { format } from "../../../../ultis/helpers";
 import Pagination from "./Pagination";
+import history from '../../../../history'
+import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
+import { getBranchId } from '../../../../ultis/branchUtils'
 
 class Expenditure extends Component {
   constructor(props) {
@@ -50,13 +53,31 @@ class Expenditure extends Component {
       txtEnd: time,
     });
   };
+  onchangeDateFromTo = (e) => {
+
+    var from = "";
+    var to = "";
+    try {
+      from = moment(e.value[0], "DD-MM-YYYY").format("YYYY-MM-DD");
+      to = moment(e.value[1], "DD-MM-YYYY").format("YYYY-MM-DD");
+    } catch (error) {
+      from = null;
+      to = null;
+    }
+
+    const branch_id = getBranchId()
+    const params = `date_from=${from}&date_to=${to}&branch_id=${branch_id}`
+    const { store_code } = this.props.match.params
+    this.props.fetchReportExpenditure(store_code, branch_id, 1, params);
+
+  }
   showData = (reportExpenditure) => {
     var result = null;
     if (reportExpenditure) {
       result = reportExpenditure.map((item, index) => {
         return (
           <>
-            <tr>
+            <tr className = "hover-product">
               <td>{index + 1}</td>
               <td>{item.code}</td>
               <td>{item.user?.name}</td>
@@ -75,6 +96,9 @@ class Expenditure extends Component {
     }
     return result;
   };
+  goBack = () => {
+    history.goBack();
+};
 
   render() {
     var { store_code } = this.props.match.params;
@@ -111,77 +135,22 @@ class Expenditure extends Component {
                         </div>
                       </h4>
                     </div>
-                    <div className="wap-header" style={{ display: "flex" }}>
-                      <div
-                        class="form-group"
-                        style={{ display: "flex", alignItems: "center" }}
-                      >
-                        <label
-                          for="product_name"
-                          style={{ marginRight: "20px" }}
-                        >
-                          Ngày bắt đầu
-                        </label>
-                        <MomentInput
-                          placeholder="Chọn thời gian"
-                          format="DD-MM-YYYY"
-                          options={true}
-                          enableInputClick={true}
-                          monthSelect={true}
-                          readOnly={true}
-                          translations={{
-                            DATE: "Ngày",
-                            TIME: "Giờ",
-                            SAVE: "Đóng",
-                            HOURS: "Giờ",
-                            MINUTES: "Phút",
-                          }}
-                          onSave={() => {}}
-                          onChange={this.onChangeStart}
-                        />
-                      </div>
-                      <div
-                        class="form-group"
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          marginLeft: "20px",
-                        }}
-                      >
-                        <label
-                          for="product_name"
-                          style={{ marginRight: "20px" }}
-                        >
-                          Ngày kết thúc
-                        </label>
-                        <MomentInput
-                          placeholder="Chọn thời gian"
-                          format="DD-MM-YYYY"
-                          options={true}
-                          enableInputClick={true}
-                          monthSelect={true}
-                          readOnly={true}
-                          translations={{
-                            DATE: "Ngày",
-                            TIME: "Giờ",
-                            SAVE: "Đóng",
-                            HOURS: "Giờ",
-                            MINUTES: "Phút",
-                          }}
-                          onSave={() => {}}
-                          onChange={this.onChangeEnd}
-                        />
-                      </div>
-                      <button
-                        className="btn btn-primary btn-sm"
-                        style={{ marginLeft: "20px", marginBottom: "10px" }}
-                        onClick={this.handleFindItem}
-                      >
-                        Tìm kiếm
-                      </button>
-                    </div>
+                    <button style={{ marginRight: "10px" }} type="button" onClick={this.goBack} class="btn btn-warning  btn-sm"><i class="fas fa-arrow-left"></i>&nbsp;Quay lại</button>
+
+                
                   </div>
+
                   <div className="card-body" style={{ minHeight: "500px" }}>
+                  <div className="wap-header" style={{ display: "flex" }}>
+                    <DateRangePickerComponent
+                                id="daterangepicker"
+                                placeholder="Khoảng thời gian..."
+                                format="dd/MM/yyyy"
+                                onChange={this.onchangeDateFromTo}
+                              />
+                    
+                     
+                    </div>
                     <div class="table-responsive">
                       <table
                         class="table  "
@@ -190,7 +159,7 @@ class Expenditure extends Component {
                         cellspacing="0"
                       >
                         <thead>
-                          <tr>
+                          <tr >
                             <th>STT</th>
                             <th>Mã phiếu</th>
                             <th>Người tạo</th>
