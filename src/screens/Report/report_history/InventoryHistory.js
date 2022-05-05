@@ -12,24 +12,37 @@ import { Link } from 'react-router-dom'
 import General from '../General'
 import Pagination from './Pagination'
 import { getBranchId } from '../../../ultis/branchUtils'
-import {formatNoD} from "../../../ultis/helpers"
+import { formatNoD } from "../../../ultis/helpers"
 import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
 import history from "../../../history";
+import { getQueryParams } from "../../../ultis/helpers"
 
 class InventoryHistory extends Component {
   constructor(props) {
     super(props)
     this.state = {
       txtStart: "",
-      txtEnd: ""
+      txtEnd: "",
+      time_from: "",
+      time_to: ""
     }
   }
-  componentDidMount() {
+  componentWillMount()
+  {
     const { store_code } = this.props.match.params
+    var from = getQueryParams("from")
+    var to = getQueryParams("to")
     const branch_id = getBranchId()
-    const params = `branch_id=${branch_id}`
-    this.props.fetchAllInventoryHistory(store_code, branch_id,1,params)
-    this.props.fetchImportExportStock(store_code, branch_id,1,params)
+
+    var params = `branch_id=${branch_id}`
+
+    if (from && to) {
+      params = params + `&date_from=${moment(from, "DD-MM-YYYY").format("YYYY-MM-DD")}&time_to=${moment(to, "DD-MM-YYYY").format("YYYY-MM-DD")}`
+      this.setState({ time_from: moment(from, "DD-MM-YYYY").format("YYYY-MM-DD"), time_to: moment(to, "DD-MM-YYYY").format("YYYY-MM-DD") })
+    }
+    console.log(from, to, branch_id)
+    this.props.fetchAllInventoryHistory(store_code, branch_id, 1, params)
+    this.props.fetchImportExportStock(store_code, branch_id, 1, params)
 
     try {
       document.getElementsByClassName('r-input')[0].placeholder = 'Chọn ngày';
@@ -40,11 +53,21 @@ class InventoryHistory extends Component {
   }
 
 
+
+
+  componentDidMount() {
+
+  }
+
+
+
+
+
   handleFindItem = () => {
     const branch_id = getBranchId()
     const params = `date_from=${this.state.txtStart}&date_to=${this.state.txtEnd}&branch_id=${branch_id}`
     const { store_code } = this.props.match.params
-    this.props.fetchAllInventoryHistory(store_code, branch_id,1, params)
+    this.props.fetchAllInventoryHistory(store_code, branch_id, 1, params)
   }
 
   onChangeStart = (e) => {
@@ -73,21 +96,26 @@ class InventoryHistory extends Component {
     }
 
     const branch_id = getBranchId()
-    const params = `date_from=${from}&date_to=${to}&branch_id=${branch_id}`
+    var params = `branch_id=${branch_id}`
     const { store_code } = this.props.match.params
-    this.props.fetchAllInventoryHistory(store_code, branch_id,1, params)
+    if (from, to) { 
+       params = `&date_from=${from}&date_to=${to}`
+    }
+    this.props.fetchAllInventoryHistory(store_code, branch_id, 1, params)
+    this.setState({ time_from: from, time_to: to })
+
 
   }
 
-  changePage = (store_code , id , type) => {
-    if(type === 0 || type === 1)
+  changePage = (store_code, id, type) => {
+    if (type === 0 || type === 1)
       history.push(`/inventory/detail/${store_code}/${id}`)
-      else
+    else
       history.push(`/import_stocks/detail/${store_code}/${id}`)
 
-      
-    
-}
+
+
+  }
   showData = (listReportHistory, store_code) => {
     var result = null
     if (listReportHistory) {
@@ -95,7 +123,7 @@ class InventoryHistory extends Component {
         const date = moment(item.created_at, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD")
         return (
           <>
-            <tr className = "hover-product" onClick = {()=>this.changePage(store_code ,item.references_id , item.type  )}>
+            <tr className="hover-product" onClick={() => this.changePage(store_code, item.references_id, item.type)}>
               <td>{index + 1}</td>
               <td>{item.references_value}</td>
               <td>{item.product?.name}</td>
@@ -134,9 +162,17 @@ class InventoryHistory extends Component {
 
   render() {
     var { store_code } = this.props.match.params
+    var { time_from,
+      time_to } = this.state
     const { reportHistory } = this.props
-    const { reportInventory , reportImportExport} = this.props
-    const {import_total_amount ,  export_total_amount,  import_count_stock,  export_count_stock} = reportImportExport
+    const { reportInventory, reportImportExport } = this.props
+    const { import_total_amount, export_total_amount, import_count_stock, export_count_stock } = reportImportExport
+    var arrDate = null
+    if (time_from, time_to) {
+      arrDate = [moment(time_from , "YYYY-MM-DD").format("DD/MM/YYYY"), moment(time_to , "YYYY-MM-DD").format("DD/MM/YYYY")]
+    }
+    console.log(arrDate)
+
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
@@ -151,30 +187,33 @@ class InventoryHistory extends Component {
                   type={Types.ALERT_UID_STATUS}
                   alert={this.props.alert}
                 />
-                <General reportImportExport = {reportImportExport} reportInventory = {reportInventory} store_code = {store_code}/>
+                <General time_from={time_from}
+                  time_to={time_to} reportImportExport={reportImportExport} reportInventory={reportInventory} store_code={store_code} />
                 <div className='card'>
                   <div className='card-header py-3' style={{ display: 'flex', justifyContent: "space-between" }}>
                     <div className='stock-title text-success'>
                       <h4>Sổ kho</h4>
                     </div>
-                    <div>
-                        <p className="sale_user_label bold">
+                    <div className="label-value">
+                      <p className="sale_user_label bold">
                         Giá trị nhập kho:{" "}
-                            <span id="total_selected">{formatNoD(import_total_amount)} - SL: {formatNoD(import_count_stock)} </span>
-                        </p>
-                        <p className="sale_user_label bold">
+                        <span id="total_selected">{formatNoD(import_total_amount)} - SL: {formatNoD(import_count_stock)} </span>
+                      </p>
+                      <p className="sale_user_label bold">
                         Giá trị xuất kho:{" "}
-                            <span id="total_selected">{formatNoD(export_total_amount)} - SL: {formatNoD(export_count_stock)}</span>
-                        </p>
-                   
+                        <span id="total_selected">{formatNoD(export_total_amount)} - SL: {formatNoD(export_count_stock)}</span>
+                      </p>
+
                     </div>
-                    <div className='wap-header' style={{display:'flex'}}>
-                    <DateRangePickerComponent
-                                id="daterangepicker"
-                                placeholder="Khoảng thời gian..."
-                                format="dd/MM/yyyy"
-                                onChange={this.onchangeDateFromTo}
-                              />
+                    <div className='wap-header' style={{ display: 'flex' }}>
+                      <DateRangePickerComponent
+                        value={arrDate}
+
+                        id="daterangepicker"
+                        placeholder="Khoảng thời gian..."
+                        // format="DD-MM-yyyy"
+                        onChange={this.onchangeDateFromTo}
+                      />
                       {/* <div class="form-group" style={{ display: "flex", alignItems: "center" }}>
                         <label for="product_name" style={{ marginRight: "20px" }}>Ngày bắt đầu</label>
                         <MomentInput
@@ -233,7 +272,9 @@ class InventoryHistory extends Component {
                         <tbody>{this.showData(reportHistory.data, store_code)}</tbody>
                       </table>
                     </div>
-                    <Pagination store_code = {store_code} reportHistory = {reportHistory} />
+                    <Pagination time_from={time_from}
+                      time_to={time_to}
+                      store_code={store_code} reportHistory={reportHistory} />
                   </div>
                 </div>
               </div>
@@ -251,18 +292,18 @@ const mapStateToProps = (state) => {
   return {
     reportHistory: state.reportReducers.reportHistory,
     reportInventory: state.reportReducers.reportInventory,
-    reportImportExport : state.reportReducers.reportImportExport,
+    reportImportExport: state.reportReducers.reportImportExport,
   }
 }
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-      fetchAllInventoryHistory: (store_code, branch_id,page, params) => {
-        dispatch(reportAction.fetchAllInventoryHistory(store_code, branch_id,page, params))
-      },
-      fetchImportExportStock: (store_code, branch_id,page,params) => {
-        dispatch(reportAction.fetchImportExportStock(store_code, branch_id,page,params))
-      }
+    fetchAllInventoryHistory: (store_code, branch_id, page, params) => {
+      dispatch(reportAction.fetchAllInventoryHistory(store_code, branch_id, page, params))
+    },
+    fetchImportExportStock: (store_code, branch_id, page, params) => {
+      dispatch(reportAction.fetchImportExportStock(store_code, branch_id, page, params))
+    }
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(InventoryHistory)

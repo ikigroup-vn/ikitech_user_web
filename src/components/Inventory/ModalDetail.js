@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { format } from '../../ultis/helpers'
 import * as Env from "../../ultis/default"
-import { findImportPrice, findImportPriceSub, findMaxImportPrice, findMinImportPrice } from '../../ultis/productUltis'
+import { findImportPrice, findImportPriceSub, findTotalStockPos ,findMaxImportPrice, findMinImportPrice } from '../../ultis/productUltis'
 
 import { shallowEqual } from '../../ultis/shallowEqual'
 class ModalDetail extends Component {
@@ -199,7 +199,7 @@ class ModalDetail extends Component {
     }
     componentWillReceiveProps(nextProps, nextState) {
 
-        this.setState({ quantityInStock: nextProps.modal.quantityProductWithDistribute == 0 ? nextProps.modal.inventoryProduct?.main_stock  : nextProps.modal.quantityProductWithDistribute})
+        this.setState({ quantityInStock: findTotalStockPos(nextProps.modal)})
         if (nextProps.modal.priceProduct !== this.state.afterPrice) {
             this.setState({ afterPrice: nextProps.modal.priceProduct })
         }
@@ -232,7 +232,7 @@ class ModalDetail extends Component {
         var inforProduct = this.props.modal
         var itemParent = inforProduct && inforProduct.inventoryProduct && inforProduct.inventoryProduct.distributes !== null && inforProduct.inventoryProduct.distributes.length > 0 ? inforProduct.inventoryProduct.distributes[0] : []
 
-        console.log(inforProduct);
+        console.log(findTotalStockPos(inforProduct) , inforProduct);
         return (
             <div class="modal" id="modalDetails">
                 <div class="modal-dialog">
@@ -260,7 +260,7 @@ class ModalDetail extends Component {
                                             <div className='persen-discount' style={{ fontSize: "13px", marginLeft: "10px" }}>{inforProduct.discountProduct !== null ? `- ${inforProduct.discountProduct.value}%` : ""}</div>
                                         </div>
                                         <div className='quantity-product' style={{ fontWeight: "bold", fontSize: "13px" }}>
-                                            {this.state.quantityInStock === -1 || this.state.quantityInStock === null ? "Còn hàng" : `Còn lại ${this.state.quantityInStock} sản phẩm`}
+                                            {this.state.quantityInStock === null ? "Còn hàng" : `Còn lại ${this.state.quantityInStock} sản phẩm`}
                                         </div>
                                     </div>
                                     <div>

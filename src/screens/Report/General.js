@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import {formatNoD} from "../../ultis/helpers"
+import moment from "moment";
+
 class General extends Component {
     constructor(props) {
         super(props)
@@ -9,9 +11,15 @@ class General extends Component {
         }
     }
     render() {
-        const { store_code , reportInventory , reportImportExport} = this.props
+        const { store_code, reportInventory, reportImportExport, time_from, time_to } = this.props
         const {total_value_stock , total_stock} = reportInventory
-        const {import_total_amount , exporttotal_amount} = reportImportExport
+        const {import_total_amount , export_total_amount} = reportImportExport
+        console.log(time_from, time_to)
+        var params = ``
+
+        if (time_from && time_to) {
+            params = params + `?from=${moment(time_from, "YYYY-MM-DD").format("DD-MM-YYYY")}&to=${moment(time_to, "YYYY-MM-DD").format("DD-MM-YYYY")}`
+        }
         return (
             <div className="row">
 
@@ -27,7 +35,7 @@ class General extends Component {
                                             Tồn kho cuối kỳ: {formatNoD(total_value_stock)}  -  Số lượng:  {formatNoD(total_stock)} </div>
                                             <span>Số lượng bao gồm các sản phẩm đang giao dịch</span>
                                         <div className="text-gray-800">
-                                            Nhập trong kỳ : {formatNoD(import_total_amount)} - Xuất trong kỳ : {formatNoD(exporttotal_amount)} 
+                                            Nhập trong kỳ : {formatNoD(import_total_amount)} - Xuất trong kỳ : {formatNoD(export_total_amount)} 
                                         </div>
                                         <div className="text-gray-800">
                                           Giá trị tồn kho = Số lượng * Giá vốn (Giá vốn (MAC) là bình quân giá sản phẩm được tính sau mỗi lần nhập hàng)
@@ -68,7 +76,7 @@ class General extends Component {
 
                 <div className="col-xl-4 col-md-6 mb-4">
                     <Link
-                        to={`/inventory_histories/${store_code}`}
+                        to={`/inventory_histories/${store_code}${params}`}
                     >
                         <div className="card border-left-success shadow h-100 py-2">
                             <div className="card-body set-padding ">
@@ -76,7 +84,7 @@ class General extends Component {
                                     <div className="col mr-2">
                                         <div className=" font-weight-bold text-success text-uppercase mb-1">
                                             Sổ kho</div>
-                                        <div className="text-gray-800">Quản lý luồng suất kho, nhập kho</div>
+                                        <div className="text-gray-800">Quản lý luồng xuất kho, nhập kho</div>
                                     </div>
                                     <div className="col-auto">
                                         <i className="fas fa-boxes fa-2x text-gray-300"></i>
@@ -88,7 +96,7 @@ class General extends Component {
                 </div>
                 <div className="col-xl-4 col-md-6 mb-4">
                     <Link
-                        to={`/import_export_stock/${store_code}`}
+                        to={`/import_export_stock/${store_code}${params}`}
                     >
                         <div className="card border-left-danger shadow h-100 py-2">
                             <div className="card-body set-padding ">

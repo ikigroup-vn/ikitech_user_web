@@ -61,6 +61,7 @@ class CalendarShift extends Component {
     return true;
   }
   handleGetDatePost = (date, typeDate) => {
+    console.log(date,typeDate)
     var typeSelect =
     typeDate == "DAY"
       ? "Ngày"
@@ -70,8 +71,8 @@ class CalendarShift extends Component {
       ? "Tháng"
       : "";    this.setState({
       datePrime: {
-        from: date.datePrime.from,
-        to: date.datePrime.to,
+        from: date.datePrime?.from,
+        to: date.datePrime?.to,
       },
 
       typeDate: typeDate, typeSelect: typeSelect    });
@@ -101,7 +102,8 @@ class CalendarShift extends Component {
 
       datePrime,
     } = this.state;
-    console.log(datePrime)
+    console.log(datePrime, typeSelect,
+      typeDate,)
     if (this.props.auth) {
       return (
         <div id="wrapper">

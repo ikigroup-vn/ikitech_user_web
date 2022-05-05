@@ -96,9 +96,9 @@ class ItemDetail extends Component {
         var { id, store_code } = this.props;
         var data = {
             refund_line_items: newArray,
-            refund_money_paid: {
-                amount_money: this.state.total_value, payment_method: 0
-            }
+            // refund_money_paid: {
+            //     amount_money: this.state.total_value, payment_method: 0
+            // }
         }
 
         if (newArray.length > 0) {

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { format } from '../../ultis/helpers'
 import * as Env from "../../ultis/default"
-import { findImportPrice, findImportPriceSub, findMaxImportPrice, findMinImportPrice } from '../../ultis/productUltis'
+import { findImportPrice, findImportPriceSub, findMaxImportPrice,findTotalStockPos, findMinImportPrice } from '../../ultis/productUltis'
 import { shallowEqual } from '../../ultis/shallowEqual'
 
 class ModalDetail extends Component {
@@ -213,7 +213,7 @@ class ModalDetail extends Component {
     componentWillReceiveProps(nextProps, nextState) {
 
         // this.setState({ quantityInStock: nextProps.modal.quantityProductWithDistribute })
-        this.setState({ quantityInStock: nextProps.modal.quantityProductWithDistribute == 0 ? nextProps.modal.inventoryProduct?.main_stock  : nextProps.modal.quantityProductWithDistribute})
+        this.setState({ quantityInStock: findTotalStockPos(nextProps.modal)})
 
         if (nextProps.modal.priceProduct !== this.state.afterPrice) {
             this.setState({ afterPrice: nextProps.modal.priceProduct })

@@ -15,7 +15,7 @@ class ModalPostDate extends Component {
     };
   }
 
-  handlePostDate = (date) => {
+  handlePostDate = (date) => {console.log(date)
     this.setState({
       datePrime: date.datePrime,
     });
@@ -50,6 +50,16 @@ class ModalPostDate extends Component {
       this.props.handleGetDatePost({ datePrime }, nextProps.typeDate);
 
     }
+  }
+
+  shouldComponentUpdate(nextProps,nextState)
+  {
+    if(this.state.datePrime != nextState.datePrime)
+    {
+      this.props.handleGetDatePost({ datePrime :{from:moment(nextState.datePrime?.from , "DD-MM-YYYY").format("YYYY-MM-DD") ,to:moment(nextState.datePrime?.to , "DD-MM-YYYY").format("YYYY-MM-DD") } }, nextProps.typeDate);
+
+    }
+    return true
   }
   onSave = (e) => {
     console.log("a");
@@ -115,7 +125,7 @@ class ModalPostDate extends Component {
           id="removeForm"
         > */}
         {/* <div className="modal-body"> */}
-        <form onSubmit={this.onSave}>
+        <div>
           <FormPostDay
             reset={reset}
             handlePostDate={this.handlePostDate}
@@ -138,7 +148,7 @@ class ModalPostDate extends Component {
             typeDate = {typeDate}
 
           />
-        </form>
+        </div>
         {/* </div> */}
         {/* <div class="modal-footer">
             <button type="button" class="btn btn-default" data-dismiss="modal">

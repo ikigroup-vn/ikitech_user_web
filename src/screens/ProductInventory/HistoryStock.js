@@ -26,7 +26,7 @@ class HistoryStock extends Component {
             <td>
               {data.change !== 0 && <div style={{display:"flex",alignItems:"center"}}>
                 {data.change>0?<i class='fas fa-arrow-circle-up' style ={{color : "green"}}></i>:<i class='fas fa-arrow-circle-down' style ={{color : "red"}}></i>}
-                <div style={{marginLeft:"10px", width:'50%'}}>{data.change}</div>
+                <div style={{marginLeft:"10px"}}>{data.change}</div>
               </div>}
               
             </td>

@@ -51,13 +51,21 @@ class SupplierDebt extends Component {
     goBack = () => {
             history.goBack();
     };
+    changePage = (e,store_code, supplierId) => {
+        var { paginate } = this.props;
+
+        if(e.target.name !== "toggle")
+        history.push(`/supplier/detail/${store_code}/${supplierId}?pag=${paginate}`)
+    }
     showData = (listCustomerDebt) => {
         var result = null
+        const { store_code } = this.props.match.params
+
         if (listCustomerDebt) {
             result = listCustomerDebt.map((item, index) => {
                 return (
                     <>
-                        <tr className = "hover-product">
+                        <tr className = "hover-product"  onClick={(e) => this.changePage(e,store_code, item.id)}>
                             <td>{index + 1}</td>
                             <td>{item.name}</td>
                             <td>{item.phone}</td>

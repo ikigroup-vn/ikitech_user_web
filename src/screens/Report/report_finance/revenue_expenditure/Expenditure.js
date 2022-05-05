@@ -66,8 +66,13 @@ class Expenditure extends Component {
     }
 
     const branch_id = getBranchId()
-    const params = `date_from=${from}&date_to=${to}&branch_id=${branch_id}`
+    var params = `branch_id=${branch_id}`
     const { store_code } = this.props.match.params
+    if (from, to) { 
+       params = `&date_from=${from}&date_to=${to}`
+    }   
+
+
     this.props.fetchReportExpenditure(store_code, branch_id, 1, params);
 
   }

@@ -46,13 +46,20 @@ class CustomerDebt extends Component {
             txtStart: time,
         });
     };
+    changePage = (store_code , customerId) => {
+        var {  paginate } = this.props;
+    
+        history.push(`/customer/detail/${store_code}/${customerId}?pag=${paginate}`)
+          }
     showData = (listCustomerDebt) => {
         var result = null
+        const { store_code } = this.props.match.params
+
         if (listCustomerDebt) {
           result = listCustomerDebt.map((item, index) => {
             return (
               <>
-                <tr className = "hover-product">
+                <tr className = "hover-product" onClick={() => this.changePage(store_code , item.id)} >
                   <td>{index + 1}</td>
                   <td>{item.name}</td>
                   <td>{item.phone_number}</td>

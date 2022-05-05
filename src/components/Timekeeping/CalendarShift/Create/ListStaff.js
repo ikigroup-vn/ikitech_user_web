@@ -207,7 +207,7 @@ class ListStaff extends Component {
                     <th>Tên nhân viên</th>
                     <th>Tên đăng nhập</th>
                     <th>Số điện thoại</th>
-                    <th>Lương</th>
+                    <th>Lương theo giờ</th>
                     <th>Phân quyền</th>
                     {/* <th>Trạng thái</th> */}
                   </tr>

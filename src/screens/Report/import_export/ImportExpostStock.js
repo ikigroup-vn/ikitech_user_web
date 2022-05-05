@@ -16,30 +16,49 @@ import { shallowEqual } from '../../../ultis/shallowEqual'
 import General from '../General'
 import Pagination from './Pagination'
 import { getBranchId } from '../../../ultis/branchUtils'
-import {formatNoD} from "../../../ultis/helpers"
+import { formatNoD } from "../../../ultis/helpers"
 import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
+import { getQueryParams } from "../../../ultis/helpers"
 
 class ImportExportStock extends Component {
   constructor(props) {
     super(props)
     this.state = {
       txtStart: "",
-      txtEnd: ""
+      txtEnd: "",
+      time_from: "",
+      time_to: ""
     }
   }
-  componentDidMount() {
+
+  componentWillMount() {
     const { store_code } = this.props.match.params
     const branch_id = getBranchId()
-    const params = `branch_id=${branch_id}`
-    this.props.fetchImportExportStock(store_code, branch_id,1,params)
+
+    var from = getQueryParams("from")
+    var to = getQueryParams("to")
+    var params = `branch_id=${branch_id}`
+
+    if (from && to) {
+      params = params + `&date_from=${moment(from, "DD-MM-YYYY").format("YYYY-MM-DD")}&time_to=${moment(to, "DD-MM-YYYY").format("YYYY-MM-DD")}`
+      this.setState({ time_from: moment(from, "DD-MM-YYYY").format("YYYY-MM-DD"), time_to: moment(to, "DD-MM-YYYY").format("YYYY-MM-DD") })
+    }
+    this.props.fetchImportExportStock(store_code, branch_id, 1, params)
 
 
     try {
       document.getElementsByClassName('r-input')[0].placeholder = 'Chọn ngày';
       document.getElementsByClassName('r-input')[1].placeholder = 'Chọn ngày';
     } catch (error) {
-
     }
+  }
+
+
+
+
+  componentDidMount() {
+
+
   }
   shouldComponentUpdate(nextProps, nextState) {
     if (shallowEqual(this.state.txtStart, nextState.txtStart) && shallowEqual(this.state.txtEnd, nextState.txtEnd)) {
@@ -52,7 +71,7 @@ class ImportExportStock extends Component {
     const branch_id = getBranchId()
     const params = `date_from=${this.state.txtStart}&date_to=${this.state.txtEnd}&branch_id=${branch_id}`
     const { store_code } = this.props.match.params
-    this.props.fetchImportExportStock(store_code, branch_id,1, params)
+    this.props.fetchImportExportStock(store_code, branch_id, 1, params)
   }
 
   onChangeStart = (e) => {
@@ -83,9 +102,14 @@ class ImportExportStock extends Component {
 
 
     const branch_id = getBranchId()
-    const params = `date_from=${from}&date_to=${to}&branch_id=${branch_id}`
+    var params = `branch_id=${branch_id}`
+
+    if (from, to) {
+      params = `&date_from=${from}&date_to=${to}`
+    }
     const { store_code } = this.props.match.params
-    this.props.fetchImportExportStock(store_code, branch_id,1, params)
+    this.props.fetchImportExportStock(store_code, branch_id, 1, params)
+    this.setState({ time_from: from, time_to: to })
 
   }
 
@@ -118,7 +142,7 @@ class ImportExportStock extends Component {
                     <div className='quantity-distribute' style={{ marginLeft: "20px" }}>{format(Number(element.export_total_amount))}</div>
                   </div>
                   <div className='col-2' style={{ display: "flex" }}>
-                    <label style={{ fontWeight: "bold" }}>Số lượng suất: </label>
+                    <label style={{ fontWeight: "bold" }}>Số lượng xuất: </label>
                     <div className='quantity-distribute' style={{ marginLeft: "20px" }}>{format(Number(element.export_count_stock))}</div>
                   </div>
                 </div>
@@ -160,8 +184,14 @@ class ImportExportStock extends Component {
     var { store_code } = this.props.match.params
     const { reportImportExport } = this.props
     const { reportInventory } = this.props
-    const {total_amount_end ,  total_amount_begin,  import_total_amount,  export_total_amount} = reportImportExport
-
+    const { total_amount_end, total_amount_begin, import_total_amount, export_total_amount } = reportImportExport
+    var { time_from,
+      time_to } = this.state
+    var arrDate = null
+    if (time_from, time_to) {
+      arrDate = [moment(time_from , "YYYY-MM-DD").format("DD/MM/YYYY"), moment(time_to , "YYYY-MM-DD").format("DD/MM/YYYY")]
+    }
+    console.log(time_from, time_to)
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
@@ -176,42 +206,43 @@ class ImportExportStock extends Component {
                   type={Types.ALERT_UID_STATUS}
                   alert={this.props.alert}
                 />
-                <General reportImportExport = {reportImportExport} reportInventory = {reportInventory} store_code = {store_code}/>
-                <div className='card'>
-                  <div className='card-header py-3' style={{ display: 'flex',justifyContent: "space-between" }}>
+                <General time_from={time_from}
+                  time_to={time_to} reportImportExport={reportImportExport} reportInventory={reportInventory} store_code={store_code} />
+                <div className='card group-time'>
+                  <div className='card-header py-3' style={{ display: 'flex', justifyContent: "space-between" }}>
                     <div className='stock-title'>
-                      <h4 style={{color:"red"}}>Xuất nhập tồn</h4>
+                      <h4 style={{ color: "red" }}>Xuất nhập tồn</h4>
                     </div>
-                    
-                    <div>
-                        <p className="sale_user_label bold">
+
+                    <div className="label-value">
+                      <p className="sale_user_label bold">
                         Tồn kho cuối kỳ:{" "}
-                            <span id="total_selected">{formatNoD(total_amount_end)}</span>
-                        </p>
-                        <p className="sale_user_label bold">
+                        <span id="total_selected">{formatNoD(total_amount_end)}</span>
+                      </p>
+                      <p className="sale_user_label bold">
                         Tồn kho đầu kỳ:{" "}
-                            <span id="total_selected">{formatNoD(total_amount_begin)}</span>
-                        </p>
-                        <p className="sale_user_label bold">
+                        <span id="total_selected">{formatNoD(total_amount_begin)}</span>
+                      </p>
+                      <p className="sale_user_label bold">
 
                         Nhập trong kỳ:{" "}
-                            <span id="total_selected">{formatNoD(import_total_amount)}</span>
-                        </p>
-                        <p className="sale_user_label bold">
+                        <span id="total_selected">{formatNoD(import_total_amount)}</span>
+                      </p>
+                      <p className="sale_user_label bold">
 
-                           Xuất trong kỳ:{" "}
-                            <span id="total_selected">{formatNoD(export_total_amount)}</span>
-                        </p>
-                   
+                        Xuất trong kỳ:{" "}
+                        <span id="total_selected">{formatNoD(export_total_amount)}</span>
+                      </p>
+
                     </div>
-            
+
                     <div className='wap-header' style={{ display: 'flex' }}>
-                    <DateRangePickerComponent
-                                id="daterangepicker"
-                                placeholder="Khoảng thời gian..."
-                                format="dd/MM/yyyy"
-                                onChange={this.onchangeDateFromTo}
-                              />
+                      <DateRangePickerComponent
+                        value={arrDate}
+                        id="daterangepicker"
+                        placeholder="Khoảng thời gian..."
+                        onChange={this.onchangeDateFromTo}
+                      />
                       {/* <div class="form-group" style={{ display: "flex", alignItems: "center" }}>
                         <label for="product_name" style={{ marginRight: "20px" }}>Ngày bắt đầu</label>
                         <MomentInput
@@ -244,7 +275,7 @@ class ImportExportStock extends Component {
                           onChange={this.onChangeEnd}
                         />
                       </div> */}
-                     
+
                       {/* <button className='btn btn-primary btn-sm' style={{ marginLeft: "20px", marginBottom: "10px" }} onClick={this.handleFindItem}>Tìm kiếm</button>
                     */}
                     </div>
@@ -259,18 +290,19 @@ class ImportExportStock extends Component {
                             <th>Tên sản phẩm</th>
                             <th>SL nhập kho</th>
                             <th>Giá nhập kho</th>
-                            <th>SL suất kho</th>
-                            <th>Giá suất kho</th>
+                            <th>SL xuất kho</th>
+                            <th>Giá xuất kho</th>
                           </tr>
                         </thead>
                         {typeof reportImportExport.data != "undefined" ?
-                                                    <tbody>{this.showData(reportImportExport.data)}</tbody>
+                          <tbody>{this.showData(reportImportExport.data)}</tbody>
 
-                            : <ShowLoading></ShowLoading>
-                          }
+                          : <ShowLoading></ShowLoading>
+                        }
                       </table>
                     </div>
-                    <Pagination store_code ={store_code} reportImportExport = {reportImportExport}/>
+                    <Pagination time_from={time_from}
+                      time_to={time_to} store_code={store_code} reportImportExport={reportImportExport} />
                   </div>
                 </div>
               </div>
@@ -293,11 +325,11 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchImportExportStock: (store_code, branch_id,page, params) => {
-      dispatch(reportAction.fetchImportExportStock(store_code, branch_id,page, params))
+    fetchImportExportStock: (store_code, branch_id, page, params) => {
+      dispatch(reportAction.fetchImportExportStock(store_code, branch_id, page, params))
     },
-    fetchImportExportStock: (store_code, branch_id,page,params) => {
-      dispatch(reportAction.fetchImportExportStock(store_code, branch_id,page,params))
+    fetchImportExportStock: (store_code, branch_id, page, params) => {
+      dispatch(reportAction.fetchImportExportStock(store_code, branch_id, page, params))
     }
   }
 }

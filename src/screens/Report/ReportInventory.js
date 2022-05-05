@@ -209,7 +209,7 @@ class ReportInventory extends Component {
                       <h4>Báo cáo tồn kho</h4>
                     </div>
 
-                    <div>
+                    <div className = "label-value"> 
                       <p className="sale_user_label bold">
                         Giá trị tồn kho:{" "}
                         <span id="total_selected">{formatNoD(total_value_stock)}</span>
