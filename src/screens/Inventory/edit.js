@@ -9,7 +9,7 @@ import Pagination from '../../components/ProductAgency/Pagination';
 import * as productAction from "../../actions/product";
 import CardProduct from '../../components/Inventory/CardProduct';
 import ListInventorySheet from '../../components/Inventory/ListInventory'
-import ModalDetail from '../../components/Import_stock/ModalDetail';
+import ModalDetail from '../../components/Inventory/ModalDetail';
 import * as inventoryAction from "../../actions/inventory"
 import history from '../../history';
 import Paginations from '../../components/Inventory/Paginations';
@@ -226,7 +226,7 @@ class EditInventory extends Component {
                                                 <label for="comment">Thêm ghi chú:</label>
                                                 <textarea class="form-control" rows="5" id="comment" style={{height:"50px"}} value ={this.state.note} onChange={this.onChange}></textarea>
                                             </div>
-                                            <button className='btn btn-danger' style={{ marginTop: "20px" }} onClick={() => this.EditSheetInventory()}>Lưu</button>
+                                            <button className='btn btn-warning' style={{ marginTop: "20px" }} onClick={() => this.EditSheetInventory()}>Lưu</button>
                                         </div>
                                     </div>
 
@@ -249,7 +249,7 @@ class EditInventory extends Component {
                                                         />
                                                         <div class="input-group-append">
                                                             <button
-                                                                class="btn btn-primary"
+                                                                class="btn btn-warning"
                                                                 type="submit"
 
                                                             >

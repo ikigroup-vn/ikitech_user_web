@@ -52,11 +52,11 @@ class ChartFinance extends Component {
       var chartDataState_prime = { ...this.state.chartDataPrime };
       const { datePrime, dateCompare } = this.state;
       const showDateChoose = `${moment(datePrime.from, "YYYY-MM-DD").format(
-        "DD/MM/YY"
-      )} - ${moment(datePrime.to, "YYYY-MM-DD").format("DD/MM/YY")}`;
+        "DD/MM/YYYY"
+      )} - ${moment(datePrime.to, "YYYY-MM-DD").format("DD/MM/YYYY")}`;
       const showDateCopare = `${moment(dateCompare.from, "YYYY-MM-DD").format(
-        "DD/MM/YY"
-      )} - ${moment(dateCompare.to, "YYYY-MM-DD").format("DD/MM/YY")}`;
+        "DD/MM/YYYY"
+      )} - ${moment(dateCompare.to, "YYYY-MM-DD").format("DD/MM/YYYY")}`;
       const showDataCopare = nextProps.reportProfit.profit;
       const showDataChoose = nextProps.compareProfit.profit;
       chartDataState_prime.labels = [showDateCopare, showDateChoose];

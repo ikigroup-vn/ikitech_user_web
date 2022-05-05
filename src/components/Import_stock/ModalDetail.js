@@ -270,7 +270,7 @@ class ModalDetail extends Component {
                                             <div className='persen-discount' style={{ fontSize: "13px", marginLeft: "10px" }}>{inforProduct.discountProduct !== null ? `- ${inforProduct.discountProduct.value}%` : ""}</div>
                                         </div>
                                         <div className='quantity-product' style={{ fontWeight: "bold", fontSize: "13px" }}>
-                                            {this.state.quantityInStock === -1 || this.state.quantityInStock === null ? "Còn hàng" : `Còn lại ${this.state.quantityInStock} sản phẩm`}
+                                        {this.state.quantityInStock === null ? "Còn hàng" : `Còn lại ${this.state.quantityInStock} sản phẩm`}
                                         </div>
                                     </div>
                                     <div>

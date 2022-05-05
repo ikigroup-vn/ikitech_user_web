@@ -83,7 +83,7 @@ class Voucher extends Component {
     var displayPag = is_end == 0 ? "hide" : null;
     var { store_code } = this.props.match.params
     var { insert, update, _delete, isShow } = this.state
-
+    console.log(is_end)
     if (this.props.auth) {
       return (
         <div id="wrapper">

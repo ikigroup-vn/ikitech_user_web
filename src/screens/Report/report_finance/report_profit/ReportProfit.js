@@ -166,7 +166,7 @@ class ReportProfit extends Component {
                                                         <p class="" style={{ display: "flex", justifyContent: "space-between" }}>
                                                             <p> Tiền hàng bán ra: </p>
                                                             <span id="user_tel">
-                                                                <span className="total-final">{format(Number(reportProfit.real_money_for_sale))}</span>
+                                                                <span className="total-final">{format(Number(reportProfit.money_sales))}</span>
                                                             </span>
                                                         </p>
                                                         <p class="" style={{ display: "flex", justifyContent: "space-between" }}>
@@ -193,13 +193,32 @@ class ReportProfit extends Component {
                                                                 <span className="total-final">{format(Number(reportProfit.discount))}</span>
                                                             </span>
                                                         </p>
-                                                        <p class="title" style={{ display: "flex", justifyContent: "space-between" , fontWeight : "500"}}>
-                                                            <p> Chi phí khác (4): </p>
+                                                  
+                                               
+                                                        <p class="" style={{ display: "flex", justifyContent: "space-between" }}>
+                                                            <p> Giảm giá sản phẩm: </p>
                                                             <span id="user_tel">
-                                                                <span className="total-final">{format(Number(reportProfit.other_costs))}</span>
+                                                                <span className="total-final">{format(Number(reportProfit.product_discount))}</span>
                                                             </span>
                                                         </p>
-                                                   
+                                                        <p class="" style={{ display: "flex", justifyContent: "space-between" }}>
+                                                            <p> Giảm giá Combo: </p>
+                                                            <span id="user_tel">
+                                                                <span className="total-final">{format(Number(reportProfit.combo))}</span>
+                                                            </span>
+                                                        </p>
+                                                        <p class="" style={{ display: "flex", justifyContent: "space-between" }}>
+                                                            <p> Giảm giá Voucher: </p>
+                                                            <span id="user_tel">
+                                                                <span className="total-final">{format(Number(reportProfit.voucher))}</span>
+                                                            </span>
+                                                        </p>
+                                                        <p class="" style={{ display: "flex", justifyContent: "space-between" }}>
+                                                            <p> Chiết khấu đơn hàng: </p>
+                                                            <span id="user_tel">
+                                                                <span className="total-final">{format(Number(reportProfit.discount))}</span>
+                                                            </span>
+                                                        </p>
                                                     </div>
 
                                                 </div></div>
@@ -246,6 +265,12 @@ class ReportProfit extends Component {
                                                             <p> Phí khách hàng trả: </p>
                                                             <span id="user_tel">
                                                                 <span className="total-final">{format(Number(reportProfit.customer_return))}</span>
+                                                            </span>
+                                                        </p>
+                                                        <p class="title" style={{ display: "flex", justifyContent: "space-between" , fontWeight : "500"}}>
+                                                            <p> Chi phí khác (4): </p>
+                                                            <span id="user_tel">
+                                                                <span className="total-final">{format(Number(reportProfit.other_costs))}</span>
                                                             </span>
                                                         </p>
                                                  

@@ -40,6 +40,12 @@ class InventoryHistory extends Component {
       params = params + `&date_from=${moment(from, "DD-MM-YYYY").format("YYYY-MM-DD")}&time_to=${moment(to, "DD-MM-YYYY").format("YYYY-MM-DD")}`
       this.setState({ time_from: moment(from, "DD-MM-YYYY").format("YYYY-MM-DD"), time_to: moment(to, "DD-MM-YYYY").format("YYYY-MM-DD") })
     }
+    else
+    {
+      params = params + `&date_from=${moment().format("YYYY-MM-DD")}&time_to=${moment().format("YYYY-MM-DD")}`
+      this.setState({ time_from: moment().format("YYYY-MM-DD"), time_to: moment().format("YYYY-MM-DD") })
+
+    }
     console.log(from, to, branch_id)
     this.props.fetchAllInventoryHistory(store_code, branch_id, 1, params)
     this.props.fetchImportExportStock(store_code, branch_id, 1, params)
@@ -99,7 +105,7 @@ class InventoryHistory extends Component {
     var params = `branch_id=${branch_id}`
     const { store_code } = this.props.match.params
     if (from, to) { 
-       params = `&date_from=${from}&date_to=${to}`
+       params =params + `&date_from=${from}&date_to=${to}`
     }
     this.props.fetchAllInventoryHistory(store_code, branch_id, 1, params)
     this.setState({ time_from: from, time_to: to })
@@ -108,10 +114,16 @@ class InventoryHistory extends Component {
   }
 
   changePage = (store_code, id, type) => {
+    var params = ``
+    const {time_from, time_to } = this.state
+
+    if (time_from && time_to) {
+        params = params + `?from=${moment(time_from, "YYYY-MM-DD").format("DD-MM-YYYY")}&to=${moment(time_to, "YYYY-MM-DD").format("DD-MM-YYYY")}`
+    }
     if (type === 0 || type === 1)
-      history.push(`/inventory/detail/${store_code}/${id}`)
+      history.push(`/inventory/detail/${store_code}/${id}${params}`)
     else
-      history.push(`/import_stocks/detail/${store_code}/${id}`)
+      history.push(`/import_stocks/detail/${store_code}/${id}${params}`)
 
 
 

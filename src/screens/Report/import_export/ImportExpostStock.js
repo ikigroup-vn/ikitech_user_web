@@ -19,6 +19,7 @@ import { getBranchId } from '../../../ultis/branchUtils'
 import { formatNoD } from "../../../ultis/helpers"
 import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
 import { getQueryParams } from "../../../ultis/helpers"
+import ShowData from "./ShowData";
 
 class ImportExportStock extends Component {
   constructor(props) {
@@ -42,6 +43,12 @@ class ImportExportStock extends Component {
     if (from && to) {
       params = params + `&date_from=${moment(from, "DD-MM-YYYY").format("YYYY-MM-DD")}&time_to=${moment(to, "DD-MM-YYYY").format("YYYY-MM-DD")}`
       this.setState({ time_from: moment(from, "DD-MM-YYYY").format("YYYY-MM-DD"), time_to: moment(to, "DD-MM-YYYY").format("YYYY-MM-DD") })
+    }
+    else
+    {
+      params = params + `&date_from=${moment().format("YYYY-MM-DD")}&time_to=${moment().format("YYYY-MM-DD")}`
+      this.setState({ time_from: moment().format("YYYY-MM-DD"), time_to: moment().format("YYYY-MM-DD") })
+
     }
     this.props.fetchImportExportStock(store_code, branch_id, 1, params)
 
@@ -113,46 +120,125 @@ class ImportExportStock extends Component {
 
   }
 
-  showDistribute = (listDistribute) => {
+  // showDistribute = (listDistribute) => {
+  //   var result = []
+  //   if (typeof listDistribute == "undefined" || listDistribute.length === 0) {
+  //     return result
+  //   }
+  //   if (listDistribute[0].element_distributes) {
+  //     listDistribute[0].element_distributes.map((element, _index) => {
+  //       result.push(
+  //         <tr class="explode" style={{ backgroundColor: "#f8f9fc" }} >
+  //           <td colSpan={7}>
+  //             <div className='show-distribute'>
+  //               <div className='row' style={{ padding: "10px" }}>
+  //                 <div className='col-4' style={{ display: "flex" }}>
+  //                   <label style={{ fontWeight: "bold" }}>Phân loại: </label>
+  //                   <div className='name-distribute' style={{ marginLeft: "20px" }}>{element.name}</div>
+  //                 </div>
+  //                 <div className='col-2' style={{ display: "flex" }}>
+  //                   <label style={{ fontWeight: "bold" }}>Giá nhập: </label>
+  //                   <div className='price-distribute' style={{ marginLeft: "20px" }}>{format(Number(element.import_total_amount))}</div>
+  //                 </div>
+  //                 <div className='col-2' style={{ display: "flex" }}>
+  //                   <label style={{ fontWeight: "bold" }}>Số lượng nhập: </label>
+  //                   <div className='quantity-distribute' style={{ marginLeft: "20px" }}>{element.import_count_stock}</div>
+  //                 </div>
+  //                 <div className='col-2' style={{ display: "flex" }}>
+  //                   <label style={{ fontWeight: "bold" }}>Giá xuất: </label>
+  //                   <div className='quantity-distribute' style={{ marginLeft: "20px" }}>{format(Number(element.export_total_amount))}</div>
+  //                 </div>
+  //                 <div className='col-2' style={{ display: "flex" }}>
+  //                   <label style={{ fontWeight: "bold" }}>Số lượng xuất: </label>
+  //                   <div className='quantity-distribute' style={{ marginLeft: "20px" }}>{format(Number(element.export_count_stock))}</div>
+  //                 </div>
+  //               </div>
+  //             </div>
+  //           </td>
+  //         </tr>
+
+  //       )
+  //     })
+  //   }
+  //   return result
+  // }
+  showDistribute = (listDistribute, data) => {
     var result = []
     if (typeof listDistribute == "undefined" || listDistribute.length === 0) {
       return result
     }
+    console.log(listDistribute.element_distributes)
     if (listDistribute[0].element_distributes) {
       listDistribute[0].element_distributes.map((element, _index) => {
-        result.push(
-          <tr class="explode" style={{ backgroundColor: "#f8f9fc" }} >
-            <td colSpan={7}>
-              <div className='show-distribute'>
-                <div className='row' style={{ padding: "10px" }}>
-                  <div className='col-4' style={{ display: "flex" }}>
-                    <label style={{ fontWeight: "bold" }}>Phân loại: </label>
-                    <div className='name-distribute' style={{ marginLeft: "20px" }}>{element.name}</div>
-                  </div>
-                  <div className='col-2' style={{ display: "flex" }}>
-                    <label style={{ fontWeight: "bold" }}>Giá nhập: </label>
-                    <div className='price-distribute' style={{ marginLeft: "20px" }}>{format(Number(element.import_total_amount))}</div>
-                  </div>
-                  <div className='col-2' style={{ display: "flex" }}>
-                    <label style={{ fontWeight: "bold" }}>Số lượng nhập: </label>
-                    <div className='quantity-distribute' style={{ marginLeft: "20px" }}>{element.import_count_stock}</div>
-                  </div>
-                  <div className='col-2' style={{ display: "flex" }}>
-                    <label style={{ fontWeight: "bold" }}>Giá xuất: </label>
-                    <div className='quantity-distribute' style={{ marginLeft: "20px" }}>{format(Number(element.export_total_amount))}</div>
-                  </div>
-                  <div className='col-2' style={{ display: "flex" }}>
-                    <label style={{ fontWeight: "bold" }}>Số lượng xuất: </label>
-                    <div className='quantity-distribute' style={{ marginLeft: "20px" }}>{format(Number(element.export_count_stock))}</div>
-                  </div>
-                </div>
-              </div>
-            </td>
-          </tr>
+        if (typeof element.sub_element_distributes != "undefined") {
+          console.log(element.sub_element_distributes)
+          if (listDistribute[0].element_distributes[0].sub_element_distributes.length > 0) {
+            listDistribute[0].element_distributes[0].sub_element_distributes.map((sub_element, index) => {
+              const cost_of_capital = listDistribute[0].element_distributes[_index].sub_element_distributes[index]?.cost_of_capital
+              const stock = listDistribute[0].element_distributes[_index].sub_element_distributes[index]?.stock
+              console.log(stock)
+              result.push(
+                <tr className='wrap-item hover-product' >
+                  <td></td>
+                  <td className='item' >
+                    <img src={element.image_url != null ? element.image_url : Env.IMG_NOT_FOUND} alt='' width="65px" height="65px"  ></img>
+                  </td>
+                  <td className='item' style={{ display: "flex" }}>
+                    <label style={{ color: "#ff8100" }}>&nbsp;Phân loại: </label>
+                    <div className='name-distribute' >{element.name},{sub_element.name}</div>
+                  </td>
+                  <td className='item' >
+                    <div className='price-distribute' >{formatNoD(Number(element.import_count_stock))}</div>
+                  </td>
 
-        )
+                  <td className='item' >
+                    <div className='price-distribute' >{format(Number(element.import_total_amount))}</div>
+                  </td>
+                  <td className='item' >
+                    <div className='price-distribute' >{formatNoD(Number(element.export_count_stock))}</div>
+                  </td>
+                  <td className='item' >
+                    <div className='price-distribute' >{format(Number(element.export_total_amount))}</div>
+                  </td>
+
+                </tr>
+              )
+
+            })
+          }
+          else {
+            result.push(
+              <tr className='wrap-item hover-product' >
+                <td></td>
+
+                <td className='item' >
+                  <img src={element.image_url != null ? element.image_url : Env.IMG_NOT_FOUND} alt='' width="65px" height="65px"></img>
+                </td>
+                <td className='item' style={{ display: "flex" }}>
+                  <label style={{ color: "#ff8100" }}>&nbsp;Phân loại: </label>
+                  <div className='name-distribute' >{element.name}</div>
+                </td>
+                <td className='item' >
+                  <div className='price-distribute' >{formatNoD(Number(element.import_count_stock))}</div>
+                </td>
+
+                <td className='item' >
+                  <div className='price-distribute' >{format(Number(element.import_total_amount))}</div>
+                </td>
+                <td className='item' >
+                  <div className='price-distribute' >{formatNoD(Number(element.export_count_stock))}</div>
+                </td>
+                <td className='item' >
+                  <div className='price-distribute' >{format(Number(element.export_total_amount))}</div>
+                </td>
+
+              </tr>
+            )
+          }
+        }
       })
     }
+    console.log(result)
     return result
   }
   showData = (listImportExport) => {
@@ -161,14 +247,33 @@ class ImportExportStock extends Component {
       result = listImportExport.map((item, index) => {
         return (
           <>
-            <tr>
+
+    
+            <tr style={{ background: "#e3e6f04d" }}>
               <td>{index + 1}</td>
               <td><img src={item.images.length > 0 ? item.images[0].image_url : Env.IMG_NOT_FOUND} alt='' width="65px" height="65px"></img></td>
               <td>{item.name}</td>
-              <td>{item.main_import_count_stock}</td>
+              {item.distribute_import_export.length > 0 && item.distribute_import_export != null ?
+              <>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+
+              </> :
+              <>
+                  <td>{item.main_import_count_stock}</td>
               <td>{format(Number(item.main_import_total_amount))}</td>
               <td>{item.main_export_count_stock}</td>
               <td>{format(Number(item.main_export_total_amount))}</td>
+
+
+
+
+
+              </>
+            }
+        
             </tr>
             {this.showDistribute(item.distribute_import_export)}
           </>
@@ -189,7 +294,7 @@ class ImportExportStock extends Component {
       time_to } = this.state
     var arrDate = null
     if (time_from, time_to) {
-      arrDate = [moment(time_from , "YYYY-MM-DD").format("DD/MM/YYYY"), moment(time_to , "YYYY-MM-DD").format("DD/MM/YYYY")]
+      arrDate = [moment(time_from, "YYYY-MM-DD").format("DD/MM/YYYY"), moment(time_to, "YYYY-MM-DD").format("DD/MM/YYYY")]
     }
     console.log(time_from, time_to)
     return (

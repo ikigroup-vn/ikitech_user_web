@@ -15,9 +15,9 @@ class Form extends Component {
     };
   }
 
-  componentDidMount() {
-    this.initialState();
-  }
+  // componentDidMount() {
+  //   this.initialState();
+  // }
   componentWillReceiveProps(nextProps) {
     if (this.props.reset != nextProps.reset && nextProps.isWeek == "show") {
       this.initialState();

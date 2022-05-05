@@ -8,6 +8,7 @@ import { formatNoD } from "../../../ultis/helpers";
 import moment from "moment";
 // import ModalDetail from "../../components/RevenueExpenditures/ModalDetail";
 import ModalDetail from "./ModalDetail";
+import ModalHistory from "./ModalHistory"
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -19,6 +20,7 @@ class Table extends Component {
       data2: {},
       dataDetail: {},
       idModalShow: null,
+      keeping_histories: []
     };
   }
 
@@ -129,7 +131,21 @@ class Table extends Component {
     //   });
     // }
   }
-
+  getTotalSalary = (listTimeSheet) => {
+    var result = null
+    var total = 0
+    if (listTimeSheet.length > 0) {
+      result = listTimeSheet?.map((data, index) => {
+        if (data.total_salary != null) {
+          total = total + data.total_salary
+        }
+      })
+    }
+    return total
+  }
+  passData = (keeping_histories) => {
+    this.setState({ keeping_histories })
+  }
   showData = (listTimeSheet) => {
     var { store_code, branch_id, timeSheet, datePrime } = this.props;
     console.log(listTimeSheet);
@@ -137,6 +153,9 @@ class Table extends Component {
     var result = null;
     if (listTimeSheet.length > 0) {
       result = listTimeSheet?.map((data, index) => {
+        var total_seconds = data?.total_seconds
+        total_seconds = total_seconds < 0 ?(total_seconds * -1) : total_seconds
+        console.log(total_seconds* 1000,Math.trunc(moment.duration( data?.total_seconds* 1000).asHours()))
         return (
           <React.Fragment>
             <tr
@@ -156,7 +175,8 @@ class Table extends Component {
                   data?.keeping_histories.length !== 0) ? (
                 <React.Fragment>
 
-                  <td>
+                  <td style={{ cursor: "pointer" }} data-toggle="modal"
+                    data-target="#modalHistory" onClick={() => { this.passData(data?.keeping_histories) }} >
                     <div
                       style={{
                         display: "flex",
@@ -186,6 +206,11 @@ class Table extends Component {
                             "HH:mm:ss"
                           )}
                         </span>
+                        &nbsp;({data?.keeping_histories[0]?.is_bonus == true ? <span style={{ color: "green" }}>
+                          Thêm công
+                        </span> : <span style={{ color: "red" }}>
+                          Bớt công
+                        </span>})
                       </div>
                       <div>
                         {data?.keeping_histories[0]?.remote_timekeeping ? (
@@ -239,10 +264,17 @@ class Table extends Component {
                             ]?.time_check
                           ).format("HH:mm:ss")}
                         </span>
+                        &nbsp;({data?.keeping_histories[
+                          data?.keeping_histories.length - 1
+                        ]?.is_bonus == true ? <span style={{ color: "green" }}>
+                          Thêm công
+                        </span> : <span style={{ color: "red" }}>
+                          Bớt công
+                        </span>})
                       </div>
                     </div>
                   </td>
-                 
+
                 </React.Fragment>
 
               ) : (
@@ -253,15 +285,17 @@ class Table extends Component {
 
               {data.total_seconds !== 0 ? (
                 <td>
-                  {moment.utc(data.total_seconds * 1000).hour()} giờ{" "}
-                  {moment.utc(data.total_seconds * 1000).minutes()} phút
+                  {Math.trunc(moment.duration(total_seconds* 1000).asHours())} giờ{" "}
+                  {moment.utc(total_seconds * 1000).minutes()} phút - {formatNoD(data.total_salary)}đ
+
+
                 </td>
               ) : (
                 <td>0 giờ 0 phút</td>
               )}
-               <td>
-                    {formatNoD(data.salary_one_hour)}đ/h
-                  </td>
+              <td>
+                {formatNoD(data.salary_one_hour)}đ/h
+              </td>
               {this.props.typeDate == "DAY" ||
                 (this.props.typeDate == "OPTION" &&
                   this.props.datePrime.from === this.props.datePrime.to) ? (
@@ -314,7 +348,7 @@ class Table extends Component {
 
   render() {
     var { store_code, branch_id, timeSheet } = this.props;
-
+    var { keeping_histories } = this.state
     // const branch_id = localStorage.getItem("branch_id");
     // var { statusOrder, statusPayment } = this.state;
 
@@ -326,6 +360,7 @@ class Table extends Component {
     return (
       <React.Fragment>
         <div class="table-responsive " style={{ minHeight: 300 }}>
+          <p style={{ fontWeight: "500" }}>Tổng lương: {formatNoD(this.getTotalSalary(listTimeSheet))}đ</p>
           <table
             class="table table-border table-hover"
             id="dataTable"
@@ -370,6 +405,9 @@ class Table extends Component {
             timeSheet={this.props.timeSheet}
             datePrime={this.props.datePrime}
             typeDate={this.props.typeDate}
+          />
+          <ModalHistory
+            keeping_histories={keeping_histories}
           />
         </div>
       </React.Fragment>

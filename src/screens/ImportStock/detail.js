@@ -14,9 +14,10 @@ import ItemDetail from '../../components/Import_stock/ItemDetail'
 import ModalPayment from '../../components/Import_stock/ModalPayment'
 import ModalDelete from '../../components/Import_stock/ModalDelete'
 import ModalEnd from '../../components/Import_stock/ModalEnd'
-import { format } from '../../ultis/helpers'
+import { format  , randomString} from '../../ultis/helpers'
 import ItemDetailRefund from "../../components/Import_stock/ItemDetailRefund"
 import history from "../../history";
+import { getQueryParams } from "../../ultis/helpers"
 
 class DetailImportStock extends Component {
     constructor(props) {
@@ -28,7 +29,8 @@ class DetailImportStock extends Component {
             statusFinal: "",
             total_price: 0,
             check: false,
-            list_refund: []
+            list_refund: [],
+            random : ""
         }
     }
     componentDidMount() {
@@ -83,7 +85,7 @@ class DetailImportStock extends Component {
         this.setState({ check: status });
     }
     getRefund = (list_refund) => {
-        this.setState({ list_refund })
+        this.setState({ list_refund , random : randomString(10) })
     }
     checked = (list) => {
         var count = 0
@@ -93,14 +95,27 @@ class DetailImportStock extends Component {
         });
         return count
     }
+    goBack = () =>{
+        var from = getQueryParams("from")
+        var to = getQueryParams("to")
+        var params = ""
+        if (from && to) {
+            params =params + `?from=${from}&to=${to}`
+            history.push(`/inventory_histories/chinhbv${params}`)
+        }
+        else
+        {
+            history.goBack()
+        }
+    }
     render() {
         const { store_code, id } = this.props.match.params
         const { itemImportStock } = this.props
-        const { statusFinal, check, list_refund } = this.state
+        const { statusFinal, check, list_refund ,random} = this.state
         const import_stock_items = this.props.itemImportStock.import_stock_items ? this.props.itemImportStock.import_stock_items : []
         const date = moment(itemImportStock.updated_at, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD")
         const total = this.state.total_price - itemImportStock.discount + itemImportStock.cost
-        console.log(this.checked(list_refund))
+        console.log(this.state.list_refund)
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
@@ -116,7 +131,7 @@ class DetailImportStock extends Component {
                                     alert={this.props.alert}
                                 />
                                 <div style={{ display: "flex", justifyContent: "end", marginBottom: "10px" }}>
-                                    <button style={{ marginRight: "10px" }} type="button" onClick={() => { history.goBack() }} class="btn btn-warning  btn-sm"><i class="fa fa-arrow-left"></i>&nbsp;Trở về</button>
+                                    <button style={{ marginRight: "10px" }} type="button" onClick={this.goBack} class="btn btn-warning  btn-sm"><i class="fa fa-arrow-left"></i>&nbsp;Trở về</button>
 
                                     {itemImportStock.status === 0 || itemImportStock.status === 1 ? <Link style={{ marginRight: "10px" }} type="button" to={`/import_stock/edit/${store_code}/${id}`} class="btn btn-primary  btn-sm"><i class="fa fa-edit"></i>&nbsp;Sửa đơn nhập</Link>
                                         : ""}
@@ -211,7 +226,7 @@ class DetailImportStock extends Component {
                                                 {
                                                     itemImportStock.import_stock_code_refund != null && (
                                                         <span style={{ color: "red", display: "block" }}>
-                                                            Đã hoàn tiền từ đơn: <span id="cart_code"><a href={`/import_stocks/detail/${store_code}/${itemImportStock.id}`} >#{itemImportStock.import_stock_code_refund}</a></span>
+                                                            Đã hoàn tiền từ đơn: <span id="cart_code"><a href={`/import_stocks/detail/${store_code}/${itemImportStock.import_stock_id_refund}`} >#{itemImportStock.import_stock_code_refund}</a></span>
 
                                                         </span>
                                                     )
@@ -321,11 +336,11 @@ class DetailImportStock extends Component {
                                                 <div class="card-body" >
                                                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                                                         <div>Tiền hàng</div>
-                                                        <div>{format(Number(this.state.total_price))}</div>
+                                                        <div>{format(Number(this.props.itemImportStock.total_amount))}</div>
                                                     </div>
                                                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                                                         <div>Chiết khấu</div>
-                                                        <div>{format(Number(itemImportStock.discount))}</div>
+                                                        <div>-{format(Number(itemImportStock.discount))}</div>
                                                     </div>
                                                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                                                         <div>Chi phí nhập hàng</div>
@@ -341,7 +356,7 @@ class DetailImportStock extends Component {
 
 
                                         {
-                                            check == true && this.checked(this.state.list_refund) > 0 && <ItemDetailRefund id={id} store_code={store_code} listItems={import_stock_items} list_refund={this.state.list_refund} discount={itemImportStock.discount}></ItemDetailRefund>
+                                            check == true && this.checked(this.state.list_refund) > 0 && <ItemDetailRefund random = {random} id={id} store_code={store_code} listItems={import_stock_items} itemImportStock = {itemImportStock} list_refund={this.state.list_refund} discount={itemImportStock.discount}></ItemDetailRefund>
                                         }
                                     </div>
                                 </div>

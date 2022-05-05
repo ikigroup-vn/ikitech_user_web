@@ -106,7 +106,7 @@ class Form extends Component {
               className="form-control form-control-user"
               id="exampleInputEmail"
               aria-describedby="emailHelp"
-              placeholder={!isEmail(this.props.phone_number) ? "Nhập mã xác nhận từ số điện thoại"  : "Nhập mã xác nhận từ Email"}
+              placeholder={!isEmail(this.props.email) ? "Nhập mã xác nhận từ Email"  : "Nhập mã xác nhận từ số điện thoại"}
               autocomplete="off"
               name="txtOTP"
               value={txtOTP}

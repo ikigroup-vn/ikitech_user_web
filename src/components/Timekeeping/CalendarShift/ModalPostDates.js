@@ -46,7 +46,9 @@ class ModalPostDate extends Component {
       var { store_code } = this.props;
       const branch_id = localStorage.getItem("branch_id");
 
+      if(typeof this.props.isGet == "undefined" )
       this.props.fetchAllCalendarShift(store_code, branch_id, param);
+
       this.props.handleGetDatePost({ datePrime }, nextProps.typeDate);
 
     }

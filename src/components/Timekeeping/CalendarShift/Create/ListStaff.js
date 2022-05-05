@@ -104,7 +104,7 @@ class ListStaff extends Component {
               {new Intl.NumberFormat("vi-VN", {
                 style: "currency",
                 currency: "VND",
-              }).format(data.salary)}
+              }).format(data.salary_one_hour)}
             </td>
             <td>{decentralization}</td>
             {/* <td style={{ textAlign: "center" }}>

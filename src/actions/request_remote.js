@@ -2,7 +2,7 @@ import * as Types from "../constants/ActionType";
 import history from "../history";
 import * as requestRemoteApi from "../data/remote/request_remote";
 
-export const fetchAllRequestRemote = (store_code, branch_id, page) => {
+export const fetchAllRequestRemote = (store_code, branch_id, page , params) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -13,7 +13,7 @@ export const fetchAllRequestRemote = (store_code, branch_id, page) => {
     //   loading: "show",
     // });
     requestRemoteApi
-      .fetchAllRequestRemote(store_code, branch_id, page)
+      .fetchAllRequestRemote(store_code, branch_id, page , params)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,

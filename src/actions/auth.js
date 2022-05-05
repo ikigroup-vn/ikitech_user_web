@@ -132,7 +132,7 @@ export const registerOTP = (form) => {
 
 
 
-export const changePassword = (form, funcModal = null) => {
+export const changePassword = (form, funcModal = null, $this = null) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -147,6 +147,12 @@ export const changePassword = (form, funcModal = null) => {
         })
         if (res.data.success && funcModal != null) {
           funcModal()
+        }
+        if ($this) {
+          $this.setState({
+            old_password: "",
+            new_password: "",
+          })
         }
         dispatch({
           type: Types.ALERT_UID_STATUS,
@@ -371,15 +377,18 @@ export const sendOTP = (phone_number) => {
       })
       .catch(function (error) {
         console.log(error.response)
-        dispatch({
-          type: Types.ALERT_UID_STATUS,
-          alert: {
-            type: "danger",
-            title: "Lỗi",
-            disable: "show",
-            content: error?.response?.data?.msg,
-          },
-        });
+        if(error?.response?.data?.msg_code !== "TIME_IS_TOO_CLOSE"){
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "danger",
+              title: "Lỗi",
+              disable: "show",
+              content: error?.response?.data?.msg,
+            },
+          });
+        }
+
       });
   };
 };
@@ -418,16 +427,18 @@ export const sendOTPToEmail = (email) => {
         }
       })
       .catch(function (error) {
-        console.log(error.response)
-        dispatch({
-          type: Types.ALERT_UID_STATUS,
-          alert: {
-            type: "danger",
-            title: "Lỗi",
-            disable: "show",
-            content: error?.response?.data?.msg,
-          },
-        });
+        if(error?.response?.data?.msg_code !== "TIME_IS_TOO_CLOSE"){
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "danger",
+              title: "Lỗi",
+              disable: "show",
+              content: error?.response?.data?.msg,
+            },
+          });
+        }
+    
       });
   };
 };

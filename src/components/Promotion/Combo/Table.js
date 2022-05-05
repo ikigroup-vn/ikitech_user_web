@@ -25,23 +25,24 @@ class Table extends Component {
     var is_end = this.props.is_end
     var now = moment().format("DD-MM-YYYY HH:mm:ss")
     var start_time = moment(data.start_time, "YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY HH:mm:ss")
-    var end_time = moment(data.end_time, "YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY HH:mm:ss")
-
-    console.log(is_end, moment(now).isAfter(moment(start_time)) && moment(now).isBefore(moment(end_time)))
-
+    console.log(now , start_time)
     if (is_end == 0) {
-      if (moment(now).isBefore(moment(start_time)) || moment(now).isAfter(moment(end_time))) {
+      if(moment(now).isBefore(moment(start_time)) )
+      {
         return true;
       }
-      else {
+      else
+      {
         return false
       }
     }
     else if (is_end == 2) {
-      if (moment(now).isAfter(moment(start_time)) && moment(now).isBefore(moment(end_time))) {
+      if(moment(now).isAfter(moment(start_time)))
+      {
         return true;
       }
-      else {
+      else
+      {
         return false
       }
     }
@@ -51,7 +52,7 @@ class Table extends Component {
   }
   showData = (combos, per_page, current_page) => {
     console.log("davao")
-    var combos = this.props.is_end == 0 ? combos : combos.data
+    var combos = this.props.is_end == 0 || this.props.is_end == 2  ? combos : combos.data
     var result = null;
     var { store_code } = this.props.params;
     if (typeof combos === "undefined") {

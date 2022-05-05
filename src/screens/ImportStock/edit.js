@@ -5,7 +5,7 @@ import Topbar from '../../components/Partials/Topbar';
 import { shallowEqual } from '../../ultis/shallowEqual';
 import * as Types from "../../constants/ActionType";
 import Alert from '../../components/Partials/Alert';
-import Pagination from '../../components/ProductAgency/Pagination';
+import Paginations from '../../components/Import_stock/Paginations';
 import * as productAction from "../../actions/product";
 import * as ImportAction from "../../actions/import_stock"
 import history from '../../history';
@@ -287,12 +287,14 @@ class EditImportStock extends Component {
                 }
             }
     render() {
-        var { supplier } = this.props;
+        var { supplier, products } = this.props;
         var { txtDiscoutType, txtValueDiscount } = this.state
         var type_discount_default = txtDiscoutType == "0" ? "show" : "hide"
         var type_discount_percent = txtDiscoutType == "1" ? "show" : "hide"
         var { store_code } = this.props.match.params
         var { searchValue, numPage, listImportStock, infoSupplier, price_total, reality_exist_total,cost , select_supplier} = this.state
+        const bonusParam = "&check_inventory=true"
+
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
@@ -326,7 +328,7 @@ class EditImportStock extends Component {
 
 
                                                             <AsyncPaginate
-                                                                placeholder="Tìm khách hàng"
+                                                                placeholder="Tìm nhà cung cấp"
                                                                 value={select_supplier}
                                                                 loadOptions={this.loadSuppliers}
                                                                 name="recipientReferences1"
@@ -395,7 +397,7 @@ class EditImportStock extends Component {
                                                 <label for="comment">Thêm ghi chú:</label>
                                                 <textarea class="form-control" rows="5" id="comment" style={{ height: "50px" }} value ={this.state.note} onChange={this.onChanges}></textarea>
                                             </div>
-                                            <button className='btn btn-danger' style={{ marginTop: "20px" }} onClick={() => this.updateImportStock()}>Lưu</button>
+                                            <button className='btn btn-warning' style={{ marginTop: "20px" }} onClick={() => this.updateImportStock()}>Lưu</button>
                                         </div>
                                     </div>
 
@@ -418,7 +420,7 @@ class EditImportStock extends Component {
                                                         />
                                                         <div class="input-group-append">
                                                             <button
-                                                                class="btn btn-primary"
+                                                                class="btn btn-warning"
                                                                 type="submit"
 
                                                             >
@@ -428,8 +430,11 @@ class EditImportStock extends Component {
 
                                                     </div>
                                                 </form>
-                                                <ModalDetail modal={this.state.infoProduct} product={this.state.product}   handleCallbackPushProduct={this.handleCallbackPushProduct} />
-                                                <ModalSupplier supplier={supplier} handleCallbackSupplier={this.handleCallbackSupplier} />
+                                                <div className='wrap-pagination'>
+                                                    <Paginations limit={numPage} bonusParam={bonusParam}
+                                                        passNumPage={this.passNumPage} store_code={store_code} products={products} />
+                                                </div>
+                                                
                                             </div>
                                             <div className='card-body'>
                                                 <CardProduct store_code={store_code} handleCallbackProduct={this.handleCallbackProduct} />
@@ -445,6 +450,8 @@ class EditImportStock extends Component {
                         </div>
                     </div>
                 </div>
+                <ModalDetail modal={this.state.infoProduct} product={this.state.product}   handleCallbackPushProduct={this.handleCallbackPushProduct} />
+                                                <ModalSupplier supplier={supplier} handleCallbackSupplier={this.handleCallbackSupplier} />
                 <Alert
                     type={Types.ALERT_UID_STATUS}
                     alert={this.props.alert}

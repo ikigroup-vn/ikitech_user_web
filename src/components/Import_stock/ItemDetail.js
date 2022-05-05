@@ -47,7 +47,8 @@ class ItemDetail extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         if (!shallowEqual(nextState.list_refunds, this.state.list_refunds)) {
-            this.props.getRefund(nextState.list_refunds)
+            console.log(nextState.list_refunds ,"Daaaaaaa")
+            // this.props.getRefund(nextState.list_refunds)
         }
         return true
     }
@@ -157,7 +158,7 @@ class ItemDetail extends Component {
                 }
             }
         }
-        console.log(list_refunds)
+        this.props.getRefund(list_refunds)
         this.setState({ list_refunds: [...list_refunds] })
 
     }

@@ -215,7 +215,7 @@ class ReportInventory extends Component {
                         <span id="total_selected">{formatNoD(total_value_stock)}</span>
                       </p>
                       <p className="sale_user_label bold">
-                        Số lương tồn kho:{" "}
+                        Số lượng tồn kho:{" "}
                         <span id="total_selected">{formatNoD(total_stock)}</span>
                       </p>
 
@@ -252,7 +252,7 @@ class ReportInventory extends Component {
                             <th>Tên sản phẩm</th>
                             <th>Giá vốn</th>
 
-                            <th>Kho</th>
+                            <th>Số lượng tồn kho</th>
                           </tr>
                         </thead>
 

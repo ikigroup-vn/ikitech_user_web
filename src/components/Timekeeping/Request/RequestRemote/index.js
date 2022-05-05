@@ -29,10 +29,15 @@ class RequestRemote extends Component {
         id: "",
         status: 1,
         store_code: "",
+        searchValue: "",
+
       },
       modalIsEnd: {},
     };
   }
+  onChangeSearch = (e) => {
+    this.setState({ searchValue: e.target.value });
+  };
   onChange = (e) => {
     var target = e.target;
     var name = target.name;
@@ -52,13 +57,44 @@ class RequestRemote extends Component {
     this.props.fetchAllRequestRemote(store_code, branch_id, 1);
   }
 
+  searchData = (e) => {
+    e.preventDefault();
+    var { store_code } = this.props;
+    var { searchValue } = this.state;
+    const branch_id = localStorage.getItem("branch_id");
+    var params = `&search=${searchValue}`;
+    this.props.fetchAllRequestRemote(store_code, branch_id, 1 , params);
+  };
+
   render() {
     var { requestRemote } = this.props;
     var { store_code, branch_id } = this.props;
     var { modal, modalIsEnd } = this.state;
+    var { searchValue } = this.state
 
     return (
       <div className="requestRemote">
+           <form style={{marginTop : "10px" , marginBottom: "10px"}} onSubmit={this.searchData}>
+              <div
+                class="input-group mb-6"
+              >
+                <input
+                  style={{ maxWidth: "280px", minWidth: "150px" }}
+                  type="search"
+                  name="txtSearch"
+                  value={searchValue}
+                  onChange={this.onChangeSearch}
+                  class="form-control"
+                  placeholder="Tìm kiếm nhân viên"
+                />
+                <div class="input-group-append">
+                  <button class="btn btn-primary" type="submit">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </div>
+              </div>
+        
+            </form>
         <div class="box-body">
           <Table
             store_code={store_code}
@@ -96,9 +132,9 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllRequestRemote: (store_code, branch_id, page) => {
+    fetchAllRequestRemote: (store_code, branch_id, page , params) => {
       dispatch(
-        requestRemoteAction.fetchAllRequestRemote(store_code, branch_id, page)
+        requestRemoteAction.fetchAllRequestRemote(store_code, branch_id, page ,params)
       );
     },
   };
