@@ -27,15 +27,6 @@ class General extends Component {
 
     render() {
         var { products, badges } = this.props
-        var { total_orders_in_day,
-            temporary_order,
-            orders_refunds,
-            
-            total_product_or_discount_nearly_out_stock,
-            voucher_total,
-            combo_total,
-            products_discount
-        } = badges
 
         var total_stoking = typeof products.total_stoking == "undefined" ? 0 : products.total_stoking
         var total_out_of_stock = typeof products.total_out_of_stock == "undefined" ? 0 : products.total_out_of_stock
@@ -70,7 +61,7 @@ class General extends Component {
                                 <div className="col mr-2">
                                     <div className=" font-weight-bold text-danger text-uppercase mb-1">
                                         Sắp hết hàng</div>
-                                    <div className="h5 mb-0 font-weight-bold text-gray-800">{total_product_or_discount_nearly_out_stock}</div>
+                                    <div className="h5 mb-0 font-weight-bold text-gray-800">{this.props.badges?. total_product_or_discount_nearly_out_stock}</div>
                                 </div>
                                 <div className="col-auto">
                                     <i className="fas fa-eye-slash fa-2x text-gray-300"></i>

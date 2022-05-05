@@ -7,7 +7,12 @@ import ComponentA6Bill from "./ComponentA6Bill";
 import { useReactToPrint } from 'react-to-print';
 import ReactToPrint from 'react-to-print';
 import history from "../../history";
+import BillPos from "./BillPos";
 // import './bill.css'
+import * as dashboardAction from "../../actions/dashboard"
+import * as branchAction from "../../actions/branch"
+import * as notificationAction from "../../actions/notification";
+import { useLocation } from "react-router-dom";
 
 class PrintOrderScreen extends Component {
     constructor(props) {
@@ -15,46 +20,94 @@ class PrintOrderScreen extends Component {
         this.state = {
             showChatBox: "show",
             isShow: false,
+            loadingBranch: true,
+            badges: props.badges
         }
     }
     componentDidMount() {
+
         var { store_code, order_code, billId } = this.props.match.params
+
+
+        window.$('link[rel=stylesheet]').prop('disabled', true);
+
+
         this.props.fetchBillId(store_code, order_code);
 
 
-     ///   window.$("div").empty();
-
         window.addEventListener('afterprint', event => {
-            //    var =  defaultHrefBack
 
+            //    var =  defaultHrefBack
+            window.$('link[rel=stylesheet]').prop('disabled', false);
             const params = new Proxy(new URLSearchParams(window.location.search), {
                 get: (searchParams, prop) => searchParams.get(prop),
             });
 
             if (params.defaultHrefBack) {
                 var link = atob(params.defaultHrefBack)
-                console.log("link", link)
+                // console.log("link", link)
                 history.push(link)
+                //  window.location.href = link;
             }
 
         });
 
     }
 
+    componentWillReceiveProps(nextProps) {
+
+        var branch_id = nextProps.bill.branch_id
+
+
+
+        if (!shallowEqual(nextProps.bill, this.props.bill)) {
+            var { store_code, order_code, billId } = nextProps.match.params
+
+            if (nextProps.location?.state?.badges == null) {
+                this.props.fetchAllBadge(store_code, branch_id ?? 0)
+            }
+            if (nextProps.location?.state?.currentBranch == null) {
+                nextProps.fetchBranchStore(store_code);
+            } else {
+
+                this.setState({
+                    selectedBranch: nextProps.location?.state?.currentBranch,
+                    loadingBranch: false,
+                })
+            }
+
+
+
+        }
+
+        if (!shallowEqual(nextProps.branchStore, this.props.branchStore)) {
+
+            const selectedBranch = nextProps.branchStore.find(branch => branch.id == branch_id);
+            this.props.changeBranch(selectedBranch)
+            this.setState({
+                selectedBranch: selectedBranch,
+                loadingBranch: false,
+            })
+
+        }
+
+
+        if (!shallowEqual(nextProps.badges, this.props.badges)) {
+            this.setState({
+                badges: nextProps.badges,
+            })
+        }
+
+
+
+    }
 
     shouldComponentUpdate(nextProps, nextState) {
 
-        // if (!shallowEqual(nextProps.bill, this.props.bill)) {
 
-
-        //     if (nextProps.bill.order_code != null && nextProps.bill.order_code != "" && this.state.isShow == true) {
-        //         this.onPrint();
-        //     }
-
-        // }
 
         if (!shallowEqual(this.state.isShow, nextState.isShow) && nextState.isShow == true) {
-          //  this.printIframe("receipt")
+            this.onPrint();
         }
 
         if (this.state.isLoading != true) {
@@ -72,84 +125,33 @@ class PrintOrderScreen extends Component {
     onPrint = () => {
         window.print();
     }
-     printIframe = (id) => {
-        // console.log(id)
-        const frame = document.frames
-            ? document.frames[id]
-            : document.getElementById(id);
-  
-
-
-
-
-        // const frame = document.getElementById(id);
-        frame.contentWindow.postMessage({}, 'http://dev.doapp.vn/api/store/print/bill/290422W2ABAFIL');
-        frame.focus();
-       // frame.print();
-      const iframeWindow = frame.contentWindow || frame
-      frame.focus();
-        iframeWindow.print();
-
-        return false;
-    };
-    render() {
-
-        var { store_code, order_code, billId } = this.props.match.params
-        var { bill, stores, currentBranch, badges } = this.props
-
-        if (bill == null || bill.order_code == null) {
-            return <Loading />;
-        }
-
+    onLoaded = () => {
 
         if (this.state.isShow == false) {
             this.setState({
                 isShow: true
             })
         }
+    }
 
+    render() {
 
+        var { store_code, order_code, billId } = this.props.match.params
+        var { bill, stores, currentBranch, badges } = this.props
+        var { badges } = this.state
 
-        // return <div>
-         
-        //  <div onClick={()=>{
-        //       this.printIframe("receipt")
-        //  }}>In</div>
+        if (bill == null || bill.order_code == null || badges == null || badges.store_name == null || this.state.loadingBranch == true) {
+            return <Loading />;
+        }
 
-       
-        //     <iframe
-        //         id="receipt"
-        //         src="http://dev.doapp.vn/api/store/print/bill/290422W2ABAFIL"
-        //         // style={{ display: 'none' }}
-        //         title="Receipt"
-        //         // style={{
-        //         //     position: "fixed",
-        //         //     top: 0, left: 0,
-        //         //     bottom: 0,
-        //         //     right: 0,
-        //         //     width: "100%",
-        //         //     height: "100%",
-        //         //     border: "none",
-        //         //     margin: 0, padding: 0,
-        //         //     overflow: "hidden",
-        //         //     zIndex: 0,
-        //         // }}
-        //     />
-        // </div>
 
         return (
             <div>
-                {/* <ReactToPrint
-                    trigger={() => {
-
-                        return <button type="button" class="btn btn-danger  btn-sm"><i class="fas fa-print"></i>&nbsp;In hóa đơn</button>;
-                    }}
-                    content={() => this.componentRef}
-                /> */}
-
-
-                <ComponentA6Bill
+                <BillPos
+                    onLoaded={this.onLoaded}
                     bill={bill}
+                    badges={badges}
+                    currentBranch={this.state.selectedBranch}
                     ref={el => (this.componentRef = el)}
                 />
             </div>
@@ -163,12 +165,23 @@ const mapStateToProps = (state) => {
     return {
         badges: state.badgeReducers.allBadge,
         bill: state.billReducers.bill.billID,
+        currentBranch: state.branchReducers.branch.currentBranch,
+        branchStore: state.storeReducers.store.branchStore,
     };
 };
 const mapDispatchToProps = (dispatch, props) => {
     return {
         fetchBillId: (store_code, billId) => {
             dispatch(billAction.fetchBillId(store_code, billId));
+        },
+        fetchBranchStore: (store_code) => {
+            dispatch(dashboardAction.fetchBranchStore(store_code))
+        },
+        changeBranch: (branchData) => {
+            dispatch(branchAction.changeBranch(branchData))
+        },
+        fetchAllBadge: (store_code, branch_id) => {
+            dispatch(notificationAction.fetchAllBadge(store_code, branch_id));
         },
 
     };
