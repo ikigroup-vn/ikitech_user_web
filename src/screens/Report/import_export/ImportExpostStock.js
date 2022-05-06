@@ -344,6 +344,8 @@ class ImportExportStock extends Component {
                     <div className='wap-header' style={{ display: 'flex' }}>
                       <DateRangePickerComponent
                         value={arrDate}
+                        format="dd/MM/yyyy"
+
                         id="daterangepicker"
                         placeholder="Khoảng thời gian..."
                         onChange={this.onchangeDateFromTo}

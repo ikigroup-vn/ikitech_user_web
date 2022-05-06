@@ -82,9 +82,9 @@ class Store extends Component {
       typeof this.props.permission.product_list != "undefined"
     ) {
       var permissions = this.props.permission;
-      var insert = permissions.product_category_add;
-      var update = permissions.product_category_update;
-      var _delete = permissions.product_category_remove;
+      var insert = permissions.product_category_list;
+      var update = permissions.product_category_list;
+      var _delete = permissions.product_category_list;
       var isShow = permissions.product_category_list;
 
       this.setState({ isLoading: true, insert, update, _delete, isShow });

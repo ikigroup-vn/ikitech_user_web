@@ -180,8 +180,9 @@ class InventoryHistory extends Component {
     const { reportInventory, reportImportExport } = this.props
     const { import_total_amount, export_total_amount, import_count_stock, export_count_stock } = reportImportExport
     var arrDate = null
+    console.log(time_from, time_to)
     if (time_from, time_to) {
-      arrDate = [moment(time_from , "YYYY-MM-DD").format("DD/MM/YYYY"), moment(time_to , "YYYY-MM-DD").format("DD/MM/YYYY")]
+      arrDate = [moment(time_from , "YYYY-MM-DD").format("dd/MM/yyyy"), moment(time_to , "YYYY-MM-DD").format("dd/MM/yyyy")]
     }
     console.log(arrDate)
 
@@ -223,7 +224,7 @@ class InventoryHistory extends Component {
 
                         id="daterangepicker"
                         placeholder="Khoảng thời gian..."
-                        // format="DD-MM-yyyy"
+                        format="DD/MM/YYYY"
                         onChange={this.onchangeDateFromTo}
                       />
                       {/* <div class="form-group" style={{ display: "flex", alignItems: "center" }}>

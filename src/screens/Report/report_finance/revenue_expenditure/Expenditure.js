@@ -173,7 +173,7 @@ class Expenditure extends Component {
 
                         id="daterangepicker"
                         placeholder="Khoảng thời gian..."
-                        // format="DD-MM-yyyy"
+                        format="dd/MM/yyyy"
                         onChange={this.onchangeDateFromTo}
                       />
 

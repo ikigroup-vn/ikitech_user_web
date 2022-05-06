@@ -22,7 +22,7 @@ class Index extends Component {
         if (this.state.isLoading != true && typeof nextProps.permission.product_list != "undefined") {
             var permissions = nextProps.permission
 
-            var isShow = permissions.promotion_voucher_add
+            var isShow = permissions.promotion
             this.setState({ isLoading: true, isShow })
         }
     }

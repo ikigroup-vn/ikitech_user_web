@@ -253,6 +253,8 @@ class ReportInventory extends Component {
                             <th>Giá vốn</th>
 
                             <th>Số lượng tồn kho</th>
+                            <th>Giá trị tồn</th>
+
                           </tr>
                         </thead>
 

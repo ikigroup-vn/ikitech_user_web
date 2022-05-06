@@ -60,10 +60,10 @@ class EditStock extends Component {
         if (
             (!shallowEqual(nextProps.modalSub, this.props.modalSub))
         ) {
-            console.log("aaaaaaaaaaa")
             this.setState({
-                cost_of_capital: nextProps.modalSub.sub.cost_of_capital,
-                quantity_in_stock: nextProps.modalSub.sub.stock,
+                cost_of_capital:  typeof nextProps.modalSub.sub.cost_of_capital !== "undefined"  ? Math.ceil(nextProps.modalSub.sub.cost_of_capital) : 0,
+
+                quantity_in_stock: nextProps.modalSub.sub.stock, 
                 nameElement: nextProps.modalSub.NameElement,
                 nameSubElement: nextProps.modalSub.SubElement,
                 NameDistribute: nextProps.modalSub.NameDistribute,
@@ -73,7 +73,8 @@ class EditStock extends Component {
         if (!shallowEqual(nextProps.modalElement, this.props.modalElement)) {
             console.log("bbbbbbbbbbbb")
             this.setState({
-                cost_of_capital: nextProps.modalElement.element.cost_of_capital,
+                cost_of_capital:  typeof nextProps.modalElement.element.cost_of_capital !== "undefined"  ? Math.ceil(nextProps.modalElement.element.cost_of_capital) : 0,
+
                 quantity_in_stock: nextProps.modalElement.element.stock,
                 NameDistribute: nextProps.modalElement.NameDistribute,
                 idProduct: nextProps.modalElement.idProduct,
@@ -84,7 +85,9 @@ class EditStock extends Component {
         if (!shallowEqual(nextProps.modalProduct, this.props.modalProduct)) {
             console.log("ccccccccccccc")
             this.setState({
-                cost_of_capital: nextProps.modalProduct.data.inventory?.main_cost_of_capital,
+
+                cost_of_capital:  typeof nextProps.modalProduct.data.inventory?.main_cost_of_capital !== "undefined"  ? Math.ceil(nextProps.modalProduct.data.inventory?.main_cost_of_capitall) : 0,
+
                 quantity_in_stock: nextProps.modalProduct.data.inventory?.main_stock,
                 idProduct: nextProps.modalProduct.data.id,
                 nameSubElement: "",

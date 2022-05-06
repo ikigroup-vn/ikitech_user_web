@@ -109,6 +109,7 @@ class ReportProfit extends Component {
                                     <div className='card-header py-3'>
                                         <div className='wap-header' style={{ display: 'flex' }}>
                                         <DateRangePickerComponent
+                                        
                                 id="daterangepicker"
                                 placeholder="Khoảng thời gian..."
                                 format="dd/MM/yyyy"

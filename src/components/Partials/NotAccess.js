@@ -12,7 +12,7 @@ class Notfound extends Component {
 
 
 
-            <div class="container-fluid">
+            <div class="container-fluid" style={{marginBottom : "500px"}}>
 
                 <div class="text-center">
                     <p class="lead text-gray-800 ">Bạn chưa được cấp quyền</p>

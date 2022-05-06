@@ -34,7 +34,9 @@
 
 
 
-
+.wap-header{
+    padding-right: 25px;
+}
 
 .react-tabs__tab--selected {
     background: #9ed2db !important;

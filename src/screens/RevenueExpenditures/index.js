@@ -146,8 +146,8 @@ class RevenueExpenditures extends Component {
       var permissions = nextProps.permission;
       var add_revenue = permissions.add_revenue;
       var add_expenditure = permissions.add_expenditure
-
-      this.setState({ isLoading: true, isShow : true , add_revenue , add_expenditure });
+      var isShow = add_revenue == false && add_expenditure == false ? false : true
+      this.setState({ isLoading: true, isShow , add_revenue , add_expenditure });
     }
     if (this.props.reportExpenditure !== nextProps.reportExpenditure) {
       const { datePrime } = this.state;

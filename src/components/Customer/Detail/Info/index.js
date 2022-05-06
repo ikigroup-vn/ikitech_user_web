@@ -170,7 +170,15 @@ class Customer extends Component {
       })
     }
 
+    if (
+      this.state.isLoading != true &&
+      typeof nextProps.permission.product_list != "undefined"
+    ) {
+      var permissions = nextProps.permission;
 
+      var isShow = permissions.customer_list;
+      this.setState({ isLoading: true, isShow });
+    }
 
   }
   handleOnClick = (e) => {
@@ -292,7 +300,7 @@ class Customer extends Component {
   };
   render() {
     var { province } = this.props
-    var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards, txtDateOfBirth, txtSex } = this.state;
+    var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards, txtDateOfBirth, txtSex , isShow } = this.state;
     var { txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state;
 
     console.log(txtDateOfBirth, txtSex)
@@ -448,7 +456,7 @@ class Customer extends Component {
 
         <div class="box-footer">
                 <button
-                  class="btn btn-primary btn-sm"
+                  class={`btn btn-primary btn-sm ${isShow == true ? "show" : "hide"}`}
                   onClick={this.handleOnClick}
                 >
                   <i class="fa fa-save"></i> Lưu
