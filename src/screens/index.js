@@ -113,7 +113,6 @@ class Store extends Component {
     var { stores } = this.props;
     console.log(this.props.loadingBranch, this.props.currentBranch, stores.store_code, getBranchId(), stores)
     if (this.props.auth) {
-
       if (stores != null && stores.data?.length == 0) {
         return <Redirect to={`/home`} />;
       }

@@ -138,6 +138,7 @@ import Setting from "./screens/Setting";
 import ProductInventory from "./screens/ProductInventory";
 import getChannel, { IKIPOS, IKITECH } from "./ultis/channel";
 import PrintOrderScreen from "./screens/Bill/PrintOrderScreen";
+import PrintBarcode from "./screens/PrintBarcode";
 const routes = [
   {
     path: "/decentralization/index/:store_code",
@@ -440,6 +441,12 @@ const routes = [
     exact: true,
 
     main: ({ match }) => <Customer match={match} />,
+  },
+  {
+    path: "/product/print_barcode/:store_code",
+    exact: true,
+
+    main: ({ match }) => <PrintBarcode match={match} />,
   },
   {
     path: "/customer/detail/:store_code/:customerId",

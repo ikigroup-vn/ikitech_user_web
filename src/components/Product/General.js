@@ -14,11 +14,11 @@ class General extends Component {
         var params = null
         if (is_near_out_of_stock) {
             params = params + `&is_near_out_of_stock=true`
-            this.props.paramNearStock(true)
+            this.props?.paramNearStock(true)
         }
         else
         {
-            this.props.paramNearStock(false)
+            this.props?.paramNearStock(false)
         }
         this.props.fetchAllProductV2(this.props.store_code, this.props.branch_id, 1, params
         );
