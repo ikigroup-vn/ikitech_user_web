@@ -211,7 +211,7 @@ class PrintBarcode extends Component {
               <BarcodePagePrint
                 key={item.name}
                 isA4={item.isA4}
-                count={180}
+                count={360}
                 ref={el => (item.componentRef = el)}
                 widthPrint={item.widthPrint}
                 heightPrint={item.heightPrint}

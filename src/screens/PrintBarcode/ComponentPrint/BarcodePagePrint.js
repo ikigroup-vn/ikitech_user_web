@@ -52,12 +52,13 @@ class BarcodePagePrint extends Component {
     render() {
         const { widthPrint, heightPrint, isA4 } = this.props
 
-        return <div>
+        return <div style={{
+            overflow: "scroll" 
+        }}>
        <style type="text/css" media="print">{`@page { size: ${widthPrint}mm ${heightPrint}mm; }`}</style>
             <style>{this.getPageMargins()}</style>
             <div style={{
-                width: "100%",
-                height: "100%",
+             
                 display: "flex",
                 flexWrap: "wrap"
 
