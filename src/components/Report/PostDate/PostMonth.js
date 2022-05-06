@@ -250,7 +250,7 @@ class Form extends Component {
                 id="gridCheck"
               />
               <label class="form-check-label" for="gridCheck">
-                Tuần trước đó : {beforeMonth_compare.from} đến{" "}
+                Tháng trước đó : {beforeMonth_compare.from} đến{" "}
                 {beforeMonth_compare.to}
               </label>
             </div>
@@ -269,7 +269,7 @@ class Form extends Component {
                 id="gridCheck"
               />
               <label class="form-check-label" for="gridCheck">
-                Tuần này tháng trước : {monthNowBeforeYear_compare.from} đến{" "}
+                Tháng này năm trước : {monthNowBeforeYear_compare.from} đến{" "}
                 {monthNowBeforeYear_compare.to}
               </label>
             </div>

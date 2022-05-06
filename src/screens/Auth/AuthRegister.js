@@ -4,6 +4,7 @@ import Alert from "../../components/Partials/Alert";
 import { Redirect } from "react-router-dom";
 import * as Types from "../../constants/ActionType";
 import { connect } from "react-redux";
+import themeData from "../../ultis/theme_data";
 
 class AuthRegister extends Component {
   constructor(props) {
@@ -64,7 +65,9 @@ class AuthRegister extends Component {
               <div className="card o-hidden border-0 shadow-lg my-5">
                 <div className="card-body p-0">
                   <div className="row">
-                    <div className="col-lg-6 d-none d-lg-block bg-register-image"></div>
+                    <div className="col-lg-6 d-none d-lg-block bg-register-image" tyle={{
+                        backgroundImage: `url(${document.location.origin + themeData().logoLogin})`
+                      }}></div>
                     <div className="col-lg-6">
                       <div className="p-5">
                         <Alert

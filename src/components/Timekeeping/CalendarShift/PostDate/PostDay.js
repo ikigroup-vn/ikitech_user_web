@@ -14,12 +14,14 @@ class Form extends Component {
 
   componentDidMount() {
     // this.initialState();
+    if(this.props.isDay == "show"){
     this.setState({
       datePrime: {
         from: moment().format("DD-MM-YYYY"),
         to: moment().format("DD-MM-YYYY"),
       },
     });
+  }
   }
 
   componentWillReceiveProps(nextProps) {

@@ -42,12 +42,12 @@ class Home extends Component {
     $("#dataTable").DataTable().destroy();
 
     if (
-      this.state.isLoading != true &&
-      typeof nextProps.permission.add_revenue != "undefined"
+     ( this.state.isLoading != true &&
+      typeof nextProps.permission.add_revenue != "undefined")
     ) {
-      var permissions = nextProps.permission;
+      var permissions = nextProps?.permission;
 
-      var isShow = permissions.store_info
+      var isShow = permissions?.store_info
       console.log(isShow)
       this.setState({ isLoading: true, isShow });
     }
@@ -57,7 +57,7 @@ class Home extends Component {
   }
   render() {
     var { isShow } = this.state
-    console.log(isShow)
+    console.log(this.props.auth)
     if (this.props.auth) {
       return (
         <div id="wrapper">
@@ -65,9 +65,9 @@ class Home extends Component {
           <div id="content-wrapper" className="d-flex flex-column">
             <div id="content">
               <Topbar isHome={true} isExsitStore={true} />
-              {typeof isShow == "undefined" ? (
+              {typeof isShow == "undefined" && this.state.isLoading ==false  ? (
                 <div ></div>
-              ) : isShow == true ? (
+              ) : isShow == true || (this.props.isLoadPermission ==true &&  typeof this.props.permission.add_revenue == "undefined") ? (
                 <div className="container-fluid" style={{ width: "60%" }}>
                   <Alert
                     type={Types.ALERT_UID_STATUS}
@@ -121,8 +121,8 @@ const mapStateToProps = (state) => {
     alert: state.storeReducers.alert.alert_success,
     loading: state.loadingReducers.disable,
     loading_lazy: state.loadingReducers.disable_lazy,
-    permission: state.authReducers.permission.data
-
+    permission: state.authReducers.permission.data,
+    isLoadPermission : state.authReducers.permission.isLoadPermission
   };
 };
 const mapDispatchToProps = (dispatch, props) => {

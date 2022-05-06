@@ -138,7 +138,7 @@ class Voucher extends Component {
                           value={is_end}
                           onChange={this.onChange}
                         >
-                          <option value="0">Chuẩn bị và đang diễn ra</option>
+                          <option value="0">Chuẩn bị diễn ra</option>
                           <option value="2">Đang diễn ra</option>
 
                           <option value="1">Đã kết thúc</option>

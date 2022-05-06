@@ -169,11 +169,10 @@ class Expenditure extends Component {
                   <div className="card-body" style={{ minHeight: "500px" }}>
                     <div className="wap-header" style={{ display: "flex" }}>
                       <DateRangePickerComponent
-                        value={arrDate}
-
-                        id="daterangepicker"
-                        placeholder="Khoảng thời gian..."
-                        format="dd/MM/yyyy"
+                              value={[new Date(moment(time_from , "YYYY-MM-DD")) , new Date(moment(time_to , "YYYY-MM-DD"))]}
+                              id="daterangepicker"
+                              placeholder="Khoảng thời gian..."
+                              format="dd/MM/yyyy"
                         onChange={this.onchangeDateFromTo}
                       />
 

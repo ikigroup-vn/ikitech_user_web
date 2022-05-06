@@ -12,7 +12,7 @@ import * as dashboardAction from "../../actions/dashboard";
 import ModalUpload from "../../components/Store/ModalUpload"
 import * as Env from "../../ultis/default"
 import { isEmpty } from "../../ultis/helpers"
-
+import history from "../../history"
 class StoreEdit extends Component {
   constructor(props) {
     super(props);
@@ -121,7 +121,6 @@ class StoreEdit extends Component {
     }, this.props.match.params.store_code);
   };
   goBack = () => {
-    var { history } = this.props;
     history.goBack();
   };
 
@@ -328,6 +327,7 @@ class StoreEdit extends Component {
 
                                 </button>
                                 <button
+                                type = "button"
                                   style={{ marginLeft: "10px" }}
                                   onClick={this.goBack}
                                   class="btn btn-warning  btn-sm"

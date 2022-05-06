@@ -13,20 +13,35 @@ import { format } from '../../../../ultis/helpers'
 import { getBranchId } from '../../../../ultis/branchUtils'
 import history from '../../../../history'
 import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
+import { getQueryParams } from "../../../../ultis/helpers"
 
 class ReportProfit extends Component {
     constructor(props) {
         super(props)
         this.state = {
             txtStart: "",
-            txtEnd: ""
+            txtEnd: "",
+            time_from: "",
+            time_to: ""
         }
     }
     componentDidMount() {
         const { store_code } = this.props.match.params
         const branch_id = getBranchId() 
-        const time = moment().format("YYYY-MM-DD")
-        const params = `date_from=${time}&date_to=${time}&branch_id=${branch_id}`
+        var from = getQueryParams("from")
+        var to = getQueryParams("to")
+        var params = `branch_id=${branch_id}`
+
+        if (from && to) {
+          params = params + `&date_from=${moment(from, "DD-MM-YYYY").format("YYYY-MM-DD")}&time_to=${moment(to, "DD-MM-YYYY").format("YYYY-MM-DD")}`
+          this.setState({ time_from: moment(from, "DD-MM-YYYY").format("YYYY-MM-DD"), time_to: moment(to, "DD-MM-YYYY").format("YYYY-MM-DD") })
+        }
+        else {
+          params = params + `&date_from=${moment().format("YYYY-MM-DD")}&time_to=${moment().format("YYYY-MM-DD")}`
+          this.setState({ time_from: moment().format("YYYY-MM-DD"), time_to: moment().format("YYYY-MM-DD") })
+    
+        }
+
         this.props.fetchReportProfit(store_code, branch_id, params)
         try {
             document.getElementsByClassName('r-input')[0].placeholder = 'Chọn ngày';
@@ -70,6 +85,8 @@ class ReportProfit extends Component {
         }   
     
         this.props.fetchReportProfit(store_code, branch_id, params)
+        this.setState({ time_from: from, time_to: to })
+
     
       }
     onChangeEnd = (e) => {
@@ -82,6 +99,8 @@ class ReportProfit extends Component {
             history.goBack();
     };
     render() {
+        var { time_from,
+            time_to } = this.state
         var { store_code } = this.props.match.params
         const reportProfit = this.props.reportProfit
         return (
@@ -109,10 +128,10 @@ class ReportProfit extends Component {
                                     <div className='card-header py-3'>
                                         <div className='wap-header' style={{ display: 'flex' }}>
                                         <DateRangePickerComponent
-                                        
-                                id="daterangepicker"
-                                placeholder="Khoảng thời gian..."
-                                format="dd/MM/yyyy"
+                                       value={[new Date(moment(time_from , "YYYY-MM-DD")) , new Date(moment(time_to , "YYYY-MM-DD"))]}
+                                       id="daterangepicker"
+                                       placeholder="Khoảng thời gian..."
+                                       format="dd/MM/yyyy"
                                 onChange={this.onchangeDateFromTo}
                               />
                                             {/* <div class="form-group" style={{ display: "flex", alignItems: "center" }}>

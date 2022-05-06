@@ -7,6 +7,7 @@ import * as Types from "../../../../constants/ActionType";
 import { compressed } from "../../../../ultis/helpers";
 import { shallowEqual } from "../../../../ultis/shallowEqual";
 import { isEmpty } from "../../../../ultis/helpers";
+import themeData from "../../../../ultis/theme_data";
 
 class ModalDetail extends Component {
   constructor(props) {
@@ -63,8 +64,9 @@ class ModalDetail extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Danh sách thiết bị của {staff_name}</h4>
+          <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+          <h4 class="modal-title">Danh sách thiết bị của {staff_name}</h4>
+
 
               <button
                 type="button"

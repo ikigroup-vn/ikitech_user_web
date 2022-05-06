@@ -57,7 +57,7 @@ class Modal extends Component {
               <div class="modal-body">
                 <input type="hidden" name="remove_id_store" />
                 <div class="alert-remove"></div>
-                {modal.type == 1 ? "Bạn có muốn phê duyệt yêu cầu của thiết bị này không?" : "Bạn có muốn hủy yêu cầu của thiết bị này không?"}
+                {modal.status == 1 ? "Bạn có muốn phê duyệt yêu cầu của thiết bị này không?" : "Bạn có muốn hủy yêu cầu của thiết bị này không?"}
               </div>
               <div class="modal-footer">
                 <button
