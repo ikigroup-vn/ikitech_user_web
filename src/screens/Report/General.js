@@ -115,8 +115,30 @@ class General extends Component {
                     </Link>
 
                 </div>
+                {/* <div className="col-xl-4 col-md-6 mb-4">
+                <Link to={`/collaborator/${store_code}`}>
+                        <div className="card border-left-danger shadow h-100 py-2">
+                            <div className="card-body set-padding">
+                                <div className="row no-gutters align-items-center">
+                                    <div className="col mr-2">
+                                        <div >
+                                            <div className=" font-weight-bold text-danger text-uppercase mb-1" >Khách hàng
+                                        </div>
+                                        <div className="h5 mb-0 font-weight-bold text-gray-800">{total_collaborators}</div>
+                                    </div>
+                                    <div className="col-auto">
+                                        <i className="fas fa-list fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
+                    </div>
+                    </Link>
+
+            </div> */}
             </div>
+
         )
     }
 }

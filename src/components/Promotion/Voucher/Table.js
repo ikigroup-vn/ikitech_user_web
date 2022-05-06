@@ -45,12 +45,9 @@ filterColDiscount = (data) => {
   var is_end = this.props.is_end
   var now = moment().format("DD-MM-YYYY HH:mm:ss")
   var start_time = moment(data.start_time, "YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY HH:mm:ss")
-  var end_time = moment(data.end_time, "YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY HH:mm:ss")
-
-  console.log(is_end , moment(now).isAfter(moment(start_time)) && moment(now).isBefore(moment(end_time)))
-
+  console.log(now , start_time , is_end)
   if (is_end == 0) {
-    if(moment(now).isBefore(moment(start_time)) || moment(now).isAfter(moment(end_time)) )
+    if(moment(now).isBefore(moment(start_time)) )
     {
       return true;
     }
@@ -60,7 +57,7 @@ filterColDiscount = (data) => {
     }
   }
   else if (is_end == 2) {
-    if(moment(now).isAfter(moment(start_time)) && moment(now).isBefore(moment(end_time)) )
+    if(moment(now).isAfter(moment(start_time)))
     {
       return true;
     }
@@ -74,7 +71,7 @@ filterColDiscount = (data) => {
   }
 }
   showData = (vouchers, per_page, current_page) => {
-    var vouchers = this.props.is_end == 0 ? vouchers : vouchers.data
+    var vouchers = this.props.is_end == 0 || this.props.is_end == 2  ? vouchers : vouchers.data
 
     var result = null;
     var { store_code } = this.props.params;

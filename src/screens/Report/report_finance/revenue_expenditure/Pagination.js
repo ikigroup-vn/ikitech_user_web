@@ -11,8 +11,17 @@ class Pagination extends Component {
   }
 
   passPagination = (page) => {
-    const params = `date_from=${this.props.txtStart}&date_to=${this.props.txtEnd}`
     const branch_id = getBranchId()
+    var { time_from, time_to } = this.props
+    var params = ``
+
+    if (time_to != "" && time_to != null) {
+      params = params + `&date_to=${time_to}`;
+
+    }
+    if (time_from != "" && time_from != null) {
+      params = params + `&date_from=${time_from}`;
+    }
     this.props.fetchReportExpenditure(this.props.store_code,branch_id , page,params)    
 }
 

@@ -12,7 +12,7 @@ import ModalListStaff from "./ListStaff";
 import { shallowEqual } from "../../../../ultis/shallowEqual";
 import { isEmpty } from "../../../../ultis/helpers";
 import moment from "moment";
-import ModalPostDate2 from "./ModalPostDates2";
+import ModalPostDate2 from "../ModalPostDates";
 import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
 class Form extends Component {
   constructor(props) {
@@ -41,15 +41,22 @@ class Form extends Component {
     });
   }
 
-  handleGetDatePost = (date, typeSelect) => {
-    console.log("final", date, typeSelect);
+  handleGetDatePost = (date, value) => {
+    var typeSelect =
+      value == "DAY"
+        ? "Ngày"
+        : value == "WEEK"
+          ? "Tuần"
+          : value == "MONTH"
+            ? "Tháng"
+            : "Tùy chọn";
     this.setState({
       datePrime: {
         from: date.datePrime.from,
         to: date.datePrime.to,
       },
 
-      typeSelect: typeSelect,
+      typeDate: value, typeSelect: typeSelect
     });
   };
   onchangeDate = (value) => {
@@ -336,6 +343,7 @@ render() {
                 </div>
               </div>
               <ModalPostDate2
+              isGet = {true}
                 style={{ marginLeft: "20px" }}
                 reset={reset}
                 handleGetDatePost={this.handleGetDatePost}

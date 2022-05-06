@@ -10,7 +10,7 @@ class Table extends Component {
   }
 
   onChange = (e, id) => {
-    this.props.handleChangeQuantity(id ,e.target.value  , true)
+    this.props.handleChangeQuantity(id ,e.target.value  ,null, true)
   };
 
   componentWillReceiveProps(nextProps) {

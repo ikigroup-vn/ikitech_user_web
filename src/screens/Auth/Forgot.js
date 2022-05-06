@@ -5,6 +5,8 @@ import Form from "../../components/Auth/Forgot/Form";
 import Alert from "../../components/Partials/Alert";
 import * as Types from "../../constants/ActionType";
 import { connect } from "react-redux";
+import themeData from "../../ultis/theme_data";
+
 class Forgot extends Component {
   render() {
     return (
@@ -18,7 +20,9 @@ class Forgot extends Component {
                 <div className="card o-hidden border-0 shadow-lg my-5">
                     <div className="card-body p-0">
                         <div className="row">
-                            <div className="col-lg-6 d-none d-lg-block bg-password-image"></div>
+                            <div className="col-lg-6 d-none d-lg-block bg-password-image"  style={{
+                        backgroundImage: `url(${document.location.origin + themeData().logoLogin})`
+                      }}></div>
                             <div className="col-lg-6">
                                 <div className="p-5">
                                     <div className="text-center">

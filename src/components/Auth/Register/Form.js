@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import * as Types from "../../../constants/ActionType"
 import * as auth from "../../../actions/auth"
-import { isEmpty , isPhone , isEmail , isSpecialCharactor } from "../../../ultis/helpers"
+import { isEmpty , isPhone , isEmail , isSpecialCharactor , countString } from "../../../ultis/helpers"
 import {getQueryParams} from "../../../ultis/helpers"
 
 class Form extends Component {
@@ -71,6 +71,19 @@ class Form extends Component {
             title: "Lỗi",
             disable: "show",
             content: "Email không đúng định dạng",
+          },
+        });
+        return;
+      }
+      if(countString(txtPassword) < 7)
+      {
+        this.props.alert({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: "Mật khẩu phải lớn hơn 6  ký tự",
           },
         });
         return;

@@ -25,6 +25,8 @@ class RequestMobile extends Component {
         name: "",
         id: "",
         store_code: "",
+        searchValue: "",
+
       },
       modalIsEnd: {},
     };
@@ -59,13 +61,48 @@ class RequestMobile extends Component {
   //       });
   //     }
   //   }
+    onChangeSearch = (e) => {
+    this.setState({ searchValue: e.target.value });
+  };
+  searchData = (e) => {
+    e.preventDefault();
+    var { store_code } = this.props;
+    var { searchValue } = this.state;
+    const branch_id = localStorage.getItem("branch_id");
+    var params = `&search=${searchValue}`;
+    this.props.fetchAllRequestMobile(store_code, branch_id , 1 , params);
+  };
+
 
   render() {
     var { requestMobile } = this.props;
     var { store_code, branch_id } = this.props;
     var { modal, modalIsEnd } = this.state;
+    var { searchValue } = this.state
+
     return (
       <div className="requestMobile">
+           <form style={{marginTop : "10px" , marginBottom: "10px"}} onSubmit={this.searchData}>
+              <div
+                class="input-group mb-6"
+              >
+                <input
+                  style={{ maxWidth: "280px", minWidth: "150px" }}
+                  type="search"
+                  name="txtSearch"
+                  value={searchValue}
+                  onChange={this.onChangeSearch}
+                  class="form-control"
+                  placeholder="Tìm kiếm nhân viên"
+                />
+                <div class="input-group-append">
+                  <button class="btn btn-primary" type="submit">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </div>
+              </div>
+        
+            </form>
         <div class="box-body">
           <Table
             store_code={store_code}
@@ -97,9 +134,9 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllRequestMobile: (store_code, branch_id) => {
+    fetchAllRequestMobile: (store_code, branch_id , page , params) => {
       dispatch(
-        requestMobileAction.fetchAllRequestMobile(store_code, branch_id)
+        requestMobileAction.fetchAllRequestMobile(store_code, branch_id , page,params)
       );
     },
   };

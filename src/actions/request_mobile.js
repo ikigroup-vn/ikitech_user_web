@@ -2,7 +2,7 @@ import * as Types from "../constants/ActionType";
 import history from "../history";
 import * as requestMobileApi from "../data/remote/request_mobile";
 
-export const fetchAllRequestMobile = (store_code, branch_id) => {
+export const fetchAllRequestMobile = (store_code, branch_id , page , params) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -13,7 +13,7 @@ export const fetchAllRequestMobile = (store_code, branch_id) => {
     //   loading: "show",
     // });
     requestMobileApi
-      .fetchAllRequestMobile(store_code, branch_id)
+      .fetchAllRequestMobile(store_code, branch_id , page, params)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,

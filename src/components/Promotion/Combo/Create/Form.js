@@ -240,7 +240,7 @@ class Form extends Component {
         } else products[index].quantity = quantity;
       }
     });
-    this.setState({ listProducts: products });
+    this.setState({ listProducts: products , saveListProducts : products })
   };
 
   render() {

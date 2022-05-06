@@ -312,7 +312,7 @@ console.log(selectValue)
 
 
                                                             <AsyncPaginate
-                                                                placeholder="Tìm khách hàng"
+                                                                placeholder="Tìm nhà cung cấp"
                                                                 value={select_supplier}
                                                                 loadOptions={this.loadSuppliers}
                                                                 name="recipientReferences1"

@@ -13,6 +13,7 @@ import Pagination from "./Pagination";
 import history from '../../../../history'
 import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
 import { getBranchId } from '../../../../ultis/branchUtils'
+import { getQueryParams } from "../../../../ultis/helpers"
 
 class Expenditure extends Component {
   constructor(props) {
@@ -20,18 +21,31 @@ class Expenditure extends Component {
     this.state = {
       txtStart: "",
       txtEnd: "",
+      time_from: "",
+      time_to: ""
     };
   }
   componentDidMount() {
     const { store_code } = this.props.match.params;
     const branch_id = localStorage.getItem("branch_id");
-    const time = moment().format("YYYY-MM-DD");
-    const params = `date_from=${time}&date_to=${time}&branch_id=${branch_id}`;
+    var params = `branch_id=${branch_id}`
+    var from = getQueryParams("from")
+    var to = getQueryParams("to")
+    if (from && to) {
+      params = params + `&date_from=${moment(from, "DD-MM-YYYY").format("YYYY-MM-DD")}&time_to=${moment(to, "DD-MM-YYYY").format("YYYY-MM-DD")}`
+      this.setState({ time_from: moment(from, "DD-MM-YYYY").format("YYYY-MM-DD"), time_to: moment(to, "DD-MM-YYYY").format("YYYY-MM-DD") })
+    }
+    else {
+      params = params + `&date_from=${moment().format("YYYY-MM-DD")}&time_to=${moment().format("YYYY-MM-DD")}`
+      this.setState({ time_from: moment().format("YYYY-MM-DD"), time_to: moment().format("YYYY-MM-DD") })
+
+    }
+
     this.props.fetchReportExpenditure(store_code, branch_id, 1, params);
     try {
       document.getElementsByClassName("r-input")[0].placeholder = "Chọn ngày";
       document.getElementsByClassName("r-input")[1].placeholder = "Chọn ngày";
-    } catch (error) {}
+    } catch (error) { }
   }
 
   handleFindItem = () => {
@@ -68,12 +82,12 @@ class Expenditure extends Component {
     const branch_id = getBranchId()
     var params = `branch_id=${branch_id}`
     const { store_code } = this.props.match.params
-    if (from, to) { 
-       params = `&date_from=${from}&date_to=${to}`
-    }   
-
-
+    if (from, to) {
+      params = params + `&date_from=${from}&date_to=${to}`
+    }
     this.props.fetchReportExpenditure(store_code, branch_id, 1, params);
+    this.setState({ time_from: from, time_to: to })
+
 
   }
   showData = (reportExpenditure) => {
@@ -82,7 +96,7 @@ class Expenditure extends Component {
       result = reportExpenditure.map((item, index) => {
         return (
           <>
-            <tr className = "hover-product">
+            <tr className="hover-product">
               <td>{index + 1}</td>
               <td>{item.code}</td>
               <td>{item.user?.name}</td>
@@ -103,12 +117,19 @@ class Expenditure extends Component {
   };
   goBack = () => {
     history.goBack();
-};
+  };
 
   render() {
     var { store_code } = this.props.match.params;
+    var { time_from,
+      time_to } = this.state
     const reportExpenditure = this.props.reportExpenditure;
     const { txtStart, txtEnd } = this.state;
+    var arrDate = null
+
+    if (time_from, time_to) {
+      arrDate = [moment(time_from, "YYYY-MM-DD").format("DD/MM/YYYY"), moment(time_to, "YYYY-MM-DD").format("DD/MM/YYYY")]
+    }
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
@@ -142,19 +163,21 @@ class Expenditure extends Component {
                     </div>
                     <button style={{ marginRight: "10px" }} type="button" onClick={this.goBack} class="btn btn-warning  btn-sm"><i class="fas fa-arrow-left"></i>&nbsp;Quay lại</button>
 
-                
+
                   </div>
 
                   <div className="card-body" style={{ minHeight: "500px" }}>
-                  <div className="wap-header" style={{ display: "flex" }}>
-                    <DateRangePickerComponent
-                                id="daterangepicker"
-                                placeholder="Khoảng thời gian..."
-                                format="dd/MM/yyyy"
-                                onChange={this.onchangeDateFromTo}
-                              />
-                    
-                     
+                    <div className="wap-header" style={{ display: "flex" }}>
+                      <DateRangePickerComponent
+                        value={arrDate}
+
+                        id="daterangepicker"
+                        placeholder="Khoảng thời gian..."
+                        // format="DD-MM-yyyy"
+                        onChange={this.onchangeDateFromTo}
+                      />
+
+
                     </div>
                     <div class="table-responsive">
                       <table
@@ -179,6 +202,8 @@ class Expenditure extends Component {
                       </table>
                     </div>
                     <Pagination
+                    time_from = {time_from}
+                    time_to = {time_to}
                       store_code={store_code}
                       reportExpenditure={reportExpenditure}
                       txtStart={txtStart}

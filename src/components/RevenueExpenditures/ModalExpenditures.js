@@ -358,7 +358,7 @@ class ModalExpenditures extends Component {
         allow_accounting,
         description,
       },
-      params,funcModal)
+      params,funcModal,getForId)
   };
 
   render() {

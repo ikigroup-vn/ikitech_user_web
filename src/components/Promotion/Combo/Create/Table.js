@@ -10,7 +10,7 @@ class Table extends Component {
   }
 
   onChange = (e, id) => {
-    this.props.handleChangeQuantity(id ,e.target.value)
+    this.props.handleChangeQuantity(id ,e.target.value ,null, true)
   };
 
   componentWillReceiveProps(nextProps) {
@@ -25,12 +25,12 @@ class Table extends Component {
   }
 
   decrement = (id) => {
-    this.props.handleChangeQuantity(id ,null , -1)
+    this.props.handleChangeQuantity(id ,null , -1 , true)
 
   }
   increment = (id) => {
 
-    this.props.handleChangeQuantity(id, null ,1)
+    this.props.handleChangeQuantity(id, null ,1 , true)
 
   }
   showData = (products) => {

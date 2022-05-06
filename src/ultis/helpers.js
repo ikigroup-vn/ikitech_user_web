@@ -70,7 +70,10 @@ export const isEmpty = (data) => {
   if (data == null || typeof data == "undefined") return false;
   return data.toString().replace(/ /g, "").length > 0;
 };
-
+export const countString = (data) => {
+  if (data == null || typeof data == "undefined") return false;
+  return data.toString().replace(/ /g, "").length;
+};
 export const callUrl = () => {
   var hostname = window.location.hostname;
   var name = "";

@@ -3,7 +3,7 @@ import * as auth from "../../../actions/auth";
 import { connect } from "react-redux";
 import themeData from "../../../ultis/theme_data";
 import * as Types from "../../../constants/ActionType";
-import {isEmpty} from "../../../ultis/helpers";
+import { isEmpty } from "../../../ultis/helpers";
 
 class ModalCreate extends Component {
   constructor(props) {
@@ -11,12 +11,17 @@ class ModalCreate extends Component {
     this.state = {
       old_password: "",
       new_password: "",
+      toggleOld : false,
+      toggleNew : false,
 
-      
+      iconShow : "fa fa-fw fa-eye",
+      iconHide : "fa fa-fw fa-eye-slash",
+
+
     };
   }
 
-  
+
   onChange = (e) => {
     var target = e.target;
     var name = target.name;
@@ -26,21 +31,27 @@ class ModalCreate extends Component {
       [name]: value,
     });
   };
- 
-  
+
+
   onSave = async (e) => {
     e.preventDefault();
     // window.$('.modal').modal('hide');
-    var {old_password , new_password} = this.state
-    this.props.changePassword({old_password , new_password} , function(){
-        window.$('.modal').modal('hide')
-    })
+    var { old_password, new_password } = this.state
+    this.props.changePassword({ old_password, new_password }, function () {
+      window.$('.modal').modal('hide')
+    }, this)
 
   };
+  toggleOld = () =>{
+    this.setState({toggleOld : !this.state.toggleOld})
+  }
+  toggleNew = () =>{
+    this.setState({toggleNew : !this.state.toggleNew})
+  }
   render() {
     console.log("render");
-    var { old_password, new_password
-     } = this.state;
+    var { old_password, new_password , toggleNew , toggleOld , iconHide , iconShow
+    } = this.state;
     return (
       <div
         class="modal fade"
@@ -56,7 +67,7 @@ class ModalCreate extends Component {
               class="modal-header"
               style={{ backgroundColor: themeData().backgroundColor }}
             >
-              <h4 class="modal-title">Thay đổi mật khảu</h4>
+              <h4 class="modal-title">Thay đổi mật khẩu</h4>
 
               <button
                 type="button"
@@ -80,8 +91,8 @@ class ModalCreate extends Component {
                     Mật khẩu cũ
                   </div>
                   <input
-                    type="password"
-                    class="form-control"
+              type={toggleOld == true ? "text" : "password"}
+              class="form-control"
                     id="txtName"
                     placeholder="Nhập mật khẩu cũ"
                     autocomplete="off"
@@ -89,15 +100,22 @@ class ModalCreate extends Component {
                     onChange={this.onChange}
                     name="old_password"
                   />
-               
+                  <span onClick={this.toggleOld} toggle="#password-field" class={toggleOld? iconShow : iconHide} style={{
+                    float: "right",
+                    marginRight: "10px",
+                    marginTop: "-26px",
+                    position: "relative",
+                    zIndex: "2"
+                  }}></span>
+
                 </div>
                 <div class="form-group">
                   <div style={{ fontWeight: "bold" }} for="product_name">
                     Mật khẩu mới
                   </div>
                   <input
-                    type="password"
-                    class="form-control"
+              type={toggleNew == true ? "text" : "password"}
+              class="form-control"
                     id="txtName"
                     placeholder="Nhập mật khẩu mới"
                     autocomplete="off"
@@ -105,9 +123,15 @@ class ModalCreate extends Component {
                     onChange={this.onChange}
                     name="new_password"
                   />
-               
+                  <span onClick={this.toggleNew} toggle="#password-field" class={toggleNew? iconShow : iconHide} style={{
+                    float: "right",
+                    marginRight: "10px",
+                    marginTop: "-26px",
+                    position: "relative",
+                    zIndex: "2"
+                  }}></span>
                 </div>
-             
+
               </div>
               <div class="modal-footer">
                 <button
@@ -137,10 +161,10 @@ const mapDispatchToProps = (dispatch, props) => {
     showError: (error) => {
       dispatch(error);
     },
-    changePassword: ($form , funcModal) => {
-        dispatch(auth.changePassword($form , funcModal));
-      },
- 
+    changePassword: ($form, funcModal, $this) => {
+      dispatch(auth.changePassword($form, funcModal, $this));
+    },
+
   };
 };
 export default connect(null, mapDispatchToProps)(ModalCreate);

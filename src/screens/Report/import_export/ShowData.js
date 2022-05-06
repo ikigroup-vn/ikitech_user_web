@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { format, formatNumber , formatNoD} from '../../ultis/helpers'
-import * as inventoryAction from '../../actions/inventory'
+import { format, formatNumber } from '../../../ultis/helpers'
+import * as inventoryAction from '../../../actions/inventory'
 import { connect } from 'react-redux';
-import * as Env from "../../ultis/default"
-import themeData from '../../ultis/theme_data';
-import { getBranchId } from '../../ultis/branchUtils';
+import * as Env from "../../../ultis/default"
+import themeData from '../../../ultis/theme_data';
+import { getBranchId } from '../../../ultis/branchUtils';
 class ShowData extends Component {
     constructor(props) {
         super(props)
@@ -88,7 +88,7 @@ class ShowData extends Component {
                                         {format(Number(cost_of_capital))}
                                     </td>
                                     <td className='item' >
-                                        {formatNoD(stock)}
+                                        {stock}
                                     </td>
                             
 
@@ -113,7 +113,7 @@ class ShowData extends Component {
                                     <div className='price-distribute' >{format(Number(element.cost_of_capital))}</div>
                                 </td>
                                 <td className='item' >
-                                    <div className='quantity-distribute' >{formatNoD(element.stock)}</div>
+                                    <div className='quantity-distribute' >{element.stock}</div>
                                 </td>
                            
 
@@ -154,6 +154,7 @@ class ShowData extends Component {
                         <>
                             <td></td>
                             <td></td>
+                            <td></td>
                         </> :
                         <>
                                 <td>
@@ -162,7 +163,7 @@ class ShowData extends Component {
                             </td>
                        
                              <td>
-                                {formatNoD(data.inventory.main_stock)}
+                                {data.inventory.main_stock}
 
                             </td>
                

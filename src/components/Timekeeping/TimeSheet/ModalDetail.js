@@ -198,6 +198,18 @@ class ModalDetail extends Component {
       ).format("YYYY-MM-DD HH:mm:ss");
     }
 
+    console.log( this.props.store_code,
+      this.props.branch_id,
+      params,
+      {
+        is_bonus: is_bonus,
+        checkin_time: date1,
+        checkout_time: date2,
+        reason: reason,
+        staff_id: staff_id,
+      },
+      )
+
     this.props.bonusLessCheckinCheckout(
       this.props.store_code,
       this.props.branch_id,

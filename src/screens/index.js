@@ -3,20 +3,20 @@ import { Link, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import Loading from "./Loading";
 import * as action from "../actions/index";
-import { getBranchId, setBranchId , setBranchName , getBranchName} from "../ultis/branchUtils";
+import { getBranchId, setBranchId, setBranchName, getBranchName } from "../ultis/branchUtils";
 import { shallowEqual } from "../ultis/shallowEqual";
 import * as dashboardAction from "../actions/dashboard";
 import * as branchAction from "../actions/branch"
-import { getStoreId, setStoreId  } from "../ultis/store";
+import { getStoreId, setStoreId } from "../ultis/store";
 
 class Store extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        store_code : ""
+      store_code: ""
     }
 
-}
+  }
   componentDidMount() {
     this.props.fetchAllStore();
 
@@ -111,8 +111,12 @@ class Store extends Component {
 
   render() {
     var { stores } = this.props;
-
+    console.log(this.props.loadingBranch, this.props.currentBranch, stores.store_code, getBranchId(), stores)
     if (this.props.auth) {
+
+      if (stores != null && stores.data?.length == 0) {
+        return <Redirect to={`/home`} />;
+      }
 
       if (this.props.loadingBranch == false &&
         stores != null &&
@@ -123,11 +127,9 @@ class Store extends Component {
         this.state.store_code != null &&
         typeof getBranchId() != "undefined") {
         return <Redirect to={`/dashboard/${this.state.store_code}`} />;
-      } if(stores != null && stores.length ==0 && this.props.loadingBranch == false) {
+      } if (stores != null && stores.length == 0 && this.props.loadingBranch == false) {
         return <Redirect to={`/home`} />;
       }
-      
-      
       else {
         return <Loading />;
 

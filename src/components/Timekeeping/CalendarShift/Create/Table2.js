@@ -29,7 +29,7 @@ class Table extends Component {
           <tr>
             <td>{data.name}</td>
 
-            <td style={{ textAlign: "center" }}>{data.username}</td>
+            <td >{data.username}</td>
             <td>{data.phone_number}</td>
 
             <td>
@@ -37,7 +37,7 @@ class Table extends Component {
               {new Intl.NumberFormat("vi-VN", {
                 style: "currency",
                 currency: "VND",
-              }).format(data.salary)}
+              }).format(data.salary_one_hour)}
             </td>
             <td>{decentralization}</td>
             {/* <td style={{ textAlign: "center" }}>
