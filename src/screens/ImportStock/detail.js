@@ -79,6 +79,15 @@ class DetailImportStock extends Component {
             })
             this.setState({ total_price: total_prices })
         }
+        if (
+            this.state.isLoading != true &&
+            typeof nextProps.permission.add_revenue != "undefined"
+          ) {
+            var permissions = nextProps.permission;
+            var isShow = permissions.inventory_import;
+            this.setState({ isLoading: true , isShow });
+      
+          }
 
     }
     changeStatus = (status) => {
@@ -111,7 +120,7 @@ class DetailImportStock extends Component {
     render() {
         const { store_code, id } = this.props.match.params
         const { itemImportStock } = this.props
-        const { statusFinal, check, list_refund ,random} = this.state
+        const { statusFinal, check, list_refund ,random , isShow} = this.state
         const import_stock_items = this.props.itemImportStock.import_stock_items ? this.props.itemImportStock.import_stock_items : []
         const date = moment(itemImportStock.updated_at, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD")
         const total = this.state.total_price - itemImportStock.discount + itemImportStock.cost
@@ -133,7 +142,7 @@ class DetailImportStock extends Component {
                                 <div style={{ display: "flex", justifyContent: "end", marginBottom: "10px" }}>
                                     <button style={{ marginRight: "10px" }} type="button" onClick={this.goBack} class="btn btn-warning  btn-sm"><i class="fa fa-arrow-left"></i>&nbsp;Trở về</button>
 
-                                    {itemImportStock.status === 0 || itemImportStock.status === 1 ? <Link style={{ marginRight: "10px" }} type="button" to={`/import_stock/edit/${store_code}/${id}`} class="btn btn-primary  btn-sm"><i class="fa fa-edit"></i>&nbsp;Sửa đơn nhập</Link>
+                                    {(itemImportStock.status === 0 || itemImportStock.status === 1) && isShow == true ? <Link style={{ marginRight: "10px" }} type="button" to={`/import_stock/edit/${store_code}/${id}`} class="btn btn-primary  btn-sm"><i class="fa fa-edit"></i>&nbsp;Sửa đơn nhập</Link>
                                         : ""}
                                 </div>
 
@@ -148,7 +157,8 @@ class DetailImportStock extends Component {
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="row justify-content-between top">
+                                    {
+                                        isShow == true &&  <div class="row justify-content-between top">
                                         <div class="row d-flex icon-content"> <img style = {{width : "45px" , height : "45px"}} class="icon" src="https://i.imgur.com/9nnc9Et.png" />
                                             <div class="d-flex flex-column">
                                                 <p class="font-weight-bold" style={{ margin: "0" }}>Đặt hàng</p>
@@ -212,6 +222,8 @@ class DetailImportStock extends Component {
                                         }
 
                                     </div>
+                                    }
+                                   
                                 </div>
 
                                 <br></br>
@@ -372,7 +384,9 @@ class DetailImportStock extends Component {
 }
 const mapStateToProps = (state) => {
     return {
-        itemImportStock: state.importStockReducers.import_reducer.detailImportStock,
+        itemImportStock: state.importStockReducers.import_reducer.detailImportStock,    
+        permission: state.authReducers.permission.data,
+
     }
 }
 const mapDispatchToProps = (dispatch, props) => {

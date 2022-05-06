@@ -36,7 +36,7 @@ class Edit extends Component {
     if (this.state.isLoading != true && typeof nextProps.permission.product_list != "undefined") {
       var permissions = nextProps.permission
 
-      var isShow = permissions.staff_update
+      var isShow = permissions.staff_list
       this.setState({ isLoading: true ,isShow })
     }
     }

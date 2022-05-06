@@ -180,8 +180,9 @@ class Sidebar extends Component {
               );
               var active = isActive ? "active" : "";
               var displayWithTabItem = this.displayItemWithGroup(
-                link.itemHasTabName
+                link.itemHasTabName , link
               );
+              console.log(link,displayWithTabItem)
               return (
                 <li
                   className={`nav-item   ${active} ${displayWithTabItem}  ${
@@ -190,7 +191,7 @@ class Sidebar extends Component {
                       this.props.badges.config_user_vip != null &&
                       typeof this.props.badges.config_user_vip !=
                         "undefined") ||
-                    typeof link.class == "undefined" || link.class == null
+                    typeof link.class == "undefined" || link.class == null || displayWithTabItem == "show"
                       ? "show"
                       : "hide"
                   }`}
@@ -213,9 +214,29 @@ class Sidebar extends Component {
     return result;
   };
 
-  displayItemWithGroup = (item) => {
+  displayItemWithGroup = (item , link) => {
     var _class = this.props.permission;
+    console.log(link)
+    if(typeof link.class != "undefined")
+    {
+      if(Array.isArray(link.class))
+        {
+          var check = true
+          for (const data of link.class) {          
+            
+       
+            if(_class[data] == true)
+            {
+              check = false
+            }
+          }
+          console.log(check)
+          var result = check==false ? "show" : "hide"
 
+          return result
+
+        }
+    }
     if (typeof _class.collaborator_config == "undefined") {
       return "hide";
     }
@@ -244,9 +265,25 @@ class Sidebar extends Component {
             ? true
             : false;
         }
+        console.log(item)
         if (typeof item.class == "undefined" || item.class == null ) {
           return false;
-        } else {
+        }
+        else if(Array.isArray(item.class))
+        {
+          for (const data of item.class) {          
+            
+            console.log(_class[data])
+            var check = true
+            if(_class[data] == true)
+            {
+              check = false
+            }
+          }
+          return check
+
+        }
+         else {
           if (_class[item.class] == true) {
             return false;
           }

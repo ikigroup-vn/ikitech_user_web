@@ -13,6 +13,7 @@ import Loading from "../Loading";
 import * as dashboardAction from "../../actions/dashboard";
 import config from "../../ultis/datatable"
 import ListStore from "../../components/Home/ListStore";
+import NotAccess from "../../components/Partials/NotAccess";
 
 class Home extends Component {
   constructor(props) {
@@ -33,18 +34,30 @@ class Home extends Component {
     this.props.hideLoading()
     this.props.fetchAllStore();
   }
-  componentWillReceiveProps(nextProps) {
-    if(this.props.loading == "show")
-    this.props.hideLoading()
-    if(this.props.loading_lazy == "show")
-    this.props.hideLoading_lazy()
+  componentWillReceiveProps(nextProps) {console.log( nextProps.permission)
+    if (this.props.loading == "show")
+      this.props.hideLoading()
+    if (this.props.loading_lazy == "show")
+      this.props.hideLoading_lazy()
     $("#dataTable").DataTable().destroy();
+
+    if (
+      this.state.isLoading != true &&
+      typeof nextProps.permission.add_revenue != "undefined"
+    ) {
+      var permissions = nextProps.permission;
+
+      var isShow = permissions.store_info
+      console.log(isShow)
+      this.setState({ isLoading: true, isShow });
+    }
   }
   componentDidUpdate(prevProps, prevState) {
     $("#dataTable").DataTable(config());
   }
   render() {
-    console.log(this.props);
+    var { isShow } = this.state
+    console.log(isShow)
     if (this.props.auth) {
       return (
         <div id="wrapper">
@@ -52,34 +65,40 @@ class Home extends Component {
           <div id="content-wrapper" className="d-flex flex-column">
             <div id="content">
               <Topbar isHome={true} isExsitStore={true} />
-              <div className="container-fluid" style={{width:"60%"}}>
-                <Alert
-                  type={Types.ALERT_UID_STATUS}
-                  alert={this.props.alert}
-                />
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <h4 className="h4 title_content mb-0 text-gray-800">
-                  Danh sách cửa hàng
-                  </h4>{" "}
-                  <Link to="/store/create" class="btn btn-info btn-icon-split btn-sm">
-                    <span class="icon text-white-50">
-                      <i class="fas fa-plus"></i>
-                    </span>
-                    <span class="text">Thêm cửa hàng</span>
-                  </Link>
-                </div>
+              {typeof isShow == "undefined" ? (
+                <div ></div>
+              ) : isShow == true ? (
+                <div className="container-fluid" style={{ width: "60%" }}>
+                  <Alert
+                    type={Types.ALERT_UID_STATUS}
+                    alert={this.props.alert}
+                  />
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <h4 className="h4 title_content mb-0 text-gray-800">
+                      Danh sách cửa hàng
+                    </h4>{" "}
+                    <Link to="/store/create" class="btn btn-info btn-icon-split btn-sm">
+                      <span class="icon text-white-50">
+                        <i class="fas fa-plus"></i>
+                      </span>
+                      <span class="text">Thêm cửa hàng</span>
+                    </Link>
+                  </div>
 
-                <br></br>
-                <div className="card shadow mb-4">
-                
-                  <div className="card-body">
-                    <ListStore handleDelCallBack={this.handleDelCallBack} data={this.props.stores} />
+                  <br></br>
+                  <div className="card shadow mb-4">
 
+                    <div className="card-body">
+                      <ListStore handleDelCallBack={this.handleDelCallBack} data={this.props.stores} />
+
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) : (
+                <NotAccess />
+              )}
             </div>
 
             <Footer />
@@ -100,8 +119,9 @@ const mapStateToProps = (state) => {
     stores: state.storeReducers.store.allStore,
     auth: state.authReducers.login.authentication,
     alert: state.storeReducers.alert.alert_success,
-    loading : state.loadingReducers.disable,
-    loading_lazy : state.loadingReducers.disable_lazy
+    loading: state.loadingReducers.disable,
+    loading_lazy: state.loadingReducers.disable_lazy,
+    permission: state.authReducers.permission.data
 
   };
 };

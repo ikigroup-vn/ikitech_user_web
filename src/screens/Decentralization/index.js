@@ -40,9 +40,9 @@ class Decentralization extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.state.isLoading != true && typeof this.props.permission.product_list != "undefined") {
       var permissions = this.props.permission
-      var insert = permissions.decentralization_add 
-      var update = permissions.decentralization_update 
-      var _delete = permissions.decentralization_remove 
+      var insert = permissions.decentralization_list 
+      var update = permissions.decentralization_list 
+      var _delete = permissions.decentralization_list 
       var isShow = permissions.decentralization_list
 
       this.setState({ isLoading: true , insert,update,_delete , isShow })

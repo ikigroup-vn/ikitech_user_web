@@ -154,7 +154,15 @@ class Supplier extends Component {
       })
     }
 
+    if (
+      this.state.isLoading != true &&
+      typeof nextProps.permission.product_list != "undefined"
+    ) {
+      var permissions = nextProps.supplier;
 
+      var isShow = permissions.supplier;
+      this.setState({ isLoading: true, isShow });
+    }
 
   }
   handleOnClick = (e) => {
@@ -229,7 +237,7 @@ class Supplier extends Component {
   }
   render() {
     var { province } = this.props
-    var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards } = this.state;
+    var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards,isShow } = this.state;
     var { txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state;
 
     console.log(this.props.supplier)
@@ -338,8 +346,8 @@ class Supplier extends Component {
         </div>
 
         <div class="box-footer">
-                <button
-                  class="btn btn-primary btn-sm"
+        <button
+                  class={`btn btn-primary btn-sm ${isShow == true ? "show" : "hide"}`}
                   onClick={this.handleOnClick}
                 >
                   <i class="fa fa-save"></i> Lưu

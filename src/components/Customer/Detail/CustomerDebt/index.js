@@ -86,7 +86,16 @@ class Footer extends Component {
     this.setState({ revenueExpendituresValue: data });
   };
   componentWillReceiveProps(nextProps) {
+    if (
+      this.state.isLoading != true &&
+      typeof nextProps.permission.add_revenue != "undefined"
+    ) {
+      var permissions = nextProps.permission;
+      var add_revenue = permissions.add_revenue;
+      var add_expenditure = permissions.add_expenditure
+      this.setState({ isLoading: true , add_revenue , add_expenditure });
 
+    }
     if (this.props.reportExpenditure !== nextProps.reportExpenditure) {
       const { datePrime } = this.state;
 
@@ -218,6 +227,8 @@ class Footer extends Component {
       reset,
       total,
       datePrime,
+      add_revenue,
+      add_expenditure
     } = this.state;
     var {
       // revenueExpenditures,
@@ -242,7 +253,7 @@ class Footer extends Component {
             <a
               data-toggle="modal"
               data-target="#modalRevenue"
-              class={`btn btn-info btn-icon-split btn-sm ${true ? "show" : "hide"
+              class={`btn btn-info btn-icon-split btn-sm ${add_revenue == true ? "show" : "hide"
                 }`}
               style={{ marginRight: "1rem" }}
             >
@@ -259,7 +270,7 @@ class Footer extends Component {
             <a
               data-toggle="modal"
               data-target="#modalExpenditures"
-              class={`btn btn-danger btn-icon-split btn-sm ${true ? "show" : "hide"
+              class={`btn btn-danger btn-icon-split btn-sm ${add_expenditure ==true ? "show" : "hide"
                 }`}
             >
               <span
@@ -394,6 +405,7 @@ const mapStateToProps = (state) => {
         .status,
     customer: state.customerReducers.customer.customerID,
     bills: state.billReducers.bill.allBill,
+    permission: state.authReducers.permission.data,
 
     theme: state.themeReducers.theme,
 

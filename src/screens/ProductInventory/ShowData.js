@@ -16,6 +16,8 @@ class ShowData extends Component {
     }
 
     handleEditStockElement = (element, distribute) => {
+     
+
         this.props.handleCallBackElement({
             element: element, idProduct: this.props.data.id, NameDistribute: distribute, time: Date()
         })
@@ -26,6 +28,8 @@ class ShowData extends Component {
         })
     }
     handleEditStockProduct = (data) => {
+        // console.log(data)
+        // data.inventory.main_stock = typeof data.inventory.main_stock !== "undefined"  ? Math.floor(data.inventory.main_stock) : 0
         this.props.handleCallBackProduct({ data, time: Date() })
     }
     historyInventorys = (subElement, element, nameDistribute) => {

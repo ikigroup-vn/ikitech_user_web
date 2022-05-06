@@ -85,13 +85,16 @@ class ShowData extends Component {
                                         <div className='name-distribute' >{element.name},{sub_element.name}</div>
                                     </td>
                                     <td className='item' >
-                                        {format(Number(cost_of_capital))}
+                                        {formatNoD(Number(cost_of_capital))}
                                     </td>
                                     <td className='item' >
                                         {formatNoD(stock)}
                                     </td>
                             
-
+                                    <td className='item' >
+                                        {formatNoD(stock *cost_of_capital)}
+                                    </td>
+                            
                                 </tr>
                             )
 
@@ -110,10 +113,13 @@ class ShowData extends Component {
                                     <div className='name-distribute' >{element.name}</div>
                                 </td>
                                 <td className='item' >
-                                    <div className='price-distribute' >{format(Number(element.cost_of_capital))}</div>
+                                    <div className='price-distribute' >{formatNoD(Number(element.cost_of_capital))}</div>
                                 </td>
                                 <td className='item' >
                                     <div className='quantity-distribute' >{formatNoD(element.stock)}</div>
+                                </td>
+                                <td className='item' >
+                                    <div className='quantity-distribute' >{formatNoD(element.stock  * element.cost_of_capital)}</div>
                                 </td>
                            
 
@@ -154,15 +160,22 @@ class ShowData extends Component {
                         <>
                             <td></td>
                             <td></td>
+                            <td></td>
+
                         </> :
                         <>
                                 <td>
-                                {format(Number(data.inventory.main_cost_of_capital))}
+                                {formatNoD(Number(data.inventory.main_cost_of_capital))}
 
                             </td>
                        
                              <td>
                                 {formatNoD(data.inventory.main_stock)}
+
+                            </td>
+
+                            <td>
+                                {formatNoD(data.inventory.main_cost_of_capital * data.inventory.main_stock)}
 
                             </td>
                

@@ -152,7 +152,9 @@ export const ikipos_menu = [
                 exact: true,
                 to: "/supplier",
             },
-            {
+            {   
+                class: ["add_revenue", "add_expenditure"],
+
                 name: "Thu chi",
                 display: "hide",
                 icon: "fa fa-money",
