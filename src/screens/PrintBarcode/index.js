@@ -14,17 +14,31 @@ import ModalEdit from "../../components/Customer/ModalEdit"
 import './barcode_style.css'
 import ReactToPrint from 'react-to-print';
 import BarcodePagePrint from "./ComponentPrint/BarcodePagePrint";
+import { AsyncPaginate } from "react-select-async-paginate";
+import CardProduct from "../../components/Pos_Order/CardProduct";
+import Table from "./Tablet";
+import * as productApi from "../../data/remote/product";
+import { getBranchId } from "../../ultis/branchUtils";
+import * as profileAction from "../../actions/profile"
+import * as dashboardAction from "../../actions/dashboard"
+import * as branchAction from "../../actions/branch"
+import * as productAction from "../../actions/product"
+import { randomString } from "../../ultis/helpers";
+
 class PrintBarcode extends Component {
   constructor(props) {
     super(props);
     this.state = {
-
+      products: [],
+      showPrice: true,
+      showName: true,
     };
   }
 
 
 
   componentWillReceiveProps(nextProps) {
+
 
   }
 
@@ -177,7 +191,7 @@ class PrintBarcode extends Component {
 
 
     return data.map((item) =>
-      <div className="col-6">
+      <div key={randomString(10)} className="col-6">
         <div class="card-body" style={{
           border: "1px solid rgba(0,0,0,.125)",
           borderRadius: "0.25rem",
@@ -196,7 +210,7 @@ class PrintBarcode extends Component {
           }}>- {item.size}</div>
           <img height={80} src={item.image} class="image-option-print"></img>
           <ReactToPrint
-          
+
             trigger={() => {
               return <button style={{
                 marginTop: 8,
@@ -212,12 +226,12 @@ class PrintBarcode extends Component {
               <BarcodePagePrint
                 key={item.name}
                 isA4={item.isA4}
-                count={360}
                 ref={el => (item.componentRef = el)}
                 widthPrint={item.widthPrint}
                 heightPrint={item.heightPrint}
                 column={item.column}
                 row={item.row}
+                products={this.state.products}
               />
 
             }
@@ -228,10 +242,130 @@ class PrintBarcode extends Component {
     )
   }
 
+  loadProducts = async (search, loadedOptions, { page }) => {
+
+
+
+    var { store_code } = this.props.match.params;
+    var branch_id = getBranchId();
+
+    const params = `&search=${search}`;
+    const res = await productApi
+      .fetchAllProductV2(store_code, branch_id, page, params);
+
+
+    if (res.status != 200) {
+      return {
+        options: [],
+        hasMore: false,
+      }
+    }
+
+    return {
+      options: res.data.data.data.map((i) => {
+        return {
+          value: i.id,
+          label: `${i.name}`,
+          product: i
+        };
+      }),
+
+      hasMore: res.data.data.data.length == 20,
+      additional: {
+        page: page + 1,
+      },
+    };
+  };
+
+
+  onChangeProduct = (selectValue) => {
+    if (selectValue != null && selectValue.product != null) {
+      var data = selectValue?.product
+
+      var index = this.state.products.findIndex(pro => pro.id === data?.id);
+      if (index == -1) {
+        data.quantity = 1;
+        this.state.products.push(data)
+        this.setState({
+          ...this.state,
+          products: this.state.products
+        })
+      }
+
+
+    }
+
+  };
+
+  onChangeQuantity = (productId, quantity) => {
+
+    var index = this.state.products.findIndex(pro => pro.id === productId);
+    if (index != -1) {
+      this.state.products[index].quantity = quantity;
+      this.setState({
+        ...this.state,
+        products: this.state.products
+      })
+    }
+  }
+
+  removeProduct = (productId) => {
+    var index = this.state.products.findIndex(pro => pro.id === productId);
+    if (index != -1) {
+      this.state.products.splice(index, 1);
+      this.setState({
+        ...this.state,
+        products: this.state.products
+      })
+    }
+  }
+
+  handChangeCheckbox = (e) => {
+
+    var name = e.target.name
+    if (name == "showName") {
+      this.setState({
+        [e.target.name]: !this.state.showName,
+      });
+    }
+
+    if (name == "showPrice") {
+      this.setState({
+        [e.target.name]: !this.state.showPrice,
+      });
+    }
+
+  }
+
+
   render() {
-    var { store_code } = this.props;
+    var { store_code } = this.props.match.params;
+
+    const customStyles = {
+      menu: styles => ({
+        ...styles,
+        width: '600px',
+
+      }),
+      option: (provided, state) => ({
+        ...provided,
+        borderBottom: '1px dotted pink',
+        fontWeight: 200,
+        padding: 20,
+        color: "black",
+      }),
+    }
+
+    const formatOptionLabel = ({ value, label, product }) => {
+
+      return <CardProduct isItemSearch={true} product={product} />
+    };
 
 
+
+
+
+    const { products, showName, showPrice } = this.state
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
@@ -279,6 +413,49 @@ class PrintBarcode extends Component {
                     <div className="card-header py-3"><h6 className="m-0 title_content font-weight-bold text-primary">Sản phẩm tự chọn</h6></div>
 
 
+                    <div style={{
+                      padding: 15
+                    }}>
+                      <AsyncPaginate
+                        autoFocus
+                        selectRef={(ref) => {
+                          this.refSearchProduct = ref;
+                        }}
+                        noOptionsMessage={() => 'Không tìm thấy sản phẩm nào'}
+                        loadingMessage={() => 'Đang tìm...'}   //minor type-O here
+                        placeholder="Tìm kiếm sản phẩm"
+                        value={null}
+                        loadOptions={this.loadProducts}
+                        formatOptionLabel={formatOptionLabel}
+                        id="recipientReferences1"
+                        onChange={this.onChangeProduct}
+                        additional={{
+                          page: 1,
+                        }}
+                        styles={customStyles}
+                        debounceTimeout={500}
+                        isClearable
+                        isSearchable
+                      />
+                    </div>
+
+
+                    <div class="card-body">
+                      <Table
+                        // insert={insert}
+                        // _delete={_delete}
+                        // update={update}
+                        // page={page}
+                        handleDelCallBack={this.handleDelCallBack}
+                        handleMultiDelCallBack={this.handleMultiDelCallBack}
+                        store_code={store_code}
+                        products={products}
+                        onChangeQuantity={this.onChangeQuantity}
+                        removeProduct={this.removeProduct}
+                      />
+
+                    </div>
+
                   </div>
 
 
@@ -289,34 +466,39 @@ class PrintBarcode extends Component {
 
                       <div className="card-body">
                         <div class="custom-control custom-switch">
-                          <input type="checkbox" class="custom-control-input" id="switch1" disabled name="example" checked={this.state.is_use_points} onChange={this.handChangeCheckbox} />
+                          <input type="checkbox" class="custom-control-input" id="switch1" disabled name="example" checked={true} onChange={this.handChangeCheckbox} />
                           <label class="custom-control-label" for="switch1">Mã barcode</label>
                         </div>
                         <div class="custom-control custom-switch">
-                          <input type="checkbox" class="custom-control-input" id="switch1" name="example" checked={this.state.is_use_points} onChange={this.handChangeCheckbox} />
-                          <label class="custom-control-label" for="switch1">Tên sản phẩm</label>
+                          <input type="checkbox" class="custom-control-input" id="showName" name="showName" checked={this.state.showName} onChange={this.handChangeCheckbox} />
+                          <label class="custom-control-label" for="showName">Tên sản phẩm</label>
                         </div>
                         <div class="custom-control custom-switch">
-                          <input type="checkbox" class="custom-control-input" id="switch1" name="example" checked={this.state.is_use_points} onChange={this.handChangeCheckbox} />
-                          <label class="custom-control-label" for="switch1">Giá bán</label>
+                          <input type="checkbox" class="custom-control-input" id="showPrice" name="showPrice" checked={this.state.showPrice} onChange={this.handChangeCheckbox} />
+                          <label class="custom-control-label" for="showPrice">Giá bán</label>
                         </div>
-                        <div class="custom-control custom-switch">
+                        {/* <div class="custom-control custom-switch">
                           <input type="checkbox" class="custom-control-input" id="switch1" name="example" checked={this.state.is_use_points} onChange={this.handChangeCheckbox} />
                           <label class="custom-control-label" for="switch1">Khổ rộng</label>
-                        </div>
+                        </div> */}
+
 
 
                         <div className="barcode-wrap">
-                          <Barcode
-                            fontSize={10}
-                            width={0.7}
-                            textMargin={2}
-                            height={52}
-                            text="dsadasd"
-                            textPosition={"top"}
-                            displayValue={true}
-                            value="http://github.com/kciter" />
 
+                          {showName && <div>Tên sản phẩm</div>}
+
+                          <Barcode
+                            fontSize={0}
+                            width={0.7}
+                            textMargin={0}
+                            height={52}
+                            textPosition={"top"}
+                            displayValue={false}
+                            value="123456789123456" />
+
+
+                          {showPrice && <p>1.000.000</p>}
                         </div>
 
 
@@ -325,7 +507,8 @@ class PrintBarcode extends Component {
                     </div>
 
 
-                    <div className="card shadow mb-4 ">
+
+                    {<div className="card shadow mb-4 ">
                       <div className="card-header py-3"><h6 className="m-0 title_content font-weight-bold text-primary">Chọn khổ giấy và in</h6></div>
 
 
@@ -334,6 +517,8 @@ class PrintBarcode extends Component {
                       </div>
 
                     </div>
+
+                    }
 
                   </div>
 
@@ -344,9 +529,7 @@ class PrintBarcode extends Component {
 
 
               </div>
-              ) : (
-              <NotAccess />
-              )
+
             </div>
 
             <Footer />
@@ -361,12 +544,28 @@ class PrintBarcode extends Component {
 
 const mapStateToProps = (state) => {
   return {
-
+    listPos: state.posReducers.pos_reducer.listPosOrder,
+    branchStore: state.storeReducers.store.branchStore,
+    user: state.userReducers.user.userID,
+    currentBranch: state.branchReducers.branch.currentBranch
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
 
+    fetchAllProductV2: (store_code, branch_id, page, params) => {
+      dispatch(productAction.fetchAllProductV2(store_code, branch_id, page, params));
+
+    },
+    fetchBranchStore: (store_code) => {
+      dispatch(dashboardAction.fetchBranchStore(store_code))
+    },
+    fetchUserId: () => {
+      dispatch(profileAction.fetchUserId());
+    },
+    changeBranch: (branchData) => {
+      dispatch(branchAction.changeBranch(branchData))
+    }
 
   };
 };

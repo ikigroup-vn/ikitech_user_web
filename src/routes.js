@@ -442,12 +442,7 @@ const routes = [
 
     main: ({ match }) => <Customer match={match} />,
   },
-  {
-    path: "/product/print_barcode/:store_code",
-    exact: true,
 
-    main: ({ match }) => <PrintBarcode match={match} />,
-  },
   {
     path: "/customer/detail/:store_code/:customerId",
     exact: true,
@@ -470,6 +465,12 @@ const routes = [
     exact: true,
 
     main: ({ match }) => <RewardPoint match={match} />,
+  },
+  {
+    path: "/product/print_barcode/:store_code",
+    exact: true,
+
+    main: ({ match, history }) => <PrintBarcode match={match} history={history} />,
   },
   {
     path: "/product/index/:store_code/:page?",
