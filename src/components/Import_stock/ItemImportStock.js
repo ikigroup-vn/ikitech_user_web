@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { format, formatNumber } from '../../ultis/helpers'
+import { format, formatNumber , formatNoD } from '../../ultis/helpers'
 import { shallowEqual } from '../../ultis/shallowEqual'
 
 class ItemImportStock extends Component {
@@ -112,7 +112,7 @@ class ItemImportStock extends Component {
                 </div>
                 <div style={{ display: "flex", marginTop: "10px" }}>
                     <div className='price-order' style={{ color: "gray", marginRight: "5px", width: "75%" }}>Giá nhập:</div>
-                    <input type="text" name="import_price" class="form-importStock" id="usr" style={{ height: "28px", width: "100px", textAlign: "right", borderRadius: 0, borderBottom: "1px solid rgb(128 128 128 / 71%)" }} value={import_price} onChange={this.onChange} />
+                    <input type="text" name="import_price" class="form-importStock" id="usr" style={{ height: "28px", width: "100px", textAlign: "right", borderRadius: 0, borderBottom: "1px solid rgb(128 128 128 / 71%)" }} value={format(import_price.toFixed())} onChange={this.onChange} />
                 </div>
             </div>
         )

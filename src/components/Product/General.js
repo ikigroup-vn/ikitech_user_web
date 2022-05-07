@@ -56,7 +56,7 @@ class General extends Component {
                                     <div className="h5 mb-0 font-weight-bold text-gray-800">{total_stoking + total_out_of_stock}</div>
                                 </div>
                                 <div className="col-auto">
-                                    <i className="fas fa-file-invoice fa-2x text-gray-300"></i>
+                                <i className="fas fa-boxes fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>
@@ -73,7 +73,7 @@ class General extends Component {
                                     <div className="h5 mb-0 font-weight-bold text-gray-800">{total_product_or_discount_nearly_out_stock}</div>
                                 </div>
                                 <div className="col-auto">
-                                    <i className="fas fa-eye-slash fa-2x text-gray-300"></i>
+                                <i className="fas fa-boxes fa-2x text-gray-300"></i>
                                 </div>
                             </div>
                         </div>
