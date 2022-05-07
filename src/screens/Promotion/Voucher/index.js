@@ -20,7 +20,7 @@ class Voucher extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      is_end: 0,
+      is_end: 2,
       modal: {
         table: "",
         id: "",
@@ -138,8 +138,9 @@ class Voucher extends Component {
                           value={is_end}
                           onChange={this.onChange}
                         >
+                                                    <option value="2">Đang diễn ra</option>
+
                           <option value="0">Chuẩn bị diễn ra</option>
-                          <option value="2">Đang diễn ra</option>
 
                           <option value="1">Đã kết thúc</option>
                         </select>

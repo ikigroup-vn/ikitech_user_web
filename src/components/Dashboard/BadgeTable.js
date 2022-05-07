@@ -146,7 +146,7 @@ class BadgeTable extends Component {
             <div class="form-group" style={{ fontSize: "15px" }}>
                 <div class="info-badge" >
                     <p class="item-detail-badges" id="sale_user_name">
-                        <Link to={`/order/${store_code}?time_from=${getDDMMYYYNow()}&time_to=${getDDMMYYYNow()}`}>Đơn hàng trong ngày </Link> <span id="user_name">
+                        <Link to={`/order/${store_code}?from=${moment().format("DD-MM-YYYY")}&to=${moment().format("DD-MM-YYYY")}`}>Đơn hàng trong ngày </Link> <span id="user_name">
                             <span
 
                                 className={`step num-badge ${statusTotalOrdersInDay}`}
