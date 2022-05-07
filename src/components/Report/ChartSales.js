@@ -176,7 +176,7 @@ class Chart extends Component {
         typeChartShow = "ALL";
         chartData.labels = labels_all;
         chartData.datasets[0].data = dataSets_all_prime;
-        chartData.datasets[0].backgroundColor = "blue";
+        chartData.datasets[0].backgroundColor = "#17a2b8";
         chartData.datasets[0].label = "prime";
 
         chartData.datasets[1].data = dataSets_all_compare;
@@ -596,7 +596,7 @@ class Chart extends Component {
               style={{
                 width: "54px",
                 height: "15px",
-                background: "blue",
+                background: "#17a2b8",
                 margin: "auto",
               }}
             ></div>

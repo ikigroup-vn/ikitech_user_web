@@ -32,7 +32,15 @@ class General extends Component {
         var total_posts = filter_var(store.total_posts)
         var total_customers = filter_var(store.total_customers)
         var total_unreadNoti = filter_var(badges.notification_unread)
+        var { 
+           
+            total_product_or_discount_nearly_out_stock,
+    
+        } = badges
 
+        // var total_stoking = typeof products.total_stoking == "undefined" ? 0 : products.total_stoking
+        // var total_out_of_stock = typeof products.total_out_of_stock == "undefined" ? 0 : products.total_out_of_stock
+        console.log(badges)
         return (
 
             <div className="row">
@@ -48,8 +56,8 @@ class General extends Component {
                                     <div className="h5 mb-0 font-weight-bold text-gray-800">{format(badges.total_final_in_day)}</div>
                                 </div>
                                 <div className="col-auto">
-                                <i class="fas fa-money-bill text-gray-300 fa-2x"></i>
-                                                                </div>
+                                    <i class="fas fa-money-bill text-gray-300 fa-2x"></i>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -173,7 +181,7 @@ class General extends Component {
                                 </div>
                                 <div className="col-auto">
                                     <i className="fas fa-receipt fa-2x text-gray-300"></i>
-                              
+
                                 </div>
                             </div>
                         </div>
@@ -200,6 +208,26 @@ class General extends Component {
                         </div>
                     </div>
                 }
+
+                    {/* <div className="col-xl-3 col-md-6 mb-4" >
+                    <div className="card border-left-primary shadow h-100 py-2">
+                        <div className="card-body set-padding ">
+                            <div className="row no-gutters align-items-center">
+                                <div className="col mr-2">
+                                    <div className=" font-weight-bold text-primary text-uppercase mb-1">
+                                        Tất cả sản phẩm</div>
+                                    <div className="h5 mb-0 font-weight-bold text-gray-800">{total_stoking + total_out_of_stock}</div>
+                                </div>
+                                <div className="col-auto">
+                                    <i className="fas fa-file-invoice fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> */}
+
+        
+
             </div>
         );
     }

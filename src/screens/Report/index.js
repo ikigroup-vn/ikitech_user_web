@@ -118,6 +118,7 @@ class Report extends Component {
                                             {getChannel() == IKIPOS && <GeneralPos
                                badges={badges}
                                store_code={store_code}
+                               store={this.props.store} 
                             
                                 />}
                           </div>

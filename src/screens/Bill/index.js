@@ -86,7 +86,9 @@ class Bill extends Component {
           : `&field_by=payment_status_code&field_by_value=${status_code}`;
     if(from && to)
     {
-      params = params + `&time_from=${moment(from, "DD-MM-YYYY").format("YYYY-MM-DD")}&time_to=${moment(to, "DD-MM-YYYY").format("YYYY-MM-DD")}`
+      from = moment(from, "DD-MM-YYYY").format("YYYY-MM-DD")
+      to = moment(to, "DD-MM-YYYY").format("YYYY-MM-DD")
+      params = params + `&time_from=${from}&time_to=${to}`
       this.setState({time_from : from, time_to : to})
     }
 
@@ -338,11 +340,18 @@ class Bill extends Component {
                               </span>{" "}
                               &nbsp;&nbsp;
                               <DateRangePickerComponent
+                       value={[new Date(moment(time_from , "YYYY-MM-DD")) , new Date(moment(time_to , "YYYY-MM-DD"))]}
+                       id="daterangepicker"
+                       placeholder="Khoảng thời gian..."
+                       format="dd/MM/yyyy"
+                        onChange={this.onchangeDateFromTo}
+                      />
+                              {/* <DateRangePickerComponent
                                 id="daterangepicker"
                                 placeholder="Khoảng thời gian..."
                                 format="dd/MM/yyyy"
                                 onChange={this.onchangeDateFromTo}
-                              />
+                              /> */}
                             </p>
                       </div>
 
