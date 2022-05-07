@@ -22,7 +22,7 @@ import { randomString } from "../../ultis/helpers";
 import Shopee from "../../components/Product/Ecomerce/Shopee";
 import Sendo from "../../components/Product/Ecomerce/Sendo";
 import getChannel, { IKITECH, IKIPOS } from "../../ultis/channel";
-import {getQueryParams} from "../../ultis/helpers"
+import { getQueryParams } from "../../ultis/helpers"
 
 class Product extends Component {
   constructor(props) {
@@ -66,8 +66,7 @@ class Product extends Component {
     const branch_id = localStorage.getItem("branch_id");
     var is_near_out_of_stock = getQueryParams("is_near_out_of_stock")
     var params = null
-    if(is_near_out_of_stock)
-    {
+    if (is_near_out_of_stock) {
       params = params + `&is_near_out_of_stock=true`
     }
     if (
@@ -292,7 +291,18 @@ class Product extends Component {
                             </div>
                           )
                         }
-
+                        <Link
+                          to={`/product/print_barcode/${store_code}`}
+                          style={{ marginRight: "10px" }}
+                          class={`btn btn-info btn-icon-split btn-sm ${insert == true ? "show" : "hide"
+                          
+                            }`}
+                        >
+                          <span class="icon text-white-50">
+                            <i class="fas fa-barcode"></i>
+                          </span>
+                          <span class="text">In mã vạch</span>
+                        </Link>
                         <a
                           style={{ marginRight: "10px" }}
                           onClick={this.fetchAllListProduct}

@@ -26,6 +26,7 @@ class Topbar extends Component {
   componentDidMount() {
     this.props.fetchBranchStore(this.props.store_code);
     const branch_id = getBranchId()
+
     
       this.props.fetchAllBadge(this.props.store_code, branch_id);
 
