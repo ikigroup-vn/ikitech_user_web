@@ -471,7 +471,9 @@ class PostOrder extends Component {
         if (this.props.loadingOrder == false && nextProps.loadingOrder == false) {
             if (nextProps.allowAutoPrint == true && this.printed != true) {
                 this.props.disablePrint();
-                history.push('/order/print/chinhbv/' + this.props.orderAfterPayment.order_code + "?defaultHrefBack=" + btoa(window.location.pathname))
+                var { store_code } = this.props.match.params;
+                
+                history.push('/order/print/' + store_code +'/' + this.props.orderAfterPayment.order_code + "?defaultHrefBack=" + btoa(window.location.pathname))
 
             }
         }

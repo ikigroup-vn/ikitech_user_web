@@ -29,6 +29,35 @@ export const ikipos_menu = [
             },
 
             {
+                name: "Báo cáo",
+
+                icon: "fas fa-chart-bar",
+                open: "report",
+                children: [
+                    {
+                        class: "report_overview",
+                        display: "hide",
+                        name: "Báo cáo chung",
+                        exact: true,
+                        to: "/report",
+                    },
+                    {
+                        class: "report_inventory",
+                        display: "hide",
+                        name: "Báo cáo kho ",
+                        exact: true,
+                        to: "/report_inventory",
+                    },
+                    {
+                        class: "report_finance",
+                        display: "hide",
+                        name: "Báo cáo tài chính",
+                        exact: true,
+                        to: "/report_finance",
+                    },
+                ],
+            },
+            {
                 name: "Sản phẩm",
 
                 icon: "fas fa-th-large",
@@ -59,35 +88,7 @@ export const ikipos_menu = [
                 ],
             },
 
-            {
-                name: "Báo cáo",
-
-                icon: "fas fa-chart-bar",
-                open: "report",
-                children: [
-                    {
-                        class: "report_overview",
-                        display: "hide",
-                        name: "Báo cáo chung",
-                        exact: true,
-                        to: "/report",
-                    },
-                    {
-                        class: "report_inventory",
-                        display: "hide",
-                        name: "Báo cáo kho ",
-                        exact: true,
-                        to: "/report_inventory",
-                    },
-                    {
-                        class: "report_finance",
-                        display: "hide",
-                        name: "Báo cáo tài chính",
-                        exact: true,
-                        to: "/report_finance",
-                    },
-                ],
-            },
+      
 
             {
                 name: "Kho hàng",

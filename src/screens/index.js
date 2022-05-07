@@ -111,7 +111,7 @@ class Store extends Component {
 
   render() {
     var { stores } = this.props;
-    console.log(this.props.loadingBranch, this.props.currentBranch, stores.store_code, getBranchId(),stores)
+    console.log(this.props.loadingBranch, this.props.currentBranch, stores.store_code, getBranchId(), stores)
     if (this.props.auth) {
 
       if (stores != null && stores.data?.length == 0) {
@@ -127,9 +127,9 @@ class Store extends Component {
         this.state.store_code != null &&
         typeof getBranchId() != "undefined") {
         return <Redirect to={`/dashboard/${this.state.store_code}`} />;
-      } 
-
-
+      } if (stores != null && stores.length == 0 && this.props.loadingBranch == false) {
+        return <Redirect to={`/home`} />;
+      }
       else {
         return <Loading />;
 

@@ -109,31 +109,9 @@ class Topbar extends Component {
     }
     handleCreateTab = () => {
 
-
-        var nextNum = 1;
-
-        if (this.props.listPos.length > 0) {
-            var listNum = [];
-            for (const pos of this.props.listPos) {
-                var ret = Number((pos['name']).match(/\d+$/));
-                ret = removeSignNumber(ret)
-                listNum.push(ret);
-            }
-
-
-            console.log(listNum)
-            while (listNum.includes(nextNum)) {
-                nextNum = nextNum + 1;
-            }
-        }
-
-        const namePos = `Hóa đơn ${nextNum}`
         const branch_id = localStorage.getItem("branch_id")
-        const nameTab = {
-            name: namePos
-        }
         const { store_code } = this.props
-        this.props.createOneTab(store_code, branch_id, nameTab)
+        this.props.createOneTab(store_code, branch_id, null)
 
 
     }
