@@ -57,7 +57,7 @@ export const fetchAllGeneralSetting = (store_code) => {
 };
 
 export const fetchAllBadge = (store_code,branch_id) => {
-  if(branch_id == null) return;
+  // if(branch_id == null) return;
   return (dispatch) => {
     // dispatch({
     //   type: Types.SHOW_LOADING,
@@ -79,8 +79,19 @@ export const fetchAllBadge = (store_code,branch_id) => {
         type: Types.FETCH_PERMISSION,
         data : typeof res.data.data != "undefined" && res.data.data.decentralization != null  ? res.data.data.decentralization : {}
       });
+      dispatch({
+        type: Types.LOAD_PERMISSION,
+        data : true
+      });
     }
-    });
+    }).catch(function (error) {
+
+      dispatch({
+        type: Types.LOAD_PERMISSION,
+        data : true
+      });
+    })
+  
   };
 };
 

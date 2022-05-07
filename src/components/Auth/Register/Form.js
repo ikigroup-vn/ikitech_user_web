@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 
 import * as Types from "../../../constants/ActionType"
 import * as auth from "../../../actions/auth"
-import { isEmpty , isPhone , isEmail , isSpecialCharactor , countString } from "../../../ultis/helpers"
-import {getQueryParams} from "../../../ultis/helpers"
+import { isEmpty, isPhone, isEmail, isSpecialCharactor, countString } from "../../../ultis/helpers"
+import { getQueryParams } from "../../../ultis/helpers"
 
 class Form extends Component {
   constructor(props) {
@@ -16,15 +16,18 @@ class Form extends Component {
       txtEmail: "",
       txtPassword: "",
       txtCPassword: "",
+      toggle: false,
+      toggleC: false,
+
+      iconShow: "fa fa-fw fa-eye",
+      iconHide: "fa fa-fw fa-eye-slash",
     };
   }
 
-  componentWillMount()
-  {
+  componentWillMount() {
     var redirect_register = getQueryParams("redirect_register")
-    if(redirect_register && typeof this.props.user.phone_number != "undefined")
-    {
-      var {user} = this.props
+    if (redirect_register && typeof this.props.user.phone_number != "undefined") {
+      var { user } = this.props
       this.setState({
         txtName: user.name,
         txtPhone: user.phone_number,
@@ -34,8 +37,13 @@ class Form extends Component {
       })
     }
   }
+  toggleCPassword = () => {
+    this.setState({ toggleC: !this.state.toggleC })
+  }
 
-
+  togglePassword = () => {
+    this.setState({ toggle: !this.state.toggle })
+  }
 
   onChange = (e) => {
     var target = e.target;
@@ -50,7 +58,7 @@ class Form extends Component {
   onSave = (e) => {
     e.preventDefault();
     var { txtName, txtEmail, txtPhone, txtPassword, txtCPassword } = this.state;
-    if (!isEmpty(txtName) || !isEmpty(txtPassword)  || !isEmpty(txtPhone)) {
+    if (!isEmpty(txtName) || !isEmpty(txtPassword) || !isEmpty(txtPhone)) {
       this.props.alert({
         type: Types.ALERT_UID_STATUS,
         alert: {
@@ -62,8 +70,7 @@ class Form extends Component {
       });
     }
     else {
-      if(!isEmail(txtEmail) && isEmpty(txtEmail))
-      {
+      if (!isEmail(txtEmail) && isEmpty(txtEmail)) {
         this.props.alert({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -75,21 +82,31 @@ class Form extends Component {
         });
         return;
       }
-      if(countString(txtPassword) < 7)
-      {
+      if (this.state.txtCPassword !== this.state.txtPassword) {
         this.props.alert({
           type: Types.ALERT_UID_STATUS,
           alert: {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: "Mật khẩu phải lớn hơn 6  ký tự",
+            content: "Nhập lại mật khẩu không hợp lệ",
           },
         });
         return;
       }
-      if(!isPhone(txtPhone))
-      {
+      if (countString(txtPassword) < 6) {
+        this.props.alert({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: "Mật khẩu phải ít nhất 6 ký tự",
+          },
+        });
+        return;
+      }
+      if (!isPhone(txtPhone)) {
         this.props.alert({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -101,8 +118,7 @@ class Form extends Component {
         });
         return;
       }
-      if(!isSpecialCharactor(txtName))
-      {
+      if (!isSpecialCharactor(txtName)) {
         this.props.alert({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -134,6 +150,8 @@ class Form extends Component {
   render() {
     var { txtName, txtEmail, txtPhone, txtPassword, txtCPassword } = this.state;
     var { products } = this.props
+    var { toggleC, toggle, iconHide, iconShow } = this.state;
+
     console.log(products)
     return (
       <React.Fragment>
@@ -180,27 +198,39 @@ class Form extends Component {
           <div className="form-group row">
             <div className="col-sm-6 mb-3 mb-sm-0">
               <input
-                type="text"
+                type={toggle == true ? "text" : "password"}
                 className="form-control form-control-user"
-                id="txtPassword"
                 placeholder="Mật khẩu"
                 autocomplete="off"
                 name="txtPassword"
                 value={txtPassword}
                 onChange={this.onChange}
               />
+              <span onClick={this.togglePassword} toggle="#password-field" class={toggle ? iconShow : iconHide} style={{
+                float: "right",
+                marginRight: "10px",
+                marginTop: "-30px",
+                position: "relative",
+                zIndex: "2"
+              }}></span>
             </div>
             <div className="col-sm-6">
               <input
-                type="text"
+                type={toggleC == true ? "text" : "password"}
                 className="form-control form-control-user"
-                id="txtPassword"
                 placeholder="Nhập lại mật khẩu"
                 autocomplete="off"
                 name="txtCPassword"
                 value={txtCPassword}
                 onChange={this.onChange}
               />
+              <span onClick={this.toggleCPassword} toggle="#password-field" class={toggleC ? iconShow : iconHide} style={{
+                float: "right",
+                marginRight: "10px",
+                marginTop: "-30px",
+                position: "relative",
+                zIndex: "2"
+              }}></span>
             </div>
           </div>
           <button

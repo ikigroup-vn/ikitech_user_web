@@ -100,37 +100,76 @@ class ModalDetail extends Component {
 
     }
 
+    // handleClickElement = (nameElement, price, index, id) => {
+    //     var sub_element_distribute = this.state.elementObject.sub_element_distributes
+    //     var { sub_element_distributes } = this.state.elementDistributeOj
+    //     var subImport = findImportPriceSub(sub_element_distributes, nameElement)
+    //     if (typeof subImport == "undefined") {
+    //         return;
+    //     } if (this.props.modal.discountProduct) {
+    //         var { value } = this.props.modal.discountProduct
+    //         this.setState({ subElementDistributeSelected: index, element_distributes: nameElement })
+    //         var indexDistribute = sub_element_distribute.map(e => e.name).indexOf(nameElement)
+    //         var sub_element = sub_element_distribute[indexDistribute]
+    //         this.setState({
+    //             // afterChoosePrice: sub_element.price - (sub_element.price * value / 100),
+    //             // priceBeforeDiscount: sub_element.price,
+    //             afterChoosePrice: sub_element.cost_of_capital,
+
+    //             priceBeforeDiscount: sub_element.cost_of_capital,
+    //             quantityInStock: sub_element.stock, messageErr: "",
+    //             idElement: id,
+    //         })
+    //     } else {
+    //         if (sub_element_distribute) {
+    //             this.setState({ subElementDistributeSelected: index, element_distributes: nameElement })
+    //             var indexDistributes = sub_element_distribute.map(e => e.name).indexOf(nameElement)
+    //             var sub_elements = sub_element_distribute[indexDistributes]
+    //             this.setState({
+    //                 afterChoosePrice: subImport.import_price,
+    //                 priceBeforeDiscount: sub_elements?.price,
+    //                 quantityInStock: sub_elements?.stock,
+    //                 idElement: id,
+    //                 messageErr: ""
+    //             })
+    //         } else {
+    //             this.setState({ afterChoosePrice: subImport.import_price, subElementDistributeSelected: index, idElement: id, element_distributes: nameElement, quantityInStock: sub_elements?.stock, })
+    //         }
+
+    //     }
+
+    // }
     handleClickElement = (nameElement, price, index, id) => {
-        var sub_element_distribute = this.state.elementObject.sub_element_distributes
-        var { sub_element_distributes } = this.state.elementDistributeOj
-        var subImport = findImportPriceSub(sub_element_distributes, nameElement)
-        if (typeof subImport == "undefined") {
-            return;
-        } if (this.props.modal.discountProduct) {
+        var { sub_element_distributes } = this.state.elementObject
+        if (this.props.modal.discountProduct) {
             var { value } = this.props.modal.discountProduct
             this.setState({ subElementDistributeSelected: index, element_distributes: nameElement })
-            var indexDistribute = sub_element_distribute.map(e => e.name).indexOf(nameElement)
-            var sub_element = sub_element_distribute[indexDistribute]
+            var indexDistribute = sub_element_distributes.map(e => e.name).indexOf(nameElement)
+            var sub_element = sub_element_distributes[indexDistribute]
             this.setState({
-                afterChoosePrice: sub_element.price - (sub_element.price * value / 100),
-                priceBeforeDiscount: sub_element.price,
+                // afterChoosePrice: sub_element.price - (sub_element.price * value / 100),
+                // priceBeforeDiscount: sub_element.price,
+                afterChoosePrice: sub_element.cost_of_capital,
+
+                priceBeforeDiscount: sub_element.cost_of_capital,
+
                 quantityInStock: sub_element.stock, messageErr: "",
                 idElement: id,
             })
         } else {
-            if (sub_element_distribute) {
+            if (sub_element_distributes) {
                 this.setState({ subElementDistributeSelected: index, element_distributes: nameElement })
-                var indexDistributes = sub_element_distribute.map(e => e.name).indexOf(nameElement)
-                var sub_elements = sub_element_distribute[indexDistributes]
+                var indexDistributes = sub_element_distributes.map(e => e.name).indexOf(nameElement)
+                var sub_elements = sub_element_distributes[indexDistributes]
                 this.setState({
-                    afterChoosePrice: subImport.import_price,
-                    priceBeforeDiscount: sub_elements?.price,
-                    quantityInStock: sub_elements?.stock,
+                    afterChoosePrice: sub_elements.cost_of_capital,
+                    priceBeforeDiscount: sub_elements.price,
+                    quantityInStock: sub_elements.stock,
                     idElement: id,
                     messageErr: ""
                 })
             } else {
-                this.setState({ afterChoosePrice: subImport.import_price, subElementDistributeSelected: index, idElement: id, element_distributes: nameElement, quantityInStock: sub_elements?.stock, })
+                this.setState({ subElementDistributeSelected: index, idElement: id, element_distributes: nameElement ,  quantityInStock: sub_elements?.stock })
             }
 
         }
@@ -264,11 +303,11 @@ class ModalDetail extends Component {
                                                 this.props.modal.minPriceProduct === this.props.modal.maxPriceProduct ?
                                                     format(Number(this.props.modal.minPriceProduct)) : `${format(Number(this.props.modal.minPriceProduct))}-${format(Number(this.props.modal.maxPriceProduct))}` : this.state.minPriceAfterDiscount === this.state.maxPriceAfterDiscount ? `${format(Number(this.state.minPriceAfterDiscount))}` : `${format(Number(this.state.minPriceAfterDiscount))} - ${format(Number(this.state.maxPriceAfterDiscount))}`
                                                 : format(Number(this.state.afterChoosePrice))}</span></div>
-                                        <div className='before-discout' style={{ display: "flex" }} >
+                                        {/* <div className='before-discout' style={{ display: "flex" }} >
                                             <span style={{ fontSize: "13px", textDecoration: "line-through" }}>{inforProduct.discountProduct !== null ?
                                                 this.state.afterChoosePrice === "" ? inforProduct.minPriceProduct === inforProduct.maxPriceProduct ? format(Number(this.state.afterPrice)) : `${format(Number(inforProduct.minPriceProduct))} - ${format(Number(inforProduct.maxPriceProduct))}` : format(Number(this.state.priceBeforeDiscount)) : ""}</span>
                                             <div className='persen-discount' style={{ fontSize: "13px", marginLeft: "10px" }}>{inforProduct.discountProduct !== null ? `- ${inforProduct.discountProduct.value}%` : ""}</div>
-                                        </div>
+                                        </div> */}
                                         <div className='quantity-product' style={{ fontWeight: "bold", fontSize: "13px" }}>
                                         {this.state.quantityInStock === null ? "Còn hàng" : `Còn lại ${this.state.quantityInStock} sản phẩm`}
                                         </div>

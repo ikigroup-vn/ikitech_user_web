@@ -38,7 +38,7 @@ class Table extends Component {
       name: name,
       id: id,
       store_code: store_code,
-      status
+      status : status,
     });
     event.preventDefault();
   };

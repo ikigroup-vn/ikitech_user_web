@@ -220,11 +220,10 @@ class InventoryHistory extends Component {
                     </div>
                     <div className='wap-header' style={{ display: 'flex' }}>
                       <DateRangePickerComponent
-                        value={arrDate}
-
+                        value={[new Date(moment(time_from , "YYYY-MM-DD")) , new Date(moment(time_to , "YYYY-MM-DD"))]}
                         id="daterangepicker"
                         placeholder="Khoảng thời gian..."
-                        format="DD/MM/YYYY"
+                        format="dd/MM/yyyy"
                         onChange={this.onchangeDateFromTo}
                       />
                       {/* <div class="form-group" style={{ display: "flex", alignItems: "center" }}>

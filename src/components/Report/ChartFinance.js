@@ -10,7 +10,7 @@ class ChartFinance extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      chartDataPrime: { labels: [], datasets: [{backgroundColor : "blue"}] },
+      chartDataPrime: { labels: [], datasets: [{backgroundColor : ["blue" , "red"]}] },
       datePrime: "",
       dateCompare: "",
       typeDate: "",
@@ -34,9 +34,13 @@ class ChartFinance extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     if (this.state.datePrime !== nextState.datePrime) {
       const branch_id = localStorage.getItem("branch_id");
+      var datePrime_from = moment(nextState.datePrime.from , "DD-MM-YYYY").format("YYYY-MM-DD") 
+      var datePrime_to = moment(nextState.datePrime.to , "DD-MM-YYYY").format("YYYY-MM-DD") 
+      var dateCompare_from = moment(nextState.dateCompare.from , "DD-MM-YYYY").format("YYYY-MM-DD") 
+      var dateCompare_to = moment(nextState.dateCompare.to , "DD-MM-YYYY").format("YYYY-MM-DD") 
 
-      const params1 = `date_from=${nextState.datePrime.from}&date_to=${nextState.datePrime.to}&branch_id=${branch_id}`;
-      const params2 = `date_from=${nextState.dateCompare.from}&date_to=${nextState.dateCompare.to}&branch_id=${branch_id}`;
+      const params1 = `date_from=${datePrime_from}&date_to=${datePrime_to}&branch_id=${branch_id}`;
+      const params2 = `date_from=${dateCompare_from}&date_to=${dateCompare_to}&branch_id=${branch_id}`;
       const { store_code } = this.props;
 
       this.props.fetchReportProfit(store_code, branch_id, params1);
@@ -51,19 +55,17 @@ class ChartFinance extends Component {
     ) {
       var chartDataState_prime = { ...this.state.chartDataPrime };
       const { datePrime, dateCompare } = this.state;
-      const showDateChoose = `${moment(datePrime.from, "YYYY-MM-DD").format(
-        "DD/MM/YYYY"
-      )} - ${moment(datePrime.to, "YYYY-MM-DD").format("DD/MM/YYYY")}`;
-      const showDateCopare = `${moment(dateCompare.from, "YYYY-MM-DD").format(
-        "DD/MM/YYYY"
-      )} - ${moment(dateCompare.to, "YYYY-MM-DD").format("DD/MM/YYYY")}`;
+      console.log(datePrime, dateCompare)
+      const showDateChoose = datePrime.from + " - " + datePrime.to
+      const showDateCopare = dateCompare.from + " - "  + dateCompare.to
       const showDataCopare = nextProps.reportProfit.profit;
       const showDataChoose = nextProps.compareProfit.profit;
       chartDataState_prime.labels = [showDateCopare, showDateChoose];
 
       chartDataState_prime.datasets[0].data = [showDataChoose, showDataCopare];
-      chartDataState_prime.datasets[0].backgroundColor = "blue";
-      chartDataState_prime.datasets[0].label = "Lợi nhuận";
+      // chartDataState_prime.datasets[0].backgroundColor = "blue";
+      // chartDataState_prime.datasets[0].label = "Lợi nhuận";
+
 
       this.setState({ chartDataPrime: chartDataState_prime });
       this.props.handleCallbackProfit(nextProps.reportProfit.profit);
@@ -185,6 +187,61 @@ class ChartFinance extends Component {
             </div>
           </div>
         </div>
+        <div
+          class="legend"
+          style={{ display: "flex", justifyContent: "center" }}
+        >
+          {/* <div className={disbleCompare} style={{ display: "flex", justifyContent: "center", margin: "0 20px" }}>
+            <div
+              onClick={this.fromAllDate}
+              style={{
+                width: "54px",
+                height: "15px",
+                background: "rgb(142 150 151)",
+                margin: "auto"
+
+              }}></div>
+            <span>&nbsp;&nbsp; Tất cả</span>
+
+          </div> */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              margin: "0 20px",
+            }}
+          >
+            <div
+              style={{
+                width: "54px",
+                height: "15px",
+                background: "blue",
+                margin: "auto",
+              }}
+            ></div>
+            <span>&nbsp;&nbsp; Lợi nhuận</span>
+          </div>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              margin: "0 20px",
+            }}
+          >
+            <div
+              style={{
+                width: "54px",
+                height: "15px",
+                background: "red",
+                margin: "auto",
+              }}
+            ></div>
+            <span>&nbsp;&nbsp; Lợi nhuận</span>
+          </div>
+          {/* <button onClick={this.fromAllDate} type="button" class="btn btn-default">tất cả</button>
+          <button onClick={this.fromPrime} type="button" class="btn btn-default">from</button>
+          <button onClick={this.fromCompare} type="button" class="btn btn-default">to</button> */}
+        </div>
         <Bar
           data={this.showData}
           options={{
@@ -201,6 +258,10 @@ class ChartFinance extends Component {
                   maxBarThickness: 100,
                 },
               ],
+            },
+            legend: {
+              display: false,
+          
             },
           }}
         />

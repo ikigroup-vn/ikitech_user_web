@@ -14,6 +14,7 @@ import { isEmpty } from "../../../../ultis/helpers";
 import moment from "moment";
 import ModalPostDate2 from "../ModalPostDates";
 import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
+import history from "../../../../history";
 class Form extends Component {
   constructor(props) {
     super(props);
@@ -166,6 +167,7 @@ class Form extends Component {
       list_staff_id: arr1,
       list_shift_id: arr2,
     });
+    var typeDate = this.state.typeDate || "DAY"
     this.props.putALot(
       this.props.store_code,
       this.props.branch_id,
@@ -175,10 +177,9 @@ class Form extends Component {
         list_staff_id: arr1,
         list_shift_id: arr2,
       },
-      param
+      param , typeDate
     );
-    var { history } = this.props;
-    history.goBack();
+    history.push(`/calendar_shift/hoqua?type=${typeDate}`);
   };
   handleAddShift = (shift, id, type, onSave = null) => {
     var shifts = [...this.state.listShift];
@@ -411,9 +412,9 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(error);
     },
 
-    putALot: (store_code, branch_id, data, params) => {
+    putALot: (store_code, branch_id, data, params , typeDate) => {
       dispatch(
-        calendarShiftAction.putALot(store_code, branch_id, data, params)
+        calendarShiftAction.putALot(store_code, branch_id, data, params,typeDate)
       );
     },
   };

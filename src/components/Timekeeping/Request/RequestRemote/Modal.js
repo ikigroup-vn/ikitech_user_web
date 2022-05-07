@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as requestRemoteAction from "../../../../actions/request_remote";
+import themeData from "../../../../ultis/theme_data";
+
 class Modal extends Component {
   onSave = (e) => {
     e.preventDefault();
@@ -33,7 +35,8 @@ class Modal extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{ background: "#47d3b0" }}>
+          <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+              <h4 style={{ color: "white" }}>Thông báo</h4>
               <button
                 type="button"
                 class="close"
@@ -67,11 +70,11 @@ class Modal extends Component {
                   Đóng
                 </button>
                 {modal.status === 2 ? (
-                  <button type="submit" class="btn btn-info">
+                  <button type="submit" class="btn btn-warning">
                     Đồng ý
                   </button>
                 ) : (
-                  <button type="submit" class="btn btn-danger">
+                  <button type="submit" class="btn btn-warning">
                     Hủy
                   </button>
                 )}

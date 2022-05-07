@@ -13,7 +13,13 @@ class Form extends Component {
       datePrime: "",
     };
   }
-
+componentDidMount()
+{
+  if(this.props.isMonth == "show")
+  {
+    this.initialState()
+  }
+}
   initialState = () => {
     // var date = new Date();
     // var monthNow = {

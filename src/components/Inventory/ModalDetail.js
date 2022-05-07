@@ -102,8 +102,12 @@ class ModalDetail extends Component {
             var indexDistribute = sub_element_distributes.map(e => e.name).indexOf(nameElement)
             var sub_element = sub_element_distributes[indexDistribute]
             this.setState({
-                afterChoosePrice: sub_element.price - (sub_element.price * value / 100),
-                priceBeforeDiscount: sub_element.price,
+                // afterChoosePrice: sub_element.price - (sub_element.price * value / 100),
+                // priceBeforeDiscount: sub_element.price,
+                afterChoosePrice: sub_element.cost_of_capital,
+
+                priceBeforeDiscount: sub_element.cost_of_capital,
+
                 quantityInStock: sub_element.stock, messageErr: "",
                 idElement: id,
             })
@@ -232,8 +236,9 @@ class ModalDetail extends Component {
         var inforProduct = this.props.modal
         var itemParent = inforProduct && inforProduct.inventoryProduct && inforProduct.inventoryProduct.distributes !== null && inforProduct.inventoryProduct.distributes.length > 0 ? inforProduct.inventoryProduct.distributes[0] : []
 
-        console.log(findTotalStockPos(inforProduct) , inforProduct);
-        return (
+        console.log(inforProduct);
+       console.log(format(Number(this.state.afterPrice)),format(Number(this.state.priceBeforeDiscount)))
+            return (
             <div class="modal" id="modalDetails">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -254,11 +259,11 @@ class ModalDetail extends Component {
                                         <div className='value' style={{ fontWeight: "bold" }}>{inforProduct.nameProduct}</div>
                                         <div className='code' style={{ color: "red" }}><span>{this.state.afterChoosePrice === '' ? inforProduct.discountProduct === null ? this.props.modal.minPriceProduct === this.props.modal.maxPriceProduct ? format(Number(this.props.modal.minPriceProduct)) :`${format(Number(this.props.modal.minPriceProduct))}-${format(Number(this.props.modal.maxPriceProduct))}`  : this.state.minPriceAfterDiscount === this.state.maxPriceAfterDiscount ? `${format(Number(this.state.minPriceAfterDiscount))}` : `${format(Number(this.state.minPriceAfterDiscount))} - ${format(Number(this.state.maxPriceAfterDiscount))}`
                                             : format(Number(this.state.afterChoosePrice))}</span></div>
-                                        <div className='before-discout' style={{ display: "flex" }} >
-                                            <span style={{ fontSize: "13px", textDecoration: "line-through" }}>{inforProduct.discountProduct !== null ?
+                                        {/* <div className='before-discout' style={{ display: "flex" }} >
+                                            <span style={{ fontSize: "13px" }}>{inforProduct.discountProduct !== null ?
                                                 this.state.afterChoosePrice === "" ? inforProduct.minPriceProduct === inforProduct.maxPriceProduct ? format(Number(this.state.afterPrice)) : `${format(Number(inforProduct.minPriceProduct))} - ${format(Number(inforProduct.maxPriceProduct))}` : format(Number(this.state.priceBeforeDiscount)) : ""}</span>
                                             <div className='persen-discount' style={{ fontSize: "13px", marginLeft: "10px" }}>{inforProduct.discountProduct !== null ? `- ${inforProduct.discountProduct.value}%` : ""}</div>
-                                        </div>
+                                        </div> */}
                                         <div className='quantity-product' style={{ fontWeight: "bold", fontSize: "13px" }}>
                                             {this.state.quantityInStock === null ? "Còn hàng" : `Còn lại ${this.state.quantityInStock} sản phẩm`}
                                         </div>

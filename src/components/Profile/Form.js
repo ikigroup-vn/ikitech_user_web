@@ -16,7 +16,7 @@ class Form extends Component {
       txtPhone: "",
       txtEmail: "",
       txtName: "",
-      txtDateOfBirth: "",
+      txtDateOfBirth: "null",
       txtSex: "",
       txtNumStore: "",
       txtCreateStore: "",
@@ -191,7 +191,7 @@ class Form extends Component {
               </div>
               <div className="form-group">
                 <label htmlFor="fname">Ngày sinh</label>
-                {txtDateOfBirth !== "" && <Datetime
+                {txtDateOfBirth !== "null" && <Datetime
                   inputProps={{
                     placeholder: "Chưa cập nhật",
                   }}

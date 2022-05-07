@@ -21,6 +21,7 @@ import ModalPostDate from "../../../components/Timekeeping/CalendarShift/ModalPo
 // import ModalPut from "../../../components/Timekeeping/CalendarShift/PutALot/Modal";
 import "./style.css";
 import { getBranchId } from "../../../ultis/branchUtils";
+import { getQueryParams } from "../../../ultis/helpers"
 
 class CalendarShift extends Component {
   constructor(props) {
@@ -42,6 +43,25 @@ class CalendarShift extends Component {
         to: moment().format("YYYY-MM-DD"),
       },
     });
+    var typeDate = getQueryParams("type")
+    
+    if(typeDate)
+    {
+      var resetId = helper.randomString(10);
+
+      typeDate = typeDate == "DAY" ||  typeDate == "WEEK" || typeDate == "MONTH" ? typeDate : "DAY"
+      var typeSelect =
+      typeDate == "DAY"
+        ? "Ngày"
+        : typeDate == "WEEK"
+        ? "Tuần"
+        : typeDate == "MONTH"
+        ? "Tháng"
+        : "";
+        console.log(typeDate,typeSelect)
+    this.setState({ typeDate: typeDate, reset: resetId, typeSelect: typeSelect });
+    }
+
     const time = moment().format("YYYY-MM-DD");
 
     var params = `date_from=${time}&date_to=${time}`;
