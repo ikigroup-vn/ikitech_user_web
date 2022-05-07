@@ -98,9 +98,22 @@ class Supplier extends Component {
       this.setState({ wardsName: nameWards })
     }
   }
+
   goBack = () => {
     var { store_code } = this.props;
-    history.replace(`/supplier/${store_code}/?pag=${getQueryParams("pag")}`);
+    var pag = getQueryParams("pag");
+    var redirect_report = getQueryParams("redirect_report");
+
+    if(redirect_report)
+    history.replace(`/supplier_debt/${store_code}}`);
+    else if(pag)
+    {
+      history.replace(`/supplier/${store_code}/?pag=${getQueryParams("pag")}`);
+    }
+    else{
+      history.replace(`/supplier/${store_code}`);
+
+    }
   };
   onChangeProvince = (e) => {
     this.setState({ txtProvince: e.target.value, isLoaded: true })
@@ -214,12 +227,12 @@ class Supplier extends Component {
 
   }
 
-  goBack = () => {
-    var { store_code } = this.props;
+  // goBack = () => {
+  //   var { store_code } = this.props;
 
 
-    history.replace(`/supplier/${store_code}/?pag=${getQueryParams("pag")}`);
-  };
+  //   history.replace(`/supplier/${store_code}/?pag=${getQueryParams("pag")}`);
+  // };
 
   showDistrict = (places) => {
     var result = null;

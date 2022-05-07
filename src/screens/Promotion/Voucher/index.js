@@ -13,6 +13,7 @@ import ModalDelete from "../../../components/Promotion/Voucher/Delete/Modal"
 import ModalIsEnd from "../../../components/Promotion/Voucher/Edit/Modal"
 import NotAccess from "../../../components/Partials/NotAccess";
 
+import { getQueryParams } from "../../../ultis/helpers"
 
 import Loading from "../../Loading";
 
@@ -64,7 +65,31 @@ class Voucher extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchAllVoucher(this.props.match.params.store_code);
+    var type = getQueryParams("type")
+    var { store_code } = this.props.match.params;
+
+    if (type && type == 0 || type == 1 || type == 2) {
+      var type = Number(type);
+
+      switch (type) {
+        case 0:
+          this.props.fetchAllVoucher(store_code);
+          break;
+        case 1:
+          this.props.fetchAllVoucherEnd(store_code);
+          break;
+          case 2:
+            this.props.fetchAllVoucher(store_code);
+            break;
+        default:
+          break;
+      }
+      this.setState({ is_end: type })
+    }
+    else {
+      this.props.fetchAllVoucher(this.props.match.params.store_code);
+
+    }
   }
   componentDidUpdate() {
     if (this.state.isLoading != true && typeof this.props.permission.product_list != "undefined") {

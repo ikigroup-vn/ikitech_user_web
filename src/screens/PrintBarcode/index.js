@@ -39,7 +39,15 @@ class PrintBarcode extends Component {
 
   componentWillReceiveProps(nextProps) {
 
+    if (
+      this.state.isLoading != true &&
+      typeof nextProps.permission.product_list != "undefined"
+    ) {
+      var permissions = nextProps.permission;
 
+      var isShow = permissions.barcode_print;
+      this.setState({ isLoading: true, isShow });
+    }
   }
 
   componentDidMount() {
@@ -362,10 +370,10 @@ class PrintBarcode extends Component {
     };
 
 
+    
 
 
-
-    const { products, showName, showPrice } = this.state
+    const { products, showName, showPrice , isShow } = this.state
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
@@ -374,6 +382,9 @@ class PrintBarcode extends Component {
           <div id="content-wrapper" className="d-flex flex-column">
             <div id="content">
               <Topbar store_code={store_code} />
+              {typeof isShow == "undefined" ? (
+                  <div style={{ height: "500px" }}></div>
+                ) : isShow == true ? (
               <div className="container-fluid">
                 <div
                   style={{
@@ -529,7 +540,9 @@ class PrintBarcode extends Component {
 
 
               </div>
-
+   ) : (
+    <NotAccess />
+  )}
             </div>
 
             <Footer />
@@ -547,7 +560,9 @@ const mapStateToProps = (state) => {
     listPos: state.posReducers.pos_reducer.listPosOrder,
     branchStore: state.storeReducers.store.branchStore,
     user: state.userReducers.user.userID,
-    currentBranch: state.branchReducers.branch.currentBranch
+    currentBranch: state.branchReducers.branch.currentBranch,
+    permission: state.authReducers.permission.data,
+
   };
 };
 const mapDispatchToProps = (dispatch, props) => {

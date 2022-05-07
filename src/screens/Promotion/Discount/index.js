@@ -12,6 +12,7 @@ import * as discountAction from "../../../actions/discount";
 import ModalDelete from "../../../components/Promotion/Discount/Delete/Modal"
 import ModalIsEnd from "../../../components/Promotion/Discount/Edit/Modal"
 import NotAccess from "../../../components/Partials/NotAccess";
+import { getQueryParams } from "../../../ultis/helpers"
 
 
 import Loading from "../../Loading";
@@ -66,7 +67,32 @@ class Discount extends Component {
 
 
   componentDidMount() {
-    this.props.fetchAllDiscount(this.props.match.params.store_code);
+    var type = getQueryParams("type")
+    var { store_code } = this.props.match.params;
+
+    if (type && type == 0 || type == 1 || type == 2) {
+      var type = Number(type);
+
+      switch (type) {
+        case 0:
+          this.props.fetchAllDiscount(store_code);
+          break;
+        case 1:
+          this.props.fetchAllDiscountEnd(store_code);
+          break;
+        case 2:
+          this.props.fetchAllDiscount(store_code);
+          break;
+        default:
+          break;
+      }
+      this.setState({ is_end: type })
+    }
+    else {
+      this.props.fetchAllDiscount(this.props.match.params.store_code);
+
+    }
+
   }
 
   componentDidUpdate() {
@@ -75,7 +101,7 @@ class Discount extends Component {
       var isShow = permissions.promotion
 
 
-      this.setState({ isLoading: true, insert : true, update : true, _delete : true ,isShow})
+      this.setState({ isLoading: true, insert: true, update: true, _delete: true, isShow })
 
     }
   }
@@ -97,76 +123,78 @@ class Discount extends Component {
                 <Topbar store_code={params.store_code} />
                 {typeof isShow == "undefined" ? <div></div> : isShow == true ?
 
-                <div class="container-fluid">
-                  <Alert
-                    type={Types.ALERT_UID_STATUS}
-                    alert={this.props.alert}
+                  <div class="container-fluid">
+                    <Alert
+                      type={Types.ALERT_UID_STATUS}
+                      alert={this.props.alert}
 
-                  />
-                  <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <h3 class="h3 title_content mb-2 text-gray-800">Giảm giá sản phẩm</h3>
-                    
-                    <Link
-                      to={`/discount/create/${params.store_code}`}
-                      class={`btn btn-info btn-icon-split  ${insert == true ? "show" : "hide"}`}                  >
-                      <span style = {{display : "flex" , margin : "auto" , height: "100%",
-    "justify-content": "center",
-    "align-items": "center"}} class="icon text-white-50">
-                        <i class="fas fa-plus"></i>
-                      </span>
-                      <span style = {{margin : "auto"}} class="text">Tạo giảm giá</span>
-                    </Link>
-                  </div>
+                    />
+                    <div
+                      style={{ display: "flex", justifyContent: "space-between" }}
+                    >
+                      <h3 class="h3 title_content mb-2 text-gray-800">Giảm giá sản phẩm</h3>
 
-                  <div class="form-group">
-                 
-                    <div class="col-sm-3" style={{ paddingLeft: "0px" }}>
-                      <select
-                        name="is_end"
-                        id="input"
-                        class="form-control"
-                        required="required"
-                        value={is_end}
-                        onChange={this.onChange}
-                      >
-                                                <option value="2">Đang diễn ra</option>
+                      <Link
+                        to={`/discount/create/${params.store_code}`}
+                        class={`btn btn-info btn-icon-split  ${insert == true ? "show" : "hide"}`}                  >
+                        <span style={{
+                          display: "flex", margin: "auto", height: "100%",
+                          "justify-content": "center",
+                          "align-items": "center"
+                        }} class="icon text-white-50">
+                          <i class="fas fa-plus"></i>
+                        </span>
+                        <span style={{ margin: "auto" }} class="text">Tạo giảm giá</span>
+                      </Link>
+                    </div>
 
-                        <option value="0">Chuẩn bị diễn ra</option>
+                    <div class="form-group">
 
-                        <option value="1">Đã kết thúc</option>
-                      </select>
+                      <div class="col-sm-3" style={{ paddingLeft: "0px" }}>
+                        <select
+                          name="is_end"
+                          id="input"
+                          class="form-control"
+                          required="required"
+                          value={is_end}
+                          onChange={this.onChange}
+                        >
+                          <option value="2">Đang diễn ra</option>
+
+                          <option value="0">Chuẩn bị diễn ra</option>
+
+                          <option value="1">Đã kết thúc</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <div class="card shadow mb-4">
+                      <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                          Danh sách chương trình
+                        </h6>
+                      </div>
+                      <div class="card-body">
+                        <Table update={update} _delete={_delete} is_end={is_end} handleIsEndCallback={this.handleIsEndCallback} handleDelCallBack={this.handleDelCallBack} params={params} discounts={discounts} />
+                        <Pagination
+                          display={displayPag}
+                          params={params}
+                          discounts={discounts}
+                          store_code={store_code}
+                        />
+                      </div>
                     </div>
                   </div>
+                  : <NotAccess />}
 
-                  <div class="card shadow mb-4">
-                    <div class="card-header py-3">
-                      <h6 class="m-0 font-weight-bold text-primary">
-                        Danh sách chương trình
-                      </h6>
-                    </div>
-                    <div class="card-body">
-                      <Table update={update} _delete={_delete} is_end={is_end} handleIsEndCallback={this.handleIsEndCallback} handleDelCallBack={this.handleDelCallBack} params={params} discounts={discounts} />
-                      <Pagination
-                        display={displayPag}
-                        params={params}
-                        discounts={discounts}
-                        store_code={store_code}
-                      />
-                    </div>
-                  </div>
-                </div>
-              : <NotAccess />}
+              </div>
+              <ModalDelete modal={modal} />
+              <ModalIsEnd modal={modalIsEnd} />
 
+
+              <Footer />
             </div>
-            <ModalDelete modal={modal} />
-            <ModalIsEnd modal={modalIsEnd} />
-
-
-            <Footer />
           </div>
-        </div>
         </div >
 
       );

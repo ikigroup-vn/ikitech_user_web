@@ -12,6 +12,7 @@ import * as comboAction from "../../../actions/combo";
 import ModalDelete from "../../../components/Promotion/Combo/Delete/Modal"
 import ModalIsEnd from "../../../components/Promotion/Combo/Edit/Modal"
 import NotAccess from "../../../components/Partials/NotAccess";
+import { getQueryParams } from "../../../ultis/helpers"
 
 
 import Loading from "../../Loading";
@@ -64,7 +65,31 @@ class Combo extends Component {
   }
 
   componentDidMount() {
-    this.props.fetchAllCombo(this.props.match.params.store_code);
+    var type = getQueryParams("type")
+    var { store_code } = this.props.match.params;
+
+    if (type && type == 0 || type == 1 || type == 2) {
+      var type = Number(type);
+
+      switch (type) {
+        case 0:
+          this.props.fetchAllCombo(store_code);
+          break;
+        case 1:
+          this.props.fetchAllComboEnd(store_code);
+          break;
+          case 2:
+            this.props.fetchAllCombo(store_code);
+            break;
+        default:
+          break;
+      }
+      this.setState({ is_end: type })
+    }
+    else {
+      this.props.fetchAllCombo(this.props.match.params.store_code);
+
+    }
   }
   componentDidUpdate() {
     if (this.state.isLoading != true && typeof this.props.permission.product_list != "undefined") {

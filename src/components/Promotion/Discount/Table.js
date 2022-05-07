@@ -39,9 +39,10 @@ class Table extends Component {
     return result
   }
   changePage = (e, store_code, supplierId) => {
+    var is_end = this.props.is_end
 
     if (e.target.name !== "toggle")
-      history.push(`/discount/edit/${store_code}/${supplierId}`)
+      history.push(`/discount/edit/${store_code}/${supplierId}?type=${is_end}`)
   }
 
 

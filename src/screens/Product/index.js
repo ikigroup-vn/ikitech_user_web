@@ -105,6 +105,7 @@ class Product extends Component {
       var ecommerce = permissions.product_list;
 
       var isShow = permissions.product_list;
+      var barcode_print = permissions.barcode_print
 
       this.setState({
         isLoading: true,
@@ -115,6 +116,7 @@ class Product extends Component {
         _export,
         isShow,
         ecommerce,
+        barcode_print
       });
     }
   }
@@ -176,7 +178,7 @@ class Product extends Component {
       var { store_code } = this.props.match.params;
       var { searchValue, importData, allow_skip_same_name, page, numPage } =
         this.state;
-      var { insert, update, _delete, _import, _export, isShow, ecommerce } =
+      var { insert, update, _delete, _import, _export, isShow, ecommerce,barcode_print } =
         this.state;
 
       return (
@@ -288,13 +290,13 @@ class Product extends Component {
                                   <span>SHOPEE</span>{" "}
                                 </a>
                               </div>
-                            </div>
+                            </div> 
                           )
                         }
                         <Link
                           to={`/product/print_barcode/${store_code}`}
                           style={{ marginRight: "10px" }}
-                          class={`btn btn-info btn-icon-split btn-sm ${insert == true ? "show" : "hide"
+                          class={`btn btn-info btn-icon-split btn-sm ${barcode_print == true ? "show" : "hide"
                           
                             }`}
                         >

@@ -17,9 +17,10 @@ class Table extends Component {
     event.preventDefault();
   }
   changePage = (e, store_code, supplierId) => {
+    var is_end = this.props.is_end
 
     if (e.target.name !== "toggle")
-      history.push(`/combo/edit/${store_code}/${supplierId}`)
+      history.push(`/combo/edit/${store_code}/${supplierId}?type=${is_end}`)
   }
   filterColDiscount = (data) => {
     var is_end = this.props.is_end

@@ -49,7 +49,7 @@ class CustomerDebt extends Component {
     changePage = (store_code , customerId) => {
         var {  paginate } = this.props;
     
-        history.push(`/customer/detail/${store_code}/${customerId}?pag=${paginate}`)
+        history.push(`/customer/detail/${store_code}/${customerId}?redirect_report=true`)
           }
     showData = (listCustomerDebt) => {
         var result = null
@@ -138,7 +138,7 @@ class CustomerDebt extends Component {
                                                 onChange={this.onChangeStart}
                                             />
                                         </div>
-                                    <div className='card-body' style={{height:"500px"}}>
+                                    <div className='card-body' >
                                         <div class="table-responsive">
                                             <table class="table  " id="dataTable" width="100%" cellspacing="0">
                                                 <thead>

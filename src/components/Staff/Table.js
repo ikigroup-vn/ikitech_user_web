@@ -36,7 +36,7 @@ class Table extends Component {
 
             
             <td>{data.email}</td>
-            <td>{data.salary != null ? format(data.salary) : ""}</td>
+            <td>{data.salary_one_hour != null ? format(data.salary_one_hour) : ""}</td>
             <td>{decentralization}</td>
  <td style={{ textAlign: "center" }}>
               {data.online ? (

@@ -25,7 +25,7 @@ class Table extends Component {
           <tr>
             <td>{index + 1}</td>
 
-            <td>{data.id}</td>
+            <td>{data.sku}</td>
 
             <td>{data.name}</td>
             <td>
@@ -72,7 +72,7 @@ class Table extends Component {
                 <thead>
                   <tr>
                     <th>STT</th>
-                    <th>Mã sản phẩm</th>
+                    <th>Mã SKU</th>
                     <th>Tên sản phẩm</th>
                     <th>Hành động</th>
                   </tr>

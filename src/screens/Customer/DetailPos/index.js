@@ -3,6 +3,7 @@ import * as Types from "../../../constants/ActionType";
 import Sidebar from "../../../components/Partials/Sidebar";
 import Topbar from "../../../components/Partials/Topbar";
 import Footer from "../../../components/Partials/Footer";
+import NotAccess from "../../../components/Partials/NotAccess";
 
 import Alert from "../../../components/Partials/Alert";
 import { connect } from "react-redux";
@@ -26,9 +27,21 @@ class DetailPos extends Component {
   componentDidMount() {
     var { store_code } = this.props.match.params;
   }
+  componentWillReceiveProps(nextProps) {
+    if (
+      this.state.isLoading != true &&
+      typeof nextProps.permission.product_list != "undefined"
+    ) {
+      var permissions = nextProps.permission;
+
+      var isShow = permissions.customer_list;
+      this.setState({ isLoading: true, isShow });
+    }
+  }
 
   render() {
     var { store_code , customerId } = this.props.match.params;
+    var {isShow} = this.state
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
@@ -36,7 +49,9 @@ class DetailPos extends Component {
           <div id="content-wrapper" className="d-flex flex-column">
             <div id="content">
               <Topbar store_code={store_code} />
-           
+              {typeof isShow == "undefined" ? (
+                  <div style={{ height: "500px" }}></div>
+                ) : isShow == true ? (
                 <div className="container-fluid">
                   <Alert
                     type={Types.ALERT_UID_STATUS}
@@ -101,7 +116,9 @@ class DetailPos extends Component {
                     </div>
                   </div>
                 </div>
-       
+             ) : (
+              <NotAccess />
+            )}
             </div>
 
             <Footer />

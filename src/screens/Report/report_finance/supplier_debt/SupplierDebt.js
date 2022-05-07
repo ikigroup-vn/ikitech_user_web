@@ -55,7 +55,7 @@ class SupplierDebt extends Component {
         var { paginate } = this.props;
 
         if(e.target.name !== "toggle")
-        history.push(`/supplier/detail/${store_code}/${supplierId}?pag=${paginate}`)
+        history.push(`/supplier/detail/${store_code}/${supplierId}?redirect_report=true`)
     }
     showData = (listCustomerDebt) => {
         var result = null

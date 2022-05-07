@@ -5,7 +5,7 @@ import Loading from "../../../../screens/Loading";
 import * as customerAction from "../../../../actions/customer";
 import * as Env from "../../../../ultis/default";
 import moment from "moment";
-import { getQueryParams } from "../../../../ultis/helpers"
+import { getQueryParams , isEmpty } from "../../../../ultis/helpers"
 import * as placeAction from "../../../../actions/place";
 import { shallowEqual } from '../../../../ultis/shallowEqual';
 import history from "../../../../history";
@@ -33,7 +33,7 @@ class Customer extends Component {
       txtPhone_branch: "",
       txtEmail_branch: "",
       idCustomer: "",
-      txtDateOfBirth: "",
+      txtDateOfBirth: "null",
       txtSex: "",
 
 
@@ -110,7 +110,18 @@ class Customer extends Component {
   }
   goBack = () => {
     var { store_code } = this.props;
-    history.replace(`/customer/${store_code}/?pag=${getQueryParams("pag")}`);
+    var pag = getQueryParams("pag");
+    var redirect_report = getQueryParams("redirect_report");
+    if(redirect_report)
+    history.replace(`/customer_debt/${store_code}`);
+    else if(pag)
+    {
+      history.replace(`/customer/${store_code}/?pag=${getQueryParams("pag")}`);
+    }
+    else{
+      history.replace(`/customer/${store_code}`);
+
+    }
   };
   onChangeProvince = (e) => {
     this.setState({ txtProvince: e.target.value, isLoaded: true })
@@ -183,7 +194,7 @@ class Customer extends Component {
   }
   handleOnClick = (e) => {
     e.preventDefault()
-    if(moment(this.state.txtDateOfBirth, "DD-MM-YYYY").format("YYYY-MM-DD HH:mm:ss") == "Invalid date")
+    if(moment(this.state.txtDateOfBirth, "DD-MM-YYYY").format("YYYY-MM-DD HH:mm:ss") == "Invalid date" && isEmpty(this.state.txtDateOfBirth))
     {
       this.props.showErrors(
             {
@@ -269,12 +280,12 @@ class Customer extends Component {
       txtDateOfBirth: time,
     });
   };
-  goBack = () => {
-    var { store_code } = this.props;
+  // goBack = () => {
+  //   var { store_code } = this.props;
 
 
-    history.replace(`/customer/${store_code}/?pag=${getQueryParams("pag")}`);
-  };
+  //   history.replace(`/customer/${store_code}/?pag=${getQueryParams("pag")}`);
+  // };
 
   showDistrict = (places) => {
     var result = null;
@@ -325,7 +336,7 @@ class Customer extends Component {
 
           <div className="form-group">
                 <label htmlFor="fname">Ngày sinh</label>
-                {txtDateOfBirth !== "" && <Datetime
+                {txtDateOfBirth !== "null" && <Datetime
                   inputProps={{
                     placeholder: "Chưa cập nhật",
                   }}

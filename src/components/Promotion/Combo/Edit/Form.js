@@ -15,6 +15,8 @@ import { formatNumber } from "../../../../ultis/helpers"
 import { isEmpty } from "../../../../ultis/helpers"
 import ConfimUpdateUsed from "../../Discount/Edit/ConfimUpdateUsed";
 import getChannel, { IKIPOS, IKITECH } from "../../../../ultis/channel";
+import history from "../../../../history"
+import { getQueryParams } from "../../../../ultis/helpers"
 
 class Form extends Component {
   constructor(props) {
@@ -236,11 +238,19 @@ class Form extends Component {
   };
 
   goBack = (e) => {
-    e.preventDefault();
-    var { history } = this.props;
-    history.goBack();
-  };
+    var { store_code } = this.props
 
+    e.preventDefault()
+    var type = getQueryParams("type")
+    if(type)
+    {
+      history.replace(`/discount/${store_code}?type=${type}`)
+    }
+    else
+    {
+      history.goBack()
+    }
+  };
   handleAddProduct = (product, id, type , onSave) => {
     var products = [...this.state.listProducts];
     console.log(products);
@@ -520,6 +530,8 @@ class Form extends Component {
 
                 </button>
                 <button
+                                type = "button"
+
                   style={{ marginLeft: "10px" }}
                   onClick={this.goBack}
                   class="btn btn-warning   btn-sm"
