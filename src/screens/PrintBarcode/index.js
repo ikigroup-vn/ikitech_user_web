@@ -196,6 +196,7 @@ class PrintBarcode extends Component {
           }}>- {item.size}</div>
           <img height={80} src={item.image} class="image-option-print"></img>
           <ReactToPrint
+          
             trigger={() => {
               return <button style={{
                 marginTop: 8,

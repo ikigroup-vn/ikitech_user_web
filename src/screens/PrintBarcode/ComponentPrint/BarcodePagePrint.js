@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Barcode from "react-barcode";
-
+import './Barcode7272.css'
 class BarcodePagePrint extends Component {
     constructor(props) {
         super(props);
@@ -19,6 +19,11 @@ class BarcodePagePrint extends Component {
         return `@page { margin: ${0} ${0} ${0} ${0} !important;padding: ${0} ${0} ${0} ${0} !important; }`;
     };
 
+
+    getPrintStyle = () => {
+        return `@print @media print { html, body {  overflow: initial !important; }} `;
+      };
+
     buidItems = () => {
 
         var arr = new Array(this.props.count ?? 1).fill(0);
@@ -29,8 +34,8 @@ class BarcodePagePrint extends Component {
 
         return arr.map((index) =>
             <div style={{
-                width: (100 / column) + "%",
-                height: (100 / row) + "%",
+                width: (500 ) ,
+                height: (500) ,
                 padding: 0,
                 margin: 0
             }}>
@@ -48,19 +53,23 @@ class BarcodePagePrint extends Component {
     }
 
 
+  
 
     render() {
         const { widthPrint, heightPrint, isA4 } = this.props
 
         return <div style={{
-            overflow: "scroll" 
+        
         }}>
        <style type="text/css" media="print">{`@page { size: ${widthPrint}mm ${heightPrint}mm; }`}</style>
+       <style type="text/css" media="print">{`@media print { html, body {  overflow: initial !important; }}`}</style>
+
             <style>{this.getPageMargins()}</style>
+     
             <div style={{
              
-                display: "flex",
-                flexWrap: "wrap"
+               
+     
 
             }}>
                 {this.buidItems()}
