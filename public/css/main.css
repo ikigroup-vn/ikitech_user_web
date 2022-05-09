@@ -23,14 +23,135 @@
 
 
 
+.combo-page {
+    padding: 1em;
+    min-height: calc(100vh - 8.5em);
+  }
+  
+  .combo-page .list {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+  .combo-page .combo-card {
+    margin-top: 8px;
+    margin-bottom: 8px;
+    width: calc(50% - 8px);
+    border: dashed 2px #bc0412;
+    border-radius: 0.5em;
+    background: white;
+    position: relative;
+  }
+  
+  .combo-page .combo-card .info-btn {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    color: white;
+    padding: 0.25em 0.5em;
+    border-radius: 0.25em;
+    opacity: 0.8;
+    background-color: rgba(188, 4, 18, 0.5);
+  }
+  
+  .combo-page .combo-card .top-pos {
+    display: flex;
+  }
+  
+  /* .combo-page .combo-card .top .name {
+    width: 132px;
+    height: 132px;
+    padding: 8px;
+  } */
+  
+  .combo-page .combo-card .top-pos .name div {
+    border-radius: 0.5em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    text-align: center;
+    color: white;
+    background: #cc3c4c;
+  }
+  
+  .combo-page .combo-card .top-pos .info {
+    padding: 8px;
+    width: calc(100% - 132px);
+  }
+  
+
+  
+  .combo-page .combo-card .top .info .date, .combo-page .combo-card .top-pos .info .note {
+    margin-top: 0.5em;
+    color: #757575;
+    font-size: 14px;
+  }
+  
+  .combo-page .products {
+    padding: 8px;
+    padding-top: 0;
+    position: relative;
+  }
+  
+  .combo-page .products .card-wraper {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+  
+  .combo-page .products .slick-list {
+    margin: 0 -3px;
+  }
+  
+  .combo-page .products .discount-product-card {
+    width: 100%;
+    border: dashed 1px #bc0412;
+    padding: 8px;
+    border-radius: 0.5em;
+  }
+  
+  .combo-page .products .discount-product-card .image {
+    width: 100%;
+    border-radius: 0.5em;
+    overflow: hidden;
+  }
+  
+  .combo-page .products .discount-product-card .image .img-container {
+    width: 100%;
+    /* padding-top: 100%; */
+  }
+  
+  .combo-page .products .discount-product-card .price {
+    font-size: 16px;
+    font-weight: 500;
+    color: #f57224;
+  }
+  
+  .combo-page .products .discount-product-card .prev-price {
+    font-size: 12px;
+    color: #757575;
+  }
 
 
 
+.filter-product-pos{
+    position: fixed;
+    height: 100%;
+    width: 100%;
+    z-index: 999;
+    background: #f6f3f0;
+    width: 260px;
+    bottom: 0;
+}
 
+input[type=checkbox]{
+    accent-color: rgb(229, 111, 37) !important;
+}
 
-
-
-
+input[type=radio]{
+    accent-color: rgb(229, 111, 37) !important;
+}
 
 
 

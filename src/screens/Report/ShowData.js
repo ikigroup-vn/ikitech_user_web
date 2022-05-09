@@ -134,7 +134,7 @@ class ShowData extends Component {
 
     render() {
         const { product_discount, data, per_page, current_page, index, store_code, page, historyInventory } = this.props
-        const listDistribute = data.inventory?.distributes !== null && data.inventory?.distributes.length > 0 ? data.inventory?.distributes[0] : []
+        const listDistribute = data.distribute_stock !== null && data.distribute_stock.length > 0 ? data.distribute_stock[0] : []
 
         let discount_percent = null;
 
@@ -156,7 +156,7 @@ class ShowData extends Component {
                         }}>{data.name}</div>
                         {/* </Link> */}
                     </td>
-                    {data.inventory.distributes.length === 1 ?
+                    {data.distribute_stock.length === 1 ?
                         <>
                             <td></td>
                             <td></td>
@@ -164,18 +164,19 @@ class ShowData extends Component {
 
                         </> :
                         <>
+
                                 <td>
-                                {formatNoD(Number(data.inventory.main_cost_of_capital))}
+                                {formatNoD(Number(data.main_stock.cost_of_capital))}
 
                             </td>
                        
                              <td>
-                                {formatNoD(data.inventory.main_stock)}
+                                {formatNoD(data.main_stock.stock)}
 
                             </td>
 
                             <td>
-                                {formatNoD(data.inventory.main_cost_of_capital * data.inventory.main_stock)}
+                                {formatNoD(data.main_stock.cost_of_capital * data.main_stock.stock)}
 
                             </td>
                

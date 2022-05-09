@@ -13,7 +13,7 @@ class CardProduct extends Component {
             isToggle: false
         }
     }
-    
+
     handleInfoProduct = (inventory, id, name, image, price, distributes, maxPrice, minPrice, priceDiscount, quayntity, quantityDistribute, product) => {
         if (distributes.length > 0) {
             this.setState({ isToggle: true })
@@ -53,7 +53,7 @@ class CardProduct extends Component {
         var price = <p class="product-price-pos-search-top-bar">{
             data.min_price == data.max_price ? format(Number(data.min_price)) : `${format(Number(data.min_price))}- ${format(Number(data.max_price))}`}</p>
 
-    
+
         return (
             <div >
 
@@ -131,27 +131,80 @@ class CardProduct extends Component {
         }
         return result;
     }
-    render() {
-        var { products, isItemSearch } = this.props
-        var listProducts = filter_arr(products.data)
-
-        if (isItemSearch) {
-            return this.buildItemProduct(this.props.product)
+    showProductCombo = (product, quantity) => {
+        let { price, product_discount, images, id } = product;
+        let avt = "/img/default_product.jpg";
+        if (product_discount) {
+            price = product_discount.discount_price;
         }
-
+        if (images.length)
+            avt = images[0].image_url;
         return (
-            <div className='show-product-pos'>
-                <div className='row'>
-                    {this.showProduct(listProducts)}
+            <div className="discount-product-card">
+                <div className="image">
+                    <div className="img-container">
+                        <img src={avt} alt="" />
+                    </div>
+                </div>
+                <div className="price" >
+                    {format(price)}
+                </div>
+                <div className="prev-price">
+                    Số lượng: {quantity}
+                </div>
+            </div>
+        )
+    }
+    render() {
+        // var { products, isItemSearch } = this.props
+        // var listProducts = filter_arr(products.data)
+
+        // if (isItemSearch) {
+        //     return this.buildItemProduct(this.props.product)
+        // }
+        const { name, value, type, products, end, set_limit_amount } = this.props;
+        console.log(this.props)
+        return (
+            <div className="combo-card">
+                <button className="info-btn">Combo</button>
+                <div className="top-pos">
+              
+                    <div className="info">
+                        <div>
+                        <div className="value">
+                                {name} 
+                            </div>
+                            <div className="value">
+                                Giảm {type === 1 ? value + "%" : "₫" + format(value)}
+                            </div>
+                            <div className="date">
+                                HSD: {end.split(" ")[0]}
+                            </div>
+                         
+
+                        </div>
+                      
+                    </div>
+                </div>
+                <div className="products">
+                    {
+                        products?.length > 0
+                        && products?.map((v, i) =>
+                            <div className="card-wraper" key={i}>
+                                {this.showProductCombo(v.product, v.quantity)}
+                            </div>
+                        )
+                    }
                 </div>
             </div>
         )
     }
 }
 
+
 const mapStateToProps = (state) => {
     return {
-        products: state.productReducers.product.allProduct,
+        // products: state.productReducers.product.allProduct,
     };
 };
 const mapDispatchToProps = (dispatch, props) => {

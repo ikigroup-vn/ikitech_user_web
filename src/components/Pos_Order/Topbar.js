@@ -230,6 +230,10 @@ class Topbar extends Component {
         }
 
     }
+    _recordInput = (name, event) => {
+
+        this.props.passKeyPress(event.key)
+    }
     onChangeProduct = (selectValue) => {
 
 
@@ -256,6 +260,8 @@ class Topbar extends Component {
 
         switch (key) {
             case "f3":
+                case "F3":
+
                 if (this.refSearchProduct != null) {
                     this.refSearchProduct.focus()
                 }
@@ -316,6 +322,15 @@ class Topbar extends Component {
 
                                     <div>
                                         <AsyncPaginate
+                                                  onKeyDown={(event) => {
+                                this._recordInput('onKeyDown', event);
+                            }}
+                            onKeyPress={(event) => {
+                                this._recordInput('onKeyPress', event)
+                            }}
+                            onKeyUp={(event) => {
+                                this._recordInput('onKeyUp', event);
+                            }} 
                                             autoFocus
                                             selectRef={(ref) => {
                                                 this.refSearchProduct = ref;
