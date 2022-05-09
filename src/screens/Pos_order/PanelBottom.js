@@ -22,6 +22,7 @@ import { debounce } from 'lodash'
 import moment from "moment"
 import ModalFilter from "./component/Filter"
 import { getBranchId } from '../../ultis/branchUtils'
+import ShowModalDetailCombo from "../../components/Pos_Order/ShowDetailCombo"
 
 class PanelBottom extends Component {
 
@@ -43,7 +44,9 @@ class PanelBottom extends Component {
             txtName: "",
             txtEmail: "",
             isShow: false,
-            filterCategory: []
+            filterCategory: [],
+            isShowDetailCombo : false,
+            modal : {products : []}
         }
 
         this.onChangeNum = debounce(this.handleChangeNum, 0)
@@ -1056,10 +1059,19 @@ class PanelBottom extends Component {
     onChangeFilterSale = (e) => {
         this.setState({ filter_sale: e.target.checked })
     }
+    getDetailCombo = (data) =>{
+        if(this.state.isShowDetailCombo == false)
+        this.setState({modal:data , isShowDetailCombo : !this.state.isShowDetailCombo})
+        else
+        this.setState({ isShowDetailCombo : !this.state.isShowDetailCombo})
+
+    }
     render() {
         var limit, passNumPage, store_code, products = this.props
-        var { isShow, filter_price, filter_sale, filterCategory } = this.state
+        var { isShow, filter_price, filter_sale, filterCategory ,isShowDetailCombo , modal} = this.state
         var show = isShow == true ? "show" : "hide"
+        var isShowDetailCombo = isShowDetailCombo == true ? "show" : "hide"
+
         var { category_product ,listCombo } = this.props
 
 
@@ -1067,7 +1079,7 @@ class PanelBottom extends Component {
         console.log(listCombo)
         return (
             <div className="panel-bottom" style={{    overflow: "hidden",
-                "padding-bottom": "25px"}}>
+                "padding-bottom": "25px" , paddingTop :"8px"}}>
                 <div className={`filter-product-pos ${show}`} style={{ padding: "15px" }}>
                     <div className="header">
                         <h5 className="title">Lọc sản phẩm</h5>
@@ -1144,6 +1156,31 @@ class PanelBottom extends Component {
                     </div>
 
                 </div>
+                 <div className={`filter-product-pos ${isShowDetailCombo}`} style={{ padding: "15px" , width:"500px" }}>
+                    <div className="header">
+                        <h5 className="title">Chi tiết sản phẩm</h5>
+
+                    </div>
+                    <div className="body" style={{ marginTop: "20px" }}>
+
+                  <ShowModalDetailCombo modal = {modal}></ShowModalDetailCombo>
+                    </div>
+                    <div className="" style={{
+                        position: "absolute",
+                        bottom: "10px",
+                        right: "10px"
+                    }}>
+                        <button
+                            type="button"
+                            class="btn btn-secondary"
+                            onClick={() => { this.setState({ isShowDetailCombo: false }) }}
+                        >
+                            Đóng
+                        </button>
+                    
+                    </div>
+
+                </div>
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
                     <li class="nav-item">
                         <a class="nav-link " id="tab-javascript" data-toggle="tab"
@@ -1159,13 +1196,13 @@ class PanelBottom extends Component {
                             Khách hàng
                         </a>
                     </li>
-                    {/* <li class="nav-item">
+                    <li class="nav-item">
                     <a class="nav-link " id="tab-javascripts" data-toggle="tab"
                             href="#content-javascripts"
                             role="tab" aria-controls="content-javascripts" aria-selected="true">
                             Combo đang diễn ra
                         </a>
-                    </li> */}
+                    </li>
                     {/* <li class="nav-item">
                         <a class="nav-link " id="tab-bootstrap" data-toggle="tab"
                             href="#content-bootstrap"
@@ -1228,11 +1265,14 @@ class PanelBottom extends Component {
                                         {
                                             listCombo.map((v, i) => <CardCombo key={i}
                                                 name={v.name}
+                                                addComboInCart = {this.props.addComboInCart}
+                                                id = {v.id}
                                                 end={v.end_time}
                                                 set_limit_amount={v.set_limit_amount}
                                                 value={v.value_discount}
                                                 type={v.discount_type}
                                                 products={v.products_combo}
+                                                getDetailCombo = {this.getDetailCombo}
                                             />)
                                         }
                                     </div>

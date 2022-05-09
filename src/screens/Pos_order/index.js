@@ -652,12 +652,19 @@ class PostOrder extends Component {
         })
     }
 
+    addComboInCart = (data) =>{
+        var { store_code } = this.props.match.params
+        var {idCart} = this.state
+        if(data)
+        this.props.addComboInCart(store_code , getBranchId() ,idCart , data )
+
+    }
 
     render() {
         var { store_code } = this.props.match.params
         var { listPertion, products, listVoucher, badges } = this.props
         var { allow_semi_negative } = badges
-        var { numPage, exchange, priceCustomer, oneCart, totalFinal, listSuggestion, totalAfterDiscount, select_customer_id, isShow } = this.state
+        var { numPage, exchange, priceCustomer, oneCart, totalFinal, listSuggestion, totalAfterDiscount, select_customer_id, isShow,idCart } = this.state
         const length = oneCart.info_cart?.line_items.length
 
 
@@ -749,7 +756,7 @@ class PostOrder extends Component {
                                             top: !this.state.isShowPanelBottom ? -20 : 0
                                         }}>
 
-                                            <div class="button-show-hide-control" onClick={this.onChangeIsShowPanelBottom}>
+                                            <div class="button-show-hide-control" style={{zIndex : "999"}} onClick={this.onChangeIsShowPanelBottom}>
                                                 <svg className="button-show-hide-control-circle" focusable="false"
                                                     viewBox="0 0 24 24" aria-hidden="true"
                                                     style={{
@@ -762,6 +769,7 @@ class PostOrder extends Component {
                                         </div>
 
                                         <PanelBottom
+                                        addComboInCart = {this.addComboInCart}
                                             passKeyPress={this.handleKeyboard}
                                             limit={numPage}
                                             passNumPage={this.passNumPage} store_code={store_code} products={products}
@@ -1129,6 +1137,9 @@ const mapDispatchToProps = (dispatch, props) => {
           },
         addProductInCart: (store_code, branch_id, id_cart, data) => {
             dispatch(posAction.addProductInCart(store_code, branch_id, id_cart, data))
+        },
+        addComboInCart: (store_code, branch_id, id_cart, data) => {
+            dispatch(posAction.addComboInCart(store_code, branch_id, id_cart, data))
         },
 
         fetchInfoOneCart: (store_code, branch_id, id) => {

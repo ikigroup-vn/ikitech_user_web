@@ -7,7 +7,12 @@ export const listPosOrder = (store_code,branch_id) => {
   export const addProductInCart = (store_code,branch_id,id,data) => {
     return callApi(`/store/${store_code}/carts/${branch_id}/list/${id}/items`, "post", data);
   };
+  export const addComboInCart = (store_code,branch_id,id,data) => {
+    return callApi(`/store/${store_code}/carts/${branch_id}/list/${id}/use_combo`, "post", data);
+  };
 
+
+  
   export const deleteOneCart = (store_code,branch_id,id) => {
     return callApi(`/store/${store_code}/carts/${branch_id}/list/${id}`, "delete", null);
   };

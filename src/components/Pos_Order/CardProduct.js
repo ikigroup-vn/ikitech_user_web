@@ -140,7 +140,7 @@ class CardProduct extends Component {
         }
 
         return (
-            <div className='show-product-pos'>
+            <div className='show-product-pos' >
                 <div className='row'>
                     {this.showProduct(listProducts)}
                 </div>
