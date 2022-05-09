@@ -11,7 +11,7 @@ import * as timeSheetAction from "../../../actions/time_sheet";
 import { Redirect, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import NotAccess from "../../../components/Partials/NotAccess";
-
+import * as staffAction from "../../../actions/staff";
 import Loading from "../../Loading";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 
@@ -47,6 +47,7 @@ class TimeSheet extends Component {
     var params = `date_from=${time}&date_to=${time}`;
 
     this.props.fetchAllTimeSheet(store_code, branch_id, params);
+    this.props.fetchAllStaff(store_code, 1, null, branch_id)
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -75,10 +76,10 @@ class TimeSheet extends Component {
       value == "DAY"
         ? "Ngày"
         : value == "WEEK"
-        ? "Tuần"
-        : value == "MONTH"
-        ? "Tháng"
-        : "Tùy chọn";
+          ? "Tuần"
+          : value == "MONTH"
+            ? "Tháng"
+            : "Tùy chọn";
     this.setState({ typeDate: value, reset: resetId, typeSelect: typeSelect });
   };
   onChange = (e) => {
@@ -146,68 +147,94 @@ class TimeSheet extends Component {
                             onChange={this.onchangeDateFromTo}
                           />
                         </div> */}
-                        <div class="dropdown">
-                          <button
-                            style={{
-                              background: "white",
-                              border: "0px",
-                              color: "#4141bb",
-                            }}
-                            class="btn btn-secondary dropdown-toggle"
-                            type="button"
-                            id="dropdownMenuButton"
-                            data-toggle="dropdown"
-                            aria-haspopup="true"
-                            aria-expanded="false"
-                          >
-                            {typeSelect}
-                          </button>
-                          <div
-                            class="dropdown-menu"
-                            aria-labelledby="dropdownMenuButton"
-                          >
-                            <p
-                              // data-toggle="modal"
-                              // data-target="#postDateModal"
-                              onClick={() => this.onchangeDate("DAY")}
-                              class="dropdown-item"
-                              style={{ cursor: "pointer" }}
+                        <div className="row">
+                          <div class="dropdown">
+                            <button
+                              style={{
+                                background: "white",
+                                border: "0px",
+                                color: "#4141bb",
+                              }}
+                              class="btn btn-secondary dropdown-toggle"
+                              type="button"
+                              id="dropdownMenuButton"
+                              data-toggle="dropdown"
+                              aria-haspopup="true"
+                              aria-expanded="false"
                             >
-                              Ngày
-                            </p>
-                            <p
-                              // data-toggle="modal"
-                              // data-target="#postDateModal"
-                              onClick={() => this.onchangeDate("WEEK")}
-                              class="dropdown-item"
-                              style={{ cursor: "pointer" }}
+                              {typeSelect}
+                            </button>
+                            <div
+                              class="dropdown-menu"
+                              aria-labelledby="dropdownMenuButton"
                             >
-                              Tuần{" "}
-                            </p>
-                            <p
-                              // data-toggle="modal"
-                              // data-target="#postDateModal"
-                              onClick={() => this.onchangeDate("MONTH")}
-                              class="dropdown-item"
-                              style={{ cursor: "pointer" }}
-                            >
-                              Tháng
-                            </p>
-                            <p
-                              onClick={() => this.onchangeDate("OPTION")}
-                              class="dropdown-item"
-                              style={{ cursor: "pointer" }}
-                            >
-                              Tùy chỉnh
-                            </p>
+                              <p
+                                // data-toggle="modal"
+                                // data-target="#postDateModal"
+                                onClick={() => this.onchangeDate("DAY")}
+                                class="dropdown-item"
+                                style={{ cursor: "pointer" }}
+                              >
+                                Ngày
+                              </p>
+                              <p
+                                // data-toggle="modal"
+                                // data-target="#postDateModal"
+                                onClick={() => this.onchangeDate("WEEK")}
+                                class="dropdown-item"
+                                style={{ cursor: "pointer" }}
+                              >
+                                Tuần{" "}
+                              </p>
+                              <p
+                                // data-toggle="modal"
+                                // data-target="#postDateModal"
+                                onClick={() => this.onchangeDate("MONTH")}
+                                class="dropdown-item"
+                                style={{ cursor: "pointer" }}
+                              >
+                                Tháng
+                              </p>
+                              <p
+                                onClick={() => this.onchangeDate("OPTION")}
+                                class="dropdown-item"
+                                style={{ cursor: "pointer" }}
+                              >
+                                Tùy chỉnh
+                              </p>
+                            </div>
+
+
                           </div>
+
+
+
+                          <ModalPostDate
+                            reset={reset}
+                            handleGetDatePost={this.handleGetDatePost}
+                            store_code={store_code}
+                            typeDate={typeDate}
+                          />
+
+
+
                         </div>
-                        <ModalPostDate
-                          reset={reset}
-                          handleGetDatePost={this.handleGetDatePost}
-                          store_code={store_code}
-                          typeDate={typeDate}
-                        />
+
+                        {
+                            datePrime.from === datePrime.to
+                          &&
+                          <button data-toggle="modal"
+                            data-target="#modalDetail" type="button" onClick={(e) => {
+                              this.setState({
+
+                              });
+                            }} class="btn btn-info   btn-sm">
+                            <i class="fas fa-plus"></i>  Thêm bớt công
+
+                          </button>
+
+                        }
+
                       </div>
                     </div>
 
@@ -244,6 +271,7 @@ const mapStateToProps = (state) => {
     alert: state.comboReducers.alert.alert_success,
     permission: state.authReducers.permission.data,
     timeSheet: state.timeSheetReducers.timeSheet.allTimeSheet,
+    staff: state.staffReducers.staff.allStaff,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -252,6 +280,9 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(
         timeSheetAction.fetchAllTimeSheet(store_code, branch_id, params)
       );
+    },
+    fetchAllStaff: (store_code, page = 1, params, branch_id) => {
+      dispatch(staffAction.fetchAllStaff(store_code, 1, params, branch_id));
     },
   };
 };

@@ -3,8 +3,9 @@ import { connect } from 'react-redux';
 import moment from "moment";
 
 import themeData from "../../../ultis/theme_data";
+import date from 'react-moment-input/dist/date';
 
-class ModalHistory extends Component {
+class ModalHistoryRecord extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -13,10 +14,55 @@ class ModalHistory extends Component {
         }
 
     }
-    showHistory = (keeping_histories) => {
+
+    toHHMMSS = (secs) => {
+        var sec_num = parseInt(secs, 10)
+        var hours   = Math.floor(sec_num / 3600)
+        var minutes = Math.floor(sec_num / 60) % 60
+        var seconds = sec_num % 60
+    
+        return `${hours} giờ ${minutes} phút ${seconds} giây`
+
+        return [hours,minutes,seconds]
+            .map(v => v < 10 ? "0" + v : v)
+            .filter((v,i) => v !== "00" || i > 0)
+            .join(":")
+    }
+
+    showHistory = (recording_time) => {
+
+        var { recording_time } = this.props
+        console.log("recording_time", recording_time)
+
         var result = null
-        result = keeping_histories.map((data, index) => {
+        result = recording_time.map((data, index) => {
+
+            return <div className='row' style={{
+                width: "100%",
+                borderRadius: "0.5rem",
+                marginBottom: "0.5rem",
+            }}>
+
+                <div
+                    className='col-md-auto'
+                >
+
+                    <span style={{ color: "green", fontWeight: "bold" }}>
+                        Vào: {data.time_check_in}
+                    </span>
+                    <span style={{ color: "orange", fontWeight: "bold", paddingLeft:20 }}>
+                        Ra: {data.time_check_out}
+                    </span>
+                    <span style={{  paddingLeft:20 }}>
+                        Ghi nhận: {this.toHHMMSS(data.total_in_time)}
+                    </span>
+                </div>
+
+            </div>
+
             return (
+
+
                 <React.Fragment>
                     <div
                         style={{
@@ -27,7 +73,7 @@ class ModalHistory extends Component {
                             padding: "0.5rem 1rem",
                             borderRadius: "0.5rem",
                             marginBottom: "0.5rem",
-                            width : "100%"
+                            width: "100%"
                         }}
                     >
                         <div>
@@ -40,18 +86,18 @@ class ModalHistory extends Component {
                                     color: "green",
                                 }}
                             ></span>
-                            <span style={{ color:  `${data.is_checkin == true ? "green" : "orange"}` , fontWeight: "bold" }}>
-                               {data.is_checkin == true ? "Vào làm:" : "Tan làm:" }  
+                            <span style={{ color: `${data.is_checkin == true ? "green" : "orange"}`, fontWeight: "bold" }}>
+                                {data.is_checkin == true ? "Vào làm:" : "Tan làm:"}
                             </span>
                             <span style={{ fontWeight: "bold" }}>
                                 {moment(data?.time_check).format(
                                     "HH:mm:ss"
                                 )}
-                                &nbsp;({data.is_bonus == true ?      <span style={{ color: "green" }}>
-                                Thêm công
-                            </span> :      <span style={{ color: "red" }}>
-                                Bớt công
-                            </span>})
+                                &nbsp;({data.is_bonus == true ? <span style={{ color: "green" }}>
+                                    Thêm công
+                                </span> : <span style={{ color: "red" }}>
+                                    Bớt công
+                                </span>})
                             </span>
                         </div>
 
@@ -75,10 +121,10 @@ class ModalHistory extends Component {
                                     ? `Lý do: ${data?.reason}`
                                     : ""}
                             </span>
-                        
+
                         </div>
                     </div>
-             
+
 
                 </React.Fragment>
             )
@@ -87,22 +133,22 @@ class ModalHistory extends Component {
     }
 
     render() {
-        var { keeping_histories } = this.props
-        console.log(keeping_histories)
+        var { recording_time } = this.props
+
         return (
             <>
 
 
-                <div class="modal" id="modalHistory">
-                    <div class="modal-dialog modal-sm">
+                <div class="modal" id="modalHistoryRecord">
+                    <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div className='model-header-modal' style={{ display: 'flex', justifyContent: "space-between", backgroundColor: themeData().backgroundColor }}>
-                                <h4 style={{ color: "white", margin: "10px" }}>Lịch sử chấm công</h4>
+                                <h4 style={{ color: "white", margin: "10px" }}>Chấm công ghi nhận</h4>
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
                                 <React.Fragment>
-                                    {this.showHistory(keeping_histories)}
+                                    {this.showHistory(recording_time)}
                                 </React.Fragment>
                             </div>
 
@@ -128,4 +174,4 @@ const mapDispatchToProps = (dispatch, props) => {
 
 }
 
-export default connect(null, mapDispatchToProps)(ModalHistory)
+export default connect(null, mapDispatchToProps)(ModalHistoryRecord)

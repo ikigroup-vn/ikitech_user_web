@@ -9,6 +9,8 @@ import moment from "moment";
 // import ModalDetail from "../../components/RevenueExpenditures/ModalDetail";
 import ModalDetail from "./ModalDetail";
 import ModalHistory from "./ModalHistory"
+import ModalHistoryRecord from "./ModalHistoryRecord"
+
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -20,7 +22,8 @@ class Table extends Component {
       data2: {},
       dataDetail: {},
       idModalShow: null,
-      keeping_histories: []
+      keeping_histories: [],
+      recording_time: []
     };
   }
 
@@ -143,8 +146,8 @@ class Table extends Component {
     }
     return total
   }
-  passData = (keeping_histories) => {
-    this.setState({ keeping_histories })
+  passData = (keeping_histories, recording_time) => {
+    this.setState({ keeping_histories, recording_time })
   }
   showData = (listTimeSheet) => {
     var { store_code, branch_id, timeSheet, datePrime } = this.props;
@@ -154,8 +157,8 @@ class Table extends Component {
     if (listTimeSheet.length > 0) {
       result = listTimeSheet?.map((data, index) => {
         var total_seconds = data?.total_seconds
-        total_seconds = total_seconds < 0 ?(total_seconds * -1) : total_seconds
-        console.log(total_seconds* 1000,Math.trunc(moment.duration( data?.total_seconds* 1000).asHours()))
+        total_seconds = total_seconds < 0 ? (total_seconds * -1) : total_seconds
+        console.log(total_seconds * 1000, Math.trunc(moment.duration(data?.total_seconds * 1000).asHours()))
         return (
           <React.Fragment>
             <tr
@@ -175,8 +178,9 @@ class Table extends Component {
                   data?.keeping_histories.length !== 0) ? (
                 <React.Fragment>
 
-                  <td style={{ cursor: "pointer" }} data-toggle="modal"
-                    data-target="#modalHistory" onClick={() => { this.passData(data?.keeping_histories) }} >
+                  <td style={{ cursor: "pointer" }}
+                    data-toggle="modal"
+                    data-target="#modalHistory" onClick={() => { this.passData(data?.keeping_histories, data?.recording_time) }} >
                     <div
                       style={{
                         display: "flex",
@@ -285,10 +289,18 @@ class Table extends Component {
 
               {data.total_seconds !== 0 ? (
                 <td>
-                  {Math.trunc(moment.duration(total_seconds* 1000).asHours())} giờ{" "}
+                  {Math.trunc(moment.duration(total_seconds * 1000).asHours())} giờ{" "}
                   {moment.utc(total_seconds * 1000).minutes()} phút - {formatNoD(data.total_salary)}đ
 
 
+                  <p
+                    data-toggle="modal"
+                    data-target="#modalHistoryRecord"
+                    onClick={() => { this.passData(data?.keeping_histories, data?.recording_time) }}
+                    style={{
+                      color: "blue",
+                      cursor: "pointer"
+                    }}>Chi tiết</p>
                 </td>
               ) : (
                 <td>0 giờ 0 phút</td>
@@ -296,46 +308,7 @@ class Table extends Component {
               <td>
                 {formatNoD(data.salary_one_hour)}đ/h
               </td>
-              {this.props.typeDate == "DAY" ||
-                (this.props.typeDate == "OPTION" &&
-                  this.props.datePrime.from === this.props.datePrime.to) ? (
-                <td>
-                  <button data-toggle="modal"
-                    data-target="#modalDetail" type="button" onClick={(e) => {
-                      this.setState({
-                        dataDetail: data,
-                      });
-                    }} class="btn btn-info   btn-sm">
-                    <i class="fas fa-plus"></i>  Thêm bớt công
 
-                  </button>
-                  {/* <a
-                    data-toggle="modal"
-                    data-target="#modalDetail"
-                    class={`btn btn-info btn-icon-split btn-sm ${
-                      true ? "show" : "hide"
-                    }`}
-                    style={{ marginRight: "1rem" }}
-                    onClick={(e) => {
-                      this.setState({
-                        dataDetail: data,
-                      });
-                    }}
-                  >
-                    <span class="icon text-white-50" style={{ marginRight: 0 }}>
-                      <i class="fas fa-plus"></i>
-                    </span>
-                    <span
-                      style={{ color: "white", margin: "0 0.75rem" }}
-                      class={`text `}
-                    >
-                      Thêm bớt công
-                    </span>
-                  </a> */}
-                </td>
-              ) : (
-                <td></td>
-              )}
             </tr>
           </React.Fragment>
         );
@@ -348,7 +321,7 @@ class Table extends Component {
 
   render() {
     var { store_code, branch_id, timeSheet } = this.props;
-    var { keeping_histories } = this.state
+    var { keeping_histories, recording_time } = this.state
     // const branch_id = localStorage.getItem("branch_id");
     // var { statusOrder, statusPayment } = this.state;
 
@@ -408,6 +381,9 @@ class Table extends Component {
           />
           <ModalHistory
             keeping_histories={keeping_histories}
+          />
+          <ModalHistoryRecord
+            recording_time={recording_time}
           />
         </div>
       </React.Fragment>
