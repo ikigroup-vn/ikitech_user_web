@@ -3,7 +3,7 @@ import * as Types from "../../constants/ActionType";
 import Sidebar from "../../components/Partials/Sidebar";
 import Topbar from "../../components/Partials/Topbar";
 import Footer from "../../components/Partials/Footer";
-
+import Seo from "../../components/Theme/Seo";
 import Alert from "../../components/Partials/Alert";
 import { connect } from "react-redux";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
@@ -52,10 +52,10 @@ class Theme extends Component {
       var web_theme_banner = permissions.web_theme_banner;
       var isShow =
         web_theme_overview == false &&
-        web_theme_contact == false &&
-        web_theme_help == false &&
-        web_theme_footer == false &&
-        web_theme_banner == false
+          web_theme_contact == false &&
+          web_theme_help == false &&
+          web_theme_footer == false &&
+          web_theme_banner == false
           ? false
           : true;
 
@@ -165,6 +165,15 @@ class Theme extends Component {
                               <span>Banners</span>
                             </Tab>
                           ) : null}
+
+
+
+                          {web_theme_banner == true ? <Tab>
+                            <i class="fa fa-search-plus "></i>
+                            <span>SEO</span>
+                          </Tab> : null}
+
+
                         </TabList>
 
                         {web_theme_overview == true ? (
@@ -229,6 +238,16 @@ class Theme extends Component {
                             />
                           </TabPanel>
                         ) : null}
+
+                        {web_theme_banner == true ? <TabPanel>
+                          <Seo
+                            theme={theme}
+                            tabId={tabId}
+                            store_code={store_code}
+                          />
+                        </TabPanel> : null}
+
+
                       </Tabs>
                     </div>
                   </div>

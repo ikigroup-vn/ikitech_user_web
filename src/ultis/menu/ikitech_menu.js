@@ -56,6 +56,14 @@ export const ikitech_menu = [
             exact: true,
             to: "/report_finance",
           },
+          {
+            class: "report_finance",
+            display: "hide",
+            name: "Thu chi",
+            exact: true,
+            to: "/revenue_expenditure",
+          },
+         
         ],
       },
       {
@@ -90,7 +98,7 @@ export const ikitech_menu = [
       },
 
       {
-        name: "Kho hàng",
+        name: "Kho",
 
         icon: "fas fa-store",
         open: "inventory",
@@ -115,6 +123,13 @@ export const ikitech_menu = [
             name: "Nhập hàng",
             exact: true,
             to: "/import_stocks/index",
+          },
+          {
+            name: "Nhà cung cấp",
+            class: "web_theme_edit",
+            display: "hide",
+            exact: true,
+            to: "/supplier",
           },
         ],
       },
@@ -174,14 +189,6 @@ export const ikitech_menu = [
         ],
       },
 
-      {
-        name: "Nhà cung cấp",
-        class: "supplier",
-        display: "hide",
-        icon: "fas fa-building",
-        exact: true,
-        to: "/supplier",
-      },
 
       {
         class: "revenue_expenditure",
@@ -286,32 +293,33 @@ export const ikitech_menu = [
           },
         ],
       },
-      {
-        name: "Thu chi",
-        display: "hide",
-        icon: "fa-coins",
-        exact: true,
-        to: "/revenue_expenditure",
-        itemHasTabName: "agency",
-      },
+
+
 
       {
-        name: "Đại lý",
-        display: "hide",
-        icon: "fa-home",
-        exact: true,
-        to: "/agency",
-        itemHasTabName: "agency",
+        name: "Đối tác bán hàng",
+
+        icon: "fa fa-user",
+        open: "setting2",
+        children: [
+          {
+            name: "Cộng tác viên",
+            class: "web_theme_edit",
+            display: "hide",
+            exact: true,
+            to: "/collaborator",
+          },
+          {
+            name: "Đại lý",
+            class: "notification_schedule_list",
+            display: "hide",
+            icon: "fa fa-bell",
+            exact: true,
+            to: "/agency",
+          },
+        ]
       },
 
-      {
-        name: "Cộng tác viên",
-        display: "hide",
-        icon: "fa-user",
-        exact: true,
-        to: "/collaborator",
-        itemHasTabName: "collaborator",
-      },
 
 
       {
@@ -321,41 +329,19 @@ export const ikitech_menu = [
         open: "setting",
         children: [
           {
-            name: "Chỉnh sửa giao diện",
+            name: "Chỉnh sửa website",
             class: "web_theme_edit",
             display: "hide",
             exact: true,
             to: "/theme",
           },
+       
           {
-            name: "Lên lịch thông báo",
-            class: "notification_schedule_list",
-            display: "hide",
-            icon: "fa fa-bell",
-            exact: true,
-            to: "/notifications/schedule",
-          },
-          {
-            name: "Cài đặt Popup",
-            class: "popup_list",
-            display: "hide",
-            icon: "fa fa-bell",
-            exact: true,
-            to: "/popup",
-          },
-          {
-            name: "Nhà cung cấp",
-            class: "web_theme_edit",
+            name: "Chi nhánh",
+            class: "branch_list",
             display: "hide",
             exact: true,
-            to: "/supplier",
-          },
-          {
-            name: "Cài đặt phân quyền",
-            class: "decentralization_list",
-            display: "hide",
-            exact: true,
-            to: "/decentralization/index",
+            to: "/branch/index",
           },
           {
             name: "Nhân viên",
@@ -364,6 +350,17 @@ export const ikitech_menu = [
             exact: true,
             to: "/staff/index",
           },
+        
+          {
+            name: "Cài đặt phân quyền",
+            class: "decentralization_list",
+            display: "hide",
+            exact: true,
+            to: "/decentralization/index",
+          },
+
+        
+
           {
             name: "Cài đặt quảng cáo",
             display: "hide",
@@ -371,14 +368,7 @@ export const ikitech_menu = [
             to: "/banner_ads",
           },
 
-          {
-            name: "Chi nhánh",
-            class: "branch_list",
-            display: "hide",
-            exact: true,
-            to: "/branch/index",
-          },
-
+        
 
           {
             name: "Cài đặt chung",
@@ -437,7 +427,22 @@ export const ikitech_menu = [
             exact: true,
             to: "/review",
           },
-
+          {
+            name: "Lên lịch thông báo",
+            class: "notification_schedule_list",
+            display: "hide",
+            icon: "fa fa-bell",
+            exact: true,
+            to: "/notifications/schedule",
+          },
+          {
+            name: "Cài đặt Popup",
+            class: "popup_list",
+            display: "hide",
+            icon: "fa fa-bell",
+            exact: true,
+            to: "/popup",
+          },
 
         ],
       },
