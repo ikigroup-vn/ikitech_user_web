@@ -1,24 +1,26 @@
 import React, { Component } from 'react'
-import { setBranchId } from '../../ultis/branchUtils';
+import { setBranchId , getBranchId} from '../../ultis/branchUtils';
 import { shallowEqual } from '../../ultis/shallowEqual'
 
 class ModalBranch extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            txtBranch: "",
+            txtBranch: getBranchId() || "",
             nameBranch: ""
         }
     }
 
     showData = (stores) => {
+        console.log(stores)
         var result = null;
         var store_code = typeof this.props.store_code != "undefined" ? this.props.store_code : null
         if (stores.length > 0) {
             result = stores.map((data, index) => {
                 var selected = data.store_code === store_code ? true : false
+                console.log(getBranchId() == data.id)
                 return (
-                    <option value={data.id} key={index} selected={selected} name={data.name} >
+                    <option value={data.id} key={index} selected={getBranchId() == data.id} name={data.name} >
                         {data.name}
                     </option>
 
