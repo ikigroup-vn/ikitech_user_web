@@ -6,6 +6,8 @@ import { connect } from 'react-redux'
 import CardProduct from '../../components/Pos_Order/CardProduct'
 import * as posAction from '../../actions/post_order'
 import ModalDetail from '../../components/Pos_Order/ModalDetail'
+import ModalUpdateDetail from '../../components/Pos_Order/UpdateModal'
+
 import { shallowEqual } from '../../ultis/shallowEqual'
 import Topbar from '../../components/Pos_Order/Topbar'
 import ListItemInCart from '../../components/Pos_Order/ListItemInCart'
@@ -73,6 +75,19 @@ class PostOrder extends Component {
             percentDiscount: 0,
             randomFocus : null,
             infoProduct: {
+                inventoryProduct: "",
+                idProduct: "",
+                nameProduct: "",
+                imageProduct: "",
+                priceProduct: "",
+                distributeProduct: "",
+                minPriceProduct: "",
+                maxPriceProduct: "",
+                discountProduct: "",
+                quantityProduct: "",
+                quantityProductWithDistribute: ""
+            },
+                       updateInfoProduct: {
                 inventoryProduct: "",
                 idProduct: "",
                 nameProduct: "",
@@ -265,6 +280,15 @@ class PostOrder extends Component {
         this.setState(
             {
                 infoProduct: modal
+            })
+    }
+
+    handleUpdateCallbackProduct = (modal) => {
+
+
+        this.setState(
+            {
+                updateInfoProduct: modal
             })
     }
 
@@ -717,7 +741,7 @@ class PostOrder extends Component {
                                                 <div className='col-list-order'>
                                                     <div className='' style={{ padding: "8px" }}>
 
-                                                        <ListItemInCart store_code={store_code} listItemPos={oneCart} idCart={this.state.idCart} handleDelete={this.handleDelete} />
+                                                        <ListItemInCart handleUpdateCallbackProduct  = {this.handleUpdateCallbackProduct} store_code={store_code}  products = {products?.data || []} listItemPos={oneCart} idCart={this.state.idCart} handleDelete={this.handleDelete} />
 
 
                                                     </div>
@@ -1097,6 +1121,7 @@ class PostOrder extends Component {
 
                             </div>
                             <ModalDetail allow_semi_negative={allow_semi_negative} modal={this.state.infoProduct} handleCallbackPushProduct={this.handleCallbackPushProduct} />
+                            <ModalUpdateDetail allow_semi_negative={allow_semi_negative} modal={this.state.updateInfoProduct} handleCallbackPushProduct={this.handleCallbackPushProduct} />
                             {/* <PertionInfo store_code={store_code} listPertion={listPertion} handleCallbackPertion={this.handleCallbackPertion} /> */}
                             <ModalUser handleCallbackUser={this.handleCallbackUser} />
                             <ModalVoucher listVoucher={listVoucher} handleCallbackVoucherInput={this.handleCallbackVoucherInput} />
@@ -1129,6 +1154,8 @@ const mapStateToProps = (state) => {
         badges: state.badgeReducers.allBadge,
         customers: state.customerReducers.customer.allCustomer,
         permission: state.authReducers.permission.data,
+        products: state.productReducers.product.allProduct,
+
 
     }
 }

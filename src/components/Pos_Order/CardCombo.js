@@ -139,6 +139,7 @@ class CardProduct extends Component {
     }
     showProductCombo = (product, quantity) => {
         let { price, product_discount, images, id, name } = product;
+        console.log(product)
         let avt = "/images/notfound.png";
         if (product_discount) {
             price = product_discount.discount_price;
@@ -159,7 +160,7 @@ class CardProduct extends Component {
                     {
                         product.min_price == product.max_price ? format(Number(product.min_price)) : `${format(Number(product.min_price))}- ${format(Number(product.max_price))}`}                </div>
                 <div className="prev-price">
-                    Số lượng:  {product.check_inventory && findTotalStockPos(product)}
+                    Số lượng:  {quantity}
 
                 </div>
             </div>

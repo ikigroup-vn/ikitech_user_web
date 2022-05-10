@@ -26,7 +26,7 @@
 }
 
 .col-list-order {
-    overflow-y: auto;
+    /* overflow-y: auto; */
     transition: height 0.5s;
     height: 100%;
 }
@@ -131,6 +131,7 @@
 
 .panel-top {
     flex: 0 0 auto;
+    overflow: scroll;
     /* only manually resize */
     width: 100%;
     white-space: nowrap;
@@ -480,7 +481,6 @@ pre {
     border-radius: 50%;
     position: absolute;
     right: 0;
-    top: 2px;
 }
 
 .icon-trash-pos:hover {
