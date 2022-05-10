@@ -267,7 +267,7 @@ class PanelBottom extends Component {
                 var selectedDate = null
                 try {
                     console.log(oneCart.customer_date_of_birth)
-                    selectedDate = oneCart == null || oneCart.customer_date_of_birth == null || oneCart.customer_date_of_birth == "0000-00-00" || oneCart.customer_date_of_birth == "0000-00-00 00:00:00" ? "" : moment(oneCart.customer_date_of_birth)
+                    selectedDate = oneCart == null || oneCart.customer_date_of_birth == null || oneCart.customer_date_of_birth == "0000-00-00" || oneCart.customer_date_of_birth == "0000-00-00 00:00:00" ? "" : new Date(oneCart.customer_date_of_birth)
                 } catch (error) {
                     selectedDate = null
                 }
@@ -359,6 +359,7 @@ class PanelBottom extends Component {
     }
 
     setStartDate = (date) => {
+        console.log(date)
         this.setState({
             selectedDate: date
         })
@@ -531,6 +532,7 @@ class PanelBottom extends Component {
     };
 
     _recordInput = (name, event) => {
+        console.log(event);
         this.props.passKeyPress(event.key)
     }
 
@@ -587,12 +589,17 @@ class PanelBottom extends Component {
 
         var handleKeyPress = {
             onKeyDown: (event) => {
+                event.preventDefault()
                 this._recordInput('onKeyDown', event);
             },
             onKeyPress: (event) => {
+                event.preventDefault()
+
                 this._recordInput('onKeyPress', event)
             },
             onKeyUp: (event) => {
+                event.preventDefault()
+
                 this._recordInput('onKeyUp', event);
             }
         }
@@ -621,8 +628,7 @@ class PanelBottom extends Component {
 
 
                     <AutoCompleteText type="text" class="form-control customerInfo"
-                        {...handleKeyPress}
-
+                            _recordInput = {this._recordInput}
                         placeholder="Điện thoại (F4)" data-startsuggest="6" id="customerMobile"
                         value={txtPhoneNumber || ""}
                         onChange={this.onChangeNum}
@@ -866,7 +872,7 @@ class PanelBottom extends Component {
                             <DatePicker
                                 {...handleKeyPress}
 
-                                //                 dateFormat = "dd/MM/yyyy"
+                                                dateFormat = "dd/MM/yyyy"
                                 className={"tbDatePicker form-control customerInfo px-1 day-of-birth-pos"}
                                 // customInput={<ExampleCustomInput />}
                                 placeholderText="Ngày sinh"
@@ -923,7 +929,7 @@ class PanelBottom extends Component {
                                         </button>
                                     </div>
                                 )}
-                                selected={selectedDate == null || this.state.selectedDate == "" ? null : selectedDate}
+                                selected={selectedDate == null || this.state.selectedDate == "" ? null : new Date(selectedDate)}
                                 onChange={(date) => this.setStartDate(date)}
                             />
                         </div>

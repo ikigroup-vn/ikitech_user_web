@@ -23,7 +23,7 @@
 }
 
 .combo-page {
-    padding: 1em;
+    padding: 4px 10px;
     min-height: calc(100vh - 8.5em);
 }
 
@@ -41,6 +41,7 @@
     border-radius: 0.5em;
     background: white;
     position: relative;
+    max-height : 195px
 }
 
 .combo-page .combo-card .info-btn {

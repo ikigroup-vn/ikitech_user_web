@@ -69,7 +69,12 @@ class Topbar extends Component {
             }
 
         }
-
+        if((this.props.randomFocus != nextProps.randomFocus) && nextProps.randomFocus != null)
+        {
+            if (this.refSearchProduct != null) {
+                this.refSearchProduct.focus()
+            }
+        }
 
         if (!shallowEqual(this.props.listPos, nextProps.listPos)) {
             if (nextProps.listPos.length > 0) {
@@ -301,7 +306,8 @@ class Topbar extends Component {
 
                 <KeyboardEventHandler
                     handleKeys={["f3"]}
-                    onKeyEvent={(key, e) => this.handleKeyboard(key)}
+                    onKeyEvent={(key, e) => { e.preventDefault()
+                        this.handleKeyboard(key)}}
                 />
                 <nav class="navbar navbar-expand navbar-light bg-white topbar static-top header-pos">
 
@@ -324,12 +330,18 @@ class Topbar extends Component {
                                         <AsyncPaginate
                                                   onKeyDown={(event) => {
                                 this._recordInput('onKeyDown', event);
+                                event.preventDefault()
+
                             }}
                             onKeyPress={(event) => {
                                 this._recordInput('onKeyPress', event)
+                                event.preventDefault()
+
                             }}
                             onKeyUp={(event) => {
                                 this._recordInput('onKeyUp', event);
+                                event.preventDefault()
+
                             }} 
                                             autoFocus
                                             selectRef={(ref) => {

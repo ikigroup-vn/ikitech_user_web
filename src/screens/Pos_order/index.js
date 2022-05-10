@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import { format, formatNoD, formatNumber, removeSignNumber, stringToInit } from '../../ultis/helpers'
+import { format, formatNoD, formatNumber, removeSignNumber, stringToInit , randomString} from '../../ultis/helpers'
 import * as productAction from "../../actions/product"
 import { connect } from 'react-redux'
 import CardProduct from '../../components/Pos_Order/CardProduct'
@@ -71,6 +71,7 @@ class PostOrder extends Component {
             beforeDiscount: 0,
             haveCheck: false,
             percentDiscount: 0,
+            randomFocus : null,
             infoProduct: {
                 inventoryProduct: "",
                 idProduct: "",
@@ -530,6 +531,11 @@ class PostOrder extends Component {
     handleKeyboard = (key) => {
 
         switch (key) {
+            case "f3":
+                case "F3":
+                    this.setState({randomFocus : randomString(10)})
+                    break;
+
             case "f9":
             case "F9":
 
@@ -678,6 +684,7 @@ class PostOrder extends Component {
                             onKeyEvent={(key, e) => this.handleKeyboard(key)}
                         />
                         <Topbar
+                            randomFocus = {this.state.randomFocus}
                             passKeyPress = {this.handleKeyboard}
                             store_code={store_code}
                             handleCallbackTab={this.handleCallbackTab}
@@ -703,7 +710,7 @@ class PostOrder extends Component {
                                     <div className="panel-container-vertical">
 
                                         <div className="panel-top" style={{
-                                            height: this.state.isShowPanelBottom ? "calc(100% - 225px)" : "calc(100% - 0px)"
+                                            height: this.state.isShowPanelBottom ? "calc(100% - 264px)" : "calc(100% - 0px)"
                                         }}>
                                             {oneCart?.info_cart?.line_items.length > 0 &&
 

@@ -120,7 +120,7 @@ class CardProduct extends Component {
                                 {data.check_inventory && <div class="inventory-tag">SL: {findTotalStockPos(data)}</div>}
                                 {data.product_discount && <div class="discount-tag">{data.product_discount.value}%</div>}
 
-                                <img src={data.images.length > 0 ? data.images[0].image_url : Env.IMG_NOT_FOUND_2} className="img-responsive image-product" alt="Image" width="100%" height="100px" />
+                                <img src={data.images.length > 0 ? data.images[0].image_url : Env.IMG_NOT_FOUND_2} className="img-responsive image-product" alt="Image" width="100%" height="90px" />
 
                                 <div class="card-body" style={{ padding: ' 0 5px' }}>
                                     <p class="card-title" style={{ margin: '0', overflow: "hidden", whiteSpace: "nowrap", textOverflow: 'ellipsis' }}>{data.name}</p>
@@ -149,7 +149,7 @@ class CardProduct extends Component {
             <div className="discount-product-card">
                 <div className="image">
                     <div className="img-container">
-                        <img style={{ width: "100%", height: "110px" }} src={avt} alt="" />
+                        <img style={{ width: "100%", height: "90px" }} src={avt} alt="" />
                     </div>
                 </div>
                 <div className="name" >
