@@ -26,11 +26,8 @@ import { getBranchId } from '../../ultis/branchUtils'
 import ShowModalDetailCombo from "../../components/Pos_Order/ShowDetailCombo"
 
 class PanelBottom extends Component {
-
     constructor(props) {
         super(props)
-
-
         this.state = {
             isDisabledButton: false,
             isOpenProvince: false,
@@ -47,8 +44,12 @@ class PanelBottom extends Component {
             isShow: false,
             filterCategory: [],
             isShowDetailCombo: false,
-            modal: { products: [] }
+            modal: { products: [] },
+            filter_sort: "",
+            filter_desc: "",
+
         }
+
 
         this.onChangeNum = debounce(this.handleChangeNum, 0)
         this.onSearchCustomer = debounce(this.handleSearchCustomer, 500)
@@ -534,7 +535,7 @@ class PanelBottom extends Component {
 
     _recordInput = (name, event) => {
         console.log(event);
-        this.props.passKeyPress(event.key)
+        this.props.passKeyPress(event.key, event)
     }
 
     buildTabCustomer = () => {
@@ -589,17 +590,15 @@ class PanelBottom extends Component {
         ];
 
         var handleKeyPress = {
-            onKeyDown: (event) => {
-                event.preventDefault()
-                this._recordInput('onKeyDown', event);
-            },
-            onKeyPress: (event) => {
-                event.preventDefault()
 
-                this._recordInput('onKeyPress', event)
-            },
             onKeyUp: (event) => {
-                event.preventDefault()
+                // event.preventDefault()
+
+                this._recordInput('onKeyUp', event);
+            },
+
+            onKeyDown: (event) => {
+                // event.preventDefault()
 
                 this._recordInput('onKeyUp', event);
             }
@@ -1040,31 +1039,42 @@ class PanelBottom extends Component {
         e.preventDefault()
         const branch_id = getBranchId()
 
-        var { filter_price, filterCategory, filter_sale } = this.state
-        var descending = filter_price == "DESC" ? true : false;
+        var { filter_desc, filter_sort, filterCategory } = this.state
+        var descending = filter_desc == "DESC" ? true : false;
         var category_ids = filterCategory;
-        var sort_by = filter_sale == true ? "sales" : ""
-        var params = ""
-        if (descending)
+        var sort_by = filter_sort
+        var params = `&limit=${this.props.limit}`
+        if (filter_desc == "") { }
+        else
             params = params + `&descending=${descending}`;
-        if (category_ids) {
+        if (category_ids && category_ids != "") {
             if (category_ids == "all") { }
             else
                 params = params + `&category_ids=${category_ids}`;
+        }
+        if (sort_by && sort_by != "")
+            params = params + `&sort_by=${sort_by}`;
+        else {
+            // params = params + `&sort_by=price`;
 
         }
-        if (sort_by)
-            params = params + `&sort_by=${sort_by}`;
-        this.props.fetchAllProductV2(this.props.store_code, branch_id, params);
+        this.props.fetchAllProductV2(this.props.store_code, branch_id, 1, params);
         this.setState({ isShow: !this.state.isShow })
 
     }
-    onChangeFilterPrice = (e) => {
-        this.setState({ filter_price: e.target.value })
+    onChangeFilterSort = (e) => {
+        this.setState({ filter_sort: e.target.value })
     }
-    onChangeFilterSale = (e) => {
-        this.setState({ filter_sale: e.target.checked })
+    onChangeFilterDesc = (e) => {
+        this.setState({ filter_desc: e.target.value })
     }
+    // onChangeFilter = (e) => {
+    //     this.setState({ filter_price: e.target.checked })
+    // }
+
+    // onChangeFilterSale = (e) => {
+    //     this.setState({ filter_sale: e.target.checked })
+    // }
     getDetailCombo = (data) => {
         if (this.state.isShowDetailCombo == false)
             this.setState({ modal: data, isShowDetailCombo: !this.state.isShowDetailCombo })
@@ -1074,7 +1084,7 @@ class PanelBottom extends Component {
     }
     render() {
         var limit, passNumPage, store_code, products = this.props
-        var { isShow, filter_price, filter_sale, filterCategory, isShowDetailCombo, modal } = this.state
+        var { isShow, filter_desc, filter_sort, filterCategory, isShowDetailCombo, modal } = this.state
         var show = isShow == true ? "show" : "hide"
         var isShowDetailCombo = isShowDetailCombo == true ? "show" : "hide"
 
@@ -1121,6 +1131,29 @@ class PanelBottom extends Component {
 
                         </div>
                         <div class="form-group">
+                            <div class="form-check">
+
+                                <input class="form-check-input" value="" onChange={this.onChangeFilterSort} checked={filter_sort == "" ? true : false} type="radio" name="filter_sort" />
+                                <label class="form-check-label" for="gridCheck">
+                                    Tất cả</label>
+                            </div>
+                            <div class="form-check">
+
+                                <input class="form-check-input" value="sales" onChange={this.onChangeFilterSort} checked={filter_sort == "sales" ? true : false} type="radio" name="filter_sort" />
+                                <label class="form-check-label" for="gridCheck">
+                                    Lọc theo sản phẩm bán chạy
+                                </label>
+                            </div>
+                            <div class="form-check">
+
+                                <input class="form-check-input" value="price" onChange={this.onChangeFilterSort} checked={filter_sort == "price" ? true : false} type="radio" name="filter_sort" />
+                                <label class="form-check-label" for="gridCheck">
+                                    Lọc theo giá sản phẩm
+                                </label>
+                            </div>
+                        </div>
+
+                        {/* <div class="form-group">
 
                             <div class="form-check">
                                 <input class="form-check-input" onChange={this.onChangeFilterSale} checked={filter_sale} value="sales" type="checkbox" name="" />
@@ -1131,18 +1164,28 @@ class PanelBottom extends Component {
 
                         </div>
                         <div class="form-group">
+
+                            <div class="form-check">
+                                <input class="form-check-input" onChange={this.onChangeFilterPrice} checked={filter_price} value="price" type="checkbox" name="" />
+                                <label class="form-check-label" for="gridCheck">
+                                    Lọc theo giá sản phẩm
+                                </label>
+                            </div>
+
+                        </div> */}
+                        <div class="form-group">
                             <label htmlFor="lname">        Lọc theo thứ tự
                             </label>
                             <div class="form-check">
 
-                                <input class="form-check-input" value="ASC" onChange={this.onChangeFilterPrice} checked={filter_price == "ASC" ? true : false} type="radio" name="filter_price" />
+                                <input class="form-check-input" value="ASC" onChange={this.onChangeFilterDesc} checked={filter_desc == "ASC" ? true : false} type="radio" name="filter_desc" />
                                 <label class="form-check-label" for="gridCheck">
                                     Tăng dần
                                 </label>
                             </div>
                             <div class="form-check">
 
-                                <input class="form-check-input" value="DESC" onChange={this.onChangeFilterPrice} checked={filter_price == "DESC" ? true : false} type="radio" name="filter_price" />
+                                <input class="form-check-input" value="DESC" onChange={this.onChangeFilterDesc} checked={filter_desc == "DESC" ? true : false} type="radio" name="filter_desc" />
                                 <label class="form-check-label" for="gridCheck">
                                     Giảm dần
                                 </label>
@@ -1152,7 +1195,7 @@ class PanelBottom extends Component {
                     <div className="" style={{
                         position: "absolute",
                         bottom: "10px",
-                        display : "flex",
+                        display: "flex",
                         right: "10px"
                     }}>
                         <button
@@ -1195,15 +1238,15 @@ class PanelBottom extends Component {
 
                 </div>
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item">
+                    <li class="nav-item" onClick = {()=>this.setState({chooseTab : 1})}>
                         <a class="nav-link " id="tab-javascript" data-toggle="tab"
                             href="#content-javascript"
                             role="tab" aria-controls="content-javascript" aria-selected="true">
                             Danh sách sản phẩm ({this.props.products?.data?.length || 0}
-)
+                            )
                         </a>
                     </li>
-                    <li class="nav-item">
+                    <li class="nav-item"  onClick = {()=>this.setState({chooseTab : 2})}>
                         <a class="nav-link active" id="tab-css" data-toggle="tab"
                             href="#content-css"
                             role="tab" aria-controls="content-css" aria-selected="false">
@@ -1211,15 +1254,28 @@ class PanelBottom extends Component {
                         </a>
                     </li>
                     {
-                        listCombo?.length > 0 && 
-                    <li class="nav-item">
-                        <a class="nav-link " id="tab-javascripts" data-toggle="tab"
-                            href="#content-javascripts"
-                            role="tab" aria-controls="content-javascripts" aria-selected="true">
-                            Combo đang diễn ra ({listCombo.length || 0})
-                        </a>
-                    </li>
-    }
+                        listCombo?.length > 0 &&
+                        <li class="nav-item"  onClick = {()=>this.setState({chooseTab : 3})}>
+                            <a class="nav-link " id="tab-javascripts" data-toggle="tab"
+                                href="#content-javascripts"
+                                role="tab" aria-controls="content-javascripts" aria-selected="true">
+                                Combo đang diễn ra ({listCombo.length || 0})
+                            </a>
+                        </li>
+                    }
+
+                   {
+                       this.state.chooseTab == 1 && 
+                        <div className = "filter-button-pos">
+                              <button
+                        style={{ marginRight: "8px", marginTop: "8px" }}
+                        onClick={this.showFilter}
+                        class={`btn btn-secondary btn-sm `}
+                    >
+                        <i class="fa  fa-filter"></i>
+                    </button>
+                        </div>
+                   } 
                     {/* <li class="nav-item">
                         <a class="nav-link " id="tab-bootstrap" data-toggle="tab"
                             href="#content-bootstrap"
@@ -1236,21 +1292,21 @@ class PanelBottom extends Component {
                     <div class="tab-pane fade" id="content-javascript"
                         role="tabpanel" aria-labelledby="tab-javascript">
 
-                        <div style={{ display : "flex" , justifyContent : "end" }}>
-                        <div >
+                        {/* <div style={{ display: "flex", justifyContent: "end" }}>
+                            <div >
 
-                            <button
-                                style = {{marginRight : "8px" , marginTop : "8px"}}
-                                onClick={this.showFilter}
-                                class={`btn btn-secondary btn-sm `}
-                            >
-                                <i class="fa  fa-filter"></i>
-                            </button>
+                                <button
+                                    style={{ marginRight: "8px", marginTop: "8px" }}
+                                    onClick={this.showFilter}
+                                    class={`btn btn-secondary btn-sm `}
+                                >
+                                    <i class="fa  fa-filter"></i>
+                                </button>
 
-                            <span></span>
+                                <span></span>
 
-                        </div>
-                        </div>
+                            </div>
+                        </div> */}
 
                         <div className='col-list-product' style={{ borderRadius: "0", display: "flex", flexDirection: "column" }}>
                             <div className='card-pos-body' style={{ overflow: "hidden" }}>

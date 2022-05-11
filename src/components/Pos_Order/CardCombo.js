@@ -5,6 +5,8 @@ import * as Env from "../../ultis/default"
 import { filter_arr, format } from '../../ultis/helpers'
 import { findTotalStockPos } from '../../ultis/productUltis'
 import ShowModalDetailCombo from "../../components/Pos_Order/ShowDetailCombo"
+import Slider from "react-slick";
+
 class CardProduct extends Component {
     constructor(props) {
         super(props)
@@ -152,7 +154,10 @@ class CardProduct extends Component {
                     <div className="img-container">
                         <img style={{ width: "100%", height: "90px" }} src={avt} alt="" />
                     </div>
+                    {product.product_discount && <div class="discount-tag">{product.product_discount.value}%</div>}
+
                 </div>
+
                 <div className="name" >
                     {name}
                 </div>
@@ -169,7 +174,7 @@ class CardProduct extends Component {
     showDetail = (modal) => {
         this.props.getDetailCombo(modal)
     }
-    render() {
+    render() {     
         // var { products, isItemSearch } = this.props
         // var listProducts = filter_arr(products.data)
 
@@ -207,14 +212,16 @@ class CardProduct extends Component {
                     </div>
                 </div>
                 <div className="products" onClick={() => { this.props.addComboInCart({ combo_id: id }) }}>
+
                     {
                         products?.length > 0
                         && products?.map((v, i) =>
-                            i < 3 && <div className="card-wraper" key={i}>
+                            i < 3 && <div className="card-wraper col-4" key={i}>
                                 {this.showProductCombo(v.product, v.quantity)}
                             </div>
                         )
                     }
+
                 </div>
     
 

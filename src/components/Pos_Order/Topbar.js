@@ -69,8 +69,7 @@ class Topbar extends Component {
             }
 
         }
-        if((this.props.randomFocus != nextProps.randomFocus) && nextProps.randomFocus != null)
-        {
+        if ((this.props.randomFocus != nextProps.randomFocus) && nextProps.randomFocus != null) {
             if (this.refSearchProduct != null) {
                 this.refSearchProduct.focus()
             }
@@ -237,7 +236,7 @@ class Topbar extends Component {
     }
     _recordInput = (name, event) => {
 
-        this.props.passKeyPress(event.key)
+        this.props.passKeyPress(event.key, event)
     }
     onChangeProduct = (selectValue) => {
 
@@ -261,11 +260,12 @@ class Topbar extends Component {
 
     };
 
-    handleKeyboard = (key) => {
+    handleKeyboard = (key,event) => {
 
         switch (key) {
             case "f3":
-                case "F3":
+            case "F3":
+                event.preventDefault()
 
                 if (this.refSearchProduct != null) {
                     this.refSearchProduct.focus()
@@ -306,8 +306,9 @@ class Topbar extends Component {
 
                 <KeyboardEventHandler
                     handleKeys={["f3"]}
-                    onKeyEvent={(key, e) => { e.preventDefault()
-                        this.handleKeyboard(key)}}
+                    onKeyEvent={(key, e) => {
+                        this.handleKeyboard(key,e)
+                    }}
                 />
                 <nav class="navbar navbar-expand navbar-light bg-white topbar static-top header-pos">
 
@@ -328,21 +329,15 @@ class Topbar extends Component {
 
                                     <div>
                                         <AsyncPaginate
-                                                  onKeyDown={(event) => {
-                                this._recordInput('onKeyDown', event);
-                                event.preventDefault()
+                                      
+                                            onKeyUp={(event) => {
+                                                this._recordInput('onKeyUp', event);
 
-                            }}
-                            onKeyPress={(event) => {
-                                this._recordInput('onKeyPress', event)
-                                event.preventDefault()
-
-                            }}
-                            onKeyUp={(event) => {
-                                this._recordInput('onKeyUp', event);
-                                event.preventDefault()
-
-                            }} 
+                                            }}
+                                            onKeyDown= {(event) => {
+                                
+                                                this._recordInput('onKeyUp', event);
+                                            }}
                                             autoFocus
                                             selectRef={(ref) => {
                                                 this.refSearchProduct = ref;
@@ -376,12 +371,12 @@ class Topbar extends Component {
                                     {
                                         listPos !== null && listPos.length > 0 ?
                                             <ul class="navbar-nav" style={{ alignItems: "center" }}>
-                                                <li 
-                                                 onClick={() => this.handleChooseTab1(listPos[0].id)}
-                                                className={this.state.selectTap === -1 ? "activess nav-item item-cart-list" : 'nav-item item-cart-list'} 
-                                              >
-                                                    <div className='tab-item' 
-                                                    style={{ marginRight: "5px" }}
+                                                <li
+                                                    onClick={() => this.handleChooseTab1(listPos[0].id)}
+                                                    className={this.state.selectTap === -1 ? "activess nav-item item-cart-list" : 'nav-item item-cart-list'}
+                                                >
+                                                    <div className='tab-item'
+                                                        style={{ marginRight: "5px" }}
                                                     >{listPos[0].name}</div>
                                                     {listPos.length > 1 && <i class='fa fa-window-close'
                                                         onClick={() => this.handleDelete(listPos[0].id)}
@@ -392,14 +387,14 @@ class Topbar extends Component {
                                                 {
                                                     listPos.slice(1, listPos.length).map((item, index) => {
                                                         return (
-                                                            <li  onClick={() => this.handleChooseTab(item.id, index)}  
-                                                            key={index} className={index === this.state.selectTap ? "activess nav-item item-cart-list" : 'nav-item item-cart-list'} 
+                                                            <li onClick={() => this.handleChooseTab(item.id, index)}
+                                                                key={index} className={index === this.state.selectTap ? "activess nav-item item-cart-list" : 'nav-item item-cart-list'}
                                                             >
-                                                                <div className='tab-item' 
-                                                               
-                                                                style={{  marginRight: "5px" }}>{item.name}</div>
-                                                                <i class='fa fa-window-close' 
-                                                                onClick={() => this.handleDelete(item.id)} data-toggle="modal" data-target="#removeModal"></i>
+                                                                <div className='tab-item'
+
+                                                                    style={{ marginRight: "5px" }}>{item.name}</div>
+                                                                <i class='fa fa-window-close'
+                                                                    onClick={() => this.handleDelete(item.id)} data-toggle="modal" data-target="#removeModal"></i>
                                                             </li >
                                                         )
                                                     })
@@ -446,7 +441,7 @@ class Topbar extends Component {
 
                                     </li>
 
-                                    <li className='nav-item' id='btn-full' style={{  color: "white", cursor: "pointer" }} onClick={this.fullScreen}>
+                                    <li className='nav-item' id='btn-full' style={{ color: "white", cursor: "pointer" }} onClick={this.fullScreen}>
                                         {!this.state.fullScreen ?
                                             <i class='fas fa-expand-arrows-alt fa-2x  add-cart'></i> :
                                             <i class='fas fa-compress-arrows-alt  add-cart'></i>
@@ -454,8 +449,10 @@ class Topbar extends Component {
 
                                     </li >
 
-                                    <li className='nav-item' style={{ color: "white", cursor: "pointer", 
-                                    marginRight: '10px' }} onClick={this.goBackHome}>
+                                    <li className='nav-item' style={{
+                                        color: "white", cursor: "pointer",
+                                        marginRight: '10px'
+                                    }} onClick={this.goBackHome}>
                                         <i class='fas fa-home fa-2x  add-cart'></i>
                                     </li>
 

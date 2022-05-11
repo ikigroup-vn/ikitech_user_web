@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import { shallowEqual } from '../../ultis/shallowEqual'
 import { getBranchId } from '../../ultis/branchUtils'
 import ModalUpdateDetail from "./UpdateModal"
+import {randomString} from "../../ultis/helpers"
 class ListItemInCart extends Component {
     constructor(props) {
         super(props)
@@ -16,6 +17,7 @@ class ListItemInCart extends Component {
                 quantity: "",
                 distributesProduct: []
             },
+            chooseId : null,
             modalSub: {
                 CartIds: "",
                 itemIds: "",
@@ -86,15 +88,18 @@ class ListItemInCart extends Component {
         }
         return true
     }
+    showDetail = (id) =>{
+        this.setState({chooseId : id , resetId : randomString(10)})
+    }
     render() {
-        var { listItemPos } = this.props
+        var { listItemPos , store_code } = this.props
 
         return (
             <div className='list-group'>
 
                 {listItemPos.info_cart?.line_items.map((item, index) => {
                     return (
-                        <ItemInCart  products = {this.props.products || []}  handleUpdateCallbackProduct = {this.props.handleUpdateCallbackProduct} key={item.id} item={item} index={index} addQuantity={this.addQuantity} handleDelete={this.handleDelete} subQuantity={this.subQuantity} addQuantitys={this.addQuantitys} />
+                        <ItemInCart store_code = {store_code} branch_id = {getBranchId()}  resetId = {this.state.resetId} chooseId = {this.state.chooseId} showDetail = {this.showDetail} products = {this.props.products || []}  handleUpdateCallbackProduct = {this.props.handleUpdateCallbackProduct} key={item.id} item={item} index={index} addQuantity={this.addQuantity} handleDelete={this.handleDelete} subQuantity={this.subQuantity} addQuantitys={this.addQuantitys} />
                     )
                 })}
 
