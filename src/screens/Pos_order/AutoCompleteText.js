@@ -196,9 +196,27 @@ export default class AutoCompleteText extends React.Component {
         this.props.onSearch(va);
     }
 
+    
+
     render() {
         const { text } = this.state
         const { placeholder, icon, value, onChange, name, disabled, autocomplete } = this.props
+        var handleKeyPress = {
+            onKeyDown: (event) => {
+                event.preventDefault()
+                this.props._recordInput('onKeyDown', event);
+            },
+            onKeyPress: (event) => {
+                event.preventDefault()
+
+                this.props._recordInput('onKeyPress', event)
+            },
+            onKeyUp: (event) => {
+                event.preventDefault()
+
+                this.props._recordInput('onKeyUp', event);
+            }
+        }
         return (
             <div className="dropdown open in" onKeyDown={this.handleKeyDown}>
 
@@ -212,6 +230,8 @@ export default class AutoCompleteText extends React.Component {
 
 
                     <input type="text" class="form-control customerInfo"
+                                            {...handleKeyPress}
+
                         placeholder={placeholder}
                         id = "phone_number_customer"
                         data-startsuggest="6"

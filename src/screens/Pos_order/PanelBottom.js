@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import DatePicker from "react-datepicker";
 import CardProduct from "../../components/Pos_Order/CardProduct";
 import CardCombo from "../../components/Pos_Order/CardCombo";
+import Slider from "react-slick";
 
 import Pagination from '../../components/Pos_Order/Pagination'
 import Dropdown from './component/Dropdown'
@@ -45,8 +46,8 @@ class PanelBottom extends Component {
             txtEmail: "",
             isShow: false,
             filterCategory: [],
-            isShowDetailCombo : false,
-            modal : {products : []}
+            isShowDetailCombo: false,
+            modal: { products: [] }
         }
 
         this.onChangeNum = debounce(this.handleChangeNum, 0)
@@ -267,7 +268,7 @@ class PanelBottom extends Component {
                 var selectedDate = null
                 try {
                     console.log(oneCart.customer_date_of_birth)
-                    selectedDate = oneCart == null || oneCart.customer_date_of_birth == null || oneCart.customer_date_of_birth == "0000-00-00" || oneCart.customer_date_of_birth == "0000-00-00 00:00:00" ? "" : moment(oneCart.customer_date_of_birth)
+                    selectedDate = oneCart == null || oneCart.customer_date_of_birth == null || oneCart.customer_date_of_birth == "0000-00-00" || oneCart.customer_date_of_birth == "0000-00-00 00:00:00" ? "" : new Date(oneCart.customer_date_of_birth)
                 } catch (error) {
                     selectedDate = null
                 }
@@ -359,6 +360,7 @@ class PanelBottom extends Component {
     }
 
     setStartDate = (date) => {
+        console.log(date)
         this.setState({
             selectedDate: date
         })
@@ -531,6 +533,7 @@ class PanelBottom extends Component {
     };
 
     _recordInput = (name, event) => {
+        console.log(event);
         this.props.passKeyPress(event.key)
     }
 
@@ -587,12 +590,17 @@ class PanelBottom extends Component {
 
         var handleKeyPress = {
             onKeyDown: (event) => {
+                event.preventDefault()
                 this._recordInput('onKeyDown', event);
             },
             onKeyPress: (event) => {
+                event.preventDefault()
+
                 this._recordInput('onKeyPress', event)
             },
             onKeyUp: (event) => {
+                event.preventDefault()
+
                 this._recordInput('onKeyUp', event);
             }
         }
@@ -611,7 +619,6 @@ class PanelBottom extends Component {
         }
 
 
-
         return <div style={{
             padding: 20
         }}>
@@ -621,8 +628,7 @@ class PanelBottom extends Component {
 
 
                     <AutoCompleteText type="text" class="form-control customerInfo"
-                        {...handleKeyPress}
-
+                        _recordInput={this._recordInput}
                         placeholder="Điện thoại (F4)" data-startsuggest="6" id="customerMobile"
                         value={txtPhoneNumber || ""}
                         onChange={this.onChangeNum}
@@ -865,8 +871,8 @@ class PanelBottom extends Component {
                         <div className="day-of-birth-pos">
                             <DatePicker
                                 {...handleKeyPress}
-
-                                //                 dateFormat = "dd/MM/yyyy"
+                                popperPlacement="top-end"
+                                dateFormat="dd/MM/yyyy"
                                 className={"tbDatePicker form-control customerInfo px-1 day-of-birth-pos"}
                                 // customInput={<ExampleCustomInput />}
                                 placeholderText="Ngày sinh"
@@ -923,7 +929,7 @@ class PanelBottom extends Component {
                                         </button>
                                     </div>
                                 )}
-                                selected={selectedDate == null || this.state.selectedDate == "" ? null : selectedDate}
+                                selected={selectedDate == null || this.state.selectedDate == "" ? null : new Date(selectedDate)}
                                 onChange={(date) => this.setStartDate(date)}
                             />
                         </div>
@@ -1059,27 +1065,33 @@ class PanelBottom extends Component {
     onChangeFilterSale = (e) => {
         this.setState({ filter_sale: e.target.checked })
     }
-    getDetailCombo = (data) =>{
-        if(this.state.isShowDetailCombo == false)
-        this.setState({modal:data , isShowDetailCombo : !this.state.isShowDetailCombo})
+    getDetailCombo = (data) => {
+        if (this.state.isShowDetailCombo == false)
+            this.setState({ modal: data, isShowDetailCombo: !this.state.isShowDetailCombo })
         else
-        this.setState({ isShowDetailCombo : !this.state.isShowDetailCombo})
+            this.setState({ isShowDetailCombo: !this.state.isShowDetailCombo })
 
     }
     render() {
         var limit, passNumPage, store_code, products = this.props
-        var { isShow, filter_price, filter_sale, filterCategory ,isShowDetailCombo , modal} = this.state
+        var { isShow, filter_price, filter_sale, filterCategory, isShowDetailCombo, modal } = this.state
         var show = isShow == true ? "show" : "hide"
         var isShowDetailCombo = isShowDetailCombo == true ? "show" : "hide"
 
-        var { category_product ,listCombo } = this.props
+        var { category_product, listCombo } = this.props
+        var settings = {
+            slidesToShow: 2,
+            slidesToScroll: 2,
+
+        };
 
 
 
         console.log(listCombo)
         return (
-            <div className="panel-bottom" style={{    overflow: "hidden",
-                "padding-bottom": "25px" , paddingTop :"8px"}}>
+            <div className="panel-bottom" style={{
+                "padding-bottom": "25px", paddingTop: "8px"
+            }}>
                 <div className={`filter-product-pos ${show}`} style={{ padding: "15px" }}>
                     <div className="header">
                         <h5 className="title">Lọc sản phẩm</h5>
@@ -1140,6 +1152,7 @@ class PanelBottom extends Component {
                     <div className="" style={{
                         position: "absolute",
                         bottom: "10px",
+                        display : "flex",
                         right: "10px"
                     }}>
                         <button
@@ -1156,14 +1169,14 @@ class PanelBottom extends Component {
                     </div>
 
                 </div>
-                 <div className={`filter-product-pos ${isShowDetailCombo}`} style={{ padding: "15px" , width:"500px" }}>
+                <div className={`filter-product-pos ${isShowDetailCombo}`} style={{ padding: "15px", width: "500px" }}>
                     <div className="header">
                         <h5 className="title">Chi tiết sản phẩm</h5>
 
                     </div>
                     <div className="body" style={{ marginTop: "20px" }}>
 
-                  <ShowModalDetailCombo modal = {modal}></ShowModalDetailCombo>
+                        <ShowModalDetailCombo modal={modal}></ShowModalDetailCombo>
                     </div>
                     <div className="" style={{
                         position: "absolute",
@@ -1177,7 +1190,7 @@ class PanelBottom extends Component {
                         >
                             Đóng
                         </button>
-                    
+
                     </div>
 
                 </div>
@@ -1186,7 +1199,8 @@ class PanelBottom extends Component {
                         <a class="nav-link " id="tab-javascript" data-toggle="tab"
                             href="#content-javascript"
                             role="tab" aria-controls="content-javascript" aria-selected="true">
-                            Danh sách sản phẩm
+                            Danh sách sản phẩm ({this.props.products?.data?.length || 0}
+)
                         </a>
                     </li>
                     <li class="nav-item">
@@ -1196,13 +1210,16 @@ class PanelBottom extends Component {
                             Khách hàng
                         </a>
                     </li>
+                    {
+                        listCombo?.length > 0 && 
                     <li class="nav-item">
-                    <a class="nav-link " id="tab-javascripts" data-toggle="tab"
+                        <a class="nav-link " id="tab-javascripts" data-toggle="tab"
                             href="#content-javascripts"
                             role="tab" aria-controls="content-javascripts" aria-selected="true">
-                            Combo đang diễn ra
+                            Combo đang diễn ra ({listCombo.length || 0})
                         </a>
                     </li>
+    }
                     {/* <li class="nav-item">
                         <a class="nav-link " id="tab-bootstrap" data-toggle="tab"
                             href="#content-bootstrap"
@@ -1212,25 +1229,29 @@ class PanelBottom extends Component {
                     </li> */}
                 </ul>
 
-                <div class="tab-content" id="myTabContent" style = {{
-                        overflow: "scroll",
-                        height: "100%"
-                   
+                <div class="tab-content" id="myTabContent" style={{
+                    height: "100%"
+
                 }}>
                     <div class="tab-pane fade" id="content-javascript"
                         role="tabpanel" aria-labelledby="tab-javascript">
 
-                        <div style={{ margin: "7px" }}>
+                        <div style={{ display : "flex" , justifyContent : "end" }}>
+                        <div >
+
                             <button
-                                style={{ float: "right" }}
+                                style = {{marginRight : "8px" , marginTop : "8px"}}
                                 onClick={this.showFilter}
-                                class={`btn btn-warning btn-sm `}
+                                class={`btn btn-secondary btn-sm `}
                             >
-                                <i class="fa  fa-filter"></i>&nbsp;Lọc sản phẩm
+                                <i class="fa  fa-filter"></i>
                             </button>
-                            <span>(Kết quả: {this.props.products?.data?.length || 0} sản phẩm)</span>
+
+                            <span></span>
 
                         </div>
+                        </div>
+
                         <div className='col-list-product' style={{ borderRadius: "0", display: "flex", flexDirection: "column" }}>
                             <div className='card-pos-body' style={{ overflow: "hidden" }}>
                                 <CardProduct
@@ -1253,28 +1274,35 @@ class PanelBottom extends Component {
                         {this.buildTabCustomer()}
                     </div>
 
-                    
+
                     <div class="tab-pane fade" id="content-javascripts"
                         role="tabpanel" aria-labelledby="tab-javascripts">
-                      
+
 
                         {listCombo.length == 0 ? null :
                             <div className="combo-page">
                                 <div className="">
-                                    <div className="list">
-                                        {
-                                            listCombo.map((v, i) => <CardCombo key={i}
-                                                name={v.name}
-                                                addComboInCart = {this.props.addComboInCart}
-                                                id = {v.id}
-                                                end={v.end_time}
-                                                set_limit_amount={v.set_limit_amount}
-                                                value={v.value_discount}
-                                                type={v.discount_type}
-                                                products={v.products_combo}
-                                                getDetailCombo = {this.getDetailCombo}
-                                            />)
-                                        }
+                                    <div className="">
+                                        <Slider {...settings}>
+
+                                            {
+                                                listCombo.map((v, i) => <CardCombo key={i}
+                                                    name={v.name}
+                                                    addComboInCart={this.props.addComboInCart}
+                                                    id={v.id}
+                                                    end={v.end_time}
+                                                    set_limit_amount={v.set_limit_amount}
+                                                    value={v.value_discount}
+                                                    type={v.discount_type}
+                                                    products={v.products_combo}
+                                                    getDetailCombo={this.getDetailCombo}
+                                                />)
+
+                                            }
+                                        </Slider>
+
+
+
                                     </div>
                                 </div>
                             </div>

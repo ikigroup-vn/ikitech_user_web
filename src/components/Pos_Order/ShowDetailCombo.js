@@ -30,7 +30,7 @@ class Modal extends Component {
                         </div>
 
                                 <div className='quantity' style={{ paddingLeft: "0" }}>
-                                SL:  {item.check_inventory && findTotalStockPos(item)}
+                                SL: {value.quantity}
 
                                     
                                 </div>

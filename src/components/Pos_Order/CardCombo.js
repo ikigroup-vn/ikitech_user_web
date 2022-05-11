@@ -120,7 +120,7 @@ class CardProduct extends Component {
                                 {data.check_inventory && <div class="inventory-tag">SL: {findTotalStockPos(data)}</div>}
                                 {data.product_discount && <div class="discount-tag">{data.product_discount.value}%</div>}
 
-                                <img src={data.images.length > 0 ? data.images[0].image_url : Env.IMG_NOT_FOUND_2} className="img-responsive image-product" alt="Image" width="100%" height="100px" />
+                                <img src={data.images.length > 0 ? data.images[0].image_url : Env.IMG_NOT_FOUND_2} className="img-responsive image-product" alt="Image" width="100%" height="90px" />
 
                                 <div class="card-body" style={{ padding: ' 0 5px' }}>
                                     <p class="card-title" style={{ margin: '0', overflow: "hidden", whiteSpace: "nowrap", textOverflow: 'ellipsis' }}>{data.name}</p>
@@ -139,6 +139,7 @@ class CardProduct extends Component {
     }
     showProductCombo = (product, quantity) => {
         let { price, product_discount, images, id, name } = product;
+        console.log(product)
         let avt = "/images/notfound.png";
         if (product_discount) {
             price = product_discount.discount_price;
@@ -149,7 +150,7 @@ class CardProduct extends Component {
             <div className="discount-product-card">
                 <div className="image">
                     <div className="img-container">
-                        <img style={{ width: "100%", height: "110px" }} src={avt} alt="" />
+                        <img style={{ width: "100%", height: "90px" }} src={avt} alt="" />
                     </div>
                 </div>
                 <div className="name" >
@@ -159,7 +160,7 @@ class CardProduct extends Component {
                     {
                         product.min_price == product.max_price ? format(Number(product.min_price)) : `${format(Number(product.min_price))}- ${format(Number(product.max_price))}`}                </div>
                 <div className="prev-price">
-                    Số lượng:  {product.check_inventory && findTotalStockPos(product)}
+                    Số lượng:  {quantity}
 
                 </div>
             </div>

@@ -4,6 +4,7 @@ import * as OrderAction from '../../actions/add_order'
 import * as Env from "../../ultis/default"
 import { filter_arr, format } from '../../ultis/helpers'
 import { findTotalStockPos } from '../../ultis/productUltis'
+import Slider from "react-slick";
 
 class CardProduct extends Component {
     constructor(props) {
@@ -13,7 +14,7 @@ class CardProduct extends Component {
             isToggle: false
         }
     }
-    
+
     handleInfoProduct = (inventory, id, name, image, price, distributes, maxPrice, minPrice, priceDiscount, quayntity, quantityDistribute, product) => {
         if (distributes.length > 0) {
             this.setState({ isToggle: true })
@@ -53,7 +54,7 @@ class CardProduct extends Component {
         var price = <p class="product-price-pos-search-top-bar">{
             data.min_price == data.max_price ? format(Number(data.min_price)) : `${format(Number(data.min_price))}- ${format(Number(data.max_price))}`}</p>
 
-    
+
         return (
             <div >
 
@@ -95,35 +96,39 @@ class CardProduct extends Component {
         if (products.length > 0) {
             result = products.map((data, index) => {
                 return (
-                    <div class="col-sm-2" style={{ marginBottom: "10px" }}>
-                        <a data-toggle={this.state.isToggle ? "modal" : ""} data-target="#modalDetail"
-                            onClick={() => this.handleInfoProduct(
-                                data.inventory,
-                                data.id,
-                                data.name,
-                                data.images,
-                                data.price, data.distributes,
-                                data.max_price, data.min_price,
-                                data.product_discount,
-                                data.quantity_in_stock,
-                                data.quantity_in_stock_with_distribute,
-                                data
-                            )}>
-                            <div class="card card-product-pos">
+                    <div className='' style={{ margin: "0px 2px" }}>
 
-                                {data.check_inventory && <div class="inventory-tag">SL: {findTotalStockPos(data)}</div>}
-                                {data.product_discount && <div class="discount-tag">{data.product_discount.value}%</div>}
+                        <div style={{ margin: "0px 10px" }}>
+                            <a data-toggle={this.state.isToggle ? "modal" : ""} data-target="#modalDetail"
+                                onClick={() => this.handleInfoProduct(
+                                    data.inventory,
+                                    data.id,
+                                    data.name,
+                                    data.images,
+                                    data.price, data.distributes,
+                                    data.max_price, data.min_price,
+                                    data.product_discount,
+                                    data.quantity_in_stock,
+                                    data.quantity_in_stock_with_distribute,
+                                    data
+                                )}>
+                                <div class="card card-product-pos">
 
-                                <img src={data.images.length > 0 ? data.images[0].image_url : Env.IMG_NOT_FOUND_2} className="img-responsive image-product" alt="Image" width="100%" height="100px" />
+                                    {data.check_inventory && <div class="inventory-tag">SL: {findTotalStockPos(data)}</div>}
+                                    {data.product_discount && <div class="discount-tag">{data.product_discount.value}%</div>}
 
-                                <div class="card-body" style={{ padding: ' 0 5px' }}>
-                                    <p class="card-title" style={{ margin: '0', overflow: "hidden", whiteSpace: "nowrap", textOverflow: 'ellipsis' }}>{data.name}</p>
-                                    <p class="card-text price">{
-                                        data.min_price == data.max_price ? format(Number(data.min_price)) : `${format(Number(data.min_price))}- ${format(Number(data.max_price))}`}</p>
+                                    <img src={data.images.length > 0 ? data.images[0].image_url : Env.IMG_NOT_FOUND_2} className="img-responsive image-product" alt="Image" width="100%" height="100px" />
+
+                                    <div class="card-body" style={{ padding: ' 0 5px' }}>
+                                        <p class="card-title" style={{ margin: '0', overflow: "hidden", whiteSpace: "nowrap", textOverflow: 'ellipsis' }}>{data.name}</p>
+                                        <p class="card-text price">{
+                                            data.min_price == data.max_price ? format(Number(data.min_price)) : `${format(Number(data.min_price))}- ${format(Number(data.max_price))}`}</p>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
+                            </a>
+                        </div>
                     </div>
+
                 )
             })
         } else {
@@ -134,6 +139,11 @@ class CardProduct extends Component {
     render() {
         var { products, isItemSearch } = this.props
         var listProducts = filter_arr(products.data)
+        var settings = {
+            slidesToShow: 6,
+            slidesToScroll: 6,
+
+        };
 
         if (isItemSearch) {
             return this.buildItemProduct(this.props.product)
@@ -141,8 +151,15 @@ class CardProduct extends Component {
 
         return (
             <div className='show-product-pos' >
-                <div className='row'>
-                    {this.showProduct(listProducts)}
+                <div>
+                    <Slider {...settings}>
+                        {
+
+                            this.showProduct(listProducts)
+
+                        }
+                    </Slider>
+
                 </div>
             </div>
         )

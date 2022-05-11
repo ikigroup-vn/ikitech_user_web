@@ -4,7 +4,7 @@ import * as posAction from '../../actions/post_order'
 import { connect } from 'react-redux'
 import { shallowEqual } from '../../ultis/shallowEqual'
 import { getBranchId } from '../../ultis/branchUtils'
-
+import ModalUpdateDetail from "./UpdateModal"
 class ListItemInCart extends Component {
     constructor(props) {
         super(props)
@@ -94,9 +94,10 @@ class ListItemInCart extends Component {
 
                 {listItemPos.info_cart?.line_items.map((item, index) => {
                     return (
-                        <ItemInCart key={item.id} item={item} index={index} addQuantity={this.addQuantity} handleDelete={this.handleDelete} subQuantity={this.subQuantity} addQuantitys={this.addQuantitys} />
+                        <ItemInCart  products = {this.props.products || []}  handleUpdateCallbackProduct = {this.props.handleUpdateCallbackProduct} key={item.id} item={item} index={index} addQuantity={this.addQuantity} handleDelete={this.handleDelete} subQuantity={this.subQuantity} addQuantitys={this.addQuantitys} />
                     )
                 })}
+
             </div>
         )
     }
