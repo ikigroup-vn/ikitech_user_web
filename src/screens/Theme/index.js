@@ -127,12 +127,7 @@ class Theme extends Component {
                               Màn hình trang chủ
                             </span>
                           </Tab>
-                          <Tab>
-                            <i class="fa fa-cog"></i>
-                            <span style={{ fontSize: "0.8rem" }}>
-                              Tùy chỉnh trang chủ
-                            </span>
-                          </Tab>
+                         
                           {web_theme_contact == true ? (
                             <Tab>
                               <i class="fas fa-address-book"></i>
@@ -192,13 +187,7 @@ class Theme extends Component {
                             theme={theme}
                           />
                         </TabPanel>
-                        <TabPanel>
-                          <Custom_Screen
-                            tabId={tabId}
-                            store_code={store_code}
-                            theme={theme}
-                          />
-                        </TabPanel>
+                      
                         {web_theme_contact == true ? (
                           <TabPanel>
                             <Contact

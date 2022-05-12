@@ -3,7 +3,7 @@ import * as themeAction from "../../../actions/theme";
 import { connect } from "react-redux";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import * as Env from "../../../ultis/default";
-class Home_Screen extends Component {
+class ItemTheme extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -11,8 +11,8 @@ class Home_Screen extends Component {
     };
   }
 
-  chooseTheme = (index) => {
-    this.props.chooseTheme(index);
+  chooseTheme = (dataTheme) => {
+    this.props.chooseTheme(dataTheme);
   };
 
   checkExsitItem = (index, _isVip, isVip, list_id_theme) => {
@@ -41,24 +41,28 @@ class Home_Screen extends Component {
     var { home_page_type, v } = this.props;
     var isVip =
       typeof this.props.badges.config_user_vip == "undefined" ||
-      this.props.badges.config_user_vip == null
+        this.props.badges.config_user_vip == null
         ? false
         : true;
     var list_id_theme =
       typeof this.props.badges.config_user_vip == "undefined" ||
-      this.props.badges.config_user_vip != null
+        this.props.badges.config_user_vip != null
         ? this.props.badges.config_user_vip.list_id_theme_vip
         : [];
 
     return (
       <div
-        class={`form-group col-xs-3 col-lg-3 col-md-3 col-sm-3 ${
-          this.checkExsitItem(v.index, v.isVip, isVip, list_id_theme) == true
-            ? ""
-            : "hide"
-        }`}
+        class={`form-group col-xs-3 col-lg-3 col-md-3 col-sm-3 ${this.checkExsitItem(v.index, v.isVip, isVip, list_id_theme) == true
+          ? ""
+          : "hide"
+          }`}
       >
-        <div style={{ width: "160px" }}>
+        <div style={{
+          width: "160px",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}>
           <img
             style={{ display: "block", objectFit: "cover" }}
             src={v.theme}
@@ -68,26 +72,31 @@ class Home_Screen extends Component {
           <div class="kv-avatar">
             <div style={{ display: "flex" }}>
               <button
-                onClick={() => this.chooseTheme(v.index)}
+                onClick={() => this.chooseTheme(v)}
                 style={{ margin: "10px auto" }}
                 type="button"
-                class={`btn btn-primary btn-sm ${
-                  home_page_type !== v.index ? "show" : "hide"
-                }`}
+                class={`btn btn-primary btn-sm ${home_page_type !== v.index ? "show" : "hide"
+                  }`}
               >
                 <i class="fa fa-plus"></i> Chọn
               </button>
               <button
                 style={{ margin: "10px auto" }}
                 type="button"
-                class={`btn btn-secondary btn-sm ${
-                  home_page_type === v.index ? "show" : "hide"
-                }`}
+                class={`btn btn-secondary btn-sm ${home_page_type === v.index ? "show" : "hide"
+                  }`}
               >
                 <i class="fa fa-check"></i> Đã chọn
               </button>
+
+
             </div>
           </div>
+
+          {home_page_type === v.index && <a onClick={this.props.goBack} style={{
+            color: "#0d6efd"
+          }}>Tùy chỉnh</a>}
+
         </div>
       </div>
     );
@@ -104,4 +113,4 @@ const mapDispatchToProps = (dispatch, props) => {
     },
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Home_Screen);
+export default connect(mapStateToProps, mapDispatchToProps)(ItemTheme);
