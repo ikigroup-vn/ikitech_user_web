@@ -20,7 +20,7 @@
     height: calc(100vh - 50px);
     display: flex;
     padding: 5px 15px;
-    flex-flow: column;
+    /* flex-flow: column; */
     background-color: #fff;
     border-left: 7px solid rgb(229, 229, 229);
 }
@@ -53,7 +53,7 @@
     height: calc(100vh - 50px);
     display: flex;
     padding: 5px 15px;
-    flex-flow: column;
+    /* flex-flow: column; */
     background-color: #fff;
 }
 

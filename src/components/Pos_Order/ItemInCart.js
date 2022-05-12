@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import { format } from "../../ultis/helpers";
-import { stockOfProduct } from "../../ultis/productUltis";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import * as OrderAction from "../../actions/add_order";
 import { connect } from "react-redux";
 import { debounce } from "lodash";
 import * as Env from "../../ultis/default";
 import * as posAction from '../../actions/post_order'
+import ReactDOM from 'react-dom';
+import { findImportPrice, findImportPriceSub, findPrice, findTotalStock, stockOfProduct } from '../../ultis/productUltis'
 
 class ItemInCart extends Component {
     constructor(props) {
@@ -23,10 +24,23 @@ class ItemInCart extends Component {
             subElementDistributeSelected: -1,
             elementNameSelected: "",
             subElementNameDistributeSelected: "",
+
+            afterPrice: "",
+            priceBeforeDiscount: "",
+            afterChoosePrice: "",
+            elementObject: "",
+            minPriceAfterDiscount: "",
+            maxPriceAfterDiscount: "",
+            stateDistribute: false,
+            messageErr: "",
+            quantityInStock: "",
+            elementDistributeOj: "",
+            totalStocks: 0,
+
         };
         this.nameElementDistribute = "";
         this.nameSubElementDistribute = "";
-
+        this.wrapperRef = React.createRef()
         this.changeQuantity = debounce(this.handleChangeQuantity, 400);
     }
 
@@ -41,13 +55,93 @@ class ItemInCart extends Component {
         );
     };
 
+    componentDidMount = () => {
+
+        document.addEventListener('mousedown', this.handleClickOutside, true);
+    }
+
+    handleClickOutside = event => {
+        try {
+            if (this.props.chooseId != null
+            ) {
+                var checkHasContain = false
+                var path = event.path
+                console.log(path)
+                for (const element of path) {
+                    if (element.className == "shopee-arrow-box__content") {
+                        checkHasContain = true
+                  
+                    }
+                }
+
+                if (checkHasContain == false) {
+                    this.props.showDetail(null)
+                }
+
+                console.log(checkHasContain)
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    // componentWillReceiveProps(nextProps, nextState) {
+    //     var { inventoryProduct } = nextProps.item.product
+    //     const totalStock = findTotalStock(inventoryProduct)
+
+    //     this.setState({ quantityInStock: totalStock })
+    //     if (!shallowEqual(nextProps.item.product.inventoryProduct, this.props.item.product.inventoryProduct)) {
+
+    //         // this.setState({ quantityInStock: nextProps.item.product.inventoryProduct.main_stock })
+    //     }
+
+    //     if (nextProps.item.product.minPriceProduct !== this.state.minPriceProduct) {
+    //         this.setState({ afterPrice: nextProps.item.product.minPriceProduct })
+    //     }
+    //     var { minPriceProduct, maxPriceProduct, discountProduct } = nextProps.item.product
+    //     if (nextProps.item.product.minPriceProduct !== this.props.item.product.minPriceProduct) {
+    //         if (discountProduct !== null) {
+    //             var minPrice = minPriceProduct - (minPriceProduct * discountProduct.value / 100)
+    //             var maxPrice = maxPriceProduct - (maxPriceProduct * discountProduct.value / 100)
+    //             this.setState({ minPriceAfterDiscount: minPrice, maxPriceAfterDiscount: maxPrice })
+    //         }
+
+    //     }
+
+    // }
+
+
+
+
     componentWillReceiveProps(nextProps) {
         console.log(nextProps);
-        if (!shallowEqual(this.props.item.quantity, nextProps.item.quantity)) {
+        // var { inventory } = nextProps.item.product
+        // const totalStock = findTotalStock(inventory)
+
+        // this.setState({ quantityInStock: totalStock })
+        // if (!shallowEqual(nextProps.item?.product.inventory, this.props.item?.product.inventory) || (this.props.resetId != nextProps.resetId && nextProps.chooseId == nextProps.item.id)) {
+
+        //     // this.setState({ quantityInStock: nextProps.item.product.inventoryProduct.main_stock })
+        // }
+
+        // if (nextProps.item.product.min_price !== this.state.min_price) {
+        //     this.setState({ afterPrice: nextProps.item.product.min_price })
+        // }
+        // var { min_price, max_price, product_discount } = nextProps.item.product
+        // if (nextProps.item.product.min_price !== this.props.item.product.min_price || (this.props.resetId != nextProps.resetId && nextProps.chooseId == nextProps.item.id)) {
+        //     if (product_discount) {
+        //         var minPrice = min_price - (min_price * product_discount.value / 100)
+        //         var maxPrice = max_price - (max_price * product_discount.value / 100)
+        //         this.setState({ minPriceAfterDiscount: minPrice, maxPriceAfterDiscount: maxPrice })
+        //     }
+
+        // }
+        if (!shallowEqual(this.props.item.quantity, nextProps.item.quantity) || (this.props.resetId != nextProps.resetId && nextProps.chooseId == nextProps.item.id)) {
             this.setState({ currentQuantity: nextProps.item.quantity });
         }
 
-        if (!shallowEqual(this.state.currentQuantity, nextProps.item.quantity)) {
+        if (!shallowEqual(this.state.currentQuantity, nextProps.item.quantity) || (this.props.resetId != nextProps.resetId && nextProps.chooseId == nextProps.item.id)) {
             this.setState({ currentQuantity: nextProps.item.quantity });
         }
         if (!shallowEqual(
@@ -63,19 +157,7 @@ class ItemInCart extends Component {
                     ? item.product?.inventory.distributes[0]
                     : [];
 
-            itemParent.element_distributes &&
-                itemParent.element_distributes.map((itemChild, index) => {
-                    if (itemChild.id == item.element_distribute_id) {
-                        this.setState({
-                            distributeName: itemParent.name,
-                            distributeSelected: index,
-                            elementNameSelected: itemChild.name,
-                        });
-                    }
-
-
-                })
-
+            var subElementNameDistributeSelected = null;
 
             itemParent.element_distributes &&
                 itemParent.element_distributes[0].sub_element_distributes.map(
@@ -85,7 +167,26 @@ class ItemInCart extends Component {
                             subElementNameDistributeSelected: itemChild.name,
                         });
 
+                        subElementNameDistributeSelected = itemChild.name
+
                     })
+
+
+            itemParent.element_distributes &&
+                itemParent.element_distributes.map((itemChild, index) => {
+                    if (itemChild.id == item.element_distribute_id) {
+                        this.setState({
+                            distributeName: itemParent.name,
+                            distributeSelected: index,
+                            elementNameSelected: itemChild.name,
+                        });
+                        this.handleNewPriceOrStock(itemChild.name, subElementNameDistributeSelected)
+
+                    }
+
+
+                })
+
 
 
         }
@@ -195,7 +296,25 @@ class ItemInCart extends Component {
         }
     }
 
+    handleNewPriceOrStock = (elementDistributeName, subElementDistribute) => {
+        var product = this.props.item.product
+        var price = findPrice(product, elementDistributeName, subElementDistribute)
+        var stock = stockOfProduct(product, elementDistributeName, subElementDistribute)
 
+
+        if (price != null) {
+            this.setState({
+                afterChoosePrice: price,
+                // priceBeforeDiscount: sub_elements.price,
+                afterPrice: price,
+                priceBeforeDiscount: price,
+
+                quantityInStock: stock,
+                // idElement: id,
+                messageErr: ""
+            })
+        }
+    }
     handleClick = (nameDistribute, nameObject, index, id, quatity) => {
         this.setState({
             distributeName: nameObject,
@@ -203,6 +322,7 @@ class ItemInCart extends Component {
             elementNameSelected: nameDistribute,
         });
 
+        this.handleNewPriceOrStock(nameDistribute, this.state.subElementNameDistributeSelected)
 
     };
 
@@ -211,9 +331,18 @@ class ItemInCart extends Component {
             subElementDistributeSelected: index,
             subElementNameDistributeSelected: nameElement,
         });
+        this.handleNewPriceOrStock(this.state.elementNameSelected, nameElement)
 
     };
 
+
+    closeModalClickOutSite = (length) => {
+        if (length == 0 || !length) {
+            if (this.props.chooseId != null) {
+                this.props.showDetail(null)
+            }
+        }
+    }
 
     updateCart = () => {
         const {
@@ -223,7 +352,7 @@ class ItemInCart extends Component {
             elementNameSelected,
 
         } = this.state;
-        var { store_code, branch_id , item } = this.props
+        var { store_code, branch_id, item } = this.props
         var { list_cart_id } = item
         var data = {
             line_item_id: item.id,
@@ -231,14 +360,14 @@ class ItemInCart extends Component {
             quantity: currentQuantity,
             distribute_name: distributeName,
             element_distribute_name: elementNameSelected,
-            sub_element_distribute_name : subElementNameDistributeSelected
+            sub_element_distribute_name: subElementNameDistributeSelected
         }
         this.props.updateQuantityLineItem(store_code, branch_id, list_cart_id, data)
         this.props.showDetail(null)
     }
 
-    //   nameProduct: this.props.modal.nameProduct,
-    //   product_id: this.props.modal.idProduct,
+    //   nameProduct: item.product.nameProduct,
+    //   product_id: item.product.idProduct,
     //   element_id: idElement,
     //   reality_exist: 0,
     //   nameDistribute: distributeName,
@@ -277,8 +406,10 @@ class ItemInCart extends Component {
                 item.product?.inventory.distributes.length > 0
                 ? item.product?.inventory.distributes[0]
                 : [];
+        console.log("itemmm", item, this.state);
         return (
             <div
+                onClick={() => { this.closeModalClickOutSite(item.product.distributes?.length) }}
                 class="card card-item-pos"
                 style={{ marginBottom: "10px" }}
                 key={index}
@@ -337,12 +468,12 @@ class ItemInCart extends Component {
                                         <div class="aUj6f2">
                                             <div class="_1XT_GF" role="button" tabindex="0" >
 
-                                                <div class="Qtk_DO" onClick={() => this.props.showDetail(item.id)}>
+                                                <div class="Qtk_DO" id={`item_pos_${this.props.key}`} ref={this.ref} onClick={() => this.props.showDetail(item.id)}>
                                                     Phân loại hàng:<button class="vZLqsj _2zsvOt"></button>
                                                 </div>
                                                 {
                                                     this.props.chooseId == item.id &&
-                                                    <div className="detail">
+                                                    <div className="detail" ref={this.ref} >
                                                         <div class="_3qAzj1 shopee-modal__transition-enter-done">
                                                             <div class="shopee-arrow-box__container">
                                                                 <div class="shopee-arrow-box__arrow shopee-arrow-box__arrow--center">
@@ -351,8 +482,51 @@ class ItemInCart extends Component {
                                                                     </div>
                                                                 </div>
                                                                 <div class="shopee-arrow-box__content">
+
                                                                     <div class="_32z-AY">
                                                                         <div class="_39MbPI">
+                                                                            <div className='info-voucher' style={{
+                                                                                display: "flex", flexDirection: "column", justifyContent: "space-around", "border-bottom": "1px solid #cec6c6",
+                                                                                width: "100%", "margin-bottom": "10px"
+                                                                            }}>
+                                                                                <div>
+                                                                                    <div className='value' style={{
+                                                                                        fontWeight: "bold",
+
+                                                                                        textOverflow: "ellipsis"
+                                                                                    }}>{item.product.nameProduct}</div>
+
+
+                                                                                    <div className='code' style={{ color: "black" }}><span>Giá sản phẩm: &nbsp;{this.state.afterChoosePrice === '' ? item.product.product_discount === null ?
+                                                                                        item.product.min_price == item.product.max_price ?
+                                                                                            format(Number(item.product.minPriceProduct))
+                                                                                            :
+                                                                                            `${format(Number(item.product.min_price))}-${format(Number(item.product.max_price))}`
+                                                                                        : this.state.minPriceAfterDiscount === this.state.maxPriceAfterDiscount ? `${format(Number(this.state.minPriceAfterDiscount))}` : `${format(Number(this.state.minPriceAfterDiscount))} - ${format(Number(this.state.maxPriceAfterDiscount))}`
+                                                                                        : format(Number(this.state.afterChoosePrice))}</span>
+                                                                                    </div>
+
+
+                                                                                    {/* <div className='before-discout' style={{ display: "flex" }} >
+                                                                                        <span style={{ fontSize: "13px", textDecoration: "line-through" }}>{item.product.product_discount ?
+                                                                                            this.state.afterChoosePrice === "" ? item.product.min_price === item.product.max_price ? format(Number(this.state.afterPrice)) : `${format(Number(item.product.min_price))} - ${format(Number(item.product.max_price))}` : format(Number(this.state.priceBeforeDiscount)) : ""}</span>
+                                                                                        <div className='persen-discount' style={{ fontSize: "13px", marginLeft: "10px" }}>{item.product.product_discount ? `- ${item.product.product_discount.value}%` : ""}</div>
+                                                                                    </div> */}
+
+                                                                                    {item.product?.check_inventory && <div className='quantity-product'
+                                                                                        style={{ fontSize: "13px", color: "grey" }}>
+                                                                                        Tồn kho hiện tại {this.state.quantityInStock} sản phẩm
+                                                                                    </div>
+                                                                                    }
+
+                                                                                </div>
+
+
+
+
+
+
+                                                                            </div>
                                                                             <div class="_3gvvQI">
                                                                                 <div class="_3_Bulc">{itemParent.name}</div>
                                                                                 {itemParent.element_distributes &&
@@ -374,17 +548,7 @@ class ItemInCart extends Component {
                                                                                                     >
                                                                                                         {itemChild.name}
                                                                                                         <div class="product-variation__tick">
-                                                                                                            <svg
-                                                                                                                enable-background="new 0 0 12 12"
-                                                                                                                viewBox="0 0 12 12"
-                                                                                                                x="0"
-                                                                                                                y="0"
-                                                                                                                class="shopee-svg-icon icon-tick-bold"
-                                                                                                            >
-                                                                                                                <g>
-                                                                                                                    <path d="m5.2 10.9c-.2 0-.5-.1-.7-.2l-4.2-3.7c-.4-.4-.5-1-.1-1.4s1-.5 1.4-.1l3.4 3 5.1-7c .3-.4 1-.5 1.4-.2s.5 1 .2 1.4l-5.7 7.9c-.2.2-.4.4-.7.4 0-.1 0-.1-.1-.1z"></path>
-                                                                                                                </g>
-                                                                                                            </svg>
+
                                                                                                         </div>
                                                                                                     </button>
                                                                                                 ) : (
@@ -430,17 +594,7 @@ class ItemInCart extends Component {
                                                                                                     >
                                                                                                         {itemChild.name}
                                                                                                         <div class="product-variation__tick">
-                                                                                                            <svg
-                                                                                                                enable-background="new 0 0 12 12"
-                                                                                                                viewBox="0 0 12 12"
-                                                                                                                x="0"
-                                                                                                                y="0"
-                                                                                                                class="shopee-svg-icon icon-tick-bold"
-                                                                                                            >
-                                                                                                                <g>
-                                                                                                                    <path d="m5.2 10.9c-.2 0-.5-.1-.7-.2l-4.2-3.7c-.4-.4-.5-1-.1-1.4s1-.5 1.4-.1l3.4 3 5.1-7c .3-.4 1-.5 1.4-.2s.5 1 .2 1.4l-5.7 7.9c-.2.2-.4.4-.7.4 0-.1 0-.1-.1-.1z"></path>
-                                                                                                                </g>
-                                                                                                            </svg>
+
                                                                                                         </div>
                                                                                                     </button>
                                                                                                 ) : (
@@ -612,7 +766,7 @@ class ItemInCart extends Component {
                     </div>
 
                 </div>
-            </div>
+            </div >
         );
     }
 }

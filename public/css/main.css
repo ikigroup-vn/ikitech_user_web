@@ -5438,6 +5438,7 @@ svg._1JwWV1 {
 .combo-card .products {
     /* display: flex;
     justify-content: space-between; */
+    display :flex
 }
 
 .combo-page .products .discount-product-card .image .img-container {

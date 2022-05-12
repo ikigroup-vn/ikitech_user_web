@@ -16,6 +16,8 @@ import KeyboardEventHandler from "react-keyboard-event-handler";
 import { AsyncPaginate } from "react-select-async-paginate";
 import CardProduct from './CardProduct'
 import history from '../../history'
+import getChannel, { IKITECH , IKIPOS } from "../../ultis/channel";
+
 
 
 
@@ -260,7 +262,7 @@ class Topbar extends Component {
 
     };
 
-    handleKeyboard = (key,event) => {
+    handleKeyboard = (key, event) => {
 
         switch (key) {
             case "f3":
@@ -307,7 +309,7 @@ class Topbar extends Component {
                 <KeyboardEventHandler
                     handleKeys={["f3"]}
                     onKeyEvent={(key, e) => {
-                        this.handleKeyboard(key,e)
+                        this.handleKeyboard(key, e)
                     }}
                 />
                 <nav class="navbar navbar-expand navbar-light bg-white topbar static-top header-pos">
@@ -329,13 +331,13 @@ class Topbar extends Component {
 
                                     <div>
                                         <AsyncPaginate
-                                      
+
                                             onKeyUp={(event) => {
                                                 this._recordInput('onKeyUp', event);
 
                                             }}
-                                            onKeyDown= {(event) => {
-                                
+                                            onKeyDown={(event) => {
+
                                                 this._recordInput('onKeyUp', event);
                                             }}
                                             autoFocus
@@ -413,12 +415,15 @@ class Topbar extends Component {
                             </li>
 
                             <div style={{
-                                paddingLeft: 50
                             }}>
                                 <ul className="navbar-nav ml-auto" style={{
                                     display: "flex", alignItems: "center", justifyContent: "space-between",
 
                                 }}>
+                                    {getChannel() == IKITECH && <li className='nav-item add-cart' onClick = {()=>this.props.handleOpenShipment(true)}>
+                                        <i class="fas fa-shipping-fast" ></i>
+                                    </li>}
+                                    
                                     <li className="nav-item dropdown no-arrow" style={{ margin: "0 10px", fontSize: "17px" }}>
                                         <div className='wrap-info' data-toggle="modal" data-target="#modalBranch" style={{ display: "flex", color: "white", cursor: "pointer" }}>
                                             <i class="fa fa-map-marker" aria-hidden="true"></i>

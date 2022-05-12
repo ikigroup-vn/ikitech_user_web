@@ -47,6 +47,7 @@ class PanelBottom extends Component {
             modal: { products: [] },
             filter_sort: "",
             filter_desc: "",
+            params: "",
 
         }
 
@@ -1059,7 +1060,7 @@ class PanelBottom extends Component {
 
         }
         this.props.fetchAllProductV2(this.props.store_code, branch_id, 1, params);
-        this.setState({ isShow: !this.state.isShow })
+        this.setState({ isShow: !this.state.isShow, params: params })
 
     }
     onChangeFilterSort = (e) => {
@@ -1083,7 +1084,7 @@ class PanelBottom extends Component {
 
     }
     render() {
-        var limit, passNumPage, store_code, products = this.props
+        var { limit, passNumPage, store_code, products } = this.props
         var { isShow, filter_desc, filter_sort, filterCategory, isShowDetailCombo, modal } = this.state
         var show = isShow == true ? "show" : "hide"
         var isShowDetailCombo = isShowDetailCombo == true ? "show" : "hide"
@@ -1094,10 +1095,13 @@ class PanelBottom extends Component {
             slidesToScroll: 2,
 
         };
+        var current_page_product = products.current_page || 1
+        var last_page_product =  products.last_page || 1
 
 
 
-        console.log(listCombo)
+
+        console.log(store_code)
         return (
             <div className="panel-bottom" style={{
                 "padding-bottom": "25px", paddingTop: "8px"
@@ -1238,15 +1242,16 @@ class PanelBottom extends Component {
 
                 </div>
                 <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class="nav-item" onClick = {()=>this.setState({chooseTab : 1})}>
+                    <li class="nav-item" onClick={() => this.setState({ chooseTab: 1 })}>
                         <a class="nav-link " id="tab-javascript" data-toggle="tab"
                             href="#content-javascript"
                             role="tab" aria-controls="content-javascript" aria-selected="true">
-                            Danh sách sản phẩm ({this.props.products?.data?.length || 0}
-                            )
+                            Danh sách sản phẩm
+                            {/* ({this.props.products?.data?.length || 0}
+                            ) */}
                         </a>
                     </li>
-                    <li class="nav-item"  onClick = {()=>this.setState({chooseTab : 2})}>
+                    <li class="nav-item" onClick={() => this.setState({ chooseTab: 2 })}>
                         <a class="nav-link active" id="tab-css" data-toggle="tab"
                             href="#content-css"
                             role="tab" aria-controls="content-css" aria-selected="false">
@@ -1255,7 +1260,7 @@ class PanelBottom extends Component {
                     </li>
                     {
                         listCombo?.length > 0 &&
-                        <li class="nav-item"  onClick = {()=>this.setState({chooseTab : 3})}>
+                        <li class="nav-item" onClick={() => this.setState({ chooseTab: 3 })}>
                             <a class="nav-link " id="tab-javascripts" data-toggle="tab"
                                 href="#content-javascripts"
                                 role="tab" aria-controls="content-javascripts" aria-selected="true">
@@ -1264,18 +1269,37 @@ class PanelBottom extends Component {
                         </li>
                     }
 
-                   {
-                       this.state.chooseTab == 1 && 
-                        <div className = "filter-button-pos">
-                              <button
-                        style={{ marginRight: "8px", marginTop: "8px" }}
-                        onClick={this.showFilter}
-                        class={`btn btn-secondary btn-sm `}
-                    >
-                        <i class="fa  fa-filter"></i>
-                    </button>
+                    {
+                        this.state.chooseTab == 1 &&
+                        <div className="filter-button-pos">
+                                                            <span style = {{
+                                                                    "margin": "auto 0",
+                                                                    "margin-right": "5px",
+                                                                    "font-size": "14px",
+                                                            }}> ({current_page_product}/{last_page_product})</span>
+
+                            <div className='wrap-pagination' style = {{marginRight : "8px"}}>
+                               <Pagination limit={this.props.limit}
+                                    params={this.state.params}
+                                    passNumPage={passNumPage}
+                                    current_page_product = {current_page_product}
+                                    last_page_product = {last_page_product}
+
+                                    store_code={store_code}
+                                    products={this.props.products} />
+                            </div>
+                            <button
+                            style = {{
+                                "margin-top": "5px",
+                                "margin-bottom": "2px"
+                            }}
+                                onClick={this.showFilter}
+                                class={`btn btn-secondary btn-sm `}
+                            >
+                                <i class="fa  fa-filter"></i>
+                            </button>
                         </div>
-                   } 
+                    }
                     {/* <li class="nav-item">
                         <a class="nav-link " id="tab-bootstrap" data-toggle="tab"
                             href="#content-bootstrap"
@@ -1317,11 +1341,7 @@ class PanelBottom extends Component {
                                 />
                             </div>
 
-                            <div className='wrap-pagination'>
-                                <Pagination limit={limit}
 
-                                    passNumPage={passNumPage} store_code={store_code} products={products} />
-                            </div>
                         </div>
 
                     </div>

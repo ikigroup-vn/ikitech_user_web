@@ -6,6 +6,8 @@ import { shallowEqual } from '../../ultis/shallowEqual'
 import { getBranchId } from '../../ultis/branchUtils'
 import ModalUpdateDetail from "./UpdateModal"
 import {randomString} from "../../ultis/helpers"
+import ReactDOM from 'react-dom';
+
 class ListItemInCart extends Component {
     constructor(props) {
         super(props)
@@ -32,6 +34,32 @@ class ListItemInCart extends Component {
                 lineIds: "",
                 distributes: ""
             }
+        }
+    }
+
+    componentDidMount = () => {
+
+        document.addEventListener('mousedown', this.handleClickOutside, true);
+    }
+
+    handleClickOutside = event => {
+        try {
+            console.log(event)
+                const domNode = ReactDOM.findDOMNode(this);
+
+                if (!domNode || !domNode.contains(event.target)) {
+                    {
+                        if(this.state.chooseId != null)
+                        {
+                            this.setState({chooseId : null , resetId : randomString(10)})
+
+                        }
+
+                    }
+                }
+            
+        } catch (error) {
+            console.log(error)
         }
     }
 
@@ -99,7 +127,7 @@ class ListItemInCart extends Component {
 
                 {listItemPos.info_cart?.line_items.map((item, index) => {
                     return (
-                        <ItemInCart store_code = {store_code} branch_id = {getBranchId()}  resetId = {this.state.resetId} chooseId = {this.state.chooseId} showDetail = {this.showDetail} products = {this.props.products || []}  handleUpdateCallbackProduct = {this.props.handleUpdateCallbackProduct} key={item.id} item={item} index={index} addQuantity={this.addQuantity} handleDelete={this.handleDelete} subQuantity={this.subQuantity} addQuantitys={this.addQuantitys} />
+                        <ItemInCart  store_code = {store_code} branch_id = {getBranchId()}  resetId = {this.state.resetId} chooseId = {this.state.chooseId} showDetail = {this.showDetail} products = {this.props.products || []}  handleUpdateCallbackProduct = {this.props.handleUpdateCallbackProduct} key={item.id} item={item} index={index} addQuantity={this.addQuantity} handleDelete={this.handleDelete} subQuantity={this.subQuantity} addQuantitys={this.addQuantitys} />
                     )
                 })}
 
