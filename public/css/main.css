@@ -268,12 +268,12 @@
 }
 
 .cancel-btn {
-    padding: 10px 0;
+    padding: 8px 0;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     width: 140px;
     text-transform: uppercase;
-    font-size: .875rem;
+    font-size: 12px;
     font-weight: 400;
     cursor: pointer;
     color: #555;
@@ -2912,11 +2912,11 @@ svg._1JwWV1 {
 .product-variation {
     overflow: visible;
     cursor: pointer;
-    min-width: 5rem;
-    min-height: 2.125rem;
+    min-width: 3rem;
+    min-height: 1.5rem;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
-    padding: .25rem .75rem;
+    padding: .15rem .2rem;
     margin: 0 8px 8px 0;
     color: rgba(0, 0, 0, .8);
     text-align: left;
@@ -3141,8 +3141,8 @@ svg._1JwWV1 {
 }
 
 ._2zsvOt {
-    -webkit-transform: rotate(180deg);
-    transform: rotate(180deg)
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg)
 }
 
 ._3dqm1i {
@@ -3157,8 +3157,8 @@ svg._1JwWV1 {
 }
 
 ._3qAzj1 {
-    /* /* position: absolute; */
-    /* top: 110%; */
+    position: absolute; 
+    /* top: 110%;  */
     /* right: -1.25rem;  */
     margin :auto;
     z-index: 3;
@@ -3184,8 +3184,8 @@ svg._1JwWV1 {
     -moz-box-direction: normal;
     -ms-flex-direction: column;
     flex-direction: column;
-    padding: 27px 25px;
-    width: 23em;
+    padding: 12px;
+    width: 30em;
     max-height: 28.125rem;
     overflow-y: auto;
     background: #fff
@@ -3194,15 +3194,17 @@ svg._1JwWV1 {
 ._1L_EZ3, ._3_Bulc {
     text-transform: capitalize;
     color: rgba(0, 0, 0, .54);
-    font-size: 1rem
+    font-size: 14px
 }
 
 ._1L_EZ3, ._3_Bulc {
-    margin-bottom: 10px
+    margin-bottom: 3px
 }
 
 ._3gvvQI {
-    margin-bottom: 15px
+    margin-bottom: 3px;
+    width : 100%
+
 }
 
 ._3gvvQI:last-child {
@@ -3227,7 +3229,7 @@ svg._1JwWV1 {
     -moz-box-pack: end;
     -ms-flex-pack: end;
     justify-content: flex-end;
-    margin-top: 5px;
+    margin-top: 15px;
     -webkit-flex: 1;
     -moz-box-flex: 1;
     -ms-flex: 1;
@@ -3237,9 +3239,9 @@ svg._1JwWV1 {
 ._18oYnx>.shopee-button-solid {
     width: 140px;
     text-transform: uppercase;
-    font-size: .875rem;
+    font-size: 12px;
     font-weight: 500;
-    padding: 12px 0;
+    padding: 8px 0;
     cursor: pointer
 }
 
@@ -5327,7 +5329,9 @@ svg._1JwWV1 {
 .slick-prev:before, .slick-next:before {
     color: orange !important;
 }
-
+/* .combo-page .slick-track .slick-track{
+    width : "100%"
+} */
 .slick-prev {
     left: -5px!important;
     z-index: 999 !important
@@ -5432,8 +5436,8 @@ svg._1JwWV1 {
 }
 
 .combo-card .products {
-    display: flex;
-    justify-content: space-between;
+    /* display: flex;
+    justify-content: space-between; */
 }
 
 .combo-page .products .discount-product-card .image .img-container {

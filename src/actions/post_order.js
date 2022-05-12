@@ -258,15 +258,6 @@ export const updateQuantityLineItem = (store_code, branch_id, id_cart, data) => 
     PosApi
       .updateQuantityLineItem(store_code, branch_id, id_cart, data)
       .then((res) => {
-
-
-        dispatch({
-          type: Types.NONE_CHANGE_QUANTITY_LINE_ITEM,
-        })
-        dispatch({
-          type: Types.FETCH_LIST_CART_ITEM,
-          data: res.data.data,
-        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -276,6 +267,15 @@ export const updateQuantityLineItem = (store_code, branch_id, id_cart, data) => 
             content: res.data.msg,
           },
         });
+
+        dispatch({
+          type: Types.NONE_CHANGE_QUANTITY_LINE_ITEM,
+        })
+        dispatch({
+          type: Types.FETCH_LIST_CART_ITEM,
+          data: res.data.data,
+        });
+      
       })
       .catch(function (error) {
         PosApi.fetchInfoOneCart(store_code, branch_id, id_cart).then((res) => {

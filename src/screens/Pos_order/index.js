@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import ReactDOM from 'react-dom'
-import { format, formatNoD, formatNumber, removeSignNumber, stringToInit , randomString} from '../../ultis/helpers'
+import { format, formatNoD, formatNumber, removeSignNumber, stringToInit, randomString } from '../../ultis/helpers'
 import * as productAction from "../../actions/product"
 import { connect } from 'react-redux'
 import CardProduct from '../../components/Pos_Order/CardProduct'
@@ -73,7 +73,7 @@ class PostOrder extends Component {
             beforeDiscount: 0,
             haveCheck: false,
             percentDiscount: 0,
-            randomFocus : null,
+            randomFocus: null,
             infoProduct: {
                 inventoryProduct: "",
                 idProduct: "",
@@ -87,7 +87,7 @@ class PostOrder extends Component {
                 quantityProduct: "",
                 quantityProductWithDistribute: ""
             },
-                       updateInfoProduct: {
+            updateInfoProduct: {
                 inventoryProduct: "",
                 idProduct: "",
                 nameProduct: "",
@@ -474,9 +474,22 @@ class PostOrder extends Component {
         }
 
     }
+    componentDidUpdate(prevProps, prevState) {
+        if (this.state.isPopoverOpen == true) {
+            console.log(document.getElementById("input-discount-pos"))
+            if (document.getElementById("input-discount-pos")) {
+                document.getElementById("input-discount-pos").focus()
+
+            }
+        }
+    }
+
+
 
 
     shouldComponentUpdate(nextProps, nextState) {
+
+
         if (!shallowEqual(nextState.listPosItem, this.state.listPosItem) && nextState.listPosItem.product_id != null) {
             const formData = {
                 product_id: nextState.listPosItem.product_id,
@@ -552,24 +565,26 @@ class PostOrder extends Component {
         this.changePaymentMethod(payment_method_id)
     }
 
-    handleKeyboard = (key) => {
-
+    handleKeyboard = (key, event) => {
+        console.log(key, event)
         switch (key) {
             case "f3":
-                case "F3":
-                    this.setState({randomFocus : randomString(10)})
-                    break;
+            case "F3":
+                event.preventDefault()
+
+                this.setState({ randomFocus: randomString(10) })
+                break;
 
             case "f9":
             case "F9":
 
-                console.log("F9")
+                event.preventDefault()
                 this.handlePayment();
                 break;
             case "f4":
             case "F4":
 
-                console.log("F4")
+                event.preventDefault()
 
                 if (document.getElementById("phone_number_customer") != null) {
                     document.getElementById("phone_number_customer").select()
@@ -579,9 +594,9 @@ class PostOrder extends Component {
             case "f8":
             case "F8":
 
-                console.log("F8")
+                event.preventDefault()
 
-                if (document.getElementById("phone_number_customer") != null) {
+                if (document.getElementById("phone_number_customer")) {
                     document.getElementById("import_prices").select()
                     document.getElementById("import_prices").focus();
                 }
@@ -589,11 +604,9 @@ class PostOrder extends Component {
                 break;
             case "f6":
             case "F6":
+                if (this.state.isPopoverOpen == false) {
+                    this.setIsPopoverOpen(!this.state.isPopoverOpen)
 
-                console.log("F6")
-
-                if (document.getElementById("discount") != null) {
-                    document.getElementById("discount").click();
                 }
 
                 break;
@@ -682,21 +695,37 @@ class PostOrder extends Component {
         })
     }
 
-    addComboInCart = (data) =>{
+    addComboInCart = (data) => {
         var { store_code } = this.props.match.params
-        var {idCart} = this.state
-        if(data)
-        this.props.addComboInCart(store_code , getBranchId() ,idCart , data )
+        var { idCart } = this.state
+        if (data)
+            this.props.addComboInCart(store_code, getBranchId(), idCart, data)
 
+    }
+
+    _recordInput = (name, event) => {
+        this.handleKeyboard(event.key, event)
     }
 
     render() {
         var { store_code } = this.props.match.params
         var { listPertion, products, listVoucher, badges } = this.props
         var { allow_semi_negative } = badges
-        var { numPage, exchange, priceCustomer, oneCart, totalFinal, listSuggestion, totalAfterDiscount, select_customer_id, isShow,idCart } = this.state
+        var { numPage, exchange, priceCustomer, oneCart, totalFinal, listSuggestion, totalAfterDiscount, select_customer_id, isShow, idCart } = this.state
         const length = oneCart.info_cart?.line_items.length
+        var handleKeyPress = {
 
+            onKeyUp: (event) => {
+                // event.preventDefault()
+
+                this._recordInput('onKeyUp', event);
+            },
+            onKeyDown: (event) => {
+                // event.preventDefault()
+
+                this._recordInput('onKeyUp', event);
+            }
+        }
 
         return (
             <React.Fragment>
@@ -705,11 +734,11 @@ class PostOrder extends Component {
                     <div className='pos-modal'>
                         <KeyboardEventHandler
                             handleKeys={["f9", "f4", "f3", "f6", "f8"]}
-                            onKeyEvent={(key, e) => this.handleKeyboard(key)}
+                            onKeyEvent={(key, e) => this.handleKeyboard(key, e)}
                         />
                         <Topbar
-                            randomFocus = {this.state.randomFocus}
-                            passKeyPress = {this.handleKeyboard}
+                            randomFocus={this.state.randomFocus}
+                            passKeyPress={this.handleKeyboard}
                             store_code={store_code}
                             handleCallbackTab={this.handleCallbackTab}
                             handleCallbackProduct={this.handleCallbackProduct}
@@ -741,7 +770,7 @@ class PostOrder extends Component {
                                                 <div className='col-list-order'>
                                                     <div className='' style={{ padding: "8px" }}>
 
-                                                        <ListItemInCart handleUpdateCallbackProduct  = {this.handleUpdateCallbackProduct} store_code={store_code}  products = {products?.data || []} listItemPos={oneCart} idCart={this.state.idCart} handleDelete={this.handleDelete} />
+                                                        <ListItemInCart handleUpdateCallbackProduct={this.handleUpdateCallbackProduct} store_code={store_code} products={products?.data || []} listItemPos={oneCart} idCart={this.state.idCart} handleDelete={this.handleDelete} />
 
 
                                                     </div>
@@ -787,7 +816,7 @@ class PostOrder extends Component {
                                             top: !this.state.isShowPanelBottom ? -20 : 0
                                         }}>
 
-                                            <div class="button-show-hide-control" style={{zIndex : "999"}} onClick={this.onChangeIsShowPanelBottom}>
+                                            <div class="button-show-hide-control" style={{ zIndex: "999" }} onClick={this.onChangeIsShowPanelBottom}>
                                                 <svg className="button-show-hide-control-circle" focusable="false"
                                                     viewBox="0 0 24 24" aria-hidden="true"
                                                     style={{
@@ -800,7 +829,7 @@ class PostOrder extends Component {
                                         </div>
 
                                         <PanelBottom
-                                        addComboInCart = {this.addComboInCart}
+                                            addComboInCart={this.addComboInCart}
                                             passKeyPress={this.handleKeyboard}
                                             limit={numPage}
                                             passNumPage={this.passNumPage} store_code={store_code} products={products}
@@ -981,13 +1010,15 @@ class PostOrder extends Component {
                                                             </div>
 
                                                             <input
+                                                                {...handleKeyPress}
+                                                                autofocus = {true}
                                                                 ref='refDiscountInput'
                                                                 onChange={this.handChange}
                                                                 type="text"
-                                                                name="discount" id="discount"
+                                                                name="discount" id="input-discount-pos"
                                                                 class=" col-4 input-discount"
                                                                 value={this.state.typeDiscount == 0 ? this.state.discount : this.state.percentDiscount}
-                                                            ></input>
+                                                            />
 
                                                             <div className={this.state.typeDiscount == 0 ? "type-discount-price activesss" : "type-discount-price"}
                                                                 onClick={() => this.ChangeTypeDiscount(0)}
@@ -1005,11 +1036,11 @@ class PostOrder extends Component {
 
                                                 >
 
-                                                    <div className='row item-info'>
-                                                        <div onClick={() => this.setIsPopoverOpen(!this.state.isPopoverOpen)} className='title-price col-8'>Chiết khấu (F6)</div>
-                                                        <button onClick={() => this.setIsPopoverOpen(!this.state.isPopoverOpen)}
+                                                    <div className='row item-info' >
+                                                        <div onClick={() => this.setIsPopoverOpen(!this.state.isPopoverOpen)} className='title-price col-8 trigger-discount'>Chiết khấu (F6)</div>
+                                                        <button className="trigger-discount" onClick={() => this.setIsPopoverOpen(!this.state.isPopoverOpen)}
                                                             type="text"
-                                                            name="discount" id="discount"
+                                                            name="" id="discount"
                                                             class="col-4 button-discount-pos"
                                                             value={this.state.typeDiscount == 0 ? this.state.discount : this.state.beforeDiscount}
                                                         // data-toggle="modal" data-target="#modalDiscount" 
@@ -1035,7 +1066,8 @@ class PostOrder extends Component {
                                                         color: "black",
                                                         fontWeight: "500"
                                                     }}>Tiền khách đưa (F8)</div>
-                                                    <input type="text" name="import_price" id="import_prices"
+                                                    <input type="text" name="import_price" id="import_prices"                             {...handleKeyPress}
+
                                                         class="col-6 text-input-pos" value={formatNoD(removeSignNumber(this.state.priceCustomer))}
                                                         onChange={this.handChange} ></input>
                                                 </div>
@@ -1168,7 +1200,7 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         fetchAllCategoryP: (store_code) => {
             dispatch(CategoryPAction.fetchAllCategoryP(store_code));
-          },
+        },
         addProductInCart: (store_code, branch_id, id_cart, data) => {
             dispatch(posAction.addProductInCart(store_code, branch_id, id_cart, data))
         },

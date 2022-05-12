@@ -190,6 +190,9 @@ export default class AutoCompleteText extends React.Component {
 
         }
 
+        this.props._recordInput('onKeyUp', event);
+
+
     }
 
     onSearch = (va) => {
@@ -202,20 +205,12 @@ export default class AutoCompleteText extends React.Component {
         const { text } = this.state
         const { placeholder, icon, value, onChange, name, disabled, autocomplete } = this.props
         var handleKeyPress = {
-            onKeyDown: (event) => {
-                event.preventDefault()
-                this.props._recordInput('onKeyDown', event);
-            },
-            onKeyPress: (event) => {
-                event.preventDefault()
 
-                this.props._recordInput('onKeyPress', event)
-            },
             onKeyUp: (event) => {
-                event.preventDefault()
 
                 this.props._recordInput('onKeyUp', event);
-            }
+            },
+ 
         }
         return (
             <div className="dropdown open in" onKeyDown={this.handleKeyDown}>
