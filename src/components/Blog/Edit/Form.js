@@ -8,10 +8,12 @@ import Select from "react-select";
 import * as Env from "../../../ultis/default"
 
 
-import {  isEmpty } from "../../../ultis/helpers"
+import { isEmpty } from "../../../ultis/helpers"
 import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
 import { handleImageUploadBefore } from "../../../ultis/sun_editor";
+import getChannel, { IKITECH } from "../../../ultis/channel";
+import SeoOption from "./SeoOption";
 class Form extends Component {
   constructor(props) {
     super(props);
@@ -22,10 +24,11 @@ class Form extends Component {
       listCategory: [],
       txtSumary: "",
       txtPublished: 1,
-      txtCategories: ""
-
+      txtCategories: "",
+      txtSeoTitle:"",
+      txtSeoDescription:"",
     };
-  
+
   }
 
 
@@ -34,7 +37,7 @@ class Form extends Component {
       !shallowEqual(nextProps.categories, this.props.categories)
     ) {
       var options = [];
-      var categories = typeof nextProps.categories != "undefined" ? [...nextProps.categories]  : [];
+      var categories = typeof nextProps.categories != "undefined" ? [...nextProps.categories] : [];
       if (categories.length > 0) {
         options = categories.map((category, index) => {
           console.log(category)
@@ -58,12 +61,14 @@ class Form extends Component {
 
 
       this.setState({
-        txtContent:  nextProps.blog.content,
+        txtContent: nextProps.blog.content,
         txtTitle: nextProps.blog.title,
         image: nextProps.blog.image_url,
         txtCategories: txtCategories,
         txtSumary: nextProps.blog.summary,
         txtPublished: published,
+        txtSeoTitle:nextProps.blog.seo_title,
+        txtSeoDescription:nextProps.blog.seo_description,
       })
     }
 
@@ -94,9 +99,9 @@ class Form extends Component {
   onSave = (e) => {
     var { store_code, blogId } = this.props
     e.preventDefault();
-    var { txtContent, txtTitle, image, txtSumary, txtPublished, txtCategories } = this.state
-    if(txtTitle == null || !isEmpty(txtTitle))
-    {
+    var { txtContent, txtTitle,txtSeoDescription, txtSeoTitle, image, txtSumary, txtPublished, txtCategories
+     } = this.state
+    if (txtTitle == null || !isEmpty(txtTitle)) {
       this.props.showError({
 
         type: Types.ALERT_UID_STATUS,
@@ -110,8 +115,7 @@ class Form extends Component {
       )
       return;
     }
-    if(txtCategories.value == null || typeof txtCategories.value == "undefined")
-    {
+    if (txtCategories.value == null || typeof txtCategories.value == "undefined") {
       this.props.showError({
 
         type: Types.ALERT_UID_STATUS,
@@ -129,12 +133,11 @@ class Form extends Component {
 
     var published = Number(txtPublished) == 1 ? true : false;
     var category_id = null;
-    if(txtCategories.value != null && txtCategories.value != "" && typeof txtCategories.value != "undefined" )
-    {
-      category_id=txtCategories.value
+    if (txtCategories.value != null && txtCategories.value != "" && typeof txtCategories.value != "undefined") {
+      category_id = txtCategories.value
 
     }
- 
+
     this.props.updateBlog(blogId, {
       content: txtContent,
       title: txtTitle,
@@ -142,15 +145,25 @@ class Form extends Component {
       category_id: category_id,
       summary: txtSumary,
       published: published,
+      seo_description:txtSeoDescription,
+      seo_title:txtSeoTitle
     }, store_code);
   };
   goBack = () => {
     var { history } = this.props;
     history.goBack();
   };
+
+  handleDataFromContent = (data) => {
+      this.setState({
+        txtSeoTitle:data.txtSeoTitle,
+        txtSeoDescription:data.txtSeoDescription,
+      })
+  };
+
   render() {
 
-    var { txtTitle, txtContent, image, listCategory, txtSumary, txtPublished, txtCategories } = this.state
+    var { txtTitle, txtContent, image, listCategory, txtSumary, txtPublished,txtSeoDescription,txtSeoTitle, txtCategories } = this.state
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
     console.log(this.state)
     return (
@@ -172,13 +185,12 @@ class Form extends Component {
                     placeholder="Nhập tên cửa hàng"
                     autocomplete="off"
                     onChange={this.onChange}
-                    name="txtTitle"
                   />
                 </div>
                 <div class="form-group">
                   <label for="product_name">Danh mục</label>
                   <Select
-                                    placeholder = "-- Chọn danh mục --"
+                    placeholder="-- Chọn danh mục --"
 
                     value={txtCategories}
                     isClearable
@@ -198,7 +210,7 @@ class Form extends Component {
                     onChange={this.onChange}
                     id="input"
                     class="form-control"
-                    >
+                  >
                     <option value="1">Hiển thị</option>
                     <option value="0">Tạm ẩn</option>
 
@@ -255,39 +267,55 @@ class Form extends Component {
             <div class="form-group">
               <label for="product_name">Nội dung bài viết</label>
               <SunEditor
-            onImageUploadBefore={handleImageUploadBefore}
-              setContents={txtContent}
-                  showToolbar={true}
-                  onChange={this.handleEditorChange}
-                  setDefaultStyle="height: auto"
-                  setOptions={{
-                    buttonList: [
-                      [
+                onImageUploadBefore={handleImageUploadBefore}
+                setContents={txtContent}
+                showToolbar={true}
+                onChange={this.handleEditorChange}
+                setDefaultStyle="height: auto"
+                setOptions={{
+                  buttonList: [
+                    [
 
 
-                        "undo",
-                        "redo",
-                        "font",
-                        "fontSize",
-                        "formatBlock",
-                        "paragraphStyle",
-                        "blockquote",
-                        "bold", "underline", "italic", "strike", "subscript", "superscript",
-                        "fontColor", "hiliteColor", "textStyle",
-                        "removeFormat",
-                        "outdent", "indent",
-                        "align", "horizontalRule", "list", "lineHeight",
-                        "table", "link", "image", "video", "audio",
-                        "imageGallery",
-                        "fullScreen", "showBlocks", "codeView",
-                        "preview", "print",
-                        "save", "template"
-                      ]
+                      "undo",
+                      "redo",
+                      "font",
+                      "fontSize",
+                      "formatBlock",
+                      "paragraphStyle",
+                      "blockquote",
+                      "bold", "underline", "italic", "strike", "subscript", "superscript",
+                      "fontColor", "hiliteColor", "textStyle",
+                      "removeFormat",
+                      "outdent", "indent",
+                      "align", "horizontalRule", "list", "lineHeight",
+                      "table", "link", "image", "video", "audio",
+                      "imageGallery",
+                      "fullScreen", "showBlocks", "codeView",
+                      "preview", "print",
+                      "save", "template"
                     ]
-                  }}
+                  ]
+                }}
 
-                />
+              />
             </div>
+
+
+            {
+              getChannel() == IKITECH && <div class="card mb-4">
+                <div class="card-header title_content">Tối ưu SEO</div>
+                <div class="card-body" style={{ padding: "0.8rem" }}>
+                  <div class="row">
+                    <SeoOption
+                      txtSeoDescription={txtSeoDescription}
+                      txtSeoTitle={txtSeoTitle}
+                      handleDataFromContent={this.handleDataFromContent}
+                    />
+                  </div>
+                </div>
+              </div>
+            }
 
           </div>
           <div class="box-footer">
@@ -300,7 +328,6 @@ class Form extends Component {
             <a
               style={{ marginLeft: "10px" }}
               onClick={this.goBack}
-              class="btn btn-warning"
               class="btn btn-warning btn-icon-split  btn-sm"
             >
               <span class="icon text-white-50">

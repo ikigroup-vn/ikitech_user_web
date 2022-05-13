@@ -81,65 +81,6 @@ export const createCategoryP = (store_code,data) => {
   };
 };
 
-export const createCategoryChild = (store_code,id,data) => {
-  return (dispatch) => {
-    dispatch({
-      type: Types.SHOW_LOADING,
-      loading : "show"
-    })
-    categoryPApi
-      .createCategoryChild(store_code,id,data)
-      .then((res) => {
-        dispatch({
-          type: Types.SHOW_LOADING,
-          loading : "hide"
-        })
-        categoryPApi.fetchAllData(store_code).then((res) => {
-          if(res.data.code === 200)
-
-          dispatch({
-            type: Types.FETCH_ALL_CATEGORY_PRODUCT,
-            data: res.data.data,
-          });
-          dispatch({
-            type: Types.ALERT_UID_STATUS,
-            alert: {
-              type: "success",
-              title: "Thành công ",
-              disable: "show",
-              content: res.data.msg,
-            },
-          });
-        });
-      })
-      .catch(function (error) {
-        dispatch({
-          type: Types.ALERT_UID_STATUS,
-          alert: {
-            type: "danger",
-            title: "Lỗi",
-            disable: "show",
-            content: error?.response?.data?.msg,
-          },
-        });
-      })
-      .catch(function (error) {
-        dispatch({
-          type: Types.SHOW_LOADING,
-          loading : "hide"
-        })
-        dispatch({
-          type: Types.ALERT_UID_STATUS,
-          alert: {
-            type: "danger",
-            title: "Lỗi",
-            disable: "show",
-            content: error?.response?.data?.msg,
-          },
-        });
-      });
-  };
-};
 
 export const sortCategory = (store_code,data) => {
   return (dispatch) => {
@@ -263,6 +204,66 @@ export const updateCategoryP = (store_code,id,data) => {
       });
   };
 };
+export const createCategoryChild = (store_code,id,data) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    categoryPApi
+      .createCategoryChild(store_code,id,data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading : "hide"
+        })
+        categoryPApi.fetchAllData(store_code).then((res) => {
+          if(res.data.code === 200)
+
+          dispatch({
+            type: Types.FETCH_ALL_CATEGORY_PRODUCT,
+            data: res.data.data,
+          });
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "success",
+              title: "Thành công ",
+              disable: "show",
+              content: res.data.msg,
+            },
+          });
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading : "hide"
+        })
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+
 export const updateCategoryChild = (store_code,id,idChild,data) => {
   return (dispatch) => {
     dispatch({
@@ -315,6 +316,69 @@ export const updateCategoryChild = (store_code,id,idChild,data) => {
           type: Types.SHOW_LOADING,
           loading: "hide"
         })
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+
+export const destroyCategoryChild = (store_code , id,idChild) => {
+
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    categoryPApi
+      .destroyCategoryChild(store_code, id, idChild)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading : "hide"
+        })
+        categoryPApi
+          .fetchAllData(store_code)
+          .then((res) => {
+            if(res.data.code !== 401)
+
+            dispatch({
+              type: Types.FETCH_ALL_CATEGORY_PRODUCT,
+              data: res.data.data,
+            });
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "success",
+                title: "Thành công ",
+                disable: "show",
+                content: res.data.msg,
+              },
+            });
+          })
+          .catch(function (error) {
+            dispatch({
+              type: Types.SHOW_LOADING,
+              loading: "hide"
+            })
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "danger",
+                title: "Lỗi",
+                disable: "show",
+                content: error?.response?.data?.msg,
+              },
+            });
+          });
+      })
+      .catch(function (error) {
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -389,69 +453,6 @@ export const destroyCategoryP = (store_code , id) => {
       });
   };
 };
-export const destroyCategoryChild = (store_code , id,idChild) => {
-
-  return (dispatch) => {
-    dispatch({
-      type: Types.SHOW_LOADING,
-      loading : "show"
-    })
-    categoryPApi
-      .destroyCategoryChild(store_code, id, idChild)
-      .then((res) => {
-        dispatch({
-          type: Types.SHOW_LOADING,
-          loading : "hide"
-        })
-        categoryPApi
-          .fetchAllData(store_code)
-          .then((res) => {
-            if(res.data.code !== 401)
-
-            dispatch({
-              type: Types.FETCH_ALL_CATEGORY_PRODUCT,
-              data: res.data.data,
-            });
-            dispatch({
-              type: Types.ALERT_UID_STATUS,
-              alert: {
-                type: "success",
-                title: "Thành công ",
-                disable: "show",
-                content: res.data.msg,
-              },
-            });
-          })
-          .catch(function (error) {
-            dispatch({
-              type: Types.SHOW_LOADING,
-              loading: "hide"
-            })
-            dispatch({
-              type: Types.ALERT_UID_STATUS,
-              alert: {
-                type: "danger",
-                title: "Lỗi",
-                disable: "show",
-                content: error?.response?.data?.msg,
-              },
-            });
-          });
-      })
-      .catch(function (error) {
-        dispatch({
-          type: Types.ALERT_UID_STATUS,
-          alert: {
-            type: "danger",
-            title: "Lỗi",
-            disable: "show",
-            content: error?.response?.data?.msg,
-          },
-        });
-      });
-  };
-};
-
 
 export const fetchDataId = (store_code, id) => {
   return (dispatch) => {

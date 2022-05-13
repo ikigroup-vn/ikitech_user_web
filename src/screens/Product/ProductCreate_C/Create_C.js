@@ -14,7 +14,7 @@ import * as CategoryPAction from "../../../actions/category_product";
 import * as Types from "../../../constants/ActionType";
 import Alert from "../../../components/Partials/Alert";
 import SeoOption from "../../../components/Product/Update/SeoOption";
-import getChannel, { IKITECH ,IKIPOS } from "../../../ultis/channel";
+import getChannel, { IKITECH, IKIPOS } from "../../../ultis/channel";
 import { isEmpty, removeVietnameseTones } from "../../../ultis/helpers";
 
 class ProductEdit extends Component {
@@ -24,14 +24,14 @@ class ProductEdit extends Component {
       form: {},
       total: "",
       disableDistribute: false,
-      disableInventory : false
+      disableInventory: false
     };
 
   }
 
-  checkDistribute = (status , _status) => {
-    console.log(status , _status);
-    this.setState({ disableDistribute: status , disableInventory : _status })
+  checkDistribute = (status, _status) => {
+    console.log(status, _status);
+    this.setState({ disableDistribute: status, disableInventory: _status })
   }
 
   componentDidMount() {
@@ -532,7 +532,7 @@ class ProductEdit extends Component {
   render() {
     var { store_code } = this.props;
     var { category_product, attributeP, auth, product, isShowAttr, isCreate, isRemove } = this.props;
-    var { total , disableInventory , disableDistribute } = this.state;
+    var { total, disableInventory, disableDistribute } = this.state;
     return (
 
 
@@ -545,7 +545,7 @@ class ProductEdit extends Component {
           style={{ display: "flex", justifyContent: "space-between" }}
         >
           <h4 className="h4 title_content mb-0 text-gray-800">
-          <h4 className="h4 title_content mb-0 text-gray-800">Thêm sản phẩm</h4>
+            <h4 className="h4 title_content mb-0 text-gray-800">Thêm sản phẩm</h4>
 
           </h4>
         </div>
@@ -559,7 +559,7 @@ class ProductEdit extends Component {
               <div class="col-lg-6">
                 <div>
                   <InfoProduct
-                  checkDistribute={this.checkDistribute}
+                    checkDistribute={this.checkDistribute}
                     total={total}
                     product={product}
                     handleDataFromInfo={this.handleDataFromInfo}
@@ -649,8 +649,8 @@ class ProductEdit extends Component {
                 <div>
                   <div class="card-body" style={{ padding: "0.8rem" }}>
                     <Distribute
-                    disableDistribute  = {disableDistribute}
-                    disableInventory = {disableInventory}
+                      disableDistribute={disableDistribute}
+                      disableInventory={disableInventory}
                       onChangeQuantityStock={this.onChangeQuantityStock}
                       product={product}
                       handleDataFromDistribute={
@@ -663,7 +663,7 @@ class ProductEdit extends Component {
             </div>
           </div>
         </div>
-        {getChannel() == IKITECH &&          <div class="card mb-4">
+        {getChannel() == IKITECH && <div class="card mb-4">
           <div class="card-header title_content">Nội dung chi tiết</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
@@ -674,7 +674,7 @@ class ProductEdit extends Component {
             </div>
           </div>
         </div>}
- 
+
 
         {
           getChannel() == IKITECH && <div class="card mb-4">
@@ -704,7 +704,7 @@ class ProductEdit extends Component {
         <div class="card mb-4">
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <button
                   class="btn btn-primary btn-sm"
                   onClick={this.postProduct}
@@ -712,13 +712,13 @@ class ProductEdit extends Component {
                   <i class="fa fa-plus"></i> Tạo
                 </button>
                 <a
-                className="color-white"
+                  className="color-white"
                   style={{ marginLeft: "10px" }}
                   onClick={this.goBack} class={`btn btn-warning btn-sm color-white `}
                 >
                   <i class="fa fa-arrow-left"></i> Trở về
                 </a>
-          
+
               </div>
             </div>
           </div>

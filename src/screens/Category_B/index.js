@@ -7,13 +7,18 @@ import Footer from "../../components/Partials/Footer";
 import ModalDelete from "../../components/Category_B/Delete/Modal";
 import NotAccess from "../../components/Partials/NotAccess";
 
-import Table from "../../components/Category_B/Table";
+import Table from "./Table";
 import Alert from "../../components/Partials/Alert";
 import { Redirect, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Loading from "../Loading";
 import * as categoryBAction from "../../actions/category_blog";
 import config from "../../ultis/datatable"
+
+import ModelRemoveChild from "../../components/Category_B/ModelRemoveChild";
+import ModalCreateChild from "../../components/Category_B/ModalCreateChild";
+import ModalUpdatechild from "../../components/Category_B/ModalUpdatechild";
+
 class CategoryBlog extends Component {
   constructor(props) {
     super(props);
@@ -22,6 +27,27 @@ class CategoryBlog extends Component {
         title: "",
         id: "",
         name: ""
+      },
+      modalremovechild: {
+        title: "",
+        id: "",
+        idChild: "",
+        name: "",
+      },
+      modalcreatechild: {
+        id: "",
+      },
+      modalupdatechild: {
+        name: "",
+        id: "",
+        idChild: "",
+        image: "",
+      },
+      modalupdate: {
+        name: "",
+        id: "",
+        image_url: "",
+        is_show_home: "",
       },
     };
   }
@@ -38,12 +64,12 @@ class CategoryBlog extends Component {
     $("#dataTable").DataTable().destroy();
     if (this.state.isLoading != true && typeof nextProps.permission.product_list != "undefined") {
       var permissions = nextProps.permission
-      var insert = permissions.post_category_add 
-      var update = permissions.post_category_update 
-      var _delete = permissions.post_category_remove 
+      var insert = permissions.post_category_add
+      var update = permissions.post_category_update
+      var _delete = permissions.post_category_remove
       var isShow = permissions.post_category_list
 
-      this.setState({ isLoading: true , insert,update,_delete  , isShow})
+      this.setState({ isLoading: true, insert, update, _delete, isShow })
 
     }
   }
@@ -61,62 +87,105 @@ class CategoryBlog extends Component {
 
   }
 
+  handleDeleteChild = (modal) => {
+    this.setState({ modalremovechild: modal });
+  };
+  handleCreateChild = (modal) => {
+    this.setState({ modalcreatechild: modal });
+  };
+  handleUpdateChild = (modal) => {
+    this.setState({ modalupdatechild: modal });
+  };
+
+  handleUpdateCallBack = (modal) => {
+    this.setState({ modalupdate: modal });
+  };
+
+
+
   render() {
     var { store_code } = this.props.match.params
     var { category_blog } = this.props
-    var { insert, update, _delete , isShow } = this.state
+    var { insert, update, _delete, isShow } = this.state
 
     if (this.props.auth) {
       return (
         <div id="wrapper">
           <Sidebar store_code={store_code} />
           <div className="col-10 col-10-wrapper">
-          <div id="content-wrapper" className="d-flex flex-column">
-            <div id="content">
-              <Topbar store_code={store_code} />
-              {typeof isShow == "undefined" ?             <div style = {{height : "500px"}}></div> :
- isShow == true ?
+            <div id="content-wrapper" className="d-flex flex-column">
+              <div id="content">
+                <Topbar store_code={store_code} />
+                {typeof isShow == "undefined" ? <div style={{ height: "500px" }}></div> :
+                  isShow == true ?
 
-              <div className="container-fluid">
-                <Alert
-                  type={Types.ALERT_UID_STATUS}
-                  alert={this.props.alert}
-                />
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <h4 className="h4 title_content mb-0 text-gray-800">
-                    Danh mục bài viết
-                  </h4>{" "}
-                  <Link to={`/posts/category/create/${store_code}`}
-                    class={`btn btn-info btn-icon-split btn-sm ${insert == true ? "show" : "hide"}`}                  >
-                    <span class="icon text-white-50">
-                      <i class="fas fa-plus"></i>
-                    </span>
-                    <span class="text">Thêm danh mục</span>
-                  </Link>
-                </div>
+                    <div className="container-fluid">
+                      <Alert
+                        type={Types.ALERT_UID_STATUS}
+                        alert={this.props.alert}
+                      />
+                      <div
+                        style={{ display: "flex", justifyContent: "space-between" }}
+                      >
+                        <h4 className="h4 title_content mb-0 text-gray-800">
+                          Danh mục bài viết
+                        </h4>{" "}
+                        <Link to={`/posts/category/create/${store_code}`}
+                          class={`btn btn-info btn-icon-split btn-sm ${insert == true ? "show" : "hide"}`}                  >
+                          <span class="icon text-white-50">
+                            <i class="fas fa-plus"></i>
+                          </span>
+                          <span class="text">Thêm danh mục</span>
+                        </Link>
+                      </div>
 
-                <br></br>
-                <div className="card shadow mb-4">
-                  <div className="card-header py-3">
-                    <h6 className="m-0 title_content font-weight-bold text-primary">
-                      Danh sách danh mục
-                    </h6>
-                  </div>
-                  <div className="card-body">
-                    <Table update = {update} _delete = {_delete} store_code={store_code} handleDelCallBack={this.handleDelCallBack} data={category_blog} />
-                  </div>
-                </div>
+                      <br></br>
+                      <div className="card shadow mb-4">
+                        <div className="card-header py-3">
+                          <h6 className="m-0 title_content font-weight-bold text-primary">
+                            Danh sách danh mục
+                          </h6>
+                        </div>
+                        <div className="card-body">
+                          <Table 
+                          update={update} 
+                          _delete={_delete} 
+                          store_code={store_code} 
+                          handleDelCallBack={this.handleDelCallBack} 
+
+                          handleDeleteChild={this.handleDeleteChild}
+                          handleCreateChild={this.handleCreateChild}
+                          handleUpdateChild={this.handleUpdateChild}
+                          handleUpdateCallBack={this.handleUpdateCallBack}
+
+                          
+                          data={category_blog} 
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    : <NotAccess />}
+
               </div>
-                                            : <NotAccess />}
 
+              <ModelRemoveChild
+              modal={this.state.modalremovechild}
+              store_code={store_code}
+            />
+            <ModalCreateChild
+              store_code={store_code}
+              modal={this.state.modalcreatechild}
+              category_blog={category_blog}
+            />
+            <ModalUpdatechild
+              store_code={store_code}
+              modal={this.state.modalupdatechild}
+              category_blog={category_blog}
+            />
+              <Footer />
             </div>
-
-            <Footer />
+            <ModalDelete store_code={store_code} modal={this.state.modal} />
           </div>
-          <ModalDelete store_code={store_code} modal={this.state.modal} />
-        </div>
         </div>
 
       );

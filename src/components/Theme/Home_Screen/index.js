@@ -74,7 +74,7 @@ class Home_Screen extends Component {
         isVip: false,
         index: 7,
         theme: "https://i.imgur.com/B9KGu8S.png",
-        arr_index_component: [1, 1, 1, 5, 1],
+        arr_index_component: [7, 7, 7, 7, 1],
         demo_link: "https://myphamkoreagiagoc.myiki.vn/"
       },
     ];
