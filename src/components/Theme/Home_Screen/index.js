@@ -28,46 +28,54 @@ class Home_Screen extends Component {
       {
         index: 1,
         theme:
-          "https://data1.doapp.vn/public/api/SahaImages/gNdPimsxMW1635935514.png",
+          "https://i.imgur.com/bbAkvJW.png",
         arr_index_component: [1, 1, 1, 1, 1],
+        demo_link: "https://taphoademo.myiki.vn/"
+
       },
       {
         index: 2,
         theme:
-          "https://data1.doapp.vn/public/api/SahaImages/bgbHigFfFE1635128355.png",
+          "https://i.imgur.com/3ptpnon.png",
         arr_index_component: [2, 2, 2, 2, 1],
+        demo_link: "https://shopmevabe.myiki.vn/"
       },
       {
         index: 3,
         theme:
-          "https://data1.doapp.vn/public/api/SahaImages/LZXepjhaEf1635387768.png",
+          "https://i.imgur.com/OB5Yldo.png",
         arr_index_component: [3, 3, 3, 3, 1],
+        demo_link: "https://dogiadungdemo.myiki.vn/"
       },
 
       {
         index: 4,
         theme:
-          "https://data1.doapp.vn/public/api/SahaImages/NrWkHISXeg1635562805.png",
+          "https://i.imgur.com/ywUhU5K.png",
         arr_index_component: [4, 4, 4, 4, 1],
+        demo_link: "https://shopdecordemo.myiki.vn/"
       },
       {
         isVip: true,
         index: 5,
         theme:
-          "https://data1.doapp.vn/public/api/SahaImages/SVLdjoSfmN1637398732.jpg",
+          "https://i.imgur.com/PhGo57G.png",
         arr_index_component: [5, 5, 5, 5, 2],
+        demo_link: "https://noithatdemo.myiki.vn/"
       },
       {
         isVip: true,
         index: 6,
-        theme: "https://i.imgur.com/tQLEVfQ.png",
+        theme: "https://i.imgur.com/6IIeJw2.png",
         arr_index_component: [6, 6, 6, 6, 3],
+        demo_link: "https://thoitrangdemo.myiki.vn/"
       },
       {
         isVip: false,
         index: 7,
-        theme: "https://i.imgur.com/g0YoP79.jpg",
+        theme: "https://i.imgur.com/B9KGu8S.png",
         arr_index_component: [1, 1, 1, 5, 1],
+        demo_link: "https://myphamkoreagiagoc.myiki.vn/"
       },
     ];
   }
@@ -166,7 +174,7 @@ class Home_Screen extends Component {
     })
   }
 
-  
+
   render() {
     var { home_page_type, is_custom } = this.state;
     var { badges, store_code, theme } = this.props;
@@ -181,7 +189,7 @@ class Home_Screen extends Component {
         goBack={() => {
           this.onChangeCustom()
         }}
-      
+
         theme={theme}
       />
     }
@@ -217,7 +225,7 @@ class Home_Screen extends Component {
           </div>
         </form>
 
-       
+
       </div>
     );
   }
