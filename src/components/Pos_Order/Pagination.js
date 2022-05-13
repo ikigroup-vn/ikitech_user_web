@@ -12,10 +12,19 @@ class Pagination extends Component {
   }
 
   passPagination = (page) => {
-    var { store_code, limit , agency_type_id } = this.props
-    var params = `&limit=${limit}`
+
+    var { store_code, limit, agency_type_id, params } = this.props
+    var query_param = ""
+    if (params && params != "") {
+      query_param = params
+    }
+    else {
+      query_param = `&limit=${limit}`
+
+    }
     const branch_id = getBranchId()
-    this.props.fetchAllProductV2(store_code, branch_id,page,params);
+
+    this.props.fetchAllProductV2(store_code, branch_id, page, query_param);
 
   }
 
@@ -32,17 +41,27 @@ class Pagination extends Component {
         var label = (data.label.includes("&laquo; ") || data.label.includes(" &raquo;"))
           ? data.label.replace("&laquo; Previous", "Trước").replace("Next &raquo;", "Sau")
           : data.label
-        if (data.url == null) {
-          return (
-            <li class={`page-item ${active} `}><a class="page-link" style={{ padding: "7px" }}>{label}</a></li>
-          );
-        }
-        else {
-
-          return (
-            <li class={`page-item ${active} `}><a onClick={() => this.passPagination(data.url.split('?page=')[1])} class="page-link" style={{ padding: "7px" }}>{label}</a></li>
-          );
-        }
+        // if (data.url == null) {
+        //   return null
+        //   // return (
+        //   //   <li class={`page-item ${active} `}><a class="page-link" style={{ padding: "7px" }}>{label}</a></li>
+        //   // );
+        // }
+        // else {
+          if (label == "Trước" || label == "Sau")
+          {
+            if(data.url == null)
+            {
+              return (
+                <li class={`page-item ${active} `}><a class="page-link" style={{ padding: "7px" }}>{label == "Trước" ? "<" : ">"}</a></li>
+              );
+            }
+            return (
+              <li class={`page-item ${active} `}><a onClick={() => this.passPagination(data.url.split('?page=')[1])} class="page-link" style={{ padding: "7px" }}>{label == "Trước" ? "<" : ">"}</a></li>
+            );
+          }
+         
+        // }
 
       });
     } else {
@@ -53,6 +72,7 @@ class Pagination extends Component {
 
   render() {
     var links = this.props.products.links || []
+    console.log("pagination", links, this.props.products);
     return (
 
 
