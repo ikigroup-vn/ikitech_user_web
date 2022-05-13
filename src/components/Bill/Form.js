@@ -100,7 +100,7 @@ class Form extends Component {
                 />
                 <section className="content">
                     <div className="row">
-                        {getChannel == IKIPOS && (
+                        {(getChannel == IKIPOS || getChannel == IKITECH )&& (
                             <div className="col-lg-2 col-md-4 col-sm-12 ">
                                 <div className="row" id="sale_nav_container">
                                     <div className="" style={{ width: "100%" }}>

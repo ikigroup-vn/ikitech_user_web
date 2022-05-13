@@ -12,36 +12,58 @@ export const fetchAllShipment = (store_code) => {
         type: Types.SHOW_LOADING,
         loading: "hide"
       })
-      if(res.data.code !== 401)
-      dispatch({
-        type: Types.FETCH_ALL_SHIPMENT,
-        data: res.data.data,
-      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_ALL_SHIPMENT,
+          data: res.data.data,
+        });
     });
   };
 };
 
-export const createShipment = (store_code,data) => {
-  
+export const calculateShipment = (store_code, shipment, value) => {
+  return async (dispatch) => {
+    for (let index = 0; index < shipment.length; index++) {
+      try {
+        var res = await  shipmentApi.calculate(store_code, shipment[index].id, value)
+        console.log(res.data)
+        if(res)
+        dispatch({
+          type: Types.FETCH_ALL_CALCULATE_SHIPMENT,
+          data: res.data?.data ,
+        });   
+
+      } catch (error) {
+        console.log(error)
+
+      }
+      
+    }
+
+  };
+};
+
+export const createShipment = (store_code, data) => {
+
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show"
     })
     shipmentApi
-      .createShipment(store_code,data)
+      .createShipment(store_code, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide"
         })
         shipmentApi.fetchAllShipment(store_code).then((res) => {
-          if(res.data.code !== 401)
+          if (res.data.code !== 401)
 
-          dispatch({
-            type: Types.FETCH_ALL_SHIPMENT,
-            data: res.data.data,
-          });
+            dispatch({
+              type: Types.FETCH_ALL_SHIPMENT,
+              data: res.data.data,
+            });
           dispatch({
             type: Types.ALERT_UID_STATUS,
             alert: {
@@ -83,26 +105,26 @@ export const createShipment = (store_code,data) => {
 };
 
 
-export const updateShipment = (store_code,id,data) => {
+export const updateShipment = (store_code, id, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show"
     })
     shipmentApi
-      .updateShipment(store_code,id,data)
+      .updateShipment(store_code, id, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide"
         })
         shipmentApi.fetchAllShipment(store_code).then((res) => {
-          if(res.data.code !== 401)
+          if (res.data.code !== 401)
 
-          dispatch({
-            type: Types.FETCH_ALL_SHIPMENT,
-            data: res.data.data,
-          });
+            dispatch({
+              type: Types.FETCH_ALL_SHIPMENT,
+              data: res.data.data,
+            });
           dispatch({
             type: Types.ALERT_UID_STATUS,
             alert: {
@@ -143,7 +165,7 @@ export const updateShipment = (store_code,id,data) => {
   };
 };
 
-export const destroyShipment = (store_code , id) => {
+export const destroyShipment = (store_code, id) => {
 
   return (dispatch) => {
     dispatch({
@@ -160,12 +182,12 @@ export const destroyShipment = (store_code , id) => {
         shipmentApi
           .fetchAllShipment(store_code)
           .then((res) => {
-            if(res.data.code !== 401)
+            if (res.data.code !== 401)
 
-            dispatch({
-              type: Types.FETCH_ALL_SHIPMENT,
-              data: res.data.data,
-            });
+              dispatch({
+                type: Types.FETCH_ALL_SHIPMENT,
+                data: res.data.data,
+              });
             dispatch({
               type: Types.ALERT_UID_STATUS,
               alert: {
@@ -219,11 +241,11 @@ export const fetchShipmentId = (store_code, id) => {
         type: Types.SHOW_LOADING,
         loading: "hide"
       })
-      if(res.data.code !== 401)
-      dispatch({
-        type: Types.FETCH_ID_SHIPMENT,
-        data: res.data.data,
-      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_ID_SHIPMENT,
+          data: res.data.data,
+        });
     });
   };
 };

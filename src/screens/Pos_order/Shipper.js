@@ -3,8 +3,17 @@ import { connect } from "react-redux";
 import DatePicker from "react-datepicker";
 import CardProduct from "../../components/Pos_Order/CardProduct";
 import CardCombo from "../../components/Pos_Order/CardCombo";
+import * as shipmentAction from "../../actions/shipment";
+import * as Types from "../../constants/ActionType"
 import Slider from "react-slick";
-
+import {
+    format,
+    formatNoD,
+    formatNumber,
+    removeSignNumber,
+    stringToInit,
+    randomString,
+} from "../../ultis/helpers";
 import Pagination from '../../components/Pos_Order/Pagination'
 import Dropdown from './component/Dropdown'
 import * as placeAction from "../../actions/place";
@@ -14,7 +23,6 @@ import { getDDMMYYYDate } from "../../ultis/date";
 import * as OrderAction from '../../actions/add_order';
 import * as productAction from "../../actions/product"
 
-import { format } from '../../ultis/helpers'
 import Autocomplete from 'react-autocomplete';
 import AutoCompleteText from "./AutoCompleteText";
 import * as customerAction from "../../actions/customer";
@@ -48,20 +56,32 @@ class PanelBottom extends Component {
             filter_sort: "",
             filter_desc: "",
             params: "",
-            openIconFilter : false
+            weight: "",
+            length: "",
+            width: "",
+            height: "",
+            type_ship: 0,
+            load_total_shipping_fee: true
+
 
         }
 
 
         this.onChangeNum = debounce(this.handleChangeNum, 0)
         this.onSearchCustomer = debounce(this.handleSearchCustomer, 500)
+        this.changeNewShipment = debounce(this.props.calculateShipment, 2000);
+
 
     }
 
 
+
+
+
     componentDidMount() {
-        this.props.fetchPlaceProvince()
-        this.props.fetchAllCombo(this.props.store_code)
+
+        this.props.fetchAllShipment(this.props.store_code)
+
     }
     showProvince = (places) => {
         var result = null;
@@ -224,22 +244,22 @@ class PanelBottom extends Component {
     }
 
     componentWillUpdate(nextProps, nextState) {
-
+        console.log(nextState)
         this.props.onNewChange(nextState)
     }
 
     componentWillReceiveProps(nextProps, nextState) {
-
-        if((this.props.openShipment != nextProps.openShipment) && nextProps.openShipment == true)
-        {
-            this.setState({chooseTab : 1})
-        }
 
         if (!shallowEqual(this.props.district, nextProps.district)) {
 
             this.setState({
                 listDistrict: nextProps.district
             })
+        }
+
+        if (typeof nextProps.total_shipping_fee != "undefined" && nextState.load_total_shipping_fee == true) {
+            console.log("vaoooo")
+            this.setState({ type_ship: nextProps.total_shipping_fee > 0 ? 2 : 0, load_total_shipping_fee: false })
         }
 
         if (!shallowEqual(nextProps.wards, this.props.wards)) {
@@ -326,6 +346,51 @@ class PanelBottom extends Component {
 
     }
 
+    resetShipment = (shipments) => {
+        var newShipments = [...shipments]
+        for (const item of newShipments) {
+            item.isLoading = false
+        }
+        // this.props.resetShipment({
+        //     type : Types.RESET_ALL_SHIPMENT,
+        //     data : newShipments
+        // })
+    }
+
+
+    shouldComponentUpdate(nextProps, nextState) {
+
+        console.log("Đã vô", nextState, this.state)
+        if (nextState.weight != this.state.weight || nextState.length != this.state.length || nextState.width != this.state.width || nextState.height != this.state.height) {
+            var { weight, length, width, height, txtAddressDetail } = nextState
+            var { badges, totalFinal, shipment, store_code } = nextProps;
+            var { txtProvince,
+                txtDistrict,
+                txtWards, valueDistrict, valueProvince, valueWards } = nextState
+            var data = {
+                "money_collection": totalFinal,
+                "sender_province_id": badges.address_pickup?.province,
+                "sender_district_id": badges.address_pickup?.district,
+                "sender_wards_id": badges.address_pickup?.wards,
+                "sender_address": badges.address_pickup?.address_detail,
+                "receiver_province_id": valueProvince.value,
+                "receiver_district_id": valueDistrict.value,
+                "receiver_wards_id": valueWards.value,
+                "receiver_address": txtAddressDetail,
+                "weight": weight,
+                "length": length,
+                "width": width,
+                "height": height
+            }
+            this.resetShipment(shipment)
+            this.changeNewShipment(store_code, shipment, data)
+            // this.props.calculateShipment(store_code , shipment , data);
+
+
+
+        }
+        return true
+    }
 
 
 
@@ -537,10 +602,25 @@ class PanelBottom extends Component {
         }
 
     };
+    getShipment = (partner_id, ship_type, fee) => {
+        this.setState({ partner_id, ship_type, fee })
+    }
 
     _recordInput = (name, event) => {
-        console.log(event);
         this.props.passKeyPress(event.key, event)
+    }
+
+    onChangeTypeShip = (e) => {
+        if (e.target.value == 0) {
+            this.setState({ type_ship: e.target.value, partner_id: null, ship_type: null, fee: null })
+        }
+        else {
+            this.setState({ type_ship: e.target.value })
+
+        }
+    }
+    onChangeFee = (e) => {
+        this.setState({ fee: e.target.value })
     }
 
     buildTabCustomer = () => {
@@ -558,10 +638,7 @@ class PanelBottom extends Component {
             txtEmail, txtEmail, txtPhoneNumber, txtName } = this.state;
 
 
-        // const ExampleCustomTimeInput = ({ date, value, onChange }) => (
-        //     <input value={value} type="text" placeholder="Ngày sinh" class="tbDatePicker form-control customerInfo px-1" id="customerBirthday"
-        //         autocomplete="new-password" />
-        // );
+
 
 
 
@@ -594,6 +671,7 @@ class PanelBottom extends Component {
             "Tháng 12",
         ];
 
+
         var handleKeyPress = {
 
             onKeyUp: (event) => {
@@ -621,13 +699,23 @@ class PanelBottom extends Component {
             //  }),
 
         }
+        var { weight,
+            length,
+            width,
+            height } = this.state
 
+        var { total_shipping_fee } = this.props
+
+        console.log(total_shipping_fee, this.state.type_ship, this.props)
 
         return <div style={{
-            padding: 20
+            padding: 5
         }}>
-            <div class="row">
-                <div class="col-md-4 col-6">
+            <div class="" style={{ marginTop: "8px" }}>
+
+
+                <div >
+
 
 
 
@@ -661,25 +749,11 @@ class PanelBottom extends Component {
                             type="text" class="form-control customerInfo" id="customerName" placeholder="Tên khách" autocomplete="new-password" />
                     </div>
 
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text px-2" title="Email">
-                                <i class="fa fa-envelope-o" aria-hidden="true"></i>
-                            </span>
-                        </div>
-                        <input
-                            {...handleKeyPress}
 
-                            value={txtEmail || ""}
-                            onChange={this.onChange}
-                            name="txtEmail"
-                            disabled={isDisabledButton}
-                            type="text" class="form-control customerInfo" id="customerName" placeholder="Email" autocomplete="new-password" />
-                    </div>
 
 
                 </div>
-                <div class="col-md-3 col-6">
+                <div >
 
 
                     <Dropdown
@@ -856,118 +930,161 @@ class PanelBottom extends Component {
                         />
                     </Dropdown>
                 </div>
+                <div class="form-group">
+                    <label for="product_name">Phí giao hàng</label>
 
-                <div class="col-md-3 col-6">
-                    <div class="input-group mb-2">
-                        <select
-                            disabled={isDisabledButton}
-                            value={txtSex || ""}
-                            onChange={this.onChangeSex}
-                            name="txtSex"
-                            class="form-control customerInfo px-1" id="customerGender">
-                            <option value="" disabled>- Giới tính -</option>
-                            <option value="1">Nam</option>
-                            <option value="2">Nữ</option>
-                            <option value="0">Khác</option>
-                        </select>
+                    <select
+                        // value={txtPublished}
+                        onChange={this.onChangeTypeShip}
+                        id="input"
+                        class="form-control"
+                        name="type_ship"
+                        value={this.state.type_ship}
+                    >
+                        <option value="0">Miễn phí giao hàng</option>
+                        <option value="1">Phí dự kiến của đối tác vận chuyển</option>
 
+                        <option value="2">Khác{total_shipping_fee && total_shipping_fee > 0 ? `(${formatNoD(total_shipping_fee)})` : null}</option>
+                    </select>
+                </div>
 
-                        <div className="day-of-birth-pos">
-                            <DatePicker
-                                {...handleKeyPress}
-                                popperPlacement="top-end"
-                                dateFormat="dd/MM/yyyy"
-                                className={"tbDatePicker form-control customerInfo px-1 day-of-birth-pos"}
-                                // customInput={<ExampleCustomInput />}
-                                placeholderText="Ngày sinh"
-                                renderCustomHeader={({
-                                    date,
-                                    changeYear,
-                                    changeMonth,
-                                    decreaseMonth,
-                                    increaseMonth,
-                                    prevMonthButtonDisabled,
-                                    nextMonthButtonDisabled,
-                                }) => (
-                                    <div
-                                        style={{
-                                            margin: 10,
-                                            display: "flex",
-                                            justifyContent: "center",
-                                        }}
-                                    >
-                                        <button onClick={decreaseMonth} disabled={prevMonthButtonDisabled}>
-                                            {"<"}
-                                        </button>
-                                        <select
-                                            value={(selectedDate == null || this.state.selectedDate == "" ? (new Date()).getFullYear() : selectedDate.getFullYear())}
-                                            onChange={({ target: { value } }) => {
-                                                changeYear(value)
-                                                this.changeYear(value)
-                                            }}
-                                        >
-                                            {years.map((option) => (
-                                                <option key={option} value={option}>
-                                                    {option}
-                                                </option>
-                                            ))}
-                                        </select>
-
-                                        <select
-                                            value={months[(selectedDate == null || this.state.selectedDate == "" ? (new Date()).getMonth() : selectedDate.getMonth())]}
-                                            onChange={({ target: { value } }) => {
-                                                changeMonth(months.indexOf(value))
-                                                this.changeMonth(months.indexOf(value))
-                                            }
-                                            }
-                                        >
-                                            {months.map((option) => (
-                                                <option key={option} value={option}>
-                                                    {option}
-                                                </option>
-                                            ))}
-                                        </select>
-
-                                        <button onClick={increaseMonth} disabled={nextMonthButtonDisabled}>
-                                            {">"}
-                                        </button>
-                                    </div>
-                                )}
-                                selected={selectedDate == null || this.state.selectedDate == "" ? null : new Date(selectedDate)}
-                                onChange={(date) => this.setStartDate(date)}
-                            />
+                {
+                    this.state.type_ship == 1 && <React.Fragment> <div className="row" style={{ padding: "5px 10px", marginBottom: "2px" }}>
+                        <div
+                            className="title-price"
+                            style={{
+                                color: "black",
+                            }}
+                        >
+                            Phí COD
                         </div>
-
-
-
-                    </div>
-                    {/* <div class="input-group mb-2">
-                        <input type="text" class="form-control customerInfo p-1" title="Email" placeholder="Email" id="customerEmail" autocomplete="new-password" />
-                        <input type="text" class="form-control customerInfo p-1" title="Facebook" placeholder="Facebook" id="customerFacebookLink" autocomplete="new-password" />
-                    </div> */}
-
-                    <div class="input-group mb-2">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text px-2" title="Địa chỉ">
-                                <i class="fa fa-home"></i>
-                            </span>
-                        </div>
-                        <textarea rows="3"
+                        <input
+                            style={{ fontSize: "18px", "margin-left": "70px" }}
+                            type="text"
+                            name="import_price"
+                            id="import_prices"
                             {...handleKeyPress}
-
-                            disabled={isDisabledButton}
-                            value={txtAddressDetail || ""}
-                            onChange={this.onChange}
-                            name="txtAddressDetail"
-                            class="form-control txtAutoHeight customerInfo" placeholder="Địa chỉ chi tiết" id="customerAddress"></textarea>
+                            class="text-input-pos"
+                            value={formatNoD(
+                                removeSignNumber(this.state.priceCustomer)
+                            )}
+                            onChange={this.handChange}
+                        ></input>
                     </div>
+                        <div className="row" style={{ padding: "5px 10px", marginBottom: "2px" }}>
+                            <div
+                                className="title-price"
+                                style={{
+                                    color: "black",
 
-                </div>
-                <div class="col-md-2 col-6">
-                    <button id="btnSaveCustomer"
-                        onClick={this.onSaveCustomer}
-                        class="btn btn-yes-pos"> <i class="fa fa-user-o" aria-hidden="true"></i> Lưu thông tin</button>
-                </div>
+                                }}
+                            >
+                                Khối lượng
+                            </div>
+                            <input
+                                style={{ fontSize: "18px", "margin-left": "70px" }}
+                                type="text"
+                                name="import_price"
+                                id="import_prices"
+                                {...handleKeyPress}
+                                class="text-input-pos"
+                                placeholder="Khối lượng"
+                                value={weight}
+                                onChange={this.handChange}
+                            ></input>
+                        </div>
+                        <div className="row" style={{ padding: "5px 10px", marginBottom: "20px", justifyContent: "space-between" }}>
+                            <div
+                                className="title-price"
+                                style={{
+                                    color: "black",
+                                }}
+                            >
+                                Kích thước
+                            </div>
+                            <input
+                                style={{ fontSize: "18px", maxWidth: "64px" }}
+                                type="text"
+                                name="length"
+                                id="import_prices"
+                                placeholder="Dài"
+                                
+
+
+                                {...handleKeyPress}
+                                class="text-input-pos"
+                                value={length}
+                                onChange={this.onChange}
+                            ></input>
+                            <input
+                                style={{ fontSize: "18px", maxWidth: "64px" }}
+                                type="text"
+                                name="width"
+                                                                placeholder="Rộng"
+
+                                id="import_prices"
+                                {...handleKeyPress}
+                                class="text-input-pos"
+                                value={width}
+                                onChange={this.onChange}
+                            ></input>
+                            <input
+                                style={{ fontSize: "18px", maxWidth: "64px" }}
+                                type="text"
+                                name="height"
+                                placeholder="Cao"
+
+                                id="import_prices"
+                                {...handleKeyPress}
+                                class="text-input-pos"
+                                value={height}
+                                onChange={this.onChange}
+                            ></input>
+                        </div>
+
+                        <div className="list-payment" style = {{padding : "0 5px"}}>
+                            {this.props.calculate?.length > 0 ? this.props.calculate.map((item, value) => {
+                                return (
+                                    <div className="item-payment" >
+                                        <input type="radio" name="shipment" onClick={() => { this.getShipment(item.partner_id, item.ship_type, item.fee) }} />
+                                        <img style = {{objectFit : "contain"}} src={item.image_url} width={50} height={50}></img>
+                                        <span className="name">{item.name}</span>
+                                        <span className="price">{item.fee ? formatNoD(item.fee) : 0}</span>
+
+                                    </div>
+                                )
+                            }) : <div style = {{textAlign : "center" , margin : "auto" , color : "red"}}>Vui lòng chọn khối lượng và địa chỉ giao hàng để xem báo giá của nhà vận chuyển</div>}
+
+
+                        </div>
+                    </React.Fragment>
+                }
+                {
+                    this.state.type_ship == 2 && <div className="row" style={{ padding: "5px 10px", marginBottom: "2px" }}>
+                        <div
+                            className="title-price"
+                            style={{
+                                color: "black",
+
+                            }}
+                        >
+                            Phí vận chuyển
+                        </div>
+                        <input
+
+                            style={{ fontSize: "18px", "margin-left": "70px",width: "120px" }}
+                            type="text"
+                            name="import_price"
+                            id="import_prices"
+                            {...handleKeyPress}
+                            class="text-input-pos"
+                            value={this.state.fee}
+                            onChange={this.onChangeFee}
+                        ></input>
+                    </div>
+                }
+
+
             </div>
         </div >
     }
@@ -1088,7 +1205,7 @@ class PanelBottom extends Component {
 
     }
     render() {
-        var { limit, passNumPage, store_code, products } = this.props
+        var { limit, passNumPage, store_code, products, shipment } = this.props
         var { isShow, filter_desc, filter_sort, filterCategory, isShowDetailCombo, modal } = this.state
         var show = isShow == true ? "show" : "hide"
         var isShowDetailCombo = isShowDetailCombo == true ? "show" : "hide"
@@ -1105,298 +1222,12 @@ class PanelBottom extends Component {
 
 
 
-        console.log(store_code)
+        console.log(shipment)
         return (
-            <div className="panel-bottom" style={{
-                "padding-bottom": "25px", paddingTop: "8px"
-            }}>
-                <div className={`filter-product-pos ${show}`} style={{ padding: "15px" }}>
-                    <div className="header">
-                        <h5 className="title">Lọc sản phẩm</h5>
+            <div >
 
-                    </div>
-                    <div className="body" style={{ marginTop: "20px" }}>
-                        <div class="form-group">
-                            <label htmlFor="lname">        Lọc theo danh mục sản phẩm
-                            </label>
-                            <select
-                                onChange={this.onChange}
-                                name="filterCategory"
-                                value={filterCategory}
-                                // onChange={this.onChange}
-                                id="input"
-                                class="form-control"
-                            >
-                                <option disabled value="">
-                                    --Chọn danh mục--
-                                </option>
-                                <option value="all">
-                                    Tất cả
-                                </option>
-                                {this.showCategory()}
-                            </select>
+                {this.buildTabCustomer()}
 
-
-                        </div>
-                        <div class="form-group">
-                            <div class="form-check">
-
-                                <input class="form-check-input" value="" onChange={this.onChangeFilterSort} checked={filter_sort == "" ? true : false} type="radio" name="filter_sort" />
-                                <label class="form-check-label" for="gridCheck">
-                                    Tất cả</label>
-                            </div>
-                            <div class="form-check">
-
-                                <input class="form-check-input" value="sales" onChange={this.onChangeFilterSort} checked={filter_sort == "sales" ? true : false} type="radio" name="filter_sort" />
-                                <label class="form-check-label" for="gridCheck">
-                                    Lọc theo sản phẩm bán chạy
-                                </label>
-                            </div>
-                            <div class="form-check">
-
-                                <input class="form-check-input" value="price" onChange={this.onChangeFilterSort} checked={filter_sort == "price" ? true : false} type="radio" name="filter_sort" />
-                                <label class="form-check-label" for="gridCheck">
-                                    Lọc theo giá sản phẩm
-                                </label>
-                            </div>
-                        </div>
-
-                        {/* <div class="form-group">
-
-                            <div class="form-check">
-                                <input class="form-check-input" onChange={this.onChangeFilterSale} checked={filter_sale} value="sales" type="checkbox" name="" />
-                                <label class="form-check-label" for="gridCheck">
-                                    Lọc theo sản phẩm bán chạy
-                                </label>
-                            </div>
-
-                        </div>
-                        <div class="form-group">
-
-                            <div class="form-check">
-                                <input class="form-check-input" onChange={this.onChangeFilterPrice} checked={filter_price} value="price" type="checkbox" name="" />
-                                <label class="form-check-label" for="gridCheck">
-                                    Lọc theo giá sản phẩm
-                                </label>
-                            </div>
-
-                        </div> */}
-                        <div class="form-group">
-                            <label htmlFor="lname">        Lọc theo thứ tự
-                            </label>
-                            <div class="form-check">
-
-                                <input class="form-check-input" value="ASC" onChange={this.onChangeFilterDesc} checked={filter_desc == "ASC" ? true : false} type="radio" name="filter_desc" />
-                                <label class="form-check-label" for="gridCheck">
-                                    Tăng dần
-                                </label>
-                            </div>
-                            <div class="form-check">
-
-                                <input class="form-check-input" value="DESC" onChange={this.onChangeFilterDesc} checked={filter_desc == "DESC" ? true : false} type="radio" name="filter_desc" />
-                                <label class="form-check-label" for="gridCheck">
-                                    Giảm dần
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="" style={{
-                        position: "absolute",
-                        bottom: "10px",
-                        display: "flex",
-                        right: "10px"
-                    }}>
-                        <button
-                            type="button"
-                            class="btn btn-default"
-                            onClick={() => { this.setState({ isShow: false }) }}
-                        >
-                            Đóng
-                        </button>
-                        <button onClick={this.postFilterProduct} type="submit" class="btn btn-warning">
-                            Lọc
-
-                        </button>
-                    </div>
-
-                </div>
-                <div className={`filter-product-pos ${isShowDetailCombo}`} style={{ padding: "15px", width: "500px" }}>
-                    <div className="header">
-                        <h5 className="title">Chi tiết sản phẩm</h5>
-
-                    </div>
-                    <div className="body" style={{ marginTop: "20px" }}>
-
-                        <ShowModalDetailCombo modal={modal}></ShowModalDetailCombo>
-                    </div>
-                    <div className="" style={{
-                        position: "absolute",
-                        bottom: "10px",
-                        right: "10px"
-                    }}>
-                        <button
-                            type="button"
-                            class="btn btn-secondary"
-                            onClick={() => { this.setState({ isShowDetailCombo: false }) }}
-                        >
-                            Đóng
-                        </button>
-
-                    </div>
-
-                </div>
-                <ul class="nav nav-tabs" id="myTab" role="tablist">
-                    <li class={`nav-item ${this.props.openShipment  ? "active" : ""}`} onClick={() => this.setState({ chooseTab: 1 })}>
-                        <a class={`nav-link ${this.props.openShipment  ? "active" : ""}`} id="tab-javascript" data-toggle="tab"
-                            href="#content-javascript"
-                            role="tab" aria-controls="content-javascript" aria-selected="true">
-                            Danh sách sản phẩm
-                            {/* ({this.props.products?.data?.length || 0}
-                            ) */}
-                        </a>
-                    </li>
-                    <li class={`nav-item ${this.props.openShipment  ? "hide" : ""}`}
-                        onClick={() => this.setState({ chooseTab: 2 })}>
-                        <a class={`nav-link ${this.props.openShipment  ? "" : "active"}`}  id="tab-css" data-toggle="tab"
-                            href="#content-css"
-                            role="tab" aria-controls="content-css" aria-selected="false">
-                            Khách hàng
-                        </a>
-                    </li>
-                    {
-                        listCombo?.length > 0 &&
-                        <li class="nav-item" onClick={() => this.setState({ chooseTab: 3 })}>
-                            <a class="nav-link " id="tab-javascripts" data-toggle="tab"
-                                href="#content-javascripts"
-                                role="tab" aria-controls="content-javascripts" aria-selected="true">
-                                Combo đang diễn ra ({listCombo.length || 0})
-                            </a>
-                        </li>
-                    }
-
-                    {
-                        this.state.chooseTab == 1 &&
-                        <div className="filter-button-pos">
-                            <span style={{
-                                "margin": "auto 0",
-                                "margin-right": "5px",
-                                "font-size": "14px",
-                            }}> ({current_page_product}/{last_page_product})</span>
-
-                            <div className='wrap-pagination' style={{ marginRight: "8px" }}>
-                                <Pagination limit={this.props.limit}
-                                    params={this.state.params}
-                                    passNumPage={passNumPage}
-                                    current_page_product={current_page_product}
-                                    last_page_product={last_page_product}
-
-                                    store_code={store_code}
-                                    products={this.props.products} />
-                            </div>
-                            <button
-                                style={{
-                                    "margin-top": "5px",
-                                    "margin-bottom": "2px"
-                                }}
-                                onClick={this.showFilter}
-                                class={`btn btn-secondary btn-sm `}
-                            >
-                                <i class="fa  fa-filter"></i>
-                            </button>
-                        </div>
-                    }
-                    {/* <li class="nav-item">
-                        <a class="nav-link " id="tab-bootstrap" data-toggle="tab"
-                            href="#content-bootstrap"
-                            role="tab" aria-controls="content-bootstrap" aria-selected="false">
-                            Combo đang diễn ra
-                        </a>
-                    </li> */}
-                </ul>
-
-                <div class="tab-content" id="myTabContent" style={{
-                    height: "100%"
-
-                }}>
-                    <div class={`tab-pane fade   ${this.props.openShipment  ?  "show active" : ""}`} id="content-javascript"
-                        role="tabpanel" aria-labelledby="tab-javascript">
-
-                        {/* <div style={{ display: "flex", justifyContent: "end" }}>
-                            <div >
-
-                                <button
-                                    style={{ marginRight: "8px", marginTop: "8px" }}
-                                    onClick={this.showFilter}
-                                    class={`btn btn-secondary btn-sm `}
-                                >
-                                    <i class="fa  fa-filter"></i>
-                                </button>
-
-                                <span></span>
-
-                            </div>
-                        </div> */}
-
-                        <div className='col-list-product' style={{ borderRadius: "0", display: "flex", flexDirection: "column" }}>
-                            <div className='card-pos-body' style={{ overflow: "hidden" }}>
-                                <CardProduct
-                                    store_code={store_code}
-                                    handleCallbackProduct={this.props.handleCallbackProduct}
-                                    handleCallbackPushProduct={this.props.handleCallbackPushProduct}
-                                />
-                            </div>
-
-
-                        </div>
-
-                    </div>
-                    <div class={`tab-pane fade   ${this.props.openShipment  ? "" : "show active"}`} id="content-css"
-                        role="tabpanel" aria-labelledby="tab-css">
-                        {this.buildTabCustomer()}
-                    </div>
-
-
-                    <div class="tab-pane fade" id="content-javascripts"
-                        role="tabpanel" aria-labelledby="tab-javascripts">
-
-
-                        {listCombo.length == 0 ? null :
-                            <div className="combo-page">
-                                <div className="">
-                                    <div className="">
-                                        <Slider {...settings}>
-
-                                            {
-                                                listCombo.map((v, i) => <CardCombo key={i}
-                                                    name={v.name}
-                                                    addComboInCart={this.props.addComboInCart}
-                                                    id={v.id}
-                                                    end={v.end_time}
-                                                    set_limit_amount={v.set_limit_amount}
-                                                    value={v.value_discount}
-                                                    type={v.discount_type}
-                                                    products={v.products_combo}
-                                                    getDetailCombo={this.getDetailCombo}
-                                                />)
-
-                                            }
-                                        </Slider>
-
-
-
-                                    </div>
-                                </div>
-                            </div>
-                        }
-
-                    </div>
-                    {/* <div class="tab-pane fade" id="content-bootstrap"
-                        role="tabpanel" aria-labelledby="tab-bootstrap">
-                        {this.buildTabCombo()}
-                    </div> */}
-                </div>
-
-                <ModalFilter></ModalFilter>
 
             </div>
         );
@@ -1418,6 +1249,11 @@ const mapStateToProps = (state) => {
         listCombo: state.orderReducers.order_product.listCombo,
         category_product: state.categoryPReducers.category_product.allCategoryP,
         products: state.productReducers.product.allProduct,
+        shipment: state.shipmentReducers.shipment.allShipment,
+        calculate: state.shipmentReducers.shipment.calculate,
+
+        badges: state.badgeReducers.allBadge,
+
 
 
     }
@@ -1425,6 +1261,10 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
+
+        calculateShipment: (store_code, shipment, data) => {
+            dispatch(shipmentAction.calculateShipment(store_code, shipment, data));
+        },
         fetchPlaceDistrict: (id) => {
             dispatch(placeAction.fetchPlaceDistrict(id));
         },
@@ -1449,6 +1289,9 @@ const mapDispatchToProps = (dispatch, props) => {
         fetchAllProductV2: (store_code, branch_id, page, params) => {
             dispatch(productAction.fetchAllProductV2(store_code, branch_id, page, params));
 
+        },
+        fetchAllShipment: (store_code) => {
+            dispatch(shipmentAction.fetchAllShipment(store_code));
         },
     }
 }
