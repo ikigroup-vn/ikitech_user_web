@@ -37,6 +37,8 @@ import * as CategoryPAction from "../../actions/category_product";
 import { AsyncPaginate } from "react-select-async-paginate";
 import * as customerApi from "../../data/remote/customer";
 import PanelBottom from "./PanelBottom";
+import Shipper from "./Shipper";
+
 import history from "../../history";
 import getChannel, { IKITECH, IKIPOS } from "../../ultis/channel";
 
@@ -131,6 +133,9 @@ class PostOrder extends Component {
                     province: newState.txtProvince,
                     district: newState.txtDistrict,
                     wards: newState.txtWards,
+                    shipper_type : newState.ship_type, 
+                    total_shipping_fee :  newState.fee,
+                    partner_shipper_id :  newState.partner_id,
                 },
             });
         }
@@ -747,7 +752,7 @@ class PostOrder extends Component {
                 ? { display: "flex", height: "calc(100vh - 50px)"  }
                 : { "flex-flow": "column" };
         var wrapPrice = this.state.openShipment == false && getChannel() == IKITECH
-            ? { height: "calc(100% - 10px)" }
+            ? { height: "calc(100% - 90px)" }
             : { height: "calc(100% - 150px)" };
         var colPayman =
             this.state.openShipment == true && getChannel() == IKITECH
@@ -886,8 +891,8 @@ class PostOrder extends Component {
                                                 </svg>
                                             </div>
                                         </div>
-
                                         <PanelBottom
+                                        openShipment = {this.state.openShipment}
                                             addComboInCart={this.addComboInCart}
                                             passKeyPress={this.handleKeyboard}
                                             limit={numPage}
@@ -903,38 +908,40 @@ class PostOrder extends Component {
                                 </div>
 
                                 <div className="row-payman" style={rowPayman}>
-                                    {this.state.openShipment && getChannel() == IKITECH && (
+                                    {/* {this.state.openShipment && getChannel() == IKITECH && ( */}
                                         <div
+                                        className = {this.state.openShipment && getChannel() == IKITECH ? "" : "hide"}
                                             style={{
+                                                "overflow-y": "scroll",
+    "overflow-x": "hidden",
                                                 width: "45%",
                                                 padding: "0 5px",
                                                 "border-right": "1px solid #b8b0b0"
                                             }}
                                         >
-                                            <div style={{ padding: "4px 0" }}>
-                                                <div
-                                                    className="title-price col-6"
-                                                    style={{
-                                                        color: "black",
-                                                        fontWeight: "500",
-                                                    }}
-                                                >
-                                                    Thu hộ tiền
-                                                </div>
-                                                <input
-                                                    type="text"
-                                                    name="import_price"
-                                                    id="import_prices"
-                                                    {...handleKeyPress}
-                                                    class="col-6 text-input-pos"
-                                                    value={formatNoD(
-                                                        removeSignNumber(this.state.priceCustomer)
-                                                    )}
-                                                    onChange={this.handChange}
-                                                ></input>
-                                            </div>
+
+
+
+                                            
+                                        <Shipper
+                                       total_shipping_fee = { oneCart?.info_cart?.total_shipping_fee}
+                                        totalFinal = {totalFinal}
+                                            addComboInCart={this.addComboInCart}
+                                            passKeyPress={this.handleKeyboard}
+                                            limit={numPage}
+                                            passNumPage={this.passNumPage}
+                                            store_code={store_code}
+                                            products={products}
+                                            handleCallbackProduct={this.handleCallbackProduct}
+                                            onSeletedCustomer={this.onSeletedCustomer}
+                                            onNewChange={this.onNewChange}
+                                            handleCallbackPushProduct={this.handleCallbackPushProduct}
+                                        />
+
+
+
                                         </div>
-                                    )}
+                                    {/* )} */}
                                     <div
                                         style={colPayman}>
                                         <div className="wrap-price" style={wrapPrice}>
@@ -1078,6 +1085,22 @@ class PostOrder extends Component {
                                                                 -
                                                                 {formatNoD(
                                                                     oneCart?.info_cart?.combo_discount_amount
+                                                                )}
+                                                            </span>
+                                                        </div>
+                                                    )}
+                                                         {oneCart?.info_cart?.total_shipping_fee > 0 && (
+                                                        <div className="row item-info">
+                                                            <div className="item-discount-name col-6">
+                                                                Phí vận chuyển
+                                                            </div>
+                                                            <span
+                                                                className="col-6"
+                                                                style={{ textAlign: "end" }}
+                                                            >
+                                                                +
+                                                                {formatNoD(
+                                                                    oneCart?.info_cart?.total_shipping_fee
                                                                 )}
                                                             </span>
                                                         </div>

@@ -19,7 +19,7 @@
 .row-payman {
     height: calc(100vh - 50px);
     display: flex;
-    padding: 5px 15px;
+    padding: 7px;
     /* flex-flow: column; */
     background-color: #fff;
     border-left: 7px solid rgb(229, 229, 229);
@@ -52,7 +52,7 @@
 .row-payman {
     height: calc(100vh - 50px);
     display: flex;
-    padding: 5px 15px;
+    padding: 7px;
     /* flex-flow: column; */
     background-color: #fff;
 }
@@ -347,8 +347,16 @@ pre {
 .customer-pos-select:hover {
     border-bottom: 2px solid rgb(255, 221, 2);
 }
-
+.item-payment{
+    display : flex ;
+     justify-content : space-between;
+     margin-top: 5px;
+}
+.list-payment{
+    border: 1px solid rgb(213, 204, 204);
+}
 .text-input-pos {
+    flex: 2;
     height: 28px;
     width: 150px;
     text-align: right;
