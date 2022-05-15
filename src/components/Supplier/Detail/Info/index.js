@@ -171,7 +171,7 @@ class Supplier extends Component {
       this.state.isLoading != true &&
       typeof nextProps.permission.product_list != "undefined"
     ) {
-      var permissions = nextProps.supplier;
+      var permissions = nextProps.permission;
 
       var isShow = permissions.supplier;
       this.setState({ isLoading: true, isShow });

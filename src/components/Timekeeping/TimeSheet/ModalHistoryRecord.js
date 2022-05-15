@@ -37,7 +37,7 @@ class ModalHistoryRecord extends Component {
         var result = null
         result = recording_time.map((data, index) => {
 
-            return <div className='row' style={{
+            return <div className='' style={{
                 width: "100%",
                 borderRadius: "0.5rem",
                 marginBottom: "0.5rem",
@@ -140,7 +140,7 @@ class ModalHistoryRecord extends Component {
 
 
                 <div class="modal" id="modalHistoryRecord">
-                    <div class="modal-dialog modal-lg">
+                    <div class="modal-dialog modal-lg" style = {{maxWidth : "620px"}}>
                         <div class="modal-content">
                             <div className='model-header-modal' style={{ display: 'flex', justifyContent: "space-between", backgroundColor: themeData().backgroundColor }}>
                                 <h4 style={{ color: "white", margin: "10px" }}>Chấm công ghi nhận</h4>

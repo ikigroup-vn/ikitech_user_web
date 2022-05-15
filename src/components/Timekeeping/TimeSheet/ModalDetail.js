@@ -41,26 +41,40 @@ class ModalDetail extends Component {
     });
   };
 
-  // componentWillReceiveProps(nextProps) {
-  //   if (!shallowEqual(nextProps.dataDetail, this.props.dataDetail)) {
-  //     window.$(".modal").modal("hide");
-  //     const { dataDetail, time_sheet_id } = this.props;
-  //     console.log(this.props.dataDetail);
-  //     this.setState({
-  //       staff_id: dataDetail.staff?.id,
-  //       reason: dataDetail?.keeping_histories[0]?.reason,
-  //       checkin_time: moment(
-  //         dataDetail?.keeping_histories[0]?.time_check
-  //       ).format("YYYY-MM-DD HH:mm:ss"),
-  //       checkout_time: moment(
-  //         dataDetail?.keeping_histories[
-  //           dataDetail?.keeping_histories.length - 1
-  //         ]?.time_check
-  //       ).format("YYYY-MM-DD HH:mm:ss"),
-  //       is_bonus: dataDetail?.keeping_histories[0]?.isBonus,
-  //     });
-  //   }
-  // }
+  componentWillReceiveProps(nextProps) {
+    if(nextProps.resetModal != this.props.resetModal)
+    {
+      this.setState({
+        staff_name: "",
+        staff_id: null,
+        reason: "",
+        checkin_date: "",
+        checkout_date: "",
+        checkin_hour: "00:00",
+        checkout_hour: "00:00",
+        is_bonus: null,
+        selectValue : null,
+      })
+    }
+    // if (!shallowEqual(nextProps.dataDetail, this.props.dataDetail)) {
+    //   window.$(".modal").modal("hide");
+    //   const { dataDetail, time_sheet_id } = this.props;
+    //   console.log(this.props.dataDetail);
+    //   this.setState({
+    //     staff_id: dataDetail.staff?.id,
+    //     reason: dataDetail?.keeping_histories[0]?.reason,
+    //     checkin_time: moment(
+    //       dataDetail?.keeping_histories[0]?.time_check
+    //     ).format("YYYY-MM-DD HH:mm:ss"),
+    //     checkout_time: moment(
+    //       dataDetail?.keeping_histories[
+    //         dataDetail?.keeping_histories.length - 1
+    //       ]?.time_check
+    //     ).format("YYYY-MM-DD HH:mm:ss"),
+    //     is_bonus: dataDetail?.keeping_histories[0]?.isBonus,
+    //   });
+    // }
+  }
 
   componentDidUpdate(prevProps, prevState) {
     if (!shallowEqual(prevProps.dataDetail, this.props.dataDetail)) {
@@ -99,6 +113,8 @@ class ModalDetail extends Component {
       } else {
         var checkout_hour = "00:00";
       }
+
+
 
       this.setState({
         staff_name: dataDetail.staff.name,
@@ -147,6 +163,18 @@ class ModalDetail extends Component {
           title: "Lỗi",
           disable: "show",
           content: "Chưa chọn thêm công/bớt công",
+        },
+      });
+      return;
+    }
+    if (staff_id == null || staff_id == "") {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Chưa chọn nhân viên",
         },
       });
       return;
@@ -349,7 +377,7 @@ class ModalDetail extends Component {
                         : moment(datePrime.from).format("DD-MM-YYYY")
                     }
                     name="name"
-                    disabled
+                    // disabled
                     onChange={this.onChange}
                   />
                 </div>
