@@ -175,7 +175,7 @@ class Chart extends Component {
           }}
         >
           <h5 style={{ display: "flex" }}>
-            TOP 10 HÀNG HÓA BÁN CHẠY  &nbsp;{nameTypeChart}
+            TOP 10 HÀNG HÓA BÁN CHẠY&nbsp;{nameTypeChart}
             <div style={{ paddingLeft: "20px" }}>
 
               <select style={{

@@ -355,6 +355,9 @@ pre {
 .list-payment{
     border: 1px solid rgb(213, 204, 204);
 }
+.btn-submit-pos{
+    bottom: 0px;position: absolute;width: 100%;
+}
 .text-input-pos {
     flex: 2;
     height: 28px;

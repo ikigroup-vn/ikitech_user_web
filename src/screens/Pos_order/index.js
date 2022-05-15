@@ -133,9 +133,9 @@ class PostOrder extends Component {
                     province: newState.txtProvince,
                     district: newState.txtDistrict,
                     wards: newState.txtWards,
-                    shipper_type : newState.ship_type, 
-                    total_shipping_fee :  newState.fee,
-                    partner_shipper_id :  newState.partner_id,
+                    shipper_type: newState.ship_type,
+                    total_shipping_fee: newState.fee,
+                    partner_shipper_id: newState.partner_id,
                 },
             });
         }
@@ -749,7 +749,7 @@ class PostOrder extends Component {
             this.state.openShipment == true && getChannel() == IKITECH ? { width: "calc(100% - 732px)" } : null;
         var rowPayman =
             this.state.openShipment == true && getChannel() == IKITECH
-                ? { display: "flex", height: "calc(100vh - 50px)"  }
+                ? { display: "flex", height: "calc(100vh - 50px)" }
                 : { "flex-flow": "column" };
         var wrapPrice = this.state.openShipment == false && getChannel() == IKITECH
             ? { height: "calc(100% - 90px)" }
@@ -762,7 +762,7 @@ class PostOrder extends Component {
                 }
                 : null;
 
-        
+
         return (
             <React.Fragment>
                 {typeof isShow == "undefined" ? (
@@ -892,7 +892,7 @@ class PostOrder extends Component {
                                             </div>
                                         </div>
                                         <PanelBottom
-                                        openShipment = {this.state.openShipment}
+                                            openShipment={this.state.openShipment}
                                             addComboInCart={this.addComboInCart}
                                             passKeyPress={this.handleKeyboard}
                                             limit={numPage}
@@ -907,25 +907,30 @@ class PostOrder extends Component {
                                     </div>
                                 </div>
 
-                                <div className="row-payman" style={rowPayman}>
+                                <div className="row-payman" style={{
+                                    ...rowPayman, 
+                                    // "flex-flow": "column",
+                                    // position: "relative",
+                                    // "z-index": "-1"
+                                }}>
                                     {/* {this.state.openShipment && getChannel() == IKITECH && ( */}
-                                        <div
-                                        className = {this.state.openShipment && getChannel() == IKITECH ? "" : "hide"}
-                                            style={{
-                                                "overflow-y": "scroll",
-    "overflow-x": "hidden",
-                                                width: "45%",
-                                                padding: "0 5px",
-                                                "border-right": "1px solid #b8b0b0"
-                                            }}
-                                        >
+                                    <div
+                                        className={this.state.openShipment && getChannel() == IKITECH ? "" : "hide"}
+                                        style={{
+                                            "overflow-y": "scroll",
+                                            "overflow-x": "hidden",
+                                            width: "45%",
+                                            padding: "0 5px",
+                                            "border-right": "1px solid #b8b0b0"
+                                        }}
+                                    >
 
 
 
-                                            
+
                                         <Shipper
-                                       total_shipping_fee = { oneCart?.info_cart?.total_shipping_fee}
-                                        totalFinal = {totalFinal}
+                                            total_shipping_fee={oneCart?.info_cart?.total_shipping_fee}
+                                            totalFinal={totalFinal}
                                             addComboInCart={this.addComboInCart}
                                             passKeyPress={this.handleKeyboard}
                                             limit={numPage}
@@ -940,10 +945,13 @@ class PostOrder extends Component {
 
 
 
-                                        </div>
+                                    </div>
                                     {/* )} */}
                                     <div
-                                        style={colPayman}>
+                                        style={{ 
+                                            position: "relative",
+                                            height: "100%",                                       
+                                         ...colPayman }}>
                                         <div className="wrap-price" style={wrapPrice}>
                                             <div className="" style={{ padding: "0" }}>
 
@@ -1089,7 +1097,7 @@ class PostOrder extends Component {
                                                             </span>
                                                         </div>
                                                     )}
-                                                         {oneCart?.info_cart?.total_shipping_fee > 0 && (
+                                                    {oneCart?.info_cart?.total_shipping_fee > 0 && (
                                                         <div className="row item-info">
                                                             <div className="item-discount-name col-6">
                                                                 Phí vận chuyển
@@ -1335,72 +1343,74 @@ class PostOrder extends Component {
                                             </div>
                                         </div>
 
-                                        <div className="row justify-content-around">
-                                            <div class="form-check">
-                                                <input
-                                                    class="form-check-input"
-                                                    onChange={this.handleOptionChange}
-                                                    type="radio"
-                                                    value={0}
-                                                    id="flexRadioDefault1"
-                                                    checked={this.state.payment_method_id == 0}
-                                                />
-                                                <label class="form-check-label" for="flexRadioDefault1">
-                                                    Tiền mặt
-                                                </label>
+                                        <div className="btn-submit-pos">
+                                            <div className="row justify-content-around">
+                                                <div class="form-check">
+                                                    <input
+                                                        class="form-check-input"
+                                                        onChange={this.handleOptionChange}
+                                                        type="radio"
+                                                        value={0}
+                                                        id="flexRadioDefault1"
+                                                        checked={this.state.payment_method_id == 0}
+                                                    />
+                                                    <label class="form-check-label" for="flexRadioDefault1">
+                                                        Tiền mặt
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check">
+                                                    <input
+                                                        class="form-check-input"
+                                                        onChange={this.handleOptionChange}
+                                                        type="radio"
+                                                        value={1}
+                                                        id="flexRadioDefault2"
+                                                        checked={this.state.payment_method_id == 1}
+                                                    />
+                                                    <label class="form-check-label" for="flexRadioDefault2">
+                                                        Thẻ
+                                                    </label>
+                                                </div>
+
+                                                <div class="form-check">
+                                                    <input
+                                                        class="form-check-input"
+                                                        onChange={this.handleOptionChange}
+                                                        type="radio"
+                                                        value={3}
+                                                        id="flexRadioDefault3"
+                                                        checked={this.state.payment_method_id == 3}
+                                                    />
+                                                    <label class="form-check-label" for="flexRadioDefault3">
+                                                        Chuyển khoản
+                                                    </label>
+                                                </div>
                                             </div>
 
-                                            <div class="form-check">
-                                                <input
-                                                    class="form-check-input"
-                                                    onChange={this.handleOptionChange}
-                                                    type="radio"
-                                                    value={1}
-                                                    id="flexRadioDefault2"
-                                                    checked={this.state.payment_method_id == 1}
-                                                />
-                                                <label class="form-check-label" for="flexRadioDefault2">
-                                                    Thẻ
-                                                </label>
-                                            </div>
-
-                                            <div class="form-check">
-                                                <input
-                                                    class="form-check-input"
-                                                    onChange={this.handleOptionChange}
-                                                    type="radio"
-                                                    value={3}
-                                                    id="flexRadioDefault3"
-                                                    checked={this.state.payment_method_id == 3}
-                                                />
-                                                <label class="form-check-label" for="flexRadioDefault3">
-                                                    Chuyển khoản
-                                                </label>
-                                            </div>
-                                        </div>
-
-                                        <div
-                                            className="wrap-buttom"
-                                            style={{
-                                                display: "flex",
-                                                justifyContent: "space-between",
-                                                margin: "10px 0",
-                                                marginTop: "15px"
-                                            }}
-                                        >
-                                            <button
-                                                className="btn btn-pay"
+                                            <div
+                                                className="wrap-buttom"
                                                 style={{
-                                                    width: "100%",
-                                                    padding: "25px",
-                                                    textAlign: "center",
-                                                    borderRadius: "5px",
-                                                    cursor: "pointer",
+                                                    display: "flex",
+                                                    justifyContent: "space-between",
+                                                    margin: "10px 0",
+                                                    marginTop: "15px"
                                                 }}
-                                                onClick={this.handlePayment}
                                             >
-                                                Thanh toán (F9)
-                                            </button>
+                                                <button
+                                                    className="btn btn-pay"
+                                                    style={{
+                                                        width: "100%",
+                                                        padding: "25px",
+                                                        textAlign: "center",
+                                                        borderRadius: "5px",
+                                                        cursor: "pointer",
+                                                    }}
+                                                    onClick={this.handlePayment}
+                                                >
+                                                    Thanh toán (F9)
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

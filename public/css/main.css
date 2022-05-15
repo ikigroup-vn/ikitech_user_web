@@ -5565,6 +5565,12 @@ input[type=radio] {
     /* color : #dddddd !important */
 }
 
+.card-border:hover {
+    background: rgba(0, 0, 0, .05) !important;
+    cursor: pointer;
+    /* color : #dddddd !important */
+}
+
 #dataTable_wrapper tbody tr:hover {
     background: rgba(0, 0, 0, .05) !important;
     cursor: pointer;
