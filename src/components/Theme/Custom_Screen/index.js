@@ -23,6 +23,7 @@ import "./style.css";
 import "slick-carousel/slick/slick.css";
 
 import "slick-carousel/slick/slick-theme.css";
+import ModalDefaultReset from "../Home_Screen/ModalDefaultReset";
 class Custom_Screen extends Component {
   constructor(props) {
     super(props);
@@ -47,6 +48,14 @@ class Custom_Screen extends Component {
     });
   };
 
+  onChangeThemeDefault = (theme) => {
+    this.setState(
+      {
+        themeDefaultReset: theme
+      }
+    )
+  }
+
   componentDidMount() {
     var theme = this.props.theme;
     console.log(theme);
@@ -61,10 +70,12 @@ class Custom_Screen extends Component {
         footer_type: theme.footer_type,
         use_footer_html: false,
       });
+
+
     }
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps, nextState) {
     if (
       !shallowEqual(nextProps.theme, this.props.theme) ||
       nextProps.tabId != this.props.tabId
@@ -78,18 +89,55 @@ class Custom_Screen extends Component {
         post_home_type: theme.post_home_type,
         footer_type: theme.footer_type,
       });
+
+      setTimeout(function() { //Start the timer
+        this.scrollToIndex(this.props)
+    }.bind(this), 200)
+
+    }
+
+
+    
+
+
+  }
+
+  scrollToIndex = (propsx) => {
+  
+    var theme = propsx != null  ? propsx.theme :  this.props.theme;
+
+
+
+    if (this.sliderHeader != null) {
+      this.sliderHeader.slickGoTo(theme.header_type - 1)
+    }
+    if (this.sliderBanner != null) {
+      this.sliderBanner.slickGoTo(theme.banner_type - 1)
+    }
+    if (this.sliderProduct != null) {
+      this.sliderProduct.slickGoTo(theme.product_home_type - 1)
+    }
+    if (this.sliderNews != null) {
+      this.sliderNews.slickGoTo(theme.post_home_type - 1)
+    }
+    if (this.sliderFooter != null) {
+      this.sliderFooter.slickGoTo(theme.footer_type - 1)
     }
   }
+
   getTabActive = (index) => {
     this.setState({ tabId: index });
+
+    setTimeout(function() { //Start the timer
+      this.scrollToIndex(this.props)
+  }.bind(this), 200)
+ 
   };
 
   chooseHeader = (theme) => {
     var { store_code } = this.props;
     var form = { ...this.props.theme };
     form.header_type = theme;
-
-    form.home_page_type = null;
 
     this.props.updateTheme(store_code, form);
   };
@@ -98,7 +146,6 @@ class Custom_Screen extends Component {
     var form = { ...this.props.theme };
     form.banner_type = theme;
 
-    form.home_page_type = null;
 
     this.props.updateTheme(store_code, form);
   };
@@ -107,7 +154,6 @@ class Custom_Screen extends Component {
     var form = { ...this.props.theme };
     form.product_home_type = theme;
 
-    form.home_page_type = null;
 
     this.props.updateTheme(store_code, form);
   };
@@ -116,7 +162,6 @@ class Custom_Screen extends Component {
     var form = { ...this.props.theme };
     form.post_home_type = theme;
 
-    form.home_page_type = null;
 
     this.props.updateTheme(store_code, form);
   };
@@ -126,10 +171,39 @@ class Custom_Screen extends Component {
     form.footer_type = theme;
     form.html_footer = "";
     form.is_use_footer_html = false;
-    form.home_page_type = null;
+
 
     this.props.updateTheme(store_code, form);
   };
+
+
+  setDefaultTheme = () => {
+
+    this.props.chooseTheme(this.props.theme_default)
+    this.props.onChangeThemeDefault(this.props.theme_default)
+
+  }
+
+  isSameDefault = () => {
+    var {
+      header_type,
+      banner_type,
+      product_home_type,
+      post_home_type,
+      footer_type,
+      use_footer_html,
+      tabId,
+    } = this.state;
+
+    var arr = [header_type, banner_type, product_home_type, post_home_type, footer_type]
+
+    if (shallowEqual(this.props.theme_default?.arr_index_component, arr)) {
+      return true
+    }
+
+    return false
+
+  }
 
   render() {
     const setting = {
@@ -156,6 +230,24 @@ class Custom_Screen extends Component {
     var { badges } = this.props;
     return (
       <div className="overview " style={{ marginLeft: "25px" }}>
+
+
+        <div className="row justify-content-between  align-items-center">
+          <button style={{ marginRight: "10px", marginBottom: 25, marginTop: 10 }} type="button" onClick={this.props.goBack} class="btn btn-warning  btn-sm">
+            <i class="fas fa-arrow-left"></i>&nbsp;Quay lại</button>
+
+          {this.isSameDefault() == false && <a
+            onClick={() => {
+
+              this.onChangeThemeDefault(this.props.theme_default)
+            }}
+            data-toggle="modal"
+            data-target="#modalDefaultReset"
+            style={{
+              color: "#0d6efd"
+            }}>Khôi phục mặc định</a>}
+        </div>
+
         <Tabs defaultIndex={0} onSelect={(index) => this.getTabActive(index)}>
           <div className="row">
             <div
@@ -352,7 +444,7 @@ class Custom_Screen extends Component {
               <form role="form">
                 <div class="box-body">
                   <TabPanel>
-                    <Slider {...setting}>
+                    <Slider {...setting} ref={sliderHeader => (this.sliderHeader = sliderHeader)}>
                       {headerImg.map((v, i) => (
                         <ItemHeaderTheme
                           badges={badges}
@@ -364,7 +456,7 @@ class Custom_Screen extends Component {
                     </Slider>
                   </TabPanel>
                   <TabPanel>
-                    <Slider {...setting}>
+                    <Slider {...setting} ref={sliderBanner => (this.sliderBanner = sliderBanner)}>
                       {bannerImg.map((v, i) => (
                         <ItemBannerTheme
                           badges={badges}
@@ -377,7 +469,7 @@ class Custom_Screen extends Component {
                     </Slider>
                   </TabPanel>
                   <TabPanel>
-                    <Slider {...setting}>
+                    <Slider {...setting} ref={sliderProduct => (this.sliderProduct = sliderProduct)}>
                       {productImg.map((v, i) => (
                         <ItemProductTheme
                           badges={badges}
@@ -389,7 +481,7 @@ class Custom_Screen extends Component {
                     </Slider>
                   </TabPanel>
                   <TabPanel>
-                    <Slider {...setting}>
+                    <Slider {...setting} ref={sliderNews => (this.sliderNews = sliderNews)}>
                       {blogImg.map((v, i) => (
                         <ItemNewsTheme
                           badges={badges}
@@ -425,7 +517,7 @@ class Custom_Screen extends Component {
                     </div>
 
                     {!use_footer_html ? (
-                      <Slider {...setting}>
+                      <Slider {...setting} ref={sliderFooter => (this.sliderFooter = sliderFooter)}>
                         {footerImg.map((v, i) => (
                           <ItemFooterTheme
                             badges={badges}
@@ -456,6 +548,8 @@ class Custom_Screen extends Component {
                   </TabPanel>
                 </div>
               </form>
+
+              <ModalDefaultReset theme={this.state.themeDefaultReset} resetTheme={this.props.resetTheme} />
             </div>
           </div>
         </Tabs>

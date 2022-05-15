@@ -1,15 +1,14 @@
 import React, { Component } from "react";
+import * as categoryBAction from "../../actions/category_blog";
 import { connect } from "react-redux";
-import * as categoryBAction from "../../../actions/category_blog";
+import themeData from "../../ultis/theme_data";
 
-class Modal extends Component {
-    
+class ModalRemoveChild extends Component {
   onSave = (e) => {
     e.preventDefault();
-    window.$('.modal').modal('hide');
-    var categoryB_id = this.props.modal.id;
-    var {store_code} = this.props
-    this.props.destroyCategoryB(store_code,categoryB_id );
+    window.$(".modal").modal("hide");
+    var { store_code, modal } = this.props;
+    this.props.destroyCategoryChild(store_code, modal.id, modal.idChild);
   };
 
   render() {
@@ -19,13 +18,17 @@ class Modal extends Component {
         class="modal fade"
         tabindex="-1"
         role="dialog"
-        id="removeModal"
+        id="removeModalChild"
         data-keyboard="false"
         data-backdrop="static"
       >
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog " role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{ background: "#47d3b0" }}>
+            <div
+              class="modal-header"
+              style={{ backgroundColor: themeData().backgroundColor }}
+            >
+              <h4>Thông báo</h4>
               <button
                 type="button"
                 class="close"
@@ -40,12 +43,12 @@ class Modal extends Component {
               role="form"
               action="#"
               method="post"
-              id="removeForm"
+              id="removeFormChild"
             >
               <div class="modal-body">
                 <input type="hidden" name="remove_id_store" />
                 <div class="alert-remove"></div>
-                Bạn có muốn xóa danh mục {modal.title}?
+                Bạn có muốn xóa {modal.title}: {modal.name}
               </div>
               <div class="modal-footer">
                 <button
@@ -55,9 +58,8 @@ class Modal extends Component {
                 >
                   Đóng
                 </button>
-                <button type="submit" class="btn btn-info">
+                <button type="submit" class="btn btn-warning">
                   Xóa
-                  
                 </button>
               </div>
             </form>
@@ -70,9 +72,9 @@ class Modal extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    destroyCategoryB: (store_code,categoryB_id) => {
-      dispatch(categoryBAction.destroyCategoryB(store_code,categoryB_id));
+    destroyCategoryChild: (store_code, id, idChild) => {
+      dispatch(categoryBAction.destroyCategoryChild(store_code, id, idChild));
     },
   };
 };
-export default connect(null, mapDispatchToProps)(Modal);
+export default connect(null, mapDispatchToProps)(ModalRemoveChild);

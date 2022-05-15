@@ -17,3 +17,18 @@ export const updateCategoryB = (categoryBId, categoryB, store_code) =>{
 export const destroyCategoryB = (store_code , storeAid) =>{
   return callApi(`/store/${store_code}/post_categories/${storeAid}`, "delete", null);
 }
+
+
+export const sortCategory = (store_code ,data) =>{
+  return callApi(`/store/${store_code}/category/sort`, "post", data);
+}
+
+export const destroyCategoryChildB = (store_code, id,idChild) =>{
+  return callApi(`/store/${store_code}/post_categories/${id}/category_children/${idChild}`, "delete", null);
+}
+export const createCategoryChildB = (store_code,id,data) =>{
+  return callApi(`/store/${store_code}/post_categories/${id}/category_children`, "post", data);
+}
+export const updateCategoryChildB = (store_code,id,idChild ,data) =>{
+  return callApi(`/store/${store_code}/post_categories/${id}/category_children/${idChild}`, "post", data);
+}

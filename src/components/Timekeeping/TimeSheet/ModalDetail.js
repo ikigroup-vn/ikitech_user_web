@@ -12,7 +12,7 @@ import { isEmpty } from "../../../ultis/helpers";
 import themeData from "../../../ultis/theme_data";
 
 // import CurrencyInput from "react-currency-input-field";
-// import Select from "react-select";
+import Select from "react-select";
 import moment from "moment";
 import MomentInput from "react-moment-input";
 import * as timeSheetAction from "../../../actions/time_sheet";
@@ -243,6 +243,28 @@ class ModalDetail extends Component {
     });
   };
 
+
+ listStaff = () => {
+
+  var listStaff = []
+
+  this.props.staff.map((staff) => {
+    listStaff.push(
+      { value: staff.id, label: staff.name,id:staff.id }
+    );
+  })
+ 
+
+  return listStaff
+ }
+
+ onChangeStaff = (selectValue) => {
+  this.setState({ 
+    selectValue:selectValue,
+    staff_name:selectValue.name,
+    staff_id: selectValue.id, });
+};
+
   render() {
     const {
       staff_id,
@@ -253,8 +275,11 @@ class ModalDetail extends Component {
       checkout_hour,
       is_bonus,
       staff_name,
+      listStaff
     } = this.state;
     const { datePrime } = this.props;
+
+   
 
     return (
       <div
@@ -287,7 +312,18 @@ class ModalDetail extends Component {
               id="createForm2"
             >
               <div class="modal-body">
-                <div class="form-group">
+
+                        <Select
+                          isClearable
+                          isSearchable
+                          placeholder="-- Chọn nhân viên --"
+                          value={this.state.selectValue}
+                          options={this.listStaff()}
+                          name="recipientReferences"
+                          onChange={this.onChangeStaff}
+                        />
+
+                {/* <div class="form-group">
                   <label>Tên nhân viên</label>
                   <input
                     type="text"
@@ -298,7 +334,9 @@ class ModalDetail extends Component {
                     disabled
                     onChange={this.onChange}
                   />
-                </div>
+                </div> */}
+
+
                 <div class="form-group">
                   <label>Ngày yêu cầu</label>
                   <input
@@ -317,7 +355,7 @@ class ModalDetail extends Component {
                 </div>
 
                 <div class="form-group">
-                  <label for="product_name">Thời gian checkin</label>
+                  <label for="product_name">Bắt đầu</label>
 
                   <MomentInput
                     placeholder="Chọn thời gian bắt đầu"
@@ -356,7 +394,7 @@ class ModalDetail extends Component {
                   />
                 </div> */}
                 <div class="form-group">
-                  <label for="product_name">Thời gian checkout</label>
+                  <label for="product_name">Kết thúc</label>
 
                   <MomentInput
                     placeholder="Chọn thời gian bắt đầu"
@@ -452,6 +490,7 @@ class ModalDetail extends Component {
 const mapStateToProps = (state) => {
   return {
     // shiftDetail: state.shiftReducers.shift.shiftId,
+    staff: state.staffReducers.staff.allStaff,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {

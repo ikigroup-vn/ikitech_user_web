@@ -11,6 +11,8 @@ import { isEmpty } from "../../../ultis/helpers";
 import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
 import { handleImageUploadBefore } from "../../../ultis/sun_editor";
+import getChannel, { IKITECH } from "../../../ultis/channel";
+import SeoOption from "./SeoOption";
 
 class Form extends Component {
   constructor(props) {
@@ -76,6 +78,13 @@ class Form extends Component {
     });
   };
 
+  handleDataFromContent = (data) => {
+    this.setState({
+      txtSeoTitle: data.txtSeoTitle,
+      txtSeoDescription: data.txtSeoDescription,
+    })
+  };
+
   onSave = (e) => {
     var { store_code } = this.props;
     e.preventDefault();
@@ -86,6 +95,8 @@ class Form extends Component {
       txtSumary,
       txtPublished,
       txtCategories,
+      txtSeoDescription,
+      txtSeoTitle
     } = this.state;
 
     if (txtTitle == null || !isEmpty(txtTitle)) {
@@ -131,6 +142,8 @@ class Form extends Component {
       category_id: category_id,
       summary: txtSumary,
       published: published,
+      seo_title: txtSeoTitle,
+      seo_description: txtSeoDescription
     });
   };
 
@@ -148,6 +161,8 @@ class Form extends Component {
       txtSumary,
       txtPublished,
       txtCategories,
+      txtSeoDescription,
+      txtSeoTitle
     } = this.state;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
     return (
@@ -289,6 +304,22 @@ class Form extends Component {
                 />
               </div>
             </div>
+
+            {
+              getChannel() == IKITECH && <div class="card mb-4">
+                <div class="card-header title_content">Tối ưu SEO</div>
+                <div class="card-body" style={{ padding: "0.8rem" }}>
+                  <div class="row">
+                    <SeoOption
+                      txtSeoDescription={txtSeoDescription}
+                      txtSeoTitle={txtSeoTitle}
+                      handleDataFromContent={this.handleDataFromContent}
+                    />
+                  </div>
+                </div>
+              </div>
+            }
+
           </div>
           <div class="box-footer">
             <button type="submit" class="btn btn-info btn-icon-split btn-sm">
