@@ -19,6 +19,7 @@ import InfoBonusAgency from "./InfoBonusAgency";
 import InfoShipper from "./InfoShipper";
 import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
 import PaymentHistory from "./PaymentHistory";
+import ChangeBranch from "./ChangeBranch";
 
 
 
@@ -31,9 +32,9 @@ class Form extends Component {
             orderData: {},
             paymentData: {},
             showChatBox: "show",
-            check : false,
-            css_IKIPOS : "col-lg-9 col-md-8 col-sm-12  pl0 pr8",
-            css_IKITECH : "col-lg-7 col-md-8 col-sm-12  pl0 pr8"
+            check: false,
+            css_IKIPOS: "col-lg-9 col-md-8 col-sm-12  pl0 pr8",
+            css_IKITECH: "col-lg-7 col-md-8 col-sm-12  pl0 pr8"
         };
     }
 
@@ -70,13 +71,13 @@ class Form extends Component {
         this.setState({ paymentData: payment })
     }
 
-    check = (status) =>{
-        this.setState({check : status})
+    check = (status) => {
+        this.setState({ check: status })
     }
 
     render() {
-        var { bill, billHistoty, order_code, store_code, billId, chat, order_allow_change_status, historyPay ,bills } = this.props
-        var { orderData, paymentData, showChatBox , check , css_IKIPOS , css_IKITECH } = this.state
+        var { bill, billHistoty, order_code, store_code, billId, chat, order_allow_change_status, historyPay, bills } = this.props
+        var { orderData, paymentData, showChatBox, check, css_IKIPOS, css_IKITECH } = this.state
         var customerImg = typeof bill.customer == "undefined" || bill.customer == null ? Env.IMG_NOT_FOUND : bill.customer.avatar_image
         var customerId = bill.customer_id
         var customerName = typeof bill.customer == "undefined" || bill.customer == null ? "Trống" : bill.customer.name
@@ -100,7 +101,7 @@ class Form extends Component {
                 />
                 <section className="content">
                     <div className="row">
-                        {(getChannel == IKIPOS || getChannel == IKITECH )&& (
+                        {(getChannel == IKIPOS || getChannel == IKITECH) && (
                             <div className="col-lg-2 col-md-4 col-sm-12 ">
                                 <div className="row" id="sale_nav_container">
                                     <div className="" style={{ width: "100%" }}>
@@ -135,7 +136,7 @@ class Form extends Component {
 
                         <div className={getChannel() == IKIPOS ? css_IKIPOS : css_IKITECH}>
                             {
-                                getChannel() == IKIPOS ? (<InfoProductPos check = {check} store_code={store_code} bills = {bills} bill={bill} />
+                                getChannel() == IKIPOS ? (<InfoProductPos check={check} store_code={store_code} bills={bills} bill={bill} />
                                 ) : <InfoProduct store_code={store_code} bill={bill} />
 
                             }
@@ -171,21 +172,21 @@ class Form extends Component {
                                             <div class="tab-content card" style={{ padding: "10px" }}>
                                                 {
                                                     getChannel() == IKITECH &&
-                                                    <InfoCustomer bill={bill} bills = {bills} store_code = {store_code} />
+                                                    <InfoCustomer bill={bill} bills={bills} store_code={store_code} />
                                                 }
-                                                       {
+                                                {
                                                     getChannel() == IKIPOS &&
-                                                    <InfoCustomerPos bill={bill} bills = {bills} store_code = {store_code} />
+                                                    <InfoCustomerPos bill={bill} bills={bills} store_code={store_code} />
                                                 }
-                                              
-                                                    {/* <OrderHistory billHistoty={billHistoty} /> */}
-                                                    {
+
+                                                {/* <OrderHistory billHistoty={billHistoty} /> */}
+                                                {
                                                     getChannel() == IKITECH && bills.data && bills.data.length > 0 &&
-                                                    <OrderHistory billHistoty={billHistoty} />                                                 }
-                                               
+                                                    <OrderHistory billHistoty={billHistoty} />}
+
                                                 {
                                                     getChannel() == IKIPOS && bills.data && bills.data.length > 0 &&
-                                                    <PaymentHistory bills  = {bills.data} historyPay={historyPay} />
+                                                    <PaymentHistory bills={bills.data} historyPay={historyPay} />
                                                 }
 
                                             </div>
@@ -206,8 +207,8 @@ class Form extends Component {
 
                                                     handleUpdateStatusOrder={this.handleUpdateStatusOrder} bill={bill} />
                                             ) : <TotalBillPos
-                                                store_code = {store_code}
-                                                check = {this.check}
+                                                store_code={store_code}
+                                                check={this.check}
                                                 order_allow_change_status={order_allow_change_status}
 
                                                 handleUpdateStatusOrder={this.handleUpdateStatusOrder} bill={bill} />
@@ -218,21 +219,34 @@ class Form extends Component {
 
                                 <hr />
 
-                                {bill.from_pos == false && <div className="card col-12 pl0" id="user_cart_info">
-                                    <InfoShipper
+                                {bill.from_pos == false &&
+                                    <div className="card col-12 pl0" id="user_cart_info">
+                                        <InfoShipper
+                                            order_allow_change_status={order_allow_change_status}
+                                            order_code={order_code}
+                                            store_code={store_code}
+                                            handleUpdateStatusOrder={this.handleUpdateStatusOrder} bill={bill} />
+                                    </div>
+
+
+                                }
+
+
+                                <hr />
+                                <div className="card col-12 pl0" id="user_cart_info">
+                                    <ChangeBranch
                                         order_allow_change_status={order_allow_change_status}
                                         order_code={order_code}
                                         store_code={store_code}
-
                                         handleUpdateStatusOrder={this.handleUpdateStatusOrder} bill={bill} />
-
                                 </div>
+
+
+                                {
+                                    getChannel() == IKITECH && <Chat
+                                        customerName={customerName} showChatBox={showChatBox} customerImg={customerImg} customerId={customerId} chat={chat} store_code={store_code} />
                                 }
-{
-    getChannel() == IKITECH &&  <Chat
-    customerName={customerName} showChatBox={showChatBox} customerImg={customerImg} customerId={customerId} chat={chat} store_code={store_code} />
-}
-                               
+
                             </div>
                         </div>
                     </div>
