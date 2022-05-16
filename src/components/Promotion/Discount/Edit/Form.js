@@ -276,6 +276,7 @@ class Form extends Component {
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
 
     var { products, store_code, discounts, discount } = this.props;
+    console.log(txtAmount , discount)
     return (
       <React.Fragment>
 

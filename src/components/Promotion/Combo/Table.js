@@ -24,11 +24,11 @@ class Table extends Component {
   }
   filterColDiscount = (data) => {
     var is_end = this.props.is_end
-    var now = moment().format("DD-MM-YYYY HH:mm:ss")
-    var start_time = moment(data.start_time, "YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY HH:mm:ss")
+    var now = moment().format("DD-MM-YYYY HH:mm:ss").valueOf()
+    var start_time = moment(data.start_time, "YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY HH:mm:ss").valueOf()
     console.log(now , start_time)
     if (is_end == 0) {
-      if(moment(now).isBefore(moment(start_time)) )
+      if(now < start_time)
       {
         return true;
       }
@@ -38,7 +38,7 @@ class Table extends Component {
       }
     }
     else if (is_end == 2) {
-      if(moment(now).isAfter(moment(start_time)))
+      if(now > start_time)
       {
         return true;
       }
@@ -53,6 +53,8 @@ class Table extends Component {
   }
   showData = (combos, per_page, current_page) => {
     console.log("davao")
+    var is_end = this.props.is_end 
+    var count = 0
     var combos = this.props.is_end == 0 || this.props.is_end == 2  ? combos : combos.data
     var result = null;
     var { store_code } = this.props.params;
@@ -71,12 +73,15 @@ class Table extends Component {
         var showCurrentPage = typeof per_page != "undefined" && per_page != null ? true : false
         var disableIsEnd = this.props.is_end == 0 ? "show" : "hide"
 
-        if (this.filterColDiscount(data) == true) {
+        if (this.filterColDiscount(data) == true) {          count = count + 1
+
           return (
             <tr className="hover-product" onClick={(e) => this.changePage(e, store_code, data.id)}>
-              <td class={showCurrentPage ? "hide" : "show"}>{index + 1}</td>
+          <td class={showCurrentPage ? "hide" : "show"}>{is_end == 0 || is_end ==2 ? count : index}</td>
+  
+  <td class={showCurrentPage ? "show" : "hide"}>{(per_page * (current_page - 1)) + (is_end == 0 || is_end ==2 ? count + 1 : index + 1)}</td>
 
-              <td class={showCurrentPage ? "show" : "hide"}>{(per_page * (current_page - 1)) + (index + 1)}</td>
+
               <td>{data.name}</td>
               <td>{data.start_time}</td>
               <td>{data.end_time}</td>

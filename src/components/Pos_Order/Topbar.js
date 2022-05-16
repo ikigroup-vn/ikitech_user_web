@@ -410,8 +410,11 @@ class Topbar extends Component {
                         </div>
 
                         <div className='end-list-top-cart'>
-                            <li className='nav-item add-cart' onClick={() => this.handleCreateTab()}>
+                            <li className='nav-item add-cart' style = {{marginRight : "30px" }} onClick={() => this.handleCreateTab()}>
+                                <div>
                                 <i class='fas fa-plus' ></i>
+
+                                </div>
                             </li>
 
                             <div style={{
@@ -420,9 +423,9 @@ class Topbar extends Component {
                                     display: "flex", alignItems: "center", justifyContent: "space-between",
 
                                 }}>
-                                    {getChannel() == IKITECH && <li className='nav-item add-cart' onClick = {()=>this.props.handleOpenShipment(true)}>
+                                    <li className={`nav-item add-cart ${getChannel() == IKITECH ? "" : "invisible"}`} onClick = {()=>this.props.handleOpenShipment(true)}>
                                         <i class="fas fa-shipping-fast" ></i>
-                                    </li>}
+                                    </li>
                                     
                                     <li className="nav-item dropdown no-arrow" style={{ margin: "0 10px", fontSize: "17px" }}>
                                         <div className='wrap-info' data-toggle="modal" data-target="#modalBranch" style={{ display: "flex", color: "white", cursor: "pointer" }}>

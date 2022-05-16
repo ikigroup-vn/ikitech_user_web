@@ -254,7 +254,7 @@ class Bill extends Component {
                       }}
                     >
                       <h4 className="h4 title_content mb-0 text-gray-800">
-                        Hóa đơn{" "}
+                        Đơn hàng{" "}
                         {typeof customer.id != "undefined" &&
                           customer.id == this.state.agency_by_customer_id
                           ? `của Đại lý ${customer.name}`

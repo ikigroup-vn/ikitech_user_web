@@ -358,19 +358,20 @@ class Table extends Component {
                 <td>Số giờ làm</td>
                 <td>Số tiền làm theo giờ</td>
 
-                {this.props.typeDate == "DAY" ||
+                {/* {this.props.typeDate == "DAY" ||
                   (this.props.typeDate == "OPTION" &&
                     this.props.datePrime.from === this.props.datePrime.to) ? (
                   <td>Hành động</td>
                 ) : (
                   <td></td>
-                )}
+                )} */}
               </tr>
 
               {this.showData(listTimeSheet)}
             </tbody>
           </table>
           <ModalDetail
+          resetModal = {this.props.resetModal}
             store_code={store_code}
             branch_id={branch_id}
             time_sheet_id={this.state.idModalShow}

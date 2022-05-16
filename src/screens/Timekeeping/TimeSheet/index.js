@@ -30,6 +30,7 @@ class TimeSheet extends Component {
       datePrime: "",
       typeDate: "DAY",
       reset: "",
+      resetModal : true
     };
   }
 
@@ -226,7 +227,7 @@ class TimeSheet extends Component {
                           <button data-toggle="modal"
                             data-target="#modalDetail" type="button" onClick={(e) => {
                               this.setState({
-
+                                resetModal : helper.randomString(10)
                               });
                             }} class="btn btn-info   btn-sm">
                             <i class="fas fa-plus"></i>  Thêm bớt công
@@ -240,6 +241,7 @@ class TimeSheet extends Component {
 
                     <div className="card-body">
                       <Table
+                      resetModal = {this.state.resetModal}
                         store_code={store_code}
                         branch_id={branch_id}
                         timeSheet={timeSheet}

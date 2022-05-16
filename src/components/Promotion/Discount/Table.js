@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import * as Env from "../../../ultis/default"
 import history from "../../../history"
 import moment from "moment"
+import getChannel , {IKITECH , IKIPOS} from "../../../ultis/channel";
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -49,11 +50,11 @@ class Table extends Component {
 
   filterColDiscount = (data) => {
     var is_end = this.props.is_end
-    var now = moment().format("DD-MM-YYYY HH:mm:ss")
-    var start_time = moment(data.start_time, "YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY HH:mm:ss")
-    console.log(now , start_time)
+    var now = moment().format("DD-MM-YYYY HH:mm:ss").valueOf()
+    var start_time = moment(data.start_time, "YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY HH:mm:ss").valueOf()
+    console.log(now , start_time , now < start_time , is_end)
     if (is_end == 0) {
-      if(moment(now).isBefore(moment(start_time)) )
+      if(now < start_time)
       {
         return true;
       }
@@ -63,7 +64,7 @@ class Table extends Component {
       }
     }
     else if (is_end == 2) {
-      if(moment(now).isAfter(moment(start_time)))
+      if(now > start_time)
       {
         return true;
       }
@@ -78,6 +79,9 @@ class Table extends Component {
   }
 
   showData = (discounts, per_page, current_page) => {
+    var is_end = this.props.is_end 
+    var count = 0
+
     var discounts = this.props.is_end == 0 || this.props.is_end == 2  ? discounts : discounts.data
     var result = null;
     var { store_code } = this.props.params;
@@ -89,20 +93,30 @@ class Table extends Component {
       var { update, _delete } = this.props
 
       result = discounts.map((data, index) => {
-        var set_limit_amount =
+        if(getChannel() == IKITECH)
+        {
+          var set_limit_amount =
           data.set_limit_amount == true ? data.amount : "Không giới hạn";
+        }
+        else
+        {
+          var set_limit_amount = data.value
+        }
         var status_limit_amount = data.set_limit_amount == true ? "" : "danger";
         var image_url =
           data.image_url == null || data.image_url == "" ? Env.IMG_NOT_FOUND : data.image_url
         var showCurrentPage = typeof per_page != "undefined" && per_page != null ? true : false
         var disableIsEnd = this.props.is_end ? "hide" : "show"
+
+        console.log(set_limit_amount)
         if(this.filterColDiscount(data) == true)
         {
+          count = count + 1
           return (
             <tr className="hover-product" onClick={(e) => this.changePage(e, store_code, data.id)}>
-              <td class={showCurrentPage ? "hide" : "show"}>{index + 1}</td>
+              <td class={showCurrentPage ? "hide" : "show"}>{is_end == 0 || is_end ==2 ? count : index}</td>
   
-              <td class={showCurrentPage ? "show" : "hide"}>{(per_page * (current_page - 1)) + (index + 1)}</td>
+              <td class={showCurrentPage ? "show" : "hide"}>{(per_page * (current_page - 1)) + (is_end == 0 || is_end ==2 ? count + 1 : index + 1)}</td>
   
   
               <td>{data.name}</td>
@@ -114,7 +128,7 @@ class Table extends Component {
   
               <td>
   
-                {!isNaN(Number(set_limit_amount)) ? new Intl.NumberFormat().format(set_limit_amount.toString()) + "%" : set_limit_amount}
+                {!isNaN(Number(set_limit_amount)) && set_limit_amount != null ? new Intl.NumberFormat().format(set_limit_amount.toString()) + "%" : set_limit_amount}
   
               </td>
               <td style={{ maxWidth: "300px" }}> {this.showListProduct(data.products || [])}</td>

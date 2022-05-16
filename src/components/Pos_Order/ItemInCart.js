@@ -55,10 +55,10 @@ class ItemInCart extends Component {
         );
     };
 
-    componentDidMount = () => {
+    // componentDidMount = () => {
 
-        document.addEventListener('mousedown', this.handleClickOutside, true);
-    }
+    //     document.addEventListener('mousedown', this.handleClickOutside, true);
+    // }
 
     handleClickOutside = event => {
         try {
@@ -193,6 +193,8 @@ class ItemInCart extends Component {
     }
 
     componentDidMount() {
+        document.addEventListener('mousedown', this.handleClickOutside, true);
+
         this.setState({
             currentQuantity: this.props.item.quantity,
             distribute: this.props.item.product.distributes,

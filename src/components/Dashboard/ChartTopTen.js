@@ -83,7 +83,13 @@ class Chart extends Component {
 
     (chartDataProps[action] ?? []).forEach(item => {
       dataSets.push(item[action]);
-      labels.push(item.product.name)
+      if(item.product.name && item.product.name.length > 50)
+        labels.push(item.product.name.slice(0, 50) + "...")
+        else
+        labels.push(item.product.name)
+
+
+      
     });
     chartDataState.datasets[0].data = dataSets
     chartDataState.labels = labels
