@@ -90,21 +90,21 @@ class Custom_Screen extends Component {
         footer_type: theme.footer_type,
       });
 
-      setTimeout(function() { //Start the timer
+      setTimeout(function () { //Start the timer
         this.scrollToIndex(this.props)
-    }.bind(this), 200)
+      }.bind(this), 200)
 
     }
 
 
-    
+
 
 
   }
 
   scrollToIndex = (propsx) => {
-  
-    var theme = propsx != null  ? propsx.theme :  this.props.theme;
+
+    var theme = propsx != null ? propsx.theme : this.props.theme;
 
 
 
@@ -128,10 +128,10 @@ class Custom_Screen extends Component {
   getTabActive = (index) => {
     this.setState({ tabId: index });
 
-    setTimeout(function() { //Start the timer
+    setTimeout(function () { //Start the timer
       this.scrollToIndex(this.props)
-  }.bind(this), 200)
- 
+    }.bind(this), 200)
+
   };
 
   chooseHeader = (theme) => {

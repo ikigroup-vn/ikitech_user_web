@@ -43,11 +43,11 @@ class Home_Screen extends Component {
       {
         index: 3,
         theme:
-          "https://i.imgur.com/OB5Yldo.png",
+          "https://i.imgur.com/PhGo57G.png",
         arr_index_component: [3, 3, 3, 3, 1],
-        demo_link: "https://dogiadungdemo.myiki.vn/"
-      },
+        demo_link: "https://shopdecordemo.myiki.vn/"
 
+      },
       {
         index: 4,
         theme:
@@ -59,23 +59,23 @@ class Home_Screen extends Component {
         isVip: true,
         index: 5,
         theme:
-          "https://i.imgur.com/PhGo57G.png",
+          "https://i.imgur.com/eDwSzo5.png",
         arr_index_component: [5, 5, 5, 5, 2],
-        demo_link: "https://noithatdemo.myiki.vn/"
+        demo_link: "https://echoa.vn"
       },
       {
         isVip: true,
         index: 6,
-        theme: "https://i.imgur.com/6IIeJw2.png",
+        theme: "https://i.imgur.com/LqX1NtJ.png",
         arr_index_component: [6, 6, 6, 6, 3],
-        demo_link: "https://thoitrangdemo.myiki.vn/"
+        demo_link: "https://daikamart.mydoapp.vn/"
       },
       {
         isVip: false,
         index: 7,
-        theme: "https://i.imgur.com/B9KGu8S.png",
+        theme: "https://i.imgur.com/OB5Yldo.png",
         arr_index_component: [7, 7, 7, 7, 1],
-        demo_link: "https://myphamkoreagiagoc.myiki.vn/"
+        demo_link: "https://mediamartonline.mydoapp.vn/"
       },
     ];
   }
