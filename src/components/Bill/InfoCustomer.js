@@ -5,6 +5,8 @@ import getNamePaymentMethod from "../../ultis/payment_method";
 import { filter_var, filter_arr, format } from "../../ultis/helpers";
 import payment_method from "../../ultis/payment_method";
 import { Link } from "react-router-dom";
+import * as OrderFrom from "../../ultis/order_from";
+
 class InfoCustomer extends Component {
     constructor(props) {
         super(props);
@@ -28,7 +30,13 @@ class InfoCustomer extends Component {
         var province_name = typeof customer_address == "undefined" ? null : customer_address.province_name
         var name_receipt = typeof customer_address == "undefined" ? null : customer_address.name
         var id = typeof customer == "undefined" || customer == null ? null : customer.id
-
+        var order_from = data.order_from == OrderFrom.ORDER_FROM_APP ? "App" 
+        : data.order_from == OrderFrom.ORDER_FROM_POS_DELIVERY ? "POS giao vận"
+        : data.order_from == OrderFrom.ORDER_FROM_POS_IN_STORE ? "POS tại quầy"
+        : data.order_from == OrderFrom.ORDER_FROM_POS_SHIPPER ? "POS vận chuyển"
+        : data.order_from == OrderFrom.ORDER_FROM_WEB ? "Web"
+        : "Web"
+    
         return (
             <div
                 class="tab-pane active"
@@ -39,7 +47,7 @@ class InfoCustomer extends Component {
                 <div class="row col-md-12 col-xs-12 form-group">
                     <div class="info_user" style={{ marginTop: "20px" }}>
                         {bill.from_pos == true && <p class="sale_user_label" id="sale_user_name">
-                            <b>Đơn này từ IKIPOS (POS)</b>
+                            <b>Đơn này từ {order_from}</b>
                         </p>}
                         <p class="sale_user_label" id="sale_user_name">
                             Khách hàng: <Link id="user_name" to ={`/customer/detail/${store_code}/${id}`}>{name}</Link>
@@ -81,14 +89,14 @@ class InfoCustomer extends Component {
                             </p>
                         }
 
-                        {
+                        {/* {
                             getChannel() == IKITECH &&
                             <p class="sale_user_label">
                                 Thanh toán:
                                 <span class="cart_payment_method">{payment}</span>
 
                             </p>
-                        }
+                        } */}
                     </div>
 
                 </div>

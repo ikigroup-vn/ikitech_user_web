@@ -14,7 +14,7 @@ class TotalBill extends Component {
         }
     }
 
-    
+
 
     changeStatus = (status) => {
         this.setState({ check: status });
@@ -128,18 +128,18 @@ class TotalBill extends Component {
                     </div> */}
 
                     {
-                        total_final > 0 &&         <div>
-                        <p className="sale_user_label bold">
-                            Tổng tiền:{" "}
-                            <span className="cart_payment_method">
-                                {format(total_final
-                                )}
-                            </span>
-                        </p>
-                    </div>
-                    
+                        total_final > 0 && <div>
+                            <p className="sale_user_label bold">
+                                Thành tiền:{" "}
+                                <span className="cart_payment_method">
+                                    {format(total_final
+                                    )}
+                                </span>
+                            </p>
+                        </div>
+
                     }
-             
+
 
                     {
                         getChannel() == IKIPOS && (
@@ -167,63 +167,162 @@ class TotalBill extends Component {
 
                         )
                     }
+                    {
+                        getChannel() == IKIPOS && (
+                            <div style={{ textAlign: "center" }}>
+                                {
+                                    bill.payment_status_code == "UNPAID" || bill.payment_status_code == "PARTIALLY_PAID" ?
 
-                    <div style={{ textAlign: "center" }}>
-                        {
-                            bill.payment_status_code == "UNPAID" || bill.payment_status_code == "PARTIALLY_PAID" ?
+                                        (<a
+                                            data-target="#modalPayment"
+                                            data-toggle="modal"
 
-                                (<a
-                                    data-target="#modalPayment"
-                                    data-toggle="modal"
-
-                                    style={{ color: "white", background: "rgb(229, 111, 37)" }}
-                                    id="sale_btn_accepted"
-                                    className={`sale_btn_action sale_btn_action_10 btn btn-secondary w100p `}
-
-
-
-                                > Thanh toán còn lại
-                                </a>)
-
-                                :
-                                (
-                                    bill.order_code_refund != null || this.checkRefundAll(list_items) == true ? (
-                                        <a
-                                            style={{ color: "white" }}
+                                            style={{ color: "white", background: "rgb(229, 111, 37)" }}
                                             id="sale_btn_accepted"
-                                            className={`sale_btn_action sale_btn_action_10 btn btn-secondary w100p ${cancel} ${disable}`}
-                                        > Đã hoàn hết sản phẩm</a>
-                                    ) :
-                                        (this.state.check == true ? (<a
-                                            style={{ color: "white" }}
-                                            id="sale_btn_accepted"
-                                            className={`sale_btn_action sale_btn_action_10 btn btn-secondary w100p ${cancel} ${disable}`}
+                                            className={`sale_btn_action sale_btn_action_10 btn btn-secondary w100p `}
 
-                                            onClick={() => { this.changeStatus(false) }}
 
-                                        >
-                                            Hủy
-                                        </a>) : (<a
-                                            style={{ color: "white" }}
-                                            id="sale_btn_accepted"
-                                            className={`sale_btn_action sale_btn_action_10 btn btn-danger w100p ${cancel} ${disable}`}
 
-                                            onClick={() => { this.changeStatus(true) }}
-
-                                        >
-                                            Hoàn tiền
+                                        > Thanh toán còn lại
                                         </a>)
+
+                                        :
+                                        (
+                                            bill.order_code_refund != null || this.checkRefundAll(list_items) == true ? (
+                                                <a
+                                                    style={{ color: "white" }}
+                                                    id="sale_btn_accepted"
+                                                    className={`sale_btn_action sale_btn_action_10 btn btn-secondary w100p ${cancel} ${disable}`}
+                                                > Đã hoàn hết sản phẩm</a>
+                                            ) :
+                                                (this.state.check == true ? (<a
+                                                    style={{ color: "white" }}
+                                                    id="sale_btn_accepted"
+                                                    className={`sale_btn_action sale_btn_action_10 btn btn-secondary w100p ${cancel} ${disable}`}
+
+                                                    onClick={() => { this.changeStatus(false) }}
+
+                                                >
+                                                    Hủy
+                                                </a>) : (<a
+                                                    style={{ color: "white" }}
+                                                    id="sale_btn_accepted"
+                                                    className={`sale_btn_action sale_btn_action_10 btn btn-danger w100p ${cancel} ${disable}`}
+
+                                                    onClick={() => { this.changeStatus(true) }}
+
+                                                >
+                                                    Hoàn tiền
+                                                </a>)
+                                                )
                                         )
-                                )
 
-                        }
-
+                                }
 
 
 
 
 
-                    </div>
+
+                            </div>
+                        )
+
+                    }
+                    {
+                        getChannel() == IKITECH && (
+                            <div style={{ textAlign: "center" }}>
+                                {
+                                    bill.payment_status_code == "PAID" &&
+                                    (
+                                        bill.order_code_refund != null || this.checkRefundAll(list_items) == true ? (
+                                            <a
+                                                style={{ color: "white" }}
+                                                id="sale_btn_accepted"
+                                                className={`sale_btn_action sale_btn_action_10 btn btn-secondary w100p ${cancel} ${disable}`}
+                                            > Đã hoàn hết sản phẩm</a>
+                                        ) :
+                                            (this.state.check == true ? (<a
+                                                style={{ color: "white" }}
+                                                id="sale_btn_accepted"
+                                                className={`sale_btn_action sale_btn_action_10 btn btn-secondary w100p ${cancel} ${disable}`}
+
+                                                onClick={() => { this.changeStatus(false) }}
+
+                                            >
+                                                Hủy
+                                            </a>) : (<a
+                                                style={{ color: "white" }}
+                                                id="sale_btn_accepted"
+                                                className={`sale_btn_action sale_btn_action_10 btn btn-danger w100p ${cancel} ${disable}`}
+
+                                                onClick={() => { this.changeStatus(true) }}
+
+                                            >
+                                                Hoàn tiền
+                                            </a>)
+                                            )
+                                    )
+
+
+
+                                }
+                                {
+                                    bill.payment_status_code == "UNPAID" && bill.from_pos == false &&  bill.order_status_code !== "USER_CANCELLED"  &&  bill.order_status_code !== "CUSTOMER_CANCELLED" &&
+                                    (
+                                        <React.Fragment>
+                                            <a
+                                                id="sale_btn_accepted"
+                                                className={`sale_btn_action sale_btn_action_10 btn btn-info w100p ${agree} ${disable}`}
+                                                data-toggle="modal"
+                                                data-target="#postModal"
+                                                onClick={() => { this.changeStatus("PACKING", "Đang chuẩn bị hàng") }}
+                                            >
+                                                <i className="fa fa-check" /> Phê duyệt
+                                            </a>
+
+                                            <a
+                                                id="sale_btn_accepted"
+                                                className={`sale_btn_action sale_btn_action_10 btn btn-danger w100p ${cancel} ${disable}`}
+                                                data-toggle="modal"
+                                                data-target="#postModal"
+                                                onClick={() => { this.changeStatus("USER_CANCELLED", "Shop đã hủy") }}
+
+                                            >
+                                                <i className="fa fa-times" /> Hủy đơn
+                                            </a>
+                                        </React.Fragment>
+                                    )
+                                    
+                                }
+
+{
+                                    bill.payment_status_code == "UNPAID" && bill.from_pos == false && (bill.order_status_code == "USER_CANCELLED"  || bill.order_status_code == "CUSTOMER_CANCELLED") &&
+                                    (
+                                        <React.Fragment>
+                            
+                                            <a 
+                                            style = {{background : "#8f9392" , color : "white"}}
+                                            disabled
+                                                id="sale_btn_accepted"
+                                                className={`sale_btn_action sale_btn_action_10 btn btn-danger w100p ${cancel} ${disable}`}
+                                          
+
+                                            >
+                                                <i className="fa fa-times" /> Hủy đơn
+                                            </a>
+                                        </React.Fragment>
+                                    )
+                                    
+                                }
+
+
+
+
+                            </div>
+                        )
+
+                    }
+
                 </div>
             </div >
 
@@ -233,8 +332,8 @@ class TotalBill extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
     return {
-  
-        resetCalculate : (data) =>{
+
+        resetCalculate: (data) => {
             dispatch(data);
 
         }

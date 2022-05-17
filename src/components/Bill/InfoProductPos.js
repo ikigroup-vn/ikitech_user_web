@@ -589,6 +589,7 @@ class InfoProductPos extends Component {
                 <div className="box-header">
                     <span className="box-title ">
                         Mã đơn: #<span id="cart_code">{bill.order_code}</span>
+                        <span id="count">&nbsp; | &nbsp;{bill?.line_items_at_time?.length ?? 0} sản phẩm</span>
 
                     </span>
                     {

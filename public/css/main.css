@@ -25,7 +25,9 @@
  * Last commit: '[RELEASE] OrderFE-v1.27.0' (7300eae2a83ab531aa3b1e2a3f38b25f8337445b);
  * Updated: '2022-04-13T10:51:28.112Z';
  */
-
+.card-header{
+    padding : .75rem 0rem !important
+}
 .shopee-button-solid {
     outline: none;
     cursor: pointer;
@@ -58,7 +60,21 @@
     user-select: none;
     box-shadow: 0 1px 1px 0 rgba(0, 0, 0, .09)
 }
+.warning
+{
+    color : #f6c23e
+}
+.danger
+{
+    color : #e74a3b
+} 
 
+.dark {
+    color : #5a5c69
+}
+.success{
+    color : #1cc88a
+}
 .shopee-button-solid:active {
     box-shadow: inset 0 2px 1px 0 rgba(0, 0, 0, .05)
 }

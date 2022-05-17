@@ -75,7 +75,7 @@ class Form extends Component {
     }
 
     render() {
-        var { bill, billHistoty, order_code, store_code, billId, chat, order_allow_change_status, historyPay ,bills } = this.props
+        var { bill, billHistoty, order_code, store_code, billId, chat, order_allow_change_status, historyPay ,bills,shipment } = this.props
         var { orderData, paymentData, showChatBox , check , css_IKIPOS , css_IKITECH } = this.state
         var customerImg = typeof bill.customer == "undefined" || bill.customer == null ? Env.IMG_NOT_FOUND : bill.customer.avatar_image
         var customerId = bill.customer_id
@@ -100,7 +100,7 @@ class Form extends Component {
                 />
                 <section className="content">
                     <div className="row">
-                        {(getChannel() == IKITECH )&& (
+                        {(getChannel() == IKITECH && bill.from_pos == false )&& (
                             <div className="col-lg-2 col-md-4 col-sm-12 ">
                                 <div className="row" id="sale_nav_container">
                                     <div className="" style={{ width: "100%" }}>
@@ -133,10 +133,10 @@ class Form extends Component {
                             </div>
                         )}
 
-                        <div className={getChannel() == IKIPOS ? css_IKIPOS : css_IKITECH}>
+                        <div className={getChannel() == IKIPOS || bill.from_pos == true ? css_IKIPOS : css_IKITECH}>
                             {
                                 getChannel() == IKIPOS ? (<InfoProductPos check = {check} store_code={store_code} bills = {bills} bill={bill} />
-                                ) : <InfoProduct store_code={store_code} bill={bill} />
+                                ) : <InfoProductPos check = {check} store_code={store_code} bills = {bills} bill={bill} />
 
                             }
                             <InfoBonusAgency store_code={store_code} bill={bill} />
@@ -151,15 +151,15 @@ class Form extends Component {
                                                 </li>
 
                                                 {
-                                                    getChannel() == IKITECH &&
+                                                    getChannel() == IKITECH && 
                                                     <li class="nav-item">
                                                         <a class="nav-link " data-toggle="tab" href="#chicken" role="tab" aria-controls="chicken" aria-selected="false">Lịch sử đơn hàng</a>
                                                     </li>
                                                 }
                                                 {
-                                                    getChannel() == IKIPOS &&
+                                                    ( getChannel() == IKITECH && bill.from_pos == false) &&
                                                     <li class="nav-item">
-                                                        <a class="nav-link " data-toggle="tab" href="#chicken" role="tab" aria-controls="chicken" aria-selected="false">Lịch sử thanh toán</a>
+                                                        <a class="nav-link " data-toggle="tab" href="#car" role="tab" aria-controls="car" aria-selected="false">Lịch sử thanh toán</a>
                                                     </li>
                                                 }
 
@@ -184,7 +184,7 @@ class Form extends Component {
                                                     <OrderHistory billHistoty={billHistoty} />                                                 }
                                                
                                                 {
-                                                    getChannel() == IKIPOS && bills.data && bills.data.length > 0 &&
+                                                    ( getChannel() == IKITECH && bill.from_pos == false) && bills.data && bills.data.length > 0 &&
                                                     <PaymentHistory bills  = {bills.data} historyPay={historyPay} />
                                                 }
 
@@ -201,10 +201,12 @@ class Form extends Component {
                                     {
                                         getChannel() == IKITECH ?
                                             (
-                                                <TotalBill
-                                                    order_allow_change_status={order_allow_change_status}
+                                                <TotalBillPos
+                                                store_code = {store_code}
+                                                check = {this.check}
+                                                order_allow_change_status={order_allow_change_status}
 
-                                                    handleUpdateStatusOrder={this.handleUpdateStatusOrder} bill={bill} />
+                                                handleUpdateStatusOrder={this.handleUpdateStatusOrder} bill={bill}  />
                                             ) : <TotalBillPos
                                                 store_code = {store_code}
                                                 check = {this.check}

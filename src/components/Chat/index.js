@@ -394,6 +394,7 @@ class Chat extends Component {
           </form>
         </section>
         <img
+        title = "Liên hệ khách hàng"
           onClick={this.closeIcon}
           style={{
             position: "fixed",

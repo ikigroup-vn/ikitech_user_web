@@ -3,11 +3,15 @@ import React, { Component } from "react";
 import * as billAction from "../../actions/bill"
 import { connect } from "react-redux";
 import ChooseShipper from "./ChooseShipper";
-
+import moment from "moment"
 class InfoShipper extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            shipperId : ""
+        }
     }
+    
 
 
     changeStatus = (statusCode, name) => {
@@ -16,15 +20,45 @@ class InfoShipper extends Component {
 
     sendOrderToDelivery = () => {
         var { bill, order_code, store_code } = this.props
-
+        
         this.props.sendOrderToDelivery(null, store_code, bill.id, order_code);
     }
 
     componentDidMount() {
 
-      
-    
-      }
+        if (this.props.bill?.partner_shipper_id) {
+            this.setState({ shipperId: this.props.bill?.partner_shipper_id })
+        }
+
+    }
+
+    showShipment = () => {
+        var result = null
+        var { shipment } = this.props
+        console.log("van chuyen",shipment)
+        if (shipment?.length > 0) {
+            result = shipment.map((data) => {
+               return <option value={data.id}>{data.name}</option>
+
+            })
+        }
+        return result
+    }
+    onChangeShipper = (e) => {
+        var { value } = e.target;
+        this.setState({ shipperId: value })
+        var { bill, order_code, store_code } = this.props
+
+        if (this.state.shipperId == "") {
+            this.setState({
+                error: "Chưa chọn phương thức vận chuyển"
+            })
+            return
+        }
+        this.props.updateOrder({
+            partner_shipper_id: value
+        }, store_code, order_code)
+    }
 
 
     render() {
@@ -33,9 +67,9 @@ class InfoShipper extends Component {
         var agree = bill.order_status_code == "WAITING_FOR_PROGRESSING" ? "show" : "hide"
         var disable = this.props.order_allow_change_status == true ? "show" : "hide"
 
-        if(bill.partner_shipper_id === null) {
-            return <ChooseShipper bill={bill} store_code={this.props.store_code} order_code = {bill.order_code}/>
-        }
+        // if(bill.partner_shipper_id === null) {
+        //     return <ChooseShipper bill={bill} store_code={this.props.store_code} order_code = {bill.order_code}/>
+        // }
 
         return (
             bill.sent_delivery == false ? <div className="box box-warning cart_wrapper mb0">
@@ -46,9 +80,20 @@ class InfoShipper extends Component {
                     className="box-body table-responsive pt0"
                 >
 
-                    <div className="m-3">
+                    <div >
                         <p className="sale_user_label bold">
-                            Đơn vị vận chuyển: <span id="total_before">{shipper_name}</span>
+                            Đơn vị vận chuyển:
+                            <select name="shipperId" id="input" class="form-control" required=""
+                                onChange={this.onChangeShipper}
+                                value={this.state.shipperId}
+                            >
+                                <option value="">---Chọn đơn vị vận chuyển---</option>
+
+                                {
+                                    this.showShipment()
+                                }
+
+                            </select>
                         </p>
                     </div>
                     <div style={{ textAlign: "center" }}>
@@ -86,7 +131,10 @@ class InfoShipper extends Component {
 
                                 <div id="item_fee">
                                     <div className="sale_user_label bold">
-                                        {history.status_text} <span> {history.time}</span>
+                                        {history.status_text}:
+                                    </div>
+                                    <div >
+                                        <span> {moment(history.time).format("DD-MM-YYYY HH:mm")}</span>
                                     </div>
                                 </div>
 
@@ -105,6 +153,8 @@ class InfoShipper extends Component {
 const mapStateToProps = (state) => {
     return {
         historyDeliveryStatus: state.billReducers.bill.historyDeliveryStatus,
+        shipment : state.shipmentReducers.shipment.allShipment,
+
     };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -112,7 +162,9 @@ const mapDispatchToProps = (dispatch, props) => {
         sendOrderToDelivery: (data, store_code, billId, order_code) => {
             dispatch(billAction.sendOrderToDelivery(data, store_code, billId, order_code));
         },
-
+        updateOrder: (data, store_code, order_code) => {
+            dispatch(billAction.updateOrder(data, store_code, order_code));
+        },
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(InfoShipper);
