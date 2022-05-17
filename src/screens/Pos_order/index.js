@@ -50,6 +50,7 @@ class PostOrder extends Component {
 
         this.hasFocus = false;
         this.state = {
+            chooseTab: 2,
             isPopoverOpen: false,
             isShowPanelBottom: true,
 
@@ -74,7 +75,7 @@ class PostOrder extends Component {
             is_use_points: false,
             selectPrice: -1,
             exchange: 0,
-            payment_method_id: 0,
+            payment_method_id: getChannel() == IKITECH ? 2 : 0,
             priceCustomer: 0,
             customerNote: "",
             totalAfterDiscount: 0,
@@ -136,6 +137,7 @@ class PostOrder extends Component {
                     shipper_type: newState.ship_type,
                     total_shipping_fee: newState.fee,
                     partner_shipper_id: newState.partner_id,
+                    customer_id : newState?.select_customer?.value ?? null
                 },
             });
         }
@@ -418,11 +420,36 @@ class PostOrder extends Component {
     handlePayment = () => {
         const branch_id = getBranchId();
         const { store_code } = this.props.match.params;
-        const data = {
-            payment_method_id: this.state.payment_method_id,
-            amount_money: formatNumber(this.state.priceCustomer),
-            allowAutoPrint: true,
-        };
+        var data = null
+        if(getChannel() == IKITECH)
+        {
+            if(this.state.oneCart?.info_cart?.total_shipping_fee > 0)
+            {
+                 data = {
+                    payment_method_id: this.state.payment_method_id,
+                    amount_money:0,
+                    allowAutoPrint: true,
+                };
+              
+            }
+            else
+            {
+                 data = {
+                    payment_method_id: this.state.payment_method_id,
+                    amount_money: formatNumber(this.state.priceCustomer),
+                    allowAutoPrint: true,
+                };
+            }
+        }
+        else
+        {
+             data = {
+                payment_method_id: this.state.payment_method_id,
+                amount_money: formatNumber(this.state.priceCustomer),
+                allowAutoPrint: true,
+            };
+        }
+     
         this.props.paymentOrderPos(store_code, branch_id, this.state.idCart, data);
         this.setState({
             priceCustomer: 0,
@@ -450,7 +477,7 @@ class PostOrder extends Component {
                 selectPrice: -1,
                 namePos: nextProps.oneCart.name,
                 customerNote: nextProps.oneCart.customer_note ?? "",
-                payment_method_id: nextProps.oneCart.payment_method_id ?? 0,
+                payment_method_id: nextProps.oneCart.payment_method_id ?? (getChannel() == IKITECH ? 2 : 0),
                 discount: nextProps.oneCart.discount,
                 is_use_points:
                     nextProps.oneCart.info_cart.is_use_points !== null
@@ -645,8 +672,9 @@ class PostOrder extends Component {
             },
         });
     };
-    handleOpenShipment = (status) => {
-        this.setState({ openShipment: !this.state.openShipment });
+    handleOpenShipment = () => {
+        var chooseTab = this.state.openShipment == false ? 1 : 2
+        this.setState({ openShipment: !this.state.openShipment, chooseTab });
     };
 
     ChangeTypeDiscount = (type) => {
@@ -762,7 +790,7 @@ class PostOrder extends Component {
                 }
                 : null;
 
-
+                console.log(this.state.payment_method_id)
         return (
             <React.Fragment>
                 {typeof isShow == "undefined" ? (
@@ -892,6 +920,7 @@ class PostOrder extends Component {
                                             </div>
                                         </div>
                                         <PanelBottom
+                                            chooseTab={this.state.chooseTab}
                                             openShipment={this.state.openShipment}
                                             addComboInCart={this.addComboInCart}
                                             passKeyPress={this.handleKeyboard}
@@ -908,7 +937,7 @@ class PostOrder extends Component {
                                 </div>
 
                                 <div className="row-payman" style={{
-                                    ...rowPayman, 
+                                    ...rowPayman,
                                     // "flex-flow": "column",
                                     // position: "relative",
                                     // "z-index": "-1"
@@ -948,10 +977,11 @@ class PostOrder extends Component {
                                     </div>
                                     {/* )} */}
                                     <div
-                                        style={{ 
+                                        style={{
                                             position: "relative",
-                                            height: "100%",                                       
-                                         ...colPayman }}>
+                                            height: "100%",
+                                            ...colPayman
+                                        }}>
                                         <div className="wrap-price" style={wrapPrice}>
                                             <div className="" style={{ padding: "0" }}>
 
@@ -1345,7 +1375,26 @@ class PostOrder extends Component {
 
                                         <div className="btn-submit-pos">
                                             <div className="row justify-content-around">
-                                                <div class="form-check">
+                                                {
+                                                    getChannel() == IKITECH && 
+                                                    <div class="form-check">
+                                                    <input
+                                                        class="form-check-input"
+                                                        onChange={this.handleOptionChange}
+                                                        type="radio"
+                                                        value={2}
+                                                        id="flexRadioDefault1"
+                                                        checked={this.state.payment_method_id == 2}
+                                                    />
+                                                    <label class="form-check-label" for="flexRadioDefault1">
+                                                        Thanh toán khi nhận hàng
+                                                    </label>
+                                                </div>
+                                                }
+                                            {
+                                                getChannel() == IKIPOS && (
+                                                    <React.Fragment>
+                                                                         <div class="form-check">
                                                     <input
                                                         class="form-check-input"
                                                         onChange={this.handleOptionChange}
@@ -1373,6 +1422,9 @@ class PostOrder extends Component {
                                                     </label>
                                                 </div>
 
+                                                    </React.Fragment>
+                                                )
+                                            }
                                                 <div class="form-check">
                                                     <input
                                                         class="form-check-input"
@@ -1386,6 +1438,7 @@ class PostOrder extends Component {
                                                         Chuyển khoản
                                                     </label>
                                                 </div>
+
                                             </div>
 
                                             <div
@@ -1408,7 +1461,9 @@ class PostOrder extends Component {
                                                     }}
                                                     onClick={this.handlePayment}
                                                 >
-                                                    Thanh toán (F9)
+                                                    {
+                                                    oneCart?.info_cart?.total_shipping_fee > 0 && getChannel() == IKITECH ?  "Lên đơn (F9)"  : "Thanh toán (F9)"
+                                                    } 
                                                 </button>
                                             </div>
                                         </div>

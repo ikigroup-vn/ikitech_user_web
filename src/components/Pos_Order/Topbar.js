@@ -423,7 +423,7 @@ class Topbar extends Component {
                                     display: "flex", alignItems: "center", justifyContent: "space-between",
 
                                 }}>
-                                    <li className={`nav-item add-cart ${getChannel() == IKITECH ? "" : "invisible"}`} onClick = {()=>this.props.handleOpenShipment(true)}>
+                                    <li title="Thêm phí vận chuyển" className={`nav-item add-cart ${getChannel() == IKITECH ? "" : "invisible"}`} onClick = {()=>this.props.handleOpenShipment(true)}>
                                         <i class="fas fa-shipping-fast" ></i>
                                     </li>
                                     

@@ -4,6 +4,8 @@ import DatePicker from "react-datepicker";
 import CardProduct from "../../components/Pos_Order/CardProduct";
 import CardCombo from "../../components/Pos_Order/CardCombo";
 import * as shipmentAction from "../../actions/shipment";
+import * as customerAction from "../../data/remote/customer";
+
 import * as Types from "../../constants/ActionType"
 import Slider from "react-slick";
 import {
@@ -22,10 +24,10 @@ import * as dashboardAction from "../../actions/customer";
 import { getDDMMYYYDate } from "../../ultis/date";
 import * as OrderAction from '../../actions/add_order';
 import * as productAction from "../../actions/product"
+import { AsyncPaginate } from "react-select-async-paginate";
 
 import Autocomplete from 'react-autocomplete';
 import AutoCompleteText from "./AutoCompleteText";
-import * as customerAction from "../../actions/customer";
 import Select, { OnChangeValue, StylesConfig } from 'react-select';
 import { debounce } from 'lodash'
 import moment from "moment"
@@ -43,6 +45,8 @@ class PanelBottom extends Component {
             startDate: new Date(),
             selectedDate: null,
             listWards: [],
+            select_customer: null,
+            select_customer_id: null,
             listDistrict: [],
             txtProvince: "",
             txtDistrict: "",
@@ -61,7 +65,9 @@ class PanelBottom extends Component {
             width: "",
             height: "",
             type_ship: 0,
-            load_total_shipping_fee: true
+            load_total_shipping_fee: true,
+            cod: "",
+            address_store: ""
 
 
         }
@@ -272,6 +278,7 @@ class PanelBottom extends Component {
 
         if (!shallowEqual(nextProps.oneCart, this.props.oneCart)) {
 
+            console.log(nextProps.oneCart)
 
             if (nextProps.oneCart.province != null) {
                 this.props.fetchPlaceDistrict(nextProps.oneCart.province);
@@ -290,51 +297,55 @@ class PanelBottom extends Component {
                 }
             )
 
-            if (oneCart.noUpdateUI != true) {
-                var selectedDate = null
-                try {
-                    console.log(oneCart.customer_date_of_birth)
-                    selectedDate = oneCart == null || oneCart.customer_date_of_birth == null || oneCart.customer_date_of_birth == "0000-00-00" || oneCart.customer_date_of_birth == "0000-00-00 00:00:00" ? "" : new Date(oneCart.customer_date_of_birth)
-                } catch (error) {
-                    selectedDate = null
-                }
-                console.log(selectedDate)
-                this.setState(
-                    {
-                        ...this.state,
-                        cartId: oneCart.id,
-                        txtProvince: oneCart.province ?? "",
-                        txtDistrict: oneCart.district ?? "",
-                        txtWards: oneCart.wards ?? "",
-                        txtName: oneCart.customer_name ?? "",
-                        txtEmail: oneCart.customer_email ?? "",
-                        txtPhoneNumber: oneCart.customer_phone ?? "",
-                        txtSex: oneCart.customer_sex ?? "",
-                        txtAddressDetail: oneCart.address_detail ?? "",
-                        selectedDate: selectedDate,
-
-                        isDisabledButton: oneCart == null || oneCart.customer == null ? false : oneCart.customer.is_passersby,
-
-                        districtName: oneCart.district_name,
-                        wardsName: oneCart.wards_name,
-                        provinceName: oneCart.province_name,
-                        valueProvince: {
-                            label: oneCart.province_name,
-                            value: oneCart.province
-                        },
-
-                        valueDistrict: {
-                            label: oneCart.district_name,
-                            value: oneCart.district
-                        },
-
-                        valueWards: {
-                            label: oneCart.wards_name,
-                            value: oneCart.wards
-                        },
-                    }
-                )
+            // if (oneCart.noUpdateUI != true) {
+            var selectedDate = null
+            try {
+                console.log(oneCart.customer_date_of_birth)
+                selectedDate = oneCart == null || oneCart.customer_date_of_birth == null || oneCart.customer_date_of_birth == "0000-00-00" || oneCart.customer_date_of_birth == "0000-00-00 00:00:00" ? "" : new Date(oneCart.customer_date_of_birth)
+            } catch (error) {
+                selectedDate = null
             }
+            console.log(selectedDate)
+            // if()
+
+            this.setState(
+                {
+                    ...this.state,
+                    cartId: oneCart.id,
+                    txtProvince: oneCart.province ?? "",
+                    txtDistrict: oneCart.district ?? "",
+                    txtWards: oneCart.wards ?? "",
+                    txtName: oneCart.customer_name ?? "",
+                    txtEmail: oneCart.customer_email ?? "",
+                    txtPhoneNumber: oneCart.customer_phone ?? "",
+                    txtSex: oneCart.customer_sex ?? "",
+                    txtAddressDetail: oneCart.address_detail ?? "",
+                    selectedDate: selectedDate,
+
+                    isDisabledButton: oneCart == null || oneCart.customer == null ? false : oneCart.customer.is_passersby,
+
+                    districtName: oneCart.district_name,
+                    wardsName: oneCart.wards_name,
+                    provinceName: oneCart.province_name,
+                    valueProvince: {
+                        label: oneCart.province_name,
+                        value: oneCart.province
+                    },
+
+                    valueDistrict: {
+                        label: oneCart.district_name,
+                        value: oneCart.district
+                    },
+
+                    valueWards: {
+                        label: oneCart.wards_name,
+                        value: oneCart.wards
+                    },
+                    select_customer: oneCart.customer ? { value: oneCart.customer.id, label: `${oneCart.customer.name}  (${oneCart.customer.phone_number})`, customer: oneCart.customer } : null
+
+                }
+            )
+
 
 
             // this.onSelectChangeProvinceById(customer.province)
@@ -342,6 +353,14 @@ class PanelBottom extends Component {
             // this.onSelectChangeWardsById(customer.wards)
 
         }
+
+        // if (this.props.badges != nextProps.badges) {
+        //     var badges = nextProps.badges
+        //     var address_store = `${badges.address_pickup?.address_detail} - ${badges.address_pickup?.wards_name} - ${badges.address_pickup?.district_name} - ${badges.address_pickup?.province_name}`
+        //     console.log(address_store)
+        //     this.setState({ address_store })
+        // }
+
 
 
     }
@@ -360,13 +379,14 @@ class PanelBottom extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
 
-        console.log("Đã vô", nextState, this.state)
+        console.log("Đã vô", nextState, this.state, nextProps.badges)
         if (nextState.weight != this.state.weight || nextState.length != this.state.length || nextState.width != this.state.width || nextState.height != this.state.height) {
             var { weight, length, width, height, txtAddressDetail } = nextState
             var { badges, totalFinal, shipment, store_code } = nextProps;
             var { txtProvince,
                 txtDistrict,
                 txtWards, valueDistrict, valueProvince, valueWards } = nextState
+            console.log(badges)
             var data = {
                 "money_collection": totalFinal,
                 "sender_province_id": badges.address_pickup?.province,
@@ -382,8 +402,10 @@ class PanelBottom extends Component {
                 "width": width,
                 "height": height
             }
+
             this.resetShipment(shipment)
             this.changeNewShipment(store_code, shipment, data)
+            // console.log(address_store)
             // this.props.calculateShipment(store_code , shipment , data);
 
 
@@ -622,6 +644,39 @@ class PanelBottom extends Component {
     onChangeFee = (e) => {
         this.setState({ fee: e.target.value })
     }
+    onChangeSelect4 = (selectValue) => {
+        console.log(selectValue)
+
+        var customer = selectValue?.customer
+        if (selectValue != null && customer != null) {
+            this.setState({ select_customer: selectValue })
+        }
+    }
+    loadCustomers = async (search, loadedOptions, { page }) => {
+        console.log("vaooooooooooooooooooo")
+        var { store_code } = this.props
+        const params = `&search=${search}`;
+        const res = await customerAction
+            .fetchAllCustomer(store_code, page, params);
+        console.log(res);
+        if (res.status != 200) {
+            return {
+                options: [],
+                hasMore: false,
+            }
+        }
+
+        return {
+            options: res.data.data.data.map((i) => {
+                return { value: i.id, label: `${i.name}  (${i.phone_number})`, customer: i };
+            }),
+
+            hasMore: res.data.data.data.length == 20,
+            additional: {
+                page: page + 1,
+            },
+        };
+    };
 
     buildTabCustomer = () => {
 
@@ -699,14 +754,20 @@ class PanelBottom extends Component {
             //  }),
 
         }
+
+
+
+
+
+
         var { weight,
             length,
             width,
-            height } = this.state
+            height, cod, select_customer } = this.state
 
-        var { total_shipping_fee } = this.props
+        var { total_shipping_fee , badges } = this.props
 
-        console.log(total_shipping_fee, this.state.type_ship, this.props)
+        var { select_customer_id, select_customer, address_store } = this.state
 
         return <div style={{
             padding: 5
@@ -717,6 +778,35 @@ class PanelBottom extends Component {
                 <div >
 
 
+                    <div style={{ marginBottom: "8px" }}>
+                        <AsyncPaginate
+                            placeholder="Tìm khách hàng"
+                            value={select_customer}
+                            loadOptions={this.loadCustomers}
+                            name="recipientReferences1"
+                            onChange={this.onChangeSelect4}
+                            additional={{
+                                page: 1,
+                            }}
+                            debounceTimeout={500}
+                            isClearable
+                            isSearchable
+                        />
+
+
+
+
+                    </div>
+                    <div class="form-group">
+                        <label style={{ fontWeight: "500" }} for="product_name">Địa chỉ lấy hàng</label>
+
+                        <div>{`${badges.address_pickup?.address_detail} - ${badges.address_pickup?.wards_name} - ${badges.address_pickup?.district_name} - ${badges.address_pickup?.province_name}`}
+
+                        </div>
+
+
+                    </div>
+                    <div style={{ marginBottom: "4px", fontWeight: "500" }}>Địa chỉ nhận hàng</div>
 
 
                     <AutoCompleteText type="text" class="form-control customerInfo"
@@ -757,7 +847,7 @@ class PanelBottom extends Component {
 
 
                     <Dropdown
-                        menuPlacement="top"
+                        menuPlacement="bottom"
                         isOpen={isOpenProvince}
                         onClose={this.toggleOpenProvince}
                         target={
@@ -800,7 +890,7 @@ class PanelBottom extends Component {
                                 this.refSearchProvince = ref;
                             }}
                             autoFocus
-                            menuPlacement="top"
+                            menuPlacement="bottom"
                             backspaceRemovesValue={false}
                             //    components={{ DropdownIndicator, IndicatorSeparator: null }}
                             controlShouldRenderValue={false}
@@ -819,7 +909,7 @@ class PanelBottom extends Component {
 
 
                     <Dropdown
-                        menuPlacement="top"
+                        menuPlacement="bottom"
                         isOpen={isOpenDistrict}
                         onClose={this.toggleOpenDistrict}
                         target={
@@ -856,7 +946,7 @@ class PanelBottom extends Component {
                                 this.refSearchDistrict = ref;
                             }}
                             autoFocus
-                            menuPlacement="top"
+                            menuPlacement="bottom"
                             backspaceRemovesValue={false}
                             //    components={{ DropdownIndicator, IndicatorSeparator: null }}
                             controlShouldRenderValue={false}
@@ -875,7 +965,7 @@ class PanelBottom extends Component {
 
 
                     <Dropdown
-                        menuPlacement="top"
+                        menuPlacement="bottom"
                         isOpen={isOpenWards}
                         onClose={this.toggleOpenWards}
                         target={
@@ -913,7 +1003,7 @@ class PanelBottom extends Component {
                                 this.refSearchWards = ref;
                             }}
                             autoFocus
-                            menuPlacement="top"
+                            menuPlacement="bottom"
                             backspaceRemovesValue={false}
                             //    components={{ DropdownIndicator, IndicatorSeparator: null }}
                             controlShouldRenderValue={false}
@@ -929,6 +1019,22 @@ class PanelBottom extends Component {
                             value={valueWards}
                         />
                     </Dropdown>
+                    <div class="input-group mb-2">
+                        <div class="input-group-prepend" style={{ height: "70px" }}>
+                            <span class="input-group-text px-2" title="Địa chỉ">
+                                <i class="fa fa-home"></i>
+                            </span>
+                        </div>
+                        <textarea rows="3"
+                            style={{ height: "70px" }}
+                            {...handleKeyPress}
+
+                            disabled={isDisabledButton}
+                            value={txtAddressDetail || ""}
+                            onChange={this.onChange}
+                            name="txtAddressDetail"
+                            class="form-control txtAutoHeight customerInfo" placeholder="Địa chỉ chi tiết" id="customerAddress"></textarea>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="product_name">Phí giao hàng</label>
@@ -961,14 +1067,15 @@ class PanelBottom extends Component {
                         <input
                             style={{ fontSize: "18px", "margin-left": "70px" }}
                             type="text"
-                            name="import_price"
+                            name="cod"
                             id="import_prices"
                             {...handleKeyPress}
                             class="text-input-pos"
                             value={formatNoD(
-                                removeSignNumber(this.state.priceCustomer)
+                                removeSignNumber(this.state.cod)
                             )}
-                            onChange={this.handChange}
+                            onChange={this.onChange}
+                        // value = {cod}
                         ></input>
                     </div>
                         <div className="row" style={{ padding: "5px 10px", marginBottom: "2px" }}>
@@ -984,13 +1091,13 @@ class PanelBottom extends Component {
                             <input
                                 style={{ fontSize: "18px", "margin-left": "70px" }}
                                 type="text"
-                                name="import_price"
+                                name="weight"
                                 id="import_prices"
                                 {...handleKeyPress}
                                 class="text-input-pos"
-                                placeholder="Khối lượng"
+                                placeholder="Khối lượng(g)"
                                 value={weight}
-                                onChange={this.handChange}
+                                onChange={this.onChange}
                             ></input>
                         </div>
                         <div className="row" style={{ padding: "5px 10px", marginBottom: "20px", justifyContent: "space-between" }}>
@@ -1007,8 +1114,8 @@ class PanelBottom extends Component {
                                 type="text"
                                 name="length"
                                 id="import_prices"
-                                placeholder="Dài"
-                                
+                                placeholder="Dài(cm)"
+
 
 
                                 {...handleKeyPress}
@@ -1020,7 +1127,7 @@ class PanelBottom extends Component {
                                 style={{ fontSize: "18px", maxWidth: "64px" }}
                                 type="text"
                                 name="width"
-                                                                placeholder="Rộng"
+                                placeholder="Rộng(cm)"
 
                                 id="import_prices"
                                 {...handleKeyPress}
@@ -1032,7 +1139,7 @@ class PanelBottom extends Component {
                                 style={{ fontSize: "18px", maxWidth: "64px" }}
                                 type="text"
                                 name="height"
-                                placeholder="Cao"
+                                placeholder="Cao(cm)"
 
                                 id="import_prices"
                                 {...handleKeyPress}
@@ -1042,18 +1149,18 @@ class PanelBottom extends Component {
                             ></input>
                         </div>
 
-                        <div className="list-payment" style = {{padding : "0 5px"}}>
+                        <div className="list-payment" style={{ padding: "0 5px" }}>
                             {this.props.calculate?.length > 0 ? this.props.calculate.map((item, value) => {
                                 return (
                                     <div className="item-payment" >
                                         <input type="radio" name="shipment" onClick={() => { this.getShipment(item.partner_id, item.ship_type, item.fee) }} />
-                                        <img style = {{objectFit : "contain"}} src={item.image_url} width={50} height={50}></img>
+                                        <img style={{ objectFit: "contain" }} src={item.image_url} width={50} height={50}></img>
                                         <span className="name">{item.name}</span>
                                         <span className="price">{item.fee ? formatNoD(item.fee) : 0}</span>
 
                                     </div>
                                 )
-                            }) : <div style = {{textAlign : "center" , margin : "auto" , color : "red"}}>Vui lòng chọn khối lượng và địa chỉ giao hàng để xem báo giá của nhà vận chuyển</div>}
+                            }) : <div style={{ textAlign: "center", margin: "auto", color: "red" }}>Vui lòng chọn khối lượng và địa chỉ giao hàng để xem báo giá của nhà vận chuyển</div>}
 
 
                         </div>
@@ -1072,7 +1179,7 @@ class PanelBottom extends Component {
                         </div>
                         <input
 
-                            style={{ fontSize: "18px", "margin-left": "70px",width: "120px" }}
+                            style={{ fontSize: "18px", "margin-left": "70px", width: "120px" }}
                             type="text"
                             name="import_price"
                             id="import_prices"

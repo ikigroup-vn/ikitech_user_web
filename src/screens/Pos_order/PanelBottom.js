@@ -48,7 +48,8 @@ class PanelBottom extends Component {
             filter_sort: "",
             filter_desc: "",
             params: "",
-            openIconFilter : false
+            openIconFilter : false,
+            chooseTab : 2
 
         }
 
@@ -57,7 +58,14 @@ class PanelBottom extends Component {
         this.onSearchCustomer = debounce(this.handleSearchCustomer, 500)
 
     }
-
+    shouldComponentUpdate(nextProps,nextState)
+    {
+        if(nextProps.chooseTab != this.props.chooseTab)
+        {
+            this.setState({chooseTab : nextProps.chooseTab})
+        }
+        return true
+    }
 
     componentDidMount() {
         this.props.fetchPlaceProvince()
@@ -251,7 +259,7 @@ class PanelBottom extends Component {
         }
 
         if (!shallowEqual(nextProps.oneCart, this.props.oneCart)) {
-
+            console.log(nextProps.oneCart)
 
             if (nextProps.oneCart.province != null) {
                 this.props.fetchPlaceDistrict(nextProps.oneCart.province);
@@ -627,7 +635,7 @@ class PanelBottom extends Component {
             padding: 20
         }}>
             <div class="row">
-                <div class="col-md-4 col-6">
+                <div class="col-md-4 col1  col-lg-4 col-xl-4 col-6">
 
 
 
@@ -679,7 +687,7 @@ class PanelBottom extends Component {
 
 
                 </div>
-                <div class="col-md-3 col-6">
+                <div class="col-md-4 col-lg-4 col2 col-xl-4 com-sm-4 col-6">
 
 
                     <Dropdown
@@ -857,7 +865,7 @@ class PanelBottom extends Component {
                     </Dropdown>
                 </div>
 
-                <div class="col-md-3 col-6">
+                <div class="col-md-4 col-lg-4 col3 col-xl-4 col-6">
                     <div class="input-group mb-2">
                         <select
                             disabled={isDisabledButton}
@@ -963,11 +971,11 @@ class PanelBottom extends Component {
                     </div>
 
                 </div>
-                <div class="col-md-2 col-6">
+                {/* <div class="col-md-2 col-6" style = {{paddingRight : "10px"}}>
                     <button id="btnSaveCustomer"
                         onClick={this.onSaveCustomer}
                         class="btn btn-yes-pos"> <i class="fa fa-user-o" aria-hidden="true"></i> Lưu thông tin</button>
-                </div>
+                </div> */}
             </div>
         </div >
     }
@@ -1305,6 +1313,20 @@ class PanelBottom extends Component {
                             </button>
                         </div>
                     }
+           {
+                        this.state.chooseTab == 2     &&
+                        <div className="filter-button-pos">
+
+                            <button   style={{
+                                    "margin-top": "5px",
+                                    "margin-bottom": "2px"
+                                }} id="btnSaveCustomer"
+                        onClick={this.onSaveCustomer}
+                        class="btn btn-yes-pos"> <i class="fa fa-user-o" aria-hidden="true"></i> Lưu thông tin</button>
+                                                </div>
+
+                    }
+
                     {/* <li class="nav-item">
                         <a class="nav-link " id="tab-bootstrap" data-toggle="tab"
                             href="#content-bootstrap"
