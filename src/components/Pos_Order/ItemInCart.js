@@ -443,7 +443,7 @@ class ItemInCart extends Component {
                         <div
                             className="info-product"
                             style={{
-                                width: "35%",
+                                width: "30%",
                                 fontWeight: "400",
                                 display: "flex",
                                 flexDirection: "column",
@@ -754,7 +754,8 @@ class ItemInCart extends Component {
                         >
                             {format(Number(item.item_price * currentQuantity))}
                         </div>
-                        <i
+                                <div style ={{width : "5%"}}>
+                                <i
                             className="fa fa-trash icon-trash-pos"
                             onClick={() =>
                                 this.handleDelete(
@@ -765,6 +766,7 @@ class ItemInCart extends Component {
                                 )
                             }
                         ></i>
+                                </div>
                     </div>
 
                 </div>

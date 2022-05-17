@@ -358,6 +358,18 @@ pre {
 .btn-submit-pos{
     bottom: 0px;position: absolute;width: 100%;
 }
+@media only screen and (max-width: 1350px) {
+    /* For mobile phones: */
+    .col1{
+      width: 33% !important;
+    }
+    .col2{
+        width: 33% !important;
+      }
+      .col3{
+        width: 33% !important;
+      }
+  }
 .text-input-pos {
     flex: 2;
     height: 28px;
@@ -496,7 +508,7 @@ pre {
     text-align: center;
     transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
     border-radius: 50%;
-    position: absolute;
+    /* position: absolute; */float : right;
     right: 0;
 }
 

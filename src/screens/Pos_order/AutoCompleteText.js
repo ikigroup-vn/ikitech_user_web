@@ -1,5 +1,6 @@
 import React from "react";
 import { shallowEqual } from "../../ultis/shallowEqual";
+import ReactDOM from 'react-dom';
 
 
 const LENGTH_NUM_SEARCH = 3
@@ -11,10 +12,28 @@ export default class AutoCompleteText extends React.Component {
             items: this.props.items,
             suggestions: [],
             text: props.value,
-            indexSelect: -1
+            indexSelect: -1,
+            isShow : true
         }
     }
+    componentDidMount = () => {
 
+        document.addEventListener('mousedown', this.handleClickOutside, true);
+    }
+    handleClickOutside = event => {
+        try {
+                const domNode = ReactDOM.findDOMNode(this);
+    
+                if (!domNode || !domNode.contains(event.target)) {
+                    {
+                        this.setState(() => ({isShow : false }))
+
+                    }
+                }
+        } catch (error) {
+            console.log(error)
+        }
+        }
     componentWillReceiveProps(nextProps, nextState) {
         if (!shallowEqual(this.props.items, nextProps.items)) {
 
@@ -74,7 +93,7 @@ export default class AutoCompleteText extends React.Component {
 
         }
 
-        this.setState(() => ({ suggestions, text: value }))
+        this.setState(() => ({ suggestions, text: value , isShow : true }))
         this.props.onChange(value)
 
         if (value.length > LENGTH_NUM_SEARCH) {
@@ -102,7 +121,7 @@ export default class AutoCompleteText extends React.Component {
 
 
         return (
-            <div class="bootstrap-autocomplete dropdown-menu show">
+            <div class={`bootstrap-autocomplete dropdown-menu ${this.state.isShow ? "show" : "hide"}`}>
                 {
                     suggestions.map((item, index) => {
 

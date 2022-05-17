@@ -13,22 +13,29 @@ function getData(state , shipment)
   var newItem = [...state]
   var newShipmen = [...shipment]
   console.log(newItem,newShipmen)
+  for ( var i=0; i<newShipmen.length; i++) {
 
-  for (const element of newShipmen) {
-    console.log(element.partner_id )
+    // for (const [index,item] of state.entries()) {
 
-    for (const [index,item] of state.entries()) {
-      if((element.partner_id == item.partner_id) && (element.ship_type == item.ship_type))
+      var check = false
+      for ( var j=0; j<state.length; j++) {
+
+      if((newShipmen[i].partner_id == state[j].partner_id) && (newShipmen[i].ship_type == state[j].ship_type))
       {
-        newItem[index] = element;
+        check = true
+        newItem[j] = newShipmen[i];
         break;
       }
     }
-    newItem.push(element)
+
+    if(check ==false)
+    newItem.push(newShipmen[i])
+
   }
-  console.log(newItem)
   return newItem
+ 
 }
+
 
 export const shipment = (state = initialState, action) => {
   let newState = { ...state };

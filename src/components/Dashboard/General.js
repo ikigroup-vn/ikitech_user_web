@@ -83,68 +83,6 @@ class General extends Component {
 
 
 
-                {
-                    getChannel() == IKITECH &&
-                    <div className="col-xl-3 col-md-6 mb-4 ">
-                        <div className="card border-left-secondary shadow h-100 py-2">
-                            <div className="card-body set-padding">
-                                <div className="row no-gutters align-items-center">
-                                    <div className="col mr-2">
-                                        <div >
-                                            <Link className=" font-weight-bold text-secondary text-uppercase mb-1" to={`/posts/${store_code}`}>Bài viết
-                                            </Link>
-                                        </div>
-                                        <div className="h5 mb-0 font-weight-bold text-gray-800">{total_posts}</div>
-                                    </div>
-                                    <div className="col-auto">
-                                        <i className="fas fa-newspaper fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                }
-
-                {getChannel() == IKITECH &&
-                    <div className="col-xl-3 col-md-6 mb-4 ">
-                        <div className="card border-left-danger shadow h-100 py-2">
-                            <div className="card-body set-padding">
-                                <div className="row no-gutters align-items-center">
-                                    <div className="col mr-2">
-                                        <div >
-                                            <Link className=" font-weight-bold text-danger text-uppercase mb-1" to={`/collaborator/${store_code}`}>Cộng tác viên
-                                            </Link>
-                                        </div>
-                                        <div className="h5 mb-0 font-weight-bold text-gray-800">{total_collaborators}</div>
-                                    </div>
-                                    <div className="col-auto">
-                                        <i className="fas fa-list fa-2x text-gray-300"></i>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                }
-                {getChannel() == IKITECH && <div className="col-xl-3 col-md-6 mb-4 ">
-                    <div className="card border-left-info shadow h-100 py-2">
-                        <div className="card-body set-padding">
-                            <div className="row no-gutters align-items-center">
-                                <div className="col mr-2">
-                                    <div >
-                                        <Link className=" font-weight-bold text-info text-uppercase mb-1" to={`/report/${store_code}`}>Báo cáo
-                                        </Link>
-                                    </div>
-                                    <div className="h5 mb-0 font-weight-bold text-gray-800">0</div>
-                                </div>
-                                <div className="col-auto">
-                                    <i className="fas fa-fw fa-chart-line fa-2x text-gray-300"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                }
 
                 <div className="col-xl-3 col-md-6 mb-4 ">
                     <div className="card border-left-warning shadow h-100 py-2">
@@ -187,6 +125,49 @@ class General extends Component {
                         </div>
                     </div>
                 </div>
+    
+
+                {getChannel() == IKITECH &&
+                    <div className="col-xl-3 col-md-6 mb-4 ">
+                        <div className="card border-left-danger shadow h-100 py-2">
+                            <div className="card-body set-padding">
+                                <div className="row no-gutters align-items-center">
+                                    <div className="col mr-2">
+                                        <div >
+                                            <Link className=" font-weight-bold text-danger text-uppercase mb-1" to={`/order/${store_code}/WAITING_FOR_PROGRESSING?from=${moment().format("DD-MM-YYYY")}&to=${moment().format("DD-MM-YYYY")}`}>Đơn chờ xử lý
+                                            </Link>
+                                        </div>
+                                        <div className="h5 mb-0 font-weight-bold text-gray-800">{badges.orders_waitting_for_progressing}</div>
+                                    </div>
+                                    <div className="col-auto">
+                                        <i className="fas fa-clock-o fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+                {getChannel() == IKITECH && <div className="col-xl-3 col-md-6 mb-4 ">
+                    <div className="card border-left-info shadow h-100 py-2">
+                        <div className="card-body set-padding">
+                            <div className="row no-gutters align-items-center">
+                                <div className="col mr-2">
+                                    <div >
+                                        <Link className=" font-weight-bold text-info text-uppercase mb-1" to={`/order/${store_code}/WAITING_FOR_PROGRESSING?from=${moment().format("DD-MM-YYYY")}&to=${moment().format("DD-MM-YYYY")}`}>Đơn đang giao
+                                        </Link>
+                                    </div>
+                                    <div className="h5 mb-0 font-weight-bold text-gray-800">{badges.orders_shipping}</div>
+                                </div>
+                                <div className="col-auto">
+                                    <i className="fas fa-truck fa-2x text-gray-300"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                }
+
                 {
 
                     getChannel() == IKITECH &&
@@ -195,10 +176,10 @@ class General extends Component {
                             <div className="card-body set-padding">
                                 <div className="row no-gutters align-items-center">
                                     <div className="col mr-2">
-                                        <div className=" font-weight-bold text-primary text-uppercase mb-1">
-                                            <a onClick={this.fetchNotification}>Thông báo</a>
-                                        </div>
-                                        <div className="h5 mb-0 font-weight-bold text-gray-800">{total_unreadNoti}</div>
+                                    <Link className="  font-weight-bold text-primary text-uppercase mb-1" to={`/order/${store_code}/COMPLETED?from=${moment().format("DD-MM-YYYY")}&to=${moment().format("DD-MM-YYYY")}`}>Đơn hoàn thành
+                                        </Link>
+                                     
+                                        <div className="h5 mb-0 font-weight-bold text-gray-800">{badges.total_orders_completed_in_day}</div>
                                     </div>
                                     <div className="col-auto">
                                         <i className="fas fa-file-invoice fa-2x text-gray-300"></i>
@@ -209,6 +190,27 @@ class General extends Component {
                     </div>
                 }
 
+{
+                    getChannel() == IKITECH &&
+                    <div className="col-xl-3 col-md-6 mb-4 ">
+                        <div className="card border-left-secondary shadow h-100 py-2">
+                            <div className="card-body set-padding">
+                                <div className="row no-gutters align-items-center">
+                                    <div className="col mr-2">
+                                        <div >
+                                            <Link className=" font-weight-bold text-secondary text-uppercase mb-1" to={`/product/index/${store_code}?is_near_out_of_stock=true`}>Sản phẩm sắp hết hàng
+                                            </Link>
+                                        </div>
+                                        <div className="h5 mb-0 font-weight-bold text-gray-800">{badges.total_product_or_discount_nearly_out_stock}</div>
+                                    </div>
+                                    <div className="col-auto">
+                                        <i className="fas fa-th-large fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
                     {/* <div className="col-xl-3 col-md-6 mb-4" >
                     <div className="card border-left-primary shadow h-100 py-2">
                         <div className="card-body set-padding ">
