@@ -17,7 +17,7 @@ import moment from "moment";
 import * as helper from "../../ultis/helpers";
 import { getBranchId } from "../../ultis/branchUtils";
 import history from "../../history";
-import {getQueryParams} from "../../ultis/helpers"
+import { getQueryParams } from "../../ultis/helpers"
 
 class Bill extends Component {
   constructor(props) {
@@ -30,11 +30,12 @@ class Bill extends Component {
       isSearch: false,
       searchValue: "",
       statusPayment: "",
+      orderFrom : "",
       numPage: 20,
       agency_by_customer_id:
         queryString.parse(window.location.search).agency_by_customer_id || null,
       time_from: "",
-      time_to : ""
+      time_to: ""
     };
   }
   closeChatBox = (status) => {
@@ -45,7 +46,7 @@ class Bill extends Component {
 
   onChangeNumPage = (e) => {
     var { store_code } = this.props.match.params;
-    var { statusOrder, statusPayment, searchValue } = this.state;
+    var { statusOrder, statusPayment, searchValue , orderFrom  , time_from , time_to , orderFrom} = this.state;
     var numPage = e.target.value;
     this.setState({
       numPage,
@@ -55,7 +56,11 @@ class Bill extends Component {
         ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
         : null;
 
-    var params = `&search=${searchValue}&order_status_code=${statusOrder}&payment_status_code=${statusPayment}&limit=${numPage}`
+
+    var params = ""
+    params = params + this.getParams(null, null, null, statusOrder, statusPayment, numPage , orderFrom)
+
+    // var params = `&search=${searchValue}&order_status_code=${statusOrder}&payment_status_code=${statusPayment}&limit=${numPage}`
     const branch_id = localStorage.getItem("branch_id")
     this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
   }
@@ -64,6 +69,9 @@ class Bill extends Component {
     var { store_code, status_code } = this.props.match.params;
     var from = getQueryParams("from")
     var to = getQueryParams("from")
+    var statusOrder = getQueryParams("order_status_code")
+    var statusPayment = getQueryParams("payment_status_code")
+
 
 
     if (
@@ -84,17 +92,21 @@ class Bill extends Component {
         : status_code != "PAID"
           ? `&field_by=order_status_code&field_by_value=${status_code}`
           : `&field_by=payment_status_code&field_by_value=${status_code}`;
-    if(from && to)
-    {
+    if (from && to) {
       from = moment(from, "DD-MM-YYYY").format("YYYY-MM-DD")
       to = moment(to, "DD-MM-YYYY").format("YYYY-MM-DD")
-      params = params + `&time_from=${from}&time_to=${to}`
-      this.setState({time_from : from, time_to : to})
+      this.setState({ time_from: from, time_to: to })
     }
+    params = params + this.getParams(from, to, null, statusOrder, statusPayment, null)
+
 
     var status_order = status == "PAID" ? null : status;
     var status_payment = status == "PAID" ? status : null;
     if (status_order != null) this.setState({ statusOrder: status_order });
+    if (statusOrder) this.setState({ statusOrder: statusOrder });
+    if (statusPayment) this.setState({ statusPayment: statusPayment });
+
+
     if (status_payment != null)
       this.setState({ statusPayment: status_payment });
     const branch_id = getBranchId()
@@ -120,6 +132,10 @@ class Bill extends Component {
   onchangeStatusPayment = (data) => {
     this.setState({ statusPayment: data });
   };
+  onchangeOrderFrom = (data) =>{
+    this.setState({orderFrom : data})
+    
+  }
   searchData = (e) => {
     e.preventDefault();
     var { store_code } = this.props.match.params;
@@ -178,13 +194,37 @@ class Bill extends Component {
     }
   }
 
+
+  getParams = (from, to, searchValue, statusOrder, statusPayment, numPage , orderFrom) => {
+    var params = ``;
+    if (to != "" && to != null) {
+      params = params + `&time_to=${to}`;
+
+    }
+    if (searchValue != "" && searchValue != null) {
+      params = params + `&search=${searchValue}`;
+    } if (from != "" && from != null) {
+      params = params + `&time_from=${from}`;
+    }
+    if (statusOrder != "" && statusOrder != null) {
+      params = params + `&order_status_code=${statusOrder}`;
+    }
+    if (statusPayment != "" && statusPayment != null) {
+      params = params + `&payment_status_code=${statusPayment}`;
+    }
+    if (numPage != "" && numPage != null) {
+      params = params + `&limit=${numPage}`;
+    }
+    if (orderFrom != "" && orderFrom != null) {
+      params = params + `&order_from_list=${orderFrom}`;
+    }
+    return params
+  }
+
   onchangeDateFromTo = (e) => {
-
-
-
     var from = "";
     var { store_code } = this.props.match.params;
-
+    var { searchValue, statusOrder, statusPayment, numPage , orderFrom } = this.state
     var to = "";
     try {
       from = moment(e.value[0], "DD-MM-YYYY").format("YYYY-MM-DD");
@@ -198,20 +238,13 @@ class Bill extends Component {
         ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
         : null;
 
-    var params = ``;
-    if(to != "" && to != null)
-    {
-      params = params +`&time_to=${to}`;
+    var params = this.getParams(from, to, searchValue, statusOrder, statusPayment, numPage , orderFrom);
 
-    }
-    if(from != "" && from != null)
-    {
-     params = params +`&time_from=${from}`;
-   }
+
     const branch_id = getBranchId()
-   console.log(from , to , params)
-    this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
-    this.setState({time_from : from, time_to : to})
+    console.log(from, to, params)
+    this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency );
+    this.setState({ time_from: from, time_to: to })
 
   }
 
@@ -231,7 +264,8 @@ class Bill extends Component {
       chat_allow,
       isShow,
       time_from,
-      time_to
+      time_to,
+      orderFrom
     } = this.state;
     console.log(time_from,
       time_to)
@@ -267,7 +301,7 @@ class Bill extends Component {
                       <div className="card-header py-3">
                         <div
                           class="row"
-                          // style={{ "justify-content": "space-between" }}
+                        // style={{ "justify-content": "space-between" }}
                         >
                           <form onSubmit={this.searchData}>
                             <div
@@ -289,9 +323,9 @@ class Bill extends Component {
                                 </button>
                               </div>
                             </div>
-                            </form>
+                          </form>
 
-            
+
                           {/* <div style={{ display: "flex" }}>
                             <div style={{ display: "flex" }}>
                               <span
@@ -332,33 +366,37 @@ class Bill extends Component {
                           </div> */}
                         </div>
                         <p class="total-item" id="sale_user_name">
-                              <span className="num-total_item">
-                                {bills.total}&nbsp;
-                              </span>
-                              <span className="text-total_item" id="user_name">
-                                hóa đơn
-                              </span>{" "}
-                              &nbsp;&nbsp;
-                              <DateRangePickerComponent
-                       value={[new Date(moment(time_from , "YYYY-MM-DD")) , new Date(moment(time_to , "YYYY-MM-DD"))]}
-                       id="daterangepicker"
-                       placeholder="Khoảng thời gian..."
-                       format="dd/MM/yyyy"
-                        onChange={this.onchangeDateFromTo}
-                      />
-                              {/* <DateRangePickerComponent
+                          <span className="num-total_item">
+                            {bills.total}&nbsp;
+                          </span>
+                          <span className="text-total_item" id="user_name">
+                            hóa đơn
+                          </span>{" "}
+                          &nbsp;&nbsp;
+                          <DateRangePickerComponent
+                            value={[new Date(moment(time_from, "YYYY-MM-DD")), new Date(moment(time_to, "YYYY-MM-DD"))]}
+                            id="daterangepicker"
+                            placeholder="Khoảng thời gian..."
+                            format="dd/MM/yyyy"
+                            onChange={this.onchangeDateFromTo}
+                          />
+                          {/* <DateRangePickerComponent
                                 id="daterangepicker"
                                 placeholder="Khoảng thời gian..."
                                 format="dd/MM/yyyy"
                                 onChange={this.onchangeDateFromTo}
                               /> */}
-                            </p>
+                        </p>
                       </div>
 
 
 
                       <div className="card-body">
                         <Table
+                        onchangeOrderFrom = {this.onchangeOrderFrom}
+                        getParams = {this.getParams}
+                          time_from={time_from}
+                          time_to = {time_to}
                           chat_allow={chat_allow}
                           onchangeStatusOrder={this.onchangeStatusOrder}
                           onchangeStatusPayment={this.onchangeStatusPayment}
@@ -369,47 +407,47 @@ class Bill extends Component {
                           store_code={store_code}
                           bills={bills}
                         />
-                                    <div style={{ display: "flex" , justifyContent : "end" }}>
-                            <div style={{ display: "flex" }}>
-                              <span
-                                style={{
-                                  margin: "20px 10px auto auto",
-                                }}
-                              >
-                                Hiển thị
-                              </span>
-                              <select
-                                style={{
-                                  margin: "auto",
-                                  marginTop: "10px",
-                                  marginRight: "20px",
-                                  width: "70px",
-                                }}
-                                onChange={this.onChangeNumPage}
-                                value={numPage}
-                                name="numPage"
-                                class="form-control"
-                              >
-                                <option value="10">10</option>
-                                <option value="20" selected>
-                                  20
-                                </option>
-                                <option value="50">50</option>
-                              </select>
-                            </div>
-
-                            <Pagination
-                            time_from = {time_from}
-                            time_to = {time_to}
-
-                              searchValue={searchValue}
-                              limit={numPage}
-                              status_payment={statusPayment}
-                              store_code={store_code}
-                              bills={bills}
-                              status_order={statusOrder}
-                            />
+                        <div style={{ display: "flex", justifyContent: "end" }}>
+                          <div style={{ display: "flex" }}>
+                            <span
+                              style={{
+                                margin: "20px 10px auto auto",
+                              }}
+                            >
+                              Hiển thị
+                            </span>
+                            <select
+                              style={{
+                                margin: "auto",
+                                marginTop: "10px",
+                                marginRight: "20px",
+                                width: "70px",
+                              }}
+                              onChange={this.onChangeNumPage}
+                              value={numPage}
+                              name="numPage"
+                              class="form-control"
+                            >
+                              <option value="10">10</option>
+                              <option value="20" selected>
+                                20
+                              </option>
+                              <option value="50">50</option>
+                            </select>
                           </div>
+
+                          <Pagination
+                            time_from={time_from}
+                            time_to={time_to}
+                            orderFrom = {orderFrom}
+                            searchValue={searchValue}
+                            limit={numPage}
+                            status_payment={statusPayment}
+                            store_code={store_code}
+                            bills={bills}
+                            status_order={statusOrder}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>

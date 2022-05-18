@@ -43,6 +43,7 @@ import history from "../../history";
 import getChannel, { IKITECH, IKIPOS } from "../../ultis/channel";
 
 import NotAccess from "../../components/Partials/NotAccess";
+import * as OrderFrom from "../../ultis/order_from";
 
 class PostOrder extends Component {
     constructor(props) {
@@ -137,7 +138,7 @@ class PostOrder extends Component {
                     shipper_type: newState.ship_type,
                     total_shipping_fee: newState.fee,
                     partner_shipper_id: newState.partner_id,
-                    customer_id : newState?.select_customer?.value ?? null
+                    customer_id : newState?.select_customer?.value ?? null,
                 },
             });
         }
@@ -421,6 +422,7 @@ class PostOrder extends Component {
         const branch_id = getBranchId();
         const { store_code } = this.props.match.params;
         var data = null
+        var {oneCart} = this.props
         if(getChannel() == IKITECH)
         {
             if(this.state.oneCart?.info_cart?.total_shipping_fee > 0)
@@ -429,6 +431,7 @@ class PostOrder extends Component {
                     payment_method_id: this.state.payment_method_id,
                     amount_money:0,
                     allowAutoPrint: true,
+                    order_from : oneCart?.info_cart?.total_shipping_fee > 0 && getChannel() == IKITECH ? OrderFrom.ORDER_FROM_POS_DELIVERY : OrderFrom.ORDER_FROM_POS_IN_STORE
                 };
               
             }
@@ -438,6 +441,8 @@ class PostOrder extends Component {
                     payment_method_id: this.state.payment_method_id,
                     amount_money: formatNumber(this.state.priceCustomer),
                     allowAutoPrint: true,
+                    order_from : oneCart?.info_cart?.total_shipping_fee > 0 && getChannel() == IKITECH ? OrderFrom.ORDER_FROM_POS_DELIVERY : OrderFrom.ORDER_FROM_POS_IN_STORE
+
                 };
             }
         }
@@ -447,6 +452,8 @@ class PostOrder extends Component {
                 payment_method_id: this.state.payment_method_id,
                 amount_money: formatNumber(this.state.priceCustomer),
                 allowAutoPrint: true,
+                order_from : oneCart?.info_cart?.total_shipping_fee > 0 && getChannel() == IKITECH ? OrderFrom.ORDER_FROM_POS_DELIVERY : OrderFrom.ORDER_FROM_POS_IN_STORE
+
             };
         }
      

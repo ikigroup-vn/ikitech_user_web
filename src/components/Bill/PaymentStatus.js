@@ -5,10 +5,10 @@ class PaymentStatus extends Component {
         super(props);
         this.state = {
                 status: [
-                    {
-                        name: "Chờ xử lý",
-                        code: "WAITING_FOR_PROGRESSING",
-                    },
+                    // {
+                    //     name: "Chờ xử lý",
+                    //     code: "WAITING_FOR_PROGRESSING",
+                    // },
                     {
                         code: "UNPAID",
                         name: "Chưa thanh toán"
@@ -18,10 +18,10 @@ class PaymentStatus extends Component {
                         name: "Đã thanh toán",
                         code: "PAID",
                     },
-                    {
-                        name: "Đã thanh toán một phần",
-                        code: "PARTIALLY_PAID",
-                    },
+                    // {
+                    //     name: "Đã thanh toán một phần",
+                    //     code: "PARTIALLY_PAID",
+                    // },
                     {
                         name: "Khách hủy",
                         code: "CUSTOMER_CANCELLED",

@@ -48,7 +48,7 @@ class InfoCustomer extends Component {
                         {
                             getChannel() == IKITECH &&
                             <div> <p class="sale_user_label" id="sale_user_name">
-                                Người nhận : <span id="user_name">{name_receipt}</span>
+                                Người nhận: <span id="user_name">{name_receipt}</span>
                             </p>
                                 <p class="sale_user_label" id="delivery_address">
                                     Địa chỉ nhận: <span id="user_address">{address_detail}, {wards_name}, {district_name}, {province_name}</span>
@@ -60,7 +60,7 @@ class InfoCustomer extends Component {
 
 
                         <p class="sale_user_label">
-                            Điện thoại: <span id="user_tel">{phone_number}</span>
+                            SĐT người nhận: <span id="user_tel">{phone_number}</span>
                         </p>
                         <p class="sale_user_label">
                             Xu tích lũy: <span id="user_tel">{customer?.points || 0}</span>

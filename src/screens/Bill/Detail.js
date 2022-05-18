@@ -12,10 +12,13 @@ import Form from "../../components/Bill/Form"
 import { shallowEqual } from "../../ultis/shallowEqual";
 import NotAccess from "../../components/Partials/NotAccess";
 import ReactToPrint from 'react-to-print';
-import ComponentToPrint from "./ComponentToPrint"
+import ListComponentToPrint from "./ListComponentPrint"
 import ComponentToPrintPos from "./ComponentToPrintPos"
-import getChannel, { IKITECH , IKIPOS } from "../../ultis/channel";
+import getChannel, { IKITECH, IKIPOS } from "../../ultis/channel";
+import { getQueryParams } from "../../ultis/helpers"
+import * as shipmentAction from "../../actions/shipment";
 
+import history from "../../history"
 class Detail extends Component {
     constructor(props) {
         super(props);
@@ -26,9 +29,10 @@ class Detail extends Component {
     componentDidMount() {
         var { store_code, order_code, billId } = this.props.match.params
         this.props.fetchBillId(store_code, order_code);
-        this.props.fetchHistoryPay(store_code, order_code);
+        this.props.fetchHistoryPay(store_code, order_code);    
+        this.props.fetchAllShipment(store_code)
 
-        
+
     }
 
     componentWillReceiveProps(nextProps) {
@@ -54,15 +58,24 @@ class Detail extends Component {
     }
 
     goBack = () => {
-        var { history } = this.props;
-        history.goBack();
+        var { store_code } = this.props.match.params
+
+        var statusOrder = getQueryParams("order_status_code")
+        var statusPayment = getQueryParams("payment_status_code")
+        var params = "?params=true"
+        if (statusOrder)
+            params = params + `&order_status_code=${statusOrder}`
+        if (statusPayment)
+            params = params + `&payment_status_code=${statusPayment}`
+        history.replace(`/order/${store_code}${params}`);
     };
     render() {
-
+        var arrBills = []
         var { store_code, order_code, billId } = this.props.match.params
-        var { bill, billHistoty, chat, stores, badges,historyPay , bills , currentBranch } = this.props
+        var { bill, billHistoty, chat, stores, badges, historyPay, bills, currentBranch , shipment } = this.props
         var { showChatBox, chat_allow, isShow, order_allow_change_status } = this.state
-        console.log(this.props.currentBranch)
+        if(bill)
+        arrBills.push(bill)
         if (this.props.auth) {
             return (
                 <div id="wrapper">
@@ -101,26 +114,26 @@ class Detail extends Component {
                                                     <div className="print-source " style={{ display: "none" }} >
 
                                                         {
-                                                           getChannel() == IKITECH && currentBranch != null && stores.length  > 0 &&
-                                                            <ComponentToPrint 
-                                                            badges={badges} 
-                                                            bill={bill} 
-                                                            store_code={store_code} 
-                                                            stores={stores} 
-                                                            ref={el => (this.componentRef = el)}
-                                                            currentBranch={this.props.currentBranch}
-                                                             />
+                                                            getChannel() == IKITECH && currentBranch != null && stores.length > 0 &&
+                                                            <ListComponentToPrint
+                                                                badges={badges}
+                                                                bills={arrBills}
+                                                                store_code={store_code}
+                                                                stores={stores}
+                                                                ref={el => (this.componentRef = el)}
+                                                                currentBranch={this.props.currentBranch}
+                                                            />
                                                         }
-                                                           {
-                                                           getChannel() == IKIPOS && currentBranch != null && stores.length  > 0 &&
-                                                            <ComponentToPrintPos 
-                                                            badges={badges} 
-                                                            bill={bill} 
-                                                            store_code={store_code} 
-                                                            stores={stores} 
-                                                            ref={el => (this.componentRef = el)}
-                                                            currentBranch={this.props.currentBranch}
-                                                             />
+                                                        {
+                                                            getChannel() == IKIPOS && currentBranch != null && stores.length > 0 &&
+                                                            <ComponentToPrintPos
+                                                                badges={badges}
+                                                                bill={bill}
+                                                                store_code={store_code}
+                                                                stores={stores}
+                                                                ref={el => (this.componentRef = el)}
+                                                                currentBranch={this.props.currentBranch}
+                                                            />
                                                         }
                                                     </div>
 
@@ -129,7 +142,7 @@ class Detail extends Component {
 
                                             <br></br>
 
-                                            <Form bills = {bills} historyPay= {historyPay} chat_allow={chat_allow} order_allow_change_status={order_allow_change_status} showChatBox={showChatBox} chat={chat} billId={billId} order_code={order_code} store_code={store_code} bill={bill} billHistoty={billHistoty}></Form>
+                                            <Form shipment = {shipment} bills={bills} historyPay={historyPay} chat_allow={chat_allow} order_allow_change_status={order_allow_change_status} showChatBox={showChatBox} chat={chat} billId={billId} order_code={order_code} store_code={store_code} bill={bill} billHistoty={billHistoty}></Form>
 
                                         </div>
                                         : <NotAccess />}
@@ -152,6 +165,7 @@ class Detail extends Component {
 const mapStateToProps = (state) => {
     return {
         bills: state.billReducers.bill.allBill,
+        shipment : state.shipmentReducers.shipment.allShipment,
 
         bill: state.billReducers.bill.billID,
         auth: state.authReducers.login.authentication,
@@ -181,6 +195,9 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         fetchAllBill: (id, page, branch_id, params, params_agency) => {
             dispatch(billAction.fetchAllBill(id, page, branch_id, params, params_agency));
+        },
+        fetchAllShipment: (store_code) => {
+            dispatch(shipmentAction.fetchAllShipment(store_code));
           },
 
     };

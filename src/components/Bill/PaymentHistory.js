@@ -46,7 +46,7 @@ class PaymentHistory extends Component {
     var { historyPay , bills } = this.props
     console.log(bills)
     return (
-      <div class="tab-pane " id="chicken" role="tabpanel" aria-labelledby="chicken-tab">
+      <div class="tab-pane " id="car" role="tabpanel" aria-labelledby="car-tab">
 
         <div class="table-responsive">
           <table class="table table-hover table-bordered  table-border">

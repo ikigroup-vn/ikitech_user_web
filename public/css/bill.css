@@ -11,16 +11,24 @@
   overflow-x : auto;
 }
 
-
+@media all {
+  .page-break {
+    display: none;
+  }
+}
 
 
 @media print {
   html, body {
-    height:100vh; 
-    margin: 0 !important; 
-    padding: 0 !important;
-    overflow: hidden;
+    height: initial !important;
+    overflow: initial !important;
+    -webkit-print-color-adjust: exact;
   }
+  .page-break {
+    display: block;
+    page-break-before: always;
+  }
+
   .parent .table td, .parent .table th {
     text-align: center;
     border: 1px dashed;
