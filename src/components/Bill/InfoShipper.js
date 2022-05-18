@@ -122,8 +122,9 @@ class InfoShipper extends Component {
 
                         <div className="mt-3">
                             <p className="sale_user_label bold" style={{ color: "grey" }}>
-                                Đơn vị vận chuyển: <span id="total_before">{shipper_name}</span>
+                                Đơn vị vận chuyển: 
                             </p>
+                            <div id="total_before">{shipper_name}</div>
                         </div>
 
                         {

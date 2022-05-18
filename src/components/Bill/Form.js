@@ -20,6 +20,7 @@ import InfoShipper from "./InfoShipper";
 import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
 import PaymentHistory from "./PaymentHistory";
 
+import * as OrderFrom from "../../ultis/order_from";
 
 
 
@@ -100,7 +101,7 @@ class Form extends Component {
                 />
                 <section className="content">
                     <div className="row">
-                        {(getChannel() == IKITECH && bill.from_pos == false )&& (
+                        {(getChannel() == IKITECH && bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE  && bill.order_from !== null )&& (
                             <div className="col-lg-2 col-md-4 col-sm-12 ">
                                 <div className="row" id="sale_nav_container">
                                     <div className="" style={{ width: "100%" }}>
@@ -133,7 +134,7 @@ class Form extends Component {
                             </div>
                         )}
 
-                        <div className={getChannel() == IKIPOS || bill.from_pos == true ? css_IKIPOS : css_IKITECH}>
+                        <div className={getChannel() == IKIPOS || bill.order_from == OrderFrom.ORDER_FROM_POS_IN_STORE ||  bill.order_from == null ? css_IKIPOS : css_IKITECH}>
                             {
                                 getChannel() == IKIPOS ? (<InfoProductPos check = {check} store_code={store_code} bills = {bills} bill={bill} />
                                 ) : <InfoProductPos check = {check} store_code={store_code} bills = {bills} bill={bill} />
@@ -157,7 +158,7 @@ class Form extends Component {
                                                     </li>
                                                 }
                                                 {
-                                                    ( getChannel() == IKITECH && bill.from_pos == false) &&
+                                                    ( getChannel() == IKITECH && bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE &&  bill.order_from !== null) &&
                                                     <li class="nav-item">
                                                         <a class="nav-link " data-toggle="tab" href="#car" role="tab" aria-controls="car" aria-selected="false">Lịch sử thanh toán</a>
                                                     </li>
@@ -184,7 +185,7 @@ class Form extends Component {
                                                     <OrderHistory billHistoty={billHistoty} />                                                 }
                                                
                                                 {
-                                                    ( getChannel() == IKITECH && bill.from_pos == false) && bills.data && bills.data.length > 0 &&
+                                                    ( getChannel() == IKITECH && bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE && bill.order_from !== null) && bills.data && bills.data.length > 0 &&
                                                     <PaymentHistory bills  = {bills.data} historyPay={historyPay} />
                                                 }
 
@@ -198,29 +199,21 @@ class Form extends Component {
                         <div className="col-lg-3 pr8 col-md-12   col-sm-12">
                             <div className="row">
                                 <div className="card col-12 pl0" id="user_cart_info">
-                                    {
-                                        getChannel() == IKITECH ?
-                                            (
+                                  
                                                 <TotalBillPos
                                                 store_code = {store_code}
                                                 check = {this.check}
                                                 order_allow_change_status={order_allow_change_status}
 
                                                 handleUpdateStatusOrder={this.handleUpdateStatusOrder} bill={bill}  />
-                                            ) : <TotalBillPos
-                                                store_code = {store_code}
-                                                check = {this.check}
-                                                order_allow_change_status={order_allow_change_status}
-
-                                                handleUpdateStatusOrder={this.handleUpdateStatusOrder} bill={bill} />
-                                    }
+                               
 
 
                                 </div>
 
                                 <hr />
 
-                                {bill.from_pos == false && <div className="card col-12 pl0" id="user_cart_info">
+                                {bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE && bill.order_from !== null && <div className="card col-12 pl0" id="user_cart_info">
                                     <InfoShipper
                                         order_allow_change_status={order_allow_change_status}
                                         order_code={order_code}

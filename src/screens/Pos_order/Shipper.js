@@ -67,7 +67,8 @@ class PanelBottom extends Component {
             type_ship: 0,
             load_total_shipping_fee: true,
             cod: "",
-            address_store: ""
+            address_store: "",
+            sent_delivery : false,
 
 
         }
@@ -255,6 +256,7 @@ class PanelBottom extends Component {
     }
 
     componentWillReceiveProps(nextProps, nextState) {
+
 
         if (!shallowEqual(this.props.district, nextProps.district)) {
 
@@ -644,13 +646,29 @@ class PanelBottom extends Component {
     onChangeFee = (e) => {
         this.setState({ fee: e.target.value })
     }
+    
+  onChangeCheckBox = (e) => {
+    var { value, name, checked } = e.target
+    this.setState({
+      [name]: checked
+    })
+  }
     onChangeSelect4 = (selectValue) => {
-        console.log(selectValue)
 
-        var customer = selectValue?.customer
-        if (selectValue != null && customer != null) {
-            this.setState({ select_customer: selectValue })
-        }
+    var customer = {
+        txtName: selectValue?.customer.name ?? null,
+        txtPhoneNumber: selectValue?.customer.phone_number ?? null,
+        txtEmail: selectValue?.customer.email ?? null,
+        txtSex:selectValue?.customer.sex ?? null,
+        selectedDate: selectValue?.customer.date_of_birth ?? null,
+        txtAddressDetail: selectValue?.customer.address_detail ?? null,
+        txtProvince: selectValue?.customer.province ?? null,
+        txtDistrict: selectValue?.customer.district ?? null,
+        txtWards: selectValue?.customer.wards ?? null,
+    }
+    
+    this.setState({ select_customer: selectValue ,...customer })
+        
     }
     loadCustomers = async (search, loadedOptions, { page }) => {
         console.log("vaooooooooooooooooooo")
@@ -767,7 +785,7 @@ class PanelBottom extends Component {
 
         var { total_shipping_fee , badges } = this.props
 
-        var { select_customer_id, select_customer, address_store } = this.state
+        var { select_customer_id, select_customer, address_store , sent_delivery } = this.state
 
         return <div style={{
             padding: 5
@@ -1190,6 +1208,15 @@ class PanelBottom extends Component {
                         ></input>
                     </div>
                 }
+                    <div class="form-group">
+                {/* <div class="form-check">
+                  <input class="form-check-input" checked={sent_delivery} name="sent_delivery" onChange={this.onChangeCheckBox} type="checkbox" id="gridCheck" />
+                  <label class="form-check-label" for="gridCheck">
+                    Xác nhận cho phép giao hàng
+                  </label>
+                </div> */}
+
+              </div>
 
 
             </div>

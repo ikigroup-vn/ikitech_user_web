@@ -15,7 +15,10 @@ class InfoCustomer extends Component {
     render() {
         var { bill , store_code } = this.props
         var { payment_method_id } = bill
+
         var customer = bill.customer;
+        var phone_customer = typeof customer == "undefined" || customer == null ? null : customer.phone_number
+
         var name = typeof customer == "undefined" || customer == null ? null : customer.name
         var orderTime = bill.created_at;
         var note = bill.customer_note == null ? "" : bill.customer_note
@@ -35,7 +38,7 @@ class InfoCustomer extends Component {
         : data.order_from == OrderFrom.ORDER_FROM_POS_IN_STORE ? "POS tại quầy"
         : data.order_from == OrderFrom.ORDER_FROM_POS_SHIPPER ? "POS vận chuyển"
         : data.order_from == OrderFrom.ORDER_FROM_WEB ? "Web"
-        : "Web"
+        : "POS tại quầy"
     
         return (
             <div
@@ -52,12 +55,19 @@ class InfoCustomer extends Component {
                         <p class="sale_user_label" id="sale_user_name">
                             Khách hàng: <Link id="user_name" to ={`/customer/detail/${store_code}/${id}`}>{name}</Link>
                         </p>
+                        <p class="sale_user_label" id="sale_user_name">
+                            SĐT khách hàng: {phone_customer}
+                        </p>
 
                         {
                             getChannel() == IKITECH &&
                             <div> <p class="sale_user_label" id="sale_user_name">
-                                Người nhận : <span id="user_name">{name_receipt}</span>
+                                Người nhận: <span id="user_name">{name_receipt}</span>
                             </p>
+                            <p class="sale_user_label">
+                            SĐT người nhận: <span id="user_tel">{phone_number}</span>
+                        </p>
+
                                 <p class="sale_user_label" id="delivery_address">
                                     Địa chỉ nhận: <span id="user_address">{address_detail}, {wards_name}, {district_name}, {province_name}</span>
                                 </p>
@@ -67,9 +77,7 @@ class InfoCustomer extends Component {
 
 
 
-                        <p class="sale_user_label">
-                            Điện thoại: <span id="user_tel">{phone_number}</span>
-                        </p>
+                      
                         <p class="sale_user_label">
                             Email: <span id="user_tel">{email}</span>
                         </p>

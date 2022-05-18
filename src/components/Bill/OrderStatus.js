@@ -70,7 +70,7 @@ class OrderStatus extends Component {
                 if(active != "")
                 {
                     return (
-                        <li class={`${active}`}>
+                        <li class={`${active} hover-product`}>
                             <a >{item.name}</a>
                         </li>
                     )
@@ -80,7 +80,7 @@ class OrderStatus extends Component {
                         <li 
                         data-toggle={disable}
                         data-target="#postModal"
-                        class={`${active}`} onClick={() => { this.changeStatus(item.code , item.name) }}>
+                        class={`${active} hover-product`} onClick={() => { this.changeStatus(item.code , item.name) }}>
                             <a >{item.name}</a>
                         </li>
                     )

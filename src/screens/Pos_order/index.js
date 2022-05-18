@@ -122,7 +122,14 @@ class PostOrder extends Component {
     }
 
     handleNewState = (newState) => {
+        console.log(newState)
         if (this.props.oneCart.id == newState.cartId) {
+            if (typeof newState?.select_customer != "undefined") {
+                var customer = { customer_id : newState?.select_customer?.value ?? null }
+            }
+            else {
+                var customer = {}
+            }
             this.setState({
                 modalUpdateCart: {
                     cartId: newState.cartId,
@@ -136,13 +143,21 @@ class PostOrder extends Component {
                     district: newState.txtDistrict,
                     wards: newState.txtWards,
                     shipper_type: newState.ship_type,
-                    total_shipping_fee: newState.fee,
+                    total_shipping_fee: newState.fee === 0 ? 0 : newState.fee > 0 ? newState.fee : null,
                     partner_shipper_id: newState.partner_id,
-                    customer_id : newState?.select_customer?.value ?? null,
+                    ...customer
+
+
                 },
             });
         }
     };
+
+    // handleChangeCustomer = (newState) =>{
+    //     this.setState({
+    //         customer_id : newState?.select_customer?.value ?? null,
+    //     })
+    // }
 
     handleChange = (e) => {
         const val = e.target.value;
@@ -422,41 +437,38 @@ class PostOrder extends Component {
         const branch_id = getBranchId();
         const { store_code } = this.props.match.params;
         var data = null
-        var {oneCart} = this.props
-        if(getChannel() == IKITECH)
-        {
-            if(this.state.oneCart?.info_cart?.total_shipping_fee > 0)
-            {
-                 data = {
+        var { oneCart } = this.props
+        if (getChannel() == IKITECH) {
+            if (this.state.oneCart?.total_shipping_fee > 0 || oneCart?.total_shipping_fee === 0) {
+                data = {
                     payment_method_id: this.state.payment_method_id,
-                    amount_money:0,
+                    amount_money: 0,
                     allowAutoPrint: true,
-                    order_from : oneCart?.info_cart?.total_shipping_fee > 0 && getChannel() == IKITECH ? OrderFrom.ORDER_FROM_POS_DELIVERY : OrderFrom.ORDER_FROM_POS_IN_STORE
+                    order_from: (oneCart?.total_shipping_fee > 0 || oneCart?.total_shipping_fee === 0) && getChannel() == IKITECH ? OrderFrom.ORDER_FROM_POS_DELIVERY : OrderFrom.ORDER_FROM_POS_IN_STORE
                 };
-              
+
             }
-            else
-            {
-                 data = {
+            else {
+                data = {
                     payment_method_id: this.state.payment_method_id,
                     amount_money: formatNumber(this.state.priceCustomer),
                     allowAutoPrint: true,
-                    order_from : oneCart?.info_cart?.total_shipping_fee > 0 && getChannel() == IKITECH ? OrderFrom.ORDER_FROM_POS_DELIVERY : OrderFrom.ORDER_FROM_POS_IN_STORE
+                    order_from: (oneCart?.total_shipping_fee > 0 || oneCart?.total_shipping_fee === 0) && getChannel() == IKITECH ? OrderFrom.ORDER_FROM_POS_DELIVERY : OrderFrom.ORDER_FROM_POS_IN_STORE
 
                 };
             }
         }
-        else
-        {
-             data = {
+        else {
+            data = {
                 payment_method_id: this.state.payment_method_id,
                 amount_money: formatNumber(this.state.priceCustomer),
                 allowAutoPrint: true,
-                order_from : oneCart?.info_cart?.total_shipping_fee > 0 && getChannel() == IKITECH ? OrderFrom.ORDER_FROM_POS_DELIVERY : OrderFrom.ORDER_FROM_POS_IN_STORE
+                order_from: (oneCart?.total_shipping_fee > 0 || oneCart?.total_shipping_fee === 0) && getChannel() == IKITECH ? OrderFrom.ORDER_FROM_POS_DELIVERY : OrderFrom.ORDER_FROM_POS_IN_STORE
 
             };
         }
-     
+
+
         this.props.paymentOrderPos(store_code, branch_id, this.state.idCart, data);
         this.setState({
             priceCustomer: 0,
@@ -681,7 +693,8 @@ class PostOrder extends Component {
     };
     handleOpenShipment = () => {
         var chooseTab = this.state.openShipment == false ? 1 : 2
-        this.setState({ openShipment: !this.state.openShipment, chooseTab });
+        this.setState({ openShipment: !this.state.openShipment, chooseTab, fee: chooseTab == 2 ? null : 0 });
+        this.onNewChange({ fee: chooseTab == 2 ? null : 0 })
     };
 
     ChangeTypeDiscount = (type) => {
@@ -797,7 +810,6 @@ class PostOrder extends Component {
                 }
                 : null;
 
-                console.log(this.state.payment_method_id)
         return (
             <React.Fragment>
                 {typeof isShow == "undefined" ? (
@@ -965,18 +977,14 @@ class PostOrder extends Component {
 
 
                                         <Shipper
-                                            total_shipping_fee={oneCart?.info_cart?.total_shipping_fee}
+                                            total_shipping_fee={oneCart?.total_shipping_fee}
                                             totalFinal={totalFinal}
-                                            addComboInCart={this.addComboInCart}
                                             passKeyPress={this.handleKeyboard}
                                             limit={numPage}
                                             passNumPage={this.passNumPage}
                                             store_code={store_code}
                                             products={products}
-                                            handleCallbackProduct={this.handleCallbackProduct}
-                                            onSeletedCustomer={this.onSeletedCustomer}
                                             onNewChange={this.onNewChange}
-                                            handleCallbackPushProduct={this.handleCallbackPushProduct}
                                         />
 
 
@@ -1134,7 +1142,7 @@ class PostOrder extends Component {
                                                             </span>
                                                         </div>
                                                     )}
-                                                    {oneCart?.info_cart?.total_shipping_fee > 0 && (
+                                                    {oneCart?.total_shipping_fee > 0 && (
                                                         <div className="row item-info">
                                                             <div className="item-discount-name col-6">
                                                                 Phí vận chuyển
@@ -1145,7 +1153,7 @@ class PostOrder extends Component {
                                                             >
                                                                 +
                                                                 {formatNoD(
-                                                                    oneCart?.info_cart?.total_shipping_fee
+                                                                    oneCart?.total_shipping_fee
                                                                 )}
                                                             </span>
                                                         </div>
@@ -1287,7 +1295,7 @@ class PostOrder extends Component {
                                                             id="import_prices"
                                                             {...handleKeyPress}
                                                             class="col-6 text-input-pos"
-                                                            value={formatNoD(
+                                                            value={(oneCart?.total_shipping_fee > 0 || oneCart?.total_shipping_fee === 0) ? 0 : formatNoD(
                                                                 removeSignNumber(this.state.priceCustomer)
                                                             )}
                                                             onChange={this.handChange}
@@ -1383,55 +1391,55 @@ class PostOrder extends Component {
                                         <div className="btn-submit-pos">
                                             <div className="row justify-content-around">
                                                 {
-                                                    getChannel() == IKITECH && 
+                                                    getChannel() == IKITECH &&
                                                     <div class="form-check">
-                                                    <input
-                                                        class="form-check-input"
-                                                        onChange={this.handleOptionChange}
-                                                        type="radio"
-                                                        value={2}
-                                                        id="flexRadioDefault1"
-                                                        checked={this.state.payment_method_id == 2}
-                                                    />
-                                                    <label class="form-check-label" for="flexRadioDefault1">
-                                                        Thanh toán khi nhận hàng
-                                                    </label>
-                                                </div>
+                                                        <input
+                                                            class="form-check-input"
+                                                            onChange={this.handleOptionChange}
+                                                            type="radio"
+                                                            value={2}
+                                                            id="flexRadioDefault1"
+                                                            checked={this.state.payment_method_id == 2}
+                                                        />
+                                                        <label class="form-check-label" for="flexRadioDefault1">
+                                                            Thanh toán khi nhận hàng
+                                                        </label>
+                                                    </div>
                                                 }
-                                            {
-                                                getChannel() == IKIPOS && (
-                                                    <React.Fragment>
-                                                                         <div class="form-check">
-                                                    <input
-                                                        class="form-check-input"
-                                                        onChange={this.handleOptionChange}
-                                                        type="radio"
-                                                        value={0}
-                                                        id="flexRadioDefault1"
-                                                        checked={this.state.payment_method_id == 0}
-                                                    />
-                                                    <label class="form-check-label" for="flexRadioDefault1">
-                                                        Tiền mặt
-                                                    </label>
-                                                </div>
+                                                {
+                                                    (oneCart?.total_shipping_fee === null) && (
+                                                        <React.Fragment>
+                                                            <div class="form-check">
+                                                                <input
+                                                                    class="form-check-input"
+                                                                    onChange={this.handleOptionChange}
+                                                                    type="radio"
+                                                                    value={0}
+                                                                    id="flexRadioDefault1"
+                                                                    checked={this.state.payment_method_id == 0}
+                                                                />
+                                                                <label class="form-check-label" for="flexRadioDefault1">
+                                                                    Tiền mặt
+                                                                </label>
+                                                            </div>
 
-                                                <div class="form-check">
-                                                    <input
-                                                        class="form-check-input"
-                                                        onChange={this.handleOptionChange}
-                                                        type="radio"
-                                                        value={1}
-                                                        id="flexRadioDefault2"
-                                                        checked={this.state.payment_method_id == 1}
-                                                    />
-                                                    <label class="form-check-label" for="flexRadioDefault2">
-                                                        Thẻ
-                                                    </label>
-                                                </div>
+                                                            <div class="form-check">
+                                                                <input
+                                                                    class="form-check-input"
+                                                                    onChange={this.handleOptionChange}
+                                                                    type="radio"
+                                                                    value={1}
+                                                                    id="flexRadioDefault2"
+                                                                    checked={this.state.payment_method_id == 1}
+                                                                />
+                                                                <label class="form-check-label" for="flexRadioDefault2">
+                                                                    Thẻ
+                                                                </label>
+                                                            </div>
 
-                                                    </React.Fragment>
-                                                )
-                                            }
+                                                        </React.Fragment>
+                                                    )
+                                                }
                                                 <div class="form-check">
                                                     <input
                                                         class="form-check-input"
@@ -1469,8 +1477,8 @@ class PostOrder extends Component {
                                                     onClick={this.handlePayment}
                                                 >
                                                     {
-                                                    oneCart?.info_cart?.total_shipping_fee > 0 && getChannel() == IKITECH ?  "Lên đơn (F9)"  : "Thanh toán (F9)"
-                                                    } 
+                                                        oneCart?.total_shipping_fee > 0 || oneCart?.total_shipping_fee === 0 && getChannel() == IKITECH ? "Lên đơn (F9)" : "Thanh toán (F9)"
+                                                    }
                                                 </button>
                                             </div>
                                         </div>

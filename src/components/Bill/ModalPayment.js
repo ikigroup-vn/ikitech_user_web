@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as billAction from "../../actions/bill"
 import { filter_var } from "../../ultis/helpers"
+import themeData from "../../ultis/theme_data";
+
 class ModalPayment extends Component {
 
     onSave = (e) => {
@@ -31,8 +33,8 @@ class ModalPayment extends Component {
             >
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
-                        <div class="modal-header">
-                            <button
+                    <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+              <h4 style={{ color: "white" }}>Thông báo</h4>                            <button
                                 type="button"
                                 class="close"
                                 data-dismiss="modal"
@@ -61,7 +63,7 @@ class ModalPayment extends Component {
                                 >
                                     Đóng
                                 </button>
-                                <button type="submit" class="btn btn-info">
+                                <button type="submit" class="btn btn-warning">
                                     Lưu thay đổi
 
                                 </button>

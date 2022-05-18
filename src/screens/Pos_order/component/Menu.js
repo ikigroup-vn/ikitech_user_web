@@ -15,6 +15,7 @@ export default class Menu extends React.Component {
                     marginTop: 8,
                     position: 'absolute',
                     zIndex: 3,
+                    width : "100%"
                 }}
                 {...this.props}
             />

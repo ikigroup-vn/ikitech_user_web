@@ -218,7 +218,7 @@ class Table extends Component {
             : data.order_from == OrderFrom.ORDER_FROM_POS_IN_STORE ? "POS tại quầy"
               : data.order_from == OrderFrom.ORDER_FROM_POS_SHIPPER ? "POS vận chuyển"
                 : data.order_from == OrderFrom.ORDER_FROM_WEB ? "Web"
-                  : "Web"
+                  : "Pos giao vận"
 
         return (
           <tr className="hover-product" onClick={(e) => this.changePage(e, store_code, data.order_code)}>
@@ -249,7 +249,6 @@ class Table extends Component {
               <td className="status_check"><i class={`fas fa-${is_collaborator} ${is_collaborator + "-status"} `}></i></td>
             } */}
 
-            <td style={{ textAlign: "center" }}>{countItem}</td>
             <td>{format(data.total_final)}</td>
             {
               getChannel() == IKITECH &&
@@ -311,17 +310,18 @@ class Table extends Component {
       id="input" class="form-control" r
       equired="required"
       onChange={this.onchangeStatusPayment}>
+                                <option disabled>Trạng thái thanh toán</option>
+
       <option value="">Tất cả</option>
       <option value="UNPAID">Chưa thanh toán</option>
       {
-        getChannel() == IKIPOS && (
           <React.Fragment>
             {/* <option value="WAITING_FOR_PROGRESSING">Chờ xử lý</option> */}
             {/* <option value="CUSTOMER_CANCELLED">Đã hủy</option> */}
             <option value="PARTIALLY_PAID">Đã thanh toán một phần</option>
 
           </React.Fragment>
-        )
+        
       }
 
       <option value="PAID">Đã thanh toán</option>
@@ -335,6 +335,8 @@ class Table extends Component {
     return <select value={orderFrom || ""} name=""
       id="input" class="form-control"
       onChange={this.onchangeOrderFrom}>
+                        <option disabled>Nguồn</option>
+
       <option value="">Tất cả</option>
       <option value={OrderFrom.ORDER_FROM_POS_IN_STORE}>Pos tại quầy</option>
       <option value={OrderFrom.ORDER_FROM_POS_DELIVERY}>Pos giao vận</option>
@@ -348,6 +350,8 @@ class Table extends Component {
 
     if (getChannel() == IKITECH) {
       return <select value={statusOrder || ""} name="" id="input" class="form-control" required="required" onChange={this.onchangeStatusOrder}>
+                <option disabled>Trạng thái đơn hàng</option>
+
         <option value="">Tất cả</option>
 
         <option value="WAITING_FOR_PROGRESSING">Chờ xử lý</option>
@@ -459,7 +463,6 @@ class Table extends Component {
                 {/* {getChannel() == IKITECH &&
                   <th>Cộng tác viên</th>
                 } */}
-                <th style={{ textAlign: "center" }}>Số sản phẩm</th>
                 <th>Tổng tiền</th>
                 {getChannel() == IKITECH &&
                   <th>
