@@ -61,6 +61,10 @@ export const bannerImg = [
     index: 7,
     banner: "https://i.imgur.com/eJrvjuE.png",
   },
+  {
+    index: 8,
+    banner: "https://i.imgur.com/5A5hIGe.png",
+  },
 ];
 export const productImg = [
   {
