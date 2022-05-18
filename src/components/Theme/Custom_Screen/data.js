@@ -35,11 +35,11 @@ export const headerImg = [
 export const bannerImg = [
   {
     index: 1,
-    banner: "https://i.imgur.com/P7bThvc.png",
+    banner: "https://i.imgur.com/FHLz6wR.png",
   },
   {
     index: 2,
-    banner: "https://i.imgur.com/WguEq5w.png",
+    banner: "https://i.imgur.com/FHLz6wR.png",
   },
   {
     index: 3,
@@ -59,37 +59,37 @@ export const bannerImg = [
   },
   {
     index: 7,
-    banner: "https://i.imgur.com/eJrvjuE.png",
+    banner: "https://i.imgur.com/WFGLPGE.png",
   },
   {
     index: 8,
-    banner: "https://i.imgur.com/5A5hIGe.png",
+    banner: "https://i.imgur.com/TVeGGTP.png",
   },
 ];
 export const productImg = [
   {
     index: 1,
-    product: "https://i.imgur.com/ur8j5xI.png",
+    product: "https://i.imgur.com/hhVP2Af.png",
   },
   {
     index: 2,
-    product: "https://i.imgur.com/izzPfnH.png",
+    product: "https://i.imgur.com/nGD1XGf.png",
   },
   {
     index: 3,
-    product: "https://i.imgur.com/zi5Xwjn.png",
+    product: "https://i.imgur.com/PDCmjDb.png",
   },
   {
     index: 4,
-    product: "https://i.imgur.com/KUWWEmY.png",
+    product: "https://i.imgur.com/EW2WoCE.png",
   },
   {
     index: 5,
-    product: "https://i.imgur.com/UdeTscS.png",
+    product: "https://i.imgur.com/nLJ5A41.png",
   },
   {
     index: 6,
-    product: "https://i.imgur.com/vaCzYHx.png",
+    product: "https://i.imgur.com/t3Nc1HH.png",
   },
   {
     index: 7,
@@ -103,27 +103,27 @@ export const productImg = [
 export const blogImg = [
   {
     index: 1,
-    blog: "https://i.imgur.com/VnnatqD.png",
+    blog: "https://i.imgur.com/HosiZpK.png",
   },
   {
     index: 2,
-    blog: "https://i.imgur.com/przNBsg.png",
+    blog: "https://i.imgur.com/zAYi9N6.png",
   },
   {
     index: 3,
-    blog: "https://i.imgur.com/9eqfeze.png",
+    blog: "https://i.imgur.com/0PebLek.png",
   },
   {
     index: 4,
-    blog: "https://i.imgur.com/Qvexahe.png",
+    blog: "https://i.imgur.com/zCVz5V9.png",
   },
   {
     index: 5,
-    blog: "https://i.imgur.com/JUszTxy.png",
+    blog: "https://i.imgur.com/3B845xR.png",
   },
   {
     index: 6,
-    blog: "https://i.imgur.com/Cak6Klk.png",
+    blog: "https://i.imgur.com/46ld5YA.png",
   },
 ];
 export const footerImg = [
