@@ -73,10 +73,18 @@ class Home_Screen extends Component {
       {
         isVip: false,
         index: 7,
-        theme: "https://i.imgur.com/OB5Yldo.png",
+        theme: "https://i.imgur.com/kWOSlwM.png",
         arr_index_component: [7, 7, 7, 7, 1],
+        demo_link: "https://nowshopdemo.mydoapp.vn/"
+      },
+      {
+        isVip: false,
+        index: 8,
+        theme: "https://i.imgur.com/kHPRmKe.png",
+        arr_index_component: [8, 8, 7, 7, 3],
         demo_link: "https://mediamartonline.mydoapp.vn/"
       },
+      
     ];
   }
 

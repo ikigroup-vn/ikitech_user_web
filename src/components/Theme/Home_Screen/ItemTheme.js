@@ -167,9 +167,9 @@ class ItemTheme extends Component {
               }
             </div>
 
-            {home_page_type === v.index && <a onClick={this.props.goBack} style={{
-              color: "#0d6efd"
-            }}>Tùy chỉnh</a>}
+            {home_page_type === v.index && <a onClick={this.props.goBack} class="ahef" style={{
+          
+            }}><span>Tùy chỉnh</span></a>}
 
           </div>
 
