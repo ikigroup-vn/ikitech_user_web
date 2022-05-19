@@ -21,7 +21,7 @@ class InfoShipper extends Component {
     sendOrderToDelivery = () => {
         var { bill, order_code, store_code } = this.props
         
-        this.props.sendOrderToDelivery(null, store_code, bill.id, order_code);
+        this.props.sendOrderToDelivery(null, store_code, bill.id, order_code , "SHIPPING");
     }
 
     componentDidMount() {
@@ -48,8 +48,7 @@ class InfoShipper extends Component {
         var { value } = e.target;
         this.setState({ shipperId: value })
         var { bill, order_code, store_code } = this.props
-
-        if (this.state.shipperId == "") {
+        if (value == "") {
             this.setState({
                 error: "Chưa chọn phương thức vận chuyển"
             })
@@ -160,8 +159,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        sendOrderToDelivery: (data, store_code, billId, order_code) => {
-            dispatch(billAction.sendOrderToDelivery(data, store_code, billId, order_code));
+        sendOrderToDelivery: (data, store_code, billId, order_code , order_status_code) => {
+            dispatch(billAction.sendOrderToDelivery(data, store_code, billId, order_code , order_status_code));
         },
         updateOrder: (data, store_code, order_code) => {
             dispatch(billAction.updateOrder(data, store_code, order_code));

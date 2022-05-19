@@ -36,6 +36,7 @@ export const fetchHistoryPay = (store_code  , order_code) => {
 };
 
 export const updateStatusOrder = (store_code , data) =>{
+  console.log(data);
   return callApi(`/store/${store_code}/orders/change_order_status`, "post", data);
 
 

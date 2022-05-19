@@ -102,7 +102,8 @@ class Form extends Component {
                 />
                 <section className="content">
                     <div className="row">
-                        {(getChannel() == IKITECH && bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE  && bill.order_from !== null )&& (
+                        {(getChannel() == IKITECH && bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE  && bill.order_from !== null &&
+                        bill.order_status_code !== "USER_CANCELLED" && bill.order_status_code !== "CUSTOMER_CANCELLED" )&& (
                             <div className="col-lg-2 col-md-4 col-sm-12 ">
                                 <div className="row" id="sale_nav_container">
                                     <div className="" style={{ width: "100%" }}>
@@ -135,7 +136,7 @@ class Form extends Component {
                             </div>
                         )}
 
-                        <div className={getChannel() == IKIPOS || bill.order_from == OrderFrom.ORDER_FROM_POS_IN_STORE ||  bill.order_from == null ? css_IKIPOS : css_IKITECH}>
+                        <div className={getChannel() == IKIPOS || bill.order_from == OrderFrom.ORDER_FROM_POS_IN_STORE ||  bill.order_from == null || bill.order_status_code == "USER_CANCELLED" || bill.order_status_code == "CUSTOMER_CANCELLED" ? css_IKIPOS : css_IKITECH}>
                             {
                                 getChannel() == IKIPOS ? (<InfoProductPos check = {check} store_code={store_code} bills = {bills} bill={bill} />
                                 ) : <InfoProductPos check = {check} store_code={store_code} bills = {bills} bill={bill} />
@@ -227,6 +228,7 @@ class Form extends Component {
 
 
                                 <hr />
+                                {( getChannel() == IKITECH && bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE &&  bill.order_from !== null && bill.order_status_code == "WAITING_FOR_PROGRESSING") &&
                                 <div className="card col-12 pl0" id="user_cart_info">
                                     <ChangeBranch
                                         order_allow_change_status={order_allow_change_status}
@@ -235,7 +237,7 @@ class Form extends Component {
                                         handleUpdateStatusOrder={this.handleUpdateStatusOrder} bill={bill} />
                                 </div>
 
-
+                                }
                                 {
                                     getChannel() == IKITECH && <Chat
                                         customerName={customerName} showChatBox={showChatBox} customerImg={customerImg} customerId={customerId} chat={chat} store_code={store_code} />

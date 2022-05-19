@@ -447,7 +447,7 @@ class PostOrder extends Component {
                     payment_method_id: this.state.payment_method_id,
                     amount_money: 0,
                     allowAutoPrint: true,
-                    order_from: (oneCart?.total_shipping_fee > 0 || oneCart?.total_shipping_fee === 0) && getChannel() == IKITECH ? OrderFrom.ORDER_FROM_POS_DELIVERY : OrderFrom.ORDER_FROM_POS_IN_STORE
+                    order_from: (oneCart?.total_shipping_fee > 0 || this.state.openShipment == true) && getChannel() == IKITECH ? OrderFrom.ORDER_FROM_POS_DELIVERY : OrderFrom.ORDER_FROM_POS_IN_STORE
                 };
 
             }
@@ -456,7 +456,7 @@ class PostOrder extends Component {
                     payment_method_id: this.state.payment_method_id,
                     amount_money: formatNumber(this.state.priceCustomer),
                     allowAutoPrint: true,
-                    order_from: (oneCart?.total_shipping_fee > 0 || oneCart?.total_shipping_fee === 0) && getChannel() == IKITECH ? OrderFrom.ORDER_FROM_POS_DELIVERY : OrderFrom.ORDER_FROM_POS_IN_STORE
+                    order_from: (oneCart?.total_shipping_fee > 0 || this.state.openShipment == true) && getChannel() == IKITECH ? OrderFrom.ORDER_FROM_POS_DELIVERY : OrderFrom.ORDER_FROM_POS_IN_STORE
 
                 };
             }
@@ -466,7 +466,7 @@ class PostOrder extends Component {
                 payment_method_id: this.state.payment_method_id,
                 amount_money: formatNumber(this.state.priceCustomer),
                 allowAutoPrint: true,
-                order_from: (oneCart?.total_shipping_fee > 0 || oneCart?.total_shipping_fee === 0) && getChannel() == IKITECH ? OrderFrom.ORDER_FROM_POS_DELIVERY : OrderFrom.ORDER_FROM_POS_IN_STORE
+                order_from: (oneCart?.total_shipping_fee > 0 || this.state.openShipment == true) && getChannel() == IKITECH ? OrderFrom.ORDER_FROM_POS_DELIVERY : OrderFrom.ORDER_FROM_POS_IN_STORE
 
             };
         }
@@ -697,10 +697,7 @@ class PostOrder extends Component {
     handleOpenShipment = () => {
         var chooseTab = this.state.openShipment == false ? 1 : 2
         this.setState({ openShipment: !this.state.openShipment, chooseTab, fee: chooseTab == 2 ? null : 0 });
-        this.props.showLoading({
-            type: Types.SHOW_LOADING,
-            loading : "show"
-        })
+   
         this.onNewChange({ fee: chooseTab == 2 ? null : 0 })
      
     };
@@ -817,7 +814,8 @@ class PostOrder extends Component {
                     padding: "0 5px",
                 }
                 : null;
-
+        var total_shipping_fee = oneCart?.total_shipping_fee
+        console.log("hehe",total_shipping_fee)
         return (
             <React.Fragment>
                 {typeof isShow == "undefined" ? (
@@ -985,7 +983,7 @@ class PostOrder extends Component {
 
 
                                         <Shipper
-                                            total_shipping_fee={oneCart?.total_shipping_fee}
+                                            total_shipping_fee={total_shipping_fee}
                                             totalFinal={totalFinal}
                                             passKeyPress={this.handleKeyboard}
                                             limit={numPage}
@@ -1150,7 +1148,7 @@ class PostOrder extends Component {
                                                             </span>
                                                         </div>
                                                     )}
-                                                    {oneCart?.total_shipping_fee > 0 && (
+                                                    {total_shipping_fee > 0 && (
                                                         <div className="row item-info">
                                                             <div className="item-discount-name col-6">
                                                                 Phí vận chuyển
@@ -1161,7 +1159,7 @@ class PostOrder extends Component {
                                                             >
                                                                 +
                                                                 {formatNoD(
-                                                                    oneCart?.total_shipping_fee
+                                                                    total_shipping_fee
                                                                 )}
                                                             </span>
                                                         </div>
@@ -1303,7 +1301,7 @@ class PostOrder extends Component {
                                                             id="import_prices"
                                                             {...handleKeyPress}
                                                             class="col-6 text-input-pos"
-                                                            value={(oneCart?.total_shipping_fee > 0 || oneCart?.total_shipping_fee === 0) ? 0 : formatNoD(
+                                                            value={(total_shipping_fee > 0 || total_shipping_fee == 0) ? 0 : formatNoD(
                                                                 removeSignNumber(this.state.priceCustomer)
                                                             )}
                                                             onChange={this.handChange}
@@ -1399,7 +1397,8 @@ class PostOrder extends Component {
                                         <div className="btn-submit-pos">
                                             <div className="row justify-content-around">
                                                 {
-                                                    getChannel() == IKITECH &&  (oneCart?.total_shipping_fee > 0 || oneCart?.total_shipping_fee === 0 || this.state.openShipment == true) &&
+                                                    getChannel() == IKITECH &&   (this.state.openShipment == true || total_shipping_fee > 0)  &&
+
                                                     <div class="form-check">
                                                         <input
                                                             class="form-check-input"
@@ -1415,7 +1414,8 @@ class PostOrder extends Component {
                                                     </div>
                                                 }
                                                 {
-                                                    (oneCart?.total_shipping_fee === null) && (
+                                                    ( typeof total_shipping_fee == "undefined" || total_shipping_fee == null || total_shipping_fee == 0 ) && this.state.openShipment == false && (
+
                                                         <React.Fragment>
                                                             <div class="form-check">
                                                                 <input
@@ -1485,7 +1485,8 @@ class PostOrder extends Component {
                                                     onClick={this.handlePayment}
                                                 >
                                                     {
-                                                        (oneCart?.total_shipping_fee > 0 || oneCart?.total_shipping_fee === 0 || this.state.openShipment == true) && getChannel() == IKITECH ? "Lên đơn (F9)" : "Thanh toán (F9)"
+                                                        this.state.openShipment == true || total_shipping_fee > 0 && getChannel() == IKITECH ? "Lên đơn (F9)" : "Thanh toán (F9)"
+
                                                     }
                                                 </button>
                                             </div>

@@ -1,6 +1,7 @@
 import moment from "moment";
 import Compressor from "compressorjs";
 import * as Config from "../constants/Config";
+import getChannel , {IKITECH , IKIPOS} from "./channel";
 export const randomString = (length) => {
   var result = "";
   var characters =
@@ -12,6 +13,34 @@ export const randomString = (length) => {
   return result;
 };
 
+
+export const contactOrNumber = (data) =>{
+  if(getChannel() == IKIPOS)
+  {
+    return data
+  }
+  else
+  {
+    var string = data.slice(0, -2)
+    console.log(string)
+    var newString =  string
+    .toString()
+    .replace(/\./g, "")
+    .toString()
+    .replace(/,/g, "")
+    .toString()
+    .replace(/-/g, "")
+    .toString()
+    if(newString  == 0)
+    {
+      return "Liên hệ"
+    }
+    else
+    {
+      return data
+    }
+  }
+}
 
 export const containsSpecialChars = (str) => {
   const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;

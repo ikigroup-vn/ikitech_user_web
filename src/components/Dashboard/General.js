@@ -154,7 +154,7 @@ class General extends Component {
                             <div className="row no-gutters align-items-center">
                                 <div className="col mr-2">
                                     <div >
-                                        <Link className=" font-weight-bold text-info text-uppercase mb-1" to={`/order/${store_code}/WAITING_FOR_PROGRESSING?from=${moment().format("DD-MM-YYYY")}&to=${moment().format("DD-MM-YYYY")}`}>Đơn đang giao
+                                        <Link className=" font-weight-bold text-info text-uppercase mb-1" to={`/order/${store_code}/SHIPPING?from=${moment().format("DD-MM-YYYY")}&to=${moment().format("DD-MM-YYYY")}`}>Đơn đang giao
                                         </Link>
                                     </div>
                                     <div className="h5 mb-0 font-weight-bold text-gray-800">{badges.orders_shipping}</div>

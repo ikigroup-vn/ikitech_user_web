@@ -6124,7 +6124,9 @@ img {
 .tab-pagination>.active>.page-link {
     background-color: rgb(229, 111, 37) !important;
 }
-
+.IKITECH>.tab-pagination>.active>.page-link {
+    background-color: rgb(187 31 37) !important;
+}
 .navbar-main {
     overflow-x: hidden;
     position: fixed;

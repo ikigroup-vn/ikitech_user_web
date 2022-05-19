@@ -1,7 +1,9 @@
 import * as Types from "../constants/ActionType";
 import history from "../history";
 import * as storeAApi from "../data/remote/store_address";
-
+import * as notificationApi from "../data/remote/notification";
+import * as badgeApi from "../data/remote/badge"
+import { getBranchId } from "../ultis/branchUtils";
 export const fetchAllStoreA = (id) => {
   return (dispatch) => {
     dispatch({
@@ -125,7 +127,7 @@ export const destroyStoreA = (store_code, id) => {
   };
 };
 
-export const updateStoreA = (storeAId, storeA, store_code) => {
+export const updateStoreA = (storeAId, storeA, store_code , funcModal = null) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -134,6 +136,10 @@ export const updateStoreA = (storeAId, storeA, store_code) => {
     storeAApi
       .updateStoreA(storeAId, storeA, store_code)
       .then((res) => {
+        if(funcModal)
+        {
+          funcModal()
+        }
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide"
@@ -148,6 +154,19 @@ export const updateStoreA = (storeAId, storeA, store_code) => {
             content: res.data.msg,
           },
         });
+        badgeApi.fetchAllBadge(store_code,getBranchId()).then((res) => {
+          
+          if(res.data.code !== 401)
+          {
+          dispatch({
+            type: Types.FETCH_ALL_BADGE,
+            data: res.data.data,
+          });
+      
+       
+        }
+        })
+        if(funcModal==null)
         history.goBack();
       })
       .catch(function (error) {

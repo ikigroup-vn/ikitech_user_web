@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { format, formatNumber } from "../../ultis/helpers";
+import { format, formatNumber , contactOrNumber } from "../../ultis/helpers";
 import * as inventoryAction from "../../actions/inventory";
 import { connect } from "react-redux";
 import getChannel, { IKITECH } from "../../ultis/channel";
@@ -233,7 +233,7 @@ class ShowData extends Component {
     if (product_discount) {
       discount_percent = product_discount.value;
     }
-    console.log(distributes)
+
     return (
         <tr className="hover-product">
           <td   className={`${_delete == true ? "show" : "hide"} `}>
@@ -271,19 +271,19 @@ class ShowData extends Component {
           <td>
             <div>
               {min_price === max_price ? (
-                format(
+                contactOrNumber(format(
                   Number(
                     discount_percent == null
                       ? min_price
                       : min_price - min_price * discount_percent * 0.01
                   )
                 )
-              ) : distributes && distributes.length == 0 ? format(
+              )) : distributes && distributes.length == 0 ? contactOrNumber(format(
                 Number(
                   discount_percent == null
                     ? min_price
                     : min_price - min_price * discount_percent * 0.01
-                )) :(
+                ))) :(
                 <div>
                   {format(
                     Number(
@@ -311,7 +311,7 @@ class ShowData extends Component {
                 }}
               >
                 {min_price === max_price ? (
-                  format(Number(min_price))
+                  contactOrNumber(format(Number(min_price)))
                 ) : (
                   <div className="row">
                     <div

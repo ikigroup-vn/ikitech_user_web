@@ -4,17 +4,17 @@ import * as billApi from "../data/remote/bill";
 import * as chatApi from "../data/remote/chat";
 import * as uploadApi from "../data/remote/upload";
 import { compressed } from "../ultis/helpers";
-import {getBranchId} from "../ultis/branchUtils"
+import { getBranchId } from "../ultis/branchUtils"
 import moment from "moment";
-export const fetchAllBill = (store_code, page = 1,branch_id, params = null, params_agency = null) => {
- 
-  if(branch_id != null) {
+export const fetchAllBill = (store_code, page = 1, branch_id, params = null, params_agency = null) => {
+
+  if (branch_id != null) {
     return (dispatch) => {
       dispatch({
         type: Types.SHOW_LOADING_LAZY,
         loading: "show"
       })
-      billApi.fetchAllBill(store_code, page,branch_id, params, params_agency).then((res) => {
+      billApi.fetchAllBill(store_code, page, branch_id, params, params_agency).then((res) => {
         dispatch({
           type: Types.SHOW_LOADING_LAZY,
           loading: "hide"
@@ -24,11 +24,11 @@ export const fetchAllBill = (store_code, page = 1,branch_id, params = null, para
             type: Types.FETCH_ALL_BILL,
             data: res.data.data,
           });
-  
-  
+
+
       });
       billApi
-        .fetchAllBill(store_code, page,branch_id,  params, params_agency)
+        .fetchAllBill(store_code, page, branch_id, params, params_agency)
         .then((res) => {
           dispatch({
             type: Types.SHOW_LOADING_LAZY,
@@ -42,7 +42,7 @@ export const fetchAllBill = (store_code, page = 1,branch_id, params = null, para
         });
     };
   }
-  
+
 };
 
 export const fetchBillId = (store_code, order_code) => {
@@ -87,11 +87,11 @@ export const fetchBillId = (store_code, order_code) => {
 };
 
 
-export const getCalculate = (store_code, data , branch_id=getBranchId()) => {
+export const getCalculate = (store_code, data, branch_id = getBranchId()) => {
   return (dispatch) => {
 
-      billApi
-      .getCalculate(store_code, data , branch_id=getBranchId())
+    billApi
+      .getCalculate(store_code, data, branch_id = getBranchId())
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING_LAZY,
@@ -103,19 +103,19 @@ export const getCalculate = (store_code, data , branch_id=getBranchId()) => {
             type: Types.GET_CALCULATE,
             data: res.data.data,
           });
-          else
+        else
           dispatch({
             type: Types.GET_CALCULATE,
             data: {},
           });
 
-      }).catch(function(error){
+      }).catch(function (error) {
         dispatch({
           type: Types.GET_CALCULATE,
           data: {},
         });
-      }); 
-  
+      });
+
   };
 };
 
@@ -273,7 +273,7 @@ export const updateStatusPayment = (data, store_code, billId, order_code) => {
   };
 };
 
-export const sendOrderToDelivery = (data, store_code, billId, order_code) => {
+export const sendOrderToDelivery = (data, store_code, billId, order_code, order_status_code) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -297,20 +297,49 @@ export const sendOrderToDelivery = (data, store_code, billId, order_code) => {
             content: res.data.msg,
           },
         });
-        billApi.fetchBillId(store_code, order_code).then((res) => {
-          if (res.data.code !== 401)
-            dispatch({
-              type: Types.FETCH_ID_BILL,
-              data: res.data.data,
+        billApi
+          .updateStatusOrder(store_code, {
+            order_code: order_code,
+            order_status_code: order_status_code
+          })
+          .then((res) => {
+
+
+            billApi.fetchBillId(store_code, order_code).then((res) => {
+              if (res.data.code !== 401)
+                dispatch({
+                  type: Types.FETCH_ID_BILL,
+                  data: res.data.data,
+                });
             });
-        });
-        billApi.fetchBillHistory(store_code, billId).then((res) => {
-          if (res.data.code !== 401)
+            if (
+              billId == undefined ||
+              billId == null ||
+              billId == "undefined" ||
+              billId == 0
+            ) {
+              return;
+            } else {
+              billApi.fetchBillHistory(store_code, billId).then((res) => {
+                if (res.data.code !== 401)
+                  dispatch({
+                    type: Types.FETCH_BILL_HISTORY,
+                    data: res.data.data,
+                  });
+              });
+            }
+          })
+          .catch(function (error) {
             dispatch({
-              type: Types.FETCH_BILL_HISTORY,
-              data: res.data.data,
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "danger",
+                title: "Lỗi",
+                disable: "show",
+                content: error?.response?.data?.msg,
+              },
             });
-        });
+          });
 
         billApi.getHistoryDeliveryStatus(store_code, data).then((res) => {
           if (res.data.code === 200)
@@ -581,18 +610,18 @@ export const uploadImgChat = function (store_code, customerId, files) {
 };
 
 
-export const postRefund = (data,store_code , branch = getBranchId()) => {
+export const postRefund = (data, store_code, branch = getBranchId()) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
     billApi
-      .postRefund(data,store_code,branch)
+      .postRefund(data, store_code, branch)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
+          loading: "hide"
         })
         dispatch({
           type: Types.ALERT_UID_STATUS,
@@ -625,18 +654,18 @@ export const postRefund = (data,store_code , branch = getBranchId()) => {
 
 
 
-export const postCashRefund = (order_code , data,store_code , branch = getBranchId()) => {
+export const postCashRefund = (order_code, data, store_code, branch = getBranchId()) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
+      loading: "show"
     })
     billApi
-      .postCashRefund(order_code,data,store_code,branch)
+      .postCashRefund(order_code, data, store_code, branch)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
+          loading: "hide"
         })
         dispatch({
           type: Types.ALERT_UID_STATUS,

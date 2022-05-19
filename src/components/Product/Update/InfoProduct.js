@@ -83,7 +83,7 @@ class InfoProduct extends Component {
 
     if (name == "txtPrice" || name == "txtImportPrice" || name == "txtPercentC" || name == "txtQuantityInStock") {
       if (!isNaN(Number(_value))) {
-        value = new Intl.NumberFormat().format(_value);
+        value = formatNoD(_value);
         value = value.toString().replace(/\./g, ',')
         if (name == "txtPercentC") {
           if (value.length < 3) {
@@ -193,7 +193,7 @@ class InfoProduct extends Component {
       const _value = formatNumber(value);
 
       if (!isNaN(Number(_value))) {
-        value = new Intl.NumberFormat().format(_value);
+        value = formatNoD(_value);
         this.setState({ txtQuantityInStock: value })
       }
     }
@@ -232,7 +232,7 @@ class InfoProduct extends Component {
 
       const quantity_stock = product.quantity_in_stock < 0 ? "" : formatNumber(product.quantity_in_stock);
 
-      var _quantity_stock = quantity_stock == "" ? "" : new Intl.NumberFormat().format(quantity_stock);
+      var _quantity_stock = quantity_stock == "" ? "" : formatNoD(quantity_stock);
       var checkHasDistribute = false;
       if(product.distributes != null && product.distributes.length > 0)
       {

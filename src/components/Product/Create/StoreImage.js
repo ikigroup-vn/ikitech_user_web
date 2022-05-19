@@ -8,6 +8,7 @@ import * as Types from "../../../constants/ActionType";
 import * as Env from "../../../ultis/default"
 import SortableList, { SortableItem } from "react-easy-sort";
 import arrayMove from "array-move";
+import getChannel , {IKITECH , IKIPOS} from "../../../ultis/channel";
 class StoreImage extends Component {
   constructor(props) {
     super(props);
@@ -193,7 +194,7 @@ class StoreImage extends Component {
 
           <div >
             <label style={{ fontSize: "20px" }} for="product_name">
-            Ảnh sản phẩm 
+            Ảnh sản phẩm {getChannel() == IKITECH && <span style = {{fontSize : "13px"}}> (Tối đa 13 ảnh) </span>}
             </label>
 
           </div>

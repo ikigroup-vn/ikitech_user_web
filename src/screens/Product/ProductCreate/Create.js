@@ -565,32 +565,29 @@ class ProductCreate extends Component {
             </div>
           </div>
         </div>
-        {/* <div class="card mb-4">
+
+      {getChannel() == IKITECH &&        <div class="card mb-4">
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <button
-                  type="button"
                   class="btn btn-primary btn-sm"
                   onClick={this.postProduct}
                 >
-                  <i class="fa fa-plus"></i>
-                  Tạo
+                  <i class="fa fa-plus"></i> Tạo
                 </button>
                 <a
                   style={{ marginLeft: "10px" }}
-                  onClick={this.goBack}
-                  class="btn btn-warning btn-icon-split  btn-sm"
+                  onClick={this.goBack} class={`btn btn-warning btn-sm color-white `}
                 >
-                  <span class="icon text-white-50">
-                    <i class="fas fa-arrow-left"></i>
-                  </span>
-                  <span class="text"> Trở về</span>
+                  <i class="fa fa-arrow-left"></i> Trở về
                 </a>
+          
               </div>
             </div>
           </div>
-        </div> */}
+        </div>}
+
         <div
           class={`card mb-4 ${typeof isShowAttr == "undefined" || isShowAttr == false || getChannel() == IKIPOS
             ? "hide"

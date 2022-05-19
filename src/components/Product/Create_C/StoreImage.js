@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ModalUploadStore from "./StoreImage/ModalUpload";
 import ModalUploadListP from "./StoreImage/ModalUploadList";
 import { shallowEqual } from "../../../ultis/shallowEqual";
+import getChannel , {IKITECH , IKIPOS} from "../../../ultis/channel";
 
 import { connect } from "react-redux";
 import Alert from "../../Partials/Alert";
@@ -216,7 +217,7 @@ class StoreImage extends Component {
 
           <div >
             <label style={{ fontSize: "20px" }} for="product_name">
-            Ảnh sản phẩm 
+            Ảnh sản phẩm {getChannel() == IKITECH && <span style = {{fontSize : "13px"}}> (Tối đa 13 ảnh) </span>}
             </label>
 
           </div>

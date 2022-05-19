@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import * as productAction from "../../actions/product";
+import getChannel from "../../ultis/channel";
 class Pagination extends Component {
   constructor(props) {
     super(props);
@@ -65,7 +66,7 @@ class Pagination extends Component {
     return (
 
 
-      <nav aria-label="Page navigation" className={`float-pagination ${this.props.style}`}>
+      <nav aria-label="Page navigation" className={`float-pagination ${this.props.style} ${getChannel()}`}>
         <ul class="pagination  tab-pagination pg-blue">
           {this.showData(links)}
         </ul>

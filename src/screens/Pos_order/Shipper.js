@@ -8,6 +8,7 @@ import * as customerAction from "../../data/remote/customer";
 
 import * as Types from "../../constants/ActionType"
 import Slider from "react-slick";
+import ModalAddress from "./component/ModalAddress";
 import {
     format,
     formatNoD,
@@ -69,6 +70,8 @@ class PanelBottom extends Component {
             cod: "",
             address_store: "",
             sent_delivery: false,
+            isError: false,
+            modalAddress : {}
 
 
         }
@@ -406,6 +409,12 @@ class PanelBottom extends Component {
             }
 
             this.resetShipment(shipment)
+            if (data.receiver_province_id == "" || data.receiver_province_id == null || data.receiver_district_id == "" || data.receiver_district_id == null || data.receiver_wards_id == "" || data.receiver_wards_id == null) {
+                this.setState({ isError: true })
+                return;
+            }
+            this.setState({ isError: false })
+
             this.changeNewShipment(store_code, shipment, data)
             // console.log(address_store)
             // this.props.calculateShipment(store_code , shipment , data);
@@ -472,6 +481,10 @@ class PanelBottom extends Component {
         }
         return list
 
+    }
+
+    passDataAddress = (data) =>{
+        this.setState({modalAddress : data})
     }
 
 
@@ -818,10 +831,21 @@ class PanelBottom extends Component {
                     </div>
                     <div class="form-group">
                         <label style={{ fontWeight: "500" }} for="product_name">Địa chỉ lấy hàng</label>
-
-                        <div>{`${badges.address_pickup?.address_detail} - ${badges.address_pickup?.wards_name} - ${badges.address_pickup?.district_name} - ${badges.address_pickup?.province_name}`} <a style = {{textDecoration : "underline"}}>Thay đổi</a>
-
-                        </div>
+                            {
+                                badges.address_pickup ?   <div>{`${badges.address_pickup?.address_detail} - ${badges.address_pickup?.wards_name} - ${badges.address_pickup?.district_name} - ${badges.address_pickup?.province_name}`}
+                                <a
+                                    onClick={() => this.passDataAddress(badges.address_pickup)}
+                                    data-toggle="modal"
+                                    data-target="#modalAddress"
+                                    style={{
+                                        textDecoration: "underline", "font-size": "13px",
+                                        color: "blue",
+                                        "margin-left": "4px"
+                                    }}>Thay đổi</a>
+    
+                            </div> : <div style = {{padding : "5px" , color : "red" , textAlign : "center"}}>Vui lòng truy cập vào mục địa chỉ cửa hàng để thêm địa chỉ lấy hàng</div>
+                            }
+                       
 
 
                     </div>
@@ -1170,7 +1194,7 @@ class PanelBottom extends Component {
 
                         <div className="list-payment" style={{ padding: "0 5px" }}>
                             {loadShipper == "show" ? <div style={{ textAlign: "center", padding: "10px" }}>...Đang tải</div>
-                                : this.props.calculate?.length > 0 ? this.props.calculate.map((item, value) => {
+                                : this.props.calculate?.length > 0 && this.state.isError == false ? this.props.calculate.map((item, value) => {
                                     return (
                                         <div className="item-payment" >
                                             <input type="radio" name="shipment" onClick={() => { this.getShipment(item.partner_id, item.ship_type, item.fee) }} />
@@ -1341,7 +1365,9 @@ class PanelBottom extends Component {
 
     }
     render() {
-        var { limit, passNumPage, store_code, products, shipment } = this.props
+        var { limit, passNumPage, store_code, products, shipment , wards,
+            province,
+            district } = this.props
         var { isShow, filter_desc, filter_sort, filterCategory, isShowDetailCombo, modal } = this.state
         var show = isShow == true ? "show" : "hide"
         var isShowDetailCombo = isShowDetailCombo == true ? "show" : "hide"
@@ -1363,8 +1389,8 @@ class PanelBottom extends Component {
             <div >
 
                 {this.buildTabCustomer()}
-
-
+                {/* <Form wards = {wards} district = {district} province = {province} history={history} storeAId={storeAId} store_address={store_address} store_code={store_code} /> */}
+               <ModalAddress wards = {wards} district = {district} province = {province}   store_code={store_code} store_address = {this.state.modalAddress}></ModalAddress>
             </div>
         );
     }

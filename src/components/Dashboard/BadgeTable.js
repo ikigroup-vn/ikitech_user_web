@@ -30,14 +30,14 @@ class BadgeTable extends Component {
         var statusDiscount = numDiscount == 0 || numDiscount == null ? "hide-badge" : "active-badge"
         var statusReview = numReview == 0 || numReview == null ? "hide-badge" : "active-badge"
 
-
+        console.log(badges)
         return (
             <div class="form-group" style={{ fontSize: "15px" }}>
                 <div class="info-badge" >
 
 
-                    <p class="" id="sale_user_name">
-                        <Link to={`/order/${store_code}/WAITING_FOR_PROGRESSING`}>Đơn hàng đang chờ xử lý </Link> <span id="user_name">
+                    <p class="item-detail-badges" id="sale_user_name">
+                        <Link to={`/order/${store_code}/WAITING_FOR_PROGRESSING?from=${moment().format("DD-MM-YYYY")}&to=${moment().format("DD-MM-YYYY")}`}>Đơn hàng đang chờ xử lý </Link> <span id="user_name">
                             <span
 
                                 className={`step num-badge ${statusOrderWaiting}`}
@@ -47,8 +47,8 @@ class BadgeTable extends Component {
 
                         </span>
                     </p>
-                    <p class="" id="delivery_address">
-                        <Link to={`/order/${store_code}/PACKING`}>Đơn hàng đang chuẩn bị</Link> <span id="user_address">
+                    <p class="item-detail-badges" id="delivery_address">
+                        <Link to={`/order/${store_code}/PACKING?from=${moment().format("DD-MM-YYYY")}&to=${moment().format("DD-MM-YYYY")}`}>Đơn hàng đang chuẩn bị</Link> <span id="user_address">
                             <span
 
                                 className={`step num-badge ${statusOrderPacking}`}
@@ -57,8 +57,8 @@ class BadgeTable extends Component {
                             </span>
                         </span>
                     </p>
-                    <p class="">
-                        <Link to={`/order/${store_code}/SHIPPING`}> Đơn hàng đang giao</Link> <span id="user_tel">
+                    <p class="item-detail-badges">
+                        <Link to={`/order/${store_code}/SHIPPING?from=${moment().format("DD-MM-YYYY")}&to=${moment().format("DD-MM-YYYY")}`}> Đơn hàng đang giao</Link> <span id="user_tel">
                             <span
 
                                 className={`step num-badge ${statusOrderShipping}`}
@@ -67,7 +67,7 @@ class BadgeTable extends Component {
                             </span>
                         </span>
                     </p>
-                    <p class="">
+                    <p class="item-detail-badges">
                         <Link to={`/chat/${store_code}`}>Tin nhắn chưa đọc </Link><span id="user_tel">
                             <span
 
@@ -77,7 +77,7 @@ class BadgeTable extends Component {
                             </span>
                         </span>
                     </p>
-                    <p class="" id="booking_time">
+                    <p class="item-detail-badges" id="booking_time">
                         <Link to={`/voucher/${store_code}`}> Tổng voucher </Link><span id="booking_time_txt">
                             <span
 
@@ -87,7 +87,7 @@ class BadgeTable extends Component {
                             </span>
                         </span>
                     </p>
-                    <p class="">
+                    <p class="item-detail-badges">
                         <Link to={`/discount/${store_code}`}> Giảm giá sản phẩm </Link><span id="user_note">
                             <span
 
@@ -99,8 +99,8 @@ class BadgeTable extends Component {
                     </p>
 
                     {
-                        getChannel() == IKITECH && <p class="">
-                            <Link to={`/review/${store_code}`}>Chưa đánh giá</Link>
+                        getChannel() == IKITECH && <p class="item-detail-badges">
+                            <Link to={`/review/${store_code}`}>Đánh giá chờ xác nhận</Link>
                             <span class="cart_payment_method">
                                 <span
 

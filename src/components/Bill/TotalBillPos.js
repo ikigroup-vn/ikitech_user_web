@@ -169,8 +169,7 @@ class TotalBill extends Component {
 
                         )
                     }
-                    {
-                        (bill.order_from == 2 || bill.order_from == null) && (
+                 
                             <div style={{ textAlign: "center" }}>
                                 {
                                     bill.payment_status_code == "UNPAID" || bill.payment_status_code == "PARTIALLY_PAID" ?
@@ -227,16 +226,16 @@ class TotalBill extends Component {
 
 
                             </div>
-                        )
+                        
 
-                    }
+                    
                     {
                         getChannel() == IKITECH && (
                             <div style={{ textAlign: "center" }}>
 
 
                                 {
-                                    bill.payment_status_code == "UNPAID" && bill.order_from !== 2 && bill.order_from !== null && bill.order_status_code !== "USER_CANCELLED" && bill.order_status_code !== "CUSTOMER_CANCELLED" &&
+                                    bill.order_from !== 2 && bill.order_from !== null && bill.order_status_code !== "USER_CANCELLED" && bill.order_status_code !== "CUSTOMER_CANCELLED"  && bill.payment_status_code !== "UNPAID" && bill.payment_status_code !== "PARTIALLY_PAID" &&
                                     (
                                         <React.Fragment>
                                             <a
