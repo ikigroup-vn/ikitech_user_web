@@ -1067,12 +1067,12 @@ class PanelBottom extends Component {
             }
             else if(sort_by == "old")
             {
-                params = params + `&descending=false`;
+                params = params + `&sort_by=created_at&descending=false`;
 
             }
             else if(sort_by == "sales")
             {
-                params = params + `&sort_by=sales`;
+                params = params + `&sort_by=sales&descending=true`;
 
             }
             else if(sort_by == "short")
