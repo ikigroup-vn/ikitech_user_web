@@ -218,7 +218,7 @@ class Table extends Component {
             : data.order_from == OrderFrom.ORDER_FROM_POS_IN_STORE ? "POS tại quầy"
               : data.order_from == OrderFrom.ORDER_FROM_POS_SHIPPER ? "POS vận chuyển"
                 : data.order_from == OrderFrom.ORDER_FROM_WEB ? "Web"
-                  : "Pos giao vận"
+                  : "Pos tại quầy"
 
         return (
           <tr className="hover-product" onClick={(e) => this.changePage(e, store_code, data.order_code)}>

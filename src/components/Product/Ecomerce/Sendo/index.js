@@ -335,7 +335,7 @@ class Sendo extends Component {
                       </th>
                       <th>Hình ảnh</th>
                       <th>Tên sản phẩm</th>
-                      <th>Gía</th>
+                      <th>Giá</th>
 
                     </tr>
                   </thead>

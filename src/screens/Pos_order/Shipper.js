@@ -68,7 +68,7 @@ class PanelBottom extends Component {
             load_total_shipping_fee: true,
             cod: "",
             address_store: "",
-            sent_delivery : false,
+            sent_delivery: false,
 
 
         }
@@ -646,29 +646,29 @@ class PanelBottom extends Component {
     onChangeFee = (e) => {
         this.setState({ fee: e.target.value })
     }
-    
-  onChangeCheckBox = (e) => {
-    var { value, name, checked } = e.target
-    this.setState({
-      [name]: checked
-    })
-  }
+
+    onChangeCheckBox = (e) => {
+        var { value, name, checked } = e.target
+        this.setState({
+            [name]: checked
+        })
+    }
     onChangeSelect4 = (selectValue) => {
 
-    var customer = {
-        txtName: selectValue?.customer.name ?? null,
-        txtPhoneNumber: selectValue?.customer.phone_number ?? null,
-        txtEmail: selectValue?.customer.email ?? null,
-        txtSex:selectValue?.customer.sex ?? null,
-        selectedDate: selectValue?.customer.date_of_birth ?? null,
-        txtAddressDetail: selectValue?.customer.address_detail ?? null,
-        txtProvince: selectValue?.customer.province ?? null,
-        txtDistrict: selectValue?.customer.district ?? null,
-        txtWards: selectValue?.customer.wards ?? null,
-    }
-    
-    this.setState({ select_customer: selectValue ,...customer })
-        
+        var customer = {
+            txtName: selectValue?.customer.name ?? null,
+            txtPhoneNumber: selectValue?.customer.phone_number ?? null,
+            txtEmail: selectValue?.customer.email ?? null,
+            txtSex: selectValue?.customer.sex ?? null,
+            selectedDate: selectValue?.customer.date_of_birth ?? null,
+            txtAddressDetail: selectValue?.customer.address_detail ?? null,
+            txtProvince: selectValue?.customer.province ?? null,
+            txtDistrict: selectValue?.customer.district ?? null,
+            txtWards: selectValue?.customer.wards ?? null,
+        }
+
+        this.setState({ select_customer: selectValue, ...customer })
+
     }
     loadCustomers = async (search, loadedOptions, { page }) => {
         console.log("vaooooooooooooooooooo")
@@ -783,9 +783,10 @@ class PanelBottom extends Component {
             width,
             height, cod, select_customer } = this.state
 
-        var { total_shipping_fee , badges } = this.props
+        var { total_shipping_fee, badges } = this.props
 
-        var { select_customer_id, select_customer, address_store , sent_delivery } = this.state
+        var { select_customer_id, select_customer, address_store, sent_delivery } = this.state
+        var { loadShipper } = this.props
 
         return <div style={{
             padding: 5
@@ -818,7 +819,7 @@ class PanelBottom extends Component {
                     <div class="form-group">
                         <label style={{ fontWeight: "500" }} for="product_name">Địa chỉ lấy hàng</label>
 
-                        <div>{`${badges.address_pickup?.address_detail} - ${badges.address_pickup?.wards_name} - ${badges.address_pickup?.district_name} - ${badges.address_pickup?.province_name}`}
+                        <div>{`${badges.address_pickup?.address_detail} - ${badges.address_pickup?.wards_name} - ${badges.address_pickup?.district_name} - ${badges.address_pickup?.province_name}`} <a style = {{textDecoration : "underline"}}>Thay đổi</a>
 
                         </div>
 
@@ -1080,7 +1081,7 @@ class PanelBottom extends Component {
                                 color: "black",
                             }}
                         >
-                            Phí COD
+                            Thu hộ COD
                         </div>
                         <input
                             style={{ fontSize: "18px", "margin-left": "70px" }}
@@ -1168,17 +1169,18 @@ class PanelBottom extends Component {
                         </div>
 
                         <div className="list-payment" style={{ padding: "0 5px" }}>
-                            {this.props.calculate?.length > 0 ? this.props.calculate.map((item, value) => {
-                                return (
-                                    <div className="item-payment" >
-                                        <input type="radio" name="shipment" onClick={() => { this.getShipment(item.partner_id, item.ship_type, item.fee) }} />
-                                        <img style={{ objectFit: "contain" }} src={item.image_url} width={50} height={50}></img>
-                                        <span className="name">{item.name}</span>
-                                        <span className="price">{item.fee ? formatNoD(item.fee) : 0}</span>
+                            {loadShipper == "show" ? <div style={{ textAlign: "center", padding: "10px" }}>...Đang tải</div>
+                                : this.props.calculate?.length > 0 ? this.props.calculate.map((item, value) => {
+                                    return (
+                                        <div className="item-payment" >
+                                            <input type="radio" name="shipment" onClick={() => { this.getShipment(item.partner_id, item.ship_type, item.fee) }} />
+                                            <img style={{ objectFit: "contain" }} src={item.image_url} width={50} height={50}></img>
+                                            <span className="name">{item.name}</span>
+                                            <span className="price">{item.fee ? formatNoD(item.fee) : 0}</span>
 
-                                    </div>
-                                )
-                            }) : <div style={{ textAlign: "center", margin: "auto", color: "red" }}>Vui lòng chọn khối lượng và địa chỉ giao hàng để xem báo giá của nhà vận chuyển</div>}
+                                        </div>
+                                    )
+                                }) : <div style={{ textAlign: "center", margin: "auto", color: "red" }}>Vui lòng chọn khối lượng và địa chỉ giao hàng để xem báo giá của nhà vận chuyển</div>}
 
 
                         </div>
@@ -1208,15 +1210,15 @@ class PanelBottom extends Component {
                         ></input>
                     </div>
                 }
-                    <div class="form-group">
-                {/* <div class="form-check">
+                <div class="form-group">
+                    {/* <div class="form-check">
                   <input class="form-check-input" checked={sent_delivery} name="sent_delivery" onChange={this.onChangeCheckBox} type="checkbox" id="gridCheck" />
                   <label class="form-check-label" for="gridCheck">
                     Xác nhận cho phép giao hàng
                   </label>
                 </div> */}
 
-              </div>
+                </div>
 
 
             </div>
@@ -1387,6 +1389,8 @@ const mapStateToProps = (state) => {
         calculate: state.shipmentReducers.shipment.calculate,
 
         badges: state.badgeReducers.allBadge,
+        loadShipper: state.loadingReducers.disable_shipper,
+
 
 
 

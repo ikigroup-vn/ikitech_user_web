@@ -3,7 +3,7 @@ import Select from "react-select";
 import * as helper from "../../../ultis/helpers";
 
 import { shallowEqual } from "../../../ultis/shallowEqual";
-import { formatNumber } from "../../../ultis/helpers"
+import { formatNumber ,  formatNoD } from "../../../ultis/helpers"
 import getChannel, { IKITECH } from "../../../ultis/channel";
 class InfoProduct extends Component {
   constructor(props) {
@@ -225,10 +225,10 @@ class InfoProduct extends Component {
       });
       console.log("eeeee");
       const price = formatNumber(product.price ?? 0);
-      var _price = new Intl.NumberFormat().format(price);
+      var _price = formatNoD(price);
 
       const import_price = formatNumber(product.import_price ?? 0);
-      var _import_price = new Intl.NumberFormat().format(import_price);
+      var _import_price = formatNoD(import_price);
 
       const quantity_stock = product.quantity_in_stock < 0 ? "" : formatNumber(product.quantity_in_stock);
 

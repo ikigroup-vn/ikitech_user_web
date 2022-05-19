@@ -43,6 +43,8 @@ import history from "../../history";
 import getChannel, { IKITECH, IKIPOS } from "../../ultis/channel";
 
 import NotAccess from "../../components/Partials/NotAccess";
+import Loading from "../../components/Partials/Loading";
+
 import * as OrderFrom from "../../ultis/order_from";
 
 class PostOrder extends Component {
@@ -123,12 +125,13 @@ class PostOrder extends Component {
 
     handleNewState = (newState) => {
         console.log(newState)
+        var customer = {}
         if (this.props.oneCart.id == newState.cartId) {
-            if (typeof newState?.select_customer != "undefined") {
-                var customer = { customer_id : newState?.select_customer?.value ?? null }
+            if (typeof newState.select_customer != "undefined") {
+                 customer = { customer_id : newState?.select_customer?.value ?? null }
             }
             else {
-                var customer = {}
+                 customer = {}
             }
             this.setState({
                 modalUpdateCart: {
@@ -694,7 +697,12 @@ class PostOrder extends Component {
     handleOpenShipment = () => {
         var chooseTab = this.state.openShipment == false ? 1 : 2
         this.setState({ openShipment: !this.state.openShipment, chooseTab, fee: chooseTab == 2 ? null : 0 });
+        this.props.showLoading({
+            type: Types.SHOW_LOADING,
+            loading : "show"
+        })
         this.onNewChange({ fee: chooseTab == 2 ? null : 0 })
+     
     };
 
     ChangeTypeDiscount = (type) => {
@@ -1391,7 +1399,7 @@ class PostOrder extends Component {
                                         <div className="btn-submit-pos">
                                             <div className="row justify-content-around">
                                                 {
-                                                    getChannel() == IKITECH &&
+                                                    getChannel() == IKITECH &&  (oneCart?.total_shipping_fee > 0 || oneCart?.total_shipping_fee === 0 || this.state.openShipment == true) &&
                                                     <div class="form-check">
                                                         <input
                                                             class="form-check-input"
@@ -1402,7 +1410,7 @@ class PostOrder extends Component {
                                                             checked={this.state.payment_method_id == 2}
                                                         />
                                                         <label class="form-check-label" for="flexRadioDefault1">
-                                                            Thanh toán khi nhận hàng
+                                                            Thanh toán khi nhận hàng 
                                                         </label>
                                                     </div>
                                                 }
@@ -1477,7 +1485,7 @@ class PostOrder extends Component {
                                                     onClick={this.handlePayment}
                                                 >
                                                     {
-                                                        oneCart?.total_shipping_fee > 0 || oneCart?.total_shipping_fee === 0 && getChannel() == IKITECH ? "Lên đơn (F9)" : "Thanh toán (F9)"
+                                                        (oneCart?.total_shipping_fee > 0 || oneCart?.total_shipping_fee === 0 || this.state.openShipment == true) && getChannel() == IKITECH ? "Lên đơn (F9)" : "Thanh toán (F9)"
                                                     }
                                                 </button>
                                             </div>
@@ -1507,6 +1515,8 @@ class PostOrder extends Component {
                 ) : (
                     <NotAccess />
                 )}
+                                    <Loading />
+
             </React.Fragment>
         );
     }
@@ -1581,6 +1591,9 @@ const mapDispatchToProps = (dispatch, props) => {
         fetchAllBadge: (store_code, branch_id) => {
             dispatch(notificationAction.fetchAllBadge(store_code, branch_id));
         },
+        showLoading : (data) =>{
+            dispatch(data)
+        }
     };
 };
 

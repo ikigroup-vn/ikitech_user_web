@@ -213,7 +213,7 @@ class Form extends Component {
 
                                 <hr />
 
-                                {bill.from_pos == false &&
+                                {( getChannel() == IKITECH && bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE &&  bill.order_from !== null) &&
                                     <div className="card col-12 pl0" id="user_cart_info">
                                         <InfoShipper
                                             order_allow_change_status={order_allow_change_status}

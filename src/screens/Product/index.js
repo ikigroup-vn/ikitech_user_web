@@ -351,8 +351,8 @@ class Product extends Component {
                       </div>
                     </div>
                     <br></br>
-                    {getChannel() == IKITECH && <General products={products} />
-                    }
+                    {/* {getChannel() == IKITECH && <General products={products} />
+                    } */}
                     <Alert
                       type={Types.ALERT_UID_STATUS}
                       alert={this.props.alert}

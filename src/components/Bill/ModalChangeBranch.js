@@ -30,7 +30,7 @@ class ModalChangeBranch extends Component {
             >
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
-                        <div class="modal-header" style={{ background: themeData().modalNoti }}>
+                        <div class="modal-header" style={{ background: themeData().backgroundColor }}>
                             <h5 class="modal-title">Thông báo</h5>
 
 

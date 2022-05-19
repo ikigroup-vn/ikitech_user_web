@@ -33,11 +33,11 @@ class InfoCustomer extends Component {
         var province_name = typeof customer_address == "undefined" ? null : customer_address.province_name
         var name_receipt = typeof customer_address == "undefined" ? null : customer_address.name
         var id = typeof customer == "undefined" || customer == null ? null : customer.id
-        var order_from = data.order_from == OrderFrom.ORDER_FROM_APP ? "App" 
-        : data.order_from == OrderFrom.ORDER_FROM_POS_DELIVERY ? "POS giao vận"
-        : data.order_from == OrderFrom.ORDER_FROM_POS_IN_STORE ? "POS tại quầy"
-        : data.order_from == OrderFrom.ORDER_FROM_POS_SHIPPER ? "POS vận chuyển"
-        : data.order_from == OrderFrom.ORDER_FROM_WEB ? "Web"
+        var order_from = bill.order_from == OrderFrom.ORDER_FROM_APP ? "App" 
+        : bill.order_from == OrderFrom.ORDER_FROM_POS_DELIVERY ? "POS giao vận"
+        : bill.order_from == OrderFrom.ORDER_FROM_POS_IN_STORE ? "POS tại quầy"
+        : bill.order_from == OrderFrom.ORDER_FROM_POS_SHIPPER ? "POS vận chuyển"
+        : bill.order_from == OrderFrom.ORDER_FROM_WEB ? "Web"
         : "POS tại quầy"
     
         return (

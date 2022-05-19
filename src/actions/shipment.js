@@ -23,6 +23,10 @@ export const fetchAllShipment = (store_code) => {
 
 export const calculateShipment = (store_code, shipment, value) => {
   return async (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING_SHIPPER,
+      loading: "show"
+    })
     for (let index = 0; index < shipment.length; index++) {
       try {
         var res = await  shipmentApi.calculate(store_code, shipment[index].id, value)
@@ -39,6 +43,10 @@ export const calculateShipment = (store_code, shipment, value) => {
       }
       
     }
+    dispatch({
+      type: Types.SHOW_LOADING_SHIPPER,
+      loading: "hide"
+    })
 
   };
 };
