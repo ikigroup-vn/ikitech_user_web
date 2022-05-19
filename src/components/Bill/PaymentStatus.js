@@ -54,7 +54,7 @@ class PaymentStatus extends Component {
                 if(active != "")
                 {
                     return (
-                        <li class={`${active}`} >
+                        <li class={`${active} hover-product`} >
                             <a >{item.name}</a>
                         </li>
                     )
@@ -65,7 +65,7 @@ class PaymentStatus extends Component {
                         style = {{background : disable}}
                         data-toggle={disable_modal}
                         data-target="#postModalPayment"
-                        class={`${active}`} onClick={() => { this.changeStatus(item.code , item.name) }}>
+                        class={`${active} hover-product` } onClick={() => { this.changeStatus(item.code , item.name) }}>
                             <a >{item.name}</a>
                         </li>
                     )

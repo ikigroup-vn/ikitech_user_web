@@ -32,7 +32,8 @@ class Topbar extends Component {
             selectTap: -1,
             fullScreen: false,
             idCart: "",
-            branchId: ""
+            branchId: "",
+            order_from : 2,
         }
 
         this.refSearchProduct = React.createRef()
@@ -48,7 +49,19 @@ class Topbar extends Component {
 
 
     }
+    // componentWillUpdate(nextProps, nextState) {
+    //     console.log("thay doi" , nextState)
+    //     this.props.onNewChange(nextState)
+    // }
+
     componentWillReceiveProps(nextProps) {
+
+        // if(this.props.openShipment != nextProps.openShipment){
+        //     console.log("da vao" ,nextProps.openShipment )
+        //     this.setState({order_from : nextProps.openShipment? 3 : 2})
+        // }
+
+        
         if (!shallowEqual(nextProps.branchStore, this.props.branchStore)) {
 
 
@@ -417,13 +430,13 @@ class Topbar extends Component {
                                 </div>
                             </li>
 
-                            <div style={{
+                            <div style={{margin : "auto 0px"
                             }}>
                                 <ul className="navbar-nav ml-auto" style={{
                                     display: "flex", alignItems: "center", justifyContent: "space-between",
 
                                 }}>
-                                    <li title="Thêm phí vận chuyển" className={`nav-item add-cart ${getChannel() == IKITECH ? "" : "invisible"}`} onClick = {()=>this.props.handleOpenShipment(true)}>
+                                    <li title="Giao hàng" className={`nav-item add-cart ${getChannel() == IKITECH ? "" : "invisible"}`} onClick = {()=>this.props.handleOpenShipment(true)}>
                                         <i class="fas fa-shipping-fast" ></i>
                                     </li>
                                     

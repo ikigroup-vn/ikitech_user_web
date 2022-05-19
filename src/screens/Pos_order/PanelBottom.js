@@ -1307,7 +1307,7 @@ class PanelBottom extends Component {
                                     "margin-bottom": "2px"
                                 }}
                                 onClick={this.showFilter}
-                                class={`btn btn-secondary btn-sm `}
+                                class={`btn btn-warning btn-sm `}
                             >
                                 <i class="fa  fa-filter"></i>
                             </button>

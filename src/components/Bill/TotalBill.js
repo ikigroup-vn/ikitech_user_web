@@ -92,7 +92,7 @@ class TotalBill extends Component {
                     <div style={{ textAlign: "center" }}>
                         <a
                             id="sale_btn_accepted"
-                            className={`sale_btn_action sale_btn_action_10 btn btn-info w100p ${agree} ${disable}`}
+                            className={`sale_btn_action sale_btn_action_10 btn btn-info w100p ${agree}`}
                             data-toggle="modal"
                             data-target="#postModal"
                             onClick={() => { this.changeStatus("PACKING", "Đang chuẩn bị hàng") }}
@@ -102,7 +102,7 @@ class TotalBill extends Component {
 
                         <a
                             id="sale_btn_accepted"
-                            className={`sale_btn_action sale_btn_action_10 btn btn-danger w100p ${cancel} ${disable}`}
+                            className={`sale_btn_action sale_btn_action_10 btn btn-danger w100p ${cancel}`}
                             data-toggle="modal"
                             data-target="#postModal"
                             onClick={() => { this.changeStatus("USER_CANCELLED", "Shop đã hủy") }}

@@ -120,7 +120,7 @@ class CardProduct extends Component {
                                 <div class="card-body" style={{ padding: ' 0 5px' }}>
                                     <p class="card-title" style={{ margin: '0', overflow: "hidden", whiteSpace: "nowrap", textOverflow: 'ellipsis' }}>{data.name}</p>
                                     <p class="card-text price">{
-                                        data.min_price == data.max_price ? format(Number(data.min_price)) : `${format(Number(data.min_price))}- ${format(Number(data.max_price))}`}</p>
+                                        data.min_price == data.max_price ? format(Number(data.min_price)) : `${format(Number(data.min_price))}-${format(Number(data.max_price))}`}</p>
                                 </div>
                             </div>
                         </a>

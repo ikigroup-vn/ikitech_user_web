@@ -35,7 +35,9 @@ class TotalBill extends Component {
         return check
 
     }
-
+    changeStatusModal = (statusCode, name) => {
+        this.props.handleUpdateStatusOrder({ order_status_code: statusCode, statusName: name })
+    }
 
     render() {
         var { bill } = this.props
@@ -52,7 +54,7 @@ class TotalBill extends Component {
         var disable = this.props.order_allow_change_status == true ? "show" : "hide"
         var list_items = filter_arr(bill.line_items);
 
-        console.log(this.checkRefundAll(list_items));
+        console.log(agree , cancel);
         return (
             <div className="box box-warning cart_wrapper mb0">
 
@@ -142,7 +144,7 @@ class TotalBill extends Component {
 
 
                     {
-                        getChannel() == IKIPOS && (
+                        (getChannel() == IKIPOS || bill.order_from == 2 || bill.order_from == null) && (
                             <React.Fragment>
                                 {/* <div>
                                 <p className="sale_user_label bold">
@@ -168,7 +170,7 @@ class TotalBill extends Component {
                         )
                     }
                     {
-                        getChannel() == IKIPOS && (
+                        (bill.order_from == 2 || bill.order_from == null) && (
                             <div style={{ textAlign: "center" }}>
                                 {
                                     bill.payment_status_code == "UNPAID" || bill.payment_status_code == "PARTIALLY_PAID" ?
@@ -192,13 +194,13 @@ class TotalBill extends Component {
                                                 <a
                                                     style={{ color: "white" }}
                                                     id="sale_btn_accepted"
-                                                    className={`sale_btn_action sale_btn_action_10 btn btn-secondary w100p ${cancel} ${disable}`}
+                                                    className={`sale_btn_action sale_btn_action_10 btn btn-secondary w100p ${cancel} `}
                                                 > Đã hoàn hết sản phẩm</a>
                                             ) :
                                                 (this.state.check == true ? (<a
                                                     style={{ color: "white" }}
                                                     id="sale_btn_accepted"
-                                                    className={`sale_btn_action sale_btn_action_10 btn btn-secondary w100p ${cancel} ${disable}`}
+                                                    className={`sale_btn_action sale_btn_action_10 btn btn-secondary w100p ${cancel} `}
 
                                                     onClick={() => { this.changeStatus(false) }}
 
@@ -207,7 +209,7 @@ class TotalBill extends Component {
                                                 </a>) : (<a
                                                     style={{ color: "white" }}
                                                     id="sale_btn_accepted"
-                                                    className={`sale_btn_action sale_btn_action_10 btn btn-danger w100p ${cancel} ${disable}`}
+                                                    className={`sale_btn_action sale_btn_action_10 btn btn-danger w100p ${cancel} `}
 
                                                     onClick={() => { this.changeStatus(true) }}
 
@@ -231,88 +233,55 @@ class TotalBill extends Component {
                     {
                         getChannel() == IKITECH && (
                             <div style={{ textAlign: "center" }}>
+
+
                                 {
-                                    bill.payment_status_code == "PAID" &&
-                                    (
-                                        bill.order_code_refund != null || this.checkRefundAll(list_items) == true ? (
-                                            <a
-                                                style={{ color: "white" }}
-                                                id="sale_btn_accepted"
-                                                className={`sale_btn_action sale_btn_action_10 btn btn-secondary w100p ${cancel} ${disable}`}
-                                            > Đã hoàn hết sản phẩm</a>
-                                        ) :
-                                            (this.state.check == true ? (<a
-                                                style={{ color: "white" }}
-                                                id="sale_btn_accepted"
-                                                className={`sale_btn_action sale_btn_action_10 btn btn-secondary w100p ${cancel} ${disable}`}
-
-                                                onClick={() => { this.changeStatus(false) }}
-
-                                            >
-                                                Hủy
-                                            </a>) : (<a
-                                                style={{ color: "white" }}
-                                                id="sale_btn_accepted"
-                                                className={`sale_btn_action sale_btn_action_10 btn btn-danger w100p ${cancel} ${disable}`}
-
-                                                onClick={() => { this.changeStatus(true) }}
-
-                                            >
-                                                Hoàn tiền
-                                            </a>)
-                                            )
-                                    )
-
-
-
-                                }
-                                {
-                                    bill.payment_status_code == "UNPAID" && bill.from_pos == false &&  bill.order_status_code !== "USER_CANCELLED"  &&  bill.order_status_code !== "CUSTOMER_CANCELLED" &&
+                                    bill.payment_status_code == "UNPAID" && bill.order_from !== 2 && bill.order_from !== null && bill.order_status_code !== "USER_CANCELLED" && bill.order_status_code !== "CUSTOMER_CANCELLED" &&
                                     (
                                         <React.Fragment>
                                             <a
                                                 id="sale_btn_accepted"
-                                                className={`sale_btn_action sale_btn_action_10 btn btn-info w100p ${agree} ${disable}`}
+                                                className={`sale_btn_action sale_btn_action_10 btn btn-info w100p ${agree} `}
                                                 data-toggle="modal"
                                                 data-target="#postModal"
-                                                onClick={() => { this.changeStatus("PACKING", "Đang chuẩn bị hàng") }}
+                                                onClick={() => { this.changeStatusModal("PACKING", "Đang chuẩn bị hàng") }}
                                             >
                                                 <i className="fa fa-check" /> Phê duyệt
                                             </a>
 
                                             <a
                                                 id="sale_btn_accepted"
-                                                className={`sale_btn_action sale_btn_action_10 btn btn-danger w100p ${cancel} ${disable}`}
+                                                className={`sale_btn_action sale_btn_action_10 btn btn-danger w100p ${cancel}`}
                                                 data-toggle="modal"
                                                 data-target="#postModal"
-                                                onClick={() => { this.changeStatus("USER_CANCELLED", "Shop đã hủy") }}
+                                                onClick={() => { this.changeStatusModal("USER_CANCELLED", "Shop đã hủy") }}
 
                                             >
                                                 <i className="fa fa-times" /> Hủy đơn
                                             </a>
                                         </React.Fragment>
                                     )
-                                    
+
                                 }
 
-{
-                                    bill.payment_status_code == "UNPAID" && bill.from_pos == false && (bill.order_status_code == "USER_CANCELLED"  || bill.order_status_code == "CUSTOMER_CANCELLED") &&
+                                {
+                                    bill.payment_status_code == "UNPAID" && bill.order_from !== 2 && bill.order_from !== null && (bill.order_status_code == "USER_CANCELLED" || bill.order_status_code == "CUSTOMER_CANCELLED") &&
                                     (
                                         <React.Fragment>
-                            
-                                            <a 
-                                            style = {{background : "#8f9392" , color : "white"}}
-                                            disabled
-                                                id="sale_btn_accepted"
-                                                className={`sale_btn_action sale_btn_action_10 btn btn-danger w100p ${cancel} ${disable}`}
-                                          
+
+                                            <a
+                                                style={{ background: "#8f9392", color: "white" }}
+                                                disabled
+                                                id="sale_btn_accepted dis"
+                                                className={`sale_btn_action sale_btn_action_10 btn btn-danger w100p ${cancel}`}
+
 
                                             >
                                                 <i className="fa fa-times" /> Hủy đơn
                                             </a>
                                         </React.Fragment>
                                     )
-                                    
+
                                 }
 
 

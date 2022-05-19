@@ -154,6 +154,11 @@ class CardProduct extends Component {
                     <div className="img-container">
                         <img style={{ width: "100%", height: "90px" }} src={avt} alt="" />
                     </div>
+                    {quantity && <div class="inventory-tag"  style={{
+                        top: "0px",
+                        right: "5px"
+                    }}>SL: {quantity}</div>}
+
                     {product.product_discount && <div class="discount-tag">{product.product_discount.value}%</div>}
 
                 </div>
@@ -164,10 +169,7 @@ class CardProduct extends Component {
                 <div className="price" >
                     {
                         product.min_price == product.max_price ? format(Number(product.min_price)) : `${format(Number(product.min_price))}- ${format(Number(product.max_price))}`}                </div>
-                <div className="prev-price">
-                    Số lượng:  {quantity}
-
-                </div>
+               
             </div>
         )
     }
