@@ -49,9 +49,9 @@ class InfoCustomer extends Component {
             >
                 <div class="row col-md-12 col-xs-12 form-group">
                     <div class="info_user" style={{ marginTop: "20px" }}>
-                        {bill.from_pos == true && <p class="sale_user_label" id="sale_user_name">
+                         <p class="sale_user_label" id="sale_user_name">
                             <b>Đơn này từ {order_from}</b>
-                        </p>}
+                        </p>
                         <p class="sale_user_label" id="sale_user_name">
                             Khách hàng: <Link id="user_name" to ={`/customer/detail/${store_code}/${id}`}>{name}</Link>
                         </p>

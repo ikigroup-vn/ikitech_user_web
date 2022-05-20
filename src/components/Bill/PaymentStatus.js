@@ -80,16 +80,16 @@ class PaymentStatus extends Component {
 
 
     render() {
-        var { bill } = this.props
+        var { bill , showBoard } = this.props
         var status  = filter_var(bill.payment_status_code);
 
         return (
             <nav class="left-nav hidden-xs hidden-sm hidden-md">
-                <ul class="nolist" >
+                <ul class="nolist" style = {{minHeight : "250px"}} >
                     <li style={{ background: "rgb(31 178 151)" }} class="">
                         <a href="#">Trạng thái thanh toán</a>
                     </li>
-                    {this.showShipmetStatus(status)}
+                    {showBoard == true && this.showShipmetStatus(status)}
 
                 </ul>
             </nav>

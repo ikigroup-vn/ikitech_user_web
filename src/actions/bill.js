@@ -114,6 +114,15 @@ export const getCalculate = (store_code, data, branch_id = getBranchId()) => {
           type: Types.GET_CALCULATE,
           data: {},
         });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
       });
 
   };

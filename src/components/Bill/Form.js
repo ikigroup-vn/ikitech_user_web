@@ -102,14 +102,15 @@ class Form extends Component {
                 />
                 <section className="content">
                     <div className="row">
-                        {(getChannel() == IKITECH && bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE  && bill.order_from !== null &&
-                        bill.order_status_code !== "USER_CANCELLED" && bill.order_status_code !== "CUSTOMER_CANCELLED" )&& (
+                        {(getChannel() == IKITECH && bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE  && bill.order_from !== null
+                       )&& (
                             <div className="col-lg-2 col-md-4 col-sm-12 ">
                                 <div className="row" id="sale_nav_container">
                                     <div className="" style={{ width: "100%" }}>
 
                                         <aside class="side-menu">
                                             <OrderStatus
+                                                showBoard = {bill.order_status_code !== "USER_CANCELLED" && bill.order_status_code !== "CUSTOMER_CANCELLED" ? true : false}
                                                 order_allow_change_status={order_allow_change_status}
                                                 handleUpdateStatusOrder={this.handleUpdateStatusOrder}
                                                 billId={billId}
@@ -125,7 +126,7 @@ class Form extends Component {
                                         <aside class="side-menu">
                                             <PaymentStatus
                                                 order_allow_change_status={order_allow_change_status}
-
+                                                showBoard = {bill.order_status_code !== "USER_CANCELLED" && bill.order_status_code !== "CUSTOMER_CANCELLED" ? true : false}
                                                 handleUpdateStatusPayment={this.handleUpdateStatusPayment}
                                                 bill={bill} />
                                         </aside>
@@ -136,7 +137,7 @@ class Form extends Component {
                             </div>
                         )}
 
-                        <div className={getChannel() == IKIPOS || bill.order_from == OrderFrom.ORDER_FROM_POS_IN_STORE ||  bill.order_from == null || bill.order_status_code == "USER_CANCELLED" || bill.order_status_code == "CUSTOMER_CANCELLED" ? css_IKIPOS : css_IKITECH}>
+                        <div className={getChannel() == IKIPOS || bill.order_from == OrderFrom.ORDER_FROM_POS_IN_STORE ||  bill.order_from == null  ? css_IKIPOS : css_IKITECH}>
                             {
                                 getChannel() == IKIPOS ? (<InfoProductPos check = {check} store_code={store_code} bills = {bills} bill={bill} />
                                 ) : <InfoProductPos check = {check} store_code={store_code} bills = {bills} bill={bill} />
@@ -160,7 +161,6 @@ class Form extends Component {
                                                     </li>
                                                 }
                                                 {
-                                                    ( getChannel() == IKITECH && bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE &&  bill.order_from !== null) &&
                                                     <li class="nav-item">
                                                         <a class="nav-link " data-toggle="tab" href="#car" role="tab" aria-controls="car" aria-selected="false">Lịch sử thanh toán</a>
                                                     </li>

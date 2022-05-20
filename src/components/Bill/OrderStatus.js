@@ -96,13 +96,13 @@ class OrderStatus extends Component {
 
 
     render() {
-        var { bill } = this.props
+        var { bill , showBoard } = this.props
         var status = filter_var(bill.order_status_code);
         var disable = this.props.order_allow_change_status == true ? "" : "#cac4c4"
 
         return (
             <nav class="left-nav hidden-xs hidden-sm hidden-md">
-                <ul class="nolist">
+                <ul class="nolist" style = {{minHeight : "250px"}}>
                     <li style={{ background: "rgb(31 178 151)" }} class="">
                         <a >Trạng thái đơn hàng</a>
 
@@ -112,7 +112,8 @@ class OrderStatus extends Component {
                         overflow: "auto",
                         background : disable
                     }}>
-                        {this.showOrderStatus(status)}
+                        
+                        {showBoard == true && this.showOrderStatus(status)}
 
                     </li>
 
