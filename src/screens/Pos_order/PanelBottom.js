@@ -1049,41 +1049,35 @@ class PanelBottom extends Component {
         e.preventDefault()
         const branch_id = getBranchId()
 
-        var {  filter_sort, filterCategory } = this.state
+        var { filter_sort, filterCategory } = this.state
         var category_ids = filterCategory;
         var sort_by = filter_sort
         var params = `&limit=${this.props.limit}`
-            // params = params + `&descending=${descending}`;
+        // params = params + `&descending=${descending}`;
         if (category_ids && category_ids != "") {
             if (category_ids == "all") { }
             else
                 params = params + `&category_ids=${category_ids}`;
         }
-        if (sort_by && sort_by != "")
-        {
-            if(sort_by == "new")
-            {
+        if (sort_by && sort_by != "") {
+            if (sort_by == "new") {
                 params = params;
             }
-            else if(sort_by == "old")
-            {
+            else if (sort_by == "old") {
                 params = params + `&sort_by=created_at&descending=false`;
 
             }
-            else if(sort_by == "sales")
-            {
+            else if (sort_by == "sales") {
                 params = params + `&sort_by=sales&descending=true`;
 
             }
-            else if(sort_by == "short")
-            {
+            else if (sort_by == "short") {
                 params = params + `&sort_by=sales&descending=false`;
 
             }
-            else
-            {
+            else {
                 params = params;
- 
+
             }
 
         }
@@ -1140,9 +1134,9 @@ class PanelBottom extends Component {
             }}>
                 <div className={`filter-product-pos ${show}`} >
                     <div className="header" style={{
-                        background: "rgb(229, 111, 37)",
-                        padding: "12px",
-                        color: "white"
+                        "padding": "12px",
+                        color: "black",
+                        "border-bottom": "1px solid #b6a6a6"
                     }}>
                         <h5 className="title">Lọc sản phẩm</h5>
 

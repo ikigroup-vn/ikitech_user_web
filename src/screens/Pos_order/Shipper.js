@@ -346,6 +346,7 @@ class PanelBottom extends Component {
                         label: oneCart.wards_name,
                         value: oneCart.wards
                     },
+                    type_ship : 0,
                     select_customer: oneCart.customer ? { value: oneCart.customer.id, label: `${oneCart.customer.name}  (${oneCart.customer.phone_number})`, customer: oneCart.customer } : null
 
                 }
@@ -484,7 +485,7 @@ class PanelBottom extends Component {
     }
 
     passDataAddress = (data) =>{
-        this.setState({modalAddress : data})
+        this.setState({modalAddress : data , resetId : randomString(10)})
     }
 
 
@@ -800,7 +801,7 @@ class PanelBottom extends Component {
 
         var { select_customer_id, select_customer, address_store, sent_delivery } = this.state
         var { loadShipper } = this.props
-
+        var check =  (txtProvince != "" && txtDistrict != "" && txtWards != "") && (weight != "" || length != "" || width != "" || height != "") ? true : false
         return <div style={{
             padding: 5
         }}>
@@ -1194,7 +1195,7 @@ class PanelBottom extends Component {
 
                         <div className="list-payment" style={{ padding: "0 5px" }}>
                             {loadShipper == "show" ? <div style={{ textAlign: "center", padding: "10px" }}>...Đang tải</div>
-                                : this.props.calculate?.length > 0 && this.state.isError == false ? this.props.calculate.map((item, value) => {
+                                : this.props.calculate?.length > 0 && this.state.isError == false && check==true ? this.props.calculate.map((item, value) => {
                                     return (
                                         <div className="item-payment" >
                                             <input type="radio" name="shipment" onClick={() => { this.getShipment(item.partner_id, item.ship_type, item.fee) }} />
@@ -1364,6 +1365,9 @@ class PanelBottom extends Component {
             this.setState({ isShowDetailCombo: !this.state.isShowDetailCombo })
 
     }
+    resetModal = () =>{
+        this.setState({resetId : randomString(10)})
+    }
     render() {
         var { limit, passNumPage, store_code, products, shipment , wards,
             province,
@@ -1390,7 +1394,7 @@ class PanelBottom extends Component {
 
                 {this.buildTabCustomer()}
                 {/* <Form wards = {wards} district = {district} province = {province} history={history} storeAId={storeAId} store_address={store_address} store_code={store_code} /> */}
-               <ModalAddress wards = {wards} district = {district} province = {province}   store_code={store_code} store_address = {this.state.modalAddress}></ModalAddress>
+               <ModalAddress resetId = {this.state.resetId} resetModal = {this.resetModal} wards = {wards} district = {district} province = {province}   store_code={store_code} store_address = {this.state.modalAddress}></ModalAddress>
             </div>
         );
     }

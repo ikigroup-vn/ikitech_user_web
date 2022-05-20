@@ -78,7 +78,7 @@ class PostOrder extends Component {
             is_use_points: false,
             selectPrice: -1,
             exchange: 0,
-            payment_method_id: getChannel() == IKITECH ? 2 : 0,
+            payment_method_id:  0,
             priceCustomer: 0,
             customerNote: "",
             totalAfterDiscount: 0,
@@ -126,25 +126,69 @@ class PostOrder extends Component {
     handleNewState = (newState) => {
         console.log(newState)
         var customer = {}
+        var customer_name = {}
+        var customer_phone = {}
+        var province = {}
+        var district = {}
+        var address_detail = {}
+        var wards = {}
+
         if (this.props.oneCart.id == newState.cartId) {
             if (typeof newState.select_customer != "undefined") {
-                 customer = { customer_id : newState?.select_customer?.value ?? null }
+                customer = { customer_id: newState?.select_customer?.value ?? null }
             }
             else {
-                 customer = {}
+                customer = {}
+            }
+
+            if (typeof newState.txtName != "undefined") {
+                customer_name = { customer_name: newState?.txtName ?? null }
+            }
+            else {
+                customer_name = {}
+            }
+            if (typeof newState.txtPhoneNumber != "undefined") {
+                customer_phone = { customer_phone: newState?.txtPhoneNumber ?? null }
+            }
+            else {
+                customer_phone = {}
+            }
+            if (typeof newState.txtProvince != "undefined") {
+                province = { province: newState?.txtProvince ?? null }
+            }
+            else {
+                province = {}
+            }
+            if (typeof newState.txtDistrict != "undefined") {
+                district = { district: newState?.txtDistrict ?? null }
+            }
+            else {
+                district = {}
+            }
+            if (typeof newState.txtWards != "undefined") {
+                wards = { wards: newState?.txtWards ?? null }
+            }
+            else {
+                wards = {}
+            }
+            if (typeof newState.txtAddressDetail != "undefined") {
+                address_detail = { address_detail: newState?.txtAddressDetail ?? null }
+            }
+            else {
+                address_detail = {}
             }
             this.setState({
                 modalUpdateCart: {
                     cartId: newState.cartId,
-                    customer_name: newState.txtName,
-                    customer_phone: newState.txtPhoneNumber,
+                    ...customer_name,
+                    ...customer_phone,
                     customer_email: newState.txtEmail,
                     customer_sex: newState.txtSex,
                     customer_date_of_birth: newState.selectedDate,
-                    address_detail: newState.txtAddressDetail,
-                    province: newState.txtProvince,
-                    district: newState.txtDistrict,
-                    wards: newState.txtWards,
+                    ...address_detail,
+                    ...province,
+                    ...district,
+                    ...wards,
                     shipper_type: newState.ship_type,
                     total_shipping_fee: newState.fee === 0 ? 0 : newState.fee > 0 ? newState.fee : null,
                     partner_shipper_id: newState.partner_id,
@@ -442,7 +486,13 @@ class PostOrder extends Component {
         var data = null
         var { oneCart } = this.props
         if (getChannel() == IKITECH) {
-            if (this.state.oneCart?.total_shipping_fee > 0 || oneCart?.total_shipping_fee === 0) {
+
+            if (this.state.oneCart?.total_shipping_fee > 0 || this.state.openShipment == true) {
+                if (oneCart.customer_id == "" || oneCart.customer_id == null) {
+                    // this.props.showError({
+
+                    // })
+                }
                 data = {
                     payment_method_id: this.state.payment_method_id,
                     amount_money: 0,
@@ -499,7 +549,7 @@ class PostOrder extends Component {
                 selectPrice: -1,
                 namePos: nextProps.oneCart.name,
                 customerNote: nextProps.oneCart.customer_note ?? "",
-                payment_method_id: nextProps.oneCart.payment_method_id ?? (getChannel() == IKITECH ? 2 : 0),
+                payment_method_id: nextProps.oneCart.payment_method_id ?? (nextProps.total_shipping_fee > 0 ? 2 : 0),
                 discount: nextProps.oneCart.discount,
                 is_use_points:
                     nextProps.oneCart.info_cart.is_use_points !== null
@@ -696,10 +746,10 @@ class PostOrder extends Component {
     };
     handleOpenShipment = () => {
         var chooseTab = this.state.openShipment == false ? 1 : 2
-        this.setState({ openShipment: !this.state.openShipment, chooseTab, fee: chooseTab == 2 ? null : 0 });
-   
+        this.setState({ openShipment: !this.state.openShipment, chooseTab, fee: chooseTab == 2 ? null : 0 , payment_method_id : this.state.openShipment ? 0 : 2});
+
         this.onNewChange({ fee: chooseTab == 2 ? null : 0 })
-     
+
     };
 
     ChangeTypeDiscount = (type) => {
@@ -815,7 +865,7 @@ class PostOrder extends Component {
                 }
                 : null;
         var total_shipping_fee = oneCart?.total_shipping_fee
-        console.log("hehe",total_shipping_fee)
+        console.log("hehe", total_shipping_fee)
         return (
             <React.Fragment>
                 {typeof isShow == "undefined" ? (
@@ -1397,7 +1447,7 @@ class PostOrder extends Component {
                                         <div className="btn-submit-pos">
                                             <div className="row justify-content-around">
                                                 {
-                                                    getChannel() == IKITECH &&   (this.state.openShipment == true || total_shipping_fee > 0)  &&
+                                                    getChannel() == IKITECH && (this.state.openShipment == true || total_shipping_fee > 0) &&
 
                                                     <div class="form-check">
                                                         <input
@@ -1409,12 +1459,12 @@ class PostOrder extends Component {
                                                             checked={this.state.payment_method_id == 2}
                                                         />
                                                         <label class="form-check-label" for="flexRadioDefault1">
-                                                            Thanh toán khi nhận hàng 
+                                                            Thanh toán khi nhận hàng
                                                         </label>
                                                     </div>
                                                 }
                                                 {
-                                                    ( typeof total_shipping_fee == "undefined" || total_shipping_fee == null || total_shipping_fee == 0 ) && this.state.openShipment == false && (
+                                                    (typeof total_shipping_fee == "undefined" || total_shipping_fee == null || total_shipping_fee == 0) && this.state.openShipment == false && (
 
                                                         <React.Fragment>
                                                             <div class="form-check">
@@ -1516,7 +1566,7 @@ class PostOrder extends Component {
                 ) : (
                     <NotAccess />
                 )}
-                                    <Loading />
+                <Loading />
 
             </React.Fragment>
         );
@@ -1592,7 +1642,7 @@ const mapDispatchToProps = (dispatch, props) => {
         fetchAllBadge: (store_code, branch_id) => {
             dispatch(notificationAction.fetchAllBadge(store_code, branch_id));
         },
-        showLoading : (data) =>{
+        showLoading: (data) => {
             dispatch(data)
         }
     };

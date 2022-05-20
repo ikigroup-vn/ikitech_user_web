@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { formatNumber } from '../../ultis/helpers'
+import { formatNumber , formatNoD } from '../../ultis/helpers'
 import { shallowEqual } from '../../ultis/shallowEqual'
 import themeData from "../../ultis/theme_data";
 
@@ -20,12 +20,13 @@ class EditStock extends Component {
         var value = e.target.value
         var name = e.target.name
         const _value = formatNumber(value)
+        console.log(_value)
         if (!isNaN(Number(_value))) {
             if (e.target.value === "") {
                 this.setState({ [name]: "" });
             }
             else {
-                this.setState({ [name]: value });
+                this.setState({ [name]: _value });
 
             }
         }
@@ -60,8 +61,12 @@ class EditStock extends Component {
         if (
             (!shallowEqual(nextProps.modalSub, this.props.modalSub))
         ) {
+            console.log("aaaaaaaaa", nextProps.modalSub,)
+            var cost_of_capital = nextProps.modalSub.sub.cost_of_capital
+
             this.setState({
-                cost_of_capital:  typeof nextProps.modalSub.sub.cost_of_capital !== "undefined"  ? Math.ceil(nextProps.modalSub.sub.cost_of_capital) : 0,
+               
+                cost_of_capital:  typeof cost_of_capital !== "undefined" && cost_of_capital !== 0 ? Math.ceil(cost_of_capital) : 0,
 
                 quantity_in_stock: nextProps.modalSub.sub.stock, 
                 nameElement: nextProps.modalSub.NameElement,
@@ -71,9 +76,12 @@ class EditStock extends Component {
             })
         }
         if (!shallowEqual(nextProps.modalElement, this.props.modalElement)) {
-            console.log("bbbbbbbbbbbb")
+            console.log("bbbbbbbbbbbb",nextProps.modalElement)          
+              var cost_of_capital = nextProps.modalElement.element.cost_of_capital
+
             this.setState({
-                cost_of_capital:  typeof nextProps.modalElement.element.cost_of_capital !== "undefined"  ? Math.ceil(nextProps.modalElement.element.cost_of_capital) : 0,
+              
+                cost_of_capital:  typeof cost_of_capital !== "undefined" && cost_of_capital !== 0 ? Math.ceil(cost_of_capital) : 0,
 
                 quantity_in_stock: nextProps.modalElement.element.stock,
                 NameDistribute: nextProps.modalElement.NameDistribute,
@@ -83,10 +91,11 @@ class EditStock extends Component {
             })
         }
         if (!shallowEqual(nextProps.modalProduct, this.props.modalProduct)) {
-            console.log("ccccccccccccc")
+            var cost_of_capital = nextProps.modalProduct.data.inventory?.main_cost_of_capital
+            console.log("ccccccccccccc",nextProps.modalProduct)
             this.setState({
 
-                cost_of_capital:  typeof nextProps.modalProduct.data.inventory?.main_cost_of_capital !== "undefined"  ? Math.ceil(nextProps.modalProduct.data.inventory?.main_cost_of_capitall) : 0,
+                cost_of_capital:  typeof cost_of_capital !== "undefined" && cost_of_capital !== 0 ? Math.ceil(cost_of_capital) : 0,
 
                 quantity_in_stock: nextProps.modalProduct.data.inventory?.main_stock,
                 idProduct: nextProps.modalProduct.data.id,
@@ -100,6 +109,8 @@ class EditStock extends Component {
 
     render() {
         const { cost_of_capital, quantity_in_stock } = this.state
+        console.log( formatNoD(cost_of_capital) , cost_of_capital )
+        
         return (
             <div class="modal" id="myModal" >
                 <div class="modal-dialog" >
@@ -124,7 +135,7 @@ class EditStock extends Component {
                                     id="customer_copyright"
                                     autocomplete="off"
                                     onChange={this.onChange}
-                                    value={cost_of_capital}
+                                    value={formatNoD(cost_of_capital)}
                                     name="cost_of_capital"
                                 />
                             </div>
@@ -136,7 +147,7 @@ class EditStock extends Component {
                                     id="customer_copyright"
                                     autocomplete="off"
                                     onChange={this.onChange}
-                                    value={quantity_in_stock}
+                                    value={formatNoD(quantity_in_stock)}
                                     name="quantity_in_stock"
                                 />
                             </div>

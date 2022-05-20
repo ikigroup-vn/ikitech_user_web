@@ -146,7 +146,7 @@ export const formatVND = (str) => {
     .split("")
     .reverse()
     .reduce((prev, next, index) => {
-      return (index % 3 ? next : next + ",") + prev;
+      return (index % 3 ? next : next + ".") + prev;
     });
 };
 
@@ -169,7 +169,7 @@ export const format = (number) => {
 };
 export const formatNoD = (number) => {
   if (number == "" || number == null) number = 0;
-  var number = number.toString().replace(/\./g, ",");
+  var number = number.toString().replace(/\./g, ".");
    number = parseInt(number);
 
   let dollarUSLocale = Intl.NumberFormat("en-US");

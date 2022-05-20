@@ -23,7 +23,7 @@ export const fetchAllStoreA = (id) => {
     });
   };
 };
-export const createStoreA = (store_code,data) => {
+export const createStoreA = (store_code,data,funcModal) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -32,6 +32,10 @@ export const createStoreA = (store_code,data) => {
     storeAApi
       .createStoreA(store_code,data)
       .then((res) => {
+        if(funcModal)
+        {
+          funcModal()
+        }
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide"
@@ -45,8 +49,20 @@ export const createStoreA = (store_code,data) => {
             content: res.data.msg,
           },
         });
-        history.goBack();
-      })
+        badgeApi.fetchAllBadge(store_code,getBranchId()).then((res) => {
+          
+          if(res.data.code !== 401)
+          {
+          dispatch({
+            type: Types.FETCH_ALL_BADGE,
+            data: res.data.data,
+          });
+      
+       
+        }
+        })
+        if(funcModal==null)
+        history.goBack();      })
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,

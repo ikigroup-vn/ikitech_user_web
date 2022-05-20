@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { format, formatNumber , formatNoD } from '../../ultis/helpers'
+import { format, formatNumber , formatNoD , formatVND } from '../../ultis/helpers'
 import { shallowEqual } from '../../ultis/shallowEqual'
 
 class ItemImportStock extends Component {
@@ -53,7 +53,21 @@ class ItemImportStock extends Component {
         this.setState({ item: this.props.item })
     }
     onChange = (e) => {
-        this.setState({ import_price: e.target.value })
+        var value = e.target.value
+        var name = e.target.name
+        
+
+        const _value = formatNumber(value)
+        if (!isNaN(Number(_value))) {
+            if (e.target.value === "") {
+                this.setState({ [name]: "" });
+            }
+            else {
+                this.setState({ [name]: _value });
+
+            }
+        }
+        // this.setState({ import_price: e.target.value })
     }
 
     subQuantity() {
@@ -78,6 +92,12 @@ class ItemImportStock extends Component {
         const { currentQuantity, import_price } = this.state
 
         const { item, index } = this.props
+        var value_import = ""
+        try {
+            value_import = format(import_price).slice(0, -2)
+        } catch (error) {
+            value_import = formatNoD(import_price)
+        }
         return (
             <div className='list-group-item' key={index} style={{ marginBottom: "10px", borderTopWidth: "1px", borderRadius: "7px" }}>
                 <div className='row' style={{ position: "relative", width: "100%", margin: "0" }}>
@@ -112,7 +132,7 @@ class ItemImportStock extends Component {
                 </div>
                 <div style={{ display: "flex", marginTop: "10px" }}>
                     <div className='price-order' style={{ color: "gray", marginRight: "5px", width: "75%" }}>Giá nhập:</div>
-                    <input type="text" name="import_price" class="form-importStock" id="usr" style={{ height: "28px", width: "100px", textAlign: "right", borderRadius: 0, borderBottom: "1px solid rgb(128 128 128 / 71%)" }} value={format(import_price.toFixed())} onChange={this.onChange} />
+                    <input type="text" name="import_price" class="form-importStock" id="usr" style={{ height: "28px", width: "100px", textAlign: "right", borderRadius: 0, borderBottom: "1px solid rgb(128 128 128 / 71%)" }} value={value_import} onChange={this.onChange} />
                 </div>
             </div>
         )
