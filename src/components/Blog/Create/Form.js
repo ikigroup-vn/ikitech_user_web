@@ -175,7 +175,7 @@ class Form extends Component {
                 style={{ borderRight: "0.5px solid #cac9c9" }}
               >
                 <div class="form-group">
-                  <label for="product_name">Tiêu đề</label>
+                  <label for="product_name">Tên bài viết</label>
                   <input
                     type="text"
                     class="form-control"
@@ -211,7 +211,7 @@ class Form extends Component {
                     class="form-control"
                   >
                     <option value="1">Hiển thị</option>
-                    <option value="0">Tạm ẩn</option>
+                    <option value="0">Lưu tạm</option>
                   </select>
                 </div>
               </div>
@@ -239,7 +239,7 @@ class Form extends Component {
             </div>
 
             <div class="form-group">
-              <label for="product_name">Tóm lượt</label>
+              <label for="product_name">Mô tả bài viết</label>
 
               <textarea
                 name="txtSumary"
@@ -322,22 +322,20 @@ class Form extends Component {
 
           </div>
           <div class="box-footer">
-            <button type="submit" class="btn btn-info btn-icon-split btn-sm">
-              <span class="icon text-white-50">
-                <i class="fas fa-save"></i>
-              </span>
-              <span class="text">Lưu</span>
-            </button>
-            <a
-              style={{ marginLeft: "10px" }}
-              onClick={this.goBack}
-              class="btn btn-warning btn-icon-split  btn-sm"
-            >
-              <span class="icon text-white-50">
-                <i class="fas fa-arrow-left"></i>
-              </span>
-              <span class="text"> Trở về</span>
-            </a>
+          <button type = "submit" class="btn btn-info   btn-sm">
+                  <i class="fas fa-save"></i>  Tạo
+
+                </button>
+                <button
+                                type = "button"
+
+                  style={{ marginLeft: "10px" }}
+                  onClick={this.goBack}
+                  class="btn btn-warning   btn-sm"
+                >
+                  <i class="fas fa-arrow-left"></i> Trở về
+
+                </button>
           </div>
         </form>
 

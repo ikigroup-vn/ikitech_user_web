@@ -86,8 +86,8 @@ class Bloglog extends Component {
                         style={{ display: "flex", justifyContent: "space-between" }}
                       >
                         <h4 className="h4 title_content mb-0 text-gray-800">
-                          Tin tức / Bài viết
-                        </h4>{" "}
+                        Tin tức - Bài viết
+                                                </h4>{" "}
                         <Link to={`/posts/create/${store_code}`}
                           class={`btn btn-info btn-icon-split btn-sm ${insert == true ? "show" : "hide"}`}
                         >

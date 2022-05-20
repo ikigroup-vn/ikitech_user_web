@@ -26,13 +26,13 @@ class General extends Component {
 
 
     render() {
-        var { products, badges } = this.props
+        var { products, badges, store } = this.props
 
-        var total_stoking = typeof products.total_stoking == "undefined" ? 0 : products.total_stoking
-        var total_out_of_stock = typeof products.total_out_of_stock == "undefined" ? 0 : products.total_out_of_stock
+        var total_stoking = typeof store.total_products == "undefined" ? 0 : store.total_products
+        var total_out_of_stock = typeof badges.total_product_or_discount_nearly_out_stock == "undefined" ? 0 : badges.total_product_or_discount_nearly_out_stock
         // var total_hide = typeof products.total_hide == "undefined" ? 0 : products.total_hide
 
-
+        console.log(badges , store);
         return (
 
             <div className="row" style={{ marginBottom: "20px" }}>
@@ -44,7 +44,7 @@ class General extends Component {
                                 <div className="col mr-2">
                                     <div className=" font-weight-bold text-primary text-uppercase mb-1">
                                         Tất cả sản phẩm</div>
-                                    <div className="h5 mb-0 font-weight-bold text-gray-800">{total_stoking + total_out_of_stock}</div>
+                                    <div className="h5 mb-0 font-weight-bold text-gray-800">{total_stoking}</div>
                                 </div>
                                 <div className="col-auto">
                                 <i className="fas fa-boxes fa-2x text-gray-300"></i>

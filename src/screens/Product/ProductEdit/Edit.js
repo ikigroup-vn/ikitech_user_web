@@ -354,6 +354,8 @@ class ProductEdit extends Component {
               <div class="col-lg-6">
                 <div>
                   <InfoProduct
+                                    store_code = {store_code}
+
                   checkDistribute={this.checkDistribute}
                     total={total}
                     product={product}

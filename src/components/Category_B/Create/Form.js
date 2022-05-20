@@ -78,14 +78,14 @@ class Form extends Component {
         <form role="form" onSubmit={this.onSave} method="post">
           <div class="box-body">
             <div class="form-group">
-              <label for="product_name">Tiêu đề</label>
+              <label for="product_name">Tên danh mục</label>
               <input
                 type="text"
                 class="form-control"
                 id="txtTitle"
                 value={txtTitle}
-                name="txtName"
-                placeholder="Nhập tiêu đề bài viết"
+                name="txtTitle"
+                placeholder="Nhập tên danh mục"
                 autocomplete="off"
                 onChange={this.onChange}
               />
@@ -128,23 +128,21 @@ class Form extends Component {
             </div>
           </div>
           <div class="box-footer">
-            <button type="submit" class="btn btn-info btn-icon-split btn-sm">
-              <span class="icon text-white-50">
-                <i class="fas fa-save"></i>
-              </span>
-              <span class="text">Tạo</span>
-            </button>
-            <a
-              style={{ marginLeft: "10px" }}
-              onClick={this.goBack}
-              class="btn btn-warning"
-              class="btn btn-warning btn-icon-split  btn-sm"
-            >
-              <span class="icon text-white-50">
-                <i class="fas fa-arrow-left"></i>
-              </span>
-              <span class="text"> Trở về</span>
-            </a>
+         
+          <button type = "submit" class="btn btn-info   btn-sm">
+                  <i class="fas fa-save"></i>  Tạo
+
+                </button>
+                <button
+                                type = "button"
+
+                  style={{ marginLeft: "10px" }}
+                  onClick={this.goBack}
+                  class="btn btn-warning   btn-sm"
+                >
+                  <i class="fas fa-arrow-left"></i> Trở về
+
+                </button>
           </div>
         </form>
         <ModalUpload />

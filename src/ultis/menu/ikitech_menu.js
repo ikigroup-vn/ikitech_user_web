@@ -136,7 +136,7 @@ export const ikitech_menu = [
 
 
       {
-        name: "Bài viết",
+        name: "Tin tức - Bài viết",
 
         icon: "fas fa-newspaper",
         open: "post",
@@ -151,7 +151,7 @@ export const ikitech_menu = [
           {
             class: "product_list",
             display: "hide",
-            name: "Tin tức bài viết",
+            name: "Tin tức - Bài viết",
             exact: true,
             to: "/posts",
           },

@@ -187,7 +187,7 @@ class Form extends Component {
                                                     <OrderHistory billHistoty={billHistoty} />}
 
                                                 {
-                                                    ( getChannel() == IKITECH && bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE && bill.order_from !== null) && bills.data && bills.data.length > 0 &&
+                                                    bills.data && bills.data.length > 0 &&
                                                     <PaymentHistory bills  = {bills.data} historyPay={historyPay} />
                                                 }
 

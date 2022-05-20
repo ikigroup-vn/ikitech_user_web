@@ -543,7 +543,9 @@ class ProductCreate extends Component {
             <div class="row">
               <div class="col-lg-6">
                 <div>
-                  <InfoProduct checkDistribute={this.checkDistribute}
+                  <InfoProduct 
+                  store_code = {store_code}
+                  checkDistribute={this.checkDistribute}
                     total={total}
                     handleDataFromInfo={this.handleDataFromInfo}
                     category_product={category_product}

@@ -1,6 +1,9 @@
 import callApi from "../../ultis/apiCaller";
 
-export const fetchAllData = (store_code) => {
+export const fetchAllData = (store_code,params) => {
+  if(params)
+  return callApi(`/store/${store_code}/categories?params=true${params}`, "get", null);
+  else
   return callApi(`/store/${store_code}/categories`, "get", null);
 };
 

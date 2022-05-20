@@ -141,11 +141,11 @@ class CategoryBlog extends Component {
 
                       <br></br>
                       <div className="card shadow mb-4">
-                        <div className="card-header py-3">
+                        {/* <div className="card-header py-3">
                           <h6 className="m-0 title_content font-weight-bold text-primary">
                             Danh sách danh mục
                           </h6>
-                        </div>
+                        </div> */}
                         <div className="card-body">
                           <Table 
                           update={update} 

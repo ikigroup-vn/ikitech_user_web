@@ -235,7 +235,7 @@ class TotalBill extends Component {
 
 
                                 {
-                                    bill.order_from !== 2 && bill.order_from !== null && bill.order_status_code !== "USER_CANCELLED" && bill.order_status_code !== "CUSTOMER_CANCELLED"  && bill.payment_status_code !== "UNPAID" && bill.payment_status_code !== "PARTIALLY_PAID" && bill.payment_status_code !== "PAID" &&
+                                    bill.order_from !== 2 && bill.order_from !== null && bill.order_status_code !== "USER_CANCELLED" && bill.order_status_code !== "CUSTOMER_CANCELLED"  && bill.payment_status_code !== "UNPAID"&& bill.payment_status_code != "REFUNDS" && bill.payment_status_code !== "PARTIALLY_PAID" && bill.payment_status_code !== "PAID" &&
                                     (
                                         <React.Fragment>
                                             <a
@@ -263,7 +263,7 @@ class TotalBill extends Component {
 
                                 }
 
-                                {
+                                {/* {
                                      bill.order_from !== 2 && bill.order_from !== null && (bill.order_status_code == "USER_CANCELLED" || bill.order_status_code == "CUSTOMER_CANCELLED") &&  bill.payment_status_code !== "UNPAID" && bill.payment_status_code !== "PARTIALLY_PAID" &&
                                     (
                                         <React.Fragment>
@@ -281,7 +281,7 @@ class TotalBill extends Component {
                                         </React.Fragment>
                                     )
 
-                                }
+                                } */}
 
 
 

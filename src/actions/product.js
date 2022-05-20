@@ -433,7 +433,7 @@ export const uploadAvataProduct = (file) => {
   };
 };
 
-export const editStock = (store_code, branch_id, data, page = 1) => {
+export const editStock = (store_code, branch_id, data, page = 1, params = null) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -457,7 +457,7 @@ export const editStock = (store_code, branch_id, data, page = 1) => {
           },
         });
         productApi
-          .fetchAllProductV2(store_code, branch_id, page)
+          .fetchAllProductV2(store_code, branch_id, page , params)
           .then((res) => {
             dispatch({
               type: Types.SHOW_LOADING,

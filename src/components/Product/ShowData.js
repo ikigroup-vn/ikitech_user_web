@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { format, formatNumber , contactOrNumber } from "../../ultis/helpers";
+import { format, formatNumber, contactOrNumber } from "../../ultis/helpers";
 import * as inventoryAction from "../../actions/inventory";
 import { connect } from "react-redux";
 import getChannel, { IKITECH } from "../../ultis/channel";
@@ -224,7 +224,7 @@ class ShowData extends Component {
     } = this.props;
     const listDistribute =
       data.inventory?.distributes !== null &&
-      data.inventory?.distributes.length > 0
+        data.inventory?.distributes.length > 0
         ? data.inventory?.distributes[0]
         : [];
 
@@ -235,145 +235,147 @@ class ShowData extends Component {
     }
 
     return (
-        <tr className="hover-product">
-          <td   className={`${_delete == true ? "show" : "hide"} `}>
-            {" "}
-            <input
-              style={{
-                height: "initial",
-              }}
-              type="checkbox"
-              checked={checked}
-              onChange={(e) => this.props.onChangeSelected(e, data.id)}
-            />
-          </td>
-          <td>{per_page * (current_page - 1) + (index + 1)}</td>
-          <td>
-            <img
-              src={
-                data.images.length > 0
-                  ? data.images[0].image_url
-                  : Env.IMG_NOT_FOUND
-              }
-              className="img-responsive"
-              alt="Image"
-              style={{ width: "100%", height: "59px", background: "#0000000d" }}
-            />
-          </td>
-          <td>{data.sku}</td>
+      <tr className="hover-product">
+        <td className={`${_delete == true ? "show" : "hide"} `}>
+          {" "}
+          <input
+            style={{
+              height: "initial",
+            }}
+            type="checkbox"
+            checked={checked}
+            onChange={(e) => this.props.onChangeSelected(e, data.id)}
+          />
+        </td>
+        <td>{per_page * (current_page - 1) + (index + 1)}</td>
+        <td>
+          <img
+            src={
+              data.images.length > 0
+                ? data.images[0].image_url
+                : Env.IMG_NOT_FOUND
+            }
+            className="img-responsive"
+            alt="Image"
+            style={{ width: "100%", height: "59px", background: "#0000000d" }}
+          />
+        </td>
+        <td>{data.sku}</td>
 
-          <td>
-            <Link to={`/product/edit/${store_code}/${data.id}/${page}`}>
-              {data.name}
-            </Link>
-          </td>
+        <td>
+          <Link to={`/product/edit/${store_code}/${data.id}/${page}`}>
+            {data.name}
+          </Link>
+        </td>
 
-          <td>
-            <div>
-              {min_price === max_price ? (
-                contactOrNumber(format(
-                  Number(
-                    discount_percent == null
-                      ? min_price
-                      : min_price - min_price * discount_percent * 0.01
-                  )
+        <td>
+        { product_discount == null &&
+          <div className="eea"
+          >
+            {min_price === max_price ? (
+              contactOrNumber(format(
+                Number(
+                  discount_percent == null
+                    ? min_price
+                    : min_price - min_price * discount_percent * 0.01
                 )
+              )
               )) : distributes && distributes.length == 0 ? contactOrNumber(format(
                 Number(
                   discount_percent == null
                     ? min_price
                     : min_price - min_price * discount_percent * 0.01
-                ))) :(
-                <div>
-                  {format(
-                    Number(
-                      discount_percent == null
-                        ? min_price
-                        : min_price - min_price * discount_percent * 0.01
-                    )
-                  )}
-                  {" - "}
-                  {format(
-                    Number(
-                      discount_percent == null
-                        ? max_price
-                        : max_price - max_price * discount_percent * 0.01
-                    )
-                  )}
-                </div>
-              )}
-            </div>
-
-            {product_discount && (
-              <div
-                style={{
-                  float: "left",
-                }}
+                ))) : (
+              <div className="ae"
               >
-                {min_price === max_price ? (
-                  contactOrNumber(format(Number(min_price)))
-                ) : (
-                  <div className="row">
-                    <div
-                      style={{
-                        textDecoration: "line-through",
-                      }}
-                    >
-                      {format(Number(min_price))}
-                      {" - "}
-                      {format(Number(max_price))}
-                    </div>
-
-                    <div className="discount">&emsp; -{discount_percent}%</div>
-                  </div>
+                {format(
+                  Number(
+                    discount_percent == null
+                      ? min_price
+                      : min_price - min_price * discount_percent * 0.01
+                  )
+                )}
+                {" - "}
+                {format(
+                  Number(
+                    discount_percent == null
+                      ? max_price
+                      : max_price - max_price * discount_percent * 0.01
+                  )
                 )}
               </div>
             )}
-          </td>
+          </div>
+          }
 
-          {getChannel() == IKITECH && (
-            <td>
-              {" "}
-              <h5>
-                <span class={`badge badge-${status}`}>{status_name}</span>
-              </h5>
-            </td>
+          {product_discount && (
+            <div
+              className="a"
+              style={{
+                float: "left",
+              }}
+            >
+              {min_price === max_price ? (
+                contactOrNumber(format(Number(min_price)))
+              ) : (
+                <div className="row e">
+                  <div
+                    style={{
+                      textDecoration: "line-through",
+                    }}
+                  >
+                    {format(Number(min_price))}
+                    {" - "}
+                    {format(Number(max_price))}
+                  </div>
+
+                  <div className="discount e">&emsp; -{discount_percent}%</div>
+                </div>
+              )}
+            </div>
           )}
+        </td>
 
-          {getChannel() == IKITECH && <td>{data.view}</td>}
-          {getChannel() == IKITECH && <td>{data.likes}</td>}
-
-          <td className="btn-voucher">
-            <Link
-              to={`/product/edit/${store_code}/${data.id}/${page}`}
-              class={`btn btn-warning btn-sm ${
-                update == true ? "show" : "hide"
-              }`}
-            >
-              <i class="fa fa-edit"></i> Sửa
-            </Link>
-            <Link
-              to={`/product/create/${store_code}/${data.id}`}
-              class={`btn btn-primary btn-sm ${
-                insert == true ? "show" : "hide"
-              }`}
-            >
-              <i class="fa fa-copy"></i> Sao chép
-            </Link>
-            <button
-              onClick={(e) =>
-                this.props.passDataModal(e, store_code, data.id, data.name)
-              }
-              data-toggle="modal"
-              data-target="#removeModal"
-              class={`btn btn-danger btn-sm ${
-                _delete == true ? "show" : "hide"
-              }`}
-            >
-              <i class="fa fa-trash"></i> Xóa
-            </button>
+        {getChannel() == IKITECH && (
+          <td>
+            {" "}
+            <h5>
+              <span class={`badge badge-${status}`}>{status_name}</span>
+            </h5>
           </td>
-        </tr>
+        )}
+
+        {getChannel() == IKITECH && <td>{data.view}</td>}
+        {getChannel() == IKITECH && <td>{data.likes}</td>}
+
+        <td className="btn-voucher">
+          <Link
+            to={`/product/edit/${store_code}/${data.id}/${page}`}
+            class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"
+              }`}
+          >
+            <i class="fa fa-edit"></i> Sửa
+          </Link>
+          <Link
+            to={`/product/create/${store_code}/${data.id}`}
+            class={`btn btn-primary btn-sm ${insert == true ? "show" : "hide"
+              }`}
+          >
+            <i class="fa fa-copy"></i> Sao chép
+          </Link>
+          <button
+            onClick={(e) =>
+              this.props.passDataModal(e, store_code, data.id, data.name)
+            }
+            data-toggle="modal"
+            data-target="#removeModal"
+            class={`btn btn-danger btn-sm ${_delete == true ? "show" : "hide"
+              }`}
+          >
+            <i class="fa fa-trash"></i> Xóa
+          </button>
+        </td>
+      </tr>
     );
   }
 }

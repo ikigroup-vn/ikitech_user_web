@@ -75,8 +75,10 @@ class Table extends Component {
     if(!shallowEqual(nextState.formData,this.state.formData)){
       const data = nextState.formData
       const branch_id = localStorage.getItem("branch_id")
-      const {store_code} = this.props
-      this.props.editStock(store_code,branch_id ,data,1)
+      const {store_code , listType} = this.props
+      var params = this.props.getParams(listType)
+  
+      this.props.editStock(store_code,branch_id ,data,1 , params)
     }
     return true
   }
@@ -180,8 +182,8 @@ class Table extends Component {
       }
     }
   };
-  render() {
-    var { products, store_code,listProductSelect } = this.props;
+  render() { 
+    var { products, store_code,listProductSelect , listType } = this.props;
     var { selected, modalSub, modalElement, formData,modalProduct } = this.state;
     var per_page = products.per_page;
     var current_page = products.current_page;
@@ -223,7 +225,7 @@ class Table extends Component {
           </thead>
           <tbody>{this.showData(listProduct, per_page, current_page)}</tbody>
         </table>
-        <EditStock store_code={store_code} modalSub={modalSub} modalElement={modalElement} modalProduct = {modalProduct} editStockCallBack={this.editStockCallBack} />
+        <EditStock listType = {listType} getParams = {this.props.getParams} store_code={store_code} modalSub={modalSub} modalElement={modalElement} modalProduct = {modalProduct} editStockCallBack={this.editStockCallBack} />
 
       </div>
     );
@@ -232,8 +234,8 @@ class Table extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    editStock: (store_code,branch_id,data,page) =>{
-      dispatch(productAction.editStock(store_code, branch_id, data,page))
+    editStock: (store_code,branch_id,data,page,params) =>{
+      dispatch(productAction.editStock(store_code, branch_id, data,page,params))
     }
   };
 };

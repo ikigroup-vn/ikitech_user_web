@@ -1,4 +1,7 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
+import * as CategoryPAction from "../../../actions/category_product";
+
 import Select from "react-select";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import * as helper from "../../../ultis/helpers";
@@ -25,6 +28,7 @@ class InfoProduct extends Component {
       txtCategory: [],
       checkHasDistribute : false,
       disabledPrice: false,
+      categorySearch : ""
     };
   }
 
@@ -290,6 +294,14 @@ class InfoProduct extends Component {
   {
     this.setState({icon: !this.state.icon})
   }
+  searchData = (e) => {
+    e.preventDefault();
+    var { store_code } = this.props;
+    var { categorySearch } = this.state;
+    const branch_id = localStorage.getItem("branch_id");
+    var params = `&search=${categorySearch}`;
+    this.props.fetchAllCategoryP(store_code, params);
+  };
   render() {
     const { inputValue, menuIsOpen } = this.state;
     var {
@@ -309,7 +321,8 @@ class InfoProduct extends Component {
       sku,
       check_inventory,
       txtCostOfCapital,
-      checkHasDistribute
+      checkHasDistribute,
+      categorySearch
     } = this.state;
 
     return (
@@ -548,6 +561,26 @@ class InfoProduct extends Component {
                 aria-labelledby="headingOne"
                 data-parent="#accordion"
               >
+               <div
+                              class="input-group mb-6"
+                              style={{ paddingTop: "10px" , 
+                              }}
+                            >
+                              <input
+                                style={{ maxWidth: "200px", minWidth: "200px" }}
+                                type="search"
+                                name="categorySearch"
+                                value={categorySearch}
+                                onChange={this.onChange}
+                                class="form-control"
+                                placeholder="Tìm kiếm danh mục"
+                              />
+                              <div class="input-group-append">
+                                <button class="btn btn-primary" type="button" onClick={this.searchData}>
+                                  <i class="fa fa-search"></i>
+                                </button>
+                              </div>
+                            </div>
                 <ul
                   style={{ listStyle: "none", margin: "5px 0" }}
                   class="list-group"
@@ -607,5 +640,15 @@ class InfoProduct extends Component {
     );
   }
 }
+const mapDispatchToProps = (dispatch, props) => {
+  return {
 
-export default InfoProduct;
+    fetchAllCategoryP: (store_code,params) => {
+      dispatch(CategoryPAction.fetchAllCategoryP(store_code,params));
+    },
+
+  };
+};
+export default connect(null, mapDispatchToProps)(InfoProduct);
+
+

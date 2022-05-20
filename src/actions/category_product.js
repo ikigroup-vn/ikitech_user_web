@@ -1,13 +1,13 @@
 import * as Types from "../constants/ActionType";
 import * as categoryPApi from "../data/remote/category_product";
 
-export const fetchAllCategoryP = (store_code) => {
+export const fetchAllCategoryP = (store_code , params=null) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading : "show"
     })
-    categoryPApi.fetchAllData(store_code).then((res) => {
+    categoryPApi.fetchAllData(store_code,params).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
         loading : "hide"

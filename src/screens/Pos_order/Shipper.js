@@ -312,7 +312,11 @@ class PanelBottom extends Component {
             }
             console.log(selectedDate)
             // if()
-
+            var type = {}
+            if(nextProps.oneCart.id != this.props.oneCart.id)
+            {
+                type = {type : 0}
+            }
             this.setState(
                 {
                     ...this.state,
@@ -346,7 +350,8 @@ class PanelBottom extends Component {
                         label: oneCart.wards_name,
                         value: oneCart.wards
                     },
-                    type_ship : 0,
+
+                    ...type,
                     select_customer: oneCart.customer ? { value: oneCart.customer.id, label: `${oneCart.customer.name}  (${oneCart.customer.phone_number})`, customer: oneCart.customer } : null
 
                 }

@@ -21,6 +21,7 @@ import Table from "./Table";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import { getBranchId } from "../../ultis/branchUtils";
 import { getQueryParams } from "../../ultis/helpers"
+import * as dashboardAction from "../../actions/dashboard";
 
 class ProductInventory extends Component {
 
@@ -108,6 +109,8 @@ class ProductInventory extends Component {
       this.props.fetchAllProductV2(this.props.match.params.store_code, branch_id, params
       );
     }
+    this.props.fetchDataId(this.props.match.params.store_code)
+
   }
 
   componentDidUpdate() {
@@ -127,6 +130,26 @@ class ProductInventory extends Component {
 
     }
   }
+
+
+  getParams = (listType = 1) =>{
+    var params = ""
+    if(listType == 1)
+    {
+       params = params + `&check_inventory=true`;
+
+    }
+    else if(listType == 2)
+    {
+      params = params +  `&is_near_out_of_stock=true`
+    }
+    else{
+
+    }
+    return params
+  }
+
+
   shouldComponentUpdate(nextProps, nextState) {
     if (!shallowEqual(nextState.listType, this.state.listType)) {
       if (nextState.listType == 1) {
@@ -137,6 +160,12 @@ class ProductInventory extends Component {
         var params = `&check_inventory=true`;
         this.props.fetchAllProductV2(store_code, branch_id, 1, params);
       } 
+      else if(nextState.listType == 2){
+        const { store_code } = this.props.match.params
+        const branch_id = getBranchId();
+        var params = this.getParams(nextState.listType);
+        this.props.fetchAllProductV2(store_code, branch_id, 1, params);
+      }
       else {
         // this.setState({listProduct:this.props.products.data})
         const { store_code } = this.props.match.params
@@ -216,7 +245,7 @@ class ProductInventory extends Component {
 
   render() {
     if (this.props.auth) {
-      var { products, badges } = this.props;
+      var { products, badges , store } = this.props;
       var { listProduct , is_near_out_of_stock , listType } = this.state
       var { store_code } = this.props.match.params
       var { searchValue, importData, allow_skip_same_name, page, numPage } = this.state
@@ -231,6 +260,7 @@ class ProductInventory extends Component {
       if(listType==1)
       params = params + `&check_inventory=true`
 
+      console.log(listType);
       return (
         <div id="wrapper">
           <ImportModal store_code={store_code} importData={importData} allow_skip_same_name={allow_skip_same_name} />
@@ -246,7 +276,7 @@ class ProductInventory extends Component {
                   isShow == true ?
 
                     <div class="container-fluid">
-                      <General  paramNearStock = {this.paramNearStock} store_code = {store_code} branch_id = {branch_id}  badges={badges} products={this.props.products} />
+                      <General store={store} paramNearStock = {this.paramNearStock} store_code = {store_code} branch_id = {branch_id}  badges={badges} products={this.props.products} />
 
 
                       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -312,6 +342,8 @@ class ProductInventory extends Component {
 
                                   <option value="0">Tất cả sản phẩm</option>
                                   <option value="1">Sản phẩm được theo dõi</option>
+                                  <option value="2">Sản phẩm sắp hết hàng</option>
+
 
                                 </select>
 
@@ -344,7 +376,8 @@ class ProductInventory extends Component {
 
 
                         <div class="card-body">
-                          <Table insert={insert} _delete={_delete} update={update} page={page} handleDelCallBack={this.handleDelCallBack} handleMultiDelCallBack={this.handleMultiDelCallBack} store_code={store_code} products={products} listProductSelect={listProduct} />
+                          <Table getParams = {this.getParams} insert={insert} listType = {listType}
+                           _delete={_delete} update={update} page={page} handleDelCallBack={this.handleDelCallBack} handleMultiDelCallBack={this.handleMultiDelCallBack} store_code={store_code} products={products} listProductSelect={listProduct} />
                           <Pagination
                           params = {params}
                             listType={listType}
@@ -387,6 +420,8 @@ const mapStateToProps = (state) => {
     allProductList: state.productReducers.product.allProductList,
     permission: state.authReducers.permission.data,
     badges: state.badgeReducers.allBadge,
+    store: state.storeReducers.store.storeID,
+
 
   };
 };
@@ -397,6 +432,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchAllListProduct: (store_code, searchValue) => {
       dispatch(productAction.fetchAllListProduct(store_code, searchValue));
+    },
+    fetchDataId: (id) => {
+      dispatch(dashboardAction.fetchDataId(id));
     },
 
   };

@@ -42,7 +42,7 @@ class ModalCreateChild extends Component {
     });
   };
   componentWillReceiveProps(nextProps){
-    if(!shallowEqual(nextProps.category_product , this.props.category_product))
+    if(!shallowEqual(nextProps.category_blog , this.props.category_blog))
     {
       window.$('.modal').modal('hide');
       window.$('#file-category-product-child').fileinput('clear');
@@ -162,7 +162,7 @@ class ModalCreateChild extends Component {
                 >
                   Đóng
                 </button>
-                <button type="submit" class="btn btn-info">
+                <button type="submit" class="btn btn-warning">
                   Tạo
                 </button>
               </div>
