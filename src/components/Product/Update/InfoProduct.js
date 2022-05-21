@@ -311,10 +311,28 @@ class InfoProduct extends Component {
   searchData = (e) => {
     e.preventDefault();
     var { store_code } = this.props;
-    var { categorySearch } = this.state;
-    const branch_id = localStorage.getItem("branch_id");
-    var params = `&search=${categorySearch}`;
-    this.props.fetchAllCategoryP(store_code, params);
+    var { categorySearch, item1 } = this.state;
+    var resultSearch = []
+    if (this.props.category_product?.length > 0) {
+      for (const category of this.props.category_product) {
+        if (category.name?.includes(categorySearch)) {
+          resultSearch.push({
+            id: category.id,
+            label: category.name,
+            categories_child: category.category_children,
+          })
+        }
+      }
+    }
+
+    this.setState({ listCategory: resultSearch })
+    //   return {
+    //     id: category.id,
+    //     label: category.name,
+    //     categories_child: category.category_children,
+    //   };
+    // });
+    // this.setState({ listCategory: option });
   };
   render() {
     var {
@@ -541,31 +559,36 @@ class InfoProduct extends Component {
               </button>
             </div>
             <div id="demo2" class="collapse">
-            <div
-                              class="input-group mb-6"
-                              style={{ paddingTop: "10px" , 
-                              }}
-                            >
-                              <input
-                                style={{ maxWidth: "200px", minWidth: "200px" }}
-                                type="search"
-                                name="categorySearch"
-                                value={categorySearch}
-                                onChange={this.onChange}
-                                class="form-control"
-                                placeholder="Tìm kiếm danh mục"
-                              />
-                              <div class="input-group-append">
-                                <button class="btn btn-primary" type="button" onClick={this.searchData}>
-                                  <i class="fa fa-search"></i>
-                                </button>
-                              </div>
-                            </div>
+              <form onSubmit={this.searchData}>
+
+                <div
+                  class="input-group mb-6"
+                  style={{
+                    paddingTop: "10px",
+                  }}
+                >
+                  <input
+                    style={{ maxWidth: "200px", minWidth: "200px" }}
+                    type="search"
+                    name="categorySearch"
+                    value={categorySearch}
+                    onChange={this.onChange}
+                    class="form-control"
+                    placeholder="Tìm kiếm danh mục"
+                  />
+                  <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" onClick={this.searchData}>
+                      <i class="fa fa-search"></i>
+                    </button>
+                  </div>
+                </div>
+              </form>
               <ul
                 style={{ listStyle: "none", margin: "5px 0" }}
                 class="list-group"
               >
-                {listCategory.map((category) => (
+                {
+                    listCategory?.length > 0 ? listCategory.map((category) => (
                   <li
                     class=""
                     style={{ cursor: "pointer", paddingLeft: "5px" }}
@@ -606,8 +629,8 @@ class InfoProduct extends Component {
                       )}
                     </ul>
                   </li>
-                ))}
-              </ul>
+                  )) : <div>Không có kết quả</div>}
+                  </ul>
             </div>
           </div>
         </div>
@@ -619,8 +642,8 @@ class InfoProduct extends Component {
 const mapDispatchToProps = (dispatch, props) => {
   return {
 
-    fetchAllCategoryP: (store_code,params) => {
-      dispatch(CategoryPAction.fetchAllCategoryP(store_code,params));
+    fetchAllCategoryP: (store_code, params) => {
+      dispatch(CategoryPAction.fetchAllCategoryP(store_code, params));
     },
 
   };

@@ -58,10 +58,23 @@ class Bloglog extends Component {
       this.setState({ isLoading: true, insert, update, _delete, isShow })
     }
   }
+  onChangeSearch = (e) => {
+    this.setState({ searchValue: e.target.value });
+  };
+
+  searchData = (e) => {
+    e.preventDefault();
+    var { store_code } = this.props.match.params;
+    var { searchValue } = this.state;
+    var params = `&search=${searchValue}`;
+    this.setState({ numPage: 20 });
+    this.props.fetchAllBlog(store_code, 1, params);
+  };
+
   render() {
     var { store_code } = this.props.match.params
     var { blogs } = this.props
-    var { numPage } = this.state
+    var { numPage,searchValue } = this.state
     var { insert, update, _delete, isShow } = this.state
 
     if (this.props.auth) {
@@ -102,36 +115,35 @@ class Bloglog extends Component {
                       <div className="card shadow ">
                         <div className="card-header">
                           <div class="row" style={{ "justify-content": "space-between" }}>
-                            Danh sách bài viết
-                            {/* <form onSubmit={this.searchData}>
-                        <div
-                          class="input-group mb-6"
-                          style={{ padding: "0 20px" }}
-                        >
-                          <input
-                            style={{ maxWidth: "400px", minWidth: "300px" }}
-                            type="search"
-                            name="txtSearch"
-                            value={searchValue}
-                            onChange={this.onChangeSearch}
-                            class="form-control"
-                            placeholder="Tìm mã đơn, tên, SĐT"
-                          />
-                          <div class="input-group-append">
-                            <button
-                              class="btn btn-primary"
-                              type="submit"
+                            <form onSubmit={this.searchData}>
+                              <div
+                                class="input-group mb-6"
+                                style={{ padding: "0 20px" }}
+                              >
+                                <input
+                                  style={{ maxWidth: "400px", minWidth: "300px" }}
+                                  type="search"
+                                  name="txtSearch"
+                                  value={searchValue}
+                                  onChange={this.onChangeSearch}
+                                  class="form-control"
+                                  placeholder="Tìm theo tên bài viết"
+                                />
+                                <div class="input-group-append">
+                                  <button
+                                    class="btn btn-primary"
+                                    type="submit"
 
-                            >
-                              <i class="fa fa-search"></i>
-                            </button>
-                          </div>
+                                  >
+                                    <i class="fa fa-search"></i>
+                                  </button>
+                                </div>
 
-                        </div>
-                        <p class="total-item" id="sale_user_name">
-                          <span className="num-total_item" >{products.total}&nbsp;</span><span className="text-total_item" id="user_name">sản phẩm</span>
-                        </p>
-                      </form> */}
+                              </div>
+                              {/* <p class="total-item" id="sale_user_name">
+                                <span className="num-total_item" >{products.total}&nbsp;</span><span className="text-total_item" id="user_name">sản phẩm</span>
+                              </p> */}
+                            </form>
                             <div style={{ display: "flex" }}>
 
                               <div style={{ display: "flex" }}>

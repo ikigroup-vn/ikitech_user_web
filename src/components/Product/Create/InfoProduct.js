@@ -19,16 +19,16 @@ class InfoProduct extends Component {
       check_inventory: false,
       txtQuantityInStock: "",
       txtCostOfCapital: "",
-      icon : true,
+      icon: true,
       txtPercentC: "",
       txtStatus: 0,
       listCategory: [],
       category_parent: [],
       category_children_ids: [],
       txtCategory: [],
-      checkHasDistribute : false,
+      checkHasDistribute: false,
       disabledPrice: false,
-      categorySearch : ""
+      categorySearch: ""
     };
   }
 
@@ -132,12 +132,11 @@ class InfoProduct extends Component {
         }
       }
     } else {
-      if(name == "txtBarcode" || name == "sku")
-      {
-        if(helper.containsSpecialChars(value)){
+      if (name == "txtBarcode" || name == "sku") {
+        if (helper.containsSpecialChars(value)) {
           return;
         }
-          
+
       }
       this.setState({ [name]: value });
     }
@@ -153,12 +152,12 @@ class InfoProduct extends Component {
     } else {
       this.setState({ check_inventory: checked });
     }
-    this.props.checkDistribute(this.state.checkHasDistribute , !this.state.check_inventory)
+    this.props.checkDistribute(this.state.checkHasDistribute, !this.state.check_inventory)
 
   };
   onChangeCheckHasDitribute = (e) => {
-    this.setState({checkHasDistribute : !this.state.checkHasDistribute});
-    this.props.checkDistribute(!this.state.checkHasDistribute , this.state.check_inventory)
+    this.setState({ checkHasDistribute: !this.state.checkHasDistribute });
+    this.props.checkDistribute(!this.state.checkHasDistribute, this.state.check_inventory)
   };
 
 
@@ -290,17 +289,34 @@ class InfoProduct extends Component {
   flipEven() {
     this.setState({ even: !this.state.even });
   }
-  onChangeIcon = () =>
-  {
-    this.setState({icon: !this.state.icon})
+  onChangeIcon = () => {
+    this.setState({ icon: !this.state.icon })
   }
   searchData = (e) => {
     e.preventDefault();
     var { store_code } = this.props;
-    var { categorySearch } = this.state;
-    const branch_id = localStorage.getItem("branch_id");
-    var params = `&search=${categorySearch}`;
-    this.props.fetchAllCategoryP(store_code, params);
+    var { categorySearch, item1 } = this.state;
+    var resultSearch = []
+    if (this.props.category_product?.length > 0) {
+      for (const category of this.props.category_product) {
+        if (category.name?.includes(categorySearch)) {
+          resultSearch.push({
+            id: category.id,
+            label: category.name,
+            categories_child: category.category_children,
+          })
+        }
+      }
+    }
+
+    this.setState({ listCategory: resultSearch })
+    //   return {
+    //     id: category.id,
+    //     label: category.name,
+    //     categories_child: category.category_children,
+    //   };
+    // });
+    // this.setState({ listCategory: option });
   };
   render() {
     const { inputValue, menuIsOpen } = this.state;
@@ -375,57 +391,57 @@ class InfoProduct extends Component {
               id="flexSwitchCheckDefault"
               checked={checkHasDistribute}
             />
-            <label style = {{fontWeight : "750"}} class="form-check-label" for="flexSwitchCheckDefault">
+            <label style={{ fontWeight: "750" }} class="form-check-label" for="flexSwitchCheckDefault">
               Có phân loại
             </label>
           </div>
         </div>
         {!checkHasDistribute && (
 
-        <div className="form-group">
-          <div className="row">
-            <div className="col-6">
-              <label htmlFor="name">
-                <b>Giá bán lẻ</b>
-              </label>
+          <div className="form-group">
+            <div className="row">
+              <div className="col-6">
+                <label htmlFor="name">
+                  <b>Giá bán lẻ</b>
+                </label>
 
-              <div class="form-group" style={{ display: "flex" }}>
-                <input
-                  disabled={disabledPrice}
-                  style={{ maxWidth: "420px" }}
-                  type="text"
-                  class="form-control"
-                  id="txtEmail"
-                  placeholder="Nhập giá bán lẻ"
-                  value={txtPrice}
-                  onChange={this.onChange}
-                  name="txtPrice"
-                />
+                <div class="form-group" style={{ display: "flex" }}>
+                  <input
+                    disabled={disabledPrice}
+                    style={{ maxWidth: "420px" }}
+                    type="text"
+                    class="form-control"
+                    id="txtEmail"
+                    placeholder="Nhập giá bán lẻ"
+                    value={txtPrice}
+                    onChange={this.onChange}
+                    name="txtPrice"
+                  />
+                </div>
               </div>
-            </div>
 
-            <div className="col-6">
-              <label htmlFor="name">
-                <b>Giá nhập</b>
-              </label>
+              <div className="col-6">
+                <label htmlFor="name">
+                  <b>Giá nhập</b>
+                </label>
 
-              <div class="form-group" style={{ display: "flex" }}>
-                <input
-                  style={{ maxWidth: "420px" }}
-                  type="text"
-                  class="form-control"
-                  id="txtEmail"
-                  placeholder="Nhập giá nhập"
-                  autocomplete="off"
-                  value={txtImportPrice}
-                  onChange={this.onChange}
-                  name="txtImportPrice"
-                />
+                <div class="form-group" style={{ display: "flex" }}>
+                  <input
+                    style={{ maxWidth: "420px" }}
+                    type="text"
+                    class="form-control"
+                    id="txtEmail"
+                    placeholder="Nhập giá nhập"
+                    autocomplete="off"
+                    value={txtImportPrice}
+                    onChange={this.onChange}
+                    name="txtImportPrice"
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-)}
+        )}
         <div class="form-group">
           <div class="form-check form-switch">
             <input
@@ -435,7 +451,7 @@ class InfoProduct extends Component {
               id="flexSwitchCheckDefault"
               checked={check_inventory}
             />
-            <label style = {{fontWeight : "750"}} class="form-check-label" for="flexSwitchCheckDefault">
+            <label style={{ fontWeight: "750" }} class="form-check-label" for="flexSwitchCheckDefault">
               Theo dõi hàng trong kho
             </label>
           </div>
@@ -540,7 +556,7 @@ class InfoProduct extends Component {
                   value={this.getNameSelected()}
                 ></input>
                 <button
-                onClick = {this.onChangeIcon}
+                  onClick={this.onChangeIcon}
                   data-toggle="collapse"
                   class="btn btn-link btn-collapse btn-accordion-collapse collapsed"
                   id="headingOne"
@@ -551,7 +567,7 @@ class InfoProduct extends Component {
                 >
                   <i
                     class={this.state.icon ? "fa fa-caret-down" : "fa fa-caret-down"}
-                    // style={{ fontSize: "0.2px", color: "#abacb4" }}
+                  // style={{ fontSize: "0.2px", color: "#abacb4" }}
                   ></i>
                 </button>
               </div>
@@ -561,31 +577,37 @@ class InfoProduct extends Component {
                 aria-labelledby="headingOne"
                 data-parent="#accordion"
               >
-               <div
-                              class="input-group mb-6"
-                              style={{ paddingTop: "10px" , 
-                              }}
-                            >
-                              <input
-                                style={{ maxWidth: "200px", minWidth: "200px" }}
-                                type="search"
-                                name="categorySearch"
-                                value={categorySearch}
-                                onChange={this.onChange}
-                                class="form-control"
-                                placeholder="Tìm kiếm danh mục"
-                              />
-                              <div class="input-group-append">
-                                <button class="btn btn-primary" type="button" onClick={this.searchData}>
-                                  <i class="fa fa-search"></i>
-                                </button>
-                              </div>
-                            </div>
+                <form onSubmit={this.searchData}>
+                <div
+                  class="input-group mb-6"
+                  style={{
+                    paddingTop: "10px",
+                  }}
+                >
+                  <input
+                    style={{ maxWidth: "200px", minWidth: "200px" }}
+                    type="search"
+                    name="categorySearch"
+                    value={categorySearch}
+                    onChange={this.onChange}
+                    class="form-control"
+                    placeholder="Tìm kiếm danh mục"
+                  />
+                  <div class="input-group-append">
+                    <button class="btn btn-primary" type="button" onClick={this.searchData}>
+                      <i class="fa fa-search"></i>
+                    </button>
+                  </div>
+                </div>
+                </form>
                 <ul
                   style={{ listStyle: "none", margin: "5px 0" }}
                   class="list-group"
                 >
-                  {listCategory.map((category, index) => (
+                  {
+                    listCategory?.length > 0 ? 
+                  
+                  listCategory.map((category, index) => (
                     <li
                       class=""
                       style={{
@@ -630,7 +652,7 @@ class InfoProduct extends Component {
                         )}
                       </ul>
                     </li>
-                  ))}
+                  )) : <div>Không có kết quả</div>}
                 </ul>
               </div>
             </div>
@@ -643,8 +665,8 @@ class InfoProduct extends Component {
 const mapDispatchToProps = (dispatch, props) => {
   return {
 
-    fetchAllCategoryP: (store_code,params) => {
-      dispatch(CategoryPAction.fetchAllCategoryP(store_code,params));
+    fetchAllCategoryP: (store_code, params) => {
+      dispatch(CategoryPAction.fetchAllCategoryP(store_code, params));
     },
 
   };

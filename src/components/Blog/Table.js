@@ -8,7 +8,7 @@ class Table extends Component {
   }
 
   passDataModal = (event, store_code , name) => {
-    this.props.handleDelCallBack({ table: "Bài viết", id: store_code , name:name });
+    this.props.handleDelCallBack({ table: "bài viết", id: store_code , name:name });
     event.preventDefault();
   }
 
@@ -20,16 +20,16 @@ class Table extends Component {
 
       result = blog.map((data, index) => {
         var image_url = data.image_url == null || data.image_url == "" ? Env.IMG_NOT_FOUND : data.image_url
-        var published = data.published == true ? "Hiển thị" : "Tạm ẩn"
+        var published = data.published == true ? "Đang hiển thị" : "Đang lưu tạm"
         var published_status = data.published == true ? "success" : "secondary"
 
         return (
           <tr>
             <td>{(per_page * (current_page -1)) + (index + 1)}</td>
-            <td>
+            {/* <td>
               {data.id}
 
-            </td>
+            </td> */}
 
             <td>
 
@@ -86,11 +86,11 @@ class Table extends Component {
           <thead>
             <tr>
               <th>STT</th>
-              <th>ID</th>
+              {/* <th>ID</th> */}
 
               <th>Hình ảnh</th>
-              <th>Tiêu đề</th>
-              <th>Hiển thị</th>
+              <th>Tên bài viết</th>
+              <th>Trạng thái</th>
               <th>Lượt xem</th>
               <th>Hành động</th>
             </tr>
