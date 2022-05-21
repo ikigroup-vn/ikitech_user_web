@@ -111,7 +111,7 @@ export const blogImg = [
   },
   {
     index: 3,
-    blog: "https://i.imgur.com/0PebLek.png",
+    blog: "https://i.imgur.com/gu0oCuM.png",
   },
   {
     index: 4,

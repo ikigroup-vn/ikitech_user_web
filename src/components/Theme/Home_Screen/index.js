@@ -45,7 +45,7 @@ class Home_Screen extends Component {
         theme:
           "https://i.imgur.com/PhGo57G.png",
         arr_index_component: [3, 3, 3, 3, 1],
-        demo_link: "https://shopdecordemo.myiki.vn/"
+        demo_link: "https://moctamtra.myiki.vn/"
 
       },
       {
