@@ -14,7 +14,7 @@ import * as CategoryPAction from "../../../actions/category_product";
 import * as Types from "../../../constants/ActionType";
 import Alert from "../../../components/Partials/Alert";
 import SeoOption from "../../../components/Product/Update/SeoOption";
-import getChannel, { IKITECH ,IKIPOS } from "../../../ultis/channel";
+import getChannel, { IKITECH, IKIPOS } from "../../../ultis/channel";
 
 class ProductEdit extends Component {
   constructor(props) {
@@ -23,14 +23,14 @@ class ProductEdit extends Component {
       form: {},
       total: "",
       disableDistribute: false,
-      disableInventory : false
+      disableInventory: false
     };
 
   }
 
-  checkDistribute = (status , _status) => {
-    console.log(status , _status);
-    this.setState({ disableDistribute: status , disableInventory : _status })
+  checkDistribute = (status, _status) => {
+    console.log(status, _status);
+    this.setState({ disableDistribute: status, disableInventory: _status })
   }
 
   componentDidMount() {
@@ -174,7 +174,7 @@ class ProductEdit extends Component {
               try {
                 const price = element.price != null ? element.price.toString().replace(/,/g, '').replace(/\./g, '') : 0;
                 const barcode = element.barcode != null ? element.barcode.toString() : 0;
-                
+
                 const quantity_in_stock = element.quantity_in_stock != null ? element.quantity_in_stock.toString().replace(/,/g, '').replace(/\./g, '') : 0;
                 const import_price = element.import_price != null ? element.import_price.toString().replace(/,/g, '').replace(/\./g, '') : 0;
                 form.list_distribute[0].element_distributes[index].price = price
@@ -191,7 +191,7 @@ class ProductEdit extends Component {
                         const barcode = _element.barcode != null ? _element.barcode.toString() : "";
                         const quantity_in_stock = _element.quantity_in_stock != null ? _element.quantity_in_stock.toString().replace(/,/g, '').replace(/\./g, '') : 0;
                         const import_price = _element.import_price != null ? _element.import_price.toString().replace(/,/g, '').replace(/\./g, '') : 0;
-                          form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].import_price = import_price
+                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].import_price = import_price
                         form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].price = price
                         form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].quantity_in_stock = quantity_in_stock
                         form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].barcode = barcode
@@ -243,25 +243,24 @@ class ProductEdit extends Component {
     // })
 
 
-    if(list_distribute.length > 0)
-    {
+    if (list_distribute.length > 0) {
       list_distribute[0].element_distributes = list_distribute[0].element_distributes.map((ele) => {
         if (ele.id != null) {
           ele.is_edit = true
         } else {
           ele.is_edit = false
         }
-  
+
         if (ele.id != null && ele.before_name == null) {
           ele.before_name = ele.name
           ele.is_edit = true
         }
-  
+
         return ele
       }
       )
       list_distribute[0].element_distributes = list_distribute[0].element_distributes.map((ele) => {
-  
+
         if (ele != null && ele.sub_element_distributes != null && ele.sub_element_distributes.length > 0) {
           ele.sub_element_distributes = ele.sub_element_distributes.
             map((sub) => {
@@ -270,12 +269,12 @@ class ProductEdit extends Component {
               } else {
                 sub.is_edit = false
               }
-  
+
               if (sub.id != null && sub.before_name == null) {
                 sub.before_name = sub.name
                 sub.is_edit = true
               }
-  
+
               return sub
             })
         }
@@ -310,7 +309,7 @@ class ProductEdit extends Component {
 
     distributeData.element_distributes = list_distribute.length > 0 ? list_distribute[0].element_distributes : distributeData
 
-    console.log(distributeData , form);
+    console.log(distributeData, form);
 
 
     this.props.updateDistribute(store_code, distributeData, productId, currentBranch?.id)
@@ -325,10 +324,51 @@ class ProductEdit extends Component {
     this.setState({ total: total })
   }
 
+
+  checkHasAttribute = (element, arr) => {
+    var check = false
+    for (const item of arr) {
+      if (item == element) {
+        check = true
+
+      }
+    }
+    return check
+  }
+
+
+  afterAttribute = () => {
+    var { attributeP, product } = this.props;
+    if (product?.attributes?.length > 0) {
+
+
+      var ListDistributeWithName = product?.attributes.map((data) => {
+        return data.name
+      })
+      console.log(ListDistributeWithName)
+      var newListDistributeWithName = [...ListDistributeWithName]
+      for (const item1 of attributeP) {
+        if (this.checkHasAttribute(item1, ListDistributeWithName) == false) {
+          newListDistributeWithName.push(item1)
+        }
+
+
+      }
+      return newListDistributeWithName
+
+    }
+    else {
+      return attributeP
+    }
+
+  }
+
   render() {
     var { store_code } = this.props;
     var { category_product, attributeP, auth, product, isShowAttr, isCreate, isRemove } = this.props;
-    var { total , disableInventory , disableDistribute } = this.state;
+    var { total, disableInventory, disableDistribute } = this.state;
+    var afterAttribute = this.afterAttribute()
+    console.log(afterAttribute)
     return (
 
 
@@ -354,9 +394,9 @@ class ProductEdit extends Component {
               <div class="col-lg-6">
                 <div>
                   <InfoProduct
-                                    store_code = {store_code}
+                    store_code={store_code}
 
-                  checkDistribute={this.checkDistribute}
+                    checkDistribute={this.checkDistribute}
                     total={total}
                     product={product}
                     handleDataFromInfo={this.handleDataFromInfo}
@@ -384,28 +424,28 @@ class ProductEdit extends Component {
             </div>
           </div>
         </div>
-        {getChannel() == IKITECH &&      
-       <div class="card mb-4">
-       <div class="card-body" style={{ padding: "0.8rem" }}>
-         <div class="row">
-           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-             <button
-               class="btn btn-primary btn-sm"
-               onClick={this.postProduct}
-             >
-               <i class="fa fa-plus"></i> Tạo
-             </button>
-             <a
-               style={{ marginLeft: "10px" }}
-               onClick={this.goBack} class={`btn btn-warning btn-sm color-white `}
-             >
-               <i class="fa fa-arrow-left"></i> Trở về
-             </a>
-       
-           </div>
-         </div>
-       </div>
-     </div>
+        {getChannel() == IKITECH &&
+          <div class="card mb-4">
+            <div class="card-body" style={{ padding: "0.8rem" }}>
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  <button
+                    class="btn btn-primary btn-sm"
+                    onClick={this.postProduct}
+                  >
+                    <i class="fa fa-plus"></i> Tạo
+                  </button>
+                  <a
+                    style={{ marginLeft: "10px" }}
+                    onClick={this.goBack} class={`btn btn-warning btn-sm color-white `}
+                  >
+                    <i class="fa fa-arrow-left"></i> Trở về
+                  </a>
+
+                </div>
+              </div>
+            </div>
+          </div>
         }
         <div class={`card mb-4 ${typeof isShowAttr == "undefined" || isShowAttr == false || getChannel() == IKIPOS ? "hide" : ""}`}>
           <div class="card-header title_content">
@@ -424,7 +464,7 @@ class ProductEdit extends Component {
                         this.handleDataFromAttribute
                       }
                       store_code={store_code}
-                      attributeP={attributeP}
+                      attributeP={afterAttribute}
                     />
                   </div>
                 </div>
@@ -443,8 +483,8 @@ class ProductEdit extends Component {
                 <div>
                   <div class="card-body" style={{ padding: "0.8rem" }}>
                     <Distribute
-                    disableDistribute  = {disableDistribute}
-                    disableInventory = {disableInventory}
+                      disableDistribute={disableDistribute}
+                      disableInventory={disableInventory}
                       onChangeQuantityStock={this.onChangeQuantityStock}
                       product={product}
                       handleDataFromDistribute={
@@ -457,7 +497,7 @@ class ProductEdit extends Component {
             </div>
           </div>
         </div>
-        {getChannel() == IKITECH &&                 <div class="card mb-4">
+        {getChannel() == IKITECH && <div class="card mb-4">
           <div class="card-header title_content">Nội dung chi tiết</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
@@ -498,7 +538,7 @@ class ProductEdit extends Component {
         <div class="card mb-4">
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <button
                   class="btn btn-primary btn-sm"
                   onClick={this.postProduct}
@@ -506,13 +546,13 @@ class ProductEdit extends Component {
                   <i class="fa fa-plus"></i> Lưu thay đổi
                 </button>
                 <a
-                className="color-white"
+                  className="color-white"
                   style={{ marginLeft: "10px" }}
                   onClick={this.goBack} class={`btn btn-warning btn-sm color-white `}
                 >
                   <i class="fa fa-arrow-left"></i> Trở về
                 </a>
-          
+
               </div>
             </div>
           </div>

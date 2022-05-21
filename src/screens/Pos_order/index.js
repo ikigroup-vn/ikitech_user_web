@@ -494,7 +494,7 @@ class PostOrder extends Component {
         if (getChannel() == IKITECH) {
 
             if (this.state.oneCart?.total_shipping_fee > 0 || this.state.openShipment == true) {
-                if (oneCart.payment_method_id == null || oneCart.payment_method_id == "") {
+                if ((oneCart.payment_method_id == null || oneCart.payment_method_id == "") && (this.state.payment_method_id == "" || this.state.payment_method_id == null) ) {
                     this.props.showError(
                         {
                             type: Types.ALERT_UID_STATUS,
@@ -1670,7 +1670,7 @@ const mapDispatchToProps = (dispatch, props) => {
         showLoading: (data) => {
             dispatch(data)
         },
-        showErrror: (data) => {
+        showError: (data) => {
             dispatch(data)
         }
     };
