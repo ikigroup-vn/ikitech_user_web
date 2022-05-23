@@ -286,7 +286,7 @@ class Form extends Component {
     var type = getQueryParams("type")
     if(type)
     {
-      history.replace(`/discount/${store_code}?type=${type}`)
+      history.replace(`/voucher/${store_code}?type=${type}`)
     }
     else
     {
@@ -393,7 +393,7 @@ class Form extends Component {
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 
               <div class="box-body">
-              {getChannel() == IKITECH && 
+              {/* {getChannel() == IKITECH && 
               (
                 <React.Fragment>
                 <div class="form-group">
@@ -417,7 +417,7 @@ class Form extends Component {
                   </div>
 
                   </React.Fragment>
-                  )}
+                  )} */}
 
 
 

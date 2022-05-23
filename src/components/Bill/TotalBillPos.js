@@ -169,10 +169,13 @@ class TotalBill extends Component {
 
                         )
                     }
+                    {
+                        bill.order_status_code !== "USER_CANCELLED" && bill.order_status_code !== "CUSTOMER_CANCELLED" &&
+                    
                  
                             <div style={{ textAlign: "center" }}>
                                 {
-                                   ( bill.payment_status_code == "UNPAID" || bill.payment_status_code == "PARTIALLY_PAID") && ( bill.order_status_code !== "USER_CANCELLED" && bill.order_status_code !== "CUSTOMER_CANCELLED" ) ?
+                                   ( bill.payment_status_code == "UNPAID" || bill.payment_status_code == "PARTIALLY_PAID")  ?
 
                                         (<a
                                             data-target="#modalPayment"
@@ -226,11 +229,12 @@ class TotalBill extends Component {
 
 
                             </div>
+    }
                         
 
                     
                     {
-                        getChannel() == IKITECH && (
+                        getChannel() == IKITECH && bill.order_status_code !== "USER_CANCELLED" && bill.order_status_code !== "CUSTOMER_CANCELLED" && (
                             <div style={{ textAlign: "center" }}>
 
 

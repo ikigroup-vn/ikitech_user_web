@@ -303,7 +303,7 @@ class Form extends Component {
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 
               <div class="box-body">
-              {getChannel() == IKITECH && 
+              {/* {getChannel() == IKITECH && 
               
               (
                 <React.Fragment>
@@ -328,7 +328,7 @@ class Form extends Component {
 
                 </div>
                 </React.Fragment>
-              )}
+              )} */}
 
                 <div class="form-group">
                   <label for="product_name">Tên chương trình</label>

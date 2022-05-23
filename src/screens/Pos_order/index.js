@@ -198,7 +198,8 @@ class PostOrder extends Component {
                     shipper_type: newState.ship_type,
                     ...total_shipping_fee,
                     partner_shipper_id: newState.partner_id,
-                    ...customer
+                    ...customer,
+                    discount : newState.discount
 
 
                 },
@@ -240,6 +241,14 @@ class PostOrder extends Component {
         });
     };
     handlePaymentMethod = (e) => {
+        console.log({
+            ...this.state,
+            payment_method_id: e,
+            modalUpdateCart: {
+                ...this.state.modalUpdateCart,
+                payment_method_id: e,
+            },
+        })
         this.setState({
             ...this.state,
             payment_method_id: e,
@@ -1327,7 +1336,9 @@ class PostOrder extends Component {
                                                                 }
                                                             // data-toggle="modal" data-target="#modalDiscount"
                                                             >
-                                                                {formatNoD(this.state.discount)}
+                                                                {formatNoD( this.state.typeDiscount == 0
+                                                                                ? this.state.discount
+                                                                                : this.state.percentDiscount)}
                                                             </button>
                                                         </div>
                                                     </Popover>
@@ -1410,7 +1421,9 @@ class PostOrder extends Component {
 
                                             
 
-                                                    <div
+                                                {
+                                                    (this.state.openShipment == false) &&
+                                                  <div
                                                         className="row"
                                                         style={{
                                                             borderTop: "1px solid #80808045",
@@ -1435,6 +1448,7 @@ class PostOrder extends Component {
                                                             {formatNoD(Math.abs(exchange))}
                                                         </span>
                                                     </div>
+                                                    }
 
                                                     <div
                                                         class="form-group"

@@ -269,7 +269,7 @@ class Form extends Component {
           <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
               <div class="box-body">
-                {
+                {/* {
                   getChannel() == IKITECH && (
                     <React.Fragment>
                       <div class="form-group">
@@ -293,7 +293,7 @@ class Form extends Component {
 
                     </React.Fragment>
                   )
-                }
+                } */}
                 <div class="form-group">
                   <label for="product_name">Tên chương trình</label>
                   <input
@@ -423,7 +423,7 @@ class Form extends Component {
                   handleAddProduct={this.handleAddProduct}
                   products={saveListProducts}                ></Table>
               </div>
-              {getChannel() == IKITECH &&
+              {/* {getChannel() == IKITECH &&
                 <div class="form-group">
                   <label for="product_name">Ghi chú</label>
                   <CKEditor
@@ -431,7 +431,7 @@ class Form extends Component {
                     onChange={this.onChangeDecription}
                   />
                 </div>
-              }
+              } */}
             </div>
           </div>
           <div class="row">

@@ -5616,7 +5616,10 @@ svg._1JwWV1 {
     width: 260px;
     bottom: 0;
 }
+.Choose-category-product input:disabled{
 
+    background: white !important;
+}
 input[type=checkbox] {
     accent-color: rgb(229, 111, 37) !important;
 }
@@ -5658,6 +5661,12 @@ input[type=radio] {
     justify-content: space-around;
 }
 
+.group-btn-table > button {
+    margin: 0 3px
+}
+.group-btn-table > a {
+    margin: 0 3px
+}
 #dataTable_filter {
     float: left !important;
 }

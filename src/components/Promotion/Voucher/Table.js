@@ -124,7 +124,7 @@ filterColDiscount = (data) => {
             </td >  
       
             <td className="group-btn-table">
-              {this.props.is_end == 0 && <Link
+              {this.props.is_end == 0 || this.props.is_end == 2   && <Link
                 to={`/voucher/edit/${store_code}/${data.id}`}
                 class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
               >
