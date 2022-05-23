@@ -71,7 +71,7 @@ class PanelBottom extends Component {
             address_store: "",
             sent_delivery: false,
             isError: false,
-            modalAddress : {}
+            modalAddress: {}
 
 
         }
@@ -270,7 +270,7 @@ class PanelBottom extends Component {
 
         if (typeof nextProps.total_shipping_fee != "undefined" && nextState.load_total_shipping_fee == true) {
             console.log("vaoooo")
-            this.setState({ type_ship: nextProps.total_shipping_fee > 0 ? 2 : 0, load_total_shipping_fee: false   })
+            this.setState({ type_ship: nextProps.total_shipping_fee > 0 ? 2 : 0, load_total_shipping_fee: false })
         }
 
         if (!shallowEqual(nextProps.wards, this.props.wards)) {
@@ -313,9 +313,9 @@ class PanelBottom extends Component {
             console.log(selectedDate)
             // if()
             var type = {}
-            if(nextProps.oneCart.id != this.props.oneCart.id)
-            {
-                type = {type_ship : 0 , fee : nextProps.total_shipping_fee}
+            if (nextProps.oneCart.id !== this.props.oneCart.id) {
+                console.log("cart khac")
+                type = { type_ship: 0, fee: nextProps.total_shipping_fee }
             }
             this.setState(
                 {
@@ -489,8 +489,8 @@ class PanelBottom extends Component {
 
     }
 
-    passDataAddress = (data) =>{
-        this.setState({modalAddress : data , resetId : randomString(10)})
+    passDataAddress = (data) => {
+        this.setState({ modalAddress: data, resetId: randomString(10) })
     }
 
 
@@ -663,7 +663,14 @@ class PanelBottom extends Component {
         }
     }
     onChangeFee = (e) => {
-        this.setState({ fee: e.target.value })
+        var name = e.target.name;
+        var value = e.target.value;
+        const _value = formatNumber(value);
+        if (!isNaN(Number(_value))) {
+            console.log(_value)
+            this.setState({ fee: _value })
+        }
+
     }
 
     onChangeCheckBox = (e) => {
@@ -806,10 +813,10 @@ class PanelBottom extends Component {
 
         var { select_customer_id, select_customer, address_store, sent_delivery } = this.state
         var { loadShipper } = this.props
-        var check =  (txtProvince != "" && txtDistrict != "" && txtWards != "") && (weight != "" || length != "" || width != "" || height != "") ? true : false
-       
+        var check = (txtProvince != "" && txtDistrict != "" && txtWards != "") && (weight != "" || length != "" || width != "" || height != "") ? true : false
+
         console.log(this.state.fee)
-       
+
         return <div style={{
             padding: 5
         }}>
@@ -840,8 +847,8 @@ class PanelBottom extends Component {
                     </div>
                     <div class="form-group">
                         <label style={{ fontWeight: "500" }} for="product_name">Địa chỉ lấy hàng</label>
-                            {
-                                badges.address_pickup ?   <div>{`${badges.address_pickup?.address_detail} - ${badges.address_pickup?.wards_name} - ${badges.address_pickup?.district_name} - ${badges.address_pickup?.province_name}`}
+                        {
+                            badges.address_pickup ? <div>{`${badges.address_pickup?.address_detail} - ${badges.address_pickup?.wards_name} - ${badges.address_pickup?.district_name} - ${badges.address_pickup?.province_name}`}
                                 <a
                                     onClick={() => this.passDataAddress(badges.address_pickup)}
                                     data-toggle="modal"
@@ -851,10 +858,10 @@ class PanelBottom extends Component {
                                         color: "blue",
                                         "margin-left": "4px"
                                     }}>Thay đổi</a>
-    
-                            </div> : <div style = {{padding : "5px" , color : "red" , textAlign : "center"}}>Vui lòng truy cập vào mục địa chỉ cửa hàng để thêm địa chỉ lấy hàng</div>
-                            }
-                       
+
+                            </div> : <div style={{ padding: "5px", color: "red", textAlign: "center" }}>Vui lòng truy cập vào mục địa chỉ cửa hàng để thêm địa chỉ lấy hàng</div>
+                        }
+
 
 
                     </div>
@@ -1203,7 +1210,7 @@ class PanelBottom extends Component {
 
                         <div className="list-payment" style={{ padding: "0 5px" }}>
                             {loadShipper == "show" ? <div style={{ textAlign: "center", padding: "10px" }}>...Đang tải</div>
-                                : this.props.calculate?.length > 0 && this.state.isError == false && check==true ? this.props.calculate.map((item, value) => {
+                                : this.props.calculate?.length > 0 && this.state.isError == false && check == true ? this.props.calculate.map((item, value) => {
                                     return (
                                         <div className="item-payment" >
                                             <input type="radio" name="shipment" onClick={() => { this.getShipment(item.partner_id, item.ship_type, item.fee) }} />
@@ -1238,7 +1245,7 @@ class PanelBottom extends Component {
                             id="import_prices"
                             {...handleKeyPress}
                             class="text-input-pos"
-                            value={this.state.fee}
+                            value={formatNoD(this.state.fee)}
                             onChange={this.onChangeFee}
                         ></input>
                     </div>
@@ -1373,11 +1380,11 @@ class PanelBottom extends Component {
             this.setState({ isShowDetailCombo: !this.state.isShowDetailCombo })
 
     }
-    resetModal = () =>{
-        this.setState({resetId : randomString(10)})
+    resetModal = () => {
+        this.setState({ resetId: randomString(10) })
     }
     render() {
-        var { limit, passNumPage, store_code, products, shipment , wards,
+        var { limit, passNumPage, store_code, products, shipment, wards,
             province,
             district } = this.props
         var { isShow, filter_desc, filter_sort, filterCategory, isShowDetailCombo, modal } = this.state
@@ -1402,7 +1409,7 @@ class PanelBottom extends Component {
 
                 {this.buildTabCustomer()}
                 {/* <Form wards = {wards} district = {district} province = {province} history={history} storeAId={storeAId} store_address={store_address} store_code={store_code} /> */}
-               <ModalAddress resetId = {this.state.resetId} resetModal = {this.resetModal} wards = {wards} district = {district} province = {province}   store_code={store_code} store_address = {this.state.modalAddress}></ModalAddress>
+                <ModalAddress resetId={this.state.resetId} resetModal={this.resetModal} wards={wards} district={district} province={province} store_code={store_code} store_address={this.state.modalAddress}></ModalAddress>
             </div>
         );
     }

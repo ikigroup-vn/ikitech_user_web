@@ -3,18 +3,12 @@ import * as placeApi from "../data/remote/place";
 
 export const fetchPlaceDistrict = (id) => {
   return (dispatch) => {
-    dispatch({
-      type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+
     placeApi
       .fetchPlaceDistrict(id)
       .then((res) => {
         console.log(res)
-        dispatch({
-          type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+ 
         if(res.data.code !== 401)
         dispatch({
           type: Types.FETCH_PLACE_DISTRICT,
@@ -26,18 +20,12 @@ export const fetchPlaceDistrict = (id) => {
 
 export const fetchPlaceDistrict_Wards = (id) =>{
   return (dispatch) => {
-    dispatch({
-      type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+
     placeApi
       .fetchPlaceDistrict(id)
       .then((res) => {
         console.log(res)
-        dispatch({
-          type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+    
         if(res.data.code !== 401)
         {
         dispatch({
@@ -67,17 +55,11 @@ export const fetchPlaceDistrict_Wards = (id) =>{
 
 export const fetchPlaceProvince = () => {
     return (dispatch) => {
-      dispatch({
-        type: Types.SHOW_LOADING,
-        loading: "show"
-      })
+
       placeApi
         .fetchPlaceProvince()
         .then((res) => {
-          dispatch({
-            type: Types.SHOW_LOADING,
-            loading: "hide"
-          })
+   
           if(res.data.code !== 401)
           dispatch({
             type: Types.FETCH_PLACE_PROVICE,
@@ -89,17 +71,11 @@ export const fetchPlaceProvince = () => {
 
   export const fetchPlaceWards = (id) => {
     return (dispatch) => {
-      dispatch({
-        type: Types.SHOW_LOADING,
-        loading: "show"
-      })
+
       placeApi
         .fetchPlaceWards(id)
         .then((res) => {
-          dispatch({
-            type: Types.SHOW_LOADING,
-            loading: "hide"
-          })
+   
           if(res.data.code !== 401)
           dispatch({
             type: Types.FETCH_PLACE_WARDS,

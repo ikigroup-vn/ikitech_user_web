@@ -2,7 +2,14 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as rewardPointAtion from "../../actions/reward_point"
 import { shallowEqual } from "../../ultis/shallowEqual";
-
+import {
+  format,
+  formatNoDWithEmpty,
+  formatNumber,
+  removeSignNumber,
+  stringToInit,
+  randomString,
+} from "../../ultis/helpers";
 
 class Form extends Component {
   constructor(props) {
@@ -27,38 +34,34 @@ class Form extends Component {
     var name = target.name;
     var value = target.value;
 
-    const _value = value.replace(/,/g, '').replace(/-/g, '');
+    const _value = formatNumber(value);
     if (!isNaN(Number(_value))) {
-      value = new Intl.NumberFormat().format(_value);
       if (name == "percent_refund") {
         if (value.length < 3) {
-          if (value == 0) {
-            this.setState({ [name]: "" });
-          }
-          else {
-            this.setState({ [name]: value });
+          if(value == "")
+          this.setState({ [name]: "" });
+          else
+          this.setState({ [name]: _value });
 
-          }
+
         }
       } else if (name == "percent_use_max_point") {
         if (value.length < 3) {
-          if (value == 0) {
-            this.setState({ [name]: "" });
-          }
-          else {
-            this.setState({ [name]: value });
+          if(value == "")
+          this.setState({ [name]: "" });
+          else
+          this.setState({ [name]: _value });
 
-          }
+
         }
       }
       else {
-        if (value == 0) {
-          this.setState({ [name]: "" });
-        }
-        else {
-          this.setState({ [name]: value });
+        if(value == "")
+        this.setState({ [name]: "" });
+        else
+        this.setState({ [name]: _value });
 
-        }
+
       }
     }
 
@@ -75,8 +78,8 @@ class Form extends Component {
 
   componentDidMount() {
     var { rewardPoints } = this.props
-    this. setData(rewardPoints)
-  
+    this.setData(rewardPoints)
+
   }
 
   setData(rewardPoints) {
@@ -84,13 +87,13 @@ class Form extends Component {
       allow_use_point_order: rewardPoints.allow_use_point_order,
       id: rewardPoints.id,
       is_set_order_max_point: rewardPoints.is_set_order_max_point,
-      money_a_point: rewardPoints.money_a_point == null ? null : new Intl.NumberFormat().format(rewardPoints.money_a_point.toString()),
-      order_max_point: rewardPoints.order_max_point == null ? null : new Intl.NumberFormat().format(rewardPoints.order_max_point.toString()),
-      percent_refund: rewardPoints.percent_refund == null ? null : new Intl.NumberFormat().format(rewardPoints.percent_refund.toString()),
-      point_introduce_customer: rewardPoints.point_introduce_customer == null ? null : new Intl.NumberFormat().format(rewardPoints.point_introduce_customer.toString()),
-      point_review: rewardPoints.point_review == null ? null : new Intl.NumberFormat().format(rewardPoints.point_review.toString()),
+      money_a_point: rewardPoints.money_a_point,
+      order_max_point: rewardPoints.order_max_point,
+      percent_refund: rewardPoints.percent_refund,
+      point_introduce_customer: rewardPoints.point_introduce_customer,
+      point_review: rewardPoints.point_review,
       is_percent_use_max_point: rewardPoints.is_percent_use_max_point,
-      percent_use_max_point: rewardPoints.percent_use_max_point == null ? null : new Intl.NumberFormat().format(rewardPoints.percent_use_max_point.toString()),
+      percent_use_max_point: rewardPoints.percent_use_max_point,
     })
   }
 
@@ -171,7 +174,7 @@ class Form extends Component {
                   </div>
                   <div class="input-group" style={{ marginLeft: "20px", maxWidth: "100%" }}>
 
-                    <input type="text" class="form-control" onChange={this.onChange} name="money_a_point" value={money_a_point} placeholder="Nhập số tiền..." />
+                    <input type="text" class="form-control" onChange={this.onChange} name="money_a_point" value={formatNoDWithEmpty(money_a_point)} placeholder="Nhập số tiền..." />
                     <div class="input-group-append">
                       <span class="input-group-text" id="basic-addon2">VNĐ</span>
                     </div>
@@ -218,7 +221,7 @@ class Form extends Component {
                   </div>
                   <div class="input-group" style={{ marginLeft: "20px", maxWidth: "100%" }}>
 
-                    <input type="text" class="form-control" onChange={this.onChange} value={point_review} name="point_review" placeholder="Nhập số xu..." />
+                    <input type="text" class="form-control" onChange={this.onChange} value={formatNoDWithEmpty(point_review)} name="point_review" placeholder="Nhập số xu..." />
                     <div class="input-group-append">
                       <span class="input-group-text" id="basic-addon2">Xu</span>
                     </div>
@@ -237,7 +240,7 @@ class Form extends Component {
                   </div>
                   <div class="input-group" style={{ marginLeft: "20px", maxWidth: "100%" }}>
 
-                    <input type="text" class="form-control" value={point_introduce_customer} onChange={this.onChange} name="point_introduce_customer" placeholder="Nhập số xu..." />
+                    <input type="text" class="form-control" value={formatNoDWithEmpty(point_introduce_customer)} onChange={this.onChange} name="point_introduce_customer" placeholder="Nhập số xu..." />
                     <div class="input-group-append">
                       <span class="input-group-text" id="basic-addon2">Xu</span>
                     </div>
@@ -249,7 +252,7 @@ class Form extends Component {
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" checked={checkedAllow} name="allow_use_point_order" onChange={this.onChangeCheckBox} id="gridCheck" />
                   <label class="form-check-label" for="gridCheck">
-                    Cho phép sử dụng su khi mua hàng
+                    Cho phép sử dụng xu khi mua hàng
                   </label>
                 </div>
 
@@ -258,7 +261,7 @@ class Form extends Component {
                 <div class="form-check">
                   <input class="form-check-input" checked={checkMaxPoint} name="is_set_order_max_point" onChange={this.onChangeCheckBox} type="checkbox" id="gridCheck" />
                   <label class="form-check-label" for="gridCheck">
-                    Xét giới hạn điểm nhận Được khi mua hàng
+                    Xét giới hạn xu nhận được khi mua hàng
                   </label>
                 </div>
 
@@ -273,7 +276,7 @@ class Form extends Component {
                   </div>
                   <div class="input-group" style={{ marginLeft: "20px", maxWidth: "100%" }}>
 
-                    <input type="text" class="form-control" onChange={this.onChange} value={order_max_point} name="order_max_point" placeholder="Nhập số xu..." />
+                    <input type="text" class="form-control" onChange={this.onChange} value={formatNoDWithEmpty(order_max_point)} name="order_max_point" placeholder="Nhập số xu..." />
                     <div class="input-group-append">
                       <span class="input-group-text" id="basic-addon2">Xu</span>
                     </div>

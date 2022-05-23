@@ -177,7 +177,8 @@ class PostOrder extends Component {
             }
             else {
                 address_detail = {}
-            } if (typeof newState.fee != "undefined") {
+            }
+             if (typeof newState.fee != "undefined") {
                 total_shipping_fee = { total_shipping_fee: newState.fee === 0 ? 0 : newState.fee > 0 ? newState.fee : null }
             }
             else {
@@ -573,6 +574,7 @@ class PostOrder extends Component {
                 totalAfterDiscount: nextProps.oneCart.info_cart.total_after_discount,
                 selectPrice: -1,
                 namePos: nextProps.oneCart.name,
+                fee : nextProps.oneCart.total_shipping_fee,
                 customerNote: nextProps.oneCart.customer_note ?? "",
                 payment_method_id: nextProps.oneCart.payment_method_id ?? (nextProps.total_shipping_fee > 0 || this.state.openShipment == true ? 2 : 0),
                 discount: nextProps.oneCart.discount,
@@ -772,7 +774,7 @@ class PostOrder extends Component {
     handleOpenShipment = () => {
         var chooseTab = this.state.openShipment == false ? 1 : 2
         this.setState({ openShipment: !this.state.openShipment, chooseTab, fee: chooseTab == 2 ? null : 0, payment_method_id: this.state.openShipment ? 0 : 2 });
-
+        console.log("vao ne")
         this.onNewChange({ fee: chooseTab == 2 ? null : 0 })
 
     };
@@ -826,6 +828,7 @@ class PostOrder extends Component {
     };
 
     onNewChange = (state) => {
+        console.log("vo state" , state , this.state)
         this.changeNewState({
             ...this.state,
             ...state,
@@ -1278,8 +1281,8 @@ class PostOrder extends Component {
                                                                         class=" col-4 input-discount"
                                                                         value={
                                                                             this.state.typeDiscount == 0
-                                                                                ? this.state.discount
-                                                                                : this.state.percentDiscount
+                                                                                ? formatNoD(this.state.discount)
+                                                                                : formatNoD(this.state.percentDiscount)
                                                                         }
                                                                     />
 

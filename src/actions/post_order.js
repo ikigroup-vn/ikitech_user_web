@@ -351,11 +351,7 @@ export const updateInfoCart = (store_code, branch_id, id, data) => {
 
     PosApi.updateInfoCart(store_code, branch_id, id, data)
       .then((res) => {
-        dispatch({
-          type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
-
+    
         dispatch({
           type: Types.FETCH_LIST_CART_ITEM,
           data: res.data.data,
@@ -390,10 +386,7 @@ export const updateInfoCarts = (store_code, branch_id, id, data) => {
 
     PosApi.updateInfoCarts(store_code, branch_id, id, data)
       .then((res) => {
-        dispatch({
-          type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+
 
         var data2 = res.data.data
         data2.noUpdateUI = data.noUpdateUI

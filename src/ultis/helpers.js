@@ -175,6 +175,14 @@ export const formatNoD = (number) => {
   let dollarUSLocale = Intl.NumberFormat("en-US");
   return dollarUSLocale.format((number ?? 0));
 };
+export const formatNoDWithEmpty = (number) => {
+  if (number == "" || number == null) return "";
+  var number = number.toString().replace(/\./g, ".");
+   number = parseInt(number);
+
+  let dollarUSLocale = Intl.NumberFormat("en-US");
+  return dollarUSLocale.format((number ?? 0));
+};
 
 export const loadExpandTable = () => {
   window.$(".exploder").unbind("click");

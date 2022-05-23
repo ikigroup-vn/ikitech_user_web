@@ -100,7 +100,7 @@ class BonusProgram extends Component {
         return (
             <div id="wrapper">
                 <div className="card-body">
-                    <div className="form-group">
+                    <div className="form-group" style = {{display:"flex" , justifyContent : "space-between"}}>
                         <div className="on-off" name={`${randomString(10)}`} style={{display: 'inline-block'}}>
                             <input type="checkbox" className="checkbox" checked={!is_end} />
 
@@ -112,6 +112,15 @@ class BonusProgram extends Component {
                                 <span className="switch__right">Đang diễn ra</span>
                             </label>
                         </div>
+                        <Link
+                                                to={`/agency_bonus_steps/${store_code}/create`}
+                                                class={`btn btn-info btn-icon-split show`}
+                                            >
+                                                <span class="icon text-white-50">
+                                                    <i style = {{marginTop : "3px"}} class="fas fa-plus"></i>
+                                                </span>
+                                                <span class="text">Thêm phần thưởng</span>
+                                            </Link>
                     </div>
 
                     {is_end == true ? "" : <div class="form-group">
@@ -144,15 +153,7 @@ class BonusProgram extends Component {
                                         <th>Giá trị</th>
                                         <th>Số lượng còn lại</th>
                                         <th>
-                                            <Link
-                                                to={`/agency_bonus_steps/${store_code}/create`}
-                                                class={`btn btn-info btn-icon-split btn-sm show`}
-                                            >
-                                                <span class="icon text-white-50">
-                                                    <i class="fas fa-plus"></i>
-                                                </span>
-                                                <span class="text">Thêm</span>
-                                            </Link>
+                                           Hành động
 
                                         </th>
 

@@ -87,7 +87,7 @@ class Table extends Component {
         }
         return (
           <React.Fragment>
-            <tr class="sub-container">
+            <tr class="sub-container hover-product">
               <td>
                 {index + 1}
               </td>{" "}
@@ -187,7 +187,7 @@ class Table extends Component {
         ? []
         : this.props.agencys.data;
     return (
-      <div class="table-responsive">
+      <div class="" style = {{overflow : "auto"}}>
         <table class="table table-border">
           <thead>
             <tr>

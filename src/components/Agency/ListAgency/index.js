@@ -49,7 +49,7 @@ class ListAgency extends Component {
         var { showChatBox } = this.state
         console.log(this.props.state)
         return (
-            <div id="wrapper">
+            <div id="">
                 <div className="card-body">
                     <Table types = {types}  tabId={tabId} showChatBox={showChatBox} handleShowChatBox={this.handleShowChatBox} store_code={store_code} agencys={agencys} />
 

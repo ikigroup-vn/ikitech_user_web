@@ -433,7 +433,7 @@ class ProductEdit extends Component {
                     class="btn btn-primary btn-sm"
                     onClick={this.postProduct}
                   >
-                    <i class="fa fa-plus"></i> Tạo
+                    <i class="fa fa-plus"></i> Lưu thay đổi
                   </button>
                   <a
                     style={{ marginLeft: "10px" }}
