@@ -72,7 +72,7 @@ class Table extends Component {
       result = products.map((data, index) => {
 
         return (
-          <tr>
+          <tr className = "hover-product">
         
             <td>{per_page * (current_page - 1) + (index + 1)}</td>
 

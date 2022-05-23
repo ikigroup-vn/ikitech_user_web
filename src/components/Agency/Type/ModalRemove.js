@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import * as agencyAction from "../../../actions/agency";
 import { connect } from "react-redux";
+import themeData from "../../../ultis/theme_data";
 
 class ModalRemove extends Component {
     
@@ -24,8 +25,8 @@ class ModalRemove extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{ background: "white" }}>
-              <button
+          <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+              <h4 style={{ color: "white" }}>Thông báo</h4>              <button
                 type="button"
                 class="close"
                 data-dismiss="modal"
@@ -44,7 +45,7 @@ class ModalRemove extends Component {
               <div class="modal-body">
                 <input type="hidden" name="remove_id_store" />
                 <div class="alert-remove"></div>
-                Bạn có muốn xóa Cấp {modal.name}
+                Bạn chắc chắn  muốn xóa cấp đại lý này không?
               </div>
               <div class="modal-footer">
                 <button
@@ -54,7 +55,7 @@ class ModalRemove extends Component {
                 >
                   Đóng
                 </button>
-                <button type="submit" class="btn btn-info">
+                <button type="submit" class="btn btn-warning">
                   Xóa
                   
                 </button>

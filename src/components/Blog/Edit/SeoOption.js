@@ -53,7 +53,7 @@ class SeoOption extends Component {
                     <p> <i >Bỏ trống mặc định sẽ lấy tiêu đề bài viết</i></p>
                     <textarea value={txtSeoTitle} maxlength="100"
                         onChange={this.onChange}
-                        name="txtSeoTitle" id="input" class="form-control" rows="1" required="required"></textarea>
+                        name="txtSeoTitle" id="input" class="form-control" rows="1"></textarea>
 
 
                 </div> <div class="form-group">
@@ -61,7 +61,7 @@ class SeoOption extends Component {
                     <p> <i >Bỏ trống mặc định sẽ lấy một phần nội dung</i></p>
                     <textarea value={txtSeoDescription} maxlength="200"
                         onChange={this.onChange}
-                        name="txtSeoDescription" id="input" class="form-control" rows="3" required="required"></textarea>
+                        name="txtSeoDescription" id="input" class="form-control" rows="3" ></textarea>
 
 
                 </div>

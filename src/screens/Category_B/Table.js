@@ -92,7 +92,7 @@ class Table extends Component {
 
         return (
           <SortableItem key={data.id}>
-            <div class="resp-table-row" style={{ width: "100%" }}>
+            <div class="resp-table-row hover-product" style={{ width: "100%" }}>
               <div class="table-body-cell">{index + 1}</div>
               <div class="table-body-cell" style={{ width: "15%" }}>
                 <img

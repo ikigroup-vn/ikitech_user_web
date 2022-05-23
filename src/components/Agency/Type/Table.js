@@ -37,11 +37,11 @@ class Table extends Component {
 
         return (
           <React.Fragment>
-            <tr>
+            <tr className ="hover-product">
               <td>{index + 1}</td>
               <td>{data.name}</td>
               <td>
-                <a
+                <button
                   onClick={() => this.handleUpdate(data.id, data.name)}
 
                   data-toggle="modal"
@@ -49,7 +49,7 @@ class Table extends Component {
                   class={`btn btn-warning btn-sm `}
                 >
                   <i class="fa fa-edit"></i> Sửa
-                </a>
+                </button>
                 <button
                   onClick={() => this.handleRemove(data.id, data.name)}
                   style={{ marginLeft: "10px" }}

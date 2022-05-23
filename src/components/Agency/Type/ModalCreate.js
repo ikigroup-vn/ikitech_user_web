@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import * as agencyAction from "../../../actions/agency"
 import { connect } from "react-redux";
+import themeData from "../../../ultis/theme_data";
 
 
 class ModalCreate extends Component {
@@ -43,9 +44,8 @@ class ModalCreate extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{ background: "white" }}>
-              <h4 class="modal-title" style={{ color: "black" }}>Thêm cấp </h4>
-
+              <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+              <h4 style={{ color: "white" }}>Thêm cấp</h4>
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
             </div>
@@ -79,7 +79,7 @@ class ModalCreate extends Component {
                 >
                   Đóng
                 </button>
-                <button type="submit" class="btn btn-info">
+                <button type="submit" class="btn btn-warning">
                   Tạo
                 </button>
               </div>

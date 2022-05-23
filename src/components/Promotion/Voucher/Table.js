@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import history from "../../../history"
 import moment from "moment"
+import {formatNoD} from "../../../ultis/helpers"
 
 class Table extends Component {
   constructor(props) {
@@ -84,8 +85,17 @@ filterColDiscount = (data) => {
       var { update, _delete } = this.props
 
       result = vouchers.map((data, index) => {
-        var set_limit_amount =
-          data.set_limit_amount == true ? data.amount : "Không giới hạn";
+        var value_discount = ""
+        if(data.set_limit_value_discount== true  && data.discount_type == 0 )
+        {
+          value_discount=  formatNoD(data.value_discount)
+        }
+ 
+        else
+        {
+          value_discount=  data.value_discount + "%"
+
+        }
         var status_limit_amount = data.set_limit_amount == true ? "" : "danger";
 
         var type_voucher = data.voucher_type == 0 ? "Toàn shop" : "Theo sản phảm"
@@ -119,10 +129,14 @@ filterColDiscount = (data) => {
             <td>
               {data.value_limit_total && new Intl.NumberFormat().format(data.value_limit_total)}
 
-              {/* {!isNaN(Number(set_limit_amount)) ? new Intl.NumberFormat().format(set_limit_amount.toString()) + "%" : set_limit_amount} */}
 
             </td >  
-      
+            <td>
+
+            {value_discount}
+
+            </td >  
+
             <td className="group-btn-table">
               {this.props.is_end == 0 || this.props.is_end == 2   && <Link
                 to={`/voucher/edit/${store_code}/${data.id}`}
@@ -178,7 +192,8 @@ filterColDiscount = (data) => {
               <th>Ngày bắt đầu</th>
               <th>Ngày kết thúc</th>
               <th>Đơn đạt tối thiểu</th>
-         
+              <th>Giảm giá</th>
+
 
               <th>Hành động</th>
             </tr>

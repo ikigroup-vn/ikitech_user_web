@@ -30,7 +30,7 @@ class Form extends Component {
       listProducts: [],
       txtContent: "",
       image: "",
-      is_type_discount: "hide",
+      is_type_discount: "show",
       is_limit: "hide",
       limit: 'hide',
       displayError: "hide",
