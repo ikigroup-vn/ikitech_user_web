@@ -19,6 +19,8 @@ class ProductEdit extends Component {
   componentDidMount() {
     var { store_code, productId, agency_type_id } = this.props;
     this.props.fetchProductAgencyPrice(store_code, productId, agency_type_id);
+    this.props.fetchProductId(store_code, productId);
+
 
   }
 
@@ -99,7 +101,8 @@ class ProductEdit extends Component {
   }
 
   render() {
-    var { product } = this.props;
+    var { product , itemProduct } = this.props;
+    console.log(product)
     return (
 
 
@@ -112,14 +115,17 @@ class ProductEdit extends Component {
           style={{ display: "flex", justifyContent: "space-between" }}
         >
           <h4 className="h4 title_content mb-0 text-gray-800">
-            Chỉnh sửa sản phẩm
+            Chỉnh sửa giá sản phẩm: {itemProduct.name ?? null}
           </h4>
         </div>
         <br></br>
         <div class="card mb-4">
           <div class="card-header title_content">
             Nhập giá đại lý
+            <span style = {{display : "block" ,fontSize : "14px", color : "black" }}>(Giá đại lý sẽ bằng giá gốc nếu các trường giá đại lý bị bỏ trống)</span>
+
           </div>
+          
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
               <div class="col-lg-6">
@@ -166,24 +172,18 @@ class ProductEdit extends Component {
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <button
-                  type="button"
+              <button
                   class="btn btn-primary btn-sm"
                   onClick={this.postProduct}
                 >
-                  <i class="fa fa-plus"></i>
-                  Lưu thay đổi
+                  <i class="fa fa-save"></i> Lưu
                 </button>
-                <a
+                <button
                   style={{ marginLeft: "10px" }}
-                  onClick={this.goBack}
-                  class="btn btn-warning"
+                  onClick={this.goBack} class={`btn btn-warning btn-sm color-white `}
                 >
-                  <span class="icon text-white-50">
-                    <i class="fas fa-arrow-left"></i>
-                  </span>
-                  <span class="text"> Trở về</span>
-                </a>
+                  <i class="fa fa-arrow-left"></i> Trở về
+                </button>
               </div>
             </div>
           </div>
@@ -200,6 +200,8 @@ const mapStateToProps = (state) => {
   return {
     product: state.productReducers.product.product_agency_price_id,
     alert: state.productReducers.alert.alert_uid,
+    itemProduct: state.productReducers.product.productId,
+
 
   };
 };
@@ -213,7 +215,9 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchProductAgencyPrice: (store_code, productId, agency_type_id) => {
       dispatch(productAction.fetchProductAgencyPrice(store_code, productId, agency_type_id));
     },
-
+    fetchProductId: (store_code, productId) => {
+      dispatch(productAction.fetchProductId(store_code, productId));
+    },
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ProductEdit);

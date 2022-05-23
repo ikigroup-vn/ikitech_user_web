@@ -28,7 +28,7 @@ class ModalRemoveChild extends Component {
               class="modal-header"
               style={{ backgroundColor: themeData().backgroundColor }}
             >
-              <h4>Thông báo</h4>
+              <h4 style = {{color : "white"}}>Thông báo</h4>
               <button
                 type="button"
                 class="close"

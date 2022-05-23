@@ -448,9 +448,9 @@ const routes = [
     exact: true,
 
     main: ({ match, history }) => (
-      getChannel() == IKITECH ?
-        <CustomerDetail match={match} history={history} /> : <CustomerDetailPos match={match} history={history} />
-    ),
+      <CustomerDetailPos match={match} history={history} />
+
+    )
   },
   {
     path: "/revenue_expenditure/:store_code",

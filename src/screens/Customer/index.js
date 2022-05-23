@@ -149,7 +149,7 @@ handleSetInfor = (item) => {
                       <h4 className="h4 title_content mb-0 text-gray-800">
                        Danh sách khách hàng
                       </h4>{" "}
-                      {getChannel() == "IKIPOS" && <a
+                      <a
                         data-toggle="modal"
                         data-target="#modalCreateCustomer"
                         class="btn btn-info btn-icon-split btn-sm"
@@ -166,7 +166,7 @@ handleSetInfor = (item) => {
                         >
                           Thêm khách hàng
                         </span>
-                      </a>}
+                      </a>
                     </div>
 
                     <br></br>

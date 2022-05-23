@@ -13,6 +13,7 @@ import Loading from "../Loading";
 import * as productAction from "../../actions/product";
 import * as agencyAction from "../../actions/agency";
 
+import history from "../../history"
 
 
 
@@ -142,6 +143,10 @@ class Product extends Component {
     return ""
   
   }
+  goBack = () => {
+
+    history.goBack();
+};
 
   render() {
     if (this.props.auth) {
@@ -169,7 +174,7 @@ class Product extends Component {
                         <h4 className="h4 title_content mb-0 text-gray-800">
                           Sản phẩm - Đại lý {this.getNameType()}
                         </h4>
-
+                        <button style={{ marginRight: "10px" }} type="button" onClick={this.goBack} class="btn btn-warning  btn-sm"><i class="fas fa-arrow-left"></i>&nbsp;Trở về</button>
 
                       </div>
                       <br></br>

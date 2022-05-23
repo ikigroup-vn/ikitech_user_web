@@ -132,27 +132,27 @@ class agency extends Component {
                             } */}
                             {
                               config == true ? <Tab>
-                                <i class="fa fa-list"></i>
+                                <i class="fa fa-cogs"></i>
                                 <span>Cấu hình đại lý</span>
                               </Tab> : null
                             }
                             {
                               agency_list == true ? <Tab>
-                                <i class="fa fa-list"></i>
+                                <i class="fa fa-users"></i>
                                 <span>Danh sách đại lý</span>
                               </Tab> : null
                             }
 
                             {
                               payment_request_list == true ? <Tab>
-                                <i class="fa fa-list"></i>
+                                <i class="fa fa-chart-bar"></i>
                                 <span> Top doanh số</span>
                               </Tab> : null
                             }
 
                             {   
                               bonus_program == true ? <Tab>
-                                <i class="fa fa-list"></i>
+                                <i class="fa fa-gift"></i>
                                 <span>Chương trình thưởng</span>
                               </Tab> : null
                             }

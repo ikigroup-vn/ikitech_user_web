@@ -16,11 +16,11 @@ class Table extends Component {
   handleSetInfor = (item) => {
     this.props.handleSetInfor(item)
   }
-  changePage = (store_code , customerId) => {
-    var {  paginate } = this.props;
+  changePage = (store_code, customerId) => {
+    var { paginate } = this.props;
 
     history.push(`/customer/detail/${store_code}/${customerId}?pag=${paginate}`)
-      }
+  }
   showData = (customer) => {
     var { store_code, paginate } = this.props;
     var result = null;
@@ -29,17 +29,17 @@ class Table extends Component {
 
       result = customer.map((data, index) => {
         return (
-          <tr className="hover-product" onClick={() => this.changePage(store_code , data.id)}>
+          <tr className="hover-product" onClick={() => this.changePage(store_code, data.id)}>
             <td>{index + 1}</td>
 
             <td>{data.name}</td>
             <td>{data.phone_number}</td>
 
-<td>{data.email == null ? "Chưa cập nhật" : data.email}</td>
+            <td>{data.email == null ? "Chưa cập nhật" : data.email}</td>
             <td>{data.points ? new Intl.NumberFormat().format(data.points)
- : 0}</td>
-        <td>{data.debt ? new Intl.NumberFormat().format(data.debt)
- : 0}</td>
+              : 0}</td>
+            <td>{data.debt ? new Intl.NumberFormat().format(data.debt)
+              : 0}</td>
             {getChannel() == IKITECH && <td>
               {data.is_collaborator == null ||
                 data.is_collaborator == "" ||
@@ -49,16 +49,16 @@ class Table extends Component {
             </td>}
 
 
-           
+
 
             <td className="">
-              {getChannel() == IKITECH && <Link
+              {/* {getChannel() == IKITECH && <Link
                 to={`/customer/detail/${store_code}/${data.id}?pag=${paginate}`}
                 class="btn btn-success btn-sm"
               >
                 <i class="fa fa-eye"></i> Xem
-              </Link> }
-              
+              </Link>} */}
+
               {getChannel() == IKITECH ? <button
                 style={{ marginLeft: "10px" }}
 
@@ -92,7 +92,7 @@ class Table extends Component {
         ? []
         : this.props.customers.data;
 
-      var store_code = this.props;
+    var store_code = this.props;
     return (
       <div class="table-responsive">
         <table
@@ -120,8 +120,8 @@ class Table extends Component {
           <tbody>{this.showData(customers)}</tbody>
         </table>
 
-      
-                      
+
+
       </div>
     );
   }

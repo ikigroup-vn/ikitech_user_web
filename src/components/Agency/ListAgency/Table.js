@@ -125,10 +125,10 @@ class Table extends Component {
 
                   <label for="checkbox" class="switch">
                     <span class="switch__circle">
-                      <span class="switch__circle-inner"></span>
+                      <span style = {{backgroundColor : data.status == 1 ? "white" : "gray"}} class="switch__circle-inner"></span>
                     </span>
-                    <span class="switch__left">Tắt</span>
-                    <span class="switch__right">Bật</span>
+                    <span class="switch__left"></span>
+                    <span class="switch__right"></span>
                   </label>
                 </div>
               </td>
@@ -158,7 +158,7 @@ class Table extends Component {
                   to={`/order/${this.props.store_code}?agency_by_customer_id=${data.customer_id}`}
                   class="btn btn-danger btn-sm"
                 >
-                  <i class="fa fa-history"></i> Lịch sử đặt hàng
+                  <i class="fa fa-history"></i> Lịch sử đơn hàng
                 </Link>
 
                 <Link
@@ -201,7 +201,7 @@ class Table extends Component {
               <th>Cấp đại lý</th>
 
 
-              <th>Trạng thái</th>
+              <th>Trạng thái hoạt động</th>
 
               <th>Hành động</th>
             </tr>
