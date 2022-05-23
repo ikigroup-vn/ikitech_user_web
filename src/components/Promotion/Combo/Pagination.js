@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import {filter_var} from "../../../ultis/helpers"
 import * as comboAction from "../../../actions/combo";
+import getChanel from "../../../ultis/channel"
 class Pagination extends Component {
   constructor(props) {
     super(props);
@@ -56,7 +57,7 @@ class Pagination extends Component {
     return (
         
    
-<nav aria-label="Page navigation" className={`float-pagination ${display}`}>
+<nav aria-label="Page navigation" className={`float-pagination ${display} ${getChanel()}`}>
   <ul class="pagination  tab-pagination pg-blue">
     {this.showData(links)}
   </ul>

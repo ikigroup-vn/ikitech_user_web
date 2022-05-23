@@ -268,8 +268,8 @@ class ListProduct extends Component {
               <table class="table table-hover table-border">
                 <thead>
                   <tr>
-                    <th>Hình ảnh</th>
-                    <th>Mã SKU</th>
+                    <th></th>
+                    <th style = {{width : "13%"}}>Hình ảnh</th>
 
                     <th>Mã SKU</th>
                     <th>Tên sản phẩm</th>

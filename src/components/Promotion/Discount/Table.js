@@ -95,8 +95,10 @@ class Table extends Component {
       result = discounts.map((data, index) => {
         if(getChannel() == IKITECH)
         {
-          var set_limit_amount =
-          data.set_limit_amount == true ? data.amount : "Không giới hạn";
+          // var set_limit_amount =
+          // data.set_limit_amount == true ? data.amount : "Không giới hạn";
+          var set_limit_amount = data.value
+
         }
         else
         {

@@ -543,6 +543,9 @@ class InfoProduct extends Component {
             <div id="accordion">
               <div className="wrap_category" style={{ display: "flex" }}>
                 <input
+                                  onClick={this.onChangeIcon}
+
+                disabled
                   type="text"
                   class="form-control"
                   placeholder="--Chọn danh mục--"
@@ -577,7 +580,7 @@ class InfoProduct extends Component {
                 aria-labelledby="headingOne"
                 data-parent="#accordion"
               >
-                <form onSubmit={this.searchData}>
+                {/* <form onSubmit={this.searchData}>
                 <div
                   class="input-group mb-6"
                   style={{
@@ -599,7 +602,7 @@ class InfoProduct extends Component {
                     </button>
                   </div>
                 </div>
-                </form>
+                </form> */}
                 <ul
                   style={{ listStyle: "none", margin: "5px 0" }}
                   class="list-group"

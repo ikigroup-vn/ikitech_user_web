@@ -274,7 +274,7 @@ class ListProduct extends Component {
                 <thead>
                   <tr>
                     <th></th>
-                    <th>Hình ảnh</th>
+                    <th style = {{width : "13%"}}>Hình ảnh</th>
 
                     <th>Mã SKU</th>
                     <th>Tên sản phẩm</th>

@@ -244,7 +244,7 @@ class Form extends Component {
     var type = getQueryParams("type")
     if(type)
     {
-      history.replace(`/discount/${store_code}?type=${type}`)
+      history.replace(`/combo/${store_code}?type=${type}`)
     }
     else
     {
@@ -338,7 +338,7 @@ class Form extends Component {
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 
               <div class="box-body">
-                {
+                {/* {
                   getChannel() == IKITECH && (
                     <React.Fragment>
                       <div class="form-group">
@@ -363,7 +363,7 @@ class Form extends Component {
                       </div>
 
                     </React.Fragment>
-                  )}
+                  )} */}
 
                 <div class="form-group">
                   <label for="product_name">Tên chương trình</label>
@@ -510,7 +510,7 @@ class Form extends Component {
                 <Table handleChangeQuantity={this.handleChangeQuantity} handleAddProduct={this.handleAddProduct} products={saveListProducts}></Table>
 
               </div>
-              {getChannel() == IKITECH &&
+              {/* {getChannel() == IKITECH &&
 
                 <div class="form-group">
                   <label for="product_name">Ghi chú</label>
@@ -519,7 +519,7 @@ class Form extends Component {
                     onChange={this.onChangeDecription}
                   />
                 </div>
-              }
+              } */}
             </div>
           </div>
           <div class="row">

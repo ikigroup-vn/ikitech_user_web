@@ -113,7 +113,7 @@ class OrderStatus extends Component {
                         background : disable
                     }}>
                         
-                        {showBoard == true && this.showOrderStatus(status)}
+                        {this.showOrderStatus(status)}
 
                     </li>
 

@@ -270,7 +270,7 @@ class PanelBottom extends Component {
 
         if (typeof nextProps.total_shipping_fee != "undefined" && nextState.load_total_shipping_fee == true) {
             console.log("vaoooo")
-            this.setState({ type_ship: nextProps.total_shipping_fee > 0 ? 2 : 0, load_total_shipping_fee: false })
+            this.setState({ type_ship: nextProps.total_shipping_fee > 0 ? 2 : 0, load_total_shipping_fee: false   })
         }
 
         if (!shallowEqual(nextProps.wards, this.props.wards)) {
@@ -315,7 +315,7 @@ class PanelBottom extends Component {
             var type = {}
             if(nextProps.oneCart.id != this.props.oneCart.id)
             {
-                type = {type : 0}
+                type = {type_ship : 0 , fee : nextProps.total_shipping_fee}
             }
             this.setState(
                 {
@@ -807,6 +807,9 @@ class PanelBottom extends Component {
         var { select_customer_id, select_customer, address_store, sent_delivery } = this.state
         var { loadShipper } = this.props
         var check =  (txtProvince != "" && txtDistrict != "" && txtWards != "") && (weight != "" || length != "" || width != "" || height != "") ? true : false
+       
+        console.log(this.state.fee)
+       
         return <div style={{
             padding: 5
         }}>

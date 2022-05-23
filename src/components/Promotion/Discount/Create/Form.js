@@ -229,7 +229,7 @@ class Form extends Component {
         <form role="form" onSubmit={this.onSave} method="post">
 
           <div class="box-body">
-            {
+            {/* {
               getChannel() == IKITECH && (
                 <React.Fragment>
                   <div class="form-group">
@@ -253,7 +253,7 @@ class Form extends Component {
 
                   </div>
                 </React.Fragment>
-              )}
+              )} */}
 
 
             <div class="form-group">
@@ -328,7 +328,7 @@ class Form extends Component {
               </div>
      
             </div>
-            {
+            {/* {
               getChannel() == IKITECH &&
             <div class="form-group">
               <label for="product_name">Giới hạn đặt hàng</label>
@@ -343,11 +343,11 @@ class Form extends Component {
                 onChange={this.onChange}
               />
             </div>
-  }
+  } */}
 
 
             <Table handleAddProduct={this.handleAddProduct} products={saveListProducts}></Table>
-            {
+            {/* {
               getChannel() == IKITECH &&
               <div class="form-group">
                 <label for="product_name">Mô tả</label>
@@ -356,7 +356,7 @@ class Form extends Component {
                   onChange={this.onChangeDecription}
                 />
               </div>
-            }
+            } */}
           </div>
           <div class="box-footer">
           <button type = "submit" class="btn btn-info   btn-sm">

@@ -89,7 +89,7 @@ class PaymentStatus extends Component {
                     <li style={{ background: "rgb(31 178 151)" }} class="">
                         <a href="#">Trạng thái thanh toán</a>
                     </li>
-                    {showBoard == true && this.showShipmetStatus(status)}
+              { this.showShipmetStatus(status)}
 
                 </ul>
             </nav>
