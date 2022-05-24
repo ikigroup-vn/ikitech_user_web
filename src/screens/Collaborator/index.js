@@ -102,21 +102,21 @@ class collaborator extends Component {
                             }
                             {
                               collaborator_list == true ? <Tab>
-                                <i class="fa fa-list"></i>
+                                <i class="fa fa-users"></i>
                                 <span>Danh sách cộng tác viên</span>
                               </Tab> : null
                             }
 
                             {
                               payment_request_list == true ? <Tab>
-                                <i class="fa fa-list"></i>
+                                <i class="fa fa-list-check"></i>
                                 <span> Danh sách yêu cầu thanh toán</span>
                               </Tab> : null
                             }
                             {
                               payment_request_history == true ? <Tab>
-                                <i class="fa fa-money"></i>
-                                <span> Lịch sử yêu cầu thanh toàn</span>
+                                <i class="fa fa-history"></i>
+                                <span> Lịch sử yêu cầu thanh toán</span>
                               </Tab> : null
                             }
 

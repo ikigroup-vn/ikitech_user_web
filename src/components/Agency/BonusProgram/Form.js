@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import ModalUpload from "./ModalUpload"
-import { formatNumber } from "../../../ultis/helpers"
+import { formatNumber, isEmpty } from "../../../ultis/helpers"
 import * as agencyAction from "../../../actions/agency"
 import "suneditor/dist/css/suneditor.min.css";
+import * as Types from "../../../constants/ActionType";
 
 class Form extends Component {
     constructor(props) {
@@ -75,7 +76,21 @@ class Form extends Component {
             reward_image_url,
             reward_value,
             limit } = this.state
+        if (isEmpty(reward_name) == false || isEmpty(reward_value) == false || isEmpty(limit) == false || isEmpty(threshold) == false ||
+            reward_value == 0 || limit == 0 || threshold == 0
+        ) {
+            this.props.showError({
+                type: Types.ALERT_UID_STATUS,
+                alert: {
+                    type: "danger",
+                    title: "Thất bại ",
+                    disable: "show",
+                    content: "Nhập giá trị không hợp lệ",
+                },
 
+            })
+            return;
+        }
         if (this.props.step_data != null) {
             this.props.updateBonusSteps(this.props.store_code, this.props.step_data.id,
                 {
@@ -232,7 +247,7 @@ class Form extends Component {
                             <i class="fa fa-save"></i> Lưu
                         </button>
                         <button
-                        type = "button"
+                            type="button"
                             className="color-white"
                             style={{ marginLeft: "10px" }}
                             onClick={this.goBack} class={`btn btn-warning btn-sm color-white `}
@@ -269,6 +284,9 @@ const mapDispatchToProps = (dispatch, props) => {
         updateBonusSteps: (store_code, id, form) => {
             dispatch(agencyAction.updateBonusSteps(store_code, id, form));
         },
+        showError: (action) => {
+            dispatch(action)
+        }
 
     };
 };
