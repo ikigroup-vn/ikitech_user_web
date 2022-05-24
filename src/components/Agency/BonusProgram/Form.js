@@ -5,7 +5,7 @@ import { formatNumber, isEmpty } from "../../../ultis/helpers"
 import * as agencyAction from "../../../actions/agency"
 import "suneditor/dist/css/suneditor.min.css";
 import * as Types from "../../../constants/ActionType";
-
+import history from "../../../history"
 class Form extends Component {
     constructor(props) {
         super(props);
@@ -55,6 +55,15 @@ class Form extends Component {
             this.setState({ [name]: value });
         }
     };
+    onChangeName = (e) =>{
+        var target = e.target;
+        var name = target.name;
+        var value = target.value;
+
+
+            this.setState({ [name]: value });
+        
+    }
     onChangeSelect = (selectValue) => {
         this.setState({ txtCategories: selectValue });
     };
@@ -117,8 +126,8 @@ class Form extends Component {
     };
 
     goBack = () => {
-        var { history } = this.props;
-        history.goBack();
+        var {store_code} = this.props
+        history.replace(`/agency/${store_code}?tab-index=3`);
     };
 
 
@@ -150,7 +159,7 @@ class Form extends Component {
                                         name="reward_name"
                                         placeholder="Nhập tên"
                                         autocomplete="off"
-                                        onChange={this.onChange}
+                                        onChange={this.onChangeName}
                                     />
                                 </div>
                                 <div class="form-group">

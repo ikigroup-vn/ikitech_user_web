@@ -109,7 +109,7 @@ class Table extends Component {
               <td>
 
                 <select name="agency_type_id" id="input" value={data.agency_type_id} required="required" onChange={(e) => this.changeAgencyType(e, data.id)}>
-                  <option value=""></option>
+                  {/* <option value=""></option> */}
                   {
                     this.props.types.map((data, index) => {
                       return <option value={data.id}>{data.name}</option>
@@ -120,7 +120,7 @@ class Table extends Component {
               </td>
 
               <td>
-                <div className="on-off" onClick={(e) => { this.onChangeStatus(e, data.id) }}>
+                <div style={{display : "flex" , justifyContent : "center"}} className="on-off" onClick={(e) => { this.onChangeStatus(e, data.id) }}>
                   <input ref={(ref) => this["checked" + data.id] = ref} type="checkbox" class="checkbox" name={`${randomString(10)}`} checked={data.status == 1 ? true : false} />
 
                   <label for="checkbox" class="switch">
@@ -218,8 +218,8 @@ class Table extends Component {
 
               <th>
                 
-                <select name="txtType" value = {txtType} id="input"   onChange={this.onChangeType}>
-                  <option  disabled>Cấp đại lý</option>                
+                <select name="txtType" value = {txtType} id="input" className="form-control"  onChange={this.onChangeType}>
+                  <option  disabled>-- Cấp đại lý --</option>                
                     <option value="" >Tất cả</option>
 
                   {this.optionsType()}

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-
+import getChannel from "../../ultis/channel"
 import * as customerAction from "../../actions/customer";
 class Pagination extends Component {
   constructor(props) {
@@ -58,7 +58,7 @@ class Pagination extends Component {
 
   render() {
     return (
-      <nav aria-label="Page navigation" className="float-pagination">
+      <nav aria-label="Page navigation" className={`float-pagination ${getChannel()}`}>
         <ul class="pagination  tab-pagination pg-blue">
           {this.showData(this.props.customers.links)}
         </ul>

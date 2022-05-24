@@ -12,6 +12,7 @@ import { connect } from "react-redux";
 import Loading from "../Loading";
 import * as productAction from "../../actions/product";
 import * as agencyAction from "../../actions/agency";
+import { getQueryParams } from "../../ultis/helpers"
 
 import history from "../../history"
 
@@ -66,16 +67,18 @@ class Product extends Component {
     this.setState({ searchValue: e.target.value });
   };
   componentDidMount() {
-    var { page ,store_code  ,agency_type_id } = this.props.match.params
-    if(this.props.types.length > 0)
-    {
+    var {  store_code  ,agency_type_id } = this.props.match.params
+    var page = getQueryParams("page")
+    console.log(page)
+    // if(this.props.types.length > 0)
+    // {
 
-    }
-    else
-    {
-      this.props.fetchAllAgencyType(store_code);
+    // }
+    // else
+    // {
+    //   this.props.fetchAllAgencyType(store_code);
 
-    }
+    // }
     if (typeof page != "undefined" && page != null && page != "" && !isNaN(Number(page) )) {
   
       this.props.fetchAllProduct(store_code, page , null, agency_type_id );
@@ -257,7 +260,7 @@ class Product extends Component {
 
 
                         <div class="card-body">
-                          <Table agency_type_id = {agency_type_id} insert={insert} _delete={_delete} update={update} page={page} handleDelCallBack={this.handleDelCallBack} handleMultiDelCallBack={this.handleMultiDelCallBack} store_code={store_code} products={products} />
+                          <Table  agency_type_id = {agency_type_id} insert={insert} _delete={_delete} update={update} page={page} handleDelCallBack={this.handleDelCallBack} handleMultiDelCallBack={this.handleMultiDelCallBack} store_code={store_code} products={products} />
                           <Pagination
                             limit={numPage}
                             searchValue={searchValue}
