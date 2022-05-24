@@ -189,7 +189,7 @@ class Config extends Component {
                                 <thead className="thead-quantity">
                                     <tr>
                                         <th>STT</th>
-                                        <th>Mức</th>
+                                        <th>Mức doanh số</th>
                                         <th>Thưởng</th>
                                         <th>
                                             <button
@@ -236,7 +236,7 @@ class Config extends Component {
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id="gridCheck" name="payment_1_of_month" onChange={this.onChangeSelect} checked={payment_1_of_month} />
                             <label class="form-check-label" for="gridCheck">
-                                Cho phép quyết toán 1 ngày 1 tháng
+                                Cho phép quyết toán ngày 1 hàng tháng
                             </label>
                         </div>
 
