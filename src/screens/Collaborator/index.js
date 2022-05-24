@@ -109,7 +109,7 @@ class collaborator extends Component {
 
                             {
                               payment_request_list == true ? <Tab>
-                                <i class="fa fa-list-check"></i>
+                                <i class="fas fa-list"></i>
                                 <span> Danh sách yêu cầu thanh toán</span>
                               </Tab> : null
                             }

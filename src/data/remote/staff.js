@@ -14,11 +14,11 @@ export const fetchAllStaff = (store_code, page, params, branch_id) => {
 };
 
 export const fetchStaffId = (store_code  , decentralizationId) => {
-  return callApi(`/ store / ${ store_code } /staffs/${ decentralizationId } `, "get", null);
+  return callApi(`/store/${store_code}/staffs/${ decentralizationId } `, "get", null);
 };
 
 export const createStaff = (store_code,data) =>{
-  return callApi(`/ store / ${ store_code } /staffs`, "post", data);
+  return callApi(`/store/${ store_code }/staffs`, "post", data);
 }
 
 export const updateStaff = (id, decentralization, store_code) => {
