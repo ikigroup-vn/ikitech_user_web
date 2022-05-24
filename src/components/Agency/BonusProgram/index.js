@@ -18,7 +18,7 @@ class BonusProgram extends Component {
                 threshold: "",
                 id: "",
                 store_code: ""
-              },
+            },
         };
     }
 
@@ -39,7 +39,7 @@ class BonusProgram extends Component {
             startTime = moment(bonusAgencyConfig?.config.start_time).format("YYYY-MM-DD HH:mm:ss");
             endTime = moment(bonusAgencyConfig?.config.end_time).format("YYYY-MM-DD HH:mm:ss");
         }
-        
+
         this.props.updateBonusAgencyConfig(store_code, {
             "is_end": !is_end,
             "start_time": startTime,
@@ -48,14 +48,14 @@ class BonusProgram extends Component {
     }
 
     handleDelCallBack = (e, data) => {
-       this.setState({
-        modal: {
-            threshold: data.threshold,
-            reward_name:data.reward_name,
-            id: data.id,
-            store_code:  this.props.store_code
-          },
-       })
+        this.setState({
+            modal: {
+                threshold: data.threshold,
+                reward_name: data.reward_name,
+                id: data.id,
+                store_code: this.props.store_code
+            },
+        })
         e.preventDefault();
     };
 
@@ -100,8 +100,8 @@ class BonusProgram extends Component {
         return (
             <div id="wrapper">
                 <div className="card-body">
-                    <div className="form-group">
-                        <div className="on-off" name={`${randomString(10)}`} style={{display: 'inline-block'}}>
+                    <div className="form-group" style={{ display: "flex", justifyContent: "space-between" }}>
+                        <div className="on-off" name={`${randomString(10)}`} style={{ display: 'inline-block' }}>
                             <input type="checkbox" className="checkbox" checked={!is_end} />
 
                             <label onClick={(e) => { this.onChangeStatus() }} for="checkbox" className="switch" style={{ width: 200 }}>
@@ -112,6 +112,15 @@ class BonusProgram extends Component {
                                 <span className="switch__right">Đang diễn ra</span>
                             </label>
                         </div>
+                        <Link
+                            to={`/agency_bonus_steps/${store_code}/create`}
+                            class={`btn btn-info btn-icon-split show`}
+                        >
+                            <span class="icon text-white-50">
+                                <i style={{ marginTop: "3px" }} class="fas fa-plus"></i>
+                            </span>
+                            <span class="text">Thêm phần thưởng</span>
+                        </Link>
                     </div>
 
                     {is_end == true ? "" : <div class="form-group">
@@ -130,29 +139,23 @@ class BonusProgram extends Component {
                     </div>}
 
                     <div className="form-group">
-                        <label htmlFor="name">Thông tin cấu hình</label>
 
                         <div class="table-responsive col-12">
                             <table class="table table-border table-hover">
                                 <thead className="thead-quantity">
                                     <tr>
                                         <th>STT</th>
-                                        <th>Đơn hàng đạt</th>
-                                        <th>Tên phần thưởng</th>
                                         <th>Hình ảnh</th>
-                                    
-                                        <th>Giá trị</th>
-                                        <th>Số lượng còn lại</th>
+
+                                        <th>Tên phần thưởng</th>
+                                        <th>Đơn đạt tối thiểu</th>
+
+
+                                        <th>Giá trị thưởng</th>
+                                        <th>Giới hạn</th>
+
                                         <th>
-                                            <Link
-                                                to={`/agency_bonus_steps/${store_code}/create`}
-                                                class={`btn btn-info btn-icon-split btn-sm show`}
-                                            >
-                                                <span class="icon text-white-50">
-                                                    <i class="fas fa-plus"></i>
-                                                </span>
-                                                <span class="text">Thêm</span>
-                                            </Link>
+                                            Hành động
 
                                         </th>
 
@@ -192,13 +195,6 @@ class BonusProgram extends Component {
                     <tr>
                         <td>{index + 1}</td>
                         <td>
-                            {threshold}
-                        </td>
-                        <td>
-                            {reward_name}
-
-                        </td>
-                        <td>
                             <img
                                 src={reward_image_url}
                                 class="img-responsive"
@@ -207,7 +203,16 @@ class BonusProgram extends Component {
                                 alt="Image"
                             />
                         </td>
-                       
+                        <td>
+                            {reward_name}
+
+                        </td>
+                        <td>
+                            {threshold}
+                        </td>
+                   
+                   
+
 
                         <td>
                             {reward_value}
@@ -219,16 +224,16 @@ class BonusProgram extends Component {
 
                         <td style={{ display: "flex" }}>
 
-                        <Link
-                                                to={`/agency_bonus_steps/${this.props.store_code}/update/${data.id}`}
-                                                class="btn btn-warning btn-sm"
-                                            >
-                                                <span class="icon text-white-50">
-                                                    <i class="fas fa-edit"></i>
-                                                </span>
-                                                <span class="text">Sửa</span>
-                                            </Link>
-                           
+                            <Link
+                                to={`/agency_bonus_steps/${this.props.store_code}/update/${data.id}`}
+                                class="btn btn-warning btn-sm"
+                            >
+                                <span class="icon text-white-50">
+                                    <i class="fas fa-edit"></i>
+                                </span>
+                                <span class="text">Sửa</span>
+                            </Link>
+
                             <button
                                 type="button"
                                 onClick={(e) => { this.handleDelCallBack(e, data) }}

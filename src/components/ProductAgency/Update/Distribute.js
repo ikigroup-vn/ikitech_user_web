@@ -510,20 +510,21 @@ class Distribute extends Component {
                       <td>
 
                         <input
+                          onChange={(e) => this.onChange(e, "SUP", { name: "price", index, _index, title: _element.name })}
+
+                          value={price} id="input" class="form-control" title="" />
+
+                      </td>
+                      <td>
+
+                        <input
 
                           value={price_default} id="input" class="form-control" title="" disabled
                         />
 
                       </td>
 
-                      <td>
 
-                        <input
-                          onChange={(e) => this.onChange(e, "SUP", { name: "price", index, _index, title: _element.name })}
-
-                          value={price} id="input" class="form-control" title="" />
-
-                      </td>
 
 
                     </tr>
@@ -538,18 +539,19 @@ class Distribute extends Component {
                       <td>
 
                         <input
-
-                          value={price_default} id="input" class="form-control" title="" disabled
-                        />
-
-                      </td>
-                      <td>
-
-                        <input
                           onChange={(e) => this.onChange(e, "PARENT", { name: "price", index: _index })}
 
                           name="" id="input" class="form-control" title=""
                           value={price}
+                        />
+
+                      </td>
+
+                      <td>
+
+                        <input
+
+                          value={price_default} id="input" class="form-control" title="" disabled
                         />
 
                       </td>
@@ -588,12 +590,6 @@ class Distribute extends Component {
                     {element.name}
                   </td>
                   <td>
-                    <input
-
-                      value={price_default} id="input" class="form-control" title="" disabled
-                    />
-                  </td>
-                  <td>
 
                     <input
                       onChange={(e) => this.onChange(e, "PARENT", { name: "price", index: _index })}
@@ -603,6 +599,13 @@ class Distribute extends Component {
                     />
 
                   </td>
+                  <td>
+                    <input
+
+                      value={price_default} id="input" class="form-control" title="" disabled
+                    />
+                  </td>
+
 
 
                 </tr>
@@ -660,8 +663,9 @@ class Distribute extends Component {
             <thead>
               <tr>
                 <th>Tên phân loại</th>
-                <th>Giá bán lẻ</th>
                 <th>Giá đại lý</th>
+                <th>Giá bán lẻ</th>
+
 
               </tr>
             </thead>

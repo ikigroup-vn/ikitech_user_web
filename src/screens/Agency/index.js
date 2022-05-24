@@ -153,7 +153,7 @@ class agency extends Component {
                             {   
                               bonus_program == true ? <Tab>
                                 <i class="fa fa-gift"></i>
-                                <span>Chương trình thưởng</span>
+                                <span>Chương trình thưởng đại lý</span>
                               </Tab> : null
                             }
                             {/* {

@@ -64,7 +64,10 @@ class Bill extends Component {
     const branch_id = localStorage.getItem("branch_id")
     this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
   }
-
+  goBack = () => {
+    var { store_code } = this.props.match.params;
+    history.replace(`/agency/${store_code}?tab-index=1`);
+};
   componentDidMount() {
     var { store_code, status_code } = this.props.match.params;
     var from = getQueryParams("from")
@@ -294,6 +297,10 @@ class Bill extends Component {
                           ? `của Đại lý ${customer.name}`
                           : null}
                       </h4>{" "}
+                      {
+                        getQueryParams("tab-index")==1 &&  <button style={{ marginRight: "10px" }} type="button" onClick={this.goBack} class="btn btn-warning  btn-sm"><i class="fas fa-arrow-left"></i>&nbsp;Trở về</button>
+
+                      }
                     </div>
 
                     <br></br>

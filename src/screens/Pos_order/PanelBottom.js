@@ -1117,8 +1117,10 @@ class PanelBottom extends Component {
 
         var { category_product, listCombo } = this.props
         var settings = {
+            infinite: listCombo.length > 2,
             slidesToShow: 2,
             slidesToScroll: 2,
+            ltr: true
 
         };
         var current_page_product = products.current_page || 1
@@ -1127,7 +1129,7 @@ class PanelBottom extends Component {
 
 
 
-        console.log(store_code)
+        console.log(listCombo)
         return (
             <div className="panel-bottom" style={{
                 "padding-bottom": "25px", paddingTop: "8px"
@@ -1407,34 +1409,34 @@ class PanelBottom extends Component {
                         role="tabpanel" aria-labelledby="tab-javascripts">
 
 
-                        {listCombo.length == 0 ? null :
-                            <div className="combo-page">
-                                <div className="">
-                                    <div className="">
-                                        <Slider {...settings}>
+                        <div className="combo-page">
+                            <div className="">
 
-                                            {
-                                                listCombo.map((v, i) => <CardCombo key={i}
-                                                    name={v.name}
-                                                    addComboInCart={this.props.addComboInCart}
-                                                    id={v.id}
-                                                    end={v.end_time}
-                                                    set_limit_amount={v.set_limit_amount}
-                                                    value={v.value_discount}
-                                                    type={v.discount_type}
-                                                    products={v.products_combo}
-                                                    getDetailCombo={this.getDetailCombo}
-                                                />)
+                                {listCombo.length > 0 &&
 
-                                            }
-                                        </Slider>
+                                    <Slider {...settings}>
 
+                                        {
+                                            listCombo.map((v, i) => <div className="card-wraper"><CardCombo key={i}
+                                                name={v.name}
+                                                addComboInCart={this.props.addComboInCart}
+                                                id={v.id}
+                                                end={v.end_time}
+                                                set_limit_amount={v.set_limit_amount}
+                                                value={v.value_discount}
+                                                type={v.discount_type}
+                                                products={v.products_combo}
+                                                getDetailCombo={this.getDetailCombo}
+                                            /> </div>)
 
+                                        }
+                                    </Slider>
 
-                                    </div>
-                                </div>
+                                }
+
                             </div>
-                        }
+                        </div>
+
 
                     </div>
                     {/* <div class="tab-pane fade" id="content-bootstrap"
@@ -1445,7 +1447,7 @@ class PanelBottom extends Component {
 
                 <ModalFilter></ModalFilter>
 
-            </div>
+            </div >
         );
     }
 }

@@ -72,7 +72,7 @@ class Table extends Component {
     
         return (
           <React.Fragment>
-            <tr class="sub-container">
+            <tr class="sub-container hover-product">
               <td>
                 {index + 1}
               </td>{" "}

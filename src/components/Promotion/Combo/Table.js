@@ -88,13 +88,13 @@ class Table extends Component {
               <td>{type_discount}</td>
               <td>{data.value_discount == null ? null : new Intl.NumberFormat().format(data.value_discount.toString())} </td>
 
-              <td>
+              <td style = {{width : "20%"}}>
                 {this.showListProduct(data.products_combo || [])}
 
               </td>
 
               <td className="group-btn-table">
-                {data.is_end != true && <Link
+                {this.props.is_end == 0 || this.props.is_end == 2  && <Link
                   to={`/combo/edit/${store_code}/${data.id}`}
                   class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
                 >
@@ -171,7 +171,7 @@ class Table extends Component {
               <th>Giá trị</th>
 
 
-              <th style={{ maxWidth: "300px" }}>Áp dụng sản phẩm</th>
+              <th style={{ maxWidth: "200px" }}>Áp dụng sản phẩm</th>
 
 
               <th>Hành động</th>

@@ -87,7 +87,7 @@ class Table extends Component {
         }
         return (
           <React.Fragment>
-            <tr class="sub-container">
+            <tr class="sub-container hover-product">
               <td>
                 {index + 1}
               </td>{" "}
@@ -155,7 +155,7 @@ class Table extends Component {
                 <Link
                   style={{ margin: "2px 0" }}
 
-                  to={`/order/${this.props.store_code}?agency_by_customer_id=${data.customer_id}`}
+                  to={`/order/${this.props.store_code}?agency_by_customer_id=${data.customer_id}&tab-index=1`}
                   class="btn btn-danger btn-sm"
                 >
                   <i class="fa fa-history"></i> Lịch sử đơn hàng
@@ -164,7 +164,7 @@ class Table extends Component {
                 <Link
                   style={{ margin: "2px 0" }}
 
-                  to={`/agency/${this.props.store_code}/report/${data.customer_id}`}
+                  to={`/agency/${this.props.store_code}/report/${data.customer_id}?tab-index=1`}
                   class="btn btn-info btn-sm"
                 >
                   <i class="fa fa-bar-chart"></i> Báo cáo
@@ -180,14 +180,32 @@ class Table extends Component {
     }
     return result;
   };
+  optionsType = () =>{
+    var result = null
+    var {types} = this.props
+    if(types.length> 0){
+      result = types.map((data) =>{
+        return (
+          <option value ={data.id}>{data.name}</option>
+        )
+      })
+    }
+    return result
+  }
+  onChangeType = (e) =>{
+    var {value} = e.target
+    this.setState({txtType : value})
+    this.props.passType(value);
 
+  }
   render() {
     var agencys =
       typeof this.props.agencys.data == "undefined"
         ? []
         : this.props.agencys.data;
+      var {txtType} = this.state
     return (
-      <div class="table-responsive">
+      <div class="" style = {{overflow : "auto"}}>
         <table class="table table-border">
           <thead>
             <tr>
@@ -198,7 +216,17 @@ class Table extends Component {
               <th>Số điện thoại</th>
               <th>Gmail</th>
 
-              <th>Cấp đại lý</th>
+              <th>
+                
+                <select name="txtType" value = {txtType} id="input"   onChange={this.onChangeType}>
+                  <option  disabled>Cấp đại lý</option>                
+                    <option value="" >Tất cả</option>
+
+                  {this.optionsType()}
+
+                </select>
+                
+              </th>
 
 
               <th>Trạng thái hoạt động</th>
@@ -219,6 +247,9 @@ const mapDispatchToProps = (dispatch, props) => {
     updateAgency: (store_code, id, data) => {
       dispatch(agencyAction.updateAgency(store_code, id, data));
     },
+    fetchAllAgency: (store_code, page, params) => {
+      dispatch(agencyAction.fetchAllAgency(store_code, page, params));
+  },
 
   };
 };

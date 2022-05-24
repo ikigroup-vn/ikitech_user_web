@@ -126,21 +126,6 @@ class Form extends Component {
                         <div class="row">
                             <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7" style={{ borderRight: "0.5px solid #cac9c9" }}>
                                 <div class="form-group">
-                                    <label for="product_name">Số tiền đơn hàng tối thiểu</label>
-                                    <input
-                                        type="text"
-                                        class="form-control"
-                                        id="threshold"
-                                        value={threshold}
-                                        name="threshold"
-                                        placeholder="Nhập số tiền"
-                                        autocomplete="off"
-                                        onChange={this.onChange}
-                                        name="threshold"
-                                    />
-                                </div>
-
-                                <div class="form-group">
                                     <label for="product_name">Tên phần thưởng</label>
                                     <input
                                         type="text"
@@ -151,21 +136,34 @@ class Form extends Component {
                                         placeholder="Nhập tên"
                                         autocomplete="off"
                                         onChange={this.onChange}
-                                        name="reward_name"
                                     />
                                 </div>
                                 <div class="form-group">
-                                    <label for="product_name">Giá trị phần thưởng</label>
+                                    <label for="product_name">Đơn đạt tối thiểu</label>
+                                    <input
+                                        type="text"
+                                        class="form-control"
+                                        id="threshold"
+                                        value={threshold}
+                                        name="threshold"
+                                        placeholder="Nhập số tiền"
+                                        autocomplete="off"
+                                        onChange={this.onChange}
+                                    />
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="product_name">Giá trị thưởng</label>
                                     <input
                                         type="text"
                                         class="form-control"
                                         id="reward_value"
                                         value={reward_value}
                                         name="reward_value"
-                                        placeholder="Nhập tên"
+                                        placeholder="Nhập giá trị"
                                         autocomplete="off"
                                         onChange={this.onChange}
-                                        name="reward_value"
                                     />
                                 </div>
 
@@ -196,9 +194,22 @@ class Form extends Component {
 
                         </div>
 
+                        <div class="form-group">
+                            <label for="product_name">Giới hạn thưởng</label>
+                            <input
+                                type="text"
+                                class="form-control"
+                                id="limit"
+                                value={limit}
+                                name="limit"
+                                placeholder="Nhập số lượng"
+                                autocomplete="off"
+                                onChange={this.onChange}
+                            />
+                        </div>
 
                         <div class="form-group">
-                            <label for="product_name">Mô tả phần thưởng</label>
+                            <label for="product_name">Mô tả</label>
 
                             <textarea
                                 name="reward_description"
@@ -210,41 +221,24 @@ class Form extends Component {
 
                         </div>
 
-                        <div class="form-group">
-                            <label for="product_name">Số lượng còn lại</label>
-                            <input
-                                type="text"
-                                class="form-control"
-                                id="limit"
-                                value={limit}
-                                name="limit"
-                                placeholder="Nhập số lượng"
-                                autocomplete="off"
-                                onChange={this.onChange}
-                                name="limit"
-                            />
-                        </div>
 
 
                     </div>
                     <div class="box-footer">
-                        <button type="submit" class="btn btn-info btn-icon-split btn-sm">
-                            <span class="icon text-white-50">
-                                <i class="fas fa-save"></i>
-                            </span>
-                            <span class="text">Lưu</span>
-                        </button>
-                        <a
-                            style={{ marginLeft: "10px" }}
-                            onClick={this.goBack}
-                            class="btn btn-warning"
-                            class="btn btn-warning btn-icon-split  btn-sm"
+                        <button
+                            type="submit"
+                            class="btn btn-primary btn-sm"
                         >
-                            <span class="icon text-white-50">
-                                <i class="fas fa-arrow-left"></i>
-                            </span>
-                            <span class="text"> Trở về</span>
-                        </a>
+                            <i class="fa fa-save"></i> Lưu
+                        </button>
+                        <button
+                        type = "button"
+                            className="color-white"
+                            style={{ marginLeft: "10px" }}
+                            onClick={this.goBack} class={`btn btn-warning btn-sm color-white `}
+                        >
+                            <i class="fa fa-arrow-left"></i> Trở về
+                        </button>
                     </div>
 
                 </form>

@@ -5660,13 +5660,15 @@ input[type=radio] {
     display: flex;
     justify-content: space-around;
 }
-
-.group-btn-table > button {
-    margin: 0 3px
+.btn-sm i{
+    margin-top: 4px;
 }
-.group-btn-table > a {
+/* .group-btn-table > button {
     margin: 0 3px
-}
+} */
+/* .group-btn-table > a {
+    margin: 0 3px
+} */
 #dataTable_filter {
     float: left !important;
 }
@@ -5914,7 +5916,7 @@ ul {
 }
 
 .table>.thead-quantity>tr>th {
-    text-align: center;
+    /* text-align: center; */
 }
 
 .input-number-decrement {

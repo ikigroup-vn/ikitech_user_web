@@ -16,9 +16,10 @@ class Table extends Component {
   handleSetInfor = (item) => {
     this.props.handleSetInfor(item)
   }
-  changePage = (store_code, customerId) => {
+  changePage = (store_code, customerId,e) => {
     var { paginate } = this.props;
-
+    if(e.target.name == "action")
+    return;
     history.push(`/customer/detail/${store_code}/${customerId}?pag=${paginate}`)
   }
   showData = (customer) => {
@@ -29,7 +30,7 @@ class Table extends Component {
 
       result = customer.map((data, index) => {
         return (
-          <tr className="hover-product" onClick={() => this.changePage(store_code, data.id)}>
+          <tr className="hover-product" onClick={(e) => this.changePage(store_code, data.id,e)}>
             <td>{index + 1}</td>
 
             <td>{data.name}</td>
@@ -61,7 +62,7 @@ class Table extends Component {
 
               {getChannel() == IKITECH ? <button
                 style={{ marginLeft: "10px" }}
-
+                name = "action"
                 onClick={() => this.showChatBox(data.id, "show")}
                 class={`btn btn-primary btn-sm ${chat_allow == true ? "show" : "hide"
                   }`}
