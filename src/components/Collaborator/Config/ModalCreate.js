@@ -3,6 +3,7 @@ import * as collaboratorAction from "../../../actions/collaborator"
 import { connect } from "react-redux";
 import * as helper from "../../../ultis/helpers";
 import {formatNumber} from "../../../ultis/helpers"
+import themeData from "../../../ultis/theme_data";
 
 class ModalCreate extends Component {
   constructor(props) {
@@ -51,8 +52,9 @@ class ModalCreate extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{ background: "white" }}>
-              <h4 class="modal-title" style={{ color: "black" }}>Thêm bật thang</h4>
+          <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+              <h4 style={{ color: "white" }}>Thêm bậc thang</h4>
+              
 
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
@@ -65,7 +67,7 @@ class ModalCreate extends Component {
             >
               <div class="modal-body">
                 <div class="form-group">
-                  <label for="product_name">Mức</label>
+                  <label for="product_name">Mức doanh số</label>
                   <input
                     required
                     type="text"
@@ -101,7 +103,7 @@ class ModalCreate extends Component {
                 >
                   Đóng
                 </button>
-                <button type="submit" class="btn btn-info">
+                <button type="submit" class="btn btn-warning">
                   Tạo
                 </button>
               </div>

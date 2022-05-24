@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import * as CollaboratorAction from "../../../actions/collaborator";
 import { connect } from "react-redux";
 import { shallowEqual } from "../../../ultis/shallowEqual";
+import themeData from "../../../ultis/theme_data";
 
 import {formatNumber} from "../../../ultis/helpers"
 
@@ -64,8 +65,8 @@ class ModalUpdate extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" >
-            <h4 class="modal-title" style={{color:"black"}}>Chỉnh sửa bật thang</h4>
+          <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+              <h4 style={{ color: "white" }}>Chỉnh sửa bậc thang</h4>       
 
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
@@ -80,7 +81,7 @@ class ModalUpdate extends Component {
               <div class="modal-body">
              
               <div class="form-group">
-                  <label for="product_name">Mức</label>
+                  <label for="product_name">Mức doanh số</label>
                   <input
                     type="text"
                     class="form-control"
@@ -115,7 +116,7 @@ class ModalUpdate extends Component {
                 >
                   Đóng
                 </button>
-                <button type="submit" class="btn btn-info">
+                <button type="submit" class="btn btn-warning">
                   Lưu
                 </button>
               </div>

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import * as Env from "../../../ultis/default";
 import * as helper from "../../../ultis/helpers";
 import { shallowEqual } from "../../../ultis/shallowEqual";
-import { format, randomString } from "../../../ultis/helpers";
+import { format, randomString, formatNoD } from "../../../ultis/helpers";
 import { connect } from "react-redux";
 import * as agencyAction from "../../../actions/agency";
 class Table extends Component {
@@ -77,11 +77,17 @@ class Table extends Component {
                 {index + 1}
               </td>{" "}
               <td>
-                {data.customer.name}
+                {data.customer?.name}
               </td>{" "}
               <td>
-                {data.agency_type.name}
+                {data.customer?.phone_number}
+              </td>
+              <td>
+                {data.agency_type?.name}
               </td>{" "}
+              <td>
+                {formatNoD(data.orders_count)}
+              </td>
               <td>
               {typeof data.sum_total_final != "undefined" ? format(Number(data.sum_total_final)) : null  }
 
@@ -113,7 +119,10 @@ class Table extends Component {
             <tr>
               <th>STT</th>
               <th>Họ tên</th>
+              <th>Số điện thoại</th>
+
               <th>Cấp đại lý</th>
+              <th>Số đơn hàng</th>
 
               <th>Tổng doanh thu</th>
      

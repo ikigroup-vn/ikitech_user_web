@@ -7,6 +7,8 @@ import moment from "moment";
 import { randomString } from "../../../ultis/helpers";
 import { Link } from "react-router-dom";
 import ModalRemove from "./ModalRemove"
+import * as Types from "../../../constants/ActionType";
+
 class BonusProgram extends Component {
     constructor(props) {
         super(props);
@@ -79,6 +81,24 @@ class BonusProgram extends Component {
         var is_end = bonusAgencyConfig?.config?.is_end ?? true;
         var startTime = moment(this.state.start_time, "DD-MM-YYYY HH:mm").format("YYYY-MM-DD HH:mm:ss");
         var endTime = moment(this.state.end_time, "DD-MM-YYYY HH:mm").format("YYYY-MM-DD HH:mm:ss");
+
+        var valueStartTime = startTime.valueOf()
+        var valueEndTime = endTime.valueOf()
+        console.log(valueEndTime, valueStartTime)
+        if (valueEndTime < valueStartTime) {
+            this.props.showError({
+                type: Types.ALERT_UID_STATUS,
+                alert: {
+                    type: "danger",
+                    title: "Thất bại ",
+                    disable: "show",
+                    content: "Ngày bắt đầu không được lớn hơn ngày kết thúc",
+                },
+
+            })
+            return;
+        }
+
         this.props.updateBonusAgencyConfig(store_code, {
             "is_end": is_end,
             "start_time": startTime,
@@ -101,16 +121,30 @@ class BonusProgram extends Component {
             <div id="wrapper">
                 <div className="card-body">
                     <div className="form-group" style={{ display: "flex", justifyContent: "space-between" }}>
-                        <div className="on-off" name={`${randomString(10)}`} style={{ display: 'inline-block' }}>
+                        <div style = {{display : "flex"}}>
+                        <div style = {{fontWeight : "500"}}>
+                            Hành động
+                        </div>
+                        <div className="on-off" name={`${randomString(10)}`} style={{ display: 'inline-block' , marginLeft : "20px" }}>
                             <input type="checkbox" className="checkbox" checked={!is_end} />
 
-                            <label onClick={(e) => { this.onChangeStatus() }} for="checkbox" className="switch" style={{ width: 200 }}>
+                            {/* <label onClick={(e) => { this.onChangeStatus() }} for="checkbox" className="switch" style={{ width: 200 }}>
                                 <span className="switch__circle">
                                     <span className="switch__circle-inner"></span>
                                 </span>
                                 <span className="switch__left">Kết thúc</span>
                                 <span className="switch__right">Đang diễn ra</span>
+                            </label> */}
+
+
+                            <label onClick={(e) => { this.onChangeStatus() }} for="checkbox" class="switch">
+                                <span class="switch__circle">
+                                    <span style={{ backgroundColor: is_end == true ? "gray" : "white" }} class="switch__circle-inner"></span>
+                                </span>
+                                <span class="switch__left"></span>
+                                <span class="switch__right"></span>
                             </label>
+                        </div>
                         </div>
                         <Link
                             to={`/agency_bonus_steps/${store_code}/create`}
@@ -128,6 +162,7 @@ class BonusProgram extends Component {
 
                         <div>
                             <DateRangePickerComponent
+                                min={new Date()}
                                 id="daterangepicker"
                                 placeholder="Chọn từ ngày... đến ngày..."
                                 format="dd/MM/yyyy"
@@ -210,8 +245,8 @@ class BonusProgram extends Component {
                         <td>
                             {threshold}
                         </td>
-                   
-                   
+
+
 
 
                         <td>
@@ -274,6 +309,9 @@ const mapDispatchToProps = (dispatch, props) => {
         deleteBonusSteps: (store_code, id) => {
             dispatch(agencyAction.deleteBonusSteps(store_code, id));
         },
+        showError: (action) => {
+            dispatch(action)
+        }
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(BonusProgram);
