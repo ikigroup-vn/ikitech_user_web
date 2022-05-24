@@ -5916,7 +5916,7 @@ ul {
 }
 
 .table>.thead-quantity>tr>th {
-    text-align: center;
+    /* text-align: center; */
 }
 
 .input-number-decrement {

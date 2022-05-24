@@ -12,6 +12,8 @@ class ListAgency extends Component {
         super(props);
         this.state = {
             showChatBox: "hide",
+            searchValue: "",
+
         };
     }
 
@@ -31,7 +33,9 @@ class ListAgency extends Component {
 
     componentDidMount() {
 
-        this.props.fetchAllAgency(this.props.store_code);
+        this.props.fetchAllAgency(this.props.store_code, 1, null);
+        this.props.fetchAllAgencyType(this.props.store_code);
+
     }
     closeChatBox = (status) => {
         this.setState({
@@ -39,21 +43,86 @@ class ListAgency extends Component {
         })
 
     }
+    passType = (data) =>{
+        var {searchValue} = this.state
+        this.setState({type : data})
+        var params = this.getParams(searchValue, data)
+        this.props.fetchAllAgency(this.props.store_code, 1, params);
+
+    }
+
+    getParams = (searchValue , type) => {
+        var params = ``;
+
+        if (searchValue != "" && searchValue != null) {
+            params = params + `&search=${searchValue}`;
+        }
+        if (type != "" && type != null) {
+            params = params + `&agency_type_id=${type}`;
+        }
+        return params
+    }
+    searchData = (e) => {
+        e.preventDefault();
+        var { searchValue } = this.state;
+        var params = this.getParams(searchValue);
+        this.props.fetchAllAgency(this.props.store_code, 1, params);
+
+    };
+
+    onChangeSearch = (e) => {
+        this.setState({ searchValue: e.target.value });
+    };
+
     render() {
-        var { customer, chat, agencys, store_code, tabId,store_code , types } = this.props
+        var { customer, chat, agencys, store_code, tabId, store_code, types } = this.props
 
         var customerImg = typeof customer.avatar_image == "undefined" || customer.avatar_image == null ? Env.IMG_NOT_FOUND : customer.avatar_image
         var customerId = typeof customer.id == "undefined" || customer.id == null ? null : customer.id;
         var customerName = typeof customer.name == "undefined" || customer.name == null ? "Trống" : customer.name;
 
-        var { showChatBox } = this.state
+        var { showChatBox, searchValue } = this.state
         console.log(this.props.state)
         return (
             <div id="">
+                <div
+                    class="row"
+                    style={{ "justify-content": "space-between" }}
+                >
+                    <form onSubmit={this.searchData}>
+                        <div
+                            class="input-group mb-6"
+                            style={{ padding: "7px 20px" }}
+                        >
+                            <input
+                                style={{ maxWidth: "400px", minWidth: "300px" }}
+                                type="search"
+                                name="txtSearch"
+                                value={searchValue}
+                                onChange={this.onChangeSearch}
+                                class="form-control"
+                                placeholder="Tìm kiếm đại lý"
+                            />
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
                 <div className="card-body">
-                    <Table types = {types}  tabId={tabId} showChatBox={showChatBox} handleShowChatBox={this.handleShowChatBox} store_code={store_code} agencys={agencys} />
+                    <Table
+                    passType={this.passType}
+                        searchValue={searchValue}
+                        getParams={this.getParams}
+                        types={types} tabId={tabId} showChatBox={showChatBox} handleShowChatBox={this.handleShowChatBox} store_code={store_code} agencys={agencys} />
 
                     <Pagination
+                        searchValue={searchValue}
+                        getParams={this.getParams}
                         store_code={store_code}
                         agencys={agencys}
                     />
@@ -89,14 +158,17 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        fetchAllAgency: (store_code) => {
-            dispatch(agencyAction.fetchAllAgency(store_code));
+        fetchAllAgency: (store_code, page, params) => {
+            dispatch(agencyAction.fetchAllAgency(store_code, page, params));
         },
         fetchCustomerId: (store_code, customerId) => {
             dispatch(customerAction.fetchCustomerId(store_code, customerId));
         },
         fetchChatId: (store_code, agencyId) => {
             dispatch(agencyAction.fetchChatId(store_code, agencyId));
+        },
+        fetchAllAgencyType: (store_code) => {
+            dispatch(agencyAction.fetchAllAgencyType(store_code));
         },
     };
 };

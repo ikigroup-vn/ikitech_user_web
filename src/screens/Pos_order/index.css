@@ -10,6 +10,9 @@
     height: calc(100vh - 50px);
     background: #fff;
 }
+.slick-list> div {
+    margin-left: 0;
+    }
 
 .group-controller-first {
     width: calc(100% - 436px);

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { filter_arr, filter_var, format } from "../../ultis/helpers";
+import { filter_arr, filter_var, format ,formatNumber, contactOrNumber} from "../../ultis/helpers";
+
 import { shallowEqual } from "../../ultis/shallowEqual";
 class Table extends Component {
   constructor(props) {
@@ -70,7 +71,27 @@ class Table extends Component {
     if (products.length > 0) {
       var { _delete, update, insert } = this.props;
       result = products.map((data, index) => {
+        let discount_percent = null;
 
+        if (data.product_discount) {
+          discount_percent = data.product_discount?.value;
+        }
+    
+        var min_price = data.min_price;
+        var max_price = data.max_price;
+        var product_discount = data.product_discount;
+        var distributes = data.distributes
+
+        var a_min_price = null;
+        var a_max_price = null;
+        var a_distributes = null
+        if(data.agency_price)
+        {
+
+           a_min_price = data.agency_price.min_price;
+           a_max_price = data.agency_price.max_price;
+           a_distributes = data.agency_price.distributes
+        }
         return (
           <tr className = "hover-product">
         
@@ -83,10 +104,143 @@ class Table extends Component {
                 {data.name}
               </Link>
             </td>
+            <td>
+        { product_discount == null &&
+          <div className="eea"
+          >
+            {min_price === max_price ? (
+              contactOrNumber(format(
+                Number(
+                  discount_percent == null
+                    ? min_price
+                    : min_price - min_price * discount_percent * 0.01
+                )
+              )
+              )) : distributes && distributes.length == 0 ? contactOrNumber(format(
+                Number(
+                  discount_percent == null
+                    ? min_price
+                    : min_price - min_price * discount_percent * 0.01
+                ))) : (
+              <div className="ae"
+              >
+                {format(
+                  Number(
+                    discount_percent == null
+                      ? min_price
+                      : min_price - min_price * discount_percent * 0.01
+                  )
+                )}
+                {" - "}
+                {format(
+                  Number(
+                    discount_percent == null
+                      ? max_price
+                      : max_price - max_price * discount_percent * 0.01
+                  )
+                )}
+              </div>
+            )}
+          </div>
+          }
 
-            <td>{format(Number(data.price))}</td>
+          {product_discount && (
+            <div
+              className="a"
+              style={{
+                float: "left",
+              }}
+            >
+              {min_price === max_price ? (
+                contactOrNumber(format(Number(min_price)))
+              ) : (
+                <div className="row e">
+                  <div
+                    style={{
+                      textDecoration: "line-through",
+                    }}
+                  >
+                    {format(Number(min_price))}
+                    {" - "}
+                    {format(Number(max_price))}
+                  </div>
+
+                  <div className="discount e">&emsp; -{discount_percent}%</div>
+                </div>
+              )}
+            </div>
+          )}
+        </td>
+        <td>
+        { product_discount == null &&
+          <div className="eea"
+          >
+            {a_min_price === a_max_price ? (
+              contactOrNumber(format(
+                Number(
+                  discount_percent == null
+                    ? a_min_price
+                    : a_min_price - a_min_price * discount_percent * 0.01
+                )
+              )
+              )) : distributes && distributes.length == 0 ? contactOrNumber(format(
+                Number(
+                  discount_percent == null
+                    ? a_min_price
+                    : a_min_price - a_min_price * discount_percent * 0.01
+                ))) : (
+              <div className="ae"
+              >
+                {format(
+                  Number(
+                    discount_percent == null
+                      ? a_min_price
+                      : a_min_price - a_min_price * discount_percent * 0.01
+                  )
+                )}
+                {" - "}
+                {format(
+                  Number(
+                    discount_percent == null
+                      ?a_max_price
+                      : a_max_price - a_max_price * discount_percent * 0.01
+                  )
+                )}
+              </div>
+            )}
+          </div>
+          }
+
+          {product_discount && (
+            <div
+              className="a"
+              style={{
+                float: "left",
+              }}
+            >
+              {a_min_price === a_max_price ? (
+                contactOrNumber(format(Number(a_min_price)))
+              ) : (
+                <div className="row e">
+                  <div
+                    style={{
+                      textDecoration: "line-through",
+                    }}
+                  >
+                    {format(Number(a_min_price))}
+                    {" - "}
+                    {format(Number(a_max_price))}
+                  </div>
+
+                  <div className="discount e">&emsp; -{discount_percent}%</div>
+                </div>
+              )}
+            </div>
+          )}
+        </td>
+            {/* <td>{format(Number(data.price))}</td> */}
     
-            <td>{typeof data.agency_price != "undefined" ? format(Number(data.agency_price.main_price)) : null  }</td>
+            {/* <td>{typeof data.agency_price != "undefined" ? format(Number(data.agency_price.main_price)) : null  }</td> */}
 
             <td>
               <Link

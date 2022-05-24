@@ -12,6 +12,8 @@ import ChartSales from "./ChartSales";
 import Alert from "../../../components/Partials/Alert";
 import * as customerAction from "../../../actions/customer";
 import { getBranchId } from "../../../ultis/branchUtils";
+import { getQueryParams } from "../../../ultis/helpers"
+import history from "../../../history";
 
 class ReportAgency extends Component {
     constructor(props) {
@@ -47,7 +49,10 @@ class ReportAgency extends Component {
             }
         }
     }
-
+    goBack = () => {
+        var { store_code } = this.props.match.params;
+        history.replace(`/agency/${store_code}?tab-index=1`);
+    };
     render() {
         var { store_code, agency_by_customer_id } = this.props.match.params;
         var { overview, customer } = this.props
@@ -77,6 +82,11 @@ class ReportAgency extends Component {
                                                 <h4 className="h4 title_content mb-0 text-gray-800">
                                                     Báo cáo đại lý
                                                 </h4>
+                                                {
+                        getQueryParams("tab-index")==1 &&  <button style={{ marginRight: "10px" }} type="button" onClick={this.goBack} class="btn btn-warning  btn-sm"><i class="fas fa-arrow-left"></i>&nbsp;Trở về</button>
+
+                      }
+                                                
                                             </div>
                                             <br></br>
                                             <div class="card shadow mb-4">

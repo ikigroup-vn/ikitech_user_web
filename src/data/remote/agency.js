@@ -22,8 +22,12 @@ export const updateConfig = (store_code,data) =>{
   return callApi(`/store/${store_code}/agency_configs`, "post", data);
 }
 
-export const fetchAllAgency = (store_code , page=1) => {
+export const fetchAllAgency = (store_code , page , params) => {
+  if(params)
+  return callApi(`/store/${store_code}/agencies?page=${page}${params}`, "get", null);
+  else
   return callApi(`/store/${store_code}/agencies?page=${page}`, "get", null);
+
 };
 
 export const fetchAllRequestPayment = (store_code) => {

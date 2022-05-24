@@ -86,7 +86,7 @@ filterColDiscount = (data) => {
 
       result = vouchers.map((data, index) => {
         var value_discount = ""
-        if(data.set_limit_value_discount== true  && data.discount_type == 0 )
+        if( data.discount_type == 0 )
         {
           value_discount=  formatNoD(data.value_discount)
         }

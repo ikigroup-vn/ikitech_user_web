@@ -504,13 +504,13 @@ export const fetchAllRequestPayment = (store_code) => {
   };
 };
 
-export const fetchAllAgency = (store_code, page = 1) => {
+export const fetchAllAgency = (store_code, page = 1, params = null) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING_LAZY,
       loading: "show"
     })
-    agencyApi.fetchAllAgency(store_code, page).then((res) => {
+    agencyApi.fetchAllAgency(store_code, page,params).then((res) => {
       console.log(res)
       dispatch({
         type: Types.SHOW_LOADING_LAZY,

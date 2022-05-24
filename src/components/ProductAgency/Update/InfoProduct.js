@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import Select from "react-select";
 import { shallowEqual } from "../../../ultis/shallowEqual";
-import {formatNumber} from "../../../ultis/helpers"
+import { formatNumber, formatNoD } from "../../../ultis/helpers"
+import { product } from "../../../reducers/product/product";
 class InfoProduct extends Component {
   constructor(props) {
     super(props);
@@ -9,7 +10,7 @@ class InfoProduct extends Component {
       txtName: "",
       txtPrice: "",
 
-      disabledPrice : false,
+      disabledPrice: false,
 
     };
   }
@@ -25,32 +26,27 @@ class InfoProduct extends Component {
     if (name == "txtPrice") {
       if (!isNaN(Number(_value))) {
         value = new Intl.NumberFormat().format(_value);
-        value = value.toString().replace(/\./g,',')
+        value = value.toString().replace(/\./g, ',')
         if (name == "txtPercentC") {
-          if(value.length < 3 )
-          {
-            if(value_text == "")
-            {
+          if (value.length < 3) {
+            if (value_text == "") {
               this.setState({ [name]: "" });
             }
-            else
-            {
+            else {
               this.setState({ [name]: value });
 
             }
           }
         }
-        else
-        {
-          if(value_text == "")
-          {
+        else {
+          if (value_text == "") {
             this.setState({ [name]: "" });
           }
-          else
-          {
+          else {
             this.setState({ [name]: value });
 
-          }        }
+          }
+        }
       }
     }
     else {
@@ -62,19 +58,19 @@ class InfoProduct extends Component {
 
 
   componentWillReceiveProps(nextProps) {
-   
+
 
     if (!shallowEqual(nextProps.product, this.props.product)) {
       var { product } = { ...nextProps };
-      const price =formatNumber(product.main_price);
+      const price = formatNumber(product.main_price);
 
       var _price = new Intl.NumberFormat().format(price);
 
       this.setState({
         txtName: product.name,
         txtPrice: _price,
-        disabledPrice : _price == 0 ? true : false,
-       
+        disabledPrice: _price == 0 ? true : false,
+
       });
 
     }
@@ -90,25 +86,25 @@ class InfoProduct extends Component {
     return true;
   }
 
-  onChangePrice = (e) =>{
-    var {checked} = e.target
-    if(checked == true)
-    {
-      this.setState({txtPrice : 0,disabledPrice : checked})
+  onChangePrice = (e) => {
+    var { checked } = e.target
+    if (checked == true) {
+      this.setState({ txtPrice: 0, disabledPrice: checked })
     }
-    else
-    {
-      this.setState({txtPrice : "" , disabledPrice : checked})
+    else {
+      this.setState({ txtPrice: "", disabledPrice: checked })
 
     }
   }
   render() {
     var {
-   
+
       txtName,
       disabledPrice,
       txtPrice,
     } = this.state;
+    var { product } = this.props
+    console.log(product)
     return (
       <div class="card-body" style={{ padding: "0.8rem" }}>
 
@@ -127,34 +123,93 @@ class InfoProduct extends Component {
             disabled
           />
         </div> */}
-     
-        <div className="form-group">
-          <label htmlFor="name">Giá đại lý</label>
-        <div class="form-group" style={{ display: "flex" }}>
-            <input
-              disabled={disabledPrice}
-              style={{ maxWidth: "420px" }}
-              type="text"
-              class="form-control"
-              id="txtEmail"
-              placeholder="Nhập giá"
-              autocomplete="off"
-              value={txtPrice}
-              onChange={this.onChange}
-              name="txtPrice"
-            />
-            {/* <div class="form-check" style={{ margin: "auto 0" }}>
+
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          {product.distributes?.length > 0 &&
+            <div className="form-group">
+              <label htmlFor="name">Giá đại lý</label>
+              <div class="form-group" style={{ display: "flex" }}>
+                <input
+                  disabled
+                  style={{ maxWidth: "420px" }}
+                  type="text"
+                  class="form-control"
+                  id="txtEmail"
+                  placeholder="Nhập giá"
+                  autocomplete="off"
+                  value={0}
+                  name="txtPrice"
+                />
+                {/* <div class="form-check" style={{ margin: "auto 0" }}>
               <label class="form-check-label" for="gridCheck">
                 Liên hệ
               </label>
               <input style={{ marginLeft: "10px" }} class="form-check-input" checked={disabledPrice} type="checkbox" onChange={this.onChangePrice} />
 
             </div> */}
-            </div>
+              </div>
 
-          </div>
- 
- 
+            </div>
+          }
+          {
+            product.distributes?.length <= 0 &&
+            <React.Fragment>
+              <div className="form-group">
+                <label htmlFor="name">Giá đại lý</label>
+                <div class="form-group" style={{ display: "flex" }}>
+                  <input
+                    disabled={disabledPrice}
+                    style={{ maxWidth: "420px" }}
+                    type="text"
+                    class="form-control"
+                    id="txtEmail"
+                    placeholder="Nhập giá"
+                    autocomplete="off"
+                    value={txtPrice}
+                    onChange={this.onChange}
+                    name="txtPrice"
+                  />
+                  {/* <div class="form-check" style={{ margin: "auto 0" }}>
+              <label class="form-check-label" for="gridCheck">
+                Liên hệ
+              </label>
+              <input style={{ marginLeft: "10px" }} class="form-check-input" checked={disabledPrice} type="checkbox" onChange={this.onChangePrice} />
+
+            </div> */}
+                </div>
+
+              </div>
+              <div className="form-group">
+                <label htmlFor="name">Giá bán lẻ</label>
+                <div class="form-group" style={{ display: "flex" }}>
+                  <input
+                    disabled
+                    style={{ maxWidth: "420px" }}
+                    type="text"
+                    class="form-control"
+                    id="txtEmail"
+                    placeholder="Nhập giá"
+                    autocomplete="off"
+                    value={formatNoD(product.main_price) ?? 0}
+                  />
+                  {/* <div class="form-check" style={{ margin: "auto 0" }}>
+              <label class="form-check-label" for="gridCheck">
+                Liên hệ
+              </label>
+              <input style={{ marginLeft: "10px" }} class="form-check-input" checked={disabledPrice} type="checkbox" onChange={this.onChangePrice} />
+
+            </div> */}
+                </div>
+
+              </div>
+            </React.Fragment>
+
+          }
+
+
+        </div>
+
+
       </div>
     );
   }

@@ -60,7 +60,7 @@ class Table extends Component {
                   <i class="fa fa-trash"></i> Xóa
                 </button>
                 <Link
-                  to = {`/product-agency/index/${store_code}/${data.id}`}
+                  to = {`/product-agency/index/${store_code}/${data.id}?tab-index=0`}
                   style={{ marginLeft: "10px" }}
 
 

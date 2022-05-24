@@ -144,8 +144,9 @@ class Product extends Component {
   
   }
   goBack = () => {
+    var { store_code } = this.props.match.params;
 
-    history.goBack();
+    history.replace(`/agency/${store_code}?tab-index=0`);
 };
 
   render() {
