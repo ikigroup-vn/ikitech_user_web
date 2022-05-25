@@ -5,7 +5,9 @@ var initialState = {
   allStep: [],
   allCollaborator : [],
   allRequestPayment : [],
-  allHistoryPayment : []
+  allHistoryPayment : [],
+  topReport : [],
+
 };
 
 export const collaborator = (state = initialState, action) => {
@@ -26,6 +28,10 @@ export const collaborator = (state = initialState, action) => {
         case Types.FETCH_ALL_COLLABORATOR_HISTORY_PAYMENT:
           newState.allHistoryPayment = action.data;
           return newState;
+
+          case Types.FETCH_ALL_COLLABORATOR_TOP_REPORT:
+            newState.topReport = action.data;
+            return newState;
     default:
       return newState;
   }

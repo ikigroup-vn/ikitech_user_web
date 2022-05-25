@@ -4,13 +4,17 @@ import * as Env from "../../../ultis/default";
 import * as helper from "../../../ultis/helpers";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import { format } from "../../../ultis/helpers";
+import ModalImg from "../ModalImg"
+
 class Table extends Component {
     constructor(props) {
         super(props);
         this.state = {
             arrayCheckBox: [],
             from: 0,
-            isLoading: false
+            isLoading: false,
+            searchValue: "",
+            modalImg: ""
 
         }
     }
@@ -36,7 +40,7 @@ class Table extends Component {
         }
     }
     changeStatusRequest = (status) => {
-        var name = status == 1 ? "Thanh toán cho CTV" : "Hoàn tiền cho CTV"
+        var name = status == 1 ? "Thanh toán cho CTV" : "Hủy yêu cầu thanh toán cho CTV"
         var { arrayCheckBox } = this.state
         this.props.handleChangeStatus(name, { status: status, list_id: arrayCheckBox })
     }
@@ -74,6 +78,10 @@ class Table extends Component {
         }
         return false
     }
+    showModalImg = (url) => {
+        this.setState({ modalImg: url })
+    }
+
     showData = (requestPayment) => {
         var { store_code } = this.props;
         var result = [];
@@ -114,7 +122,7 @@ class Table extends Component {
                 if (data.from == this.state.from)
                     result.push(
                         <React.Fragment>
-                            <tr class="sub-container">
+                            <tr class="sub-container hover-product">
                                 <td>
                                     <div class="checkbox">
                                         <label>
@@ -135,7 +143,9 @@ class Table extends Component {
                                         <span class="fa fa-plus"></span>
                                     </button>
                                 </td>{" "}
-                                <td>
+                                <td style = {{
+                padding: "0.75rem 0px"
+              }}>
                                     <img
                                         src={avatar}
                                         class="img-responsive"
@@ -147,12 +157,12 @@ class Table extends Component {
 
                                 <td>{data.collaborator.customer.name}</td>
                                 <td>{data.collaborator.customer.phone_number}</td>
-                               
+                                {/* 
                                 <td>
                                     {data.collaborator.customer.email == null
                                         ? "Trống"
                                         : data.collaborator.customer.email}
-                                </td>
+                                </td> */}
                                 <td>{format(Number(data.money))}</td>
 
                             </tr>
@@ -175,6 +185,13 @@ class Table extends Component {
                                                     </span>
                                                 </p>
                                                 <p class="sale_user_label">
+                                                    Gmail:{" "}
+                                                    <span id="user_tel">             {data.collaborator.customer.email == null
+                                                        ? "Trống"
+                                                        : data.collaborator.customer.email}
+                                                    </span>
+                                                </p>
+                                                <p class="sale_user_label">
                                                     Tiền thưởng:{" "}
                                                     <span id="user_tel">
                                                         {format(Number(data.collaborator.balance))}
@@ -186,7 +203,12 @@ class Table extends Component {
                                                         {data.collaborator.customer.points == null ? null : new Intl.NumberFormat().format(data.collaborator.customer.points.toString())}
                                                     </span>
                                                 </p>
-
+                                                <p class="sale_user_label">
+                                                    Tên CMND:{" "}
+                                                    <span id="user_tel">
+                                                        {data.collaborator.first_and_last_name}
+                                                    </span>
+                                                </p>
                                                 <p class="sale_user_label" id="sale_user_name">
                                                     CMND:{" "}
                                                     <span id="user_name"> {data.collaborator.cmnd} </span>
@@ -210,8 +232,8 @@ class Table extends Component {
                                         <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
                                             <div class="info_user">
                                                 <div class="row">
-                                                    <div style={{ textAlign: "center" }}>
-                                                        <img
+                                                    <div data-toggle="modal"
+                                                        data-target="#modalImg" style={{ textAlign: "center", cursor: "pointer" }} onClick={() => this.showModalImg(img_front)}>                                                        <img
                                                             width="120"
                                                             height="125px"
                                                             src={img_front}
@@ -223,8 +245,8 @@ class Table extends Component {
                                                         </p>
                                                     </div>
 
-                                                    <div style={{ textAlign: "center" }}>
-                                                        <img
+                                                    <div data-toggle="modal"
+                                                        data-target="#modalImg" style={{ textAlign: "center", cursor: "pointer" }} onClick={() => this.showModalImg(img_back)}>                                                        <img
                                                             width="120px"
                                                             height="125px"
                                                             style={{ marginLeft: "10px" }}
@@ -254,24 +276,44 @@ class Table extends Component {
     onChangeSelectAll = (e) => {
         var checked = e.target.checked;
         var arrayCheckBox = [...this.state.arrayCheckBox];
-    
+
         var requestPayment = this.props.requestPayment;
 
         if (requestPayment.length > 0) {
-          if (checked == false) {
-            this.setState({ arrayCheckBox: [] });
-          } else {
-            arrayCheckBox = [];
-            requestPayment.forEach((request) => {
-                arrayCheckBox.push(request.id);
-            });
-            this.setState({ arrayCheckBox: arrayCheckBox });
-          }
+            if (checked == false) {
+                this.setState({ arrayCheckBox: [] });
+            } else {
+                arrayCheckBox = [];
+                requestPayment.forEach((request) => {
+                    arrayCheckBox.push(request.id);
+                });
+                this.setState({ arrayCheckBox: arrayCheckBox });
+            }
         }
-      };
+    };
+    getParams = (searchValue) => {
+        var params = ``;
 
+        if (searchValue != "" && searchValue != null) {
+            params = params + `&search=${searchValue}`;
+        }
+
+        return params
+    }
+    searchData = (e) => {
+        e.preventDefault();
+        var { searchValue } = this.state;
+        var params = this.getParams(searchValue);
+
+        this.props.fetchdDataForSearch(params);
+
+    };
+
+    onChangeSearch = (e) => {
+        this.setState({ searchValue: e.target.value });
+    };
     render() {
-        var { arrayCheckBox, from } = this.state
+        var { arrayCheckBox, from, searchValue } = this.state
         var requestPayment = this.props.requestPayment;
         var length = typeof requestPayment != "undefined" && requestPayment.length > 0 ? requestPayment.length : 0
         var disable_group = length == 0 ? "hide" : "show"
@@ -279,47 +321,41 @@ class Table extends Component {
         var payment_request_solve = true
 
         var _selected =
-        arrayCheckBox.length > 0 && arrayCheckBox.length == requestPayment.length
-          ? true
-          : false;
+            arrayCheckBox.length > 0 && arrayCheckBox.length == requestPayment.length
+                ? true
+                : false;
 
         console.log(from);
         return (
             <div className="request-payment">
+                <ModalImg img={this.state.modalImg}></ModalImg>
 
-                <div className="row" style={{ justifyContent: "space-between" }}>
-                    <div className={`group-btn ${disable_group}`}>
 
-                        <button
-                            class={`btn btn-success btn-sm ${payment_request_solve == true ? "show" : "hide"}`}
-                            data-toggle="modal"
-                            data-target="#updateModalAllRequest"
+                <div
+                    class=""
+                    style={{ "justify-content": "space-between", display: "flex", marginBottom: '10px' }}
+                >
+                    <form onSubmit={this.searchData}>
+                        <div
+                            class="input-group mb-6"
                         >
-                            <i class="fa fa-list"></i> Quyết toán cho toàn bộ CTV
-                        </button>
+                            <input
+                                style={{ maxWidth: "400px", minWidth: "300px" }}
+                                type="search"
+                                name="txtSearch"
+                                value={searchValue}
+                                onChange={this.onChangeSearch}
+                                class="form-control"
+                                placeholder="Tìm theo tên hoặc STK"
+                            />
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
 
-                        <button
-                            onClick={() => this.changeStatusRequest(2)}
-                            data-toggle="modal"
-                            data-target="#updateModalRequest"
-                            style={{ marginLeft: "10px" }}
-                            class={`btn btn-danger btn-sm ${disable_item} ${payment_request_solve == true ? "show" : "hide"}`}
-                        >
-                            <i class="fa fa-money"></i> Hoàn tiền cho CTV
-                        </button>
-
-                        <button
-                            onClick={() => this.changeStatusRequest(1)}
-                            data-toggle="modal"
-                            data-target="#updateModalRequest"
-                            style={{ marginLeft: "10px" }}
-
-                            class={`btn btn-primary btn-sm ${disable_item} ${payment_request_solve == true ? "show" : "hide"}`}
-                        >
-
-                            <i class="fa fa-money"></i> Thanh toán cho CTV
-                        </button>
-                    </div>
+                    </form>
                     <select
                         onChange={this.onchangeSelect}
                         style={{ maxWidth: "20%" }}
@@ -332,13 +368,45 @@ class Table extends Component {
                     </select>
 
                 </div>
-                <div class="table-responsive">
+                <div className={`group-btn ${disable_group}`}>
+
+                    {/* <div> */}
+                    <button
+                        class={`btn btn-success btn-sm ${payment_request_solve == true ? "show" : "hide"}`}
+                        data-toggle="modal"
+                        data-target="#updateModalAllRequest"
+                    >
+                        <i class="fa fa-list"></i> Quyết toán cho toàn bộ CTV
+                    </button>
+
+                    <button
+                        onClick={() => this.changeStatusRequest(2)}
+                        data-toggle="modal"
+                        data-target="#updateModalRequest"
+                        style={{ marginLeft: "10px" }}
+                        class={`btn btn-danger btn-sm ${disable_item} ${payment_request_solve == true ? "show" : "hide"}`}
+                    >
+                        <i class="fa fa-money"></i> Hủy yêu cầu thanh toán cho CTV
+                    </button>
+
+                    <button
+                        onClick={() => this.changeStatusRequest(1)}
+                        data-toggle="modal"
+                        data-target="#updateModalRequest"
+                        style={{ marginLeft: "10px" }}
+
+                        class={`btn btn-primary btn-sm ${disable_item} ${payment_request_solve == true ? "show" : "hide"}`}
+                    >
+
+                        <i class="fa fa-money"></i> Thanh toán cho CTV
+                    </button>
+                </div>                <div class="table-responsive">
                     <table class="table table-border">
                         <thead>
                             <tr>
-                               
+
                                 <th
-                                          >
+                                >
                                     <input
                                         type="checkbox"
                                         checked={_selected}
@@ -351,8 +419,7 @@ class Table extends Component {
 
                                 <th>Họ tên</th>
                                 <th>Số điện thoại</th>
-                             
-                                <th>Gmail</th>
+
 
                                 <th>Số tiền</th>
 

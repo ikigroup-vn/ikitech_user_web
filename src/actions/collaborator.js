@@ -23,13 +23,13 @@ export const fetchCollaboratorConf = (store_code) => {
 };
 
 
-export const fetchAllHistory = (store_code) => {
+export const fetchAllHistory = (store_code , page=1,params) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING_LAZY,
       loading: "show"
     })
-    collaboratorApi.fetchAllHistory(store_code).then((res) => {
+    collaboratorApi.fetchAllHistory(store_code,page,params).then((res) => {
       console.log(res)
       dispatch({
         type: Types.SHOW_LOADING_LAZY,
@@ -107,6 +107,28 @@ export const updateAllRequestPayment = (store_code) => {
       });
   };
 };
+
+export const fetchAllTopReport = (store_code, page = 1, params) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING_LAZY,
+      loading: "show"
+    })
+    collaboratorApi.fetchAllTopReport(store_code, page, params).then((res) => {
+      console.log(res)
+      dispatch({
+        type: Types.SHOW_LOADING_LAZY,
+        loading: "hide"
+      })
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_ALL_COLLABORATOR_TOP_REPORT,
+          data: res.data.data,
+        });
+    });
+  };
+};
+
 
 
 export const updateCollaborator = (store_code, id, data) => {
@@ -243,13 +265,13 @@ export const updateRequestPayment = (store_code, data) => {
 };
 
 
-export const fetchAllRequestPayment = (store_code) => {
+export const fetchAllRequestPayment = (store_code , params=null) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING_LAZY,
       loading: "show"
     })
-    collaboratorApi.fetchAllRequestPayment(store_code).then((res) => {
+    collaboratorApi.fetchAllRequestPayment(store_code,params).then((res) => {
       console.log(res)
       dispatch({
         type: Types.SHOW_LOADING_LAZY,
@@ -264,13 +286,13 @@ export const fetchAllRequestPayment = (store_code) => {
   };
 };
 
-export const fetchAllCollaborator = (store_code, page = 1) => {
+export const fetchAllCollaborator = (store_code, page = 1,params=null) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING_LAZY,
       loading: "show"
     })
-    collaboratorApi.fetchAllCollaborator(store_code, page).then((res) => {
+    collaboratorApi.fetchAllCollaborator(store_code, page,params).then((res) => {
       console.log(res)
       dispatch({
         type: Types.SHOW_LOADING_LAZY,

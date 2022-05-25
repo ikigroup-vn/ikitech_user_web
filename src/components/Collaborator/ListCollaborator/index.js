@@ -12,6 +12,8 @@ class ListCollaborator extends Component {
         super(props);
         this.state = {
             showChatBox: "hide",
+            searchValue: "",
+
         };
     }
 
@@ -39,6 +41,27 @@ class ListCollaborator extends Component {
         })
 
     }
+    getParams = (searchValue) => {
+        var params = ``;
+
+        if (searchValue != "" && searchValue != null) {
+            params = params + `&search=${searchValue}`;
+        }
+   
+        return params
+    }
+    searchData = (e) => {
+        e.preventDefault();
+        var { searchValue } = this.state;
+        var params = this.getParams(searchValue);
+        this.props.fetchAllCollaborator(this.props.store_code, 1, params);
+
+    };
+
+    onChangeSearch = (e) => {
+        this.setState({ searchValue: e.target.value });
+    };
+
     render() {
         var { customer, chat, collaborators, store_code, tabId,store_code } = this.props
 
@@ -46,14 +69,44 @@ class ListCollaborator extends Component {
         var customerId = typeof customer.id == "undefined" || customer.id == null ? null : customer.id;
         var customerName = typeof customer.name == "undefined" || customer.name == null ? "Trống" : customer.name;
 
-        var { showChatBox } = this.state
+        var { showChatBox ,searchValue} = this.state
         console.log(this.props.state)
         return (
-            <div id="wrapper">
+            <div id="">
+                       <div
+                    class="row"
+                    style={{ "justify-content": "space-between" }}
+                >
+                    <form onSubmit={this.searchData}>
+                        <div
+                            class="input-group mb-6"
+                            style={{ padding: "7px 20px" }}
+                        >
+                            <input
+                                style={{ maxWidth: "400px", minWidth: "300px" }}
+                                type="search"
+                                name="txtSearch"
+                                value={searchValue}
+                                onChange={this.onChangeSearch}
+                                class="form-control"
+                                placeholder="Tìm kiếm CTV"
+                            />
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+
+                </div>
                 <div className="card-body">
-                    <Table store_code = {store_code} tabId={tabId} showChatBox={showChatBox} handleShowChatBox={this.handleShowChatBox} store_code={store_code} collaborators={collaborators} />
+                    <Table tabId={tabId} showChatBox={showChatBox} handleShowChatBox={this.handleShowChatBox} store_code={store_code} collaborators={collaborators} />
 
                     <Pagination
+                                 searchValue={searchValue}
+                                 getParams={this.getParams}
                         store_code={store_code}
                         collaborators={collaborators}
                     />
@@ -87,8 +140,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        fetchAllCollaborator: (store_code) => {
-            dispatch(collaboratorAction.fetchAllCollaborator(store_code));
+        fetchAllCollaborator: (store_code,page,params) => {
+            dispatch(collaboratorAction.fetchAllCollaborator(store_code,page,params));
         },
         fetchCustomerId: (store_code, customerId) => {
             dispatch(customerAction.fetchCustomerId(store_code, customerId));

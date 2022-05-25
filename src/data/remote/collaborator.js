@@ -22,14 +22,24 @@ export const updateConfig = (store_code,data) =>{
   return callApi(`/store/${store_code}/collaborator_configs`, "post", data);
 }
 
-export const fetchAllCollaborator = (store_code , page=1) => {
+export const fetchAllCollaborator = (store_code , page=1 , params) => {
+  if(params)
+    return callApi(`/store/${store_code}/collaborators?page=${page}${params}`, "get", null);
+  else
   return callApi(`/store/${store_code}/collaborators?page=${page}`, "get", null);
 };
 
-export const fetchAllRequestPayment = (store_code) => {
+export const fetchAllRequestPayment = (store_code,params) => {
+  if(params)
+  return callApi(`/store/${store_code}/collaborators/request_payment/current?param=true${params}`, "get", null);
+  else
   return callApi(`/store/${store_code}/collaborators/request_payment/current`, "get", null);
 };
-export const fetchAllHistory = (store_code) => {
+export const fetchAllHistory = (store_code,page,params) => {
+  if(params)
+  return callApi(`/store/${store_code}/collaborators/request_payment/history${params}`, "get", null);
+
+  else
   return callApi(`/store/${store_code}/collaborators/request_payment/history`, "get", null);
 };
 export const updateRequestPayment = (store_code,data) =>{
@@ -42,3 +52,12 @@ export const updateAllRequestPayment = (store_code) =>{
 export const updateCollaborator = (store_code,id,data) =>{
   return callApi(`/store/${store_code}/collaborators/${id}`, "put", data);
 }
+export const fetchAllTopReport = (store_code , page=1 , params) => {
+  if(params != null)
+  {
+    return callApi(`/store/${store_code}/collaborators/report?page=${page}${params}`, "get", null);
+
+  }
+
+  return callApi(`/store/${store_code}/collaborators/report?page=${page}`, "get", null);
+};

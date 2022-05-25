@@ -30,10 +30,12 @@ class Bill extends Component {
       isSearch: false,
       searchValue: "",
       statusPayment: "",
-      orderFrom : "",
+      orderFrom: "",
       numPage: 20,
       agency_by_customer_id:
         queryString.parse(window.location.search).agency_by_customer_id || null,
+      collaborator_by_customer_id:
+        queryString.parse(window.location.search).collaborator_by_customer_id || null,
       time_from: "",
       time_to: ""
     };
@@ -46,7 +48,7 @@ class Bill extends Component {
 
   onChangeNumPage = (e) => {
     var { store_code } = this.props.match.params;
-    var { statusOrder, statusPayment, searchValue , orderFrom  , time_from , time_to , orderFrom} = this.state;
+    var { statusOrder, statusPayment, searchValue, orderFrom, time_from, time_to, orderFrom, collaborator_by_customer_id } = this.state;
     var numPage = e.target.value;
     this.setState({
       numPage,
@@ -58,7 +60,7 @@ class Bill extends Component {
 
 
     var params = ""
-    params = params + this.getParams(null, null, null, statusOrder, statusPayment, numPage , orderFrom)
+    params = params + this.getParams(null, null, null, statusOrder, statusPayment, numPage, orderFrom, collaborator_by_customer_id)
 
     // var params = `&search=${searchValue}&order_status_code=${statusOrder}&payment_status_code=${statusPayment}&limit=${numPage}`
     const branch_id = localStorage.getItem("branch_id")
@@ -66,22 +68,37 @@ class Bill extends Component {
   }
   goBack = () => {
     var { store_code } = this.props.match.params;
+    var {collaborator_by_customer_id , agency_by_customer_id} = this.state
+    if(agency_by_customer_id != null)
     history.replace(`/agency/${store_code}?tab-index=1`);
-};
+    else
+    history.replace(`/collaborator/${store_code}?tab-index=1`);
+
+  };
   componentDidMount() {
     var { store_code, status_code } = this.props.match.params;
     var from = getQueryParams("from")
     var to = getQueryParams("from")
     var statusOrder = getQueryParams("order_status_code")
     var statusPayment = getQueryParams("payment_status_code")
+    var {collaborator_by_customer_id} = this.state
 
 
 
     if (
       this.props.customer.id !== this.state.agency_by_customer_id &&
       this.state.agency_by_customer_id != null
-    ) {
+    ) 
+    {
       this.props.fetchCustomerId(store_code, this.state.agency_by_customer_id);
+    }
+
+    if (
+      this.props.customer.id !== this.state.collaborator_by_customer_id &&
+      this.state.collaborator_by_customer_id != null
+    ) 
+    {
+      this.props.fetchCustomerId(store_code, this.state.collaborator_by_customer_id);
     }
 
     var params_agency =
@@ -100,9 +117,9 @@ class Bill extends Component {
       to = moment(to, "DD-MM-YYYY").format("YYYY-MM-DD")
       this.setState({ time_from: from, time_to: to })
     }
-    params = params + this.getParams(from, to, null, statusOrder, statusPayment, null)
+    params = params + this.getParams(from, to, null, statusOrder, statusPayment, null ,null, collaborator_by_customer_id)
 
-
+console.log(params);
     var status_order = status == "PAID" ? null : status;
     var status_payment = status == "PAID" ? status : null;
     if (status_order != null) this.setState({ statusOrder: status_order });
@@ -135,9 +152,9 @@ class Bill extends Component {
   onchangeStatusPayment = (data) => {
     this.setState({ statusPayment: data });
   };
-  onchangeOrderFrom = (data) =>{
-    this.setState({orderFrom : data})
-    
+  onchangeOrderFrom = (data) => {
+    this.setState({ orderFrom: data })
+
   }
   searchData = (e) => {
     e.preventDefault();
@@ -198,7 +215,7 @@ class Bill extends Component {
   }
 
 
-  getParams = (from, to, searchValue, statusOrder, statusPayment, numPage , orderFrom) => {
+  getParams = (from, to, searchValue, statusOrder, statusPayment, numPage, orderFrom, collaborator_by_customer_id) => {
     var params = ``;
     if (to != "" && to != null) {
       params = params + `&time_to=${to}`;
@@ -221,13 +238,16 @@ class Bill extends Component {
     if (orderFrom != "" && orderFrom != null) {
       params = params + `&order_from_list=${orderFrom}`;
     }
+    if (collaborator_by_customer_id != "" && collaborator_by_customer_id != null) {
+      params = params + `&collaborator_by_customer_id=${collaborator_by_customer_id}`
+    }
     return params
   }
 
   onchangeDateFromTo = (e) => {
     var from = "";
     var { store_code } = this.props.match.params;
-    var { searchValue, statusOrder, statusPayment, numPage , orderFrom } = this.state
+    var { searchValue, statusOrder, statusPayment, numPage, orderFrom,collaborator_by_customer_id } = this.state
     var to = "";
     try {
       from = moment(e.value[0], "DD-MM-YYYY").format("YYYY-MM-DD");
@@ -241,12 +261,12 @@ class Bill extends Component {
         ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
         : null;
 
-    var params = this.getParams(from, to, searchValue, statusOrder, statusPayment, numPage , orderFrom);
+    var params = this.getParams(from, to, searchValue, statusOrder, statusPayment, numPage, orderFrom,collaborator_by_customer_id);
 
 
     const branch_id = getBranchId()
     console.log(from, to, params)
-    this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency );
+    this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
     this.setState({ time_from: from, time_to: to })
 
   }
@@ -296,9 +316,13 @@ class Bill extends Component {
                           customer.id == this.state.agency_by_customer_id
                           ? `của Đại lý ${customer.name}`
                           : null}
+                              {typeof customer.id != "undefined" &&
+                          customer.id == this.state.collaborator_by_customer_id
+                          ? `của CTV ${customer.name}`
+                          : null}
                       </h4>{" "}
                       {
-                        getQueryParams("tab-index")==1 &&  <button style={{ marginRight: "10px" }} type="button" onClick={this.goBack} class="btn btn-warning  btn-sm"><i class="fas fa-arrow-left"></i>&nbsp;Trở về</button>
+                        getQueryParams("tab-index") && <button style={{ marginRight: "10px" }} type="button" onClick={this.goBack} class="btn btn-warning  btn-sm"><i class="fas fa-arrow-left"></i>&nbsp;Trở về</button>
 
                       }
                     </div>
@@ -400,10 +424,10 @@ class Bill extends Component {
 
                       <div className="card-body">
                         <Table
-                        onchangeOrderFrom = {this.onchangeOrderFrom}
-                        getParams = {this.getParams}
+                          onchangeOrderFrom={this.onchangeOrderFrom}
+                          getParams={this.getParams}
                           time_from={time_from}
-                          time_to = {time_to}
+                          time_to={time_to}
                           chat_allow={chat_allow}
                           onchangeStatusOrder={this.onchangeStatusOrder}
                           onchangeStatusPayment={this.onchangeStatusPayment}
@@ -446,7 +470,7 @@ class Bill extends Component {
                           <Pagination
                             time_from={time_from}
                             time_to={time_to}
-                            orderFrom = {orderFrom}
+                            orderFrom={orderFrom}
                             searchValue={searchValue}
                             limit={numPage}
                             status_payment={statusPayment}

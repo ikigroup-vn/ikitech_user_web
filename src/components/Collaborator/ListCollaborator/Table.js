@@ -7,12 +7,14 @@ import { format, randomString } from "../../../ultis/helpers";
 import { connect } from "react-redux";
 import * as collaboratorAction from "../../../actions/collaborator";
 import ModalListReferences from "./ModalListReferences";
+import ModalImg from "../ModalImg"
 class Table extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loadFrist: false,
-      referral_phone_number:""
+      referral_phone_number: "",
+      modalImg : ""
     };
   }
 
@@ -22,7 +24,7 @@ class Table extends Component {
 
   showReferences = (referral_phone_number) => {
     this.setState({
-      referral_phone_number:referral_phone_number
+      referral_phone_number: referral_phone_number
     })
   };
 
@@ -48,6 +50,9 @@ class Table extends Component {
       status: status
     }
     )
+  }
+  showModalImg = (url) =>{
+    this.setState({modalImg : url})
   }
 
   showData = (collaborators) => {
@@ -84,7 +89,7 @@ class Table extends Component {
         }
         return (
           <React.Fragment>
-            <tr class="sub-container">
+            <tr class="sub-container hover-product">
               <td>
                 <button
                   type="button"
@@ -94,7 +99,9 @@ class Table extends Component {
                   <span class="fa fa-plus"></span>
                 </button>
               </td>{" "}
-              <td>
+              <td style = {{
+                padding: "0.75rem 0px"
+              }}>
                 <img
                   src={avatar}
                   class="img-responsive"
@@ -106,9 +113,7 @@ class Table extends Component {
 
               <td>{data.customer.name}</td>
               <td>{data.customer.phone_number}</td>
-              <td>
-                {data.customer.email == null ? "Trống" : data.customer.email}
-              </td>
+{/* 
               <td>
                 {" "}
                 {data.customer.points == null
@@ -116,19 +121,20 @@ class Table extends Component {
                   : new Intl.NumberFormat().format(
                     data.customer.points.toString()
                   )}
-              </td>
+              </td> */}
               <td>{data.customer.referral_phone_number || null}</td>
 
               <td>
                 <div className="on-off" onClick={(e) => { this.onChangeStatus(e, data.id) }}>
                   <input ref={(ref) => this["checked" + data.id] = ref} type="checkbox" class="checkbox" name={`${randomString(10)}`} checked={data.status == 1 ? true : false} />
 
+             
                   <label for="checkbox" class="switch">
                     <span class="switch__circle">
-                      <span class="switch__circle-inner"></span>
+                      <span style = {{backgroundColor : data.status == 1 ? "white" : "gray"}} class="switch__circle-inner"></span>
                     </span>
-                    <span class="switch__left">Tắt</span>
-                    <span class="switch__right">Bật</span>
+                    <span class="switch__left"></span>
+                    <span class="switch__right"></span>
                   </label>
                 </div>
               </td>
@@ -147,6 +153,16 @@ class Table extends Component {
                   <i class="fa fa-phone"></i> Gọi ngay
                 </a>
                 &nbsp;
+
+                <Link
+                  style={{ margin: "2px 0" }}
+
+                  to={`/order/${this.props.store_code}?collaborator_by_customer_id=${data.customer_id}&tab-index=1`}
+                  class="btn btn-danger btn-sm"
+                >
+                  <i class="fa fa-history"></i> Lịch sử đơn hàng
+                </Link>
+                &nbsp;
                 <Link
                   style={{ margin: "2px 0" }}
 
@@ -156,7 +172,7 @@ class Table extends Component {
                   <i class="fa fa-bar-chart"></i> Báo cáo
                 </Link>
                 &nbsp;
-             
+
 
                 <a
 
@@ -188,11 +204,23 @@ class Table extends Component {
                         <span id="user_tel">{data.account_name}</span>
                       </p>
                       <p class="sale_user_label">
+                        Gmail:{" "}
+                        <span id="user_tel">             {data.customer.email == null ? "Trống" : data.customer.email}
+                        </span>
+                      </p>
+                      <p class="sale_user_label">
                         Tiền thưởng:{" "}
                         <span id="user_tel">
                           {format(Number(data.balance))}
                         </span>
                       </p>
+                      <p class="sale_user_label">
+                        Tên CMND:{" "}
+                        <span id="user_tel">
+                          {data.first_and_last_name}
+                        </span>
+                      </p>
+
                       <p class="sale_user_label" id="sale_user_name">
                         CMND: <span id="user_name"> {data.cmnd} </span>
                       </p>
@@ -209,7 +237,8 @@ class Table extends Component {
                   <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
                     <div class="info_user">
                       <div class="row">
-                        <div style={{ textAlign: "center" }}>
+                        <div  data-toggle="modal"
+                      data-target="#modalImg" style={{ textAlign: "center" , cursor : "pointer"}} onClick = {()=>this.showModalImg(img_front)}>
                           <img
                             width="120"
                             height="125px"
@@ -222,7 +251,8 @@ class Table extends Component {
                           </p>
                         </div>
 
-                        <div style={{ textAlign: "center" }}>
+                        <div  data-toggle="modal"
+                      data-target="#modalImg" style={{ textAlign: "center" ,  cursor : "pointer" }} onClick = {()=>this.showModalImg(img_back)}>
                           <img
                             width="120px"
                             height="125px"
@@ -256,7 +286,8 @@ class Table extends Component {
         ? []
         : this.props.collaborators.data;
     return (
-      <div class="table-responsive">
+      <div class=""  style = {{overflow : "auto"}}>
+        <ModalImg img={this.state.modalImg}></ModalImg>
         <table class="table table-border">
           <thead>
             <tr>
@@ -265,12 +296,11 @@ class Table extends Component {
 
               <th>Họ tên</th>
               <th>Số điện thoại</th>
-              <th>Gmail</th>
 
-              <th>Điểm</th>
+              {/* <th>Điểm</th> */}
               <th>Mã giới thiệu</th>
 
-              <th>Trạng thái</th>
+              <th>Trạng thái hoạt động</th>
 
               <th>Hành động</th>
             </tr>
@@ -278,7 +308,7 @@ class Table extends Component {
 
           <tbody>{this.showData(collaborators)}</tbody>
         </table>
-        <ModalListReferences store_code={this.props.store_code} referral_phone_number={this.state.referral_phone_number}/>
+        <ModalListReferences store_code={this.props.store_code} referral_phone_number={this.state.referral_phone_number} />
       </div>
     );
   }
