@@ -321,7 +321,7 @@ class ShowData extends Component {
                 <div className="row e">
                   <div
                     style={{
-                      textDecoration: "line-through",
+                      // textDecoration: "line-through",
                     }}
                   >
                     {format(Number(min_price))}
@@ -329,7 +329,7 @@ class ShowData extends Component {
                     {format(Number(max_price))}
                   </div>
 
-                  <div className="discount e">&emsp; -{discount_percent}%</div>
+                  {/* <div className="discount e">&emsp; -{discount_percent}%</div> */}
                 </div>
               )}
             </div>

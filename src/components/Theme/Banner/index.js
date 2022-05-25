@@ -125,7 +125,7 @@ class Footer extends Component {
 
         return (
             <div className="support">
-                <a
+                <button
                 style = {{float : "right"}}
 
                     data-toggle="modal" data-target="#createModal"
@@ -135,7 +135,7 @@ class Footer extends Component {
                         <i class="fas fa-plus"></i>
                     </span>
                     <span class="text">Thêm Banner</span>
-                </a>
+                </button>
                 <form role="form" onSubmit={this.onSave} >
 
                     <div class="box-body">

@@ -65,6 +65,7 @@ class Table extends Component {
                         }
                     }
                 }
+                if(data.status != 0)
                 result.push(
                     <React.Fragment>
                         <tr class="sub-container hover-product">

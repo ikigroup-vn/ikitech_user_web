@@ -113,7 +113,15 @@ class FormFooterHtml extends Component {
             </div>
           </div>
           <div class="box-footer">
-            <button
+          <button
+                        type="button"
+
+                  class="btn btn-primary btn-sm"
+                  onClick={this.onSave}
+                  >
+                  <i class="fa fa-save"></i> Lưu
+                </button>
+            {/* <button
               type="submit"
               class="btn btn-info btn-icon-split btn-sm"
               onClick={this.onSave}
@@ -122,7 +130,7 @@ class FormFooterHtml extends Component {
                 <i class="fas fa-save"></i>
               </span>
               <span class="text">Lưu</span>
-            </button>
+            </button> */}
           </div>
         </form>
       </React.Fragment>

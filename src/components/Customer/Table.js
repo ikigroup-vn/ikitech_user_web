@@ -27,6 +27,17 @@ class Table extends Component {
     var result = null;
     if (customer.length > 0) {
       var { chat_allow } = this.props;
+      // var is_collaborator  = data.is_collaborator == null ||
+      //   data.is_collaborator == "" ||
+      //   data.is_collaborator == false
+      //   ? "Không"
+      //   : "Có"
+
+      //   var is_agency  = data.is_agency == null ||
+      //   data.is_agency == "" ||
+      //   data.is_agency == false
+      //   ? "Không"
+      //   : "Có"  
 
       result = customer.map((data, index) => {
         return (
@@ -39,20 +50,22 @@ class Table extends Component {
             <td>{data.email == null ? "Chưa cập nhật" : data.email}</td>
             <td>{data.points ? new Intl.NumberFormat().format(data.points)
               : 0}</td>
+       
+       
             <td>{data.debt ? new Intl.NumberFormat().format(data.debt)
               : 0}</td>
-            {getChannel() == IKITECH && <td>
-              {data.is_collaborator == null ||
-                data.is_collaborator == "" ||
-                data.is_collaborator == false
-                ? "Không"
-                : "Có"}
+                   {getChannel() == IKITECH && <td className = {data.is_collaborator === true ? "success" : "danger"}>
+              {data.is_collaborator === true ?  "Có" : "Không"}
+            </td>}
+            {getChannel() == IKITECH && <td className= {data.is_agency === true ?  "success" : "danger"}>
+
+              {data.is_agency === true ?  "Có" : "Không"}
             </td>}
 
 
 
 
-            <td className="">
+            {getChannel() == IKIPOS && <td className="">
               {/* {getChannel() == IKITECH && <Link
                 to={`/customer/detail/${store_code}/${data.id}?pag=${paginate}`}
                 class="btn btn-success btn-sm"
@@ -60,7 +73,7 @@ class Table extends Component {
                 <i class="fa fa-eye"></i> Xem
               </Link>} */}
 
-              {getChannel() == IKITECH ? <button
+               {/* <button
                 style={{ marginLeft: "10px" }}
                 name = "action"
                 onClick={() => this.showChatBox(data.id, "show")}
@@ -68,16 +81,20 @@ class Table extends Component {
                   }`}
               >
                 <i class="fa fa-comment-alt"></i> Chat
-              </button> : <Link
+              </button>  */}
+              {getChannel() == IKIPOS && <Link
                 to={`/customer/detail/${store_code}/${data.id}?pag=${paginate}`}
 
                 style={{ marginLeft: "10px" }}
                 class={`btn btn-warning btn-sm`}
               >
                 <i class="fa fa-edit"></i> Sửa
-              </Link>}
+              </Link>
+      }
+    
 
             </td>
+    }
           </tr>
         );
       });
@@ -114,7 +131,11 @@ class Table extends Component {
               <th>Số nợ hiện tại</th>
 
               {getChannel() == IKITECH && <th>Cộng tác viên</th>}
-              <th>Hành động</th>
+              {getChannel() == IKITECH && <th>Đại lý</th>}
+
+              {/* {getChannel() == IKIPOS &&   <th>Hành động</th>} */}
+
+            
             </tr>
           </thead>
 

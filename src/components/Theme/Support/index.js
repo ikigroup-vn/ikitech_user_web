@@ -236,27 +236,6 @@ class Support extends Component {
 
                         </div>
                         <div className="form-group">
-                            <label htmlFor="name">Bài viết liên hệ</label>
-                            <input
-                                value={ID_post_id_contact}
-
-
-                                type="hidden"
-
-                            />
-                            <input
-                                onClick={() => this.fetchAllBlog("post_id_contact")}
-                                value={post_id_contact}
-
-                                data-toggle="modal"
-                                data-target="#showListBlog"
-                                type="text"
-                                name="product_name"
-                                class="form-control"
-                                placeholder="Chọn bài viết..."
-                            />
-                        </div>
-                        <div className="form-group">
                             <label htmlFor="name">Bài viết giới thiệu</label>
                             <input
                                 value={ID_post_id_about}
@@ -268,48 +247,6 @@ class Support extends Component {
                             <input
                                 onClick={() => this.fetchAllBlog("post_id_about")}
                                 value={post_id_about}
-
-                                data-toggle="modal"
-                                data-target="#showListBlog"
-                                type="text"
-                                name="product_name"
-                                class="form-control"
-                                placeholder="Chọn bài viết..."
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="name">Bài viết điều khoản điều kiện</label>
-                            <input
-                                value={ID_post_id_terms}
-
-
-                                type="hidden"
-
-                            />
-                            <input
-                                onClick={() => this.fetchAllBlog("post_id_terms")}
-                                value={post_id_terms}
-
-                                data-toggle="modal"
-                                data-target="#showListBlog"
-                                type="text"
-                                name="product_name"
-                                class="form-control"
-                                placeholder="Chọn bài viết..."
-                            />
-                        </div>
-                        <div className="form-group">
-                            <label htmlFor="name">Chính sách hoàn trả</label>
-                            <input
-                                value={ID_post_id_return_policy}
-
-
-                                type="hidden"
-
-                            />
-                            <input
-                                onClick={() => this.fetchAllBlog("post_id_return_policy")}
-                                value={post_id_return_policy}
 
                                 data-toggle="modal"
                                 data-target="#showListBlog"
@@ -341,17 +278,39 @@ class Support extends Component {
                             />
                         </div>
                         <div className="form-group">
-                            <label htmlFor="name">Chính sách bảo mật</label>
+                            <label htmlFor="name">Bài viết điều khoản điều kiện</label>
                             <input
-                                value={ID_post_id_privacy_policy}
+                                value={ID_post_id_terms}
 
 
                                 type="hidden"
 
                             />
                             <input
-                                onClick={() => this.fetchAllBlog("post_id_privacy_policy")}
-                                value={post_id_privacy_policy}
+                                onClick={() => this.fetchAllBlog("post_id_terms")}
+                                value={post_id_terms}
+
+                                data-toggle="modal"
+                                data-target="#showListBlog"
+                                type="text"
+                                name="product_name"
+                                class="form-control"
+                                placeholder="Chọn bài viết..."
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="name">Chính sách hoàn trả</label>
+                            <input
+                                value={ID_post_id_return_policy}
+
+
+                                type="hidden"
+
+                            />
+                            <input
+                                onClick={() => this.fetchAllBlog("post_id_return_policy")}
+                                value={post_id_return_policy}
 
                                 data-toggle="modal"
                                 data-target="#showListBlog"
@@ -382,6 +341,54 @@ class Support extends Component {
                                 placeholder="Chọn bài viết..."
                             />
                         </div>
+                        <div className="form-group">
+                            <label htmlFor="name">Chính sách bảo mật</label>
+                            <input
+                                value={ID_post_id_privacy_policy}
+
+
+                                type="hidden"
+
+                            />
+                            <input
+                                onClick={() => this.fetchAllBlog("post_id_privacy_policy")}
+                                value={post_id_privacy_policy}
+
+                                data-toggle="modal"
+                                data-target="#showListBlog"
+                                type="text"
+                                name="product_name"
+                                class="form-control"
+                                placeholder="Chọn bài viết..."
+                            />
+                        </div>
+                     
+                        {/* <div className="form-group">
+                            <label htmlFor="name">Bài viết liên hệ</label>
+                            <input
+                                value={ID_post_id_contact}
+
+
+                                type="hidden"
+
+                            />
+                            <input
+                                onClick={() => this.fetchAllBlog("post_id_contact")}
+                                value={post_id_contact}
+
+                                data-toggle="modal"
+                                data-target="#showListBlog"
+                                type="text"
+                                name="product_name"
+                                class="form-control"
+                                placeholder="Chọn bài viết..."
+                            />
+                        </div>
+                      */}
+                    
+                
+                    
+                     
 
                     </div>
                     <div class="box-footer">
@@ -389,7 +396,7 @@ class Support extends Component {
 
                             <i class="fas fa-save"></i>
 
-                            Lưu
+                            &nbsp;&nbsp;Lưu
                         </button>
 
                     </div>

@@ -20,7 +20,7 @@ class Overview extends Component {
             font_family: "",
             typeUpload: "",
             loadFont: false,
-            home_description : ""
+            home_description: ""
         };
     }
 
@@ -50,7 +50,7 @@ class Overview extends Component {
                 domain: theme.domain,
                 color_main_1: theme.color_main_1,
                 font_family: theme.font_family,
-                home_description : theme.home_description
+                home_description: theme.home_description
             })
         }
     }
@@ -69,7 +69,7 @@ class Overview extends Component {
                 domain: theme.domain,
                 color_main_1: theme.color_main_1,
                 font_family: theme.font_family,
-                home_description : theme.home_description
+                home_description: theme.home_description
             })
         }
         if (nextProps.faceImg != this.props.faceImg)
@@ -100,15 +100,15 @@ class Overview extends Component {
         e.preventDefault();
         var { store_code } = this.props
         var theme = this.state
-        var form = {...this.props.theme}
+        var form = { ...this.props.theme }
         form.logo_url = theme.logo_url
-            form.favicon_url = theme.favicon_url
-            form.image_share_web_url = theme.image_share_web_url
-            form.home_title = theme.home_title
-            form.domain = theme.domain
-            form.color_main_1 = theme.color_main_1
-            form.font_family = theme.font_family
-            form.home_description = theme.home_description
+        form.favicon_url = theme.favicon_url
+        form.image_share_web_url = theme.image_share_web_url
+        form.home_title = theme.home_title
+        form.domain = theme.domain
+        form.color_main_1 = theme.color_main_1
+        form.font_family = theme.font_family
+        form.home_description = theme.home_description
         this.props.updateTheme(store_code, form);
     }
     showFont = (font) => {
@@ -165,7 +165,21 @@ class Overview extends Component {
                                     <br />
                                     <div class="kv-avatar">
                                         <div >
+
                                             <button
+                                                                                            onClick={() => this.onChangeUpload("LOGO")}
+
+                                                type="button"
+                                                class="btn btn-primary-no-background btn-sm"
+
+                                                // style={{ marginLeft: "10px" }}
+                                                data-toggle="modal"
+                                                data-target="#uploadModalTheme"
+                                            >
+                                                <i class="fas fa-plus" ></i>
+                                                <span class="text">&nbsp; Upload Logo</span>
+                                            </button>
+                                            {/* <button
                                                 onClick={() => this.onChangeUpload("LOGO")}
                                                 type="button"
                                                 class="btn btn-primary btn-sm"
@@ -173,7 +187,7 @@ class Overview extends Component {
                                                 data-target="#uploadModalTheme"
                                             >
                                                 <i class="fa fa-plus"></i> Upload Logo
-                                            </button>
+                                            </button> */}
                                         </div>
                                     </div>
                                 </div>
@@ -186,7 +200,20 @@ class Overview extends Component {
 
                                     <div class="kv-avatar">
                                         <div >
-                                            <button
+                                        <button
+                                                                                            onClick={() => this.onChangeUpload("FAVICON")}
+
+                                                type="button"
+                                                class="btn btn-primary-no-background btn-sm"
+
+                                                // style={{ marginLeft: "10px" }}
+                                                data-toggle="modal"
+                                                data-target="#uploadModalTheme"
+                                            >
+                                                <i class="fas fa-plus" ></i>
+                                                <span class="text">&nbsp;  Upload Favicon</span>
+                                            </button>
+                                            {/* <button
                                                 onClick={() => this.onChangeUpload("FAVICON")}
 
                                                 type="button"
@@ -195,7 +222,7 @@ class Overview extends Component {
                                                 data-target="#uploadModalTheme"
                                             >
                                                 <i class="fa fa-plus"></i> Upload Favicon
-                                            </button>
+                                            </button> */}
                                         </div>
                                     </div>
                                 </div>
@@ -208,7 +235,21 @@ class Overview extends Component {
 
                                     <div class="kv-avatar">
                                         <div >
-                                            <button
+                                        <button
+                                                onClick={() => this.onChangeUpload("FACE")}
+
+                                                type="button"
+                                                class="btn btn-primary-no-background btn-sm"
+
+                                                // style={{ marginLeft: "10px" }}
+                                                data-toggle="modal"
+                                                data-target="#uploadModalTheme"
+                                            >
+                                                <i class="fas fa-plus" ></i>
+                                                <span class="text">&nbsp;   Upload Ảnh</span>
+                                            </button>
+
+                                            {/* <button
                                                 onClick={() => this.onChangeUpload("FACE")}
 
                                                 type="button"
@@ -217,7 +258,8 @@ class Overview extends Component {
                                                 data-target="#uploadModalTheme"
                                             >
                                                 <i class="fa fa-plus"></i> Upload Ảnh
-                                            </button>
+                                            </button> */}
+
                                         </div>
                                     </div>
                                 </div>
@@ -242,7 +284,7 @@ class Overview extends Component {
                         <div className="form-group">
                             <label htmlFor="name">Tên miền</label>
                             <input type="text" className="form-control" placeholder="Tên miền của bạn" id="txtName" onChange={this.onChange} value={domain || ""} name="domain" autoComplete="off" />
-                            <strong>(Tên miền cần trỏ vào IP 116.118.50.101, sẽ được tự xác nhận sau 5 phút)</strong>
+                            <span>(Tên miền cần trỏ vào IP 116.118.50.101, sẽ được tự xác nhận sau 5 phút)</span>
                         </div>
                         <div className="form-group">
                             <label htmlFor="name">Kiểu chữ cho web</label>
@@ -257,8 +299,22 @@ class Overview extends Component {
 
                             <div style={{ display: "flex" }}>
 
-
-                                <button style={{
+                            <button
+                                                // onClick={() => this.onChangeUpload("FACE")}
+                                                style = {{                                      width: "115px",
+                                                    height: "34px"
+                                            }}
+                                                type="button"
+                                                class="btn btn-primary-no-background btn-sm"
+                                                data-toggle="modal"
+                                                data-target="#chooseColor"
+                                                // style={{ marginLeft: "10px" }}
+                                           
+                                            >
+                                                <i class="fas fa-plus" ></i>
+                                                <span class="text">&nbsp;Chọn màu</span>
+                                            </button>
+                                {/* <button style={{
                                     height: "30px",
                                     marginTop: "12px"
                                 }} type="button"
@@ -268,7 +324,7 @@ class Overview extends Component {
 
                                     <i class="fa fa-plus"></i>
 
-                                    Chọn màu</button>
+                                    Chọn màu</button> */}
 
                                 <div
                                     style={{ background: _color_main_1 }}
