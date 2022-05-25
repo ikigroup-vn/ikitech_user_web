@@ -6,6 +6,7 @@ import Footer from "../../components/Partials/Footer";
 import ModalCreate from "../../components/Collaborator/Config/ModalCreate";
 import ModalUpdate from "../../components/Collaborator/Config/ModalUpdate";
 import ModalRemove from "../../components/Collaborator/Config/ModalRemove";
+import TopReport from "../../components/Collaborator/TopReport";
 
 import Alert from "../../components/Partials/Alert";
 import { Redirect, Link } from "react-router-dom";
@@ -55,7 +56,13 @@ class collaborator extends Component {
       var payment_request_solve = permissions.collaborator_payment_request_solve
 
       var isShow = payment_request_list == false && config == false && payment_request_history == false && collaborator_list == false ? false : true
-
+      const queryString = window.location.search;
+      const urlParams = new URLSearchParams(queryString);
+      var tabIndex = urlParams.get('tab-index');
+      if (!tabIndex) {
+        tabIndex = 0;
+      }
+      this.defaultIndex = tabIndex;
       this.setState({ isLoading: true, collaborator_list, payment_request_list, config, payment_request_history, payment_request_solve, isShow })
 
     }
@@ -106,7 +113,12 @@ class collaborator extends Component {
                                 <span>Danh sách cộng tác viên</span>
                               </Tab> : null
                             }
-
+                            {
+                              collaborator_list == true ? <Tab>
+                                <i class="fa fa-chart-bar"></i>
+                                <span> Top doanh số</span>
+                              </Tab> : null
+                            }
                             {
                               payment_request_list == true ? <Tab>
                                 <i class="fas fa-list"></i>
@@ -135,6 +147,9 @@ class collaborator extends Component {
 
                           {collaborator_list == true ? <TabPanel>
                             <ListCollaborator tabId={tabId} store_code={store_code} />
+                          </TabPanel> : null}
+                          {collaborator_list == true ? <TabPanel>
+                            <TopReport paramId={id} tabId={tabId} store_code={store_code} payment_request_solve={payment_request_solve} />
                           </TabPanel> : null}
                           {payment_request_list == true ? <TabPanel>
                             <RequestPayment paramId={id} tabId={tabId} store_code={store_code} payment_request_solve={payment_request_solve} />
