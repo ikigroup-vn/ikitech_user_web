@@ -64,7 +64,7 @@ class Table extends Component {
   };
   showData = (products, per_page, current_page) => {
     var result = null;
-    var { store_code, page,agency_type_id } = this.props;
+    var { store_code, page,agency_type_id} = this.props;
     if (typeof products === "undefined") {
       return result;
     }
@@ -100,7 +100,7 @@ class Table extends Component {
             <td>{data.sku}</td>
 
             <td>
-              <Link to={`/product/edit/${store_code}/${data.id}/${page}`}>
+              <Link to={`/product/edit/${store_code}/${data.id}/${page}?page=${page}`}>
                 {data.name}
               </Link>
             </td>
@@ -244,7 +244,7 @@ class Table extends Component {
 
             <td>
               <Link
-                to={`/product-agency/edit-price/${store_code}/${data.id}/${agency_type_id}`}
+                to={`/product-agency/edit-price/${store_code}/${data.id}/${agency_type_id}?page=${page}`}
                 class={`btn btn-warning btn-sm ${update == true ? "" : "hide"
                   }`}
               >

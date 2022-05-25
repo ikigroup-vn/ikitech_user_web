@@ -135,7 +135,7 @@ class Table extends Component {
               </td>
               <td style={{ maxWidth: "300px" }}> {this.showListProduct(data.products || [])}</td>
   
-              <td className="group-btn-table">
+              <td className="group-btn-table" style = {{maxWidth : "150px"}}>
                 <Link
                   to={`/discount/edit/${store_code}/${data.id}`}
                   class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}

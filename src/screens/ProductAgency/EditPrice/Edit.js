@@ -5,6 +5,8 @@ import Distribute from "../../../components/ProductAgency/Update/Distribute";
 import * as productAction from "../../../actions/product";
 import * as Types from "../../../constants/ActionType";
 import Alert from "../../../components/Partials/Alert";
+import history from "../../../history"
+import { getQueryParams } from "../../../ultis/helpers"
 
 class ProductEdit extends Component {
   constructor(props) {
@@ -50,7 +52,7 @@ class ProductEdit extends Component {
   };
 
   postProduct = () => {
-    var { store_code, productId } = this.props;
+    var { store_code, productId, agency_type_id } = this.props;
     var form = { ...this.state.form };
     console.log(form.list_distribute)
     var list_distribute = [...form.list_distribute]
@@ -62,7 +64,7 @@ class ProductEdit extends Component {
           element_distributes_price.push({
             distribute_name: item.name,
             element_distribute: _item.name,
-            price: _item.price != null ? _item.price .toString().replace(/,/g, '').replace(/\./g, '') : 0
+            price: _item.price != null ? _item.price.toString().replace(/,/g, '').replace(/\./g, '') : 0
           })
           if (typeof _item.sub_element_distributes != "undefined") {
             if (_item.sub_element_distributes.length > 0) {
@@ -71,7 +73,7 @@ class ProductEdit extends Component {
                   distribute_name: item.name,
                   element_distribute: _item.name,
                   sub_element_distribute: element.name,
-                  price:element.price != null ? element.price .toString().replace(/,/g, '').replace(/\./g, '') : 0
+                  price: element.price != null ? element.price.toString().replace(/,/g, '').replace(/\./g, '') : 0
                 })
 
               })
@@ -88,20 +90,27 @@ class ProductEdit extends Component {
     delete form.list_distribute
     form.agency_type_id = this.props.agency_type_id
     console.log(form)
-    // return;
-    this.props.updateAgencyPrice(store_code, form, productId, null);
+    var page = getQueryParams("page") ?? 0
+    var tabIndex = getQueryParams("tab-index") ?? 0
+    var url = `/product-agency/index/${store_code}/${agency_type_id}?tab-index=${tabIndex}&page=${page}`
+    this.props.updateAgencyPrice(store_code, form, productId, null, url);
   };
   goBack = (e) => {
+    var { store_code, productId, agency_type_id } = this.props;
+
     e.preventDefault();
-    var { history } = this.props;
-    history.goBack();
+    var page = getQueryParams("page") ?? 0
+    var tabIndex = getQueryParams("tab-index") ?? 0
+
+    var url = `/product-agency/index/${store_code}/${agency_type_id}?tab-index=${tabIndex}&page=${page}`
+    history.replace(url);
   };
   onChangeQuantityStock = (total) => {
     this.setState({ total: total })
   }
 
   render() {
-    var { product , itemProduct } = this.props;
+    var { product, itemProduct } = this.props;
     console.log(product)
     return (
 
@@ -122,10 +131,13 @@ class ProductEdit extends Component {
         <div class="card mb-4">
           <div class="card-header title_content">
             Nhập giá đại lý
-            <span style = {{display : "block" ,fontSize : "14px", color : "black" }}>(Giá đại lý sẽ bằng giá gốc nếu các trường giá đại lý bị bỏ trống)</span>
+            <span style={{
+              display: "block", fontSize: "14px", color: "#514949",
+              "font-weight": "400"
+            }}>(Giá đại lý sẽ bằng giá gốc nếu các trường giá đại lý bị bỏ trống)</span>
 
           </div>
-          
+
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
               <div class="col-lg-6">
@@ -139,40 +151,40 @@ class ProductEdit extends Component {
 
 
             </div>
-            <div class="" style = {{padding : "0 14px"}}>
-          {/* <div class="card-header title_content">
+            <div class="" style={{ padding: "0 14px" }}>
+              {/* <div class="card-header title_content">
             Phân loại sản phẩm
           </div> */}
-          <div >
-            <div class="row">
-              <div class="col-lg-12">
-                <div>
-                  <div >
-                    <Distribute
-                      onChangeQuantityStock={this.onChangeQuantityStock}
-                      product={product}
-                      handleDataFromDistribute={
-                        this.handleDataFromDistribute
-                      }
-                    />
+              <div >
+                <div class="row">
+                  <div class="col-lg-12">
+                    <div>
+                      <div >
+                        <Distribute
+                          onChangeQuantityStock={this.onChangeQuantityStock}
+                          product={product}
+                          handleDataFromDistribute={
+                            this.handleDataFromDistribute
+                          }
+                        />
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-          </div>
-     
-        </div>
-    
 
-        
+        </div>
+
+
+
 
         <div class="card mb-4">
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <button
+                <button
                   class="btn btn-primary btn-sm"
                   onClick={this.postProduct}
                 >
@@ -209,8 +221,8 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
 
 
-    updateAgencyPrice: (store_code, product, productId, page) => {
-      dispatch(productAction.updateAgencyPrice(store_code, product, productId, page));
+    updateAgencyPrice: (store_code, product, productId, page, url) => {
+      dispatch(productAction.updateAgencyPrice(store_code, product, productId, page, url));
     },
     fetchProductAgencyPrice: (store_code, productId, agency_type_id) => {
       dispatch(productAction.fetchProductAgencyPrice(store_code, productId, agency_type_id));

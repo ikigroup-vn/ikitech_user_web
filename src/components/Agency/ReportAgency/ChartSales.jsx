@@ -40,21 +40,20 @@ class Chart extends Component {
 
 
 
+    getData = (_overview,_chartDataPrime,_chartDataCompare,_chartData,_actionChart) =>{
 
-    shouldComponentUpdate(nextProps, nextState) {
-        if (!shallowEqual(nextProps.overview, this.props.overview) || this.state.actionChart != nextState.actionChart) {
-            var actionChart = nextState.actionChart
+            var actionChart = _actionChart
             console.log(actionChart)
             var typeChartShow = "PRIME"
             var time = "";
             var parseNumberTime = 0;
-            var chartDataProps = nextProps.overview;
-            var chartDataState_prime = { ...this.state.chartDataPrime };
-            var chartDataState_compare = { ...this.state.chartDataCompare };
-            var chartData = { ...this.state.chartData }
+            var chartDataProps = _overview;
+            var chartDataState_prime = { ..._chartDataPrime };
+            var chartDataState_compare = { ..._chartDataCompare };
+            var chartData = { ..._chartData }
             var labels_prime = [];
             var dataSets_prime = [];
-            chartDataProps.data_prime_time.charts.forEach((item) => {
+            chartDataProps.data_prime_time?.charts.forEach((item) => {
                 dataSets_prime.push(item[actionChart]);
                 if (chartDataProps.data_prime_time.type_chart == "hour") {
                     time = moment(item.time, "YYYY-MM-DD HH:mm:ss").format("HH");
@@ -198,6 +197,168 @@ class Chart extends Component {
             this.setState({
                 chartDataPrime: chartDataState_prime, chartDataCompare: chartDataState_compare, chartData: chartData, typeChartShow: typeChartShow
             });
+        
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        if (!shallowEqual(nextProps.overview, this.props.overview) || this.state.actionChart != nextState.actionChart) {
+
+            this.getData(nextProps.overview,this.state.chartDataPrime,this.state.chartDataCompare,this.state.chartData,nextState.actionChart)
+            // var actionChart = nextState.actionChart
+            // console.log(actionChart)
+            // var typeChartShow = "PRIME"
+            // var time = "";
+            // var parseNumberTime = 0;
+            // var chartDataProps = nextProps.overview;
+            // var chartDataState_prime = { ...this.state.chartDataPrime };
+            // var chartDataState_compare = { ...this.state.chartDataCompare };
+            // var chartData = { ...this.state.chartData }
+            // var labels_prime = [];
+            // var dataSets_prime = [];
+            // chartDataProps.data_prime_time.charts.forEach((item) => {
+            //     dataSets_prime.push(item[actionChart]);
+            //     if (chartDataProps.data_prime_time.type_chart == "hour") {
+            //         time = moment(item.time, "YYYY-MM-DD HH:mm:ss").format("HH");
+            //         parseNumberTime = Number(time) + "h";
+            //         labels_prime.push(parseNumberTime);
+            //     } else if (chartDataProps.data_prime_time.type_chart == "day") {
+            //         time = moment(item.time, "YYYY-MM-DD").format("DD/MM");
+            //         labels_prime.push(time);
+            //     } else if (chartDataProps.data_prime_time.type_chart == "month") {
+            //         time = moment(item.time, "YYYY-MM").format("MM/YYYY");
+            //         parseNumberTime = time;
+            //         labels_prime.push(parseNumberTime);
+            //     }
+            // });
+            // chartDataState_prime.datasets[0].data = dataSets_prime;
+            // chartDataState_prime.datasets[0].backgroundColor = "#17a2b8"
+            // chartDataState_compare.datasets[0].label = "prime_date"
+
+            // chartDataState_prime.labels = labels_prime;
+
+            // if (chartDataProps.data_compare_time != null) {
+            //     var labels_compare = [];
+            //     var dataSets_compare = [];
+            //     chartDataProps.data_compare_time.charts.forEach((item) => {
+            //         console.log(item)
+            //         dataSets_compare.push(item[actionChart]);
+            //         if (chartDataProps.data_compare_time.type_chart == "hour") {
+            //             time = moment(item.time, "YYYY-MM-DD HH:mm:ss").format("HH");
+            //             parseNumberTime = Number(time) + "h";
+            //             labels_compare.push(parseNumberTime);
+            //         } else if (chartDataProps.data_compare_time.type_chart == "day") {
+            //             time = moment(item.time, "YYYY-MM-DD").format("DD/MM");
+            //             labels_compare.push(time);
+            //         } else if (chartDataProps.data_compare_time.type_chart == "month") {
+            //             time = moment(item.time, "YYYY-MM").format("MM/YYYY");
+            //             parseNumberTime = time;
+            //             labels_compare.push(parseNumberTime);
+            //         }
+            //     });
+
+            //     chartDataState_compare.datasets[0].data = dataSets_compare;
+            //     chartDataState_compare.datasets[0].backgroundColor = "red"
+            //     chartDataState_compare.datasets[0].label = "compare_date"
+
+            //     chartDataState_compare.labels = labels_compare;
+
+            // }
+
+
+            // if (chartDataProps.data_compare_time != null) {
+            //     var dataSets_all_prime = [];
+            //     var labels_all = [...chartDataState_prime.labels]
+            //     chartDataState_compare.labels.forEach(item => {
+            //         var check = false;
+            //         for (const _item of labels_all) {
+            //             console.log(_item, item, _item == item)
+            //             if (item == _item) {
+            //                 check = false;
+            //                 break
+            //             }
+            //             else {
+            //                 check = item
+            //             }
+
+            //         }
+            //         if (check != false) {
+            //             console.log(check)
+            //             labels_all.push(check)
+            //         }
+            //     })
+            //     if (chartDataProps.data_compare_time.type_chart == "day") {
+            //         labels_all.sort((a, b) =>
+            //             moment(a, 'DD/MM').isBefore(moment(b, 'DD/MM')) ? -1 : 1
+
+            //         )
+            //     }
+            //     if (chartDataProps.data_compare_time.type_chart == "hour") {
+            //         labels_all.sort((a, b) =>
+            //             moment(a.replace("h", ""), 'HH').isBefore(moment(b.replace("h", ""), 'HH')) ? -1 : 1
+
+            //         )
+            //     }
+            //     if (chartDataProps.data_compare_time.type_chart == "month") {
+            //         labels_all.sort((a, b) =>
+            //             moment(a, 'MM/YYYY').isBefore(moment(b, 'MM/YYYY')) ? -1 : 1
+
+            //         )
+            //     }
+            //     var dataSets_all_prime = [];
+            //     var dataSets_all_compare = [];
+            //     var check_prime = false;
+            //     var check_compare = false
+            //     labels_all.forEach(item => {
+
+            //         for (let [index, _item] of chartDataState_prime.labels.entries()) {
+            //             if (item == _item) {
+            //                 check_prime = true
+            //                 dataSets_all_prime.push(chartDataState_prime.datasets[0].data[index])
+            //                 break
+            //             }
+            //             else {
+            //             }
+
+            //         }
+            //         if (check_prime == false) {
+            //             dataSets_all_prime.push(0)
+
+            //         }
+            //         for (let [index, _item] of chartDataState_compare.labels.entries()) {
+            //             if (item == _item) {
+            //                 check_compare = true
+
+            //                 dataSets_all_compare.push(chartDataState_compare.datasets[0].data[index])
+            //                 break
+            //             }
+            //             else {
+            //             }
+
+
+            //         }
+            //         if (check_compare == false) {
+            //             dataSets_all_compare.push(0)
+
+            //         }
+            //     })
+            //     typeChartShow = "ALL"
+            //     chartData.labels = labels_all
+            //     chartData.datasets[0].data = dataSets_all_prime
+            //     chartData.datasets[0].backgroundColor = "blue"
+            //     chartData.datasets[0].label = "prime"
+
+
+
+            //     chartData.datasets[1].data = dataSets_all_compare
+            //     chartData.datasets[1].backgroundColor = "red"
+            //     chartData.datasets[1].label = "compare"
+
+
+
+            // }
+            // this.setState({
+            //     chartDataPrime: chartDataState_prime, chartDataCompare: chartDataState_compare, chartData: chartData, typeChartShow: typeChartShow
+            // });
         }
         return true
     }
@@ -225,6 +386,7 @@ class Chart extends Component {
 
 
         var { agency_by_customer_id, store_code } = this.props;
+        this.getData(this.props.overview,this.state.chartDataPrime,this.state.chartDataCompare,this.state.chartData,this.state.actionChart)
 
         if (agency_by_customer_id != null) {
             console.log(agency_by_customer_id)

@@ -122,7 +122,7 @@ class BonusProgram extends Component {
                 <div className="card-body">
                     <div className="form-group" style={{ display: "flex", justifyContent: "space-between" }}>
                         <div style = {{display : "flex"}}>
-                        <div style = {{fontWeight : "500"}}>
+                        <div style = {{fontWeight : "500",    marginTop: "3px"}}>
                             Hành động
                         </div>
                         <div className="on-off" name={`${randomString(10)}`} style={{ display: 'inline-block' , marginLeft : "20px" }}>
@@ -147,7 +147,7 @@ class BonusProgram extends Component {
                         </div>
                         </div>
                         <Link
-                            to={`/agency_bonus_steps/${store_code}/create`}
+                            to={`/agency_bonus_steps/${store_code}/create?tab-index=3`}
                             class={`btn btn-info btn-icon-split show`}
                         >
                             <span class="icon text-white-50">
@@ -260,7 +260,7 @@ class BonusProgram extends Component {
                         <td style={{ display: "flex" }}>
 
                             <Link
-                                to={`/agency_bonus_steps/${this.props.store_code}/update/${data.id}`}
+                                to={`/agency_bonus_steps/${this.props.store_code}/update/${data.id}?tab-index=3`}
                                 class="btn btn-warning btn-sm"
                             >
                                 <span class="icon text-white-50">

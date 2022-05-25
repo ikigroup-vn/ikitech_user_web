@@ -5728,16 +5728,16 @@ input[type=radio] {
     border-radius: 500px;
     cursor: pointer;
     display: flex;
-    height: 30px;
+    height: 27px;
     justify-content: space-between;
     padding: 0 10px;
     position: relative;
     user-select: none;
-    width: 80px;
+    width: 63px;
 }
 
 .on-off>.checkbox:checked~.switch {
-    background-color: blue;
+    background-color: #4e73df;
     border: 1px solid gray;
 
 }
@@ -5914,6 +5914,9 @@ input[type=radio] {
 ul {
     list-style: none;
 }
+.exploder span {
+    margin-top: 2px;
+}
 
 .table>.thead-quantity>tr>th {
     /* text-align: center; */
@@ -6084,7 +6087,7 @@ ul {
 }
 
 .tab-pos .react-tabs__tab--selected {
-    background-color: rgb(229, 111, 37) !important;
+    /* background-color: rgb(229, 111, 37) !important; */
 }
 
 .card-body {

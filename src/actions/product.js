@@ -873,7 +873,7 @@ export const postMultiProduct = (store_code, data) => {
   };
 };
 
-export const updateAgencyPrice = (store_code, data, productId, page) => {
+export const updateAgencyPrice = (store_code, data, productId, page,url=null) => {
   return (dispatch) => {
     const _value_price = data.main_price.toString().replace(/,/g, "");
     if (isNaN(Number(_value_price))) {
@@ -909,6 +909,9 @@ export const updateAgencyPrice = (store_code, data, productId, page) => {
             content: res.data.msg,
           },
         });
+        if(url)
+        history.replace(url)
+        else
         // history.push(`/product/index/${store_code}/${page}`);
         history.goBack();
       })

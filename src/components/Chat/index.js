@@ -233,11 +233,14 @@ class Chat extends Component {
 
     if(typeof nextProps.showChatBox != "undefined" && nextProps.showChatBox != this.props.showChatBox)
     {
+      if(nextProps.showChatBox == "show")
+      {
       this.setState({
         showIcon: "hide",
         showChat: "show",
         showChatBox : "show"
       })
+    }
     }
     if (nextProps.customerId != this.props.customerId) {
 
