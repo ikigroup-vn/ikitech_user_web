@@ -86,6 +86,7 @@ class Footer extends Component {
                                 <i class="fa fa-edit"></i> Sửa
                             </button>
                             <button
+                            style = {{marginLeft : "10px"}}
                                 type="button"
 
                                 onClick={(e) => this.destroyBanner(e,index,data.title)}

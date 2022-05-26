@@ -124,7 +124,7 @@ class Seo extends Component {
 
                             <i class="fas fa-save"></i>
 
-                            Lưu
+                            &nbsp;&nbsp;Lưu
                         </button>
 
                     </div>

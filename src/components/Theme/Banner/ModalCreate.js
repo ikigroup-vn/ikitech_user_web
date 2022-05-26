@@ -54,8 +54,9 @@ class ModalCreate extends Component {
       window.$('#file-banner').fileinput('clear');
 
       this.props.createBanner(store_code, { title: title, file: await compressed(file, 0, 0) }, carousel_app_images, theme);
-      this.setState({ fileUpload: null })
-
+      this.setState({ fileUpload: null,  title: "",
+    })
+     
     }
     else {
       this.props.showError({
@@ -73,10 +74,7 @@ class ModalCreate extends Component {
       // this.props.createBanner(store_code, { title: title, file: "" }, carousel_app_images,theme);
 
     }
-    this.setState({
-      title: "",
-
-    })
+  
   };
   render() {
     var { title } = this.state;
@@ -140,7 +138,7 @@ class ModalCreate extends Component {
                 >
                   Đóng
                 </button>
-                <button type="submit" class="btn btn-info">
+                <button type="submit" class="btn btn-warning">
                   Tạo
                 </button>
               </div>

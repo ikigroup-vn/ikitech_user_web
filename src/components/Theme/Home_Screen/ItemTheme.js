@@ -168,16 +168,17 @@ class ItemTheme extends Component {
             </div>
 
             {home_page_type === v.index &&
-              // <a onClick={this.props.goBack} class="ahef" style={{
+              <a onClick={this.props.goBack} class="ahef" style={{
 
-              // }}></a> 
-              <button
-                type="button"
-                onClick={this.props.goBack}
-                class="btn btn-primary btn-sm"
-              >
-                <i class="fa fa-save"></i> Tùy chỉnh
-              </button>}
+              }}><span>Tùy chỉnh</span></a> 
+              // <button
+              //   type="button"
+              //   onClick={this.props.goBack}
+              //   class="btn btn-primary btn-sm"
+              // >
+              //   <i class="fa fa-save"></i> Tùy chỉnh
+              // </button>
+              }
 
           </div>
 
