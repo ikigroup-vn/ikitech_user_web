@@ -125,6 +125,13 @@ export const ikitech_menu = [
             to: "/import_stocks/index",
           },
           {
+            class: "inventory_import",
+            display: "hide",
+            name: "Chuyển kho",
+            exact: true,
+            to: "/transfer_stocks/index",
+          },
+          {
             name: "Nhà cung cấp",
             class: "web_theme_edit",
             display: "hide",
