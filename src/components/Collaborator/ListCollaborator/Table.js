@@ -99,9 +99,7 @@ class Table extends Component {
                   <span class="fa fa-plus"></span>
                 </button>
               </td>{" "}
-              <td style = {{
-                padding: "0.75rem 0px"
-              }}>
+              <td style = {{textAlign : "center"}}>
                 <img
                   src={avatar}
                   class="img-responsive"
@@ -292,7 +290,7 @@ class Table extends Component {
           <thead>
             <tr>
               <th></th>
-              <th>Ảnh</th>
+              <th style = {{textAlign : "center"}}>Ảnh</th>
 
               <th>Họ tên</th>
               <th>Số điện thoại</th>

@@ -4,7 +4,8 @@ import * as themeAction from "../../../actions/theme";
 import { connect } from "react-redux";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import CKEditor from "ckeditor4-react";
-
+import * as Types from "../../../constants/ActionType";
+import {isPhone} from "../../../ultis/helpers"
 class Footer extends Component {
     constructor(props) {
         super(props);
@@ -91,8 +92,23 @@ class Footer extends Component {
 
     onSave = (e) => {
         e.preventDefault();
-        var { store_code } = this.props
         var theme = this.state
+
+        if(!isPhone(theme.contact_phone_number))
+        {
+            this.props.showError({
+                type: Types.ALERT_UID_STATUS,
+                alert: {
+                    type: "danger",
+                    title: "Thất bại ",
+                    disable: "show",
+                    content: "Số điện thoại không đúng định dạng",
+                },
+    
+            })
+            return
+        }
+        var { store_code } = this.props
         var form = { ...this.props.theme }
         form.contact_address = theme.contact_address
         form.contact_email = theme.contact_email
@@ -172,7 +188,7 @@ class Footer extends Component {
 
 
                         <div className="form-group">
-                            <label htmlFor="name">Fanpage</label>
+                            <label htmlFor="name">ID FaceBook</label>
                             <input type="text" name="contact_fanpage" value={contact_fanpage} placeholder="Nhập..." onChange={this.onChange} className="form-control" id="txtName" autoComplete="off" />
 
                         </div>
@@ -187,7 +203,7 @@ class Footer extends Component {
 
                             <i class="fas fa-save"></i>
 
-                            Lưu
+                            &nbsp;&nbsp;Lưu
                         </button>
 
                     </div>
@@ -213,7 +229,9 @@ const mapDispatchToProps = (dispatch, props) => {
         updateTheme: (store_code, theme) => {
             dispatch(themeAction.updateTheme(store_code, theme));
         },
-
+        showError: (action) => {
+            dispatch(action)
+        }
 
     };
 };

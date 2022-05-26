@@ -4,13 +4,14 @@ import { Router, Route, Switch } from "react-router-dom";
 import history from "./history";
 import { randomString } from "./ultis/helpers";
 import themeData from "./ultis/theme_data";
-
+import getChannel from "./ultis/channel"
 
 class App extends Component {
 
 
   componentDidMount() {
     document.title = `Quản lý - ${themeData().loginTitle}`
+    document.getElementById("root").className = getChannel();
   }
 
   showContentMenus = (routes) => {

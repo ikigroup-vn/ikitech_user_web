@@ -14,11 +14,28 @@ class Table extends Component {
             from: 0,
             isLoading: false,
             searchValue: "",
-            modalImg: ""
+            modalImg: "",
+            requestPayment :[],
+            loadFrist: false,
+
 
         }
     }
+    componentDidMount()
+    {
+        if(this.props.requestPayment?.length > 0)
+        {
+            this.setState({requestPayment : this.props.requestPayment})
+        }
+    }
 
+    componentWillReceiveProps(nextProps)
+    {
+        if(!shallowEqual(this.props.requestPayment , nextProps.requestPayment))
+        {
+            this.setState({requestPayment : nextProps.requestPayment})
+        }
+    }
 
 
     showChatBox = (collaboratorId, status) => {
@@ -30,7 +47,7 @@ class Table extends Component {
                 prevProps.requestPayment.length == 0) || (this.state.isLoading == false && prevProps.tabId != 1)
 
         ) {
-            helper.loadExpandTable();
+            // helper.loadExpandTable();
             if (this.props.paramId != null) {
                 window.$(`.collaborator-${this.props.paramId}`).trigger('click')
 
@@ -38,6 +55,8 @@ class Table extends Component {
 
             this.setState({ isLoading: true })
         }
+        helper.loadExpandTable();
+
     }
     changeStatusRequest = (status) => {
         var name = status == 1 ? "Thanh toán cho CTV" : "Hủy yêu cầu thanh toán cho CTV"
@@ -143,9 +162,7 @@ class Table extends Component {
                                         <span class="fa fa-plus"></span>
                                     </button>
                                 </td>{" "}
-                                <td style = {{
-                padding: "0.75rem 0px"
-              }}>
+                                <td style = {{textAlign : "center"}}>
                                     <img
                                         src={avatar}
                                         class="img-responsive"
@@ -302,11 +319,23 @@ class Table extends Component {
     }
     searchData = (e) => {
         e.preventDefault();
-        var { searchValue } = this.state;
+        var { searchValue , } = this.state;
+        var {requestPayment} = this.props;
         var params = this.getParams(searchValue);
+        var newArr = []
+        if(requestPayment?.length > 0)
+        {
+            for (const item of requestPayment) {
+                console.log(item.collaborator.customer.name, item.collaborator.customer.name?.includes(searchValue))
 
-        this.props.fetchdDataForSearch(params);
-
+              if(item.collaborator.customer.name?.includes(searchValue) || item.collaborator.account_number?.includes(searchValue) )  
+              {
+                  newArr.push(item)
+              }
+            }
+        }
+        console.log(requestPayment)
+        this.setState({requestPayment : newArr})
     };
 
     onChangeSearch = (e) => {
@@ -314,7 +343,7 @@ class Table extends Component {
     };
     render() {
         var { arrayCheckBox, from, searchValue } = this.state
-        var requestPayment = this.props.requestPayment;
+        var requestPayment = this.state.requestPayment;
         var length = typeof requestPayment != "undefined" && requestPayment.length > 0 ? requestPayment.length : 0
         var disable_group = length == 0 ? "hide" : "show"
         var disable_item = arrayCheckBox.length > 0 ? "show" : "hide"
@@ -415,7 +444,7 @@ class Table extends Component {
                                 </th>
                                 <th>Hành động</th>
 
-                                <th>Ảnh</th>
+                                <th style = {{textAlign : "center"}}>Ảnh</th>
 
                                 <th>Họ tên</th>
                                 <th>Số điện thoại</th>

@@ -8,6 +8,7 @@ import { randomString } from "../../../ultis/helpers";
 import { Link } from "react-router-dom";
 import ModalRemove from "./ModalRemove"
 import * as Types from "../../../constants/ActionType";
+import * as ENV_default from "../../../ultis/default"
 
 class BonusProgram extends Component {
     constructor(props) {
@@ -180,7 +181,7 @@ class BonusProgram extends Component {
                                 <thead className="thead-quantity">
                                     <tr>
                                         <th>STT</th>
-                                        <th>Hình ảnh</th>
+                                        <th style = {{textAlign : "center"}}>Hình ảnh</th>
 
                                         <th>Tên phần thưởng</th>
                                         <th>Đơn đạt tối thiểu</th>
@@ -229,9 +230,9 @@ class BonusProgram extends Component {
                 return (
                     <tr>
                         <td>{index + 1}</td>
-                        <td>
+                        <td style = {{textAlign : "center"}}>
                             <img
-                                src={reward_image_url}
+                                src={reward_image_url == null || reward_image_url == "" ? ENV_default.IMG_NOT_FOUND : reward_image_url}
                                 class="img-responsive"
                                 width="100px"
                                 height="115px"

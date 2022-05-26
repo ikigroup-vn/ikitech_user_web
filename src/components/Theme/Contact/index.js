@@ -3,8 +3,8 @@ import React, { Component } from "react";
 import * as themeAction from "../../../actions/theme";
 import { connect } from "react-redux";
 import { shallowEqual } from "../../../ultis/shallowEqual";
-
-
+import * as Types from "../../../constants/ActionType";
+import {isPhone} from "../../../ultis/helpers"
 class Support extends Component {
     constructor(props) {
         super(props);
@@ -78,8 +78,24 @@ class Support extends Component {
 
     onSave = (e) => {
         e.preventDefault();
-        var { store_code } = this.props
         var theme = this.state
+
+        if(!isPhone(theme.phone_number_hotline))
+        {
+            this.props.showError({
+                type: Types.ALERT_UID_STATUS,
+                alert: {
+                    type: "danger",
+                    title: "Thất bại ",
+                    disable: "show",
+                    content: "Số điện thoại không đúng định dạng",
+                },
+    
+            })
+            return
+        }
+     
+        var { store_code } = this.props
         var form = {...this.props.theme}
 
             form.is_show_icon_hotline= theme.is_show_icon_hotline 
@@ -192,7 +208,7 @@ class Support extends Component {
 
                             <i class="fas fa-save"></i>
 
-                            Lưu
+                            &nbsp;&nbsp;Lưu
                         </button>
 
                     </div>
@@ -218,7 +234,9 @@ const mapDispatchToProps = (dispatch, props) => {
         updateTheme: (store_code, theme) => {
             dispatch(themeAction.updateTheme(store_code, theme));
         },
-
+        showError: (action) => {
+            dispatch(action)
+        }
 
     };
 };

@@ -91,7 +91,7 @@ class Table extends Component {
               <td>
                 {index + 1}
               </td>{" "}
-              <td>
+              <td style = {{textAlign : "center"}}>
                 <img
                   src={avatar}
                   class="img-responsive"
@@ -108,7 +108,7 @@ class Table extends Component {
               </td>
               <td>
 
-                <select name="agency_type_id" id="input" value={data.agency_type_id} required="required" onChange={(e) => this.changeAgencyType(e, data.id)}>
+                <select style = {{width : "100%"}} name="agency_type_id" id="input" value={data.agency_type_id} required="required" onChange={(e) => this.changeAgencyType(e, data.id)}>
                   {/* <option value=""></option> */}
                   {
                     this.props.types.map((data, index) => {
@@ -210,7 +210,7 @@ class Table extends Component {
           <thead>
             <tr>
               <th>STT</th>
-              <th>Ảnh</th>
+              <th style = {{textAlign : "center"}}>Ảnh</th>
 
               <th>Họ tên</th>
               <th>Số điện thoại</th>

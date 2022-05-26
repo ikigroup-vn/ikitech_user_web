@@ -139,7 +139,7 @@ class ModalUpdate extends Component {
                 >
                   Đóng
                 </button>
-                <button type="submit" class="btn btn-info">
+                <button type="submit" class="btn btn-warning">
                   Lưu
                 </button>
               </div>

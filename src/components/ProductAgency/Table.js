@@ -157,7 +157,7 @@ class Table extends Component {
                 <div className="row e">
                   <div
                     style={{
-                      textDecoration: "line-through",
+                      // textDecoration: "line-through",
                     }}
                   >
                     {format(Number(min_price))}
@@ -165,7 +165,7 @@ class Table extends Component {
                     {format(Number(max_price))}
                   </div>
 
-                  <div className="discount e">&emsp; -{discount_percent}%</div>
+                  {/* <div className="discount e">&emsp; -{discount_percent}%</div> */}
                 </div>
               )}
             </div>
@@ -224,7 +224,7 @@ class Table extends Component {
                 <div className="row e">
                   <div
                     style={{
-                      textDecoration: "line-through",
+                      // textDecoration: "line-through",
                     }}
                   >
                     {format(Number(a_min_price))}
@@ -232,7 +232,7 @@ class Table extends Component {
                     {format(Number(a_max_price))}
                   </div>
 
-                  <div className="discount e">&emsp; -{discount_percent}%</div>
+                  {/* <div className="discount e">&emsp; -{discount_percent}%</div> */}
                 </div>
               )}
             </div>

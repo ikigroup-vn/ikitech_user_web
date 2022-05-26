@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import Pagination from "../../Blog/Pagination"
 import * as Env from "../../../ultis/default"
 import { format } from "../../../ultis/helpers"
+import themeData from "../../../ultis/theme_data";
+
 class ListBlog extends Component {
   constructor(props) {
     super(props);
@@ -26,19 +28,16 @@ class ListBlog extends Component {
     if (blogs.length > 0) {
       result = blogs.map((data, index) => {
         var image_url = data.image_url == null || data.image_url == "" ? Env.IMG_NOT_FOUND : data.image_url
-        var published = data.published == true ? "Hiển thị" : "Tạm ẩn"
+        var published = data.published == true ? "Đang hiển thị" : "Đang lưu tạm"
         var published_status = data.published == true ? "success" : "secondary"
         return (
           <tr >
 
 
             <td>{index + 1}</td>
-            <td>
-              {data.id}
+     
 
-            </td>
-
-            <td>
+            <td style = {{textAlign : "center"}}>
 
               <img src={image_url} className="img-responsive" alt="Image" width="100px" height="100px" />
             </td>
@@ -63,7 +62,7 @@ class ListBlog extends Component {
 
                 class="btn btn-primary btn-sm"
               >
-                <i class="fa fa-plus"></i> Thêm bài viết
+                <i class="fa fa-plus"></i> Chọn bài viết
               </button>
 
 
@@ -78,7 +77,7 @@ class ListBlog extends Component {
   };
 
   render() {
-    var { blogs  , store_code} = this.props
+    var { blogs, store_code } = this.props
     return (
       <div
         class="modal fade"
@@ -90,7 +89,8 @@ class ListBlog extends Component {
       >
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content" style={{ maxHeight: "630px" }}>
-            <div class="modal-header" style={{ background: "white" }}>
+            <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+              <h4 style={{ color: "white" }}>Danh sách bài viết</h4>
 
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
@@ -98,34 +98,33 @@ class ListBlog extends Component {
             <div class="table-responsive">
               <table class="table  table-hover table-border" style={{ color: "black" }}>
                 <thead>
-                <tr>
-              <th>STT</th>
-              <th>ID</th>
+                  <tr>
+                    <th>STT</th>
 
-              <th>Hình ảnh</th>
-              <th>Tiêu đề</th>
-              <th>Hiển thị</th>
-              <th>Lượt xem</th>
-              <th>Hành động</th>
-            </tr>
+                    <th style = {{textAlign : "center"}}>Hình ảnh</th>
+                    <th>Tên bài viết</th>
+                    <th>Trạng thái</th>
+                    <th>Lượt xem</th>
+                    <th>Hành động</th>
+                  </tr>
                 </thead>
 
                 <tbody>{this.showData(blogs.data)}</tbody>
               </table>
             </div>
 
-               <div  class="group-pagination_flex col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="group-pagination_flex col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
-<Pagination style = "float-fix" store_code={store_code} blogs={blogs} />
-<button
+              <Pagination style="float-fix" store_code={store_code} blogs={blogs} />
+              <button
 
-    type="button"
-    class="btn btn-primary pagination-btn"
-    data-dismiss="modal"
-  >
-    Đóng
-  </button>
-</div>
+                type="button"
+                class="btn btn-default pagination-btn"
+                data-dismiss="modal"
+              >
+                Đóng
+              </button>
+            </div>
           </div>
         </div>
       </div>

@@ -6,6 +6,7 @@ import * as agencyAction from "../../../actions/agency"
 import "suneditor/dist/css/suneditor.min.css";
 import * as Types from "../../../constants/ActionType";
 import history from "../../../history"
+import * as ENV_default from "../../../ultis/default"
 class Form extends Component {
     constructor(props) {
         super(props);
@@ -13,7 +14,7 @@ class Form extends Component {
             threshold: 0,
             reward_name: "",
             reward_description: "",
-            reward_image_url: "",
+            reward_image_url: null,
             reward_value: 0,
             limit: 0
 
@@ -196,7 +197,7 @@ class Form extends Component {
                             <div class="col-xs-5 col-sm-5 col-md-5 col-lg-5">
                                 <div class="form-group">
                                     <label>Ảnh: &nbsp; </label>
-                                    <img src={`${reward_image_url}`} width="150" height="150" />
+                                    <img src={`${reward_image_url ?? ENV_default.IMG_NOT_FOUND }`} width="150" height="150" />
                                 </div>
                                 <div class="form-group">
 

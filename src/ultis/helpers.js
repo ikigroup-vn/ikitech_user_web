@@ -51,7 +51,7 @@ export const containsSpecialChars = (str) => {
 export const compressed = (file, maxWitdh = 1024, maxHeight = 1024) => {
   return new Promise((resolve, reject) => {
     new Compressor(file, {
-      quality: 0.5,
+      quality: 0.8,
       maxWitdh,
       maxHeight,
       success: (compressedResult) => {

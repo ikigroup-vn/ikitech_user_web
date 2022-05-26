@@ -120,7 +120,7 @@ class PostOrder extends Component {
         this.changeSearch = debounce(this.handleSearch, 1000);
         this.changeDiscount = debounce(this.handleDiscount, 1000);
         this.changePaymentMethod = debounce(this.handlePaymentMethod, 0);
-        this.changeNewState = debounce(this.handleNewState, 1000);
+        this.changeNewState = debounce(this.handleNewState, 500);
     }
 
     handleNewState = (newState) => {
@@ -565,7 +565,11 @@ class PostOrder extends Component {
             !shallowEqual(nextProps.oneCart, this.props.oneCart) &&
             this.props.loadingHandleChangeQuantity == false
         ) {
-            console.log(nextProps)
+            var discount = {}
+            if(nextProps.oneCart.id != this.props.oneCart.id)
+            {
+                discount = {discount: nextProps.oneCart.discount}
+            }
             this.setState({
                 code_voucher: nextProps.oneCart.code_voucher,
                 oneCart: nextProps.oneCart,
@@ -573,11 +577,14 @@ class PostOrder extends Component {
                 totalFinal: nextProps.oneCart.info_cart.total_final,
                 totalAfterDiscount: nextProps.oneCart.info_cart.total_after_discount,
                 selectPrice: -1,
+                
                 namePos: nextProps.oneCart.name,
                 fee : nextProps.oneCart.total_shipping_fee,
                 customerNote: nextProps.oneCart.customer_note ?? "",
+               
                 payment_method_id: nextProps.oneCart.payment_method_id ?? (nextProps.total_shipping_fee > 0 || this.state.openShipment == true ? 2 : 0),
-                discount: nextProps.oneCart.discount,
+                ...discount,
+                // discount: nextProps.oneCart.discount,
                 is_use_points:
                     nextProps.oneCart.info_cart.is_use_points !== null
                         ? nextProps.oneCart.info_cart.is_use_points

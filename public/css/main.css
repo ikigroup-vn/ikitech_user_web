@@ -5620,14 +5620,21 @@ svg._1JwWV1 {
 
     background: white !important;
 }
-input[type=checkbox] {
+.IKIPOS input[type=checkbox] {
     accent-color: rgb(229, 111, 37) !important;
 }
 
-input[type=radio] {
+.IKITECH input[type=checkbox] {
+    accent-color: rgb(193, 32, 38) !important;
+}
+
+.IKIPOS  input[type=radio] {
     accent-color: rgb(229, 111, 37) !important;
 }
 
+.IKITECH  input[type=radio] {
+    accent-color: rgb(193, 32, 38) !important;
+}
 .wap-header {
     padding-right: 25px;
 }
@@ -6243,6 +6250,7 @@ img {
 
 .form-group>label {
     font-weight: 750;
+    height: 34px;
 }
 
 .modal-title {
