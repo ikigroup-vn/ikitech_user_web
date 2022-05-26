@@ -43,7 +43,7 @@ class Support extends Component {
 
 
     componentDidMount() {
-        var {store_code} = this.props
+        var { store_code } = this.props
         var theme = this.props.theme
         if (theme == null || theme == "" || typeof theme.store_id == "undefined") { }
         else {
@@ -57,8 +57,8 @@ class Support extends Component {
                 ID_post_id_privacy_policy: theme.post_id_privacy_policy || "",
 
             })
-            if ( theme.post_id_help != "" &&  theme.post_id_help != null)
-                this.props.fetchBlogId(store_code, { id:  theme.post_id_help, type: Types.POST_ID_HELP });
+            if (theme.post_id_help != "" && theme.post_id_help != null)
+                this.props.fetchBlogId(store_code, { id: theme.post_id_help, type: Types.POST_ID_HELP });
 
             if (theme.post_id_contact != "" && theme.post_id_contact != null)
                 this.props.fetchBlogId(store_code, { id: theme.post_id_contact, type: Types.POST_ID_CONTACT });
@@ -107,7 +107,7 @@ class Support extends Component {
                 isLoading: true
             })
         }
-        if(
+        if (
             !shallowEqual(nextProps.post_id_help, this.props.post_id_help)
             || !shallowEqual(nextProps.post_id_contact, this.props.post_id_contact)
             || !shallowEqual(nextProps.post_id_about, this.props.post_id_about)
@@ -115,8 +115,7 @@ class Support extends Component {
             || !shallowEqual(nextProps.post_id_return_policy, this.props.post_id_return_policy)
             || !shallowEqual(nextProps.post_id_support_policy, this.props.post_id_support_policy)
             || !shallowEqual(nextProps.post_id_privacy_policy, this.props.post_id_privacy_policy)
-        )
-        {
+        ) {
             console.log(nextProps.post_id_help)
             this.setState({
                 post_id_help: nextProps.post_id_help.title || null,
@@ -126,7 +125,7 @@ class Support extends Component {
                 post_id_return_policy: nextProps.post_id_return_policy.title || null,
                 post_id_support_policy: nextProps.post_id_support_policy.title || null,
                 post_id_privacy_policy: nextProps.post_id_privacy_policy.title || null,
-    
+
                 ID_post_id_help: nextProps.post_id_help.id || null,
                 ID_post_id_contact: nextProps.post_id_contact.id || null,
                 ID_post_id_about: nextProps.post_id_about.id || null,
@@ -134,7 +133,7 @@ class Support extends Component {
                 ID_post_id_return_policy: nextProps.post_id_return_policy.id || null,
                 ID_post_id_support_policy: nextProps.post_id_support_policy.id || null,
                 ID_post_id_privacy_policy: nextProps.post_id_privacy_policy.id || null,
-    
+
 
             })
         }
@@ -173,7 +172,7 @@ class Support extends Component {
             if (ID_post_id_privacy_policy != "" && ID_post_id_privacy_policy != null)
                 this.props.fetchBlogId(store_code, { id: ID_post_id_privacy_policy, type: Types.POST_ID_PRIVACY_POLICY });
 
-            this.setState({isLoading : false})
+            this.setState({ isLoading: false })
 
         }
         return true
@@ -187,16 +186,16 @@ class Support extends Component {
         e.preventDefault();
         var { store_code } = this.props
         var theme = this.state
-        var form = {...this.props.theme}
+        var form = { ...this.props.theme }
 
-            form.post_id_help= theme.ID_post_id_help == "" ? null : theme.ID_post_id_help
-            form.post_id_contact= theme.ID_post_id_contact == "" ? null : theme.ID_post_id_contact
-            form.post_id_about= theme.ID_post_id_about == "" ? null : theme.ID_post_id_about
-            form.post_id_terms= theme.ID_post_id_terms == "" ? null : theme.ID_post_id_terms
-            form.post_id_return_policy= theme.ID_post_id_return_policy == "" ? null : theme.ID_post_id_return_policy
-            form.post_id_support_policy= theme.ID_post_id_support_policy == "" ? null : theme.ID_post_id_support_policy
-            form.post_id_privacy_policy= theme.ID_post_id_privacy_policy == "" ? null : theme.ID_post_id_privacy_policy
-        
+        form.post_id_help = theme.ID_post_id_help == "" ? null : theme.ID_post_id_help
+        form.post_id_contact = theme.ID_post_id_contact == "" ? null : theme.ID_post_id_contact
+        form.post_id_about = theme.ID_post_id_about == "" ? null : theme.ID_post_id_about
+        form.post_id_terms = theme.ID_post_id_terms == "" ? null : theme.ID_post_id_terms
+        form.post_id_return_policy = theme.ID_post_id_return_policy == "" ? null : theme.ID_post_id_return_policy
+        form.post_id_support_policy = theme.ID_post_id_support_policy == "" ? null : theme.ID_post_id_support_policy
+        form.post_id_privacy_policy = theme.ID_post_id_privacy_policy == "" ? null : theme.ID_post_id_privacy_policy
+
         console.log(form)
         this.props.updateTheme(store_code, form);
     }
@@ -235,8 +234,18 @@ class Support extends Component {
 
 
                         </div>
+
+                        {/* <div class="right-inner-addon input-container">
+                            <i class="fa fa-search"></i>
+                            <input type="text"
+                                class="form-control"
+                                placeholder="Right icon" />
+                        </div> */}
+
+
                         <div className="form-group">
                             <label htmlFor="name">Bài viết giới thiệu</label>
+
                             <input
                                 value={ID_post_id_about}
 
@@ -244,18 +253,22 @@ class Support extends Component {
                                 type="hidden"
 
                             />
-                            <input
-                                onClick={() => this.fetchAllBlog("post_id_about")}
-                                value={post_id_about}
+                            <div class="right-inner-addon input-container">
+                                <i class="fa fa-caret-down"></i>
+                                <input
+                                    onClick={() => this.fetchAllBlog("post_id_about")}
+                                    value={post_id_about}
 
-                                data-toggle="modal"
-                                data-target="#showListBlog"
-                                type="text"
-                                name="product_name"
-                                class="form-control"
-                                placeholder="Chọn bài viết..."
-                            />
+                                    data-toggle="modal"
+                                    data-target="#showListBlog"
+                                    type="text"
+                                    name="product_name"
+                                    class="form-control"
+                                    placeholder="Chọn bài viết..."
+                                />
+                            </div>
                         </div>
+
                         <div className="form-group">
                             <label htmlFor="name">Bài viết giúp đỡ</label>
                             <input
@@ -265,6 +278,8 @@ class Support extends Component {
                                 type="hidden"
 
                             />
+                              <div class="right-inner-addon input-container">
+                                <i class="fa fa-caret-down"></i>
                             <input
                                 onClick={() => this.fetchAllBlog("post_id_help")}
                                 value={post_id_help}
@@ -277,6 +292,8 @@ class Support extends Component {
                                 placeholder="Chọn bài viết..."
                             />
                         </div>
+                        </div>
+
                         <div className="form-group">
                             <label htmlFor="name">Bài viết điều khoản điều kiện</label>
                             <input
@@ -286,6 +303,8 @@ class Support extends Component {
                                 type="hidden"
 
                             />
+                              <div class="right-inner-addon input-container">
+                                <i class="fa fa-caret-down"></i>
                             <input
                                 onClick={() => this.fetchAllBlog("post_id_terms")}
                                 value={post_id_terms}
@@ -298,6 +317,7 @@ class Support extends Component {
                                 placeholder="Chọn bài viết..."
                             />
                         </div>
+                        </div>
 
                         <div className="form-group">
                             <label htmlFor="name">Chính sách hoàn trả</label>
@@ -308,6 +328,8 @@ class Support extends Component {
                                 type="hidden"
 
                             />
+                              <div class="right-inner-addon input-container">
+                                <i class="fa fa-caret-down"></i>
                             <input
                                 onClick={() => this.fetchAllBlog("post_id_return_policy")}
                                 value={post_id_return_policy}
@@ -320,6 +342,8 @@ class Support extends Component {
                                 placeholder="Chọn bài viết..."
                             />
                         </div>
+                        </div>
+
                         <div className="form-group">
                             <label htmlFor="name">Chính sách hỗ trợ</label>
                             <input
@@ -329,6 +353,8 @@ class Support extends Component {
                                 type="hidden"
 
                             />
+                              <div class="right-inner-addon input-container">
+                                <i class="fa fa-caret-down"></i>
                             <input
                                 onClick={() => this.fetchAllBlog("post_id_support_policy")}
                                 value={post_id_support_policy}
@@ -340,6 +366,8 @@ class Support extends Component {
                                 class="form-control"
                                 placeholder="Chọn bài viết..."
                             />
+                                                    </div>
+
                         </div>
                         <div className="form-group">
                             <label htmlFor="name">Chính sách bảo mật</label>
@@ -350,6 +378,8 @@ class Support extends Component {
                                 type="hidden"
 
                             />
+                              <div class="right-inner-addon input-container">
+                                <i class="fa fa-caret-down"></i>
                             <input
                                 onClick={() => this.fetchAllBlog("post_id_privacy_policy")}
                                 value={post_id_privacy_policy}
@@ -362,7 +392,9 @@ class Support extends Component {
                                 placeholder="Chọn bài viết..."
                             />
                         </div>
-                     
+                        </div>
+
+
                         {/* <div className="form-group">
                             <label htmlFor="name">Bài viết liên hệ</label>
                             <input
@@ -385,10 +417,10 @@ class Support extends Component {
                             />
                         </div>
                       */}
-                    
-                
-                    
-                     
+
+
+
+
 
                     </div>
                     <div class="box-footer">
@@ -414,13 +446,13 @@ const mapStateToProps = (state) => {
     return {
 
         blogs: state.blogReducers.blog.allBlog,
-        post_id_help : state.themeReducers.post_id_help,
-        post_id_contact : state.themeReducers.post_id_contact,
-        post_id_about : state.themeReducers.post_id_about,
-        post_id_terms : state.themeReducers.post_id_terms,
-        post_id_return_policy : state.themeReducers.post_id_return_policy,
-        post_id_support_policy : state.themeReducers.post_id_support_policy,
-        post_id_privacy_policy : state.themeReducers.post_id_privacy_policy,
+        post_id_help: state.themeReducers.post_id_help,
+        post_id_contact: state.themeReducers.post_id_contact,
+        post_id_about: state.themeReducers.post_id_about,
+        post_id_terms: state.themeReducers.post_id_terms,
+        post_id_return_policy: state.themeReducers.post_id_return_policy,
+        post_id_support_policy: state.themeReducers.post_id_support_policy,
+        post_id_privacy_policy: state.themeReducers.post_id_privacy_policy,
 
 
     };
