@@ -57,7 +57,7 @@ class Table extends Component {
         return (
           <tr>
             <td>{index + 1}</td>
-            <td>{data.name}</td>
+            <td style = {{width : "150px"}}>{data.name}</td>
             <td style = {{maxWidth : "600px"}}>{token}</td>
 
             <td style = {{
@@ -125,8 +125,8 @@ class Table extends Component {
           <thead>
             <tr>
               <th>STT</th>
-              <th style = {{width : "100px"}}>Tên </th>
-              <th>Token </th>
+              <th >Tên đơn vị vận chuyển </th>
+              <th>Mã Token </th>
               <th style = {{textAlign : "center"}}>Trạng thái hoạt động </th>
 
               <th>Hành động</th>
