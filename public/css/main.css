@@ -5620,6 +5620,18 @@ svg._1JwWV1 {
 
     background: white !important;
 }
+.right-inner-addon {
+    position: relative;
+}
+.right-inner-addon input {
+    padding-right: 35px !important;
+}
+.right-inner-addon i {
+    position: absolute;
+    right: 0px;
+    padding: 12px 12px;
+    pointer-events: none;
+}
 .IKIPOS input[type=checkbox] {
     accent-color: rgb(229, 111, 37) !important;
 }
@@ -5627,6 +5639,10 @@ svg._1JwWV1 {
 .IKITECH input[type=checkbox] {
     accent-color: rgb(193, 32, 38) !important;
 }
+
+
+
+
 
 .IKIPOS  input[type=radio] {
     accent-color: rgb(229, 111, 37) !important;
@@ -6160,9 +6176,18 @@ img {
 .tab-pagination>.active>.page-link {
     background-color: rgb(229, 111, 37) !important;
 }
-.IKITECH>.tab-pagination>.active>.page-link {
+.IKITECH .active>.page-link {
     background-color: rgb(187 31 37) !important;
 }
+
+
+
+
+
+
+
+
+
 .navbar-main {
     overflow-x: hidden;
     position: fixed;

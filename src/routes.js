@@ -121,10 +121,21 @@ import Inventory from "./screens/Inventory";
 import CreateInventory from "./screens/Inventory/create";
 import DetailInventory from "./screens/Inventory/detail";
 import EditInventory from "./screens/Inventory/edit";
+
 import ImportStock from "./screens/ImportStock";
+
 import CreateImportStock from "./screens/ImportStock/create";
 import DetailImportStock from "./screens/ImportStock/detail";
 import EditImportStock from "./screens/ImportStock/edit";
+
+
+import TransferStock from "./screens/TransferStock/index";
+
+import CreateTransferStock from "./screens/TransferStock/Sender/create";
+import DetailTransferStock from "./screens/TransferStock/Sender/detail";
+import EditTransferStock from "./screens/TransferStock/Sender/edit";
+
+
 import ReportInventory from "./screens/Report/ReportInventory";
 import ImportExpostStock from "./screens/Report/import_export/ImportExpostStock";
 import InventoryHistory from "./screens/Report/report_history/InventoryHistory";
@@ -214,6 +225,46 @@ const routes = [
     ),
   },
 
+
+
+
+  {
+    path: "/transfer_stocks/index/:store_code",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <TransferStock match={match} history={history} />
+    ),
+  },
+  {
+    path: "/transfer_stock/create/:store_code",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <CreateTransferStock match={match} history={history} />
+    ),
+  },
+  {
+    path: "/transfer_stock/edit/:store_code/:id",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <EditTransferStock match={match} history={history} />
+    ),
+  },
+  {
+    path: "/transfer_stocks/detail/:store_code/:id",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <DetailTransferStock match={match} history={history} />
+    ),
+  },
+
+
+
+
+  
   {
     path: "/import_stocks/index/:store_code",
     exact: true,
@@ -246,6 +297,9 @@ const routes = [
       <DetailImportStock match={match} history={history} />
     ),
   },
+
+
+
 
   {
     path: "/branch/index/:store_code",
