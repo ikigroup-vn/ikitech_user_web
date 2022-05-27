@@ -73,7 +73,7 @@ class StoreAddress extends Component {
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
                     <h4 className="h4 title_content mb-0 text-gray-800">
-                      Địa chỉ cửa hàng
+                      Địa chỉ giao vận
                     </h4>{" "}
                     <Link to={`/store_address/create/${store_code}`} class="btn btn-info btn-icon-split btn-sm">
                       <span class="icon text-white-50">
@@ -87,7 +87,7 @@ class StoreAddress extends Component {
                   <div className="card shadow mb-4">
                     <div className="card-header py-3">
                       <h6 className="m-0 title_content font-weight-bold text-primary">
-                        Danh sách địa chỉ
+                        Danh sách địa chỉ lấy hàng
                       </h6>
                     </div>
                     <div className="card-body">

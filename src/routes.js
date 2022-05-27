@@ -94,6 +94,7 @@ import Notification from "./screens/Notification";
 import StoreACreate from "./screens/Store_Address/StoreACreate";
 import AuthRegister from "./screens/Auth/AuthRegister";
 import AuthForgot from "./screens/Auth/AuthForgot";
+import ShipConfig from "./screens/ShipConfig";
 
 import Home from "./screens/Home/index";
 
@@ -775,6 +776,14 @@ const routes = [
 
     main: ({ match, history }) => (
       <StoreACreate match={match} history={history} />
+    ),
+  },
+  {
+    path: "/ship_config/:store_code",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <ShipConfig match={match} history={history} />
     ),
   },
 

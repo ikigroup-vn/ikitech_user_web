@@ -144,9 +144,9 @@ class Form extends Component {
                 <option value="3">Trên sản phẩm khuyến mại</option>
                 <option value="4">Trên danh sách tin tức</option>
                 <option value="5">Trên Footer</option>
-                <option value="6">Dưới danh mục sản phẩm</option>
+                {/* <option value="6">Dưới danh mục sản phẩm</option>
                 <option value="7">Dưới danh mục tin tức</option>
-                <option value="8">Trên header</option>
+                <option value="8">Trên header</option> */}
 
                   </select>
                   
@@ -172,23 +172,19 @@ class Form extends Component {
 
           </div>
           <div class="box-footer">
-            <button type="submit" class="btn btn-info btn-icon-split btn-sm">
-              <span class="icon text-white-50">
-                <i class="fas fa-save"></i>
-              </span>
-              <span class="text">Lưu</span>
-            </button>
-            <a
-              style={{ marginLeft: "10px" }}
-              onClick={this.goBack}
-              class="btn btn-warning"
-              class="btn btn-warning btn-icon-split  btn-sm"
-            >
-              <span class="icon text-white-50">
-                <i class="fas fa-arrow-left"></i>
-              </span>
-              <span class="text"> Trở về</span>
-            </a>
+          <button type = "submit" class="btn btn-info   btn-sm">
+                  <i class="fas fa-save"></i>   &nbsp;Lưu
+
+                </button>
+                <button
+                type = "button"
+                  style={{ marginLeft: "10px" }}
+                  onClick={this.goBack}
+                  class="btn btn-warning   btn-sm"
+                >
+                  <i class="fas fa-arrow-left"></i> Trở về
+
+                </button>
           </div>
 
         </form>

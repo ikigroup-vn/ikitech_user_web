@@ -44,7 +44,7 @@ class StoreACreate extends Component {
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   <h4 className="h4 title_content mb-0 text-gray-800">
-                    Thêm địa chỉ cửa hàng
+                    Thêm địa chỉ giao vận
                   </h4>
                 </div>
                 <br></br>

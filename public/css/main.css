@@ -5700,8 +5700,37 @@ svg._1JwWV1 {
     float: right !important;
 }
 
-.dataTables_paginate .current {
+.IKIPOS .dataTables_paginate .current {
     background: rgb(229, 111, 37) !important;
+    color : white !important
+
+}
+
+.IKIPOS .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover
+{
+    color: white !important;
+}
+
+.IKITECH .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover
+{
+    color: white !important;
+}
+
+
+
+
+
+.IKIPOS .dataTables_wrapper .dataTables_paginate .paginate_button{
+    color : white !important
+}
+.IKITECH .dataTables_wrapper .dataTables_paginate .paginate_button{
+    color : white !important
+}
+
+.IKITECH .dataTables_paginate .current {
+    background: rgb(193, 32, 38) !important;
+    color : white !important
+    
 }
 
 .dataTables_paginate a:not(.active):hover {
@@ -6415,10 +6444,12 @@ table.dataTable thead .sorting {
     background-image: none !important;
 }
 
-.form-group>input {
+.form-group>input:not(input[type='radio'], input[type='checkbox']) {
     height: 35px;
 }
-
+table.dataTable thead th{
+    padding: 0.75rem !important;
+}
 .img-chat {
     padding: 4px
 }

@@ -4,6 +4,7 @@ var initialState = {
   allStoreA: [],
   storeAID: { store_code: "", name: "", address: "", id_type_of_store: "" },
   type: [],
+  shipConfig : {}
 };
 
 export const storeAddress = (state = initialState, action) => {
@@ -15,7 +16,9 @@ export const storeAddress = (state = initialState, action) => {
     case Types.FETCH_ID_STORE_ADDRESS:
       newState.storeAID = action.data;
       return newState;
-   
+      case Types.FETCH_SHIP_CONFIG:
+        newState.shipConfig = action.data;
+        return newState;
     default:
       return newState;
   }

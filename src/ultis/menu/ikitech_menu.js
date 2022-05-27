@@ -393,7 +393,7 @@ export const ikitech_menu = [
         open: "another",
         children: [
           {
-            name: "Địa chỉ cửa hàng",
+            name: "Địa chỉ giao vận",
             class: "delivery_pick_address_list",
             display: "hide",
             icon: "fas fa-fw fa-cog",
@@ -407,6 +407,15 @@ export const ikitech_menu = [
             icon: "fas fa-fw fa-cog",
             exact: true,
             to: "/shipment",
+          },
+
+          {
+            name: "Cấu hình phí ship",
+            class: "delivery_provider_update",
+
+            icon: "fas fa-fw fa-cog",
+            exact: true,
+            to: "/ship_config",
           },
           {
             name: "Phương thức thanh toán",

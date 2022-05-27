@@ -3,6 +3,9 @@ import { connect } from "react-redux";
 import * as StoreAAction from "../../../actions/store_address";
 import * as placeAction from "../../../actions/place";
 import {shallowEqual} from "../../../ultis/shallowEqual"
+import { isEmail, isEmpty, isPhone } from "../../../ultis/helpers";
+
+import * as Types from "../../../constants/ActionType";
 
 class Form extends Component {
   constructor(props) {
@@ -49,7 +52,7 @@ class Form extends Component {
   };
   onChangeProvince = (e) =>{
     console.log(e.target.value)
-    this.setState({txtProvince : e.target.value , isLoaded : true})
+    this.setState({txtProvince : e.target.value , isLoaded : true , txtDistrict : "" , txtWards : ""})
     this.props.fetchPlaceDistrict_Wards(e.target.value);
 
   }
@@ -76,18 +79,55 @@ class Form extends Component {
         listDistrict : nextProps.district
       })
     }
-    if(!shallowEqual(nextProps.wards , this.props.wards))
-    {
-      this.setState({txtWards : nextProps.wards[0].id})
-    }
+    // if(!shallowEqual(nextProps.wards , this.props.wards))
+    // {
+    //   this.setState({txtWards : nextProps.wards[0].id})
+    // }
   }
   onSave = (e) => {
     var { store_code } = this.props
 
     var is_default_pickup = this.state.txtPickup == "0" ||  this.state.txtPickup == "" ? false : true
     var is_default_return = this.state.txtReturn == "0" || this.state.txtPickup == ""? false : true
-      console.log(this.state)
     e.preventDefault();
+    if (this.state.txtName == null || !isEmpty(this.state.txtName) || !isEmpty(this.state.txtAddress_detail)) {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng nhập đầy đủ thông tin",
+        },
+      });
+      return;
+    }
+    if ((isEmpty(this.state.txtEmail) && !isEmail(this.state.txtEmail))) {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Email không hợp lệ",
+        },
+      });
+      return;
+    }
+    if (!isPhone(this.state.txtPhone)) {
+      {
+        this.props.showError({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: "SDT không hợp lệ",
+          },
+        });
+        return;
+      }
+    }
     this.props.createStoreA(store_code, {
       name: this.state.txtName,
       address_detail: this.state.txtAddress_detail,
@@ -183,7 +223,7 @@ class Form extends Component {
               />
             </div>
             <div className="form-group">
-              <label for="product_name">Phone</label>
+              <label for="product_name">Số điện thoại</label>
               <input
               type="text"
               className="form-control"
@@ -246,6 +286,8 @@ class Form extends Component {
                 onChange={this.onChangeDistrict}
                 name="txtDistrict"
               >
+                                <option value="">-- Chọn quận/huyện --</option>
+
                 {this.showDistrict(listDistrict)}
               </select>
             </div>
@@ -259,6 +301,8 @@ class Form extends Component {
                 onChange={this.onChange}
                 name="txtWards"
               >
+                                <option value="">-- Chọn phường/xã --</option>
+
                 {this.showWards(listWards)}
 
               </select>
@@ -266,33 +310,29 @@ class Form extends Component {
 
             <div class="form-group form-check">
               <input type="checkbox" class="form-check-input" checked={checkPickup} id="exampleCheck1" name="txtPickup" onChange={this.onChangeCheck} value={txtPickup} />
-              <label class="form-check-label" for="exampleCheck1" >Đặt làm địa chỉ giao hàng</label>
+              <label class="form-check-label" for="exampleCheck1" >Đặt làm địa chỉ lấy hàng</label>
             </div>
 
             <div class="form-group form-check">
               <input checked={checkReturn} value={txtReturn} onChange={this.onChangeCheck} name="txtReturn" type="checkbox" class="form-check-input" id="exampleCheck1" />
-              <label class="form-check-label" for="exampleCheck1">Đặt làm địa chỉ nhận hàng</label>
+              <label class="form-check-label" for="exampleCheck1">Đặt làm địa chỉ trả hàng</label>
             </div>
           </div>
 
           <div class="box-footer">
-            <button class="btn btn-info btn-icon-split btn-sm">
-              <span class="icon text-white-50">
-                <i class="fas fa-save"></i>
-              </span>
-              <span class="text">Tạo</span>
-            </button>
-            <a
-              style={{ marginLeft: "10px" }}
-              onClick={this.goBack}
-              class="btn btn-warning"
-              class="btn btn-warning btn-icon-split btn-sm"
-            >
-              <span class="icon text-white-50">
-                <i class="fas fa-arrow-left"></i>
-              </span>
-              <span class="text"> Trở về</span>
-            </a>
+          <button type = "submit" class="btn btn-info   btn-sm">
+                  <i class="fas fa-plus"></i>  Tạo
+
+                </button>
+                <button
+                type = "button"
+                  style={{ marginLeft: "10px" }}
+                  onClick={this.goBack}
+                  class="btn btn-warning   btn-sm"
+                >
+                  <i class="fas fa-arrow-left"></i> Trở về
+
+                </button>
           </div>
         </form>
       </React.Fragment>
@@ -314,6 +354,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchPlaceDistrict_Wards: (id) => {
       dispatch(placeAction.fetchPlaceDistrict_Wards(id));
+    },  
+     showError: (error) => {
+      dispatch(error);
     },
   };
 };
