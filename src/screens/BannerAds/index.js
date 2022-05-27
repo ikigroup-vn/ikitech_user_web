@@ -86,14 +86,14 @@ class BannerAds extends Component {
                         style={{ display: "flex", justifyContent: "space-between" }}
                       >
                         <h4 className="h4 title_content mb-0 text-gray-800">
-                          Danh mục bài viết
+                          Quảng cáo
                         </h4>{" "}
                         <Link to={`/banner_ads/create/${store_code}`}
                           class={`btn btn-info btn-icon-split btn-sm ${insert == true ? "show" : "hide"}`}                  >
                           <span class="icon text-white-50">
                             <i class="fas fa-plus"></i>
                           </span>
-                          <span class="text">Thêm Banner</span>
+                          <span class="text">Thêm banner quảng cáo</span>
                         </Link>
                       </div>
 
@@ -101,7 +101,7 @@ class BannerAds extends Component {
                       <div className="card shadow mb-4">
                         <div className="card-header py-3">
                           <h6 className="m-0 title_content font-weight-bold text-primary">
-                            Danh sách danh mục
+                            Danh sách banner quảng cáo
                           </h6>
                         </div>
                         <div className="card-body">

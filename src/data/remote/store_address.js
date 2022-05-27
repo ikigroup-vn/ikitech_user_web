@@ -3,6 +3,14 @@ import callApi from "../../ultis/apiCaller";
 export const fetchAllData = (id) => {
   return callApi(`/store/${id}/store_address`, "get", null);
 };
+export const fetchShipConfig = (id) => {
+  return callApi(`/store/${id}/config_ship`, "get", null);
+};
+
+
+export const updateShipConfig = (store_code, data) =>{
+  return callApi(`/store/${store_code}/config_ship`, "put", data);
+}
 
 export const fetchDataId = (id) => {
   return callApi(`/store/${id}`, "get", null);

@@ -15,25 +15,84 @@ export const fetchAllStoreA = (id) => {
         type: Types.SHOW_LOADING,
         loading: "hide"
       })
-      if(res.data.code !== 401)
-      dispatch({
-        type: Types.FETCH_ALL_STORE_ADDRESS,
-        data: res.data.data,
-      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_ALL_STORE_ADDRESS,
+          data: res.data.data,
+        });
     });
   };
 };
-export const createStoreA = (store_code,data,funcModal) => {
+
+
+export const fetchShipConfig = (id) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show"
+    })
+    storeAApi.fetchShipConfig(id).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide"
+      })
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_SHIP_CONFIG,
+          data: res.data.data,
+        });
+    });
+  };
+};
+
+export const updateShipConfig = (store_code, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show"
     })
     storeAApi
-      .createStoreA(store_code,data)
+      .updateShipConfig(store_code, data)
       .then((res) => {
-        if(funcModal)
-        {
+        storeAApi.fetchShipConfig(store_code).then((res) => {
+          dispatch({
+            type: Types.SHOW_LOADING,
+            loading: "hide"
+          })
+          if (res.data.code !== 401)
+            dispatch({
+              type: Types.FETCH_SHIP_CONFIG,
+              data: res.data.data,
+            });
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+
+
+
+
+export const createStoreA = (store_code, data, funcModal) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show"
+    })
+    storeAApi
+      .createStoreA(store_code, data)
+      .then((res) => {
+        if (funcModal) {
           funcModal()
         }
         dispatch({
@@ -49,20 +108,20 @@ export const createStoreA = (store_code,data,funcModal) => {
             content: res.data.msg,
           },
         });
-        badgeApi.fetchAllBadge(store_code,getBranchId()).then((res) => {
-          
-          if(res.data.code !== 401)
-          {
-          dispatch({
-            type: Types.FETCH_ALL_BADGE,
-            data: res.data.data,
-          });
-      
-       
-        }
+        badgeApi.fetchAllBadge(store_code, getBranchId()).then((res) => {
+
+          if (res.data.code !== 401) {
+            dispatch({
+              type: Types.FETCH_ALL_BADGE,
+              data: res.data.data,
+            });
+
+
+          }
         })
-        if(funcModal==null)
-        history.goBack();      })
+        if (funcModal == null)
+          history.goBack();
+      })
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
@@ -97,12 +156,12 @@ export const destroyStoreA = (store_code, id) => {
         })
         storeAApi.fetchAllData(store_code)
           .then((res) => {
-            if(res.data.code !== 401)
+            if (res.data.code !== 401)
 
-            dispatch({
-              type: Types.FETCH_ALL_STORE_ADDRESS,
-              data: res.data.data,
-            });
+              dispatch({
+                type: Types.FETCH_ALL_STORE_ADDRESS,
+                data: res.data.data,
+              });
             dispatch({
               type: Types.ALERT_UID_STATUS,
               alert: {
@@ -143,7 +202,14 @@ export const destroyStoreA = (store_code, id) => {
   };
 };
 
-export const updateStoreA = (storeAId, storeA, store_code , funcModal = null) => {
+
+
+
+
+
+
+
+export const updateStoreA = (storeAId, storeA, store_code, funcModal = null) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -152,8 +218,7 @@ export const updateStoreA = (storeAId, storeA, store_code , funcModal = null) =>
     storeAApi
       .updateStoreA(storeAId, storeA, store_code)
       .then((res) => {
-        if(funcModal)
-        {
+        if (funcModal) {
           funcModal()
         }
         dispatch({
@@ -170,20 +235,19 @@ export const updateStoreA = (storeAId, storeA, store_code , funcModal = null) =>
             content: res.data.msg,
           },
         });
-        badgeApi.fetchAllBadge(store_code,getBranchId()).then((res) => {
-          
-          if(res.data.code !== 401)
-          {
-          dispatch({
-            type: Types.FETCH_ALL_BADGE,
-            data: res.data.data,
-          });
-      
-       
-        }
+        badgeApi.fetchAllBadge(store_code, getBranchId()).then((res) => {
+
+          if (res.data.code !== 401) {
+            dispatch({
+              type: Types.FETCH_ALL_BADGE,
+              data: res.data.data,
+            });
+
+
+          }
         })
-        if(funcModal==null)
-        history.goBack();
+        if (funcModal == null)
+          history.goBack();
       })
       .catch(function (error) {
         dispatch({

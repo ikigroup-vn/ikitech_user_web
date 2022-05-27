@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import * as shipmentPAction from "../../actions/shipment";
 import { connect } from "react-redux";
+import { randomString } from "../../ultis/helpers";
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -30,6 +31,16 @@ class Table extends Component {
       use : false,
     });
   }
+  onChangeStatus = (e, id, token) => {
+    var checked = !this["checked" + id].checked
+    var status = checked
+    this.props.updateShipment(this.props.store_code,id,{
+      token : token,
+
+      use : status,
+    });
+  }
+  
 
   showData = (shipments) => {
     var result = null;
@@ -46,22 +57,30 @@ class Table extends Component {
         return (
           <tr>
             <td>{index + 1}</td>
-            <td>{data.id}</td>
             <td>{data.name}</td>
-            <td>{token}</td>
+            <td style = {{maxWidth : "600px"}}>{token}</td>
 
-            <td>
-              <h5>
-                <span class={`badge badge-${status_use}`}>
-                  {" "}
-                  {use}
-                </span>{" "}
-              </h5>
+            <td style = {{
+                  display: "flex",
+                  "justify-content": "center"
+            }}>
+            <div className="on-off" onClick={(e) => { this.onChangeStatus(e, data.id ,data.shipper_config?.token ?? null  ) }}>
+                  <input ref={(ref) => this["checked" + data.id] = ref} type="checkbox" class="checkbox" name={`${randomString(10)}`} checked={data.shipper_config?.use ?? false} />
+
+             
+                  <label for="checkbox" class="switch">
+                    <span class="switch__circle">
+                      <span style = {{backgroundColor : data.shipper_config?.use === true ? "white" : "gray"}} class="switch__circle-inner"></span>
+                    </span>
+                    <span class="switch__left"></span>
+                    <span class="switch__right"></span>
+                  </label>
+                </div>
             </td>
 
 
             <td>
-              <a
+              <button
                 style={{ marginLeft: "10px" }}
                 onClick={(e) => this.passEditFunc(e,data.id , token)}
                 data-toggle="modal"
@@ -69,8 +88,8 @@ class Table extends Component {
                 class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
               >
                 <i class="fa fa-edit"></i>Sửa
-              </a>
-              <a
+              </button>
+              {/* <a
                 style={{ marginLeft: "10px" }}
                 onClick={(e) => this.unUse(e,data.id , token)}
                 data-toggle="modal"
@@ -87,7 +106,7 @@ class Table extends Component {
                 class={`btn btn-success btn-sm ${disable_use}`}
               >
                 <i class="fa fa-trash"></i> Bật
-              </a>
+              </a> */}
             </td>
           </tr>
         );
@@ -106,10 +125,9 @@ class Table extends Component {
           <thead>
             <tr>
               <th>STT</th>
-              <th>Mã</th>
-              <th>Tên </th>
+              <th style = {{width : "100px"}}>Tên </th>
               <th>Token </th>
-              <th>Trạng thái </th>
+              <th style = {{textAlign : "center"}}>Trạng thái hoạt động </th>
 
               <th>Hành động</th>
             </tr>

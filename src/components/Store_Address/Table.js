@@ -82,8 +82,8 @@ class StoreTable extends Component {
               <th>Tỉnh/thành phố </th>
               <th>Quận/huyện</th>
               <th>Phường/xã</th>
-              <th>Giao hàng</th>
-              <th>Nhận hàng</th>
+              <th>Lấy hàng</th>
+              <th>Trả hàng</th>
 
               <th>Hành động</th>
             </tr>
