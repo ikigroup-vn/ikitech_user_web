@@ -28,7 +28,7 @@ class Home_Screen extends Component {
       {
         index: 1,
         theme:
-          "https://i.imgur.com/bbAkvJW.png",
+          "1.png",
         arr_index_component: [1, 1, 1, 1, 1],
         demo_link: "https://taphoademo.myiki.vn/"
 
@@ -36,22 +36,22 @@ class Home_Screen extends Component {
       {
         index: 2,
         theme:
-          "https://i.imgur.com/3ptpnon.png",
+          "2.png",
         arr_index_component: [2, 2, 2, 2, 1],
         demo_link: "https://shopmevabe.myiki.vn/"
       },
       {
         index: 3,
         theme:
-          "https://i.imgur.com/PhGo57G.png",
+          "3.png",
         arr_index_component: [3, 3, 3, 3, 1],
-        demo_link: "https://shopdecordemo.myiki.vn/"
+        demo_link: "https://moctamtra.myiki.vn/"
 
       },
       {
         index: 4,
         theme:
-          "https://i.imgur.com/ywUhU5K.png",
+          "4.png",
         arr_index_component: [4, 4, 4, 4, 1],
         demo_link: "https://shopdecordemo.myiki.vn/"
       },
@@ -59,32 +59,32 @@ class Home_Screen extends Component {
         isVip: true,
         index: 5,
         theme:
-          "https://i.imgur.com/eDwSzo5.png",
+          "5.png",
         arr_index_component: [5, 5, 5, 5, 2],
         demo_link: "https://echoa.vn"
       },
       {
         isVip: true,
         index: 6,
-        theme: "https://i.imgur.com/LqX1NtJ.png",
+        theme: "6.png",
         arr_index_component: [6, 6, 6, 6, 3],
         demo_link: "https://daikamart.mydoapp.vn/"
       },
       {
         isVip: false,
         index: 7,
-        theme: "https://i.imgur.com/kWOSlwM.png",
-        arr_index_component: [7, 7, 7, 7, 1],
+        theme: "7.png",
+        arr_index_component: [7, 7, 7, 3, 1],
         demo_link: "https://nowshopdemo.mydoapp.vn/"
       },
       {
         isVip: false,
         index: 8,
-        theme: "https://i.imgur.com/kHPRmKe.png",
-        arr_index_component: [8, 8, 7, 7, 3],
+        theme: "8.png",
+        arr_index_component: [8, 8, 7, 3, 3],
         demo_link: "https://mediamartonline.mydoapp.vn/"
       },
-      
+
     ];
   }
 

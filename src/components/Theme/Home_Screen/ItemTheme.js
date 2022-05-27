@@ -95,7 +95,7 @@ class ItemTheme extends Component {
           }}>
             <img
               style={{ display: "block", objectFit: "cover" }}
-              src={v.theme}
+              src={"../images/themes/" + v.theme}
               width="100%"
               height={200}
 
@@ -167,18 +167,9 @@ class ItemTheme extends Component {
               }
             </div>
 
-            {home_page_type === v.index &&
-              <a onClick={this.props.goBack} class="ahef" style={{
+            {home_page_type === v.index && <a onClick={this.props.goBack} class="ahef" style={{
 
-              }}><span>Tùy chỉnh</span></a> 
-              // <button
-              //   type="button"
-              //   onClick={this.props.goBack}
-              //   class="btn btn-primary btn-sm"
-              // >
-              //   <i class="fa fa-save"></i> Tùy chỉnh
-              // </button>
-              }
+            }}><span>Tùy chỉnh</span></a>}
 
           </div>
 

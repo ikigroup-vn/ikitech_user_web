@@ -613,6 +613,7 @@ class PostOrder extends Component {
         }
     }
     componentDidUpdate(prevProps, prevState) {
+        window.$('link[rel=stylesheet]').prop('disabled', false);
         if (this.state.isPopoverOpen == true) {
             console.log(document.getElementById("input-discount-pos"));
             if (document.getElementById("input-discount-pos")) {
@@ -622,6 +623,7 @@ class PostOrder extends Component {
     }
 
     shouldComponentUpdate(nextProps, nextState) {
+        window.$('link[rel=stylesheet]').prop('disabled', false);
         if (
             !shallowEqual(nextState.listPosItem, this.state.listPosItem) &&
             nextState.listPosItem.product_id != null
