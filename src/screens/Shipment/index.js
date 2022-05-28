@@ -84,7 +84,7 @@ class Store extends Component {
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
    <h4 className="h4 title_content mb-0 text-gray-800">
-                                        Cấu hình phí Ship
+                                        Đơn vị vận chuyển
                                     </h4>{" "}             
                 </div>
                 <br></br>
