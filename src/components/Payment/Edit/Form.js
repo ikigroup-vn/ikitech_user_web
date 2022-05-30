@@ -50,20 +50,18 @@ class Form extends Component {
           var config = payment.config
           if (payment.field.length > 0) {
             payment.field.forEach((element, index) => {
-              if(element == "payment_guide" && config == null)
-              {
+              if (element == "payment_guide" && config == null) {
                 field[element] = []
               }
-              else if((element == "token_key" || element == "security_code" || element == "payment_key") && config == null){
+              else if ((element == "token_key" || element == "security_code" || element == "payment_key") && config == null) {
                 // var itemConfig = typeof config[element] === "undefined" || config[element] == "nothing" ? "" : config[element]
                 field[element] = ""
               }
-              else
-              {
-                 var itemConfig = typeof config[element] === "undefined" || config[element] == "nothing" ? "" : config[element]
-                 field[element] = itemConfig
+              else {
+                var itemConfig = typeof config[element] === "undefined" || config[element] == "nothing" ? "" : config[element]
+                field[element] = itemConfig
               }
-         
+
             });
           }
 
@@ -120,7 +118,7 @@ class Form extends Component {
               type="button"
               data-toggle="modal"
               data-target="#updateModal"
-              class="btn btn-success btn-sm"
+              class="btn btn-warning btn-sm"
             >
               <i class="fa fa-edit"></i> Sửa
             </button>
@@ -169,7 +167,7 @@ class Form extends Component {
                         class="btn btn-primary btn-sm"
                       >
 
-                        <i class="fa fa-plus"></i> Thêm
+                        <i class="fa fa-plus"></i> Thêm tài khoản
                       </button>
                     </th>
 
@@ -187,12 +185,12 @@ class Form extends Component {
       else {
         result.push(
           <div class="form-group">
-            <label for="product_name">Nhập {defind_field[index]}</label>
+            <label for="product_name">{defind_field[index]}</label>
             <input
               type="text"
               class="form-control"
               value={value}
-              placeholder={defind_field[index]}
+              placeholder={"Nhập " + defind_field[index]}
               autocomplete="off"
               onChange={this.onChangeField}
               name={name}
@@ -238,13 +236,13 @@ class Form extends Component {
     history.goBack();
   };
   HandleEditPayment = (payment, index) => {
-    console.log(payment,index);
+    console.log(payment, index);
 
     var field = { ...this.state.field }
     var payments = [...field.payment_guide]
     payments.forEach((item, _index) => {
       if (index == _index) {
-        console.log(index,_index)
+        console.log(index, _index)
         payments[index] = payment
       }
     });
@@ -263,7 +261,7 @@ class Form extends Component {
 
     this.props.updatePaymentMethod(store_code, paymentId, form);
   }
-  deletePayment = (index) =>{
+  deletePayment = (index) => {
     var field = { ...this.state.field }
     var payments = [...field.payment_guide]
     payments.forEach((item, _index) => {
@@ -285,7 +283,7 @@ class Form extends Component {
     })
     this.props.updatePaymentMethod(store_code, paymentId, form);
   }
-  
+
   render() {
 
     var { txtName, txtContent, txtUse, field, defind_field, editPayment } = this.state
@@ -314,7 +312,7 @@ class Form extends Component {
 
 
             <div class="form-group">
-              <label for="product_name">Nội dung</label>
+              <label for="product_name">Trạng thái</label>
 
               <select name="txtUse" id="inputisUse" class="form-control" value={txtUse} onChange={this.onChange} >
                 <option value="1">Đang hoạt động</option>
@@ -335,23 +333,19 @@ class Form extends Component {
 
           </div>
           <div class="box-footer">
-            <button type="submit" class="btn btn-info btn-icon-split btn-sm">
-              <span class="icon text-white-50">
-                <i class="fas fa-save"></i>
-              </span>
-              <span class="text">Lưu</span>
+            <button type="submit" class="btn btn-info   btn-sm">
+              <i class="fas fa-save"></i>  Lưu
+
             </button>
-            <a
+            <button
+              type="button"
               style={{ marginLeft: "10px" }}
               onClick={this.goBack}
-              class="btn btn-warning"
-              class="btn btn-warning btn-icon-split  btn-sm"
+              class="btn btn-warning   btn-sm"
             >
-              <span class="icon text-white-50">
-                <i class="fas fa-arrow-left"></i>
-              </span>
-              <span class="text"> Trở về</span>
-            </a>
+              <i class="fas fa-arrow-left"></i> Trở về
+
+            </button>
           </div>
 
         </form>

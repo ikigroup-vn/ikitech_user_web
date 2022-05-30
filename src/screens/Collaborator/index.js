@@ -128,7 +128,7 @@ class collaborator extends Component {
                             {
                               payment_request_history == true ? <Tab>
                                 <i class="fa fa-history"></i>
-                                <span> Lịch sử yêu cầu thanh toán</span>
+                                <span> Lịch sử thanh toán</span>
                               </Tab> : null
                             }
 

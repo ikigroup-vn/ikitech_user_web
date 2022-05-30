@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { format, formatNumber , formatNoD , formatVND } from '../../ultis/helpers'
 import { shallowEqual } from '../../ultis/shallowEqual'
+import * as Types from "../../constants/ActionType";
+import { connect } from "react-redux";
 
 class ItemImportStock extends Component {
     constructor(props) {
@@ -58,11 +60,13 @@ class ItemImportStock extends Component {
         
 
         const _value = formatNumber(value)
+
         if (!isNaN(Number(_value))) {
             if (e.target.value === "") {
                 this.setState({ [name]: "" });
             }
             else {
+             
                 this.setState({ [name]: _value });
 
             }
@@ -79,12 +83,46 @@ class ItemImportStock extends Component {
 
     addQuantity() {
         const q = this.state.currentQuantity + 1
+        var stock = this.props.item?.stock ?? 0 
+        if(q > stock && !this.props.id){
+        this.props.showError({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "danger",
+                title: "Lỗi",
+                disable: "show",
+                content: "Số lượng sản phẩm trong chi nhánh đã đạt giới hạn",
+              },
+            });
+            return;
+          }
+          if (q === "" || q == null) {
+            this.setState({ currentQuantity : 0 });
+            return;
+        }
         this.setState({ currentQuantity: q })
     }
     handleDelete(id) {
         this.props.handleDelete({ idElement: id })
     }
     handleOnChange = (e) => {
+        var stock = this.props.item?.stock ?? 0 
+        if(e.target.value > stock && !this.props.id){
+        this.props.showError({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "danger",
+                title: "Lỗi",
+                disable: "show",
+                content: "Số lượng sản phẩm trong chi nhánh đã đạt giới hạn",
+              },
+            });
+            return;
+          }
+          if (e.target.value === "" || e.target.value == null) {
+            this.setState({ currentQuantity : 0 });
+            return;
+        }
         this.setState({ currentQuantity: e.target.value })
     }
 
@@ -136,4 +174,12 @@ class ItemImportStock extends Component {
     }
 }
 
-export default ItemImportStock;
+const mapDispatchToProps = (dispatch, props) => {
+    return {
+
+       showError: (error) => {
+        dispatch(error);
+      },
+    };
+  };
+  export default connect(null, mapDispatchToProps)(ItemImportStock);

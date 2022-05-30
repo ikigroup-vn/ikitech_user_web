@@ -245,7 +245,7 @@ class ModalDetail extends Component {
             nameProduct: this.props.modal.nameProduct,
             product_id: this.props.modal.idProduct,
             element_id: idElement,
-            reality_exist: 1,
+            reality_exist: quantityInStock ?? 1,
             nameDistribute: distributeName,
             nameElement: distributeValue,
             nameSubDistribute: element_distributes,

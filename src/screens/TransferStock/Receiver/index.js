@@ -68,7 +68,7 @@ class TransferStock extends Component {
         this.props.fetchAllTransferStockReceiver(store_code, branch_id, 1, params)
     }
     changePage = (store_code, order_code) => {
-        history.push(`/transfer_stocks/detail/${store_code}/${order_code}?tab-index=2`)
+        history.push(`/transfer_stocks/detail/${store_code}/${order_code}?tab-index=2&from=2`)
     }
 
     showData = (listTransferStock, store_code) => {

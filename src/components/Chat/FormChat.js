@@ -18,7 +18,7 @@ class FormChat extends Component {
     super(props);
     this.state = {
       message: "",
-      chat: {},
+      chat: {data:[]},
       newMessage: "",
       pag: 1,
       loading: false,
@@ -134,6 +134,7 @@ class FormChat extends Component {
         ).format("DD-MM-YYYY")
         var showDateTime = date == dateTimeOld ? "hide" : "show";
         dateTimeOld = date;
+        var unRead = this.props.unRead == true ? "Đã xem" : "Đã gửi"
         return (
           <React.Fragment>
             <div
@@ -177,13 +178,18 @@ class FormChat extends Component {
                 style={{ backgroundImage: `url(${img})`, cursor: "pointer" }}
               ></div>
 
-              <div class={`msg-bubble ${backGroundImg}`} style={{ maxWidth: "40%" }}>
+              <div class={`msg-bubble ${backGroundImg}`} style={{ maxWidth: "35%" }}>
 
 
                 <div class={` ${isImg}`}>{this.showListImg(listimg)}</div>
                 <div class={`msg-text ${isContent}`}>{mes.content}</div>
                 <div class="msg-info">
                   <div class="msg-info-time">{time}</div>
+                  {
+                    isUser == "right-msg" &&  <div class="msg-info-time" style = {{marginLeft : "10px"}}>{unRead}</div>
+                  }
+                 
+
                 </div>
               </div>
             </div>
@@ -197,6 +203,16 @@ class FormChat extends Component {
   componentDidMount() {
     var c = $(".msger-chatbox");
     c.scrollTop(c.prop("scrollHeight"), 1000);
+    console.log(this.props)
+    if (this.props.chat?.data?.length > 0) {
+
+        var chat = { ...this.state.chat };
+        var arrChat = [...(this.props.chat.data ?? [])]
+        var newArr = chat.data.concat(arrChat);
+        chat.data = newArr;
+        this.setState({ chat: chat, loading: false });
+      
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -213,6 +229,8 @@ class FormChat extends Component {
   }
   shouldComponentUpdate(nextProps, nextState) {
     if (!shallowEqual(nextProps.chat, this.props.chat)) {
+      console.log("chat ne" , nextProps.chat)
+
       if (nextState.pag !== 1) {
         var chat = { ...nextState.chat };
         console.log(chat)
@@ -229,6 +247,7 @@ class FormChat extends Component {
       !shallowEqual(nextState.newMessage, this.state.newMessage) &&
       nextState.newMessage != ""
     ) {
+
       var messengers = { ...nextState.chat };
       var mess = { ...nextState.newMessage };
       var arr_mess = [...messengers.data];
@@ -243,6 +262,9 @@ class FormChat extends Component {
       !shallowEqual(nextProps.message, this.props.message) &&
       nextProps.message != {}
     ) {
+
+      console.log("chat ne" , nextProps.message)
+
       var messengers = { ...this.state.chat };
       var mess = { ...nextProps.message };
       var arr_mess = [...messengers.data];

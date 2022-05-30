@@ -33,7 +33,7 @@ class CardProduct extends Component {
                         <a data-toggle="modal" data-target="#modalDetails" onClick={() => this.handleInfoProduct(data.inventory, data.id, data.name, data.images, data.price, data.distributes,maxPrice,minPrice, data.product_discount, data.quantity_in_stock, data.quantity_in_stock_with_distribute, data)}>
                             <div class="card">
                                 <img src={data.images.length > 0 ? data.images[0].image_url : Env.IMG_NOT_FOUND} className="img-responsive" alt="Image" width="100%" height="100px" />
-                                <div class="card-body" style={{ padding: '0' }}>
+                                <div class="card-body" style={{ padding: '0'  , minHeight : "70px" }}>
                                     <p class="card-title" style={{ margin: '0', overflow: "hidden", whiteSpace: "nowrap", textOverflow: 'ellipsis' }}>{data.name}</p>
 
                                     <>

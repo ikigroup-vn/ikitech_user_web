@@ -139,7 +139,8 @@ class ProductEdit extends Component {
           </div>
 
           <div class="card-body" style={{ padding: "0.8rem" }}>
-            <div class="row">
+            {
+              (product.distributes?.length == 0 || product.distributes == null )  && <div class="row">
               <div class="col-lg-6">
                 <div>
                   <InfoProduct
@@ -151,6 +152,9 @@ class ProductEdit extends Component {
 
 
             </div>
+
+            }
+            
             <div class="" style={{ padding: "0 14px" }}>
               {/* <div class="card-header title_content">
             Phân loại sản phẩm

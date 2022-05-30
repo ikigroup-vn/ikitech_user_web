@@ -656,7 +656,7 @@ class Distribute extends Component {
         </button> */}
 
 
-        {list_distribute.length > 0 && <div>  <br />
+        {list_distribute.length > 0 && <div> 
           <h4 style={{ fontSize: "15px", marginTop: "10px", fontWeight: "500" }} class="label">Danh sách giá theo phân loại sản phẩm</h4>
 
           <table class="table table-hover table-border" style={{ maxWidth: "900px" }}>

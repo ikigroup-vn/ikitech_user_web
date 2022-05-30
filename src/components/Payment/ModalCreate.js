@@ -38,6 +38,13 @@ class ModalCreate extends Component {
       branch: payment.branch
     })
 
+    this.setState({
+      account_name: "",
+      account_number: "",
+      bank: "",
+      branch: ""
+    })
+
   };
   render() {
     var { account_name,
@@ -130,7 +137,7 @@ class ModalCreate extends Component {
                 >
                   Đóng
                 </button>
-                <button type="submit" class="btn btn-info">
+                <button type="submit" class="btn btn-warning">
                   Tạo
                 </button>
               </div>

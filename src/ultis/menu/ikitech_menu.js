@@ -409,14 +409,7 @@ export const ikitech_menu = [
             to: "/shipment",
           },
 
-          {
-            name: "Cấu hình phí ship",
-            class: "delivery_provider_update",
-
-            icon: "fas fa-fw fa-cog",
-            exact: true,
-            to: "/ship_config",
-          },
+   
           {
             name: "Phương thức thanh toán",
             class: "payment_list",

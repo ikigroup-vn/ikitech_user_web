@@ -296,7 +296,7 @@ class EditImportStock extends Component {
         var { store_code } = this.props.match.params
         var { searchValue, numPage, listImportStock, infoSupplier, price_total, reality_exist_total,cost , select_supplier , toBranchId} = this.state
         const bonusParam = "&check_inventory=true"
-
+        var {id} = this.props.match.params
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
@@ -346,7 +346,7 @@ class EditImportStock extends Component {
                                             </div>
 
                                             <div className='card-bodys' style={{ width: "0 10px", height: "380px", overflowY: "auto" }}>
-                                                <ListImportStock store_code={store_code} listImportStock={listImportStock} handleCallbackQuantity={this.handleCallbackQuantity} handleDelete={this.handleDelete} handleCallbackPrice = {this.handleCallbackPrice}/>
+                                                <ListImportStock id = {id} store_code={store_code} listImportStock={listImportStock} handleCallbackQuantity={this.handleCallbackQuantity} handleDelete={this.handleDelete} handleCallbackPrice = {this.handleCallbackPrice}/>
                                             </div>
                                             <div className='voucher-input' style={{ margin: "10px 0px" }}>
 
@@ -404,7 +404,7 @@ class EditImportStock extends Component {
                                                 
                                             </div>
                                             <div className='card-body'>
-                                                <CardProduct store_code={store_code} handleCallbackProduct={this.handleCallbackProduct} />
+                                                <CardProduct id = {id} store_code={store_code} handleCallbackProduct={this.handleCallbackProduct} />
                                             </div>
 
                                             {/* <Pagination limit={numPage}
@@ -417,7 +417,7 @@ class EditImportStock extends Component {
                         </div>
                     </div>
                 </div>
-                <ModalDetail modal={this.state.infoProduct} product={this.state.product}   handleCallbackPushProduct={this.handleCallbackPushProduct} />
+                <ModalDetail id = {id} modal={this.state.infoProduct} product={this.state.product}   handleCallbackPushProduct={this.handleCallbackPushProduct} />
                                                 <ModalSupplier supplier={supplier} handleCallbackSupplier={this.handleCallbackSupplier} />
                 <Alert
                     type={Types.ALERT_UID_STATUS}
