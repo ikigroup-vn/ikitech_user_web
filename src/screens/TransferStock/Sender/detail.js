@@ -18,6 +18,7 @@ import { format, randomString } from '../../../ultis/helpers'
 import ItemDetailRefund from "../../../components/Transfer_stock/ItemDetailRefund"
 import history from "../../../history";
 import { getQueryParams } from "../../../ultis/helpers"
+import ModalUpdateNote from "./ModalUpdateNote"
 
 class DetailImportStock extends Component {
     constructor(props) {
@@ -105,10 +106,15 @@ class DetailImportStock extends Component {
         const transfer_stock_items = this.props.itemImportStock.transfer_stock_items ? this.props.itemImportStock.transfer_stock_items : []
         const date = moment(itemImportStock.updated_at, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD")
         const total = this.state.total_price - itemImportStock.discount + itemImportStock.cost
+        var from = getQueryParams("from")
         console.log(this.state.list_refund)
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
+                <ModalUpdateNote note={itemImportStock.note} store_code={store_code}
+                    id={id}
+                    to_branch_id={itemImportStock.to_branch_id}
+                    transfer_stock_items={itemImportStock?.transfer_stock_items}></ModalUpdateNote>
                 <div className="col-10 col-10-wrapper">
 
                     <div id="content-wrapper" className="d-flex flex-column">
@@ -123,7 +129,7 @@ class DetailImportStock extends Component {
                                 <div style={{ display: "flex", justifyContent: "end", marginBottom: "10px" }}>
                                     <button style={{ marginRight: "10px" }} type="button" onClick={this.goBack} class="btn btn-warning  btn-sm"><i class="fa fa-arrow-left"></i>&nbsp;Trở về</button>
 
-                                    {(itemImportStock.status === 0) && isShow == true ? <Link style={{ marginRight: "10px" }} type="button" to={`/transfer_stock/edit/${store_code}/${id}`} class="btn btn-primary  btn-sm"><i class="fa fa-edit"></i>&nbsp;Sửa phiếu</Link>
+                                    {(itemImportStock.status === 0 && from != 2) && isShow == true ? <Link style={{ marginRight: "10px" }} type="button" to={`/transfer_stock/edit/${store_code}/${id}`} class="btn btn-primary  btn-sm"><i class="fa fa-edit"></i>&nbsp;Sửa phiếu</Link>
                                         : ""}
                                 </div>
 
@@ -168,15 +174,21 @@ class DetailImportStock extends Component {
                                                         </div>
                                                     </div>
                                                 </div> */}
-                                                {itemImportStock.note ? <div>
+                                                {itemImportStock.note ? <div  >
                                                     <label style={{ fontWeight: "bold", marginTop: "5px" }}>Ghi chú</label>
-                                                    <div class="card">
-                                                        <div class="card-body" style={{ padding: "0" }}>{itemImportStock.note}</div>
+                                                    <div class="card note-stock" data-toggle="modal"
+                                                        data-target="#updateModal">
+                                                        <div class="right-inner-addon input-container">
+                                                            <i style = {{fontSize : "16px" , padding : "2px"}} class="fa fa-pencil"></i>
+
+                                                            <div class="card-body" style={{ padding: "0" }}>{itemImportStock.note}</div>
+                                                        </div>
                                                     </div>
+
                                                 </div> : ""}
 
 
-                                                {itemImportStock.status === 0 && (this.state.tabIndex == 1 ||  this.state.tabIndex == null)  &&<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                                {itemImportStock.status === 0 && (this.state.tabIndex == 1 || this.state.tabIndex == null) && <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                                                     <button type="button" style={{ marginTop: "20px" }} data-toggle="modal" data-target="#removeModal" class="btn btn-danger  btn-sm"><i class="fa fa-trash"></i>&nbsp;Hủy phiếu chuyển kho</button>
                                                     {/* <button className="cancel btn btn-danger"  >Hủy phiếu chuyển kho</button> */}
                                                 </div>
@@ -185,7 +197,7 @@ class DetailImportStock extends Component {
                                                 }
 
                                                 {itemImportStock.status === 0 && this.state.tabIndex == 2 && <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                                <button class="btn btn-success" style={{ marginTop: "20px" }} onClick={() => this.handleChangeStatus(2)} >Đã nhận hàng</button>
+                                                    <button class="btn btn-success" style={{ marginTop: "20px" }} onClick={() => this.handleChangeStatus(2)} >Đã nhận hàng</button>
 
                                                     <button type="button" style={{ marginTop: "20px" }} data-toggle="modal" data-target="#removeModal" class="btn btn-danger  btn-sm"><i class="fa fa-trash"></i>&nbsp;Hủy phiếu chuyển kho</button>
 

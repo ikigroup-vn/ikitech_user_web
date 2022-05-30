@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import history from "../../../history"
 import moment from "moment"
-
+import {formatNoD} from "../../../ultis/helpers"
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -86,7 +86,7 @@ class Table extends Component {
               <td>{data.start_time}</td>
               <td>{data.end_time}</td>
               <td>{type_discount}</td>
-              <td>{data.value_discount == null ? null : new Intl.NumberFormat().format(data.value_discount.toString())} </td>
+              <td>{data.value_discount == null ? null : formatNoD(data.value_discount.toString())} </td>
 
               <td style = {{width : "20%"}}>
                 {this.showListProduct(data.products_combo || [])}

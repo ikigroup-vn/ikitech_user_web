@@ -146,7 +146,7 @@ class Support extends Component {
                                     <label class="form-check-label" for="gridCheck">
                                         Hiển thị
                                     </label>
-                                    <input style = {{marginLeft : "10px"}} class="form-check-input" type="checkbox" id="gridCheck" name="is_show_icon_hotline" checked = {is_show_icon_hotline} onChange = {this.onChangeStatus}   />
+                                    <input  style = {{marginLeft : "10px"}} class="form-check-input" type="checkbox" id="gridCheck" name="is_show_icon_hotline" checked = {is_show_icon_hotline} onChange = {this.onChangeStatus}   />
 
                                 </div>
 

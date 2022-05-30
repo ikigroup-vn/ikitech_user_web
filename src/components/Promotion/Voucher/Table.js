@@ -127,7 +127,7 @@ filterColDiscount = (data) => {
 
          
             <td>
-              {data.value_limit_total && new Intl.NumberFormat().format(data.value_limit_total)}
+              {data.value_limit_total && formatNoD(data.value_limit_total)}
 
 
             </td >  

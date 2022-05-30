@@ -33,7 +33,6 @@ class StoreTable extends Component {
               
                 {data.address_detail}
             </td>
-            <td>{data.country}</td>
 
             <td>{data.province_name}</td>
             <td>{data.district_name}</td>
@@ -42,7 +41,7 @@ class StoreTable extends Component {
             <td className = "status_check"><i class={`fas fa-${is_default_return} ${is_default_return + "-status"} `}></i></td>
 
 
-            <td>
+            <td className="group-btn-table">
               <Link
                 to={`/store_address/edit/${store_code}/${data.id}`}
                 class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
@@ -78,7 +77,6 @@ class StoreTable extends Component {
               <th>Họ tên</th>
 
               <th>Địa chỉ chi tiết</th>
-              <th>Quốc gia</th>
               <th>Tỉnh/thành phố </th>
               <th>Quận/huyện</th>
               <th>Phường/xã</th>

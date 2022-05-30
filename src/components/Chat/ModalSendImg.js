@@ -23,42 +23,42 @@ class ModalSendImg extends Component {
         if (this.state.files.length > 0) {
             window.$('#file-chat').fileinput('clear');
             this.setState({
-              files: [],
-              files_copy: [],
+                files: [],
+                files_copy: [],
             })
-    
+
             var { customerId, store_code } = this.props
             this.props.uploadImgChat(store_code, customerId, this.state.files)
-      
-          }
 
-       
+        }
+
+
     }
 
     componentDidMount() {
         var _this = this
 
         window.$('#file-chat').on('fileloaded', function (event, file, previewId, fileId, index, reader) {
-          var files = [..._this.state.files]
-          var files_copy = [..._this.state.files_copy]
-          files.push(file)
-          files_copy.push(previewId)
-          _this.setState({ files, files_copy })
+            var files = [..._this.state.files]
+            var files_copy = [..._this.state.files_copy]
+            files.push(file)
+            files_copy.push(previewId)
+            _this.setState({ files, files_copy })
         });
-    
+
         window.$('#file-chat').on('fileremoved', function (event, id, index) {
-          var { files, files_copy } = _this.state
-          var _files_copy = [...files_copy]
-          if (files_copy.length > 0) {
-            files_copy.forEach((item, _index) => {
-              if (item == id) {
-                files.splice(_index, 1);
-                _files_copy.splice(_index, 1);
-                _this.setState({ files: files , files_copy : _files_copy })
-                return;
-              }
-            });
-          }
+            var { files, files_copy } = _this.state
+            var _files_copy = [...files_copy]
+            if (files_copy.length > 0) {
+                files_copy.forEach((item, _index) => {
+                    if (item == id) {
+                        files.splice(_index, 1);
+                        _files_copy.splice(_index, 1);
+                        _this.setState({ files: files, files_copy: _files_copy })
+                        return;
+                    }
+                });
+            }
         });
         helper.loadFileInput("file-chat");
     }
@@ -115,15 +115,13 @@ class ModalSendImg extends Component {
                             </div>
                             <div class="modal-footer">
                                 <button
-                                    onClick={this.showDialog}
                                     type="button"
-                                    class="btn btn-warning"
+                                    class="btn btn-default"
+                                    data-dismiss="modal"
                                 >
-
-                                    <i class="fa fa-plus"></i>
-                                    Thêm ảnh
+                                    Đóng
                                 </button>
-                                <button type="submit" class="btn btn-info">
+                                <button type="submit" class="btn btn-warning">
                                     <i class="fa fa-upload"></i>
 
                                     Upload

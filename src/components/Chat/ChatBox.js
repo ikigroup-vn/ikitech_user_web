@@ -9,7 +9,7 @@ class ChatBox extends Component {
     this.state = {
       loading: false,
       pag: 1,
-      listChat: "",
+      listChat: {data : []},
       loadMesageId : false,
       isCheck : false
 
@@ -17,7 +17,23 @@ class ChatBox extends Component {
   }
 
 
+  componentDidMount()
+  {
+     
+    if (this.props.listChat?.data?.length > 0) {
+
+      var arrChatProps = [...this.props.listChat.data]
+
+      var listChatState = {...this.state.listChat}
+      var arrData =[...listChatState.data]
+      var newArr = arrData.concat(arrChatProps);
+      listChatState.data = newArr;    
+      this.setState({ listChat: listChatState , loading : false ,  listChat: this.props.listChat , loadMesageId : true , isCheck : true })
+    }
+
+  }
   componentWillReceiveProps(nextProps) {
+
     if (!shallowEqual(nextProps.listChat, this.props.listChat) && this.state.pag == 1 || (nextProps.isShow == true &&  this.state.isCheck ==false)
     ) {
       this.setState({ listChat: nextProps.listChat , loadMesageId : true , isCheck : true })
@@ -58,6 +74,7 @@ class ChatBox extends Component {
   showListUserChat = (listChat, isActive, numPages) => {
     var { store_code } = this.props;
     var result = <div>Không có dữ liệu</div>;
+    console.log(listChat)
     if (listChat.length > 0) {
       result = listChat.map((chat, index) => {
         var time = moment(
@@ -90,7 +107,7 @@ class ChatBox extends Component {
 
         var unRead = chat.user_unread == 0 ? null : "bold-unread";
         var showUnRead = chat.user_unread == 0 ? "hide" : "show";
-
+          console.log(chat.last_message.content )
         return (
           <React.Fragment>
             <div className={`friend-drawer friend-drawer--onhover message-${chat.customer_id} ${_isActive}`} onClick={() => this.isActive(chat.customer_id)}>
@@ -142,14 +159,32 @@ class ChatBox extends Component {
     }
     return result;
   };
+  checkRead = () =>{
+    var read = true
+    var { listChat } = this.state
+    var { customerId , isActive} = this.props;
 
+    var listChat = typeof listChat.data == "undefined" ? [] : listChat.data;
+    console.log(listChat , customerId , isActive)
+    for (const item of listChat) {
+      if(item.customer_id == isActive)
+      {
+        if(item.customer_unread > 0)
+        {
+          return false
+        }
+        return true
+      }
+    }
+    return read
+  }
   render() {
     var { customerImg, customerId, chat, store_code, isActive } = this.props;
     var { listChat } = this.state
     var numPages = listChat.last_page
 
     var listChat = typeof listChat.data == "undefined" ? [] : listChat.data;
-    console.log(isActive);
+    console.log(this.checkRead());
     return (
       <div
         style={{ background: "white",  }}
@@ -163,7 +198,7 @@ class ChatBox extends Component {
 
         </div>
         <div className="col-md-8" style={{ height: "500px" }}>
-          <FormChat listChat = {listChat} customerImg={customerImg} customerId={customerId} chat={chat} store_code={store_code} />
+          <FormChat unRead = {this.checkRead()} listChat = {listChat} customerImg={customerImg} customerId={customerId} chat={chat} store_code={store_code} />
 
 
         </div>

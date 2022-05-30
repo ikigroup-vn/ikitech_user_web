@@ -13,6 +13,7 @@ import { connect } from "react-redux";
 import Loading from "../Loading";
 import * as shipmentAction from "../../actions/shipment";
 import config from "../../ultis/datatable"
+import ShipConfig from "./ShipConfig";
 
 
 
@@ -48,7 +49,7 @@ class Store extends Component {
 
   }
   componentWillReceiveProps(nextProps) {
-    $("#dataTable").DataTable().destroy();
+    // $("#dataTable").DataTable().destroy();
   }
   componentDidUpdate(prevProps, prevState) {
     if (this.state.isLoading != true && typeof this.props.permission.product_list != "undefined") {
@@ -58,7 +59,7 @@ class Store extends Component {
       this.setState({ isLoading: true , update })
 
     }
-    $("#dataTable").DataTable(config());
+    // $("#dataTable").DataTable(config());
   }
   render() {
     var {store_code} = this.props.match.params;
@@ -90,14 +91,23 @@ class Store extends Component {
                 <br></br>
                 <div class="card shadow mb-4">
                   <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">
-                      Danh sach đơn vị vận chuyển
+                    <h6 class="m-0 title_content font-weight-bold text-primary">
+                      Danh sách đơn vị vận chuyển
                     </h6>
                   </div>
-                  <div class="card-body">
+                  <div class="card-body" style = {{padding : "2px"}}>
                     <Table update = {update} store_code = {store_code} shipment = {shipment} handleUpdateCallBack = {this.handleUpdateCallBack}  handleDelCallBack = {this.handleDelCallBack}   />
                   </div>
                 </div>
+                <div class="card shadow mb-4">
+                  <div class="card-header py-3">
+                    <h6 class="m-0 title_content font-weight-bold text-primary">
+                      Cấu hình phí ship
+                    </h6>
+                  </div>
+                   <ShipConfig store_code = {store_code}></ShipConfig>
+                </div>
+             
               </div>
             </div>
 

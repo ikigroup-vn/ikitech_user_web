@@ -87,7 +87,7 @@ class StoreAddress extends Component {
                   <div className="card shadow mb-4">
                     <div className="card-header py-3">
                       <h6 className="m-0 title_content font-weight-bold text-primary">
-                        Danh sách địa chỉ lấy hàng
+                        Danh sách địa chỉ giao vận
                       </h6>
                     </div>
                     <div className="card-body">

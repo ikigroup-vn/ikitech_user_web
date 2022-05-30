@@ -64,7 +64,7 @@ class Table extends Component {
                 to = {`/payment/edit/${this.props.store_code}/${data.id}`}
                 class={`btn btn-primary btn-sm ${update == true ? "show" : "hide"}`}
               >
-                <i class="fa fa-edit"></i>Điều chỉnh
+                <i class="fa fa-edit"></i>&nbsp;Điều chỉnh
               </Link>
             </td>
           </tr>

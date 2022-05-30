@@ -54,13 +54,13 @@ class Table extends Component {
        
             <td>{data.debt ? new Intl.NumberFormat().format(data.debt)
               : 0}</td>
-                   {getChannel() == IKITECH && <td className = {data.is_collaborator === true ? "success" : "danger"}>
-              {data.is_collaborator === true ?  "Có" : "Không"}
+                   {getChannel() == IKITECH && <td className =   {data.is_collaborator === true ?  "success" : data.is_agency === true ? "primary" : ""}>
+              {data.is_collaborator === true ?  "Cộng tác viên" : data.is_agency === true ? "Đại lý" : "Không"}
             </td>}
-            {getChannel() == IKITECH && <td className= {data.is_agency === true ?  "success" : "danger"}>
+            {/* {getChannel() == IKITECH && <td className= {data.is_agency === true ?  "success" : "danger"}>
 
               {data.is_agency === true ?  "Có" : "Không"}
-            </td>}
+            </td>} */}
 
 
 
@@ -130,8 +130,7 @@ class Table extends Component {
               <th>Xu</th>
               <th>Số nợ hiện tại</th>
 
-              {getChannel() == IKITECH && <th>Cộng tác viên</th>}
-              {getChannel() == IKITECH && <th>Đại lý</th>}
+              {getChannel() == IKITECH && <th>Vai trò</th>}
 
               {/* {getChannel() == IKIPOS &&   <th>Hành động</th>} */}
 

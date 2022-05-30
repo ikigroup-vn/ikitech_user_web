@@ -219,7 +219,7 @@ class Support extends Component {
 
         var { blogs, store_code } = this.props
         return (
-            <div className="support">
+            <div className="support-theme">
                 <ListBlog handleAddBlog={this.handleAddBlog} store_code={store_code} blogs={blogs} />
 
                 <form role="form" onSubmit={this.onSave} >
@@ -256,6 +256,8 @@ class Support extends Component {
                             <div class="right-inner-addon input-container">
                                 <i class="fa fa-caret-down"></i>
                                 <input
+                                                            readOnly
+
                                     onClick={() => this.fetchAllBlog("post_id_about")}
                                     value={post_id_about}
 
@@ -272,6 +274,7 @@ class Support extends Component {
                         <div className="form-group">
                             <label htmlFor="name">Bài viết giúp đỡ</label>
                             <input
+                            readOnly
                                 value={ID_post_id_help}
 
 
@@ -281,6 +284,8 @@ class Support extends Component {
                               <div class="right-inner-addon input-container">
                                 <i class="fa fa-caret-down"></i>
                             <input
+                                                        readOnly
+
                                 onClick={() => this.fetchAllBlog("post_id_help")}
                                 value={post_id_help}
 
@@ -306,6 +311,8 @@ class Support extends Component {
                               <div class="right-inner-addon input-container">
                                 <i class="fa fa-caret-down"></i>
                             <input
+                                                        readOnly
+
                                 onClick={() => this.fetchAllBlog("post_id_terms")}
                                 value={post_id_terms}
 
@@ -331,6 +338,8 @@ class Support extends Component {
                               <div class="right-inner-addon input-container">
                                 <i class="fa fa-caret-down"></i>
                             <input
+                                                        readOnly
+
                                 onClick={() => this.fetchAllBlog("post_id_return_policy")}
                                 value={post_id_return_policy}
 
@@ -356,6 +365,8 @@ class Support extends Component {
                               <div class="right-inner-addon input-container">
                                 <i class="fa fa-caret-down"></i>
                             <input
+                                                        readOnly
+
                                 onClick={() => this.fetchAllBlog("post_id_support_policy")}
                                 value={post_id_support_policy}
 
@@ -381,6 +392,9 @@ class Support extends Component {
                               <div class="right-inner-addon input-container">
                                 <i class="fa fa-caret-down"></i>
                             <input
+
+readOnly
+
                                 onClick={() => this.fetchAllBlog("post_id_privacy_policy")}
                                 value={post_id_privacy_policy}
 

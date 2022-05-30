@@ -718,7 +718,9 @@ class Chart extends Component {
                         <span>&nbsp;&nbsp; {textLegendPrime}</span>
 
                     </div>
-                    {/* <div className={disbleCompare} style={{ display: "flex", justifyContent: "center", margin: "0 20px" }}>
+                    {
+                        this.props.overview?.data_compare_time != null && typeof this.props.overview?.data_compare_time != "undefined" &&
+                        <div style={{ display: "flex", justifyContent: "center", margin: "0 20px" }}>
                         <div
                             onClick={this.fromCompare}
                             style={{
@@ -730,7 +732,9 @@ class Chart extends Component {
                             }}></div>
                         <span> &nbsp;&nbsp;{textLegendCompare}</span>
 
-                    </div> */}
+                    </div>
+                    }
+                  
                     {/* <button onClick={this.fromAllDate} type="button" class="btn btn-default">tất cả</button>
           <button onClick={this.fromPrime} type="button" class="btn btn-default">from</button>
           <button onClick={this.fromCompare} type="button" class="btn btn-default">to</button> */}

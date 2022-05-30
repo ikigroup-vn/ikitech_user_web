@@ -4,12 +4,18 @@ import { connect } from "react-redux";
 import * as StoreAAction from "../../../actions/store_address";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import * as placeAction from "../../../actions/place";
+import { isEmail, isEmpty, isPhone } from "../../../ultis/helpers";
+
+import * as Types from "../../../constants/ActionType";
+
 class ModalDelete extends Component {
   constructor(props) {
     super(props);
     this.state = {
       txtName: "",
       txtPhone: "",
+      CtxtName: "",
+      CtxtPhone: "",
       txtAddress_detail: "",
       txtCountry: 1,
       txtProvince: "",
@@ -71,6 +77,8 @@ class ModalDelete extends Component {
         CtxtProvince: "",
         CtxtDistrict: "",
         CtxtWards: "",
+        CtxtName: "",
+        CtxtPhone: "",
       })
       return;
     }
@@ -170,7 +178,33 @@ class ModalDelete extends Component {
     var { store_address, store_code } = this.props
     var is_default_pickup = this.state.txtPickup == "0" || this.state.txtPickup == "" ? false : true
     var is_default_return = this.state.txtReturn == "0" || this.state.txtPickup == "" ? false : true
+    if (this.state.txtName == null || !isEmpty(this.state.txtName) || !isEmpty(this.state.txtAddress_detail)) {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng nhập đầy đủ thông tin",
+        },
+      });
+      return;
+    }
 
+    if (!isPhone(this.state.txtPhone)) {
+      {
+        this.props.showError({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: "SDT không hợp lệ",
+          },
+        });
+        return;
+      }
+    }
     this.props.updateStoreA(store_address.id, {
       name: this.state.txtName,
       address_detail: this.state.txtAddress_detail,
@@ -194,8 +228,35 @@ class ModalDelete extends Component {
     e.preventDefault();
 
     var { store_address, store_code } = this.props
-
+    if (this.state.CtxtName == null || !isEmpty(this.state.CtxtName) || !isEmpty(this.state.CtxtAddress_detail)) {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng nhập đầy đủ thông tin",
+        },
+      });
+      return;
+    }
+    if (!isPhone(this.state.CtxtPhone)) {
+      {
+        this.props.showError({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: "SDT không hợp lệ",
+          },
+        });
+        return;
+      }
+    }
     this.props.createStoreA(store_code, {
+      name: this.state.CtxtName,
+      phone: this.state.CtxtPhone,
       address_detail: this.state.CtxtAddress_detail,
       country: this.state.txtCountry,
       province: this.state.CtxtProvince,
@@ -211,7 +272,7 @@ class ModalDelete extends Component {
 
 
   render() {
-    var { txtName, type, txtAddress_detail, txtProvince, txtDistrict, txtWards, CtxtAddress_detail, CtxtProvince, CtxtDistrict, CtxtWards, txtEmail, txtPickup, txtReturn, listDistrict, listWards, txtPhone } = this.state;
+    var { txtName, CtxtName,type, txtAddress_detail, txtProvince, txtDistrict, txtWards, CtxtAddress_detail, CtxtProvince, CtxtDistrict, CtxtWards, txtEmail, txtPickup, txtReturn, listDistrict, listWards, txtPhone , CtxtPhone } = this.state;
     var { province } = this.props
 
     return (
@@ -245,6 +306,33 @@ class ModalDelete extends Component {
               id="removeForm"
             >
               <div class="modal-body" style={{ padding: " 0 10px" }}>
+              <div class="form-group">
+              <label for="product_name">Họ tên</label>
+              <input
+                type="text"
+                class="form-control"
+                id="txtName"
+                placeholder="Nhập họ tên"
+                autocomplete="off"
+                value={txtName}
+                onChange={this.onChange}
+                name="txtName"
+              />
+            </div>
+  
+            <div class="form-group">
+            <label for="product_name">Số điện thoại</label>
+              <input
+                type="text"
+                class="form-control"
+                id="txtPhone"
+                placeholder="Nhập số điện thoại"
+                autocomplete="off"
+                value={txtPhone}
+                onChange={this.onChange}
+                name="txtPhone"
+              />
+            </div>
                 <div class="form-group">
                   <label for="product_name">Địa chỉ chi tiết</label>
                   <input
@@ -341,6 +429,33 @@ class ModalDelete extends Component {
               id="removeForm"
             >
               <div class="modal-body" style={{ padding: " 0 10px" }}>
+                <div class="form-group">
+                  <label for="product_name">Họ tên</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="txtName"
+                    placeholder="Nhập họ tên"
+                    autocomplete="off"
+                    value={CtxtName || ""}
+                    onChange={this.onChange}
+                    name="CtxtName"
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label for="product_name">Số điện thoại</label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    id="CtxtPhone"
+                    placeholder="Nhập số điện thoại"
+                    autocomplete="off"
+                    value={CtxtPhone || ""}
+                    onChange={this.onChange}
+                    name="CtxtPhone"
+                  />
+                </div>
                 <div class="form-group">
                   <label for="product_name">Địa chỉ chi tiết</label>
                   <input
@@ -453,6 +568,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     createStoreA: (store_code, form, funcModal) => {
       dispatch(StoreAAction.createStoreA(store_code, form, funcModal));
+    },
+    showError: (error) => {
+      dispatch(error);
     },
   };
 };

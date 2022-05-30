@@ -267,7 +267,7 @@ class Product extends Component {
                                       maxWidth: "27px",
                                       marginRight: "10px",
                                     }}
-                                    src="https://lucas.vn/wp-content/uploads/2019/10/logo-sendo.png"
+                                    src="https://bloggiamgia.vn/wp-content/uploads/2020/06/logo-sendo.png"
                                     class="img-responsive"
                                     alt="Image"
                                   />
@@ -362,7 +362,7 @@ class Product extends Component {
                       <div className="card-header">
                         <div
                           class="row"
-                          style={{ "justify-content": "space-between" }}
+                          style={{ "justify-content": "space-between" , marginRight : "15px" , marginLeft : "15px" }}
                         >
                           <form onSubmit={this.searchData}>
                             <div

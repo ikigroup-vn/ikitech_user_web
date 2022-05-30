@@ -17,6 +17,19 @@
 }
 
 
+.support-theme input {
+    background-color: white !important;
+    cursor : pointer
+ }
+/* .note-stock{
+    cursor: pointer;
+} */
+.note-stock:hover {
+    background: rgba(0, 0, 0, .05) !important;
+    cursor: pointer;
+    /* color : #dddddd !important */
+}
+
 /*!
  * Project: 'pcmall';
  * Module: 'cart';
@@ -3946,6 +3959,13 @@ svg._1JwWV1 {
     display: -ms-flexbox;
     display: flex
 }
+.react-tabs__tab-list span{
+font-size: 14px !important;
+}
+
+button i {
+    margin-right: 4px;
+}
 
 ._2REt5n {
     width: 34.30127%;
@@ -6304,7 +6324,7 @@ img {
 
 .form-group>label {
     font-weight: 750;
-    height: 34px;
+    /* height: 34px; */
 }
 
 .modal-title {

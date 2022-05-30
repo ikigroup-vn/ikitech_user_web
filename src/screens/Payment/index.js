@@ -85,13 +85,16 @@ class Store extends Component {
                 <div
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
-                  <h1 class="h3 mb-2 text-gray-800">Phương thức thanh toán</h1>
+                  {/* <h1 class="h3 mb-2 text-gray-800">Phương thức thanh toán</h1> */}
+                  <h4 className="h4 title_content mb-0 text-gray-800">
+                  Phương thức thanh toán                                    </h4>{" "}   
              
                 </div>
                 <br></br>
                 <div class="card shadow mb-4">
+             
                   <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">
+                    <h6 class="m-0 title_content font-weight-bold text-primary">
                       Danh sách phương thức thanh toán
                     </h6>
                   </div>

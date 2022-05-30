@@ -115,7 +115,7 @@ export const createTransferStocks = (store_code, branch_id, id) => {
     };
   };
 
-  export const updateTransferStock = (store_code, branch_id, id,data) => {
+  export const updateTransferStock = (store_code, branch_id, id,data , redirect = true) => {
     return (dispatch) => {
       dispatch({
         type: Type.SHOW_LOADING,
@@ -137,8 +137,24 @@ export const createTransferStocks = (store_code, branch_id, id) => {
               content: res.data.msg,
             },
           });
-          
+          if(redirect)
           history.goBack();
+          else
+          {
+          transferStock.fetchDetailTransferStock(store_code,branch_id,id)
+          .then(res =>{
+              dispatch({
+                  type: Type.SHOW_LOADING,
+                  loading:"hide"
+              })
+              if(res.data.code !== 401){
+                  dispatch({
+                      type: Type.FETCH_DETAIL_TRANSFER_STOCK,
+                      data: res.data.data
+                  })
+              }
+          })
+        }
         })
         .catch(function (error) {
           dispatch({

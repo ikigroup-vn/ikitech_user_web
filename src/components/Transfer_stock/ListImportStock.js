@@ -31,6 +31,7 @@ import ItemImportStock from './ItemImportStock'
                     return(
                         <ItemImportStock item = 
                         {item} 
+                        id = {this.props.id}
                         index ={index} 
                         handleCallbackQuantity ={this.handleCallbackQuantity} 
                         handleDelete ={this.handleDelete} 

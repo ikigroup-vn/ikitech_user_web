@@ -3457,15 +3457,16 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
 }
 
 .custom-switch .custom-control-label::before {
-    left: -2.25rem;
-    width: 1.75rem;
+    left: -1.65rem;
+    width: 40px !important;
+    height: 19px;
     pointer-events: all;
     border-radius: .5rem
 }
 
 .custom-switch .custom-control-label::after {
-    top: calc(.25rem + 2px);
-    left: calc(-2.25rem + 2px);
+    top: calc(.32rem + 2px);
+    left: calc(-1.5rem + 2px);
     width: calc(1rem - 4px);
     height: calc(1rem - 4px);
     background-color: #b7b9cc;
@@ -3481,7 +3482,7 @@ input[type=button].btn-block, input[type=reset].btn-block, input[type=submit].bt
 
 .custom-switch .custom-control-input:checked~.custom-control-label::after {
     background-color: #fff;
-    transform: translateX(.75rem)
+    transform: translateX(1.2rem)
 }
 
 .custom-switch .custom-control-input:disabled:checked~.custom-control-label::before {

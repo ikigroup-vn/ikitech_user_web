@@ -360,7 +360,7 @@ class Form extends Component {
           </div>
           <div class="box-footer">
           <button type = "submit" class="btn btn-info   btn-sm">
-                  <i class="fas fa-save"></i>  Tạo
+                  <i class="fas fa-plus"></i>  Tạo
 
                 </button>
                 <button
