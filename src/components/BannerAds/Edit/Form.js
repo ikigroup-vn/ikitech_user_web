@@ -77,6 +77,20 @@ class Form extends Component {
       )
       return;
     }
+    if (title == null || !isEmpty(title)) {
+      this.props.showError({
+
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Tiêu đề không được để trống",
+        },
+      }
+      )
+      return;
+    }
     this.props.updateBannerAds(bannerAdsId, {
       title,
       type,

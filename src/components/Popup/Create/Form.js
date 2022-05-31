@@ -153,7 +153,7 @@ class Form extends Component {
         <ListCBlog handleAddCBlog={this.handleAddCBlog} store_code={store_code} category_blog={category_blog} />
         <ListBlog handleAddBlog={this.handleAddBlog} store_code={store_code} blogs={blogs} />
         <ModalUpload />
-        <form role="form" onSubmit={this.onSave} method="post">
+        <form role="form"  onSubmit={this.onSave} method="post">
 
 
 
@@ -208,12 +208,14 @@ class Form extends Component {
               />
             </div>
 
+            <div  className="support-theme">
             <div class={`form-group ${disable_product}`}>
               <label>Chọn Sản phẩm</label>
 
               <div class="right-inner-addon input-container">
                 <i class="fa fa-caret-down"></i>
                 <input
+                readOnly
                   data-toggle="modal"
                   data-target="#showListProduct"
                   onClick={this.fetchAllProduct}
@@ -228,19 +230,7 @@ class Form extends Component {
 
 
 
-              <button
-              style = {{marginTop : "10px" , marginBottom : "10px"}}
-              onClick={this.fetchAllProduct}
-
-                data-toggle="modal"
-                data-target="#showListProduct"
-                type="button"
-                class="btn btn-primary-no-background btn-sm"
-
-              >
-                <i class="fas fa-plus" ></i>
-                <span class="text">&nbsp;Chọn sản phẩm</span>
-              </button>
+          
     
               <br></br>
               <div class={`media ${showProduct}`} id="product_preview">
@@ -261,6 +251,7 @@ class Form extends Component {
               <div class="right-inner-addon input-container">
                 <i class="fa fa-caret-down"></i>
                 <input
+                readOnly
                   onClick={this.fetchAllCProduct}
                   value={category.name}
                   data-toggle="modal"
@@ -272,20 +263,7 @@ class Form extends Component {
                 />
               </div>
 
-             
-              <button
-              style = {{marginTop : "10px" , marginBottom : "10px"}}
-              onClick={this.fetchAllCProduct}
-
-                  data-toggle="modal"
-                  data-target="#showListCProduct"
-                  type="button"
-                  class="btn btn-primary-no-background btn-sm"
-
-                >
-                  <i class="fas fa-plus" ></i>
-                  <span class="text">&nbsp;Chọn danh mục</span>
-                </button>
+       
               <br></br>
               <div class={`media ${showCProduct}`} id="product_preview">
                 <img
@@ -306,7 +284,7 @@ class Form extends Component {
                 <input
                   onClick={this.fetchAllBlog}
                   value={blog.name}
-
+                  readOnly
                   data-toggle="modal"
                   data-target="#showListBlog"
                   type="text"
@@ -315,19 +293,7 @@ class Form extends Component {
                   placeholder="Chọn bài viết..."
                 />
               </div>
-              <button
-                  onClick={this.fetchAllBlog}
-                  style = {{marginTop : "10px" , marginBottom : "10px"}}
-
-                  data-toggle="modal"
-                  data-target="#showListBlog"
-                  type="button"
-                  class="btn btn-primary-no-background btn-sm"
-
-                >
-                  <i class="fas fa-plus" ></i>
-                  <span class="text">&nbsp;Chọn bài viết</span>
-                </button>
+            
               <br></br>
               <div class={`media ${showBlog}`} id="product_preview">
                 <img
@@ -350,7 +316,7 @@ class Form extends Component {
                 <input
                   onClick={this.fetchAllBlog}
                   value={blog.name}
-
+                  readOnly
                   data-toggle="modal"
                   data-target="#showListCBlog"
                   type="text"
@@ -359,18 +325,7 @@ class Form extends Component {
                   placeholder="Chọn danh mục..."
                 />
               </div>
-              <button
-                    onClick={this.fetchAllCBlog}
-                    style = {{marginTop : "10px" , marginBottom : "10px"}}
-                    data-toggle="modal"
-                    data-target="#showListCBlog"
-                  type="button"
-                  class="btn btn-primary-no-background btn-sm"
-
-                >
-                  <i class="fas fa-plus" ></i>
-                  <span class="text">&nbsp;Thêm danh mục</span>
-                </button>
+          
            
               <br></br>
               <div class={`media ${showCblog}`} id="product_preview">
@@ -384,6 +339,7 @@ class Form extends Component {
                   <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{categoryBlog.name} </h5>
                 </div>
               </div>
+            </div>
             </div>
 
             <div class="form-group">

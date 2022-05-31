@@ -6,7 +6,9 @@ import moment from "moment";
 import MomentInput from 'react-moment-input';
 
 import {shallowEqual} from "../../../ultis/shallowEqual"
+import { isEmail, isEmpty, isPhone } from "../../../ultis/helpers";
 
+import * as Types from "../../../constants/ActionType";
 class Form extends Component {
   constructor(props) {
     super(props);
@@ -112,6 +114,18 @@ class Form extends Component {
       title,
       type_schedule,
     };
+    if (this.state.title == null || !isEmpty(this.state.title) || !isEmpty(this.state.description)) {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng nhập đầy đủ thông tin tiêu đề và mô tả",
+        },
+      });
+      return;
+    }
     if(Number(type_schedule ) == 0)
     {
       console.log("dadsasdasdadasd")
@@ -411,7 +425,10 @@ const mapDispatchToProps = (dispatch, props) => {
 
     updateSchedule: (id, data, store_code) => {
       dispatch(scheduleAction.updateSchedule(id, data, store_code))
-    }
+    },
+    showError: (error) => {
+      dispatch(error);
+    },
 
   };
 };

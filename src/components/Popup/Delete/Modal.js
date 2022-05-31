@@ -47,7 +47,7 @@ class Modal extends Component {
               <div class="modal-body">
                 <input type="hidden" name="remove_id_store" />
                 <div class="alert-remove"></div>
-                Bạn có muốn xóa {modal.table} ID : {modal.id}
+                Bạn có chắc chắn muốn xóa popup quảng cáo này không?
               </div>
               <div class="modal-footer">
                 <button
@@ -57,7 +57,7 @@ class Modal extends Component {
                 >
                   Đóng
                 </button>
-                <button type="submit" class="btn btn-info">
+                <button type="submit" class="btn btn-warning">
                   Xóa
                   
                 </button>
