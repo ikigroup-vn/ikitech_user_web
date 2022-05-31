@@ -1,15 +1,14 @@
 import callApi from "../../ultis/apiCaller";
 
-export const fetchAllStaff = (store_code, page, params, branch_id) => {
-  params = ``
-  if (params) {
-    params = params + params
+export const fetchAllStaff = (store_code, page, _params, branch_id) => {
+  var params = ``
+  if (_params) {
+    params = params + _params
   }
   if (branch_id) {
     params = params + `branch_id=${branch_id}`
 
   }
-
   return callApi(`/store/${store_code}/staffs${params != "" ? "?"+params : ""}`, "get", null);
 };
 

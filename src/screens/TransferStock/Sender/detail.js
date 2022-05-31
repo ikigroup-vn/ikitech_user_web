@@ -197,7 +197,8 @@ class DetailImportStock extends Component {
                                                 }
 
                                                 {itemImportStock.status === 0 && this.state.tabIndex == 2 && <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                                                    <button class="btn btn-success" style={{ marginTop: "20px" }} onClick={() => this.handleChangeStatus(2)} >Đã nhận hàng</button>
+                                                    {/* <button class="btn btn-success" style={{ marginTop: "20px" }} onClick={() => this.handleChangeStatus(2)} >Đã nhận hàng</button> */}
+                                                    <button type="button" style={{ marginTop: "20px" }} class="btn btn-success  btn-sm" onClick={() => this.handleChangeStatus(2)}><i class="fa fa-check"></i>&nbsp;Đã nhận hàng</button>
 
                                                     <button type="button" style={{ marginTop: "20px" }} data-toggle="modal" data-target="#removeModal" class="btn btn-danger  btn-sm"><i class="fa fa-trash"></i>&nbsp;Hủy phiếu chuyển kho</button>
 
@@ -240,7 +241,7 @@ class DetailImportStock extends Component {
                                                     <div style={{ display: "flex", justifyContent: "space-between" }}>
                                                         <div>Trạng thái:</div>
 
-                                                        <div className={itemImportStock.status == 2 ? "success" : itemImportStock.status == 0 ? "secondary" : "danger"}>  {itemImportStock.status == 2 ? "Đã nhận hàng" : itemImportStock.status == 0 ? "Chờ nhận hàng" : "Hủy"}</div>
+                                                        <div className={itemImportStock.status == 2 ? "success" : itemImportStock.status == 0 ? "secondary" : "danger"}>  {itemImportStock.status == 2 ? "Đã nhận hàng" : itemImportStock.status == 0 ? "Chờ nhận hàng" : "Đã hủy"}</div>
 
                                                     </div>
 

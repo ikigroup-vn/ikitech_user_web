@@ -47,7 +47,7 @@ class Modal extends Component {
               <div class="modal-body">
                 <input type="hidden" name="remove_id_store" />
                 <div class="alert-remove"></div>
-                Bạn có muốn xóa {modal.table}: {modal.name}?
+                Bạn có chắc chắn muốn xóa popup này không?
               </div>
               <div class="modal-footer">
                 <button

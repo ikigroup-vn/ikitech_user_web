@@ -26,17 +26,14 @@ class ListBlog extends Component {
     if (blogs.length > 0) {
       result = blogs.map((data, index) => {
         var image_url = data.image_url == null || data.image_url == "" ? Env.IMG_NOT_FOUND : data.image_url
-        var published = data.published == true ? "Hiển thị" : "Tạm ẩn"
+        var published = data.published == true ? "Đang hiển thị" : "Đang lưu tạm"
         var published_status = data.published == true ? "success" : "secondary"
         return (
           <tr >
 
 
             <td>{index + 1}</td>
-            <td>
-              {data.id}
-
-            </td>
+          
 
             <td>
 
@@ -47,11 +44,9 @@ class ListBlog extends Component {
 
             <td>
               {" "}
-              <h5>
-                <span class={`badge badge-${published_status}`}>
+                <span class={`${published_status}`}>
                   {published}
                 </span>
-              </h5>
             </td>
             <td>{data.count_view}</td>
 
@@ -63,7 +58,7 @@ class ListBlog extends Component {
 
                 class="btn btn-primary btn-sm"
               >
-                <i class="fa fa-plus"></i> Thêm bài viết
+                <i class="fa fa-plus"></i>Chọn
               </button>
 
 
@@ -100,7 +95,6 @@ class ListBlog extends Component {
                 <thead>
                 <tr>
               <th>STT</th>
-              <th>ID</th>
 
               <th>Hình ảnh</th>
               <th>Tiêu đề</th>
@@ -120,7 +114,7 @@ class ListBlog extends Component {
 <button
 
     type="button"
-    class="btn btn-primary pagination-btn"
+    class="btn btn-default pagination-btn"
     data-dismiss="modal"
   >
     Đóng

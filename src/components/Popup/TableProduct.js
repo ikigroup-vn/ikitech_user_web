@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import Pagination from "../../components/Product/Pagination"
 import * as Env from "../../ultis/default"
-import {format} from "../../ultis/helpers"
+import { format, formatNumber, contactOrNumber } from "../../ultis/helpers";
 class ListProduct extends Component {
   constructor(props) {
     super(props);
@@ -10,7 +10,7 @@ class ListProduct extends Component {
 
   }
 
-  handleAddProduct = (id,name,img ,price) =>{
+  handleAddProduct = (id, name, img, price) => {
     window.$('.modal').modal('hide');
 
     this.props.handleAddProduct({
@@ -21,8 +21,8 @@ class ListProduct extends Component {
     })
   }
 
-  
-  
+
+
   showData = (products) => {
     var result = null;
     if (typeof products === "undefined") {
@@ -40,39 +40,130 @@ class ListProduct extends Component {
         } catch (error) {
           img = Env.IMG_NOT_FOUND
         }
+        const {
+          product_discount,
+          min_price,
+          max_price,
+          _delete,
+          update,
+          insert,
+          per_page,
+          current_page,
+          store_code,
+          page,
+          status_stock,
+          discount,
+          historyInventory,
+          distributes
+        } = data;
+        let discount_percent = null;
 
+        if (product_discount) {
+          discount_percent = product_discount.value;
+        }
         return (
           <tr >
             <td>
-                {index+1}
-       
+              {index + 1}
+
 
             </td>
 
-            <td>{data.id}</td>
+            <td>
+              <img
+                src={
+                  data.images.length > 0
+                    ? data.images[0].image_url
+                    : Env.IMG_NOT_FOUND
+                }
+                className="img-responsive"
+                alt="Image"
+                style={{ width: "100%", height: "59px", background: "#0000000d" }}
+              />
+            </td>
+            <td>{data.sku}</td>
 
             <td>{data.name}</td>
 
-            <td>{format(data.price)}</td>
-            <td> <h5>
-              <span class={`badge badge-${status}`}>
-                {status_name}
-              </span>
-            </h5></td>
+            <td>
+        { product_discount == null &&
+          <div className="eea"
+          >
+            {min_price === max_price ? (
+              contactOrNumber(format(
+                Number(
+                  discount_percent == null
+                    ? min_price
+                    : min_price - min_price * discount_percent * 0.01
+                )
+              )
+              )) : distributes && distributes.length == 0 ? contactOrNumber(format(
+                Number(
+                  discount_percent == null
+                    ? min_price
+                    : min_price - min_price * discount_percent * 0.01
+                ))) : (
+              <div className="ae"
+              >
+                {format(
+                  Number(
+                    discount_percent == null
+                      ? min_price
+                      : min_price - min_price * discount_percent * 0.01
+                  )
+                )}
+                {" - "}
+                {format(
+                  Number(
+                    discount_percent == null
+                      ? max_price
+                      : max_price - max_price * discount_percent * 0.01
+                  )
+                )}
+              </div>
+            )}
+          </div>
+          }
 
+          {product_discount && (
+            <div
+              className="a"
+              style={{
+                float: "left",
+              }}
+            >
+              {min_price === max_price ? (
+                contactOrNumber(format(Number(min_price)))
+              ) : (
+                <div className="row e">
+                  <div
+                    style={{
+                      // textDecoration: "line-through",
+                    }}
+                  >
+                    {format(Number(min_price))}
+                    {" - "}
+                    {format(Number(max_price))}
+                  </div>
 
+                  {/* <div className="discount e">&emsp; -{discount_percent}%</div> */}
+                </div>
+              )}
+            </div>
+          )}
+        </td>
 
             <td >
               <button
-              type = "button"
-                onClick = {()=>this.handleAddProduct(data.id , data.name , img , data.price)}
-              
+                type="button"
+                onClick={() => this.handleAddProduct(data.id, data.name, img, data.price)}
+
                 class="btn btn-primary btn-sm"
               >
-                <i class="fa fa-plus"></i> Thêm sản phẩm
+                <i class="fa fa-plus"></i> Chọn
               </button>
-            
- 
+
+
             </td>
           </tr>
         );
@@ -84,7 +175,7 @@ class ListProduct extends Component {
   };
 
   render() {
-    var { products , store_code} = this.props
+    var { products, store_code } = this.props
     return (
       <div
         class="modal fade"
@@ -95,21 +186,22 @@ class ListProduct extends Component {
         data-backdrop="static"
       >
         <div class="modal-dialog modal-lg" role="document">
-          <div class="modal-content" style = {{maxHeight : "630px"}}>
-          <div class="modal-header" style ={{background : "white"}}>
-        
+          <div class="modal-content" style={{ maxHeight: "630px" }}>
+            <div class="modal-header" style={{ background: "white" }}>
+
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
             </div>
             <div class="table-responsive">
-              <table class="table  table-hover table-border" style = {{color : "black"}}>
+              <table class="table  table-hover table-border" style={{ color: "black" }}>
                 <thead>
                   <tr>
-                    <th>STT</th>
-                    <th>Mã</th>
-                    <th>Tên</th>
+                    <th></th>
+                    <th style={{ width: "13%" }}>Hình ảnh</th>
+
+                    <th>Mã SKU</th>
+                    <th>Tên sản phẩm</th>
                     <th>Giá</th>
-                    <th>Trạng thái</th>
                     <th>Hành động</th>
 
                   </tr>
@@ -119,18 +211,18 @@ class ListProduct extends Component {
               </table>
             </div>
 
-            <div  class="group-pagination_flex col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="group-pagination_flex col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
-<Pagination style = "float-fix" store_code={store_code} products={products} />
-<button
+              <Pagination style="float-fix" store_code={store_code} products={products} />
+              <button
 
-    type="button"
-    class="btn btn-primary pagination-btn"
-    data-dismiss="modal"
-  >
-    Đóng
-  </button>
-</div>
+                type="button"
+                class="btn btn-default pagination-btn"
+                data-dismiss="modal"
+              >
+                Đóng
+              </button>
+            </div>
 
           </div>
         </div>

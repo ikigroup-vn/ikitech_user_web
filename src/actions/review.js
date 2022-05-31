@@ -1,13 +1,13 @@
 import * as Types from "../constants/ActionType";
 import * as reviewApi from "../data/remote/review";
 
-export const fetchAllReview = (store_code , page = 1) => {
+export const fetchAllReview = (store_code , page = 1 , params=null) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading : "show"
     })
-    reviewApi.fetchAllReview(store_code , page).then((res) => {
+    reviewApi.fetchAllReview(store_code , page,params).then((res) => {
       console.log(res)
       dispatch({
         type: Types.SHOW_LOADING,

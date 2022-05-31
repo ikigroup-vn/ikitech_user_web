@@ -32,7 +32,7 @@ class Staff extends Component {
   };
 
   componentDidMount() {
-    var params = `?branch_id=${getBranchId()}`
+    var params = `branch_id=${getBranchId()}`
 
     this.props.fetchAllStaff(this.props.match.params.store_code , null , params , null );
   }

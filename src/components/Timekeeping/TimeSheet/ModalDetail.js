@@ -42,8 +42,7 @@ class ModalDetail extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    if(nextProps.resetModal != this.props.resetModal)
-    {
+    if (nextProps.resetModal != this.props.resetModal) {
       this.setState({
         staff_name: "",
         staff_id: null,
@@ -53,7 +52,7 @@ class ModalDetail extends Component {
         checkin_hour: "00:00",
         checkout_hour: "00:00",
         is_bonus: null,
-        selectValue : null,
+        selectValue: null,
       })
     }
     // if (!shallowEqual(nextProps.dataDetail, this.props.dataDetail)) {
@@ -198,35 +197,47 @@ class ModalDetail extends Component {
     // window.$(".modal").modal("hide");
 
     let params = `date_from=${this.props.datePrime.from}&date_to=${this.props.datePrime.to}`;
-
+    var date1 = null;
+    var date2 = null
     if (checkin_date) {
-      var date1 = moment(
+       date1 = moment(
         `${moment(checkin_date, "DD-MM-YYYY").format(
           "YYYY-MM-DD"
         )} ${checkin_hour}`
       ).format("YYYY-MM-DD HH:mm:ss");
+       date2 = moment(
+        `${moment(checkin_date, "DD-MM-YYYY").format(
+          "YYYY-MM-DD"
+        )} ${checkout_hour}`
+      ).format("YYYY-MM-DD HH:mm:ss");
     } else {
-      var date1 = moment(
+       date1 = moment(
         `${moment(this.props.datePrime.from, "YYYY-MM-DD").format(
           "YYYY-MM-DD"
         )} ${checkin_hour}`
       ).format("YYYY-MM-DD HH:mm:ss");
-    }
-    if (checkout_date) {
-      var date2 = moment(
-        `${moment(checkout_date, "DD-MM-YYYY").format(
-          "YYYY-MM-DD"
-        )} ${checkout_hour}`
-      ).format("YYYY-MM-DD HH:mm:ss");
-    } else {
-      var date2 = moment(
+       date2 = moment(
         `${moment(this.props.datePrime.to, "YYYY-MM-DD").format(
           "YYYY-MM-DD"
         )} ${checkout_hour}`
       ).format("YYYY-MM-DD HH:mm:ss");
+      // }
     }
+    // if (checkout_date) {
+    //   var date2 = moment(
+    //     `${moment(checkout_date, "DD-MM-YYYY").format(
+    //       "YYYY-MM-DD"
+    //     )} ${checkout_hour}`
+    //   ).format("YYYY-MM-DD HH:mm:ss");
+    // } else {
+    //   var date2 = moment(
+    //     `${moment(this.props.datePrime.to, "YYYY-MM-DD").format(
+    //       "YYYY-MM-DD"
+    //     )} ${checkout_hour}`
+    //   ).format("YYYY-MM-DD HH:mm:ss");
+    // }
 
-    console.log( this.props.store_code,
+    console.log(this.props.store_code,
       this.props.branch_id,
       params,
       {
@@ -236,7 +247,7 @@ class ModalDetail extends Component {
         reason: reason,
         staff_id: staff_id,
       },
-      )
+    )
 
     this.props.bonusLessCheckinCheckout(
       this.props.store_code,
@@ -272,26 +283,35 @@ class ModalDetail extends Component {
   };
 
 
- listStaff = () => {
+  listStaff = () => {
 
-  var listStaff = []
+    var listStaff = []
 
-  this.props.staff.map((staff) => {
-    listStaff.push(
-      { value: staff.id, label: staff.name,id:staff.id }
-    );
-  })
- 
+    this.props.staff.map((staff) => {
+      listStaff.push(
+        { value: staff.id, label: staff.name, id: staff.id }
+      );
+    })
 
-  return listStaff
- }
 
- onChangeStaff = (selectValue) => {
-  this.setState({ 
-    selectValue:selectValue,
-    staff_name:selectValue.name,
-    staff_id: selectValue.id, });
-};
+    return listStaff
+  }
+
+  onChangeStaff = (selectValue) => {
+    this.setState({
+      selectValue: selectValue,
+      staff_name: selectValue.name,
+      staff_id: selectValue.id,
+    });
+  };
+
+  onChangeDate = (e) => {
+    var time = ""
+    time = moment(e, "DD-MM-YYYY").format("DD-MM-YYYY");
+    this.setState({
+      checkin_date: time,
+    });
+  };
 
   render() {
     const {
@@ -307,7 +327,7 @@ class ModalDetail extends Component {
     } = this.state;
     const { datePrime } = this.props;
 
-   
+    console.log(checkin_date)
 
     return (
       <div
@@ -320,7 +340,7 @@ class ModalDetail extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-          <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+            <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
               <h4 style={{ color: "white" }}>Thêm bớt công</h4>
 
               <button
@@ -341,15 +361,15 @@ class ModalDetail extends Component {
             >
               <div class="modal-body">
 
-                        <Select
-                          isClearable
-                          isSearchable
-                          placeholder="-- Chọn nhân viên --"
-                          value={this.state.selectValue}
-                          options={this.listStaff()}
-                          name="recipientReferences"
-                          onChange={this.onChangeStaff}
-                        />
+                <Select
+                  isClearable
+                  isSearchable
+                  placeholder="-- Chọn nhân viên --"
+                  value={this.state.selectValue}
+                  options={this.listStaff()}
+                  name="recipientReferences"
+                  onChange={this.onChangeStaff}
+                />
 
                 {/* <div class="form-group">
                   <label>Tên nhân viên</label>
@@ -367,7 +387,27 @@ class ModalDetail extends Component {
 
                 <div class="form-group">
                   <label>Ngày yêu cầu</label>
-                  <input
+                  <MomentInput
+                    value={
+                      checkin_date && checkin_date != ""
+                        ? moment(checkin_date, "DD-MM-YYYY")
+                        : moment()
+                    }
+                    format="DD-MM-YYYY"
+                    options={false}
+                    tab={0}
+
+                    enableInputClick={true}
+                    monthSelect={true}
+                    readOnly={true}
+
+                    translations={
+                      { DATE: "Ngày", TIME: "Giờ", SAVE: "Đóng", HOURS: "Giờ", MINUTES: "Phút" }
+                    }
+                    onSave={() => { }}
+                    onChange={this.onChangeDate}
+                  />
+                  {/* <input
                     type="text"
                     class="form-control"
                     id="name"
@@ -379,7 +419,7 @@ class ModalDetail extends Component {
                     name="name"
                     // disabled
                     onChange={this.onChange}
-                  />
+                  /> */}
                 </div>
 
                 <div class="form-group">
@@ -495,7 +535,7 @@ class ModalDetail extends Component {
                 </div>
               </div>
               <div class="modal-footer">
-              <button
+                <button
                   type="button"
                   class="btn btn-default"
                   data-dismiss="modal"
@@ -504,7 +544,7 @@ class ModalDetail extends Component {
                 </button>
                 <button type="submit" class="btn btn-warning">
                   Lưu
-                  
+
                 </button>
               </div>
             </form>

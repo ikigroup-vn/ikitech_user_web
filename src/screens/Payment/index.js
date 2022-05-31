@@ -48,7 +48,7 @@ class Store extends Component {
 
   }
   componentWillReceiveProps(nextProps) {
-    $("#dataTable").DataTable().destroy();
+    // $("#dataTable").DataTable().destroy();
   }
   componentDidUpdate(prevProps, prevState) {
     if (this.state.isLoading != true && typeof this.props.permission.product_list != "undefined") {
@@ -59,7 +59,7 @@ class Store extends Component {
       this.setState({ isLoading: true , update , isShow})
 
     }
-    $("#dataTable").DataTable(config());
+    // $("#dataTable").DataTable(config());
   }
   render() {
     var {store_code} = this.props.match.params;

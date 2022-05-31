@@ -53,7 +53,7 @@ class ListCProduct extends Component {
 
                 class="btn btn-primary btn-sm"
               >
-                <i class="fa fa-plus"></i> Thêm danh mục
+                <i class="fa fa-plus"></i> Chọn
               </button>
 
 
@@ -105,7 +105,7 @@ class ListCProduct extends Component {
             <button
 
 type="button"
-class="btn btn-primary pagination-btn"
+class="btn btn-default pagination-btn"
 data-dismiss="modal"
 >
 Đóng

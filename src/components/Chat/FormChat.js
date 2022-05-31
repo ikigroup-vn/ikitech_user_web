@@ -307,9 +307,9 @@ class FormChat extends Component {
   sendMessage = (e) => {
     e.preventDefault();
     var { message } = this.state;
-    var { store_code, customerId } = this.props;
+    var { store_code, customerId ,isActive} = this.props;
 
-    this.props.sendMessage(store_code, customerId, message);
+    this.props.sendMessage(store_code, isActive, message);
     this.setState({ message: "" });
   };
 

@@ -35,10 +35,7 @@ class ListCBlog extends Component {
                     <tr >
 
                         <td>{index + 1}</td>
-                        <td>
-                            {data.id}
-
-                        </td>
+                      
 
                         <td>
 
@@ -56,7 +53,7 @@ class ListCBlog extends Component {
 
                                 class="btn btn-primary btn-sm"
                             >
-                                <i class="fa fa-plus"></i> Thêm danh mục
+                                <i class="fa fa-plus"></i> Chọn
                             </button>
 
 
@@ -93,7 +90,6 @@ class ListCBlog extends Component {
                                 <thead>
                                     <tr>
                                         <th>STT</th>
-                                        <th>ID</th>
 
                                         <th>Hình ảnh</th>
                                         <th>Tiêu đề</th>
@@ -110,7 +106,7 @@ class ListCBlog extends Component {
             <button
 
 type="button"
-class="btn btn-primary pagination-btn"
+class="btn btn-default pagination-btn"
 data-dismiss="modal"
 >
 Đóng

@@ -84,7 +84,7 @@ class TransferStock extends Component {
                         <td>{item.code}</td>
                         <td>{item.from_branch?.name}</td>
                         <td>{item.to_branch?.name}</td>
-                        <td className = {item.status == 2 ? "success" : item.status == 0 ? "secondary" : "danger"}>{item.status == 2 ? "Đã nhận hàng" : item.status == 0 ? "Chờ nhận hàng" : "Hủy"}</td>
+                        <td className = {item.status == 2 ? "success" : item.status == 0 ? "secondary" : "danger"}>{item.status == 2 ? "Đã nhận hàng" : item.status == 0 ? "Chờ nhận hàng" : "Đã hủy"}</td>
                         <td>{datetime}</td>
                     
                     </tr>

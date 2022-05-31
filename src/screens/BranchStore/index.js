@@ -18,7 +18,7 @@ class Branch extends Component {
         this.state = {
             id_branch: "",
             modal: "",
-            openModal : false,
+            openModal: false,
 
         }
     }
@@ -32,24 +32,24 @@ class Branch extends Component {
         this.setState({ modal: item })
     }
 
-    openModal = () =>{
-        this.setState({openModal : true})
-      }
-      resetModal = () =>{
-        this.setState({openModal : false})
-    
-      }
-      componentWillReceiveProps(nextProps) {
+    openModal = () => {
+        this.setState({ openModal: true })
+    }
+    resetModal = () => {
+        this.setState({ openModal: false })
+
+    }
+    componentWillReceiveProps(nextProps) {
         if (
-          this.state.isLoading != true &&
-          typeof nextProps.permission.branch_list != "undefined"
+            this.state.isLoading != true &&
+            typeof nextProps.permission.branch_list != "undefined"
         ) {
-          var permissions = nextProps.permission;
-    
-          var isShow = permissions.branch_list;
-          this.setState({ isLoading: true, isShow });
+            var permissions = nextProps.permission;
+
+            var isShow = permissions.branch_list;
+            this.setState({ isLoading: true, isShow });
         }
-      }
+    }
     componentDidMount() {
         this.props.fetchBranchStore(this.props.store_code);
         this.props.fetchPlaceProvince()
@@ -67,7 +67,12 @@ class Branch extends Component {
                 return (
                     <tr className="hover-product">
                         <td>{index + 1}</td>
-                        <td>{data.name}</td>
+                        <td>{data.name} {data.is_default_order_online == true ? <span style={{
+                            color: "red",
+                            "font-size": "13px",
+                            "font-style": "italic",
+                            "font-weight": "500",
+                        }}>(mặc định)</span> : ""}</td>
 
                         <td>{data.address_detail}</td>
                         <td>{data.wards_name}</td>
@@ -103,7 +108,7 @@ class Branch extends Component {
     render() {
         var { store_code } = this.props.match.params
         var listBranch = this.props.branchStore ? this.props.branchStore : []
-        var { id_branch, modal , openModal , isShow } = this.state
+        var { id_branch, modal, openModal, isShow } = this.state
         var { wards, district, province, name } = this.props
         return (
             <div id="wrapper">
@@ -117,77 +122,77 @@ class Branch extends Component {
                             <Topbar store_code={store_code} />
                             {typeof isShow == "undefined" ? <div></div> : isShow == true ?
 
-                            <div className="container-fluid">
-                                <Alert
-                                    type={Types.ALERT_UID_STATUS}
-                                    alert={this.props.alert}
-                                />
+                                <div className="container-fluid">
+                                    <Alert
+                                        type={Types.ALERT_UID_STATUS}
+                                        alert={this.props.alert}
+                                    />
 
 
 
 
-           <div
-                                    style={{ display: "flex", justifyContent: "space-between" }}
-                                > 
-                                <h4 class="h4 title_content mb-0 text-gray-800">Chi nhánh</h4>
-                                
-                                 <a
-    onClick={this.openModal}
-                                    data-toggle="modal" data-target="#modalAddress"
-                                    class={`btn btn-info btn-icon-split btn-sm ${true ? "show" : "hide"
-                                        }`}
-                                    style={{ marginRight: "1rem" }}
-                                >
-                                    <span
-                                        class="icon text-white-50"
-                                        style={{ marginRight: 0 }}
+                                    <div
+                                        style={{ display: "flex", justifyContent: "space-between" }}
                                     >
-                                        <i class="fas fa-plus"></i>
-                                    </span>
-                                    <span style={{ color: "white" }} class={`text `}>
-                                    Thêm chi nhánh
-                                    </span>
-                                </a>
-                                </div>
+                                        <h4 class="h4 title_content mb-0 text-gray-800">Chi nhánh</h4>
 
-                                <br></br>
-                                <div className='card'>
-                                    <div className='card-body'>
-                                        {listBranch.length > 0 ?
-                                            <div class="table-responsive">
-                                                <table class="table  " id="dataTable" width="100%" cellspacing="0">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>STT</th>
-                                                            <th>Tên chi nhánh</th>
+                                        <a
+                                            onClick={this.openModal}
+                                            data-toggle="modal" data-target="#modalAddress"
+                                            class={`btn btn-info btn-icon-split btn-sm ${true ? "show" : "hide"
+                                                }`}
+                                            style={{ marginRight: "1rem" }}
+                                        >
+                                            <span
+                                                class="icon text-white-50"
+                                                style={{ marginRight: 0 }}
+                                            >
+                                                <i class="fas fa-plus"></i>
+                                            </span>
+                                            <span style={{ color: "white" }} class={`text `}>
+                                                Thêm chi nhánh
+                                            </span>
+                                        </a>
+                                    </div>
+
+                                    <br></br>
+                                    <div className='card'>
+                                        <div className='card-body'>
+                                            {listBranch.length > 0 ?
+                                                <div class="table-responsive">
+                                                    <table class="table  " id="dataTable" width="100%" cellspacing="0">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>STT</th>
+                                                                <th>Tên chi nhánh</th>
 
 
-                                                            <th>Địa chỉ</th>
-                                                            <th>Phường/xã</th>
-                                                            <th>Quận/huyện</th>
+                                                                <th>Địa chỉ</th>
+                                                                <th>Phường/xã</th>
+                                                                <th>Quận/huyện</th>
 
-                                                            <th>Tỉnh/thành phố</th>
+                                                                <th>Tỉnh/thành phố</th>
 
-                                                            <th>Hành động</th>
-                                                        </tr>
-                                                    </thead>
+                                                                <th>Hành động</th>
+                                                            </tr>
+                                                        </thead>
 
-                                                    <tbody>{this.showData(listBranch)}</tbody>
-                                                </table>
-                                            </div> :
-                                            <div style={{ fontSize: "15px", fontWeight: "bold", textAlign: "center" }}>Chi nhánh mặc định</div>
-                                        }
+                                                        <tbody>{this.showData(listBranch)}</tbody>
+                                                    </table>
+                                                </div> :
+                                                <div style={{ fontSize: "15px", fontWeight: "bold", textAlign: "center" }}>Chi nhánh mặc định</div>
+                                            }
 
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                                                                          : <NotAccess />}
+                                : <NotAccess />}
 
                         </div>
                         <Footer />
                     </div>
                     <ModalDelete store_code={store_code} id_branch={id_branch} brand_name={this.state.name} />
-                    <ModalCreate openModal = {openModal} resetModal = {this.resetModal} store_code={store_code} wards={wards} district={district} province={province} />
+                    <ModalCreate openModal={openModal} resetModal={this.resetModal} store_code={store_code} wards={wards} district={district} province={province} />
                     <ModalEdit store_code={store_code} wards={wards} district={district} province={province} modal={modal} />
                 </div>
             </div>

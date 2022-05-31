@@ -137,7 +137,7 @@ class PopupEdit extends Component {
                         style={{ display: "flex", justifyContent: "space-between" }}
                       >
                         <h4 className="h4 title_content mb-0 text-gray-800">
-                          Chỉnh sửa cửa hàng
+                          Chỉnh sửa quảng cáo
                         </h4>
                       </div>
                       <br></br>

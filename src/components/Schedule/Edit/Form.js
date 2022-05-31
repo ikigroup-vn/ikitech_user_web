@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import * as scheduleAction from "../../../actions/schedule";
 import Datetime from "react-datetime";
 import moment from "moment";
+import MomentInput from 'react-moment-input';
 
 import {shallowEqual} from "../../../ultis/shallowEqual"
 
@@ -10,13 +11,13 @@ class Form extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      day_of_month: "",
-      day_of_week: "",
+      day_of_month: 1,
+      day_of_week: 0,
       description: "",
       group_customer: "0",
       status: 0,
-      time_of_day: "",
-      time_run: "",
+      time_of_day: "00:00",
+      time_run: moment(),
       time_run_near: "",
       title: "",
       type_schedule: "0",
@@ -53,14 +54,17 @@ class Form extends Component {
   }
 
   onChange = (e) => {
-    var target = e.target;
-    var name = target.name;
-    var value = target.value;
+    var { value, name } = e.target
+    if(name == "type_schedule")
+    {
+      this.setState({ [name]: value , time_of_day : "00:00" })
 
-    this.setState({
-      [name]: value,
-    });
-  };
+    }else
+    {
+    this.setState({ [name]: value })
+    }
+
+  }
 
 
   showAllDayofMonth = () => {
@@ -78,11 +82,7 @@ class Form extends Component {
     }
   }
 
-  onChange = (e) => {
-    var { value, name } = e.target
-    this.setState({ [name]: value })
 
-  }
 
   onSave = (e) => {
     e.preventDefault();
@@ -251,14 +251,18 @@ class Form extends Component {
               <div class="form-group" >
                 <label for="product_name">Thời gian thông báo trong ngày</label>
 
-                <Datetime
-                  inputProps={{
-                    placeholder: "Chọn ngày (dd:mm:yyyy HH:mm:ss)",
-                  }}
-                  value={time_run}
-                  onChange={(e) => this.onChangeDate(e, "time_run")}
-                  dateFormat="DD-MM-YYYY"
-                  timeFormat = "HH:mm:ss"
+                <MomentInput
+                  value = {moment(time_run , "DD-MM-YYYY HH:mm")}
+                  format="DD-MM-YYYY HH:mm"
+                options={true}
+                enableInputClick={true}
+                monthSelect={true}
+                readOnly={true}
+                translations={
+                  { DATE: "Ngày", TIME: "Giờ", SAVE: "Lưu", HOURS: "Giờ", MINUTES: "Phút" }
+                }
+                onSave={() => { }}
+                onChange={(e) => this.onChangeDate(e, "time_run")}
                 />
 
               </div>
@@ -269,15 +273,23 @@ class Form extends Component {
               <div class="form-group">
                 <label for="product_name">Thời gian thông báo trong ngày</label>
 
-                <Datetime
-                  inputProps={{
-                    placeholder: "Chọn thời gian (HH:mm:ss)",
+                <MomentInput
+                  value = {moment(time_of_day , "HH:mm")}
+                  format="HH:mm"
+                  options={false}
+                  enableInputClick={true}
+                  readOnly={true}
+                  tab={1}
+
+                  translations={{
+              
+                    SAVE: "Lưu",
+                    HOURS: "Giờ",
+                    MINUTES: "Phút",
                   }}
-                  value={time_of_day}
+                  onSave={() => { }}
                   onChange={(e) => this.onChangeDate(e, "time_of_day")}
-                  dateFormat={false}
-                  timeFormat="HH:mm:ss"
-                />
+                                  />
 
               </div>
             </div>
@@ -289,7 +301,6 @@ class Form extends Component {
 
 
                 <select name="day_of_week" value = {day_of_week} onChange={this.onChange} id="input" class="form-control" >
-                  <option value="">-- Chọn thứ ---</option>
 
                   <option value="0">Thứ 2</option>
                   <option value="1">Thứ 3</option>
@@ -308,16 +319,23 @@ class Form extends Component {
               <div class="form-group">
                 <label for="product_name">Thời gian thông báo trong ngày</label>
 
-                <Datetime
-                  inputProps={{
-                    placeholder: "Chọn thời gian (HH:mm:ss)",
-                  }}
-                  value={time_of_day}
-                  onChange={(e) => this.onChangeDate(e, "time_of_day")}
-                  dateFormat={false}
-                  timeFormat="HH:mm:ss"
-                />
+                <MomentInput
+                  value = {moment(time_of_day , "HH:mm")}
+                  format="HH:mm"
+                  options={false}
+                  enableInputClick={true}
+                  readOnly={true}
+                  tab={1}
 
+                  translations={{
+              
+                    SAVE: "Lưu",
+                    HOURS: "Giờ",
+                    MINUTES: "Phút",
+                  }}
+                  onSave={() => { }}
+                  onChange={(e) => this.onChangeDate(e, "time_of_day")}
+                                  />
               </div>
             </div>
             <div className={disable_everyMonth}>
@@ -327,7 +345,6 @@ class Form extends Component {
 
 
                 <select name="day_of_month" value={day_of_month} onChange={this.onChange} id="input" class="form-control" >
-                  <option value="">-- Chọn ngày ---</option>
 
                   {this.showAllDayofMonth()}
                 </select>
@@ -337,15 +354,23 @@ class Form extends Component {
               <div class="form-group">
                 <label for="product_name">Thời gian thông báo trong ngày</label>
 
-                <Datetime
-                  inputProps={{
-                    placeholder: "HH:mm:ss",
+                <MomentInput
+                  value = {moment(time_of_day , "HH:mm")}
+                  format="HH:mm"
+                  options={false}
+                  enableInputClick={true}
+                  readOnly={true}
+                  tab={1}
+
+                  translations={{
+              
+                    SAVE: "Lưu",
+                    HOURS: "Giờ",
+                    MINUTES: "Phút",
                   }}
-                  value={time_of_day}
+                  onSave={() => { }}
                   onChange={(e) => this.onChangeDate(e, "time_of_day")}
-                  dateFormat={false}
-                  timeFormat="HH:mm:ss"
-                />
+                                  />
 
               </div>
 
@@ -356,23 +381,19 @@ class Form extends Component {
 
           </div>
           <div class="box-footer">
-            <button type="submit" class="btn btn-info btn-icon-split btn-sm">
-              <span class="icon text-white-50">
-                <i class="fas fa-save"></i>
-              </span>
-              <span class="text">Lưu</span>
-            </button>
-            <a
-              style={{ marginLeft: "10px" }}
-              onClick={this.goBack}
-              class="btn btn-warning"
-              class="btn btn-warning btn-icon-split  btn-sm"
-            >
-              <span class="icon text-white-50">
-                <i class="fas fa-arrow-left"></i>
-              </span>
-              <span class="text"> Trở về</span>
-            </a>
+          <button type = "submit" class="btn btn-info   btn-sm">
+                  <i class="fas fa-save"></i>  Lưu
+
+                </button>
+                <button
+                type = "button"
+                  style={{ marginLeft: "10px" }}
+                  onClick={this.goBack}
+                  class="btn btn-warning   btn-sm"
+                >
+                  <i class="fas fa-arrow-left"></i> Trở về
+
+                </button>
           </div>
 
         </form>
