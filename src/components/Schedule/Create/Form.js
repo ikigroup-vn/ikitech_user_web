@@ -216,10 +216,12 @@ class Form extends Component {
               </select>
 
             </div>
-
+         
             <div className={disable_oneDay}>
               <div class="form-group" >
                 <label for="product_name">Thời gian thông báo trong ngày</label>
+
+                <div className="set-top-moment">
                 <MomentInput
                   value = {moment(time_run , "DD-MM-YYYY HH:mm")}
                   format="DD-MM-YYYY HH:mm"
@@ -233,6 +235,7 @@ class Form extends Component {
                 onSave={() => { }}
                 onChange={(e) => this.onChangeDate(e, "time_run")}
                 />
+                </div>
                 {/* <Datetime
                   inputProps={{
                     placeholder: "Chọn ngày (dd:mm:yyyy hh:mm)",
@@ -251,7 +254,9 @@ class Form extends Component {
             <div className={disable_everyDay}>
 
               <div class="form-group">
-                <label for="product_name">Thời gian thông báo trong ngày</label>
+                <label for="product_name">Thời gian thông báo trong ngày</label>         
+                       <div className="set-top-moment">
+
                 <MomentInput
                   value = {moment(time_of_day , "HH:mm")}
                   format="HH:mm"
@@ -279,7 +284,9 @@ class Form extends Component {
                   timeFormat="HH:mm:ss"
                 /> */}
 
-              </div>
+              </div>          
+                  </div>
+
             </div>
 
             <div className={disable_everyWeek}>
@@ -306,6 +313,7 @@ class Form extends Component {
 
               <div class="form-group">
                 <label for="product_name">Thời gian thông báo trong ngày</label>
+                <div className="set-top-moment">
 
                 <MomentInput
                   value = {moment(time_of_day , "HH:mm")}
@@ -326,6 +334,8 @@ class Form extends Component {
                                   />
 
               </div>
+              </div>
+
             </div>
             <div className={disable_everyMonth}>
 
@@ -342,6 +352,7 @@ class Form extends Component {
               </div>
               <div class="form-group">
                 <label for="product_name">Thời gian thông báo trong ngày</label>
+                <div className="set-top-moment">
 
                 <MomentInput
                   value = {moment(time_of_day , "HH:mm")}
@@ -350,7 +361,6 @@ class Form extends Component {
                   enableInputClick={true}
                   readOnly={true}
                   tab={1}
-
                   translations={{
               
                     SAVE: "Lưu",
@@ -361,6 +371,7 @@ class Form extends Component {
                   onChange={(e) => this.onChangeDate(e, "time_of_day")}
                                   />
 
+              </div>
               </div>
 
             </div>
