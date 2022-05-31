@@ -74,7 +74,6 @@ class Form extends Component {
                 placeholder="Chọn từ ngày... đến ngày..."
                 format="dd/MM/yyyy"
                 width="100%"
-                min={new Date()}
                 value={datePrime.from + " đến " + datePrime.to}
                 onChange={this.onChangeDatePrime}
               />

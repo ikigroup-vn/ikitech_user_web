@@ -27,7 +27,7 @@ class ModalHistory extends Component {
                             padding: "0.5rem 1rem",
                             borderRadius: "0.5rem",
                             marginBottom: "0.5rem",
-                            width : "100%"
+                            width: "100%"
                         }}
                     >
                         <div>
@@ -40,18 +40,25 @@ class ModalHistory extends Component {
                                     color: "green",
                                 }}
                             ></span>
-                            <span style={{ color:  `${data.is_checkin == true ? "green" : "orange"}` , fontWeight: "bold" }}>
-                               {data.is_checkin == true ? "Vào làm:" : "Tan làm:" }  
+                            <span style={{ color: `${data.is_checkin == true ? "green" : "orange"}`, fontWeight: "bold" }}>
+                                {data.is_checkin == true ? "Vào làm:" : "Tan làm:"}
                             </span>
                             <span style={{ fontWeight: "bold" }}>
                                 {moment(data?.time_check).format(
                                     "HH:mm:ss"
                                 )}
-                                &nbsp;({data.is_bonus == true ?      <span style={{ color: "green" }}>
+                                &nbsp;{
+                                    data?.remote_timekeeping != true && (data.is_bonus == true ? <span style={{ color: "green" }}>
+                                        Thêm công
+                                    </span> : <span style={{ color: "red" }}>
+                                        Bớt công
+                                    </span>
+                                    )}
+                                {/* ({data.is_bonus == true ?      <span style={{ color: "green" }}>
                                 Thêm công
                             </span> :      <span style={{ color: "red" }}>
                                 Bớt công
-                            </span>})
+                            </span>}) */}
                             </span>
                         </div>
 
@@ -75,10 +82,16 @@ class ModalHistory extends Component {
                                     ? `Lý do: ${data?.reason}`
                                     : ""}
                             </span>
-                        
+                            <span style={{ color: "gray" , display : "block" }}>
+                                {data?.from_user
+                                    ? `Được tạo bởi: Quản lý ${data?.from_user_created?.name}`
+                                    : `Được tạo bởi:  Nhân viên ${data?.from_staff_created?.name}`}
+                                
+                            </span>
+
                         </div>
                     </div>
-             
+
 
                 </React.Fragment>
             )

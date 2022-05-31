@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import * as collaboratorAction from "../../../actions/collaborator";
 import { connect } from "react-redux";
 
+import themeData from "../../../ultis/theme_data";
 
 class ModalUpdate extends Component {
   constructor(props) {
@@ -30,8 +31,8 @@ class ModalUpdate extends Component {
     >
       <div class="modal-dialog" role="document">
         <div class="modal-content">
-          <div class="modal-header" style={{ background: "white" }}>
-            <button
+        <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+              <h4 style={{ color: "white" }}>Thông báo</h4>            <button
               type="button"
               class="close"
               data-dismiss="modal"
@@ -60,7 +61,7 @@ class ModalUpdate extends Component {
               >
                 Đóng
               </button>
-              <button type="submit" class="btn btn-info">
+              <button type="submit" class="btn btn-warning">
                 Xác nhận
                 
               </button>

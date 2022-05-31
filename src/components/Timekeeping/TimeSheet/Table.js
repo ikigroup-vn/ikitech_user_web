@@ -236,6 +236,12 @@ class Table extends Component {
                             ? `Lý do: ${data?.keeping_histories[0]?.reason}`
                             : ""}
                         </span>
+                        <span style={{ color: "gray" , display : "block" }}>
+                                {data?.keeping_histories[0]?.from_user
+                                    ? `Được tạo bởi: Quản lý ${data?.keeping_histories[0]?.from_user_created?.name}`
+                                    : `Được tạo bởi:  Nhân viên ${data?.keeping_histories[0]?.from_staff_created?.name}`}
+                                
+                            </span>
                       </div>
                     </div>
                     <div
@@ -278,6 +284,7 @@ class Table extends Component {
                       </div>
                     </div>
                   </td>
+              
 
                 </React.Fragment>
 
@@ -308,7 +315,17 @@ class Table extends Component {
               <td>
                 {formatNoD(data.salary_one_hour)}đ/h
               </td>
-
+              <td>
+                  { data?.keeping_histories[
+                              data?.keeping_histories.length - 1
+                            ]?.from_user
+                                    ? `Quản lý ${data?.keeping_histories[
+                                      data?.keeping_histories.length - 1
+                                    ]?.from_user_created?.name}`
+                                    : `Nhân viên ${data?.keeping_histories[
+                                      data?.keeping_histories.length - 1
+                                    ]?.from_staff_created?.name}`}
+                  </td>
             </tr>
           </React.Fragment>
         );
@@ -357,6 +374,7 @@ class Table extends Component {
                 )}
                 <td>Số giờ làm</td>
                 <td>Số tiền làm theo giờ</td>
+                <td>Tạo bởi</td>
 
                 {/* {this.props.typeDate == "DAY" ||
                   (this.props.typeDate == "OPTION" &&

@@ -3,9 +3,14 @@ import { connect } from "react-redux";
 import Pagination from "../../components/Product/Pagination"
 import * as Env from "../../ultis/default"
 import { format, formatNumber, contactOrNumber } from "../../ultis/helpers";
+import * as productAction from "../../actions/product";
+
 class ListProduct extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      searchValue : ""
+    }
 
 
   }
@@ -174,8 +179,22 @@ class ListProduct extends Component {
     return result;
   };
 
+  onChangeSearch = (e) => {
+    this.setState({ searchValue: e.target.value });
+  };
+
+  searchData = (e) => {
+    e.preventDefault();
+    var { store_code } = this.props;
+    var { searchValue } = this.state;
+    const branch_id = localStorage.getItem("branch_id");
+    var params = `&search=${searchValue}`;
+    this.props.fetchAllProductV2(store_code, branch_id, 1, params);
+  };
+
   render() {
     var { products, store_code } = this.props
+    var {searchValue} = this.state
     return (
       <div
         class="modal fade"
@@ -188,10 +207,34 @@ class ListProduct extends Component {
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content" style={{ maxHeight: "630px" }}>
             <div class="modal-header" style={{ background: "white" }}>
+            <h4 style={{ color: "black", display: "block" }}>Chọn sản phẩm</h4>
 
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
             </div>
+            <form style={{marginTop : "10px"}} onSubmit={this.searchData}>
+              <div
+                class="input-group mb-6"
+                style={{ padding: "0 20px" }}
+              >
+                <input
+                  style={{ maxWidth: "280px", minWidth: "150px" }}
+                  type="search"
+                  name="txtSearch"
+                  value={searchValue}
+                  onChange={this.onChangeSearch}
+                  class="form-control"
+                  placeholder="Tìm kiếm sản phẩm"
+                />
+                <div class="input-group-append">
+                  <button class="btn btn-primary" type="submit">
+                    <i class="fa fa-search"></i>
+                  </button>
+                </div>
+              </div>
+        
+            </form>
+
             <div class="table-responsive">
               <table class="table  table-hover table-border" style={{ color: "black" }}>
                 <thead>
@@ -235,7 +278,11 @@ class ListProduct extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-
+    fetchAllProductV2: (store_code, branch_id, page, params) => {
+      dispatch(
+        productAction.fetchAllProductV2(store_code, branch_id, page, params)
+      );
+    },
   };
 };
 export default connect(null, mapDispatchToProps)(ListProduct);

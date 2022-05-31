@@ -53,7 +53,21 @@ class Form extends Component {
           type: "danger",
           title: "Lỗi",
           disable: "show",
-          content: "Vui lòng chọn Banner quảng cáo",
+          content: "Vui lòng chọn hình ảnh quảng cáo",
+        },
+      }
+      )
+      return;
+    }
+    if (title == null || !isEmpty(title)) {
+      this.props.showError({
+
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Tiêu đề không được để trống",
         },
       }
       )
