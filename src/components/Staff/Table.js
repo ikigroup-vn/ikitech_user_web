@@ -7,75 +7,77 @@ class Table extends Component {
     super(props);
   }
 
-  passDataModal = (event,store_code,name) => {
-    this.props.handleDelCallBack({table : "Nhân viên" , id : store_code,name:name });
+  passDataModal = (event, store_code, name) => {
+    this.props.handleDelCallBack({ table: "Nhân viên", id: store_code, name: name });
     event.preventDefault();
-}
+  }
 
   showData = (staff) => {
     console.log(staff)
-    var {store_code} = this.props
+    var { store_code } = this.props
     var result = null;
     if (staff.length > 0) {
-      var {update , _delete} = this.props
+      var { update, _delete } = this.props
 
       result = staff.map((data, index) => {
-       
-        var decentralization = typeof data.decentralization  != "undefined" && data.decentralization != null    ?  data.decentralization.name : ""
+
+        var decentralization = typeof data.decentralization != "undefined" && data.decentralization != null ? data.decentralization.name : ""
 
         return (
-          <tr className = "hover-product">
+          <tr className="hover-product">
             <td>{index + 1}</td>
             <td>
-            {data.name}
+              {data.name}
 
             </td>
 
             <td>{data.username}</td>
             <td>{data.phone_number}</td>
 
-            
-            <td>{data.email}</td>
+
             <td>{data.salary_one_hour != null ? format(data.salary_one_hour) : ""}</td>
             <td>{decentralization}</td>
- <td style={{ textAlign: "center" }}>
+            <td style={{ textAlign: "center" }}>
               {data.online ? (
-                <>
-                  <span
+
+                <div style={{ display: "flex" }}>
+                  <div
                     style={{
                       background: "green",
-                      padding: "0.005px 8px",
+                      height: "16px",
+                      width: "16px",
                       borderRadius: "50%",
-                      marginRight: "0.3rem",
+                      marginTop: "2px",
+                      marginRight: "6px"
+
                     }}
                   >
-                    {" "}
-                  </span>
-                  <span>Online</span>
-                </>
+                  </div>
+
+                  <div>Online</div>
+                </div>
               ) : (
-                <>
-                  <span
+                <div style={{ display: "flex" }}>
+                  <div
                     style={{
                       background: "red",
-                      padding: "0.005px 8px",
+                      height: "16px",
+                      width: "16px",
                       borderRadius: "50%",
-                      marginRight: "0.3rem",
+                      marginTop: "2px",
+                      marginRight: "6px"
+
                     }}
                   >
-                    {" "}
-                  </span>
-                  <span>Offline</span>
-                </>
+                  </div>
+
+                  <div>Offline</div>
+                </div>
               )}
             </td>
 
 
-            <td style = {{
-              display: "flex",
-              justifyContent: "space-around"
-          
-            }}>
+            <td >
               <Link
                 to={`/staff/edit/${store_code}/${data.id}`}
                 class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
@@ -83,7 +85,8 @@ class Table extends Component {
                 <i class="fa fa-edit"></i> Sửa
               </Link>
               <button
-              onClick = {(e)=>this.passDataModal(e,data.id,data.name)}
+                style={{ marginLeft: "10px" }}
+                onClick={(e) => this.passDataModal(e, data.id, data.name)}
                 data-toggle="modal"
                 data-target="#removeModal"
                 class={`btn btn-danger btn-sm ${_delete == true ? "show" : "hide"}`}
@@ -91,7 +94,7 @@ class Table extends Component {
                 <i class="fa fa-trash"></i> Xóa
               </button>
             </td>
-          </tr>
+          </tr >
         );
       });
     } else {
@@ -110,9 +113,8 @@ class Table extends Component {
               <th>Họ và tên</th>
 
               <th>Tên tài khoản</th>
-                            <th>Số điện thoại</th>
+              <th>Số điện thoại</th>
 
-              <th>Email</th>
               <th>Lương theo giờ</th>
 
               <th>Vai trò</th>

@@ -12,10 +12,12 @@ class ListReview extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      valueSearchStar : "",
-      isSearchStar  :false,
-      isSearchStatus : false,
-      valueSearchStatus : ""
+      valueSearchStar: "",
+      isSearchStar: false,
+      isSearchStatus: false,
+      valueSearchStatus: "",
+      filter_by_stars: null,
+      filter_by_status: null,
     }
   }
 
@@ -29,28 +31,40 @@ class ListReview extends Component {
     this.props.changeStatus(store_code, id, { status: status });
   };
 
-  componentDidMount(){
+  componentDidMount() {
     helper.loadExpandTable()
 
   }
 
-  shouldComponentUpdate(nextProps, nextState){
-    if(nextState.valueSearchStar != this.state.valueSearchStar)
-    {
-      this.setState({isSearchStar : true})
+
+
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextState.valueSearchStar != this.state.valueSearchStar) {
+      this.setState({ isSearchStar: true })
     }
-    
-    
+    if ((this.props.filter_by != nextProps.filter_by) || (this.props.filter_by_value != nextProps.filter_by_value)) {
+      var { filter_by, filter_by_value } = nextProps
+      if (filter_by == "status") {
+        this.setState({ filter_by_status: filter_by_value, filter_by_stars: "" })
+      }
+      if (filter_by == "stars") {
+        this.setState({ filter_by_stars: filter_by_value, filter_by_status: "" })
+
+      }
+    }
+
+
     return true
   }
 
 
   showListImg = (imgs) => {
-    var result = <span>Không có hình ảnh nào</span>;
+    var result = <span   style={{ padding: "10px" }}>Không có hình ảnh nào</span>;
     if (typeof imgs == "undefined") {
       return result;
     }
-    if (imgs.length > 0) {
+    if (imgs.length == 0) {
       result = imgs.map((data, index) => {
         return (
           <div>
@@ -75,7 +89,7 @@ class ListReview extends Component {
       return result;
     }
     if (reviews.length > 0) {
-      var {censorship} = this.props
+      var { censorship } = this.props
       result = reviews.map((data, index) => {
 
         var image_product = "";
@@ -104,39 +118,41 @@ class ListReview extends Component {
           data.status == 0
             ? "Đang chờ"
             : data.status == 1
-            ? "Đã duyệt"
-            : "Đã hủy";
+              ? "Đã duyệt"
+              : "Đã hủy";
         var _status =
           data.status == 0
             ? "secondary"
             : data.status == 1
-            ? "success"
-            : "danger";
+              ? "success"
+              : "danger";
         var disable_Confirm =
           data.status == 0 || data.status == -1 ? "show" : "hide";
+          var disable_Delete =
+          data.status == -1 ? "show" : "hide";
         var disable_Cancel =
           data.status == 0 || data.status == 1 ? "show" : "hide";
-          var {isSearchStar , isSearchStatus , valueSearchStar , valueSearchStatus} = this.state
-          console.log(isSearchStar , isSearchStatus , valueSearchStar , valueSearchStatus)
-          var searchStar = ""
-          var searchStatus = ""
-          if(isSearchStar)
-          {
-            if(valueSearchStar == "")
-            searchStar = "show"
-            else
-            searchStar = Number(valueSearchStar) == data.stars ? "show" : "hide"
-          }
-          if(isSearchStatus)
-          {
-            if(valueSearchStatus == "")
-            searchStatus = "show"
-            else
-            searchStatus = Number(valueSearchStatus) == data.status ? "show" : "hide"
-          }
+        var { isSearchStar, isSearchStatus, valueSearchStar, valueSearchStatus } = this.state
+        console.log(isSearchStar, isSearchStatus, valueSearchStar, valueSearchStatus)
+        // var searchStar = ""
+        // var searchStatus = ""
+        // if(isSearchStar)
+        // {
+        //   if(valueSearchStar == "")
+        //   searchStar = "show"
+        //   else
+        //   searchStar = Number(valueSearchStar) == data.stars ? "show" : "hide"
+        // }
+        // if(isSearchStatus)
+        // {
+        //   if(valueSearchStatus == "")
+        //   searchStatus = "show"
+        //   else
+        //   searchStatus = Number(valueSearchStatus) == data.status ? "show" : "hide"
+        // }
         return (
           <React.Fragment>
-            <tr class={`sub-container ${searchStar} ${searchStatus}`}>
+            <tr class={`sub-container hover-product `} >
               <td>
                 <button
                   type="button"
@@ -157,34 +173,58 @@ class ListReview extends Component {
                   alt="Image"
                 />
               </td>
-              <td>
+              <td style={{
+                display: "flex",
+                "justify-content": "center"
+              }}>
                 <Stars num={data.stars} />
               </td>
               <td>
                 <span
                   style={{ fontSize: "14px" }}
-                  class={`badge badge-${_status}`}
+                  class={`${_status}`}
                 >
                   {status}
                 </span>
               </td>
-              <td>{time}</td>
               <td>
-                <a
+                <button
                   style={{ marginLeft: "10px" }}
                   onClick={(e) => this.passDeleteFunc(e, data.id)}
                   data-toggle="modal"
                   data-target="#removeModal"
-                  class={`btn btn-danger btn-sm ${censorship == true ? "show" : "hide"}`}
+                  class={`btn btn-danger btn-sm ${disable_Delete} ${censorship == true ? "show" : "hide"}`}
                 >
                   <i class="fa fa-trash"></i> Xóa
-                </a>
+                </button>
+                <button
+                                style = {{marginLeft : "10px"}}
+
+                  type="submit"
+                  class={`btn btn-info  btn-sm ${disable_Confirm} ${censorship == true ? "show" : "hide"}`}
+                  onClick={() => {
+                    this.changeStatus(data.id, 1);
+                  }}
+                >
+                    <i class="fas fa-check"></i>                 Duyệt
+
+                </button>
+                <button
+                style = {{marginLeft : "10px"}}
+                  onClick={() => {
+                    this.changeStatus(data.id, -1);
+                  }}
+                  class={`btn btn-warning  btn-sm ${disable_Cancel} ${censorship == true ? "show" : "hide"} `}
+                >
+                    <i class="fas fa-times"></i>Hủy
+                 
+                </button>
               </td>
             </tr>
             <tr class="explode hide" style={{ background: "rgb(200 234 222)" }}>
               <td colSpan={8}>
                 <div class="row">
-                  <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                  <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
                     <div class="info_user">
                       <img
                         style={{ marginBottom: "10px" }}
@@ -204,7 +244,7 @@ class ListReview extends Component {
                         <span id="user_tel">{data.customer.phone_number}</span>
                       </p>
                     </div>
-                    <div class="box-footer">
+                    {/* <div class="box-footer">
                       <button
                         style={{ marginRight: "10px" }}
                         type="submit"
@@ -229,24 +269,27 @@ class ListReview extends Component {
                         </span>
                         <span class="text">Hủy</span>
                       </a>
-                    </div>
+                    </div> */}
                   </div>
                   <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
                     <div class="info_user">
+
                       <p class="sale_user_label" id="sale_user_name">
                         Nội dung: <span id="user_name"> {data.content} </span>
                       </p>
                       <p class="sale_user_label" id="sale_user_name">
                         Hình ảnh:
                       </p>
-
                       <div class="row">{this.showListImg(image_review)}</div>
+                      <p class="sale_user_label" id="sale_user_name">
+                        Thời gian: {time}
+                      </p>
                     </div>
                   </div>
                 </div>
               </td>
             </tr>
-        
+
           </React.Fragment>
         );
       });
@@ -256,24 +299,32 @@ class ListReview extends Component {
     return result;
   };
 
-  searchStars = (e) =>{
+  searchStars = (e) => {
+    var { getParams, store_code } = this.props
     var value = e.target.value
-    this.setState({valueSearchStar : value , isSearchStar : true , isSearchStatus : false})
+    var params = getParams("stars", value)
+    this.props.fetchAllReview(store_code, 1, params);
+
+    this.setState({ filter_by_stars: value, filter_by_status: "" })
 
   }
-  searchStatus = (e) =>{
+  searchStatus = (e) => {
+    var { getParams, store_code } = this.props
     var value = e.target.value
-    this.setState({valueSearchStatus : value , isSearchStar : false , isSearchStatus : true})
+    var params = getParams("status", value)
+    this.props.fetchAllReview(store_code, 1, params);
+    this.setState({ filter_by_status: value, filter_by_stars: "" })
 
   }
   componentDidUpdate(prevProps, prevState) {
 
-      helper.loadExpandTable()
+    helper.loadExpandTable()
   }
 
   render() {
     var { reviews } = this.props;
     var reviews = typeof reviews.data == "undefined" ? [] : reviews.data;
+    var { filter_by_stars, filter_by_status } = this.state
     return (
       <table class="table table-border">
         <thead>
@@ -282,8 +333,13 @@ class ListReview extends Component {
             <th>Họ tên</th>
             <th>Tên sản phẩm</th>
             <th>Ảnh sản phẩm</th>
-            <th>
-              <select style={{ height: "27px" }} name="" id="input" onChange = {this.searchStars}>
+            <th style={{
+              display: "flex",
+              "justify-content": "center"
+            }}>
+              <select value={filter_by_stars} style={{ maxWidth: "150px" }} name="" id="input" className="form-control" onChange={this.searchStars}>
+                <option value="" disabled>-- Sao đánh giá --</option>
+
                 <option value="">Tất cả sao</option>
                 <option value="5">5 sao</option>
                 <option value="4">4 sao</option>
@@ -293,16 +349,16 @@ class ListReview extends Component {
               </select>
             </th>
             <th>
-              <select style={{ height: "27px" }} name="" id="input" onChange = {this.searchStatus}>
+              Trạng thái
+              {/* <select value = {filter_by_status} style={{ height: "27px" }} name="" id="input" onChange = {this.searchStatus}>
                 <option value="">Tất cả trạng thái</option>
-                <option value="0">Chưa duyệt</option>
                 <option value="1">Đã duyệt</option>
+                <option value="0">Chờ xác nhận</option>
                 <option value="-1">Đã hủy</option>{" "}
-              </select>
+              </select> */}
             </th>
 
-            <th>Thời gian</th>
-            <th>Hành động</th>
+            <th style ={{paddingLeft : "25px"}}>Hành động</th>
           </tr>
         </thead>
         <tbody>{this.showData(reviews)}</tbody>
@@ -315,6 +371,9 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     changeStatus: (store_code, id, data) => {
       dispatch(reviewAction.changeStatus(store_code, id, data));
+    },
+    fetchAllReview: (store_code, page, params) => {
+      dispatch(reviewAction.fetchAllReview(store_code, page, params));
     },
   };
 };

@@ -99,7 +99,7 @@ class ModalSendImg extends Component {
                         >
                             <div className="modal-body">
                                 <form enctype="multipart/form-data">
-                                    <div className="form-group upload-list-product">
+                                    <div className="form-group ">
                                         <div className="file-loading">
                                             <input
                                                 multiple
@@ -122,7 +122,7 @@ class ModalSendImg extends Component {
                                     Đóng
                                 </button>
                                 <button type="submit" class="btn btn-warning">
-                                    <i class="fa fa-upload"></i>
+                                    {/* <i class="fa fa-upload"></i> */}
 
                                     Upload
                                 </button>

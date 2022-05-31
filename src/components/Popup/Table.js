@@ -42,7 +42,7 @@ class Table extends Component {
             </td>
 
 
-            <td style={{ textAlign: "initial" }} className="status_check"><i class={`fas fa-${is_show_once} ${is_show_once + "-status"} `}></i></td>
+            <td style={{ textAlign: "center" }} className="status_check"><i class={`fas fa-${is_show_once} ${is_show_once + "-status"} `}></i></td>
 
 
 
@@ -52,7 +52,7 @@ class Table extends Component {
                 to={`/popup/edit/${store_code}/${data.id}`}
                 class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
               >
-                <i class="fa fa-edit"></i> Chỉnh sửa
+                <i class="fa fa-edit"></i> Sửa
               </Link>
 
               <button
@@ -84,7 +84,7 @@ class Table extends Component {
               <th>STT</th>
               <th>Hình ảnh</th>
               <th>Loại Popup</th>
-              <th>Hiển thị 1 lần</th>
+              <th style={{ textAlign: "center" }} >Hiển thị 1 lần</th>
 
               <th>Hành động</th>
             </tr>

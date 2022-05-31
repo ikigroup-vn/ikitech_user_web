@@ -405,7 +405,7 @@ class ModalCreate extends Component {
                                 >
                                     Đóng
                                 </button>
-                                <button type="submit" style={{ backgroundColor: themeData().backgroundColor }} onClick={this.handleOnClick} class="btn btn-info">
+                                <button type="submit" onClick={this.handleOnClick} class="btn btn-warning">
                                     Tạo
                                 </button>
                             </div>

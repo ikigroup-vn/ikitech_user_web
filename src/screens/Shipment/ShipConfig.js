@@ -158,7 +158,7 @@ render() {
             {use_fee_from_partnership === false && is_calculate_ship &&
                 <React.Fragment>
                     <div class="form-group">
-                        <label for="product_name">Danh sách các tỉnh áp dụng phí cố định nội thành ({provices?.length ?? 0})</label>
+                        <label for="product_name">Danh sách các tỉnh áp dụng phí cố định nội thành ({proviceOptions?.length ?? 0} tỉnh)</label>
                         <Select
                             placeholder="-- Danh sách các tỉnh --"
                             value={proviceOptions}

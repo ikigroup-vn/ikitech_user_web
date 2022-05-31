@@ -78,6 +78,14 @@ export const sendMessage = (store_code, customerId, message) => {
             });
           }
           else {
+            chatApi.fetchAllChat(store_code , 1).then((res) => {
+
+              if(res.data.code !== 401)
+              dispatch({
+                type: Types.FETCH_ALL_CHAT,
+                data: res.data.data,
+              });
+            });
             dispatch({
               type: Types.FETCH_ID_CHAT_USER,
               data: {

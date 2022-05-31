@@ -84,7 +84,7 @@ class TransferStock extends Component {
                         <td>{item.code}</td>
                         <td>{item.from_branch?.name}</td>
                         <td>{item.to_branch?.name}</td>
-                        <td className={item.status == 2 ? "success" : item.status == 0 ? "secondary" : "danger"}>{item.status == 2 ? "Đã nhận hàng" : item.status == 0 ? "Chờ nhận hàng" : "Hủy"}</td>
+                        <td className={item.status == 2 ? "success" : item.status == 0 ? "secondary" : "danger"}>{item.status == 2 ? "Đã nhận hàng" : item.status == 0 ? "Chờ nhận hàng" : "Đã hủy"}</td>
                         <td>{datetime}</td>
 
                     </tr>
@@ -137,7 +137,7 @@ class TransferStock extends Component {
                         </form>
 
                     </div>
-                    <Link to={`/transfer_stock/create/${store_code}`}  >
+                    {/* <Link to={`/transfer_stock/create/${store_code}`}  >
                         <div
                             class="btn btn-info btn-icon-split btn-sm show"
                         >
@@ -149,7 +149,7 @@ class TransferStock extends Component {
                             >Tạo đơn nhập hàng</span>
                         </div>
 
-                    </Link>
+                    </Link> */}
                 </div>
 
                 <br></br>

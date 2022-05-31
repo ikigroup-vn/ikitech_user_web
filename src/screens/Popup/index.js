@@ -92,7 +92,7 @@ class Popup extends Component {
                 <div className="card shadow mb-4">
                   <div className="card-header py-3">
                     <h6 className="m-0 title_content font-weight-bold text-primary">
-                      Danh sách thông báo
+                      Danh sách popup thông báo
                     </h6>
                   </div>
                   <div className="card-body">

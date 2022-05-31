@@ -66,11 +66,11 @@ class Table extends Component {
             <td>{date == "Thứ 8" ? "Chủ Nhật" : date}</td>
             <td>{time}</td>
 
-            <td> <h5>
-              <span class={`badge badge-${status}`}>
+            <td> 
+              <span class={`${status}`}>
                 {status_name}
               </span>
-            </h5></td>
+            </td>
 
 
 

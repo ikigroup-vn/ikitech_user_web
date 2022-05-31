@@ -23,6 +23,8 @@ class Store extends Component {
       modalremove: {
         title: "",
         id: "",
+        filter_by: null,
+        filter_by_value: null
       },
     }
   }
@@ -36,78 +38,94 @@ class Store extends Component {
     this.props.fetchAllReview(this.props.match.params.store_code);
 
   }
-  componentDidUpdate(){
+  componentDidUpdate() {
     if (this.state.isLoading != true && typeof this.props.permission.product_list != "undefined") {
       var permissions = this.props.permission
-      var censorship  = permissions.customer_review_censorship 
+      var censorship = permissions.customer_review_censorship
       var isShow = permissions.customer_review_list
 
 
-      this.setState({ isLoading: true , censorship,isShow })
+      this.setState({ isLoading: true, censorship, isShow })
 
     }
+  }
+
+  passFilter  = (filter_by, filter_by_value) =>{
+    this.setState({filter_by, filter_by_value})
+  }
+
+  getParams = (filter_by, filter_by_value) => {
+    var params = ``;
+    if (filter_by != "" && filter_by != null && filter_by_value != "" && filter_by_value != null) {
+      params = params + `&filter_by=${filter_by}&filter_by_value=${filter_by_value}`;
+    }
+
+    return params
   }
 
   render() {
     var { store_code } = this.props.match.params;
     var { alert, reviews } = this.props
-    var { modalremove , censorship,isShow } = this.state
+    var { modalremove, censorship, isShow ,filter_by_value ,filter_by} = this.state
     if (this.props.auth) {
       return (
         <div id="wrapper">
           <Sidebar store_code={store_code} />
-<div className="col-10 col-10-wrapper">
+          <div className="col-10 col-10-wrapper">
 
-          <div id="content-wrapper" className="d-flex flex-column">
-            <div id="content">
-              <Topbar store_code={store_code} />
-              {typeof isShow == "undefined" ?             <div style = {{height : "500px"}}></div> :
- isShow == true ?
+            <div id="content-wrapper" className="d-flex flex-column">
+              <div id="content">
+                <Topbar store_code={store_code} />
+                {typeof isShow == "undefined" ? <div style={{ height: "500px" }}></div> :
+                  isShow == true ?
 
-              <div class="container-fluid">
-                <Alert
-                  type={Types.ALERT_UID_STATUS}
-                  alert={alert}
-                />
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <h4 className="h4 title_content mb-0 text-gray-800">
-                    Đánh giá</h4>
+                    <div class="container-fluid">
+                      <Alert
+                        type={Types.ALERT_UID_STATUS}
+                        alert={alert}
+                      />
+                      <div
+                        style={{ display: "flex", justifyContent: "space-between" }}
+                      >
+                        <h4 className="h4 title_content mb-0 text-gray-800">
+                          Đánh giá</h4>
 
-                </div>
-                <br></br>
+                      </div>
+                      <br></br>
 
-                <General reviews={reviews} store_code={store_code} />
+                      <General passFilter = {this.passFilter} reviews={reviews} store_code={store_code} />
 
-                <div class="card shadow mb-4">
-                  <div class="card-header py-3">
-                    <h6 class="m-0 font-weight-bold text-primary">
-                      Danh sách đánh giá
-                    </h6>
-                  </div>
-                  <div class="card-body">
-                    <ListReview
-                    censorship = {censorship}
-                      handleDelCallBack={this.handleDelCallBack}
-                      store_code={store_code}
-                      reviews={reviews}
-                    ></ListReview>
-                    <Pagination store_code={store_code} reviews={reviews} />
+                      <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                          <h6 class="m-0 font-weight-bold text-primary">
+                            Danh sách đánh giá
+                          </h6>
+                        </div>
+                        <div class="card-body">
+                          <ListReview
+                          filter_by = {filter_by}
+                          filter_by_value = {filter_by_value}
+                          getParams  = {this.getParams}
+                            censorship={censorship}
+                            handleDelCallBack={this.handleDelCallBack}
+                            store_code={store_code}
+                            reviews={reviews}
+                          ></ListReview>
+                          <Pagination store_code={store_code} reviews={reviews} />
 
-                  </div>
-                </div>
+                        </div>
+                      </div>
+                    </div>
+                    : <NotAccess />}
+
               </div>
-                                                            : <NotAccess/>}
 
+              <Footer />
             </div>
 
-            <Footer />
+            <ModalRemove modal={modalremove} store_code={store_code} />
+
           </div>
-
-          <ModalRemove modal={modalremove} store_code={store_code} />
-
-        </div>
         </div>
 
       );

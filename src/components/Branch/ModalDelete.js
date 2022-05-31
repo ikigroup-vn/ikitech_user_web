@@ -30,7 +30,7 @@ class ModalDelete extends Component {
             >
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
-                        <div class="modal-header" style={{ background: themeData().modalNoti }}>
+                        <div class="modal-header" style={{ background: themeData() }}>
                         <h5 class="modal-title">Thông báo</h5>
 
                      
@@ -63,7 +63,7 @@ class ModalDelete extends Component {
                                 >
                                     Đóng
                                 </button>
-                                <button type="submit" class="btn btn-yes-pos">
+                                <button type="submit" class="btn btn-warning">
                                     Xóa
 
                                 </button>

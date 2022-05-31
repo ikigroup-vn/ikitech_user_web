@@ -82,7 +82,8 @@ class Schedule extends Component {
                     <span class="icon text-white-50">
                       <i class="fas fa-plus"></i>
                     </span>
-                    <span class="text">Đặt lịch</span>
+                    <span class="text">Thêm lịch thông báo
+</span>
                   </Link>
                 </div>
 

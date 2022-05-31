@@ -198,7 +198,7 @@ class ChatBox extends Component {
 
         </div>
         <div className="col-md-8" style={{ height: "500px" }}>
-          <FormChat unRead = {this.checkRead()} listChat = {listChat} customerImg={customerImg} customerId={customerId} chat={chat} store_code={store_code} />
+          <FormChat isActive = {isActive} unRead = {this.checkRead()} listChat = {listChat} customerImg={customerImg} customerId={customerId} chat={chat} store_code={store_code} />
 
 
         </div>

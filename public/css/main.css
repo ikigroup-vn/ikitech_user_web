@@ -29,7 +29,43 @@
     cursor: pointer;
     /* color : #dddddd !important */
 }
+.mb-4-stars{
+    margin-bottom: 13px;
+ 
+}
+.container-review-stars{
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-left: 15px;
+    margin-right: 15px;
+    margin-bottom: 13px;
 
+}
+.file-input img{
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+}
+.sorting_asc::before{
+    content : "" !important
+}
+.sorting_asc::after{
+    content : "" !important
+}
+.container-review-stars i{
+  font-size: 1.5em !important;
+}
+.stars{
+      /* margin: 10px; */cursor: pointer;
+  
+}
+.review-stars
+{
+    /* margin: 10px; */cursor: pointer;
+    width : 19%
+}
 /*!
  * Project: 'pcmall';
  * Module: 'cart';
@@ -81,12 +117,19 @@
 {
     color : #e74a3b
 } 
+.card-header .row{
+    margin-right: 0px;
+    margin-left: 0px;
+}
 
 .dark {
     color : #5a5c69
 }
 .success{
     color : #1cc88a
+}
+.primary{
+    color : #4e73df
 }
 .shopee-button-solid:active {
     box-shadow: inset 0 2px 1px 0 rgba(0, 0, 0, .05)
@@ -5741,10 +5784,10 @@ button i {
 
 
 .IKIPOS .dataTables_wrapper .dataTables_paginate .paginate_button{
-    color : white !important
+    /* color : white !important */
 }
 .IKITECH .dataTables_wrapper .dataTables_paginate .paginate_button{
-    color : white !important
+    /* color : white !important */
 }
 
 .IKITECH .dataTables_paginate .current {
@@ -5756,7 +5799,20 @@ button i {
 .dataTables_paginate a:not(.active):hover {
     background-color: #dddfeb !important;
 }
+.dataTables_paginate a:hover {
+    background-color: #dddfeb !important;
+}
 
+.IKITECH  .dataTables_wrapper .dataTables_paginate .paginate_button:hover{
+    background: #dddfeb !important;
+    color : black !important
+
+}
+.IKIPOS  .dataTables_wrapper .dataTables_paginate .paginate_button:hover{
+    background: #dddfeb !important;
+    color : black !important
+
+}
 .label-value {
     min-width: 290px;
 }
@@ -6501,7 +6557,7 @@ p {
 }
 
 .checked-star {
-    color: blue
+    color: #ebeb04
 }
 
 .not-checked-star {

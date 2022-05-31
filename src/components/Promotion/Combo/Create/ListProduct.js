@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import Pagination from "../../../Product/Pagination"
-import { format } from "../../../../ultis/helpers"
+import { format, formatNumber, contactOrNumber } from "../../../../ultis/helpers";
 import themeData from "../../../../ultis/theme_data";
 import * as productAction from "../../../../actions/product";
 import * as Env from "../../../../ultis/default";
@@ -128,66 +128,74 @@ class ListProduct extends Component {
 
             <td>{data.name}</td>
 
-            <td>     <div>
-              {min_price === max_price ? (
-                format(
+            <td>
+        { product_discount == null &&
+          <div className="eea"
+          >
+            {min_price === max_price ? (
+              contactOrNumber(format(
+                Number(
+                  discount_percent == null
+                    ? min_price
+                    : min_price - min_price * discount_percent * 0.01
+                )
+              )
+              )) : distributes && distributes.length == 0 ? contactOrNumber(format(
+                Number(
+                  discount_percent == null
+                    ? min_price
+                    : min_price - min_price * discount_percent * 0.01
+                ))) : (
+              <div className="ae"
+              >
+                {format(
                   Number(
                     discount_percent == null
                       ? min_price
                       : min_price - min_price * discount_percent * 0.01
                   )
-                )
-              ) : distributes && distributes.length == 0 ? format(
-                Number(
-                  discount_percent == null
-                    ? min_price
-                    : min_price - min_price * discount_percent * 0.01
-                )) : (
-                <div>
-                  {format(
-                    Number(
-                      discount_percent == null
-                        ? min_price
-                        : min_price - min_price * discount_percent * 0.01
-                    )
-                  )}
-                  {" - "}
-                  {format(
-                    Number(
-                      discount_percent == null
-                        ? max_price
-                        : max_price - max_price * discount_percent * 0.01
-                    )
-                  )}
+                )}
+                {" - "}
+                {format(
+                  Number(
+                    discount_percent == null
+                      ? max_price
+                      : max_price - max_price * discount_percent * 0.01
+                  )
+                )}
+              </div>
+            )}
+          </div>
+          }
+
+          {product_discount && (
+            <div
+              className="a"
+              style={{
+                float: "left",
+              }}
+            >
+              {min_price === max_price ? (
+                contactOrNumber(format(Number(min_price)))
+              ) : (
+                <div className="row e">
+                  <div
+                    style={{
+                      // textDecoration: "line-through",
+                    }}
+                  >
+                    {format(Number(min_price))}
+                    {" - "}
+                    {format(Number(max_price))}
+                  </div>
+
+                  {/* <div className="discount e">&emsp; -{discount_percent}%</div> */}
                 </div>
               )}
             </div>
-
-              {product_discount && (
-                <div
-                  style={{
-                    float: "left",
-                  }}
-                >
-                  {min_price === max_price ? (
-                    format(Number(min_price))
-                  ) : (
-                    <div className="row">
-                      <div
-                        style={{
-                          textDecoration: "line-through",
-                        }}
-                      >
-                        {format(Number(min_price))}
-                        {" - "}
-                        {format(Number(max_price))}
-                      </div>
-
-                      <div className="discount">&emsp; -{discount_percent}%</div>
-                    </div>
-                  )}
-                </div>
-              )}</td>           
+          )}
+        </td>
+         
 
 
 
