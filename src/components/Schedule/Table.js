@@ -56,7 +56,7 @@ class Table extends Component {
             </td>
 
             <td>
-              {data.description}
+              {data.description == null|| data.description?.lengh == 0  ? null : data.description?.slice(0,15) + "..."}
 
             </td>
 

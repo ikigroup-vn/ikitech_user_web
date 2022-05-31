@@ -60,16 +60,16 @@ class ListReview extends Component {
 
 
   showListImg = (imgs) => {
-    var result = <span   style={{ padding: "10px" }}>Không có hình ảnh nào</span>;
+    var result = <span   >Không có hình ảnh nào</span>;
     if (typeof imgs == "undefined") {
       return result;
     }
-    if (imgs.length == 0) {
+    if (imgs.length > 0) {
       result = imgs.map((data, index) => {
         return (
           <div>
             <img
-              style={{ padding: "10px" }}
+              style={{ marginRight: "10px"  , marginBottom : "10px"}}
               src={data}
               class="img-responsive"
               width="120px"
@@ -271,7 +271,7 @@ class ListReview extends Component {
                       </a>
                     </div> */}
                   </div>
-                  <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+                  <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
                     <div class="info_user">
 
                       <p class="sale_user_label" id="sale_user_name">
@@ -280,7 +280,7 @@ class ListReview extends Component {
                       <p class="sale_user_label" id="sale_user_name">
                         Hình ảnh:
                       </p>
-                      <div class="row">{this.showListImg(image_review)}</div>
+                      <div class="" style = {{display : "flex" , flexWrap : "wrap"}}>{this.showListImg(image_review)}</div>
                       <p class="sale_user_label" id="sale_user_name">
                         Thời gian: {time}
                       </p>
@@ -338,7 +338,7 @@ class ListReview extends Component {
               "justify-content": "center"
             }}>
               <select value={filter_by_stars} style={{ maxWidth: "150px" }} name="" id="input" className="form-control" onChange={this.searchStars}>
-                <option value="" disabled>-- Sao đánh giá --</option>
+                <option  disabled>-- Sao đánh giá --</option>
 
                 <option value="">Tất cả sao</option>
                 <option value="5">5 sao</option>

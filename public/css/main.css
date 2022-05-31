@@ -5796,6 +5796,16 @@ button i {
     
 }
 
+
+.set-top-moment .r-input-moment{
+    display: block !important;
+
+    top: -310px !important;
+}
+.set-top-moment{
+  position: relative;
+}
+
 .dataTables_paginate a:not(.active):hover {
     background-color: #dddfeb !important;
 }
