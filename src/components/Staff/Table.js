@@ -77,7 +77,7 @@ class Table extends Component {
             </td>
 
 
-            <td >
+            <td style = {{display : "flex"}}>
               <Link
                 to={`/staff/edit/${store_code}/${data.id}`}
                 class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}

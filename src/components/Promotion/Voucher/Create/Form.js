@@ -145,7 +145,7 @@ class Form extends Component {
       return
     }
     var state = this.state;
-    if(state.txtValueDiscount == null || !isEmpty( state.txtValueDiscount))
+    if(state.txtValueDiscount == null || !isEmpty( state.txtValueDiscount) )
     {
       this.props.showError({
 
@@ -155,6 +155,21 @@ class Form extends Component {
           title: "Lỗi",
           disable: "show",
           content: "Vui lòng chọn giá trị giảm giá",
+        },
+      }
+      )
+      return;
+    }
+    if(state.txtDiscountType == 0 && formatNumber(state.txtValueLimitTotal) < formatNumber(state.txtValueDiscount))
+    {
+      this.props.showError({
+
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Giá trị voucher không thể vượt quá giá trị tối thiểu của đơn hàng",
         },
       }
       )

@@ -90,12 +90,13 @@ class General extends Component {
                             <div className="row no-gutters align-items-center">
                                 <div className="col mr-2">
                                     <div>
-                                        <Link className=" font-weight-bold text-warning text-uppercase mb-1" to={`/order/${store_code}/CUSTOMER_HAS_RETURNS?from=${moment().format("DD-MM-YYYY")}&to=${moment().format("DD-MM-YYYY")}`}>    Đơn hoàn trả
+                                        <Link className=" font-weight-bold text-warning text-uppercase mb-1" to={`/order/${store_code}/CUSTOMER_HAS_RETURNS?from=${moment().format("DD-MM-YYYY")}&to=${moment().format("DD-MM-YYYY")}`}>Đơn hoàn trả
 
                                         </Link>
 
                                     </div>
                                     <div className="h5 mb-0 font-weight-bold text-gray-800">{badges.orders_refunds}</div>
+
                                 </div>
                                 <div className="col-auto">
                                     <i className="fas fa-money-bill-alt fa-2x text-gray-300"></i>
@@ -198,7 +199,7 @@ class General extends Component {
                                 <div className="row no-gutters align-items-center">
                                     <div className="col mr-2">
                                         <div >
-                                            <Link className=" font-weight-bold text-secondary text-uppercase mb-1" to={`/product/index/${store_code}?is_near_out_of_stock=true`}>Sản phẩm sắp hết hàng
+                                            <Link className=" font-weight-bold text-secondary text-uppercase mb-1" to={`/product_inventory/index/${store_code}?is_near_out_of_stock=true`}>Sản phẩm sắp hết hàng
                                             </Link>
                                         </div>
                                         <div className="h5 mb-0 font-weight-bold text-gray-800">{badges.total_product_or_discount_nearly_out_stock}</div>

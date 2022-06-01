@@ -687,8 +687,8 @@ a{
 
 .item-detail-badges {
   font-size: 13 !important;
-  padding-top: 5px;
-  padding-bottom: 5px;
+  padding-top: 2px;
+  padding-bottom: 2px;
   font-weight: 500 !important;
   display: flex;
   justify-content: space-between;

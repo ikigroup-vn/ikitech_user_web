@@ -173,7 +173,7 @@ class Chart extends Component {
       var view_name = topten.view.length > 0 ? topten.view[0].product.name : ""
     }
     if (typeof topten.number_of_orders != "undefined") {
-      var number_of_orders = topten.number_of_orders.length > 0 ? topten.number_of_orders[0].total_items : 0
+      var number_of_orders = topten.number_of_orders.length > 0 ? topten.number_of_orders[0].number_of_orders : 0
       var number_of_orders_name = topten.number_of_orders.length > 0 ? topten.number_of_orders[0].product.name : ""
     }
     return (

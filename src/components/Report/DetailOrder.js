@@ -55,11 +55,11 @@ class BadgeTable extends Component {
                     <div class="form-group" style={{ fontSize: "15px" }}>
 
                         <div class="info-badge  badge-report" >
-                            <p class="" id="sale_user_name">
+                        <p class="report-detail " id="booking_time" >
                                 <a >Đã hoàn thành: </a> <span id="user_name">
                                     <span
+                                        style={{ paddingRight: "15px" }}
 
-                                        className="total-final"
                                     >
                                         {completed}
                                     </span>
@@ -72,12 +72,12 @@ class BadgeTable extends Component {
 
                                 </span>
                             </p>
-                            <p class="" id="delivery_address">
+                            <p class="report-detail " id="booking_time" >
                                 <a >Khách đã hủy: </a> <span id="user_address">
                                     <span
 
-                                        className="total-final"
-                                    >
+style={{ paddingRight: "15px" }}
+>
                                         {customer_cancelled}
                                     </span>
                                     <span
@@ -89,11 +89,11 @@ class BadgeTable extends Component {
 
                                 </span>
                             </p>
-                            <p class="">
+                            <p class="report-detail " id="booking_time" >
                                 <a> Đã trả hàng: </a> <span id="user_tel">
                                     <span
 
-                                        className="total-final"
+                                        style={{ paddingRight: "15px" }}
                                     >
                                         {customer_has_return}
                                     </span>
@@ -106,11 +106,11 @@ class BadgeTable extends Component {
 
                                 </span>
                             </p>
-                            <p class="">
+                            <p class="report-detail " id="booking_time" >
                                 <a >Chò trả hàng: </a><span id="user_tel">
                                     <span
 
-                                        className="total-final"
+                                        style={{ paddingRight: "15px" }}
                                     >
                                         {customer_returning}
                                     </span>
@@ -123,11 +123,11 @@ class BadgeTable extends Component {
 
                                 </span>
                             </p>
-                            <p class="" id="booking_time">
+                            <p class="report-detail " id="booking_time" >
                                 <a > Lỗi giao hàng: </a><span id="booking_time_txt">
                                     <span
 
-                                        className="total-final"
+                                        style={{ paddingRight: "15px" }}
                                     >
                                         {delivery_error}
                                     </span>
@@ -151,11 +151,11 @@ class BadgeTable extends Component {
                     <div class="form-group" style={{ fontSize: "15px" }}>
                         <div class="info-badge badge-report" >
 
-                            <p class="">
+                            <p class="report-detail">
                                 <a > Hết hàng:</a><span id="user_note">
                                     <span
 
-                                        className="total-final"
+                                        style={{ paddingRight: "15px" }}
                                     >
                                         {out_of_stock}
                                     </span>
@@ -169,12 +169,12 @@ class BadgeTable extends Component {
                                 </span>
                             </p>
 
-                            <p class="">
+                            <p class="report-detail">
                                 <a >Đang chuẩn bị hàng:</a>
                                 <span class="cart_payment_method">
                                     <span
 
-                                        className="total-final"
+                                        style={{ paddingRight: "15px" }}
                                     >
                                         {packing}
                                     </span>
@@ -189,12 +189,12 @@ class BadgeTable extends Component {
                                 </span>
                             </p>
 
-                            <p class="">
+                            <p class="report-detail">
                                 <a>Đang giao hàng:</a>
                                 <span class="cart_payment_method">
                                     <span
 
-                                        className="total-final"
+                                        style={{ paddingRight: "15px" }}
                                     >
                                         {shipping}
                                     </span>
@@ -207,12 +207,12 @@ class BadgeTable extends Component {
 
                                 </span>
                             </p>
-                            <p class="">
+                            <p class="report-detail">
                                 <a >Shop hủy:</a>
                                 <span class="cart_payment_method">
                                     <span
 
-                                        className="total-final"
+                                        style={{ paddingRight: "15px" }}
                                     >
                                         {user_cancelled}
                                     </span>
@@ -225,12 +225,12 @@ class BadgeTable extends Component {
 
                                 </span>
                             </p>
-                            <p class="">
+                            <p class="report-detail">
                                 <a >Chờ xử lý:</a>
                                 <span class="cart_payment_method">
                                     <span
 
-                                        className="total-final"
+                                        style={{ paddingRight: "15px" }}
                                     >
                                         {waiting_for_progress}
                                     </span>

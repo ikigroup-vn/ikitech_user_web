@@ -30,7 +30,7 @@ class TimeSheet extends Component {
       datePrime: "",
       typeDate: "DAY",
       reset: "",
-      resetModal : true
+      resetModal: true
     };
   }
 
@@ -128,6 +128,44 @@ class TimeSheet extends Component {
                     <h4 className="h4 title_content mb-0 text-gray-800">
                       Bảng công
                     </h4>{" "}
+
+
+                    <button
+                         data-toggle="modal"
+                         data-target="#modalDetail" type="button" onClick={(e) => {
+                           this.setState({
+                             resetModal: helper.randomString(10)
+                           });
+                         }}    
+                          class={`btn btn-info btn-icon-split btn-sm `}                       >
+                          <span class="icon text-white-50">
+                            <i class="fas fa-plus"></i>
+                          </span>
+                          <span class="text">Thêm bớt công</span>
+                        </button>
+
+                    {/* <button
+                      data-toggle="modal"
+                      data-target="#modalDetail" type="button" onClick={(e) => {
+                        this.setState({
+                          resetModal: helper.randomString(10)
+                        });
+                      }}         class="btn btn-info   btn-sm"        >
+                      <span class="icon text-white-50">
+                        <i class="fas fa-plus"></i>
+                      </span>
+                      <span class="text">Thêm bớt công</span>
+                    </button> */}
+                    {/* <button data-toggle="modal"
+                            data-target="#modalDetail" type="button" onClick={(e) => {
+                              this.setState({
+                                resetModal : helper.randomString(10)
+                              });
+                            }} class="btn btn-info   btn-sm">
+                            <i class="fas fa-plus"></i>  Thêm bớt công
+
+                          </button> */}
+
                   </div>
 
                   <br></br>
@@ -221,27 +259,16 @@ class TimeSheet extends Component {
 
                         </div>
 
-                        {
-                            datePrime.from === datePrime.to
-                          &&
-                          <button data-toggle="modal"
-                            data-target="#modalDetail" type="button" onClick={(e) => {
-                              this.setState({
-                                resetModal : helper.randomString(10)
-                              });
-                            }} class="btn btn-info   btn-sm">
-                            <i class="fas fa-plus"></i>  Thêm bớt công
 
-                          </button>
 
-                        }
+
 
                       </div>
                     </div>
 
                     <div className="card-body">
                       <Table
-                      resetModal = {this.state.resetModal}
+                        resetModal={this.state.resetModal}
                         store_code={store_code}
                         branch_id={branch_id}
                         timeSheet={timeSheet}
