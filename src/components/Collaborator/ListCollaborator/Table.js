@@ -201,11 +201,11 @@ class Table extends Component {
                         Tên chủ tài khoản:{" "}
                         <span id="user_tel">{data.account_name}</span>
                       </p>
-                      <p class="sale_user_label">
+                      {/* <p class="sale_user_label">
                         Gmail:{" "}
                         <span id="user_tel">             {data.customer.email == null ? "Trống" : data.customer.email}
                         </span>
-                      </p>
+                      </p> */}
                       <p class="sale_user_label">
                         Tiền thưởng:{" "}
                         <span id="user_tel">

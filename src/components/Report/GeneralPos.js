@@ -5,6 +5,7 @@ import * as notificationAction from "../../actions/notification";
 import { connect } from "react-redux";
 import getChannel, { IKITECH } from "../../ultis/channel";
 import { format } from "../../ultis/helpers";
+import moment from "moment";
 
 class General extends Component {
     constructor(props) {
@@ -65,7 +66,7 @@ class General extends Component {
                             <div className="row no-gutters align-items-center">
                                 <div className="col mr-2">
                                     <div className=" font-weight-bold text-primary text-uppercase mb-1">
-                                        <Link to={`/order/${store_code}`}>Đơn hàng</Link>
+                                        <Link to={`/order/${store_code}?from=${moment().format("DD-MM-YYYY")}&to=${moment().format("DD-MM-YYYY")}`}>Đơn hàng</Link>
                                     </div>
                                     <div className="h5 mb-0 font-weight-bold text-gray-800">{badges.total_orders_in_day}</div>
                                 </div>
@@ -90,7 +91,7 @@ class General extends Component {
                             <div className="row no-gutters align-items-center">
                                 <div className="col mr-2">
                                     <div>
-                                        <Link className=" font-weight-bold text-warning text-uppercase mb-1" to={`/order/${store_code}`}>    Đơn hoàn trả
+                                        <Link className=" font-weight-bold text-warning text-uppercase mb-1" to={`/order/${store_code}/CUSTOMER_HAS_RETURNS?from=${moment().format("DD-MM-YYYY")}&to=${moment().format("DD-MM-YYYY")}`}>    Đơn hoàn trả
 
                                         </Link>
 

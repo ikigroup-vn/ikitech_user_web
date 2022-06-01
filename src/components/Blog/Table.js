@@ -48,7 +48,7 @@ class Table extends Component {
             </td>
             <td>{data.count_view}</td>
 
-            <td>
+            <td style = {{display : "flex"}}>
               <Link
                 to={`/posts/edit/${store_code}/${data.id}`}
                 class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}

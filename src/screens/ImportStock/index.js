@@ -11,6 +11,7 @@ import moment from 'moment';
 import { format } from '../../ultis/helpers'
 import Pagination from '../../components/Import_stock/Pagination';
 import NotAccess from "../../components/Partials/NotAccess";
+import { getQueryParams } from "../../ultis/helpers"
 
 import history from "../../history";
 
@@ -18,13 +19,18 @@ class ImportStock extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            searchValue: ""
+            searchValue: "",
+            filterStatus : getQueryParams("status_list") || null,
         }
     }
     componentDidMount() {
         const { store_code } = this.props.match.params
         const branch_id = localStorage.getItem('branch_id')
-        this.props.fetchAllImportStock(store_code, branch_id)
+        var {filterStatus} = this.state
+        var params = ""
+        if(filterStatus)
+        params = params + `&status_list=${filterStatus}`
+        this.props.fetchAllImportStock(store_code, branch_id , 1 , params)
     }
     onChangeSearch = (e) => {
         this.setState({ searchValue: e.target.value });
@@ -96,7 +102,7 @@ class ImportStock extends Component {
     render() {
         const { store_code } = this.props.match.params
         const { listImportStock } = this.props
-        const { searchValue , isShow } = this.state
+        const { searchValue , isShow , filterStatus} = this.state
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
@@ -184,7 +190,7 @@ class ImportStock extends Component {
                                                 <tbody>{this.showData(listImportStock?.data, store_code)}</tbody>
                                             </table>
                                         </div>
-                                        <Pagination store_code={store_code} listImportStock={listImportStock} />
+                                        <Pagination filterStatus = {filterStatus} store_code={store_code} listImportStock={listImportStock} />
                                     </div>
                                 </div>
 

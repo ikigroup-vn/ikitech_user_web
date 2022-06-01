@@ -35,7 +35,7 @@ class BadgeTable extends Component {
             <div class="form-group" style={{ fontSize: "15px" }}>
                 <div class="info-badge" >
                     <p class="item-detail-badges" id="sale_user_name">
-                        <Link to={`/order/${store_code}/WAITING_FOR_PROGRESSING`}>Đơn kiểm cần xử lý </Link> <span id="user_name">
+                        <Link to={`/inventory/index/${store_code}?status=0`}>Đơn kiểm cần xử lý </Link> <span id="user_name">
                             <span
                               
                                 className={`step num-badge ${statusOrderWaiting}`}
@@ -46,7 +46,7 @@ class BadgeTable extends Component {
                         </span>
                     </p>
                     <p class="item-detail-badges" id="delivery_address">
-                        <Link to={`/order/${store_code}/PACKING`}>Đơn nhập cần xử lý</Link> <span id="user_address">
+                        <Link to={`/import_stocks/index/${store_code}?status_list=0,1,2`}>Đơn nhập cần xử lý</Link> <span id="user_address">
                               <span
                               
                                 className={`step num-badge ${statusOrderPacking}`}
@@ -55,7 +55,7 @@ class BadgeTable extends Component {
                             </span>
                         </span>
                     </p>
-                    <p class="item-detail-badges">
+                    {/* <p class="item-detail-badges">
                         <Link to={`/order/${store_code}/SHIPPING`}>Đơn chuyển kho cần xử lý</Link> <span id="user_tel">
                               <span
                               
@@ -64,7 +64,7 @@ class BadgeTable extends Component {
                                 {numOrderShipping}
                             </span>
                         </span>
-                    </p>
+                    </p> */}
                     <p class="item-detail-badges">
                         <Link to={`/chat/${store_code}`}>Tin nhắn chưa đọc </Link><span id="user_tel">
                               <span

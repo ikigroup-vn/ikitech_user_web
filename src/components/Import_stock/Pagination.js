@@ -12,7 +12,11 @@ class Pagination extends Component {
 
   passPagination = (page) => {
     const branch_id = getBranchId()
-    this.props.fetchAllImportStock(this.props.store_code,branch_id , page)    
+    var {filterStatus} = this.props
+    var params = ""
+    if(filterStatus)
+    params = params + `&status_list=${filterStatus}`
+    this.props.fetchAllImportStock(this.props.store_code,branch_id , page , params)    
 }
 
 
@@ -67,8 +71,8 @@ class Pagination extends Component {
 const mapDispatchToProps = (dispatch, props) => {
   return {
 
-    fetchAllImportStock: (store_code,branch_id , page) => {
-      dispatch(ImportAction.fetchAllImportStock(store_code,branch_id , page));
+    fetchAllImportStock: (store_code,branch_id , page , params) => {
+      dispatch(ImportAction.fetchAllImportStock(store_code,branch_id , page , params));
     },
   };
 };

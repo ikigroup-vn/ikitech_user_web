@@ -43,7 +43,7 @@ class BadgeTable extends Component {
         return (
             <div class="form-group" style={{ fontSize: "15px" }}>
                 <div class="info-badge  badge-report" >
-                    <p class="report-detail" id="sale_user_name">
+                    {/* <p class="report-detail" id="sale_user_name">
                         <a >Khách đã hủy: </a> <span id="user_name">
                             <span
 
@@ -53,13 +53,13 @@ class BadgeTable extends Component {
                             </span>
                             <span
 
-                                className={`step num-badge-report ${statusCustomerCancel}`}
+                                className={`step  ${statusCustomerCancel}`}
                             >
                                 {count_customer_cancelled}
                             </span>
 
                         </span>
-                    </p>
+                    </p> */}
                     <p class="report-detail" id="delivery_address">
                         <a >Đã thanh toán: </a> <span id="user_address">
                             <span
@@ -70,7 +70,7 @@ class BadgeTable extends Component {
                             </span>
                             <span
 
-                                className={`step num-badge-report ${statusPaid}`}
+                                className={`step  ${statusPaid}`}
                             >
                                 {count_paid}
                             </span>
@@ -87,7 +87,7 @@ class BadgeTable extends Component {
                             </span>
                             <span
 
-                                className={`step num-badge-report ${statusPartially}`}
+                                className={`step  ${statusPartially}`}
                             >
                                 {count_partially_paid}
                             </span>
@@ -104,7 +104,7 @@ class BadgeTable extends Component {
                             </span>
                             <span
 
-                                className={`step num-badge-report ${statusRefunds}`}
+                                className={`step  ${statusRefunds}`}
                             >
                                 {count_refunds}
                             </span>
@@ -121,14 +121,14 @@ class BadgeTable extends Component {
                             </span>
                             <span
 
-                                className={`step num-badge-report ${statusUnpaid}`}
+                                className={`step  ${statusUnpaid}`}
                             >
                                 {count_unpaid}
                             </span>
 
                         </span>
                     </p>
-                    <p class="report-detail" id="booking_time">
+                    {/* <p class="report-detail" id="booking_time">
                         <a > Chờ xử lý: </a><span id="booking_time_txt">
                             <span
 
@@ -138,13 +138,13 @@ class BadgeTable extends Component {
                             </span>
                             <span
 
-                                className={`step num-badge-report ${statusWaitingForProgress}`}
+                                className={`step  ${statusWaitingForProgress}`}
                             >
                                 {count_waitting_for_progressing}
                             </span>
 
                         </span>
-                    </p>
+                    </p> */}
 
                 </div>
 

@@ -11,7 +11,11 @@ class Pagination extends Component {
 
   passPagination = (page) => {
     const branch_id = localStorage.getItem("branch_id")
-    this.props.fetchAllInventory(this.props.store_code,branch_id , page)    
+    var {filterStatus} = this.props
+    var params = ""
+    if(filterStatus)
+    params = params + `&status=${filterStatus}`
+    this.props.fetchAllInventory(this.props.store_code,branch_id , page , params)    
 }
 
 

@@ -23,53 +23,32 @@ class Sidebar extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const location = window.location.pathname;
-    if (location.includes("/customer") || location.includes("/reward_point")) {
-      if (window.$(".customer-collapse").attr("aria-expanded") == "false")
-        window.$(`.customer-collapse`).trigger("click");
-    }
-    if (
-      location.includes("/discount") ||
-      location.includes("/voucher") ||
-      location.includes("/combo")
-    ) {
-      if (window.$(".promotion-collapse").attr("aria-expanded") == "false")
-        window.$(`.promotion-collapse`).trigger("click");
-    }
-    if (
-      location.includes("/shift") ||
-      location.includes("/work_schedule") ||
-      location.includes("/work_location")
-    ) {
-      if (window.$(".timekeeping-collapse").attr("aria-expanded") == "false")
-        window.$(`.timekeeping-collapse`).trigger("click");
-    }
-    if (
-      location.includes("/store_address") ||
-      location.includes("/shipment") ||
-      location.includes("/payment") ||
-      location.includes("/review")
-    ) {
-      if (window.$(".another-collapse").attr("aria-expanded") == "false")
-        window.$(`.another-collapse`).trigger("click");
-    }
-    if (
-      location.includes("/theme") ||
-      location.includes("/decentralization") ||
-      location.includes("/staff") ||
-      location.includes("/banner_ads")
-    ) {
-      if (window.$(".setting-collapse").attr("aria-expanded") == "false")
-        window.$(`.setting-collapse`).trigger("click");
-    }
+    console.log("open" , menu)
+    for (const item of menu[0]?.link) {
+      if (item.open) {
+        console.log("open" , item)
+        if(item.setOpenKey?.length > 0)
+        for (const element of item.setOpenKey
+        ) {
+          if (location.includes(element)) {
+            if (window.$(`.${item.open}-collapse`).attr("aria-expanded") == "false") {
+              window.$(`.${item.open}-collapse`).trigger("click");
+              return;
+            }
+          }
+        }
+      }
+    };
+   
   }
   setActiveLocation = (location) => {
     return location.includes("/create")
       ? location.replace("/create", "")
       : location.includes("/edit")
-      ? location.replace("/edit", "")
-      : location.includes("/detail")
-      ? location.replace("/detail", "")
-      : location;
+        ? location.replace("/edit", "")
+        : location.includes("/detail")
+          ? location.replace("/detail", "")
+          : location;
   };
 
   MenuLink_3 = (link) => {
@@ -92,12 +71,11 @@ class Sidebar extends Component {
               // var _class = this.props.permission
               return (
                 <Link
-                  className={`collapse-item  ${active} ${
-                    _class[link.class] == true ||
+                  className={`collapse-item  ${active} ${_class[link.class] == true ||
                     typeof link.class == "undefined" || link.class == null
-                      ? "show"
-                      : "hide"
-                  }`}
+                    ? "show"
+                    : "hide"
+                    }`}
                   to={link.to + "/" + this.props.store_code}
                 >
                   {link.name}
@@ -180,21 +158,20 @@ class Sidebar extends Component {
               );
               var active = isActive ? "active" : "";
               var displayWithTabItem = this.displayItemWithGroup(
-                link.itemHasTabName , link
+                link.itemHasTabName, link
               );
-              console.log(link,displayWithTabItem)
+              console.log(link, displayWithTabItem)
               return (
                 <li
-                  className={`nav-item   ${active} ${displayWithTabItem}  ${
-                    _class[link.class] == true ||
+                  className={`nav-item   ${active} ${displayWithTabItem}  ${_class[link.class] == true ||
                     (link.class == "isVip" &&
                       this.props.badges.config_user_vip != null &&
                       typeof this.props.badges.config_user_vip !=
-                        "undefined") ||
+                      "undefined") ||
                     typeof link.class == "undefined" || link.class == null || displayWithTabItem == "show"
-                      ? "show"
-                      : "hide"
-                  }`}
+                    ? "show"
+                    : "hide"
+                    }`}
                 >
                   <Link
                     className="nav-link"
@@ -214,28 +191,25 @@ class Sidebar extends Component {
     return result;
   };
 
-  displayItemWithGroup = (item , link) => {
+  displayItemWithGroup = (item, link) => {
     var _class = this.props.permission;
     console.log(link)
-    if(typeof link.class != "undefined")
-    {
-      if(Array.isArray(link.class))
-        {
-          var check = true
-          for (const data of link.class) {          
-            
-       
-            if(_class[data] == true)
-            {
-              check = false
-            }
+    if (typeof link.class != "undefined") {
+      if (Array.isArray(link.class)) {
+        var check = true
+        for (const data of link.class) {
+
+
+          if (_class[data] == true) {
+            check = false
           }
-          console.log(check)
-          var result = check==false ? "show" : "hide"
-
-          return result
-
         }
+        console.log(check)
+        var result = check == false ? "show" : "hide"
+
+        return result
+
+      }
     }
     if (typeof _class.collaborator_config == "undefined") {
       return "hide";
@@ -266,24 +240,22 @@ class Sidebar extends Component {
             : false;
         }
         console.log(item)
-        if (typeof item.class == "undefined" || item.class == null ) {
+        if (typeof item.class == "undefined" || item.class == null) {
           return false;
         }
-        else if(Array.isArray(item.class))
-        {
-          for (const data of item.class) {          
-            
+        else if (Array.isArray(item.class)) {
+          for (const data of item.class) {
+
             console.log(_class[data])
             var check = true
-            if(_class[data] == true)
-            {
+            if (_class[data] == true) {
               check = false
             }
           }
           return check
 
         }
-         else {
+        else {
           if (_class[item.class] == true) {
             return false;
           }

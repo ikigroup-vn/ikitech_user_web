@@ -32,11 +32,15 @@ export const ikitech_menu = [
      
       {
         name: "Sản phẩm",
+        setOpenKey : ["/product/"],
 
         icon: "fas fa-th-large",
-        open: "inventory",
+        open: "product",
         children: [
           {
+           
+
+
             class: "product_category_list",
             display: "hide",
             name: "Danh mục sản phẩm",
@@ -63,6 +67,7 @@ export const ikitech_menu = [
 
       {
         name: "Kho",
+        setOpenKey : ["/product_inventory/index" , "/inventory/index" , "/import_stocks/index" , "/transfer_stocks/index" , "/supplier" ],
 
         icon: "fas fa-store",
         open: "inventory",
@@ -108,9 +113,10 @@ export const ikitech_menu = [
 
       {
         name: "Tin tức - Bài viết",
+        setOpenKey : ["/posts/category" , "/posts/index"],
 
         icon: "fas fa-newspaper",
-        open: "post",
+        open: "posts",
         children: [
           {
             class: "product_category_list",
@@ -124,7 +130,7 @@ export const ikitech_menu = [
             display: "hide",
             name: "Tin tức - Bài viết",
             exact: true,
-            to: "/posts",
+            to: "/posts/index",
           },
 
           // {
@@ -140,6 +146,7 @@ export const ikitech_menu = [
    
       {
         name: "Báo cáo",
+        setOpenKey : ["/report" , "/report_"],
 
         icon: "fas fa-chart-bar",
         open: "report",
@@ -177,6 +184,7 @@ export const ikitech_menu = [
       }, 
       {
         name: "Kế toán",
+        setOpenKey : ["/revenue_expenditure" , "/time_sheet"],
 
         icon: "fas fa-coins",
         open: "revenue_expenditure",
@@ -205,7 +213,7 @@ export const ikitech_menu = [
       },
       {
         name: "Khách hàng",
-
+        setOpenKey : ["/customer" , "/reward_point" , "chat"],
         icon: "fas fa-user",
         open: "customer",
         children: [
@@ -235,7 +243,7 @@ export const ikitech_menu = [
       },
       {
         name: "Đối tác bán hàng",
-
+        setOpenKey : ["/collaborator" , "/agency"],
         icon: "fa fa-user",
         open: "setting2",
         children: [
@@ -273,7 +281,7 @@ export const ikitech_menu = [
         name: "Chấm công",
         icon: "fa fa-calendar",
         class: "timekeeping",
-        // open: "promotion",
+        setOpenKey : ["/shift" , "/calendar_shift" , "/time_sheet" , "/work_location" , "/request"],
         open: "timekeeping",
 
         children: [
@@ -334,6 +342,8 @@ export const ikitech_menu = [
         class: "promotion",
         name: "Chương trình khuyến mại",
         icon: "fas fa-money-bill-alt",
+        setOpenKey : ["/discount" , "/voucher" , "/combo" ],
+
         open: "promotion",
         children: [
           {
@@ -373,6 +383,8 @@ export const ikitech_menu = [
         name: "Cài đặt",
 
         icon: "fas fa-cogs",
+        setOpenKey : ["/theme" , "/branch/index" , "/staff/index" , "/decentralization/index" ],
+
         open: "setting",
         children: [
           {
@@ -431,6 +443,8 @@ export const ikitech_menu = [
         name: "Khác",
         icon: "fas fa-th-list",
         open: "another",
+        setOpenKey : ["/store_address" , "/shipment" , "payment" , "review" , "/notifications/schedule" , "popup"],
+
         children: [
           {
             name: "Địa chỉ giao vận",

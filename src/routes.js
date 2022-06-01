@@ -824,7 +824,7 @@ const routes = [
   },
   ////////////////////////
   {
-    path: "/posts/:store_code",
+    path: "/posts/index/:store_code",
     exact: true,
 
     main: ({ match }) => <Blog match={match} />,

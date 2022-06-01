@@ -96,7 +96,7 @@ class ModalUpload extends Component {
                 >
                   Đóng
                 </button>
-                <button type="submit" class="btn btn-info">
+                <button type="submit" class="btn btn-warning">
                   Upload
                 </button>
               </div>
