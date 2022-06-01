@@ -4,7 +4,8 @@ import Topbar from "../../components/Partials/Topbar";
 import Footer from "../../components/Partials/Footer";
 import ChartSales from "../../components/Report/ChartSales";
 import ChartTopTen from "../../components/Report/ChartTopTen";
-
+import * as agencyAction from "../../actions/agency";
+import * as customerAction from "../../actions/customer";
 
 import General from "../../components/Report/General";
 import GeneralPos from "../../components/Report/GeneralPos";
@@ -21,7 +22,7 @@ import * as helper from "../../ultis/helpers"
 import Alert from "../../components/Partials/Alert";
 import * as Types from "../../constants/ActionType";
 import NotAccess from "../../components/Partials/NotAccess";
-import getChannel , {IKIPOS , IKITECH} from "../../ultis/channel"
+import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel"
 class Report extends Component {
 
   constructor(props) {
@@ -38,9 +39,12 @@ class Report extends Component {
     var date = helper.getDateForChartDay()
     const branch_id = localStorage.getItem("branch_id")
     this.props.fetchDataId(store_code);
-    this.props.fetchTopTenProduct(store_code,branch_id, `?date_from=${date.from}&date_to=${date.to}`)
-    this.props.fetchOverview(store_code,branch_id, `?date_from=${date.from}&date_to=${date.to}`)
+    this.props.fetchTopTenProduct(store_code, branch_id, `?date_from=${date.from}&date_to=${date.to}`)
+    this.props.fetchOverview(store_code, branch_id, `?date_from=${date.from}&date_to=${date.to}`)
     this.props.fetchAllCollaborator(store_code);
+    this.props.fetchAllAgency(store_code, 1, null)
+    this.props.fetchAllCustomer(store_code, 1, null);
+
 
   }
 
@@ -60,7 +64,7 @@ class Report extends Component {
 
   render() {
     var { store_code } = this.props.match.params
-    var { badges, collaborators, overview, topten } = this.props
+    var { badges, collaborators, overview, topten, agencys , customers } = this.props
     var numDiscount = badges.products_discount || 0
     var { isShow } = this.state
     if (this.props.auth) {
@@ -96,7 +100,7 @@ class Report extends Component {
                             </div>
                             <div class="card-body">
                               {getChannel() == IKITECH ? <BadgeTable overview={overview} badges={badges} store_code={store_code} /> : <BadgeTablePos overview={overview} badges={badges} store_code={store_code} />}
-                              
+
                             </div>
                           </div>
 
@@ -110,17 +114,22 @@ class Report extends Component {
                           </div>
                           <div class="card-body">
 
-                              {getChannel() == IKITECH && <General
+                            {getChannel() == IKITECH && <General
                               store_code={store_code}
+                              agencys={agencys}
+                              badges={badges}
+                              customers = {customers}
                               numDiscount={numDiscount}
                               collaborators={collaborators}
                               store={this.props.store} />}
-                                            {getChannel() == IKIPOS && <GeneralPos
-                               badges={badges}
-                               store_code={store_code}
-                               store={this.props.store} 
-                            
-                                />}
+                            {getChannel() == IKIPOS && <GeneralPos
+                              badges={badges}
+                              store_code={store_code}
+                              customers = {customers}
+
+                              store={this.props.store}
+
+                            />}
                           </div>
                         </div>
 
@@ -187,6 +196,8 @@ const mapStateToProps = (state) => {
     collaborators: state.collaboratorReducers.collaborator.allCollaborator,
     alert: state.reportReducers.alert_fetch_report,
     permission: state.authReducers.permission.data,
+    agencys: state.agencyReducers.agency.allAgency,
+    customers: state.customerReducers.customer.allCustomer,
 
 
   };
@@ -196,14 +207,20 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchDataId: (id) => {
       dispatch(reportAction.fetchDataId(id));
     },
-    fetchTopTenProduct: (store_code,branch_id, params) => {
-      dispatch(reportAction.fetchTopTenProduct(store_code,branch_id, params));
+    fetchTopTenProduct: (store_code, branch_id, params) => {
+      dispatch(reportAction.fetchTopTenProduct(store_code, branch_id, params));
     },
-    fetchOverview: (store_code,branch_id, params) => {
-      dispatch(reportAction.fetchOverview(store_code,branch_id, params));
+    fetchOverview: (store_code, branch_id, params) => {
+      dispatch(reportAction.fetchOverview(store_code, branch_id, params));
     },
     fetchAllCollaborator: (store_code) => {
       dispatch(collaboratorAction.fetchAllCollaborator(store_code));
+    },
+    fetchAllAgency: (store_code, page, params) => {
+      dispatch(agencyAction.fetchAllAgency(store_code, page, params));
+    },
+    fetchAllCustomer: (id, page, params) => {
+      dispatch(customerAction.fetchAllCustomer(id, page, params));
     },
   };
 };

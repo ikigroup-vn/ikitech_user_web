@@ -97,7 +97,7 @@ class ItemImportStock extends Component {
             return;
           }
           if (q === "" || q == null) {
-            this.setState({ currentQuantity : 0 });
+            this.setState({ currentQuantity : 1 });
             return;
         }
         this.setState({ currentQuantity: q })
@@ -120,7 +120,7 @@ class ItemImportStock extends Component {
             return;
           }
           if (e.target.value === "" || e.target.value == null) {
-            this.setState({ currentQuantity : 0 });
+            this.setState({ currentQuantity : 1 });
             return;
         }
         this.setState({ currentQuantity: e.target.value })

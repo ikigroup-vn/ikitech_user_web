@@ -43,11 +43,11 @@ class BadgeTable extends Component {
         return (
             <div class="form-group" style={{ fontSize: "15px" }}>
                 <div class="info-badge  badge-report" >
-                    <p class="" id="sale_user_name">
+                    <p class="report-detail" id="sale_user_name">
                         <a >Khách đã hủy: </a> <span id="user_name">
                             <span
 
-                                className="total-final"
+                                        style={{ paddingRight: "15px" }}
                             >
                                 {customer_cancelled}
                             </span>
@@ -60,11 +60,11 @@ class BadgeTable extends Component {
 
                         </span>
                     </p>
-                    <p class="" id="delivery_address">
+                    <p class="report-detail" id="delivery_address">
                         <a >Đã thanh toán: </a> <span id="user_address">
                             <span
 
-                                className="total-final"
+                                        style={{ paddingRight: "15px" }}
                             >
                                 {paid}
                             </span>
@@ -77,11 +77,11 @@ class BadgeTable extends Component {
 
                         </span>
                     </p>
-                    <p class="">
+                    <p class="report-detail">
                         <a> Đã thanh toán một phần: </a> <span id="user_tel">
                             <span
 
-                                className="total-final"
+                                        style={{ paddingRight: "15px" }}
                             >
                                 {partiallly_paid}
                             </span>
@@ -94,11 +94,11 @@ class BadgeTable extends Component {
 
                         </span>
                     </p>
-                    <p class="">
+                    <p class="report-detail">
                         <a >Đã hoàn tiền: </a><span id="user_tel">
                             <span
 
-                                className="total-final"
+                                        style={{ paddingRight: "15px" }}
                             >
                                 {refunds}
                             </span>
@@ -111,11 +111,11 @@ class BadgeTable extends Component {
 
                         </span>
                     </p>
-                    <p class="" id="booking_time">
+                    <p class="report-detail" id="booking_time">
                         <a > Chưa thanh toán: </a><span id="booking_time_txt">
                             <span
 
-                                className="total-final"
+                                        style={{ paddingRight: "15px" }}
                             >
                                 {unpaid}
                             </span>
@@ -128,11 +128,11 @@ class BadgeTable extends Component {
 
                         </span>
                     </p>
-                    <p class="" id="booking_time">
+                    <p class="report-detail" id="booking_time">
                         <a > Chờ xử lý: </a><span id="booking_time_txt">
                             <span
 
-                                className="total-final"
+                                        style={{ paddingRight: "15px" }}
                             >
                                 {waitting_for_progressing}
                             </span>

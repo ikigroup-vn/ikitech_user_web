@@ -98,7 +98,7 @@ class ProductInventory extends Component {
     if (is_near_out_of_stock) {
       params = params + `&is_near_out_of_stock=true`
     }
-    if (is_near_out_of_stock) {
+    if (status) {
       params = params + `&status=${status}`
     }
     if (typeof page != "undefined" && page != null && page != "" && !isNaN(Number(page))) {

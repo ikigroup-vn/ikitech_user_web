@@ -28,35 +28,7 @@ export const ikipos_menu = [
                 to: "/order",
             },
 
-            {
-                name: "Báo cáo",
-
-                icon: "fas fa-chart-bar",
-                open: "report",
-                children: [
-                    {
-                        class: "report_overview",
-                        display: "hide",
-                        name: "Báo cáo chung",
-                        exact: true,
-                        to: "/report",
-                    },
-                    {
-                        class: "report_inventory",
-                        display: "hide",
-                        name: "Báo cáo kho ",
-                        exact: true,
-                        to: "/report_inventory",
-                    },
-                    {
-                        class: "report_finance",
-                        display: "hide",
-                        name: "Báo cáo tài chính",
-                        exact: true,
-                        to: "/report_finance",
-                    },
-                ],
-            },
+          
             {
                 name: "Sản phẩm",
 
@@ -121,7 +93,86 @@ export const ikipos_menu = [
             },
 
 
+           
+         
+            // {   
+            //     class: ["add_revenue", "add_expenditure"],
+
+            //     name: "Thu chi",
+            //     display: "hide",
+            //     icon: "fa fa-money",
+            //     exact: true,
+            //     to: "/revenue_expenditure",
+            //     itemHasTabName: "agency",
+            // },
+            // {
+            //     class : "revenue_expenditure",
+            //     name: "Kế toán",
+            //     display: "hide",
+            //     icon: "fa-coins",
+            //     exact: true,
+            //     to: "/accountant",
+            //     itemHasTabName: "agency",
+            // },
+
             {
+                name: "Báo cáo",
+
+                icon: "fas fa-chart-bar",
+                open: "report",
+                children: [
+                    {
+                        class: "report_overview",
+                        display: "hide",
+                        name: "Báo cáo chung",
+                        exact: true,
+                        to: "/report",
+                    },
+                    {
+                        class: "report_inventory",
+                        display: "hide",
+                        name: "Báo cáo kho ",
+                        exact: true,
+                        to: "/report_inventory",
+                    },
+                    {
+                        class: "report_finance",
+                        display: "hide",
+                        name: "Báo cáo tài chính",
+                        exact: true,
+                        to: "/report_finance",
+                    },
+                ],
+            },
+            {
+                name: "Kế toán",
+        
+                icon: "fas fa-coins",
+                open: "revenue_expenditure",
+                children: [
+                  {
+                    class: "report_finance",
+                    display: "hide",
+                    name: "Thu chi",
+                    exact: true,
+                    to: "/revenue_expenditure",
+                  },
+        
+                  {
+        
+                    name: "Bảng công",
+                    class: "timekeeping",
+        
+                    display: "hide",
+                    icon: "fas fa-fw fa-calendar-days",
+                    exact: true,
+                    to: "/time_sheet",
+                  },
+                
+                 
+                ],
+              },
+              {
                 name: "Khách hàng",
 
                 icon: "fas fa-user",
@@ -143,7 +194,6 @@ export const ikipos_menu = [
                     },
                 ],
             },
-
             {
                 name: "Nhà cung cấp",
                 class: "supplier",
@@ -152,25 +202,7 @@ export const ikipos_menu = [
                 exact: true,
                 to: "/supplier",
             },
-            {   
-                class: ["add_revenue", "add_expenditure"],
 
-                name: "Thu chi",
-                display: "hide",
-                icon: "fa fa-money",
-                exact: true,
-                to: "/revenue_expenditure",
-                itemHasTabName: "agency",
-            },
-            {
-                class : "revenue_expenditure",
-                name: "Kế toán",
-                display: "hide",
-                icon: "fa-coins",
-                exact: true,
-                to: "/accountant",
-                itemHasTabName: "agency",
-            },
 
             {
                 name: "Chấm công",

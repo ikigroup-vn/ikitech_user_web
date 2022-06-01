@@ -55,10 +55,10 @@ class BadgeTable extends Component {
                     <div class="form-group" style={{ fontSize: "15px" }}>
 
                         <div class="info-badge  badge-report" >
-                        <p class="" id="booking_time"  style={{ fontSize: "15px" , display : "flex" , justifyContent : "space-between" }}>
+                            <p class="report-detail " id="booking_time">
                                 <a >Đã thanh toán: </a> <span id="user_name">
                                     <span
-    style = {{paddingRight  : "15px"}}
+                                        style={{ paddingRight: "15px" }}
 
                                         className=""
                                     >
@@ -73,11 +73,11 @@ class BadgeTable extends Component {
 
                                 </span>
                             </p>
-                        
-                            <p class="" id="booking_time"  style={{ fontSize: "15px" , display : "flex" , justifyContent : "space-between" }}>
+
+                            <p class="report-detail " id="booking_time" >
                                 <a> Đã trả hàng: </a> <span id="user_tel">
                                     <span
-    style = {{paddingRight  : "15px"}}
+                                        style={{ paddingRight: "15px" }}
 
                                         className=""
                                     >
@@ -92,7 +92,7 @@ class BadgeTable extends Component {
 
                                 </span>
                             </p>
-                    
+
 
                         </div>
 
@@ -100,7 +100,7 @@ class BadgeTable extends Component {
 
                 </div>
 
-             
+
 
             </div>
 

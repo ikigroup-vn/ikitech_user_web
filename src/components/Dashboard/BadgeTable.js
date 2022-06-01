@@ -177,7 +177,7 @@ class BadgeTable extends Component {
                         </span>
                     </p>
                     <p class="item-detail-badges">
-                        <Link to={`/product/index/${store_code}?is_near_out_of_stock=true`}> Sản phẩm sắp hết hàng </Link><span id="user_tel">
+                        <Link to={`/product_inventory/index/${store_code}?is_near_out_of_stock=true`}> Sản phẩm sắp hết hàng </Link><span id="user_tel">
                             <span
 
                                 className={`step num-badge ${statusTotalProductOrDiscountNearlyOutStock}`}

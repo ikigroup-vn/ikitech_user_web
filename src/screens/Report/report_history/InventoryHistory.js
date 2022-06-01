@@ -122,7 +122,7 @@ class InventoryHistory extends Component {
     }
     if (type === 0 || type === 1)
       history.push(`/inventory/detail/${store_code}/${id}${params}`)
-    else
+      if(type === 2)
       history.push(`/import_stocks/detail/${store_code}/${id}${params}`)
 
 
@@ -143,7 +143,7 @@ class InventoryHistory extends Component {
               <td>{formatNoD(item.change)}</td>
               <td>{formatNoD(item.change_money)}</td>
 
-              <td>{item.type_name}</td>
+              <td>{item.type_name?.replace(" hàng" , "")}</td>
               <td>{date}</td>
               {/* <td>
                 {item.type === 0 || item.type === 1 ?

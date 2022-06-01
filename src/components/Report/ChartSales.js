@@ -348,6 +348,8 @@ class Chart extends Component {
         ? _textLegendCompare_from
         : _textLegendCompare_from + " đến " + _textLegendCompare_to;
 
+      console.log(overview)
+
     return (
       <div className="chart">
         <ModalPostDate
