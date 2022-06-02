@@ -53,10 +53,10 @@ class Store extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.state.isLoading != true && typeof this.props.permission.product_list != "undefined") {
       var permissions = this.props.permission
-      var update = permissions.payment_on_off 
+      // var update = permissions.payment_on_off 
       var isShow = permissions.payment_list
 
-      this.setState({ isLoading: true , update , isShow})
+      this.setState({ isLoading: true , update:true , isShow})
 
     }
     // $("#dataTable").DataTable(config());

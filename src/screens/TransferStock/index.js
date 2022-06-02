@@ -29,12 +29,30 @@ class Theme extends Component {
 
   }
 
+  componentWillReceiveProps(nextProps, nextState) {
+
+
+
+
+
+    if (
+      this.state.isLoading != true &&
+      typeof nextProps.permission.inventory_import != "undefined"
+    ) {
+      var permissions = nextProps.permission;
+      var isShow = permissions.transfer_stock;
+
+      this.setState({ isLoading: true, isShow });
+    }
+  }
+
   fetchDataOnTap = (index) => {
     this.setState({ tabId: index, change: helper.randomString(10) });
   };
   render() {
     var { store_code } = this.props.match.params;
-    var isShow = true 
+    var {isShow} = this.state 
+    console.log(isShow)
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
@@ -116,6 +134,12 @@ class Theme extends Component {
     );
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    
+    permission: state.authReducers.permission.data,
 
+  };
+};
+export default connect(mapStateToProps, null)(Theme);
 
-export default connect(null, null)(Theme);

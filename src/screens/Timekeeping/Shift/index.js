@@ -34,20 +34,18 @@ class Shift extends Component {
   }
 
   componentDidUpdate() {
-    // if (this.state.isLoading != true && typeof this.props.permission.timekeeping_shift_list != "undefined") {
-    //     var permissions = this.props.permission
-    //     var insert = permissions.timekeeping_shift_add
-    //     var update = permissions.timekeeping_shift_update
-    //     var _delete = permissions.timekeeping_shift_delete
+    if (this.state.isLoading != true && typeof this.props.permission.timekeeping != "undefined") {
+        var permissions = this.props.permission
+        // var insert = permissions.timekeeping_shift_add
+        // var update = permissions.timekeeping_shift_update
+        // var _delete = permissions.timekeeping_shift_delete
 
-    //     var isShow = permissions.timekeeping_shift_list
+        var isShow = permissions.timekeeping
 
-    //     this.setState({ isLoading: true, insert, update, _delete ,isShow})
+        this.setState({ isLoading: true, insert:true, update:true, _delete:true ,isShow})
 
-    //   }
-    if (this.state.isLoading != true) {
-      this.setState({ isLoading: true, isShow: true });
-    }
+      }
+
   }
   onChangeNumPage = (e) => {
     var { store_code } = this.props.match.params;

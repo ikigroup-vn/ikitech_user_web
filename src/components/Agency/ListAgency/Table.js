@@ -91,7 +91,7 @@ class Table extends Component {
               <td>
                 {index + 1}
               </td>{" "}
-              <td style = {{textAlign : "center"}}>
+              <td style={{ textAlign: "center" }}>
                 <img
                   src={avatar}
                   class="img-responsive"
@@ -108,11 +108,18 @@ class Table extends Component {
               </td>
               <td>
 
-                <select style = {{width : "100%"}} name="agency_type_id" id="input" value={data.agency_type_id} required="required" onChange={(e) => this.changeAgencyType(e, data.id)}>
+                <select style={{ width: "100%" }} name="agency_type_id" id="input" value={data.agency_type_id} required="required" onChange={(e) => this.changeAgencyType(e, data.id)}>
                   {/* <option value=""></option> */}
                   {
                     this.props.types.map((data, index) => {
-                      return <option value={data.id}>{data.name}</option>
+                      return(<React.Fragment>
+                        {/* {
+                          index == 0 && data.agency_type_id == null &&  <option value="">--Chưa chọn--</option>
+
+                        } */}
+                          <option value={data.id}>{data.name}</option>
+                        </React.Fragment>
+                      )
 
                     })}
                 </select>
@@ -120,12 +127,12 @@ class Table extends Component {
               </td>
 
               <td>
-                <div style={{display : "flex" , justifyContent : "center"}} className="on-off" onClick={(e) => { this.onChangeStatus(e, data.id) }}>
+                <div style={{ display: "flex", justifyContent: "center" }} className="on-off" onClick={(e) => { this.onChangeStatus(e, data.id) }}>
                   <input ref={(ref) => this["checked" + data.id] = ref} type="checkbox" class="checkbox" name={`${randomString(10)}`} checked={data.status == 1 ? true : false} />
 
                   <label for="checkbox" class="switch">
                     <span class="switch__circle">
-                      <span style = {{backgroundColor : data.status == 1 ? "white" : "gray"}} class="switch__circle-inner"></span>
+                      <span style={{ backgroundColor: data.status == 1 ? "white" : "gray" }} class="switch__circle-inner"></span>
                     </span>
                     <span class="switch__left"></span>
                     <span class="switch__right"></span>
@@ -180,21 +187,21 @@ class Table extends Component {
     }
     return result;
   };
-  optionsType = () =>{
+  optionsType = () => {
     var result = null
-    var {types} = this.props
-    if(types.length> 0){
-      result = types.map((data) =>{
+    var { types } = this.props
+    if (types.length > 0) {
+      result = types.map((data) => {
         return (
-          <option value ={data.id}>{data.name}</option>
+          <option value={data.id}>{data.name}</option>
         )
       })
     }
     return result
   }
-  onChangeType = (e) =>{
-    var {value} = e.target
-    this.setState({txtType : value})
+  onChangeType = (e) => {
+    var { value } = e.target
+    this.setState({ txtType: value })
     this.props.passType(value);
 
   }
@@ -203,29 +210,29 @@ class Table extends Component {
       typeof this.props.agencys.data == "undefined"
         ? []
         : this.props.agencys.data;
-      var {txtType} = this.state
+    var { txtType } = this.state
     return (
-      <div class="" style = {{overflow : "auto"}}>
+      <div class="" style={{ overflow: "auto" }}>
         <table class="table table-border">
           <thead>
             <tr>
               <th>STT</th>
-              <th style = {{textAlign : "center"}}>Ảnh</th>
+              <th style={{ textAlign: "center" }}>Ảnh</th>
 
               <th>Họ tên</th>
               <th>Số điện thoại</th>
               <th>Gmail</th>
 
               <th>
-                
-                <select name="txtType" value = {txtType} id="input" className="form-control"  onChange={this.onChangeType}>
-                  <option  disabled>-- Cấp đại lý --</option>                
-                    <option value="" >Tất cả</option>
+
+                <select name="txtType" value={txtType} id="input" className="form-control" onChange={this.onChangeType}>
+                  <option disabled>-- Cấp đại lý --</option>
+                  <option value="" >Tất cả</option>
 
                   {this.optionsType()}
 
                 </select>
-                
+
               </th>
 
 
@@ -249,7 +256,7 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchAllAgency: (store_code, page, params) => {
       dispatch(agencyAction.fetchAllAgency(store_code, page, params));
-  },
+    },
 
   };
 };

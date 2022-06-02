@@ -222,11 +222,12 @@ const permission = (channel) => {
 
                     "Nhập hàng",
                     "Kiểm kho",
+                    "Chuyển kho",
                     "Kho hàng",
                     "Tạo đơn hàng",
                     "Xem hóa đơn"
                 ]
-                , body: ["inventory_import", "inventory_tally_sheet", "inventory_list","create_order_pos", "order_list"]
+                , body: ["inventory_import", "inventory_tally_sheet","transfer_stock" , "inventory_list","create_order_pos", "order_list"]
             },
             {
                 name: "Quản lý sản phẩm & Bài viết",

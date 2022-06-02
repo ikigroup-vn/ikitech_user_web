@@ -23,7 +23,7 @@ class Index extends Component {
         if (this.state.isLoading != true && typeof nextProps.permission.product_list != "undefined") {
             var permissions = nextProps.permission
 
-            var isShow = permissions.notification_schedule_update
+            var isShow = permissions.notification_schedule_list
             this.setState({ isLoading: true, isShow })
         }
     }

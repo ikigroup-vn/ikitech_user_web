@@ -32,7 +32,6 @@ class Request extends Component {
     this.state = {
       tabId: "",
       change: "",
-      isShow: true,
     };
   }
   componentDidMount() {
@@ -43,6 +42,21 @@ class Request extends Component {
   fetchDataOnTap = (index) => {
     this.setState({ tabId: index, change: helper.randomString(10) });
   };
+
+  componentDidUpdate() {
+    if (this.state.isLoading != true && typeof this.props.permission.timekeeping != "undefined") {
+        var permissions = this.props.permission
+        // var insert = permissions.timekeeping_shift_add
+        // var update = permissions.timekeeping_shift_update
+        // var _delete = permissions.timekeeping_shift_delete
+
+        var isShow = permissions.timekeeping
+
+        this.setState({ isLoading: true, insert:true, update:true, _delete:true ,isShow})
+
+      }
+
+  }
 
   render() {
     var { store_code } = this.props.match.params;

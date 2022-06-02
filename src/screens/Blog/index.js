@@ -51,11 +51,11 @@ class Bloglog extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.state.isLoading != true && typeof nextProps.permission.product_list != "undefined") {
       var permissions = nextProps.permission
-      var insert = permissions.post_add
-      var update = permissions.post_update
-      var _delete = permissions.post_remove_hide
+      // var insert = permissions.post_add
+      // var update = permissions.post_update
+      // var _delete = permissions.post_remove_hide
       var isShow = permissions.post_list
-      this.setState({ isLoading: true, insert, update, _delete, isShow })
+      this.setState({ isLoading: true, insert:true, update:true, _delete:true, isShow })
     }
   }
   onChangeSearch = (e) => {

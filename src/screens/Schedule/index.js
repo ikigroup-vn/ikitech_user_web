@@ -39,12 +39,10 @@ class Schedule extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.state.isLoading != true && typeof this.props.permission.product_list != "undefined") {
       var permissions = this.props.permission
-      var insert = permissions.notification_schedule_add
-      var update = permissions.notification_schedule_update
-      var _delete = permissions.notification_schedule_remove_pause
+    
       var isShow = permissions.notification_schedule_list
 
-      this.setState({ isLoading: true, insert, update, _delete ,isShow})
+      this.setState({ isLoading: true, insert:true, update:true, _delete:true ,isShow})
 
     }
     $("#dataTable").DataTable(config());
