@@ -1376,7 +1376,7 @@ class PostOrder extends Component {
 
 
                                                     {
-                                                        (this.state.openShipment == false) &&  <React.Fragment><div className="row" style={{ padding: "4px 0" }}>
+                                                        <React.Fragment><div className="row" style={{ padding: "4px 0" }}>
                                                             
                                                             <div
                                                                 className="title-price col-6"

@@ -49,18 +49,35 @@ export const containsSpecialChars = (str) => {
 }
 
 
-export const compressed = (file, maxWitdh = 1024, maxHeight = 1024) => {
-  return new Promise((resolve, reject) => {
-    new Compressor(file, {
-      quality: 0.8,
-      maxWitdh,
-      maxHeight,
-      success: (compressedResult) => {
-        resolve(compressedResult);
+// export const compressed = (file, maxWitdh = 1024, maxHeight = 1024) => {
+//   return new Promise((resolve, reject) => {
+//     new Compressor(file, {
+//       quality: 0.8,
+//       maxWitdh,
+//       maxHeight,
+//       success: (compressedResult) => {
+//         resolve(compressedResult);
+//       },
+//     });
+//   });
+// };
+
+
+export const compressed = (file,maxWitdh = 1024, maxHeight = 1024) =>
+  new Promise((resolve) => {
+    Resizer.imageFileResizer(
+      file,
+      maxWitdh <= 0 ? 1024 : maxWitdh,
+      maxHeight <= 0 ? 1024 : maxHeight,
+      "WEBP",
+      100,
+      0,
+      (uri) => {
+        resolve(uri);
       },
-    });
+      "file"
+    );
   });
-};
 
 
 

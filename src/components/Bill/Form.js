@@ -228,7 +228,7 @@ class Form extends Component {
 
 
                                 <hr />
-                                {( getChannel() == IKITECH && bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE &&  bill.order_from !== null && bill.order_status_code == "WAITING_FOR_PROGRESSING") &&
+                                {( getChannel() == IKITECH && bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE &&  bill.order_from !== null && (bill.order_status_code !== "COMPLETED" )) &&
                                 <div className="card col-12 pl0" id="user_cart_info">
                                     <ChangeBranch
                                         order_allow_change_status={order_allow_change_status}
