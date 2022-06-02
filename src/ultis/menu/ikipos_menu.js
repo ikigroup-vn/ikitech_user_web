@@ -31,9 +31,9 @@ export const ikipos_menu = [
           
             {
                 name: "Sản phẩm",
-
+                setOpenKey : ["/product/"],
                 icon: "fas fa-th-large",
-                open: "inventory",
+                open: "product",
                 children: [
                     {
                         class: "product_category_list",
@@ -64,6 +64,7 @@ export const ikipos_menu = [
 
             {
                 name: "Kho hàng",
+                setOpenKey : ["/product_inventory/index" , "/inventory/index" , "/import_stocks/index" , "/transfer_stocks/index" , "/supplier" ],
 
                 icon: "fas fa-store",
                 open: "inventory",
@@ -117,6 +118,7 @@ export const ikipos_menu = [
 
             {
                 name: "Báo cáo",
+                setOpenKey : ["/report" , "/report_"],
 
                 icon: "fas fa-chart-bar",
                 open: "report",
@@ -146,7 +148,8 @@ export const ikipos_menu = [
             },
             {
                 name: "Kế toán",
-        
+                setOpenKey : ["/revenue_expenditure" , "/time_sheet"],
+
                 icon: "fas fa-coins",
                 open: "revenue_expenditure",
                 children: [
@@ -174,6 +177,7 @@ export const ikipos_menu = [
               },
               {
                 name: "Khách hàng",
+                setOpenKey : ["/customer" , "/reward_point" , "chat"],
 
                 icon: "fas fa-user",
                 open: "customer",
@@ -208,7 +212,7 @@ export const ikipos_menu = [
                 name: "Chấm công",
                 icon: "fa fa-calendar",
                 class  : "timekeeping",
-                // open: "promotion",
+                setOpenKey : ["/shift" , "/calendar_shift" , "/time_sheet" , "/work_location" , "/request"],
                 open: "timekeeping",
         
                 children: [
@@ -268,6 +272,8 @@ export const ikipos_menu = [
               {
                   class : "promotion",
                 name: "Chương trình khuyến mại",
+                setOpenKey : ["/discount" , "/voucher" , "/combo" ],
+
                 icon: "fas fa-money-bill-alt",
                 open: "promotion",
                 children: [
@@ -299,6 +305,7 @@ export const ikipos_menu = [
             },
             {
                 name: "Cài đặt",
+                setOpenKey : ["/theme" , "/branch/index" , "/staff/index" , "/decentralization/index" ],
 
                 icon: "fas fa-cogs",
                 open: "setting",

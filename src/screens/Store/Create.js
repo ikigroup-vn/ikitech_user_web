@@ -298,6 +298,7 @@ class StoreCreate extends Component {
                                
                                 </button>
                                 <button
+                                type = "button"
                                   style={{ marginLeft: "10px" }}
                                   onClick={this.goBack}
                                   class="btn btn-warning   btn-sm"

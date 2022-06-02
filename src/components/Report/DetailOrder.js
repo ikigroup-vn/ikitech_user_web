@@ -55,115 +55,21 @@ class BadgeTable extends Component {
                     <div class="form-group" style={{ fontSize: "15px" }}>
 
                         <div class="info-badge  badge-report" >
-                        <p class="report-detail " id="booking_time" >
-                                <a >Đã hoàn thành: </a> <span id="user_name">
-                                    <span
-                                        style={{ paddingRight: "15px" }}
 
-                                    >
-                                        {completed}
-                                    </span>
-                                    <span
-
-                                        className={`step num-badge-report ${statusCompleted}`}
-                                    >
-                                        {count_completed}
-                                    </span>
-
-                                </span>
-                            </p>
-                            <p class="report-detail " id="booking_time" >
-                                <a >Khách đã hủy: </a> <span id="user_address">
-                                    <span
-
-style={{ paddingRight: "15px" }}
->
-                                        {customer_cancelled}
-                                    </span>
-                                    <span
-
-                                        className={`step num-badge-report ${statusCustomerCancel}`}
-                                    >
-                                        {count_customer_cancelled}
-                                    </span>
-
-                                </span>
-                            </p>
-                            <p class="report-detail " id="booking_time" >
-                                <a> Đã trả hàng: </a> <span id="user_tel">
+                        <p class="report-detail">
+                                <a >Chờ xử lý:</a>
+                                <span class="cart_payment_method">
                                     <span
 
                                         style={{ paddingRight: "15px" }}
                                     >
-                                        {customer_has_return}
+                                        {waiting_for_progress}
                                     </span>
                                     <span
 
-                                        className={`step num-badge-report ${statusCustomerHasReturn}`}
+                                        className={`step  ${statusWaitingForProgress}`}
                                     >
-                                        {count_customer_has_return}
-                                    </span>
-
-                                </span>
-                            </p>
-                            <p class="report-detail " id="booking_time" >
-                                <a >Chò trả hàng: </a><span id="user_tel">
-                                    <span
-
-                                        style={{ paddingRight: "15px" }}
-                                    >
-                                        {customer_returning}
-                                    </span>
-                                    <span
-
-                                        className={`step num-badge-report ${statusCustomerReturning}`}
-                                    >
-                                        {count_customer_returning}
-                                    </span>
-
-                                </span>
-                            </p>
-                            <p class="report-detail " id="booking_time" >
-                                <a > Lỗi giao hàng: </a><span id="booking_time_txt">
-                                    <span
-
-                                        style={{ paddingRight: "15px" }}
-                                    >
-                                        {delivery_error}
-                                    </span>
-                                    <span
-
-                                        className={`step num-badge-report ${statusDeliveryError}`}
-                                    >
-                                        {count_delivery_error}
-                                    </span>
-
-                                </span>
-                            </p>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                    <div class="form-group" style={{ fontSize: "15px" }}>
-                        <div class="info-badge badge-report" >
-
-                            <p class="report-detail">
-                                <a > Hết hàng:</a><span id="user_note">
-                                    <span
-
-                                        style={{ paddingRight: "15px" }}
-                                    >
-                                        {out_of_stock}
-                                    </span>
-                                    <span
-
-                                        className={`step num-badge-report ${statusOutOfStock}`}
-                                    >
-                                        {count_out_of_stock}
+                                        {count_waiting_for_progress}
                                     </span>
 
                                 </span>
@@ -180,7 +86,7 @@ style={{ paddingRight: "15px" }}
                                     </span>
                                     <span
 
-                                        className={`step num-badge-report ${statusPacking}`}
+                                        className={`step  ${statusPacking}`}
                                     >
                                         {count_packing
                                         }
@@ -188,6 +94,82 @@ style={{ paddingRight: "15px" }}
 
                                 </span>
                             </p>
+                            <p class="report-detail">
+                                <a > Hết hàng:</a><span id="user_note">
+                                    <span
+
+                                        style={{ paddingRight: "15px" }}
+                                    >
+                                        {out_of_stock}
+                                    </span>
+                                    <span
+
+                                        className={`step  ${statusOutOfStock}`}
+                                    >
+                                        {count_out_of_stock}
+                                    </span>
+
+                                </span>
+                            </p>
+                            <p class="report-detail " id="booking_time" >
+                                <a >Khách đã hủy: </a> <span id="user_address">
+                                    <span
+
+style={{ paddingRight: "15px" }}
+>
+                                        {customer_cancelled}
+                                    </span>
+                                    <span
+
+                                        className={`step  ${statusCustomerCancel}`}
+                                    >
+                                        {count_customer_cancelled}
+                                    </span>
+
+                                </span>
+                            </p>
+
+
+                            <p class="report-detail">
+                                <a >Shop hủy:</a>
+                                <span class="cart_payment_method">
+                                    <span
+
+                                        style={{ paddingRight: "15px" }}
+                                    >
+                                        {user_cancelled}
+                                    </span>
+                                    <span
+
+                                        className={`step  ${statusUserCancel}`}
+                                    >
+                                        {count_user_cancelled}
+                                    </span>
+
+                                </span>
+                            </p>
+
+
+
+
+
+                
+                      
+                 
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                    <div class="form-group" style={{ fontSize: "15px" }}>
+                        <div class="info-badge badge-report" >
+
+                       
+
+                       
 
                             <p class="report-detail">
                                 <a>Đang giao hàng:</a>
@@ -200,49 +182,84 @@ style={{ paddingRight: "15px" }}
                                     </span>
                                     <span
 
-                                        className={`step num-badge-report ${statusShipping}`}
+                                        className={`step  ${statusShipping}`}
                                     >
                                         {count_shipping}
                                     </span>
 
                                 </span>
                             </p>
-                            <p class="report-detail">
-                                <a >Shop hủy:</a>
-                                <span class="cart_payment_method">
+                      
+                            <p class="report-detail " id="booking_time" >
+                                <a > Lỗi giao hàng: </a><span id="booking_time_txt">
                                     <span
 
                                         style={{ paddingRight: "15px" }}
                                     >
-                                        {user_cancelled}
+                                        {delivery_error}
                                     </span>
                                     <span
 
-                                        className={`step num-badge-report ${statusUserCancel}`}
+                                        className={`step  ${statusDeliveryError}`}
                                     >
-                                        {count_user_cancelled}
+                                        {count_delivery_error}
                                     </span>
 
                                 </span>
                             </p>
-                            <p class="report-detail">
-                                <a >Chờ xử lý:</a>
-                                <span class="cart_payment_method">
+                            <p class="report-detail " id="booking_time" >
+                                <a >Đã hoàn thành: </a> <span id="user_name">
+                                    <span
+                                        style={{ paddingRight: "15px" }}
+
+                                    >
+                                        {completed}
+                                    </span>
+                                    <span
+
+                                        className={`step  ${statusCompleted}`}
+                                    >
+                                        {count_completed}
+                                    </span>
+
+                                </span>
+                            </p>
+                            <p class="report-detail " id="booking_time" >
+                                <a >Chò trả hàng: </a><span id="user_tel">
                                     <span
 
                                         style={{ paddingRight: "15px" }}
                                     >
-                                        {waiting_for_progress}
+                                        {customer_returning}
                                     </span>
                                     <span
 
-                                        className={`step num-badge-report ${statusWaitingForProgress}`}
+                                        className={`step  ${statusCustomerReturning}`}
                                     >
-                                        {count_waiting_for_progress}
+                                        {count_customer_returning}
                                     </span>
 
                                 </span>
                             </p>
+                            
+                            <p class="report-detail " id="booking_time" >
+                                <a> Đã trả hàng: </a> <span id="user_tel">
+                                    <span
+
+                                        style={{ paddingRight: "15px" }}
+                                    >
+                                        {customer_has_return}
+                                    </span>
+                                    <span
+
+                                        className={`step  ${statusCustomerHasReturn}`}
+                                    >
+                                        {count_customer_has_return}
+                                    </span>
+
+                                </span>
+                            </p>
+                      
                         </div>
                     </div>
 

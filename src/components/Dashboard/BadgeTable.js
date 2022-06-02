@@ -13,8 +13,10 @@ class BadgeTable extends Component {
 
     buildBagesIkitech() {
         var { store_code, badges } = this.props
-        var numOrderWaiting = badges.orders_waitting_for_progressing
-        var numOrderPacking = badges.orders_packing
+        // var numOrderWaiting = badges.orders_waitting_for_progressing
+        // var numOrderPacking = badges.orders_packing
+           var numOrderWaiting = badges.total_tally_sheet_checked
+        var numOrderPacking = badges.total_import_not_completed
         var numOrderShipping = badges.orders_shipping
         var numUnread = badges.chats_unread
         var numVoucher = badges.voucher_total
@@ -35,8 +37,28 @@ class BadgeTable extends Component {
             <div class="form-group" style={{ fontSize: "15px" }}>
                 <div class="info-badge" >
 
-
-                    <p class="item-detail-badges" id="sale_user_name">
+                <p class="item-detail-badges" id="sale_user_name">
+                        <Link to={`/inventory/index/${store_code}?status=0`}>Đơn kiểm cần xử lý </Link> <span id="user_name">
+                            <span
+                              
+                                className={`step num-badge ${statusOrderWaiting}`}
+                            >
+                                {numOrderWaiting}
+                            </span>
+                           
+                        </span>
+                    </p>
+                    <p class="item-detail-badges" id="delivery_address">
+                        <Link to={`/import_stocks/index/${store_code}?status_list=0,1,2`}>Đơn nhập cần xử lý</Link> <span id="user_address">
+                              <span
+                              
+                                className={`step num-badge ${statusOrderPacking}`}
+                            >
+                                {numOrderPacking}
+                            </span>
+                        </span>
+                    </p>
+                    {/* <p class="item-detail-badges" id="sale_user_name">
                         <Link to={`/order/${store_code}/WAITING_FOR_PROGRESSING?from=${moment().format("DD-MM-YYYY")}&to=${moment().format("DD-MM-YYYY")}`}>Đơn hàng đang chờ xử lý </Link> <span id="user_name">
                             <span
 
@@ -66,7 +88,7 @@ class BadgeTable extends Component {
                                 {numOrderShipping}
                             </span>
                         </span>
-                    </p>
+                    </p> */}
                     <p class="item-detail-badges">
                         <Link to={`/chat/${store_code}`}>Tin nhắn chưa đọc </Link><span id="user_tel">
                             <span

@@ -213,6 +213,16 @@ class FormChat extends Component {
         this.setState({ chat: chat, loading: false });
       
     }
+    if (this.props.customerId != "" && this.props.customerId != null ) {
+
+      this.socket = io(helpers.callUrlSocket(), {
+        transports: ["websocket"],
+      });
+      this.socket.on(
+        `chat:message_from_customer:${this.props.customerId}`,
+        (res) => this.changeMess(res)
+      );
+    }
   }
 
   componentWillReceiveProps(nextProps) {

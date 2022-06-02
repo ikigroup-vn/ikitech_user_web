@@ -25,7 +25,9 @@ class ModalRemove extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{ background: themeData().modalNoti }}>
+            <div class="modal-header" style={{ background: themeData() }}>
+            <h4 style={{ color: "white" }}>Thông báo</h4>
+
               <button
                 type="button"
                 class="close"
@@ -45,7 +47,7 @@ class ModalRemove extends Component {
               <div class="modal-body">
                 <input type="hidden" name="remove_id_store" />
                 <div class="alert-remove"></div>
-                Bạn thực sự muốn xóa cửa hàng <b>{modal.name}</b>?
+                Bạn chắc chắn có muốn xóa cửa hàng <b>{modal.name}</b>?
               </div>
               <div class="modal-footer">
                 <button
@@ -55,7 +57,7 @@ class ModalRemove extends Component {
                 >
                   Đóng
                 </button>
-                <button type="submit" class="btn btn-yes-pos">
+                <button type="submit" class="btn btn-warning">
                   Xóa
                   
                 </button>

@@ -12,6 +12,7 @@ import moment from "moment";
 import history from "../../history";
 import General from "../../components/Product/General";
 import NotAccess from "../../components/Partials/NotAccess";
+import { getQueryParams } from "../../ultis/helpers"
 
 import * as productAction from "../../actions/product";
 
@@ -19,13 +20,19 @@ class Inventory extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            searchValue: ""
+            searchValue: "",
+            filterStatus : getQueryParams("status") || null,
+
         }
     }
     componentDidMount() {
         const { store_code } = this.props.match.params
         const branch_id = localStorage.getItem('branch_id')
-        this.props.fetchAllInventory(store_code, branch_id)
+        var {filterStatus} = this.state
+        var params = ""
+        if(filterStatus)
+        params = params + `&status=${filterStatus}`
+        this.props.fetchAllInventory(store_code, branch_id ,1 ,params)
 
       
     }
