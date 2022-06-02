@@ -84,7 +84,7 @@ class Table extends Component {
               address_default = address_default + data.customer.default_address.province_name
             }
           }
-        }
+        } console.log("check", data.agency_type_id == null);
         return (
           <React.Fragment>
             <tr class="sub-container hover-product">
@@ -109,16 +109,15 @@ class Table extends Component {
               <td>
 
                 <select style={{ width: "100%" }} name="agency_type_id" id="input" value={data.agency_type_id} required="required" onChange={(e) => this.changeAgencyType(e, data.id)}>
-                  {/* <option value=""></option> */}
                   {
-                    this.props.types.map((data, index) => {
-                      return(<React.Fragment>
-                        {/* {
-                          index == 0 && data.agency_type_id == null &&  <option value="">--Chưa chọn--</option>
+                    data.agency_type_id == null && <option value="">--Chưa chọn--</option>
 
-                        } */}
-                          <option value={data.id}>{data.name}</option>
-                        </React.Fragment>
+                  }                  {
+                    this.props.types.map((data, index) => {
+                      return (<React.Fragment>
+
+                        <option value={data.id}>{data.name}</option>
+                      </React.Fragment>
                       )
 
                     })}

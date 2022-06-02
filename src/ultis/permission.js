@@ -202,7 +202,7 @@ const permission = (channel) => {
                     "Thông báo tới cửa hàng",
                     "Chi nhánh",
                     "Kế toán",
-                    "Chát"
+                    "Chat"
 
                 ]
                 , body: ["store_info", "decentralization_list", "promotion","notification_to_stote" , "branch_list" , "revenue_expenditure" , "chat_list"]
@@ -236,30 +236,42 @@ const permission = (channel) => {
                     "Danh sách sản phẩm",
 
                     "Danh mục sản phẩm",
-                    "Danh sách tin tức bài viết",
+                    "Tin tức bài viết",
 
                 ]
                 , body: ["product_list", "product_category_list" , "post_list"]
             },
-            {
-                name: "Quản lý thu chi",
-                header: [
+            // {
+            //     name: "Quản lý thu chi",
+            //     header: [
 
-                    "Tạo khoản thu",
-                    "Tạo khoản chi"
-                ]
-                , body: ["add_revenue", "add_expenditure"]
-            },
+            //         "Tạo khoản thu",
+            //         "Tạo khoản chi"
+            //     ]
+            //     , body: ["add_revenue", "add_expenditure"]
+            // },
             {
-                name: "Báo cáo",
+                name: "Báo cáo & Thu chi",
                 header: [
 
                     "Báo cáo bán hàng",
                     "Báo cáo kho",
                     "Báo cáo tài chính",
+                    "Tạo khoản thu",
+                    "Tạo khoản chi"
 
                 ]
-                , body: [ "report_overview" , "report_inventory", "report_finance"]
+                , body: [ "report_overview" , "report_inventory", "report_finance","add_revenue", "add_expenditure"]
+            },
+            {
+                name: "Đối tác bán hàng",
+                header: [
+
+                    "Cộng tác viên",
+                    "Đại lý",
+
+                ]
+                , body: ["collaborator_list", "agency_list" ]
             },
             {
                 name: "Quản lý nhân viên & khách hàng",
@@ -280,7 +292,7 @@ const permission = (channel) => {
                     "Cài đặt xu KH",
                     "Cài đặt chung",
                     "In mã vạch",
-                    "Giao diện khách hàng",
+                    // "Giao diện khách hàng",
                     "Chấm công"
 
 
@@ -314,7 +326,7 @@ const permission = (channel) => {
                     "Thông tin cửa hàng",
                     "Phân quyền",
                     "Chương trình KM",
-                    "Thông báo tới cửa hàng",
+                    "Thông báo tới khách hàng",
                     "Chi nhánh",
                     "Chấm công",
                     "Kế toán",
@@ -381,16 +393,7 @@ const permission = (channel) => {
                 ]
                 , body: ["customer_list", "staff_list", "supplier"]
             },
-            {
-                name: "Đối tác bán hàng",
-                header: [
-
-                    "Cộng tác viên",
-                    "Đại lý",
-
-                ]
-                , body: ["collaborator_list", "agency_list" ]
-            },
+         
             {
                 name: "Cài đặt",
                 header: [
@@ -510,6 +513,7 @@ export const initialPermission = () =>{
         report_finance : false,
         chat_list: false,
         chat_allow: false,
+        transfer_stock : false,
         report_view: false,
         report_overview: false,
         report_product: false,

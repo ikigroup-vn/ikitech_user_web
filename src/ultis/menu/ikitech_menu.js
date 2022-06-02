@@ -282,7 +282,7 @@ export const ikitech_menu = [
         icon: "fa fa-calendar",
         class: "timekeeping",
         setOpenKey : ["/shift" , "/calendar_shift" , "/time_sheet" , "/work_location" , "/request"],       
-        // ExcludeSetOpenKey : ["/accountant/time_sheet/"],
+        ExcludeSetOpenKey : ["/accountant/time_sheet/"],
 
         open: "timekeeping",
 
@@ -493,14 +493,14 @@ export const ikitech_menu = [
             exact: true,
             to: "/notifications/schedule",
           },
-          {
-            name: "Cài đặt Popup",
-            class: "popup_list",
-            display: "hide",
-            icon: "fa fa-bell",
-            exact: true,
-            to: "/popup",
-          },
+          // {
+          //   name: "Cài đặt Popup",
+          //   class: "popup_list",
+          //   display: "hide",
+          //   icon: "fa fa-bell",
+          //   exact: true,
+          //   to: "/popup",
+          // },
 
         ],
       },
