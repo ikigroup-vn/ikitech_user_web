@@ -18,18 +18,26 @@ class FormFooterHtml extends Component {
     };
   }
 
-  //   componentWillReceiveProps(nextProps) {
-  //     if (
-  //       !shallowEqual(nextProps.theme, this.props.theme) ||
-  //       nextProps.tabId != this.props.tabId
-  //     ) {
-  //       var theme = nextProps.theme;
 
-  //       this.setState({
-  //         txtContent: theme.html_footer,
-  //       });
-  //     }
-  //   }
+  componentDidMount()
+  {
+    this.setState({
+      txtContent: this.props.html_footer,
+    });
+  }
+
+
+    componentWillReceiveProps(nextProps) {
+      if (this.props.html_footer != nextProps.html_footer)
+         {
+
+        this.setState({
+          txtContent: nextProps.html_footer,
+        });
+      }
+    }
+
+
   handleEditorChange = (editorState) => {
     this.setState(
       {

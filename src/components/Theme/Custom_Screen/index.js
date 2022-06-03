@@ -33,6 +33,7 @@ class Custom_Screen extends Component {
       product_home_type: null,
       post_home_type: null,
       footer_type: null,
+      html_footer : null,
       use_footer_html: false,
       tabId: 0,
     };
@@ -68,7 +69,9 @@ class Custom_Screen extends Component {
         product_home_type: theme.product_home_type,
         post_home_type: theme.post_home_type,
         footer_type: theme.footer_type,
-        use_footer_html: false,
+        use_footer_html: theme.is_use_footer_html,
+
+        html_footer : theme.html_footer
       });
 
 
@@ -81,6 +84,7 @@ class Custom_Screen extends Component {
       nextProps.tabId != this.props.tabId
     ) {
       var theme = nextProps.theme;
+      console.log(theme)
       this.setState({
         store_id: theme.store_id,
         header_type: theme.header_type,
@@ -88,6 +92,8 @@ class Custom_Screen extends Component {
         product_home_type: theme.product_home_type,
         post_home_type: theme.post_home_type,
         footer_type: theme.footer_type,
+        use_footer_html: theme.is_use_footer_html,
+        html_footer : theme.html_footer
       });
 
       setTimeout(function () { //Start the timer
@@ -225,6 +231,7 @@ class Custom_Screen extends Component {
       post_home_type,
       footer_type,
       use_footer_html,
+      html_footer,
       tabId,
     } = this.state;
     var { badges } = this.props;
@@ -236,16 +243,32 @@ class Custom_Screen extends Component {
           <button style={{ marginRight: "10px", marginBottom: 25, marginTop: 10 }} type="button" onClick={this.props.goBack} class="btn btn-warning  btn-sm">
             <i class="fas fa-arrow-left"></i>&nbsp;Quay lại</button>
 
-          {this.isSameDefault() == false && <a
-            onClick={() => {
+          {this.isSameDefault() == false &&
+          <button
+          type="button"
+          class="btn btn-primary-no-background btn-sm" style = {{    color: "#0d6efd",
+            "border-color": "#0d6efd"}}
+          onClick={() => {
 
-              this.onChangeThemeDefault(this.props.theme_default)
-            }}
-            data-toggle="modal"
-            data-target="#modalDefaultReset"
-            style={{
-              color: "#0d6efd"
-            }}>Khôi phục mặc định</a>}
+            this.onChangeThemeDefault(this.props.theme_default)
+          }}
+          data-toggle="modal"
+          data-target="#modalDefaultReset"
+        >
+            <i class="fas fa-undo" ></i>
+          <span class="text">&nbsp;Khôi phục mặc định</span>
+        </button>
+          //  <a
+          //   onClick={() => {
+
+          //     this.onChangeThemeDefault(this.props.theme_default)
+          //   }}
+          //   data-toggle="modal"
+          //   data-target="#modalDefaultReset"
+          //   style={{
+          //     color: "#0d6efd"
+          //   }}>Khôi phục mặc định</a>
+            }
         </div>
 
         <Tabs defaultIndex={0} onSelect={(index) => this.getTabActive(index)}>
@@ -535,6 +558,7 @@ class Custom_Screen extends Component {
                               <div class="col-md-12 col-xs-12">
                                 <div class="box">
                                   <FormFooterHtml
+                                  html_footer  = {html_footer}
                                     theme={this.props.theme}
                                     store_code={this.props.store_code}
                                   />

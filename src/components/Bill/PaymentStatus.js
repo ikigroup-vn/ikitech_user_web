@@ -22,10 +22,10 @@ class PaymentStatus extends Component {
                         name: "Đã thanh toán một phần",
                         code: "PARTIALLY_PAID",
                     },
-                    {
-                        name: "Khách hủy",
-                        code: "CUSTOMER_CANCELLED",
-                    },
+                    // {
+                    //     name: "Khách hủy",
+                    //     code: "CUSTOMER_CANCELLED",
+                    // },
                     {
                         name: "Đã hoàn tiền",
                         code: "REFUNDS",
