@@ -21,6 +21,12 @@
     cursor: pointer
 }
 
+.active-branch-default{
+    color : blue
+}
+
+/* .active-branch-default[--nth-word="1"] { color: red; } */
+
 
 /* .note-stock{
     cursor: pointer;

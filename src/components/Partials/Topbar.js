@@ -122,8 +122,8 @@ class Topbar extends Component {
       result = stores.map((data, index) => {
         var selected = data.store_code === store_code ? true : false;
         return (
-          <option value={data.id} key={index} selected={selected}>
-            {data.name}
+          <option value={data.id} key={index} selected={selected} data-branch-type = "(CN mặc định)" className={data.is_default_order_online == true ? "active-branch-default" : ""}>
+            {data.name}      {data.is_default_order_online == true ? "(Mặc định)" : ""} 
           </option>
         );
       });
@@ -159,6 +159,11 @@ class Topbar extends Component {
         />
       );
   };
+
+  // componentDidUpdate()
+  // {
+  //   window.$(".active-branch-default").after("CN mặc định");
+  // }
 
   render() {
     var chooseStore = this.props.isHome ? "hide" : "show";

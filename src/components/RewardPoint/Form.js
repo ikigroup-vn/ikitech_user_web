@@ -165,90 +165,7 @@ class Form extends Component {
         <form role="form" onSubmit={this.onSave} >
           <div class="box-body">
             <div className="box-body">
-              <div className="form-group">
-                <label htmlFor="lname">Quy đổi xu thành VNĐ</label>
-                <div className="group" style={{ display: "flex" }}>
-                  <div style={{ display: "flex" }}>
-                    <span style={{ margin: "auto", minWidth: "100px " }}>1 Xu bằng: </span>
-
-                  </div>
-                  <div class="input-group" style={{ marginLeft: "20px", maxWidth: "100%" }}>
-
-                    <input type="text" class="form-control" onChange={this.onChange} name="money_a_point" value={formatNoDWithEmpty(money_a_point)} placeholder="Nhập số tiền..." />
-                    <div class="input-group-append">
-                      <span class="input-group-text" id="basic-addon2">VNĐ</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="phone">Phần trăm hoàn xu cho mỗi đơn hàng</label>
-                <div className="group" style={{ display: "flex" }}>
-                  <div style={{ display: "flex" }}>
-                    <span style={{ margin: "auto", minWidth: "100px " }}>Phần trăm: </span>
-
-                  </div>
-                  <div class="input-group" style={{ marginLeft: "20px", maxWidth: "100%" }}>
-
-                    <input type="text" class="form-control" value={percent_refund} onChange={this.onChange} name="percent_refund" placeholder="Nhập phần trăm..." />
-                    <div class="input-group-append">
-                      <span class="input-group-text" id="basic-addon2">%</span>
-                    </div>
-                  </div>
-
-                </div>
-                <p
-                  style={{ paddingTop: "10px" }}
-                >
-                  <i>
-                    ( Ví dụ: {new Intl.NumberFormat().format(ex.toString())} VNĐ hoàn {percent_refund == null || percent_refund == "" ? 0 : percent_refund}%
-                    =&nbsp;
-                    {percent_refund == null ? 0 : new Intl.NumberFormat().format((ex * percent_refund / 100).toString())} VNĐ =
-                    {percent_refund == null || money_a_point == null || percent_refund == "" || money_a_point == "" ? 0 : new Intl.NumberFormat().format(((ex * percent_refund / 100) / Number(money_a_point.toString().replace(/,/g, '').replace(/-/g, ''))).toString())} Xu )
-                  </i>
-                </p>
-              </div>
-
-
-
-              <div className="form-group">
-                <label htmlFor="phone">Số xu nhận được khi đánh giá sản phẩm</label>
-                <div className="group" style={{ display: "flex" }}>
-                  <div style={{ display: "flex" }}>
-                    <span style={{ margin: "auto", minWidth: "100px " }}>Số Xu: </span>
-
-                  </div>
-                  <div class="input-group" style={{ marginLeft: "20px", maxWidth: "100%" }}>
-
-                    <input type="text" class="form-control" onChange={this.onChange} value={formatNoDWithEmpty(point_review)} name="point_review" placeholder="Nhập số xu..." />
-                    <div class="input-group-append">
-                      <span class="input-group-text" id="basic-addon2">Xu</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-
-
-              <div className="form-group">
-                <label htmlFor="phone">Số xu nhận được khi Giới thiệu 'Được' bạn bè</label>
-                <div className="group" style={{ display: "flex" }}>
-                  <div style={{ display: "flex" }}>
-                    <span style={{ margin: "auto", minWidth: "100px " }}>Số Xu: </span>
-
-                  </div>
-                  <div class="input-group" style={{ marginLeft: "20px", maxWidth: "100%" }}>
-
-                    <input type="text" class="form-control" value={formatNoDWithEmpty(point_introduce_customer)} onChange={this.onChange} name="point_introduce_customer" placeholder="Nhập số xu..." />
-                    <div class="input-group-append">
-                      <span class="input-group-text" id="basic-addon2">Xu</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="form-group">
+            <div class="form-group">
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" checked={checkedAllow} name="allow_use_point_order" onChange={this.onChangeCheckBox} id="gridCheck" />
                   <label class="form-check-label" for="gridCheck">
@@ -257,60 +174,150 @@ class Form extends Component {
                 </div>
 
               </div>
-              <div class="form-group">
-                <div class="form-check">
-                  <input class="form-check-input" checked={checkMaxPoint} name="is_set_order_max_point" onChange={this.onChangeCheckBox} type="checkbox" id="gridCheck" />
-                  <label class="form-check-label" for="gridCheck">
-                    Xét giới hạn xu nhận được khi mua hàng
-                  </label>
-                </div>
-
-              </div>
-
-              <div className={`form-group ${disableValueMaxPoint}`}>
-                <label htmlFor="phone">Số xu nhận được tối đa khi mua hàng</label>
-                <div className="group" style={{ display: "flex" }}>
-                  <div style={{ display: "flex" }}>
-                    <span style={{ margin: "auto", minWidth: "100px " }}>Số Xu: </span>
-
-                  </div>
-                  <div class="input-group" style={{ marginLeft: "20px", maxWidth: "100%" }}>
-
-                    <input type="text" class="form-control" onChange={this.onChange} value={formatNoDWithEmpty(order_max_point)} name="order_max_point" placeholder="Nhập số xu..." />
-                    <div class="input-group-append">
-                      <span class="input-group-text" id="basic-addon2">Xu</span>
+              {
+                checkedAllow == true && 
+                <React.Fragment>
+                <div className="form-group">
+                  <label htmlFor="lname">Quy đổi xu thành VNĐ</label>
+                  <div className="group" style={{ display: "flex" }}>
+                    <div style={{ display: "flex" }}>
+                      <span style={{ margin: "auto", minWidth: "100px " }}>1 Xu bằng: </span>
+  
+                    </div>
+                    <div class="input-group" style={{ marginLeft: "20px", maxWidth: "100%" }}>
+  
+                      <input type="text" class="form-control" onChange={this.onChange} name="money_a_point" value={formatNoDWithEmpty(money_a_point)} placeholder="Nhập số tiền..." />
+                      <div class="input-group-append">
+                        <span class="input-group-text" id="basic-addon2">VNĐ</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-
-
-              <div class="form-group">
-                <div class="form-check">
-                  <input class="form-check-input" checked={isPercentUseMaxPoint} name="is_percent_use_max_point" onChange={this.onChangeCheckBox} type="checkbox" id="gridCheck" />
-                  <label class="form-check-label" for="gridCheck">
-                    Xét giới hạn số tiền có thể sử dụng bởi xu trong một đơn hàng
-                  </label>
-                </div>
-
-              </div>
-
-              <div className={`form-group ${disablePercentUseMaxPont}`}>
-                <label htmlFor="phone">Phần trăm số tiền tối đa sử dụng bằng xu trên mỗi đơn hàng</label>
-                <div className="group" style={{ display: "flex" }}>
-                  <div style={{ display: "flex" }}>
-                    <span style={{ margin: "auto", minWidth: "100px " }}>Số phần trăm: </span>
-
+  
+                <div className="form-group">
+                  <label htmlFor="phone">Phần trăm hoàn xu cho mỗi đơn hàng</label>
+                  <div className="group" style={{ display: "flex" }}>
+                    <div style={{ display: "flex" }}>
+                      <span style={{ margin: "auto", minWidth: "100px " }}>Phần trăm: </span>
+  
+                    </div>
+                    <div class="input-group" style={{ marginLeft: "20px", maxWidth: "100%" }}>
+  
+                      <input type="text" class="form-control" value={percent_refund} onChange={this.onChange} name="percent_refund" placeholder="Nhập phần trăm..." />
+                      <div class="input-group-append">
+                        <span class="input-group-text" id="basic-addon2">%</span>
+                      </div>
+                    </div>
+  
                   </div>
-                  <div class="input-group" style={{ marginLeft: "20px", maxWidth: "100%" }}>
-
-                    <input type="text" class="form-control" onChange={this.onChange} value={percent_use_max_point} name="percent_use_max_point" placeholder="Nhập số phần trăm..." />
-                    <div class="input-group-append">
-
+                  <p
+                    style={{ paddingTop: "10px" }}
+                  >
+                    <i>
+                      ( Ví dụ: {new Intl.NumberFormat().format(ex.toString())} VNĐ hoàn {percent_refund == null || percent_refund == "" ? 0 : percent_refund}%
+                      =&nbsp;
+                      {percent_refund == null ? 0 : new Intl.NumberFormat().format((ex * percent_refund / 100).toString())} VNĐ =
+                      {percent_refund == null || money_a_point == null || percent_refund == "" || money_a_point == "" ? 0 : new Intl.NumberFormat().format(((ex * percent_refund / 100) / Number(money_a_point.toString().replace(/,/g, '').replace(/-/g, ''))).toString())} Xu )
+                    </i>
+                  </p>
+                </div>
+  
+  
+  
+                <div className="form-group">
+                  <label htmlFor="phone">Số xu nhận được khi đánh giá sản phẩm</label>
+                  <div className="group" style={{ display: "flex" }}>
+                    <div style={{ display: "flex" }}>
+                      <span style={{ margin: "auto", minWidth: "100px " }}>Số Xu: </span>
+  
+                    </div>
+                    <div class="input-group" style={{ marginLeft: "20px", maxWidth: "100%" }}>
+  
+                      <input type="text" class="form-control" onChange={this.onChange} value={formatNoDWithEmpty(point_review)} name="point_review" placeholder="Nhập số xu..." />
+                      <div class="input-group-append">
+                        <span class="input-group-text" id="basic-addon2">Xu</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
+  
+  
+  
+                <div className="form-group">
+                  <label htmlFor="phone">Số xu nhận được khi Giới thiệu 'Được' bạn bè</label>
+                  <div className="group" style={{ display: "flex" }}>
+                    <div style={{ display: "flex" }}>
+                      <span style={{ margin: "auto", minWidth: "100px " }}>Số Xu: </span>
+  
+                    </div>
+                    <div class="input-group" style={{ marginLeft: "20px", maxWidth: "100%" }}>
+  
+                      <input type="text" class="form-control" value={formatNoDWithEmpty(point_introduce_customer)} onChange={this.onChange} name="point_introduce_customer" placeholder="Nhập số xu..." />
+                      <div class="input-group-append">
+                        <span class="input-group-text" id="basic-addon2">Xu</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+  
+          
+                <div class="form-group">
+                  <div class="form-check">
+                    <input class="form-check-input" checked={checkMaxPoint} name="is_set_order_max_point" onChange={this.onChangeCheckBox} type="checkbox" id="gridCheck" />
+                    <label class="form-check-label" for="gridCheck">
+                      Xét giới hạn xu nhận được khi mua hàng
+                    </label>
+                  </div>
+  
+                </div>
+  
+                <div className={`form-group ${disableValueMaxPoint}`}>
+                  <label htmlFor="phone">Số xu nhận được tối đa khi mua hàng</label>
+                  <div className="group" style={{ display: "flex" }}>
+                    <div style={{ display: "flex" }}>
+                      <span style={{ margin: "auto", minWidth: "100px " }}>Số Xu: </span>
+  
+                    </div>
+                    <div class="input-group" style={{ marginLeft: "20px", maxWidth: "100%" }}>
+  
+                      <input type="text" class="form-control" onChange={this.onChange} value={formatNoDWithEmpty(order_max_point)} name="order_max_point" placeholder="Nhập số xu..." />
+                      <div class="input-group-append">
+                        <span class="input-group-text" id="basic-addon2">Xu</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+  
+  
+                <div class="form-group">
+                  <div class="form-check">
+                    <input class="form-check-input" checked={isPercentUseMaxPoint} name="is_percent_use_max_point" onChange={this.onChangeCheckBox} type="checkbox" id="gridCheck" />
+                    <label class="form-check-label" for="gridCheck">
+                      Xét giới hạn số tiền có thể sử dụng bởi xu trong một đơn hàng
+                    </label>
+                  </div>
+  
+                </div>
+  
+                <div className={`form-group ${disablePercentUseMaxPont}`}>
+                  <label htmlFor="phone">Phần trăm số tiền tối đa sử dụng bằng xu trên mỗi đơn hàng</label>
+                  <div className="group" style={{ display: "flex" }}>
+                    <div style={{ display: "flex" }}>
+                      <span style={{ margin: "auto", minWidth: "100px " }}>Số phần trăm: </span>
+  
+                    </div>
+                    <div class="input-group" style={{ marginLeft: "20px", maxWidth: "100%" }}>
+  
+                      <input type="text" class="form-control" onChange={this.onChange} value={percent_use_max_point} name="percent_use_max_point" placeholder="Nhập số phần trăm..." />
+                      <div class="input-group-append">
+  
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                </React.Fragment>
+              }
+            
 
             </div>
 
