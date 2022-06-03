@@ -2,6 +2,7 @@ auto build
 
 git checkout son
 git pull
+git checkout dev
 git merge son
 git add .
 git commit -m "Merge son"
