@@ -32,7 +32,7 @@ class BlogEdit extends Component {
     ) {
       var permissions = nextProps.permission;
 
-      var isShow = permissions.post_add;
+      var isShow = permissions.post_list;
       this.setState({ isLoading: true, isShow });
     }
   }

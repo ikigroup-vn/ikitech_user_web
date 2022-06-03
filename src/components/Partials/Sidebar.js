@@ -26,8 +26,13 @@ class Sidebar extends Component {
     console.log("open" , menu)
     for (const item of menu[0]?.link) {
       if (item.open) {
-        console.log("open" , item)
-        if(item.setOpenKey?.length > 0)
+        if(item.ExcludeSetOpenKey?.length > 0)
+        for (const element of item.ExcludeSetOpenKey
+        ) {
+          if (location.includes(element)) {
+            return;
+          }
+        }        if(item.setOpenKey?.length > 0)
         for (const element of item.setOpenKey
         ) {
           if (location.includes(element)) {

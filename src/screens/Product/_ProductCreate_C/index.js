@@ -24,11 +24,9 @@ class Index extends Component {
         if (this.state.isLoading != true && typeof nextProps.permission.product_list != "undefined") {
             var permissions = nextProps.permission
 
-            var isShow = permissions.product_add
-            var isShowAttr = permissions.product_attribute_list
-            var isCreate = permissions.product_attribute_add
-            var isRemove = permissions.product_attribute_remove
-            this.setState({ isLoading: true, isShow , isShowAttr , isCreate , isRemove })
+            var isShow = permissions.product_list
+    
+            this.setState({ isLoading: true, isShow : isShow , isShowAttr : true , isCreate : true , isRemove : true })
         }
     }
 

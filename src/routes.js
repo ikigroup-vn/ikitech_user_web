@@ -732,6 +732,12 @@ const routes = [
     main: ({ match }) => <TimeSheet match={match} />,
   },
   {
+    path: "/accountant/time_sheet/:store_code",
+    exact: true,
+
+    main: ({ match }) => <TimeSheet match={match} />,
+  },
+  {
     path: "/login",
     exact: true,
 

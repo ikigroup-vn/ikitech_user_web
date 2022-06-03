@@ -94,7 +94,7 @@ export const ikitech_menu = [
             to: "/import_stocks/index",
           },
           {
-            class: "inventory_import",
+            class: "transfer_stock",
             display: "hide",
             name: "Chuyển kho",
             exact: true,
@@ -119,14 +119,14 @@ export const ikitech_menu = [
         open: "posts",
         children: [
           {
-            class: "product_category_list",
+            class: "post_list",
             display: "hide",
             name: "Danh mục bài viết",
             exact: true,
             to: "/posts/category",
           },
           {
-            class: "product_list",
+            class: "post_list",
             display: "hide",
             name: "Tin tức - Bài viết",
             exact: true,
@@ -184,7 +184,7 @@ export const ikitech_menu = [
       }, 
       {
         name: "Kế toán",
-        setOpenKey : ["/revenue_expenditure" , "/time_sheet"],
+        setOpenKey : ["/revenue_expenditure" , "/accountant/time_sheet/"],
 
         icon: "fas fa-coins",
         open: "revenue_expenditure",
@@ -205,7 +205,7 @@ export const ikitech_menu = [
             display: "hide",
             icon: "fas fa-fw fa-calendar-days",
             exact: true,
-            to: "/time_sheet",
+            to: "/accountant/time_sheet",
           },
         
          
@@ -249,14 +249,14 @@ export const ikitech_menu = [
         children: [
           {
             name: "Cộng tác viên",
-            class: "web_theme_edit",
+            class: "collaborator_list",
             display: "hide",
             exact: true,
             to: "/collaborator",
           },
           {
             name: "Đại lý",
-            class: "notification_schedule_list",
+            class: "agency_list",
             display: "hide",
             icon: "fa fa-bell",
             exact: true,
@@ -281,7 +281,9 @@ export const ikitech_menu = [
         name: "Chấm công",
         icon: "fa fa-calendar",
         class: "timekeeping",
-        setOpenKey : ["/shift" , "/calendar_shift" , "/time_sheet" , "/work_location" , "/request"],
+        setOpenKey : ["/shift" , "/calendar_shift" , "/time_sheet" , "/work_location" , "/request"],       
+        ExcludeSetOpenKey : ["/accountant/time_sheet/"],
+
         open: "timekeeping",
 
         children: [
@@ -456,7 +458,7 @@ export const ikitech_menu = [
           },
           {
             name: "Đơn vị vận chuyển",
-            class: "delivery_provider_update",
+            class: "delivery_pick_address_list",
 
             icon: "fas fa-fw fa-cog",
             exact: true,
@@ -491,14 +493,14 @@ export const ikitech_menu = [
             exact: true,
             to: "/notifications/schedule",
           },
-          {
-            name: "Cài đặt Popup",
-            class: "popup_list",
-            display: "hide",
-            icon: "fa fa-bell",
-            exact: true,
-            to: "/popup",
-          },
+          // {
+          //   name: "Cài đặt Popup",
+          //   class: "popup_list",
+          //   display: "hide",
+          //   icon: "fa fa-bell",
+          //   exact: true,
+          //   to: "/popup",
+          // },
 
         ],
       },

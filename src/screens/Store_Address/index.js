@@ -41,10 +41,10 @@ class StoreAddress extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.state.isLoading != true && typeof this.props.permission.product_list != "undefined") {
       var permissions = this.props.permission
-      var update = permissions.delivery_pick_address_update
+      // var update = permissions.delivery_pick_address_update
       var isShow = permissions.delivery_pick_address_list
 
-      this.setState({ isLoading: true, update,isShow })
+      this.setState({ isLoading: true, update:true,isShow })
 
     }
     $("#dataTable").DataTable(config());

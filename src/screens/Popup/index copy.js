@@ -31,7 +31,7 @@ class Popup extends Component {
   };
 
   componentDidMount() {
-    this.props.fetchAllPopup(this.props.store_code);
+    this.props.fetchAllPopup(this.props.match.params.store_code);
   }
   componentWillReceiveProps(nextProps) {
     $("#dataTable").DataTable().destroy();
@@ -50,45 +50,68 @@ class Popup extends Component {
     $("#dataTable").DataTable(config());
   }
   render() {
-    var {store_code} = this.props
+    var {store_code} = this.props.match.params
     var {popup} = this.props
     var { insert, update, _delete ,isShow} = this.state
 
     if (this.props.auth) {
       return (
-        <div className="">
-        <Alert
-          type={Types.ALERT_UID_STATUS}
-          alert={this.props.alert}
-        />
-        <div
-          style={{ display: "flex", justifyContent: "end" }}
-        >
-       
-          <Link to={`/popup/create/${store_code}`} 
-                              class={`btn btn-info btn-icon-split btn-sm ${insert == true ? "show" : "hide"}`}
+        <div id="wrapper">
+          <Sidebar store_code={store_code} />
+<div className="col-10 col-10-wrapper">
 
-          >
-            <span class="icon text-white-50">
-              <i class="fas fa-plus"></i>
-            </span>
-            <span class="text">Thêm quảng cáo</span>
-          </Link>
-        </div>
+          <div id="content-wrapper" className="d-flex flex-column">
+            <div id="content">
+              <Topbar store_code= {store_code} />
+              {typeof isShow == "undefined" ?             <div style = {{height : "500px"}}></div> :
+ isShow == true ?
 
-        <div className="card shadow mb-4" style = {{marginTop : "8px"}}>
-          <div className="card-header py-3">
-            <h6 className="m-0 title_content font-weight-bold text-primary">
-              Danh sách popup thông báo
-            </h6>
+              <div className="container-fluid">
+                <Alert
+                  type={Types.ALERT_UID_STATUS}
+                  alert={this.props.alert}
+                />
+                <div
+                  style={{ display: "flex", justifyContent: "space-between" }}
+                >
+                  <h4 className="h4 title_content mb-0 text-gray-800">
+                    Quảng cáo
+                  </h4>{" "}
+                  <Link to={`/popup/create/${store_code}`} 
+                                      class={`btn btn-info btn-icon-split btn-sm ${insert == true ? "show" : "hide"}`}
+
+                  >
+                    <span class="icon text-white-50">
+                      <i class="fas fa-plus"></i>
+                    </span>
+                    <span class="text">Thêm quảng cáo</span>
+                  </Link>
+                </div>
+
+                <br></br>
+                <div className="card shadow mb-4">
+                  <div className="card-header py-3">
+                    <h6 className="m-0 title_content font-weight-bold text-primary">
+                      Danh sách popup thông báo
+                    </h6>
+                  </div>
+                  <div className="card-body">
+                    <Table update={update} _delete={_delete} store_code = {store_code}  handleDelCallBack = {this.handleDelCallBack}  data={popup} />
+                  </div>
+                </div>
+              </div>
+
+: <NotAccess/>}
+
+            </div>
+
+            <Footer />
           </div>
-          <div className="card-body">
-            <Table update={update} _delete={_delete} store_code = {store_code}  handleDelCallBack = {this.handleDelCallBack}  data={popup} />
-          </div>
-        </div>
-        <ModalDelete store_code = {store_code}  modal = {this.state.modal} />
+          <ModalDelete store_code = {store_code}  modal = {this.state.modal} />
 
-      </div>
+          
+        </div>
+        </div>
 
       );
     } else if (this.props.auth === false) {

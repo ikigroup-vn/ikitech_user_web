@@ -93,6 +93,21 @@ class TimeSheet extends Component {
     });
   };
 
+  componentDidUpdate() {
+    if (this.state.isLoading != true && typeof this.props.permission.timekeeping != "undefined") {
+        var permissions = this.props.permission
+        // var insert = permissions.timekeeping_shift_add
+        // var update = permissions.timekeeping_shift_update
+        // var _delete = permissions.timekeeping_shift_delete
+
+        var isShow = permissions.timekeeping
+
+        this.setState({ isLoading: true, insert:true, update:true, _delete:true ,isShow})
+
+      }
+
+  }
+
   render() {
     var { store_code } = this.props.match.params;
     const branch_id = getBranchId();
@@ -105,6 +120,7 @@ class TimeSheet extends Component {
 
       datePrime,
     } = this.state;
+    console.log(isShow)
     if (this.props.auth) {
       return (
         <div id="wrapper">
@@ -113,6 +129,7 @@ class TimeSheet extends Component {
             <div id="content-wrapper" className="d-flex flex-column">
               <div id="content">
                 <Topbar store_code={store_code} />
+                {typeof isShow == "undefined" ? <div></div> : isShow == true ?
 
                 <div className="container-fluid">
                   <Alert
@@ -278,6 +295,8 @@ class TimeSheet extends Component {
                     </div>
                   </div>
                 </div>
+                   : <NotAccess/>}
+
               </div>
 
               <Footer />

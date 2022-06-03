@@ -44,22 +44,21 @@ class CalendarShift extends Component {
       },
     });
     var typeDate = getQueryParams("type")
-    
-    if(typeDate)
-    {
+
+    if (typeDate) {
       var resetId = helper.randomString(10);
 
-      typeDate = typeDate == "DAY" ||  typeDate == "WEEK" || typeDate == "MONTH" ? typeDate : "DAY"
+      typeDate = typeDate == "DAY" || typeDate == "WEEK" || typeDate == "MONTH" ? typeDate : "DAY"
       var typeSelect =
-      typeDate == "DAY"
-        ? "Ngày"
-        : typeDate == "WEEK"
-        ? "Tuần"
-        : typeDate == "MONTH"
-        ? "Tháng"
-        : "";
-        console.log(typeDate,typeSelect)
-    this.setState({ typeDate: typeDate, reset: resetId, typeSelect: typeSelect });
+        typeDate == "DAY"
+          ? "Ngày"
+          : typeDate == "WEEK"
+            ? "Tuần"
+            : typeDate == "MONTH"
+              ? "Tháng"
+              : "";
+      console.log(typeDate, typeSelect)
+      this.setState({ typeDate: typeDate, reset: resetId, typeSelect: typeSelect });
     }
 
     const time = moment().format("YYYY-MM-DD");
@@ -81,21 +80,22 @@ class CalendarShift extends Component {
     return true;
   }
   handleGetDatePost = (date, typeDate) => {
-    console.log(date,typeDate)
+    console.log(date, typeDate)
     var typeSelect =
-    typeDate == "DAY"
-      ? "Ngày"
-      : typeDate == "WEEK"
-      ? "Tuần"
-      : typeDate == "MONTH"
-      ? "Tháng"
-      : "";    this.setState({
-      datePrime: {
-        from: date.datePrime?.from,
-        to: date.datePrime?.to,
-      },
+      typeDate == "DAY"
+        ? "Ngày"
+        : typeDate == "WEEK"
+          ? "Tuần"
+          : typeDate == "MONTH"
+            ? "Tháng"
+            : ""; this.setState({
+              datePrime: {
+                from: date.datePrime?.from,
+                to: date.datePrime?.to,
+              },
 
-      typeDate: typeDate, typeSelect: typeSelect    });
+              typeDate: typeDate, typeSelect: typeSelect
+            });
   };
   onchangeDate = (value) => {
     var resetId = helper.randomString(10);
@@ -103,12 +103,26 @@ class CalendarShift extends Component {
       value == "DAY"
         ? "Ngày"
         : value == "WEEK"
-        ? "Tuần"
-        : value == "MONTH"
-        ? "Tháng"
-        : "";
+          ? "Tuần"
+          : value == "MONTH"
+            ? "Tháng"
+            : "";
     this.setState({ typeDate: value, reset: resetId, typeSelect: typeSelect });
   };
+  componentDidUpdate() {
+    if (this.state.isLoading != true && typeof this.props.permission.timekeeping != "undefined") {
+      var permissions = this.props.permission
+      // var insert = permissions.timekeeping_shift_add
+      // var update = permissions.timekeeping_shift_update
+      // var _delete = permissions.timekeeping_shift_delete
+
+      var isShow = permissions.timekeeping
+
+      this.setState({ isLoading: true, insert: true, update: true, _delete: true, isShow })
+
+    }
+
+  }
 
   render() {
     var { store_code } = this.props.match.params;
@@ -123,7 +137,7 @@ class CalendarShift extends Component {
       datePrime,
     } = this.state;
     console.log(datePrime, typeSelect,
-      typeDate,)
+      typeDate)
     if (this.props.auth) {
       return (
         <div id="wrapper">
@@ -132,6 +146,7 @@ class CalendarShift extends Component {
             <div id="content-wrapper" className="d-flex flex-column">
               <div id="content">
                 <Topbar store_code={store_code} />
+                {typeof isShow == "undefined" ? <div></div> : isShow == true ?
 
                 <div className="container-fluid">
                   <Alert
@@ -168,7 +183,7 @@ class CalendarShift extends Component {
                           alignItems: "center",
                         }}
                       >
-                        
+
                         <div class="dropdown">
                           <button
                             style={{
@@ -238,6 +253,8 @@ class CalendarShift extends Component {
                     </div>
                   </div>
                 </div>
+                                                                                                                                        : <NotAccess/>}
+
               </div>
 
               {/* <ModalPut

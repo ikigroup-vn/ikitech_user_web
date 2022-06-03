@@ -41,11 +41,11 @@ class Store extends Component {
   componentDidUpdate() {
     if (this.state.isLoading != true && typeof this.props.permission.product_list != "undefined") {
       var permissions = this.props.permission
-      var censorship = permissions.customer_review_censorship
+      // var censorship = permissions.customer_review_censorship
       var isShow = permissions.customer_review_list
 
 
-      this.setState({ isLoading: true, censorship, isShow })
+      this.setState({ isLoading: true, censorship:true, isShow })
 
     }
   }

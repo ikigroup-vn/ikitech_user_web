@@ -49,13 +49,15 @@ class collaborator extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.state.isLoading != true && typeof this.props.permission.product_list != "undefined") {
       var permissions = this.props.permission
-      var payment_request_list = permissions.collaborator_payment_request_list
-      var config = permissions.collaborator_config
-      var payment_request_history = permissions.collaborator_payment_request_history
-      var collaborator_list = permissions.collaborator_list
-      var payment_request_solve = permissions.collaborator_payment_request_solve
+      // var payment_request_list = permissions.collaborator_payment_request_list
+      // var config = permissions.collaborator_config
+      // var payment_request_history = permissions.collaborator_payment_request_history
+      // var collaborator_list = permissions.collaborator_list
+      // var payment_request_solve = permissions.collaborator_payment_request_solve
+      var isShow = permissions.collaborator_list
 
-      var isShow = payment_request_list == false && config == false && payment_request_history == false && collaborator_list == false ? false : true
+      
+      // var isShow = payment_request_list == false && config == false && payment_request_history == false && collaborator_list == false ? false : true
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
       var tabIndex = urlParams.get('tab-index');
@@ -63,7 +65,7 @@ class collaborator extends Component {
         tabIndex = 0;
       }
       this.defaultIndex = tabIndex;
-      this.setState({ isLoading: true, collaborator_list, payment_request_list, config, payment_request_history, payment_request_solve, isShow })
+      this.setState({ isLoading: true, collaborator_list : true, payment_request_list : true, config : true, payment_request_history : true, payment_request_solve : true, isShow })
 
     }
 

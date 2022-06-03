@@ -81,7 +81,7 @@ class Home_Screen extends Component {
         isVip: false,
         index: 8,
         theme: "8.png",
-        arr_index_component: [8, 8, 7, 3, 3],
+        arr_index_component: [8, 8, 7, 3, 2],
         demo_link: "https://mediamartonline.mydoapp.vn/"
       },
 
