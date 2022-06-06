@@ -33,7 +33,7 @@ class Custom_Screen extends Component {
       product_home_type: null,
       post_home_type: null,
       footer_type: null,
-      html_footer : null,
+      html_footer: null,
       use_footer_html: false,
       tabId: 0,
     };
@@ -71,7 +71,7 @@ class Custom_Screen extends Component {
         footer_type: theme.footer_type,
         use_footer_html: theme.is_use_footer_html,
 
-        html_footer : theme.html_footer
+        html_footer: theme.html_footer
       });
 
 
@@ -93,7 +93,7 @@ class Custom_Screen extends Component {
         post_home_type: theme.post_home_type,
         footer_type: theme.footer_type,
         use_footer_html: theme.is_use_footer_html,
-        html_footer : theme.html_footer
+        html_footer: theme.html_footer
       });
 
       setTimeout(function () { //Start the timer
@@ -234,7 +234,7 @@ class Custom_Screen extends Component {
       html_footer,
       tabId,
     } = this.state;
-    var { badges } = this.props;
+    var { badges , store_code} = this.props;
     return (
       <div className="overview " style={{ marginLeft: "25px" }}>
 
@@ -244,31 +244,33 @@ class Custom_Screen extends Component {
             <i class="fas fa-arrow-left"></i>&nbsp;Quay lại</button>
 
           {this.isSameDefault() == false &&
-          <button
-          type="button"
-          class="btn btn-primary-no-background btn-sm" style = {{    color: "#0d6efd",
-            "border-color": "#0d6efd"}}
-          onClick={() => {
+            <button
+              type="button"
+              class="btn btn-primary-no-background btn-sm" style={{
+                color: "#0d6efd",
+                "border-color": "#0d6efd"
+              }}
+              onClick={() => {
 
-            this.onChangeThemeDefault(this.props.theme_default)
-          }}
-          data-toggle="modal"
-          data-target="#modalDefaultReset"
-        >
-            <i class="fas fa-undo" ></i>
-          <span class="text">&nbsp;Khôi phục mặc định</span>
-        </button>
-          //  <a
-          //   onClick={() => {
+                this.onChangeThemeDefault(this.props.theme_default)
+              }}
+              data-toggle="modal"
+              data-target="#modalDefaultReset"
+            >
+              <i class="fas fa-undo" ></i>
+              <span class="text">&nbsp;Khôi phục mặc định</span>
+            </button>
+            //  <a
+            //   onClick={() => {
 
-          //     this.onChangeThemeDefault(this.props.theme_default)
-          //   }}
-          //   data-toggle="modal"
-          //   data-target="#modalDefaultReset"
-          //   style={{
-          //     color: "#0d6efd"
-          //   }}>Khôi phục mặc định</a>
-            }
+            //     this.onChangeThemeDefault(this.props.theme_default)
+            //   }}
+            //   data-toggle="modal"
+            //   data-target="#modalDefaultReset"
+            //   style={{
+            //     color: "#0d6efd"
+            //   }}>Khôi phục mặc định</a>
+          }
         </div>
 
         <Tabs defaultIndex={0} onSelect={(index) => this.getTabActive(index)}>
@@ -523,14 +525,25 @@ class Custom_Screen extends Component {
                         checked={use_footer_html}
                         onChange={(e) => {
                           let checkbox = e.target;
+                          var form = { ...this.props.theme };
+
                           if (checkbox.checked) {
                             this.setState({
                               use_footer_html: true,
+
+
                             });
+
+
+                            form.is_use_footer_html = true;
+                            this.props.updateTheme(store_code, form);
                           } else {
                             this.setState({
                               use_footer_html: false,
                             });
+                            form.is_use_footer_html = false;
+                            this.props.updateTheme(store_code, form);
+
                           }
                         }}
                       />
@@ -558,7 +571,7 @@ class Custom_Screen extends Component {
                               <div class="col-md-12 col-xs-12">
                                 <div class="box">
                                   <FormFooterHtml
-                                  html_footer  = {html_footer}
+                                    html_footer={html_footer}
                                     theme={this.props.theme}
                                     store_code={this.props.store_code}
                                   />

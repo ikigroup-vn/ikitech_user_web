@@ -84,6 +84,14 @@ class Home_Screen extends Component {
         arr_index_component: [8, 8, 7, 3, 2],
         demo_link: "https://mediamartonline.mydoapp.vn/"
       },
+      {
+        isVip: false,
+        index: 9,
+        theme: "9.png",
+        arr_index_component: [9, 4, 6, 7, 1],
+        demo_link: "https://hoqua.isempai.net/"
+      },
+
 
     ];
   }
