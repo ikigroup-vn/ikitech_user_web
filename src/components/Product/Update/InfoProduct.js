@@ -230,6 +230,7 @@ class InfoProduct extends Component {
     }
     if (!shallowEqual(nextProps.product, this.props.product)) {
       var { product } = { ...nextProps };
+      var {isCopy} = nextProps
       var categories = [];
       var listcategorynew = [];
       categories = product.categories.map((category, index) => {
@@ -264,12 +265,12 @@ class InfoProduct extends Component {
         txtImportPrice: _import_price,
         disabledPrice: _price == 0 ? true : false,
         txtPercentC: product.percent_collaborator,
-        txtBarcode: product.barcode || Math.random().toString().slice(2, 11),
+        txtBarcode: isCopy ? Math.random().toString().slice(2, 11) :  product.barcode || Math.random().toString().slice(2, 11),
         txtStatus: product.status,
         category_parent: listcategorynew,
         category_children_ids: product.category_children,
         txtQuantityInStock: _quantity_stock,
-        sku: product.sku || Math.random().toString().slice(2, 11),
+        sku:  isCopy ? Math.random().toString().slice(2, 11)  : product.sku || Math.random().toString().slice(2, 11),
         checkHasDistribute,
         check_inventory: product.check_inventory,
         txtCostOfCapital: product.main_cost_of_capital,
@@ -356,6 +357,7 @@ class InfoProduct extends Component {
     } = this.state;
     console.log(checkHasDistribute);
     var txtQuantityInStock = txtQuantityInStock == -1 ? "" : txtQuantityInStock;
+    var {isCopy}   = this.props
     return (
       <div class="card-body" style={{ padding: "0.8rem" }}>
         <div class="form-group">
