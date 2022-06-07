@@ -242,6 +242,21 @@ export const ikitech_menu = [
         ],
       },
       {
+        name: "OnSale",
+        setOpenKey : ["/customer" , "/reward_point" , "chat"],
+        icon: "fas fa-user",
+        open: "customer",
+        children: [
+          {
+            class: "customer_list",
+            display: "hide",
+            name: "Khách hàng tiềm năng",
+            exact: true,
+            to: "/customer_sales",
+          },
+        ],
+      },
+      {
         name: "Đối tác bán hàng",
         setOpenKey : ["/collaborator" , "/agency"],
         icon: "fa fa-user",

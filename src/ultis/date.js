@@ -8,6 +8,15 @@ export const getYYYYMMDDNow = () => {
     return moment().format("DD-MM-YYYY");
   };
 
+  export const getDDMMYYYHis = (date) => {
+    return moment(date).format("HH:mm:ss DD-MM-YYYY");
+  };
+
+
+  export const getDDMMYYY = (date) => {
+    return moment(date).format("DD-MM-YYYY");
+  };
+
   export function getDDMMYYYDate(date) {
     let year = date.getFullYear();
     let month = (1 + date.getMonth()).toString().padStart(2, '0');
