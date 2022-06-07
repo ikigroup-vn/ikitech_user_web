@@ -286,11 +286,11 @@ class Overview extends Component {
                             <input type="text" className="form-control" placeholder="Tên miền của bạn" id="txtName" onChange={this.onChange} value={domain || ""} name="domain" autoComplete="off" />
                             <span>(Tên miền cần trỏ vào IP 116.118.50.101, sẽ được tự xác nhận sau 5 phút)</span>
                         </div>
-                        <div className="form-group">
+                        {/* <div className="form-group">
                             <label htmlFor="name">Kiểu chữ cho web</label>
                             {this.showFont(_font_family)}
                             <p className="apply-font">Kiểu chữ {_font_family}</p>
-                        </div>
+                        </div> */}
                         <div className="form-group" >
 
 

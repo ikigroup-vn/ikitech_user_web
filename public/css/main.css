@@ -20,11 +20,16 @@
     background-color: white !important;
     cursor: pointer
 }
-
+.disable-color{
+    background: #a6a1a1
+}
 .active-branch-default{
     color : blue
 }
-
+.group-total{
+    display : flex;
+    justify-content: space-between;
+}
 /* .active-branch-default[--nth-word="1"] { color: red; } */
 
 

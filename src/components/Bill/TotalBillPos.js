@@ -67,54 +67,63 @@ class TotalBill extends Component {
 
                     <br />
                     <div>
-                        <p className="sale_user_label bold">
-                            Tạm tính:{" "}
+                        <p className="sale_user_label bold bold group-total">
+                        <div>Tạm tính</div>
                             <span id="total_selected">{format(bill.total_before_discount || 0)}</span>
                         </p>
                     </div>
                     {total_shipping_fee > 0 && <div id="item_fee">
-                        <div className="sale_user_label bold">
-                            Phí giao hàng:  <span>+ {format(total_shipping_fee)}</span>
+                        <div className="sale_user_label bold bold group-total">
+                        <div>Phí giao hàng:</div>
+
+                              <span>+&nbsp;{format(total_shipping_fee)}</span>
                         </div>
                     </div>
                     }
                     {product_discount_amount > 0 && <div id={`item_fee ${product_discount_amount > 0 ? "show" : "hide"}`}>
-                        <div className="sale_user_label bold">
-                            Giảm giá sản phẩm :  <span>- {format(product_discount_amount)}</span>
+                        <div className="sale_user_label bold group-total">
+                        <div> Giảm giá sản phẩm: </div>  <span>-&nbsp;{format(product_discount_amount)}</span>
                         </div>
                     </div>
                     }
                     {combo_discount_amount > 0 && <div id={`item_fee ${combo_discount_amount > 0 ? "show" : "hide"}`}>
-                        <div className="sale_user_label bold">
-                            Giảm giá Combo :  <span>- {format(combo_discount_amount)}</span>
+                        <div className="sale_user_label bold" bold group-total>
+                        <div>Giảm giá Combo:</div>
+
+                              <span>- {format(combo_discount_amount)}</span>
                         </div>
                     </div>
                     }
                     {voucher_discount_amount > 0 && <div id={`item_fee ${voucher_discount_amount > 0 ? "show" : "hide"}`}>
-                        <div className="sale_user_label bold">
-                            Giảm giá Voucher :  <span>- {format(voucher_discount_amount)}</span>
+                        <div className="sale_user_label bold bold group-total">
+                        <div>Giảm giá Voucher:</div>
+
+                              <span>-&nbsp;{format(voucher_discount_amount)}</span>
                         </div>
                     </div>
                     }
                     {discount > 0 && <div id={`item_fee ${discount > 0 ? "show" : "hide"}`}>
-                        <div className="sale_user_label bold">
-                            Chiết khấu :  <span>- {format(discount)}</span>
+                        <div className="sale_user_label bold bold group-total">
+                        <div> Chiết khấu:</div>
+
+                             <span>-&nbsp;{format(discount)}</span>
                         </div>
                     </div>
                     }
 
                     {bill.bonus_points_amount_used != null && bill.bonus_points_amount_used != 0 && <div>
-                        <p className="sale_user_label bold">
-                            Giảm giá xu:{" "}
-                            <span className="cart_payment_method">
-                                - {format(bill.bonus_points_amount_used)}
+                        <p className="sale_user_label bold bold group-total">
+                        <div> Giảm giá xu:</div>
+
+                            <span className="cart_payment_method">-&nbsp;{format(bill.bonus_points_amount_used)}
                             </span>
                         </p>
                     </div>
                     }
                     {bill.order_code_refund && <div>
-                        <p className="sale_user_label bold">
-                            Đã thanh toán:{" "}
+                        <p className="sale_user_label bold bold group-total">
+                        <div>Đã thanh toán:</div>
+
                             <span className="cart_payment_method">
                                 {format(bill.total_final - bill.remaining_amount)}
                             </span>
@@ -131,8 +140,9 @@ class TotalBill extends Component {
 
                     {
                         total_final > 0 && <div>
-                            <p className="sale_user_label bold">
-                                Thành tiền:{" "}
+                            <p className="sale_user_label bold bold group-total">
+                            <div> Thành tiền:</div>
+
                                 <span className="cart_payment_method">
                                     {format(total_final
                                     )}
@@ -157,8 +167,9 @@ class TotalBill extends Component {
                             </div> */}
 
                                 <div>
-                                    <p className="sale_user_label bold">
-                                        Còn nợ:{" "}
+                                    <p className="sale_user_label bold bold group-total">
+                                    <div>Còn nợ:</div>
+
                                         <span className="cart_payment_method">
                                             {format(bill.remaining_amount)}
 

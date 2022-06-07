@@ -685,7 +685,7 @@ export const postCashRefund = (order_code, data, store_code, branch = getBranchI
             content: res.data.msg,
           },
         });
-        history.goBack();
+        // history.goBack();
       })
       .catch(function (error) {
         dispatch({

@@ -332,7 +332,11 @@ class Sidebar extends Component {
             <div className="sidebar-brand-text">
               <img
                 width="80%"
-                src={themeData().logo}
+                src={
+                  badges?.config_user_vip?.url_logo_image != null
+                    ? badges?.config_user_vip?.url_logo_image
+                    : themeData().logo
+                }
                 class="img-responsive"
                 alt="Image"
               />
