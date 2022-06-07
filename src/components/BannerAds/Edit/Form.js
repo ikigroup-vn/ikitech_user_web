@@ -157,6 +157,8 @@ class Form extends Component {
                 <option value="2">Trên sản phẩm mới</option>
                 <option value="3">Trên sản phẩm khuyến mại</option>
                 <option value="4">Trên danh sách tin tức</option>
+                <option value="6">Bên phải danh sách tin tức</option>
+
                 <option value="5">Trên Footer</option>
                 {/* <option value="6">Dưới danh mục sản phẩm</option>
                 <option value="7">Dưới danh mục tin tức</option>

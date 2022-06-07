@@ -31,7 +31,10 @@ export const headerImg = [
     index: 8,
     header: "https://i.imgur.com/xu5BZ92.png",
   },
-
+  {
+    index: 9,
+    header: "https://i.imgur.com/KAMl9hQ.png",
+  },
 ];
 export const bannerImg = [
   {
@@ -96,6 +99,8 @@ export const productImg = [
     index: 7,
     product: "https://i.imgur.com/Iyzb3fw.png",
   },
+
+
   {
     index: 8,
     product: "https://i.imgur.com/efnEpc2.png",
@@ -125,6 +130,11 @@ export const blogImg = [
   {
     index: 6,
     blog: "https://i.imgur.com/i4uOtvD.png",
+  },
+  {
+    index: 7,
+    blog: "https://i.imgur.com/2WfyE7A.png"
+    ,
   },
 ];
 export const footerImg = [

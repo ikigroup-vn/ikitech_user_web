@@ -51,9 +51,8 @@ class Table extends Component {
             data.type == 3 ? "Trên sản phẩm khuyến mại" :
             data.type == 4 ? "Trên danh sách tin tức" : 
             data.type == 5 ? "Trên footer" : 
-            data.type == 6 ? "Dưới danh mục sản phẩm" : 
-            data.type == 7 ? "Dưới danh mục tin tức" : 
-            data.type == 8 ? "Trên header" : 
+            data.type == 6 ? "Bên phải danh sách tin tức" : 
+
             "Trên Footer"}</td>
 
 
