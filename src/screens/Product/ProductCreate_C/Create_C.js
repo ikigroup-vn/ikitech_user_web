@@ -559,6 +559,7 @@ class ProductEdit extends Component {
               <div class="col-lg-6">
                 <div>
                   <InfoProduct
+                    isCopy  = {true}
                     checkDistribute={this.checkDistribute}
                     total={total}
                     product={product}

@@ -181,7 +181,7 @@ class Form extends Component {
                     class="form-control"
                     id="txtTitle"
                     value={txtTitle}
-                    name="txtName"
+                    name="txtTitle"
                     placeholder="Nhập tên cửa hàng"
                     autocomplete="off"
                     onChange={this.onChange}

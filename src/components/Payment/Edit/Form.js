@@ -47,7 +47,7 @@ class Form extends Component {
         if (payment.id == Number(nextProps.paymentId)) {
           var use = payment.use == true ? "1" : "0";
           var field = { ...this.state.field }
-          var config = payment.config
+          var config = payment.config || {}
           if (payment.field.length > 0) {
             payment.field.forEach((element, index) => {
               if (element == "payment_guide" && config == null) {
@@ -58,6 +58,8 @@ class Form extends Component {
                 field[element] = ""
               }
               else {
+                // console.log(itemConfig , config , element)
+                // if()
                 var itemConfig = typeof config[element] === "undefined" || config[element] == "nothing" ? "" : config[element]
                 field[element] = itemConfig
               }
