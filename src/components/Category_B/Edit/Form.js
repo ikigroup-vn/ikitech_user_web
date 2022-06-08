@@ -6,7 +6,7 @@ import { shallowEqual } from "../../../ultis/shallowEqual";
 import CKEditor from "ckeditor4-react";
 import ModalUpload from "./ModalUpload"
 import * as Env from "../../../ultis/default"
-import {isEmpty} from "../../../ultis/helpers"
+import { isEmpty } from "../../../ultis/helpers"
 
 class Form extends Component {
   constructor(props) {
@@ -14,7 +14,9 @@ class Form extends Component {
     this.state = {
       txtContent: "",
       txtTitle: "",
-      image: ""
+      image: "",
+      isShowHome: false
+
     };
   }
   componentDidMount() {
@@ -30,7 +32,9 @@ class Form extends Component {
             {
               txtTitle: item.title,
               txtContent: item.description,
-              image: item.image_url
+              image: item.image_url,
+              isShowHome: item.is_show_home
+
             }
           )
         }
@@ -60,9 +64,9 @@ class Form extends Component {
   onSave = (e) => {
     var { store_code, categoryBId } = this.props
     e.preventDefault();
-    var { txtContent, txtTitle, image } = this.state
-    if(txtTitle == null || !isEmpty(txtTitle))
-    {
+    var { txtContent, txtTitle, image, isShowHome
+    } = this.state
+    if (txtTitle == null || !isEmpty(txtTitle)) {
       this.props.showError({
 
         type: Types.ALERT_UID_STATUS,
@@ -80,6 +84,7 @@ class Form extends Component {
       title: txtTitle,
       description: txtContent,
       image_url: image,
+      is_show_home: isShowHome
     }, store_code);
   };
   goBack = () => {
@@ -88,7 +93,7 @@ class Form extends Component {
   };
   render() {
 
-    var { txtTitle, txtContent, image } = this.state
+    var { txtTitle, txtContent, image, isShowHome } = this.state
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
     console.log(this.props)
     return (
@@ -96,7 +101,7 @@ class Form extends Component {
         <form role="form" onSubmit={this.onSave} method="post">
 
           <div class="box-body">
-          <div class="form-group">
+            <div class="form-group">
               <label for="product_name">Tên danh mục</label>
               <input
                 type="text"
@@ -108,6 +113,14 @@ class Form extends Component {
                 onChange={this.onChange}
                 name="txtTitle"
               />
+            </div>
+            <div class="form-check" style={{ marginTop: "10px", padding: "0" }}>
+              <label class="form-check-label">
+                <input type="checkbox"
+                  name="even"
+                  onChange={() => this.setState({ isShowHome: !isShowHome })}
+                  checked={isShowHome} /> Hiển thị sản phẩm ở trang chủ
+              </label>
             </div>
             <div class="form-group">
               <label>Ảnh: &nbsp; </label>
@@ -134,9 +147,9 @@ class Form extends Component {
 
             <div class="form-group">
               <label for="product_name">Nội dung mô tả danh mục</label>
-              
-              <textarea name="txtContent" value={txtContent} onChange = {this.onChange} id="input" class="form-control" rows="3"></textarea>
-              
+
+              <textarea name="txtContent" value={txtContent} onChange={this.onChange} id="input" class="form-control" rows="3"></textarea>
+
               {/* <CKEditor
                 data={txtContent}
                 onChange={this.onChangeDecription}
@@ -149,20 +162,20 @@ class Form extends Component {
 
           </div>
           <div class="box-footer">
-          <button type = "submit" class="btn btn-info   btn-sm">
-                  <i class="fas fa-save"></i>  Lưu
+            <button type="submit" class="btn btn-info   btn-sm">
+              <i class="fas fa-save"></i>  Lưu
 
-                </button>
-                <button
-                type = "button"
-                  style={{ marginLeft: "10px" }}
-                  onClick={this.goBack}
-                  class="btn btn-warning   btn-sm"
-                >
-                  <i class="fas fa-arrow-left"></i> Trở về
+            </button>
+            <button
+              type="button"
+              style={{ marginLeft: "10px" }}
+              onClick={this.goBack}
+              class="btn btn-warning   btn-sm"
+            >
+              <i class="fas fa-arrow-left"></i> Trở về
 
-                </button>
-        
+            </button>
+
           </div>
 
         </form>

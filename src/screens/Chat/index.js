@@ -15,15 +15,16 @@ class Customer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isActive: ""
+      isActive: "",
+      isLoadFirstCustomer : false
     };
   }
   componentWillReceiveProps(nextProps) {
     if (!shallowEqual(nextProps.listChat, this.props.listChat)) {
-      if (typeof nextProps.listChat.data !== "undefined" && nextProps.listChat.data.length > 0) {
+      if (typeof nextProps.listChat.data !== "undefined" && nextProps.listChat.data.length > 0 && this.state.isLoadFirstCustomer == false) {
         var { store_code } = this.props.match.params
         var customerId = nextProps.listChat.data[0].customer_id
-        this.setState({ isActive: customerId })
+        this.setState({ isActive: customerId , isLoadFirstCustomer : true })
 
         this.props.fetchChatId(store_code, customerId);
       }

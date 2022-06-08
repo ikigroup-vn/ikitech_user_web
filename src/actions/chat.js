@@ -43,25 +43,26 @@ export const fetchChatId = (store_code, customerId, pag = 1) => {
       type: Types.SHOW_LOADING,
       loading: "show"
     })
-
-    chatApi.fetchAllChat(store_code , 1).then((res) => {
-
-      if(res.data.code !== 401)
-      dispatch({
-        type: Types.FETCH_ALL_CHAT,
-        data: res.data.data,
-      });
-    });
     chatApi.fetchChatId(store_code, customerId, pag).then((res) => {
+
       dispatch({
         type: Types.SHOW_LOADING,
         loading: "hide"
       })
+
       if (res.data.code !== 401)
         dispatch({
           type: Types.FETCH_ID_CHAT,
           data: res.data.data,
         });
+      chatApi.fetchAllChat(store_code, 1).then((res) => {
+
+        if (res.data.code !== 401)
+          dispatch({
+            type: Types.FETCH_ALL_CHAT,
+            data: res.data.data,
+          });
+      });
     }).catch(function (errors) {
       console.log(errors)
     });
