@@ -79,21 +79,6 @@ class Support extends Component {
     onSave = (e) => {
         e.preventDefault();
         var theme = this.state
-
-        if(!isPhone(theme.phone_number_hotline))
-        {
-            this.props.showError({
-                type: Types.ALERT_UID_STATUS,
-                alert: {
-                    type: "danger",
-                    title: "Thất bại ",
-                    disable: "show",
-                    content: "Số điện thoại không đúng định dạng",
-                },
-    
-            })
-            return
-        }
      
         var { store_code } = this.props
         var form = {...this.props.theme}

@@ -51,6 +51,7 @@ class ChatBox extends Component {
 
   isActive = (id) => {
     this.props.handleFetchChatId(id)
+    // this.props.handleFetchAllChat(1)
   }
 
   componentDidUpdate(prevProps, prevState)
