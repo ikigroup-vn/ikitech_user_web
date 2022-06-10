@@ -24,8 +24,8 @@ class Table extends Component {
   }
   filterColDiscount = (data) => {
     var is_end = this.props.is_end
-    var now = moment().format("DD-MM-YYYY HH:mm:ss").valueOf()
-    var start_time = moment(data.start_time, "YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY HH:mm:ss").valueOf()
+    var now = moment().valueOf()
+    var start_time = moment(data.start_time, "YYYY-MM-DD HH:mm:ss").valueOf()
     console.log(now , start_time)
     if (is_end == 0) {
       if(now < start_time)
@@ -71,7 +71,7 @@ class Table extends Component {
 
         var type_discount = data.discount_type == 0 ? "Cố định" : "Theo %"
         var showCurrentPage = typeof per_page != "undefined" && per_page != null ? true : false
-        var disableIsEnd = this.props.is_end == 0 ? "show" : "hide"
+        var disableIsEnd = this.props.is_end == 0 || this.props.is_end == 2 ? "show" : "hide"
 
         if (this.filterColDiscount(data) == true) {          count = count + 1
 

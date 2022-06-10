@@ -50,8 +50,8 @@ class Table extends Component {
 
   filterColDiscount = (data) => {
     var is_end = this.props.is_end
-    var now = moment().format("DD-MM-YYYY HH:mm:ss").valueOf()
-    var start_time = moment(data.start_time, "YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY HH:mm:ss").valueOf()
+    var now = moment().valueOf()
+    var start_time = moment(data.start_time, "YYYY-MM-DD HH:mm:ss").valueOf()
     console.log(now , start_time , now < start_time , is_end)
     if (is_end == 0) {
       if(now < start_time)
@@ -108,7 +108,7 @@ class Table extends Component {
         var image_url =
           data.image_url == null || data.image_url == "" ? Env.IMG_NOT_FOUND : data.image_url
         var showCurrentPage = typeof per_page != "undefined" && per_page != null ? true : false
-        var disableIsEnd = this.props.is_end ? "hide" : "show"
+        var disableIsEnd = this.props.is_end || this.props.is_end == 2 ? "hide" : "show"
 
         console.log(set_limit_amount)
         if(this.filterColDiscount(data) == true)

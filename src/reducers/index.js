@@ -47,6 +47,8 @@ import { timeSheetReducers } from "./time_sheet/index";
 import { requestMobileReducers } from "./request_mobile/index";
 import { requestRemoteReducers } from "./request_remote/index";
 import { mobileCheckinReducers } from "./mobile_checkin/index";
+import { bonusProductReducers } from "./bonus_product/index";
+
 const appReducers = combineReducers({
   authReducers,
   branchReducers,
@@ -97,6 +99,7 @@ const appReducers = combineReducers({
   requestMobileReducers,
   requestRemoteReducers,
   mobileCheckinReducers,
+  bonusProductReducers
 });
 
 export default appReducers;
