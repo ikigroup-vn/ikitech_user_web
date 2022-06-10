@@ -95,7 +95,7 @@ class ItemTheme extends Component {
           }}>
             <img
               style={{ display: "block", objectFit: "cover" }}
-              src={"../images/themes/" + v.theme}
+              src={v.theme}
               width="100%"
               height={200}
 
