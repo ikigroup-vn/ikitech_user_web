@@ -133,7 +133,7 @@ export const blogImg = [
   },
   {
     index: 7,
-    blog: "https://i.imgur.com/2WfyE7A.png"
+    blog: "https://i.imgur.com/jtCHo6Y.png"
     ,
   },
 ];

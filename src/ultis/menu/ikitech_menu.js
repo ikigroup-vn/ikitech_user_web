@@ -371,7 +371,17 @@ export const ikitech_menu = [
             icon: "fas fa-fw fa-cog",
             exact: true,
             to: "/combo",
+        },
+          {
+            name: "Thưởng sản phẩm",
+            class: "promotion",
+            display: "hide",
+            icon: "fas fa-fw fa-cog",
+            exact: true,
+            to: "/bonus_product",
           },
+
+          
         ],
       },
 

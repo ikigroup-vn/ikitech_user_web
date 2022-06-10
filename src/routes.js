@@ -50,6 +50,10 @@ import Combo from "./screens/Promotion/Combo/index";
 import ComboEdit from "./screens/Promotion/Combo/Edit/index";
 import ComboCreate from "./screens/Promotion/Combo/Create/index";
 
+import BonusProduct from "./screens/Promotion/BonusProduct/index";
+import BonusProductEdit from "./screens/Promotion/BonusProduct/Edit/index";
+import BonusProductCreate from "./screens/Promotion/BonusProduct/Create/index";
+
 import Shift from "./screens/Timekeeping/Shift/index";
 import WorkLocation from "./screens/Timekeeping/WorkLocation/index";
 import Request from "./screens/Timekeeping/Request/index";
@@ -658,6 +662,30 @@ const routes = [
 
     main: ({ match, history }) => (
       <ComboCreate match={match} history={history} />
+    ),
+  },
+
+
+  {
+    path: "/bonus_product/:store_code",
+    exact: true,
+
+    main: ({ match }) => <BonusProduct match={match} />,
+  },
+
+  {
+    path: "/bonus_product/edit/:store_code/:bonusProductId",
+    exact: true,
+
+    main: ({ match, history }) => <BonusProductEdit match={match} history={history} />,
+  },
+
+  {
+    path: "/bonus_product/create/:store_code",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <BonusProductCreate match={match} history={history} />
     ),
   },
 

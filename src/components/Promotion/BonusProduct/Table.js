@@ -41,15 +41,14 @@ class Table extends Component {
     var is_end = this.props.is_end
 
     if(e.target.name !== "toggle")
-    history.push(`/voucher/edit/${store_code}/${supplierId}?type=${is_end}`)
+    history.push(`/bonus_product/edit/${store_code}/${supplierId}?type=${is_end}`)
 }
 filterColDiscount = (data) => {
   var is_end = this.props.is_end
   var now = moment().valueOf()
   var start_time = moment(data.start_time, "YYYY-MM-DD HH:mm:ss").valueOf()
-  console.log(now , start_time , now < start_time , is_end)
+  console.log(now , start_time , is_end)
   if (is_end == 0) {
-    // console
     if(now < start_time)
     {
       return true;
@@ -73,19 +72,19 @@ filterColDiscount = (data) => {
     return true
   }
 }
-  showData = (vouchers, per_page, current_page) => {
-    var vouchers = this.props.is_end == 0 || this.props.is_end == 2  ? vouchers : vouchers.data
+  showData = (bonusProducts, per_page, current_page) => {
+    var bonusProducts = this.props.is_end == 0 || this.props.is_end == 2  ? bonusProducts : bonusProducts.data
     var is_end = this.props.is_end 
     var count = 0
     var result = null;
     var { store_code } = this.props.params;
-    if (typeof vouchers === "undefined") {
+    if (typeof bonusProducts === "undefined") {
       return result;
     }
-    if (vouchers.length > 0) {
+    if (bonusProducts.length > 0) {
       var { update, _delete } = this.props
 
-      result = vouchers.map((data, index) => {
+      result = bonusProducts.map((data, index) => {
         var value_discount = ""
         if( data.discount_type == 0 )
         {
@@ -97,15 +96,11 @@ filterColDiscount = (data) => {
           value_discount=  data.value_discount + "%"
 
         }
-        var status_limit_amount = data.set_limit_amount == true ? "" : "danger";
 
-        var type_voucher = data.voucher_type == 0 ? "Toàn shop" : "Theo sản phảm"
-        var type_discount = data.discount_type == 0 ? "Cố định" : "Theo %"
-        var is_show_voucher = data.is_show_voucher == true ? "Hiển thị" : "Đang ẩn"
-        var status_show_voucher = data.is_show_voucher == true ? "success" : "secondary"
+       
         var showCurrentPage = typeof per_page != "undefined" && per_page != null ? true : false
 
-        var disableIsEnd = this.props.is_end == 0 || this.props.is_end == 2 ? "show" : "hide"
+        var disableIsEnd = this.props.is_end == 0 ||  this.props.is_end == 2 ? "show" : "hide"
         if(this.filterColDiscount(data) == true)
         {
           count = count + 1
@@ -119,7 +114,6 @@ filterColDiscount = (data) => {
 
 
             <td>{data.name}</td>
-            <td>{type_voucher}</td>
     
             <td>{data.start_time}</td>
 
@@ -128,19 +122,15 @@ filterColDiscount = (data) => {
 
          
             <td>
-              {data.value_limit_total && formatNoD(data.value_limit_total)}
+              {data.amount == "" || data.amount == null ? "Không giới hạn" : formatNoD(data.amount)}
 
 
             </td >  
-            <td>
-
-            {value_discount}
-
-            </td >  
+        
 
             <td className="group-btn-table" style = {{maxWidth : "150px"}}>
               {this.props.is_end == 0 || this.props.is_end == 2   && <Link
-                to={`/voucher/edit/${store_code}/${data.id}`}
+                to={`/bonus_product/edit/${store_code}/${data.id}`}
                 class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
               >
                 <i class="fa fa-edit"></i> Sửa
@@ -178,9 +168,9 @@ filterColDiscount = (data) => {
   };
 
   render() {
-    var { vouchers } = this.props;
-    var per_page = vouchers.per_page
-    var current_page = vouchers.current_page
+    var { bonusProducts } = this.props;
+    var per_page = bonusProducts.per_page
+    var current_page = bonusProducts.current_page
     return (
       <div class="table-responsive">
         <table class="table table-border" id="dataTable" width="100%" cellspacing="0">
@@ -188,19 +178,17 @@ filterColDiscount = (data) => {
             <tr>
               <th>STT</th>
               <th>Tên</th>
-              <th>Loại voucher</th>
 
               <th>Ngày bắt đầu</th>
               <th>Ngày kết thúc</th>
-              <th>Đơn đạt tối thiểu</th>
-              <th>Giảm giá</th>
+              <th>Giới hạn số lần thưởng</th>
 
 
               <th>Hành động</th>
             </tr>
           </thead>
 
-          <tbody>{this.showData(vouchers, per_page, current_page)}</tbody>
+          <tbody>{this.showData(bonusProducts, per_page, current_page)}</tbody>
         </table>
       </div>
     );
