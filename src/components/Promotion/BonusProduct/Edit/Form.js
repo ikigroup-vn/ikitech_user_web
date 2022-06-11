@@ -10,7 +10,7 @@ import moment from "moment";
 import Datetime from "react-datetime";
 import ModalListProduct from "../Create/ListProduct";
 import ModalListProductBonus from "../Create/ListProductBonus";
-
+import history from "../../../../history"
 import CKEditor from "ckeditor4-react";
 import ModalUpload from "../ModalUpload";
 import * as Env from "../../../../ultis/default";
@@ -72,7 +72,7 @@ class Form extends Component {
         listProductsBonus = bonusProduct?.bonus_products.map((item) => {
           return {
             "id": item.product?.id,
-            "quantity": 1,
+            "quantity": item.quantity,
             "distribute_name": item.distribute_name,
             "element_distribute_name": item.element_distribute_name,
             "sub_element_distribute_name": item.sub_element_distribute_name,
@@ -80,7 +80,7 @@ class Form extends Component {
             "name": item.product?.name,
             product: {
               "id": item.product?.id,
-              "quantity": 1,
+              "quantity": item.quantity,
               "distribute_name": item.distribute_name,
               "element_distribute_name": item.element_distribute_name,
               "sub_element_distribute_name": item.sub_element_distribute_name,
@@ -96,7 +96,7 @@ class Form extends Component {
         listProducts = bonusProduct?.select_products.map((item) => {
           return {
             "id": item.product?.id,
-            "quantity": 1,
+            "quantity": item.quantity,
             "distribute_name": item.distribute_name,
             "element_distribute_name": item.element_distribute_name,
             "sub_element_distribute_name": item.sub_element_distribute_name,
@@ -104,7 +104,7 @@ class Form extends Component {
             "name": item.product?.name,
             product: {
               "id": item.product?.id,
-              "quantity": 1,
+              "quantity": item.quantity,
               "distribute_name": item.distribute_name,
               "element_distribute_name": item.element_distribute_name,
               "sub_element_distribute_name": item.sub_element_distribute_name,
@@ -303,7 +303,6 @@ class Form extends Component {
 
   goBack = (e) => {
     e.preventDefault();
-    var { history } = this.props;
     history.goBack();
   };
 

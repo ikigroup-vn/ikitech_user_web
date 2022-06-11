@@ -344,7 +344,7 @@ export const ikitech_menu = [
         class: "promotion",
         name: "Chương trình khuyến mại",
         icon: "fas fa-money-bill-alt",
-        setOpenKey : ["/discount" , "/voucher" , "/combo" ],
+        setOpenKey : ["/discount" , "/voucher" , "/combo" , "/bonus_product"],
 
         open: "promotion",
         children: [

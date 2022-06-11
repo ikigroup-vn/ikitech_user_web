@@ -140,7 +140,7 @@ export const blogImg = [
 export const footerImg = [
   {
     index: 1,
-    footer: "https://i.imgur.com/qLyZfZl.png",
+    footer: "https://i.imgur.com/gHJuRNh.png",
   },
   {
     index: 2,
