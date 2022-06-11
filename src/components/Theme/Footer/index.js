@@ -93,21 +93,6 @@ class Footer extends Component {
     onSave = (e) => {
         e.preventDefault();
         var theme = this.state
-
-        if(!isPhone(theme.contact_phone_number))
-        {
-            this.props.showError({
-                type: Types.ALERT_UID_STATUS,
-                alert: {
-                    type: "danger",
-                    title: "Thất bại ",
-                    disable: "show",
-                    content: "Số điện thoại không đúng định dạng",
-                },
-    
-            })
-            return
-        }
         var { store_code } = this.props
         var form = { ...this.props.theme }
         form.contact_address = theme.contact_address

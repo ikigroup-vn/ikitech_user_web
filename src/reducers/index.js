@@ -14,6 +14,7 @@ import { blogReducers } from "./blog/index";
 import { shipmentReducers } from "./shipment/index";
 import { paymentReducers } from "./payment/index";
 import { customerReducers } from "./customer/index";
+import { customerSaleReducers } from "./customer_sales/index";
 import { userReducers } from "./user/index";
 import { billReducers } from "./bill/index";
 import { chatReducers } from "./chat/index";
@@ -65,6 +66,7 @@ const appReducers = combineReducers({
   shipmentReducers,
   paymentReducers,
   customerReducers,
+  customerSaleReducers,
   userReducers,
   billReducers,
   chatReducers,
