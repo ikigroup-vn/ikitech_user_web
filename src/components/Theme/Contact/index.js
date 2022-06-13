@@ -4,7 +4,7 @@ import * as themeAction from "../../../actions/theme";
 import { connect } from "react-redux";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import * as Types from "../../../constants/ActionType";
-import {isPhone} from "../../../ultis/helpers"
+import { isPhone } from "../../../ultis/helpers"
 class Support extends Component {
     constructor(props) {
         super(props);
@@ -17,6 +17,12 @@ class Support extends Component {
             id_facebook: null,
             is_show_icon_zalo: null,
             id_zalo: null,
+            id_youtube: null,
+            is_show_icon_youtube: null,
+            link_ministry_of_industry_and_trade: null,
+            is_show_icon_ministry_of_industry_and_trade: null,
+
+
         }
     }
 
@@ -30,10 +36,16 @@ class Support extends Component {
                 phone_number_hotline: theme.phone_number_hotline == "null" ? null : theme.phone_number_hotline,
                 is_show_icon_email: theme.is_show_icon_email,
                 email_contact: theme.email_contact == "null" ? null : theme.email_contact,
-                is_show_icon_facebook: theme.is_show_icon_facebook ,
+                is_show_icon_facebook: theme.is_show_icon_facebook,
                 id_facebook: theme.id_facebook == "null" ? null : theme.id_facebook,
                 is_show_icon_zalo: theme.is_show_icon_zalo,
                 id_zalo: theme.id_zalo == "null" ? null : theme.id_zalo,
+
+
+                id_youtube: theme.id_youtube == "null" ? null : theme.id_youtube,
+                is_show_icon_youtube: theme.is_show_icon_youtube == "null" ? null : theme.is_show_icon_youtube,
+                link_ministry_of_industry_and_trade: theme.link_ministry_of_industry_and_trade == "null" ? null : theme.link_ministry_of_industry_and_trade,
+                is_show_icon_ministry_of_industry_and_trade: theme.is_show_icon_ministry_of_industry_and_trade == "null" ? null : theme.is_show_icon_ministry_of_industry_and_trade,
             })
         }
     }
@@ -48,13 +60,13 @@ class Support extends Component {
         });
     }
 
-    onChangeStatus = (e) =>{
+    onChangeStatus = (e) => {
         var target = e.target;
         var name = target.name;
         var checked = target.checked
         this.setState({
             [name]: checked,
-        });    
+        });
     }
 
     componentWillReceiveProps(nextProps) {
@@ -66,10 +78,15 @@ class Support extends Component {
                 phone_number_hotline: theme.phone_number_hotline,
                 // is_show_icon_email: theme.is_show_icon_email,
                 // email_contact: theme.email_contact,
-                is_show_icon_facebook: theme.is_show_icon_facebook ,
+                is_show_icon_facebook: theme.is_show_icon_facebook,
                 id_facebook: theme.id_facebook,
-                is_show_icon_zalo: theme.is_show_icon_zalo ,
+                is_show_icon_zalo: theme.is_show_icon_zalo,
                 id_zalo: theme.id_zalo,
+
+                id_youtube: theme.id_youtube,
+                is_show_icon_youtube: theme.is_show_icon_youtube,
+                link_ministry_of_industry_and_trade: theme.link_ministry_of_industry_and_trade,
+                is_show_icon_ministry_of_industry_and_trade: theme.is_show_icon_ministry_of_industry_and_trade,
             })
         }
 
@@ -79,23 +96,29 @@ class Support extends Component {
     onSave = (e) => {
         e.preventDefault();
         var theme = this.state
-     
+
         var { store_code } = this.props
-        var form = {...this.props.theme}
+        var form = { ...this.props.theme }
 
-            form.is_show_icon_hotline= theme.is_show_icon_hotline 
-            form.phone_number_hotline= theme.phone_number_hotline
-            // form.is_show_icon_email= theme.is_show_icon_email
-            // form.email_contact= theme.email_contact
-            form.is_show_icon_email= false
+        form.is_show_icon_hotline = theme.is_show_icon_hotline
+        form.phone_number_hotline = theme.phone_number_hotline
+        // form.is_show_icon_email= theme.is_show_icon_email
+        // form.email_contact= theme.email_contact
+        form.is_show_icon_email = false
 
-            form.email_contact  = null
-            form.is_show_icon_facebook= theme.is_show_icon_facebook
-            form.id_facebook= theme.id_facebook
-            form.is_show_icon_zalo= theme.is_show_icon_zalo 
-            form.id_zalo= theme.id_zalo
-        
-        this.props.updateTheme(store_code, form);
+        form.email_contact = null
+        form.is_show_icon_facebook = theme.is_show_icon_facebook
+        form.id_facebook = theme.id_facebook
+        form.is_show_icon_zalo = theme.is_show_icon_zalo
+        form.id_zalo = theme.id_zalo
+
+
+        form.id_youtube = theme.id_youtube
+            form.is_show_icon_youtube = theme.is_show_icon_youtube
+            form.link_ministry_of_industry_and_trade = theme.link_ministry_of_industry_and_trade
+            form.is_show_icon_ministry_of_industry_and_trade = theme.is_show_icon_ministry_of_industry_and_trade
+
+            this.props.updateTheme(store_code, form);
     }
     render() {
         var
@@ -107,6 +130,11 @@ class Support extends Component {
                 id_facebook,
                 is_show_icon_zalo,
                 id_zalo,
+
+                id_youtube,
+                is_show_icon_youtube,
+                link_ministry_of_industry_and_trade,
+                is_show_icon_ministry_of_industry_and_trade,
             } = this.state
 
         return (
@@ -125,18 +153,18 @@ class Support extends Component {
                         </div>
                         <div className="form-group">
                             <label htmlFor="name">Số điện thoại Hotline</label>
-                            <div class="form-group" style = {{display : "flex"}}>
-                            <input style = {{maxWidth : "500px"}} type="tel" name="phone_number_hotline" value={phone_number_hotline} placeholder="Nhập..." onChange={this.onChange} className="form-control" id="txtName" autoComplete="off" />
-                                <div class="form-check" style = {{margin : "auto 10px"}}>
+                            <div class="form-group" style={{ display: "flex" }}>
+                                <input style={{ maxWidth: "500px" }} type="tel" name="phone_number_hotline" value={phone_number_hotline} placeholder="Nhập..." onChange={this.onChange} className="form-control" id="txtName" autoComplete="off" />
+                                <div class="form-check" style={{ margin: "auto 10px" }}>
                                     <label class="form-check-label" for="gridCheck">
                                         Hiển thị
                                     </label>
-                                    <input  style = {{marginLeft : "10px"}} class="form-check-input" type="checkbox" id="gridCheck" name="is_show_icon_hotline" checked = {is_show_icon_hotline} onChange = {this.onChangeStatus}   />
+                                    <input style={{ marginLeft: "10px" }} class="form-check-input" type="checkbox" id="gridCheck" name="is_show_icon_hotline" checked={is_show_icon_hotline} onChange={this.onChangeStatus} />
 
                                 </div>
 
                             </div>
-                           
+
                         </div>
                         {/* <div className="form-group">
                             <label htmlFor="name">Địa chỉ Email</label>
@@ -170,23 +198,52 @@ class Support extends Component {
                         </div> */}
                         <div className="form-group">
                             <label htmlFor="name">ID Zalo</label>
-                           
-                            <div class="form-group" style = {{display : "flex"}}>
-                            <input style = {{maxWidth : "500px"}} type="text" name="id_zalo" value={id_zalo} placeholder="Nhập..." onChange={this.onChange} className="form-control" id="txtName" autoComplete="off" />
-                                <div class="form-check" style = {{margin : "auto 10px"}}>
+
+                            <div class="form-group" style={{ display: "flex" }}>
+                                <input style={{ maxWidth: "500px" }} type="text" name="id_zalo" value={id_zalo} placeholder="Nhập..." onChange={this.onChange} className="form-control" id="txtName" autoComplete="off" />
+                                <div class="form-check" style={{ margin: "auto 10px" }}>
                                     <label class="form-check-label" for="gridCheck">
                                         Hiển thị
                                     </label>
-                                    <input style = {{marginLeft : "10px"}} class="form-check-input" type="checkbox" id="gridCheck" name="is_show_icon_zalo" checked = {is_show_icon_zalo}  onChange = {this.onChangeStatus}  />
+                                    <input style={{ marginLeft: "10px" }} class="form-check-input" type="checkbox" id="gridCheck" name="is_show_icon_zalo" checked={is_show_icon_zalo} onChange={this.onChangeStatus} />
 
                                 </div>
 
                             </div>
                         </div>
 
-                  
-               
-             
+                        <div className="form-group">
+                            <label htmlFor="name">ID Youtube</label>
+
+                            <div class="form-group" style={{ display: "flex" }}>
+                                <input style={{ maxWidth: "500px" }} type="text" name="id_youtube" value={id_youtube} placeholder="Nhập..." onChange={this.onChange} className="form-control" id="txtName" autoComplete="off" />
+                                <div class="form-check" style={{ margin: "auto 10px" }}>
+                                    <label class="form-check-label" for="gridCheck">
+                                        Hiển thị
+                                    </label>
+                                    <input style={{ marginLeft: "10px" }} class="form-check-input" type="checkbox" id="gridCheck" name="is_show_icon_youtube" checked={is_show_icon_youtube} onChange={this.onChangeStatus} />
+
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div className="form-group">
+                            <label htmlFor="name">Link đăng ký bộ công thương</label>
+
+                            <div class="form-group" style={{ display: "flex" }}>
+                                <input style={{ maxWidth: "500px" }} type="text" name="link_ministry_of_industry_and_trade" value={link_ministry_of_industry_and_trade} placeholder="Nhập..." onChange={this.onChange} className="form-control" id="txtName" autoComplete="off" />
+                                <div class="form-check" style={{ margin: "auto 10px" }}>
+                                    <label class="form-check-label" for="gridCheck">
+                                        Hiển thị
+                                    </label>
+                                    <input style={{ marginLeft: "10px" }} class="form-check-input" type="checkbox" id="gridCheck" name="is_show_icon_ministry_of_industry_and_trade" checked={is_show_icon_ministry_of_industry_and_trade} onChange={this.onChangeStatus} />
+
+                                </div>
+
+                            </div>
+                        </div>
+
                     </div>
                     <div class="box-footer">
                         <button type="submit" class="btn btn-info  btn-sm">

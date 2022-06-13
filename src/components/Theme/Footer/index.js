@@ -173,7 +173,7 @@ class Footer extends Component {
 
 
                         <div className="form-group">
-                            <label htmlFor="name">ID FaceBook</label>
+                            <label htmlFor="name">Link Fanpage</label>
                             <input type="text" name="contact_fanpage" value={contact_fanpage} placeholder="Nhập..." onChange={this.onChange} className="form-control" id="txtName" autoComplete="off" />
 
                         </div>
