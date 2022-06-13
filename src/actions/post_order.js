@@ -418,7 +418,7 @@ export const updateInfoCarts = (store_code, branch_id, id, data) => {
       });
   };
 };
-export const paymentOrderPos = (store_code, branch_id, id, data) => {
+export const paymentOrderPos = (store_code, branch_id, id, data , _this) => {
   return (dispatch) => {
 
     dispatch({
@@ -427,6 +427,22 @@ export const paymentOrderPos = (store_code, branch_id, id, data) => {
     })
     PosApi.paymentOrderPos(store_code, branch_id, id, data)
       .then((res) => {
+        if(_this)
+        {
+          _this.setState({
+            priceCustomer: 0,
+            totalFinal : 0,
+            listPosItem: [],
+            modalUpdateCart: {
+                name: "",
+                phone_number: "",
+                debt: 0,
+                id: 0,
+            },
+        });
+        }
+
+
         dispatch({
           type: Types.POS_ORDER_PAYMENT_SUCCESS,
           data: {

@@ -27,3 +27,12 @@ export const createMultiCustomerSale = (store_code, data) => {
 export const editCustomerSale = (store_code, id, data) => {
   return callApi(`/store/${store_code}/customer_sales/${id}`, "put", data);
 };
+export const destroyCustomerSale = (store_code, id) => {
+  return callApi(`/store/${store_code}/customer_sales/${id}`, "delete", null);
+}
+
+
+
+export const editMultiCustomerSale = (store_code, data) => {
+  return callApi(`/store/${store_code}/customer_sales`, "put", data);
+};

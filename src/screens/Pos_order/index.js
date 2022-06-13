@@ -547,17 +547,17 @@ class PostOrder extends Component {
         }
 
 
-        this.props.paymentOrderPos(store_code, branch_id, this.state.idCart, data);
-        this.setState({
-            priceCustomer: 0,
-            listPosItem: [],
-            modalUpdateCart: {
-                name: "",
-                phone_number: "",
-                debt: 0,
-                id: 0,
-            },
-        });
+        this.props.paymentOrderPos(store_code, branch_id, this.state.idCart, data , this);
+        // this.setState({
+        //     priceCustomer: 0,
+        //     listPosItem: [],
+        //     modalUpdateCart: {
+        //         name: "",
+        //         phone_number: "",
+        //         debt: 0,
+        //         id: 0,
+        //     },
+        // });
     };
 
     componentWillReceiveProps(nextProps) {
@@ -1120,6 +1120,7 @@ class PostOrder extends Component {
                                                         style={{
                                                             padding: "3px 0",
                                                             justifyContent: "space-between",
+                                                            marginRight : "13px"
                                                         }}
                                                     >
                                                         {this.props.oneCart.customer?.name ? (
@@ -1679,8 +1680,8 @@ const mapDispatchToProps = (dispatch, props) => {
         updateInfoCarts: (store_code, branch_id, id_cart, data) => {
             dispatch(posAction.updateInfoCarts(store_code, branch_id, id_cart, data));
         },
-        paymentOrderPos: (store_code, branch_id, id_cart, data) => {
-            dispatch(posAction.paymentOrderPos(store_code, branch_id, id_cart, data));
+        paymentOrderPos: (store_code, branch_id, id_cart, data ,_this) => {
+            dispatch(posAction.paymentOrderPos(store_code, branch_id, id_cart, data , _this));
         },
         fetchVoucher: (store_code, branch_id, id_cart, data) => {
             dispatch(posAction.fetchVoucher(store_code, branch_id, id_cart, data));

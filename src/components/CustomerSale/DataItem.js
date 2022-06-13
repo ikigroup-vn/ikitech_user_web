@@ -28,13 +28,12 @@ class DataItem extends Component {
         this.props.editCustomerSale(store_code, id, data)
     }
 
-  
+
 
     componentWillReceiveProps(nextProps, nextState) {
         var { store_code } = this.props;
-        if(!shallowEqual(nextProps.data, this.props.data))
-        {
-            this.setState({ updateApi: false, data : nextProps.data  });
+        if (!shallowEqual(nextProps.data, this.props.data)) {
+            this.setState({ updateApi: false, data: nextProps.data });
 
         }
         if (!shallowEqual(nextProps.customer, this.props.customer) && this.state.data.id == nextProps.customer.id) {
@@ -42,7 +41,7 @@ class DataItem extends Component {
             //     updateApi: false,
             //     data: nextProps.customer
             // }
-            this.setState({ updateApi: false, data : nextProps.customer  });
+            this.setState({ updateApi: false, data: nextProps.customer });
 
         }
 
@@ -89,19 +88,36 @@ class DataItem extends Component {
 
     }
 
+    passDataModal = (event, store_code, name) => {
+        this.props.handleDelCallBack({ table: "Nhân viên", id: store_code, name: name });
+        event.preventDefault();
+    }
+
+
 
     render() {
         var { data } = this.state;
-        var { store_code, index, paginate } = this.props;
+        var { store_code, index, paginate, numPage , checked , is_user} = this.props;
 
         console.log(this.props.data)
         return (
             <tr className="hover-product">
-                <td>{index + 1}</td>
+                <td>   <input
+                    style={{
+                        height: "initial",
+                    }}
+                    type="checkbox"
+                    checked={checked}
+                    onChange={(e) => this.props.onChangeSelected(e, JSON.stringify(data))}
+                /></td>
 
-                <td><div>{data.name}</div><div>{data.phone_number}</div><div style={{
-                    fontSize: 10
-                }}> Ngày thêm: {getDDMMYYY(data.created_at)}</div></td>
+                <td data-toggle="modal"
+                    data-target="#modalEditCustomer"
+                    onClick={() => {
+                        this.props.handleSetInfor(data)
+                    }}><div>{data.name}</div><div>{data.phone_number}</div><div style={{
+                        fontSize: 10
+                    }}> Ngày thêm: {getDDMMYYY(data.created_at)}</div></td>
                 <td>
                     <select name="" value={data?.status} id="input" class="form-control" onChange={this.onChangeStatus}>
                         <option disabled={true}>Trạng thái</option>
@@ -126,18 +142,28 @@ class DataItem extends Component {
                         {this.buildOptionStaff()}
                     </select>
                 </td>
-
-                <div
-                    data-toggle="modal"
-                    data-target="#modalEditCustomer"
-                    onClick={()=> {
-                        this.props.handleSetInfor(data)
-                    }}
-                    style={{ marginLeft: "10px", marginTop: 15 }}
-                    class={`btn btn-warning btn-sm`}
-                >
-                    <i class="fa fa-edit"></i> Sửa
-                </div>
+                <td style={{ display: "flex" }}>
+                    <button
+                        data-toggle="modal"
+                        data-target="#modalEditCustomer"
+                        onClick={() => {
+                            this.props.handleSetInfor(data)
+                        }}
+                        // style={{ marginLeft: "10px", marginTop: 15 }}
+                        class={`btn btn-warning btn-sm`}
+                    >
+                        <i class="fa fa-edit"></i> Sửa
+                    </button>
+                    <button
+                        style={{ marginLeft: "10px" }}
+                        onClick={(e) => this.passDataModal(e, data.id, data.name)}
+                        data-toggle="modal"
+                        data-target="#removeModal"
+                        class={`btn btn-danger btn-sm ${is_user === true ? "" : "hide"}`}
+                    >
+                        <i class="fa fa-trash"></i> Xóa
+                    </button>
+                </td>
             </tr>
         );
     }

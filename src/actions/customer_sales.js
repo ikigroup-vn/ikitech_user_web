@@ -149,6 +149,68 @@ export const fetchAllCustomerSale = (
   };
 };
 
+export const destroyCustomerSale = (store_code, id , page , params , branch_id) => {
+  
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    customerApi
+      .destroyCustomerSale(store_code, id)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading : "hide"
+        })
+        customerApi.fetchAllCustomerSale(store_code , page,params )
+          .then((res) => {
+            if(res.data.code !== 401)
+
+            dispatch({
+              type: Types.FETCH_ALL_CUSTOMER_SALE,
+              data: res.data.data,
+            });
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "success",
+                title: "Thành công ",
+                disable: "show",
+                content: res.data.msg,
+              },
+            });
+          })
+          .catch(function (error) {
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "danger",
+                title: "Lỗi",
+                disable: "show",
+                content: error?.response?.data?.msg,
+              },
+            });
+          });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide"
+        })
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+
 export const fetchCustomerSaleId = (store_code, customerId) => {
   return (dispatch) => {
     dispatch({
@@ -308,6 +370,60 @@ export const createCustomerSale = (store_code,id , funcModal = null) => {
   };
 };
 
+
+
+export const editMultiCustomerSale = (store_code,data) => {
+
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    customerApi
+      .editMultiCustomerSale(store_code,data)
+      .then((res) => {
+    
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading : "hide"
+        })
+        customerApi
+        .fetchAllCustomerSale(store_code, 1, null, 20)
+        .then((res) => {
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "success",
+              title: "Thành công ",
+              disable: "show",
+              content: res.data.msg,
+            },
+          });
+          if (res.data.code !== 401)
+            dispatch({
+              type: Types.FETCH_ALL_CUSTOMER_SALE,
+              data: res.data.data,
+            });
+        })
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide"
+        })
+    
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
 export const editCustomerSale = (store_code,id,data , funcModal = null) => {
 
   return (dispatch) => {

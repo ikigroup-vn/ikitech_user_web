@@ -7,6 +7,7 @@ import Table from "../../components/CustomerSale/Table";
 import { Redirect, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Loading from "../Loading";
+
 import * as customerAction from "../../actions/customer_sales";
 import Chat from "../../components/Chat";
 import * as Env from "../../ultis/default";
@@ -34,10 +35,12 @@ class CustomerSale extends Component {
 
       id_customer: "",
       modal: {},
+      modalDelete : {},
       filter_by_status : ""
     };
   }
 
+  
   openModal = () => {
     this.setState({ openModal: true })
   }
@@ -188,7 +191,7 @@ class CustomerSale extends Component {
           <Sidebar store_code={store_code} />
           <ModalCreate resetModal={this.resetModal} openModal={openModal} store_code={store_code} wards={wards} district={district} province={province} />
           <ModalEdit openModalEdit={openModalEdit} resetModal={this.resetModalEdit} store_code={store_code} wards={wards} district={district} province={province} modal={modal} />
-
+          
           <ImportModal
             store_code={store_code}
             importData={importData}
@@ -298,6 +301,7 @@ class CustomerSale extends Component {
                       </div>
                       <div className="card-body">
                         <Table
+                        is_user = {this.props.badges.is_staff === false ? true : false}
                         passFilterStatus = {this.passFilterStatus}
                           handleSetInfor={this.handleSetInfor}
                           paginate={paginate}
@@ -306,7 +310,6 @@ class CustomerSale extends Component {
                           handleShowChatBox={this.handleShowChatBox}
                           handleEdit={this.handleEdit}
                           store_code={store_code}
-                          handleDelCallBack={this.handleDelCallBack}
                           customers={customers}
                           staff={staff}
                           getParams = {this.getParams}
@@ -353,6 +356,8 @@ const mapStateToProps = (state) => {
     province: state.placeReducers.province,
     district: state.placeReducers.district,
     staff: state.staffReducers.staff.allStaff,
+    badges: state.badgeReducers.allBadge,
+
   };
 };
 const mapDispatchToProps = (dispatch, props) => {

@@ -391,7 +391,12 @@ class PanelBottom extends Component {
     shouldComponentUpdate(nextProps, nextState) {
 
         console.log("Đã vô", nextState, this.state, nextProps.badges)
-        if (nextState.weight != this.state.weight || nextState.length != this.state.length || nextState.width != this.state.width || nextState.height != this.state.height) {
+        if (nextState.weight != this.state.weight || nextState.length != this.state.length || nextState.width != this.state.width || nextState.height != this.state.height
+            || !shallowEqual(this.props.badges , nextProps.badges) || !shallowEqual(this.state.valueProvince , nextState.valueProvince) 
+            || !shallowEqual(this.state.valueDistrict , nextState.valueDistrict)
+            || !shallowEqual(this.state.valueWards , nextState.valueWards)
+            
+            ) {
             var { weight, length, width, height, txtAddressDetail } = nextState
             var { badges, totalFinal, shipment, store_code } = nextProps;
             var { txtProvince,
@@ -404,9 +409,9 @@ class PanelBottom extends Component {
                 "sender_district_id": badges.address_pickup?.district,
                 "sender_wards_id": badges.address_pickup?.wards,
                 "sender_address": badges.address_pickup?.address_detail,
-                "receiver_province_id": valueProvince.value,
-                "receiver_district_id": valueDistrict.value,
-                "receiver_wards_id": valueWards.value,
+                "receiver_province_id": valueProvince?.value,
+                "receiver_district_id": valueDistrict?.value,
+                "receiver_wards_id": valueWards?.value,
                 "receiver_address": txtAddressDetail,
                 "weight": weight,
                 "length": length,
