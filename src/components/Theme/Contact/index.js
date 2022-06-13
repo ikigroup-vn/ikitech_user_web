@@ -181,7 +181,7 @@ class Support extends Component {
 
                             </div>
                         </div> */}
-                        {/* <div className="form-group">
+                        <div className="form-group">
                             <label htmlFor="name">ID Fanpage FaceBook</label>
                             
                             <div class="form-group" style = {{display : "flex"}}>
@@ -195,7 +195,7 @@ class Support extends Component {
                                 </div>
 
                             </div>
-                        </div> */}
+                        </div>
                         <div className="form-group">
                             <label htmlFor="name">ID Zalo</label>
 
