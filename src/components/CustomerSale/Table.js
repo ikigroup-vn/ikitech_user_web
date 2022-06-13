@@ -4,11 +4,17 @@ import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
 import history from "../../history";
 import { filter_arr, format } from "../../ultis/helpers";
 import Pagination from "../../components/RevenueExpenditures/Pagination";
+import * as customerAction from "../../actions/customer_sales";
+import { connect } from "react-redux";
+
 import DataItem from "./DataItem";
 
 class Table extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      filter_by_status : ""
+    }
   }
 
   showChatBox = (customerId, status) => {
@@ -48,7 +54,15 @@ class Table extends Component {
     }
     return result;
   };
+  searchStars = (e) => {
+    var { getParams, store_code } = this.props
+    var value = e.target.value
+    var params = getParams(value ,1)
+    this.props.fetchAllCustomerSale(this.props.store_code, 1 , params);
+this.props. passFilterStatus(value)
+    this.setState({ filter_by_status: value })
 
+  }
 
   render() {
     var customers =
@@ -57,6 +71,8 @@ class Table extends Component {
         : this.props.customers.data;
 
     var {store_code,staff} = this.props;
+
+    var {filter_by_status} = this.state
     return (
       <div class="table-responsive">
         <table
@@ -69,8 +85,16 @@ class Table extends Component {
             <tr>
               <th>STT</th>
               <th>Họ tên/SĐT</th>
-              <th>Trạng thái</th>
-              <th>Tư vấn lần 1</th>
+              <th>
+              <select value={filter_by_status} style={{ maxWidth: "150px" }} name="" id="input" className="form-control" onChange={this.searchStars}>
+              <option value = "">--Trạng thái--</option>
+                        <option value="0">Cần tư vấn</option>
+                        <option value="1">Đang tư vấn</option>
+                        <option value="2">Thành công</option>
+                        <option value="3">Thất bại</option>
+              </select>         
+              </th> 
+                  <th>Tư vấn lần 1</th>
               <th>Tư vấn lần 2</th>
               <th>Tư vấn lần 3</th>
 
@@ -89,4 +113,12 @@ class Table extends Component {
   }
 }
 
-export default Table;
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    fetchAllCustomerSale: (id, page, params) => {
+      dispatch(customerAction.fetchAllCustomerSale(id, page, params));
+    },
+
+  };
+};
+export default connect(null, mapDispatchToProps)(Table);

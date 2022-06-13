@@ -23,28 +23,40 @@ class Sidebar extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const location = window.location.pathname;
-    console.log("open" , menu)
+    console.log("open", menu)
+    console.log("lo ne", location)
     for (const item of menu[0]?.link) {
+      console.log("item hehe" , item)
+      var exsit = false
       if (item.open) {
-        if(item.ExcludeSetOpenKey?.length > 0)
-        for (const element of item.ExcludeSetOpenKey
-        ) {
-          if (location.includes(element)) {
-            return;
+        if (item.ExcludeSetOpenKey?.length > 0) {
+
+
+          for (const element of item.ExcludeSetOpenKey
+          ) {
+            if (location.includes(element)) {
+              exsit = true;
+            }
           }
-        }        if(item.setOpenKey?.length > 0)
-        for (const element of item.setOpenKey
-        ) {
-          if (location.includes(element)) {
-            if (window.$(`.${item.open}-collapse`).attr("aria-expanded") == "false") {
-              window.$(`.${item.open}-collapse`).trigger("click");
-              return;
+        }
+        if(exsit == true)
+        continue
+
+        if (item.setOpenKey?.length > 0) {
+          for (const element of item.setOpenKey
+          ) {
+            if (location.includes(element)) {
+              console.log("itemmm", item.open)
+              if (window.$(`.${item.open}-collapse`).attr("aria-expanded") == "false") {
+                window.$(`.${item.open}-collapse`).trigger("click");
+                return;
+              }
             }
           }
         }
       }
     };
-   
+
   }
   setActiveLocation = (location) => {
     return location.includes("/create")

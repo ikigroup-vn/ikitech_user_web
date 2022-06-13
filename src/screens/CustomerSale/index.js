@@ -33,7 +33,8 @@ class CustomerSale extends Component {
       openModalEdit: false,
 
       id_customer: "",
-      modal: {}
+      modal: {},
+      filter_by_status : ""
     };
   }
 
@@ -77,10 +78,9 @@ class CustomerSale extends Component {
       typeof nextProps.permission.product_list != "undefined"
     ) {
       var permissions = nextProps.permission;
-      var chat_allow = permissions.chat_allow;
 
-      var isShow = permissions.customer_list;
-      this.setState({ isLoading: true, isShow, chat_allow });
+      var isShow = permissions.onsale;
+      this.setState({ isLoading: true, isShow, chat_allow  : true});
     }
   }
 
@@ -141,6 +141,22 @@ class CustomerSale extends Component {
     document.getElementById("file-excel-import").value = null;
     reader.readAsBinaryString(f);
   };
+  getParams = (status, page) => {
+    var params = ``;
+    if (status != "" && status != null) {
+      params = params + `&status=${status}`;
+    }
+    if (page != "" && page != null) {
+      params = params + `&page=${page}`;
+    }
+
+    return params
+  }
+  passFilterStatus = (filter_by_status) =>{
+    this.setState({
+      filter_by_status
+    })
+  }
 
 
   render() {
@@ -161,7 +177,7 @@ class CustomerSale extends Component {
         : customer.name;
 
     var { store_code } = this.props.match.params;
-    var { showChatBox, isShow, chat_allow, searchValue, paginate, openModal, modal, openModalEdit } = this.state;
+    var { showChatBox, isShow, chat_allow, searchValue, paginate, openModal, modal, openModalEdit , filter_by_status } = this.state;
     var { wards, district, province } = this.props
     var importData = this.state.importData
 
@@ -282,6 +298,7 @@ class CustomerSale extends Component {
                       </div>
                       <div className="card-body">
                         <Table
+                        passFilterStatus = {this.passFilterStatus}
                           handleSetInfor={this.handleSetInfor}
                           paginate={paginate}
                           chat_allow={chat_allow}
@@ -292,11 +309,13 @@ class CustomerSale extends Component {
                           handleDelCallBack={this.handleDelCallBack}
                           customers={customers}
                           staff={staff}
+                          getParams = {this.getParams}
                         />
 
                         <Pagination
                           getPaginate={this.getPaginate}
-
+                          getParams = {this.getParams}
+                          filter_by_status  = {filter_by_status}
                           store_code={store_code}
                           customers={customers}
                         />

@@ -28,15 +28,22 @@ class DataItem extends Component {
         this.props.editCustomerSale(store_code, id, data)
     }
 
+  
 
     componentWillReceiveProps(nextProps, nextState) {
         var { store_code } = this.props;
+        if(!shallowEqual(nextProps.data, this.props.data))
+        {
+            this.setState({ updateApi: false, data : nextProps.data  });
 
+        }
         if (!shallowEqual(nextProps.customer, this.props.customer) && this.state.data.id == nextProps.customer.id) {
-            this.state = {
-                updateApi: false,
-                data: nextProps.customer
-            }
+            // this.state = {
+            //     updateApi: false,
+            //     data: nextProps.customer
+            // }
+            this.setState({ updateApi: false, data : nextProps.customer  });
+
         }
 
     }
@@ -86,6 +93,8 @@ class DataItem extends Component {
     render() {
         var { data } = this.state;
         var { store_code, index, paginate } = this.props;
+
+        console.log(this.props.data)
         return (
             <tr className="hover-product">
                 <td>{index + 1}</td>

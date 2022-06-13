@@ -214,6 +214,7 @@ export const ikitech_menu = [
       {
         name: "Khách hàng",
         setOpenKey : ["/customer" , "/reward_point" , "chat"],
+        ExcludeSetOpenKey : ["customer_sales"],
         icon: "fas fa-user",
         open: "customer",
         children: [
@@ -243,12 +244,12 @@ export const ikitech_menu = [
       },
       {
         name: "OnSale",
-        setOpenKey : ["/customer" , "/reward_point" , "chat"],
+        setOpenKey : ["/customer_sales"],
         icon: "fas fa-user",
-        open: "customer",
+        open: "onsale",
         children: [
           {
-            class: "customer_list",
+            class: "onsale",
             display: "hide",
             name: "Khách hàng tiềm năng",
             exact: true,

@@ -118,6 +118,8 @@ class ImportModal extends Component {
               <option value=""></option>
               <option value="name">Tên khách hàng</option>
               <option value="phone_number">Số điện thoại</option>
+              <option value="email">Email</option>
+
               <option value="address">Địa chỉ</option>
             </select>
 

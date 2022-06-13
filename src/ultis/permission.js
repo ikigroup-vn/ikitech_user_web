@@ -307,10 +307,11 @@ const permission = (channel) => {
                     "Thanh toán",
                     "Lên lịch thông báo",
                     "Đánh giá khách hàng",
-                    "Giao diện khách hàng"
+                    "Giao diện khách hàng",
+                    "OnSale"
 
                 ]
-                , body: ["delivery_pick_address_list", "payment_list", "notification_schedule_list", "customer_review_list" , "web_theme_edit"]
+                , body: ["delivery_pick_address_list", "payment_list", "notification_schedule_list", "customer_review_list" , "web_theme_edit" , "onsale"]
             },
 
 
@@ -527,6 +528,7 @@ export const initialPermission = () =>{
         staff_add: false,
         staff_remove: false,
         staff_delegating: false,
+        onsale : false
       
     }
     return {...state}

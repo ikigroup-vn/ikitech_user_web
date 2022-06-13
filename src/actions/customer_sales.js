@@ -72,6 +72,8 @@ export const saveAllListCustomer = (
                 stt:i,
                 name : item.name,
                 phone_number:item.phone_number,
+                email:item.email,
+
                 address : item.address,
 
               }
@@ -88,6 +90,10 @@ export const saveAllListCustomer = (
 
                 if (key == "phone_number") {
                     newItem["Số điện thoại"] = value;
+                    // newItem["Tên sản phẩm"] = value
+                  }
+                  if (key == "email") {
+                    newItem["Email"] = value;
                     // newItem["Tên sản phẩm"] = value
                   }
                

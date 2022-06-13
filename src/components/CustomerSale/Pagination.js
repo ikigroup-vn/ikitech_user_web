@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import getChannel from "../../ultis/channel"
-import * as customerAction from "../../actions/customer";
+import * as customerAction from "../../actions/customer_sales";
 class Pagination extends Component {
   constructor(props) {
     super(props);
@@ -12,7 +12,8 @@ class Pagination extends Component {
 
   passPagination = (page) => {
     console.log("page in customer", page);
-    this.props.fetchAllCustomer(this.props.store_code, page);
+    var params = this.props.getParams(this.props.filter_by_status , page)
+    this.props.fetchAllCustomerSale(this.props.store_code, page , params);
     this.props.getPaginate(page)
   };
 
@@ -69,8 +70,8 @@ class Pagination extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllCustomer: (store_code, page) => {
-      dispatch(customerAction.fetchAllCustomer(store_code, page));
+    fetchAllCustomerSale: (id, page, params) => {
+      dispatch(customerAction.fetchAllCustomerSale(id, page, params));
     },
   };
 };
