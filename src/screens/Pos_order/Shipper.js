@@ -420,7 +420,7 @@ class PanelBottom extends Component {
             }
 
             this.resetShipment(shipment)
-            if (data.receiver_province_id == "" || data.receiver_province_id == null || data.receiver_district_id == "" || data.receiver_district_id == null || data.receiver_wards_id == "" || data.receiver_wards_id == null) {
+            if (data.receiver_province_id == "" || data.receiver_province_id == null || data.receiver_district_id == "" || data.receiver_district_id == null || data.receiver_wards_id == "" || data.receiver_wards_id == null || this.state.weight == "" ) {
                 this.setState({ isError: true })
                 return;
             }
@@ -1214,7 +1214,7 @@ class PanelBottom extends Component {
                         </div>
 
                         <div className="list-payment" style={{ padding: "0 5px" }}>
-                            {loadShipper == "show" ? <div style={{ textAlign: "center", padding: "10px" }}>...Đang tải</div>
+                            {loadShipper == "show"  ? <div style={{ textAlign: "center", padding: "10px" }}>...Đang tải</div>
                                 : this.props.calculate?.length > 0 && this.state.isError == false && check == true ? this.props.calculate.map((item, value) => {
                                     return (
                                         <div className="item-payment" >
@@ -1225,7 +1225,9 @@ class PanelBottom extends Component {
 
                                         </div>
                                     )
-                                }) : <div style={{ textAlign: "center", margin: "auto", color: "red" }}>Vui lòng chọn khối lượng và địa chỉ giao hàng để xem báo giá của nhà vận chuyển</div>}
+                                }) : ( 
+                                    
+                                <div style={{ textAlign: "center", margin: "auto", color: "red" }}> {this.state.isError == false && loadShipper != "initial" ? "Bạn chưa cài đặt đơn vị vận chuyển nào" : "Vui lòng chọn khối lượng và địa chỉ giao hàng để xem báo giá của nhà vận chuyển"}</div>)}
 
 
                         </div>

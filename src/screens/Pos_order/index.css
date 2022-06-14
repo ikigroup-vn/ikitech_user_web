@@ -3,7 +3,9 @@
     color: rgba(0, 0, 0, 0.87);
     overflow: hidden;
 }
-
+.border-item-bonus {
+    border: 3px solid orange !important;
+}
 .col-list-pos {
     float: left;
     width: calc(100% - 452px);

@@ -70,7 +70,7 @@ class ItemInCart extends Component {
                 for (const element of path) {
                     if (element.className == "shopee-arrow-box__content") {
                         checkHasContain = true
-                  
+
                     }
                 }
 
@@ -409,10 +409,11 @@ class ItemInCart extends Component {
                 ? item.product?.inventory.distributes[0]
                 : [];
         console.log("itemmm", item, this.state);
+        var is_bonus = item.is_bonus
         return (
             <div
                 onClick={() => { this.closeModalClickOutSite(item.product.distributes?.length) }}
-                class="card card-item-pos"
+                class={`card card-item-pos ${is_bonus === true ? "border-item-bonus" : ""}`}
                 style={{ marginBottom: "10px" }}
                 key={index}
             >
@@ -470,7 +471,7 @@ class ItemInCart extends Component {
                                         <div class="aUj6f2">
                                             <div class="_1XT_GF" role="button" tabindex="0" >
 
-                                                <div class="Qtk_DO" id={`item_pos_${this.props.key}`} ref={this.ref} onClick={() => this.props.showDetail(item.id)}>
+                                                <div class="Qtk_DO" id={`item_pos_${this.props.key}`} ref={this.ref} onClick={() => { is_bonus === false && this.props.showDetail(item.id) }}>
                                                     Phân loại hàng:<button class="vZLqsj _2zsvOt"></button>
                                                 </div>
                                                 {
@@ -697,7 +698,7 @@ class ItemInCart extends Component {
                             >
                                 <button
                                     className="btn-sub"
-                                    onClick={() =>
+                                    onClick={() => is_bonus === false &&
                                         this.subQuantity(
                                             item.list_cart_id,
                                             item.id,
@@ -711,8 +712,9 @@ class ItemInCart extends Component {
                                     -
                                 </button>
                                 <input
+                                    disabled =  {is_bonus}
                                     className="input-quantity"
-                                    onChange={this.handleOnChange}
+                                    onChange={() => is_bonus === false && this.handleOnChange}
                                     style={{
                                         width: "40px",
                                         textAlign: "center",
@@ -724,6 +726,7 @@ class ItemInCart extends Component {
                                     disabled={!allowAdd}
                                     className="btn-add"
                                     onClick={() =>
+                                        is_bonus === false &&
                                         this.addQuantity(
                                             item.product.id,
                                             item.id,
@@ -748,25 +751,43 @@ class ItemInCart extends Component {
                             )}
                         </div>
 
-                        <div
-                            className="total-price"
-                            style={{ width: "13%", fontWeight: "500" }}
-                        >
-                            {format(Number(item.item_price * currentQuantity))}
-                        </div>
-                                <div style ={{width : "5%"}}>
+                        {
+                            is_bonus === true ? <div
+                                className="total-price"
+                                style={{ width: "13%", fontWeight: "500" }}
+                            >
+                                {/* {item.bonus_product_name ?? "Thưởng sản pham"} */}
+                                Sản phẩm tặng
+                            </div> : <div
+                                className="total-price"
+                                style={{ width: "13%", fontWeight: "500" }}
+                            >
+                                {format(Number(item.item_price * currentQuantity))}
+                            </div>
+                        }
+                        <div style={{ width: "5%" }}>
+                            {is_bonus === true ?
+                                <i class="fa fa-gift" style={{
+                                    "font-size": "40px",
+                                    color: "darkorange",
+                                    /* float: right; */
+                                    padding: "12px"
+                                }}></i> :
                                 <i
-                            className="fa fa-trash icon-trash-pos"
-                            onClick={() =>
-                                this.handleDelete(
-                                    item.list_cart_id,
-                                    item.product.id,
-                                    item.id,
-                                    item.distributes_selected
-                                )
+                                    className="fa fa-trash icon-trash-pos"
+                                    onClick={() =>
+
+                                        this.handleDelete(
+                                            item.list_cart_id,
+                                            item.product.id,
+                                            item.id,
+                                            item.distributes_selected
+                                        )
+                                    }
+                                ></i>
                             }
-                        ></i>
-                                </div>
+
+                        </div>
                     </div>
 
                 </div>

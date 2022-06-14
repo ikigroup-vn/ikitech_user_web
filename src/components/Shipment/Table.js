@@ -85,7 +85,7 @@ class Table extends Component {
                 onClick={(e) => this.passEditFunc(e,data.id , token)}
                 data-toggle="modal"
                 data-target="#updateModal"
-                class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
+                class={`btn btn-warning btn-sm`}
               >
                 <i class="fa fa-edit"></i>Sửa
               </button>

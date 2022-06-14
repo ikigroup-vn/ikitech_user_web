@@ -1,7 +1,7 @@
 import * as Types from "../constants/ActionType";
 var initialState = {
   disable : "hide",
-  disable_shipper : "hide",
+  disable_shipper : "initial",
 
   disable_lazy : "hide"
 };

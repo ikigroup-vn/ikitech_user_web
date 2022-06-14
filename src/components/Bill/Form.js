@@ -214,7 +214,7 @@ class Form extends Component {
 
                                 <hr />
 
-                                {( getChannel() == IKITECH && bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE &&  bill.order_from !== null) && bill.order_status_code !== "COMPLETED" && 
+                                {( getChannel() == IKITECH && bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE &&  bill.order_from !== null) && bill.order_status_code !== "COMPLETED" && bill.order_status_code !=="CUSTOMER_HAS_RETURNS" && 
                                     <div className="card col-12 pl0" id="user_cart_info">
                                         <InfoShipper
                                             order_allow_change_status={order_allow_change_status}
@@ -228,7 +228,7 @@ class Form extends Component {
 
 
                                 <hr />
-                                {( getChannel() == IKITECH && bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE &&  bill.order_from !== null && bill.order_status_code !== "COMPLETED"  && bill.order_status_code !== "PACKING" && bill.order_status_code !=="SHIPPING") &&
+                                {( getChannel() == IKITECH && bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE &&  bill.order_from !== null && bill.order_status_code !== "COMPLETED"  && bill.order_status_code !=="SHIPPING"  && bill.order_status_code !=="CUSTOMER_HAS_RETURNS") &&
                                 <div className="card col-12 pl0" id="user_cart_info">
                                     <ChangeBranch
                                         order_allow_change_status={order_allow_change_status}

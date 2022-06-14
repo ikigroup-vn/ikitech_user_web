@@ -602,7 +602,7 @@ class Form extends Component {
                   {isLoading == true
                     ?
                     <MomentInput
-                    defaultValue={txtEnd == "" || txtEnd == null ? "" : moment(txtEnd, "DD-MM-YYYY HH:mm")}
+                    defaultValue={txtStart == "" || txtStart == null ? "" : moment(txtStart, "DD-MM-YYYY HH:mm")}
 
                       min={moment()}
                       format="DD-MM-YYYY HH:mm"
@@ -628,7 +628,7 @@ class Form extends Component {
                   {isLoading == true
                     ?
                   <MomentInput
-                  defaultValue={txtStart == "" || txtStart == null ? "" : moment(txtStart, "DD-MM-YYYY HH:mm")}
+                  defaultValue={txtEnd == "" || txtEnd == null ? "" : moment(txtEnd, "DD-MM-YYYY HH:mm")}
 
                     min={moment()}
                     format="DD-MM-YYYY HH:mm"

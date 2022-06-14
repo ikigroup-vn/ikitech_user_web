@@ -672,10 +672,39 @@ export const postCashRefund = (order_code, data, store_code, branch = getBranchI
     billApi
       .postCashRefund(order_code, data, store_code, branch)
       .then((res) => {
-        dispatch({
-          type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+        billApi.fetchBillId(store_code, order_code).then((res) => {
+          dispatch({
+            type: Types.SHOW_LOADING,
+            loading: "hide",
+          });
+          if (res.data.code !== 401) {
+            dispatch({
+              type: Types.FETCH_ID_BILL,
+              data: res.data.data,
+            });
+    
+            billApi.fetchBillHistory(store_code, res.data.data.id).then((res) => {
+              if (res.data.code !== 401)
+                dispatch({
+                  type: Types.FETCH_BILL_HISTORY,
+                  data: res.data.data,
+                });
+            });
+    
+            billApi
+              .getHistoryDeliveryStatus(store_code, {
+                order_code: res.data.data.order_code,
+              })
+              .then((res) => {
+                if (res.data.code === 200)
+                  dispatch({
+                    type: Types.FETCH_DELIVERY_HISTORY,
+                    data: res.data.data,
+                  });
+              });
+          }
+        });
+   
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {

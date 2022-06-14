@@ -46,7 +46,8 @@ class Table extends Component {
 filterColDiscount = (data) => {
   var is_end = this.props.is_end
   var now = moment().valueOf()
-  var start_time = moment(data.start_time, "YYYY-MM-DD HH:mm:ss").valueOf()
+  var start_time = moment(data.start_time).valueOf()
+  console.log(moment().format("DD-MM-YYYY HH:mm:ss"))
   console.log(now , start_time , is_end)
   if (is_end == 0) {
     if(now < start_time)
