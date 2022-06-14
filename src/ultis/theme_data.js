@@ -8,6 +8,8 @@ const posTheme = {
     logo: "/images/logo/ikipos_logo.png",
     logoTab: "/images/logo/ikipos_logo_tab.png",
     logoLogin: "/images/logo/ikipos_login.jpg",
+    favicon: "/images/logo/ikipos_logo_tab.png"
+
 }
 
 const ikitechTheme = {
@@ -18,6 +20,7 @@ const ikitechTheme = {
     logo: "/images/logo/ikitech_logo.jpg",
     logoTab: "/images/logo/ikitech_logo_tab.png",
     logoLogin: "/images/logo/ikitech_login.jpg",
+    favicon: "/images/logo/ikitech_favicon.png"
 }
 
 

@@ -12,6 +12,8 @@ class App extends Component {
   componentDidMount() {
     document.title = `Quản lý - ${themeData().loginTitle}`
     document.getElementById("root").className = getChannel();
+document.head.innerHTML = document.head.innerHTML + `<link rel="icon"  href="${themeData().favicon}"/>`
+
   }
 
   showContentMenus = (routes) => {
