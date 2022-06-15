@@ -44,7 +44,7 @@ class Modal extends Component {
               <div class="modal-body">
                 <input type="hidden" name="remove_id_store" />
                 <div class="alert-remove"></div>
-                Bạn có muốn xóa {multi.data.length > 0 ?"danh sách sản phẩm" : "sản phẩm"} này không 
+                Bạn có muốn xóa {multi.data.length === 1 ?"sản phẩm" : `${multi.data.length} sản phẩm`} này không?
               </div>
               <div class="modal-footer">
               <button

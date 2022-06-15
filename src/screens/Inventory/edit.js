@@ -172,7 +172,9 @@ class EditInventory extends Component {
     componentDidMount() {
         const branch_id = localStorage.getItem('branch_id')
         const {store_code,id} = this.props.match.params
-        this.props.fetchAllProductV2(store_code, branch_id);
+        const params = `&check_inventory=true`
+
+        this.props.fetchAllProductV2(store_code, branch_id ,1, params);
         this.props.fetchDetailInventory(store_code, branch_id,id)
     }
 

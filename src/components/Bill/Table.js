@@ -310,7 +310,7 @@ class Table extends Component {
       id="input" class="form-control" r
       equired="required"
       onChange={this.onchangeStatusPayment}>
-                                <option disabled>Trạng thái thanh toán</option>
+                                <option disabled>--Trạng thái thanh toán--</option>
 
       <option value="">Tất cả</option>
       <option value="UNPAID">Chưa thanh toán</option>
@@ -350,7 +350,7 @@ class Table extends Component {
 
     if (getChannel() == IKITECH) {
       return <select value={statusOrder || ""} name="" id="input" class="form-control" required="required" onChange={this.onchangeStatusOrder}>
-                <option disabled>Trạng thái đơn hàng</option>
+                <option disabled>--Trạng thái đơn hàng--</option>
 
         <option value="">Tất cả</option>
 

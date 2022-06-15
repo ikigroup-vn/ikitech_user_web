@@ -20,6 +20,9 @@
     background-color: white !important;
     cursor: pointer
 }
+.contact .form-control{
+    max-width: 80%;
+}
 .disable-color{
     background: #a6a1a1
 }

@@ -5,6 +5,7 @@ import CardProduct from "../../components/Pos_Order/CardProduct";
 import CardCombo from "../../components/Pos_Order/CardCombo";
 import * as shipmentAction from "../../actions/shipment";
 import * as customerAction from "../../data/remote/customer";
+import { Link } from "react-router-dom";
 
 import * as Types from "../../constants/ActionType"
 import Slider from "react-slick";
@@ -1227,7 +1228,8 @@ class PanelBottom extends Component {
                                     )
                                 }) : ( 
                                     
-                                <div style={{ textAlign: "center", margin: "auto", color: "red" }}> {this.state.isError == false && loadShipper != "initial" ? "Bạn chưa cài đặt đơn vị vận chuyển nào" : "Vui lòng chọn khối lượng và địa chỉ giao hàng để xem báo giá của nhà vận chuyển"}</div>)}
+                                <div style={{ textAlign: "center", margin: "auto", color: "red" }}> {this.state.isError == false && loadShipper != "initial" ? <Link style = {{    color: "red",
+                                    "text-decoration": "underline"}} to = {`/shipment/${this.props.store_code}`}>Không có đơn vị vận chuyển nào hoặc mã token không hợp lệ. Vui lòng nhấp để cài đặt</Link> : "Vui lòng chọn khối lượng và địa chỉ giao hàng để xem báo giá của nhà vận chuyển"}</div>)}
 
 
                         </div>

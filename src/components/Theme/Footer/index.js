@@ -19,6 +19,7 @@ class Footer extends Component {
             contact_short_description: "",
             contact_business_registration_certificate: "",
             contact_info_bank: "",
+            content_ministry_of_industry_and_trade : "",
 
             contact_fanpage: "",
             html_footer: "",
@@ -42,7 +43,7 @@ class Footer extends Component {
                 contact_individual_organization_name: theme.contact_individual_organization_name,
                 contact_short_description: theme.contact_short_description,
                 contact_business_registration_certificate: theme.contact_business_registration_certificate,
-
+                content_ministry_of_industry_and_trade : theme.content_ministry_of_industry_and_trade,
                 contact_info_bank: theme.contact_info_bank,
                 contact_fanpage: theme.contact_fanpage,
                 html_footer: theme.html_footer,
@@ -75,7 +76,7 @@ class Footer extends Component {
                 contact_individual_organization_name: theme.contact_individual_organization_name,
                 contact_short_description: theme.contact_short_description,
                 contact_business_registration_certificate: theme.contact_business_registration_certificate,
-
+                content_ministry_of_industry_and_trade : theme.content_ministry_of_industry_and_trade,
                 contact_info_bank: theme.contact_info_bank,
                 contact_fanpage: theme.contact_fanpage,
                 html_footer: theme.html_footer,
@@ -103,7 +104,7 @@ class Footer extends Component {
         form.contact_short_description = theme.contact_short_description
         form.contact_business_registration_certificate = theme.contact_business_registration_certificate
         form.contact_info_bank = theme.contact_info_bank
-
+        form.content_ministry_of_industry_and_trade = theme.content_ministry_of_industry_and_trade
         form.contact_fanpage = theme.contact_fanpage
         form.html_footer = theme.html_footer
 
@@ -119,7 +120,7 @@ class Footer extends Component {
                 contact_individual_organization_name,
                 contact_short_description,
                 contact_business_registration_certificate,
-
+                content_ministry_of_industry_and_trade,
                 contact_info_bank,
                 contact_fanpage,
                 html_footer,
@@ -168,6 +169,17 @@ class Footer extends Component {
                             <input type="text" name="contact_individual_organization_name" value={contact_individual_organization_name} placeholder="Nhập..." onChange={this.onChange} className="form-control" id="txtName" autoComplete="off" />
 
                         </div>
+                        <div className="form-group">
+                                <label htmlFor="name">Thông tin giấy đăng ký kinh doanh</label>
+                                <div class="form-group" style={{ display: "flex" }}>
+                                    {/* <input type="tel" name="phone_number_hotline" value={phone_number_hotline} placeholder="Nhập..." onChange={this.onChange} className="form-control" id="txtName" autoComplete="off" />
+                               */}
+                                    
+                                    <textarea name="content_ministry_of_industry_and_trade" id="input" class="form-control" rows="3" onChange={this.onChange} value = {content_ministry_of_industry_and_trade}>{content_ministry_of_industry_and_trade}</textarea>
+                                    
+                                </div>
+
+                            </div>
 
 
 

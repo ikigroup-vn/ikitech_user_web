@@ -13,3 +13,11 @@
     height: 80px;
     vertical-align: middle;
 }
+
+.print-feature-container {
+    display : flex
+}
+.print-feature-container .name {
+    margin: auto 0;
+    margin-left: 20px;
+}

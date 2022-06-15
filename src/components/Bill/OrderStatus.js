@@ -9,7 +9,10 @@ class OrderStatus extends Component {
         super(props);
         this.state = {
             status: [
-
+                {
+                    name: "Chờ xử lý",
+                    code: "WAITING_FOR_PROGRESSING",
+                },
                 {
                     name: "Đang chuẩn bị hàng",
                     code: "PACKING",
@@ -85,7 +88,9 @@ class OrderStatus extends Component {
             curentStatus == "CUSTOMER_CANCELLED" ||
             curentStatus == "DELIVERY_ERROR" ||
             curentStatus == "CUSTOMER_RETURNING" ||
-            curentStatus == "CUSTOMER_HAS_RETURNS"
+            curentStatus == "CUSTOMER_HAS_RETURNS" || 
+            curentStatus == "WAITING_FOR_PROGRESSING" 
+
         ) {
             if (status == "PACKING" || status == "COMPLETED" || status == "SHIPPING") {
                 return true

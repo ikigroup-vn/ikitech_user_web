@@ -33,6 +33,7 @@ class PrintBarcode extends Component {
       product_map_list: [],
       showPrice: true,
       showName: true,
+      showBarcode : true,
     };
   }
 
@@ -66,12 +67,12 @@ class PrintBarcode extends Component {
     var data = [
       {
         name: (<div>Mẫu giấy <b>180</b> </div>),  //ok
-        size: "Khổ A4 - 20x15mm.",  
+        size: "Khổ A4 - 20x15mm.",
         isA4: true,
         widthPrint: 210,
         heightPrint: 297,
-        itemTemHight:"75px",
-        heightOnePage:1420,
+        itemTemHight: "75px",
+        heightOnePage: 1420,
         column: 10,
         row: 18,
         image: "https://i.imgur.com/y4nAwHP.png",
@@ -81,11 +82,11 @@ class PrintBarcode extends Component {
         name: "Mẫu giấy 65 nhãn",
         size: "Khổ A4, Tomy 145 - 210x297mm.",  //ok
         isA4: true,
-        widthBarcode:1.2,
+        widthBarcode: 1.2,
         widthPrint: 210,
-        heightOnePage:1310,
+        heightOnePage: 1310,
         heightPrint: 297,
-        itemTemHight:"100px",
+        itemTemHight: "100px",
         column: 5,
         row: 13,
         image: "https://i.imgur.com/6Ynu3zS.png",
@@ -122,10 +123,10 @@ class PrintBarcode extends Component {
         isA4: false,
         widthPrint: 70,
         heightPrint: 22,
-        paddingTop:0,
+        paddingTop: 0,
         heightOnePage: 122,
         itemTemHight: "71px",
-        widthTable:350,
+        widthTable: 350,
         column: 2,
         row: 1,
         image: "https://i.imgur.com/UlmovmM.png",
@@ -138,9 +139,9 @@ class PrintBarcode extends Component {
         widthPrint: 77,
         heightPrint: 22,
         heightOnePage: 122,
-        itemTemHight:"71px",
-        paddingTop:0,
-        widthTable:350,
+        itemTemHight: "71px",
+        paddingTop: 0,
+        widthTable: 350,
         column: 2,
         row: 1,
         image: "https://i.imgur.com/xFMDfuP.png",
@@ -152,10 +153,10 @@ class PrintBarcode extends Component {
         isA4: false,
         widthPrint: 50,
         heightPrint: 40,
-        paddingTop:0,
+        paddingTop: 0,
         heightOnePage: 220,
-        itemTemHight:"140px",
-        widthTable:250,
+        itemTemHight: "140px",
+        widthTable: 250,
         column: 2,
         row: 1,
         image: "https://i.imgur.com/gKuOulQ.png",
@@ -182,7 +183,7 @@ class PrintBarcode extends Component {
         isA4: false,
         widthPrint: 40,
         heightPrint: 25,
-        itemTemHight:"71px",
+        itemTemHight: "71px",
         heightOnePage: 130,
         itemTemHight: "71px",
         widthTable: 200,
@@ -199,7 +200,7 @@ class PrintBarcode extends Component {
         heightPrint: 30,
         itemTemHight: "71px",
         heightOnePage: 160,
-        paddingTop:0,
+        paddingTop: 0,
         itemTemHight: "71px",
         widthTable: 200,
         column: 1,
@@ -410,7 +411,12 @@ class PrintBarcode extends Component {
         [e.target.name]: !this.state.showPrice,
       });
     }
-
+    {
+      this.setState({
+        [e.target.name]: !this.state.showBarcode,
+      });
+    }
+   
   }
 
 
@@ -441,7 +447,7 @@ class PrintBarcode extends Component {
 
 
 
-    const { products, showName, showPrice, isShow } = this.state
+    const { products, showName, showPrice, isShow  , showBarcode} = this.state
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
@@ -544,18 +550,29 @@ class PrintBarcode extends Component {
                         <div className="card-header py-3"><h6 className="m-0 title_content font-weight-bold text-primary">Cấu hình tem in</h6></div>
 
                         <div className="card-body">
-                          <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="switch1" disabled name="example" checked={true} onChange={this.handChangeCheckbox} />
-                            <label class="custom-control-label" for="switch1">Mã barcode</label>
+                          <div className="print-feature-container">
+                            <div class="custom-control custom-switch" style = {{paddingLeft : "1.5rem"}}>
+                              <input type="checkbox" class="custom-control-input" id="switch1" name="showBarcode" checked={showBarcode} onChange={this.handChangeCheckbox} />
+                              <label class="custom-control-label" for="switch1"></label>
+                            </div>
+                            <div className="name"><span>Mã barcode</span></div>
                           </div>
-                          <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="showName" name="showName" checked={this.state.showName} onChange={this.handChangeCheckbox} />
-                            <label class="custom-control-label" for="showName">Tên sản phẩm</label>
+                          <div className="print-feature-container">
+                            <div class="custom-control custom-switch" style = {{paddingLeft : "1.5rem"}}>
+                              <input type="checkbox" class="custom-control-input" id="showName" name="showName" checked={this.state.showName} onChange={this.handChangeCheckbox} />
+                              <label class="custom-control-label" for="showName"></label>
+                            </div>
+                            <div className="name"><span>Tên sản phẩm</span></div>
+
                           </div>
-                          <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="showPrice" name="showPrice" checked={this.state.showPrice} onChange={this.handChangeCheckbox} />
-                            <label class="custom-control-label" for="showPrice">Giá bán</label>
+                          <div className="print-feature-container">
+                            <div class="custom-control custom-switch" style = {{paddingLeft : "1.5rem"}}>
+                              <input type="checkbox" class="custom-control-input" id="showPrice" name="showPrice" checked={this.state.showPrice} onChange={this.handChangeCheckbox} />
+                              <label class="custom-control-label" for="showPrice"></label>
+                            </div>
+                            <div className="name"><span>Giá bán</span></div>
                           </div>
+
                           {/* <div class="custom-control custom-switch">
                           <input type="checkbox" class="custom-control-input" id="switch1" name="example" checked={this.state.is_use_points} onChange={this.handChangeCheckbox} />
                           <label class="custom-control-label" for="switch1">Khổ rộng</label>
@@ -563,7 +580,7 @@ class PrintBarcode extends Component {
 
 
 
-                          <div className="barcode-wrap">
+                          <div className="barcode-wrap" style = {{marginTop : "10px"}}>
 
                             {showName && <div>Tên sản phẩm</div>}
 
@@ -576,6 +593,7 @@ class PrintBarcode extends Component {
                               displayValue={false}
                               value="123456789123456" />
 
+                            {showBarcode && <span>IKINO1</span>}
 
                             {showPrice && <p>1.000.000</p>}
                           </div>

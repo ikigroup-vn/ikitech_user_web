@@ -76,10 +76,12 @@ class ShowData extends Component {
       discount_percent = product_discount.value;
     }
 
+    console.log(listDistribute,distributes)
+
     return (
       <tr className="hover-product">
 
-        <td>{data.barcode}</td>
+        <td>{listDistribute.id  ? "" : data.barcode}</td>
 
         <td>
           <Link to={`/product/edit/${store_code}/${data.id}/${page}`}>
