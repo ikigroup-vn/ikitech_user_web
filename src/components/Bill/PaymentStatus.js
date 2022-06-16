@@ -86,8 +86,12 @@ class PaymentStatus extends Component {
         return (
             <nav class="left-nav hidden-xs hidden-sm hidden-md">
                 <ul class="nolist" style = {{minHeight : "250px"}} >
-                    <li style={{ background: "rgb(31 178 151)" }} class="">
-                        <a href="#">Trạng thái thanh toán</a>
+                <li style={{ background: "#EAEFF3",
+                    border: "2px solid #e3e5e6"
+                }} class="">
+                        <a href="#" style={{
+                            fontWeight: 600
+                        }}>Trạng thái thanh toán</a>
                     </li>
               { this.showShipmetStatus(status)}
 

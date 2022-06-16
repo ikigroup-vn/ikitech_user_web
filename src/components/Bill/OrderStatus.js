@@ -60,36 +60,43 @@ class OrderStatus extends Component {
 
 
 
-    changeStatus = (statusCode, name,statusCheck) => {
-        if(statusCheck == true)
-        {
+    changeStatus = (statusCode, name, statusCheck) => {
+    
+        if (statusCheck == true) {
             this.props.showError({
                 type: Types.ALERT_UID_STATUS,
                 alert: {
-                  type: "danger",
-                  title: "Lỗi",
-                  disable: "show",
-                  content: "Không thể chuyển về trạng thái cũ",
+                    type: "danger",
+                    title: "Lỗi",
+                    disable: "show",
+                    content: "Không thể chuyển về trạng thái cũ",
                 },
-              });
-              return;
+            });
+            return;
         }
+
         window.$('#postModal').modal('show');
+
         var disable = this.props.order_allow_change_status
         if (disable == false)
             return
+
         this.props.handleUpdateStatusOrder({ order_status_code: statusCode, statusName: name })
     }
 
 
     checkStatus = (status, curentStatus) => {
+
+        if (curentStatus == "WAITING_FOR_PROGRESSING") {
+            return false
+        }
+
         if (curentStatus == "OUT_OF_STOCK" ||
             curentStatus == "USER_CANCELLED" ||
             curentStatus == "CUSTOMER_CANCELLED" ||
             curentStatus == "DELIVERY_ERROR" ||
             curentStatus == "CUSTOMER_RETURNING" ||
-            curentStatus == "CUSTOMER_HAS_RETURNS" || 
-            curentStatus == "WAITING_FOR_PROGRESSING" 
+            curentStatus == "CUSTOMER_HAS_RETURNS"
 
         ) {
             if (status == "PACKING" || status == "COMPLETED" || status == "SHIPPING") {
@@ -105,7 +112,7 @@ class OrderStatus extends Component {
             if (status !== "COMPLETED") {
                 return true
             }
-            else{
+            else {
 
                 return false
             }
@@ -121,10 +128,10 @@ class OrderStatus extends Component {
         var result = null;
         if (orderStatus.length > 0) {
             var disable = this.props.order_allow_change_status == true ? "modal" : ""
-          
+
             result = orderStatus.map((item, index) => {
                 var statusCheck = this.checkStatus(item.code, status)
-                console.log(item.code,status,this.checkStatus(item.code, status))
+                console.log(item.code, status, this.checkStatus(item.code, status))
                 var disable_back_status = statusCheck == true ? "disable-color" : ""
                 var active = item.code == status ? "active_status" : ""
                 if (active != "") {
@@ -139,7 +146,12 @@ class OrderStatus extends Component {
                         <li
                             // data-toggle={disable}
                             // data-target="#postModal"
-                            class={`${active} ${statusCheck !== true  ? "hover-product" : "" } ${disable_back_status}`} onClick={() => { this.changeStatus(item.code, item.name,statusCheck,disable) }}>
+                            class={`${active} ${statusCheck !== true ? "hover-product" : ""} ${disable_back_status}`} 
+                            onClick={
+                                () => { 
+
+                                    this.changeStatus(item.code, item.name, statusCheck) 
+                                    }}>
                             <a >{item.name}</a>
                         </li>
                     )
@@ -162,8 +174,12 @@ class OrderStatus extends Component {
         return (
             <nav class="left-nav hidden-xs hidden-sm hidden-md">
                 <ul class="nolist" style={{ minHeight: "250px" }}>
-                    <li style={{ background: "rgb(31 178 151)" }} class="">
-                        <a >Trạng thái đơn hàng</a>
+                    <li style={{ background: "#EAEFF3",
+                    border: "2px solid #e3e5e6"
+                }} class="">
+                        <a style={{
+                            fontWeight: 600
+                        }}>Trạng thái đơn hàng</a>
 
                     </li>
                     <li style={{
@@ -198,7 +214,7 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         showError: (error) => {
             dispatch(error);
-          },
+        },
 
     };
 };
