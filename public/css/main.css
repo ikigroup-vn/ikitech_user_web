@@ -26,8 +26,8 @@
 }
 
 .disable-color {
-    background: #a6a1a1;
-    color: #fff;
+    background: #f6f6f6;
+    color: grey;
 }
 
 .active-branch-default {

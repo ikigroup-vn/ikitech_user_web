@@ -391,7 +391,7 @@ export const destroyAttributeP = ($this, store_code, data) => {
       });
   };
 };
-export const uploadAvataProduct = (file , store_code) => {
+export const uploadAvataProduct = (file) => {
   console.log(file);
   return (dispatch) => {
     dispatch({
@@ -399,7 +399,7 @@ export const uploadAvataProduct = (file , store_code) => {
       loading: "show",
     });
     uploadApi
-      .upload(file , store_code)
+      .upload(file)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
@@ -407,7 +407,7 @@ export const uploadAvataProduct = (file , store_code) => {
         });
         dispatch({
           type: Types.UPLOAD_PRODUCT_IMG,
-          data: res.data.data?.image_url,
+          data: res.data.data,
         });
         dispatch({
           type: Types.ALERT_UID_STATUS,
@@ -484,7 +484,7 @@ export const editStock = (store_code, branch_id, data, page = 1, params = null) 
   };
 };
 
-export const uploadListImgProduct = function (files , store_code) {
+export const uploadListImgProduct = function (files) {
   return async (dispatch) => {
     var images = [];
     for (let i = 0; i < files.length; i++) {
@@ -492,7 +492,7 @@ export const uploadListImgProduct = function (files , store_code) {
 
       fd.append(`image`, await compressed(files[i]));
       try {
-        var res = await uploadApi.upload(fd,store_code);
+        var res = await uploadApi.upload(fd);
         console.log(res);
       } catch (error) {
         console.log(error);
@@ -521,7 +521,7 @@ export const uploadListImgProduct = function (files , store_code) {
           });
         }
       } else {
-        images.push(res.data.data?.image_url);
+        images.push(res.data.data);
         console.log(images);
       }
       if (i == files.length - 1) {
