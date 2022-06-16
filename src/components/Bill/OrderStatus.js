@@ -61,6 +61,7 @@ class OrderStatus extends Component {
 
 
     changeStatus = (statusCode, name, statusCheck) => {
+    
         if (statusCheck == true) {
             this.props.showError({
                 type: Types.ALERT_UID_STATUS,
@@ -73,10 +74,13 @@ class OrderStatus extends Component {
             });
             return;
         }
+
         window.$('#postModal').modal('show');
+
         var disable = this.props.order_allow_change_status
         if (disable == false)
             return
+
         this.props.handleUpdateStatusOrder({ order_status_code: statusCode, statusName: name })
     }
 
@@ -128,8 +132,8 @@ class OrderStatus extends Component {
             result = orderStatus.map((item, index) => {
                 var statusCheck = this.checkStatus(item.code, status)
                 console.log(item.code, status, this.checkStatus(item.code, status))
-                var disable_back_status = statusCheck == true ? "disable-color" : "non-active"
-                var active = item.code == status ? "active_status" : "non-active"
+                var disable_back_status = statusCheck == true ? "disable-color" : ""
+                var active = item.code == status ? "active_status" : ""
                 if (active != "") {
                     return (
                         <li class={`${active} hover-product`}>
@@ -142,7 +146,12 @@ class OrderStatus extends Component {
                         <li
                             // data-toggle={disable}
                             // data-target="#postModal"
-                            class={`${active} ${statusCheck !== true ? "hover-product" : ""} ${disable_back_status}`} onClick={() => { this.changeStatus(item.code, item.name, statusCheck, disable) }}>
+                            class={`${active} ${statusCheck !== true ? "hover-product" : ""} ${disable_back_status}`} 
+                            onClick={
+                                () => { 
+
+                                    this.changeStatus(item.code, item.name, statusCheck) 
+                                    }}>
                             <a >{item.name}</a>
                         </li>
                     )
