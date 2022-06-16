@@ -32,7 +32,7 @@ class Store extends Component {
       var stores = nextProps.stores
       if (stores.isApi) {
         var listStore = typeof stores.data == "undefined" ? [] : stores.data;
-        if (listStore.length > 0) {
+        if (listStore?.length > 0) {
 
           if (store_id != null) {
             const selectedStrore = stores.data.find(

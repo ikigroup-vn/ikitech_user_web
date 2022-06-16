@@ -171,14 +171,14 @@ export const updateCategoryB = (categoryBId, categoryB, store_code) => {
   };
 };
 
-export const uploadImgCategoryB = (file) => {
+export const uploadImgCategoryB = (file,store_code) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading : "show"
     })
     uploadApi
-      .upload(file)
+      .upload(file,store_code)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,

@@ -13,6 +13,13 @@ import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
 import { handleImageUploadBefore } from "../../../ultis/sun_editor";
 import getChannel, { IKITECH } from "../../../ultis/channel";
+import * as userLocalApi from "../../../data/local/user";
+
+import {
+  image as imagePlugin
+} from "suneditor/src/plugins";
+import imageGallery from "./../../imageGallery";
+import {getApiImageStore} from "../../../constants/Config"
 import SeoOption from "./SeoOption";
 class Form extends Component {
   constructor(props) {
@@ -165,7 +172,7 @@ class Form extends Component {
 
     var { txtTitle, txtContent, image, listCategory, txtSumary, txtPublished,txtSeoDescription,txtSeoTitle, txtCategories } = this.state
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
-    console.log(this.state)
+    var {store_code} = this.props
     return (
       <React.Fragment>
         <form role="form" onSubmit={this.onSave} method="post">
@@ -273,6 +280,17 @@ class Form extends Component {
                 onChange={this.handleEditorChange}
                 setDefaultStyle="height: auto"
                 setOptions={{
+                  requestHeaders: {
+                    "X-Sample": "sample",
+                    "token" : userLocalApi.getToken()
+
+                  },
+                  imageGalleryLoadURL: getApiImageStore(store_code),
+                  plugins: [
+                    imagePlugin,
+                    imageGallery
+                  ],
+            
                   buttonList: [
                     [
 
@@ -336,7 +354,7 @@ class Form extends Component {
           </div>
 
         </form>
-        <ModalUpload />
+        <ModalUpload store_code = {this.props.store_code} />
 
       </React.Fragment>
 

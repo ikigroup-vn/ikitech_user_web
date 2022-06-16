@@ -93,7 +93,7 @@ class ModalUpload extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    uploadAvataProduct: (file) => {
+    uploadAvataProduct: (file ) => {
       dispatch(productAction.uploadAvataProduct(file));
     },
   };

@@ -18,12 +18,12 @@ class ModalUpload extends Component {
     e.preventDefault();
     window.$('.modal').modal('hide');
     var file = this.state.fileUpload;
-    
+    var {store_code} = this.props
     if (typeof file !== "undefined" && file != "" && file != null) {
       window.$('#file-bannerAds').fileinput('clear');
       const fd = new FormData();
       fd.append('image', await compressed(file))
-      this.props.uploadImgBannerAds(fd)
+      this.props.uploadImgBannerAds(fd )
       this.setState({fileUpload: null})
     }
 
@@ -118,8 +118,8 @@ class ModalUpload extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    uploadImgBannerAds: (file) => {
-      dispatch(bannerAdsAction.uploadImgBannerAds(file));
+    uploadImgBannerAds: (file ) => {
+      dispatch(bannerAdsAction.uploadImgBannerAds(file ));
     },
   };
 };

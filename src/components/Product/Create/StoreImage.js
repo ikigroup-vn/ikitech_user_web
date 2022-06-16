@@ -223,8 +223,8 @@ class StoreImage extends Component {
             <i class="fa fa-plus"></i> Upload ảnh
           </button>
         </div>
-        <ModalUploadListP listImgProduct={listImgProduct} startProgressBar={this.startProgressBar} imgs={this.props.listImgProduct} />
-        <ModalUploadStore />
+        <ModalUploadListP store_code = {this.props.store_code} listImgProduct={listImgProduct} startProgressBar={this.startProgressBar} imgs={this.props.listImgProduct} />
+        <ModalUploadStore  store_code = {this.props.store_code}/>
       </div>
     );
   }

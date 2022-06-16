@@ -666,6 +666,8 @@ class ProductEdit extends Component {
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
               <ContentDetail
+                                    store_code={store_code}
+
                 product={product}
                 handleDataFromContent={this.handleDataFromContent}
               />

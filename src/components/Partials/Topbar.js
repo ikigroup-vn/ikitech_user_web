@@ -10,7 +10,7 @@ import * as Env from "../../ultis/default";
 import Notification from "./Notification";
 import * as helper from "../../ultis/helpers";
 import { shallowEqual } from "../../ultis/shallowEqual";
-import { getBranchId, setBranchId, getBranchName, setBranchName } from "../../ultis/branchUtils";
+import { getBranchId, setBranchId, getBranchName, setBranchName , setStoreCode , getStoreCode } from "../../ultis/branchUtils";
 import { Redirect } from "react-router-dom";
 import * as notificationAction from "../../actions/notification";
 
@@ -26,6 +26,8 @@ class Topbar extends Component {
   componentDidMount() {
     this.props.fetchBranchStore(this.props.store_code);
     const branch_id = getBranchId()
+
+    setStoreCode(this.props.store_code)
 
     
       this.props.fetchAllBadge(this.props.store_code, branch_id);
@@ -63,6 +65,7 @@ class Topbar extends Component {
             this.setState({ txtBranch: value });
             this.props.changeBranch(nextProps.branchStore[0]);
             setBranchId(value)
+
             setBranchName(name)
           } else {
             this.props.changeBranch(selectedBranch);

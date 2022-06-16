@@ -171,14 +171,14 @@ export const updateBannerAds = (categoryBId, categoryB, store_code) => {
   };
 };
 
-export const uploadImgBannerAds = (file) => {
+export const uploadImgBannerAds = (file,store_code) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading : "show"
     })
     uploadApi
-      .upload(file)
+      .upload(file,store_code)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
@@ -186,7 +186,7 @@ export const uploadImgBannerAds = (file) => {
         })
         dispatch({
           type: Types.UPLOAD_BANNER_ADS_IMG,
-          data: res.data.data,
+          data: res.data.data?.image_url,
         });
 
       })

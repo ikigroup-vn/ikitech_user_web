@@ -559,6 +559,8 @@ class ProductCreate extends Component {
               >
                 <div>
                   <StoreImage
+                                    store_code = {store_code}
+
                     handleDataFromAvatarImg={this.handleDataFromAvatarImg}
                     handleDataFromProductImg={this.handleDataFromProductImg}
                   />
@@ -624,6 +626,7 @@ class ProductCreate extends Component {
                   <div>
                     <div class="card-body" style={{ padding: "0.8rem" }}>
                       <Distribute
+
                         disableDistribute={disableDistribute}
                         disableInventory={disableInventory}
                         onChangeQuantityStock={this.onChangeQuantityStock}
@@ -642,6 +645,8 @@ class ProductCreate extends Component {
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
               <ContentDetail
+                      store_code={store_code}
+
                 handleDataFromContent={this.handleDataFromContent}
               />
             </div>

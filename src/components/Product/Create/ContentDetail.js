@@ -3,6 +3,12 @@ import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
 import getChannel, { IKITECH } from "../../../ultis/channel";
 import { handleImageUploadBefore } from "../../../ultis/sun_editor";
+import {
+  image as imagePlugin
+} from "suneditor/src/plugins";
+import imageGallery from "./../../imageGallery";
+import {getApiImageStore} from "../../../constants/Config"
+import * as userLocalApi from "../../../data/local/user";
 
 class ContentDetail extends Component {
   constructor(props) {
@@ -32,6 +38,8 @@ class ContentDetail extends Component {
 
   render() {
     var { txtContent, txtContentC } = this.state;
+    var {store_code} = this.props
+
     return (
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="form-group">
@@ -42,6 +50,17 @@ class ContentDetail extends Component {
             onChange={this.handleEditorChange}
             setDefaultStyle="height: auto"
             setOptions={{
+              requestHeaders: {
+                "X-Sample": "sample",
+                "token" : userLocalApi.getToken()
+
+              },
+              imageGalleryLoadURL: getApiImageStore(store_code),
+              plugins: [
+                imagePlugin,
+                imageGallery
+              ],
+        
               buttonList: [
                 [
 

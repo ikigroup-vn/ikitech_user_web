@@ -13,3 +13,11 @@ export const setBranchName = (name) => {
 export const getBranchName = () => {
     return localStorage.getItem("branch_name")
 }
+
+export const setStoreCode = (store_code) => {
+    localStorage.setItem("store_code", store_code);
+}
+
+export const getStoreCode = () => {
+    return localStorage.getItem("store_code")
+}

@@ -145,8 +145,8 @@ class ModalUpload extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    uploadListImgProduct: (file, listImg) => {
-      dispatch(productAction.uploadListImgProduct(file, listImg));
+    uploadListImgProduct: (file) => {
+      dispatch(productAction.uploadListImgProduct(file));
     },
     checkNumImg: (alert) => {
       dispatch(alert)

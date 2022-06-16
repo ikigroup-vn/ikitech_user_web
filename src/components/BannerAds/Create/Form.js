@@ -92,6 +92,7 @@ class Form extends Component {
 
     var { title, image_url, link_to, type } = this.state
     var image = image_url == "" || image_url == null ? Env.IMG_NOT_FOUND : image_url;
+    var { store_code } = this.props
 
     return (
       <React.Fragment>
@@ -189,7 +190,7 @@ class Form extends Component {
           </div>
 
         </form>
-        <ModalUpload />
+        <ModalUpload store_code = {store_code} />
      
       </React.Fragment>
 

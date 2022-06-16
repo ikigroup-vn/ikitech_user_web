@@ -6,13 +6,19 @@ import { shallowEqual } from "../../../ultis/shallowEqual";
 import ModalUpload from "../ModalUpload";
 import Select from "react-select";
 import * as Env from "../../../ultis/default";
-
 import { isEmpty } from "../../../ultis/helpers";
 import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
 import { handleImageUploadBefore } from "../../../ultis/sun_editor";
 import getChannel, { IKITECH } from "../../../ultis/channel";
 import SeoOption from "./SeoOption";
+import * as userLocalApi from "../../../data/local/user";
+import {
+  image as imagePlugin
+} from "suneditor/src/plugins";
+import imageGallery from "./../../imageGallery";
+import {getApiImageStore} from "../../../constants/Config"
+
 
 class Form extends Component {
   constructor(props) {
@@ -165,6 +171,9 @@ class Form extends Component {
       txtSeoTitle
     } = this.state;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
+
+    var { store_code } = this.props;
+
     return (
       <React.Fragment>
         <form role="form" onSubmit={this.onSave} method="post">
@@ -259,7 +268,19 @@ class Form extends Component {
                   showToolbar={true}
                   onChange={this.handleEditorChange}
                   setDefaultStyle="height: auto"
+                  
                   setOptions={{
+                    requestHeaders: {
+                      "X-Sample": "sample",
+                      "token" : userLocalApi.getToken()
+
+                    },
+                    imageGalleryLoadURL: getApiImageStore(store_code),
+                    plugins: [
+                      imagePlugin,
+                      imageGallery
+                    ],
+              
                     buttonList: [
                       [
                         "undo",
@@ -339,7 +360,7 @@ class Form extends Component {
           </div>
         </form>
 
-        <ModalUpload />
+        <ModalUpload store_code = {store_code} />
       </React.Fragment>
     );
   }

@@ -1,5 +1,6 @@
 import * as userLocalApi from "../data/local/user"
 import { callUrl, isEmpty } from "../ultis/helpers"
+import {  getStoreCode } from "../ultis/branchUtils";
 
 
 export const handleImageUploadBefore = (files, info, uploadHandler) => {
@@ -26,7 +27,7 @@ export const uploadImageCallBack = (file) => {
     return new Promise(
         (resolve, reject) => {
             const xhr = new XMLHttpRequest();
-            xhr.open('POST', `${callUrl() + "/images"}`);
+            xhr.open('POST', `${callUrl() + "/store/" + getStoreCode()  + "/images"}`);
             xhr.setRequestHeader('token', userLocalApi.getToken());
             const data = new FormData();
             data.append('image', file);
@@ -36,7 +37,7 @@ export const uploadImageCallBack = (file) => {
                 console.log(response.data)
                 resolve({
                     data: {
-                        link: response.data
+                        link: response.data?.image_url
                     }
                 })
             });

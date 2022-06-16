@@ -24,7 +24,7 @@ class ModalUpload extends Component {
       window.$('#file-bannerAds').fileinput('clear');
       const fd = new FormData();
       fd.append('image' , await compressed(file))
-      this.props.uploadImgBannerAds(fd)
+      this.props.uploadImgBannerAds(fd )
       this.setState({fileUpload: null})
 
     }
@@ -116,8 +116,8 @@ class ModalUpload extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    uploadImgBannerAds: ( file) => {
-      dispatch(bannerAdsAction.uploadImgBannerAds(file));
+    uploadImgBannerAds: ( file ) => {
+      dispatch(bannerAdsAction.uploadImgBannerAds(file ));
     },
   };
 };

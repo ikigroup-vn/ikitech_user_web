@@ -225,6 +225,40 @@ export const uploadImgBlog = (file) => {
       });
   };
 };
+
+export const uploadImgBlogV2 = (file , store_code) => {
+  
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    uploadApi
+      .upload(file , store_code)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading : "hide"
+        })
+        dispatch({
+          type: Types.UPLOAD_BLOG_IMG,
+          data: res.data.data?.image_url,
+        });
+
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
 export const initialUpload = () => {
   return (dispatch) => {
     dispatch({
