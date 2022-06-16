@@ -348,7 +348,12 @@ aside nav.left-nav ul {
   margin-bottom: 6px;
 }
 
+.non-active {
+  background: #F9FAFC;
+}
+
 .active_status {
+  color: #fff;
   background: darkorange;
 }
 
