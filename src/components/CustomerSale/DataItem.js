@@ -102,14 +102,16 @@ class DataItem extends Component {
         console.log(this.props.data)
         return (
             <tr className="hover-product">
-                <td>   <input
+                   {is_user === true &&     <td>   <input
                     style={{
                         height: "initial",
                     }}
                     type="checkbox"
                     checked={checked}
                     onChange={(e) => this.props.onChangeSelected(e, JSON.stringify(data))}
-                /></td>
+                /></td>} 
+
+               
 
                 <td data-toggle="modal"
                     data-target="#modalEditCustomer"
@@ -136,12 +138,14 @@ class DataItem extends Component {
                 <td><textarea value={data.consultation_3} onChange={this.onChangeText} name="consultation_3"></textarea>
                     <p>{data.time_update_consultation_3 == null ? "" : getDDMMYYYHis(data.time_update_consultation_3)}</p>
                 </td>
-                <td>
+                {is_user === true &&         <td>
                     <select name="" value={data?.staff_id} id="input" class="form-control" onChange={this.onChangeStaff}>
                         <option value={null}>Chưa phân công</option>
                         {this.buildOptionStaff()}
                     </select>
-                </td>
+                </td>} 
+
+           
                 <td style={{ display: "flex" }}>
                     <button
                         data-toggle="modal"

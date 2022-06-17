@@ -37,8 +37,8 @@
 }
 .listImages > .wrapperImage img {
   cursor: pointer;
-  max-width: var(--img-maxWidth);
-  max-height: var(--img-maxHeight);
+  width: var(--img-maxWidth);
+  height: var(--img-maxHeight);
 }
 .listImages > .wrapperImage img:hover {
   opacity: 0.85;

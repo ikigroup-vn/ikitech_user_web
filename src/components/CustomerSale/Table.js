@@ -194,6 +194,7 @@ class Table extends Component {
       selected.length > 0 && selected.length == customers.length ? true : false;
 
     var multiDelete = selected.length > 0 ? "show" : "hide";
+    var {is_user} = this.props
     return (
       <div class="table-responsive">
         <ModalDelete store_code={store_code} modal={this.state.modalDelete} />
@@ -219,13 +220,15 @@ class Table extends Component {
         >
           <thead>
             <tr>
-              <th >
+            {is_user === true &&    <th >
                 <input
                   type="checkbox"
                   checked={_selected}
                   onChange={this.onChangeSelectAll}
                 />
-              </th>
+              </th>} 
+
+           
               <th>Họ tên/SĐT</th>
               <th>
                 <select
@@ -247,7 +250,7 @@ class Table extends Component {
               <th>Tư vấn lần 2</th>
               <th>Tư vấn lần 3</th>
 
-              <th>Nhân viên sale</th>
+             {is_user === true && <th>Nhân viên sale</th>} 
               <th>Hành động</th>
             </tr>
           </thead>
