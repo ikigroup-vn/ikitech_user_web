@@ -6,6 +6,7 @@ import * as Types from "../../constants/ActionType";
 import Alert from '../../components/Partials/Alert';
 import * as productAction from "../../actions/product";
 import * as dashboardAction from "../../actions/dashboard";
+import * as placeAction from "../../actions/place";
 
 import * as storeAction from "../../data/remote/store";
 
@@ -14,6 +15,8 @@ import CardProduct from '../../components/Import_stock/CardProduct';
 import ModalDetail from '../../components/Import_stock/ModalDetail';
 import ModalSupplier from '../../components/Import_stock/ModalSupplier';
 import ListImportStock from '../../components/Import_stock/ListImportStock';
+import ModalAddSupplier from '../../components/Import_stock/ModalAddSupplier';
+
 import { format } from '../../ultis/helpers';
 import { formatNumber } from "../../ultis/helpers"
 import Paginations from '../../components/Import_stock/Paginations';
@@ -28,6 +31,8 @@ class CreateImportStock extends Component {
             reality_exist_total: 0,
             existing_branch: 0,
             price_total: 0,
+            openModal: false,
+
             note: "",
             infoSupplier: "",
             cost: "",
@@ -76,6 +81,13 @@ class CreateImportStock extends Component {
     // onChange = (e) => {
     //     this.setState({ [e.target.name]: e.target.value })
     // }
+    openModal = () => {
+        this.setState({ openModal: true })
+    }
+    resetModal = () => {
+        this.setState({ openModal: false })
+
+    }
     onChange = (e) => {
         var target = e.target;
         var name = target.name;
@@ -268,12 +280,17 @@ console.log(selectValue)
         const branch_id = localStorage.getItem('branch_id')
         const bonusParam = "&check_inventory=true"
         this.props.fetchAllProductV2(store_code, branch_id, 1, bonusParam);
+        this.props.fetchPlaceProvince()
+
         // this.props.fetchAllSupplier(store_code);
     }
 
+  
+
+
     render() {
-        var { supplier, products } = this.props;
-        var { txtDiscoutType, txtValueDiscount, select_supplier_id ,select_supplier} = this.state
+        var { supplier, products,province , wards , district } = this.props;
+        var { txtDiscoutType, txtValueDiscount, select_supplier_id ,select_supplier ,openModal} = this.state
         var { store_code } = this.props.match.params
         var { searchValue, numPage, listImportStock, infoSupplier, price_total, reality_exist_total } = this.state
         var type_discount_default = txtDiscoutType == "0" ? "show" : "hide"
@@ -284,6 +301,7 @@ console.log(selectValue)
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
+                <ModalAddSupplier openModal={openModal}  resetModal={this.resetModal} wards={wards} district={district} store_code={store_code}  province={province} />
                 <div className='col-10 col-10-wrapper'>
                     <div id="content-wrapper" className='d-flex flex-column'>
                         <div id='content'>
@@ -337,7 +355,7 @@ console.log(selectValue)
 
 
 
-                                                {/* <button class="btn btn-warning" type="submit" data-toggle="modal" data-target="#supplier"><i class="fas fa-user"></i></button> */}
+                                                <i class='fas fa-plus' style={{ fontSize: "20px" , cursor: "pointer" , margin: "7px 5px 0px 10px" }} data-toggle="modal" data-target="#modalAddress" ></i>
                                                 {/* <div class="card" style={{ marginLeft: "10px", width: "80%" }}>
                                                     <div class="card-body" style={{ padding: '0px' }}>{infoSupplier ? `${infoSupplier.name}` : 'Chọn nhà cung cấp'}</div>
                                                 </div> */}
@@ -458,6 +476,9 @@ const mapStateToProps = (state) => {
         products: state.productReducers.product.allProduct,
         sheetsInventory: state.inventoryReducers.inventory_reducer.sheetsInventory,
         supplier: state.storeReducers.store.supplier,
+        wards: state.placeReducers.wards,
+        province: state.placeReducers.province,
+        district: state.placeReducers.district,
     };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -471,7 +492,10 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         fetchAllSupplier: (store_code) => {
             dispatch(dashboardAction.fetchAllSupplier(store_code))
-        }
+        },
+        fetchPlaceProvince: () => {
+            dispatch(placeAction.fetchPlaceProvince());
+        },
     }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(CreateImportStock);

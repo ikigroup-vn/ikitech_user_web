@@ -35,12 +35,12 @@ class CustomerSale extends Component {
 
       id_customer: "",
       modal: {},
-      modalDelete : {},
-      filter_by_status : ""
+      modalDelete: {},
+      filter_by_status: ""
     };
   }
 
-  
+
   openModal = () => {
     this.setState({ openModal: true })
   }
@@ -83,7 +83,11 @@ class CustomerSale extends Component {
       var permissions = nextProps.permission;
 
       var isShow = permissions.onsale;
-      this.setState({ isLoading: true, isShow, chat_allow  : true});
+      var edit = permissions.onsale_edit
+      var add = permissions.onsale_add
+      var remove = permissions.onsale_remove
+      var assignment = permissions.onsale_assignment
+      this.setState({ isLoading: true, isShow, chat_allow: true , edit,add,remove,assignment });
     }
   }
 
@@ -109,7 +113,7 @@ class CustomerSale extends Component {
   }
 
   handleSetInfor = (item) => {
-    
+
 
     this.setState({ modal: item })
   }
@@ -155,7 +159,7 @@ class CustomerSale extends Component {
 
     return params
   }
-  passFilterStatus = (filter_by_status) =>{
+  passFilterStatus = (filter_by_status) => {
     this.setState({
       filter_by_status
     })
@@ -180,18 +184,18 @@ class CustomerSale extends Component {
         : customer.name;
 
     var { store_code } = this.props.match.params;
-    var { showChatBox, isShow, chat_allow, searchValue, paginate, openModal, modal, openModalEdit , filter_by_status } = this.state;
+    var { showChatBox, isShow, chat_allow, searchValue, paginate, openModal, modal, openModalEdit, filter_by_status,edit,add,remove,assignment } = this.state;
     var { wards, district, province } = this.props
     var importData = this.state.importData
 
-
+    console.log(isShow)
     if (this.props.auth) {
       return (
         <div id="wrapper">
           <Sidebar store_code={store_code} />
           <ModalCreate resetModal={this.resetModal} openModal={openModal} store_code={store_code} wards={wards} district={district} province={province} />
           <ModalEdit openModalEdit={openModalEdit} resetModal={this.resetModalEdit} store_code={store_code} wards={wards} district={district} province={province} modal={modal} />
-          
+
           <ImportModal
             store_code={store_code}
             importData={importData}
@@ -220,8 +224,8 @@ class CustomerSale extends Component {
                         <a
                           style={{ marginRight: "10px" }}
                           onClick={this.showDialogImportExcel}
-                          class={`btn btn-primary btn-icon-split btn-sm  show"
-                            }`}
+                          class={`btn btn-primary btn-icon-split btn-sm  ${add == true && assignment == true ? "" : "hide"}
+                            `}
                         >
                           <span class="icon text-white-50">
                             <i class="fas fa-file-import"></i>
@@ -301,8 +305,9 @@ class CustomerSale extends Component {
                       </div>
                       <div className="card-body">
                         <Table
-                        is_user = {this.props.badges.is_staff === false ? true : false}
-                        passFilterStatus = {this.passFilterStatus}
+                        edit = {edit} add = {add} remove = {remove} assignment = {assignment}
+                          is_user={this.props.badges.is_staff === false ? true : false}
+                          passFilterStatus={this.passFilterStatus}
                           handleSetInfor={this.handleSetInfor}
                           paginate={paginate}
                           chat_allow={chat_allow}
@@ -312,13 +317,13 @@ class CustomerSale extends Component {
                           store_code={store_code}
                           customers={customers}
                           staff={staff}
-                          getParams = {this.getParams}
+                          getParams={this.getParams}
                         />
 
                         <Pagination
                           getPaginate={this.getPaginate}
-                          getParams = {this.getParams}
-                          filter_by_status  = {filter_by_status}
+                          getParams={this.getParams}
+                          filter_by_status={filter_by_status}
                           store_code={store_code}
                           customers={customers}
                         />

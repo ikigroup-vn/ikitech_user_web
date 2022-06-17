@@ -265,7 +265,9 @@ class InfoProduct extends Component {
         txtImportPrice: _import_price,
         disabledPrice: _price == 0 ? true : false,
         txtPercentC: product.percent_collaborator,
-        txtBarcode: isCopy ? Math.random().toString().slice(2, 11) :  product.barcode || Math.random().toString().slice(2, 11),
+        // txtBarcode: isCopy ? Math.random().toString().slice(2, 11) :  product.barcode || Math.random().toString().slice(2, 11),
+        txtBarcode: product.barcode ,
+
         txtStatus: product.status,
         category_parent: listcategorynew,
         category_children_ids: product.category_children,

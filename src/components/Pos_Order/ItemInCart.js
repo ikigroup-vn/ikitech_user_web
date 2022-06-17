@@ -714,7 +714,7 @@ class ItemInCart extends Component {
                                 <input
                                     disabled =  {is_bonus}
                                     className="input-quantity"
-                                    onChange={() => is_bonus === false && this.handleOnChange}
+                                    onChange={() => is_bonus === false && this.handleOnChange()}
                                     style={{
                                         width: "40px",
                                         textAlign: "center",

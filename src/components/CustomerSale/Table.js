@@ -71,6 +71,7 @@ class Table extends Component {
   };
   showData = (customer, per_page, current_page) => {
     var { store_code, paginate, staff  , is_user} = this.props;
+    var {remove , assignment,edit} = this.props
     var result = null;
     if (customer.length > 0) {
       var { chat_allow } = this.props;
@@ -98,7 +99,9 @@ class Table extends Component {
             handleSetInfor={this.props.handleSetInfor}
             store_code={store_code}
             index={index}
-            is_user = {is_user}
+            remove = {remove}
+            edit = {edit}
+            assignment = {assignment}
             paginate={paginate}
             numPage={per_page * (current_page - 1) + (index + 1)}
             key={data.id}
@@ -194,7 +197,7 @@ class Table extends Component {
       selected.length > 0 && selected.length == customers.length ? true : false;
 
     var multiDelete = selected.length > 0 ? "show" : "hide";
-    var {is_user} = this.props
+    var {is_user , add,edit,remove,add,assignment} = this.props
     return (
       <div class="table-responsive">
         <ModalDelete store_code={store_code} modal={this.state.modalDelete} />
@@ -220,7 +223,7 @@ class Table extends Component {
         >
           <thead>
             <tr>
-            {is_user === true &&    <th >
+            {remove === true && assignment == true &&   <th >
                 <input
                   type="checkbox"
                   checked={_selected}
@@ -250,7 +253,7 @@ class Table extends Component {
               <th>Tư vấn lần 2</th>
               <th>Tư vấn lần 3</th>
 
-             {is_user === true && <th>Nhân viên sale</th>} 
+             {edit === true && assignment == true && <th>Nhân viên sale</th>} 
               <th>Hành động</th>
             </tr>
           </thead>

@@ -815,7 +815,7 @@ class PanelBottom extends Component {
             width,
             height, cod, select_customer } = this.state
 
-        var { total_shipping_fee, badges } = this.props
+        var { total_shipping_fee, badges , store_code} = this.props
 
         var { select_customer_id, select_customer, address_store, sent_delivery } = this.state
         var { loadShipper } = this.props
@@ -865,7 +865,7 @@ class PanelBottom extends Component {
                                         "margin-left": "4px"
                                     }}>Thay đổi</a>
 
-                            </div> : <div style={{ padding: "5px", color: "red", textAlign: "center" }}>Vui lòng truy cập vào mục địa chỉ cửa hàng để thêm địa chỉ lấy hàng</div>
+                            </div> : <div style={{ padding: "5px", color: "red", textAlign: "center" }}><Link style = {{color : "red"}} to={`/store_address/${store_code}` }>Vui lòng truy cập vào mục địa chỉ cửa hàng để thêm địa chỉ lấy hàng, nhấp để cài đặt</Link></div>
                         }
 
 

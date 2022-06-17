@@ -37,7 +37,7 @@ class Footer extends Component {
         if (listImport.length > 0) {
             result = listImport.map((importStock, index) => {
                 var status =  importStock.status
-                var status_name = status == 0 ? "Đã đặt hàng" : status == 1 ? "Đã duyệt" :  status==2 ? "Nhập kho" : status == 3 ? "Hoàn thành"  : status == 4 ? "Đã hủy"  : null
+                var status_name = status == 0 ? "Đã đặt hàng" : status == 1 ? "Đã duyệt" :  status==2 ? "Nhập kho" : status == 3 ? "Hoàn thành"  : status == 4 ? "Đã hủy"  : status == 6 ? "Trả hàng" : null
                 return (
                     <tr style={{cursor : "pointer"}}>
                         <td>{index+1}</td>

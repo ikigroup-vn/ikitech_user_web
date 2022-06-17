@@ -12,7 +12,9 @@ class InfoProduct extends Component {
     super(props);
     this.state = {
       txtName: "",
-      txtBarcode: Math.random().toString().slice(2, 11),
+      // txtBarcode: Math.random().toString().slice(2, 11),
+      txtBarcode:"",
+
       txtPrice: "",
       txtImportPrice: "",
       sku: Math.random().toString().slice(2, 11),

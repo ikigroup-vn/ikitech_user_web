@@ -700,14 +700,14 @@ class Distribute extends Component {
                           value={import_price} id="input" class="form-control" required="required" title="" />
 
                       </td>
-                      <td>
+                      {/* <td>
                         <input
                           value={barcode}
                           onChange={(e) => this.onChange(e, "SUP", { name: "barcode", index, _index, title: _element.name })}
 
                           name="" id="input" class="form-control" required="required" title="" />
 
-                      </td>
+                      </td> */}
 
                       {/* <td>
                     <input
@@ -760,14 +760,14 @@ class Distribute extends Component {
 
                       </td>
 
-                      <td>
+                      {/* <td>
                         <input
                           value={barcode}
                           onChange={(e) => this.onChange(e, "PARENT", { name: "barcode", index, _index })}
 
                           name="" id="input" class="form-control" required="required" title="" />
 
-                      </td>
+                      </td> */}
 
                       {/* <td>
                     <input
@@ -839,14 +839,14 @@ class Distribute extends Component {
                   </td>
 
 
-                  <td>
+                  {/* <td>
                     <input
                       value={barcode}
                       onChange={(e) => this.onChange(e, "PARENT", { name: "barcode", index: _index })}
 
                       name="" id="input" class="form-control" required="required" title="" />
 
-                  </td>
+                  </td> */}
 
                   {/* <td>
                     <input
@@ -917,7 +917,7 @@ class Distribute extends Component {
               <th>Tên thuộc tính</th>
               <th>Giá bán lẻ</th>
               <th>Giá nhập</th>
-              <th>Barcode</th>
+              {/* <th>Barcode</th> */}
               {/* <th>Tồn kho ban đầu</th> */}
 
 

@@ -264,14 +264,19 @@ const permission = (channel) => {
                 , body: [ "report_overview" , "report_inventory", "report_finance","add_revenue", "add_expenditure"]
             },
             {
-                name: "Đối tác bán hàng",
+                name: "Đối tác bán hàng & Onsale",
                 header: [
 
                     "Cộng tác viên",
                     "Đại lý",
+                    "Truy cập onsale",
+                    "Danh sách onsale",
+                    "Thêm onsale",
+                    "Sửa onsale",
+                    "Xóa onsale",
 
                 ]
-                , body: ["collaborator_list", "agency_list" ]
+                , body: ["collaborator_list", "agency_list" , "onsale" ,"onsale_assignment", "onsale_add" , "onsale_edit" , "onsale_remove"]
             },
             {
                 name: "Quản lý nhân viên & khách hàng",
@@ -279,10 +284,13 @@ const permission = (channel) => {
 
                     "Khách hàng",
                     "Nhân viên",
-                    "Nhà cung cấp"
+                    "Nhà cung cấp",
+                  
+
+
 
                 ]
-                , body: ["customer_list", "staff_list", "supplier"]
+                , body: ["customer_list", "staff_list", "supplier" ]
             },
             {
                 name: "Cài đặt",
@@ -308,10 +316,9 @@ const permission = (channel) => {
                     "Lên lịch thông báo",
                     "Đánh giá khách hàng",
                     "Giao diện khách hàng",
-                    "OnSale"
 
                 ]
-                , body: ["delivery_pick_address_list", "payment_list", "notification_schedule_list", "customer_review_list" , "web_theme_edit" , "onsale"]
+                , body: ["delivery_pick_address_list", "payment_list", "notification_schedule_list", "customer_review_list" , "web_theme_edit"]
             },
 
 
@@ -444,6 +451,10 @@ export const initialPermission = () =>{
         promotion_discount_update: false,
         promotion_discount_end: false,
         promotion_voucher_list: false,
+        onsale_edit: false,
+        onsale_add: false,
+        onsale_remove: false,
+        onsale_assignment: false,
         promotion_voucher_add: false,
         promotion_voucher_update: false,
         promotion_voucher_end: false,

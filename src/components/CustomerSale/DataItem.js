@@ -97,12 +97,12 @@ class DataItem extends Component {
 
     render() {
         var { data } = this.state;
-        var { store_code, index, paginate, numPage , checked , is_user} = this.props;
+        var { store_code, index, paginate, numPage , checked , is_user , remove , edit,assignment} = this.props;
 
         console.log(this.props.data)
         return (
             <tr className="hover-product">
-                   {is_user === true &&     <td>   <input
+                   {remove === true && assignment === true &&     <td>   <input
                     style={{
                         height: "initial",
                     }}
@@ -138,7 +138,7 @@ class DataItem extends Component {
                 <td><textarea value={data.consultation_3} onChange={this.onChangeText} name="consultation_3"></textarea>
                     <p>{data.time_update_consultation_3 == null ? "" : getDDMMYYYHis(data.time_update_consultation_3)}</p>
                 </td>
-                {is_user === true &&         <td>
+                {edit === true && assignment === true &&        <td>
                     <select name="" value={data?.staff_id} id="input" class="form-control" onChange={this.onChangeStaff}>
                         <option value={null}>Chưa phân công</option>
                         {this.buildOptionStaff()}
@@ -163,7 +163,7 @@ class DataItem extends Component {
                         onClick={(e) => this.passDataModal(e, data.id, data.name)}
                         data-toggle="modal"
                         data-target="#removeModal"
-                        class={`btn btn-danger btn-sm ${is_user === true ? "" : "hide"}`}
+                        class={`btn btn-danger btn-sm ${remove === true && assignment === true ? "" : "hide"}`}
                     >
                         <i class="fa fa-trash"></i> Xóa
                     </button>

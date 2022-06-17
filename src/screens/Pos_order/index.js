@@ -64,6 +64,7 @@ class PostOrder extends Component {
                 debt: 0,
                 is_use_points: 0,
             },
+            allowAutoPrint : false,
             modalCreateUser: "",
             listSuggestion: [],
             txtDiscount: 0,
@@ -501,6 +502,7 @@ class PostOrder extends Component {
         const { store_code } = this.props.match.params;
         var data = null
         var { oneCart } = this.props
+        var {allowAutoPrint} = this.state
         if (getChannel() == IKITECH) {
 
             if (this.state.oneCart?.total_shipping_fee > 0 || this.state.openShipment == true) {
@@ -521,7 +523,7 @@ class PostOrder extends Component {
                 data = {
                     payment_method_id: this.state.payment_method_id,
                     amount_money: 0,
-                    allowAutoPrint: true,
+                    allowAutoPrint: allowAutoPrint,
                     order_from: (oneCart?.total_shipping_fee > 0 || this.state.openShipment == true) && getChannel() == IKITECH ? OrderFrom.ORDER_FROM_POS_DELIVERY : OrderFrom.ORDER_FROM_POS_IN_STORE
                 };
 
@@ -530,7 +532,7 @@ class PostOrder extends Component {
                 data = {
                     payment_method_id: this.state.payment_method_id,
                     amount_money: formatNumber(this.state.priceCustomer),
-                    allowAutoPrint: true,
+                    allowAutoPrint: allowAutoPrint,
                     order_from: (oneCart?.total_shipping_fee > 0 || this.state.openShipment == true) && getChannel() == IKITECH ? OrderFrom.ORDER_FROM_POS_DELIVERY : OrderFrom.ORDER_FROM_POS_IN_STORE
 
                 };
@@ -540,7 +542,7 @@ class PostOrder extends Component {
             data = {
                 payment_method_id: this.state.payment_method_id,
                 amount_money: formatNumber(this.state.priceCustomer),
-                allowAutoPrint: true,
+                allowAutoPrint: allowAutoPrint,
                 order_from: (oneCart?.total_shipping_fee > 0 || this.state.openShipment == true) && getChannel() == IKITECH ? OrderFrom.ORDER_FROM_POS_DELIVERY : OrderFrom.ORDER_FROM_POS_IN_STORE
 
             };
@@ -782,9 +784,14 @@ class PostOrder extends Component {
     };
     handleOpenShipment = () => {
         var chooseTab = this.state.openShipment == false ? 1 : 2
-        this.setState({ openShipment: !this.state.openShipment, chooseTab, fee: chooseTab == 2 ? null : 0, payment_method_id: this.state.openShipment ? 0 : 2 });
+        this.setState({ openShipment: !this.state.openShipment, chooseTab, fee: chooseTab == 2 ? 0 : null, payment_method_id: this.state.openShipment ? 0 : 2 });
         console.log("vao ne")
-        this.onNewChange({ fee: chooseTab == 2 ? null : 0 })
+        var total_shipping_fee = {}
+        if(this.state.openShipment === true)
+        {
+            total_shipping_fee = {total_shipping_fee : 0}
+        }
+        this.onNewChange({ fee: chooseTab == 2 ? 0 : null })
 
     };
 
@@ -1490,6 +1497,19 @@ class PostOrder extends Component {
                                                             onChange={this.handleChange}
                                                         ></input>
                                                     </div>
+                                                    <div class="form-check">
+                                                        <input
+                                                            class="form-check-input " style = {{marginTop: "7px"}}
+                                                            onChange={(e)=>this.setState({allowAutoPrint : !this.state.allowAutoPrint})}
+                                                            type="checkbox"
+                                                            id="flexRadioDefault1"
+                                                        />
+                                                        <label class="form-check-label" for="flexRadioDefault1">
+                                                            In hóa đơn
+                                                        </label>
+                                                    </div>
+                                                
+                                                    
                                                 </div>
                                             </div>
                                         </div>

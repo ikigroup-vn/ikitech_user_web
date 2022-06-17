@@ -6,6 +6,9 @@ import { shallowEqual } from '../../ultis/shallowEqual';
 import * as Types from "../../constants/ActionType";
 import Alert from '../../components/Partials/Alert';
 import Paginations from '../../components/Import_stock/Paginations';
+import ModalAddSupplier from '../../components/Import_stock/ModalAddSupplier';
+import * as placeAction from "../../actions/place";
+
 import * as productAction from "../../actions/product";
 import * as ImportAction from "../../actions/import_stock"
 import history from '../../history';
@@ -27,6 +30,8 @@ class EditImportStock extends Component {
             reality_exist_total: 0,
             existing_branch: 0,
             price_total:0,
+            openModal: false,
+
             note: "",
             infoSupplier: "",
             tax:"",
@@ -65,6 +70,14 @@ class EditImportStock extends Component {
             this.setState({ reality_exist_total: reality_total,price_total: total_price })
         }
         return true
+
+    }
+
+    openModal = () => {
+        this.setState({ openModal: true })
+    }
+    resetModal = () => {
+        this.setState({ openModal: false })
 
     }
 
@@ -252,6 +265,8 @@ class EditImportStock extends Component {
         this.props.fetchAllProductV2(store_code, branch_id);
         this.props.fetchAllSupplier(store_code);
         this.props.fetchDetailImportStock(store_code, branch_id, id)
+        this.props.fetchPlaceProvince()
+
     }
     loadSuppliers = async (search, loadedOptions, { page }) => {
         console.log("vaooooooooooooooooooo")
@@ -287,8 +302,8 @@ class EditImportStock extends Component {
                 }
             }
     render() {
-        var { supplier, products } = this.props;
-        var { txtDiscoutType, txtValueDiscount } = this.state
+        var { supplier, products ,province , wards , district} = this.props;
+        var { txtDiscoutType, txtValueDiscount ,openModal} = this.state
         var type_discount_default = txtDiscoutType == "0" ? "show" : "hide"
         var type_discount_percent = txtDiscoutType == "1" ? "show" : "hide"
         var { store_code } = this.props.match.params
@@ -298,6 +313,7 @@ class EditImportStock extends Component {
         return (
             <div id="wrapper">
                 <Sidebar store_code={store_code} />
+                <ModalAddSupplier openModal={openModal}  resetModal={this.resetModal} wards={wards} district={district} store_code={store_code}  province={province} />
                 <div className='col-10 col-10-wrapper'>
                     <div id="content-wrapper" className='d-flex flex-column'>
                         <div id='content'>
@@ -350,6 +366,7 @@ class EditImportStock extends Component {
 
 
                                                 </div>
+                                                <i class='fas fa-plus' style={{ fontSize: "20px" , cursor: "pointer" , margin: "7px 5px 0px 10px" }} data-toggle="modal" data-target="#modalAddress" ></i>
 
                                             </div>
 
@@ -466,6 +483,9 @@ const mapStateToProps = (state) => {
         sheetsInventory: state.inventoryReducers.inventory_reducer.sheetsInventory,
         supplier: state.storeReducers.store.supplier,
         itemImportStock: state.importStockReducers.import_reducer.detailImportStock,
+        wards: state.placeReducers.wards,
+        province: state.placeReducers.province,
+        district: state.placeReducers.district,
     };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -482,6 +502,9 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         fetchDetailImportStock: (store_code, branch_id, id) => {
             dispatch(ImportAction.fetchDetailImportStock(store_code, branch_id, id))
+        },
+        fetchPlaceProvince: () => {
+            dispatch(placeAction.fetchPlaceProvince());
         },
     }
 }

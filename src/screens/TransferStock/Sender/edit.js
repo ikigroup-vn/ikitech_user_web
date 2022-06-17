@@ -238,7 +238,8 @@ class EditImportStock extends Component {
     componentDidMount() {
         const { store_code,id } = this.props.match.params
         const branch_id = localStorage.getItem('branch_id')
-        this.props.fetchAllProductV2(store_code, branch_id);
+        const bonusParam = "&check_inventory=true"
+        this.props.fetchAllProductV2(store_code, branch_id, 1, bonusParam);
         this.props.fetchAllSupplier(store_code);
         this.props.fetchDetailTransferStock(store_code, branch_id, id)
     }
