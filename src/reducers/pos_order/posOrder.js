@@ -27,19 +27,19 @@ export const pos_reducer = (state = initialState, action) => {
     case Types.POS_ORDER_PAYMENT_SUCCESS:
       newState.orderAfterPayment = action.data.orderAfterPayment;
       newState.loadingOrder = false;
-      newState.allowAutoPrint = action.data.allowAutoPrint;
+      // newState.allowAutoPrint = action.data.allowAutoPrint;
       return newState;
 
     case Types.POS_ORDER_PAYMENT_FAILD:
       newState.orderAfterPayment = {};
       newState.loadingOrder = false;
-      newState.allowAutoPrint = false;
+      // newState.allowAutoPrint = false;
       return newState;
 
     case Types.POS_ORDER_PAYMENT_LOADING:
       newState.orderAfterPayment = action.data;
       newState.loadingOrder = action.data;
-      newState.allowAutoPrint = false;
+      // newState.allowAutoPrint = false;
       return newState;
     case Types.FETCH_LIST_POS_ORDER:
       newState.listPosOrder = action.data;

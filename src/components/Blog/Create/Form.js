@@ -14,10 +14,23 @@ import getChannel, { IKITECH } from "../../../ultis/channel";
 import SeoOption from "./SeoOption";
 import * as userLocalApi from "../../../data/local/user";
 import {
-  image as imagePlugin
+  image as imagePlugin,
+  font,
+  fontSize,
+  formatBlock,
+  paragraphStyle,
+  blockquote,
+  fontColor,
+  textStyle,
+  list,
+  lineHeight,
+  table as tablePlugin,
+  link as linkPlugin,
+  video,
+  audio
 } from "suneditor/src/plugins";
 import imageGallery from "./../../imageGallery";
-import {getApiImageStore} from "../../../constants/Config"
+import { getApiImageStore } from "../../../constants/Config"
 
 
 class Form extends Component {
@@ -268,19 +281,33 @@ class Form extends Component {
                   showToolbar={true}
                   onChange={this.handleEditorChange}
                   setDefaultStyle="height: auto"
-                  
+
                   setOptions={{
                     requestHeaders: {
                       "X-Sample": "sample",
-                      "token" : userLocalApi.getToken()
+                      "token": userLocalApi.getToken()
 
                     },
                     imageGalleryLoadURL: getApiImageStore(store_code),
+
+
                     plugins: [
                       imagePlugin,
-                      imageGallery
-                    ],
-              
+                      imageGallery,
+                      font,
+                      fontSize,
+                      formatBlock,
+                      paragraphStyle,
+                      blockquote,
+                      fontColor,
+                      textStyle,
+                      list,
+                      lineHeight,
+                      tablePlugin,
+                      linkPlugin,
+                      video,
+                      audio],
+
                     buttonList: [
                       [
                         "undo",
@@ -293,15 +320,9 @@ class Form extends Component {
                         "bold",
                         "underline",
                         "italic",
-                        "strike",
-                        "subscript",
-                        "superscript",
                         "fontColor",
-                        "hiliteColor",
                         "textStyle",
-                        "removeFormat",
                         "outdent",
-                        "indent",
                         "align",
                         "horizontalRule",
                         "list",
@@ -313,12 +334,7 @@ class Form extends Component {
                         "audio",
                         "imageGallery",
                         "fullScreen",
-                        "showBlocks",
-                        "codeView",
                         "preview",
-                        "print",
-                        "save",
-                        "template",
                       ],
                     ],
                   }}
@@ -343,24 +359,24 @@ class Form extends Component {
 
           </div>
           <div class="box-footer">
-          <button type = "submit" class="btn btn-info   btn-sm">
-                  <i class="fas fa-save"></i>  Tạo
+            <button type="submit" class="btn btn-info   btn-sm">
+              <i class="fas fa-save"></i>  Tạo
 
-                </button>
-                <button
-                                type = "button"
+            </button>
+            <button
+              type="button"
 
-                  style={{ marginLeft: "10px" }}
-                  onClick={this.goBack}
-                  class="btn btn-warning   btn-sm"
-                >
-                  <i class="fas fa-arrow-left"></i> Trở về
+              style={{ marginLeft: "10px" }}
+              onClick={this.goBack}
+              class="btn btn-warning   btn-sm"
+            >
+              <i class="fas fa-arrow-left"></i> Trở về
 
-                </button>
+            </button>
           </div>
         </form>
 
-        <ModalUpload store_code = {store_code} />
+        <ModalUpload store_code={store_code} />
       </React.Fragment>
     );
   }

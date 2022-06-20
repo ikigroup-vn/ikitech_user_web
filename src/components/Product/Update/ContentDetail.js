@@ -4,7 +4,20 @@ import "suneditor/dist/css/suneditor.min.css";
 import getChannel, { IKITECH } from "../../../ultis/channel";
 import { handleImageUploadBefore } from "../../../ultis/sun_editor";
 import {
-  image as imagePlugin
+  image as imagePlugin,
+  font,
+  fontSize,
+  formatBlock,
+  paragraphStyle,
+  blockquote,
+  fontColor,
+  textStyle,
+  list,
+  lineHeight,
+  table as tablePlugin,
+  link as linkPlugin,
+  video,
+  audio
 } from "suneditor/src/plugins";
 import imageGallery from "./../../imageGallery";
 import {getApiImageStore} from "../../../constants/Config"
@@ -71,13 +84,23 @@ class ContentDetail extends Component {
               imageGalleryLoadURL: getApiImageStore(store_code),
               plugins: [
                 imagePlugin,
-                imageGallery
-              ],
-              
+                imageGallery,
+                font,
+                fontSize,
+                formatBlock,
+                paragraphStyle,
+                blockquote,
+                fontColor,
+                textStyle,
+                list,
+                lineHeight,
+                tablePlugin,
+                linkPlugin,
+                video,
+                audio],
+
               buttonList: [
                 [
-
-
                   "undo",
                   "redo",
                   "font",
@@ -85,18 +108,26 @@ class ContentDetail extends Component {
                   "formatBlock",
                   "paragraphStyle",
                   "blockquote",
-                  "bold", "underline", "italic", "strike", "subscript", "superscript",
-                  "fontColor", "hiliteColor", "textStyle",
-                  "removeFormat",
-                  "outdent", "indent",
-                  "align", "horizontalRule", "list", "lineHeight",
-                  "table", "link", "image", "video", "audio",
+                  "bold",
+                  "underline",
+                  "italic",
+                  "fontColor",
+                  "textStyle",
+                  "outdent",
+                  "align",
+                  "horizontalRule",
+                  "list",
+                  "lineHeight",
+                  "table",
+                  "link",
+                  "image",
+                  "video",
+                  "audio",
                   "imageGallery",
-                  "fullScreen", "showBlocks", "codeView",
-                  "preview", "print",
-                  "save", "template"
-                ]
-              ]
+                  "fullScreen",
+                  "preview",
+                ],
+              ],
             }}
 
           />

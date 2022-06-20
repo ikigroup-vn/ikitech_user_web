@@ -66,7 +66,7 @@
     "shallow-equal": "^1.2.1",
     "slick-carousel": "^1.8.1",
     "socket.io-client": "^2.0.4",
-    "suneditor": "^2.41.3",
+    "suneditor": "^2.43.11",
     "suneditor-react": "^3.3.1",
     "validator": "^13.7.0",
     "version": "^0.1.2",

@@ -1520,14 +1520,14 @@ class PostOrder extends Component {
                                                                         <input
                                                                             type="checkbox"
                                                                             class="custom-control-input"
-                                                                            id="switch1"
-                                                                            name="example"
+                                                                            id="switch2"
+                                                                            // name="example"
                                                                             checked={this.props.allowAutoPrint}
                                                                             onChange={(e)=>this.props.setStatusPrint(!this.props.allowAutoPrint)}
                                                                         />
                                                                         <label
                                                                             class="custom-control-label"
-                                                                            for="switch1"
+                                                                            for="switch2"
                                                                         ></label>
                                                                     </div>
                                                                 </form>
@@ -1730,9 +1730,11 @@ const mapDispatchToProps = (dispatch, props) => {
                 type: Types.POS_ORDER_PAYMENT_FAILD,
             });
         },
-        setStatusPrint: () => {
+
+        setStatusPrint: (data) => {
             dispatch({
                 type: Types.CHANGE_STATUS_ALLOW_PRINT,
+                data : data
             });
         },
 

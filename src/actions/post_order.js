@@ -450,7 +450,7 @@ export const paymentOrderPos = (store_code, branch_id, id, data , _this) => {
             orderAfterPayment: res.data.data,
             loadingOrder: false,
             // allowAutoPrint: data.allowAutoPrint
-            allowAutoPrint: true
+            // allowAutoPrint: true
 
           }
         })
