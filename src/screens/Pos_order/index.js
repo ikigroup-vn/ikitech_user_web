@@ -55,6 +55,7 @@ class PostOrder extends Component {
         this.state = {
             chooseTab: 2,
             isPopoverOpen: false,
+            onSave : false,
             isShowPanelBottom: true,
 
             oneCart: {},
@@ -64,7 +65,6 @@ class PostOrder extends Component {
                 debt: 0,
                 is_use_points: 0,
             },
-            allowAutoPrint : false,
             modalCreateUser: "",
             listSuggestion: [],
             txtDiscount: 0,
@@ -117,7 +117,7 @@ class PostOrder extends Component {
                 quantityProductWithDistribute: "",
             },
         };
-
+        this.onSave = false;
         this.changeSearch = debounce(this.handleSearch, 1000);
         this.changeDiscount = debounce(this.handleDiscount, 1000);
         this.changePaymentMethod = debounce(this.handlePaymentMethod, 0);
@@ -502,7 +502,7 @@ class PostOrder extends Component {
         const { store_code } = this.props.match.params;
         var data = null
         var { oneCart } = this.props
-        var {allowAutoPrint} = this.state
+        var {allowAutoPrint} = this.props
         if (getChannel() == IKITECH) {
 
             if (this.state.oneCart?.total_shipping_fee > 0 || this.state.openShipment == true) {
@@ -651,7 +651,7 @@ class PostOrder extends Component {
         }
 
         if (this.props.loadingOrder == false && nextProps.loadingOrder == false) {
-            if (nextProps.allowAutoPrint == true && this.printed != true) {
+            if (nextProps.allowAutoPrint == true && this.printed != true && this.onSave == true) {
                 this.props.disablePrint();
                 var { store_code } = this.props.match.params;
 
@@ -663,6 +663,8 @@ class PostOrder extends Component {
                     "?defaultHrefBack=" +
                     btoa(window.location.pathname)
                 );
+                this.onSave = false
+
             }
         }
 
@@ -1497,7 +1499,42 @@ class PostOrder extends Component {
                                                             onChange={this.handleChange}
                                                         ></input>
                                                     </div>
-                                                    <div class="form-check">
+                                                    <div
+                                                        className="row"
+                                                        style={{
+                                                            padding: "3px 0",
+                                                            justifyContent: "space-between",
+                                                            marginRight : "13px"
+                                                        }}
+                                                    >
+                                                            <>
+                                                                <div
+                                                                    className="title-price"
+                                                                    style={{
+                                                                        paddingLeft: 16,
+                                                                    }}
+                                                                >  In hóa đơn
+                                                                </div>
+                                                                <form >
+                                                                    <div class="custom-control custom-switch">
+                                                                        <input
+                                                                            type="checkbox"
+                                                                            class="custom-control-input"
+                                                                            id="switch1"
+                                                                            name="example"
+                                                                            checked={this.props.allowAutoPrint}
+                                                                            onChange={(e)=>this.props.setStatusPrint(!this.props.allowAutoPrint)}
+                                                                        />
+                                                                        <label
+                                                                            class="custom-control-label"
+                                                                            for="switch1"
+                                                                        ></label>
+                                                                    </div>
+                                                                </form>
+                                                            </>
+                                                      
+                                                    </div>
+                                                    {/* <div class="form-check">
                                                         <input
                                                             class="form-check-input " style = {{marginTop: "7px"}}
                                                             onChange={(e)=>this.setState({allowAutoPrint : !this.state.allowAutoPrint})}
@@ -1507,7 +1544,7 @@ class PostOrder extends Component {
                                                         <label class="form-check-label" for="flexRadioDefault1">
                                                             In hóa đơn
                                                         </label>
-                                                    </div>
+                                                    </div> */}
                                                 
                                                     
                                                 </div>
@@ -1691,6 +1728,11 @@ const mapDispatchToProps = (dispatch, props) => {
         disablePrint: () => {
             dispatch({
                 type: Types.POS_ORDER_PAYMENT_FAILD,
+            });
+        },
+        setStatusPrint: () => {
+            dispatch({
+                type: Types.CHANGE_STATUS_ALLOW_PRINT,
             });
         },
 

@@ -865,7 +865,7 @@ class PanelBottom extends Component {
                                         "margin-left": "4px"
                                     }}>Thay đổi</a>
 
-                            </div> : <div style={{ padding: "5px", color: "red", textAlign: "center" }}><Link style = {{color : "red"}} to={`/store_address/${store_code}` }>Vui lòng truy cập vào mục địa chỉ cửa hàng để thêm địa chỉ lấy hàng, nhấp để cài đặt</Link></div>
+                            </div> : <div style={{ padding: "5px", color: "red", textAlign: "center" }}>Chưa có địa chỉ lấy hàng<Link style = {{color : "red" , display : "block" , "text-decoration": "underline"}} to={`/store_address/${store_code}` }>Nhấp để cài đặt</Link></div>
                         }
 
 
@@ -1229,7 +1229,7 @@ class PanelBottom extends Component {
                                 }) : ( 
                                     
                                 <div style={{ textAlign: "center", margin: "auto", color: "red" }}> {this.state.isError == false && loadShipper != "initial" ? <Link style = {{    color: "red",
-                                    "text-decoration": "underline"}} to = {`/shipment/${this.props.store_code}`}>Không có đơn vị vận chuyển nào hoặc mã token không hợp lệ. Vui lòng nhấp để cài đặt</Link> : "Vui lòng chọn khối lượng và địa chỉ giao hàng để xem báo giá của nhà vận chuyển"}</div>)}
+                                    "text-decoration": "underline"}} to = {`/shipment/${this.props.store_code}`}>Chưa có đơn vị vận chuyển hoặc mã token không hợp lệ. Nhấp để cài đặt</Link> : "Vui lòng chọn khối lượng và địa chỉ giao hàng để xem báo giá của nhà vận chuyển"}</div>)}
 
 
                         </div>

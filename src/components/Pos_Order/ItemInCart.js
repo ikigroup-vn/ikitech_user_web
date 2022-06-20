@@ -413,7 +413,7 @@ class ItemInCart extends Component {
         return (
             <div
                 onClick={() => { this.closeModalClickOutSite(item.product.distributes?.length) }}
-                class={`card card-item-pos ${is_bonus === true ? "border-item-bonus" : ""}`}
+                class={`card card-item-pos ${is_bonus === true ? "border-item-bonus1" : ""}`}
                 style={{ marginBottom: "10px" }}
                 key={index}
             >
@@ -714,7 +714,7 @@ class ItemInCart extends Component {
                                 <input
                                     disabled =  {is_bonus}
                                     className="input-quantity"
-                                    onChange={() => is_bonus === false && this.handleOnChange()}
+                                    onChange={(e) => is_bonus === false && this.handleOnChange(e)}
                                     style={{
                                         width: "40px",
                                         textAlign: "center",

@@ -429,6 +429,7 @@ export const paymentOrderPos = (store_code, branch_id, id, data , _this) => {
       .then((res) => {
         if(_this)
         {
+          _this.onSave = true
           _this.setState({
             priceCustomer: 0,
             totalFinal : 0,
@@ -448,7 +449,9 @@ export const paymentOrderPos = (store_code, branch_id, id, data , _this) => {
           data: {
             orderAfterPayment: res.data.data,
             loadingOrder: false,
-            allowAutoPrint: data.allowAutoPrint
+            // allowAutoPrint: data.allowAutoPrint
+            allowAutoPrint: true
+
           }
         })
 

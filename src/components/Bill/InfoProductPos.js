@@ -16,8 +16,7 @@ class InfoProductPos extends Component {
         this.refund = 0;
 
     }
-    componentWillMount()
-    {
+    componentWillMount() {
         this.props.resetCalculate({
             type: Types.GET_CALCULATE,
             data: {},
@@ -25,8 +24,27 @@ class InfoProductPos extends Component {
     }
 
 
+
+
+    hasBonusProduct = (listProduct) =>{
+        console.log(listProduct)
+        if(listProduct?.length == 0)
+        {
+            return false
+        }
+        else
+        {
+            for (const item of listProduct) {
+                if(item.is_bonus === true)
+                return true
+            }
+        }
+        return false
+
+    }
+
     componentWillReceiveProps(nextProps) {
-        if (this.props.check != nextProps.check && this.state.list_refunds.length == 0) {
+        if (this.props.check != nextProps.check &&  this.state.list_refunds.length == 0) {
             if (nextProps.check == true) {
                 var list_items = filter_arr(nextProps.bill.line_items);
                 var array = []
@@ -34,10 +52,12 @@ class InfoProductPos extends Component {
                     array.push({
                         line_item_id: element.id,
                         quantity: element.quantity - element.total_refund,
-                        check: false
+                        check: this.hasBonusProduct(list_items)
                     })
                 });
                 this.setState({ list_refunds: [...array] })
+                if(this.hasBonusProduct(list_items)=== true)
+                this.postTotalRefund(array)
             }
             else {
             }
@@ -136,7 +156,7 @@ class InfoProductPos extends Component {
             if (element.check == true) {
                 var item = { ...element };
                 delete item.check;
-                newArray.push(element)
+                newArray.push(item)
             }
         });
 
@@ -152,7 +172,23 @@ class InfoProductPos extends Component {
 
     }
 
-
+    checkItem = (id) =>{
+        var list_refunds = [...this.state.list_refunds];
+        console.log(list_refunds , id)
+        var listItems = []
+        var _id   = this.getLineItemId(id)
+        console.log(_id)
+        if(list_refunds?.length == 0)
+        return false
+        else
+        {
+             listItems = list_refunds.filter(function(e) {
+                return e.line_item_id ===  _id && e.check === true;
+            });
+        }
+        console.log(listItems)
+        return listItems.length > 0
+    }
 
 
     check = (e, id) => {
@@ -327,7 +363,7 @@ class InfoProductPos extends Component {
                 return (
                     <React.Fragment>
                         {this.checkExsitProduct(product.id) == true &&
-                            <li className={`${line_list_product} row`} style={{ display: "flex", marginBottom: "10px"   }}>
+                            <li className={`${line_list_product} row`} style={{ display: "flex", marginBottom: "10px" }}>
 
                                 <li className="cart_item cart_item_change col-lg-3 col-md-12 col-sm-12 ">
                                     <div className="panel panel-default mb0" style={{}}>
@@ -349,10 +385,12 @@ class InfoProductPos extends Component {
 
                                 <li className="cart_item cart_item_change col-lg-9 col-md-12 col-sm-12">
                                     <div class="col-xs-12 pl0" id="user_cart_info">
-                                        <div class="box box-warning cart_wrapper mb0" style = {{    display: "flex",
-    justifyContent: "space-between"}}>
-                                            <div class="box-body  pt0" style = {{flex : "2"}}>
-                                                <div>
+                                        <div class="box box-warning cart_wrapper mb0" style={{
+                                            display: "flex",
+                                            justifyContent: "space-between"
+                                        }}>
+                                            <div class="box-body  pt0" style={{ flex: "2" }}>
+                                                <div style = {{display : "flex" , justifyContent : "space-between"}}>
 
                                                     <p class="bold_name sale_user_label" style={{ fontWeight: "500" }}>
                                                         Tên sản phẩm:
@@ -361,6 +399,16 @@ class InfoProductPos extends Component {
                                                             <span>&nbsp;{product.name}</span>
                                                         </Link>
                                                     </p>
+                                                    {
+                                                        product.is_bonus === true &&           <div >
+                                                        <i class="fa fa-gift" style={{
+                                                            "font-size": "40px",
+                                                            color: "darkorange",
+                                                            marginLeft : "4px"
+                                                        }}></i>
+                                                    </div>
+                                                    }
+                                          
                                                 </div>
 
                                                 {/* <div >
@@ -417,7 +465,7 @@ class InfoProductPos extends Component {
                                                     </div>
                                                 }
                                                 <div>
-                                                    <p class=" bold sale_user_label" style = {{paddingTop : "3px"}}>
+                                                    <p class=" bold sale_user_label" style={{ paddingTop: "3px" }}>
                                                         Giá sản phẩm:
                                                         <span class={`cart_payment_method ${showTagDelPrice != 0 || (product.before_price == product.after_discount || product.before_discount_price == product.after_discount) ? "show" : "hide"}`}>
                                                             {format(product.before_price || product.before_discount_price)}
@@ -441,30 +489,30 @@ class InfoProductPos extends Component {
 
 
                                             </div>
-                                            {check == true && this.getNumQuantity(product.id, list_items) > 0 && (
+                                            {check == true && product.is_bonus === false && this.getNumQuantity(product.id, list_items) > 0 && (
                                                 <div class="checkbox" style={{
-                                                    marginRight: "10px", marginRight: "10px",marginLeft : "20px",
+                                                    marginRight: "10px", marginRight: "10px", marginLeft: "20px",
                                                     alignSelf: "center"
                                                 }}>
                                                     <label>
-                                                        <input style={{ width: "16px", height: "16px" }} type="checkbox" onChange={(e) => this.check(e, this.getLineItemId(product.id))} />
+                                                        <input style={{ width: "16px", height: "16px" }} type="checkbox" checked ={this.checkItem(product.id)} onChange={(e) => this.check(e, this.getLineItemId(product.id))} />
 
                                                     </label>
                                                 </div>
                                             )}
                                             {check == false || this.getNumQuantity(product.id, list_items) <= 0 && (
                                                 <div class="checkbox" style={{
-                                                    marginRight: "10px", marginRight: "10px",marginLeft : "20px",
+                                                    marginRight: "10px", marginRight: "10px", marginLeft: "20px",
                                                     alignSelf: "center"
                                                 }}>
                                                     <label>
-                                                        <input title="Đã hoàn hết sản phẩm này" disabled style={{ width: "16px", height: "16px", cursor: "not-allowed" }} type="checkbox" />
+                                                        <input title="Đã hoàn hết sản phẩm này" disabled  style={{ width: "16px", height: "16px", cursor: "not-allowed" }} type="checkbox" />
 
                                                     </label>
                                                 </div>
                                             )}
                                         </div>
-                                        
+
                                         {/* {check == true && this.getNumQuantity(product.id, list_items) > 0 && (
                                                 <div class="checkbox" style={{
                                                     marginRight: "10px", marginRight: "10px",
@@ -533,22 +581,22 @@ class InfoProductPos extends Component {
 
                                     </React.Fragment>
                                     {index == products.length - 1 && check == true && this.props.calculate.total_refund_current_in_time > 0 && (
-                            <React.Fragment>
+                                        <React.Fragment>
 
-                                <div style={{ display: "flex" , justifyContent : "end" }}>
+                                            <div style={{ display: "flex", justifyContent: "end" }}>
 
-                                    <button onClick={this.post}  type="button" class="btn btn-success">Hoàn tiền</button>
+                                                <button onClick={this.post} type="button" class="btn btn-success">Hoàn tiền</button>
 
-                                </div>
-                            </React.Fragment>
-                        )}
+                                            </div>
+                                        </React.Fragment>
+                                    )}
                                 </li>
                             </li>
 
                         )}
 
 
-                   
+
                     </React.Fragment>
 
                 );
@@ -572,7 +620,7 @@ class InfoProductPos extends Component {
     }
 
     render() {
-        var { bill, bills, calculate , store_code } = this.props;
+        var { bill, bills, calculate, store_code } = this.props;
         var order_code = bill.order_code;
         var total_product =
             Array.isArray(bill.line_items_at_time) == true
@@ -606,7 +654,7 @@ class InfoProductPos extends Component {
                 <ul
                     id="sale_cart_container"
                     className="box-body  no-padding cart_items"
-                    style = {{margin : "0 20px"}}
+                    style={{ margin: "0 20px" }}
                 >
                     {this.shoListProduct(listProduct, product_discount_amount, list_items, total_final)}
                 </ul>
@@ -631,7 +679,7 @@ const mapDispatchToProps = (dispatch, props) => {
             dispatch(billAction.getCalculate(store_code, data));
 
         },
-        resetCalculate : (data) =>{
+        resetCalculate: (data) => {
             dispatch(data);
 
         }

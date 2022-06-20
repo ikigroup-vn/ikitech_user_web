@@ -8,7 +8,7 @@ var initialState = {
   loadingHandleChangeQuantity: false,
   orderAfterPayment: {},
   loadingOrder: false,
-  allowAutoPrint: false
+  allowAutoPrint: true
 };
 
 export const pos_reducer = (state = initialState, action) => {
@@ -18,6 +18,10 @@ export const pos_reducer = (state = initialState, action) => {
     case Types.POS_ORDER_PAYMENT_LOADING:
       newState.orderAfterPayment = {};
       newState.loadingOrder = true;
+      return newState;
+    case Types.CHANGE_STATUS_ALLOW_PRINT:
+
+      newState.allowAutoPrint = action.data;
       return newState;
 
     case Types.POS_ORDER_PAYMENT_SUCCESS:

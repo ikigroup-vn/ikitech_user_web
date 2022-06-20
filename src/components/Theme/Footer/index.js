@@ -5,7 +5,8 @@ import { connect } from "react-redux";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import CKEditor from "ckeditor4-react";
 import * as Types from "../../../constants/ActionType";
-import {isPhone} from "../../../ultis/helpers"
+import {isPhone , isEmpty} from "../../../ultis/helpers"
+
 class Footer extends Component {
     constructor(props) {
         super(props);
@@ -96,6 +97,26 @@ class Footer extends Component {
         var theme = this.state
         var { store_code } = this.props
         var form = { ...this.props.theme }
+        if(isEmpty(theme.contact_fanpage))
+        {
+            var string = theme.contact_fanpage?.toString().replace(/ /g, "")
+            console.log(string.slice(0,7))
+            if(string.slice(0,8) !== "https://" && string.slice(0,7) !== "http://")
+            {
+                    this.props.showError({
+                      type: Types.ALERT_UID_STATUS,
+                      alert: {
+                        type: "danger",
+                        title: "Lỗi",
+                        disable: "show",
+                        content: "Link Fanpage không đúng định dạng!",
+                      },
+                    });
+                    return;
+                  
+            }
+            
+        }
         form.contact_address = theme.contact_address
         form.contact_email = theme.contact_email
         form.contact_phone_number = theme.contact_phone_number
