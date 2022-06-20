@@ -11,7 +11,8 @@ class ShowData extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            show_item: true
+            show_item: true,
+            formData : {}
         }
     }
 
@@ -42,6 +43,8 @@ class ShowData extends Component {
             sub_element_distribute_name: subElement.name
         }
         this.props.historyInventorys(store_code, branch_id, formData)
+        this.props.passFormData(formData )
+
     }
     historyInventory = (element, nameDistribute) => {
         const branch_id = getBranchId()
@@ -53,6 +56,7 @@ class ShowData extends Component {
             sub_element_distribute_name: ""
         }
         this.props.historyInventorys(store_code, branch_id, formData)
+        this.props.passFormData(formData )
     }
     historyInventoryss = () => {
         const branch_id = getBranchId()
@@ -64,6 +68,8 @@ class ShowData extends Component {
             sub_element_distribute_name: ""
         }
         this.props.historyInventorys(store_code, branch_id, formData)
+        this.props.passFormData(formData )
+
     }
 
 
@@ -156,6 +162,9 @@ class ShowData extends Component {
             discount_percent = product_discount.value;
         }
 
+        var {formData} = this.props
+        console.log(formData)
+
         return (
             <>
                 <tr className = "hover-product" style={{ background: "#e3e6f04d" }}>
@@ -208,7 +217,7 @@ class ShowData extends Component {
                 {/* </div>
                     </td>
                 </tr> */}
-                <HistoryStock historyInventory={historyInventory} />
+                <HistoryStock historyInventory={historyInventory} formData = {formData} store_code = {this.props.store_code}/>
             </>
         )
     }

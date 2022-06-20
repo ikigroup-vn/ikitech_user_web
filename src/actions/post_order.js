@@ -429,7 +429,7 @@ export const paymentOrderPos = (store_code, branch_id, id, data , _this) => {
       .then((res) => {
         if(_this)
         {
-          _this.onSave = true
+          _this.onSave = _this.props?.allowAutoPrint
           _this.setState({
             priceCustomer: 0,
             totalFinal : 0,

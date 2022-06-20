@@ -1,6 +1,7 @@
 import moment from 'moment';
 import React, { Component } from 'react'
 import { filter_arr, formatNoD, format } from "../../ultis/helpers";
+import Pagination from "./PaginationHistory"
 
 class HistoryStock extends Component {
   constructor(props) {
@@ -9,6 +10,9 @@ class HistoryStock extends Component {
 
     }
   }
+
+
+
   showData = (listHistory) => {
     var result = null;
     if (typeof listHistory === "undefined") {
@@ -41,7 +45,7 @@ class HistoryStock extends Component {
     return result;
   };
   render() {
-    const { historyInventory } = this.props
+    const { historyInventory , formData , store_code } = this.props
     return (
       <div class="modal" id="historyStock">
         <div class="modal-dialog modal-lg">
@@ -74,6 +78,24 @@ class HistoryStock extends Component {
                 </thead>
                 <tbody>{this.showData(historyInventory.data)}</tbody>
               </table>
+            </div>
+            <div class="group-pagination_flex col-xs-12 col-sm-12 col-md-12 col-lg-12" style={{ display: "flex", justifyContent: "space-between" }}>
+
+              <Pagination style="float-fix" store_code={store_code} formData = {formData} historyInventory={historyInventory}  />
+              <div style={{ marginTop: "10px" }}>
+                <button
+                  style={{
+                    border: "1px solid",
+                    marginRight: "10px"
+                  }}
+                  type="button"
+                  class="btn btn-default"
+                  data-dismiss="modal"
+                >
+                  Hủy
+                </button>
+              
+              </div>
             </div>
           </div>
         </div>

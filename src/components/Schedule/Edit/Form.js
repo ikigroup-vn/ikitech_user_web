@@ -160,7 +160,7 @@ class Form extends Component {
     var time = ""
     switch (name) {
       case "time_run":
-        time = moment(e, "DD-MM-YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
+        time = moment(e, "DD-MM-YYYY HH:mm:ss").format("DD-MM-YYYY HH:mm:ss");
         break;
       case "time_of_day":
         time = moment(e, "HH:mm:ss").format("HH:mm:ss")
@@ -191,7 +191,7 @@ class Form extends Component {
     var disable_everyWeek = type_schedule == "2" ? "show" : "hide"
     var disable_everyMonth = type_schedule == "3" ? "show" : "hide"
 
-    console.log(time_of_day)
+    console.log(time_run)
     return (
       <React.Fragment>
         <form role="form" onSubmit={this.onSave} method="post">
@@ -261,7 +261,7 @@ class Form extends Component {
                 <div className="set-top-moment">
 
                   <MomentInput
-                    value={moment(time_run, "DD-MM-YYYY HH:mm")}
+                    value={moment(time_run , "DD-MM-YYYY HH:mm")}
                     format="DD-MM-YYYY HH:mm"
                     options={true}
                     enableInputClick={true}

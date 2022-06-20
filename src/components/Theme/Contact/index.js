@@ -245,7 +245,7 @@ class Support extends Component {
                                 <label htmlFor="name">Link đăng ký bộ công thương</label>
 
                                 <div class="form-group" style={{ display: "flex" }}>
-                                    <input type="text" name="link_ministry_of_industry_and_trade" value={link_ministry_of_industry_and_trade} placeholder="Nhập..." onChange={this.onChange} className="form-control" id="txtName" autoComplete="off" />
+                                    <input type="text" name="link_ministry_of_industry_and_trade" value={link_ministry_of_industry_and_trade}  placeholder="Vd: http://online.gov.vn/..." onChange={this.onChange} className="form-control" id="txtName" autoComplete="off" />
                                     <div class="form-check" style={{ margin: "auto 10px" }}>
                                         <label class="form-check-label" for="gridCheck">
                                             Hiển thị

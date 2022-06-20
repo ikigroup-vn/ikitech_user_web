@@ -72,20 +72,19 @@ class Table extends Component {
         var address_default = ""
 
         if (data.customer != null && typeof data.customer != "undefined") {
-          if (typeof data.customer.default_address === 'object' && data.customer.default_address !== null) {
-            if (data.customer.default_address.address_detail !== null && data.customer.default_address.address_detail !== "") {
-              address_default = address_default + data.customer.default_address.address_detail + ", "
+            if (data.customer.address_detail !== null && data.customer.address_detail !== "") {
+              address_default = address_default + data.customer.address_detail + ", "
             }
-            if (data.customer.default_address.wards_name !== null && data.customer.default_address.wards_name !== "") {
-              address_default = address_default + data.customer.default_address.wards_name + ", "
+            if (data.customer.wards_name !== null && data.customer.wards_name !== "") {
+              address_default = address_default + data.customer.wards_name + ", "
             }
-            if (data.customer.default_address.district_name !== null && data.customer.default_address.district_name !== "") {
-              address_default = address_default + data.customer.default_address.district_name + ", "
+            if (data.customer.district_name !== null && data.customer.district_name !== "") {
+              address_default = address_default + data.customer.district_name + ", "
             }
-            if (data.customer.default_address.province_name !== null && data.customer.default_address.province_name !== "") {
-              address_default = address_default + data.customer.default_address.province_name
+            if (data.customer.province_name !== null && data.customer.province_name !== "") {
+              address_default = address_default + data.customer.province_name
             }
-          }
+          
         }
         return (
           <React.Fragment>

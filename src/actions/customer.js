@@ -65,6 +65,26 @@ export const fetchCustomerId = (store_code, customerId) => {
   };
 };
 
+export const fetchAllPointHistory = (id, store_code,page, branch_id, params) =>{
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    customerApi.fetchAllPointHistory(id , store_code, page).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide",
+      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_ALL_POINT_HISTORY,
+          data: res.data.data,
+        });
+    });
+  };
+}
+
 export const createCustomer = (store_code,id , funcModal = null) => {
 
   return (dispatch) => {

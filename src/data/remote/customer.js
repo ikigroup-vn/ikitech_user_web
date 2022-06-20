@@ -24,3 +24,6 @@ export const createCustomer = (store_code, data) => {
 export const editCustomer = (store_code, id, data) => {
   return callApi(`/store/${store_code}/customers/${id}`, "put", data);
 };
+export const fetchAllPointHistory = (id, store_code,page, branch_id, params) =>{
+  return callApi(`/store/${store_code}/customers/${id}/history_points?page=${page}`, "get", null);
+}

@@ -25,14 +25,14 @@ export const fetchAllInventory = (store_code,branch_id,page,params) =>{
     }
     
 }
-export const historyInventorys = (store_code,branch_id,data) =>{
+export const historyInventorys = (store_code,branch_id,data,page) =>{
   console.log('store_code',branch_id)
   return (dispatch) =>{
       dispatch({
           type: Type.SHOW_LOADING,
           loading: "show"
       })
-      inventory.historyInventorys(store_code,branch_id,data)
+      inventory.historyInventorys(store_code,branch_id,data,page)
       .then(res =>{
           dispatch({
               type: Type.SHOW_LOADING,

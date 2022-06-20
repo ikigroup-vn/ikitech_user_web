@@ -5,7 +5,8 @@ var initialState = {
   customerID: {},
   type: [],
   isFromPosAndSave: false,
-  customerCreated: {}
+  customerCreated: {},
+  pointHistory: []
 };
 
 export const customer = (state = initialState, action) => {
@@ -21,8 +22,9 @@ export const customer = (state = initialState, action) => {
       newState.isFromPosAndSave = action.isFromPosAndSave;
       newState.customerCreated = action.data;
       return newState;
-
-
+    case Types.FETCH_ALL_POINT_HISTORY:
+    newState.pointHistory = action.data;
+      return newState
     default:
       return newState;
   }

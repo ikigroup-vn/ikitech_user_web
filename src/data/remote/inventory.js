@@ -20,6 +20,6 @@ export const fetchAllInventory = (store_code,branch_id,page,params) => {
   export const editInventorys = (store_code,branch_id, id,data) =>{
     return callApi(`/store/${store_code}/${branch_id}/inventory/tally_sheets/${id}`, "put", data);
   };
-  export const historyInventorys = (store_code,branch_id,data) => {
-    return  callApi(`/store/${store_code}/${branch_id}/inventory/history`, "post", data)
+  export const historyInventorys = (store_code,branch_id,data,page=1) => {
+    return  callApi(`/store/${store_code}/${branch_id}/inventory/history?page=${page}`, "post", data)
   };

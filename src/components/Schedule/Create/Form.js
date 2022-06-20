@@ -237,7 +237,7 @@ class Form extends Component {
 
                 <div className="set-top-moment">
                 <MomentInput
-                  value = {moment(time_run , "DD-MM-YYYY HH:mm")}
+                  value = {moment(time_run)}
                   format="DD-MM-YYYY HH:mm"
                 options={true}
                 enableInputClick={true}

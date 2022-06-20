@@ -409,7 +409,7 @@ class Table extends Component {
                     </button>
 
                     <button
-                        onClick={() => this.changeStatusRequest(2)}
+                        onClick={() => this.changeStatusRequest(1)}
                         data-toggle="modal"
                         data-target="#updateModalRequest"
                         style={{ marginLeft: "10px" }}
@@ -419,7 +419,7 @@ class Table extends Component {
                     </button>
 
                     <button
-                        onClick={() => this.changeStatusRequest(1)}
+                        onClick={() => this.changeStatusRequest(2)}
                         data-toggle="modal"
                         data-target="#updateModalRequest"
                         style={{ marginLeft: "10px" }}

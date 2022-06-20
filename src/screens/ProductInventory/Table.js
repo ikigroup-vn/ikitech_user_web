@@ -24,6 +24,7 @@ class Table extends Component {
       },
       modalProduct:"",
       formData: "",
+      passFormdata : {}
     };
   }
 
@@ -69,6 +70,10 @@ class Table extends Component {
     if (!shallowEqual(nextProps.listProductSelect, this.props.listProductSelect)) {
       this.setState({ selected: [] });
     }
+  }
+
+  passFormData = (data) =>{
+    this.setState({passFormdata : data})
   }
 
   shouldComponentUpdate(nextProps,nextState){
@@ -148,6 +153,9 @@ class Table extends Component {
 
         return (
           <ShowData
+          
+          formData = {this.state.passFormdata}
+          passFormData = {this.passFormData}
             _delete={_delete}
             passDataModal={this.passDataModal}
             min_price={min_price}

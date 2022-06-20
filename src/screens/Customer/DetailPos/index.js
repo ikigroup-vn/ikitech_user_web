@@ -12,6 +12,9 @@ import "react-tabs/style/react-tabs.css";
 import OrderHistory from "../../../components/Customer/Detail/OrderHistory";
 import Info from "../../../components/Customer/Detail/Info";
 import CustomerDebt from "../../../components/Customer/Detail/CustomerDebt";
+import PointHistory from "../../../components/Customer/Detail/PointHistory";
+
+
 
 
 import * as themeAction from "../../../actions/theme";
@@ -90,6 +93,13 @@ class DetailPos extends Component {
                                 Lịch sử mua hàng
                               </span>
                             </Tab>
+                            <Tab>
+                              <i class="fa fa-history"></i>
+                              <span style={{ fontSize: "0.8rem" }}>
+                                Lịch sử xu mua hàng
+                              </span>
+                            </Tab>
+                    
                     
                         </TabList>
 
@@ -107,6 +117,13 @@ class DetailPos extends Component {
                           </TabPanel>
                           <TabPanel>
                           <OrderHistory
+                              store_code={store_code}
+                            />
+                          </TabPanel>
+
+                          <TabPanel>
+                            <PointHistory
+                            customerId = {customerId}
                               store_code={store_code}
                             />
                           </TabPanel>

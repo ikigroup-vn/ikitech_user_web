@@ -21,12 +21,12 @@ class ChartFinance extends Component {
   componentDidMount() {
     this.setState({
       datePrime: {
-        from: moment().format("DD-MM-YYYY"),
-        to: moment().format("DD-MM-YYYY"),
+        from: moment().format("YYYY-MM-DD"),
+        to: moment().format("YYYY-MM-DD"),
       },
       dateCompare: {
-        from: moment().subtract(1, "days").format("DD-MM-YYYY"),
-        to: moment().subtract(1, "days").format("DD-MM-YYYY"),
+        from: moment().subtract(1, "days").format("YYYY-MM-DD"),
+        to: moment().subtract(1, "days").format("YYYY-MM-DD"),
       },
     });
   }
@@ -34,10 +34,11 @@ class ChartFinance extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     if (this.state.datePrime !== nextState.datePrime) {
       const branch_id = localStorage.getItem("branch_id");
-      var datePrime_from = moment(nextState.datePrime.from , "DD-MM-YYYY").format("YYYY-MM-DD") 
-      var datePrime_to = moment(nextState.datePrime.to , "DD-MM-YYYY").format("YYYY-MM-DD") 
-      var dateCompare_from = moment(nextState.dateCompare.from , "DD-MM-YYYY").format("YYYY-MM-DD") 
-      var dateCompare_to = moment(nextState.dateCompare.to , "DD-MM-YYYY").format("YYYY-MM-DD") 
+      console.log(nextState.datePrime.from  , nextState.datePrime.to )
+      var datePrime_from = moment(nextState.datePrime.from).format("YYYY-MM-DD") 
+      var datePrime_to = moment(nextState.datePrime.to).format("YYYY-MM-DD") 
+      var dateCompare_from = moment(nextState.dateCompare.from).format("YYYY-MM-DD") 
+      var dateCompare_to = moment(nextState.dateCompare.to).format("YYYY-MM-DD") 
 
       const params1 = `date_from=${datePrime_from}&date_to=${datePrime_to}&branch_id=${branch_id}`;
       const params2 = `date_from=${dateCompare_from}&date_to=${dateCompare_to}&branch_id=${branch_id}`;

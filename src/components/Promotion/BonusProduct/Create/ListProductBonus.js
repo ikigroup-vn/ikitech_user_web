@@ -22,14 +22,14 @@ class ListProduct extends Component {
     console.log(checked)
     var data = JSON.parse(value);
     if (checked == true)
-      this.props.handleAddProduct(data, null, "add",null,true) // true đến từ sản phẩm bonus
+      this.props.handleAddProduct(data, null, "add", null, true) // true đến từ sản phẩm bonus
     else {
       if (data.length > 0) {
-        this.props.handleAddProduct(data, data.id, "remove",null,true)
+        this.props.handleAddProduct(data, data.id, "remove", null, true)
 
       }
       else {
-        this.props.handleAddProduct(data, data.id, "remove",null,true)
+        this.props.handleAddProduct(data, data.id, "remove", null, true)
 
       }
     }
@@ -48,7 +48,7 @@ class ListProduct extends Component {
     delete product2.quantity;
     delete product2.product;
 
-    console.log(product1,product2)
+    console.log(product1, product2)
     if (shallowEqual(product1, product2)) {
       return true
     }
@@ -60,7 +60,7 @@ class ListProduct extends Component {
       for (const element of list) {
         // console.log(element,data,this.compareTwoProduct(element == data));
 
-        if (this.compareTwoProduct(element , data)) {
+        if (this.compareTwoProduct(element, data)) {
           return true
         }
       }
@@ -69,8 +69,8 @@ class ListProduct extends Component {
   }
 
 
- checkDisable = (combos, id ,listDistribute , product ) => {
-       var dataDistribute = this.getistribute(listDistribute, product)
+  checkDisable = (combos, id, listDistribute, product) => {
+    var dataDistribute = this.getistribute(listDistribute, product)
     if (dataDistribute.length > 0) {
       return true
     }
@@ -101,8 +101,8 @@ class ListProduct extends Component {
                 "distribute_name": listDistribute.name,
                 "element_distribute_name": element.name,
                 "sub_element_distribute_name": sub_element.name,
-                "sku" :  product.sku,
-                "name" : product.name
+                "sku": product.sku,
+                "name": product.name
 
 
               })
@@ -117,8 +117,8 @@ class ListProduct extends Component {
               "distribute_name": listDistribute.name,
               "element_distribute_name": element.name,
               "sub_element_distribute_name": null,
-              "sku" :  product.sku,
-              "name" : product.name
+              "sku": product.sku,
+              "name": product.name
 
 
             })
@@ -160,14 +160,29 @@ class ListProduct extends Component {
                 "distribute_name": listDistribute.name,
                 "element_distribute_name": element.name,
                 "sub_element_distribute_name": sub_element.name,
-                "sku" :  product.sku,
-                "name" : product.name
+                "sku": product.sku,
+                "name": product.name,
 
               }
               var checked = this.checkExsit(list, _data)
 
               result.push(
-                <div className='wrap-item hover-product' >
+                <>
+                  {/* {index == 0 && <div class="form-group">
+                    <div class="form-check">
+                      <input type="checkbox"
+                        // disabled={disaled}
+                        checked={checked}
+                        onChange={this.onChange}
+                        value={JSON.stringify(_data)}
+                        class="form-check-input" id="gridCheck" />
+                      <label class="form-check-label" for="gridCheck">
+                        Cho phép tự chọn phân loại                  </label>
+                    </div>
+
+                  </div>
+                  } */}
+                  {/* <div className='wrap-item hover-product' > */}
 
                   {/* <label style={{ color: "#ff8100" }}>&nbsp;Phân loại: </label>
                   <div className='name-distribute' >{element.name},{sub_element.name}</div> */}
@@ -185,7 +200,8 @@ class ListProduct extends Component {
 
                   </div>
 
-                </div>
+                  {/* </div> */}
+                </>
               )
 
             })
@@ -197,8 +213,8 @@ class ListProduct extends Component {
               "distribute_name": listDistribute.name,
               "element_distribute_name": element.name,
               "sub_element_distribute_name": null,
-              "sku" :  product.sku,
-              "name" : product.name
+              "sku": product.sku,
+              "name": product.name
 
             }
             var checked = this.checkExsit(list, _data)
@@ -206,7 +222,20 @@ class ListProduct extends Component {
             result.push(
               <div >
 
+                {/* {_index == 0 && <div class="form-group">
+                  <div class="form-check">
+                    <input type="checkbox"
+                      // disabled={disaled}
+                      checked={checked}
+                      onChange={this.onChange}
+                      value={JSON.stringify(_data)}
+                      class="form-check-input" id="gridCheck" />
+                    <label class="form-check-label" for="gridCheck">
+                      Cho phép tự chọn phân loại                  </label>
+                  </div>
 
+                </div>
+                } */}
 
 
                 <div class="form-group">
@@ -248,8 +277,8 @@ class ListProduct extends Component {
           "distribute_name": null,
           "element_distribute_name": null,
           "sub_element_distribute_name": null,
-          "sku" :  data.sku,
-          "name" : data.name
+          "sku": data.sku,
+          "name": data.name
 
         }
         var checked = this.checkExsit(list, _data)
@@ -276,7 +305,7 @@ class ListProduct extends Component {
           discount_percent = product_discount.value;
         }
         const listDistribute = data.inventory?.distributes !== null && data.inventory?.distributes.length > 0 ? data.inventory?.distributes[0] : []
-        var disaled = this.checkDisable(combos, data.id, listDistribute , data);
+        var disaled = this.checkDisable(combos, data.id, listDistribute, data);
 
         return (
           <tr className={disaled == true ? "" : "hover-product"} style={{ background: background_disable }}>
@@ -307,8 +336,8 @@ class ListProduct extends Component {
             </td>
             <td>{data.sku}</td>
 
-            <td>{data.name}</td>
-            <td>            {this.showDistribute(listDistribute, data,list)}
+            <td style = {{width : "240px"}}>{data.name}</td>
+            <td>            {this.showDistribute(listDistribute, data, list)}
             </td>
             <td>
               {product_discount == null &&
