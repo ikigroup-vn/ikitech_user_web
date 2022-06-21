@@ -51,7 +51,7 @@ class Table extends Component {
             <td>{data.product.sku}</td>
 
             <td>{data.product.name}</td>
-            <td>{distribute}</td>
+            <td>{data.allows_choose_distribute === true ? "Tự chọn phân loại" :  distribute}</td>
 
             <td className="quantity" style = {{display:"flex"}}>
               <span onClick={() => { this.decrement(data.product) }} class="input-quantity input-number-decrement">–</span>

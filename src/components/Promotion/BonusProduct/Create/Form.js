@@ -250,7 +250,7 @@ class Form extends Component {
       var products = [...this.state.listProductsBonus];
     else
       var products = [...this.state.listProducts];
-    console.log(isBonus)
+    console.log(products,product,id,isBonus)
     if (product?.length > 0) {
       if (type == "remove") {
         if (products.length > 0) {
@@ -281,12 +281,17 @@ class Form extends Component {
 
           });
           if (check == false) {
-            var product = { quantity: 1, product: item, id: item.id, sku: item.sku, name: item.name, distribute_name: item.distribute_name, element_distribute_name: item.element_distribute_name, sub_element_distribute_name: item.sub_element_distribute_name };
+           
+            var product = { quantity: 1, product: item, allows_choose_distribute : item.allows_choose_distribute, id: item.id, sku: item.sku, name: item.name, distribute_name: item.distribute_name, element_distribute_name: item.element_distribute_name, sub_element_distribute_name: item.sub_element_distribute_name };
+            if(isBonus == false || typeof isBonus == "undefined")
+          delete item.allows_choose_distribute
             products.push(product);
           }
           else
           {
-            var product = { quantity: 1, product: item, id: item.id, sku: item.sku, name: item.name, distribute_name: item.distribute_name, element_distribute_name: item.element_distribute_name, sub_element_distribute_name: item.sub_element_distribute_name };
+            var product = { quantity: 1, product: item, allows_choose_distribute : item.allows_choose_distribute,id: item.id, sku: item.sku, name: item.name, distribute_name: item.distribute_name, element_distribute_name: item.element_distribute_name, sub_element_distribute_name: item.sub_element_distribute_name };
+            if(isBonus == false || typeof isBonus == "undefined")
+          delete item.allows_choose_distribute
             products[_index] = product;
           }
         });
@@ -320,12 +325,16 @@ class Form extends Component {
           }
         });
         if (checkExsit == true) {
-          var product = { quantity: 1, product: product, id: product.id, sku: product.sku, name: product.name, distribute_name: product.distribute_name, element_distribute_name: product.element_distribute_name, sub_element_distribute_name: product.sub_element_distribute_name };
+          var product = { quantity: 1, product: product,allows_choose_distribute : product.allows_choose_distribute, id: product.id, sku: product.sku, name: product.name, distribute_name: product.distribute_name, element_distribute_name: product.element_distribute_name, sub_element_distribute_name: product.sub_element_distribute_name };
+          if(isBonus == false || typeof isBonus == "undefined")
+          delete product.allows_choose_distribute
           products.push(product);
         }
         else
         {
-          var product = { quantity: 1, product: product, id: product.id, sku: product.sku, name: product.name, distribute_name: product.distribute_name, element_distribute_name: product.element_distribute_name, sub_element_distribute_name: product.sub_element_distribute_name };          products[_index] = product;
+          var product = { quantity: 1, product: product, allows_choose_distribute : product.allows_choose_distribute, id: product.id, sku: product.sku, name: product.name, distribute_name: product.distribute_name, element_distribute_name: product.element_distribute_name, sub_element_distribute_name: product.sub_element_distribute_name };          products[_index] = product;
+          if(isBonus == false || typeof isBonus == "undefined")
+          delete product.allows_choose_distribute
           products[_index] = product;
 
         }
@@ -335,6 +344,7 @@ class Form extends Component {
       if (isBonus)
         this.setState({ listProductsBonus: products, saveListProductsBonus: products })
       else
+      
         this.setState({ listProducts: products, saveListProducts: products })
     }
 

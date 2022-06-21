@@ -87,7 +87,7 @@ class TotalBill extends Component {
                     </div>
                     }
                     {combo_discount_amount > 0 && <div id={`item_fee ${combo_discount_amount > 0 ? "show" : "hide"}`}>
-                        <div className="sale_user_label bold" bold group-total>
+                        <div className="sale_user_label bold  group-total" bold group-total>
                         <div>Giảm giá Combo:</div>
 
                               <span>- {format(combo_discount_amount)}</span>

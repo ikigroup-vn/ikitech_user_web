@@ -162,26 +162,39 @@ class ListProduct extends Component {
                 "sub_element_distribute_name": sub_element.name,
                 "sku": product.sku,
                 "name": product.name,
+                "allows_choose_distribute" : false
+
 
               }
+              var _dataAllowDistribute = {
+                "id": product.id,
+                "quantity": 1,
+                "distribute_name": null,
+                "element_distribute_name": null,
+                "sub_element_distribute_name": null,
+                "sku": product.sku,
+                "name": product.name,
+                "allows_choose_distribute" : true
+  
+              }
               var checked = this.checkExsit(list, _data)
-
+              var checkedAllow = this.checkExsit(list, _dataAllowDistribute)
               result.push(
                 <>
-                  {/* {index == 0 && <div class="form-group">
+                  {index == 0 && <div class="form-group">
                     <div class="form-check">
                       <input type="checkbox"
                         // disabled={disaled}
-                        checked={checked}
+                        checked={checkedAllow}
                         onChange={this.onChange}
-                        value={JSON.stringify(_data)}
+                        value={JSON.stringify(_dataAllowDistribute)}
                         class="form-check-input" id="gridCheck" />
                       <label class="form-check-label" for="gridCheck">
                         Cho phép tự chọn phân loại                  </label>
                     </div>
 
                   </div>
-                  } */}
+                  }
                   {/* <div className='wrap-item hover-product' > */}
 
                   {/* <label style={{ color: "#ff8100" }}>&nbsp;Phân loại: </label>
@@ -214,28 +227,41 @@ class ListProduct extends Component {
               "element_distribute_name": element.name,
               "sub_element_distribute_name": null,
               "sku": product.sku,
-              "name": product.name
+              "name": product.name,
+              "allows_choose_distribute" : false
+
+
+            }
+            var _dataAllowDistribute = {
+              "id": product.id,
+              "quantity": 1,
+              "distribute_name": null,
+              "element_distribute_name": null,
+              "sub_element_distribute_name": null,
+              "sku": product.sku,
+              "name": product.name,
+              "allows_choose_distribute" : true
 
             }
             var checked = this.checkExsit(list, _data)
-
+            var checkedAllow = this.checkExsit(list, _dataAllowDistribute)
             result.push(
               <div >
 
-                {/* {_index == 0 && <div class="form-group">
+                {_index == 0 && <div class="form-group">
                   <div class="form-check">
                     <input type="checkbox"
                       // disabled={disaled}
-                      checked={checked}
+                      checked={checkedAllow}
                       onChange={this.onChange}
-                      value={JSON.stringify(_data)}
+                      value={JSON.stringify(_dataAllowDistribute)}
                       class="form-check-input" id="gridCheck" />
                     <label class="form-check-label" for="gridCheck">
                       Cho phép tự chọn phân loại                  </label>
                   </div>
 
                 </div>
-                } */}
+                }
 
 
                 <div class="form-group">
@@ -278,7 +304,8 @@ class ListProduct extends Component {
           "element_distribute_name": null,
           "sub_element_distribute_name": null,
           "sku": data.sku,
-          "name": data.name
+          "name": data.name,
+          "allows_choose_distribute" : false
 
         }
         var checked = this.checkExsit(list, _data)

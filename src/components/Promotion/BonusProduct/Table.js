@@ -120,7 +120,11 @@ filterColDiscount = (data) => {
 
             <td>{data.end_time}</td>
 
+            <td>
+              {data.amount == "" || data.amount == null ? "Không giới hạn" : formatNoD(data.amount -data.used)}
 
+
+            </td >  
          
             <td>
               {data.amount == "" || data.amount == null ? "Không giới hạn" : formatNoD(data.amount)}
@@ -182,6 +186,8 @@ filterColDiscount = (data) => {
 
               <th>Ngày bắt đầu</th>
               <th>Ngày kết thúc</th>
+              <th>Só lần thưởng còn lại</th>
+
               <th>Giới hạn số lần thưởng</th>
 
 
