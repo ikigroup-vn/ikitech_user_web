@@ -26,7 +26,7 @@ class Support extends Component {
             ID_post_id_return_policy: null,
             ID_post_id_support_policy: null,
             ID_post_id_privacy_policy: null,
-
+            is_show_list_post_contact: false,
             type: "",
             isLoading: false
 
@@ -55,6 +55,7 @@ class Support extends Component {
                 ID_post_id_return_policy: theme.post_id_return_policy || "",
                 ID_post_id_support_policy: theme.post_id_support_policy || "",
                 ID_post_id_privacy_policy: theme.post_id_privacy_policy || "",
+                is_show_list_post_contact: theme.is_show_list_post_contact
 
             })
             if (theme.post_id_help != "" && theme.post_id_help != null)
@@ -104,6 +105,7 @@ class Support extends Component {
                 ID_post_id_return_policy: theme.post_id_return_policy || "",
                 ID_post_id_support_policy: theme.post_id_support_policy || "",
                 ID_post_id_privacy_policy: theme.post_id_privacy_policy || "",
+                is_show_list_post_contact: theme.is_show_list_post_contact,
                 isLoading: true
             })
         }
@@ -195,7 +197,7 @@ class Support extends Component {
         form.post_id_return_policy = theme.ID_post_id_return_policy == "" ? null : theme.ID_post_id_return_policy
         form.post_id_support_policy = theme.ID_post_id_support_policy == "" ? null : theme.ID_post_id_support_policy
         form.post_id_privacy_policy = theme.ID_post_id_privacy_policy == "" ? null : theme.ID_post_id_privacy_policy
-
+        form.is_show_list_post_contact = theme.is_show_list_post_contact
         console.log(form)
         this.props.updateTheme(store_code, form);
     }
@@ -215,6 +217,7 @@ class Support extends Component {
                 ID_post_id_return_policy,
                 ID_post_id_support_policy,
                 ID_post_id_privacy_policy,
+                is_show_list_post_contact
             } = this.state
 
         var { blogs, store_code } = this.props
@@ -241,7 +244,41 @@ class Support extends Component {
                                 class="form-control"
                                 placeholder="Right icon" />
                         </div> */}
+                        <div
+                            className="row"
+                            style={{
+                                padding: "3px 0",
+                                justifyContent: "start",
+                                fontWeight : "500"
+                            }}
+                        >
+                            <>
+                                <label
+                                    className="title-price"
+                                    style={{
+                                        paddingLeft: 16,
+                                    }}
+                                >  Hiển thị khung danh sách bài viết trên Footer
+                                </label>
+                                <form >
+                                    <div class="custom-control custom-switch">
+                                        <input
+                                            type="checkbox"
+                                            class="custom-control-input"
+                                            id="switch2"
+                                            // name="example"
+                                            checked={is_show_list_post_contact}
+                                            onChange={(e) => this.setState(!is_show_list_post_contact)}
+                                        />
+                                        <label
+                                            class="custom-control-label"
+                                            for="switch2"
+                                        ></label>
+                                    </div>
+                                </form>
+                            </>
 
+                        </div>
 
                         <div className="form-group">
                             <label htmlFor="name">Bài viết giới thiệu</label>
@@ -256,7 +293,7 @@ class Support extends Component {
                             <div class="right-inner-addon input-container">
                                 <i class="fa fa-caret-down"></i>
                                 <input
-                                                            readOnly
+                                    readOnly
 
                                     onClick={() => this.fetchAllBlog("post_id_about")}
                                     value={post_id_about}
@@ -274,29 +311,29 @@ class Support extends Component {
                         <div className="form-group">
                             <label htmlFor="name">Bài viết giúp đỡ</label>
                             <input
-                            readOnly
+                                readOnly
                                 value={ID_post_id_help}
 
 
                                 type="hidden"
 
                             />
-                              <div class="right-inner-addon input-container">
+                            <div class="right-inner-addon input-container">
                                 <i class="fa fa-caret-down"></i>
-                            <input
-                                                        readOnly
+                                <input
+                                    readOnly
 
-                                onClick={() => this.fetchAllBlog("post_id_help")}
-                                value={post_id_help}
+                                    onClick={() => this.fetchAllBlog("post_id_help")}
+                                    value={post_id_help}
 
-                                data-toggle="modal"
-                                data-target="#showListBlog"
-                                type="text"
-                                name="product_name"
-                                class="form-control"
-                                placeholder="Chọn bài viết..."
-                            />
-                        </div>
+                                    data-toggle="modal"
+                                    data-target="#showListBlog"
+                                    type="text"
+                                    name="product_name"
+                                    class="form-control"
+                                    placeholder="Chọn bài viết..."
+                                />
+                            </div>
                         </div>
 
                         <div className="form-group">
@@ -308,22 +345,22 @@ class Support extends Component {
                                 type="hidden"
 
                             />
-                              <div class="right-inner-addon input-container">
+                            <div class="right-inner-addon input-container">
                                 <i class="fa fa-caret-down"></i>
-                            <input
-                                                        readOnly
+                                <input
+                                    readOnly
 
-                                onClick={() => this.fetchAllBlog("post_id_terms")}
-                                value={post_id_terms}
+                                    onClick={() => this.fetchAllBlog("post_id_terms")}
+                                    value={post_id_terms}
 
-                                data-toggle="modal"
-                                data-target="#showListBlog"
-                                type="text"
-                                name="product_name"
-                                class="form-control"
-                                placeholder="Chọn bài viết..."
-                            />
-                        </div>
+                                    data-toggle="modal"
+                                    data-target="#showListBlog"
+                                    type="text"
+                                    name="product_name"
+                                    class="form-control"
+                                    placeholder="Chọn bài viết..."
+                                />
+                            </div>
                         </div>
 
                         <div className="form-group">
@@ -335,22 +372,22 @@ class Support extends Component {
                                 type="hidden"
 
                             />
-                              <div class="right-inner-addon input-container">
+                            <div class="right-inner-addon input-container">
                                 <i class="fa fa-caret-down"></i>
-                            <input
-                                                        readOnly
+                                <input
+                                    readOnly
 
-                                onClick={() => this.fetchAllBlog("post_id_return_policy")}
-                                value={post_id_return_policy}
+                                    onClick={() => this.fetchAllBlog("post_id_return_policy")}
+                                    value={post_id_return_policy}
 
-                                data-toggle="modal"
-                                data-target="#showListBlog"
-                                type="text"
-                                name="product_name"
-                                class="form-control"
-                                placeholder="Chọn bài viết..."
-                            />
-                        </div>
+                                    data-toggle="modal"
+                                    data-target="#showListBlog"
+                                    type="text"
+                                    name="product_name"
+                                    class="form-control"
+                                    placeholder="Chọn bài viết..."
+                                />
+                            </div>
                         </div>
 
                         <div className="form-group">
@@ -362,22 +399,22 @@ class Support extends Component {
                                 type="hidden"
 
                             />
-                              <div class="right-inner-addon input-container">
+                            <div class="right-inner-addon input-container">
                                 <i class="fa fa-caret-down"></i>
-                            <input
-                                                        readOnly
+                                <input
+                                    readOnly
 
-                                onClick={() => this.fetchAllBlog("post_id_support_policy")}
-                                value={post_id_support_policy}
+                                    onClick={() => this.fetchAllBlog("post_id_support_policy")}
+                                    value={post_id_support_policy}
 
-                                data-toggle="modal"
-                                data-target="#showListBlog"
-                                type="text"
-                                name="product_name"
-                                class="form-control"
-                                placeholder="Chọn bài viết..."
-                            />
-                                                    </div>
+                                    data-toggle="modal"
+                                    data-target="#showListBlog"
+                                    type="text"
+                                    name="product_name"
+                                    class="form-control"
+                                    placeholder="Chọn bài viết..."
+                                />
+                            </div>
 
                         </div>
                         <div className="form-group">
@@ -389,23 +426,23 @@ class Support extends Component {
                                 type="hidden"
 
                             />
-                              <div class="right-inner-addon input-container">
+                            <div class="right-inner-addon input-container">
                                 <i class="fa fa-caret-down"></i>
-                            <input
+                                <input
 
-readOnly
+                                    readOnly
 
-                                onClick={() => this.fetchAllBlog("post_id_privacy_policy")}
-                                value={post_id_privacy_policy}
+                                    onClick={() => this.fetchAllBlog("post_id_privacy_policy")}
+                                    value={post_id_privacy_policy}
 
-                                data-toggle="modal"
-                                data-target="#showListBlog"
-                                type="text"
-                                name="product_name"
-                                class="form-control"
-                                placeholder="Chọn bài viết..."
-                            />
-                        </div>
+                                    data-toggle="modal"
+                                    data-target="#showListBlog"
+                                    type="text"
+                                    name="product_name"
+                                    class="form-control"
+                                    placeholder="Chọn bài viết..."
+                                />
+                            </div>
                         </div>
 
 
