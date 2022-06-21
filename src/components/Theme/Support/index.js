@@ -268,7 +268,7 @@ class Support extends Component {
                                             id="switch2"
                                             // name="example"
                                             checked={is_show_list_post_contact}
-                                            onChange={(e) => this.setState(!is_show_list_post_contact)}
+                                            onChange={(e) => this.setState({is_show_list_post_contact : !is_show_list_post_contact})}
                                         />
                                         <label
                                             class="custom-control-label"
