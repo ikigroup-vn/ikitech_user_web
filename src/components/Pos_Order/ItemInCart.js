@@ -410,6 +410,8 @@ class ItemInCart extends Component {
                 : [];
         console.log("itemmm", item, this.state);
         var is_bonus = item.is_bonus
+        var allows_choose_distribute = item.allows_choose_distribute
+
         return (
             <div
                 onClick={() => { this.closeModalClickOutSite(item.product.distributes?.length) }}
@@ -471,8 +473,8 @@ class ItemInCart extends Component {
                                         <div class="aUj6f2">
                                             <div class="_1XT_GF" role="button" tabindex="0" >
 
-                                                <div class="Qtk_DO" id={`item_pos_${this.props.key}`} ref={this.ref} onClick={() => { is_bonus === false && this.props.showDetail(item.id) }}>
-                                                    Phân loại hàng:<button class="vZLqsj _2zsvOt"></button>
+                                                <div class="Qtk_DO" id={`item_pos_${this.props.key}`} ref={this.ref} onClick={() => { (is_bonus === false || allows_choose_distribute === true ) && this.props.showDetail(item.id) }}>
+                                                    Phân loại hàng: {(is_bonus === false || allows_choose_distribute === true ) && <button class="vZLqsj _2zsvOt"></button>}
                                                 </div>
                                                 {
                                                     this.props.chooseId == item.id &&
