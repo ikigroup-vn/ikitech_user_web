@@ -13,6 +13,8 @@ import { shallowEqual } from "../../../../ultis/shallowEqual";
 import { isEmpty } from "../../../../ultis/helpers";
 import moment from "moment";
 import ModalPostDate2 from "../ModalPostDates";
+// import ModalPostDate2 from "./ModalPostDates2";
+
 import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
 import history from "../../../../history";
 class Form extends Component {
@@ -43,6 +45,7 @@ class Form extends Component {
   }
 
   handleGetDatePost = (date, value) => {
+    console.log(date,value)
     var typeSelect =
       value == "DAY"
         ? "Ngày"
@@ -53,8 +56,8 @@ class Form extends Component {
             : "Tùy chọn";
     this.setState({
       datePrime: {
-        from: date.datePrime.from,
-        to: date.datePrime.to,
+        from: date.datePrime?.from,
+        to: date.datePrime?.to,
       },
 
       typeDate: value, typeSelect: typeSelect

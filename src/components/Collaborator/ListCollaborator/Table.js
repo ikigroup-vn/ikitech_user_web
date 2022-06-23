@@ -225,10 +225,11 @@ class Table extends Component {
                         Nơi đăng kí:{" "}
                         <span id="user_name"> {data.issued_by} </span>
                       </p>
-                      <p class="sale_user_label" id="sale_user_name">
+                      {address_default !== "" &&  <p class="sale_user_label" id="sale_user_name">
                         Địa chỉ:{" "}
                         <span id="user_name"> {address_default} </span>
-                      </p>
+                      </p>}
+                     
                     </div>
                   </div>
                   <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">

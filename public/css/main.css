@@ -15,7 +15,14 @@
     --ck-inline-image-style-spacing: calc(var(--ck-image-style-spacing) / 2);
     --ck-todo-list-checkmark-size: 16px;
 }
+.three-btn-group {
+    display: flex;
+    flex-direction: column;
+}
 
+.three-btn-group a,button{
+    margin : 2px
+}
 .support-theme input {
     background-color: white !important;
     cursor: pointer
