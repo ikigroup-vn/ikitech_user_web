@@ -315,7 +315,9 @@ class Table extends Component {
               <td>
                 {formatNoD(data.salary_one_hour)}đ/h
               </td>
-              <td>
+              {this.props.typeDate == "DAY"  && 
+                  <React.Fragment>
+                  <td>
                   { data?.keeping_histories[
                               data?.keeping_histories.length - 1
                             ]?.from_user
@@ -326,6 +328,9 @@ class Table extends Component {
                                       data?.keeping_histories.length - 1
                                     ]?.from_staff_created?.name}`}
                   </td>
+                  </React.Fragment>
+                }
+              
             </tr>
           </React.Fragment>
         );
@@ -361,9 +366,7 @@ class Table extends Component {
               <tr>
                 <td>Nhân viên</td>
                 {console.log("133131", this.props.datePrime)}
-                {this.props.typeDate == "DAY" ||
-                  (this.props.typeDate == "OPTION" &&
-                    this.props.datePrime.from === this.props.datePrime.to) ? (
+                {this.props.typeDate == "DAY" ? (
                   <React.Fragment>
                     <td>Vào/Tan ca</td>
                   </React.Fragment>
@@ -374,7 +377,12 @@ class Table extends Component {
                 )}
                 <td>Số giờ làm</td>
                 <td>Số tiền làm theo giờ</td>
+                {this.props.typeDate == "DAY" 
+              && (
+                  <React.Fragment>
                 <td>Tạo bởi</td>
+                  </React.Fragment>
+                )}
 
                 {/* {this.props.typeDate == "DAY" ||
                   (this.props.typeDate == "OPTION" &&

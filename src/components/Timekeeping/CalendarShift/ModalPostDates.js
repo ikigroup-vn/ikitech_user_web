@@ -4,6 +4,7 @@ import * as calendarShiftAction from "../../../actions/calendar_shift";
 import FormPostDay from "./PostDate/PostDay";
 import FormPostMonth from "./PostDate/PostMonth";
 import FormPostWeek from "./PostDate/PostWeek";
+import FormPostOption2 from "./Create/PostDate2/PostOption2";
 
 import moment from "moment";
 
@@ -97,6 +98,7 @@ class ModalPostDate extends Component {
     var isDay = typeDate == "DAY" ? "show" : "hide";
     var isWeek = typeDate == "WEEK" ? "show" : "hide";
     var isMonth = typeDate == "MONTH" ? "show" : "hide";
+    var isOption = typeDate == "OPTION" ? "show" : "hide";
 
     return (
       <div
@@ -147,6 +149,13 @@ class ModalPostDate extends Component {
             handlePostDate={this.handlePostDate}
             isWeek={isWeek}
 
+            typeDate = {typeDate}
+
+          />
+               <FormPostOption2
+            reset={reset}
+            handlePostDate={this.handlePostDate}
+            isOption={isOption}
             typeDate = {typeDate}
 
           />

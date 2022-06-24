@@ -11,6 +11,7 @@ export const createBannerAds = (store_code,data) =>{
 }
 
 export const updateBannerAds = (bannerAdsId, categoryB, store_code) =>{
+  console.log("vao222" , bannerAdsId, categoryB, store_code)
   return callApi(`/store/${store_code}/banner_ads/${bannerAdsId}`, "put", categoryB);
 }
 

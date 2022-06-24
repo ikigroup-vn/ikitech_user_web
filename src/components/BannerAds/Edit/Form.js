@@ -153,6 +153,8 @@ class Form extends Component {
                   <select name="type" value = {type} id="input" class="form-control" required="required"                 onChange={this.onChange}
 >
                 <option value="0">Dưới Banner</option>
+                <option value="7">Bên phải Banner chính</option>
+
                 <option value="1">Trên sản phẩm nổi bật</option>
                 <option value="2">Trên sản phẩm mới</option>
                 <option value="3">Trên sản phẩm khuyến mại</option>

@@ -67,7 +67,7 @@ class Branch extends Component {
                 return (
                     <tr className="hover-product">
                         <td>{index + 1}</td>
-                        <td>{data.name} {data.is_default_order_online == true ? <span style={{
+                        <td>{data.name} {data.is_default == true ? <span style={{
                             color: "red",
                             "font-size": "13px",
                             "font-style": "italic",

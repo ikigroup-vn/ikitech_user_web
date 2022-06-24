@@ -122,6 +122,8 @@ class Form extends Component {
       isCheck,
     } = this.state;
 
+    var {store_code} = this.props
+
     if (listStaff.length === 0) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
@@ -182,7 +184,7 @@ class Form extends Component {
       },
       param , typeDate
     );
-    history.push(`/calendar_shift/hoqua?type=${typeDate}`);
+    history.push(`/calendar_shift/${store_code}?type=${typeDate}`);
   };
   handleAddShift = (shift, id, type, onSave = null) => {
     var shifts = [...this.state.listShift];
