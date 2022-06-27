@@ -271,12 +271,11 @@ const permission = (channel) => {
                     "Đại lý",
                     "Truy cập onsale",
                     "Danh sách onsale",
-                    "Thêm onsale",
-                    "Sửa onsale",
+                    "Phân công nhân viên",
                     "Xóa onsale",
 
                 ]
-                , body: ["collaborator_list", "agency_list" , "onsale" ,"onsale_assignment", "onsale_add" , "onsale_edit" , "onsale_remove"]
+                , body: ["collaborator_list", "agency_list" , "onsale" ,"onsale_assignment",  "onsale_edit" , "onsale_remove"]
             },
             {
                 name: "Quản lý nhân viên & khách hàng",

@@ -87,7 +87,7 @@ class CustomerSale extends Component {
       var add = permissions.onsale_add
       var remove = permissions.onsale_remove
       var assignment = permissions.onsale_assignment
-      this.setState({ isLoading: true, isShow, chat_allow: true , edit,add,remove,assignment });
+      this.setState({ isLoading: true, isShow, chat_allow: true , edit,add : true,remove,assignment });
     }
   }
 

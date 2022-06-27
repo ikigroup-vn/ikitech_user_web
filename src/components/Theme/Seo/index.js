@@ -89,7 +89,7 @@ class Seo extends Component {
                         <div className="form-group">
                             <label htmlFor="name">Mã Google Analytics</label>
                             <div class="form-group" style={{ display: "flex" }}>
-                                <input style={{ maxWidth: "500px" }} type="tel" name="code_google_analytics" value={code_google_analytics} placeholder="Nhập..." onChange={this.onChange} className="form-control" id="txtName" autoComplete="off" />
+                                <input style={{ maxWidth: "500px" }}  name="code_google_analytics" value={code_google_analytics} placeholder="Nhập Google Analytics ID (Ví dụ: UA-64282XXX-1)" onChange={this.onChange} className="form-control" id="txtName" autoComplete="off" />
 
 
                             </div>
@@ -99,7 +99,7 @@ class Seo extends Component {
                         <div className="form-group">
                             <label htmlFor="name">Google Tag Manager ID</label>
                             <div class="form-group" style={{ display: "flex" }}>
-                                <input style={{ maxWidth: "500px" }} type="tel" name="google_tag_manager_id" value={google_tag_manager_id} placeholder="Nhập..." onChange={this.onChange} className="form-control" id="txtName" autoComplete="off" />
+                                <input style={{ maxWidth: "500px" }}  name="google_tag_manager_id" value={google_tag_manager_id} placeholder="Nhập Google Tag Manager ID (Ví dụ: GTM-5FJXXX)" onChange={this.onChange} className="form-control" id="txtName" autoComplete="off" />
 
 
                             </div>
@@ -109,7 +109,7 @@ class Seo extends Component {
                         <div className="form-group">
                             <label htmlFor="name">Mã Google Site Verification</label>
                             <div class="form-group" style={{ display: "flex" }}>
-                                <input style={{ maxWidth: "500px" }} type="tel" name="google_site_verification_code" value={google_site_verification_code} placeholder="Nhập..." onChange={this.onChange} className="form-control" id="txtName" autoComplete="off" />
+                                <input style={{ maxWidth: "500px" }}  name="google_site_verification_code" value={google_site_verification_code} placeholder="Nhập mã..." onChange={this.onChange} className="form-control" id="txtName" autoComplete="off" />
 
 
                             </div>

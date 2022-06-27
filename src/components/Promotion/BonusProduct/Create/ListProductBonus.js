@@ -154,6 +154,7 @@ class ListProduct extends Component {
             listDistribute.element_distributes[0].sub_element_distributes.map((sub_element, index) => {
               const cost_of_capital = listDistribute.element_distributes[_index].sub_element_distributes[index]?.cost_of_capital
               const stock = listDistribute.element_distributes[_index].sub_element_distributes[index]?.stock
+              var length = listDistribute.element_distributes[0].sub_element_distributes ?? 0
               var _data = {
                 "id": product.id,
                 "quantity": 1,
@@ -181,7 +182,7 @@ class ListProduct extends Component {
               var checkedAllow = this.checkExsit(list, _dataAllowDistribute)
               result.push(
                 <>
-                  {index == 0 && <div class="form-group">
+                  {index == 0 && length > 1 && <div class="form-group">
                     <div class="form-check">
                       <input type="checkbox"
                         // disabled={disaled}
@@ -232,6 +233,7 @@ class ListProduct extends Component {
 
 
             }
+            var length = listDistribute.element_distributes.length ?? 0
             var _dataAllowDistribute = {
               "id": product.id,
               "quantity": 1,
@@ -248,7 +250,7 @@ class ListProduct extends Component {
             result.push(
               <div >
 
-                {_index == 0 && <div class="form-group">
+                {_index == 0 && length > 1 && <div class="form-group">
                   <div class="form-check">
                     <input type="checkbox"
                       // disabled={disaled}
