@@ -174,6 +174,14 @@ class Table extends Component {
     data.forEach((data , index)=> {
       newData[index].staff_id = staff_id
       delete newData[index].staff
+      delete newData[index].address
+      delete newData[index].email
+      delete newData[index].name
+      delete newData[index].date_of_birth
+      delete newData[index].phone_number
+      delete newData[index].sex
+
+      
     });
 
     console.log(newData)
@@ -233,13 +241,13 @@ class Table extends Component {
 
            
               <th>Họ tên/SĐT</th>
-              <th>
+              <th className="content-onsale">
                 <select
                   value={filter_by_status}
                   style={{ maxWidth: "150px" }}
                   name=""
                   id="input"
-                  className="form-control"
+                  className="form-control status-onsale"
                   onChange={this.searchStars}
                 >
                   <option value="">--Trạng thái--</option>
@@ -249,9 +257,9 @@ class Table extends Component {
                   <option value="3">Thất bại ({this.props.customers?.total_status_3})</option>
                 </select>
               </th>
-              <th>Tư vấn lần 1</th>
-              <th>Tư vấn lần 2</th>
-              <th>Tư vấn lần 3</th>
+              <th  className="content-onsale">Nội dung tư vấn lần 1</th>
+              <th  className="content-onsale">Nội dung tư vấn lần 2</th>
+              <th  className="content-onsale">Nội dung tư vấn lần 3</th>
 
              {edit === true && assignment == true && <th>Nhân viên sale</th>} 
               <th>Hành động</th>

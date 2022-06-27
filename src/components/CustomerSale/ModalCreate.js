@@ -28,7 +28,7 @@ class ModalCreate extends Component {
             txtName_branch: "",
             txtPhone_branch: "",
             txtSex: "",
-
+            txtDateOfBirth : null,
             txtEmail_branch: "",
             errors: {},
             error_email: { status: false, text: "" },
@@ -198,6 +198,25 @@ class ModalCreate extends Component {
 
             this.props.createCustomer(store_code, Formdata, function () {
                 window.$(".modal").modal("hide");
+            } , this, function(_this){
+                _this.setState({
+                    provinceName: "",
+                    districtName: "",
+                    wardsName: "",
+                    txtAddress_detail: "",
+                    txtCountry: 1,
+                    txtProvince: "",
+                    txtDistrict: "",
+                    txtWards: "",
+                    isLoaded: false,
+                    listWards: [],
+                    listDistrict: [],
+                    txtName_branch: "",
+                    txtPhone_branch: "",
+                    txtEmail_branch: "",
+                    txtDateOfBirth : ""
+    
+                })
             });
         }
 
@@ -261,6 +280,8 @@ class ModalCreate extends Component {
         var isAnother = txtSex == "0" ? true : false
     
         console.log(isEmail(txtEmail_branch), isEmpty())
+
+        console.log(txtDateOfBirth)
         return (
             <>
                 {this.state.status &&
@@ -329,16 +350,19 @@ class ModalCreate extends Component {
                                                 </div>
                                                 <div className="form-group">
                                                     <label htmlFor="fname">Ngày sinh</label>
-                                                    {txtDateOfBirth !== "" && <Datetime
+                                                    <Datetime
                                                         inputProps={{
                                                             placeholder: "Chưa cập nhật",
                                                         }}
-                                                        initialValue={txtDateOfBirth}
-
+                                                        // initialValue={txtDateOfBirth}
+                                                        value = {txtDateOfBirth}
                                                         onChange={this.onChangeDate}
                                                         dateFormat="DD-MM-YYYY"
                                                         timeFormat={false}
-                                                    />}
+                                                        renderInput={(props) => {
+                                                            return <input {...props} value={txtDateOfBirth} />
+                                                        }}
+                                                    />
                                                 </div>
                                                 <div className="form-group gender">
                                                     <label htmlFor="gender">Giới tính</label>
@@ -404,8 +428,8 @@ class ModalCreate extends Component {
 }
 const mapDispatchToProps = (dispatch, props) => {
     return {
-        createCustomer: (id, form, funcModal) => {
-            dispatch(dashboardAction.createCustomerSale(id, form, funcModal));
+        createCustomer: (id, form, funcModal , _this , resetModal) => {
+            dispatch(dashboardAction.createCustomerSale(id, form, funcModal  , _this , resetModal));
         },
         fetchPlaceDistrict: (id) => {
             dispatch(placeAction.fetchPlaceDistrict(id));

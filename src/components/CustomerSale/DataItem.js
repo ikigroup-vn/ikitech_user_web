@@ -129,13 +129,13 @@ class DataItem extends Component {
                         <option value="3">Thất bại</option>
                     </select>
                 </td>
-                <td><textarea value={data.consultation_1} onChange={this.onChangeText} name="consultation_1"></textarea>
+                <td ><  textarea className="content-onsale" value={data.consultation_1} onChange={this.onChangeText} name="consultation_1"></textarea>
                     <p>{data.time_update_consultation_1 == null ? "" : getDDMMYYYHis(data.time_update_consultation_1)}</p>
                 </td>
-                <td><textarea value={data.consultation_2} onChange={this.onChangeText} name="consultation_2"></textarea>
+                <td><textarea className="content-onsale" value={data.consultation_2} onChange={this.onChangeText} name="consultation_2"></textarea>
                     <p>{data.time_update_consultation_2 == null ? "" : getDDMMYYYHis(data.time_update_consultation_2)}</p>
                 </td>
-                <td><textarea value={data.consultation_3} onChange={this.onChangeText} name="consultation_3"></textarea>
+                <td><textarea className="content-onsale" value={data.consultation_3} onChange={this.onChangeText} name="consultation_3"></textarea>
                     <p>{data.time_update_consultation_3 == null ? "" : getDDMMYYYHis(data.time_update_consultation_3)}</p>
                 </td>
                 {edit === true && assignment === true &&        <td>
@@ -146,7 +146,7 @@ class DataItem extends Component {
                 </td>} 
 
            
-                <td style={{ display: "flex" }}>
+                <td className="three-btn-group" >
                     <button
                         data-toggle="modal"
                         data-target="#modalEditCustomer"
@@ -159,7 +159,6 @@ class DataItem extends Component {
                         <i class="fa fa-edit"></i> Sửa
                     </button>
                     <button
-                        style={{ marginLeft: "10px" }}
                         onClick={(e) => this.passDataModal(e, data.id, data.name)}
                         data-toggle="modal"
                         data-target="#removeModal"

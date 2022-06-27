@@ -31,7 +31,12 @@
 .contact .form-control {
     max-width: 80%;
 }
-
+.content-onsale{
+    width: 130px;
+}
+.status-onsale{
+    width : 125px
+}
 .disable-color {
     background: #f6f6f6;
     color: grey;

@@ -43,7 +43,7 @@ class ModalEdit extends Component {
                 txtAddress_detail: nextProps.modal.address,
                 idCustomer: nextProps.modal.id,
                 txtSex:nextProps.modal.sex,
-                txtDateOfBirth:nextProps.modal.date_of_birth
+                txtDateOfBirth:nextProps.modal.date_of_birth ? moment(nextProps.modal.date_of_birth).format("DD-MM-YYYY") : ""
             })
         }
 
@@ -145,6 +145,15 @@ class ModalEdit extends Component {
           txtDateOfBirth: time,
         });
       };
+      onChangeGender = (e) => {
+        var target = e.target;
+        var name = target.name;
+        var value = target.value;
+    
+        this.setState({
+          [name]: value,
+        });
+      }
 
     render() {
         var { txtAddress_detail} = this.state;
@@ -217,16 +226,19 @@ class ModalEdit extends Component {
 
                                                 <div className="form-group">
                                                     <label htmlFor="fname">Ngày sinh</label>
-                                                    {txtDateOfBirth !== "" && <Datetime
-                                                        inputProps={{
-                                                            placeholder: "Chưa cập nhật",
-                                                        }}
-                                                        initialValue={txtDateOfBirth}
-
-                                                        onChange={this.onChangeDate}
-                                                        dateFormat="DD-MM-YYYY"
-                                                        timeFormat={false}
-                                                    />}
+                                                    <Datetime
+                                                      inputProps={{
+                                                        placeholder: "Chưa cập nhật",
+                                                    }}
+                                                    // initialValue={txtDateOfBirth}
+                                                    value = {txtDateOfBirth}
+                                                    onChange={this.onChangeDate}
+                                                    dateFormat="DD-MM-YYYY"
+                                                    timeFormat={false}
+                                                    renderInput={(props) => {
+                                                        return <input {...props} value={txtDateOfBirth} />
+                                                    }}
+                                                    />
                                                 </div>
                                                 <div className="form-group gender">
                                                     <label htmlFor="gender">Giới tính</label>
