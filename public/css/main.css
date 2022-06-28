@@ -20,8 +20,8 @@
     flex-direction: column;
 }
 
-.three-btn-group a,button{
-    margin : 2px
+.three-btn-group  a, .three-btn-group button{
+    margin : 2px !important
 }
 .support-theme input {
     background-color: white !important;

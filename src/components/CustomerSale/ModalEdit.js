@@ -43,7 +43,7 @@ class ModalEdit extends Component {
                 txtAddress_detail: nextProps.modal.address,
                 idCustomer: nextProps.modal.id,
                 txtSex:nextProps.modal.sex,
-                txtDateOfBirth:nextProps.modal.date_of_birth ? moment(nextProps.modal.date_of_birth).format("DD-MM-YYYY") : ""
+                txtDateOfBirth:nextProps.modal.date_of_birth && nextProps.modal.date_of_birth != "0000-00-00 00:00:00" ? moment(nextProps.modal.date_of_birth).format("DD-MM-YYYY") : ""
             })
         }
 

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as Types from "../../constants/ActionType";
 import * as customerAction from "../../actions/customer_sales";
+import moment from "moment";
 
 class ImportModal extends Component {
 
@@ -41,13 +42,13 @@ class ImportModal extends Component {
       result = listImg.map((image, index) => {
         return (
 
-            <img src={image} class="img-responsive" alt="Image" style={{
-              width: "120px",
-              objectFit: "cover",
-              height: "100px",
-              margin: "7px"
-              
-            }} />
+          <img src={image} class="img-responsive" alt="Image" style={{
+            width: "120px",
+            objectFit: "cover",
+            height: "100px",
+            margin: "7px"
+
+          }} />
 
         )
 
@@ -66,31 +67,30 @@ class ImportModal extends Component {
       var data = ""
       Object.entries(item).forEach(([key, value], index) => {
 
-        
+
         if (typeof value == "string" && value != null && value != "") {
-          
-          if(!key.includes("STT")) {
+
+          if (!key.includes("STT")) {
             var name = ""
-            if(key != null)
-            {
-              if(key.includes("tên") || key.includes("Tên"))
-              {
+            if (key != null) {
+              if (key.includes("tên") || key.includes("Tên")) {
                 name = "class-name-product"
               }
             }
             object.push(
-              <td className = {name} >
-                <div style = {{maxHeight : "300px", overflow : "auto" , maxWidth:"250px"}}>
-                {value}
+              <td className={name} >
+                <div style={{ maxHeight: "300px", overflow: "auto", maxWidth: "250px" }}>
+                  {value}
                 </div>
-                </td>
+              </td>
 
             );
           }
-         
+
 
         }
         else {
+          if(!key.includes("STT"))
           object.push(
             <td>{value}</td>
 
@@ -110,22 +110,26 @@ class ImportModal extends Component {
     if (data.length > 0) {
 
       Object.entries(data[0]).forEach(([key, value], index) => {
+        if (!key.includes("STT")) {
+          result.push(
+            <th>
 
-        result.push(
-          <th>
+              <select name="" id="input" class="form-control" required="required" onChange={(e) => { this.onChangeType(e, index) }}>
+                <option value=""></option>
+                <option value="name">Tên khách hàng</option>
+                
+                <option value="phone_number">Số điện thoại</option>
+                <option value="date_of_birth">Ngày sinh</option>
 
-            <select name="" id="input" class="form-control" required="required" onChange={(e) => { this.onChangeType(e, index) }}>
-              <option value=""></option>
-              <option value="name">Tên khách hàng</option>
-              <option value="phone_number">Số điện thoại</option>
-              <option value="email">Email</option>
+                <option value="email">Email</option>
 
-              <option value="address">Địa chỉ</option>
-            </select>
+                <option value="address">Địa chỉ</option>
+              </select>
 
-          </th>
+            </th>
 
-        );
+          );
+        }
       })
     } else {
       return result;
@@ -183,18 +187,23 @@ class ImportModal extends Component {
           for (const item of importData) {
             var newItem = {}
             Object.entries(item).forEach(([key, value], index) => {
+              console.log(key, value,index , type , newItem)
               if (type["type" + index] !== "" && typeof type["type" + index] !== "undefined") {
-                console.log(type["type" + index])
-                  newItem[type["type" + index]] = value
+                if(type["type" + index] == "date_of_birth")
+                newItem[type["type" + index]] = moment(value).format("YYYY-MM-DD")
+
+                else
+                newItem[type["type" + index]] = value
+
               }
 
             })
             newArray.push(newItem)
           }
-       
+
           window.$("#importModal").modal("hide")
-        
-          this.props.createMultiCustomerSale(this.props.store_code , {
+
+          this.props.createMultiCustomerSale(this.props.store_code, {
             allow_skip_phone_number: this.state.allow_skip_same_name,
             list: newArray
           })
@@ -254,10 +263,10 @@ class ImportModal extends Component {
             <div class="modal-header" style={{ background: "white" }} >
 
               <div class="form-group">
-                <div class="form-check" style = {{paddingLeft : "0px"}}>
+                <div class="form-check" style={{ paddingLeft: "0px" }}>
                   <label class="form-check-label" for="gridCheck">
-                    
-                  <i class="fas fa-arrow-alt-circle-right"></i>                    
+
+                    <i class="fas fa-arrow-alt-circle-right"></i>
                     &nbsp;Xem trước nhập liệu
                   </label>
                   {/* <input class="form-check-input" type="checkbox" id="gridCheck" style={{ marginLeft: "10px" }}

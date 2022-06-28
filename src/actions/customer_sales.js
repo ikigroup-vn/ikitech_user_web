@@ -102,10 +102,7 @@ export const saveAllListCustomer = (
                 newItem["Email"] = value;
                 // newItem["Tên sản phẩm"] = value
               }
-              if (key == "sex") {
-                newItem["Giới tính"] = value == 1 ? "Nam" : value == 2 ? "Nữ" : "Không xác định";
-                // newItem["Tên sản phẩm"] = value
-              }
+           
 
               if (key == "address") {
                 newItem["Địa chỉ"] = value;

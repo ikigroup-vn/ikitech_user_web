@@ -244,7 +244,7 @@ class Table extends Component {
               <th className="content-onsale">
                 <select
                   value={filter_by_status}
-                  style={{ maxWidth: "150px" }}
+                  style={{ width: "155px" }}
                   name=""
                   id="input"
                   className="form-control status-onsale"
