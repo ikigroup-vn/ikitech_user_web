@@ -295,18 +295,7 @@ class ProductCreate extends Component {
       });
       return;
     }
-    if (form.barcode == null || !isEmpty(form.barcode)) {
-      this.props.showError({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "danger",
-          title: "Lỗi",
-          disable: "show",
-          content: "Vui lòng nhập barcode",
-        },
-      });
-      return;
-    }
+
     if (form.barcode === form.sku) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
