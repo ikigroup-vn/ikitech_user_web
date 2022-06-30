@@ -40,34 +40,50 @@ export const bannerImg = [
   {
     index: 1,
     banner: "https://i.imgur.com/FHLz6wR.png",
+    width : "1024",
+    height : "460"
   },
   {
     index: 2,
     banner: "https://i.imgur.com/wmt3VYB.png",
+      width : "1024",
+    height : "482"
   },
   {
     index: 3,
     banner: "https://i.imgur.com/IEUr1Gq.png",
+    width : "1024",
+    height : "576"
   },
   {
     index: 4,
     banner: "https://i.imgur.com/eIOA3Ef.png",
+    width : "1024",
+    height : "403"
   },
   {
     index: 5,
     banner: "https://i.imgur.com/Z7dC8RG.png",
+    width : "1024",
+    height : "340"
   },
   {
     index: 6,
     banner: "https://i.imgur.com/xHcw53r.png",
+    width : "1024",
+    height : "403"
   },
   {
     index: 7,
     banner: "https://i.imgur.com/WFGLPGE.png",
+    width : "1024",
+    height : "612"
   },
   {
     index: 8,
     banner: "https://i.imgur.com/TVeGGTP.png",
+    width : "1024",
+    height : "648"
   },
 ];
 export const productImg = [

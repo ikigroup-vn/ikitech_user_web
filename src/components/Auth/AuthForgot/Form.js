@@ -11,6 +11,9 @@ class Form extends Component {
       txtOTP: "",
       canSendOtp: true,
       secondCountDown: 30,
+      toggle : false,
+      iconShow : "fa fa-fw fa-eye",
+      iconHide : "fa fa-fw fa-eye-slash",
     };
   }
 
@@ -94,9 +97,13 @@ class Form extends Component {
 
     history.push("/forgot?redirect_forgot=true");
   };
+
+  togglePassword = () =>{
+    this.setState({toggle : !this.state.toggle})
+  }
   render() {
       
-      var { txtOTP , txtPassword } = this.state;
+    var { txtOTP, txtPassword , toggle , iconHide , iconShow } = this.state;
     return (
       <React.Fragment>
         <form onSubmit={this.onSave} className="user">
@@ -113,11 +120,11 @@ class Form extends Component {
               onChange={this.onChange}
             />
           </div>
+
           <div className="form-group">
             <input
-              type="text"
+              type={toggle == true ? "text" : "password"}
               className="form-control form-control-user"
-              id="txtPassword"
               placeholder="Nhập mật khẩu mới"
               autocomplete="off"
               value={txtPassword}
@@ -125,7 +132,16 @@ class Form extends Component {
               name = "txtPassword"
 
             />
+            <span onClick = {this.togglePassword} toggle="#password-field" class={toggle ? iconShow : iconHide} style={{
+               float: "right",
+               marginRight: "10px",
+               marginTop: "-30px",
+               position: "relative",
+               zIndex: "2"
+            }}></span>
           </div>
+
+    
           <button type="submit" className="btn btn-primary btn-user btn-block">
             Xác nhận
           </button>

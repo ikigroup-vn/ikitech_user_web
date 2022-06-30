@@ -87,6 +87,10 @@ class Custom_Screen extends Component {
             <img src={v.banner} />
             <span>Banner {v.index}</span>
           </div>
+          <div className="col-12" style = {{textAlign : "center"}}>
+          <span >Kích thước banner: {v.width} x {v.height}</span>
+
+          </div>
         </div>
       </div>
     );

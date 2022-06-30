@@ -224,6 +224,18 @@ class Custom_Screen extends Component {
       arrow: true,
       dotsClass: "slick-dots slick-thumb",
     };
+    const settingBanner = {
+      dots: false,
+      autoplay: false,
+      autoplaySpeed: 4000,
+      pauseOnHover: true,
+      infinite: true,
+      slidesToShow: 1,
+      slidesToScroll: 1,
+
+      arrow: true,
+      dotsClass: "slick-dots slick-thumb",
+    };
     var {
       header_type,
       banner_type,
@@ -481,7 +493,7 @@ class Custom_Screen extends Component {
                     </Slider>
                   </TabPanel>
                   <TabPanel>
-                    <Slider {...setting} ref={sliderBanner => (this.sliderBanner = sliderBanner)}>
+                    <Slider {...settingBanner} ref={sliderBanner => (this.sliderBanner = sliderBanner)}>
                       {bannerImg.map((v, i) => (
                         <ItemBannerTheme
                           badges={badges}
