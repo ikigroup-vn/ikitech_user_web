@@ -2,6 +2,7 @@ import * as Types from "../constants/ActionType";
 import history from "../history";
 import * as userApi from "../data/remote/user";
 import * as userLocalApi from "../data/local/user";
+import { isEmpty} from "../ultis/helpers"
 
 
 export const register = (form) => {
@@ -21,8 +22,8 @@ export const register = (form) => {
           loading: "hide"
         })
         if (
-          res.data.data[0].value == false &&
-          res.data.data[1].value == false
+          (res.data.data[0].value == false &&
+          res.data.data[1].value == false) || (res.data.data[0].value == false && !isEmpty(form.txtEmail))
         ) {
           dispatch({
             type: Types.USER_REGISTER,

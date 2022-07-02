@@ -153,7 +153,7 @@ class Form extends Component {
         <ListCBlog handleAddCBlog={this.handleAddCBlog} store_code={store_code} category_blog={category_blog} />
         <ListBlog handleAddBlog={this.handleAddBlog} store_code={store_code} blogs={blogs} />
         <ModalUpload />
-        <form role="form"  onSubmit={this.onSave} method="post">
+        <form role="form" onSubmit={this.onSave} method="post">
 
 
 
@@ -165,6 +165,10 @@ class Form extends Component {
             <div class="form-group">
 
               <div class="kv-avatar">
+                <div style={{
+                  "font-size": "13.5px",
+                  "margin-bottom": "5px"
+                }}>Kích thước ảnh: 480 x 480</div>
                 <div >
                   <button
                     type="button"
@@ -208,138 +212,138 @@ class Form extends Component {
               />
             </div>
 
-            <div  className="support-theme">
-            <div class={`form-group ${disable_product}`}>
-              <label>Chọn Sản phẩm</label>
+            <div className="support-theme">
+              <div class={`form-group ${disable_product}`}>
+                <label>Chọn Sản phẩm</label>
 
-              <div class="right-inner-addon input-container">
-                <i class="fa fa-caret-down"></i>
-                <input
-                readOnly
-                  data-toggle="modal"
-                  data-target="#showListProduct"
-                  onClick={this.fetchAllProduct}
-                  style={{ background: "white" }}
-                  type="text"
-                  name="product_name"
-                  placeholder="Chọn sản phẩm..."
-                  class="form-control"
-                  value={product.name}
-                />
-              </div>
+                <div class="right-inner-addon input-container">
+                  <i class="fa fa-caret-down"></i>
+                  <input
+                    readOnly
+                    data-toggle="modal"
+                    data-target="#showListProduct"
+                    onClick={this.fetchAllProduct}
+                    style={{ background: "white" }}
+                    type="text"
+                    name="product_name"
+                    placeholder="Chọn sản phẩm..."
+                    class="form-control"
+                    value={product.name}
+                  />
+                </div>
 
 
 
-          
-    
-              <br></br>
-              <div class={`media ${showProduct}`} id="product_preview">
-                <img
-                  width="100px"
-                  height="120px"
-                  src={product.img}
-                  alt=""
-                />
-                <div class="media-body" style={{ marginLeft: "10px" }}>
-                  <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{product.name} </h5>
-                  <p>{format(Number(product.price))}</p>
+
+
+                <br></br>
+                <div class={`media ${showProduct}`} id="product_preview">
+                  <img
+                    width="100px"
+                    height="120px"
+                    src={product.img}
+                    alt=""
+                  />
+                  <div class="media-body" style={{ marginLeft: "10px" }}>
+                    <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{product.name} </h5>
+                    <p>{format(Number(product.price))}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class={`form-group ${disable_category_product}`}>
-              <label>Chọn Danh mục sản phẩm</label>
-              <div class="right-inner-addon input-container">
-                <i class="fa fa-caret-down"></i>
-                <input
-                readOnly
-                  onClick={this.fetchAllCProduct}
-                  value={category.name}
-                  data-toggle="modal"
-                  data-target="#showListCProduct"
-                  type="text"
-                  name="product_name"
-                  class="form-control"
-                  placeholder="Chọn danh mục..."
-                />
-              </div>
-
-       
-              <br></br>
-              <div class={`media ${showCProduct}`} id="product_preview">
-                <img
-                  width="100px"
-                  height="120px"
-                  src={category.img}
-                  alt=""
-                />
-                <div class="media-body" style={{ marginLeft: "10px" }}>
-                  <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{category.name} </h5>
+              <div class={`form-group ${disable_category_product}`}>
+                <label>Chọn Danh mục sản phẩm</label>
+                <div class="right-inner-addon input-container">
+                  <i class="fa fa-caret-down"></i>
+                  <input
+                    readOnly
+                    onClick={this.fetchAllCProduct}
+                    value={category.name}
+                    data-toggle="modal"
+                    data-target="#showListCProduct"
+                    type="text"
+                    name="product_name"
+                    class="form-control"
+                    placeholder="Chọn danh mục..."
+                  />
                 </div>
-              </div>
-            </div>
-            <div class={`form-group ${disable_post}`}>
-              <label>Chọn Bài viết</label>
-              <div class="right-inner-addon input-container">
-                <i class="fa fa-caret-down"></i>
-                <input
-                  onClick={this.fetchAllBlog}
-                  value={blog.name}
-                  readOnly
-                  data-toggle="modal"
-                  data-target="#showListBlog"
-                  type="text"
-                  name="product_name"
-                  class="form-control"
-                  placeholder="Chọn bài viết..."
-                />
-              </div>
-            
-              <br></br>
-              <div class={`media ${showBlog}`} id="product_preview">
-                <img
-                  width="100px"
-                  height="120px"
-                  src={blog.img}
-                  alt=""
-                />
-                <div class="media-body" style={{ marginLeft: "10px" }}>
-                  <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{blog.name} </h5>
-                </div>
-              </div>
-            </div>
 
 
-            <div class={`form-group ${disable_category_post}`}>
-              <label>Chọn danh mục bài viết</label>
-              <div class="right-inner-addon input-container">
-                <i class="fa fa-caret-down"></i>
-                <input
-                  onClick={this.fetchAllBlog}
-                  value={blog.name}
-                  readOnly
-                  data-toggle="modal"
-                  data-target="#showListCBlog"
-                  type="text"
-                  name="product_name"
-                  class="form-control"
-                  placeholder="Chọn danh mục..."
-                />
-              </div>
-          
-           
-              <br></br>
-              <div class={`media ${showCblog}`} id="product_preview">
-                <img
-                  width="100px"
-                  height="120px"
-                  src={categoryBlog.img}
-                  alt=""
-                />
-                <div class="media-body" style={{ marginLeft: "10px" }}>
-                  <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{categoryBlog.name} </h5>
+                <br></br>
+                <div class={`media ${showCProduct}`} id="product_preview">
+                  <img
+                    width="100px"
+                    height="120px"
+                    src={category.img}
+                    alt=""
+                  />
+                  <div class="media-body" style={{ marginLeft: "10px" }}>
+                    <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{category.name} </h5>
+                  </div>
                 </div>
               </div>
-            </div>
+              <div class={`form-group ${disable_post}`}>
+                <label>Chọn Bài viết</label>
+                <div class="right-inner-addon input-container">
+                  <i class="fa fa-caret-down"></i>
+                  <input
+                    onClick={this.fetchAllBlog}
+                    value={blog.name}
+                    readOnly
+                    data-toggle="modal"
+                    data-target="#showListBlog"
+                    type="text"
+                    name="product_name"
+                    class="form-control"
+                    placeholder="Chọn bài viết..."
+                  />
+                </div>
+
+                <br></br>
+                <div class={`media ${showBlog}`} id="product_preview">
+                  <img
+                    width="100px"
+                    height="120px"
+                    src={blog.img}
+                    alt=""
+                  />
+                  <div class="media-body" style={{ marginLeft: "10px" }}>
+                    <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{blog.name} </h5>
+                  </div>
+                </div>
+              </div>
+
+
+              <div class={`form-group ${disable_category_post}`}>
+                <label>Chọn danh mục bài viết</label>
+                <div class="right-inner-addon input-container">
+                  <i class="fa fa-caret-down"></i>
+                  <input
+                    onClick={this.fetchAllBlog}
+                    value={blog.name}
+                    readOnly
+                    data-toggle="modal"
+                    data-target="#showListCBlog"
+                    type="text"
+                    name="product_name"
+                    class="form-control"
+                    placeholder="Chọn danh mục..."
+                  />
+                </div>
+
+
+                <br></br>
+                <div class={`media ${showCblog}`} id="product_preview">
+                  <img
+                    width="100px"
+                    height="120px"
+                    src={categoryBlog.img}
+                    alt=""
+                  />
+                  <div class="media-body" style={{ marginLeft: "10px" }}>
+                    <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{categoryBlog.name} </h5>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <div class="form-group">
@@ -357,19 +361,19 @@ class Form extends Component {
             </div>
           </div>
           <div class="box-footer">
-          <button type = "submit" class="btn btn-info   btn-sm">
-                  <i class="fas fa-plus"></i>  Tạo
+            <button type="submit" class="btn btn-info   btn-sm">
+              <i class="fas fa-plus"></i>  Tạo
 
-                </button>
-                <button
-                type = "button"
-                  style={{ marginLeft: "10px" }}
-                  onClick={this.goBack}
-                  class="btn btn-warning   btn-sm"
-                >
-                  <i class="fas fa-arrow-left"></i> Trở về
+            </button>
+            <button
+              type="button"
+              style={{ marginLeft: "10px" }}
+              onClick={this.goBack}
+              class="btn btn-warning   btn-sm"
+            >
+              <i class="fas fa-arrow-left"></i> Trở về
 
-                </button>
+            </button>
           </div>
         </form>
       </React.Fragment>

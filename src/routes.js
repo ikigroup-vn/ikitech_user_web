@@ -67,6 +67,12 @@ import CategoryB from "./screens/Category_B/index";
 import CategoryBEdit from "./screens/Category_B/Edit/index";
 import CategoryBCreate from "./screens/Category_B/Create";
 
+
+import Course from "./screens/Train/Course/index";
+import CourseEdit from "./screens/Train/Course//Edit/index";
+import CourseCreate from "./screens/Train/Course//Create";
+
+
 import BannerAds from "./screens/BannerAds/index";
 import BannerAdsEdit from "./screens/BannerAds/Edit/index";
 import BannerAdsCreate from "./screens/BannerAds/Create";
@@ -849,6 +855,7 @@ const routes = [
     main: ({ match }) => <CategoryB match={match} />,
   },
 
+
   {
     path: "/posts/category/create/:store_code",
     exact: true,
@@ -864,6 +871,32 @@ const routes = [
 
     main: ({ match, history }) => (
       <CategoryBEdit match={match} history={history} />
+    ),
+  },
+
+  ////////////////////
+  {
+    path: "/train/course/:store_code",
+    exact: true,
+
+    main: ({ match }) => <Course match={match} />,
+  },
+
+  {
+    path: "/train/course/create/:store_code",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <CourseCreate match={match} history={history} />
+    ),
+  },
+
+  {
+    path: "/train/course/edit/:store_code/:courseId",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <CourseEdit match={match} history={history} />
     ),
   },
   ////////////////////////

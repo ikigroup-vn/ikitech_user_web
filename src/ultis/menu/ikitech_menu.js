@@ -354,6 +354,39 @@ export const ikitech_menu = [
           },
         ],
       },
+      {
+        name: "Đào tạo",
+        icon: "fas fa-book-open",
+        class: "timekeeping",
+        setOpenKey : ["/shift" , "/calendar_shift" , "/time_sheet" , "/work_location" , "/request"],       
+        ExcludeSetOpenKey : ["/accountant/time_sheet/"],
+
+        open: "timekeeping",
+
+        children: [
+          
+          {
+
+            name: "Khóa học",
+            class: "timekeeping",
+            display: "hide",
+            icon: "fas fa-fw fa-location-dot",
+
+            exact: true,
+            to: "/train/course",
+          },
+          {
+
+            name: "Chương - Bài học",
+            class: "timekeeping",
+            display: "hide",
+            icon: "fas fa-book",
+
+            exact: true,
+            to: "/train/course",
+          },
+        ],
+      },
 
 
       {

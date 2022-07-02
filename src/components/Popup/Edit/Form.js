@@ -233,6 +233,10 @@ class Form extends Component {
             </div>
             <div class="form-group">
               <div class="kv-avatar">
+              <div style={{
+                  "font-size": "13.5px",
+                  "margin-bottom": "5px"
+                }}>Kích thước ảnh: 480 x 480</div>
                 <div>
                   <button
                     type="button"

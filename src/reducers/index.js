@@ -48,6 +48,8 @@ import { requestMobileReducers } from "./request_mobile/index";
 import { requestRemoteReducers } from "./request_remote/index";
 import { mobileCheckinReducers } from "./mobile_checkin/index";
 import { bonusProductReducers } from "./bonus_product/index";
+import {trainReducers } from "./train/index";
+
 
 const appReducers = combineReducers({
   authReducers,
@@ -99,7 +101,8 @@ const appReducers = combineReducers({
   requestMobileReducers,
   requestRemoteReducers,
   mobileCheckinReducers,
-  bonusProductReducers
+  bonusProductReducers,
+  trainReducers
 });
 
 export default appReducers;
