@@ -330,7 +330,7 @@ class Table extends Component {
                                         >
                                             {this.showData(data.lessons)}
                                         </SortableList> : <div class="resp-table-row" style={{ width: "100%" }}>
-                                            <div style={{ textAlign: "center" }}>Không có bài học nào!</div>
+                                            <div >Không có bài học nào!</div>
                                         </div>
                                     }
 
