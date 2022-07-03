@@ -41,7 +41,13 @@ class Table extends Component {
             <td>{moment(data.created_at).format("DD-MM-YYYY HH:mm:ss")}</td>
 
 
-            <td style = {{display : "flex"}}>
+            <td className="three-btn-group" style = {{maxWidth : "230px"}}>
+            <Link
+                to={`/train/chapter/index/${store_code}/${data.id}`}
+                class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
+              >
+                <i class="fa fa-edit"></i> Xem chương - bài học
+              </Link>
               <Link
                 to={`/train/course/edit/${store_code}/${data.id}`}
                 class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}

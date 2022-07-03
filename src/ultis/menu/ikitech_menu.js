@@ -354,39 +354,47 @@ export const ikitech_menu = [
           },
         ],
       },
-      {
-        name: "Đào tạo",
-        icon: "fas fa-book-open",
-        class: "timekeeping",
-        setOpenKey : ["/shift" , "/calendar_shift" , "/time_sheet" , "/work_location" , "/request"],       
-        ExcludeSetOpenKey : ["/accountant/time_sheet/"],
+         {
+          name: "Đào tạo",
+          class: "onsale",
 
-        open: "timekeeping",
+          icon: "fas fa-book-open",
+          exact: true,
+          to: "/train/course",
+        },
+      // {
+      //   name: "Đào tạo",
+      //   icon: "fas fa-book-open",
+      //   class: "timekeeping",
+      //   setOpenKey : ["/shift" , "/calendar_shift" , "/time_sheet" , "/work_location" , "/request"],       
+      //   ExcludeSetOpenKey : ["/accountant/time_sheet/"],
 
-        children: [
+      //   open: "timekeeping",
+
+      //   children: [
           
-          {
+      //     {
 
-            name: "Khóa học",
-            class: "timekeeping",
-            display: "hide",
-            icon: "fas fa-fw fa-location-dot",
+      //       name: "Khóa học",
+      //       class: "timekeeping",
+      //       display: "hide",
+      //       icon: "fas fa-fw fa-location-dot",
 
-            exact: true,
-            to: "/train/course",
-          },
-          {
+      //       exact: true,
+      //       to: "/train/course",
+      //     },
+      //     // {
 
-            name: "Chương - Bài học",
-            class: "timekeeping",
-            display: "hide",
-            icon: "fas fa-book",
+      //     //   name: "Chương - Bài học",
+      //     //   class: "timekeeping",
+      //     //   display: "hide",
+      //     //   icon: "fas fa-book",
 
-            exact: true,
-            to: "/train/course",
-          },
-        ],
-      },
+      //     //   exact: true,
+      //     //   to: "/train/lesson",
+      //     // },
+      //   ],
+      // },
 
 
       {

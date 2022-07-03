@@ -73,6 +73,13 @@ import CourseEdit from "./screens/Train/Course//Edit/index";
 import CourseCreate from "./screens/Train/Course//Create";
 
 
+
+import Chapter from "./screens/Train/Chapter/index";
+import Lesson from "./screens/Train/Lesson/index";
+
+import LessonEdit from "./screens/Train/Lesson//Edit/index";
+import LessonCreate from "./screens/Train/Lesson//Create";
+
 import BannerAds from "./screens/BannerAds/index";
 import BannerAdsEdit from "./screens/BannerAds/Edit/index";
 import BannerAdsCreate from "./screens/BannerAds/Create";
@@ -897,6 +904,38 @@ const routes = [
 
     main: ({ match, history }) => (
       <CourseEdit match={match} history={history} />
+    ),
+  },
+
+  {
+    path: "/train/chapter/index/:store_code/:courseId",
+    exact: true,
+
+    main: ({ match }) => <Chapter match={match} />,
+  },
+  ////////////////////
+  {
+    path: "/train/lesson/index/:store_code/:courseId",
+    exact: true,
+
+    main: ({ match }) => <Lesson match={match} />,
+  },
+
+  {
+    path: "/train/lesson/create/:store_code/:courseId",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <LessonCreate match={match} history={history} />
+    ),
+  },
+
+  {
+    path: "/train/lesson/edit/:store_code/:lessonId/:courseId",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <LessonEdit match={match} history={history} />
     ),
   },
   ////////////////////////

@@ -3,6 +3,8 @@ import * as Types from "../../constants/ActionType";
 var initialState = {
   allCourse: [],
   courseID: {  },
+  allLesson: [],
+  lessonID: {  },
   type: [],
 };
 
@@ -15,6 +17,14 @@ export const train = (state = initialState, action) => {
     case Types.FETCH_ID_TRAIN_COURSE:
       newState.courseID = action.data;
       return newState;
+
+
+      case Types.FETCH_ALL_TRAIN_LESSON:
+        newState.allLesson = action.data;
+        return newState;
+      case Types.FETCH_ID_TRAIN_LESSON:
+        newState.lessonID = action.data;
+        return newState;
    
     default:
       return newState;

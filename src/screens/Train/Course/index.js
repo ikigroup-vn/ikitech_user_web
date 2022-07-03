@@ -99,7 +99,7 @@ class Course extends Component {
                         style={{ display: "flex", justifyContent: "space-between" }}
                       >
                         <h4 className="h4 title_content mb-0 text-gray-800">
-                        Khóa học
+                        Đào tạo - Khóa học
                                                 </h4>{" "}
                         <Link to={`/train/course/create/${store_code}`}
                           class={`btn btn-info btn-icon-split btn-sm ${insert == true ? "show" : "hide"}`}

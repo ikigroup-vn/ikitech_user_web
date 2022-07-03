@@ -3,17 +3,15 @@ import * as Types from "../../../constants/ActionType";
 import Sidebar from "../../../components/Partials/Sidebar";
 import Topbar from "../../../components/Partials/Topbar";
 import Footer from "../../../components/Partials/Footer";
-import ModalDelete from "../../../components/Train/Chapter/Delete/Modal";
-import Pagination from "../../../components/Train/Chapter/Pagination";
-import Table from "../../../components/Train/Chapter/Table";
+import ModalDelete from "../../../components/Train/Lesson/Delete/Modal";
+import Pagination from "../../../components/Train/Lesson/Pagination";
+import Table from "../../../components/Train/Lesson/Table";
 import Alert from "../../../components/Partials/Alert";
 import { Redirect, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Loading from "../../Loading";
 import * as trainAction from "../../../actions/train";
 import NotAccess from "../../../components/Partials/NotAccess";
-import ModalCreate from "../../../components/Train/Chapter/Create/Form";
-import ModalUpdate from "../../../components/Train/Chapter/Edit/Form";
 
 class Lesson extends Component {
   constructor(props) {
@@ -26,8 +24,8 @@ class Lesson extends Component {
 
       },
       numPage: 20,
-      courseId: this.props.match.params?.courseId ?? null,
-      modalupdate: {}
+      courseId : this.props.match.params?.courseId ?? null
+
 
     };
   }
@@ -41,20 +39,16 @@ class Lesson extends Component {
     })
     var params = `&limit=${numPage}`
 
-    this.props.fetchAllLesson(store_code, this.state.courseId, 1, params);
+    this.props.fetchAllLesson(store_code,this.state.courseId, 1, params);
   }
 
 
   handleDelCallBack = (modal) => {
     this.setState({ modal: modal });
   };
-  handleUpdateCallBack = (modal) => {
-    console.log(modal)
-    this.setState({ modalupdate: modal });
-  };
 
   componentDidMount() {
-    this.props.fetchAllLesson(this.props.match.params.store_code, this.state.courseId);
+    this.props.fetchAllLesson(this.props.match.params.store_code , this.state.courseId);
   }
   componentWillReceiveProps(nextProps) {
     if (this.state.isLoading != true && typeof nextProps.permission.product_list != "undefined") {
@@ -63,7 +57,7 @@ class Lesson extends Component {
       // var update = permissions.post_update
       // var _delete = permissions.post_remove_hide
       var isShow = permissions.post_list
-      this.setState({ isLoading: true, insert: true, update: true, _delete: true, isShow })
+      this.setState({ isLoading: true, insert:true, update:true, _delete:true, isShow })
     }
   }
   onChangeSearch = (e) => {
@@ -76,15 +70,15 @@ class Lesson extends Component {
     var { searchValue } = this.state;
     var params = `&search=${searchValue}`;
     this.setState({ numPage: 20 });
-    this.props.fetchAllLesson(store_code, this.state.courseId, 1, params);
+    this.props.fetchAllLesson(store_code, this.state.courseId,1, params);
   };
 
   render() {
-    var { store_code, courseId } = this.props.match.params
+    var { store_code ,courseId} = this.props.match.params
     var { lessons } = this.props
-    var { numPage, searchValue } = this.state
+    var { numPage,searchValue } = this.state
     var { insert, update, _delete, isShow } = this.state
-    console.log(lessons)
+
     if (this.props.auth) {
       return (
         <div id="wrapper">
@@ -107,17 +101,16 @@ class Lesson extends Component {
                         style={{ display: "flex", justifyContent: "space-between" }}
                       >
                         <h4 className="h4 title_content mb-0 text-gray-800">
-                          Chương học
-                        </h4>{" "}
-                        <button data-toggle="modal"
-                          data-target="#createModal"
+                        Khóa học
+                                                </h4>{" "}
+                        <Link to={`/train/lesson/create/${store_code}/${courseId}`}
                           class={`btn btn-info btn-icon-split btn-sm ${insert == true ? "show" : "hide"}`}
                         >
                           <span class="icon text-white-50">
                             <i class="fas fa-plus"></i>
                           </span>
-                          <span class="text">Thêm chương học</span>
-                        </button>
+                          <span class="text">Thêm khóa học</span>
+                        </Link>
                       </div>
 
                       <br></br>
@@ -136,7 +129,7 @@ class Lesson extends Component {
                                   value={searchValue}
                                   onChange={this.onChangeSearch}
                                   class="form-control"
-                                  placeholder="Tìm theo chương học"
+                                  placeholder="Tìm theo khóa học"
                                 />
                                 <div class="input-group-append">
                                   <button
@@ -153,17 +146,52 @@ class Lesson extends Component {
                                 <span className="num-total_item" >{products.total}&nbsp;</span><span className="text-total_item" id="user_name">sản phẩm</span>
                               </p> */}
                             </form>
+                            <div style={{ display: "flex" }}>
+
+                              <div style={{ display: "flex" }}>
+                                <span
+                                  style={{
+                                    margin: "20px 10px auto auto"
+                                  }}
+                                >Hiển thị</span>
+                                <select
+                                  style={{
+                                    margin: "auto",
+                                    marginTop: "10px",
+                                    marginRight: "20px",
+                                    width: "70px",
+                                  }}
+                                  onChange={this.onChangeNumPage}
+
+                                  value={numPage}
+                                  name="numPage" class="form-control" >
+                                  <option value="10">10</option>
+                                  <option value="20" selected>20</option>
+                                  <option value="50">50</option>
+                                </select>
+                              </div>
+
+
+                              {/* <Pagination limit={numPage}
+                        searchValue = {searchValue}
+                          passNumPage={this.passNumPage} store_code={store_code} products={products} /> */}
+
+
+                            </div>
 
 
                           </div>
                         </div>
 
                         <div className="card-body">
-                          <Table handleUpdateCallBack={this.handleUpdateCallBack}
-                          courseId = {courseId}
-                            update={update} _delete={_delete} store_code={store_code} handleDelCallBack={this.handleDelCallBack} lessons={lessons} />
+                          <Table update={update} _delete={_delete} store_code={store_code} handleDelCallBack={this.handleDelCallBack} lessons={lessons} />
 
-
+                          <Pagination
+                            limit={numPage}
+                            courseId = {this.state.courseId}
+                            store_code={store_code}
+                            lessons={lessons}
+                          />
                         </div>
                       </div>
                     </div>
@@ -173,14 +201,6 @@ class Lesson extends Component {
 
               <Footer />
             </div>
-            <ModalCreate
-              store_code={store_code}
-              courseId={courseId}
-            />
-                 <ModalUpdate
-              modal={this.state.modalupdate}
-              store_code={store_code}
-            />
             <ModalDelete store_code={store_code} modal={this.state.modal} />
           </div>
         </div>
@@ -204,8 +224,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllLesson: (id, courseId, page, params) => {
-      dispatch(trainAction.fetchAllLesson(id, courseId, page, params));
+    fetchAllLesson: (id, courseId,page, params) => {
+      dispatch(trainAction.fetchAllLesson(id, courseId , page, params));
     },
   };
 };

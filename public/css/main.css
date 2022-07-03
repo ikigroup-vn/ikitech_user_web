@@ -20,6 +20,15 @@
     flex-direction: column;
 }
 
+.btn-not-background{
+    background-color: transparent;
+    background-repeat: no-repeat;
+    border: none;
+    cursor: pointer;
+    overflow: hidden;
+    outline: none;
+}
+
 .three-btn-group  a, .three-btn-group button{
     margin : 2px !important
 }
