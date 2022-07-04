@@ -323,7 +323,7 @@ class Table extends Component {
                                         </div>
                                     </div>
                                     {
-                                        data.lessons > 0 ? <SortableList
+                                        data.lessons?.length > 0 ? <SortableList
                                             onSortEnd={this.onSortEnd}
                                             className="resp-table-body"
                                             draggedItemClassName="dragged"
