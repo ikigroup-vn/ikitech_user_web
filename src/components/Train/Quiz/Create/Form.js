@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import * as Types from "../../../../constants/ActionType";
 import { connect } from "react-redux";
 import * as trainAction from "../../../../actions/train";
-import * as blogAction from "../../../../actions/blog";
-
 import { shallowEqual } from "../../../../ultis/shallowEqual";
 import ModalUpload from "../ModalUpload";
 import Select from "react-select";
@@ -16,6 +14,8 @@ import getChannel, { IKITECH } from "../../../../ultis/channel";
 import SeoOption from "./SeoOption";
 import history from "../../../../history";
 import * as userLocalApi from "../../../../data/local/user";
+import themeData from "../../../../ultis/theme_data";
+
 import {
   image as imagePlugin,
   font,
@@ -32,7 +32,7 @@ import {
   video,
   audio
 } from "suneditor/src/plugins";
-import imageGallery from "./../../../imageGallery";
+import imageGallery from "../../../imageGallery";
 import { getApiImageStore } from "../../../../constants/Config"
 
 
@@ -43,24 +43,14 @@ class Form extends Component {
       txtTitle: "",
       txtSumary: "",
       txtContent: "",
-      image: "",
-
+      txtMinute : "",
+      auto_change_order_questions : false,
+      auto_change_order_answer : false,
     };
   }
 
-  componentWillReceiveProps(nextProps) {
 
 
-    if (this.props.image !== nextProps.image) {
-      this.setState({ image: nextProps.image });
-    }
-  }
-
-  componentDidMount() {
-
-
-    this.props.initialUpload();
-  }
 
   onChange = (e) => {
     var target = e.target;
@@ -80,13 +70,15 @@ class Form extends Component {
 
 
   onSave = (e) => {
-    var { store_code } = this.props;
+    var { store_code , courseId } = this.props;
     e.preventDefault();
     var {
-      txtContent,
       txtTitle,
       txtSumary,
-      image
+      txtMinute,
+      auto_change_order_questions,
+      auto_change_order_answer
+
     } = this.state;
 
     if (txtTitle == null || !isEmpty(txtTitle)) {
@@ -103,13 +95,18 @@ class Form extends Component {
     }
 
 
-    this.props.createCourse(store_code, {
-      description: txtContent,
+    this.props.createQuiz(store_code, {
+      // description: txtContent,
       title: txtTitle,
       short_description: txtSumary,
-      image_url: image,
+      minute : txtMinute,
+      auto_change_order_questions,
+      auto_change_order_answer
 
-    });
+    },this, function(){
+      window.$(".modal").modal("hide");
+
+    } , courseId);
   };
 
   goBack = () => {
@@ -120,51 +117,75 @@ class Form extends Component {
     var {
       txtTitle,
       txtSumary,
-      image,
+      txtMinute,
+      auto_change_order_questions,
+      auto_change_order_answer
 
     } = this.state;
 
     var { store_code } = this.props;
-    var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
 
     return (
       <React.Fragment>
-        <form role="form" onSubmit={this.onSave} method="post">
-          <div class="box-body">
-            <div class="row">
-              <div
-                class="col-12"
-                style={{ borderRight: "0.5px solid #cac9c9" }}
+        <div
+        class="modal fade"
+        tabindex="-1"
+        role="dialog"
+        id="createQuizModal"
+        data-keyboard="false"
+        data-backdrop="static"
+      >
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div
+              class="modal-header"
+              style={{ backgroundColor: themeData().backgroundColor }}
+            >
+              <h4 class="modal-title">Thêm bài trắc nghiệm</h4>
+
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+                onClick={this.handleClear}
               >
-                   <div class="form-group">
-                  <label>Ảnh: &nbsp; </label>
-                  <img src={`${image}`} width="150" height="150" />
-                </div>
+                &times;
+              </button>
+            </div>
+            <form
+              onSubmit={this.onSave}
+              role="form"
+              action="#"
+              method="post"
+              id="createForm"
+            >
+              <div class="modal-body" style={{ padding: " 0 10px" }}>
+         
                 <div class="form-group">
-                  <div class="kv-avatar">
-                    <div>
-                      <button
-                        type="button"
-                        class="btn btn-primary btn-sm"
-                        data-toggle="modal"
-                        data-target="#uploadModalBlog"
-                      >
-                        <i class="fa fa-plus"></i> Upload ảnh
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="product_name">Tên khóa học</label>
+                  <label for="product_name">Tên bài trắc nghiệm</label>
                   <input
                     type="text"
                     class="form-control"
                     id="txtTitle"
                     value={txtTitle}
-                    placeholder="Nhập tên khóa học"
+                    placeholder="Nhập tên bài trắc nghiệm"
                     autocomplete="off"
                     onChange={this.onChange}
                     name="txtTitle"
+                  />
+                </div>
+                <div class="form-group">
+                  <label for="product_name">Số phút thi</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="txtMinute"
+                    value={txtMinute}
+                    placeholder="Nhập số phút"
+                    autocomplete="off"
+                    onChange={this.onChange}
+                    name="txtMinute"
                   />
                 </div>
 
@@ -182,6 +203,27 @@ class Form extends Component {
                 </div>
 
                 <div class="form-group">
+                  <div class="form-check">
+                    <input class="form-check-input" checked={auto_change_order_questions} name="auto_change_order_questions" onChange={()=>{this.setState({auto_change_order_questions :!auto_change_order_questions})}} type="checkbox" id="gridCheck" />
+                    <label class="form-check-label" for="gridCheck">
+                    cho phép tự động đổi vị trí câu hỏi
+
+                    </label>
+                  </div>
+  
+                </div>
+                <div class="form-group">
+                  <div class="form-check">
+                    <input class="form-check-input" checked={auto_change_order_answer} name="auto_change_order_answer" onChange={()=>{this.setState({auto_change_order_answer :!auto_change_order_answer})}} type="checkbox" id="gridCheck1" />
+                    <label class="form-check-label" for="gridCheck1">
+                    cho phép tự động đổi vị trí câu trả lời
+
+                    </label>
+                  </div>
+  
+                </div>
+
+                {/* <div class="form-group">
                   <label for="product_name">Nội dung</label>
                   <div className="editor">
                     <SunEditor
@@ -248,35 +290,32 @@ class Form extends Component {
                       }}
                     />
                   </div>
-                </div>
+                </div> */}
 
               </div>
-
-
-            </div>
-
-
-
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  class="btn btn-default"
+                  data-dismiss="modal"
+                  onClick={this.handleClear}
+                >
+                  Đóng
+                </button>
+                <button
+                  type="submit"
+                  class="btn btn-warning"
+                >
+                  Tạo
+                </button>
+              </div>
+            </form>
           </div>
-          <div class="box-footer">
-            <button type="submit" class="btn btn-info   btn-sm">
-              <i class="fas fa-save"></i>  Tạo
+        </div>
+      </div>
 
-            </button>
-            <button
-              type="button"
 
-              style={{ marginLeft: "10px" }}
-              onClick={this.goBack}
-              class="btn btn-warning   btn-sm"
-            >
-              <i class="fas fa-arrow-left"></i> Trở về
 
-            </button>
-          </div>
-        </form>
-
-        <ModalUpload store_code={store_code} />
       </React.Fragment>
     );
   }
@@ -284,8 +323,6 @@ class Form extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    image: state.UploadReducers.blogImg.blog_img,
-
   };
 };
 
@@ -294,11 +331,9 @@ const mapDispatchToProps = (dispatch, props) => {
     showError: (error) => {
       dispatch(error);
     },
-    initialUpload: () => {
-      dispatch(blogAction.initialUpload());
-    },
-    createCourse: (store_code, data) => {
-      dispatch(trainAction.createCourse(store_code, data));
+
+    createQuiz: (store_code, data , _this,resetModal,courseId) => {
+      dispatch(trainAction.createQuiz(store_code, data , _this, resetModal,courseId));
     },
   };
 };

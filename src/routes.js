@@ -70,8 +70,9 @@ import CategoryBCreate from "./screens/Category_B/Create";
 
 import Course from "./screens/Train/Course/index";
 import CourseEdit from "./screens/Train/Course//Edit/index";
-import CourseCreate from "./screens/Train/Course//Create";
+import CourseCreate from "./screens/Train/Course/Create";
 
+import QuizQuestion from "./screens/Train/Question/index";
 
 
 import Chapter from "./screens/Train/Chapter/index";
@@ -904,6 +905,15 @@ const routes = [
 
     main: ({ match, history }) => (
       <CourseEdit match={match} history={history} />
+    ),
+  },
+
+  {
+    path: "/train/quiz/question/:store_code/:courseId/:quizId",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <QuizQuestion match={match} history={history} />
     ),
   },
 

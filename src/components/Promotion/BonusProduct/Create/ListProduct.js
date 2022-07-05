@@ -202,7 +202,7 @@ class ListProduct extends Component {
                         value={JSON.stringify(_dataAllowDistribute)}
                         class="form-check-input" id="gridCheck" />
                       <label class="form-check-label" for="gridCheck">
-                        Cho phép mua mọi phân loại                  </label>
+                        Cho phép tự chọn phân loại                  </label>
                     </div>
 
                   </div>
@@ -270,7 +270,7 @@ class ListProduct extends Component {
                       value={JSON.stringify(_dataAllowDistribute)}
                       class="form-check-input" id="gridCheck" />
                     <label class="form-check-label" for="gridCheck">
-                    Cho phép mua mọi phân loại                   </label>
+                    Cho phép tự chọn phân loại                   </label>
                   </div>
 
                 </div>

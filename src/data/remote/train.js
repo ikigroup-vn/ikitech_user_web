@@ -6,6 +6,13 @@ export const fetchAllLesson = (store_code, page, params , courseId) => {
   return params ? callApi(`/store/${store_code}/train_chapter_lessons/${courseId}?page=${page}${params}`, "get", null)
     : callApi(`/store/${store_code}/train_chapter_lessons/${courseId}?page=${page}`, "get", null)
 };
+export const fetchAllQuiz = (store_code, page, params , courseId) => {
+  // return callApi(`/store/${store_code}/posts?page=${page}`, "get", null);
+
+  return params ? callApi(`/store/${store_code}/train_courses/${courseId}/quiz`, "get", null)
+    : callApi(`/store/${store_code}/train_courses/${courseId}/quiz`, "get", null)
+};
+
 
 export const fetchLessonId = (store_code, LessonId) => {
   return callApi(`/store/${store_code}/train_chapters/${LessonId}`, "get", null);
@@ -18,6 +25,14 @@ export const createChapter = (store_code, data) => {
   return callApi(`/store/${store_code}/train_chapters`, "post", data);
 }
 
+export const createQuiz = (store_code, data , courseId) => {
+  return callApi(`/store/${store_code}/train_courses/${courseId}/quiz`, "post", data);
+}
+
+export const createQuestion = (store_code, data , courseId , quizId) => {
+  return callApi(`/store/${store_code}/train_courses/${courseId}/quiz/${quizId}/questions`, "post", data);
+}
+
 export const updateLesson = (categoryBId, categoryB, store_code) => {
   return callApi(`/store/${store_code}/train_lessons/${categoryBId}`, "put", categoryB);
 }
@@ -25,13 +40,31 @@ export const updateChapter = (categoryBId, categoryB, store_code) => {
   return callApi(`/store/${store_code}/train_chapters/${categoryBId}`, "put", categoryB);
 }
 
+export const updateQuiz = (categoryBId, categoryB, store_code , courseId) => {
+  return callApi(`/store/${store_code}/train_courses/${courseId}/quiz/${categoryBId}`, "put", categoryB);
+}
+export const updateQuestion = (categoryBId, categoryB, store_code , courseId , quizId) => {
+  return callApi(`/store/${store_code}/train_courses/${courseId}/quiz/${quizId}/questions/${categoryBId}`, "put", categoryB);
+}
+
+
 export const destroyLesson = (store_code, storeAid) => {
   return callApi(`/store/${store_code}/train_lessons/${storeAid}`, "delete", null);
 }
 
-export const destroyChapter = (store_code, storeAid) => {
-  return callApi(`/store/${store_code}/train_chapters/${storeAid}`, "delete", null);
+export const destroyChapter = (store_code, storeAid,train_course_id) => {
+  return callApi(`/store/${store_code}/train_courses/${train_course_id}/quiz/${storeAid}`, "delete", null);
 }
+
+export const destroyQuiz = (store_code, storeAid,courseId) => {
+  return callApi(`/store/${store_code}/train_courses/${courseId}/quiz/${storeAid}`, "delete", null);
+}
+export const destroyQuestion = (store_code, storeAid,courseId,quizId) => {
+  return callApi(`/store/${store_code}/train_courses/${courseId}/quiz/${quizId}/questions/${storeAid}`, "delete", null);
+}
+
+
+
 
 
 
@@ -45,12 +78,14 @@ export const sortLesson = (store_code, data) => {
 
 
 
-
+export const fetchQuizId = (store_code, courseId , quizId) => { return callApi(`/store/${store_code}/train_courses/${courseId}/quiz/${quizId}`, "get", null); };
 
 export const fetchAllCourse = (store_code, page, params) => {
   return params ? callApi(`/store/${store_code}/train_courses?page=${page}${params}`, "get", null) : callApi(`/store/${store_code}/train_courses?page=${page}`, "get", null)
 };
 export const fetchCourseId = (store_code, courseId) => { return callApi(`/store/${store_code}/train_courses/${courseId}`, "get", null); };
+
+
 export const createCourse = (store_code, data) => { return callApi(`/store/${store_code}/train_courses`, "post", data); }
 export const updateCourse = (categoryBId, categoryB, store_code) => { return callApi(`/store/${store_code}/train_courses/${categoryBId}`, "put", categoryB); }
 export const destroyCourse = (store_code, storeAid) => { return callApi(`/store/${store_code}/train_courses/${storeAid}`, "delete", null); }

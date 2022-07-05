@@ -149,6 +149,17 @@ class Table extends Component {
   passData = (keeping_histories, recording_time) => {
     this.setState({ keeping_histories, recording_time })
   }
+
+  showShiftWork = (data) =>{
+    var result = null
+    result = data.map((data,key)=>{
+      return <div className = "time-shift">
+      <span>{moment(`${data.start_work_hour}:${data.start_work_minute}` , "HH:mm").format("HH:mm")}</span> 
+      - <span>{moment(`${data.end_work_hour}:${data.end_work_minute}` , "HH:mm").format("HH:mm")}</span>
+      </div>
+    })
+    return result
+  }
   showData = (listTimeSheet) => {
     var { store_code, branch_id, timeSheet, datePrime } = this.props;
     console.log(listTimeSheet);
@@ -159,6 +170,12 @@ class Table extends Component {
         var total_seconds = data?.total_seconds
         total_seconds = total_seconds < 0 ? (total_seconds * -1) : total_seconds
         console.log(total_seconds * 1000, Math.trunc(moment.duration(data?.total_seconds * 1000).asHours()))
+        var status1 = data?.keeping_histories[
+          data?.keeping_histories.length - 1
+        ].status
+        var status_name = status1 == 1 ? "Chờ xử lý" : status1 == 2 ?  "Đã đồng ý" : "Đã hủy"
+        var status_color = status1 == 1 ? "secondary" : status1 == 2 ?  "success" : "danger"
+
         return (
           <React.Fragment>
             <tr
@@ -171,7 +188,15 @@ class Table extends Component {
             //   })
             // }
             >
-              <td>{data.staff.name}</td>
+              <td style = {{textAlign : "center"}}>
+                <div>                {data.staff.name}
+</div>
+<div>
+  {this.showShiftWork(
+    data.shift_work
+  )}
+</div>
+              </td>
               {this.props.typeDate == "DAY" ||
                 (this.props.typeDate == "OPTION" &&
                   this.props.datePrime.from === this.props.datePrime.to &&
@@ -243,6 +268,11 @@ class Table extends Component {
                                 
                             </span>
                       </div>
+                      <div>
+                      <span >
+                          Trạng thái: <span style = {{fontWeight : "500"}} className={status_color} >{status_name}</span>
+                        </span>
+                      </div>
                     </div>
                     <div
                       style={{
@@ -281,6 +311,12 @@ class Table extends Component {
                         </span> : <span style={{ color: "red" }}>
                           Bớt công
                         </span>})
+                     
+                      </div>
+                      <div>
+                      <span >
+                          Trạng thái: <span style = {{fontWeight : "500"}} className={status_color} >{status_name}</span>
+                        </span>
                       </div>
                     </div>
                   </td>
@@ -364,7 +400,7 @@ class Table extends Component {
           >
             <tbody>
               <tr>
-                <td>Nhân viên</td>
+                <td style = {{textAlign : "center"}}>Nhân viên</td>
                 {console.log("133131", this.props.datePrime)}
                 {this.props.typeDate == "DAY" ? (
                   <React.Fragment>

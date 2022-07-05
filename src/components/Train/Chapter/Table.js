@@ -10,6 +10,7 @@ import ModalCreate from "../../../components/Train/Lesson/Create/Form";
 import ModalUpdate from "../../../components/Train/Lesson/Edit/Form";
 import ModalDelete from "../../../components/Train/Lesson/Delete/Modal";
 import SortableList, { SortableItem } from "react-easy-sort";
+import "./style.css";
 import arrayMove from "array-move";
 class Table extends Component {
   constructor(props) {
@@ -82,17 +83,13 @@ handleDelLessonCallBack = (modal) => {
       <div id="resp-table">
 
       <div className="resp-table-body">
-      <div style={{ fontWeight: "500" }} class="table-body-cell">
-        
-      </div>
+
       <div style={{ fontWeight: "500" }} class="table-body-cell">
       Tên chương
       </div>
       <div style={{ fontWeight: "500" }} class="table-body-cell">
       Mô tả ngắn      </div>
-      <div style={{ fontWeight: "500" }} class="table-body-cell">
-      Ngày tạo
-      </div>
+    
       <div style={{ fontWeight: "500" }} class="table-body-cell">
       Hành động
       </div>

@@ -137,7 +137,7 @@ class ModalCreate extends Component {
     handleOnClick = () => {
         const errors = this.validator.validate(this.state)
 
-        var { txtAddress_detail, txtDistrict, txtProvince, txtWards, txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state
+        var { is_default,txtAddress_detail, txtDistrict, txtProvince, txtWards, txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state
         var error = false
         this.setState({
             errors: errors,
@@ -176,7 +176,7 @@ class ModalCreate extends Component {
             wards: txtWards,
             address_detail: txtAddress_detail,
             postcode: txtPost_branch,
-            is_default: true
+            is_default: is_default
         }
 
         this.props.createBranchStore(store_code, Formdata, this, function () {
@@ -231,7 +231,7 @@ class ModalCreate extends Component {
     render() {
         var { province } = this.props
         var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards, error_email, error_phone, errors, error_name } = this.state;
-        var { txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state;
+        var { txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch ,is_default} = this.state;
         return (
             <>
                 {this.state.status &&
@@ -386,7 +386,7 @@ class ModalCreate extends Component {
                                                 </div>
                                                 <div class="form-group">
                                                     <label class="form-check-label" style={{ marginLeft: "20px", marginTop: "30px" }}>
-                                                        <input type="checkbox" class="form-check-input" onChange={this.onChange} value="" />Chi nhánh mặc định
+                                                        <input type="checkbox" class="form-check-input" onChange={()=>this.setState({is_default : !is_default})} checked = {is_default} />Chi nhánh mặc định
                                                     </label>
                                                 </div>
                                             </div>

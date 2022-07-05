@@ -31,7 +31,7 @@ class ModalEdit extends Component {
             error_email : {status : false , text : ""},
             error_phone : {status : false , text : ""},
             error_name : {status : false , text : ""},
-
+            is_default : false,
             errors: {},
 
         }
@@ -142,7 +142,7 @@ class ModalEdit extends Component {
     handleOnClick = () => {
         const errors = this.validator.validate(this.state)
 
-        var { txtAddress_detail, txtDistrict, txtProvince, txtWards, txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state
+        var { is_default,txtAddress_detail, txtDistrict, txtProvince, txtWards, txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state
         const { store_code } = this.props
         var error = false;
         this.setState({
@@ -185,7 +185,7 @@ class ModalEdit extends Component {
             wards: txtWards,
             address_detail: txtAddress_detail,
             postcode: txtPost_branch,
-            is_default: true
+            is_default: is_default
         }
         this.props.updateBranchStore(store_code, Formdata, this.state.id , this,  function () {
             window.$(".modal").modal("hide");
@@ -255,7 +255,7 @@ class ModalEdit extends Component {
     
         var { province } = this.props
         var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards , error_email , error_phone ,errors , error_name  } = this.state;
-        var { txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state;
+        var { txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch,is_default } = this.state;
         return (
             <>
                 {this.state.status &&
@@ -414,8 +414,8 @@ class ModalEdit extends Component {
                                                         <input type="checkbox" class="form-check-input"
                                                             name="is_default"
                                                             id="is_default"
-                                                            checked={this.state.is_default}
-                                                            onChange={this.handleChangeCheckBox} value="" />Chi nhánh mặc định
+                                                            onChange={()=>this.setState({is_default : !is_default})} checked = {is_default}
+                                                          />Chi nhánh mặc định
                                                     </label>
                                                 </div>
                                             </div>

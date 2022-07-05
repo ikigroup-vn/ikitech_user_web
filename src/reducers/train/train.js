@@ -6,6 +6,8 @@ var initialState = {
   allLesson: [],
   lessonID: {  },
   type: [],
+  allQuiz : [],
+  quizID : {}
 };
 
 export const train = (state = initialState, action) => {
@@ -14,6 +16,14 @@ export const train = (state = initialState, action) => {
     case Types.FETCH_ALL_TRAIN_COURSE:
       newState.allCourse = action.data;
       return newState;
+      case Types.FETCH_ALL_TRAIN_QUIZ:
+        newState.allQuiz = action.data;
+        return newState;
+        
+        case Types.FETCH_ID_TRAIN_QUIZ:
+          newState.quizID = action.data;
+          return newState;
+    
     case Types.FETCH_ID_TRAIN_COURSE:
       newState.courseID = action.data;
       return newState;

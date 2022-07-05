@@ -37,6 +37,14 @@
     overflow: hidden;
     outline: none;
 }
+.time-shift{
+    border-radius: 20px;
+    border: 1px solid #bfbdbd;
+    text-align: center;
+    background: #6ae4a7;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
 
 .three-btn-group  a, .three-btn-group button{
     margin : 2px !important

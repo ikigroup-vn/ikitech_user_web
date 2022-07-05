@@ -2,7 +2,7 @@ import moment from "moment";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import * as Env from "../../../ultis/default"
-
+import history from "../../../history";
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -13,6 +13,12 @@ class Table extends Component {
     event.preventDefault();
   }
 
+  changePage = (store_code, id,e) => {
+    if(e.target.name == "action")
+    return;
+    history.push(`/train/chapter/index/${store_code}/${id}`)
+  }
+
   showData = (courses , per_page , current_page) => {
     var { store_code } = this.props
     var result = null;
@@ -21,40 +27,44 @@ class Table extends Component {
 
       result = courses.map((data, index) => {
         var image_url = data.image_url == null || data.image_url == "" ? Env.IMG_NOT_FOUND : data.image_url
-        var published = data.published == true ? "Đang hiển thị" : "Đang lưu tạm"
-        var published_status = data.published == true ? "success" : "secondary"
 
         return (
-          <tr>
+          <tr className = "hover-product" onClick={(e) => this.changePage(store_code, data.id,e)}>
             <td>{(per_page * (current_page -1)) + (index + 1)}</td>
-            {/* <td>
-              {data.id}
+            <td>
+            <img
+                  src={image_url}
+                  className="img-responsive"
+                  alt="Image"
+                  width="100px"
+                  height="100px"
+                />
+            </td>
 
-            </td> */}
-
-        
+            
 
             <td>{data.title}</td>
 
        
             <td>{data.short_description}</td>
-            <td>{moment(data.created_at).format("DD-MM-YYYY HH:mm:ss")}</td>
 
 
-            <td className="three-btn-group" style = {{maxWidth : "230px"}}>
-            <Link
+            <td style = {{maxWidth : "150px"}}>
+            {/* <Link
                 to={`/train/chapter/index/${store_code}/${data.id}`}
                 class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
               >
                 <i class="fa fa-edit"></i> Xem chương - bài học
-              </Link>
+              </Link> */}
               <Link
+              name = "action"
                 to={`/train/course/edit/${store_code}/${data.id}`}
                 class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
               >
                 <i class="fa fa-edit"></i> Sửa
               </Link>
               <button
+              name = "action"
                 onClick={(e) => this.passDataModal(e, data.id ,data.title)}
                 style={{ marginLeft: "10px" }}
                 data-toggle="modal"
@@ -85,11 +95,10 @@ class Table extends Component {
           <thead>
             <tr>
               <th>STT</th>
-              {/* <th>ID</th> */}
+              <th>Hình ảnh</th>
 
               <th>Tên khóa học</th>
               <th>Mô tả ngắn</th>
-              <th>Ngày tạo</th>
               <th>Hành động</th>
             </tr>
           </thead>

@@ -6,6 +6,7 @@ import { shallowEqual } from "../../../../ultis/shallowEqual";
 import ModalUpload from "../ModalUpload"
 import Select from "react-select";
 import * as Env from "../../../../ultis/default"
+import * as blogAction from "../../../../actions/blog";
 
 
 import { isEmpty } from "../../../../ultis/helpers"
@@ -41,6 +42,7 @@ class Form extends Component {
       txtContent: "",
       txtTitle: "",
       txtSumary: "",
+      image : "",
    
     };
 
@@ -58,13 +60,16 @@ class Form extends Component {
       this.setState({
         txtContent: nextProps.course.description,
         txtTitle: nextProps.course.title,
+        image: nextProps.course.image_url,
 
         txtSumary: nextProps.course.short_description,
      
       })
     }
 
-  
+    if (this.props.image !== nextProps.image) {
+      this.setState({ image: nextProps.image })
+    }
   }
 
   onChange = (e) => {
@@ -108,6 +113,8 @@ class Form extends Component {
     this.props.updateCourse(courseId, {
       description: txtContent,
       title: txtTitle,
+      image_url: image,
+
       short_description: txtSumary,
     }, store_code);
   };
@@ -131,7 +138,26 @@ class Form extends Component {
 
             <div class="row">
               <div class="col-12">
-              
+              <div class="form-group">
+                  <label>Ảnh: &nbsp; </label>
+                  <img src={`${image}`} width="150" height="150" />
+                </div>
+                <div class="form-group">
+
+                  <div class="kv-avatar">
+                    <div >
+                      <button
+                        type="button"
+                        class="btn btn-primary btn-sm"
+                        data-toggle="modal"
+                        data-target="#uploadModalBlog"
+                      >
+                        <i class="fa fa-plus"></i> Upload ảnh
+                      </button>
+                    </div>
+                  </div>
+
+                </div>
                 <div class="form-group">
                   <label for="product_name">Tên khóa học</label>
                   <input
@@ -265,6 +291,7 @@ class Form extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    image: state.UploadReducers.blogImg.blog_img,
 
   };
 };
@@ -274,7 +301,9 @@ const mapDispatchToProps = (dispatch, props) => {
     showError: (error) => {
       dispatch(error)
     },
-
+    initialUpload: () => {
+      dispatch(blogAction.initialUpload())
+    },
     updateCourse: (id, data, store_code) => {
       dispatch(trainAction.updateCourse(id, data, store_code))
     }

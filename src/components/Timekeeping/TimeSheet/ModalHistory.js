@@ -16,18 +16,20 @@ class ModalHistory extends Component {
     showHistory = (keeping_histories) => {
         var result = null
         result = keeping_histories.map((data, index) => {
+            var status1 = data.status
+              var status_name = status1 == 1 ? "Chờ xử lý" : status1 == 2 ?  "Đã đồng ý" : "Đã hủy"
+              var status_color = status1 == 1 ? "secondary" : status1 == 2 ?  "success" : "danger"
             return (
-                <React.Fragment>
                     <div
                         style={{
                             display: "flex",
                             flexDirection: "column",
                             background: `${data.is_checkin == true ? "lightgreen" : "lightgoldenrodyellow"}`,
-                            width: "fit-content",
+                            // width: "fit-content",
                             padding: "0.5rem 1rem",
                             borderRadius: "0.5rem",
                             marginBottom: "0.5rem",
-                            width: "100%"
+                            width: "49%"
                         }}
                     >
                         <div>
@@ -82,18 +84,20 @@ class ModalHistory extends Component {
                                     ? `Lý do: ${data?.reason}`
                                     : ""}
                             </span>
-                            <span style={{ color: "gray" , display : "block" }}>
+                            <span style={{ color: "gray", display: "block" }}>
                                 {data?.from_user
                                     ? `Được tạo bởi: Quản lý ${data?.from_user_created?.name}`
                                     : `Được tạo bởi:  Nhân viên ${data?.from_staff_created?.name}`}
-                                
+
                             </span>
+                            <span >
+                          Trạng thái: <span style = {{fontWeight : "500"}} className={status_color} >{status_name}</span>
+                        </span>
 
                         </div>
                     </div>
 
 
-                </React.Fragment>
             )
         })
         return result
@@ -107,16 +111,18 @@ class ModalHistory extends Component {
 
 
                 <div class="modal" id="modalHistory">
-                    <div class="modal-dialog modal-sm">
+                    <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div className='model-header-modal' style={{ display: 'flex', justifyContent: "space-between", backgroundColor: themeData().backgroundColor }}>
                                 <h4 style={{ color: "white", margin: "10px" }}>Lịch sử chấm công</h4>
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
-                                <React.Fragment>
+                                <div style = {{
+                                    display : "flex" , justifyContent : "space-between" , flexWrap : "wrap"
+                                }}>
                                     {this.showHistory(keeping_histories)}
-                                </React.Fragment>
+                                </div>
                             </div>
 
                             <div class="modal-footer">
