@@ -334,7 +334,7 @@ class ListProduct extends Component {
           discount_percent = product_discount.value;
         }
         const listDistribute = data.inventory?.distributes !== null && data.inventory?.distributes.length > 0 ? data.inventory?.distributes[0] : []
-        var disaled = this.checkDisable(combos, data.id, listDistribute, data);
+        var disaled = this.checkDisable(combos, data.id, listDistribute , data);
 
         return (
           <tr className={disaled == true ? "" : "hover-product"} style={{ background: background_disable }}>
@@ -343,7 +343,7 @@ class ListProduct extends Component {
               <div class="checkbox">
                 <label>
                   <input type="checkbox"
-                    // disabled={disaled}
+                    disabled={disaled}
                     // checked={checked}
                     onChange={(e) => this.onChange(e, "PARENT")}
                     value={this.getData(_data, listDistribute, data)} />

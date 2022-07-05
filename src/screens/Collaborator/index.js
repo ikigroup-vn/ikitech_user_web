@@ -105,32 +105,38 @@ class collaborator extends Component {
                           <TabList>
                             {
                               config == true ? <Tab>
-                                <i class="fa fa-cog"></i>
-                                <span>Cấu hình hoa hồng</span>
+                                 <Link to ={"?tab-index=0"}>  <i class="fa fa-cog"></i>
+                                <span>Cấu hình hoa hồng</span></Link>
+                               
+                               
                               </Tab> : null
                             }
                             {
                               collaborator_list == true ? <Tab>
-                                <i class="fa fa-users"></i>
-                                <span>Danh sách cộng tác viên</span>
+                                <Link to ={"?tab-index=1"}> <i class="fa fa-users"></i>
+                                <span>Danh sách cộng tác viên</span></Link>
+                               
                               </Tab> : null
                             }
                             {
                               collaborator_list == true ? <Tab>
-                                <i class="fa fa-chart-bar"></i>
-                                <span> Top doanh số</span>
+                                 <Link to ={"?tab-index=2"}>    <i class="fa fa-chart-bar"></i>
+                                <span> Top doanh số</span></Link>
+                             
                               </Tab> : null
                             }
                             {
                               payment_request_list == true ? <Tab>
-                                <i class="fas fa-list"></i>
-                                <span> Danh sách yêu cầu thanh toán</span>
+                                  <Link to ={"?tab-index=3"}>     <i class="fas fa-list"></i>
+                                <span> Danh sách yêu cầu thanh toán</span></Link>
+                               
                               </Tab> : null
                             }
                             {
                               payment_request_history == true ? <Tab>
-                                <i class="fa fa-history"></i>
-                                <span> Lịch sử thanh toán</span>
+                                  <Link to ={"?tab-index=4"}>       <i class="fa fa-history"></i>
+                                <span> Lịch sử thanh toán</span></Link>
+                             
                               </Tab> : null
                             }
 

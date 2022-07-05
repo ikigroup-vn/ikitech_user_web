@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import * as CollaboratorAction from "../../../actions/collaborator";
 import { connect } from "react-redux";
 import { shallowEqual } from "../../../ultis/shallowEqual";
-import { formatNumber } from "../../../ultis/helpers"
+import { formatNumber , formatNoD } from "../../../ultis/helpers"
 
 class Config extends Component {
     constructor(props) {
@@ -32,7 +32,7 @@ class Config extends Component {
         const _value = formatNumber(value);
         if (!isNaN(Number(_value))) {
 
-            value = new Intl.NumberFormat().format(_value);
+            value = formatNoD(_value);
             value = value.toString().replace(/\./g,',')
 
             if (name == "percent_collaborator_t1") {

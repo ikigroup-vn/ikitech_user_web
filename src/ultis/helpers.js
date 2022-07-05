@@ -105,6 +105,8 @@ export const isSpecialCharactor = (string) => {
 };
 
 export const isEmail = (email) => {
+  if(email)
+  var email = email.toString().replace(/ /g, "");
   const re =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
@@ -189,12 +191,19 @@ export const format = (number) => {
   });
 };
 export const formatNoD = (number) => {
-  if (number == "" || number == null) number = 0;
-  var number = number.toString().replace(/\./g, ".");
-   number = parseInt(number);
+  console.log(number)
+  if (number == "" || number == null || isNaN(Number(number)) || !number || typeof number == "undefined") number = 0;
 
-  let dollarUSLocale = Intl.NumberFormat("en-US");
-  return dollarUSLocale.format((number ?? 0));
+
+
+  console.log(number)
+
+  return number.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  // var number = number.toString().replace(/\./g, ".");
+  //  number = parseInt(number);
+
+  // let dollarUSLocale = Intl.NumberFormat("en-US");
+  // return dollarUSLocale.format((number ?? 0));
 };
 export const formatNoDWithEmpty = (number) => {
   if (number == "" || number == null) return "";

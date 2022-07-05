@@ -2,6 +2,8 @@ import * as Types from "../constants/ActionType";
 import history from "../history";
 import * as revenueExpendituresApi from "../data/remote/revenue_expenditures";
 import * as storeApi from "../data/remote/store";
+import * as customerApi from "../data/remote/customer";
+
 import moment from "moment";
 export const fetchAllRevenueExpenditures = (
   store_code,
@@ -150,7 +152,13 @@ export const createRevenueExpenditures = (
 
 
         if (getForCustomer) {
-          console.log(getForCustomer)
+          customerApi.fetchCustomerId(store_code, data.recipient_references_id).then((res) => {
+        
+              dispatch({
+                type: Types.FETCH_ID_CUSTOMER,
+                data: res.data.data,
+              });
+          });
           revenueExpendituresApi
             .fetchAllRevenueExpenditures(store_code, branch_id, 1, params)
             .then((res) => {

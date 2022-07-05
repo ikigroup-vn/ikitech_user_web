@@ -43,10 +43,10 @@ class Table extends Component {
   onchangeStatusOrder = (e) => {
     var { value } = e.target;
     this.setState({ statusOrder: value })
-    var { statusPayment, statusOrder } = this.state
+    var { statusPayment, statusOrder , orderFrom } = this.state
     var { store_code, time_from, time_to, numPage, searchValue } = this.props
     const branch_id = getBranchId()
-    var params = this.props.getParams(time_from, time_to, searchValue, value, statusPayment, numPage);
+    var params = this.props.getParams(time_from, time_to, searchValue, value, statusPayment, numPage , orderFrom);
     this.props.onchangeStatusOrder(value)
 
     this.props.fetchAllBill(store_code, 1, branch_id, params);
@@ -54,11 +54,11 @@ class Table extends Component {
   onchangeStatusPayment = (e) => {
     var { value } = e.target;
     this.setState({ statusPayment: value })
-    var { statusPayment, statusOrder } = this.state
+    var { statusPayment, statusOrder  , orderFrom} = this.state
     var { store_code, time_from, time_to, numPage, searchValue } = this.props
     const branch_id = getBranchId()
 
-    var params = this.props.getParams(time_from, time_to, searchValue, statusOrder, value, numPage);
+    var params = this.props.getParams(time_from, time_to, searchValue, statusOrder, value, numPage , orderFrom);
     this.props.onchangeStatusPayment(value)
     this.props.fetchAllBill(store_code, 1, branch_id, params);
   }

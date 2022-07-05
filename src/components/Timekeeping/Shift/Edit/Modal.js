@@ -620,17 +620,14 @@ class Modal extends Component {
                     </div>
                   </div>
                 </div>
-                <div id="accordion">
+                {/* <div id="accordion">
                   <div>
                     <button
                       onClick={this.onChangeIcon}
 
                       id="headingOne"
                       class="btn btn-link btn-collapse btn-accordion-collapse"
-                      // data-toggle="collapse"
-                      // data-target="#collapseOne"
-                      // aria-expanded="false"
-                      // aria-controls="collapseOne"
+                  
                       type="button"
                       style={{
                         width: "100%",
@@ -651,7 +648,6 @@ class Modal extends Component {
                       >
                         <span>Cài đặt nâng cao</span>  <i
                           class={this.state.icon ? "fa fa-caret-down" : "fa fa-caret-up"}
-                        // style={{ fontSize: "0.2px", color: "#abacb4" }}
                         ></i>
 
 
@@ -715,7 +711,7 @@ class Modal extends Component {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
               <div class="modal-footer">
                 {/* <button

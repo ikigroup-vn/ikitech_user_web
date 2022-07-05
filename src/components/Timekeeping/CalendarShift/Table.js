@@ -50,18 +50,35 @@ class Table extends Component {
   //   }
   // }
   componentDidMount() {
-    console.log({
-      day: weekday[new Date(this.props.datePrime.from).getDay()],
-      date: new Date(this.props.datePrime.from).getDate(),
+    var arr = []
+    var datePrime = {
+      from: moment().startOf("isoWeek").format("YYYY-MM-DD"),
+          to: moment().endOf("isoWeek").format("YYYY-MM-DD"),
+    };
+    var dateFrom = new Date(datePrime.from);
+    while (dateFrom <= new Date(datePrime.to)) {
+      arr.push(new Date(dateFrom));
+      dateFrom.setDate(dateFrom.getDate() + 1);
+    }
+    var newArr = arr.map((e) => {
+      return {
+        day: weekday[new Date(e).getDay()],
+        date: new Date(e).getDate(),
+      };
     });
     this.setState({
-      arrDate: [
-        {
-          day: weekday[new Date(this.props.datePrime.from).getDay()],
-          date: new Date(this.props.datePrime.from).getDate(),
-        },
-      ],
+      arrDate: newArr,
     });
+    // this.setState({
+    //   arrDate: [
+    //     {
+    //       day: weekday[new Date(this.props.datePrime.from).getDay()],
+    //       date: new Date(this.props.datePrime.from).getDate(),
+    //     },
+    //   ],
+    
+    // });
+
   }
   componentDidUpdate(prevProps, prevState) {
     if (!shallowEqual(prevProps.datePrime, this.props.datePrime)) {
@@ -81,6 +98,8 @@ class Table extends Component {
       this.setState({
         arrDate: newArr,
       });
+      console.log("vao roi", newArr);
+
     }
     if (!shallowEqual(prevProps.typeDate, this.props.typeDate  )) {
       var arr = [];
@@ -120,11 +139,11 @@ class Table extends Component {
           date: new Date(e).getDate(),
         };
       });
-      console.log(datePrime, newArr);
       this.setState({
         arrDate: newArr,
       });
     }
+
   }
   componentWillReceiveProps(nextProps) {
     // if (this.props.typeDate !== nextProps.typeDate) {
@@ -242,6 +261,7 @@ class Table extends Component {
     var listCalendarShift =
       typeof calendarShift == "undefined" ? [] : calendarShift;
     // console.log("asdasd" + this.props.statusPayment, statusPayment);
+    console.log(this.state.arrDate)
     return (
       <React.Fragment>
         <div

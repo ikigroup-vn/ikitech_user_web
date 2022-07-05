@@ -10,7 +10,6 @@ import moment from "moment";
 import Datetime from "react-datetime";
 import ModalListProduct from "../Create/ListProduct";
 import ModalListProductBonus from "../Create/ListProductBonus";
-import history from "../../../../history"
 import CKEditor from "ckeditor4-react";
 import ModalUpload from "../ModalUpload";
 import * as Env from "../../../../ultis/default";
@@ -18,6 +17,8 @@ import MomentInput from "react-moment-input";
 import { formatNumber } from "../../../../ultis/helpers";
 import { isEmpty } from "../../../../ultis/helpers";
 import getChannel, { IKIPOS, IKITECH } from "../../../../ultis/channel";
+import history from "../../../../history";
+
 class Form extends Component {
   constructor(props) {
     super(props);
@@ -105,6 +106,7 @@ class Form extends Component {
             "sub_element_distribute_name": item.sub_element_distribute_name,
             "sku": item.product?.sku,
             "name": item.product?.name,
+            "allows_all_distribute" : item.allows_all_distribute,
             product: {
               "id": item.product?.id,
               "quantity": item.quantity,
@@ -113,6 +115,8 @@ class Form extends Component {
               "sub_element_distribute_name": item.sub_element_distribute_name,
               "sku": item.product?.sku,
               "name": item.product?.name,
+              "allows_all_distribute" : item.allows_all_distribute,
+
             }
           }
         })
@@ -305,7 +309,7 @@ class Form extends Component {
   };
 
   goBack = (e) => {
-    e.preventDefault();
+    // e.preventDefault();
     history.goBack();
   };
 
@@ -364,16 +368,21 @@ class Form extends Component {
           });
           if (check == false) {
            
-            var product = { quantity: 1, product: item, allows_choose_distribute : item.allows_choose_distribute, id: item.id, sku: item.sku, name: item.name, distribute_name: item.distribute_name, element_distribute_name: item.element_distribute_name, sub_element_distribute_name: item.sub_element_distribute_name };
+            var product = { quantity: 1, product: item, allows_all_distribute : item.allows_all_distribute,allows_choose_distribute : item.allows_choose_distribute, id: item.id, sku: item.sku, name: item.name, distribute_name: item.distribute_name, element_distribute_name: item.element_distribute_name, sub_element_distribute_name: item.sub_element_distribute_name };
             if(isBonus == false || typeof isBonus == "undefined")
           delete item.allows_choose_distribute
+          else
+          delete item.allows_all_distribute
+
             products.push(product);
           }
           else
           {
-            var product = { quantity: 1, product: item, allows_choose_distribute : item.allows_choose_distribute,id: item.id, sku: item.sku, name: item.name, distribute_name: item.distribute_name, element_distribute_name: item.element_distribute_name, sub_element_distribute_name: item.sub_element_distribute_name };
+            var product = { quantity: 1, product: item, allows_all_distribute : item.allows_all_distribute, allows_choose_distribute : item.allows_choose_distribute,id: item.id, sku: item.sku, name: item.name, distribute_name: item.distribute_name, element_distribute_name: item.element_distribute_name, sub_element_distribute_name: item.sub_element_distribute_name };
             if(isBonus == false || typeof isBonus == "undefined")
           delete item.allows_choose_distribute
+          else
+          delete item.allows_all_distribute
             products[_index] = product;
           }
         });
@@ -407,16 +416,20 @@ class Form extends Component {
           }
         });
         if (checkExsit == true) {
-          var product = { quantity: 1, product: product,allows_choose_distribute : product.allows_choose_distribute, id: product.id, sku: product.sku, name: product.name, distribute_name: product.distribute_name, element_distribute_name: product.element_distribute_name, sub_element_distribute_name: product.sub_element_distribute_name };
+          var product = { quantity: 1, product: product, allows_all_distribute : product.allows_all_distribute,allows_choose_distribute : product.allows_choose_distribute, id: product.id, sku: product.sku, name: product.name, distribute_name: product.distribute_name, element_distribute_name: product.element_distribute_name, sub_element_distribute_name: product.sub_element_distribute_name };
           if(isBonus == false || typeof isBonus == "undefined")
           delete product.allows_choose_distribute
+          else
+          delete product.allows_all_distribute
           products.push(product);
         }
         else
         {
-          var product = { quantity: 1, product: product, allows_choose_distribute : product.allows_choose_distribute, id: product.id, sku: product.sku, name: product.name, distribute_name: product.distribute_name, element_distribute_name: product.element_distribute_name, sub_element_distribute_name: product.sub_element_distribute_name };          products[_index] = product;
+          var product = { quantity: 1, product: product, allows_all_distribute : product.allows_all_distribute, allows_choose_distribute : product.allows_choose_distribute, id: product.id, sku: product.sku, name: product.name, distribute_name: product.distribute_name, element_distribute_name: product.element_distribute_name, sub_element_distribute_name: product.sub_element_distribute_name };          products[_index] = product;
           if(isBonus == false || typeof isBonus == "undefined")
           delete product.allows_choose_distribute
+          else
+          delete product.allows_all_distribute
           products[_index] = product;
 
         }
@@ -748,6 +761,7 @@ class Form extends Component {
 
                 </button>
                 <button
+                type = "button"
                   style={{ marginLeft: "10px" }}
                   onClick={this.goBack}
                   class="btn btn-warning   btn-sm"

@@ -59,7 +59,7 @@ class Table extends Component {
 
     }
     changeStatusRequest = (status) => {
-        var name = status == 1 ? "Thanh toán cho CTV" : "Hủy yêu cầu thanh toán cho CTV"
+        var name = status == 1 ? "Hủy yêu cầu thanh toán cho CTV" : "Thanh toán cho CTV"
         var { arrayCheckBox } = this.state
         this.props.handleChangeStatus(name, { status: status, list_id: arrayCheckBox })
     }
@@ -214,12 +214,7 @@ class Table extends Component {
                                                         {format(Number(data.collaborator.balance))}
                                                     </span>
                                                 </p>
-                                                <p class="sale_user_label">
-                                                    Số điểm:{" "}
-                                                    <span id="user_tel">
-                                                        {data.collaborator.customer.points == null ? null : new Intl.NumberFormat().format(data.collaborator.customer.points.toString())}
-                                                    </span>
-                                                </p>
+                                     
                                                 <p class="sale_user_label">
                                                     Tên CMND:{" "}
                                                     <span id="user_tel">

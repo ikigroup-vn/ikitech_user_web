@@ -76,11 +76,11 @@ class Table extends Component {
                 ).slice(-2)}:${("0" + data.end_break_minute).slice(-2)}`}</td>
               )} */}
 
-              <td style={{ textAlign: "center" }}>{data.minutes_late_allow}</td>
+              {/* <td style={{ textAlign: "center" }}>{data.minutes_late_allow}</td>
               <td style={{ textAlign: "center" }}>
                 {data.minutes_early_leave_allow}
-              </td>
-              <td>
+              </td> */}
+              <td style = {{textAlign : "center"}}>
                 {data.days_of_week_list
                   .sort((a, b) => a - b)
                   .map((value) => {
@@ -94,7 +94,7 @@ class Table extends Component {
                   .join("")
                   .slice(0, -2)}
               </td>
-              <td className="group-btn-table">
+              <td style = {{textAlign : "center"}} >
                 <button
                   class={`btn btn-warning btn-sm `}
                   data-toggle="modal"
@@ -168,13 +168,13 @@ class Table extends Component {
                 <th>STT</th>
                 <th>Tên ca</th>
 
-                <th>Thời gian bắt đầu</th>
-                <th>Thời gian kết thúc</th>
-
+                <th style = {{textAlign : "center"}}>Thời gian bắt đầu</th>
+                <th style = {{textAlign : "center"}}>Thời gian kết thúc</th>
+{/* 
                 <th>Phút đi trễ cho phép </th>
-                <th>Phút về sớm cho phép</th>
-                <th>Ngày trong tuần</th>
-                <th>Hành động</th>
+                <th>Phút về sớm cho phép</th> */}
+                <th style = {{textAlign : "center"}}>Ngày trong tuần</th>
+                <th style = {{textAlign : "center"}}>Hành động</th>
 
               </tr>
             </thead>

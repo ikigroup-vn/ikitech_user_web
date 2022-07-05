@@ -27,9 +27,9 @@ class CalendarShift extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      typeSelect: "Ngày",
+      typeSelect: "Tuần",
       datePrime: "",
-      typeDate: "DAY",
+      typeDate: "WEEK",
       reset: "",
     };
   }
@@ -39,8 +39,10 @@ class CalendarShift extends Component {
     const branch_id = getBranchId();
     this.setState({
       datePrime: {
-        from: moment().format("YYYY-MM-DD"),
-        to: moment().format("YYYY-MM-DD"),
+        // from: moment().format("YYYY-MM-DD"),
+        // to: moment().format("YYYY-MM-DD"),
+        from: moment().startOf("isoWeek").format("YYYY-MM-DD"),
+        to: moment().endOf("isoWeek").format("YYYY-MM-DD"),
       },
     });
     var typeDate = getQueryParams("type")

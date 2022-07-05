@@ -24,6 +24,7 @@ class ItemInCart extends Component {
             subElementDistributeSelected: -1,
             elementNameSelected: "",
             subElementNameDistributeSelected: "",
+            isOnChangeQuantity : false,
 
             afterPrice: "",
             priceBeforeDiscount: "",
@@ -138,10 +139,14 @@ class ItemInCart extends Component {
 
         // }
         if (!shallowEqual(this.props.item.quantity, nextProps.item.quantity) || (this.props.resetId != nextProps.resetId && nextProps.chooseId == nextProps.item.id)) {
+            if(this.props.resetId == nextProps.resetId && this.state.isOnChangeQuantity === true )
+            return;
             this.setState({ currentQuantity: nextProps.item.quantity });
         }
 
-        if (!shallowEqual(this.state.currentQuantity, nextProps.item.quantity) || (this.props.resetId != nextProps.resetId && nextProps.chooseId == nextProps.item.id)) {
+        if (!shallowEqual(this.state.currentQuantity, nextProps.item.quantity) || (this.props.resetId != nextProps.resetId && nextProps.chooseId == nextProps.item.id) ) {
+            if(this.state.isOnChangeQuantity === true )
+            return;
             this.setState({ currentQuantity: nextProps.item.quantity });
         }
         if (!shallowEqual(
@@ -239,12 +244,15 @@ class ItemInCart extends Component {
             const q = quantity;
             this.setState({
                 currentQuantity: q,
+                isOnChangeQuantity : true
             });
             return;
         } else {
             const q = quantity;
             this.setState({
                 currentQuantity: q,
+                isOnChangeQuantity : true
+
             });
         }
     };

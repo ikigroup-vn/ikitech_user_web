@@ -137,12 +137,12 @@ class Table extends Component {
                                                     {format(Number(data.collaborator.balance))}
                                                 </span>
                                             </p>
-                                            <p class="sale_user_label">
+                                            {/* <p class="sale_user_label">
                                                 Số điểm:{" "}
                                                 <span id="user_tel">
                                                     {data.collaborator.customer.points == null ? null : new Intl.NumberFormat().format(data.collaborator.customer.points.toString())}
                                                 </span>
-                                            </p>
+                                            </p> */}
                                             <p class="sale_user_label">
                                                 Tên CMND:{" "}
                                                 <span id="user_tel">

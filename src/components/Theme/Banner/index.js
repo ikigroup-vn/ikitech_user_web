@@ -7,6 +7,9 @@ import ModalRemove from "./ModalRemove";
 import ModalUpdate from "./ModalUpdate";
 import ModalCreate from "./ModalCreate";
 import * as Env from "../../../ultis/default"
+import {
+    bannerImg,
+} from "../Custom_Screen/data.js";
 class Footer extends Component {
     constructor(props) {
         super(props);
@@ -28,7 +31,7 @@ class Footer extends Component {
 
     componentDidMount() {
         var theme = this.props.theme
-        if (theme == null || theme == "" ) { }
+        if (theme == null || theme == "") { }
         else {
             this.setState({
                 carousel_app_images: theme.carousel_app_images == "null" || theme.carousel_app_images == null ? [] : theme.carousel_app_images,
@@ -36,7 +39,7 @@ class Footer extends Component {
         }
     }
     componentWillReceiveProps(nextProps) {
-        if (!shallowEqual(nextProps.theme, this.props.them)  || (nextProps.tabId != this.props.tabId)) {
+        if (!shallowEqual(nextProps.theme, this.props.them) || (nextProps.tabId != this.props.tabId)) {
             var theme = nextProps.theme
             this.setState({
                 carousel_app_images: theme.carousel_app_images == "null" || theme.carousel_app_images == null ? [] : theme.carousel_app_images,
@@ -47,12 +50,12 @@ class Footer extends Component {
 
     }
 
-    destroyBanner = (e , id , title) =>{
-        this.setState({modalremove : {title : "banner" , id : id , _title : title}});
+    destroyBanner = (e, id, title) => {
+        this.setState({ modalremove: { title: "banner", id: id, _title: title } });
     }
 
-    updateBanner = (e , id , title, img) =>{
-        this.setState({modalupdate : {title : "banner" , id : id , _title : title , image_url : img}});
+    updateBanner = (e, id, title, img) => {
+        this.setState({ modalupdate: { title: "banner", id: id, _title: title, image_url: img } });
     }
     showBanners = (banners) => {
         var result = null;
@@ -70,14 +73,14 @@ class Footer extends Component {
 
                         <td>
 
-                            <img style = {{objectFit : "cover" , width : "300px" , borderRadius : "0px"}} src={img} class="img-responsive" width="90px" height="95px" alt="Image" />
+                            <img style={{ objectFit: "cover", width: "300px", borderRadius: "0px" }} src={img} class="img-responsive" width="90px" height="95px" alt="Image" />
 
                         </td>
                         <td className="btn-voucher">
                             <button
-                                                            type="button"
+                                type="button"
 
-                                onClick={(e) => this.updateBanner(e,index , data.title , img)}
+                                onClick={(e) => this.updateBanner(e, index, data.title, img)}
                                 data-toggle="modal"
                                 data-target="#updateModal"
                                 class="btn btn-warning btn-sm"
@@ -86,10 +89,10 @@ class Footer extends Component {
                                 <i class="fa fa-edit"></i> Sửa
                             </button>
                             <button
-                            style = {{marginLeft : "10px"}}
+                                style={{ marginLeft: "10px" }}
                                 type="button"
 
-                                onClick={(e) => this.destroyBanner(e,index,data.title)}
+                                onClick={(e) => this.destroyBanner(e, index, data.title)}
                                 data-toggle="modal"
                                 data-target="#removeModal"
                                 class="btn btn-danger btn-sm"
@@ -118,16 +121,16 @@ class Footer extends Component {
     //     this.props.updateTheme(store_code, form);
     // }
     render() {
-        var { store_code , theme } = this.props
+        var { store_code, theme } = this.props
         var
             {
                 carousel_app_images,
             } = this.state
-
+        var banner = bannerImg.filter((v) => v.index === theme.banner_type)[0];
         return (
             <div className="support">
                 <button
-                style = {{float : "right"}}
+                    style={{ float: "right" }}
 
                     data-toggle="modal" data-target="#createModal"
                     class="btn btn-info btn-icon-split btn-sm"
@@ -152,7 +155,7 @@ class Footer extends Component {
 
 
                         <div className="form-group">
-                            <label htmlFor="name">Danh sách Banner</label>
+                            <label htmlFor="name">Bạn đang chọn Banner {banner.index} với tỷ lệ kích thước là: {banner.width} x {banner.height} (px) </label>
 
                             <div class="table-responsive">
                                 <table class="table table-hover table-border">
@@ -175,12 +178,12 @@ class Footer extends Component {
                         </div>
 
                     </div>
-               
+
                 </form>
 
-                <ModalCreate theme = {theme} carousel_app_images={carousel_app_images} store_code={store_code} />
-                <ModalUpdate theme = {theme} carousel_app_images={carousel_app_images}  modal = {this.state.modalupdate} store_code = {store_code} />
-          <ModalRemove theme = {theme} carousel_app_images={carousel_app_images} modal = {this.state.modalremove} store_code = {store_code} />
+                <ModalCreate theme={theme} carousel_app_images={carousel_app_images} store_code={store_code} />
+                <ModalUpdate theme={theme} carousel_app_images={carousel_app_images} modal={this.state.modalupdate} store_code={store_code} />
+                <ModalRemove theme={theme} carousel_app_images={carousel_app_images} modal={this.state.modalremove} store_code={store_code} />
             </div>
         );
 

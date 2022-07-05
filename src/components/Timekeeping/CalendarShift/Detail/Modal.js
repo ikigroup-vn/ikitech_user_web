@@ -9,6 +9,7 @@ import * as Types from "../../../../constants/ActionType";
 import { shallowEqual } from "../../../../ultis/shallowEqual";
 import { isEmpty } from "../../../../ultis/helpers";
 import moment from "moment";
+import { getBranchId } from "../../../../ultis/branchUtils";
 
 // import { compressed } from "../../ultis/helpers";
 // import * as helper from "../../ultis/helpers";
@@ -37,7 +38,9 @@ class Modal extends Component {
 
   componentDidMount() {
     var { store_code } = this.props;
-    this.props.fetchAllStaff(store_code);
+    const branch_id = getBranchId()
+    var params = `limit=${10}&branch_id=${getBranchId()}`;
+    this.props.fetchAllStaff(store_code , null , params , null );
   }
   onChange = (e) => {
     var target = e.target;
@@ -315,8 +318,8 @@ const mapDispatchToProps = (dispatch, props) => {
     putOne: (store_code, branch_id, data, params) => {
       dispatch(calendarShiftAction.putOne(store_code, branch_id, data, params));
     },
-    fetchAllStaff: (id) => {
-      dispatch(staffAction.fetchAllStaff(id));
+    fetchAllStaff: (id , page , params , branch_id) => {
+      dispatch(staffAction.fetchAllStaff(id , page , params , branch_id));
     },
   };
 };

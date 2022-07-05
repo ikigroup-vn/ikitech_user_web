@@ -23,8 +23,8 @@ class Index extends Component {
   componentDidMount() {
     var { store_code } = this.props.match.params;
     const branch_id = getBranchId()
-    var params = `&limit=${10}`;
-    this.props.fetchAllStaff(store_code);
+    var params = `limit=${10}&branch_id=${getBranchId()}`;
+    this.props.fetchAllStaff(store_code , null , params , null );
     this.props.fetchAllShift(store_code, branch_id, 1, params);
   }
   // componentWillReceiveProps(nextProps) {
@@ -125,8 +125,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllStaff: (id) => {
-      dispatch(staffAction.fetchAllStaff(id));
+    fetchAllStaff: (id , page , params , branch_id) => {
+      dispatch(staffAction.fetchAllStaff(id , page , params , branch_id));
     },
     fetchAllShift: (store_code, branch_id, page, params) => {
       dispatch(shiftAction.fetchAllShift(store_code, branch_id, page, params));

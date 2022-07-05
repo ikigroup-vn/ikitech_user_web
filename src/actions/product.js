@@ -875,19 +875,23 @@ export const postMultiProduct = (store_code, data) => {
 
 export const updateAgencyPrice = (store_code, data, productId, page,url=null) => {
   return (dispatch) => {
-    const _value_price = data.main_price.toString().replace(/,/g, "");
-    if (isNaN(Number(_value_price))) {
-      dispatch({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "danger",
-          title: "Lỗi ",
-          disable: "show",
-          content: "Sai định dạng hoặc bị để trống",
-        },
-      });
-      return;
+    if(data.main_price)
+    {
+      const _value_price = data.main_price.toString().replace(/,/g, "");
+      if (isNaN(Number(_value_price))) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi ",
+            disable: "show",
+            content: "Sai định dạng hoặc bị để trống",
+          },
+        });
+        return;
+      }
     }
+
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",

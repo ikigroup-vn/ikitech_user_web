@@ -19,6 +19,15 @@
     display: flex;
     flex-direction: column;
 }
+.react-tabs__tab--selected a{
+    color: white;
+}
+.react-tabs__tab--selected a:hover{
+    color: white !important;
+}
+.react-tabs__tab:not(.react-tabs__tab--selected) a{
+    color: black;
+}
 
 .btn-not-background{
     background-color: transparent;

@@ -5,7 +5,7 @@ import * as CategoryPAction from "../../../actions/category_product";
 import Select from "react-select";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import * as helper from "../../../ultis/helpers";
-import { formatNumber, removeVietnameseTones } from "../../../ultis/helpers";
+import { formatNumber, removeVietnameseTones , formatNoD } from "../../../ultis/helpers";
 import getChannel, { IKITECH } from "../../../ultis/channel";
 class InfoProduct extends Component {
   constructor(props) {
@@ -110,7 +110,7 @@ class InfoProduct extends Component {
       name == "txtQuantityInStock"
     ) {
       if (!isNaN(Number(_value))) {
-        value = new Intl.NumberFormat().format(_value);
+        value = formatNoD(_value);
         value = value.toString().replace(/\./g, ",");
         console.log(name);
         if (name === "txtPercentC") {
