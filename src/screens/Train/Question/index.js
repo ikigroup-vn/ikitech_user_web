@@ -75,11 +75,11 @@ class CourseEdit extends Component {
                 <br></br>
                 <div class="card shadow mb-4">
                   <div class="card-body">
-                      {
+                      {/* {
                    questions.map((item,key)=>(
                           <Item handleUpdateCallBack={this.handleUpdateCallBack} handleDelCallBack = {this.handleDelCallBack} data = {item}></Item>
                         ))
-                      }
+                      } */}
                   </div>
                 </div>
               </div>
