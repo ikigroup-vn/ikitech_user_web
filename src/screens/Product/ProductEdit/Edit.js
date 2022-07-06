@@ -4,6 +4,8 @@ import { Redirect } from "react-router-dom";
 import InfoProduct from "../../../components/Product/Update/InfoProduct";
 import ContentDetail from "../../../components/Product/Update/ContentDetail";
 import InfoDiscount from "../../../components/Product/Update/InfoDiscount";
+import Video from "../../../components/Product/Update/Video";
+
 import * as blogAction from "../../../actions/blog";
 
 import Attribute from "../../../components/Product/Update/Attribute";
@@ -362,6 +364,14 @@ class ProductEdit extends Component {
     }
 
   }
+  handleDataFromProductVideo = (video) => {
+    console.log(video);
+    this.setState((prevState, props) => {
+      var formdata = { ...prevState.form };
+      formdata.video_url = video;
+      return { form: formdata };
+    });
+  };
 
   render() {
     var { store_code } = this.props;
@@ -409,6 +419,14 @@ class ProductEdit extends Component {
                 class="col-lg-6"
                 style={{ borderLeft: "0.5px solid #e6dfdf" }}
               >
+                   <div>
+                  <Video
+                                    store_code = {store_code}
+                                    product={product}
+
+                                    handleDataFromProductVideo={this.handleDataFromProductVideo}
+                  />
+                </div>
                 <div>
                   <StoreImage
 

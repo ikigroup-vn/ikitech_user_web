@@ -5,6 +5,7 @@ import InfoProduct from "../../../components/Product/Update/InfoProduct";
 import ContentDetail from "../../../components/Product/Update/ContentDetail";
 import InfoDiscount from "../../../components/Product/Update/InfoDiscount";
 import * as blogAction from "../../../actions/blog";
+import Video from "../../../components/Product/Update/Video";
 
 import Attribute from "../../../components/Product/Update/Attribute";
 import Distribute from "../../../components/Product/Update/Distribute";
@@ -518,6 +519,15 @@ class ProductEdit extends Component {
     this.setState({ total: total })
   }
 
+  handleDataFromProductVideo = (video) => {
+    console.log(video);
+    this.setState((prevState, props) => {
+      var formdata = { ...prevState.form };
+      formdata.video_url = video;
+      return { form: formdata };
+    });
+  };
+
   render() {
     var { store_code } = this.props;
     var { category_product, attributeP, auth, product, isShowAttr, isCreate, isRemove } = this.props;
@@ -562,6 +572,14 @@ class ProductEdit extends Component {
                 class="col-lg-6"
                 style={{ borderLeft: "0.5px solid #e6dfdf" }}
               >
+                   <div>
+                  <Video
+                                    store_code = {store_code}
+                                    product={product}
+
+                                    handleDataFromProductVideo={this.handleDataFromProductVideo}
+                  />
+                </div>
                 <div>
                   <StoreImage
 

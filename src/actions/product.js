@@ -1199,3 +1199,36 @@ export const fetchProductId = (store_code, id) => {
     });
   };
 };
+export const uploadVideoProduct = (file) => {
+  
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading : "show"
+    })
+    uploadApi
+      .uploadVideo(file)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading : "hide"
+        })
+        dispatch({
+          type: Types.UPLOAD_PRODUCT_VIDEO,
+          data: res.data.data,
+        });
+
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};

@@ -75,14 +75,14 @@ class ItemImportStock extends Component {
     }
 
     subQuantity() {
-        const q = this.state.currentQuantity - 1 < 0 ? 0 : this.state.currentQuantity - 1
+        const q = this.state.currentQuantity - 1 < 0 ? 0 : parseInt(this.state.currentQuantity ?? 0) - 1
         this.setState({
             currentQuantity: q
         })
     }
 
     addQuantity() {
-        const q = this.state.currentQuantity + 1
+        const q = parseInt(this.state.currentQuantity ?? 0)  + 1
         var stock = this.props.item?.stock ?? 0 
         if(q > stock && !this.props.id){
         this.props.showError({

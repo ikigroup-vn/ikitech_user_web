@@ -4,6 +4,7 @@ var initialState = {
   product_img: "",
   listImgProduct: [],
   listImgDistribute: [],
+  product_video : "",
 };
 
 export const productImg = (state = initialState, action) => {
@@ -12,6 +13,9 @@ export const productImg = (state = initialState, action) => {
     case Types.UPLOAD_PRODUCT_IMG:
       newState.product_img = action.data;
       return newState;
+      case Types.UPLOAD_PRODUCT_VIDEO:
+        newState.product_video = action.data;
+        return newState;
     case Types.UPLOAD_ALL_PRODUCT_IMG:
       newState.listImgProduct = action.data;
       return newState;

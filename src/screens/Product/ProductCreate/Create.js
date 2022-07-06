@@ -7,6 +7,8 @@ import ContentDetail from "../../../components/Product/Create/ContentDetail";
 import Attribute from "../../../components/Product/Create/Attribute";
 import Distribute from "../../../components/Product/Create/Distribute";
 import StoreImage from "../../../components/Product/Create/StoreImage";
+import Video from "../../../components/Product/Create/Video";
+
 import * as productAction from "../../../actions/product";
 import * as CategoryPAction from "../../../actions/category_product";
 import * as Types from "../../../constants/ActionType";
@@ -483,6 +485,15 @@ class ProductCreate extends Component {
       return { form: formdata };
     });
   };
+
+  handleDataFromProductVideo = (video) => {
+    console.log(video);
+    this.setState((prevState, props) => {
+      var formdata = { ...prevState.form };
+      formdata.video_url = video;
+      return { form: formdata };
+    });
+  };
   handleDataFromAvatarImg = (data) => {
     this.setState((prevState, props) => {
       var formdata = { ...prevState.form };
@@ -546,6 +557,13 @@ class ProductCreate extends Component {
                 class="col-lg-6"
                 style={{ borderLeft: "0.5px solid #e6dfdf" }}
               >
+                         <div>
+                  <Video
+                                    store_code = {store_code}
+
+                                    handleDataFromProductVideo={this.handleDataFromProductVideo}
+                  />
+                </div>
                 <div>
                   <StoreImage
                                     store_code = {store_code}

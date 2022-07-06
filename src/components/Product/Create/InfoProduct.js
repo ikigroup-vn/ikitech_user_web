@@ -111,11 +111,11 @@ class InfoProduct extends Component {
     ) {
       if (!isNaN(Number(_value))) {
         value = formatNoD(_value);
-        value = value.toString().replace(/\./g, ",");
+        // value = value.toString().replace(/\./g, ",");
         console.log(name);
         if (name === "txtPercentC") {
           if (value.length < 3) {
-            if (value_text == "") {
+            if (value == "") {
               this.setState({ [name]: "" });
             } else {
               this.setState({ [name]: value });
@@ -123,10 +123,11 @@ class InfoProduct extends Component {
           }
         }
         if (name !== "txtPercentC") {
-          if (value.length > 14) {
+          console.log(value.length)
+          if (value.length > 18) {
             return;
           }
-          if (value_text == "") {
+          if (value == "") {
             this.setState({ [name]: "" });
           } else {
             this.setState({ [name]: value });

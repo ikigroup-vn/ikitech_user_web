@@ -56,17 +56,17 @@ class Form extends Component {
     console.log("componentDidMount");
     var _this = this;
 
-    window.$("#file-category-product").on("fileloaded", function (event, file) {
+    window.$("#file-quiz-question-update").on("fileloaded", function (event, file) {
       _this.setState({ fileUpload: file });
     });
     window
-      .$("#file-category-product")
+      .$("#file-quiz-question-update")
       .on("fileremoved", function (event, id, index) {
         _this.setState({ fileUpload: null });
       });
 
-    helper.loadFileInput("file-category-product");
-  }
+      helper.loadFileInput("file-quiz-question-update");
+    }
 
   componentWillReceiveProps(nextProps) {
     if (!shallowEqual(nextProps.modal, this.props.modal)) {
@@ -142,7 +142,7 @@ class Form extends Component {
     var image = null
     var file = fileUpload
     if (typeof file !== "undefined" && file != "" && file != null) {
-      // window.$('#file-category-product').fileinput('clear');
+      // window.$('#file-quiz-question-update').fileinput('clear');
       image =  await compressed(file);
       console.log(image)
 
@@ -301,16 +301,16 @@ class Form extends Component {
                     </div>
                     <div class="form-group">
                       <label for="product_name">Câu trả lời đúng</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="right_answer"
-                        value={right_answer}
-                        placeholder="Nhập câu trả lời"
-                        autocomplete="off"
-                        onChange={this.onChange}
-                        name="right_answer"
-                      />
+               
+                      <select name="right_answer" value={right_answer} id="input" class="form-control"  onChange={this.onChange}
+>
+                        <option value="A">A</option>
+                        <option value="B">B</option>
+
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+
+                      </select>
                     </div>
                   </div>
                   <div style = {{paddingLeft : "10px",
@@ -326,7 +326,7 @@ class Form extends Component {
                   </label>
                   <div className="file-loading">
                     <input
-                      id="file-category-product"
+                      id="file-quiz-question-update"
                       type="file"
                       className="file"
             

@@ -151,12 +151,12 @@ export const callUrlSocket = () => {
   return name;
 };
 
-export const loadFileInput = (name, upload = "#") => {
+export const loadFileInput = (name, upload = "#" , mp4 = false) => {
   window.$(`#${name}`).fileinput({
     theme: "fa",
     overwriteInitial: true,
     uploadUrl: upload,
-    allowedFileExtensions: ["jpg", "png", "jpeg"],
+    allowedFileExtensions: mp4 == true ? ["mp4"] :  ["jpg", "png", "jpeg" ],
     maxFilesNum: 10,
     slugCallback: function (filename) {
       return filename.replace("(", "_").replace("]", "_");
@@ -244,7 +244,7 @@ export const getDateForChartHour = () => {
 export const formatNumber = (value) => {
   var _value = value;
   console.log(value);
-  return typeof _value !== "undefined" && _value != null
+  return (typeof _value !== "undefined" && _value != null)
     ? _value
       .toString()
       .replace(/\./g, "")

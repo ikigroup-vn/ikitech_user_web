@@ -93,20 +93,19 @@ class InfoProduct extends Component {
     ) {
       if (!isNaN(Number(_value))) {
         value = formatNoD(_value);
-        value = value.toString().replace(/\./g, ",");
         if (name == "txtPercentC") {
           if (value.length < 3) {
-            if (value_text == "") {
+            if (value == "") {
               this.setState({ [name]: "" });
             } else {
               this.setState({ [name]: value });
             }
           }
         } else {
-          if (value.length > 14) {
+          if (value.length > 18) {
             return;
           }
-          if (value_text == "") {
+          if (value == "") {
             this.setState({ [name]: "" });
           } else {
             this.setState({ [name]: value });

@@ -348,7 +348,7 @@ export const createQuestion = (store_code,data , _this, resetModal , courseId , 
 
     var res = null
 
-    if (typeof data.image != "undefined" && data.image != "") {
+    if (typeof data.image != "undefined" && data.image != "" && data.image != null && data.image) {
       const fd = new FormData()
 
       fd.append(`image`, data.image)
@@ -1027,7 +1027,7 @@ export const updateQuestion = (id ,data ,store_code , _this, resetModal , course
 
     var res = null
 
-    if (typeof data.image != "undefined" && data.image != "") {
+    if (typeof data.image != "undefined" && data.image != "" && data.image != null && data.image) {
       const fd = new FormData()
 
       fd.append(`image`, data.image)

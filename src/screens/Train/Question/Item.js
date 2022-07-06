@@ -37,15 +37,7 @@ class CourseEdit extends Component {
 
 
             <div className="wrap-box-item hover-product">
-                <div className="" style = {{padding : "10px"}}  onClick={(e) =>
-                                this.passEditFunc(
-                                  e,
-                                  JSON.stringify(data)
-                                    
-                                )
-                              }
-                    data-toggle="modal"
-                    data-target="#updateQuestionModal" >
+                <div className="" style = {{padding : "10px"}}   >
 
                     <div className="question">
                     {data.question}
@@ -71,20 +63,20 @@ class CourseEdit extends Component {
                     </div>
                 </div>
                 <div className="action-box">
-                {/* <button className="btn-not-background"
-                            onClick={(e) =>
-                                this.passEditFunc(
-                                  e,
-                                  JSON.stringify(data)
-                                    
-                                )
-                              }
-                        data-toggle="modal"
-                        data-target="#updateQuestionModal" 
+                <button className="btn-not-background edit"
+                          onClick={(e) =>
+                            this.passEditFunc(
+                              e,
+                              JSON.stringify(data)
+                                
+                            )
+                          }
+                data-toggle="modal"
+                data-target="#updateQuestionModal"
                     >
-                        <i class="fa fa-penci editl"></i>
-                    </button> */}
-                    <button className="btn-not-background"
+                        <i class="fa fa-pencil"></i>
+                    </button>
+                    <button className="btn-not-background remove"
                         onClick={(e) => this.passDataModal(e, JSON.stringify(data)
                         )}
                         data-toggle="modal"
