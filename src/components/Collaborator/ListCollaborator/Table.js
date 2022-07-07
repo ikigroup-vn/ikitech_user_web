@@ -8,6 +8,7 @@ import { connect } from "react-redux";
 import * as collaboratorAction from "../../../actions/collaborator";
 import ModalListReferences from "./ModalListReferences";
 import ModalImg from "../ModalImg"
+import moment from "moment"
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -224,6 +225,10 @@ class Table extends Component {
                       <p class="sale_user_label" id="sale_user_name">
                         Nơi đăng kí:{" "}
                         <span id="user_name"> {data.issued_by} </span>
+                      </p>
+                      <p class="sale_user_label" id="sale_user_name">
+                        Ngày đăng ký CTV:{" "}
+                        <span id="user_name">{moment(data.created_a).format("DD-MM-YYYY")} </span>
                       </p>
                       {address_default !== "" &&  <p class="sale_user_label" id="sale_user_name">
                         Địa chỉ:{" "}

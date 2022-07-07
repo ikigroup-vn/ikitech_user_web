@@ -17,8 +17,8 @@ class ModalHistory extends Component {
         var result = null
         result = keeping_histories.map((data, index) => {
             var status1 = data.status
-              var status_name = status1 == 1 ? "Chờ xử lý" : status1 == 2 ?  "Đã đồng ý" : "Đã hủy"
-              var status_color = status1 == 1 ? "secondary" : status1 == 2 ?  "success" : "danger"
+            var status_name = status1 == 1 ? "Chờ xử lý" : status1 == 2 ?  "Đã đồng ý" : status1 == 3 ? "Đã hủy" : null
+            var status_color = status1 == 1 ? "secondary" : status1 == 2 ?  "success" :status1 == 3 ? "danger" : null
             return (
                     <div
                         style={{

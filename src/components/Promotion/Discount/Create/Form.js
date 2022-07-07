@@ -24,7 +24,7 @@ class Form extends Component {
       txtValue: "",
       txtAmount: "",
       listProducts: [],
-      saveListProducts : [],
+      saveListProducts: [],
       txtContent: "",
       image: "",
       displayError: "hide"
@@ -127,6 +127,23 @@ class Form extends Component {
       txtEnd: time,
     });
   };
+
+    checkStatus = (start_time) => {
+    var now = moment().valueOf()
+    var start_time = moment(start_time, "YYYY-MM-DD HH:mm:ss").valueOf()
+    if (now < start_time) {
+      return "0";
+    }
+    else {
+      return "2"
+    }
+
+  }
+
+
+
+
+
   onSave = (e) => {
     console.log("dadassss")
 
@@ -177,7 +194,7 @@ class Form extends Component {
     }
     form.set_limit_amount = form.amount == null || form.amount == "" ? false : true
     console.log(form)
-    this.props.createDiscount(store_code, form)
+    this.props.createDiscount(store_code, form , this.checkStatus(startTime))
   };
   goBack = (e) => {
     e.preventDefault();
@@ -185,7 +202,7 @@ class Form extends Component {
     history.goBack();
   };
 
-  handleAddProduct = (product, id, type , onSave = null) => {
+  handleAddProduct = (product, id, type, onSave = null) => {
     console.log(product);
     var products = [...this.state.listProducts];
 
@@ -209,19 +226,19 @@ class Form extends Component {
         products.push(product)
       }
     }
-    if(onSave == true)
-    this.setState({ listProducts: products , saveListProducts : products })
+    if (onSave == true)
+      this.setState({ listProducts: products, saveListProducts: products })
     else
-    this.setState({ listProducts: products })
+      this.setState({ listProducts: products })
   };
 
-  onSaveProduct = () =>{
-    this.setState({saveListProducts : [...this.state.listProducts]})
+  onSaveProduct = () => {
+    this.setState({ saveListProducts: [...this.state.listProducts] })
   }
 
 
   render() {
-    var { txtName, txtStart, txtEnd, txtValue, txtAmount, listProducts, txtContent, image, displayError  ,saveListProducts} = this.state;
+    var { txtName, txtStart, txtEnd, txtValue, txtAmount, listProducts, txtContent, image, displayError, saveListProducts } = this.state;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
     var { products, store_code, discounts } = this.props;
     return (
@@ -315,18 +332,18 @@ class Form extends Component {
               <div class="input-group">
 
                 <input type="text"
-                class="form-control"
-                id="txtValue"
-                name="txtValue"
-                value={txtValue}
-                placeholder="nhập giảm giá"
-                autocomplete="off"
-                onChange={this.onChange} />
+                  class="form-control"
+                  id="txtValue"
+                  name="txtValue"
+                  value={txtValue}
+                  placeholder="nhập giảm giá"
+                  autocomplete="off"
+                  onChange={this.onChange} />
                 <div class="input-group-append">
                   <span class="input-group-text" id="basic-addon2">%</span>
                 </div>
               </div>
-     
+
             </div>
             {/* {
               getChannel() == IKITECH &&
@@ -359,24 +376,24 @@ class Form extends Component {
             } */}
           </div>
           <div class="box-footer">
-          <button type = "submit" class="btn btn-info   btn-sm">
-                  <i class="fas fa-plus"></i>  Tạo
+            <button type="submit" class="btn btn-info   btn-sm">
+              <i class="fas fa-plus"></i>  Tạo
 
-                </button>
-                <button
-                  style={{ marginLeft: "10px" }}
-                  onClick={this.goBack}
-                  class="btn btn-warning   btn-sm"
-                >
-                  <i class="fas fa-arrow-left"></i> Trở về
+            </button>
+            <button
+              style={{ marginLeft: "10px" }}
+              onClick={this.goBack}
+              class="btn btn-warning   btn-sm"
+            >
+              <i class="fas fa-arrow-left"></i> Trở về
 
-                </button>
+            </button>
           </div>
 
         </form>
         <ModalUpload />
         <ModalListProduct
-        onSaveProduct = {this.onSaveProduct}
+          onSaveProduct={this.onSaveProduct}
           discounts={discounts}
           handleAddProduct={this.handleAddProduct}
           listProducts={listProducts}
@@ -399,8 +416,8 @@ const mapDispatchToProps = (dispatch, props) => {
     showError: (error) => {
       dispatch(error)
     },
-    createDiscount: (store_code, discount) => {
-      dispatch(discountAction.createDiscount(store_code, discount));
+    createDiscount: (store_code, discount , status) => {
+      dispatch(discountAction.createDiscount(store_code, discount , status));
     },
     initialUpload: () => {
       dispatch(discountAction.initialUpload())

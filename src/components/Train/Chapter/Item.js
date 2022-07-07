@@ -57,9 +57,12 @@ class Table extends Component {
         event.preventDefault();
     }
     getId = (url) => {
+        if (url === null) return;
         let regex = /(youtu.*be.*)\/(watch\?v=|embed\/|v|shorts|)(.*?((?=[&#?])|$))/gm;
-        return regex.exec(url)[3];
+        return (regex.exec(url) !== null && typeof regex.exec(url) !== "undefined") ? regex.exec(url)[3] : null;
     }
+
+
 
     showData = (lessons) => {
         var result = null;
@@ -73,23 +76,10 @@ class Table extends Component {
                 return (
 
                     <SortableItem key={data.id}>
-                        <div className = "wrap-box-item hover-product">
-                            <div className = "box-content"        onClick={(e) =>
-                                        this.passEditLessonFunc(
-                                            e,
-                                            data.id,
-                                            data.train_chapter_id,
-                                            data.title,
-                                            data.link_video_youtube,
-                                            data.description,
-
-                                            data.short_description
-                                        )
-                                    }
-                                    data-toggle="modal"
-                                    data-target="#updateLessonModal" >
+                        <div className="wrap-box-item hover-product">
+                            <div className="box-content"  >
                                 <div className="img-contain">
-                                    <img src={image_url} />
+                                    <img width={120} height={90} src={image_url} />
                                 </div>
                                 <div className="content">
                                     <div className="title">
@@ -98,17 +88,55 @@ class Table extends Component {
                                     <div className="short-description">
                                         <span> {data.short_description}</span>
                                     </div>
+                                    <div className="action">
+                                        <button className={`btn-not-background ${linkUrl ? "play" : "play-disable"}`}
+                                            title = "play video"
+                                           onClick={(e) =>{
+                                            linkUrl &&
+                                            this.props.passUrlVideo(
+                                           
+                                                linkUrl,
+
+                                            )
+                                           }
+                                        }
+                                            data-toggle="modal"
+                                            data-target="#PlayModal"
+                                        >
+                                            <i class="fa fa-play"></i>
+                                        </button>
+                                        <button className="btn-not-background edit"
+                                                                                    title = "Chỉnh sửa"
+
+                                           onClick={(e) =>
+                                            this.passEditLessonFunc(
+                                                e,
+                                                data.id,
+                                                data.train_chapter_id,
+                                                data.title,
+                                                data.link_video_youtube,
+                                                data.description,
+            
+                                                data.short_description
+                                            )
+                                        }
+                                            data-toggle="modal"
+                                            data-target="#updateLessonModal"
+                                        >
+                                            <i class="fa fa-pencil"></i>
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                             <div className="action-box">
-                            <button className = "btn-not-background"
-                                        onClick={(e) => this.passDelLessonDataModal(e, data.id, data.title, data.train_chapter_id
-                                        )}
-                                        data-toggle="modal"
-                                        data-target="#removeLessonModal"
-                                    >
-                                        <i class="fa fa-trash"></i> 
-                                    </button>
+                                <button className="btn-not-background"
+                                    onClick={(e) => this.passDelLessonDataModal(e, data.id, data.title, data.train_chapter_id
+                                    )}
+                                    data-toggle="modal"
+                                    data-target="#removeLessonModal"
+                                >
+                                    <i class="fa fa-trash"></i>
+                                </button>
                                 {/* <button
                                 className = "btn-not-background"
                                     onClick={(e) =>
@@ -258,7 +286,7 @@ class Table extends Component {
                         <div class="table-body-cell" style={{ width: "20%" }}>
                             {data.short_description}
                         </div>
-                     
+
                         <div class="table-body-cell" style={{ width: "15%" }}>
                             <div
                                 className=""
@@ -339,35 +367,35 @@ class Table extends Component {
                     <td colSpan={5} style={{
                         border: "1px solid #dcd2d2",
                         padding: "4px",
-                        marginTop : "5px",
+                        marginTop: "5px",
                     }}>
-                       
+
                         {
-                           
-                                <div>
 
-                             
-                                    {
-                                        data.lessons?.length > 0 && <SortableList
-                                            onSortEnd={this.onSortEnd}
-                                            // className="resp-table-body"
-                                            // draggedItemClassName="dragged"
-                                        >
-                                            {this.showData(data.lessons)}
-                                        </SortableList> 
-    }
+                            <div>
 
-                                </div>
 
-                            
+                                {
+                                    data.lessons?.length > 0 && <SortableList
+                                        onSortEnd={this.onSortEnd}
+                                    // className="resp-table-body"
+                                    // draggedItemClassName="dragged"
+                                    >
+                                        {this.showData(data.lessons)}
+                                    </SortableList>
+                                }
+
+                            </div>
+
+
 
 
 
                         }
-                         <div
+                        <div
                             style={{ display: "flex", justifyContent: "space-between", marginBottom: "10px" }}
                         >
-                   
+
 
                             <button
                                 data-toggle="modal"

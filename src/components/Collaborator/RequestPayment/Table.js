@@ -5,6 +5,7 @@ import * as helper from "../../../ultis/helpers";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import { format } from "../../../ultis/helpers";
 import ModalImg from "../ModalImg"
+import moment from "moment"
 
 class Table extends Component {
     constructor(props) {
@@ -232,6 +233,10 @@ class Table extends Component {
                                                         {data.collaborator.issued_by}{" "}
                                                     </span>
                                                 </p>
+                                                <p class="sale_user_label" id="sale_user_name">
+                        Ngày đăng ký CTV:{" "}
+                        <span id="user_name">{moment(data.collaborator.created_a).format("DD-MM-YYYY")} </span>
+                      </p>
                                                 <p class="sale_user_label" id="sale_user_name">
                                                     Địa chỉ:{" "}
                                                     <span id="user_name">

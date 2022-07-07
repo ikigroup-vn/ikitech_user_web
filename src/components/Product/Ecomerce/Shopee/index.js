@@ -257,6 +257,8 @@ class Shopee extends Component {
     selected.forEach((item,index) => {
       selected[index].categories = []
     });
+    console.log(selected);
+
     this.props.postMultiProduct(store_code, { allow_skip_same_name: false, list: selected })
 
   }

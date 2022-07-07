@@ -35,9 +35,10 @@ class Form extends Component {
     var value = target.value;
 
     const _value = formatNumber(value);
+    console.log(_value)
     if (!isNaN(Number(_value))) {
       if (name == "percent_refund") {
-        if (_value.length < 3) {
+        if (_value < 100) {
           if(_value == "")
           this.setState({ [name]: "" });
           else
@@ -46,7 +47,7 @@ class Form extends Component {
 
         }
       } else if (name == "percent_use_max_point") {
-        if (_value.length < 3) {
+        if (_value < 100) {
           if(_value == "")
           this.setState({ [name]: "" });
           else

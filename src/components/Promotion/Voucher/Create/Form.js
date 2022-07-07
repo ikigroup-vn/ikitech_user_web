@@ -139,6 +139,18 @@ class Form extends Component {
     });
   };
 
+  checkStatus = (start_time) => {
+    var now = moment().valueOf()
+    var start_time = moment(start_time, "YYYY-MM-DD HH:mm:ss").valueOf()
+    if (now < start_time) {
+      return "0";
+    }
+    else {
+      return "2"
+    }
+
+  }
+
   onSave = (e) => {
     e.preventDefault();
     if (this.state.displayError == "show") {
@@ -222,7 +234,7 @@ class Form extends Component {
       delete form.product_ids
     }
     console.log(form)
-    this.props.createVoucher(store_code, form)
+    this.props.createVoucher(store_code, form , this.checkStatus(startTime))
   };
 
   goBack = (e) => {
@@ -600,8 +612,8 @@ const mapDispatchToProps = (dispatch, props) => {
     showError: (error) => {
       dispatch(error)
     },
-    createVoucher: (store_code, voucher) => {
-      dispatch(voucherAction.createVoucher(store_code, voucher));
+    createVoucher: (store_code, voucher , status) => {
+      dispatch(voucherAction.createVoucher(store_code, voucher,status));
     },
     initialUpload: () => {
       dispatch(voucherAction.initialUpload())

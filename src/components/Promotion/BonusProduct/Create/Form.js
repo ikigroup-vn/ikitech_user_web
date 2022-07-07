@@ -140,6 +140,18 @@ class Form extends Component {
     });
   };
 
+  checkStatus = (start_time) => {
+    var now = moment().valueOf()
+    var start_time = moment(start_time, "YYYY-MM-DD HH:mm:ss").valueOf()
+    if (now < start_time) {
+      return "0";
+    }
+    else {
+      return "2"
+    }
+
+  }
+
   onSave = (e) => {
     e.preventDefault();
     console.log(this.state.saveListProducts, this.state.saveListProductsBonus)
@@ -220,7 +232,7 @@ class Form extends Component {
     )
       form.set_limit_amount = false;
     console.log(form);
-    this.props.createBonusProduct(store_code, form);
+    this.props.createBonusProduct(store_code, form ,  this.checkStatus(startTime));
   };
 
   goBack = (e) => {
@@ -630,8 +642,8 @@ const mapDispatchToProps = (dispatch, props) => {
     showError: (error) => {
       dispatch(error);
     },
-    createBonusProduct: (store_code, form) => {
-      dispatch(bonusProductAction.createBonusProduct(store_code, form));
+    createBonusProduct: (store_code, form ,status) => {
+      dispatch(bonusProductAction.createBonusProduct(store_code, form,status));
     },
     initialUpload: () => {
       dispatch(bonusProductAction.initialUpload());

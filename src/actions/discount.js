@@ -164,7 +164,7 @@ export const updateDiscountIsEnd = (store_code, discount, id) => {
   };
 };
 
-export const createDiscount = (store_code, discount) => {
+export const createDiscount = (store_code, discount ,status) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -186,7 +186,10 @@ export const createDiscount = (store_code, discount) => {
             content: res.data.msg,
           },
         });
-        history.goBack();
+        if(status)
+        history.replace(`/discount/${store_code}?type=${status}`);
+        else
+        history.goBack()
       })
       .catch(function (error) {
         dispatch({

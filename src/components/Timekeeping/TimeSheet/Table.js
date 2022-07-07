@@ -171,10 +171,19 @@ class Table extends Component {
         total_seconds = total_seconds < 0 ? (total_seconds * -1) : total_seconds
         console.log(total_seconds * 1000, Math.trunc(moment.duration(data?.total_seconds * 1000).asHours()))
         var status1 = data?.keeping_histories[
+        0
+        ]?.status
+
+        var status2 = data?.keeping_histories[
           data?.keeping_histories.length - 1
         ]?.status
-        var status_name = status1 == 1 ? "Chờ xử lý" : status1 == 2 ?  "Đã đồng ý" : status1 == 3 ? "Đã hủy" : null
-        var status_color = status1 == 1 ? "secondary" : status1 == 2 ?  "success" :status1 == 3 ? "danger" : null
+
+
+        var status_name1 = status1 == 1 ? "Chờ xử lý" : status1 == 2 ?  "Đã đồng ý" : status1 == 3 ? "Đã hủy" : null
+        var status_color1 = status1 == 1 ? "secondary" : status1 == 2 ?  "success" :status1 == 3 ? "danger" : null
+
+        var status_name2 = status1 == 1 ? "Chờ xử lý" : status2 == 2 ?  "Đã đồng ý" : status2 == 3 ? "Đã hủy" : null
+        var status_color2 = status1 == 1 ? "secondary" : status2 == 2 ?  "success" :status2 == 3 ? "danger" : null
 
         return (
           <React.Fragment>
@@ -206,6 +215,8 @@ class Table extends Component {
                   <td style={{ cursor: "pointer" }}
                     data-toggle="modal"
                     data-target="#modalHistory" onClick={() => { this.passData(data?.keeping_histories, data?.recording_time) }} >
+                      {data.keeping_histories?.length > 0 &&
+                      <>
                     <div
                       style={{
                         display: "flex",
@@ -269,8 +280,8 @@ class Table extends Component {
                             </span>
                       </div>
                       <div>
-                        {status_name !== null &&    <span >
-                          Trạng thái: <span style = {{fontWeight : "500"}} className={status_color} >{status_name}</span>
+                        {status_name1 !== null &&    <span >
+                          Trạng thái: <span style = {{fontWeight : "500"}} className={status_color1} >{status_name1}</span>
                         </span>}
                     
                       </div>
@@ -314,15 +325,44 @@ class Table extends Component {
                         </span>})
                      
                       </div>
+                         <div>
+                        {data?.keeping_histories[0]?.remote_timekeeping ? (
+                          <span
+                            style={{
+                              color: "red",
+                              fontWeight: "bold",
+                              fontSize: "0.7rem",
+                            }}
+                          >
+                            (Từ xa){" "}
+                          </span>
+                        ) : (
+                          <span></span>
+                        )}
+
+                        <span style={{ color: "gray" }}>
+                          {data?.keeping_histories[  data?.keeping_histories.length - 1]?.reason
+                            ? `Lý do: ${data?.keeping_histories[  data?.keeping_histories.length - 1]?.reason}`
+                            : ""}
+                        </span>
+                        <span style={{ color: "gray" , display : "block" }}>
+                                {data?.keeping_histories[  data?.keeping_histories.length - 1]?.from_user
+                                    ? `Được tạo bởi: Quản lý ${data?.keeping_histories[  data?.keeping_histories.length - 1]?.from_user_created?.name}`
+                                    : `Được tạo bởi:  Nhân viên ${data?.keeping_histories[  data?.keeping_histories.length - 1]?.from_staff_created?.name}`}
+                                
+                            </span>
+                      </div>
                       <div>
                         {
-                          status_name !== null &&       <span >
-                          Trạng thái: <span style = {{fontWeight : "500"}} className={status_color} >{status_name}</span>
+                          status_name2 !== null &&       <span >
+                          Trạng thái: <span style = {{fontWeight : "500"}} className={status_color2} >{status_name2}</span>
                         </span>
                         }
                 
                       </div>
                     </div>
+                    </>
+      }
                   </td>
               
 
@@ -337,7 +377,7 @@ class Table extends Component {
               {data.total_seconds !== 0 ? (
                 <td>
                   {Math.trunc(moment.duration(total_seconds * 1000).asHours())} giờ{" "}
-                  {moment.utc(total_seconds * 1000).minutes()} phút - {formatNoD(data.total_salary)}đ
+                  {moment.utc(total_seconds * 1000).minutes()} phút - {formatNoD(data.total_salary ? data.total_salary.toFixed() : 0) }đ
 
 
                   <p
@@ -355,21 +395,7 @@ class Table extends Component {
               <td>
                 {formatNoD(data.salary_one_hour)}đ/h
               </td>
-              {this.props.typeDate == "DAY"  && 
-                  <React.Fragment>
-                  <td>
-                  { data?.keeping_histories[
-                              data?.keeping_histories.length - 1
-                            ]?.from_user
-                                    ? `Quản lý ${data?.keeping_histories[
-                                      data?.keeping_histories.length - 1
-                                    ]?.from_user_created?.name}`
-                                    : `Nhân viên ${data?.keeping_histories[
-                                      data?.keeping_histories.length - 1
-                                    ]?.from_staff_created?.name}`}
-                  </td>
-                  </React.Fragment>
-                }
+         
               
             </tr>
           </React.Fragment>
@@ -395,7 +421,7 @@ class Table extends Component {
     return (
       <React.Fragment>
         <div class="table-responsive " style={{ minHeight: 300 }}>
-          <p style={{ fontWeight: "500" }}>Tổng lương: {formatNoD(this.getTotalSalary(listTimeSheet))}đ</p>
+          <p style={{ fontWeight: "500" }}>Tổng lương: {formatNoD(this.getTotalSalary(listTimeSheet)?.toFixed())}đ</p>
           <table
             class="table table-border table-hover"
             id="dataTable"
@@ -417,12 +443,7 @@ class Table extends Component {
                 )}
                 <td>Số giờ làm</td>
                 <td>Số tiền làm theo giờ</td>
-                {this.props.typeDate == "DAY" 
-              && (
-                  <React.Fragment>
-                <td>Tạo bởi</td>
-                  </React.Fragment>
-                )}
+              
 
                 {/* {this.props.typeDate == "DAY" ||
                   (this.props.typeDate == "OPTION" &&

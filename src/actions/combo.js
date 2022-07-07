@@ -170,7 +170,7 @@ export const updateComboIsEnd = (store_code, combo, id) => {
   };
 };
 
-export const createCombo = (store_code, combo) => {
+export const createCombo = (store_code, combo,status) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -192,8 +192,10 @@ export const createCombo = (store_code, combo) => {
             content: res.data.msg,
           },
         });
-        history.goBack();
-      })
+        if(status)
+        history.replace(`/combo/${store_code}?type=${status}`);
+        else
+        history.goBack()      })
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,

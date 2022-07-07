@@ -39,3 +39,23 @@
     font-style: italic;
     margin-top: 5px;
 }
+.wrap-box-item .action {
+    display: flex;
+    margin-top: 10px;
+}
+
+.wrap-box-item .action .edit {
+    color: #eded2d;
+    margin-left: 6px;
+    font-size: 17px;
+}
+
+.wrap-box-item .action .play {
+    color: green;
+    font-size: 17px;
+
+}
+
+.wrap-box-item .action .play-disable {
+    color: gray !important;
+}

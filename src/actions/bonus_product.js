@@ -170,7 +170,7 @@ export const updateBonusProductIsEnd = (store_code, BonusProduct, id) => {
   };
 };
 
-export const createBonusProduct = (store_code, BonusProduct) => {
+export const createBonusProduct = (store_code, BonusProduct,status) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -192,8 +192,10 @@ export const createBonusProduct = (store_code, BonusProduct) => {
             content: res.data.msg,
           },
         });
-        history.goBack();
-      })
+        if(status)
+        history.replace(`/bonus_product/${store_code}?type=${status}`);
+        else
+        history.goBack()      })
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,

@@ -169,7 +169,7 @@ export const updateVoucherIsEnd = (store_code, voucher, id) => {
   };
 };
 
-export const createVoucher = (store_code, voucher) => {
+export const createVoucher = (store_code, voucher , status) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -192,8 +192,11 @@ export const createVoucher = (store_code, voucher) => {
             content: res.data.msg,
           },
         });
-        history.goBack();
-      })
+        if(status)
+        history.replace(`/voucher/${store_code}?type=${status}`);
+        else
+        history.goBack()
+            })
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,

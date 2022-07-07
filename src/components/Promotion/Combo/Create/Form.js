@@ -128,6 +128,18 @@ class Form extends Component {
     });
   };
 
+  checkStatus = (start_time) => {
+    var now = moment().valueOf()
+    var start_time = moment(start_time, "YYYY-MM-DD HH:mm:ss").valueOf()
+    if (now < start_time) {
+      return "0";
+    }
+    else {
+      return "2"
+    }
+
+  }
+
   onSave = (e) => {
     e.preventDefault();
     if (this.state.displayError == "show") {
@@ -189,7 +201,8 @@ class Form extends Component {
       (typeof amount != "undefined" && amount.replace(/ /g, "").length == 0)
     )
       form.set_limit_amount = false;
-    this.props.createCombo(store_code, form, comboId);
+    this.props.createCombo(store_code, form , this.checkStatus(startTime));
+
   };
 
   goBack = (e) => {
@@ -480,8 +493,8 @@ const mapDispatchToProps = (dispatch, props) => {
     showError: (error) => {
       dispatch(error);
     },
-    createCombo: (store_code, form, comboId) => {
-      dispatch(comboAction.createCombo(store_code, form, comboId));
+    createCombo: (store_code, form ,status) => {
+      dispatch(comboAction.createCombo(store_code, form ,status));
     },
     initialUpload: () => {
       dispatch(comboAction.initialUpload());

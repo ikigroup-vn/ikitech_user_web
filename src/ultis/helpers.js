@@ -191,7 +191,6 @@ export const format = (number) => {
   });
 };
 export const formatNoD = (number) => {
-  console.log(number)
   if (number == "" || number == null || isNaN(Number(number)) || !number || typeof number == "undefined") number = 0;
 
 
@@ -243,17 +242,16 @@ export const getDateForChartHour = () => {
 
 export const formatNumber = (value) => {
   var _value = value;
-  console.log(value);
-  return (typeof _value !== "undefined" && _value != null)
-    ? _value
-      .toString()
-      .replace(/\./g, "")
-      .toString()
-      .replace(/,/g, "")
-      .toString()
-      .replace(/-/g, "")
-      .toString()
-    : "";
+  var numStr =
+  (typeof _value !== "undefined" && _value != null)
+  ? _value
+    .toString()
+    .replace(/\./g, "")
+    .replace(/,/g, "")
+    .replace(/-/g, "")
+  : "";
+  var numStr = parseFloat(numStr);
+  return isNaN(numStr) ? 0 : numStr;
 };
 
 export const getQueryParams = (name) =>{

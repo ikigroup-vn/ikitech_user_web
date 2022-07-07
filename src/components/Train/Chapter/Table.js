@@ -8,6 +8,8 @@ import * as Env from "../../../ultis/default"
 import Item from "./Item"
 import ModalCreate from "../../../components/Train/Lesson/Create/Form";
 import ModalUpdate from "../../../components/Train/Lesson/Edit/Form";
+import ModalPlay from "./ModalPlay";
+
 import ModalDelete from "../../../components/Train/Lesson/Delete/Modal";
 import SortableList, { SortableItem } from "react-easy-sort";
 import "./style.css";
@@ -16,9 +18,10 @@ class Table extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      chapterId : null,
-      modalupdate : {},
-      modal : {}
+      chapterId: null,
+      modalupdate: {},
+      modal: {},
+      id_video: null
 
     }
   }
@@ -26,17 +29,17 @@ class Table extends Component {
 
   handleUpdateLessonCallBack = (modal) => {
     this.setState({
-    modalupdate : modal
-  });
-}
+      modalupdate: modal
+    });
+  }
 
-handleDelLessonCallBack = (modal) => {
-  this.setState({ modal });
-}
+  handleDelLessonCallBack = (modal) => {
+    this.setState({ modal });
+  }
 
 
-  passChapterId = (chapterId) =>{
-    this.setState({chapterId})
+  passChapterId = (chapterId) => {
+    this.setState({ chapterId })
   }
 
 
@@ -45,18 +48,22 @@ handleDelLessonCallBack = (modal) => {
     var listArr = arrayMove(this.props.lessons, oldIndex, newIndex);
     var listId = [];
     listArr.forEach((element, index) => {
-      listId.push({id : element.id , position : index+1 });
+      listId.push({ id: element.id, position: index + 1 });
 
     });
-    var {  courseId } = this.props
+    var { courseId } = this.props
 
-    this.props.sortChapter(this.props.store_code,{list_sort : listId}  , courseId);
+    this.props.sortChapter(this.props.store_code, { list_sort: listId }, courseId);
 
   };
 
+  passUrlVideo = (id_video) => {
+    this.setState({ id_video })
+  }
+
 
   showData = (lessons) => {
-    var { store_code , courseId } = this.props
+    var { store_code, courseId } = this.props
     var result = null;
     if (lessons.length > 0) {
       var { update, _delete } = this.props
@@ -64,7 +71,7 @@ handleDelLessonCallBack = (modal) => {
       result = lessons.map((data, index) => {
 
         return (
-       <Item store_code = {store_code} courseId = {courseId} handleDelLessonCallBack = {this.handleDelLessonCallBack}  handleUpdateLessonCallBack = {this.handleUpdateLessonCallBack} passChapterId = {this.passChapterId} index = {index+1} data = {data} handleDelCallBack = {this.props.handleDelCallBack} handleUpdateCallBack = {this.props.handleUpdateCallBack} ></Item>
+          <Item passUrlVideo  = {this.passUrlVideo } store_code={store_code} courseId={courseId} handleDelLessonCallBack={this.handleDelLessonCallBack} handleUpdateLessonCallBack={this.handleUpdateLessonCallBack} passChapterId={this.passChapterId} index={index + 1} data={data} handleDelCallBack={this.props.handleDelCallBack} handleUpdateCallBack={this.props.handleUpdateCallBack} ></Item>
         );
       });
     } else {
@@ -74,57 +81,61 @@ handleDelLessonCallBack = (modal) => {
   };
 
   render() {
-    var { lessons , store_code , courseId } = this.props
-    var{chapterId , modalupdate} = this.state
+    var { lessons, store_code, courseId } = this.props
+    var { chapterId, modalupdate , id_video} = this.state
 
 
     return (
       <>
-      <div id="resp-table">
+        <div id="resp-table">
 
-      <div className="resp-table-body">
+          <div className="resp-table-body">
 
-      <div style={{ fontWeight: "500" }} class="table-body-cell">
-      Tên chương
-      </div>
-      <div style={{ fontWeight: "500" }} class="table-body-cell">
-      Mô tả ngắn      </div>
-    
-      <div style={{ fontWeight: "500" }} class="table-body-cell">
-      Hành động
-      </div>
-    </div>
-      <SortableList
-      onSortEnd={this.onSortEnd}
-      className="resp-table-body"
-      draggedItemClassName="dragged"
-    >
-      {this.showData(lessons)}
-    </SortableList>
+            <div style={{ fontWeight: "500" }} class="table-body-cell">
+              Tên chương
+            </div>
+            <div style={{ fontWeight: "500" }} class="table-body-cell">
+              Mô tả ngắn      </div>
 
-  </div>
-  <ModalCreate
-              store_code={store_code}
-              chapterId={chapterId}
-              courseId = {courseId}
+            <div style={{ fontWeight: "500" }} class="table-body-cell">
+              Hành động
+            </div>
+          </div>
+          <SortableList
+            onSortEnd={this.onSortEnd}
+            className="resp-table-body"
+            draggedItemClassName="dragged"
+          >
+            {this.showData(lessons)}
+          </SortableList>
+
+        </div>
+        <ModalPlay
+              id_video = {id_video}
             />
-                 <ModalUpdate
-              modal={modalupdate}
-              store_code={store_code}
-              courseId = {courseId}
+        <ModalCreate
+          store_code={store_code}
+          chapterId={chapterId}
+          courseId={courseId}
+        />
+        <ModalUpdate
+          modal={modalupdate}
+          store_code={store_code}
+          courseId={courseId}
 
-            />
-                        <ModalDelete courseId = {courseId} store_code={store_code} modal={this.state.modal} />
-</>
- 
+        />
+
+        <ModalDelete courseId={courseId} store_code={store_code} modal={this.state.modal} />
+      </>
+
     );
   }
 }
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    sortChapter: (store_code, data,train_course_id) => {
-      dispatch(trainAction.sortChapter(store_code, data,train_course_id));
+    sortChapter: (store_code, data, train_course_id) => {
+      dispatch(trainAction.sortChapter(store_code, data, train_course_id));
     },
   };
 };
