@@ -172,9 +172,9 @@ class Table extends Component {
         console.log(total_seconds * 1000, Math.trunc(moment.duration(data?.total_seconds * 1000).asHours()))
         var status1 = data?.keeping_histories[
           data?.keeping_histories.length - 1
-        ].status
-        var status_name = status1 == 1 ? "Chờ xử lý" : status1 == 2 ?  "Đã đồng ý" : "Đã hủy"
-        var status_color = status1 == 1 ? "secondary" : status1 == 2 ?  "success" : "danger"
+        ]?.status
+        var status_name = status1 == 1 ? "Chờ xử lý" : status1 == 2 ?  "Đã đồng ý" : status1 == 3 ? "Đã hủy" : null
+        var status_color = status1 == 1 ? "secondary" : status1 == 2 ?  "success" :status1 == 3 ? "danger" : null
 
         return (
           <React.Fragment>
@@ -269,9 +269,10 @@ class Table extends Component {
                             </span>
                       </div>
                       <div>
-                      <span >
+                        {status_name !== null &&    <span >
                           Trạng thái: <span style = {{fontWeight : "500"}} className={status_color} >{status_name}</span>
-                        </span>
+                        </span>}
+                    
                       </div>
                     </div>
                     <div
@@ -314,9 +315,12 @@ class Table extends Component {
                      
                       </div>
                       <div>
-                      <span >
+                        {
+                          status_name !== null &&       <span >
                           Trạng thái: <span style = {{fontWeight : "500"}} className={status_color} >{status_name}</span>
                         </span>
+                        }
+                
                       </div>
                     </div>
                   </td>

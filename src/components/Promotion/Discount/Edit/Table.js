@@ -11,7 +11,7 @@ class Table extends Component {
 
 
   removeItem = (id) => {
-    this.props.handleAddProduct(null, id, "remove")
+    this.props.handleAddProduct(null, id, "remove",true)
   }
 
   showData = (products) => {
