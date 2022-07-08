@@ -401,6 +401,7 @@ class Table extends Component {
 
                     {/* <div> */}
                     <button
+                    style = {{float : "right"}}
                         class={`btn btn-success btn-sm ${payment_request_solve == true ? "show" : "hide"}`}
                         data-toggle="modal"
                         data-target="#updateModalAllRequest"

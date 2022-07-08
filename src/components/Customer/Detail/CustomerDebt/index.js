@@ -300,7 +300,7 @@ class Footer extends Component {
 
 
             <div className="form-group">
-              <label htmlFor="name">Nợ hiện tại:&nbsp;{customer.debt > 0 ? format(customer.debt || 0) : 0}</label>
+              <label htmlFor="name">Nợ hiện tại:&nbsp;{ format(customer.debt || 0)}</label>
 
               <div class="table-responsive">
                 <table class="table table-hover table-border">

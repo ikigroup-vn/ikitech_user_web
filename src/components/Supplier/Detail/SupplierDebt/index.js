@@ -237,6 +237,8 @@ class Footer extends Component {
             reportExpenditure,
           } = this.props;
 
+          console.log(supplierID)
+
         return (
             <div className="support">
                   <div
@@ -299,7 +301,7 @@ class Footer extends Component {
 
 
                         <div className="form-group">
-                        <label htmlFor="name">Nợ nhà cung cấp:&nbsp;{supplierID.debt > 0 ? format(supplierID.debt || 0) : 0}</label>
+                        <label htmlFor="name">Nợ nhà cung cấp:&nbsp;{format(supplierID.debt || 0)}</label>
 
                             <div class="table-responsive">
                                 <table class="table table-hover table-border">

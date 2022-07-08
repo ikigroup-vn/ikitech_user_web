@@ -6,7 +6,7 @@ import * as Types from "../../../constants/ActionType";
 import Alert from "../../Partials/Alert";
 import * as productAction from "../../../actions/product";
 import { shallowEqual } from "../../../ultis/shallowEqual";
-import { formatNumber } from "../../../ultis/helpers"
+import { formatNumber , formatNoD } from "../../../ultis/helpers"
 import { isEmpty } from "../../../ultis/helpers"
 
 class Distribute extends Component {
@@ -41,7 +41,7 @@ class Distribute extends Component {
 
           const _value = formatNumber(value);
           if (!isNaN(Number(_value))) {
-            var data = new Intl.NumberFormat().format(_value)
+            var data = formatNoD(_value);
             if (obj.name == "quantity_in_stock") {
               if (value_data == "") {
                 data = ""
@@ -78,7 +78,7 @@ class Distribute extends Component {
 
           const _value = formatNumber(value);
           if (!isNaN(Number(_value))) {
-            var data = new Intl.NumberFormat().format(_value)
+            var data = formatNoD(_value);
             if (obj.name == "quantity_in_stock") {
               if (value_data == "") {
                 data = ""
@@ -100,7 +100,7 @@ class Distribute extends Component {
 
           const _value = formatNumber(value);
           if (!isNaN(Number(_value))) {
-            var data = new Intl.NumberFormat().format(_value)
+            var data = formatNoD(_value);
             if (obj.name == "quantity_in_stock") {
               if (value_data == "") {
                 data = ""
@@ -489,11 +489,11 @@ class Distribute extends Component {
                 var value_quantity_in_stock = list_distribute[0].element_distributes[_index].sub_element_distributes[index].quantity_in_stock
 
                 const _value = value_price != null ? formatNumber(value_price) : "";
-                var price = _value == "" ? "" : new Intl.NumberFormat().format(_value);
+                var price = _value == "" ? "" : formatNoD(_value);
                 const _value_default = value_price_default != null ? formatNumber(value_price_default) : "";
-                var price_default = _value_default == "" ? "" : new Intl.NumberFormat().format(_value_default);
+                var price_default = _value_default == "" ? "" : formatNoD(_value_default);
                 const _value_S = value_quantity_in_stock !== null && value_quantity_in_stock !== "" ? formatNumber(value_quantity_in_stock) : "";
-                var quantity_in_stock = _value_S == "" ? "" : new Intl.NumberFormat().format(_value_S);
+                var quantity_in_stock = _value_S == "" ? "" : formatNoD(_value_S);
 
               } catch (error) {
                 // var price =  _element.price
@@ -567,14 +567,14 @@ class Distribute extends Component {
             try {
 
               const _value = element.price != null ? formatNumber(element.price) : "";
-              var price = _value == "" ? "" : new Intl.NumberFormat().format(_value);
+              var price = _value == "" ? "" : formatNoD(_value);
 
 
               const _value_default = list_distribute_default[0].element_distributes[_index].price != null ? formatNumber(list_distribute_default[0].element_distributes[_index].price) : "";
-              var price_default = _value_default == "" ? "" : new Intl.NumberFormat().format(_value_default);
+              var price_default = _value_default == "" ? "" : formatNoD(_value_default);
 
               const _value_S = element.quantity_in_stock !== null && element.quantity_in_stock !== "" ? formatNumber(element.quantity_in_stock) : "";
-              var quantity_in_stock = _value_S == "" ? "" : new Intl.NumberFormat().format(_value_S);
+              var quantity_in_stock = _value_S == "" ? "" : formatNoD(_value_S);
 
             } catch (error) {
               var price = element.price

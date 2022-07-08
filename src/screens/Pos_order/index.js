@@ -654,8 +654,7 @@ class PostOrder extends Component {
             if (nextProps.allowAutoPrint == true && this.printed != true && this.onSave == true) {
                 this.props.disablePrint();
                 var { store_code } = this.props.match.params;
-
-                history.push(
+                history.replace(
                     "/order/print/" +
                     store_code +
                     "/" +

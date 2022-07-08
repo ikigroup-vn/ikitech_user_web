@@ -38,20 +38,20 @@ class Form extends Component {
     console.log(_value)
     if (!isNaN(Number(_value))) {
       if (name == "percent_refund") {
-        if (_value < 100) {
+        if (parseInt(_value) < 100) {
           if(_value == "")
           this.setState({ [name]: "" });
           else
-          this.setState({ [name]: _value });
+          this.setState({ [name]: value });
 
 
         }
       } else if (name == "percent_use_max_point") {
-        if (_value < 100) {
+        if (parseInt(_value) < 100) {
           if(_value == "")
           this.setState({ [name]: "" });
           else
-          this.setState({ [name]: _value });
+          this.setState({ [name]: value });
 
 
         }

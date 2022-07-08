@@ -23,37 +23,21 @@ class InfoProduct extends Component {
     const _value = formatNumber(value);
 
 
-    if (name == "txtPrice") {
-      if (!isNaN(Number(_value))) {
-        value = new Intl.NumberFormat().format(_value);
-        value = value.toString().replace(/\./g, ',')
-        if (name == "txtPercentC") {
-          if (value.length < 3) {
-            if (value_text == "") {
-              this.setState({ [name]: "" });
-            }
-            else {
-              this.setState({ [name]: value });
+    if (!isNaN(Number(_value))) {
+      value = formatNoD(_value);
 
-            }
-          }
-        }
-        else {
-          if (value_text == "") {
-            this.setState({ [name]: "" });
-          }
-          else {
-            this.setState({ [name]: value });
 
-          }
-        }
+      if (value_text == "") {
+        this.setState({ [name]: "" });
       }
-    }
-    else {
+      else {
+        this.setState({ [name]: value });
 
-      this.setState({ [name]: value });
+      }
 
     }
+
+
   };
 
 

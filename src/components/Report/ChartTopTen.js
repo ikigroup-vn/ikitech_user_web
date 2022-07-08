@@ -29,7 +29,8 @@ class Chart extends Component {
       },
       nameTypeChart: "THÁNG NÀY",
       showDateTime: "hide",
-      typeTop: "THEO-DOANH-THU"
+      typeTop: "THEO-DOANH-THU",
+      typeDate : "HOM-NAY"
     };
   }
 
@@ -110,12 +111,12 @@ class Chart extends Component {
     switch (value) {
       case "HOM-NAY":
         this.setState({ nameTypeChart: "HÔM NAY" })
-        date = helper.getDateForChartHour()
+        date = helper.getDateForChartDay()
         break;
       case "TUAN-NAY":
         this.setState({ nameTypeChart: "TUẦN NÀY" })
 
-        date = helper.getDateForChartDay()
+        date = helper.getDateForChartWeek()
         break;
       case "THANG-NAY":
         this.setState({ nameTypeChart: "THÁNG NÀY" })
@@ -138,7 +139,9 @@ class Chart extends Component {
 
     var { store_code } = this.props
     if (value != "TUY-CHINH")
-      this.props.fetchTopTenProduct(store_code, `?date_from=${date.from}&date_to=${date.to}`)
+    this.props.fetchTopTenProduct(store_code, `?date_from=${date.from}&date_to=${date.to}`)
+
+    this.setState({typeDate : value})
 
   }
   onchangeDateFromTo = (e) => {
@@ -157,7 +160,7 @@ class Chart extends Component {
 
   }
   render() {
-    var { nameTypeChart, showDateTime, typeTop } = this.state
+    var { nameTypeChart, showDateTime, typeTop , typeDate } = this.state
     var { topten } = this.props
     console.log(topten)
     if (typeof topten.total_items != "undefined") {
@@ -201,6 +204,7 @@ class Chart extends Component {
             />
           </div>
           <select
+            value={typeDate}
             onChange={this.onchangeDate}
             style={{ maxWidth: "170px" }}
             name=""
@@ -208,9 +212,10 @@ class Chart extends Component {
             class="form-control"
             required="required"
           >
-            <option value="THANG-NAY">Tháng này</option>
-            <option value="HOM-NAY">Hôm nay</option>
+               <option value="HOM-NAY">Hôm nay</option>
             <option value="TUAN-NAY">Tuần này</option>
+            <option value="THANG-NAY">Tháng này</option>
+         
             <option value="NAM-NAY">Năm này</option>
             <option value="TUY-CHINH">Tùy chỉnh</option>
 

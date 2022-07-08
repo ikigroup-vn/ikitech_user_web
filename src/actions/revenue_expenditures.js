@@ -122,7 +122,8 @@ export const createRevenueExpenditures = (
   data,
   params,
   funcModal,
-  getForCustomer
+  getForCustomer,
+  _this
 ) => {
   return (dispatch) => {
     dispatch({
@@ -135,7 +136,19 @@ export const createRevenueExpenditures = (
         if (res.data.success && funcModal) {
           funcModal()
         }
-
+        if(_this)
+        {
+          _this.setState({
+            payment_method: null,
+            change_money: 0,
+            type: null,
+            recipient_group: null,
+            recipient_references_id: null,
+      
+            allow_accounting: true,
+            description: "",
+          })
+        }
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",

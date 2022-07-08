@@ -358,7 +358,7 @@ class ModalExpenditures extends Component {
         allow_accounting,
         description,
       },
-      params,funcModal,getForId)
+      params,funcModal,getForId,this)
   };
 
   render() {
@@ -601,7 +601,7 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(error);
     },
     createRevenueExpenditures: (id, branch_id, data, params,funcModal,
-      getForId = null) => {
+      getForId = null , _this) => {
       dispatch(
         revenueExpendituresAction.createRevenueExpenditures(
           id,
@@ -609,7 +609,8 @@ const mapDispatchToProps = (dispatch, props) => {
           data,
           params,
           funcModal,
-          getForId
+          getForId,
+          _this
         )
       );
     },
