@@ -96,7 +96,7 @@ class Form extends Component {
           type: "danger",
           title: "Lỗi",
           disable: "show",
-          content: "Tiêu đề không được để trống",
+          content: "Tên khóa học không được để trống",
         },
       });
       return;

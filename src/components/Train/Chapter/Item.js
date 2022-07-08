@@ -76,12 +76,12 @@ class Table extends Component {
                 return (
 
                     <SortableItem key={data.id}>
-                        <div className="wrap-box-item hover-product">
+                        <div className="wrap-box-item hover-product" >
                             <div className="box-content"  >
                                 <div className="img-contain">
                                     <img width={120} height={90} src={image_url} />
                                 </div>
-                                <div className="content">
+                                <div className="content" style = {{maxWidth : "750px"}}>
                                     <div className="title">
                                         <span>{data.title}</span>
                                     </div>
@@ -125,10 +125,18 @@ class Table extends Component {
                                         >
                                             <i class="fa fa-pencil"></i>
                                         </button>
+                                        <button className="btn-not-background remove"
+                                    onClick={(e) => this.passDelLessonDataModal(e, data.id, data.title, data.train_chapter_id
+                                    )}
+                                    data-toggle="modal"
+                                    data-target="#removeLessonModal"
+                                >
+                                    <i class="fa fa-trash"></i>
+                                </button>
                                     </div>
                                 </div>
                             </div>
-                            <div className="action-box">
+                            {/* <div className="action-box">
                                 <button className="btn-not-background"
                                     onClick={(e) => this.passDelLessonDataModal(e, data.id, data.title, data.train_chapter_id
                                     )}
@@ -137,26 +145,8 @@ class Table extends Component {
                                 >
                                     <i class="fa fa-trash"></i>
                                 </button>
-                                {/* <button
-                                className = "btn-not-background"
-                                    onClick={(e) =>
-                                        this.passEditLessonFunc(
-                                            e,
-                                            data.id,
-                                            data.train_chapter_id,
-                                            data.title,
-                                            data.link_video_youtube,
-                                            data.description,
-
-                                            data.short_description
-                                        )
-                                    }
-                                    data-toggle="modal"
-                                    data-target="#updateLessonModal" 
-                                >
-                                    <i class="fa fa-edit"></i>
-                                </button> */}
-                            </div>
+                              
+                            </div> */}
                         </div>
                         {/* <div class="resp-table-row" style={{ width: "100%" }}>
                             <div class="table-body-cell" style={{ width: "15%" }}>
@@ -273,23 +263,22 @@ class Table extends Component {
             <>
                 <SortableItem key={data.id} collection={data.id}>
                     <div class="resp-table-row hover-product" style={{ width: "100%" }}>
-                        {/* <div class="table-body-cell icon-show-detail " style={{ width: "3%" }} >
+                        <div class="table-body-cell icon-show-detail " style={{ width: "1%" }} >
                             <button style={{ maxWidth: "30px" }} className="btn-not-background" onClick={() => {
                                 this.setState({ isOpenLesson: !isOpenLesson })
                             }}>              <i class={`fas fa-angle-double-${isOpenLesson === true ? "down" : "right"}`}></i>
                             </button>
-                        </div> */}
+                        </div>
 
-                        <div class="table-body-cell" style={{ width: "15%" }}>
+                        <div class="table-body-cell" style={{ width: "15%"  , color : "blue" }}>
                             {data.title}
                         </div>
                         <div class="table-body-cell" style={{ width: "20%" }}>
-                            {data.short_description}
-                        </div>
+                        {data.short_description?.slice(0,140)}...                        </div>
 
-                        <div class="table-body-cell" style={{ width: "15%" }}>
+                        <div class="table-body-cell" style={{ width: "6%" }}>
                             <div
-                                className=""
+                                className="action-table"
                             >
                                 <button
                                     onClick={(e) =>
@@ -303,9 +292,10 @@ class Table extends Component {
                                         )
                                     }
                                     data-toggle="modal"
-                                    data-target="#updateModal" class={`btn btn-warning btn-sm`}
+                                    data-target="#updateModal"
+                                    className = "btn-not-background edit"
                                 >
-                                    <i class="fa fa-edit"></i> Sửa
+                                    <i class="fa fa-pencil"></i> 
                                 </button>
                                 <button
                                     onClick={(e) => this.passDataModal(e, data.id, data.title, data.train_course_id
@@ -313,9 +303,9 @@ class Table extends Component {
                                     style={{ marginLeft: "10px" }}
                                     data-toggle="modal"
                                     data-target="#removeModal"
-                                    class={`btn btn-danger btn-sm `}
+                                    className = "btn-not-background remove"
                                 >
-                                    <i class="fa fa-trash"></i> Xóa
+                                    <i class="fa fa-trash"></i> 
                                 </button>
                             </div>
                         </div>
@@ -363,8 +353,11 @@ class Table extends Component {
                 </tr> */}
 
 
-                <tr >
-                    <td colSpan={5} style={{
+                <tr className= {`collaspe-lesson ${isOpenLesson == true ? "" : "hide"}`} >
+                    <td style = {{
+                            background: "beige"
+                    }}></td>
+                    <td colSpan={3} style={{
                         border: "1px solid #dcd2d2",
                         padding: "4px",
                         marginTop: "5px",
@@ -372,13 +365,13 @@ class Table extends Component {
 
                         {
 
-                            <div>
+                            <div className="container-lesson">
 
 
                                 {
                                     data.lessons?.length > 0 && <SortableList
                                         onSortEnd={this.onSortEnd}
-                                    // className="resp-table-body"
+                                    className="container-item"
                                     // draggedItemClassName="dragged"
                                     >
                                         {this.showData(data.lessons)}
@@ -412,6 +405,7 @@ class Table extends Component {
                         </div>
 
                     </td>
+
                 </tr>
 
 

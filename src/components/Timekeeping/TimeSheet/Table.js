@@ -246,11 +246,14 @@ class Table extends Component {
                             "HH:mm:ss"
                           )}
                         </span>
-                        &nbsp;({data?.keeping_histories[0]?.is_bonus == true ? <span style={{ color: "green" }}>
-                          Thêm công
+                        &nbsp;{
+                          data?.keeping_histories[0]?.remote_timekeeping === true ? "" :
+
+                        data?.keeping_histories[0]?.is_bonus == true ? <span style={{ color: "green" }}>
+                          (Thêm công)
                         </span> : <span style={{ color: "red" }}>
-                          Bớt công
-                        </span>})
+                          (Bớt công)
+                        </span>}
                       </div>
                       <div>
                         {data?.keeping_histories[0]?.remote_timekeeping ? (
@@ -316,17 +319,26 @@ class Table extends Component {
                             ]?.time_check
                           ).format("HH:mm:ss")}
                         </span>
-                        &nbsp;({data?.keeping_histories[
-                          data?.keeping_histories.length - 1
-                        ]?.is_bonus == true ? <span style={{ color: "green" }}>
-                          Thêm công
-                        </span> : <span style={{ color: "red" }}>
-                          Bớt công
-                        </span>})
+                      
+                            &nbsp;{
+                              data?.keeping_histories[data?.keeping_histories.length - 1]?.remote_timekeeping === true ? "" :
+                            data?.keeping_histories[
+                              data?.keeping_histories.length - 1
+                            ]?.is_bonus == true ?
+                            
+                            <span style={{ color: "green" }}>
+                              (Thêm công)
+                            </span> : 
+                            <span style={{ color: "red" }}>
+                              (Bớt công)
+                            </span>}
+                          
+                        
+                  
                      
                       </div>
                          <div>
-                        {data?.keeping_histories[0]?.remote_timekeeping ? (
+                        {data?.keeping_histories[data?.keeping_histories.length - 1]?.remote_timekeeping ? (
                           <span
                             style={{
                               color: "red",

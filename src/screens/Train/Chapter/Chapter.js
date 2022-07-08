@@ -122,7 +122,7 @@ class Lesson extends Component {
             </div>
           
           </form>
-          <button data-toggle="modal"
+          <button data-toggle="modal" style = {{marginTop : "auto"}}
             data-target="#createModal"
             class={`btn btn-info btn-icon-split btn-sm ${insert == true ? "show" : "hide"}`}
           >

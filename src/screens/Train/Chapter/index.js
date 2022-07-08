@@ -8,6 +8,7 @@ import Alert from "../../../components/Partials/Alert";
 import { connect } from "react-redux";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
+import { Redirect, Link } from "react-router-dom";
 
 import NotAccess from "../../../components/Partials/NotAccess";
 import Chapter from "./Chapter";
@@ -22,8 +23,10 @@ class Theme extends Component {
     this.state = {
       tabId: "",
       change: "",
-      
+
     };
+    this.defaultIndex = 0
+
   }
 
 
@@ -31,42 +34,22 @@ class Theme extends Component {
     this.setState({ tabId: index, change: helper.randomString(10) });
   };
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (
-  //     this.state.isLoading != true &&
-  //     typeof this.props.permission.product_list != "undefined"
-  //   ) {
-  //     var permissions = this.props.permission;
+  componentWillMount() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    var tabIndex = urlParams.get('tab-index');
+    if (!tabIndex) {
+      tabIndex = 0;
+    }
+    this.defaultIndex = tabIndex;
+    
 
-  //     var web_theme_overview = permissions.web_theme_overview;
-  //     var web_theme_contact = permissions.web_theme_contact;
-  //     var web_theme_help = permissions.web_theme_help;
-  //     var web_theme_footer = permissions.web_theme_footer;
-  //     var web_theme_banner = permissions.web_theme_banner;
-  //     var isShow =
-  //       web_theme_overview == false &&
-  //         web_theme_contact == false &&
-  //         web_theme_help == false &&
-  //         web_theme_footer == false &&
-  //         web_theme_banner == false
-  //         ? false
-  //         : true;
+  }
 
-  //     this.setState({
-  //       isLoading: true,
-  //       web_theme_overview,
-  //       web_theme_contact,
-  //       web_theme_help,
-  //       web_theme_footer,
-  //       web_theme_banner,
-  //       isShow,
-  //     });
-  //   }
-  // }
   render() {
     var { store_code, courseId } = this.props.match.params
 
-    var {tabId} = this.state
+    var { tabId } = this.state
     var isShow = true
     return (
       <div id="wrapper">
@@ -87,7 +70,7 @@ class Theme extends Component {
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
                     <h4 className="h4 title_content mb-0 text-gray-800">
-                     Chương - Trắc nghiệm
+                      Chương - Trắc nghiệm
                     </h4>
                   </div>
                   <br></br>
@@ -95,49 +78,54 @@ class Theme extends Component {
                   <div className="card shadow mb-4">
                     <div className="card-body">
                       <Tabs
-                        defaultIndex={0}
+                        defaultIndex={this.defaultIndex}
                         onSelect={(index) => this.fetchDataOnTap(index)}
                       >
                         <TabList>
-                            <Tab>
-                              <i class="fas fa-book-open"></i>
+
+                          <Tab>
+                            <Link to={"?tab-index=0"}>              
+                             <i class="fas fa-book-open"></i> {" "}
                               <span style={{ fontSize: "0.8rem" }}>
                                 Chương
-                              </span>
-                            </Tab>
-                          <Tab>
-                            <i class="fas fa-book-reader"></i>
-                            <span style={{ fontSize: "0.8rem" }}>
-                              Trắc nghiệm
-                            </span>
+                              </span></Link>
+
                           </Tab>
-                         
-                      
+                          <Tab>
+                            <Link to={"?tab-index=1"}>    
+                                        <i class="fas fa-book-reader"></i>{" "}
+                              <span style={{ fontSize: "0.8rem" }}>
+                                Trắc nghiệm
+                              </span></Link>
+
+                          </Tab>
 
 
 
-                          
+
+
+
 
 
                         </TabList>
 
-                          <TabPanel>
-                            <Chapter
-                              tabId={tabId}
-                              store_code={store_code}
-                              courseId = {courseId}
-                           
-                            />
-                          </TabPanel>
                         <TabPanel>
-                        <Quiz
-                              tabId={tabId}
-                              store_code={store_code}
-                              courseId = {courseId}
-                           
-                            />
+                          <Chapter
+                            tabId={tabId}
+                            store_code={store_code}
+                            courseId={courseId}
+
+                          />
                         </TabPanel>
-                      
+                        <TabPanel>
+                          <Quiz
+                            tabId={tabId}
+                            store_code={store_code}
+                            courseId={courseId}
+
+                          />
+                        </TabPanel>
+
 
 
                       </Tabs>
@@ -169,7 +157,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     fetchTheme: (store_code) => {
-    //   dispatch(themeAction.fetchTheme(store_code));
+      //   dispatch(themeAction.fetchTheme(store_code));
     },
   };
 };

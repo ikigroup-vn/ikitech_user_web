@@ -36,7 +36,10 @@ class CourseEdit extends Component {
         return (
 
 
-            <div className="wrap-box-item hover-product">
+            <div className="wrap-box-item hover-product" style = {{
+                border: "1px solid #cac6c6",
+"border-radius": "0.375rem"
+            }}>
                 <div className="" style = {{padding : "10px"}}   >
 
                     <div className="question">

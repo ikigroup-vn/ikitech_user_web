@@ -89,8 +89,9 @@ class Table extends Component {
       <>
         <div id="resp-table">
 
-          <div className="resp-table-body">
-
+          <div className="resp-table-body" style = {{background: "#eeeded"}}>
+          <div  class="table-body-cell">
+            </div>
             <div style={{ fontWeight: "500" }} class="table-body-cell">
               Tên chương
             </div>

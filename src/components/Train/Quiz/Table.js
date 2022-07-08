@@ -62,6 +62,8 @@ class Table extends Component {
 
   showData = (courses) => {
     var { store_code } = this.props
+    var {courseId} = this.props
+
     var result = null;
     if (courses.length > 0) {
       var { update, _delete } = this.props
@@ -76,13 +78,14 @@ class Table extends Component {
 
 
             <td>{data.title}</td>
-
-
-            <td>{data.short_description}</td>
             <td>{data.minute ?? 0} phút</td>
 
 
-            <td>
+            <td style = {{maxWidth : "250px"}}>
+          {data.short_description?.slice(0,120)}...</td>
+
+
+            <td className = "three-btn-group" style = {{maxWidth : "150px"}}>
               {/* <Link
                 to={`/train/chapter/index/${store_code}/${data.id}`}
                 class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
@@ -110,13 +113,19 @@ class Table extends Component {
               <button
                 name="action"
                 onClick={(e) => this.handleDelLessonCallBack(data.id, data.title, "bài trắc nghiệm", data.train_course_id)}
-                style={{ marginLeft: "10px" }}
                 data-toggle="modal"
                 data-target="#removeModalQuiz"
                 class={`btn btn-danger btn-sm ${_delete == true ? "show" : "hide"}`}
               >
                 <i class="fa fa-trash"></i> Xóa
               </button>
+
+              <Link
+                to = {`/train/quiz/question/${store_code}/${courseId}/${data.id}`}
+                class={`btn btn-success btn-sm`}
+              >
+                <i class="fa fa-plus"></i> Tạo bài thi
+              </Link>
             </td>
           </tr>
         );

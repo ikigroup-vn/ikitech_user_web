@@ -291,9 +291,9 @@ export const createLesson = (store_code,courseId,data , _this, resetModal) => {
           resetModal();
           _this.setState({
             txtTitle: "",
-      txtSumary: "",
-      txtContent: "",
-      link_video_youtube : "",
+            txtSumary: "",
+            txtContent: "",
+            link_video_youtube : "",
           })
         }
         dispatch({
@@ -1121,11 +1121,11 @@ export const updateQuiz = (id, data, store_code,_this,resetModal , courseId) => 
           type: Types.SHOW_LOADING,
           loading : "hide"
         })
-        trainApi.fetchAllLesson(store_code , 1 ,null , courseId).then((res) => {
+        trainApi.fetchAllQuiz(store_code , 1 ,null , courseId).then((res) => {
       
             if(res.data.code !== 401)
           dispatch({
-            type: Types.FETCH_ALL_TRAIN_LESSON,
+            type: Types.FETCH_ALL_TRAIN_QUIZ,
             data: res.data.data,
           });
         });

@@ -119,6 +119,7 @@ class Quiz extends Component {
           </form>
           <button data-toggle="modal"
             data-target="#createQuizModal"
+            style = {{marginTop : "auto"}}
             class={`btn btn-info btn-icon-split btn-sm ${insert == true ? "show" : "hide"}`}
           >
             <span class="icon text-white-50">

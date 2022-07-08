@@ -43,13 +43,21 @@ class Table extends Component {
 
             
 
-            <td>{data.title}</td>
+            <td><div>
+              <span> {data.title}</span>
+              <div style = {{
+                color: "blue",
+                "text-decoration": "underline"
+              }}>Xem</div>
+              </div></td>
 
        
-            <td>{data.short_description}</td>
+            <td 
+            style = {{maxWidth : "240px"}}
+            >{data.short_description?.slice(0,80)}...</td>
 
 
-            <td style = {{maxWidth : "150px"}}>
+            <td style = {{maxWidth : "150px" , display : "flex"}}>
             {/* <Link
                 to={`/train/chapter/index/${store_code}/${data.id}`}
                 class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}

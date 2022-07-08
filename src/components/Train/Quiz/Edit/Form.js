@@ -15,6 +15,7 @@ import SeoOption from "./SeoOption";
 import history from "../../../../history";
 import * as userLocalApi from "../../../../data/local/user";
 import themeData from "../../../../ultis/theme_data";
+import { formatNumber, removeVietnameseTones , formatNoD } from "../../../../ultis/helpers";
 
 import {
   image as imagePlugin,
@@ -69,15 +70,28 @@ class Form extends Component {
   }
 
 
-  onChange = (e) => {
-    var target = e.target;
-    var name = target.name;
-    var value = target.value;
 
-    this.setState({
-      [name]: value,
-    });
-  };
+    onChange = (e) => {
+      var target = e.target;
+      var name = target.name;
+      var value = target.value;
+      if(name == "txtMinute")
+      {
+        var _value = formatNumber(value);
+        this.setState({
+          [name]: _value,
+        });
+      }
+      else
+      {
+        this.setState({
+          [name]: value,
+        });
+      }
+   
+    };
+  
+   
 
   handleEditorChange = (editorState) => {
     this.setState({
@@ -99,18 +113,30 @@ class Form extends Component {
     } = this.state
     if (txtTitle == null || !isEmpty(txtTitle)) {
       this.props.showError({
-
         type: Types.ALERT_UID_STATUS,
         alert: {
           type: "danger",
           title: "Lỗi",
           disable: "show",
-          content: "Tiêu đề không được để trống",
+          content: "Tên bài trắc nghiệm không được để trống",
         },
-      }
-      )
+      });
       return;
     }
+    
+    if (txtMinute == null || !isEmpty(txtMinute) || parseInt(txtMinute ?? 0) <= 0) {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Thời gian thi không được để trống",
+        },
+      });
+      return;
+    }
+
 
 
     this.props.updateQuiz(id, {
@@ -157,7 +183,7 @@ class Form extends Component {
                 class="modal-header"
                 style={{ backgroundColor: themeData().backgroundColor }}
               >
-                <h4 class="modal-title">Sửa chương</h4>
+              <h4 class="modal-title">Sửa bài trắc nghiệm</h4>
 
                 <button
                   type="button"
@@ -179,13 +205,13 @@ class Form extends Component {
                 <div class="modal-body" style={{ padding: " 0 10px" }}>
 
                   <div class="form-group">
-                    <label for="product_name">Tên chương</label>
+                  <label for="product_name">Tên bài trắc nghiệm</label>
                     <input
                       type="text"
                       class="form-control"
                       id="txtTitle"
                       value={txtTitle}
-                      placeholder="Nhập tên khóa học"
+                      placeholder="Nhập tên bài trắc nghiệm"
                       autocomplete="off"
                       onChange={this.onChange}
                       name="txtTitle"
@@ -197,7 +223,7 @@ class Form extends Component {
                       type="text"
                       class="form-control"
                       id="txtMinute"
-                      value={txtMinute}
+                      value={formatNoD(txtMinute)}
                       placeholder="Nhập số phút"
                       autocomplete="off"
                       onChange={this.onChange}

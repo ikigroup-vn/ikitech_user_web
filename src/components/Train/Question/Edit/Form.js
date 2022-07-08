@@ -215,7 +215,7 @@ class Form extends Component {
                 class="modal-header"
                 style={{ backgroundColor: themeData().backgroundColor }}
               >
-                <h4 class="modal-title">Thêm câu hỏi</h4>
+                <h4 class="modal-title">Sửa câu hỏi</h4>
 
                 <button
                   type="button"

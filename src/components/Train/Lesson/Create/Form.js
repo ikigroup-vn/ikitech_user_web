@@ -111,7 +111,8 @@ class Form extends Component {
     var {
       txtTitle,
       txtSumary,
-      link_video_youtube
+      link_video_youtube,
+      txtContent
       
     } = this.state;
 
@@ -203,6 +204,7 @@ class Form extends Component {
                       showToolbar={true}
                       onChange={this.handleEditorChange}
                       setDefaultStyle="height: auto"
+                      setContents={txtContent}
 
                       setOptions={{
                         requestHeaders: {
