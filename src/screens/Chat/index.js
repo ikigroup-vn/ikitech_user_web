@@ -12,6 +12,8 @@ import ChatBox from "../../components/Chat/ChatBox";
 import NotAccess from "../../components/Partials/NotAccess";
 import * as  helpers from '../../ultis/helpers';
 import io from "socket.io-client";
+import { getBranchId } from "../../ultis/branchUtils";
+import * as notificationAction from "../../actions/notification";
 
 
 class Customer extends Component {
@@ -40,16 +42,17 @@ class Customer extends Component {
       var isShow = permissions.chat_list
       this.setState({ isLoading: true, isShow })
     }
-    console.log(this.props.user)
     if (!shallowEqual(this.props.user, nextProps.user) && typeof nextProps.user.id !== "undefined") {
-      console.log( `badges:badges_user:${nextProps.user.id}`)
+      var { store_code } = this.props.match.params
+ 
       this.socket = io(helpers.callUrlSocket(), {
         transports: ["websocket"],
       });
       this.socket.on(
         `badges:badges_user:${nextProps.user.id}`,
-
-        (res) => console.log("data ne" , res)      
+        (res) => {
+          this.props.fetchAllChat(store_code, 1)
+          }
       );
     }
 
@@ -158,6 +161,9 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchAllChat: (store_code, page) => {
       dispatch(chatAction.fetchAllChat(store_code, page));
     },
+    fetchAllBadge: (store_code, branch_id) => {
+      dispatch(notificationAction.fetchAllBadge(store_code, branch_id));
+  },
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Customer);

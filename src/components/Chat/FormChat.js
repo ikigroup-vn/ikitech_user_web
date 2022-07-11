@@ -220,7 +220,7 @@ class FormChat extends Component {
       });
       this.socket.on(
         `chat:message_from_customer:${this.props.customerId}`,
-        (res) => this.changeMess(res)
+        (res) =>  {console.log(res);this.changeMess(res)}
       );
     }
   }
@@ -233,7 +233,7 @@ class FormChat extends Component {
       });
       this.socket.on(
         `chat:message_from_customer:${nextProps.customerId}`,
-        (res) => this.changeMess(res)
+        (res) => {console.log(res);this.changeMess(res)}
       );
     }
   }
