@@ -51,6 +51,7 @@ class Customer extends Component {
       this.socket.on(
         `badges:badges_user:${nextProps.user.id}`,
         (res) => {
+          console.log(res)
           this.props.fetchAllChat(store_code, 1)
           }
       );
