@@ -39,9 +39,9 @@ class Distribute extends Component {
       else {
         try {
 
-          const _value = formatNumber(value);
-          if (!isNaN(Number(_value))) {
-            var data = formatNoD(_value);
+          const valueFormat = formatNumber(value);
+          if (!isNaN(Number(valueFormat))) {
+            var data = formatNoD(valueFormat);
             if (obj.name == "quantity_in_stock") {
               if (value_data == "") {
                 data = ""
@@ -76,9 +76,9 @@ class Distribute extends Component {
         console.log(type, obj, this.state.list_distribute)
         try {
 
-          const _value = formatNumber(value);
-          if (!isNaN(Number(_value))) {
-            var data = formatNoD(_value);
+          const valueFormat = formatNumber(value);
+          if (!isNaN(Number(valueFormat))) {
+            var data = formatNoD(valueFormat);
             if (obj.name == "quantity_in_stock") {
               if (value_data == "") {
                 data = ""
@@ -98,9 +98,9 @@ class Distribute extends Component {
         } catch (error) {
           list_distribute[0].element_distributes[obj._index].sub_element_distributes.push({ name: obj.title })
 
-          const _value = formatNumber(value);
-          if (!isNaN(Number(_value))) {
-            var data = formatNoD(_value);
+          const valueFormat = formatNumber(value);
+          if (!isNaN(Number(valueFormat))) {
+            var data = formatNoD(valueFormat);
             if (obj.name == "quantity_in_stock") {
               if (value_data == "") {
                 data = ""
@@ -448,13 +448,13 @@ class Distribute extends Component {
             if (typeof element.sub_element_distributes != "undefined") {
               if (element.sub_element_distributes.length > 0) {
                 element.sub_element_distributes.forEach((_element, index) => {
-                  const _value = _element.quantity_in_stock != null && isEmpty(_element.quantity_in_stock) ? formatNumber(_element.quantity_in_stock) : 0;
-                  total = _element.quantity_in_stock !== null ? Number(total) + Number(_value) : 0
+                  const valueFormat = _element.quantity_in_stock != null && isEmpty(_element.quantity_in_stock) ? formatNumber(_element.quantity_in_stock) : 0;
+                  total = _element.quantity_in_stock !== null ? Number(total) + Number(valueFormat) : 0
                 });
               }
               else {
-                const _value = element.quantity_in_stock != null && isEmpty(element.quantity_in_stock) ? formatNumber(element.quantity_in_stock) : 0;
-                total = element.quantity_in_stock !== null ? Number(total) + Number(_value) : 0
+                const valueFormat = element.quantity_in_stock != null && isEmpty(element.quantity_in_stock) ? formatNumber(element.quantity_in_stock) : 0;
+                total = element.quantity_in_stock !== null ? Number(total) + Number(valueFormat) : 0
               }
             }
           });
@@ -488,12 +488,12 @@ class Distribute extends Component {
 
                 var value_quantity_in_stock = list_distribute[0].element_distributes[_index].sub_element_distributes[index].quantity_in_stock
 
-                const _value = value_price != null ? formatNumber(value_price) : "";
-                var price = _value == "" ? "" : formatNoD(_value);
-                const _value_default = value_price_default != null ? formatNumber(value_price_default) : "";
-                var price_default = _value_default == "" ? "" : formatNoD(_value_default);
-                const _value_S = value_quantity_in_stock !== null && value_quantity_in_stock !== "" ? formatNumber(value_quantity_in_stock) : "";
-                var quantity_in_stock = _value_S == "" ? "" : formatNoD(_value_S);
+                const valueFormat = value_price != null ? formatNumber(value_price) : "";
+                var price = valueFormat == "" ? "" : formatNoD(valueFormat);
+                const valueFormat_default = value_price_default != null ? formatNumber(value_price_default) : "";
+                var price_default = valueFormat_default == "" ? "" : formatNoD(valueFormat_default);
+                const valueFormat_S = value_quantity_in_stock !== null && value_quantity_in_stock !== "" ? formatNumber(value_quantity_in_stock) : "";
+                var quantity_in_stock = valueFormat_S == "" ? "" : formatNoD(valueFormat_S);
 
               } catch (error) {
                 // var price =  _element.price
@@ -566,15 +566,15 @@ class Distribute extends Component {
           else {
             try {
 
-              const _value = element.price != null ? formatNumber(element.price) : "";
-              var price = _value == "" ? "" : formatNoD(_value);
+              const valueFormat = element.price != null ? formatNumber(element.price) : "";
+              var price = valueFormat == "" ? "" : formatNoD(valueFormat);
 
 
-              const _value_default = list_distribute_default[0].element_distributes[_index].price != null ? formatNumber(list_distribute_default[0].element_distributes[_index].price) : "";
-              var price_default = _value_default == "" ? "" : formatNoD(_value_default);
+              const valueFormat_default = list_distribute_default[0].element_distributes[_index].price != null ? formatNumber(list_distribute_default[0].element_distributes[_index].price) : "";
+              var price_default = valueFormat_default == "" ? "" : formatNoD(valueFormat_default);
 
-              const _value_S = element.quantity_in_stock !== null && element.quantity_in_stock !== "" ? formatNumber(element.quantity_in_stock) : "";
-              var quantity_in_stock = _value_S == "" ? "" : formatNoD(_value_S);
+              const valueFormat_S = element.quantity_in_stock !== null && element.quantity_in_stock !== "" ? formatNumber(element.quantity_in_stock) : "";
+              var quantity_in_stock = valueFormat_S == "" ? "" : formatNoD(valueFormat_S);
 
             } catch (error) {
               var price = element.price

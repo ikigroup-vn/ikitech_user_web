@@ -10,21 +10,26 @@ import * as chatAction from "../../actions/chat";
 import * as Env from "../../ultis/default"
 import ChatBox from "../../components/Chat/ChatBox";
 import NotAccess from "../../components/Partials/NotAccess";
+import * as  helpers from '../../ultis/helpers';
+import io from "socket.io-client";
+
 
 class Customer extends Component {
   constructor(props) {
     super(props);
     this.state = {
       isActive: "",
-      isLoadFirstCustomer : false
+      isLoadFirstCustomer: false
     };
+    this.socket = null;
+
   }
   componentWillReceiveProps(nextProps) {
     if (!shallowEqual(nextProps.listChat, this.props.listChat)) {
       if (typeof nextProps.listChat.data !== "undefined" && nextProps.listChat.data.length > 0 && this.state.isLoadFirstCustomer == false) {
         var { store_code } = this.props.match.params
         var customerId = nextProps.listChat.data[0].customer_id
-        this.setState({ isActive: customerId , isLoadFirstCustomer : true })
+        this.setState({ isActive: customerId, isLoadFirstCustomer: true })
 
         this.props.fetchChatId(store_code, customerId);
       }
@@ -35,7 +40,22 @@ class Customer extends Component {
       var isShow = permissions.chat_list
       this.setState({ isLoading: true, isShow })
     }
+    console.log(this.props.user)
+    if (!shallowEqual(this.props.user, nextProps.user) && typeof nextProps.user.id !== "undefined") {
+      console.log( `badges:badges_user:${nextProps.user.id}`)
+      this.socket = io(helpers.callUrlSocket(), {
+        transports: ["websocket"],
+      });
+      this.socket.on(
+        `badges:badges_user:${nextProps.user.id}`,
+
+        (res) => console.log("data ne" , res)      
+      );
+    }
+
   }
+
+
 
 
 
@@ -53,6 +73,9 @@ class Customer extends Component {
 
   componentDidMount() {
     this.props.fetchAllChat(this.props.match.params.store_code, 1);
+    console.log(this.props.user)
+
+
   }
 
   render() {
@@ -117,6 +140,7 @@ const mapStateToProps = (state) => {
     listChat: state.chatReducers.chat.allChat,
     chat: state.chatReducers.chat.chatID,
     permission: state.authReducers.permission.data,
+    user: state.userReducers.user.userID,
 
   };
 };

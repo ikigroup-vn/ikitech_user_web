@@ -29,7 +29,7 @@ class ModalDetail extends Component {
 
     handleClick = (nameDistribute, nameObject, index, id, quatity) => {
 
-        var { distributes } = this.props.modal.inventoryProduct
+        var distributes  = this.props.modal.distributeProduct
         var distribute = this.props.modal.distributeProduct
         var elementImport = findImportPrice(distribute, id)
         console.log("element", elementImport)
@@ -68,10 +68,11 @@ class ModalDetail extends Component {
                         var indexElement = itemParent.element_distributes.map(e => e.id).indexOf(id)
                         if (indexElement !== -1) {
                             var elment = itemParent.element_distributes[indexElement]
+                            console.log(1,elment)
                             if (elment)
                                 this.setState({
                                     elementObject: elment,
-                                    afterChoosePrice: elment.cost_of_capital,
+                                    afterChoosePrice: elment.import_price,
                                     priceBeforeDiscount: elment.price,
                                     quantityInStock: quatity,
                                     messageErr: "",
@@ -83,6 +84,8 @@ class ModalDetail extends Component {
                         var indexElements = itemParent.element_distributes.map(e => e.id).indexOf(id)
                         if (indexElements !== -1) {
                             var elments = itemParent.element_distributes[indexElements]
+                            console.log(2,elment)
+
                             if (elments)
                                 this.setState({
                                     elementObject: elments,
@@ -147,11 +150,11 @@ class ModalDetail extends Component {
             var indexDistribute = sub_element_distributes.map(e => e.name).indexOf(nameElement)
             var sub_element = sub_element_distributes[indexDistribute]
             this.setState({
-                // afterChoosePrice: sub_element.price - (sub_element.price * value / 100),
-                // priceBeforeDiscount: sub_element.price,
-                afterChoosePrice: sub_element.cost_of_capital,
+                afterChoosePrice: sub_element.price - (sub_element.price * value / 100),
+                priceBeforeDiscount: sub_element.price,
+                // afterChoosePrice: sub_element.cost_of_capital,
 
-                priceBeforeDiscount: sub_element.cost_of_capital,
+                // priceBeforeDiscount: sub_element.cost_of_capital,
 
                 quantityInStock: sub_element.stock, messageErr: "",
                 idElement: id,
@@ -162,7 +165,7 @@ class ModalDetail extends Component {
                 var indexDistributes = sub_element_distributes.map(e => e.name).indexOf(nameElement)
                 var sub_elements = sub_element_distributes[indexDistributes]
                 this.setState({
-                    afterChoosePrice: sub_elements.cost_of_capital,
+                    afterChoosePrice: sub_elements.import_price,
                     priceBeforeDiscount: sub_elements.price,
                     quantityInStock: sub_elements.stock,
                     idElement: id,
@@ -277,7 +280,15 @@ class ModalDetail extends Component {
     }
     render() {
         var inforProduct = this.props.modal
+        
         var itemParent = inforProduct && inforProduct.inventoryProduct && inforProduct.inventoryProduct.distributes !== null && inforProduct.inventoryProduct.distributes.length > 0 ? inforProduct.inventoryProduct.distributes[0] : []
+        
+        console.log(this.props.modal , this.state,inforProduct,
+            this.state.afterChoosePrice === '' ? inforProduct.discountProduct === null ?
+                                                this.props.modal.minPriceProduct === this.props.modal.maxPriceProduct ?
+                                                    format(Number(this.props.modal.minPriceProduct)) : `${format(Number(this.props.modal.minPriceProduct))}-${format(Number(this.props.modal.maxPriceProduct))}` : this.state.minPriceAfterDiscount === this.state.maxPriceAfterDiscount ? `${format(Number(this.state.minPriceAfterDiscount))}` : `${format(Number(this.state.minPriceAfterDiscount))} - ${format(Number(this.state.maxPriceAfterDiscount))}`
+                                                : format(Number(this.state.afterChoosePrice))
+        )
         return (
             <div class="modal" id="modalDetails">
                 <div class="modal-dialog">

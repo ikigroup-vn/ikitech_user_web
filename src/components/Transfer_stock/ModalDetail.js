@@ -29,7 +29,7 @@ class ModalDetail extends Component {
 
     handleClick = (nameDistribute, nameObject, index, id, quatity) => {
 
-        var { distributes } = this.props.modal.inventoryProduct
+        var distributes  = this.props.modal.distributeProduct
         var distribute = this.props.modal.distributeProduct
         var elementImport = findImportPrice(distribute, id)
         console.log("element", elementImport)
@@ -71,7 +71,7 @@ class ModalDetail extends Component {
                             if (elment)
                                 this.setState({
                                     elementObject: elment,
-                                    afterChoosePrice: elment.cost_of_capital,
+                                    afterChoosePrice: elment.import_price,
                                     priceBeforeDiscount: elment.price,
                                     quantityInStock: quatity,
                                     messageErr: "",
@@ -147,11 +147,11 @@ class ModalDetail extends Component {
             var indexDistribute = sub_element_distributes.map(e => e.name).indexOf(nameElement)
             var sub_element = sub_element_distributes[indexDistribute]
             this.setState({
-                // afterChoosePrice: sub_element.price - (sub_element.price * value / 100),
-                // priceBeforeDiscount: sub_element.price,
-                afterChoosePrice: sub_element.cost_of_capital,
+                afterChoosePrice: sub_element.price - (sub_element.price * value / 100),
+                priceBeforeDiscount: sub_element.price,
+                // afterChoosePrice: sub_element.cost_of_capital,
 
-                priceBeforeDiscount: sub_element.cost_of_capital,
+                // priceBeforeDiscount: sub_element.cost_of_capital,
 
                 quantityInStock: sub_element.stock, messageErr: "",
                 idElement: id,
@@ -162,7 +162,7 @@ class ModalDetail extends Component {
                 var indexDistributes = sub_element_distributes.map(e => e.name).indexOf(nameElement)
                 var sub_elements = sub_element_distributes[indexDistributes]
                 this.setState({
-                    afterChoosePrice: sub_elements?.cost_of_capital,
+                    afterChoosePrice: sub_elements?.import_price,
                     priceBeforeDiscount: sub_elements?.price,
                     quantityInStock: sub_elements?.stock,
                     idElement: id,

@@ -296,7 +296,7 @@ class ModalExpenditures extends Component {
           type: "danger",
           title: "Lỗi",
           disable: "show",
-          content: "Người nộp không được để trống",
+          content: "Người nhận không được để trống",
         },
       });
       return;
@@ -358,7 +358,7 @@ class ModalExpenditures extends Component {
         allow_accounting,
         description,
       },
-      params,funcModal,getForId,this)
+      params,funcModal,getForId == true ? this.props.getFor : null,this)
   };
 
   render() {

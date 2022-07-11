@@ -72,6 +72,7 @@ class CreateImportStock extends Component {
     }
 
     handleCallbackProduct = (modal, product) => {
+        console.log("vào" , product)
         this.setState(
             {
                 infoProduct: modal,

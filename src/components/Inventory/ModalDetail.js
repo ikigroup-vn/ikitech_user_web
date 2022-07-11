@@ -26,7 +26,7 @@ class ModalDetail extends Component {
         }
     }
     handleClick = (nameDistribute, nameObject, index, id, quatity) => {
-        var { distributes } = this.props.modal.inventoryProduct
+        var distributes  = this.props.modal.distributeProduct
 
         this.setState({ distributeSelected: index, subElementDistributeSelected: -1, element_distributes: "", distributeValue: nameDistribute, distributeName: nameObject })
         if (distributes.length > 0) {
@@ -66,7 +66,7 @@ class ModalDetail extends Component {
                             if (elment)
                                 this.setState({
                                     elementObject: elment,
-                                    afterChoosePrice: elment.cost_of_capital,
+                                    afterChoosePrice: elment.import_price,
                                     priceBeforeDiscount: elment.price,
                                     quantityInStock: quatity,
                                     messageErr: "",
@@ -81,7 +81,7 @@ class ModalDetail extends Component {
                             if (elments)
                                 this.setState({
                                     elementObject: elments,
-                                    afterChoosePrice: elments.cost_of_capital,
+                                    afterChoosePrice: elments.import_price,
                                     quantityInStock: quatity,
                                     messageErr: "",
                                     idElement: id,
@@ -102,11 +102,11 @@ class ModalDetail extends Component {
             var indexDistribute = sub_element_distributes.map(e => e.name).indexOf(nameElement)
             var sub_element = sub_element_distributes[indexDistribute]
             this.setState({
-                // afterChoosePrice: sub_element.price - (sub_element.price * value / 100),
-                // priceBeforeDiscount: sub_element.price,
-                afterChoosePrice: sub_element.cost_of_capital,
+                afterChoosePrice: sub_element.price - (sub_element.price * value / 100),
+                priceBeforeDiscount: sub_element.price,
+                // afterChoosePrice: sub_element.cost_of_capital,
 
-                priceBeforeDiscount: sub_element.cost_of_capital,
+                // priceBeforeDiscount: sub_element.cost_of_capital,
 
                 quantityInStock: sub_element.stock, messageErr: "",
                 idElement: id,

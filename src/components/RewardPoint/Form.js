@@ -34,24 +34,24 @@ class Form extends Component {
     var name = target.name;
     var value = target.value;
 
-    const _value = formatNumber(value);
-    console.log(_value)
-    if (!isNaN(Number(_value))) {
+    const valueFormat = formatNumber(value);
+    console.log(valueFormat)
+    if (!isNaN(Number(valueFormat))) {
       if (name == "percent_refund") {
-        if (parseInt(_value) < 100) {
-          if(_value == "")
+        if (parseInt(valueFormat) < 100) {
+          if(valueFormat === 0)
           this.setState({ [name]: "" });
           else
-          this.setState({ [name]: value });
+          this.setState({ [name]: valueFormat });
 
 
         }
       } else if (name == "percent_use_max_point") {
-        if (parseInt(_value) < 100) {
-          if(_value == "")
+        if (parseInt(valueFormat) < 100) {
+          if(valueFormat === 0)
           this.setState({ [name]: "" });
           else
-          this.setState({ [name]: value });
+          this.setState({ [name]: valueFormat });
 
 
         }
@@ -60,7 +60,7 @@ class Form extends Component {
         if(value == "")
         this.setState({ [name]: "" });
         else
-        this.setState({ [name]: _value });
+        this.setState({ [name]: valueFormat });
 
 
       }

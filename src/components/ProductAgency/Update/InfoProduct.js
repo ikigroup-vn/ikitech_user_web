@@ -20,14 +20,15 @@ class InfoProduct extends Component {
     var name = target.name;
     var value_text = target.value;
     var value = value_text
-    const _value = formatNumber(value);
+    const valueFormat = formatNumber(value);
+
+    
+    if (!isNaN(parseFloat(valueFormat))) {
+      console.log(value , valueFormat)
+      value = formatNoD(valueFormat);
 
 
-    if (!isNaN(Number(_value))) {
-      value = formatNoD(_value);
-
-
-      if (value_text == "") {
+      if (value === "") {
         this.setState({ [name]: "" });
       }
       else {
@@ -48,7 +49,7 @@ class InfoProduct extends Component {
       var { product } = { ...nextProps };
       const price = formatNumber(product.main_price);
 
-      var _price = new Intl.NumberFormat().format(price);
+      var _price = parseFloat(formatNoD(price));
 
       this.setState({
         txtName: product.name,

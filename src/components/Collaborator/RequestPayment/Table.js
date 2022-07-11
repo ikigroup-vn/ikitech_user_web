@@ -348,13 +348,13 @@ class Table extends Component {
         var disable_group = length == 0 ? "hide" : "show"
         var disable_item = arrayCheckBox.length > 0 ? "show" : "hide"
         var payment_request_solve = true
-
+        var arrLength = requestPayment.filter((v)=>v.from === parseInt(from)).length
         var _selected =
             arrayCheckBox.length > 0 && arrayCheckBox.length == requestPayment.length
                 ? true
                 : false;
 
-        console.log(from);
+        console.log(requestPayment);
         return (
             <div className="request-payment">
                 <ModalImg img={this.state.modalImg}></ModalImg>
@@ -395,20 +395,25 @@ class Table extends Component {
                         <option value="1" >Theo lịch</option>
 
                     </select>
+                    {
+                        arrLength > 0 && <button
+                        style = {{float : "right"}}
+                            class={`btn btn-success btn-sm ${payment_request_solve == true ? "show" : "hide"}`}
+                            data-toggle="modal"
+                            data-target="#updateModalAllRequest"
+                        >
+                            <i class="fa fa-list"></i> Quyết toán cho toàn bộ CTV
+                        </button>
+                    }
+                    
+
+                 
 
                 </div>
                 <div className={`group-btn ${disable_group}`}>
 
                     {/* <div> */}
-                    <button
-                    style = {{float : "right"}}
-                        class={`btn btn-success btn-sm ${payment_request_solve == true ? "show" : "hide"}`}
-                        data-toggle="modal"
-                        data-target="#updateModalAllRequest"
-                    >
-                        <i class="fa fa-list"></i> Quyết toán cho toàn bộ CTV
-                    </button>
-
+              
                     <button
                         onClick={() => this.changeStatusRequest(1)}
                         data-toggle="modal"

@@ -352,6 +352,8 @@ class Footer extends Component {
           customers.data !== undefined &&
           staff.length !== 0 && (
             <ModalRevenue
+            getFor = "CUSTOMER"
+
               notDate={true}
               store_code={store_code}
               branch_id={branch_id}
@@ -370,6 +372,8 @@ class Footer extends Component {
           customers.data !== undefined &&
           staff.length !== 0 && (
             <ModalExpenditures
+            getFor = "CUSTOMER"
+
               customer={customer}
               notDate={true}
 

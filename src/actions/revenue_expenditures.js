@@ -165,6 +165,7 @@ export const createRevenueExpenditures = (
 
 
         if (getForCustomer) {
+          if(getForCustomer == "CUSTOMER")
           customerApi.fetchCustomerId(store_code, data.recipient_references_id).then((res) => {
         
               dispatch({
@@ -172,6 +173,17 @@ export const createRevenueExpenditures = (
                 data: res.data.data,
               });
           });
+          if(getForCustomer == "SUPPLIER")
+          {
+            storeApi.fetchSupplierId(store_code, data.recipient_references_id).then((res) => {
+      
+                dispatch({
+                  type: Types.FETCH_ID_SUPPLIER,
+                  data: res.data.data,
+                });
+            });
+          }
+          
           revenueExpendituresApi
             .fetchAllRevenueExpenditures(store_code, branch_id, 1, params)
             .then((res) => {
