@@ -38,6 +38,8 @@ class CustomerSale extends Component {
       modalDelete: {},
       filter_by_status: ""
     };
+
+    this.currentStatus = "";
   }
 
 
@@ -76,6 +78,18 @@ class CustomerSale extends Component {
     this.props.fetchAllCustomerSale(store_code, 1, params);
   };
   componentWillReceiveProps(nextProps) {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    var status = urlParams.get('status');
+    var { store_code } = this.props.match.params;
+
+    if(status !==  this.currentStatus)
+    {
+      this.currentStatus = status
+      var params = this.getParams(status);
+      this.props.fetchAllCustomerSale(store_code, 1, params);
+    }
+
     if (
       this.state.isLoading != true &&
       typeof nextProps.permission.product_list != "undefined"
@@ -192,7 +206,11 @@ class CustomerSale extends Component {
     if (this.props.auth) {
       return (
         <div id="wrapper">
-          <Sidebar store_code={store_code} />
+          <Sidebar store_code={store_code} 
+         
+
+
+           currentParams = {this.currentStatus}/>
           <ModalCreate resetModal={this.resetModal} openModal={openModal} store_code={store_code} wards={wards} district={district} province={province} />
           <ModalEdit openModalEdit={openModalEdit} resetModal={this.resetModalEdit} store_code={store_code} wards={wards} district={district} province={province} modal={modal} />
 

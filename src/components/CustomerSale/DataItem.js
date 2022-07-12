@@ -5,16 +5,52 @@ import { connect } from "react-redux";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import { debounce } from 'lodash'
 import { getDDMMYYYHis, getDDMMYYY } from "../../ultis/date";
+import ReactDOM from 'react-dom';
 
 class DataItem extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            data: props.data
+            data: props.data,
+            showDrop: false
         }
 
         this.onCallApi = debounce(this.props.editCustomerSale, 1000);
+        this.handleClickOutside = this.handleClickOutside.bind(this);
+        // this.color = ["red"]
+        this.list_status = [
+            { index: "", title: "-- Trạng thái ---", color: null },
+
+            { index: 0, title: "Cần tư vấn", color: "darkseagreen" },
+            { index: 1, title: "Đang tư vấn", color: "orange" },
+            { index: 2, title: "Thành công", color: "#7be97b" },
+            { index: 3, title: "Thất bại", color: "#eb3e3e" },
+
+        ]
+        this.wrapperRef = React.createRef();
+
+
     }
+
+
+    componentDidMount() {
+        document.addEventListener("mousedown", this.handleClickOutside);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener("mousedown", this.handleClickOutside);
+    }
+
+    handleClickOutside(event) {
+        if (this.wrapperRef && !this.wrapperRef.current.contains(event.target)) {
+            console.log("outside")
+            if (this.state.showDrop === true) {
+                this.setState({ showDrop: false })
+
+            }
+        }
+    }
+
 
     shouldComponentUpdate(nextProps, nextState) {
         var { store_code } = this.props;
@@ -27,6 +63,7 @@ class DataItem extends Component {
     editCustomerSale = (store_code, id, data) => {
         this.props.editCustomerSale(store_code, id, data)
     }
+
 
 
 
@@ -52,9 +89,11 @@ class DataItem extends Component {
             updateApi: true,
             data: {
                 ...this.state.data,
-                status: event.target.value
-            }
+                status: event
+            },
+            showDrop: false
         });
+
     }
 
     onChangeStaff = (event) => {
@@ -95,32 +134,85 @@ class DataItem extends Component {
 
 
 
-    render() {
-        var { data } = this.state;
-        var { store_code, index, paginate, numPage , checked , is_user , remove , edit,assignment} = this.props;
 
-        console.log(this.props.data)
+
+    render() {
+        var { data, showDrop } = this.state;
+        var { store_code, index, paginate, numPage, checked, is_user, remove, edit, assignment } = this.props;
+        var arrStatus = this.list_status.filter((v) => v.index === data.status)
+        var colorStatus = null
+        var status = {}
+        console.log(arrStatus)
+        if (arrStatus.length > 0) {
+            status = arrStatus[0].title
+            colorStatus = arrStatus[0].color
+        }
+        else {
+            status = this.list_status[0].title
+
+        }
+        console.log(colorStatus)
         return (
-            <tr className="hover-product">
-                   {remove === true && assignment === true &&     <td>   <input
+            <tr className="hover-product" ref={this.wrapperRef}>
+                {remove === true && assignment === true && <td style={{ verticalAlign: "middle" }}>   <input
                     style={{
                         height: "initial",
+
                     }}
                     type="checkbox"
                     checked={checked}
                     onChange={(e) => this.props.onChangeSelected(e, JSON.stringify(data))}
-                /></td>} 
+                /></td>}
 
-               
 
-                <td data-toggle="modal"
-                    data-target="#modalEditCustomer"
-                    onClick={() => {
-                        this.props.handleSetInfor(data)
-                    }}><div>{data.name}</div><div>{data.phone_number}</div><div style={{
-                        fontSize: 10
-                    }}> Ngày thêm: {getDDMMYYY(data.created_at)}</div></td>
-                <td>
+
+                <td ><div style={{ color: "blue" }}>{data.name}</div><div>{data.phone_number}</div><div style={{
+                    fontSize: 10
+                }}> Ngày thêm: {getDDMMYYY(data.created_at)}</div>
+                    <div className="" style={{ marginTop: "6px" }}>
+                        <div id="color-picker" onClick={() => { this.setState({ showDrop: !showDrop }) }}>
+                            <div className="wrapper-dropdown">
+                                <span style={{ backgroundColor: colorStatus, fontWeight: "500" }}>{status}</span>
+                                <ul className={`dropdown ${showDrop === true ? "" : "hide"}`} >
+                                    <li>
+                                        {this.list_status.map((v, i) => {
+                                            return (
+                                                <span onClick={() => this.onChangeStatus(v.index)} style={{ display: "block" }}>{v.title}</span>
+
+                                            )
+                                        })}
+
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <button className="btn btn-primary btn-sm" type="button" style={{
+                            padding: "0.1rem 0.4rem",
+                            "font-size": ".850em"
+                        }}
+                            class="btn btn-secondary-no-background btn-sm" data-toggle="modal"
+                            data-target="#modalEditCustomer"
+                            onClick={() => {
+                                this.props.handleSetInfor(data)
+                            }}
+                        >
+                            <i class="fa fa-pencil"></i> Sửa
+                        </button>
+                        <button type="button" style={{
+                            marginLeft: "5px", padding: "0.1rem 0.4rem", "font-size": ".850em"
+                        }}
+                            class="btn btn-primary-no-background btn-sm"
+                            onClick={(e) => this.passDataModal(e, data.id, data.name)}
+                            data-toggle="modal"
+                            data-target="#removeModal"
+                        >
+                            <i class="fa fa-trash"></i> Xóa
+                        </button>
+
+
+                    </div>
+                </td>
+                {/* <td>
                     <select name="" value={data?.status} id="input" class="form-control" onChange={this.onChangeStatus}>
                         <option disabled={true}>Trạng thái</option>
                         <option value="0">Cần tư vấn</option>
@@ -128,24 +220,24 @@ class DataItem extends Component {
                         <option value="2">Thành công</option>
                         <option value="3">Thất bại</option>
                     </select>
+                </td> */}
+                <td className="content-onsale" ><  textarea className="" value={data.consultation_1} onChange={this.onChangeText} name="consultation_1" rows={4}></textarea>
+                    {data.time_update_consultation_1 !== null && <span>{data.time_update_consultation_1 == null ? "" : getDDMMYYYHis(data.time_update_consultation_1)}</span>}
                 </td>
-                <td ><  textarea className="content-onsale" value={data.consultation_1} onChange={this.onChangeText} name="consultation_1"></textarea>
-                    <p>{data.time_update_consultation_1 == null ? "" : getDDMMYYYHis(data.time_update_consultation_1)}</p>
+                <td className="content-onsale"><textarea className="" value={data.consultation_2} onChange={this.onChangeText} name="consultation_2" rows={4} ></textarea>
+                    {data.time_update_consultation_2 !== null && <span>{data.time_update_consultation_2 == null ? "" : getDDMMYYYHis(data.time_update_consultation_2)}</span>}
                 </td>
-                <td><textarea className="content-onsale" value={data.consultation_2} onChange={this.onChangeText} name="consultation_2"></textarea>
-                    <p>{data.time_update_consultation_2 == null ? "" : getDDMMYYYHis(data.time_update_consultation_2)}</p>
+                <td className="content-onsale"><textarea className="" value={data.consultation_3} onChange={this.onChangeText} name="consultation_3" rows={4}></textarea>
+                    {data.time_update_consultation_3 !== null && <span>{data.time_update_consultation_3 == null ? "" : getDDMMYYYHis(data.time_update_consultation_3)}</span>}
                 </td>
-                <td><textarea className="content-onsale" value={data.consultation_3} onChange={this.onChangeText} name="consultation_3"></textarea>
-                    <p>{data.time_update_consultation_3 == null ? "" : getDDMMYYYHis(data.time_update_consultation_3)}</p>
-                </td>
-                {edit === true && assignment === true &&        <td>
-                    <select name="" value={data?.staff_id} id="input" class="form-control" onChange={this.onChangeStaff}>
+                {edit === true && assignment === true && <td >
+                    <select style={{ marginTop: "12px", width: "140px", fontSize: "0.8rem", padding: "0.2rem" }} name="" value={data?.staff_id} id="input" class="form-control " onChange={this.onChangeStaff}>
                         <option value={null}>Chưa phân công</option>
                         {this.buildOptionStaff()}
                     </select>
-                </td>} 
+                </td>}
 
-           
+                {/*            
                 <td className="three-btn-group" >
                     <button
                         data-toggle="modal"
@@ -166,7 +258,7 @@ class DataItem extends Component {
                     >
                         <i class="fa fa-trash"></i> Xóa
                     </button>
-                </td>
+                </td> */}
             </tr>
         );
     }

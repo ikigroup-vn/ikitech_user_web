@@ -251,8 +251,46 @@ export const ikitech_menu = [
           {
             class: "onsale",
             display: "hide",
-            name: "Khách hàng tiềm năng",
+            name: "Tất cả",
             exact: true,
+            params : "?status=",
+
+            to: "/customer_sales",
+          },
+          {
+            class: "onsale",
+            display: "hide",
+            name: "Cần tư vấn",
+            exact: true,
+            params : "?status=0",
+
+            to: "/customer_sales",
+          },
+          {
+            class: "onsale",
+            display: "hide",
+            name: "Đang tư vấn",
+            exact: true,
+            params : "?status=1",
+            to: "/customer_sales",
+          },
+          {
+            class: "onsale",
+            display: "hide",
+            name: "Thành công",
+            exact: true,
+            params : "?status=2",
+
+            to: "/customer_sales",
+          },
+          {
+            class: "onsale",
+            display: "hide",
+            name: "Thất bại",
+
+            exact: true,
+            params : "?status=3",
+
             to: "/customer_sales",
           },
         ],

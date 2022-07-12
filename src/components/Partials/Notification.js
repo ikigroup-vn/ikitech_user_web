@@ -213,7 +213,7 @@ class Notification extends Component {
         var { notifications, allow_notification } = this.state
         var { total_unread, list_notification } = notifications
         var { notification_unread } = this.state
-
+        console.log(badges)
         if (typeof list_notification != "undefined")
             var disableLoad = list_notification.last_page == 1 ? false : true
         return (

@@ -207,7 +207,7 @@ class Table extends Component {
     var multiDelete = selected.length > 0 ? "show" : "hide";
     var {is_user , add,edit,remove,add,assignment} = this.props
     return (
-      <div class="table-responsive">
+      <div class="">
         <ModalDelete store_code={store_code} modal={this.state.modalDelete} />
         <div className={multiDelete} style={{ display: "flex" }}>
           <select style={{ maxWidth: "250px" }} name="" value={staff_id} id="input" class="form-control" onChange={(e) => this.setState({ staff_id: e.target.value })}>
@@ -224,7 +224,7 @@ class Table extends Component {
           </button>
         </div>
         <table
-          class="table table-border "
+          class="table table-border table-sale"
           id="dataTable"
           width="100%"
           cellspacing="0"
@@ -241,7 +241,7 @@ class Table extends Component {
 
            
               <th>Họ tên/SĐT</th>
-              <th className="content-onsale">
+              {/* <th className="content-onsale">
                 <select
                   value={filter_by_status}
                   style={{ width: "155px" }}
@@ -256,13 +256,13 @@ class Table extends Component {
                   <option value="2">Thành công ({this.props.customers?.total_status_2})</option>
                   <option value="3">Thất bại ({this.props.customers?.total_status_3})</option>
                 </select>
-              </th>
+              </th> */}
               <th  className="content-onsale">Nội dung tư vấn lần 1</th>
               <th  className="content-onsale">Nội dung tư vấn lần 2</th>
               <th  className="content-onsale">Nội dung tư vấn lần 3</th>
 
              {edit === true && assignment == true && <th>Nhân viên sale</th>} 
-              <th>Hành động</th>
+              {/* <th>Hành động</th> */}
             </tr>
           </thead>
 

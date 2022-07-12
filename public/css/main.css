@@ -19,6 +19,83 @@
     display: flex;
     flex-direction: column;
 }
+* {
+	box-sizing: border-box;
+	font-family: "Arial";
+}
+.wrapper-dropdown {
+    position: relative;
+    background: #FFF;
+    color: #2e2e2e;
+    max-width: 113px;
+    outline: none;
+    cursor: pointer;
+    margin-bottom: 4px;
+}
+.wrapper-dropdown > span {
+	width: 100%;
+	display: block;
+	border: 1px solid #ababab;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    padding-left: 4px;
+    font-size: 12px;
+
+}
+.wrapper-dropdown > span > span {
+  padding: 0 12px;
+  margin-right: 5px;
+}
+.wrapper-dropdown > span:after {
+    content: "";
+    width: 0;
+    height: 0;
+    position: absolute;
+    right: 16px;
+    top: calc(50% + 4px);
+    margin-top: -6px;
+	  border-width: 6px 6px 0 6px;
+    border-style: solid;
+	  border-color: #2e2e2e transparent;
+}
+
+.wrapper-dropdown .dropdown {
+    position: absolute;
+	  z-index: 10;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: #fff;
+    font-weight: normal;
+	  list-style-type: none;
+	  padding-left: 0;
+	  margin: 0;
+	  border: 1px solid #ababab;
+	  border-top: 0;
+}
+
+.wrapper-dropdown .dropdown li {
+    display: block;
+    text-decoration: none;
+    color: #2e2e2e;
+	  padding: 5px;
+	  cursor: pointer;
+}
+
+.wrapper-dropdown .dropdown li > span {
+  /* padding: 0 12px;
+  margin-right: 5px; */
+  font-size: 12px;
+}
+
+.wrapper-dropdown .dropdown li > span:hover {
+        background-color: rgb(180, 175, 175);
+  }
+
+.wrapper-dropdown .dropdown li:hover {
+    /* background: #eee; */
+	  cursor: pointer;
+}
 .react-tabs__tab--selected a{
     color: white;
 }
@@ -45,7 +122,10 @@
     margin-top: 5px;
     margin-bottom: 5px;
 }
-
+.table-sale  td, .table th {
+    padding: 0.25rem !important;
+    
+}
 .three-btn-group  a, .three-btn-group button{
     margin : 2px !important
 }
@@ -53,12 +133,18 @@
     background-color: white !important;
     cursor: pointer
 }
-
+.btn-secondary-no-background {
+    color: rgb(29, 71, 210);
+    border-color: #878ef3;
+}
 .contact .form-control {
     max-width: 80%;
 }
+.content-onsale textarea{
+    width: 100%;
+}
 .content-onsale{
-    width: 130px;
+    width: 225px;
 }
 .status-onsale{
     width : 125px

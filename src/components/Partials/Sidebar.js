@@ -5,6 +5,8 @@ import { menu } from "../../ultis/menu";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import * as Types from "../../constants/ActionType";
 import themeData from "../../ultis/theme_data";
+import * as customerAction from "../../actions/customer_sales";
+
 class Sidebar extends Component {
   constructor(props) {
     super(props);
@@ -13,20 +15,18 @@ class Sidebar extends Component {
     };
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
-    if (!shallowEqual(nextProps.permission, this.props.permission)) {
-      return true;
-    } else {
-      return true;
-    }
+  componentWillReceiveProps() {
+    console.log(1)
   }
+
+
 
   componentDidUpdate(prevProps, prevState) {
     const location = window.location.pathname;
     console.log("open", menu)
     console.log("lo ne", location)
     for (const item of menu[0]?.link) {
-      console.log("item hehe" , item)
+      console.log("item hehe", item)
       var exsit = false
       if (item.open) {
         if (item.ExcludeSetOpenKey?.length > 0) {
@@ -39,8 +39,8 @@ class Sidebar extends Component {
             }
           }
         }
-        if(exsit == true)
-        continue
+        if (exsit == true)
+          continue
 
         if (item.setOpenKey?.length > 0) {
           for (const element of item.setOpenKey
@@ -72,7 +72,18 @@ class Sidebar extends Component {
     var result = null;
     if (link.length > 0) {
       var _class = this.props.permission;
+      var {
+        total_status_0,
+        total_status_1,
+        total_status_2,
+        total_status_3,
+        total,
+      } = this.props.customers
 
+      console.log( total_status_0,
+        total_status_1,
+        total_status_2,
+        total_status_3,)
       result = link.map((link, index) => {
         return (
           <Route
@@ -82,9 +93,37 @@ class Sidebar extends Component {
             exact={link.exact}
             children={({ match }) => {
               const location = window.location.pathname;
+              console.log(location)
               const newLocation = this.setActiveLocation(location);
-              const isActive = newLocation.includes(link.to + "/");
+              // const isActive = newLocation.includes(link.to + "/");
+              var isActive = false;
+              var name = link.name
+
+              if (link.params) {
+                isActive = newLocation.includes(link.to + "/" + this.props.store_code) && link.params == `?status=${this.props.currentParams}`;
+                var param = link.params.replace("?status=", "")
+                if (param == "") {
+                  name = name + ` (${ total_status_0 +total_status_1 +total_status_2 +total_status_3})`
+                }
+                if (param == "0") {
+                  name = name + ` (${total_status_0})`
+                }
+                if (param == "1") {
+                  name = name + ` (${total_status_1})`
+                }
+                if (param == "2") {
+                  name = name + ` (${total_status_2})`
+                }
+                if (param == "3") {
+                  name = name + ` (${total_status_3})`
+                }
+              }
+              else {
+                isActive = newLocation.includes(link.to + "/");
+
+              }
               var active = isActive ? "active-col" : "";
+
               // var _class = this.props.permission
               return (
                 <Link
@@ -93,9 +132,9 @@ class Sidebar extends Component {
                     ? "show"
                     : "hide"
                     }`}
-                  to={link.to + "/" + this.props.store_code}
+                  to={link.to + "/" + this.props.store_code + (link.params || "")}
                 >
-                  {link.name}
+                  {name}
                 </Link>
               );
             }}
@@ -308,6 +347,11 @@ class Sidebar extends Component {
   };
   componentDidMount() {
     window.loadScript();
+    var {customers ,store_code} = this.props
+    if(typeof customers.total === "undefined"){
+      this.props.fetchAllCustomerSale(store_code, 1);
+
+    }
   }
   render() {
     var { badges, stores, permission } = this.props;
@@ -374,12 +418,17 @@ const mapStateToProps = (state) => {
     permission: state.authReducers.permission.data,
     isLoadPermission: state.authReducers.permission.isLoadPermission,
     badges: state.badgeReducers.allBadge,
+    customers: state.customerSaleReducers.customer_sales.allCustomer,
+
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
     loadPermission: (data) => {
       dispatch(data);
+    },
+    fetchAllCustomerSale: (id, page, params) => {
+      dispatch(customerAction.fetchAllCustomerSale(id, page, params));
     },
   };
 };

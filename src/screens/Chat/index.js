@@ -14,6 +14,7 @@ import * as  helpers from '../../ultis/helpers';
 import io from "socket.io-client";
 import { getBranchId } from "../../ultis/branchUtils";
 import * as notificationAction from "../../actions/notification";
+import * as Types from "../../constants/ActionType";
 
 
 class Customer extends Component {
@@ -44,7 +45,7 @@ class Customer extends Component {
     }
     if (!shallowEqual(this.props.user, nextProps.user) && typeof nextProps.user.id !== "undefined") {
       var { store_code } = this.props.match.params
- 
+      var branchId = getBranchId()
       this.socket = io(helpers.callUrlSocket(), {
         transports: ["websocket"],
       });
@@ -52,8 +53,14 @@ class Customer extends Component {
         `badges:badges_user:${nextProps.user.id}`,
         (res) => {
           console.log(res)
+          // this.props.fetchBadges({
+          //   type: Types.FETCH_ALL_BADGE,
+          //   data: res
+          // });
+          
+
           this.props.fetchAllChat(store_code, 1)
-          }
+        }
       );
     }
 
@@ -164,7 +171,10 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchAllBadge: (store_code, branch_id) => {
       dispatch(notificationAction.fetchAllBadge(store_code, branch_id));
-  },
+    },
+    fetchBadges: (action) => {
+      dispatch(action)
+    }
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Customer);
