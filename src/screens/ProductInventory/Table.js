@@ -81,9 +81,9 @@ class Table extends Component {
       const data = nextState.formData
       const branch_id = localStorage.getItem("branch_id")
       const {store_code , listType} = this.props
-      var params = this.props.getParams(listType)
+      // var params = this.props.getParams(listType)
   
-      this.props.editStock(store_code,branch_id ,data,1 , params)
+      this.props.editStock(store_code,branch_id ,data,1 , this.props.params)
     }
     return true
   }

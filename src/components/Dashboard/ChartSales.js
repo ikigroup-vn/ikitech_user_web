@@ -105,7 +105,7 @@ class Chart extends Component {
       case "TUAN-NAY":
         this.setState({ nameTypeChart: "TUẦN NÀY" })
 
-        date = helper.getDateForChartDay()
+        date = helper.getDateForChartWeek()
         break;
       case "THANG-NAY":
         this.setState({ nameTypeChart: "THÁNG NÀY" })

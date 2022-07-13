@@ -396,7 +396,7 @@ class Table extends Component {
 
                     </select>
                     {
-                        arrLength > 0 && <button
+                        <button
                         style = {{float : "right"}}
                             class={`btn btn-success btn-sm ${payment_request_solve == true ? "show" : "hide"}`}
                             data-toggle="modal"
@@ -461,7 +461,7 @@ class Table extends Component {
                             </tr>
                         </thead>
 
-                        <tbody>{this.showData(requestPayment)}</tbody>
+                        <tbody>{requestPayment?.length > 0 && this.showData(requestPayment)}</tbody>
                     </table>
                 </div>
             </div>

@@ -583,8 +583,7 @@ class Modal extends Component {
                             type="checkbox"
                             id="inlineCheckbox1"
                             value="option1"
-                            checked={isCheck}
-                            onChange={this.handleCheck}
+                            checked={list_days_of_week_list.length === this.state.days_of_week_list?.length ? true : false}                            onChange={this.handleCheck}
                           />
                           <label class="form-check-label" for="inlineCheckbox1">
                             Tất cả

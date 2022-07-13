@@ -160,14 +160,14 @@ class Form extends Component {
               /> */}
 
           <div className="navigation-buttons">
-            <button className="btn btn-back" onClick={this.goToBack}>
+            <button type="button" className="btn btn-back" onClick={this.goToBack}>
               {"<"}
             </button>
 
             <label className="label-date">
               Từ {datePrime.from} đến {datePrime.to}
             </label>
-            <button className="btn btn-next" onClick={this.goToNext}>
+            <button type="button" className="btn btn-next" onClick={this.goToNext}>
               {">"}
             </button>
           </div>

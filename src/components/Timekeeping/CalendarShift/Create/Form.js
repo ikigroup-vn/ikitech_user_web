@@ -184,7 +184,7 @@ class Form extends Component {
       },
       param , typeDate
     );
-    history.push(`/calendar_shift/${store_code}?type=${typeDate}`);
+    history.goBack();
   };
   handleAddShift = (shift, id, type, onSave = null) => {
     var shifts = [...this.state.listShift];

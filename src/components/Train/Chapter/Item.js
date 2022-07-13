@@ -274,7 +274,8 @@ class Table extends Component {
                             {data.title}
                         </div>
                         <div class="table-body-cell" style={{ width: "20%" }}>
-                        {data.short_description?.slice(0,140)}...                        </div>
+                        {data.short_description?.length > 120 ? data.short_description?.slice(0, 120) + "..." : data.short_description}                               
+                             </div>
 
                         <div class="table-body-cell" style={{ width: "6%" }}>
                             <div

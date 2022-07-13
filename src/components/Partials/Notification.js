@@ -221,7 +221,7 @@ class Notification extends Component {
                 <a onClick={this.fetchNotification} style={{ fontSize: "18px" }} class="nav-link notification-toggle dropdown-toggle"
                     aria-haspopup="false" aria-expanded="true">
                     <i style={{ color: "#8f8787" }} class="fa fa-bell"></i>
-                    <span class={`badge badge-danger badge-counter ${notification_unread == 0 ? "hide" : "show"}`}>{notification_unread}</span>
+                    <span class={`badge badge-danger badge-counter ${badges.notification_unread == 0 ? "hide" : "show"}`}>{badges.notification_unread || 0}</span>
                 </a>
                 <div style={{
                     maxHeight: "600px",

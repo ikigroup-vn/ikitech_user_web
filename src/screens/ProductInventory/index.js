@@ -93,7 +93,7 @@ class ProductInventory extends Component {
     const branch_id = getBranchId();
     var is_near_out_of_stock = getQueryParams("is_near_out_of_stock")
     var status = getQueryParams("status")
-
+    this.setState({is_near_out_of_stock})
     var params = null
     if (is_near_out_of_stock) {
       params = params + `&is_near_out_of_stock=true`
@@ -132,7 +132,7 @@ class ProductInventory extends Component {
   }
 
 
-  getParams = (listType = 1) =>{
+  getParams = (listType = 1 , is_near_out_of_stock) =>{
     var params = ""
     if(listType == 1)
     {
@@ -146,6 +146,11 @@ class ProductInventory extends Component {
     else{
 
     }
+    if(is_near_out_of_stock)
+    {
+       params = params + `&is_near_out_of_stock=${is_near_out_of_stock}`;
+
+    }
     return params
   }
 
@@ -157,20 +162,23 @@ class ProductInventory extends Component {
         // this.setState({listProduct:listData}
         const { store_code } = this.props.match.params
         const branch_id = getBranchId();
-        var params = `&check_inventory=true`;
+        // var params = `&check_inventory=true`;
+        var params = this.getParams(nextState.listType , this.state.is_near_out_of_stock);
+
         this.props.fetchAllProductV2(store_code, branch_id, 1, params);
       } 
       else if(nextState.listType == 2){
         const { store_code } = this.props.match.params
         const branch_id = getBranchId();
-        var params = this.getParams(nextState.listType);
+        var params = this.getParams(nextState.listType , this.state.is_near_out_of_stock);
         this.props.fetchAllProductV2(store_code, branch_id, 1, params);
       }
       else {
         // this.setState({listProduct:this.props.products.data})
         const { store_code } = this.props.match.params
         const branch_id = getBranchId();
-        this.props.fetchAllProductV2(store_code, branch_id, 1);
+        var params = this.getParams(null , this.state.is_near_out_of_stock);
+        this.props.fetchAllProductV2(store_code, branch_id, 1 , params);
       }
     }
     return true
@@ -241,7 +249,9 @@ class ProductInventory extends Component {
   passNumPage = (page) => {
     this.setState({ page: page })
   }
-
+  passIsNearStock = (status) =>{
+    this.setState({is_near_out_of_stock :status})
+  }
 
   render() {
     if (this.props.auth) {
@@ -255,12 +265,9 @@ class ProductInventory extends Component {
       const bonusParam = "&check_inventory=true"
 
       var params = `&search=${searchValue ?? ""}&limit=${numPage}`
-      if(is_near_out_of_stock)
-      params = params + `&is_near_out_of_stock=true`
-      if(listType==1)
-      params = params + `&check_inventory=true`
+       params = params + this.getParams(this.state.listType , this.state.is_near_out_of_stock);
 
-      console.log(listType);
+
       return (
         <div id="wrapper">
           <ImportModal store_code={store_code} importData={importData} allow_skip_same_name={allow_skip_same_name} />
@@ -276,7 +283,7 @@ class ProductInventory extends Component {
                   isShow == true ?
 
                     <div class="container-fluid">
-                      <General store={store} paramNearStock = {this.paramNearStock} store_code = {store_code} branch_id = {branch_id}  badges={badges} products={this.props.products} />
+                      <General passIsNearStock = {this.passIsNearStock} store={store} paramNearStock = {this.paramNearStock} store_code = {store_code} branch_id = {branch_id}  badges={badges} products={this.props.products} />
 
 
                       <div style={{ display: "flex", justifyContent: "space-between" }}>
@@ -376,7 +383,7 @@ class ProductInventory extends Component {
 
 
                         <div class="card-body">
-                          <Table getParams = {this.getParams} insert={insert} listType = {listType}
+                          <Table params = {params} getParams = {this.getParams} insert={insert} listType = {listType}
                            _delete={_delete} update={update} page={page} handleDelCallBack={this.handleDelCallBack} handleMultiDelCallBack={this.handleMultiDelCallBack} store_code={store_code} products={products} listProductSelect={listProduct} />
                           <Pagination
                           params = {params}

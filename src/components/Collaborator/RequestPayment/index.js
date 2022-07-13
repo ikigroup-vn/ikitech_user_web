@@ -39,7 +39,7 @@ class RequestPayment extends Component {
             <div id="wrapper">
                 <div className="card-body" style = {{paddingTop : "10px"}}>
                     {
-                        requestPayment?.length > 0 && <Table fetchdDataForSearch = {this.fetchdDataForSearch} paramId = {paramId || null} handleChangeStatus = {this.handleChangeStatus} tabId = {tabId} store_code={store_code} requestPayment={requestPayment} />
+                     <Table fetchdDataForSearch = {this.fetchdDataForSearch} paramId = {paramId || null} handleChangeStatus = {this.handleChangeStatus} tabId = {tabId} store_code={store_code} requestPayment={requestPayment} />
                     }
                     
                     </div>

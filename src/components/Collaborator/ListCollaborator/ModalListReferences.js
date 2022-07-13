@@ -20,7 +20,7 @@ class ModalListReferences extends Component {
   componentWillReceiveProps(nextProps) {
     var { store_code } = this.props
     if (this.props.referral_phone_number != nextProps.referral_phone_number) {
-      this.props.fetchAllCustomer(store_code, 1, nextProps.referral_phone_number)
+      this.props.fetchAllCustomer(store_code, 1, null, nextProps.referral_phone_number)
     }
 
   }
@@ -84,8 +84,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllCustomer: (store_code, page, referral_phone_number) => {
-      dispatch(customerAction.fetchAllCustomer(store_code, page, referral_phone_number));
+    fetchAllCustomer: (store_code, page, params, referral_phone_number) => {
+      dispatch(customerAction.fetchAllCustomer(store_code, page, params,referral_phone_number));
     },
 
   };

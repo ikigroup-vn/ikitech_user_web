@@ -543,7 +543,7 @@ class Modal extends Component {
                           class="form-check-input"
                           type="checkbox"
                           id="flexCheckDefault"
-                          checked={isCheck}
+                          checked={list_days_of_week_list.length === this.state.days_of_week_list?.length ? true : false}
                           onChange={this.handleCheck}
                         />
                         <label class="form-check-label" for="flexCheckDefault">

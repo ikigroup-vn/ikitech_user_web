@@ -12,7 +12,7 @@ export const fetchAllCustomer = (
         "get",
         null
       )
-    : callApi(`/store/${store_code}/customers?page=${page}`, "get", null);
+    : callApi(`/store/${store_code}/customers?page=${page}&referral_phone_number=${referral_phone_number}`, "get", null);
 };
 
 export const fetchCustomerId = (store_code, blogId) => {

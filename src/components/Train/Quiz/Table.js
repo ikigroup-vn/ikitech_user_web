@@ -77,12 +77,12 @@ class Table extends Component {
             <td>{index + 1}</td>
 
 
-            <td>{data.title}</td>
+            <td style={{maxWidth : "200px"}}>{data.title}</td>
             <td>{data.minute ?? 0} phút</td>
 
 
             <td style = {{maxWidth : "250px"}}>
-          {data.short_description?.slice(0,120)}...</td>
+          {data.short_description?.length > 120 ? data.short_description?.slice(0,120) + "..." : data.short_description}</td>
 
 
             <td className = "three-btn-group" style = {{maxWidth : "150px"}}>
