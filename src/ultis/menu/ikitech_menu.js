@@ -243,7 +243,7 @@ export const ikitech_menu = [
         ],
       },
       {
-        name: "OnSale",
+        name: "Khách hàng tiềm năng",
         setOpenKey : ["/customer_sales"],
         icon: "fas fa-user",
         open: "onsale",
