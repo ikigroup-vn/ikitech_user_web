@@ -16,7 +16,7 @@ class ModalHistoryRecord extends Component {
     }
 
     toHHMMSS = (secs) => {
-        var sec_num = parseInt(secs, 10)
+        var sec_num = parseFloat(secs, 10)
         var hours   = Math.floor(sec_num / 3600)
         var minutes = Math.floor(sec_num / 60) % 60
         var seconds = sec_num % 60
@@ -36,6 +36,7 @@ class ModalHistoryRecord extends Component {
 
         var result = null
         result = recording_time.map((data, index) => {
+            console.log("recording_time", data.total_in_time)
 
             return <div className='' style={{
                 width: "100%",

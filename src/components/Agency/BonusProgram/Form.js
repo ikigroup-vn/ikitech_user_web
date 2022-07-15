@@ -49,6 +49,11 @@ class Form extends Component {
         var value = target.value;
 
         const _value = formatNumber(value);
+        if(name == "reward_description")
+        {
+            this.setState({ [name]: value });
+            return;
+        }
         if (!isNaN(Number(_value))) {
             value = new Intl.NumberFormat().format(_value);
             this.setState({ [name]: value });

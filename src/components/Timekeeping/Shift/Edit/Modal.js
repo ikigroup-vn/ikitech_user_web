@@ -159,7 +159,7 @@ class Modal extends Component {
     e.preventDefault();
     // window.$('.modal').modal('hide');
 
-    const {
+    var {
       name,
       code,
       end_work_hour,
@@ -477,7 +477,6 @@ class Modal extends Component {
                     options={false}
                     enableInputClick={true}
                     // monthSelect={true}
-                    readOnly={true}
                     translations={{
                       //   DATE: "Ngày",
                       //   TIME: "Giờ",
@@ -503,7 +502,6 @@ class Modal extends Component {
                     options={false}
                     enableInputClick={true}
                     // monthSelect={true}
-                    readOnly={true}
                     translations={{
                       //   DATE: "Ngày",
                       //   TIME: "Giờ",
@@ -530,7 +528,6 @@ class Modal extends Component {
                     options={false}
                     enableInputClick={true}
                     // monthSelect={true}
-                    readOnly={true}
                     translations={{
                       //   DATE: "Ngày",
                       //   TIME: "Giờ",

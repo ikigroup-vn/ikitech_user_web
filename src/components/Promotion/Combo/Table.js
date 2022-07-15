@@ -68,10 +68,10 @@ class Table extends Component {
         var set_limit_amount =
           data.set_limit_amount == true ? data.amount : "Không giới hạn";
         var status_limit_amount = data.set_limit_amount == true ? "" : "danger";
-
         var type_discount = data.discount_type == 0 ? "Cố định" : "Theo %"
         var showCurrentPage = typeof per_page != "undefined" && per_page != null ? true : false
         var disableIsEnd = this.props.is_end == 0 || this.props.is_end == 2 ? "show" : "hide"
+        var action = this.props.is_end == 0 || this.props.is_end == 2 ? "show" : "hide"
 
         if (this.filterColDiscount(data) == true) {          count = count + 1
 
@@ -96,7 +96,7 @@ class Table extends Component {
               <td className="group-btn-table three-btn-group" style = {{maxWidth : "150px"}}>
                 {this.props.is_end == 0 || this.props.is_end == 2  && <Link
                   to={`/combo/edit/${store_code}/${data.id}`}
-                  class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
+                  class={`btn btn-warning btn-sm ${action}`}
                 >
                   <i class="fa fa-edit"></i> Sửa
                 </Link>}
@@ -107,7 +107,7 @@ class Table extends Component {
                   data-target="#removeModal"
                   name="toggle"
 
-                  class={`btn btn-danger btn-sm ${_delete == true ? "show" : "hide"}`}
+                  class={`btn btn-danger btn-sm ${action}`}
                 >
                   <i class="fa fa-trash"></i> Xóa
                 </button>

@@ -205,11 +205,11 @@ class Footer extends Component {
 
 
 
-                        <div className="form-group">
+                        {/* <div className="form-group">
                             <label htmlFor="name">Link Fanpage</label>
                             <input type="text" name="contact_fanpage" value={contact_fanpage} placeholder="Vd: https://facebook.com/tenfanpage" onChange={this.onChange} className="form-control" id="txtName" autoComplete="off" />
 
-                        </div>
+                        </div> */}
 
 
 

@@ -24,6 +24,7 @@ class Support extends Component {
             link_ministry_of_industry_and_trade: null,
             is_show_icon_ministry_of_industry_and_trade: null,
             content_ministry_of_industry_and_trade : null,
+            contact_fanpage: null
 
 
         }
@@ -43,7 +44,7 @@ class Support extends Component {
                 id_facebook: theme.id_facebook == "null" ? null : theme.id_facebook,
                 is_show_icon_zalo: theme.is_show_icon_zalo,
                 id_zalo: theme.id_zalo == "null" ? null : theme.id_zalo,
-
+                contact_fanpage : theme.contact_fanpage,
                 is_show_icon_tiktok: theme.is_show_icon_tiktok,
                 id_tiktok: theme.id_tiktok == "null" ? null : theme.id_tiktok,
 
@@ -85,6 +86,7 @@ class Support extends Component {
                 phone_number_hotline: theme.phone_number_hotline,
                 // is_show_icon_email: theme.is_show_icon_email,
                 // email_contact: theme.email_contact,
+                contact_fanpage : theme.contact_fanpage,
                 is_show_icon_facebook: theme.is_show_icon_facebook,
                 id_facebook: theme.id_facebook,
                 is_show_icon_zalo: theme.is_show_icon_zalo,
@@ -114,7 +116,7 @@ class Support extends Component {
         // form.is_show_icon_email= theme.is_show_icon_email
         // form.email_contact= theme.email_contact
         form.is_show_icon_email = false
-
+        form.contact_fanpage = theme.contact_fanpage
         form.email_contact = null
         form.is_show_icon_facebook = theme.is_show_icon_facebook
         form.id_facebook = theme.id_facebook
@@ -148,7 +150,8 @@ class Support extends Component {
                 is_show_icon_youtube,
                 link_ministry_of_industry_and_trade,
                 is_show_icon_ministry_of_industry_and_trade,
-                content_ministry_of_industry_and_trade
+                content_ministry_of_industry_and_trade,
+                contact_fanpage
             } = this.state
 
         return (
@@ -256,6 +259,11 @@ class Support extends Component {
 
                                 </div>
                             </div>
+                            <div className="form-group">
+                            <label htmlFor="name">Link Fanpage</label>
+                            <input type="text" name="contact_fanpage" value={contact_fanpage} placeholder="Vd: https://facebook.com/tenfanpage" onChange={this.onChange} className="form-control" id="txtName" autoComplete="off" />
+
+                        </div>
                         </div>
                         {/* <div className="col-6">
                           

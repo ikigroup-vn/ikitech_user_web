@@ -2,15 +2,16 @@ import * as Types from "../constants/ActionType";
 import history from "../history";
 import * as notificationApi from "../data/remote/notification";
 import * as badgeApi from "../data/remote/badge"
+import { getBranchId } from "../ultis/branchUtils";
 
-export const fetchAllNotification = (store_code , page=1) => {
+export const fetchAllNotification = (store_code ,page=1) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show"
     })
     notificationApi
-      .fetchAllNotification(store_code , page)
+      .fetchAllNotification(store_code ,getBranchId(), page)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
@@ -23,7 +24,7 @@ export const fetchAllNotification = (store_code , page=1) => {
             data : res.data.data
           });
    
-          notificationApi.readAllNotification(store_code)
+          notificationApi.readAllNotification(store_code,getBranchId())
         }
 
       });
@@ -49,7 +50,7 @@ export const fetchAllGeneralSetting = (store_code) => {
             data : res.data.data
           });
    
-          notificationApi.readAllNotification(store_code)
+          notificationApi.readAllNotification(store_code , getBranchId())
         }
 
       });

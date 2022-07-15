@@ -219,7 +219,9 @@ class CreateImportStock extends Component {
         this.setState({ searchValue: "" })
         const { store_code } = this.props.match.params
         const branch_id = localStorage.getItem('branch_id')
-        this.props.fetchAllProductV2(store_code, branch_id);
+        var params = `&check_inventory=true`;
+
+        this.props.fetchAllProductV2(store_code, branch_id, 1, params);
     }
 
     searchData = (e) => {

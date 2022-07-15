@@ -109,7 +109,7 @@ class Table extends Component {
           data.image_url == null || data.image_url == "" ? Env.IMG_NOT_FOUND : data.image_url
         var showCurrentPage = typeof per_page != "undefined" && per_page != null ? true : false
         var disableIsEnd = this.props.is_end || this.props.is_end == 2 ? "hide" : "show"
-
+        var action = this.props.is_end == 0 || this.props.is_end == 2 ? "show" : "hide"
         console.log(set_limit_amount)
         if(this.filterColDiscount(data) == true)
         {
@@ -138,7 +138,7 @@ class Table extends Component {
               <td className="group-btn-table three-btn-group" style = {{maxWidth : "150px"}}>
                 <Link
                   to={`/discount/edit/${store_code}/${data.id}`}
-                  class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
+                  class={`btn btn-warning btn-sm ${action}`}
                 >
                   <i class="fa fa-edit"></i> Sửa
                 </Link>
@@ -148,7 +148,7 @@ class Table extends Component {
                   data-toggle="modal"
                   data-target="#removeModal"
                   name="toggle"
-                  class={`btn btn-danger btn-sm ${_delete == true ? "show" : "hide"}`}
+                  class={`btn btn-danger btn-sm ${action}`}
                 >
                   <i class="fa fa-trash"></i> Xóa
                 </button>

@@ -159,7 +159,7 @@ class Form extends Component {
       else staff_ids = staff_ids + element.id + ",";
     });
     console.log(this.state.datePrime, listStaff, listShift);
-    const param = `date_from=${this.state.datePrime.from}&date_to=${this.state.datePrime.to}`;
+    const param = `date_from=${moment().startOf("isoWeek").format("YYYY-MM-DD")}&date_to=${moment().endOf("isoWeek").format("YYYY-MM-DD")}`;
     var arr1 = listStaff.map((e) => {
       return e.id;
     });
