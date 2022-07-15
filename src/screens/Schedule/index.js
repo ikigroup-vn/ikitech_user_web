@@ -33,10 +33,18 @@ class Accountant extends Component {
       change: "",
       isShow: true,
     };
+    this.defaultIndex =  0
+
   }
-  componentDidMount() {
-    var { store_code } = this.props.match.params;
-    console.log(store_code);
+  componentWillMount() {
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    var tabIndex = urlParams.get('tab-index');
+    if (!tabIndex) {
+      tabIndex = 0;
+    }
+    this.defaultIndex = tabIndex;
+
   }
 
   fetchDataOnTap = (index) => {
@@ -85,7 +93,7 @@ class Accountant extends Component {
                   <div className="card shadow mb-4">
                     <div className="">
                       <Tabs
-                        defaultIndex={0}
+                        defaultIndex={this.defaultIndex}
                         onSelect={(index) => this.fetchDataOnTap(index)}
                       >
                         <TabList>
@@ -94,27 +102,32 @@ class Accountant extends Component {
                             <span style={{ fontSize: "0.8rem" }}>
                               Lịch thông báo đẩy
                             </span>
+                            <Link to ={"?tab-index=1"}>     <i class="fa fa-calendar"></i>
+                            <span style={{ fontSize: "0.8rem" }}>
+                              Lịch thông báo đẩy
+                            </span></Link>
                           </Tab>
 
                           <Tab>
-                          <i class="fa fa-bell"></i>
+                          <Link to ={"?tab-index=1"}>       <i class="fa fa-bell"></i>
                             <span style={{ fontSize: "0.8rem" }}>
                               Popup quảng cáo
-                            </span>
+                            </span></Link>
+                          
                           </Tab>
                         </TabList>
 
                         <TabPanel>
                           <Schedule
                             tabId={tabId}
-                         
+
                             store_code={store_code}
                           />
                         </TabPanel>
                         <TabPanel>
                           <Popup
                             tabId={tabId}
-                         
+
                             store_code={store_code}
                           />
                         </TabPanel>

@@ -231,13 +231,13 @@ class DataItem extends Component {
                     </select>
                 </td> */}
                 <td className="content-onsale" ><  textarea className="" value={data.consultation_1} onChange={this.onChangeText} name="consultation_1" rows={4}></textarea>
-                    {data.time_update_consultation_1 !== null && <span>{data.time_update_consultation_1 == null ? "" : getDDMMYYYHis(data.time_update_consultation_1)}</span>}
+                    {data.time_update_consultation_1 !== null && <span className="time">{data.time_update_consultation_1 == null ? "" : getDDMMYYYHis(data.time_update_consultation_1)}</span>}
                 </td>
                 <td className="content-onsale"><textarea className="" value={data.consultation_2} onChange={this.onChangeText} name="consultation_2" rows={4} ></textarea>
-                    {data.time_update_consultation_2 !== null && <span>{data.time_update_consultation_2 == null ? "" : getDDMMYYYHis(data.time_update_consultation_2)}</span>}
+                    {data.time_update_consultation_2 !== null && <span  className="time">{data.time_update_consultation_2 == null ? "" : getDDMMYYYHis(data.time_update_consultation_2)}</span>}
                 </td>
                 <td className="content-onsale"><textarea className="" value={data.consultation_3} onChange={this.onChangeText} name="consultation_3" rows={4}></textarea>
-                    {data.time_update_consultation_3 !== null && <span>{data.time_update_consultation_3 == null ? "" : getDDMMYYYHis(data.time_update_consultation_3)}</span>}
+                    {data.time_update_consultation_3 !== null && <span  className="time">{data.time_update_consultation_3 == null ? "" : getDDMMYYYHis(data.time_update_consultation_3)}</span>}
                 </td>
                 {edit === true && assignment === true && <td >
                     <select style={{ marginTop: "12px", width: "140px", fontSize: "0.8rem", padding: "0.2rem" }} name="" value={data?.staff_id} id="input" class="form-control " onChange={this.onChangeStaff}>

@@ -33,7 +33,13 @@ class Form extends Component {
     var target = e.target;
     var name = target.name;
     var value = target.value;
-
+    if(name=="percent_use_max_point")
+    {
+      if((parseInt(value) || 0) < 100)
+      this.setState({ [name]: value });
+      else
+      return;
+    }
     const valueFormat = formatNumber(value);
     console.log(valueFormat)
     if (!isNaN(Number(valueFormat))) {
@@ -309,7 +315,7 @@ class Form extends Component {
                     </div>
                     <div class="input-group" style={{ marginLeft: "20px", maxWidth: "100%" }}>
   
-                      <input type="text" class="form-control" onChange={this.onChange} value={percent_use_max_point} name="percent_use_max_point" placeholder="Nhập số phần trăm..." />
+                      <input type="number" class="form-control" onChange={this.onChange} value={percent_use_max_point} name="percent_use_max_point" placeholder="Nhập số phần trăm..." />
                       <div class="input-group-append">
   
                       </div>

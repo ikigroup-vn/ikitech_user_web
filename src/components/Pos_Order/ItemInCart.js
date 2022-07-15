@@ -207,7 +207,7 @@ class ItemInCart extends Component {
     }
 
     subQuantity(idCart, id, productId, quantity, distribute) {
-        const q = quantity - 1 < 1 ? 1 : quantity - 1;
+        const q = (parseInt(quantity) || 1) - 1 < 1 ? 1 : (parseInt(quantity) || 1) - 1;
         this.setState({
             currentQuantity: q,
         });
@@ -219,13 +219,13 @@ class ItemInCart extends Component {
             this.props.item.distributes_selected !== null &&
             this.props.item.distributes_selected.length > 0
         ) {
-            const q = quantity + 1;
+            const q = (parseInt(quantity) || 0) + 1;
             this.setState({
                 currentQuantity: q,
             });
             this.changeQuantity(q);
         } else {
-            const q = quantity + 1;
+            const q =  (parseInt(quantity) || 0) + 1;
             this.setState({
                 currentQuantity: q,
             });

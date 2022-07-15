@@ -8,6 +8,9 @@ import { Link } from "react-router-dom";
 import history from "../../history";
 import { getBranchId } from "../../ultis/branchUtils";
 import ReactDOM from 'react-dom';
+import io from "socket.io-client";
+import * as Types from "../../constants/ActionType";
+import * as  helpers from '../../ultis/helpers';
 
 class Notification extends Component {
     constructor(props) {
@@ -171,7 +174,22 @@ class Notification extends Component {
             this.props.fetchAllBadge(this.props.store_code, branch_id);
         }
 
-
+        if (!shallowEqual(this.props.user, nextProps.user) && typeof nextProps.user.id !== "undefined") {
+     
+            this.socket = io(helpers.callUrlSocket(), {
+              transports: ["websocket"],
+            });
+            this.socket.on(
+              `badges:badges_user:${nextProps.user.id}`,
+              (res) => {
+                console.log(res)
+                this.props.fetchBadges({
+                  type: Types.FETCH_ALL_BADGE,
+                  data: res
+                });
+              }
+            );
+          }
     }
 
 
@@ -259,6 +277,7 @@ const mapStateToProps = (state) => {
     return {
         badges: state.badgeReducers.allBadge,
         permission: state.authReducers.permission.data,
+        user: state.userReducers.user.userID,
 
         notifications: state.notificationReducers.allNotificaiton
 
@@ -272,6 +291,9 @@ const mapDispatchToProps = (dispatch, props) => {
         fetchAllBadge: (store_code, branch_id) => {
             dispatch(notificationAction.fetchAllBadge(store_code, branch_id));
         },
+        fetchBadges: (action) => {
+            dispatch(action)
+          }
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Notification);

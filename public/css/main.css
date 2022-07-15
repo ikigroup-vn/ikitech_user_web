@@ -150,6 +150,10 @@
     width: 100%;
     border-radius: 5px;
 }
+.content-onsale .time{
+    font-size: 11.5px;
+}
+
 
 .content-onsale{
     width: 225px;
