@@ -4,6 +4,7 @@ import * as customerAction from "../../actions/customer_sales";
 import { shallowEqual } from '../../ultis/shallowEqual';
 import moment from "moment";
 import Datetime from "react-datetime";
+import themeData from "../../ultis/theme_data";
 
 class ModalEdit extends Component {
     constructor(props) {
@@ -79,8 +80,9 @@ class ModalEdit extends Component {
     }
     handleOnClick = () => {
         var { txtAddress_detail,txtSex, txtName_branch, txtPhone_branch, txtEmail_branch, idCustomer,txtDateOfBirth } = this.state
-        const { store_code } = this.props
+        const { store_code , modal} = this.props
         const Formdata = {
+            ...modal,
             name: txtName_branch,
             phone_number: txtPhone_branch,
             email: txtEmail_branch,
@@ -140,9 +142,9 @@ class ModalEdit extends Component {
     }
 
     onChangeDate = (e) => {
-        var time = moment(e, "DD-MM-YYYY").format("DD-MM-YYYY");
+        // var time = moment(e, "DD-MM-YYYY").format("DD-MM-YYYY");
         this.setState({
-          txtDateOfBirth: time,
+          txtDateOfBirth: e,
         });
       };
       onChangeGender = (e) => {
@@ -175,8 +177,9 @@ class ModalEdit extends Component {
                 <div class="modal" id="modalEditCustomer">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <div className='model-header-modal' style={{ display: 'flex', justifyContent: "space-between", margin: "10px 15px" }}>
-                                <p class="" style={{ margin: "0px", fontWeight: "bold" }}>Chỉnh sửa khách hàng</p>
+                        <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+
+<h4 style={{ color: "white" }}>Chỉnh sửa khách hàng</h4>
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
@@ -235,9 +238,9 @@ class ModalEdit extends Component {
                                                     onChange={this.onChangeDate}
                                                     dateFormat="DD-MM-YYYY"
                                                     timeFormat={false}
-                                                    renderInput={(props) => {
-                                                        return <input {...props} value={txtDateOfBirth} />
-                                                    }}
+                                                    // renderInput={(props) => {
+                                                    //     return <input {...props} value={txtDateOfBirth} />
+                                                    // }}
                                                     />
                                                 </div>
                                                 <div className="form-group gender">
@@ -289,7 +292,7 @@ class ModalEdit extends Component {
                                     >
                                         Đóng
                                     </button>
-                                    <button type="submit" onClick={this.handleOnClick} class="btn btn-info">
+                                    <button type="submit" onClick={this.handleOnClick} class="btn btn-warning">
                                         Sửa
                                     </button>
                                 </div>

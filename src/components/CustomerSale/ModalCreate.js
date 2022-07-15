@@ -266,9 +266,9 @@ class ModalCreate extends Component {
         
     }
     onChangeDate = (e) => {
-        var time = moment(e, "DD-MM-YYYY").format("DD-MM-YYYY");
+        // var time = moment(e, "DD-MM-YYYY").format("DD-MM-YYYY");
         this.setState({
-          txtDateOfBirth: time,
+          txtDateOfBirth: e,
         });
       };
     render() {
@@ -294,8 +294,9 @@ class ModalCreate extends Component {
                 <div class="modal" id="modalCreateCustomer">
                     <div class="modal-dialog">
                         <div class="modal-content">
-                            <div className='model-header-modal' style={{ display: 'flex', justifyContent: "space-between", backgroundColor: themeData().backgroundColor }}>
-                                <h4 style={{ color: "white", margin: "10px" }}>Thêm khách hàng tư vấn</h4>
+                        <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+
+                                <h4 style={{ color: "white" }}>Thêm khách hàng tư vấn</h4>
                                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                             </div>
                             <div class="modal-body">
@@ -359,9 +360,9 @@ class ModalCreate extends Component {
                                                         onChange={this.onChangeDate}
                                                         dateFormat="DD-MM-YYYY"
                                                         timeFormat={false}
-                                                        renderInput={(props) => {
-                                                            return <input {...props} value={txtDateOfBirth} />
-                                                        }}
+                                                        // renderInput={(props) => {
+                                                        //     return <input {...props} value={txtDateOfBirth} />
+                                                        // }}
                                                     />
                                                 </div>
                                                 <div className="form-group gender">
@@ -414,7 +415,7 @@ class ModalCreate extends Component {
                                 >
                                     Đóng
                                 </button>
-                                <button type="submit" style={{ backgroundColor: themeData().backgroundColor }} onClick={this.handleOnClick} class="btn btn-info">
+                                <button type="submit"  onClick={this.handleOnClick} class="btn btn-warning">
                                     Tạo
                                 </button>
                             </div>

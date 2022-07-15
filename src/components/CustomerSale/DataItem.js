@@ -19,12 +19,12 @@ class DataItem extends Component {
         this.handleClickOutside = this.handleClickOutside.bind(this);
         // this.color = ["red"]
         this.list_status = [
-            { index: "", title: "-- Trạng thái ---", color: null },
+            { index: "", title: "--Trạng thái--", color: null },
 
-            { index: 0, title: "Cần tư vấn", color: "darkseagreen" },
-            { index: 1, title: "Đang tư vấn", color: "orange" },
-            { index: 2, title: "Thành công", color: "#7be97b" },
-            { index: 3, title: "Thất bại", color: "#eb3e3e" },
+            { index: 0, title: "Cần tư vấn", color: "#ecb704" },
+            { index: 1, title: "Đang tư vấn", color: "#4182f2" },
+            { index: 2, title: "Thành công", color: "#4aa44c" },
+            { index: 3, title: "Thất bại", color: "#e64131" },
 
         ]
         this.wrapperRef = React.createRef();
@@ -166,19 +166,28 @@ class DataItem extends Component {
 
 
 
-                <td ><div style={{ color: "blue" }}>{data.name}</div><div>{data.phone_number}</div><div style={{
-                    fontSize: 10
+                <td style={{ minWidth: "145px" }}><div style={{
+                    color: "#363535",
+                    "font-weight": "600"
+                }}>{data.name}</div><div style={{
+                    fontSize: "11.5px"
+
+                }}>{data.phone_number}</div><div style={{
+                    fontSize: "11.5px"
                 }}> Ngày thêm: {getDDMMYYY(data.created_at)}</div>
                     <div className="" style={{ marginTop: "6px" }}>
                         <div id="color-picker" onClick={() => { this.setState({ showDrop: !showDrop }) }}>
                             <div className="wrapper-dropdown">
-                                <span style={{ backgroundColor: colorStatus, fontWeight: "500" }}>{status}</span>
+                                <span style={{ backgroundColor: colorStatus, fontWeight: "500", fontSize: "13px" }}>{status}</span>
                                 <ul className={`dropdown ${showDrop === true ? "" : "hide"}`} >
                                     <li>
                                         {this.list_status.map((v, i) => {
                                             return (
-                                                <span onClick={() => this.onChangeStatus(v.index)} style={{ display: "block" }}>{v.title}</span>
-
+                                                <div className="hover-product" style = {{display : "flex"}}>
+                                                    <div className="dot" style={{background : v.color , margin: "auto 0px"
+}}></div>
+                                                <span onClick={() => this.onChangeStatus(v.index)} style={{ display: "block"  , marginLeft: "6px"}}>{v.title}</span>
+                                                </div>
                                             )
                                         })}
 
