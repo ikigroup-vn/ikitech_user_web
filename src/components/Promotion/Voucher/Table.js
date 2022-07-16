@@ -104,9 +104,10 @@ filterColDiscount = (data) => {
         var is_show_voucher = data.is_show_voucher == true ? "Hiển thị" : "Đang ẩn"
         var status_show_voucher = data.is_show_voucher == true ? "success" : "secondary"
         var showCurrentPage = typeof per_page != "undefined" && per_page != null ? true : false
-        var action = this.props.is_end == 0 || this.props.is_end == 2 ? "show" : "hide"
+        var action_edit = this.props.is_end == 0 || this.props.is_end == 2 ? "show" : "hide"
+        var action_end = this.props.is_end == 2 ? "show" : "hide"
+        var action_remove = this.props.is_end == 0  ? "show" : "hide"
 
-        var disableIsEnd = this.props.is_end == 0 || this.props.is_end == 2 ? "show" : "hide"
         if(this.filterColDiscount(data) == true)
         {
           count = count + 1
@@ -142,7 +143,7 @@ filterColDiscount = (data) => {
             <td className="group-btn-table three-btn-group" style = {{maxWidth : "150px"}}>
               {this.props.is_end == 0 || this.props.is_end == 2   && <Link
                 to={`/voucher/edit/${store_code}/${data.id}`}
-                class={`btn btn-warning btn-sm ${action}`}
+                class={`btn btn-warning btn-sm ${action_edit}`}
               >
                 <i class="fa fa-edit"></i> Sửa
               </Link>}
@@ -153,7 +154,7 @@ filterColDiscount = (data) => {
                 name= "toggle"
 
                 data-target="#removeModal"
-                class={`btn btn-danger btn-sm ${action}`}
+                class={`btn btn-danger btn-sm ${action_remove}`}
               >
                 <i class="fa fa-trash"></i> Xóa
               </button>
@@ -163,7 +164,7 @@ filterColDiscount = (data) => {
                 name= "toggle"
 
                 data-target="#isEndModal"
-                class={`btn btn-primary btn-sm ${disableIsEnd} ${_delete == true ? "show" : "hide"}`}
+                class={`btn btn-primary btn-sm ${action_end} `}
               >
                 <i class="fa fa-clock-o"></i> Kết thúc
               </button>

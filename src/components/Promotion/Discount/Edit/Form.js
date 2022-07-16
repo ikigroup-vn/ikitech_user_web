@@ -227,12 +227,10 @@ class Form extends Component {
     var { store_code } = this.props
 
     var type = getQueryParams("type")
-    if(type)
-    {
+    if (type) {
       history.replace(`/discount/${store_code}?type=${type}`)
     }
-    else
-    {
+    else {
       history.goBack()
     }
   };
@@ -268,19 +266,21 @@ class Form extends Component {
   };
 
 
-  onSaveProduct = () =>{
-    this.setState({saveListProducts : [...this.state.listProducts]})
+  onSaveProduct = () => {
+    this.setState({ saveListProducts: [...this.state.listProducts] })
   }
   render() {
     var { txtName, txtStart, txtEnd, txtValue, txtAmount, listProducts, image, txtContent, displayError, isLoading, saveListProducts } = this.state;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
 
     var { products, store_code, discounts, discount } = this.props;
-    console.log(txtAmount , discount)
+    var now = moment().valueOf()
+    var end_time = moment(discount.end_time, "YYYY-MM-DD HH:mm:ss").valueOf()
+    var canOnsave = now < end_time
     return (
       <React.Fragment>
 
-        <form role="form" onSubmit={this.onSave} method="post">
+        <form role="form" onSubmit={() => canOnsave == true && this.onSave} method="post">
           <div class="box-body">
             {/* {
               getChannel() == IKITECH && (
@@ -422,19 +422,20 @@ class Form extends Component {
             } */}
           </div>
           <div class="box-footer">
-          <button type = "submit" class="btn btn-info   btn-sm">
-                  <i class="fas fa-save"></i>  Lưu
+            {canOnsave == true && <button type="submit" class="btn btn-info   btn-sm">
+              <i class="fas fa-save"></i>  Lưu
 
-                </button>
-                <button
-                type = "button"
-                  style={{ marginLeft: "10px" }}
-                  onClick={this.goBack}
-                  class="btn btn-warning   btn-sm"
-                >
-                  <i class="fas fa-arrow-left"></i> Trở về
+            </button>}
 
-                </button>
+            <button
+              type="button"
+              style={{ marginLeft: "10px" }}
+              onClick={this.goBack}
+              class="btn btn-warning   btn-sm"
+            >
+              <i class="fas fa-arrow-left"></i> Trở về
+
+            </button>
           </div>
 
         </form>
@@ -442,7 +443,7 @@ class Form extends Component {
 
         <ConfimUpdateUsed onOk={this.onOkUpdate} />
         <ModalListProduct onSaveProduct={this.onSaveProduct}
-          discounts={discounts} discount = {discount} handleAddProduct={this.handleAddProduct} listProducts={listProducts} store_code={store_code} products={products} />
+          discounts={discounts} discount={discount} handleAddProduct={this.handleAddProduct} listProducts={listProducts} store_code={store_code} products={products} />
       </React.Fragment>
 
     );

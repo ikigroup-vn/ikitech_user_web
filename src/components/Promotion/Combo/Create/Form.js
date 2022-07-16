@@ -197,8 +197,8 @@ class Form extends Component {
     var amount = form.amount;
     if (
       typeof amount == "undefined" ||
-      amount == null ||
-      (typeof amount != "undefined" && amount.replace(/ /g, "").length == 0)
+      amount == null || !isEmpty(amount)
+      
     )
       form.set_limit_amount = false;
     this.props.createCombo(store_code, form , this.checkStatus(startTime));

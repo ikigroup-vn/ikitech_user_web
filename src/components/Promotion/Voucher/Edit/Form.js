@@ -398,10 +398,13 @@ class Form extends Component {
     var { products, store_code, vouchers  , voucher} = this.props;
     var disableOfType = type == "store" ? "hide" : "show"
     var checkLimit = limit == "show" ? true : false
+    var now = moment().valueOf()
+    var end_time = moment(voucher.end_time, "YYYY-MM-DD HH:mm:ss").valueOf()
+    var canOnsave = now < end_time
     console.log(checkLimit)
     return (
       <React.Fragment>
-        <form role="form" onSubmit={this.onSave} method="post">
+        <form role="form" onSubmit={() => canOnsave == true && this.onSave} method="post">
 
           <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -662,10 +665,10 @@ class Form extends Component {
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <div class="box-footer">
-              <button type = "submit" class="btn btn-info   btn-sm">
-                  <i class="fas fa-save"></i>  Lưu
+              {canOnsave == true && <button type="submit" class="btn btn-info   btn-sm">
+              <i class="fas fa-save"></i>  Lưu
 
-                </button>
+            </button>}
                 <button
                                 type = "button"
 

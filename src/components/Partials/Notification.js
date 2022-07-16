@@ -30,6 +30,7 @@ class Notification extends Component {
                 REFUND_ORDER : `/order/detail/${this.props.store_code}`
             }
         }
+        this.socket = null
 
     }
 
@@ -174,7 +175,7 @@ class Notification extends Component {
             this.props.fetchAllBadge(this.props.store_code, branch_id);
         }
 
-        if (!shallowEqual(this.props.user, nextProps.user) && typeof nextProps.user.id !== "undefined") {
+        if (!shallowEqual(this.props.user, nextProps.user) && typeof nextProps.user.id !== "undefined" && this.socket == null) {
      
             this.socket = io(helpers.callUrlSocket(), {
               transports: ["websocket"],

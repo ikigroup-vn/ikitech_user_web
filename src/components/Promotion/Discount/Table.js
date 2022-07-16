@@ -108,9 +108,11 @@ class Table extends Component {
         var image_url =
           data.image_url == null || data.image_url == "" ? Env.IMG_NOT_FOUND : data.image_url
         var showCurrentPage = typeof per_page != "undefined" && per_page != null ? true : false
-        var disableIsEnd = this.props.is_end || this.props.is_end == 2 ? "hide" : "show"
-        var action = this.props.is_end == 0 || this.props.is_end == 2 ? "show" : "hide"
-        console.log(set_limit_amount)
+        var action_edit = this.props.is_end == 0 || this.props.is_end == 2 ? "show" : "hide"
+        var action_end = this.props.is_end == 2 ? "show" : "hide"
+        var action_remove = this.props.is_end == 0  ? "show" : "hide"
+
+
         if(this.filterColDiscount(data) == true)
         {
           count = count + 1
@@ -138,7 +140,7 @@ class Table extends Component {
               <td className="group-btn-table three-btn-group" style = {{maxWidth : "150px"}}>
                 <Link
                   to={`/discount/edit/${store_code}/${data.id}`}
-                  class={`btn btn-warning btn-sm ${action}`}
+                  class={`btn btn-warning btn-sm ${action_edit}`}
                 >
                   <i class="fa fa-edit"></i> Sửa
                 </Link>
@@ -148,7 +150,7 @@ class Table extends Component {
                   data-toggle="modal"
                   data-target="#removeModal"
                   name="toggle"
-                  class={`btn btn-danger btn-sm ${action}`}
+                  class={`btn btn-danger btn-sm ${action_remove}`}
                 >
                   <i class="fa fa-trash"></i> Xóa
                 </button>
@@ -159,7 +161,7 @@ class Table extends Component {
                   name="toggle"
   
                   data-target="#isEndModal"
-                  class={`btn btn-primary btn-sm ${disableIsEnd} ${_delete == true ? "show" : "hide"}`}
+                  class={`btn btn-primary btn-sm ${action_end}`}
                 >
                   <i class="fa fa-clock-o"></i> Kết thúc
                 </button>

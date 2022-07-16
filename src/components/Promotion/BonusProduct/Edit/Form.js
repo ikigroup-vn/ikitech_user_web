@@ -575,14 +575,16 @@ class Form extends Component {
       saveListProductsBonus
     } = this.state;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
-    var { products, store_code, combos } = this.props;
+    var { products, store_code, combos , bonusProduct } = this.props;
     var type_discount_default = txtDiscoutType == "0" ? "show" : "hide";
     var type_discount_percent = txtDiscoutType == "1" ? "show" : "hide";
-
+    var now = moment().valueOf()
+    var end_time = moment(bonusProduct.end_time, "YYYY-MM-DD HH:mm:ss").valueOf()
+    var canOnsave = now < end_time
     console.log(this.state);
     return (
       <React.Fragment>
-        <form role="form" onSubmit={this.onSave} method="post">
+        <form role="form" onSubmit={() => canOnsave == true && this.onSave} method="post">
           <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
               <div class="box-body">
@@ -756,10 +758,10 @@ class Form extends Component {
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <div class="box-footer">
-                <button type="submit" class="btn btn-info   btn-sm">
-                  <i class="fas fa-save"></i> Lưu
+              {canOnsave == true && <button type="submit" class="btn btn-info   btn-sm">
+              <i class="fas fa-save"></i>  Lưu
 
-                </button>
+            </button>}
                 <button
                 type = "button"
                   style={{ marginLeft: "10px" }}
