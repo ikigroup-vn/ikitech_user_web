@@ -185,7 +185,7 @@ class Form extends Component {
                   ></textarea>
                 </div>
           
-              <div class="form-group">
+              {/* <div class="form-group">
               <label for="product_name">Nội dung</label>
               <SunEditor
                 onImageUploadBefore={handleImageUploadBefore}
@@ -249,7 +249,7 @@ class Form extends Component {
                 }}
 
               />
-            </div>
+            </div> */}
 
               </div>
 

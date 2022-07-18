@@ -2,6 +2,7 @@ import * as Types from "../constants/ActionType";
 import history from "../history";
 import * as bonusProductApi from "../data/remote/bonus_product";
 import * as uploadApi from "../data/remote/upload";
+import { getQueryParams } from "../ultis/helpers"
 
 export const fetchAllBonusProduct = (store_id) => {
   return (dispatch) => {
@@ -88,7 +89,7 @@ export const updateBonusProduct = (store_code, BonusProduct, id) => {
             content: res.data.msg,
           },
         });
-        history.goBack();
+        history.replace(`/bonus_product/${store_code}?type=${getQueryParams("type") ?? 1}`)
       })
       .catch(function (error) {
         dispatch({

@@ -690,6 +690,13 @@ export const postCashRefund = (order_code, data, store_code, branch = getBranchI
                   data: res.data.data,
                 });
             });
+            billApi.fetchHistoryPay(store_code, order_code).then((res) => {
+              if (res.data.code === 200)
+                dispatch({
+                  type: Types.FETCH_ALL_HISTORY_PAY,
+                  data: res.data.data,
+                });
+            });
     
             billApi
               .getHistoryDeliveryStatus(store_code, {

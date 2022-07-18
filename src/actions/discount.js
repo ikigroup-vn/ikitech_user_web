@@ -2,6 +2,7 @@ import * as Types from "../constants/ActionType";
 import history from "../history";
 import * as discountApi from "../data/remote/discount";
 import * as uploadApi from "../data/remote/upload";
+import { getQueryParams } from "../ultis/helpers"
 
 export const fetchAllDiscount = (store_id) => {
   return (dispatch) => {
@@ -90,7 +91,7 @@ export const updateDiscount = (store_code, discount, id) => {
             content: res.data.msg,
           },
         });
-        history.goBack();
+        history.replace(`/discount/${store_code}?type=${getQueryParams("type") ?? 1}`)
       })
       .catch(function (error) {
         dispatch({

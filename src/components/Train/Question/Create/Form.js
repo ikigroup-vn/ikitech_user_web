@@ -43,7 +43,7 @@ class Form extends Component {
       answer_b: "",
       answer_c: "",
       answer_d: "",
-      right_answer: "",
+      right_answer: "A",
       image: "",
       fileUpload: null,
 

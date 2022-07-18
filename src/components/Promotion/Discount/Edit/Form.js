@@ -280,7 +280,7 @@ class Form extends Component {
     return (
       <React.Fragment>
 
-        <form role="form" onSubmit={() => canOnsave == true && this.onSave} method="post">
+        <form role="form" onSubmit={(e) => canOnsave == true && this.onSave(e)} method="post">
           <div class="box-body">
             {/* {
               getChannel() == IKITECH && (

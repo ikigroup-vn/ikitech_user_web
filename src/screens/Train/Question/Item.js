@@ -41,6 +41,13 @@ class CourseEdit extends Component {
 "border-radius": "0.375rem"
             }}>
                 <div className="" style = {{padding : "10px"}}   >
+                    <div
+                    style={{ width: "100%",
+                        }}
+                    > {data.question_image != "" && data.question_image != null &&  
+                    <img style={{margin : "auto" ,  width: "160px",
+                    height: "160px"}} src = {data.question_image}/>}</div>
+                   
 
                     <div className="question">
                     {data.question}

@@ -180,7 +180,7 @@ class Form extends Component {
                     rows="3"
                   ></textarea>
                 </div>
-
+{/* 
                 <div class="form-group">
                   <label for="product_name">Nội dung</label>
                   <div className="editor">
@@ -248,7 +248,7 @@ class Form extends Component {
                       }}
                     />
                   </div>
-                </div>
+                </div> */}
 
               </div>
 

@@ -334,7 +334,7 @@ class Form extends Component {
     console.log(this.state);
     return (
       <React.Fragment>
-        <form role="form" onSubmit={() => canOnsave == true && this.onSave} method="post">
+        <form role="form" onSubmit={(e) => canOnsave == true && this.onSave(e)} method="post">
 
           <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">

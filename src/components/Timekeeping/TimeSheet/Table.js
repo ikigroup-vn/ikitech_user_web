@@ -8,8 +8,8 @@ import { formatNoD } from "../../../ultis/helpers";
 import moment from "moment";
 // import ModalDetail from "../../components/RevenueExpenditures/ModalDetail";
 import ModalDetail from "./ModalDetail";
-import ModalHistory from "./ModalHistory"
-import ModalHistoryRecord from "./ModalHistoryRecord"
+import ModalHistory from "./ModalHistory";
+import ModalHistoryRecord from "./ModalHistoryRecord";
 
 class Table extends Component {
   constructor(props) {
@@ -23,7 +23,7 @@ class Table extends Component {
       dataDetail: {},
       idModalShow: null,
       keeping_histories: [],
-      recording_time: []
+      recording_time: [],
     };
   }
 
@@ -135,31 +135,44 @@ class Table extends Component {
     // }
   }
   getTotalSalary = (listTimeSheet) => {
-    var result = null
-    var total = 0
+    var result = null;
+    var total = 0;
     if (listTimeSheet.length > 0) {
       result = listTimeSheet?.map((data, index) => {
         if (data.total_salary != null) {
-          total = total + data.total_salary
+          total = total + data.total_salary;
         }
-      })
+      });
     }
-    return total
-  }
+    return total;
+  };
   passData = (keeping_histories, recording_time) => {
-    this.setState({ keeping_histories, recording_time })
-  }
+    this.setState({ keeping_histories, recording_time });
+  };
 
-  showShiftWork = (data) =>{
-    var result = null
-    result = data.map((data,key)=>{
-      return <div className = "time-shift">
-      <span>{moment(`${data.start_work_hour}:${data.start_work_minute}` , "HH:mm").format("HH:mm")}</span> 
-      - <span>{moment(`${data.end_work_hour}:${data.end_work_minute}` , "HH:mm").format("HH:mm")}</span>
-      </div>
-    })
-    return result
-  }
+  showShiftWork = (data) => {
+    var result = null;
+    result = data.map((data, key) => {
+      return (
+        <div className="time-shift">
+          <span>
+            {moment(
+              `${data.start_work_hour}:${data.start_work_minute}`,
+              "HH:mm"
+            ).format("HH:mm")}
+          </span>
+          -{" "}
+          <span>
+            {moment(
+              `${data.end_work_hour}:${data.end_work_minute}`,
+              "HH:mm"
+            ).format("HH:mm")}
+          </span>
+        </div>
+      );
+    });
+    return result;
+  };
   showData = (listTimeSheet) => {
     var { store_code, branch_id, timeSheet, datePrime } = this.props;
     console.log(listTimeSheet);
@@ -167,23 +180,50 @@ class Table extends Component {
     var result = null;
     if (listTimeSheet.length > 0) {
       result = listTimeSheet?.map((data, index) => {
-        var total_seconds = data?.total_seconds
-        total_seconds = total_seconds < 0 ? (total_seconds * -1) : total_seconds
-        console.log(total_seconds * 1000, Math.trunc(moment.duration(data?.total_seconds * 1000).asHours()))
-        var status1 = data?.keeping_histories[
-        0
-        ]?.status
+        var total_seconds = data?.total_seconds;
+        total_seconds = total_seconds < 0 ? total_seconds * -1 : total_seconds;
+        console.log(
+          total_seconds * 1000,
+          Math.trunc(moment.duration(data?.total_seconds * 1000).asHours())
+        );
+        var status1 = data?.keeping_histories[0]?.status;
 
-        var status2 = data?.keeping_histories[
-          data?.keeping_histories.length - 1
-        ]?.status
+        var status2 =
+          data?.keeping_histories[data?.keeping_histories.length - 1]?.status;
 
+        var status_name1 =
+          status1 == 1
+            ? "Chờ xử lý"
+            : status1 == 2
+            ? "Đã đồng ý"
+            : status1 == 3
+            ? "Đã hủy"
+            : null;
+        var status_color1 =
+          status1 == 1
+            ? "secondary"
+            : status1 == 2
+            ? "success"
+            : status1 == 3
+            ? "danger"
+            : null;
 
-        var status_name1 = status1 == 1 ? "Chờ xử lý" : status1 == 2 ?  "Đã đồng ý" : status1 == 3 ? "Đã hủy" : null
-        var status_color1 = status1 == 1 ? "secondary" : status1 == 2 ?  "success" :status1 == 3 ? "danger" : null
-
-        var status_name2 = status1 == 1 ? "Chờ xử lý" : status2 == 2 ?  "Đã đồng ý" : status2 == 3 ? "Đã hủy" : null
-        var status_color2 = status1 == 1 ? "secondary" : status2 == 2 ?  "success" :status2 == 3 ? "danger" : null
+        var status_name2 =
+          status1 == 1
+            ? "Chờ xử lý"
+            : status2 == 2
+            ? "Đã đồng ý"
+            : status2 == 3
+            ? "Đã hủy"
+            : null;
+        var status_color2 =
+          status1 == 1
+            ? "secondary"
+            : status2 == 2
+            ? "success"
+            : status2 == 3
+            ? "danger"
+            : null;
 
         return (
           <React.Fragment>
@@ -197,189 +237,220 @@ class Table extends Component {
             //   })
             // }
             >
-              <td style = {{textAlign : "center"}}>
-                <div>                {data.staff.name}
-</div>
-<div>
-  {this.showShiftWork(
-    data.shift_work
-  )}
-</div>
+              <td style={{ textAlign: "center" }}>
+                <div> {data.staff.name}</div>
+                <div>{this.showShiftWork(data.shift_work)}</div>
               </td>
               {this.props.typeDate == "DAY" ||
-                (this.props.typeDate == "OPTION" &&
-                  this.props.datePrime.from === this.props.datePrime.to &&
-                  data?.keeping_histories.length !== 0) ? (
+              (this.props.typeDate == "OPTION" &&
+                this.props.datePrime.from === this.props.datePrime.to &&
+                data?.keeping_histories.length !== 0) ? (
                 <React.Fragment>
-
-                  <td style={{ cursor: "pointer" }}
+                  <td
+                    style={{ cursor: "pointer" }}
                     data-toggle="modal"
-                    data-target="#modalHistory" onClick={() => { this.passData(data?.keeping_histories, data?.recording_time) }} >
-                      {data.keeping_histories?.length > 0 &&
+                    data-target="#modalHistory"
+                    onClick={() => {
+                      this.passData(
+                        data?.keeping_histories,
+                        data?.recording_time
+                      );
+                    }}
+                  >
+                    {data.keeping_histories?.length > 0 && (
                       <>
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        background: "lightgreen",
-                        width: "fit-content",
-                        padding: "0.5rem 1rem",
-                        borderRadius: "0.5rem",
-                        marginBottom: "0.5rem",
-                      }}
-                    >
-                      <div>
-                        <span
+                        <div
                           style={{
-                            background: "green",
-                            padding: "0.02rem 0.5rem",
-                            borderRadius: "50%",
-                            marginRight: "0.3rem",
-                            color: "green",
+                            display: "flex",
+                            flexDirection: "column",
+                            background: "lightgreen",
+                            width: "fit-content",
+                            padding: "0.5rem 1rem",
+                            borderRadius: "0.5rem",
+                            marginBottom: "0.5rem",
                           }}
-                        ></span>
-                        <span style={{ color: "green", fontWeight: "bold" }}>
-                          Vào làm:{" "}
-                        </span>
-                        <span style={{ fontWeight: "bold" }}>
-                          {moment(data?.keeping_histories[0]?.time_check).format(
-                            "HH:mm:ss"
-                          )}
-                        </span>
-                        &nbsp;{
-                          data?.keeping_histories[0]?.remote_timekeeping === true ? "" :
-
-                        data?.keeping_histories[0]?.is_bonus == true ? <span style={{ color: "green" }}>
-                          (Thêm công)
-                        </span> : <span style={{ color: "red" }}>
-                          (Bớt công)
-                        </span>}
-                      </div>
-                      <div>
-                        {data?.keeping_histories[0]?.remote_timekeeping ? (
-                          <span
-                            style={{
-                              color: "red",
-                              fontWeight: "bold",
-                              fontSize: "0.7rem",
-                            }}
-                          >
-                            (Từ xa){" "}
-                          </span>
-                        ) : (
-                          <span></span>
-                        )}
-
-                        <span style={{ color: "gray" }}>
-                          {data?.keeping_histories[0]?.reason
-                            ? `Lý do: ${data?.keeping_histories[0]?.reason}`
-                            : ""}
-                        </span>
-                        <span style={{ color: "gray" , display : "block" }}>
-                                {data?.keeping_histories[0]?.from_user
-                                    ? `Được tạo bởi: Quản lý ${data?.keeping_histories[0]?.from_user_created?.name}`
-                                    : `Được tạo bởi:  Nhân viên ${data?.keeping_histories[0]?.from_staff_created?.name}`}
-                                
+                        >
+                          <div>
+                            <span
+                              style={{
+                                background: "green",
+                                padding: "0.02rem 0.5rem",
+                                borderRadius: "50%",
+                                marginRight: "0.3rem",
+                                color: "green",
+                              }}
+                            ></span>
+                            <span
+                              style={{ color: "green", fontWeight: "bold" }}
+                            >
+                              Vào làm:{" "}
                             </span>
-                      </div>
-                      <div>
-                        {status_name1 !== null &&    <span >
-                          Trạng thái: <span style = {{fontWeight : "500"}} className={status_color1} >{status_name1}</span>
-                        </span>}
-                    
-                      </div>
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        background: "lightgoldenrodyellow",
-                        width: "fit-content",
-                        padding: "0.5rem 1rem",
-                        borderRadius: "0.5rem",
-                      }}
-                    >
-                      <div>
-                        <span
+                            <span style={{ fontWeight: "bold" }}>
+                              {moment(
+                                data?.keeping_histories[0]?.time_check
+                              ).format("HH:mm:ss")}
+                            </span>
+                            &nbsp;
+                            {data?.keeping_histories[0]?.remote_timekeeping ===
+                            true ? (
+                              ""
+                            ) : data?.keeping_histories[0]?.is_bonus == true ? (
+                              <span style={{ color: "green" }}>
+                                (Thêm công)
+                              </span>
+                            ) : (
+                              <span style={{ color: "red" }}>(Bớt công)</span>
+                            )}
+                          </div>
+                          <div>
+                            {data?.keeping_histories[0]?.remote_timekeeping ? (
+                              <span
+                                style={{
+                                  color: "red",
+                                  fontWeight: "bold",
+                                  fontSize: "0.7rem",
+                                }}
+                              >
+                                (Từ xa){" "}
+                              </span>
+                            ) : (
+                              <span></span>
+                            )}
+
+                            <span style={{ color: "gray" }}>
+                              {data?.keeping_histories[0]?.reason
+                                ? `Lý do: ${data?.keeping_histories[0]?.reason}`
+                                : ""}
+                            </span>
+                            <span style={{ color: "gray", display: "block" }}>
+                              {data?.keeping_histories[0]?.from_user
+                                ? `Được tạo bởi: Quản lý ${data?.keeping_histories[0]?.from_user_created?.name}`
+                                : `Được tạo bởi:  Nhân viên ${data?.keeping_histories[0]?.from_staff_created?.name}`}
+                            </span>
+                          </div>
+                          <div>
+                            {status_name1 !== null && (
+                              <span>
+                                Trạng thái:{" "}
+                                <span
+                                  style={{ fontWeight: "500" }}
+                                  className={status_color1}
+                                >
+                                  {status_name1}
+                                </span>
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <div
                           style={{
-                            background: "orange",
-                            padding: "0.02rem 0.5rem",
-                            borderRadius: "50%",
-                            marginRight: "0.3rem",
-                            color: "orange",
+                            display: "flex",
+                            flexDirection: "column",
+                            background: "lightgoldenrodyellow",
+                            width: "fit-content",
+                            padding: "0.5rem 1rem",
+                            borderRadius: "0.5rem",
                           }}
-                        ></span>
-                        <span style={{ color: "orange", fontWeight: "bold" }}>
-                          Tan làm:{" "}
-                        </span>
-                        <span style={{ fontWeight: "bold" }}>
-                          {moment(
-                            data?.keeping_histories[
-                              data?.keeping_histories.length - 1
-                            ]?.time_check
-                          ).format("HH:mm:ss")}
-                        </span>
-                      
-                            &nbsp;{
-                              data?.keeping_histories[data?.keeping_histories.length - 1]?.remote_timekeeping === true ? "" :
-                            data?.keeping_histories[
-                              data?.keeping_histories.length - 1
-                            ]?.is_bonus == true ?
-                            
-                            <span style={{ color: "green" }}>
-                              (Thêm công)
-                            </span> : 
-                            <span style={{ color: "red" }}>
-                              (Bớt công)
-                            </span>}
-                          
-                        
-                  
-                     
-                      </div>
-                         <div>
-                        {data?.keeping_histories[data?.keeping_histories.length - 1]?.remote_timekeeping ? (
-                          <span
-                            style={{
-                              color: "red",
-                              fontWeight: "bold",
-                              fontSize: "0.7rem",
-                            }}
-                          >
-                            (Từ xa){" "}
-                          </span>
-                        ) : (
-                          <span></span>
-                        )}
-
-                        <span style={{ color: "gray" }}>
-                          {data?.keeping_histories[  data?.keeping_histories.length - 1]?.reason
-                            ? `Lý do: ${data?.keeping_histories[  data?.keeping_histories.length - 1]?.reason}`
-                            : ""}
-                        </span>
-                        <span style={{ color: "gray" , display : "block" }}>
-                                {data?.keeping_histories[  data?.keeping_histories.length - 1]?.from_user
-                                    ? `Được tạo bởi: Quản lý ${data?.keeping_histories[  data?.keeping_histories.length - 1]?.from_user_created?.name}`
-                                    : `Được tạo bởi:  Nhân viên ${data?.keeping_histories[  data?.keeping_histories.length - 1]?.from_staff_created?.name}`}
-                                
+                        >
+                          <div>
+                            <span
+                              style={{
+                                background: "orange",
+                                padding: "0.02rem 0.5rem",
+                                borderRadius: "50%",
+                                marginRight: "0.3rem",
+                                color: "orange",
+                              }}
+                            ></span>
+                            <span
+                              style={{ color: "orange", fontWeight: "bold" }}
+                            >
+                              Tan làm:{" "}
                             </span>
-                      </div>
-                      <div>
-                        {
-                          status_name2 !== null &&       <span >
-                          Trạng thái: <span style = {{fontWeight : "500"}} className={status_color2} >{status_name2}</span>
-                        </span>
-                        }
-                
-                      </div>
-                    </div>
-                    </>
-      }
+                            <span style={{ fontWeight: "bold" }}>
+                              {moment(
+                                data?.keeping_histories[
+                                  data?.keeping_histories.length - 1
+                                ]?.time_check
+                              ).format("HH:mm:ss")}
+                            </span>
+                            &nbsp;
+                            {data?.keeping_histories[
+                              data?.keeping_histories.length - 1
+                            ]?.remote_timekeeping === true ? (
+                              ""
+                            ) : data?.keeping_histories[
+                                data?.keeping_histories.length - 1
+                              ]?.is_bonus == true ? (
+                              <span style={{ color: "green" }}>
+                                (Thêm công)
+                              </span>
+                            ) : (
+                              <span style={{ color: "red" }}>(Bớt công)</span>
+                            )}
+                          </div>
+                          <div>
+                            {data?.keeping_histories[
+                              data?.keeping_histories.length - 1
+                            ]?.remote_timekeeping ? (
+                              <span
+                                style={{
+                                  color: "red",
+                                  fontWeight: "bold",
+                                  fontSize: "0.7rem",
+                                }}
+                              >
+                                (Từ xa){" "}
+                              </span>
+                            ) : (
+                              <span></span>
+                            )}
+
+                            <span style={{ color: "gray" }}>
+                              {data?.keeping_histories[
+                                data?.keeping_histories.length - 1
+                              ]?.reason
+                                ? `Lý do: ${
+                                    data?.keeping_histories[
+                                      data?.keeping_histories.length - 1
+                                    ]?.reason
+                                  }`
+                                : ""}
+                            </span>
+                            <span style={{ color: "gray", display: "block" }}>
+                              {data?.keeping_histories[
+                                data?.keeping_histories.length - 1
+                              ]?.from_user
+                                ? `Được tạo bởi: Quản lý ${
+                                    data?.keeping_histories[
+                                      data?.keeping_histories.length - 1
+                                    ]?.from_user_created?.name
+                                  }`
+                                : `Được tạo bởi:  Nhân viên ${
+                                    data?.keeping_histories[
+                                      data?.keeping_histories.length - 1
+                                    ]?.from_staff_created?.name
+                                  }`}
+                            </span>
+                          </div>
+                          <div>
+                            {status_name2 !== null && (
+                              <span>
+                                Trạng thái:{" "}
+                                <span
+                                  style={{ fontWeight: "500" }}
+                                  className={status_color2}
+                                >
+                                  {status_name2}
+                                </span>
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                      </>
+                    )}
                   </td>
-              
-
                 </React.Fragment>
-
               ) : (
                 <React.Fragment>
                   <td></td>
@@ -388,27 +459,37 @@ class Table extends Component {
 
               {data.total_seconds !== 0 ? (
                 <td>
-                  {Math.trunc(moment.duration(total_seconds * 1000).asHours())} giờ{" "}
-                  {moment.utc(total_seconds * 1000).minutes()} phút - {formatNoD(data.total_salary ? data.total_salary.toFixed() : 0) }đ
-
-
+                  {Math.trunc(moment.duration(total_seconds * 1000).asHours())}{" "}
+                  giờ {moment.utc(total_seconds * 1000).minutes()} phút -{" "}
+                  {formatNoD(
+                    data.total_salary ? data.total_salary.toFixed() : 0
+                  )}
+                  đ
                   <p
                     data-toggle="modal"
                     data-target="#modalHistoryRecord"
-                    onClick={() => { this.passData(data?.keeping_histories, data?.recording_time) }}
+                    onClick={() => {
+                      this.passData(
+                        data?.keeping_histories,
+                        data?.recording_time
+                      );
+                    }}
                     style={{
                       color: "blue",
-                      cursor: "pointer"
-                    }}>Chi tiết</p>
+                      cursor: "pointer",
+                    }}
+                  >
+                    Chi tiết
+                  </p>
                 </td>
               ) : (
                 <td>0 giờ 0 phút</td>
               )}
-              <td>
-                {formatNoD(data.salary_one_hour)}đ/h
-              </td>
-         
-              
+               {this.props.typeDate == "DAY" ||
+              (this.props.typeDate == "OPTION" &&
+                this.props.datePrime.from === this.props.datePrime.to &&
+                data?.keeping_histories.length !== 0) &&
+              <td>{formatNoD(data.salary_one_hour)}đ/h</td>}
             </tr>
           </React.Fragment>
         );
@@ -421,7 +502,7 @@ class Table extends Component {
 
   render() {
     var { store_code, branch_id, timeSheet } = this.props;
-    var { keeping_histories, recording_time } = this.state
+    var { keeping_histories, recording_time } = this.state;
     // const branch_id = localStorage.getItem("branch_id");
     // var { statusOrder, statusPayment } = this.state;
 
@@ -433,7 +514,10 @@ class Table extends Component {
     return (
       <React.Fragment>
         <div class="table-responsive " style={{ minHeight: 300 }}>
-          <p style={{ fontWeight: "500" }}>Tổng lương: {formatNoD(this.getTotalSalary(listTimeSheet)?.toFixed())}đ</p>
+          <p style={{ fontWeight: "500" }}>
+            Tổng lương:{" "}
+            {formatNoD(this.getTotalSalary(listTimeSheet)?.toFixed())}đ
+          </p>
           <table
             class="table table-border table-hover"
             id="dataTable"
@@ -442,7 +526,7 @@ class Table extends Component {
           >
             <tbody>
               <tr>
-                <td style = {{textAlign : "center"}}>Nhân viên</td>
+                <td style={{ textAlign: "center" }}>Nhân viên</td>
                 {console.log("133131", this.props.datePrime)}
                 {this.props.typeDate == "DAY" ? (
                   <React.Fragment>
@@ -454,8 +538,7 @@ class Table extends Component {
                   </React.Fragment>
                 )}
                 <td>Số giờ làm</td>
-                <td>Số tiền làm theo giờ</td>
-              
+                {this.props.typeDate == "DAY" && <td>Số tiền làm theo giờ</td>}
 
                 {/* {this.props.typeDate == "DAY" ||
                   (this.props.typeDate == "OPTION" &&
@@ -470,7 +553,7 @@ class Table extends Component {
             </tbody>
           </table>
           <ModalDetail
-          resetModal = {this.props.resetModal}
+            resetModal={this.props.resetModal}
             store_code={store_code}
             branch_id={branch_id}
             time_sheet_id={this.state.idModalShow}
@@ -479,12 +562,8 @@ class Table extends Component {
             datePrime={this.props.datePrime}
             typeDate={this.props.typeDate}
           />
-          <ModalHistory
-            keeping_histories={keeping_histories}
-          />
-          <ModalHistoryRecord
-            recording_time={recording_time}
-          />
+          <ModalHistory keeping_histories={keeping_histories} />
+          <ModalHistoryRecord recording_time={recording_time} />
         </div>
       </React.Fragment>
     );

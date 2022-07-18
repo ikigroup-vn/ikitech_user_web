@@ -245,7 +245,7 @@ class Form extends Component {
                     alt=""
                   />
                   <div class="media-body" style={{ marginLeft: "10px" }}>
-                    <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{product.name} </h5>
+                    {/* <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{product.name} </h5> */}
                     <p>{format(Number(product.price))}</p>
                   </div>
                 </div>
@@ -270,12 +270,12 @@ class Form extends Component {
 
                 <br></br>
                 <div class={`media ${showCProduct}`} id="product_preview">
-                  <img
+                  {/* <img
                     width="100px"
                     height="120px"
                     src={category.img}
                     alt=""
-                  />
+                  /> */}
                   <div class="media-body" style={{ marginLeft: "10px" }}>
                     <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{category.name} </h5>
                   </div>
@@ -306,9 +306,9 @@ class Form extends Component {
                     src={blog.img}
                     alt=""
                   />
-                  <div class="media-body" style={{ marginLeft: "10px" }}>
+                  {/* <div class="media-body" style={{ marginLeft: "10px" }}>
                     <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{blog.name} </h5>
-                  </div>
+                  </div> */}
                 </div>
               </div>
 
@@ -339,9 +339,9 @@ class Form extends Component {
                     src={categoryBlog.img}
                     alt=""
                   />
-                  <div class="media-body" style={{ marginLeft: "10px" }}>
+                  {/* <div class="media-body" style={{ marginLeft: "10px" }}>
                     <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{categoryBlog.name} </h5>
-                  </div>
+                  </div> */}
                 </div>
               </div>
             </div>

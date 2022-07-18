@@ -386,8 +386,9 @@ export const createQuestion = (store_code,data , _this, resetModal , courseId , 
             answer_b: "",
             answer_c: "",
             answer_d: "",
-            right_answer: "",
-            image : ""
+            right_answer: "A",
+            image : "",
+            question_image : null,
 
           })
         }

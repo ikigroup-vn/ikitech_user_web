@@ -571,11 +571,12 @@ class PostOrder extends Component {
             if(nextProps.oneCart.id != this.props.oneCart.id)
             {
                 discount = {discount: nextProps.oneCart.discount}
+                this.setState({  priceCustomer: nextProps.oneCart.info_cart.total_final,
+                })
             }
             this.setState({
                 code_voucher: nextProps.oneCart.code_voucher,
                 oneCart: nextProps.oneCart,
-                priceCustomer: nextProps.oneCart.info_cart.total_final,
                 totalFinal: nextProps.oneCart.info_cart.total_final,
                 totalAfterDiscount: nextProps.oneCart.info_cart.total_after_discount,
                 selectPrice: -1,

@@ -53,7 +53,7 @@ class Create extends Component {
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   <h4 className="h4 title_content mb-0 text-gray-800">
-                    Thêm quảng cáo
+                    Thêm popup quảng cáo
                   </h4>
                 </div>
                 <br></br>

@@ -2,6 +2,7 @@ import * as Types from "../constants/ActionType";
 import history from "../history";
 import * as comboApi from "../data/remote/combo";
 import * as uploadApi from "../data/remote/upload";
+import { getQueryParams } from "../ultis/helpers"
 
 export const fetchAllCombo = (store_id) => {
   return (dispatch) => {
@@ -88,7 +89,7 @@ export const updateCombo = (store_code, combo, id) => {
             content: res.data.msg,
           },
         });
-        history.goBack();
+        history.replace(`/combo/${store_code}?type=${getQueryParams("type") ?? 1}`)
       })
       .catch(function (error) {
         dispatch({

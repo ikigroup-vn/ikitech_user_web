@@ -90,10 +90,10 @@ class EditImportStock extends Component {
                 total_price = parseInt(total_price) + parseInt(item.import_price)
                 newImportStock.push({
                     element_id: item.id,
-                    nameDistribute: item.distribute_name,
-                    nameElement: item.element_distribute_name,
+                    nameDistribute: item.distribute_name || "",
+                    nameElement: item.element_distribute_name || "",
                     nameProduct: item.product.name,
-                    nameSubDistribute: item.sub_element_distribute_name,
+                    nameSubDistribute: item.sub_element_distribute_name || "",
                     product_id: item.product.id,
                     import_price: item.import_price,
                     reality_exist: item.quantity
@@ -164,8 +164,11 @@ class EditImportStock extends Component {
     }
     handleCallbackPushProduct = (modal) => {
         this.setState({ change: !this.state.change })
-        const index_element = this.state.listImportStock.map(e => e.element_id).indexOf(modal.element_id)
-        if (index_element < 0) {
+        // const index_element = this.state.listImportStock.map(e => e.element_id).indexOf(modal.element_id)
+        const index_element = this.state.listImportStock.filter(e => e.product_id === modal.product_id && e.nameDistribute == modal.nameDistribute && e.nameElement == modal.nameElement && e.nameSubDistribute == modal.nameSubDistribute)
+
+        console.log(modal,this.state.listImportStock,index_element)
+        if (index_element?.length === 0) {
             this.setState({ listImportStock: [...this.state.listImportStock, modal] })
         }
     }
