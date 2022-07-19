@@ -363,8 +363,10 @@ class PostOrder extends Component {
     };
 
     handleCallbackProduct = (modal) => {
+        console.log("hehe",modal)
         this.setState({
             infoProduct: modal,
+            isScan : randomString(10)
         });
     };
 
@@ -392,7 +394,8 @@ class PostOrder extends Component {
     };
 
     handleCallbackPushProduct = (modal) => {
-        this.setState({ listPosItem: modal });
+        console.log("haha" , modal)
+        this.setState({ listPosItem: modal , isScan : randomString(10) });
     };
 
     handleCallbackTab = (modal) => {
@@ -628,12 +631,13 @@ class PostOrder extends Component {
     shouldComponentUpdate(nextProps, nextState) {
         window.$('link[rel=stylesheet]').prop('disabled', false);
         if (
-            !shallowEqual(nextState.listPosItem, this.state.listPosItem) &&
-            nextState.listPosItem.product_id != null
+            (!shallowEqual(nextState.listPosItem, this.state.listPosItem) &&
+            nextState.listPosItem.product_id != null) || (nextState.listPosItem.product_id != null && (this.state.isScan != nextState.isScan))
         ) {
+            console.log(nextState.listPosItem)
             const formData = {
                 product_id: nextState.listPosItem.product_id,
-                quantity: 1,
+                quantity: nextState.listPosItem.stock ?? 1,
                 distribute_name: nextState.listPosItem.nameDistribute,
                 element_distribute_name: nextState.listPosItem.nameElement,
                 sub_element_distribute_name: nextState.listPosItem.nameSubDistribute,
