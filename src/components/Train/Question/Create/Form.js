@@ -132,6 +132,8 @@ class Form extends Component {
 
     }, this, function () {
       window.$(".modal").modal("hide");
+      window.$("#file-quiz-question").fileinput("clear");
+
 
     }, courseId, quizId);
   };
