@@ -40,7 +40,7 @@ class Table extends Component {
   changePage = (e,store_code, supplierId) => {
     var is_end = this.props.is_end
 
-    if(e.target.name !== "toggle")
+    if (e.target.name !== "toggle"  && e.target.parentNode.name !== "toggle")
     history.push(`/voucher/edit/${store_code}/${supplierId}?type=${is_end}`)
 }
 filterColDiscount = (data) => {
