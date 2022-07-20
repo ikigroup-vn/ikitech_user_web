@@ -15,7 +15,7 @@ function getSheetData(data, header) {
   return sheetData;
 }
 
-async function saveAsExcel(value) {
+async function saveAsExcel(value , title) {
   // var data = [
   //   { name: "John", city: "Seattle" },
   //   { name: "Mike", city: "Los Angeles" },
@@ -38,16 +38,75 @@ async function saveAsExcel(value) {
     range.style("border", true);
     return workbook.outputAsync().then((res) => {
       console.log(res);
-      saveAs(res, "Danh sách top đại lý.xlsx");
+      saveAs(res, title);
     });
   });
 }
+
+export const exportListCollaborator = (store_code, page, params) => {
+  return (dispatch) => {
+    collaboratorApi.fetchAllCollaborator(store_code, 1).then((res) => {
+      if (res.data.code !== 401)
+        if (res.data.code !== 401)
+          if (typeof res.data.data != "undefined") {
+            if (typeof res.data.data.data != "undefined") {
+              if (res.data.data.data.length > 0) {
+                var newArray = [];
+                var index = 0
+                for (const item of res.data.data.data) {
+                  index = index + 1
+                  var newItem = {};
+                  var arangeKeyItem = {
+                    order : index,
+                    name: item.customer?.name,
+                    phone_number: item.customer?.phone_number,
+                    referral_phone_number: item.customer.referral_phone_number,
+                    status : item.status == 1 ? "Đã kích hoạt" : "Chưa kích hoạt"
+                  };
+                  Object.entries(arangeKeyItem).forEach(
+                    ([key, value], index) => {
+                      if (key == "order") {
+                        newItem["STT"] = value;
+                      }
+                      if (key == "name") {
+                        newItem["Tên"] = value;
+                      }
+                      if (key == "phone_number") {
+                        newItem["Số điện thoại"] = value;
+                        // newItem["Tên sản phẩm"] = value
+                      }
+                      if (key == "referral_phone_number") {
+                        newItem["Mã giới thiệu"] = value;
+                        // newItem["Tên sản phẩm"] = value
+                      }
+                      if (key == "status") {
+                        newItem["Trạng thái"] = value;
+                      }
+                    }
+                  );
+
+                  newArray.push(newItem);
+                }
+                var header = [];
+                if (newArray.length > 0) {
+                  Object.entries(newArray[0]).forEach(([key, value], index) => {
+                    header.push(key);
+                  });
+                }
+                console.log(header);
+                saveAsExcel({ data: newArray, header: header } , "Danh sách CTV");
+              }
+            }
+          }
+    });
+  };
+};
+
 export const exportTopten = (store_code, page, params) => {
   return (dispatch) => {
- 
     collaboratorApi.fetchAllTopReport(store_code, page, params).then((res) => {
       console.log(res);
-   
+
       if (res.data.code !== 401)
         if (typeof res.data.data != "undefined") {
           if (typeof res.data.data.data != "undefined") {
@@ -88,7 +147,7 @@ export const exportTopten = (store_code, page, params) => {
                 });
               }
               console.log(header);
-              saveAsExcel({ data: newArray, header: header });
+              saveAsExcel({ data: newArray, header: header } , "Danh sách Top CTV");
             }
           }
         }

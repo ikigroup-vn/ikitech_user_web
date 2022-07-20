@@ -51,7 +51,7 @@ class General extends Component {
                             <div className="row no-gutters align-items-center">
                                 <div className="col mr-2">
                                     <div >
-                                        <Link className=" font-weight-bold text-success text-uppercase mb-1" to={`/order/${store_code}`}>Doanh thu ngày</Link>
+                                        <Link className=" font-weight-bold text-success text-uppercase mb-1" to={`/order/${store_code}?from=${moment().format("DD-MM-YYYY")}&to=${moment().format("DD-MM-YYYY")}`}>Doanh thu ngày</Link>
                                     </div>
                                     <div className="h5 mb-0 font-weight-bold text-gray-800">{format(badges.total_final_in_day)}</div>
                                 </div>

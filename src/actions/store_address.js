@@ -83,7 +83,7 @@ export const updateShipConfig = (store_code, data) => {
 
 
 
-export const createStoreA = (store_code, data, funcModal) => {
+export const createStoreA = (store_code, data, _this , funcModal) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -94,6 +94,26 @@ export const createStoreA = (store_code, data, funcModal) => {
       .then((res) => {
         if (funcModal) {
           funcModal()
+          _this.setState({
+            txtName: "",
+            txtPhone: "",
+            CtxtName: "",
+            CtxtPhone: "",
+            txtAddress_detail: "",
+            txtCountry: 1,
+            txtProvince: "",
+            txtDistrict: "",
+            txtWards: "",
+            CtxtAddress_detail: "",
+      
+            CtxtProvince: "",
+            CtxtDistrict: "",
+            CtxtWards: "",
+      
+            txtEmail: "",
+            txtPickup: "",
+            txtReturn: "",
+          })
         }
         dispatch({
           type: Types.SHOW_LOADING,
@@ -205,6 +225,49 @@ export const destroyStoreA = (store_code, id) => {
 
 
 
+export const updateStoreAPos = (storeAId, storeA, store_code, funcModal = null) => {
+  return (dispatch) => {
+
+    storeAApi
+      .updateStoreA(storeAId, storeA, store_code)
+      .then((res) => {
+
+        badgeApi.fetchAllBadge(store_code,getBranchId()).then((res) => {
+          // dispatch({
+          //   type: Types.SHOW_LOADING,
+          //   loading : "hide"
+          // })
+          
+          if(res.data.code !== 401)
+          {
+          dispatch({
+            type: Types.FETCH_ALL_BADGE,
+            data: res.data.data,
+          });
+      
+        
+        }
+        })
+   
+      
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide"
+        })
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
 
 
 

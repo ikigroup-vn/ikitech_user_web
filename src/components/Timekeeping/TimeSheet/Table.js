@@ -485,10 +485,10 @@ class Table extends Component {
               ) : (
                 <td>0 giờ 0 phút</td>
               )}
-               {this.props.typeDate == "DAY" ||
+               {(this.props.typeDate == "DAY" ||
               (this.props.typeDate == "OPTION" &&
                 this.props.datePrime.from === this.props.datePrime.to &&
-                data?.keeping_histories.length !== 0) &&
+                data?.keeping_histories.length !== 0) )&&
               <td>{formatNoD(data.salary_one_hour)}đ/h</td>}
             </tr>
           </React.Fragment>

@@ -110,6 +110,7 @@ class Table extends Component {
         var action_edit = this.props.is_end == 0 || this.props.is_end == 2 ? "show" : "hide"
         var action_end = this.props.is_end == 2 ? "show" : "hide"
         var action_remove = this.props.is_end == 0  ? "show" : "hide"
+        var action = this.props.is_end !== 1  ? "show" : "hide"
 
 
         if(this.filterColDiscount(data) == true)
@@ -136,7 +137,7 @@ class Table extends Component {
               </td>
               <td style={{ maxWidth: "300px" }}> {this.showListProduct(data.products || [])}</td>
   
-              <td className="group-btn-table three-btn-group" style = {{maxWidth : "150px"}}>
+              <td className={`group-btn-table three-btn-group ${action}`} style = {{maxWidth : "150px"}}>
                 <Link
                   to={`/discount/edit/${store_code}/${data.id}`}
                   class={`btn btn-warning btn-sm ${action_edit}`}
@@ -179,6 +180,8 @@ class Table extends Component {
     var { discounts, is_end } = this.props;
     var per_page = discounts.per_page
     var current_page = discounts.current_page
+    var action = this.props.is_end !== 1  ? "show" : "hide"
+
     return (
       <div class="table-responsive">
         <table class="table table-border" id="dataTable" width="100%" cellspacing="0">
@@ -191,7 +194,7 @@ class Table extends Component {
               <th>Ngày kết thúc</th>
               <th>Giảm giá</th>
               <th style={{ maxWidth: "300px" }}>Áp dụng sản phẩm</th>
-              <th>Hành động</th>
+              <th className={action}>Hành động</th>
             </tr>
           </thead>
 

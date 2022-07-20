@@ -69,23 +69,6 @@ class ModalDelete extends Component {
     }
   }
 
-  changeModal = () => {
-    if (this.state.type == "UPDATE") {
-      this.setState({
-        type: "CREATE", CtxtAddress_detail: "",
-
-        CtxtProvince: "",
-        CtxtDistrict: "",
-        CtxtWards: "",
-        CtxtName: "",
-        CtxtPhone: "",
-      })
-      return;
-    }
-    this.setState({ type: "UPDATE" })
-    this.props.resetModal()
-
-  }
 
   showProvince = (places) => {
     var result = null;
@@ -141,19 +124,15 @@ class ModalDelete extends Component {
   };
   onChangeProvince = (e) => {
     var { type } = this.state
-    if (type == "UPDATE")
       this.setState({ txtProvince: e.target.value, isLoaded: true })
-    else
-      this.setState({ CtxtProvince: e.target.value })
+  
     this.props.fetchPlaceDistrict_Wards(e.target.value);
 
   }
   onChangeDistrict = (e) => {
     var { type } = this.state
-    if (type == "UPDATE")
       this.setState({ txtDistrict: e.target.value })
-    else
-      this.setState({ CtxtDistrict: e.target.value })
+   
 
     this.props.fetchPlaceWards(e.target.value);
   }
@@ -224,51 +203,6 @@ class ModalDelete extends Component {
 
 
 
-  onSaveCreate = (e) => {
-    e.preventDefault();
-
-    var { store_address, store_code } = this.props
-    if (this.state.CtxtName == null || !isEmpty(this.state.CtxtName) || !isEmpty(this.state.CtxtAddress_detail)) {
-      this.props.showError({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "danger",
-          title: "Lỗi",
-          disable: "show",
-          content: "Vui lòng nhập đầy đủ thông tin",
-        },
-      });
-      return;
-    }
-    if (!isPhone(this.state.CtxtPhone)) {
-      {
-        this.props.showError({
-          type: Types.ALERT_UID_STATUS,
-          alert: {
-            type: "danger",
-            title: "Lỗi",
-            disable: "show",
-            content: "SDT không hợp lệ",
-          },
-        });
-        return;
-      }
-    }
-    this.props.createStoreA(store_code, {
-      name: this.state.CtxtName,
-      phone: this.state.CtxtPhone,
-      address_detail: this.state.CtxtAddress_detail,
-      country: this.state.txtCountry,
-      province: this.state.CtxtProvince,
-      district: this.state.CtxtDistrict,
-      wards: this.state.CtxtWards,
-      is_default_pickup: true,
-      is_default_return: false
-
-    }, function () {
-      window.$(".modal").modal("hide");
-    });
-  }
 
 
   render() {
@@ -280,7 +214,7 @@ class ModalDelete extends Component {
         class="modal fade"
         tabindex="-1"
         role="dialog"
-        id="modalAddress"
+        id="modalAddressUpdate"
         data-keyboard="false"
         data-backdrop="static"
       >
@@ -299,7 +233,7 @@ class ModalDelete extends Component {
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            {type == "UPDATE" && <form
+          <form
               role="form"
               action="#"
               method="post"
@@ -412,139 +346,17 @@ class ModalDelete extends Component {
                 >
                   Đóng
                 </button>
-                <button type="button" onClick={this.changeModal} class="btn btn-primary">
+                {/* <button type="button" onClick={this.changeModal} class="btn btn-primary">
                   Thêm mới
 
-                </button>
+                </button> */}
                 <button type="button" onClick={this.onSave} class="btn btn-yes-pos">
                   Lưu
 
                 </button>
               </div>
-            </form>}
-            {type == "CREATE" && <form
-              role="form"
-              action="#"
-              method="post"
-              id="removeForm"
-            >
-              <div class="modal-body" style={{ padding: " 0 10px" }}>
-                <div class="form-group">
-                  <label for="product_name">Họ tên</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="txtName"
-                    placeholder="Nhập họ tên"
-                    autocomplete="off"
-                    value={CtxtName || ""}
-                    onChange={this.onChange}
-                    name="CtxtName"
-                  />
-                </div>
-
-                <div className="form-group">
-                  <label for="product_name">Số điện thoại</label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="CtxtPhone"
-                    placeholder="Nhập số điện thoại"
-                    autocomplete="off"
-                    value={CtxtPhone || ""}
-                    onChange={this.onChange}
-                    name="CtxtPhone"
-                  />
-                </div>
-                <div class="form-group">
-                  <label for="product_name">Địa chỉ chi tiết</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="txtAddress_detail"
-                    placeholder="Nhập chi tiết địa chỉ"
-                    autocomplete="off"
-                    value={CtxtAddress_detail || ""}
-                    onChange={this.onChange}
-                    name="CtxtAddress_detail"
-                  />
-                </div>
-                {/* <div class="form-group">
-              <label for="product_name">Quốc gia</label>
-
-              <select
-                id="input"
-                class="form-control"
-                value={txtCountry}
-                onChange={this.onChange}
-                name="txtCountry"
-              >
-                <option value="">-- Chọn quốc gia --</option>
-                <option value="1">Việt Nam</option>
-              </select>
-            </div> */}
-                <div class="form-group">
-                  <label for="product_name">Tỉnh/thành phố </label>
-
-                  <select
-                    id="input"
-                    class="form-control"
-                    value={CtxtProvince || ""}
-                    onChange={this.onChangeProvince}
-                    name="CtxtProvince"
-                  >
-                    <option value="">-- Chọn tỉnh/thành phố --</option>
-
-                    {this.showProvince(province)}
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="product_name">Quận/huyện</label>
-
-                  <select
-                    id="input"
-                    class="form-control"
-                    value={CtxtDistrict || ""}
-                    onChange={this.onChangeDistrict}
-                    name="CtxtDistrict"
-                  >
-                    <option value="">-- Chọn Quận/huyện --</option>
-                    {this.showDistrict(listDistrict)}
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label for="product_name">Phường/xã</label>
-
-                  <select
-                    id="input"
-                    class="form-control"
-                    value={CtxtWards || ""}
-                    onChange={this.onChange}
-                    name="CtxtWards"
-                  ><option value="">-- Chọn phường xã --</option>
-                    {this.showWards(listWards)}
-
-                  </select>
-                </div>
-
-              </div>
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-default"
-                  data-dismiss="modal"
-                >
-                  Đóng
-                </button>
-                <button type="button" onClick={this.changeModal} class="btn btn-primary">
-                  Chỉnh sửa
-                </button>
-                <button type="button" onClick={this.onSaveCreate} class="btn btn-yes-pos">
-                  Lưu
-
-                </button>
-              </div>
-            </form>}
+            </form>
+           
           </div>
         </div>
       </div>

@@ -228,7 +228,7 @@ class Form extends Component {
     if (
       typeof amount == "undefined" ||
       amount == null ||
-      (typeof amount != "undefined" && amount.replace(/ /g, "").length == 0)
+      (typeof amount != "undefined" && amount == null && amount?.replace(/ /g, "").length == 0)
     )
       form.set_limit_amount = false;
     console.log(form);

@@ -21,7 +21,9 @@ class CardProduct extends Component {
                 inventoryProduct: inventory, idProduct: id, nameProduct: name, imageProduct: image,
                 priceProduct: price, distributeProduct: distributes,
                 minPriceProduct: minPrice, maxPriceProduct: maxPrice, discountProduct: priceDiscount,
-                quantityProduct: quayntity,
+                // quantityProduct: quayntity,
+                quantityProduct: 1,
+
                 quantityProductWithDistribute: quantityDistribute,
                 product: product
             })
@@ -35,7 +37,10 @@ class CardProduct extends Component {
                 nameElement: "",
                 nameSubDistribute: "",
                 priceProduct: price,
-                stock: quayntity,
+
+                // stock: quayntity,
+                stock: 1,
+
                 product: product
             })
         }

@@ -402,6 +402,7 @@ class Topbar extends Component {
                       height: "36px",
                       "border-radius": "2px",
                       "margin-left": "5px",
+                      textAlign : "center"
                     }}
                   />}
                   <i
@@ -413,7 +414,7 @@ class Topbar extends Component {
                       color: "white",
                       "vertical-align": "middle",
                     }}
-                    class="fa fa-qrcode"
+                    class="fa fa-barcode"
                   ></i>{" "}
                 </li>
               </div>

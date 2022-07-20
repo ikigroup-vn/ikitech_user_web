@@ -107,6 +107,7 @@ filterColDiscount = (data) => {
         var action_edit = this.props.is_end == 0 || this.props.is_end == 2 ? "show" : "hide"
         var action_end = this.props.is_end == 2 ? "show" : "hide"
         var action_remove = this.props.is_end == 0  ? "show" : "hide"
+        var action = this.props.is_end !== 1  ? "show" : "hide"
 
         if(this.filterColDiscount(data) == true)
         {
@@ -140,7 +141,7 @@ filterColDiscount = (data) => {
 
             </td >  
 
-            <td className="group-btn-table three-btn-group" style = {{maxWidth : "150px"}}>
+            <td className={`group-btn-table three-btn-group ${action}`} style = {{maxWidth : "150px"}}>
               {this.props.is_end == 0 || this.props.is_end == 2   && <Link
                 to={`/voucher/edit/${store_code}/${data.id}`}
                 class={`btn btn-warning btn-sm ${action_edit}`}
@@ -183,6 +184,8 @@ filterColDiscount = (data) => {
     var { vouchers } = this.props;
     var per_page = vouchers.per_page
     var current_page = vouchers.current_page
+    var action = this.props.is_end !== 1  ? "show" : "hide"
+
     return (
       <div class="table-responsive">
         <table class="table table-border" id="dataTable" width="100%" cellspacing="0">
@@ -198,7 +201,7 @@ filterColDiscount = (data) => {
               <th>Giảm giá</th>
 
 
-              <th>Hành động</th>
+              <th className={action}>Hành động</th>
             </tr>
           </thead>
 

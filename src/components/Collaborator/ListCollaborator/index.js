@@ -41,6 +41,12 @@ class ListCollaborator extends Component {
         })
 
     }
+    exportListCollaborator = () =>{
+        var { searchValue } = this.state;
+        var params = this.getParams(searchValue);
+        this.props.exportListCollaborator(this.props.store_code, 1 , params);
+
+    }
     getParams = (searchValue) => {
         var params = ``;
 
@@ -100,6 +106,19 @@ class ListCollaborator extends Component {
 
                     </form>
 
+                    <button
+            style={{ margin: "auto 0px" }}
+            onClick={this.exportListCollaborator}
+            class={`btn btn-danger btn-icon-split btn-sm `}
+          >
+            <span class="icon text-white-50">
+              <i class="fas fa-file-export"></i>
+            </span>
+            <span style={{ color: "white" }} class="text">
+              Export Excel
+            </span>
+          </button>
+
                 </div>
                 <div className="card-body">
                     <Table tabId={tabId} showChatBox={showChatBox} handleShowChatBox={this.handleShowChatBox} store_code={store_code} collaborators={collaborators} />
@@ -148,6 +167,10 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         fetchChatId: (store_code, collaboratorId) => {
             dispatch(collaboratorAction.fetchChatId(store_code, collaboratorId));
+        },
+        
+        exportListCollaborator: (store_code,page,params) => {
+            dispatch(collaboratorAction.exportListCollaborator(store_code,page,params));
         },
     };
 };
