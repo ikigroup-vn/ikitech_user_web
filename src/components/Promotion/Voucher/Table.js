@@ -142,7 +142,7 @@ filterColDiscount = (data) => {
             </td >  
 
             <td className={`group-btn-table three-btn-group ${action}`} style = {{maxWidth : "150px"}}>
-              {this.props.is_end == 0 || this.props.is_end == 2   && <Link
+              {(this.props.is_end == 0 || this.props.is_end == 2)   && <Link
                 to={`/voucher/edit/${store_code}/${data.id}`}
                 class={`btn btn-warning btn-sm ${action_edit}`}
               >

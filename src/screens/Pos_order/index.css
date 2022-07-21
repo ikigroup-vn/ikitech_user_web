@@ -4,9 +4,12 @@
     overflow: hidden;
 }
 .wrap-detail .price-info{
-    max-height: 415px;
-    overflow-y: scroll;
+    max-height: 434px;
+    /* overflow-y: scroll; */
     overflow-x: hidden;
+}
+.select-async > .css-b62m3t-container{
+    width: 100%;
 }
 .wrap-address-pickup i{
     cursor: pointer;

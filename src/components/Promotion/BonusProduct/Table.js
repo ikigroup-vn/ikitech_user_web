@@ -137,12 +137,12 @@ filterColDiscount = (data) => {
         
 
             <td className={`group-btn-table three-btn-group ${action}`} style = {{maxWidth : "150px"}}>
-              {this.props.is_end == 0 || this.props.is_end == 2   && <Link
+            <Link
                 to={`/bonus_product/edit/${store_code}/${data.id}`}
                 class={`btn btn-warning btn-sm ${action}`}
               >
                 <i class="fa fa-edit"></i> Sửa
-              </Link>}
+              </Link>
 
               <button
                 onClick={(e) => this.handleDelCallBack(e, store_code, data.id, data.name , this.props.is_end)}

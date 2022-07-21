@@ -31,8 +31,9 @@ class Topbar extends Component {
       order_from: 2,
       selectValue: {},
       isScan: randomString(10),
-      isShowScanner : false,
-      numOfScanner : 1
+      isShowScanner: false,
+      numOfScanner: 1,
+      startAsync: false,
     };
 
     this.refSearchProduct = React.createRef();
@@ -43,6 +44,11 @@ class Topbar extends Component {
     this.props.listPosOrder(store_code, branch_id);
     this.props.fetchBranchStore(this.props.store_code);
     this.props.fetchUserId();
+
+    // this.props.fetchAllProductV2(  store_code,
+    //   branch_id,
+    //   1,
+    //   "&limit=5")
   }
   // componentWillUpdate(nextProps, nextState) {
   //     console.log("thay doi" , nextState)
@@ -54,7 +60,15 @@ class Topbar extends Component {
     //     console.log("da vao" ,nextProps.openShipment )
     //     this.setState({order_from : nextProps.openShipment? 3 : 2})
     // }
-
+    var { startAsync } = this.state;
+    var { products } = nextProps;
+    if (
+      (!shallowEqual(products, this.props.products) ||
+        products.data?.length > 0) &&
+      startAsync == false
+    ) {
+      this.setState({ startAsync: true });
+    }
     if (!shallowEqual(nextProps.branchStore, this.props.branchStore)) {
       if (nextProps.branchStore != null && nextProps.branchStore.length > 0) {
         var branch_id = getBranchId();
@@ -109,9 +123,11 @@ class Topbar extends Component {
       console.log("vao", selectValue);
       if (selectValue != null && selectValue.product != null) {
         var data = selectValue?.product;
-        var {numOfScanner}  = nextState
-        var compareIsScan = this.state.isScan !== nextState.isScan && nextState.isShowScanner === true
-        console.log(this.state.isScan , nextState.isScan)
+        var { numOfScanner } = nextState;
+        var compareIsScan =
+          this.state.isScan !== nextState.isScan &&
+          nextState.isShowScanner === true;
+        console.log(this.state.isScan, nextState.isScan);
         this.handleInfoProduct(
           data.inventory,
           data.id,
@@ -160,7 +176,7 @@ class Topbar extends Component {
     var { searchValue } = this.state;
     const limit = 12;
     var params = `&search=${searchValue}&limit=${limit}`;
-    this.setState({ numPage: 20 });
+    this.setState({ numPage: 5 });
     const branch_id = localStorage.getItem("branch_id");
     this.props.fetchAllProductV2(store_code, branch_id, 1, params);
   };
@@ -197,10 +213,31 @@ class Topbar extends Component {
   };
 
   loadProducts = async (search, loadedOptions, { page }) => {
+    var { startAsync } = this.state;
+    var { products } = this.props;
+    console.log("vao ne");
+    if (startAsync === true) {
+      this.setState({ startAsync: false });
+      return {
+        options: products.data.map((i) => {
+          return {
+            value: i.id,
+            label: `${i.name}`,
+            product: i,
+          };
+        }),
+
+        hasMore: products.data.length == 6,
+        additional: {
+          page: page + 1,
+        },
+      };
+    }
+
     var { store_code } = this.props;
     var branch_id = getBranchId();
 
-    const params = `&search=${search}`;
+    const params = `&search=${search}&limit=6`;
     const res = await productApi.fetchAllProductV2(
       store_code,
       branch_id,
@@ -224,7 +261,7 @@ class Topbar extends Component {
         };
       }),
 
-      hasMore: res.data.data.data.length == 20,
+      hasMore: res.data.data.data.length == 6,
       additional: {
         page: page + 1,
       },
@@ -393,19 +430,26 @@ class Topbar extends Component {
                   </div>
                 </li>
                 <li class="nav-item">
-                    {this.state.isShowScanner === true && <input
-                    onChange={(e)=>{e.target.value > 0 && this.setState({numOfScanner : e.target.value})}}
-                    placeholder="SL"
-                    value = {this.state.numOfScanner ?? 1}
-                    style={{
-                      width: "35px",
-                      height: "36px",
-                      "border-radius": "2px",
-                      "margin-left": "5px",
-                      textAlign : "center"
-                    }}
-                  />}
-                  <i
+                  {this.state.isShowScanner === true && (
+                    <input
+                      onChange={(e) => {
+                        ((!isNaN(e.target.value) && e.target.value > 0) ||
+                          e.target.value == "") &&
+                          this.setState({ numOfScanner: e.target.value });
+                      }}
+                      placeholder="SL"
+                      type=""
+                      value={this.state.numOfScanner ?? ""}
+                      style={{
+                        width: "35px",
+                        height: "36px",
+                        "border-radius": "2px",
+                        "margin-left": "5px",
+                        textAlign: "center",
+                      }}
+                    />
+                  )}
+                  {/* <i
                   onClick={()=>this.setState({isShowScanner : !this.state.isShowScanner})}
                     style={{
                         cursor : "pointer",
@@ -415,7 +459,20 @@ class Topbar extends Component {
                       "vertical-align": "middle",
                     }}
                     class="fa fa-barcode"
-                  ></i>{" "}
+                  ></i>{" "} */}
+                  <img
+                    onClick={() =>
+                      this.setState({
+                        isShowScanner: !this.state.isShowScanner,
+                      })
+                    }
+                    style={{
+                      width: "30px",
+                      cursor: "pointer",
+                      marginLeft: "5px",
+                    }}
+                    src="/images/scan-barcode-white.svg"
+                  ></img>
                 </li>
               </div>
               <div className="cart-list-banner">
@@ -610,6 +667,7 @@ const mapStateToProps = (state) => {
     user: state.userReducers.user.userID,
     loadingCart: state.posReducers.pos_reducer.loadingCart,
     currentBranch: state.branchReducers.branch.currentBranch,
+    products: state.productReducers.product.allProduct,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {

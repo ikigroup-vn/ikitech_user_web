@@ -296,9 +296,10 @@ class PanelBottom extends Component {
       if (nextProps.oneCart.id !== this.props.oneCart.id) {
         console.log("cart khac");
         type = {
-          type_ship: 0,
+          type_ship:   oneCart.total_shipping_fee > 0 ? 2 : 0,
+          
           fee: nextProps.total_shipping_fee,
-          txtPhoneNumber: oneCart.customer_phone ?? "",
+          // txtPhoneNumber: oneCart.customer_phone ?? "",
         };
       }
       this.setState({
@@ -309,7 +310,7 @@ class PanelBottom extends Component {
         txtWards: oneCart.wards ?? "",
         txtName: oneCart.customer_name ?? "",
         txtEmail: oneCart.customer_email ?? "",
-        // txtPhoneNumber: oneCart.customer_phone ?? "",
+        txtPhoneNumber: oneCart.customer_phone ?? "",
         txtSex: oneCart.customer_sex ?? "",
         txtAddressDetail: oneCart.address_detail ?? "",
         selectedDate: selectedDate,
@@ -776,6 +777,16 @@ class PanelBottom extends Component {
       }),
     };
   };
+  itemAddress = (i) => {
+    return (
+      <div>
+        {i}
+      </div>
+    );
+  };
+  formatOptionLabel = ({ value, label, address }) => {
+    return this.itemAddress(label);
+  };
   buildTabCustomer = () => {
     var { province } = this.props;
 
@@ -854,6 +865,7 @@ class PanelBottom extends Component {
         this._recordInput("onKeyUp", event);
       },
     };
+
     const customStylesProvince = {
       control: (provided) => ({
         ...provided,
@@ -893,6 +905,8 @@ class PanelBottom extends Component {
           address_pickup: badges.address_pickup,
         }
       : null;
+
+ 
     return (
       <div
         style={{
@@ -901,7 +915,7 @@ class PanelBottom extends Component {
       >
         <div class="" style={{ marginTop: "8px" }}>
           <div>
-            <div style={{ marginBottom: "8px" }}>
+            <div className="select-async" style={{ marginBottom: "8px" }}>
               <AsyncPaginate
                 placeholder="Tìm khách hàng"
                 value={select_customer}
@@ -922,8 +936,6 @@ class PanelBottom extends Component {
                   Địa chỉ lấy hàng
                 </label>
                 <div style={{ display: "flex" }}>
-                 
-
                   <i
                     className="fa fa-plus"
                     onClick={() =>
@@ -1012,12 +1024,16 @@ class PanelBottom extends Component {
                   </Link>
                 </div>
               )} */}
-              <div style={{ marginBottom: "8px", display: "flex" }}>
+              <div
+                className="select-async"
+                style={{ marginBottom: "8px", display: "flex" }}
+              >
                 <AsyncPaginate
                   placeholder="Tìm địa chỉ lấy hàng"
                   value={addressPickup}
                   loadOptions={this.loadAddress}
                   name="recipientReferences1"
+                  formatOptionLabel={this.formatOptionLabel}
                   onChange={this.onChangeSelect4Addr}
                   additional={{
                     page: 1,
@@ -1026,18 +1042,21 @@ class PanelBottom extends Component {
                   isClearable
                   isSearchable
                 />
-                 {badges.address_pickup && (
-                    <i
-                      className="fa fa-pencil"
-                      onClick={() =>
-                        this.passDataAddressUpdate(badges.address_pickup)
-                      }
-                      data-toggle="modal"
-                      data-target="#modalAddressUpdate"
-                      style={{ marginLeft: "6px", cursor: "pointer" ,   "font-size": "19px",
+                {badges.address_pickup && (
+                  <i
+                    className="fa fa-pencil"
+                    onClick={() =>
+                      this.passDataAddressUpdate(badges.address_pickup)
+                    }
+                    data-toggle="modal"
+                    data-target="#modalAddressUpdate"
+                    style={{
+                      marginLeft: "6px",
+                      cursor: "pointer",
+                      "font-size": "19px",
                     }}
-                    ></i>
-                  )}
+                  ></i>
+                )}
               </div>
             </div>
             <div style={{ marginBottom: "4px", fontWeight: "500" }}>
@@ -1315,7 +1334,7 @@ class PanelBottom extends Component {
 
               <option value="2">
                 Khác
-                {total_shipping_fee && total_shipping_fee > 0
+                {(total_shipping_fee && total_shipping_fee > 0)
                   ? `(${formatNoD(total_shipping_fee)})`
                   : null}
               </option>
@@ -1728,6 +1747,7 @@ class PanelBottom extends Component {
           store_address={this.state.modalAddress}
         ></ModalAddressCreate>
         <ModalAddressUpdate
+          typeModal={this.state.typeModal}
           type={this.state.type}
           resetId={this.state.resetId}
           resetModal={this.resetModal}

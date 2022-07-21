@@ -38,7 +38,7 @@ class ModalDelete extends Component {
   }
   componentWillReceiveProps(nextProps) {
     var { store_address } = this.props
-    if (!shallowEqual(nextProps.store_address, store_address) || (nextProps.resetId != this.props.resetId)) {
+    if ((!shallowEqual(nextProps.store_address, store_address) || (nextProps.resetId != this.props.resetId)) && nextProps.store_address ) {
       var store = nextProps.store_address
       this.props.fetchPlaceWards(store.district);
       this.props.fetchPlaceDistrict(store.province);

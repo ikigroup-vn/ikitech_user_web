@@ -275,7 +275,7 @@ class PanelBottom extends Component {
                 }
             )
 
-            if (oneCart.noUpdateUI != true) {
+            // if (oneCart.noUpdateUI != true) {
                 var selectedDate = null
                 try {
                     console.log(oneCart.customer_date_of_birth)
@@ -319,7 +319,7 @@ class PanelBottom extends Component {
                         },
                     }
                 )
-            }
+            
 
 
             // this.onSelectChangeProvinceById(customer.province)
