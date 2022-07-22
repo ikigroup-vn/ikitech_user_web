@@ -37,6 +37,8 @@ class Topbar extends Component {
     };
 
     this.refSearchProduct = React.createRef();
+
+    this.afterEnter = false;
   }
   componentDidMount() {
     const { store_code } = this.props;
@@ -54,6 +56,7 @@ class Topbar extends Component {
   //     console.log("thay doi" , nextState)
   //     this.props.onNewChange(nextState)
   // }
+
 
   componentWillReceiveProps(nextProps) {
     // if(this.props.openShipment != nextProps.openShipment){
@@ -120,14 +123,14 @@ class Topbar extends Component {
       this.state.isScan !== nextState.isScan
     ) {
       var { selectValue } = nextState;
-      console.log("vao", selectValue);
+
       if (selectValue != null && selectValue.product != null) {
         var data = selectValue?.product;
         var { numOfScanner } = nextState;
         var compareIsScan =
           this.state.isScan !== nextState.isScan &&
           nextState.isShowScanner === true;
-        console.log(this.state.isScan, nextState.isScan);
+
         this.handleInfoProduct(
           data.inventory,
           data.id,
@@ -215,7 +218,7 @@ class Topbar extends Component {
   loadProducts = async (search, loadedOptions, { page }) => {
     var { startAsync } = this.state;
     var { products } = this.props;
-    console.log("vao ne");
+
     if (startAsync === true) {
       this.setState({ startAsync: false });
       return {
@@ -252,14 +255,41 @@ class Topbar extends Component {
       };
     }
 
-    return {
-      options: res.data.data.data.map((i) => {
+    const listShowChoose = res.data.data.data.map((i) => {
+      return {
+        value: i.id,
+        label: `${i.name}`,
+        product: i,
+      };
+    })
+
+
+    if (this.refSearchProduct != null) {
+      if (listShowChoose.length == 1 && !isNaN(this.refSearchProduct.getValue("") && this.refSearchProduct.getValue("").length > 8)) {
+        this.setState({ selectValue: listShowChoose[0] });
+        //  isNaN('123')  
+        this.sleep(100).then(() => {
+          if (this.refSearchProduct != null) {
+
+            this.refSearchProduct.setValue("")
+          }
+        });
+
+        this.afterEnter = false
         return {
-          value: i.id,
-          label: `${i.name}`,
-          product: i,
+          options: listShowChoose,
+
+          hasMore: res.data.data.data.length == 6,
+          additional: {
+            page: page + 1,
+          },
         };
-      }),
+      }
+    }
+
+
+    return {
+      options: listShowChoose,
 
       hasMore: res.data.data.data.length == 6,
       additional: {
@@ -316,14 +346,29 @@ class Topbar extends Component {
     }
   };
   _recordInput = (name, event) => {
+
+
     if (event.keyCode == 13) {
       this.setState({ isScan: randomString(10) });
     }
     this.props.passKeyPress(event.key, event);
   };
+  sleep(time) {
+    return new Promise((resolve) => setTimeout(resolve, time));
+  }
+
   onChangeProduct = (selectValue) => {
-    console.log(selectValue);
+
     this.setState({ selectValue });
+
+
+    this.sleep(100).then(() => {
+      if (this.refSearchProduct != null) {
+        this.refSearchProduct.focus();
+      }
+    });
+
+
     // if (selectValue != null && selectValue.product != null) {
     //     var data = selectValue?.product
     //     this.handleInfoProduct(
@@ -342,6 +387,25 @@ class Topbar extends Component {
   };
 
   handleKeyboard = (key, event) => {
+
+
+
+    if (key == "ctrl+v" || key == "meta+v") {
+      this.isCtrl = true;
+      event.preventDefault();
+
+      if (this.refSearchProduct != null) {
+        this.refSearchProduct.focus();
+      }
+    }
+
+    if (key == "enter") {
+      this.afterEnter = true
+    }
+
+    console.log(key, this.isCtrl, this.afterEnter)
+
+
     switch (key) {
       case "f3":
       case "F3":
@@ -361,7 +425,7 @@ class Topbar extends Component {
     var { listPos, branchStore, user, store_code, currentBranch, selectValue } =
       this.props;
     var { idCart, selected_product_id, selectValue } = this.state;
-    console.log(selectValue);
+
     const formatOptionLabel = ({ value, label, product }) => {
       return <CardProduct isItemSearch={true} product={product} />;
     };
@@ -383,7 +447,7 @@ class Topbar extends Component {
     return (
       <div className="controller-top">
         <KeyboardEventHandler
-          handleKeys={["f3"]}
+          handleKeys={["f3", "ctrl+v", "meta+v", 'enter']}
           onKeyEvent={(key, e) => {
             this.handleKeyboard(key, e);
           }}
@@ -558,9 +622,8 @@ class Topbar extends Component {
                 >
                   <li
                     title="Giao hàng"
-                    className={`nav-item add-cart ${
-                      getChannel() == IKITECH ? "" : "invisible"
-                    }`}
+                    className={`nav-item add-cart ${getChannel() == IKITECH ? "" : "invisible"
+                      }`}
                     onClick={() => this.props.handleOpenShipment(true)}
                   >
                     <i class="fas fa-shipping-fast"></i>
