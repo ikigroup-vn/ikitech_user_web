@@ -13,7 +13,7 @@ mv ./build/* ../ikitech_user_build/
 cd ../ikitech_user_build 
 git add .
 git commit -m "New"
-git push
+git push -f
 cd ../ikitech_user_web
 
 cd /www/wwwroot/isempai.net
