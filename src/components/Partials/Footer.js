@@ -27,7 +27,7 @@ class Footer extends Component {
         <footer className="sticky-footer bg-white">
           <div className="container my-auto">
             <div className="copyright text-center my-auto">
-              <span>  Copyright &copy; {badges?.config_user_vip?.user_copyright != null ? badges?.config_user_vip?.user_copyright : "CÔNG TY CỔ PHẦN IKI TECH VIỆT NAM "}  - Version 1.2.8 </span>
+              <span>  Copyright &copy; {badges?.config_user_vip?.user_copyright != null ? badges?.config_user_vip?.user_copyright : "CÔNG TY CỔ PHẦN IKI TECH VIỆT NAM "}  - Version 3.0.0 </span>
             </div>
           </div>
         </footer>
