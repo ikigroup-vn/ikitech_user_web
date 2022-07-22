@@ -265,7 +265,7 @@ class Topbar extends Component {
 
 
     if (this.refSearchProduct != null) {
-      if (listShowChoose.length == 1 && !isNaN(this.refSearchProduct.getValue("") && this.refSearchProduct.getValue("").length > 8)) {
+      if (listShowChoose.length == 1 && !isNaN(this.refSearchProduct.getValue("")) && this.refSearchProduct.getValue("").length > 8) {
         this.setState({ selectValue: listShowChoose[0] });
         //  isNaN('123')  
         this.sleep(100).then(() => {
