@@ -39,6 +39,7 @@ class Topbar extends Component {
     this.refSearchProduct = React.createRef();
 
     this.afterEnter = false;
+    this.search = "";
   }
   componentDidMount() {
     const { store_code } = this.props;
@@ -219,6 +220,8 @@ class Topbar extends Component {
     var { startAsync } = this.state;
     var { products } = this.props;
 
+    this.search = search;
+
     if (startAsync === true) {
       this.setState({ startAsync: false });
       return {
@@ -264,8 +267,10 @@ class Topbar extends Component {
     })
 
 
+
     if (this.refSearchProduct != null) {
-      if (listShowChoose.length == 1 && !isNaN(this.refSearchProduct.getValue("")) && this.refSearchProduct.getValue("").length > 8) {
+
+      if (listShowChoose.length == 1 && !isNaN(this.search) && this.search.length > 8) {
         this.setState({ selectValue: listShowChoose[0] });
         //  isNaN('123')  
         this.sleep(100).then(() => {
