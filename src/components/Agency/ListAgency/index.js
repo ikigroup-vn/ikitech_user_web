@@ -69,7 +69,12 @@ class ListAgency extends Component {
         this.props.fetchAllAgency(this.props.store_code, 1, params);
 
     };
+    exportListAgency = () =>{
+        var { searchValue } = this.state;
+        var params = this.getParams(searchValue);
+        this.props.exportListAgency(this.props.store_code, 1 , params);
 
+    }
     onChangeSearch = (e) => {
         this.setState({ searchValue: e.target.value });
     };
@@ -85,11 +90,11 @@ class ListAgency extends Component {
         console.log(this.props.state)
         return (
             <div id="">
-                <div
+                        <div
                     class="row"
                     style={{ "justify-content": "space-between" }}
                 >
-                    <form onSubmit={this.searchData}>
+                     <form onSubmit={this.searchData}>
                         <div
                             class="input-group mb-6"
                             style={{ padding: "7px 20px" }}
@@ -112,7 +117,21 @@ class ListAgency extends Component {
 
                     </form>
 
+                    <button
+            style={{ margin: "auto 0px" }}
+            onClick={this.exportListAgency}
+            class={`btn btn-danger btn-icon-split btn-sm `}
+          >
+            <span class="icon text-white-50">
+              <i class="fas fa-file-export"></i>
+            </span>
+            <span style={{ color: "white" }} class="text">
+              Export Excel
+            </span>
+          </button>
+
                 </div>
+              
                 <div className="card-body">
                     <Table
                     passType={this.passType}
@@ -169,6 +188,9 @@ const mapDispatchToProps = (dispatch, props) => {
         },
         fetchAllAgencyType: (store_code) => {
             dispatch(agencyAction.fetchAllAgencyType(store_code));
+        },
+        exportListAgency: (store_code,page,params) => {
+            dispatch(agencyAction.exportListAgency(store_code,page,params));
         },
     };
 };

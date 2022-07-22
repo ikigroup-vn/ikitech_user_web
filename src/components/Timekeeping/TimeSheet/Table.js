@@ -499,7 +499,19 @@ class Table extends Component {
     }
     return result;
   };
+  toHHMMSS = (secs) => {
+    var sec_num = parseFloat(secs, 10)
+    var hours   = Math.floor(sec_num / 3600)
+    var minutes = Math.floor(sec_num / 60) % 60
+    var seconds = sec_num % 60
 
+    return `${hours || 0} giờ ${minutes } phút ${seconds} giây`
+
+    return [hours,minutes,seconds]
+        .map(v => v < 10 ? "0" + v : v)
+        .filter((v,i) => v !== "00" || i > 0)
+        .join(":")
+}
   render() {
     var { store_code, branch_id, timeSheet } = this.props;
     var { keeping_histories, recording_time } = this.state;
@@ -512,7 +524,9 @@ class Table extends Component {
         : timeSheet.list_staff_timekeeping;
     // console.log("asdasd" + this.props.statusPayment, statusPayment);
     return (
+      
       <React.Fragment>
+     
         <div class="table-responsive " style={{ minHeight: 300 }}>
           <p style={{ fontWeight: "500" }}>
             Tổng lương:{" "}

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Select from "react-select";
 import { shallowEqual } from "../../../ultis/shallowEqual";
-import { formatNumber, formatNoD } from "../../../ultis/helpers"
+import { formatNumber, formatNoD, getQueryParams } from "../../../ultis/helpers"
 import { product } from "../../../reducers/product/product";
 class InfoProduct extends Component {
   constructor(props) {
@@ -11,6 +11,7 @@ class InfoProduct extends Component {
       txtPrice: "",
 
       disabledPrice: false,
+      price : getQueryParams("price")  || null
 
     };
   }
@@ -41,19 +42,38 @@ class InfoProduct extends Component {
 
   };
 
+  componentDidMount()
+  {
+    if(typeof this.props.product.main_price != "undefined" )
+    {
+      var { product } = { ...this.props };
+      // const price = formatNumber(product.main_price);
+
+      var _price = parseFloat(product.main_price);
+       const price = formatNoD(_price);
+      
+      this.setState({
+        txtName: product.name,
+        txtPrice: price,
+        disabledPrice: _price == 0 ? true : false,
+
+      });
+    }
+  }
 
   componentWillReceiveProps(nextProps) {
 
 
     if (!shallowEqual(nextProps.product, this.props.product)) {
       var { product } = { ...nextProps };
-      const price = formatNumber(product.main_price);
+      // const price = formatNumber(product.main_price);
 
-      var _price = parseFloat(formatNoD(price));
-
+      var _price = parseFloat(product.main_price);
+       const price = formatNoD(_price);
+      
       this.setState({
         txtName: product.name,
-        txtPrice: _price,
+        txtPrice: price,
         disabledPrice: _price == 0 ? true : false,
 
       });
@@ -175,7 +195,7 @@ class InfoProduct extends Component {
                     id="txtEmail"
                     placeholder="Nhập giá"
                     autocomplete="off"
-                    value={formatNoD(product.main_price) ?? 0}
+                    value={formatNoD(this.state.price) ?? 0}
                   />
                   {/* <div class="form-check" style={{ margin: "auto 0" }}>
               <label class="form-check-label" for="gridCheck">

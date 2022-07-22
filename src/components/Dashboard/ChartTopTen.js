@@ -123,12 +123,12 @@ class Chart extends Component {
     switch (value) {
       case "HOM-NAY":
         this.setState({ nameTypeChart: "HÔM NAY" })
-        date = helper.getDateForChartHour()
+        date = helper.getDateForChartDay()
         break;
       case "TUAN-NAY":
         this.setState({ nameTypeChart: "TUẦN NÀY" })
 
-        date = helper.getDateForChartDay()
+        date = helper.getDateForChartWeek()
         break;
       case "THANG-NAY":
         this.setState({ nameTypeChart: "THÁNG NÀY" })
