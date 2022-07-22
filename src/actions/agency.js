@@ -2,7 +2,158 @@ import * as Types from "../constants/ActionType";
 import * as agencyApi from "../data/remote/agency";
 import * as chatApi from "../data/remote/chat";
 import history from "../history";
+import { saveAs } from "file-saver";
+import XlsxPopulate from "xlsx-populate";
 
+function getSheetData(data, header) {
+  var fields = Object.keys(data[0]);
+  var sheetData = data.map(function (row) {
+    return fields.map(function (fieldName) {
+      return row[fieldName] ? row[fieldName] : "";
+    });
+  });
+  sheetData.unshift(header);
+  return sheetData;
+}
+
+async function saveAsExcel(value , title) {
+  // var data = [
+  //   { name: "John", city: "Seattle" },
+  //   { name: "Mike", city: "Los Angeles" },
+  //   { name: "Zach", city: "New York" }
+  // ];
+  // let header = ["Name", "City"];
+  var data = value.data;
+  var data_header = value.header;
+  XlsxPopulate.fromBlankAsync().then(async (workbook) => {
+    const sheet1 = workbook.sheet(0);
+    const sheetData = getSheetData(data, data_header);
+    console.log(sheetData);
+    const totalColumns = sheetData[0].length;
+
+    sheet1.cell("A1").value(sheetData);
+    const range = sheet1.usedRange();
+    const endColumn = String.fromCharCode(64 + totalColumns);
+    sheet1.row(1).style("bold", true);
+    sheet1.range("A1:" + endColumn + "1").style("fill", "F4D03F");
+    range.style("border", true);
+    return workbook.outputAsync().then((res) => {
+      console.log(res);
+      saveAs(res, title);
+    });
+  });
+}
+export const exportTopten = (store_code, page, params) => {
+  return (dispatch) => {
+    agencyApi.fetchAllTopReport(store_code, page, params).then((res) => {
+      console.log(res);
+
+      if (res.data.code !== 401)
+        if (typeof res.data.data != "undefined") {
+          if (typeof res.data.data.data != "undefined") {
+            if (res.data.data.data.length > 0) {
+              var newArray = [];
+
+              for (const item of res.data.data.data) {
+                var newItem = {};
+                var arangeKeyItem = {
+                  name: item.customer?.name,
+                  phone_number: item.customer?.phone_number,
+                  orders_count: item.orders_count,
+                  sum_total_final: item.sum_total_final,
+                };
+                Object.entries(arangeKeyItem).forEach(([key, value], index) => {
+                  if (key == "name") {
+                    newItem["Tên"] = value;
+                  }
+                  if (key == "phone_number") {
+                    newItem["Số điện thoại"] = value;
+                    // newItem["Tên sản phẩm"] = value
+                  }
+                  if (key == "orders_count") {
+                    newItem["Số đơn hàng"] = value;
+                    // newItem["Tên sản phẩm"] = value
+                  }
+                  if (key == "sum_total_final") {
+                    newItem["Tổng doanh thu"] = value;
+                  }
+                });
+
+                newArray.push(newItem);
+              }
+              var header = [];
+              if (newArray.length > 0) {
+                Object.entries(newArray[0]).forEach(([key, value], index) => {
+                  header.push(key);
+                });
+              }
+              console.log(header);
+              saveAsExcel({ data: newArray, header: header } , "Danh sách Top CTV");
+            }
+          }
+        }
+    });
+  };
+};
+
+export const exportListAgency = (store_code, page, params) => {
+  return (dispatch) => {
+    agencyApi.fetchAllAgency(store_code, 1).then((res) => {
+      if (res.data.code !== 401)
+        if (res.data.code !== 401)
+          if (typeof res.data.data != "undefined") {
+            if (typeof res.data.data.data != "undefined") {
+              if (res.data.data.data.length > 0) {
+                var newArray = [];
+                var index = 0
+                for (const item of res.data.data.data) {
+                  index = index + 1
+                  var newItem = {};
+                  var arangeKeyItem = {
+                    order : index,
+                    name: item.customer?.name,
+                    phone_number: item.customer?.phone_number,
+                    email: item.customer.email,
+                    status : item.status == 1 ? "Đã kích hoạt" : "Chưa kích hoạt"
+                  };
+                  Object.entries(arangeKeyItem).forEach(
+                    ([key, value], index) => {
+                      if (key == "order") {
+                        newItem["STT"] = value;
+                      }
+                      if (key == "name") {
+                        newItem["Tên"] = value;
+                      }
+                      if (key == "phone_number") {
+                        newItem["Số điện thoại"] = value;
+                        // newItem["Tên sản phẩm"] = value
+                      }
+                      if (key == "email") {
+                        newItem["Email"] = value;
+                        // newItem["Tên sản phẩm"] = value
+                      }
+                      if (key == "status") {
+                        newItem["Trạng thái"] = value;
+                      }
+                    }
+                  );
+
+                  newArray.push(newItem);
+                }
+                var header = [];
+                if (newArray.length > 0) {
+                  Object.entries(newArray[0]).forEach(([key, value], index) => {
+                    header.push(key);
+                  });
+                }
+                console.log(header);
+                saveAsExcel({ data: newArray, header: header } , "Danh sách Đại lý");
+              }
+            }
+          }
+    });
+  };
+};
 export const fetchAgencyConf = (store_code) => {
   return (dispatch) => {
     dispatch({

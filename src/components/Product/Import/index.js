@@ -125,6 +125,7 @@ class Modal extends Component {
               <option value="price">Giá</option>
               <option value="quantity_in_stock">Tồn kho</option>
               <option value="category_name">Danh mục</option>
+              <option value="percent_collaborator">Hoa hồng CTV</option>
 
               <option value="description">Mô tả</option>
               <option value="images">Hình ảnh</option>

@@ -15,6 +15,8 @@ class ListAgency extends Component {
         super(props);
         this.state = {
             showChatBox: "hide",
+            date_from : "",
+            date_to : ""
         };
     }
 
@@ -25,6 +27,10 @@ class ListAgency extends Component {
         var date = helper.getDateForChartMonth()
         var params = `&date_from=${date.from}&date_to=${date.to}`
         this.props.fetchAllTopReport(this.props.store_code, 1, params);
+        this.setState({
+            date_from : date.from ,
+            date_to : date.to
+          })
     }
     closeChatBox = (status) => {
         this.setState({
@@ -44,7 +50,10 @@ class ListAgency extends Component {
         }
         var params = `&date_from=${from}&date_to=${to}`
         this.props.fetchAllTopReport(this.props.store_code, 1, params);
-
+        this.setState({
+            date_from : from ,
+            date_to : to
+          })
 
     }
     onChangeDateFromComponent = (date) => {
@@ -59,9 +68,22 @@ class ListAgency extends Component {
         // }
         var params = `&date_from=${date.from}&date_to=${date.to}`
         this.props.fetchAllTopReport(this.props.store_code, 1, params);
+        this.setState({
+            date_from : date.from ,
+            date_to : date.to
+          })
 
 
     }
+    exportTopten = () =>{
+        var {
+          date_from ,
+          date_to
+        } = this.state
+        var params = `&date_from=${date_from}&date_to=${date_to}`;
+        this.props.exportTopten(this.props.store_code, 1, params);
+    
+      }
     render() {
         var { customer, chat, topReport, store_code, tabId, store_code, types } = this.props
 
@@ -73,9 +95,26 @@ class ListAgency extends Component {
         console.log(this.props.topReport)
         return (
             <div id="wrapper">
+                        <div className="" style = {{width : "100%"}}>
+
+                     <div style={{display : "flex" , justifyContent : "space-between"}}>
+            <SDateRangePicker onChangeDate={this.onChangeDateFromComponent} />
+
+            <button
+            style={{ margin: "auto 0px" }}
+            onClick={this.exportTopten}
+            class={`btn btn-danger btn-icon-split btn-sm `}
+          >
+            <span class="icon text-white-50">
+              <i class="fas fa-file-export"></i>
+            </span>
+            <span style={{ color: "white" }} class="text">
+              Export Excel
+            </span>
+          </button>
+            </div>
                 <div className="card-body">
 
-                    <SDateRangePicker onChangeDate={this.onChangeDateFromComponent} />
                    
                     <Table types={types} tabId={tabId} showChatBox={showChatBox} handleShowChatBox={this.handleShowChatBox} store_code={store_code} topReport={topReport} />
 
@@ -83,6 +122,7 @@ class ListAgency extends Component {
                         store_code={store_code}
                         topReport={topReport}
                     />
+                </div>
                 </div>
 
                 <Chat
@@ -124,6 +164,9 @@ const mapDispatchToProps = (dispatch, props) => {
         fetchChatId: (store_code, agencyId) => {
             dispatch(agencyAction.fetchChatId(store_code, agencyId));
         },
+        exportTopten: (store_code, page, params) => {
+            dispatch(agencyAction.exportTopten(store_code, page, params));
+          },
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ListAgency);

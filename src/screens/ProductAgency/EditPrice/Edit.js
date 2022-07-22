@@ -215,6 +215,8 @@ class ProductEdit extends Component {
 const mapStateToProps = (state) => {
   return {
     product: state.productReducers.product.product_agency_price_id,
+    mainProduct: state.productReducers.product.productId,
+
     alert: state.productReducers.alert.alert_uid,
     itemProduct: state.productReducers.product.productId,
 

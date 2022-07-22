@@ -111,9 +111,9 @@ class ChatBox extends Component {
           console.log(chat.last_message.content )
         return (
           <React.Fragment>
-            <div className={`friend-drawer friend-drawer--onhover message-${chat.customer_id} ${_isActive}`} onClick={() => this.isActive(chat.customer_id)}>
-              <img className="profile-image" src={image_url} alt="" />
-              <div className={`text ${unRead}`}>
+            <div  className={`friend-drawer friend-drawer--onhover message-${chat.customer_id} ${_isActive}`} >
+              <img onClick={() => this.isActive(chat.customer_id)} className="profile-image" src={image_url} alt="" />
+              <div onClick={() => this.isActive(chat.customer_id)} className={`text ${unRead}`}>
                 <h6>{chat.customer.name}</h6>
                 <p className="">{content}</p>
               </div>

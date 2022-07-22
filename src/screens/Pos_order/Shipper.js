@@ -705,7 +705,7 @@ class PanelBottom extends Component {
     this.setState({ select_customer: selectValue, ...customer });
   };
   onChangeSelect4Addr = (selectValue) => {
-    if (selectValue.address_pickup) {
+    if (selectValue?.address_pickup) {
       var { address_pickup } = selectValue;
       this.props.updateStoreA(
         address_pickup.id,
@@ -1038,9 +1038,13 @@ class PanelBottom extends Component {
                   additional={{
                     page: 1,
                   }}
+                  key={addressPickup.value}
+                  cacheOptions
+                  defaultOptions
                   debounceTimeout={500}
-                  isClearable
+                  // isClearable
                   isSearchable
+                  cache={false}
                 />
                 {badges.address_pickup && (
                   <i

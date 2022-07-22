@@ -55,7 +55,7 @@ class ModalHistoryRecord extends Component {
                         Ra: {data.time_check_out}
                     </span>
                     <span style={{  paddingLeft:20 }}>
-                        Ghi nhận: {this.toHHMMSS(data.total_in_time)}
+                        Ghi nhận: {data.total_in_time < 0 ?  "-" : ""}{this.toHHMMSS(data.total_in_time < 0 ? (data.total_in_time * -1) :data.total_in_time )}
                     </span>
                 </div>
 

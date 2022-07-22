@@ -167,6 +167,8 @@ export const fetchAllListProduct = (store_code, search) => {
                   price : item.price,
                   quantity_in_stock : item.quantity_in_stock,
                   categories : item.categories,
+                  categories : item.categories,
+                  percent_collaborator : item.percent_collaborator,
                   full_description : item.full_description
                 }
                 Object.entries(arangeKeyItem).forEach(([key, value], index) => {
@@ -176,6 +178,11 @@ export const fetchAllListProduct = (store_code, search) => {
                     } else {
                       newItem["Mô tả"] = "";
                     }
+                  }
+                  if (key == "percent_collaborator") {
+                  
+                      newItem["Hoa hồng CTV (%)"] = value ?? 0;
+                    
                   }
                   if (key == "name") {
                     newItem["Tên sản phẩm"] = formatStringCharactor(value);

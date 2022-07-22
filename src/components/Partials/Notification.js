@@ -20,7 +20,7 @@ class Notification extends Component {
             notifications: {},
             notification_unread: 0,
             type: {
-                NEW_PERIODIC_SETTLEMENT: `/collaborator/${this.props.store_code}/request_payment`,
+                NEW_PERIODIC_SETTLEMENT: `/collaborator/${this.props.store_code}?tab-index=3`,
                 NEW_POST: `/posts/edit/${this.props.store_code}`,
                 ORDER_STATUS: `/order/detail/${this.props.store_code}`,
                 NEW_MESSAGE: `/chat/${this.props.store_code}`,

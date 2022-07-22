@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import history from "../../history";
 import { filter_arr, filter_var, format ,formatNumber, contactOrNumber} from "../../ultis/helpers";
 
 import { shallowEqual } from "../../ultis/shallowEqual";
@@ -62,6 +63,13 @@ class Table extends Component {
     });
     e.preventDefault();
   };
+
+ 
+  changePage = (data) =>{
+    var {store_code , page , agency_type_id} = this.props
+    var price = window.$(`.price-${data.id} > input`).val()
+    history.push(`/product-agency/edit-price/${store_code}/${data.id}/${agency_type_id}?page=${page}&price=${price}`)
+  }
   showData = (products, per_page, current_page) => {
     var result = null;
     var { store_code, page,agency_type_id} = this.props;
@@ -99,30 +107,43 @@ class Table extends Component {
 
             <td>{data.sku}</td>
 
-            <td>
-              <Link to={`/product/edit/${store_code}/${data.id}/${page}?page=${page}`}>
+            <td
+            >
+              <Link to={`/product/edit/${store_code}/${data.id}/${page}?page=${page}?`}>
                 {data.name}
               </Link>
             </td>
             <td>
         { product_discount == null &&
-          <div className="eea"
+          <div className={`price-${data.id}`}
           >
             {min_price === max_price ? (
-              contactOrNumber(format(
+                  <>
+                  <input type={"hidden"} value ={ discount_percent == null
+                    ? min_price
+                    : min_price - min_price * discount_percent * 0.01} ></input>
+                  {contactOrNumber(format(
                 Number(
                   discount_percent == null
                     ? min_price
                     : min_price - min_price * discount_percent * 0.01
                 )
               )
-              )) : distributes && distributes.length == 0 ? contactOrNumber(format(
+              )      }            </>
+            ) : distributes && distributes.length == 0 ? 
+            (
+            <>
+            
+            <input type={"hidden"} value ={  discount_percent == null
+                    ? min_price
+                    : min_price - min_price * discount_percent * 0.01} ></input>
+            {contactOrNumber(format(
                 Number(
                   discount_percent == null
                     ? min_price
                     : min_price - min_price * discount_percent * 0.01
-                ))) : (
-              <div className="ae"
+                )))} </>): (
+              <div className="price"
               >
                 {format(
                   Number(
@@ -146,13 +167,16 @@ class Table extends Component {
 
           {product_discount && (
             <div
-              className="a"
+              className={`price-${data.id}`}
               style={{
                 float: "left",
               }}
             >
               {min_price === max_price ? (
-                contactOrNumber(format(Number(min_price)))
+                <>
+                <input type={"hidden"} value ={min_price} ></input>
+                {contactOrNumber(format(Number(min_price)))}
+                </>
               ) : (
                 <div className="row e">
                   <div
@@ -171,7 +195,7 @@ class Table extends Component {
             </div>
           )}
         </td>
-        <td>
+        <td  >
         { product_discount == null &&
           <div className="eea"
           >
@@ -242,14 +266,15 @@ class Table extends Component {
     
             {/* <td>{typeof data.agency_price != "undefined" ? format(Number(data.agency_price.main_price)) : null  }</td> */}
 
-            <td>
-              <Link
-                to={`/product-agency/edit-price/${store_code}/${data.id}/${agency_type_id}?page=${page}`}
+            <td             onClick={()=>{this.changePage(data)}}
+>
+              <button
+              
                 class={`btn btn-warning btn-sm ${update == true ? "" : "hide"
                   }`}
               >
                 <i class="fa fa-edit"></i> Chỉnh sửa giá
-              </Link>
+              </button>
 
             </td>
           </tr>
