@@ -3,6 +3,25 @@ import SunEditor from "suneditor-react";
 import "suneditor/dist/css/suneditor.min.css";
 import getChannel, { IKITECH } from "../../../ultis/channel";
 import { handleImageUploadBefore } from "../../../ultis/sun_editor";
+import {
+  image as imagePlugin,
+  font,
+  fontSize,
+  formatBlock,
+  paragraphStyle,
+  blockquote,
+  fontColor,
+  textStyle,
+  list,
+  lineHeight,
+  table as tablePlugin,
+  link as linkPlugin,
+  video,
+  audio
+} from "suneditor/src/plugins";
+import imageGallery from "./../../imageGallery";
+import {getApiImageStore} from "../../../constants/Config"
+import * as userLocalApi from "../../../data/local/user";
 class ContentDetail extends Component {
   constructor(props) {
     super(props);
@@ -50,17 +69,38 @@ class ContentDetail extends Component {
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="form-group">
         <label for="product_name">&nbsp;&nbsp;Mô tả sản phẩm</label>
-          <SunEditor
+        <SunEditor
             onImageUploadBefore={handleImageUploadBefore}
             setContents={txtContent}
             showToolbar={true}
             onChange={this.handleEditorChange}
             setDefaultStyle="height: auto"
-            setOptions={{
+                  setOptions={{
+              requestHeaders: {
+                "X-Sample": "sample",
+                "token" : userLocalApi.getToken()
+
+              },
+              imageGalleryLoadURL: getApiImageStore(store_code),
+              plugins: [
+                imagePlugin,
+                imageGallery,
+                font,
+                fontSize,
+                formatBlock,
+                paragraphStyle,
+                blockquote,
+                fontColor,
+                textStyle,
+                list,
+                lineHeight,
+                tablePlugin,
+                linkPlugin,
+                video,
+                audio],
+
               buttonList: [
                 [
-
-
                   "undo",
                   "redo",
                   "font",
@@ -68,18 +108,28 @@ class ContentDetail extends Component {
                   "formatBlock",
                   "paragraphStyle",
                   "blockquote",
-                  "bold", "underline", "italic", "strike", "subscript", "superscript",
-                  "fontColor", "hiliteColor", "textStyle",
-                  "removeFormat",
-                  "outdent", "indent",
-                  "align", "horizontalRule", "list", "lineHeight",
-                  "table", "link", "image", "video", "audio",
+                  "bold",
+                  "underline",
+                  "italic",
+                  "fontColor",
+                  "textStyle",
+                  "outdent",
+                  "align",
+                  "horizontalRule",
+                  "list",
+                  "lineHeight",
+                  "table",
+                  "link",
+                  "image",
+                  "video",
+                  "audio",
                   "imageGallery",
-                  "fullScreen", "showBlocks", "codeView",
-                  "preview", "print",
-                  "save", "template"
-                ]
-              ]
+                  "fullScreen",
+                  "preview",
+                  "codeView",
+                  "removeFormat"
+                ],
+              ],
             }}
 
           />

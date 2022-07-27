@@ -343,6 +343,8 @@ class Form extends Component {
                       "imageGallery",
                       "fullScreen",
                       "preview",
+                      "codeView",
+                      "removeFormat"
                     ],
                   ],
                 }}

@@ -126,6 +126,8 @@ class ContentDetail extends Component {
                   "imageGallery",
                   "fullScreen",
                   "preview",
+                  "codeView",
+                  "removeFormat"
                 ],
               ],
             }}

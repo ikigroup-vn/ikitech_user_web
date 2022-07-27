@@ -27,7 +27,7 @@ import {
   table as tablePlugin,
   link as linkPlugin,
   video,
-  audio
+  audio,
 } from "suneditor/src/plugins";
 import imageGallery from "./../../imageGallery";
 import { getApiImageStore } from "../../../constants/Config"
@@ -306,7 +306,8 @@ class Form extends Component {
                       tablePlugin,
                       linkPlugin,
                       video,
-                      audio],
+                      audio,
+                      ],
 
                     buttonList: [
                       [
@@ -335,6 +336,8 @@ class Form extends Component {
                         "imageGallery",
                         "fullScreen",
                         "preview",
+                        "codeView",
+                        "removeFormat"
                       ],
                     ],
                   }}

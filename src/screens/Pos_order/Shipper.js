@@ -1038,7 +1038,7 @@ class PanelBottom extends Component {
                   additional={{
                     page: 1,
                   }}
-                  key={addressPickup.value}
+                  key={addressPickup?.value}
                   cacheOptions
                   defaultOptions
                   debounceTimeout={500}
