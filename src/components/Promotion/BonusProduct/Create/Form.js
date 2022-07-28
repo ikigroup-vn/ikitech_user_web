@@ -225,12 +225,10 @@ class Form extends Component {
       multiply_by_number : state.multiply_by_number
     };
     var amount = form.amount;
-    if (
-      typeof amount == "undefined" ||
-      amount == null ||
-      (typeof amount != "undefined" && amount == null && amount?.replace(/ /g, "").length == 0)
-    )
-      form.set_limit_amount = false;
+    if (typeof amount == "undefined"
+      || amount == null  || !isEmpty(amount)
+   )
+      form.set_limit_amount = false
     console.log(form);
     this.props.createBonusProduct(store_code, form ,  this.checkStatus(startTime));
   };

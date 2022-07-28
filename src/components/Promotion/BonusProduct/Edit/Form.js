@@ -298,12 +298,10 @@ class Form extends Component {
       multiply_by_number: state.multiply_by_number
     };
     var amount = form.amount;
-    if (
-      typeof amount == "undefined" ||
-      amount == null ||
-      (typeof amount != "undefined" && amount.replace(/ /g, "").length == 0)
-    )
-      form.set_limit_amount = false;
+    if (typeof amount == "undefined"
+      || amount == null  || !isEmpty(amount)
+   )
+      form.set_limit_amount = false
     console.log(form);
      this.props.updateBonusProduct(store_code, form , bonusProductId);
   };
