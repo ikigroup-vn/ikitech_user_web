@@ -23,7 +23,7 @@ class ModalDetail extends Component {
       staff_name: "",
       staff_id: null,
       reason: "",
-      checkin_date: "",
+      checkin_date: moment().format("DD-MM-YYYY"),
       checkout_date: "",
       checkin_hour: "00:00",
       checkout_hour: "00:00",
@@ -47,7 +47,7 @@ class ModalDetail extends Component {
         staff_name: "",
         staff_id: null,
         reason: "",
-        checkin_date: "",
+        checkin_date: moment().format("DD-MM-YYYY"),
         checkout_date: "",
         checkin_hour: "00:00",
         checkout_hour: "00:00",
@@ -199,6 +199,7 @@ class ModalDetail extends Component {
     let params = `date_from=${this.props.datePrime.from}&date_to=${this.props.datePrime.to}`;
     var date1 = null;
     var date2 = null
+    console.log(checkin_date)
     if (checkin_date) {
        date1 = moment(
         `${moment(checkin_date, "DD-MM-YYYY").format(
@@ -210,19 +211,7 @@ class ModalDetail extends Component {
           "YYYY-MM-DD"
         )} ${checkout_hour}`
       ).format("YYYY-MM-DD HH:mm:ss");
-    } else {
-       date1 = moment(
-        `${moment(this.props.datePrime.from, "YYYY-MM-DD").format(
-          "YYYY-MM-DD"
-        )} ${checkin_hour}`
-      ).format("YYYY-MM-DD HH:mm:ss");
-       date2 = moment(
-        `${moment(this.props.datePrime.to, "YYYY-MM-DD").format(
-          "YYYY-MM-DD"
-        )} ${checkout_hour}`
-      ).format("YYYY-MM-DD HH:mm:ss");
-      // }
-    }
+    } 
     // if (checkout_date) {
     //   var date2 = moment(
     //     `${moment(checkout_date, "DD-MM-YYYY").format(
@@ -298,11 +287,15 @@ class ModalDetail extends Component {
   }
 
   onChangeStaff = (selectValue) => {
-    this.setState({
-      selectValue: selectValue,
-      staff_name: selectValue.name,
-      staff_id: selectValue.id,
-    });
+    if(selectValue)
+    {
+      this.setState({
+        selectValue: selectValue,
+        staff_name: selectValue.name,
+        staff_id: selectValue.id,
+      });
+    }
+ 
   };
 
   onChangeDate = (e) => {
