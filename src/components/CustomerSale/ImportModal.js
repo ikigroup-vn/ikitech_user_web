@@ -109,7 +109,7 @@ class ImportModal extends Component {
     }
     if (data.length > 0) {
 
-      Object.entries(data[0]).forEach(([key, value], index) => {
+      Object.entries({name : "" , phone_number : "" ,date_of_birth  : "", email : "" , address : ""}).forEach(([key, value], index) => {
         if (!key.includes("STT")) {
           result.push(
             <th>
@@ -248,7 +248,7 @@ class ImportModal extends Component {
   render() {
     var { importData } = this.props
     var { allow_skip_same_name } = this.state
-
+    console.log(importData)
     return (
       <div
         class="modal fade"

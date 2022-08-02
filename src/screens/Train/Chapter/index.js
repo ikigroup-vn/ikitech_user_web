@@ -17,6 +17,7 @@ import Quiz from "../Quiz";
 
 
 import * as helper from "../../../ultis/helpers";
+import history from "../../../history";
 class Theme extends Component {
   constructor(props) {
     super(props);
@@ -72,6 +73,14 @@ class Theme extends Component {
                     <h4 className="h4 title_content mb-0 text-gray-800">
                       Chương - Trắc nghiệm
                     </h4>
+                    <button onClick={()=>history.goBack()}
+                        class={`btn btn-warning btn-icon-split btn-sm`}
+                      >
+                        <span class="icon text-white-50">
+                          <i class="fas fa-arrow-left"></i>
+                        </span>
+                        <span class="text">Trở về</span>
+                      </button>
                   </div>
                   <br></br>
 

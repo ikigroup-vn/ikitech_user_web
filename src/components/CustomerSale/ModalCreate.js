@@ -214,7 +214,8 @@ class ModalCreate extends Component {
                     txtName_branch: "",
                     txtPhone_branch: "",
                     txtEmail_branch: "",
-                    txtDateOfBirth : ""
+                    txtDateOfBirth : null,
+                    txtSex : ""
     
                 })
             });
@@ -352,6 +353,7 @@ class ModalCreate extends Component {
                                                 <div className="form-group">
                                                     <label htmlFor="fname">Ngày sinh</label>
                                                     <Datetime
+                                                        key={txtDateOfBirth}
                                                         inputProps={{
                                                             placeholder: "Chưa cập nhật",
                                                         }}

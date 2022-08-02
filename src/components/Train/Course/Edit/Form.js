@@ -33,7 +33,7 @@ import {
   audio
 } from "suneditor/src/plugins";
 import imageGallery from "./../../../imageGallery";
-import {getApiImageStore} from "../../../../constants/Config"
+import { getApiImageStore } from "../../../../constants/Config"
 import SeoOption from "./SeoOption";
 class Form extends Component {
   constructor(props) {
@@ -42,19 +42,34 @@ class Form extends Component {
       txtContent: "",
       txtTitle: "",
       txtSumary: "",
-      image : "",
-   
+      image: "",
+
     };
 
   }
 
 
+  componentDidMount() {
+    var { course } = this.props
+    this.setState({
+      txtContent: course.description,
+      txtTitle: course.title,
+      image: course.image_url,
+
+      txtSumary: course.short_description,
+
+    })
+
+
+  }
+
+
   componentWillReceiveProps(nextProps) {
-   
+
     if (!shallowEqual(nextProps.course, this.props.course)) {
 
-   
- 
+
+
 
 
       this.setState({
@@ -63,7 +78,7 @@ class Form extends Component {
         image: nextProps.course.image_url,
 
         txtSumary: nextProps.course.short_description,
-     
+
       })
     }
 
@@ -92,8 +107,8 @@ class Form extends Component {
   onSave = (e) => {
     var { store_code, courseId } = this.props
     e.preventDefault();
-    var { txtContent, txtTitle,txtSeoDescription, txtSeoTitle, image, txtSumary, txtPublished, txtCategories
-     } = this.state
+    var { txtContent, txtTitle, txtSeoDescription, txtSeoTitle, image, txtSumary, txtPublished, txtCategories
+    } = this.state
     if (txtTitle == null || !isEmpty(txtTitle)) {
       this.props.showError({
 
@@ -108,7 +123,7 @@ class Form extends Component {
       )
       return;
     }
-   
+
 
     this.props.updateCourse(courseId, {
       description: txtContent,
@@ -123,13 +138,13 @@ class Form extends Component {
     history.goBack();
   };
 
- 
+
 
   render() {
 
-    var { txtTitle, txtContent, image, listCategory, txtSumary, txtPublished,txtSeoDescription,txtSeoTitle, txtCategories } = this.state
+    var { txtTitle, txtContent, image, listCategory, txtSumary, txtPublished, txtSeoDescription, txtSeoTitle, txtCategories } = this.state
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
-    var {store_code} = this.props
+    var { store_code } = this.props
     return (
       <React.Fragment>
         <form role="form" onSubmit={this.onSave} method="post">
@@ -138,7 +153,7 @@ class Form extends Component {
 
             <div class="row">
               <div class="col-12">
-              <div class="form-group">
+                <div class="form-group">
                   <label>Ảnh: &nbsp; </label>
                   <img src={`${image}`} width="150" height="150" />
                 </div>
@@ -184,8 +199,8 @@ class Form extends Component {
                     rows="3"
                   ></textarea>
                 </div>
-          
-              {/* <div class="form-group">
+
+                {/* <div class="form-group">
               <label for="product_name">Nội dung</label>
               <SunEditor
                 onImageUploadBefore={handleImageUploadBefore}
@@ -253,35 +268,35 @@ class Form extends Component {
 
               </div>
 
-            
+
 
             </div>
 
 
 
-         
 
-     
+
+
           </div>
           <div class="box-footer">
-          <button type = "submit" class="btn btn-info   btn-sm">
-                  <i class="fas fa-save"></i>  Lưu
+            <button type="submit" class="btn btn-info   btn-sm">
+              <i class="fas fa-save"></i>  Lưu
 
-                </button>
-                <button
-                                type = "button"
+            </button>
+            <button
+              type="button"
 
-                  style={{ marginLeft: "10px" }}
-                  onClick={this.goBack}
-                  class="btn btn-warning   btn-sm"
-                >
-                  <i class="fas fa-arrow-left"></i> Trở về
+              style={{ marginLeft: "10px" }}
+              onClick={this.goBack}
+              class="btn btn-warning   btn-sm"
+            >
+              <i class="fas fa-arrow-left"></i> Trở về
 
-                </button>
+            </button>
           </div>
 
         </form>
-        <ModalUpload store_code = {this.props.store_code} />
+        <ModalUpload store_code={this.props.store_code} />
 
       </React.Fragment>
 

@@ -126,7 +126,7 @@ class Notification extends Component {
                 var to = type[data.type] || "/"
                 console.log(listNotification)
                 return (
-                    <a onClick={() => this.onchangeRouter(`${to}/${data.references_value}`, data.references_value, to , data.type)} key={index} class="dropdown-item d-flex align-items-center " >
+                    <a onClick={() => this.onchangeRouter(`${to}${data.references_value ? `/${data.references_value}` : ""}`, data.references_value, to , data.type)} key={index} class="dropdown-item d-flex align-items-center " >
                         {/* // <Link key={index} class="dropdown-item d-flex align-items-center " to={`${to}/${data.references_value}`}> */}
 
                         <div style={{ width: "100%" }}>

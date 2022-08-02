@@ -380,7 +380,7 @@ export const createCustomerSale = (store_code, id, funcModal = null, _this, rese
 
 
 
-export const editMultiCustomerSale = (store_code, data) => {
+export const editMultiCustomerSale = (store_code, data , _this) => {
 
   return (dispatch) => {
     dispatch({
@@ -395,6 +395,7 @@ export const editMultiCustomerSale = (store_code, data) => {
           type: Types.SHOW_LOADING,
           loading: "hide"
         })
+        _this.setState({selected : []})
         customerApi
           .fetchAllCustomerSale(store_code, 1, null, 20)
           .then((res) => {

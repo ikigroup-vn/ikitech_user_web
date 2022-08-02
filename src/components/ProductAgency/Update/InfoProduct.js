@@ -55,7 +55,7 @@ class InfoProduct extends Component {
       this.setState({
         txtName: product.name,
         txtPrice: price,
-        disabledPrice: _price == 0 ? true : false,
+        // disabledPrice: _price == 0 ? true : false,
 
       });
     }
@@ -74,7 +74,7 @@ class InfoProduct extends Component {
       this.setState({
         txtName: product.name,
         txtPrice: price,
-        disabledPrice: _price == 0 ? true : false,
+        // disabledPrice: _price == 0 ? true : false,
 
       });
 
@@ -164,6 +164,7 @@ class InfoProduct extends Component {
                 <div class="form-group" style={{ display: "flex" }}>
                   <input
                     disabled={disabledPrice}
+                    // disabled
                     style={{ maxWidth: "420px" }}
                     type="text"
                     class="form-control"

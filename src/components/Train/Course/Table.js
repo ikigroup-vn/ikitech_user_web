@@ -14,7 +14,8 @@ class Table extends Component {
   }
 
   changePage = (store_code, id, e) => {
-    if (e.target.name == "action")
+ 
+    if (e.target.name == "action" || e.target.tagName == "I")
       return;
     history.push(`/train/chapter/index/${store_code}/${id}`)
   }
@@ -71,7 +72,8 @@ class Table extends Component {
                 to={`/train/course/edit/${store_code}/${data.id}`}
                 class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
               >
-                <i class="fa fa-edit"></i> Sửa
+                <i class="fa fa-edit" name="action"
+                ></i> Sửa
               </Link>
               <button
                 name="action"

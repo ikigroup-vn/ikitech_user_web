@@ -36,18 +36,18 @@ export default class ComponentToPrint extends Component {
       )
       {
         var address = ""
-        if(typeof bill.customer_address != "undefined"){
+        if(typeof bill.customer_address != "undefined" && bill.customer_address != null){
           address = {
             customer_name: bill.customer_address.name,
-            customer_address: bill.customer_address.address_detail ?? "" + ", " + bill.customer_address.wards_name ?? "" + ", " + bill.customer_address.district_name ?? "" + ", " + bill.customer_address.province_name ?? "",
+            customer_address: bill.customer_address.address_detail ?? "" + ", " + bill.customer_address?.wards_name ?? "" + ", " + bill.customer_address?.district_name ?? "" + ", " + bill.customer_address?.province_name ?? "",
             customer_phone: bill.customer_address.phone,
           }
          
         }else{
           address = {
             customer_name: bill.customer_name,
-            customer_address: bill.customer_address_detail ?? "" + ", " + bill.customer_address.wards_name ?? "" + ", " + bill.customer_address.district_name ?? "" + ", " + bill.customer_address.province_name ?? "",
-            customer_phone: bill.customer_address.phone,
+            customer_address: bill.customer_address_detail ?? "" + ", " + bill.customer_address?.wards_name ?? "" + ", " + bill.customer_address?.district_name ?? "" + ", " + bill.customer_address?.province_name ?? "",
+            customer_phone: bill.customer_address?.phone,
           }
         }
         this.setState({

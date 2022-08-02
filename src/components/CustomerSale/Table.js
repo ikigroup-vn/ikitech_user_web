@@ -185,7 +185,7 @@ class Table extends Component {
     });
 
     console.log(newData)
-    this.props.editMultiCustomerSale(store_code , {list : newData})
+    this.props.editMultiCustomerSale(store_code , {list : newData} , this)
   };
 
   render() {
@@ -278,8 +278,8 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchAllCustomerSale: (id, page, params) => {
       dispatch(customerAction.fetchAllCustomerSale(id, page, params));
     },
-    editMultiCustomerSale: (store_code, data) => {
-      dispatch(customerAction.editMultiCustomerSale(store_code, data));
+    editMultiCustomerSale: (store_code, data , _this) => {
+      dispatch(customerAction.editMultiCustomerSale(store_code, data , _this));
   },
     showError: (error) => {
       dispatch(error);
