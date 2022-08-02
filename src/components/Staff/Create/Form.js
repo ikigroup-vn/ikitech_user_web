@@ -194,7 +194,8 @@ class Form extends Component {
       decentralizationArr,
       password,
     } = this.state;
-    var { store_code } = this.props;
+    var { store_code , branchStore } = this.props;
+    console.log("test1",branchStore , getBranchId());
     return (
       <React.Fragment>
         <form role="form" onSubmit={this.onSave} method="post">
@@ -218,7 +219,7 @@ class Form extends Component {
               disabled
                 type="text"
                 class="form-control"
-                value={getBranchName() || this.getNameBranch()}
+                value={this.getNameBranch()}
                 name="name"
                 placeholder="Nhập tên nhân viên"
                 autocomplete="off"
@@ -367,7 +368,9 @@ class Form extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {};
+  return {
+    branchStore: state.storeReducers.store.branchStore,
+  };
 };
 
 const mapDispatchToProps = (dispatch, props) => {

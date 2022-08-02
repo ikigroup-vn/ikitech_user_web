@@ -394,7 +394,7 @@ export const ikitech_menu = [
       },
          {
           name: "Đào tạo",
-          class: "onsale",
+          class: "train",
 
           icon: "fas fa-book-open",
           exact: true,

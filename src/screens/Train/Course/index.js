@@ -54,7 +54,7 @@ class Course extends Component {
       // var insert = permissions.post_add
       // var update = permissions.post_update
       // var _delete = permissions.post_remove_hide
-      var isShow = permissions.post_list
+      var isShow = permissions.train
       this.setState({ isLoading: true, insert:true, update:true, _delete:true, isShow })
     }
   }

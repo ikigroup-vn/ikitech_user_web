@@ -197,7 +197,7 @@ const permission = (channel) => {
                 header: [
 
                     "Thông tin cửa hàng",
-                    "Phân quyền",
+                    "Khóa học",
                     "Chương trình KM",
                     "Thông báo tới cửa hàng",
                     "Chi nhánh",
@@ -205,7 +205,7 @@ const permission = (channel) => {
                     "Chat"
 
                 ]
-                , body: ["store_info", "decentralization_list", "promotion","notification_to_stote" , "branch_list" , "revenue_expenditure" , "chat_list"]
+                , body: ["store_info", "train", "promotion","notification_to_stote" , "branch_list" , "revenue_expenditure" , "chat_list"]
             },
             // {
             //     name: "Quản lý đơn hàng",
@@ -300,11 +300,12 @@ const permission = (channel) => {
                     "Cài đặt chung",
                     "In mã vạch",
                     // "Giao diện khách hàng",
-                    "Chấm công"
+                    "Chấm công",
+                    "Phân quyền"
 
 
                 ]
-                , body: ["setting_print", "customer_config_point", "config_setting", "barcode_print" , "web_theme_edit" , "timekeeping"]
+                , body: ["setting_print", "customer_config_point", "config_setting", "barcode_print" , "web_theme_edit" , "timekeeping" , "decentralization_list"]
             },
             {
                 name: "Khác",
@@ -538,7 +539,8 @@ export const initialPermission = () =>{
         staff_add: false,
         staff_remove: false,
         staff_delegating: false,
-        onsale : false
+        onsale : false,
+        train : false
       
     }
     return {...state}

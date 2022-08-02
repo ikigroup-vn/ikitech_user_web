@@ -252,7 +252,7 @@ class Form extends Component {
               disabled
                 type="text"
                 class="form-control"
-                value={getBranchName() || this.getNameBranch()}
+                value={this.getNameBranch()}
                 name="name"
                 placeholder="Nhập tên nhân viên"
                 autocomplete="off"
