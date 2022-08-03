@@ -27,8 +27,7 @@ class Topbar extends Component {
     const branch_id = getBranchId()
     if (getStoreCode() == "" || getStoreCode() == "undefined" || typeof getStoreCode() == "undefined") {
       setStoreCode(this.props.store_code)
-      window.location.reload();
-      return;
+      // return;
     }
 
 
