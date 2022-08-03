@@ -10,10 +10,9 @@ import * as Env from "../../ultis/default";
 import Notification from "./Notification";
 import * as helper from "../../ultis/helpers";
 import { shallowEqual } from "../../ultis/shallowEqual";
-import { getBranchId, setBranchId, getBranchName, setBranchName , setStoreCode , getStoreCode } from "../../ultis/branchUtils";
+import { getBranchId, setBranchId, getBranchName, setBranchName, setStoreCode, getStoreCode } from "../../ultis/branchUtils";
 import { Redirect } from "react-router-dom";
 import * as notificationAction from "../../actions/notification";
-
 class Topbar extends Component {
   constructor(props) {
     super(props);
@@ -26,11 +25,17 @@ class Topbar extends Component {
   componentDidMount() {
     this.props.fetchBranchStore(this.props.store_code);
     const branch_id = getBranchId()
+    if (getStoreCode() == "" || getStoreCode() == "undefined" || typeof getStoreCode() == "undefined") {
+      setStoreCode(this.props.store_code)
+      window.location.reload();
+      return;
+    }
 
-    setStoreCode(this.props.store_code)
 
-    
-      this.props.fetchAllBadge(this.props.store_code, branch_id);
+
+
+
+    this.props.fetchAllBadge(this.props.store_code, branch_id);
 
 
 
@@ -125,8 +130,8 @@ class Topbar extends Component {
       result = stores.map((data, index) => {
         var selected = data.store_code === store_code ? true : false;
         return (
-          <option value={data.id} key={index} selected={selected} data-branch-type = "(CN mặc định)" className={data.is_default_order_online == true ? "active-branch-default" : ""}>
-            {data.name}      {data.is_default_order_online == true ? "(Mặc định)" : ""} 
+          <option value={data.id} key={index} selected={selected} data-branch-type="(CN mặc định)" className={data.is_default_order_online == true ? "active-branch-default" : ""}>
+            {data.name}      {data.is_default_order_online == true ? "(Mặc định)" : ""}
           </option>
         );
       });
@@ -259,19 +264,19 @@ class Topbar extends Component {
                   </Link>
                 ) : (
                   <a className="show-store" >
-                  <i
-                    class="fas fa-store"
-                    style={{
-                      marginRight: "10px",
-                      marginTop: "23px",
-                      fontSize: "20px",
-                      color: "#ec0c38",
-                    }}
-                  ></i>
-                  {
-                    stores?.length > 0 && this.getNameBranch(stores)
-                  }
-                </a>
+                    <i
+                      class="fas fa-store"
+                      style={{
+                        marginRight: "10px",
+                        marginTop: "23px",
+                        fontSize: "20px",
+                        color: "#ec0c38",
+                      }}
+                    ></i>
+                    {
+                      stores?.length > 0 && this.getNameBranch(stores)
+                    }
+                  </a>
                 )}              </li>
 
               <div className="topbar-divider d-none d-sm-block"></div>
@@ -361,7 +366,7 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchAllBadge: (store_code, branch_id) => {
       dispatch(notificationAction.fetchAllBadge(store_code, branch_id));
-  },
+    },
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Topbar);

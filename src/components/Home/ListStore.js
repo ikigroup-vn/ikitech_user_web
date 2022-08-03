@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
-import { setBranchId } from '../../ultis/branchUtils'
+import { setBranchId  , setStoreCode} from '../../ultis/branchUtils'
 import * as Env from "../../ultis/default"
 import { setStoreId } from '../../ultis/store'
 class ListStore extends Component {
@@ -14,9 +14,10 @@ class ListStore extends Component {
         this.props.handleDelCallBack({ table: "Cửa hàng", id: store_code, name:name });
         event.preventDefault();
     }
-    handleSetbranch = (store_id) => {
+    handleSetbranch = (store_id , store_code) => {
         setStoreId(store_id)
         setBranchId("");
+        setStoreCode(store_code)
     }
 
     render() {
@@ -38,7 +39,7 @@ class ListStore extends Component {
                     return (
                         <div class="card list-group-item list-group-item-action list-group-item-light" 
                         style={{ border: "1px solid #8e8a8a", margin: "10px 0" }} 
-                        onClick={()=>this.handleSetbranch(item.id)}>
+                        onClick={()=>this.handleSetbranch(item.id , item.store_code)}>
                             <Link to={`/`}>
                                 <div class="card-body" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0px" }}>
                                     <div className='wrap-list' style={{ display: "flex", alignItems: "center" }}>

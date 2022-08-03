@@ -398,7 +398,7 @@ class Sidebar extends Component {
               />
             </div>
           </Link>
-          {this.showMenus(menu)}
+          {stores?.length > 0 && this.showMenus(menu)}
 
           <div className="text-center d-none d-md-inline">
             <button

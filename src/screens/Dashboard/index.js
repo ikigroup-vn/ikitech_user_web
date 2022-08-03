@@ -72,13 +72,17 @@ class Dashboard extends Component {
 
   render() {
     var { store_code } = this.props.match.params
-    var { badges, collaborators, overview, topten } = this.props
-    var numDiscount = badges.products_discount || 0
-    var { isShow } = this.state
-    console.log(this.props.permission)
-    if (typeof store_code == "undefined" || store_code == null) {
+
+    if (typeof store_code == "undefined" || store_code == null || store_code == "") {
       return <Redirect to="/home" />
     }
+
+    
+    var { badges, collaborators, overview, topten } = this.props
+    console.log()
+    var numDiscount = badges?.products_discount || 0
+    var { isShow } = this.state
+    console.log(badges)
     if (this.props.auth) {
 
       return (
