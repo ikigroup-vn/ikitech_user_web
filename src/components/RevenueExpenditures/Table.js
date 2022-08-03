@@ -46,7 +46,7 @@ class Table extends Component {
       (this.props.revenueExpendituresValue !=
         nextProps.revenueExpendituresValue ||
         nextState.revenueExpendituresValue !=
-          nextProps.revenueExpendituresValue ||
+        nextProps.revenueExpendituresValue ||
         !shallowEqual(
           nextProps.revenueExpenditures,
           this.props.revenueExpenditures
@@ -65,7 +65,7 @@ class Table extends Component {
       (this.props.revenueExpendituresValue !=
         nextProps.revenueExpendituresValue ||
         this.state.revenueExpendituresValue !=
-          nextProps.revenueExpendituresValue) &&
+        nextProps.revenueExpendituresValue) &&
       this.state.isLoading == true
     )
       this.setState({
@@ -89,6 +89,13 @@ class Table extends Component {
     var result = null;
     if (listRevenueExpenditures.length > 0) {
       result = listRevenueExpenditures.map((data, index) => {
+        var action_create = (data.action_create == 9 ||
+          data.action_create == 5 ||
+          data.action_create == 6 ||
+          data.action_create == 7 ||
+          data.action_create == 8 ||
+          data.action_create == 10 ||
+          data.action_create == 11) ? true : false
         return (
           <React.Fragment>
             <tr
@@ -102,7 +109,9 @@ class Table extends Component {
               }
             >
               <td>{per_page * (current_page - 1) + (index + 1)}</td>
-              <td>{data.code}</td>
+              <td>
+                <Link to={action_create ? `/order/detail/chinhbv/${data.references_value}` : "#"}>{data.code}</Link>
+              </td>
               <td>
                 {data.is_revenue ? (
                   <p style={{ color: " rgb(54 185 204)" }}>Phiếu thu</p>
@@ -122,14 +131,14 @@ class Table extends Component {
                   currency: "VND",
                 }).format(data?.current_money)}
               </td>
-        
+
               <td>
                 {data.staff !== null ? data.staff?.name : data.user?.name}
               </td>
 
               <td>{data.created_at}</td>
-        
-    
+
+
               <td>{data?.type_action_name}</td>
             </tr>
           </React.Fragment>

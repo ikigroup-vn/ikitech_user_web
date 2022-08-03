@@ -372,12 +372,16 @@ export const sendOrderToDelivery = (data, store_code, billId, order_code, order_
   };
 };
 
-export const updateOrder = (data, store_code, order_code) => {
+export const updateOrder = (data, store_code, order_code , noneLoading) => {
   return (dispatch) => {
-    dispatch({
-      type: Types.SHOW_LOADING,
-      loading: "show",
-    });
+    if(noneLoading !== true)
+    {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "show",
+      });
+    }
+ 
     billApi
       .updateOrder(data, store_code, order_code)
       .then((res) => {
@@ -385,15 +389,7 @@ export const updateOrder = (data, store_code, order_code) => {
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
-        dispatch({
-          type: Types.ALERT_UID_STATUS,
-          alert: {
-            type: "success",
-            title: "Thành công ",
-            disable: "show",
-            content: res.data.msg,
-          },
-        });
+ 
         billApi.fetchBillId(store_code, order_code).then((res) => {
           if (res.data.code !== 401)
             dispatch({
@@ -410,16 +406,20 @@ export const updateOrder = (data, store_code, order_code) => {
               data: res.data.data,
             });
         });
-
-        dispatch({
-          type: Types.ALERT_UID_STATUS,
-          alert: {
-            type: "danger",
-            title: "Lỗi",
-            disable: "show",
-            content: error?.response?.data?.msg,
-          },
-        });
+        if(noneLoading !== true)
+        {
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "danger",
+              title: "Lỗi",
+              disable: "show",
+              content: error?.response?.data?.msg,
+            },
+          });
+        }
+     
+       
       });
   };
 };

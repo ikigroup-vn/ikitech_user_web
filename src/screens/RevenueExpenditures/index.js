@@ -152,7 +152,7 @@ class RevenueExpenditures extends Component {
     if (this.props.reportExpenditure !== nextProps.reportExpenditure) {
       const { datePrime } = this.state;
 
-      this.setState({ total: nextProps.reportExpenditure.reserve });
+      this.setState({ total: nextProps.reportExpenditure?.reserve });
     }
   }
 
@@ -168,7 +168,7 @@ class RevenueExpenditures extends Component {
       customers,
       reportExpenditure,
     } = this.props;
-    console.log(reportExpenditure, reportExpenditure.reserve);
+    console.log(reportExpenditure, reportExpenditure?.reserve);
     var {
       //   customerId,
       //   customerImg,
@@ -417,9 +417,10 @@ class RevenueExpenditures extends Component {
                       </div>
 
                       <div className="card-body">
-                        {supplier.data !== undefined &&
+                        {
+                        supplier.data !== undefined &&
                           customers.data !== undefined &&
-                          staff.length !== 0 && (
+                           (
                             <Table
                               // numPage={numPage}
 

@@ -1,17 +1,83 @@
 import { data } from "jquery";
 import React, { Component } from "react";
 import getChannel, { IKITECH, IKIPOS } from "../../ultis/channel";
-import { filter_var, filter_arr, format } from "../../ultis/helpers";
+import { filter_var, filter_arr, format, formatNoD , formatNumber } from "../../ultis/helpers";
 import Modal from "./ModalPaymentPos";
 import * as Types from "../../constants/ActionType"
 import { connect } from "react-redux";
+import { debounce } from 'lodash'
+import { updateOrder } from "../../actions/bill";
+import { shallowEqual } from "../../ultis/shallowEqual";
 
 class TotalBill extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            check: false
+            check: false,
+            total_shipping_fee : ""
+            
         }
+
+        this.onCallApi = debounce(this.props.updateShip, 800);
+
+
+
+    }
+
+    componentDidMount()
+    {   
+        console.log("yeah",this.props)
+        this.setState({total_shipping_fee : this.props.bill.total_shipping_fee})
+    }
+
+
+    
+
+    // componentDidUpdate(){
+    //     var {store_code , order_code} = this.props
+    //     var {total_shipping_fee} = this.state
+     
+    //         this.onCallApi ({
+    //             total_shipping_fee : total_shipping_fee
+    //         } , store_code , order_code)
+        
+    // }
+
+    // componentWillReceiveProps(nextProps){
+    //     if(parseInt(nextProps.bill.total_shipping_fee) !== parseInt(this.props.bill.total_shipping_fee))
+    //     {
+    //         this.setState({total_shipping_fee : nextProps.bill.total_shipping_fee})
+    //     }
+    // }
+
+    shouldComponentUpdate(nextProps , nextState){
+        var {store_code , order_code} = this.props
+        var {total_shipping_fee} = this.state
+        if(!shallowEqual(this.state , nextState))
+        {
+            this.onCallApi ({
+                total_shipping_fee : nextState.total_shipping_fee
+            } , store_code , order_code , true)
+        }
+
+        return true
+    }
+
+    onChange = (e) =>{
+
+
+        var value = formatNumber(e.target.value);
+
+        this.setState({total_shipping_fee : value})
+
+
+        // var {store_code , order_code} = this.props
+        // var {total_shipping_fee} = this.state
+ 
+        //     this.onCallApi ({
+        //         total_shipping_fee : total_shipping_fee
+        //     } , store_code , order_code)
+        
     }
 
 
@@ -55,7 +121,7 @@ class TotalBill extends Component {
         var disable = this.props.order_allow_change_status == true ? "show" : "hide"
         var list_items = filter_arr(bill.line_items);
 
-        console.log(agree , cancel);
+        console.log(agree, cancel);
         return (
             <div className="box box-warning cart_wrapper mb0">
 
@@ -69,60 +135,78 @@ class TotalBill extends Component {
                     <br />
                     <div>
                         <p className="sale_user_label bold bold group-total">
-                        <div>Tạm tính</div>
+                            <div>Tạm tính</div>
                             <span id="total_selected">{format(bill.total_before_discount || 0)}</span>
                         </p>
                     </div>
                     {total_shipping_fee > 0 && <div id="item_fee">
                         <div className="sale_user_label bold bold group-total">
-                        <div>Phí giao hàng:</div>
-
-                              <span>+&nbsp;{format(total_shipping_fee)}</span>
+                            <div>Phí giao hàng:</div>
+                            <input
+                            style={{
+                                width: "85px",
+                                "text-align": "end",
+                                "border-bottom": "1px solid",
+                            }}
+                                type="text"
+                                name="import_price"
+                                onChange={this.onChange}
+                                id="import_prices"
+                                defaultValue={total_shipping_fee}
+                                value={formatNoD(this.state.total_shipping_fee)}
+                                // {...handleKeyPress}
+                                // class="col-6 text-input-pos"
+                                // value={formatNoD(
+                                //     removeSignNumber(this.state.priceCustomer)
+                                // )}
+                                // onChange={this.handChange}
+                            ></input>
+                            {/* <span>+&nbsp;{format(total_shipping_fee)}</span> */}
                         </div>
                     </div>
                     }
-                       {balance_collaborator_used > 0 && <div id="item_fee">
+                    {balance_collaborator_used > 0 && <div id="item_fee">
                         <div className="sale_user_label bold bold group-total">
-                        <div>Giảm giá ví CTV:</div>
+                            <div>Giảm giá ví CTV:</div>
 
-                              <span>-&nbsp;{format(balance_collaborator_used)}</span>
+                            <span>-&nbsp;{format(balance_collaborator_used)}</span>
                         </div>
                     </div>
                     }
                     {product_discount_amount > 0 && <div id={`item_fee ${product_discount_amount > 0 ? "show" : "hide"}`}>
                         <div className="sale_user_label bold group-total">
-                        <div> Giảm giá sản phẩm: </div>  <span>-&nbsp;{format(product_discount_amount)}</span>
+                            <div> Giảm giá sản phẩm: </div>  <span>-&nbsp;{format(product_discount_amount)}</span>
                         </div>
                     </div>
                     }
                     {combo_discount_amount > 0 && <div id={`item_fee ${combo_discount_amount > 0 ? "show" : "hide"}`}>
                         <div className="sale_user_label bold  group-total" bold group-total>
-                        <div>Giảm giá Combo:</div>
+                            <div>Giảm giá Combo:</div>
 
-                              <span>- {format(combo_discount_amount)}</span>
+                            <span>- {format(combo_discount_amount)}</span>
                         </div>
                     </div>
                     }
                     {voucher_discount_amount > 0 && <div id={`item_fee ${voucher_discount_amount > 0 ? "show" : "hide"}`}>
                         <div className="sale_user_label bold bold group-total">
-                        <div>Giảm giá Voucher:</div>
+                            <div>Giảm giá Voucher:</div>
 
-                              <span>-&nbsp;{format(voucher_discount_amount)}</span>
+                            <span>-&nbsp;{format(voucher_discount_amount)}</span>
                         </div>
                     </div>
                     }
                     {discount > 0 && <div id={`item_fee ${discount > 0 ? "show" : "hide"}`}>
                         <div className="sale_user_label bold bold group-total">
-                        <div> Chiết khấu:</div>
+                            <div> Chiết khấu:</div>
 
-                             <span>-&nbsp;{format(discount)}</span>
+                            <span>-&nbsp;{format(discount)}</span>
                         </div>
                     </div>
                     }
 
                     {bill.bonus_points_amount_used != null && bill.bonus_points_amount_used != 0 && <div>
                         <p className="sale_user_label bold bold group-total">
-                        <div> Giảm giá xu:</div>
+                            <div> Giảm giá xu:</div>
 
                             <span className="cart_payment_method">-&nbsp;{format(bill.bonus_points_amount_used)}
                             </span>
@@ -131,7 +215,7 @@ class TotalBill extends Component {
                     }
                     {bill.order_code_refund && <div>
                         <p className="sale_user_label bold bold group-total">
-                        <div>Đã thanh toán:</div>
+                            <div>Đã thanh toán:</div>
 
                             <span className="cart_payment_method">
                                 {format(bill.total_final - bill.remaining_amount)}
@@ -150,7 +234,7 @@ class TotalBill extends Component {
                     {
                         total_final > 0 && <div>
                             <p className="sale_user_label bold bold group-total">
-                            <div> Thành tiền:</div>
+                                <div> Thành tiền:</div>
 
                                 <span className="cart_payment_method">
                                     {format(total_final
@@ -177,7 +261,7 @@ class TotalBill extends Component {
 
                                 <div>
                                     <p className="sale_user_label bold bold group-total">
-                                    <div>Còn nợ:</div>
+                                        <div>Còn nợ:</div>
 
                                         <span className="cart_payment_method">
                                             {format(bill.remaining_amount)}
@@ -191,75 +275,75 @@ class TotalBill extends Component {
                     }
                     {
                         bill.order_status_code !== "USER_CANCELLED" && bill.order_status_code !== "CUSTOMER_CANCELLED" &&
-                    
-                 
-                            <div style={{ textAlign: "center" }}>
-                                {
-                                   ( bill.payment_status_code == "UNPAID" || bill.payment_status_code == "PARTIALLY_PAID")  ?
-
-                                        (<a
-                                            data-target="#modalPayment"
-                                            data-toggle="modal"
-
-                                            style={{ color: "white", background: "rgb(229, 111, 37)" }}
-                                            id="sale_btn_accepted"
-                                            className={`sale_btn_action sale_btn_action_10 btn btn-secondary w100p `}
 
 
+                        <div style={{ textAlign: "center" }}>
+                            {
+                                (bill.payment_status_code == "UNPAID" || bill.payment_status_code == "PARTIALLY_PAID") ?
 
-                                        > Thanh toán còn lại
-                                        </a>)
+                                    (<a
+                                        data-target="#modalPayment"
+                                        data-toggle="modal"
 
-                                        :
-                                        (
-                                            bill.order_code_refund != null || this.checkRefundAll(list_items) == true ? (
-                                                <a
-                                                    style={{ color: "white" }}
-                                                    id="sale_btn_accepted"
-                                                    className={`sale_btn_action sale_btn_action_10 btn btn-secondary w100p ${cancel} `}
-                                                > Đã hoàn hết sản phẩm</a>
-                                            ) :
-                                                (this.state.check == true ? (<a
-                                                    style={{ color: "white" }}
-                                                    id="sale_btn_accepted"
-                                                    className={`sale_btn_action sale_btn_action_10 btn btn-secondary w100p ${cancel} `}
-
-                                                    onClick={() => { this.changeStatus(false) }}
-
-                                                >
-                                                    Hủy
-                                                </a>) : (<a
-                                                    style={{ color: "white" }}
-                                                    id="sale_btn_accepted"
-                                                    className={`sale_btn_action sale_btn_action_10 btn btn-danger w100p ${cancel} `}
-
-                                                    onClick={() => { this.changeStatus(true) }}
-
-                                                >
-                                                    Hoàn tiền
-                                                </a>)
-                                                )
-                                        )
-
-                                }
+                                        style={{ color: "white", background: "rgb(229, 111, 37)" }}
+                                        id="sale_btn_accepted"
+                                        className={`sale_btn_action sale_btn_action_10 btn btn-secondary w100p `}
 
 
+
+                                    > Thanh toán còn lại
+                                    </a>)
+
+                                    :
+                                    (
+                                        bill.order_code_refund != null || this.checkRefundAll(list_items) == true ? (
+                                            <a
+                                                style={{ color: "white" }}
+                                                id="sale_btn_accepted"
+                                                className={`sale_btn_action sale_btn_action_10 btn btn-secondary w100p ${cancel} `}
+                                            > Đã hoàn hết sản phẩm</a>
+                                        ) :
+                                            (this.state.check == true ? (<a
+                                                style={{ color: "white" }}
+                                                id="sale_btn_accepted"
+                                                className={`sale_btn_action sale_btn_action_10 btn btn-secondary w100p ${cancel} `}
+
+                                                onClick={() => { this.changeStatus(false) }}
+
+                                            >
+                                                Hủy
+                                            </a>) : (<a
+                                                style={{ color: "white" }}
+                                                id="sale_btn_accepted"
+                                                className={`sale_btn_action sale_btn_action_10 btn btn-danger w100p ${cancel} `}
+
+                                                onClick={() => { this.changeStatus(true) }}
+
+                                            >
+                                                Hoàn tiền
+                                            </a>)
+                                            )
+                                    )
+
+                            }
 
 
 
 
-                            </div>
-    }
-                        
 
-                    
+
+                        </div>
+                    }
+
+
+
                     {
                         getChannel() == IKITECH && bill.order_status_code !== "USER_CANCELLED" && bill.order_status_code !== "CUSTOMER_CANCELLED" && (
                             <div style={{ textAlign: "center" }}>
 
 
                                 {
-                                    bill.order_from !== 2 && bill.order_from !== null && bill.order_status_code !== "USER_CANCELLED" && bill.order_status_code !== "CUSTOMER_CANCELLED"  && bill.payment_status_code !== "UNPAID"&& bill.payment_status_code != "REFUNDS" && bill.payment_status_code !== "PARTIALLY_PAID" && bill.payment_status_code !== "PAID" &&
+                                    bill.order_from !== 2 && bill.order_from !== null && bill.order_status_code !== "USER_CANCELLED" && bill.order_status_code !== "CUSTOMER_CANCELLED" && bill.payment_status_code !== "UNPAID" && bill.payment_status_code != "REFUNDS" && bill.payment_status_code !== "PARTIALLY_PAID" && bill.payment_status_code !== "PAID" &&
                                     (
                                         <React.Fragment>
                                             <a
@@ -328,6 +412,10 @@ const mapDispatchToProps = (dispatch, props) => {
         resetCalculate: (data) => {
             dispatch(data);
 
+        },
+
+        updateShip : (data , store_code , order_code , noneLoading) =>{
+            dispatch(updateOrder(data , store_code , order_code , noneLoading))
         }
 
     };

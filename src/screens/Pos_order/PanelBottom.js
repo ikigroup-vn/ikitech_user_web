@@ -1123,8 +1123,8 @@ class PanelBottom extends Component {
             ltr: true
 
         };
-        var current_page_product = products.current_page || 1
-        var last_page_product = products.last_page || 1
+        var current_page_product = products?.current_page || 1
+        var last_page_product = products?.last_page || 1
 
 
 

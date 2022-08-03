@@ -202,12 +202,16 @@ class Form extends Component {
                             <div className="row">
                                 <div className="card col-12 pl0" id="user_cart_info">
                                   
-                                                <TotalBillPos
-                                                store_code = {store_code}
-                                                check = {this.check}
-                                                order_allow_change_status={order_allow_change_status}
-
-                                                handleUpdateStatusOrder={this.handleUpdateStatusOrder} bill={bill}  />
+                                                {
+                                                    typeof bill.id != "undefined" &&    <TotalBillPos
+                                                    store_code = {store_code}
+                                                    order_code={order_code}
+    
+                                                    check = {this.check}
+                                                    order_allow_change_status={order_allow_change_status}
+    
+                                                    handleUpdateStatusOrder={this.handleUpdateStatusOrder} bill={bill}  />
+                                                }
                                             
 
                                 </div>

@@ -290,13 +290,15 @@ class ListProduct extends Component {
                   </tr>
                 </thead>
 
-                <tbody>{this.showData(products.data, listProducts, discounts)}</tbody>
+                <tbody>{this.showData(products?.data, listProducts, discounts)}</tbody>
               </table>
             </div>
 
             <div class="group-pagination_flex col-xs-12 col-sm-12 col-md-12 col-lg-12" style={{ display: "flex", justifyContent: "space-between" }}>
 
-              <Pagination style="float-fix" store_code={store_code} products={products} passNumPage={this.passNumPage} limit={this.state.numPage} />
+             {
+              products &&  <Pagination style="float-fix" store_code={store_code} products={products} passNumPage={this.passNumPage} limit={this.state.numPage} />
+             }
               <div style={{ marginTop: "10px" }}>
                 <button
                   style={{

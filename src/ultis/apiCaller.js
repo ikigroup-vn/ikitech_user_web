@@ -32,7 +32,7 @@ export default function (endpoint, method, body) {
           typeof response.data.code !== "undefined" &&
           response.data.code === 404
         ) {
-          history.push("/notfound");
+          // history.push("/notfound");
         } else if (response.data.code === 401) {
           history.push("/login");
         } else {

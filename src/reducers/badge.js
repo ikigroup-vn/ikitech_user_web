@@ -2,7 +2,7 @@
 import * as Types from "../constants/ActionType";
 
 var initialState = {
-  allBadge: [],
+  allBadge: {},
   
 };
 
