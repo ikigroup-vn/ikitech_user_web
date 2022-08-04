@@ -154,7 +154,8 @@ class CustomerSale extends Component {
       const workbook = XLSX.read(bstr, { type: "binary" });
       workbook.SheetNames.forEach((sheet) => {
         let rowObject = XLSX.utils.sheet_to_row_object_array(
-          workbook.Sheets[sheet]
+          workbook.Sheets[sheet] ,  {
+            defval: ""        }
         );
         _this.setState({ importData: rowObject });
       });

@@ -118,23 +118,22 @@ class Support extends Component {
             || !shallowEqual(nextProps.post_id_support_policy, this.props.post_id_support_policy)
             || !shallowEqual(nextProps.post_id_privacy_policy, this.props.post_id_privacy_policy)
         ) {
-            console.log(nextProps.post_id_help)
             this.setState({
-                post_id_help: nextProps.post_id_help.title || null,
-                post_id_contact: nextProps.post_id_contact.title || null,
-                post_id_about: nextProps.post_id_about.title || null,
-                post_id_terms: nextProps.post_id_terms.title || null,
-                post_id_return_policy: nextProps.post_id_return_policy.title || null,
-                post_id_support_policy: nextProps.post_id_support_policy.title || null,
-                post_id_privacy_policy: nextProps.post_id_privacy_policy.title || null,
+                post_id_help: nextProps.post_id_help?.title || null,
+                post_id_contact: nextProps.post_id_contact?.title || null,
+                post_id_about: nextProps.post_id_about?.title || null,
+                post_id_terms: nextProps.post_id_terms?.title || null,
+                post_id_return_policy: nextProps.post_id_return_policy?.title || null,
+                post_id_support_policy: nextProps.post_id_support_policy?.title || null,
+                post_id_privacy_policy: nextProps.post_id_privacy_policy?.title || null,
 
-                ID_post_id_help: nextProps.post_id_help.id || null,
-                ID_post_id_contact: nextProps.post_id_contact.id || null,
-                ID_post_id_about: nextProps.post_id_about.id || null,
-                ID_post_id_terms: nextProps.post_id_terms.id || null,
-                ID_post_id_return_policy: nextProps.post_id_return_policy.id || null,
-                ID_post_id_support_policy: nextProps.post_id_support_policy.id || null,
-                ID_post_id_privacy_policy: nextProps.post_id_privacy_policy.id || null,
+                ID_post_id_help: nextProps.post_id_help?.id || null,
+                ID_post_id_contact: nextProps.post_id_contact?.id || null,
+                ID_post_id_about: nextProps.post_id_about?.id || null,
+                ID_post_id_terms: nextProps.post_id_terms?.id || null,
+                ID_post_id_return_policy: nextProps.post_id_return_policy?.id || null,
+                ID_post_id_support_policy: nextProps.post_id_support_policy?.id || null,
+                ID_post_id_privacy_policy: nextProps.post_id_privacy_policy?.id || null,
 
 
             })

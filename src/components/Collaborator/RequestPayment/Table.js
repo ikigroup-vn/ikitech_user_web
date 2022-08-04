@@ -6,13 +6,13 @@ import { shallowEqual } from "../../../ultis/shallowEqual";
 import { format } from "../../../ultis/helpers";
 import ModalImg from "../ModalImg"
 import moment from "moment"
-
+import { getQueryParams } from "../../../ultis/helpers";
 class Table extends Component {
     constructor(props) {
         super(props);
         this.state = {
             arrayCheckBox: [],
-            from: 0,
+            from: getQueryParams("from") || 0,
             isLoading: false,
             searchValue: "",
             modalImg: "",
@@ -22,6 +22,7 @@ class Table extends Component {
 
         }
     }
+
     componentDidMount()
     {
         if(this.props.requestPayment?.length > 0)
@@ -342,6 +343,8 @@ class Table extends Component {
         this.setState({ searchValue: e.target.value });
     };
     render() {
+        console.log(getQueryParams("from"))
+
         var { arrayCheckBox, from, searchValue } = this.state
         var requestPayment = this.state.requestPayment;
         var length = typeof requestPayment != "undefined" && requestPayment.length > 0 ? requestPayment.length : 0
@@ -386,6 +389,7 @@ class Table extends Component {
 
                     </form>
                     <select
+                        value={from}
                         onChange={this.onchangeSelect}
                         style={{ maxWidth: "20%" }}
                         id="input"

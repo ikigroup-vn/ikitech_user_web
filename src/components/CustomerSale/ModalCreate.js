@@ -4,7 +4,7 @@ import * as dashboardAction from "../../actions/customer_sales";
 import * as placeAction from "../../actions/place";
 import { shallowEqual } from '../../ultis/shallowEqual';
 import Validator from '../../ultis/validator';
-import { isEmail, isEmpty } from "../../ultis/helpers"
+import { isEmail, isEmpty, randomString } from "../../ultis/helpers"
 import themeData from "../../ultis/theme_data";
 import Datetime from "react-datetime";
 import * as Types from "../../constants/ActionType";
@@ -32,6 +32,7 @@ class ModalCreate extends Component {
             txtEmail_branch: "",
             errors: {},
             error_email: { status: false, text: "" },
+            resetDate : ""
 
 
         }
@@ -215,7 +216,8 @@ class ModalCreate extends Component {
                     txtPhone_branch: "",
                     txtEmail_branch: "",
                     txtDateOfBirth : null,
-                    txtSex : ""
+                    txtSex : "",
+                    resetDate : randomString(10)
     
                 })
             });
@@ -353,11 +355,10 @@ class ModalCreate extends Component {
                                                 <div className="form-group">
                                                     <label htmlFor="fname">Ngày sinh</label>
                                                     <Datetime
-                                                        key={txtDateOfBirth}
+                                                        key={this.state.resetDate }
                                                         inputProps={{
                                                             placeholder: "Chưa cập nhật",
                                                         }}
-                                                        // initialValue={txtDateOfBirth}
                                                         value = {txtDateOfBirth}
                                                         onChange={this.onChangeDate}
                                                         dateFormat="DD-MM-YYYY"

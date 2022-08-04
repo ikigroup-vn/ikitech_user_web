@@ -114,12 +114,14 @@ class Form extends Component {
     var file = fileUpload
     if (typeof file !== "undefined" && file != "" && file != null) {
       // window.$('#file-quiz-question').fileinput('clear');
-      image =  await compressed(file);
+      image = await compressed(file);
       console.log(image)
 
-    } 
+    }
 
-
+    this.props.loadQuestion(
+      { type: Types.LOADING_CREATE_QUESTION, loadType: Types.LOADING }
+    )
     this.props.createQuestion(store_code, {
       question,
       answer_a,
@@ -154,9 +156,9 @@ class Form extends Component {
 
     } = this.state;
 
-    var { store_code } = this.props;
+    var { store_code, loading } = this.props;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
-
+    console.log(loading);
     return (
       <React.Fragment>
         <div
@@ -186,24 +188,23 @@ class Form extends Component {
                 </button>
               </div>
               <form
-                onSubmit={this.onSave}
                 role="form"
                 action="#"
                 method="post"
                 id="createForm"
               >
-                <div class="modal-body" style={{ padding: " 0 10px" , display : "flex" }}>
-                  <div style = {{width : "60%" , paddingRight : "10px"}}>
+                <div class="modal-body" style={{ padding: " 0 10px", display: "flex" }}>
+                  <div style={{ width: "60%", paddingRight: "10px" }}>
                     <div class="form-group">
                       <label for="product_name">Câu hỏi</label>
-                      
-                      <textarea  value={question}
+
+                      <textarea value={question}
                         placeholder="Nhập câu hỏi"
                         autocomplete="off"
                         onChange={this.onChange}
                         name="question" class="form-control" rows="3" ></textarea>
-                      
-                    
+
+
                     </div>
                     <div class="form-group">
                       <label for="product_name">Câu trả lời A</label>
@@ -259,9 +260,9 @@ class Form extends Component {
                     </div>
                     <div class="form-group">
                       <label for="product_name">Câu trả lời đúng</label>
-                      
-                      <select name="right_answer" value={right_answer} id="input" class="form-control"  onChange={this.onChange}
->
+
+                      <select name="right_answer" value={right_answer} id="input" class="form-control" onChange={this.onChange}
+                      >
                         <option value="A">A</option>
                         <option value="B">B</option>
 
@@ -269,111 +270,38 @@ class Form extends Component {
                         <option value="D">D</option>
 
                       </select>
-{/*                       
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="right_answer"
-                        value={right_answer}
-                        placeholder="Nhập câu trả lời"
-                        autocomplete="off"
-                        onChange={this.onChange}
-                        name="right_answer"
-                      /> */}
+
                     </div>
                   </div>
-                  <div style = {{paddingLeft : "10px",
+                  <div style={{
+                    paddingLeft: "10px",
 
-    "border-left": "1px solid #dcd0d0"}}>
-                   
-                   <div class="form-group">
-                  <label for="product_name" style={{ margin: 0 }}>
-                    Hình ảnh
-                  </label>
-                  <div className="file-loading">
-                    <input
-                      id="file-quiz-question"
-                      type="file"
-                      className="file"
-         
-                    />
+                    "border-left": "1px solid #dcd0d0"
+                  }}>
+
+                    <div class="form-group">
+                      <label for="product_name" style={{ margin: 0 }}>
+                        Hình ảnh
+                      </label>
+                      <div className="file-loading">
+                        <input
+                          id="file-quiz-question"
+                          type="file"
+                          className="file"
+
+                        />
+                      </div>
+                    </div>
                   </div>
-                </div>
-                  </div>
 
 
 
-                  {/* <div class="form-group">
-                  <label for="product_name">Nội dung</label>
-                  <div className="editor">
-                    <SunEditor
-                      onImageUploadBefore={handleImageUploadBefore}
-                      showToolbar={true}
-                      onChange={this.handleEditorChange}
-                      setDefaultStyle="height: auto"
 
-                      setOptions={{
-                        requestHeaders: {
-                          "X-Sample": "sample",
-                          "token": userLocalApi.getToken()
-
-                        },
-                        imageGalleryLoadURL: getApiImageStore(store_code),
-
-
-                        plugins: [
-                          imagePlugin,
-                          imageGallery,
-                          font,
-                          fontSize,
-                          formatBlock,
-                          paragraphStyle,
-                          blockquote,
-                          fontColor,
-                          textStyle,
-                          list,
-                          lineHeight,
-                          tablePlugin,
-                          linkPlugin,
-                          video,
-                          audio],
-
-                        buttonList: [
-                          [
-                            "undo",
-                            "redo",
-                            "font",
-                            "fontSize",
-                            "formatBlock",
-                            "paragraphStyle",
-                            "blockquote",
-                            "bold",
-                            "underline",
-                            "italic",
-                            "fontColor",
-                            "textStyle",
-                            "outdent",
-                            "align",
-                            "horizontalRule",
-                            "list",
-                            "lineHeight",
-                            "table",
-                            "link",
-                            "image",
-                            "video",
-                            "audio",
-                            "imageGallery",
-                            "fullScreen",
-                            "preview",
-                          ],
-                        ],
-                      }}
-                    />
-                  </div>
-                </div> */}
 
                 </div>
                 <div class="modal-footer">
+                  {this.props.loading !== Types.LOADING ? (
+                    <>
                   <button
                     type="button"
                     class="btn btn-default"
@@ -382,12 +310,17 @@ class Form extends Component {
                   >
                     Đóng
                   </button>
-                  <button
-                    type="submit"
-                    class="btn btn-warning"
-                  >
-                    Tạo
-                  </button>
+
+                      <button
+                        type="button"
+                        onClick={this.onSave}
+                        class="btn btn-warning"
+                      >
+                        Tạo
+                      </button>
+                      </>
+                  ) : "...LOADING"
+                  }
                 </div>
               </form>
             </div>
@@ -405,6 +338,7 @@ class Form extends Component {
 const mapStateToProps = (state) => {
   return {
     image: state.UploadReducers.blogImg.blog_img,
+    loading: state.trainReducers.train.loading
 
   };
 };
@@ -420,6 +354,10 @@ const mapDispatchToProps = (dispatch, props) => {
     createQuestion: (store_code, data, _this, resetModal, courseId, quizId) => {
       dispatch(trainAction.createQuestion(store_code, data, _this, resetModal, courseId, quizId));
     },
+    loadQuestion: (type) => {
+      dispatch(type);
+
+    }
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Form);

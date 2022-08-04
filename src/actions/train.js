@@ -368,6 +368,7 @@ export const createQuestion = (store_code,data , _this, resetModal , courseId , 
       }
     }    
     var image = res != null ? res.data.data : null
+    dispatch({type : Types.LOADING_CREATE_QUESTION , loadType : Types.NONE})
 
     dispatch({
       type: Types.SHOW_LOADING,
