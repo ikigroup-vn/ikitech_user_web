@@ -11,9 +11,9 @@ import CKEditor from "ckeditor4-react";
 import ModalUpload from "../ModalUpload";
 import * as Env from "../../../../ultis/default"
 import MomentInput from 'react-moment-input';
-import {formatNumber} from "../../../../ultis/helpers"
-import {isEmpty} from "../../../../ultis/helpers"
-import getChannel , {IKIPOS , IKITECH} from "../../../../ultis/channel"
+import { formatNumber } from "../../../../ultis/helpers"
+import { isEmpty } from "../../../../ultis/helpers"
+import getChannel, { IKIPOS, IKITECH } from "../../../../ultis/channel"
 class Form extends Component {
   constructor(props) {
     super(props);
@@ -34,8 +34,11 @@ class Form extends Component {
       is_limit: "hide",
       limit: 'hide',
       displayError: "hide",
-      saveListProducts : [],
-
+      saveListProducts: [],
+      discount_for: 0,
+      is_free_ship: true,
+      ship_discount_value: null,
+      has_discount_ship: false
 
     };
   }
@@ -50,8 +53,8 @@ class Form extends Component {
 
 
   }
-  onSaveProduct = () =>{
-    this.setState({saveListProducts : [...this.state.listProducts]})
+  onSaveProduct = () => {
+    this.setState({ saveListProducts: [...this.state.listProducts] })
   }
   componentWillReceiveProps(nextProps) {
     if (this.props.image !== nextProps.image) {
@@ -157,8 +160,7 @@ class Form extends Component {
       return
     }
     var state = this.state;
-    if(state.txtValueDiscount == null || !isEmpty( state.txtValueDiscount) )
-    {
+    if (state.txtValueDiscount == null || !isEmpty(state.txtValueDiscount)) {
       this.props.showError({
 
         type: Types.ALERT_UID_STATUS,
@@ -172,8 +174,7 @@ class Form extends Component {
       )
       return;
     }
-    if(state.txtDiscountType == 0 && formatNumber(state.txtValueLimitTotal) < formatNumber(state.txtValueDiscount))
-    {
+    if (state.txtDiscountType == 0 && formatNumber(state.txtValueLimitTotal) < formatNumber(state.txtValueDiscount)) {
       this.props.showError({
 
         type: Types.ALERT_UID_STATUS,
@@ -204,7 +205,7 @@ class Form extends Component {
     var form = {
       name: state.txtName,
       start_time: startTime == "Invalid date" ? null : startTime,
-      end_time: endTime== "Invalid date" ? null : endTime,
+      end_time: endTime == "Invalid date" ? null : endTime,
       amount: state.txtAmount == null ? state.txtAmount : formatNumber(state.txtAmount),
       product_ids: product_ids,
       description: state.txtContent,
@@ -234,7 +235,48 @@ class Form extends Component {
       delete form.product_ids
     }
     console.log(form)
-    this.props.createVoucher(store_code, form , this.checkStatus(startTime))
+    var { discount_for,
+      is_free_ship,
+      ship_discount_value,
+      has_discount_ship } = this.state
+
+    var dataShip = {}
+    var formatShipDiscount = ship_discount_value ? formatNumber(ship_discount_value) : null
+    if (has_discount_ship == true) {
+      if (discount_for == 0) {
+        dataShip = {
+          discount_for: discount_for,
+          is_free_ship: false,
+          ship_discount_value: formatShipDiscount,
+        }
+      }
+      else {
+        if (is_free_ship == true) {
+          dataShip = {
+            discount_for: discount_for,
+            is_free_ship: true,
+            ship_discount_value: null,
+          }
+        }
+        else {
+
+          dataShip = {
+            discount_for: discount_for,
+            is_free_ship: false,
+            ship_discount_value: formatShipDiscount,
+          }
+
+        }
+      }
+    }
+    else {
+      dataShip = {
+        discount_for: 0,
+        is_free_ship: false,
+        ship_discount_value: null,
+      }
+    }
+    this.props.createVoucher(store_code, {...form , ...dataShip}, this.checkStatus(startTime))
   };
 
   goBack = (e) => {
@@ -243,7 +285,7 @@ class Form extends Component {
     history.goBack();
   };
 
-  handleAddProduct = (product, id, type , onSave = null) => {
+  handleAddProduct = (product, id, type, onSave = null) => {
     console.log(product);
     var products = [...this.state.listProducts];
 
@@ -267,11 +309,11 @@ class Form extends Component {
         products.push(product)
       }
     }
-    if(onSave == true)
-    this.setState({ listProducts: products , saveListProducts : products })
+    if (onSave == true)
+      this.setState({ listProducts: products, saveListProducts: products })
     else
-    this.setState({ listProducts: products })
-    };
+      this.setState({ listProducts: products })
+  };
 
   setTypeDiscount = (e) => {
     var value = e.target.value
@@ -316,7 +358,12 @@ class Form extends Component {
       is_limit,
       limit,
       displayError,
-      saveListProducts
+      saveListProducts,
+      discount_for,
+      is_free_ship,
+      ship_discount_value,
+      has_discount_ship
+
     } = this.state;
     console.log(this.state);
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
@@ -330,7 +377,7 @@ class Form extends Component {
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 
               <div class="box-body">
-              {/* {getChannel() == IKITECH && 
+                {/* {getChannel() == IKITECH && 
               
               (
                 <React.Fragment>
@@ -430,11 +477,11 @@ class Form extends Component {
               <div class="box-body">
 
 
-         
+
 
                 <div class={`alert alert-danger ${displayError}`} role="alert">
-              Thời gian kết thúc phải sau thời gian bắt đầu
-            </div>
+                  Thời gian kết thúc phải sau thời gian bắt đầu
+                </div>
 
 
                 <div class="form-group">
@@ -537,6 +584,77 @@ class Form extends Component {
 
                 </div>
 
+                <div class="form-group">
+                  <div class="form-check">
+                    <input class="form-check-input" name="has_discount_ship" onChange={(e) => this.setState({ has_discount_ship: !has_discount_ship })} checked={has_discount_ship} type="checkbox" id="gridCheck" />
+                    <label class="form-check-label">
+                      Áp dụng giảm giá phí vận chuyển
+                    </label>
+                  </div>
+
+                </div>
+                {
+                  has_discount_ship === true && (
+                    <>
+                      {
+                        <select name="discount_for" value={discount_for} onChange={this.onChange} id="input" class="form-control"  >
+                          <option value="0">Giảm giá cho đơn hàng</option>
+                          <option value="1">Giảm giá cho phí vận chuyển</option>
+
+                        </select>
+
+                      }
+                      {
+                        discount_for == 1 && (
+                          <>
+                            <div class="form-group" style={{ marginTop: "10px" }}>
+                              <div class="form-check">
+                                <input class="form-check-input" name="is_free_ship" onChange={(e) => this.setState({ is_free_ship: !is_free_ship })} checked={is_free_ship} type="checkbox" />
+                                <label class="form-check-label">
+                                  Miễn phí vận chuyển
+                                </label>
+                              </div>
+
+                            </div>
+                            {
+                              is_free_ship == false && (
+                                <input
+                                  style={{ marginTop: "10px" }}
+                                  type="text"
+                                  class="form-control"
+                                  id="txtAmount"
+                                  name="ship_discount_value"
+                                  value={ship_discount_value}
+                                  placeholder="Nhập giá trị giảm"
+                                  autocomplete="off"
+                                  onChange={this.onChange}
+                                />
+                              )
+                            }
+                          </>
+                        )
+                      }
+                      {
+                        discount_for == 0 && (
+                          <input
+                            style={{ marginTop: "10px" }}
+                            type="text"
+                            class="form-control"
+                            id="txtAmount"
+                            name="ship_discount_value"
+                            value={ship_discount_value}
+                            placeholder="Nhập giá trị giảm"
+                            autocomplete="off"
+                            onChange={this.onChange}
+                          />
+                        )
+                      }
+                    </>
+                  )
+                }
+
+
+
               </div>
 
 
@@ -550,23 +668,23 @@ class Form extends Component {
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
               <div className={`${disableOfType}`} >
-              <Table handleAddProduct={this.handleAddProduct} products={saveListProducts}></Table>
+                <Table handleAddProduct={this.handleAddProduct} products={saveListProducts}></Table>
 
               </div>
-              {getChannel == IKITECH &&   <div class="form-group">
+              {getChannel == IKITECH && <div class="form-group">
                 <label for="product_name">Mô tả</label>
                 <CKEditor
                   data={txtContent}
                   onChange={this.onChangeDecription}
                 />
-              </div> }
-       
+              </div>}
+
             </div>
           </div>
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <div class="box-footer">
-              <button type = "submit" class="btn btn-info   btn-sm">
+                <button type="submit" class="btn btn-info   btn-sm">
                   <i class="fas fa-save"></i>  Tạo
 
                 </button>
@@ -587,7 +705,7 @@ class Form extends Component {
 
         <ModalUpload />
         <ModalListProduct
-                onSaveProduct = {this.onSaveProduct}
+          onSaveProduct={this.onSaveProduct}
 
           discounts={vouchers}
           handleAddProduct={this.handleAddProduct}
@@ -612,8 +730,8 @@ const mapDispatchToProps = (dispatch, props) => {
     showError: (error) => {
       dispatch(error)
     },
-    createVoucher: (store_code, voucher , status) => {
-      dispatch(voucherAction.createVoucher(store_code, voucher,status));
+    createVoucher: (store_code, voucher, status) => {
+      dispatch(voucherAction.createVoucher(store_code, voucher, status));
     },
     initialUpload: () => {
       dispatch(voucherAction.initialUpload())

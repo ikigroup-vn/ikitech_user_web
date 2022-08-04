@@ -885,6 +885,8 @@ class PostOrder extends Component {
             idCart,
         } = this.state;
         const length = oneCart.info_cart?.line_items.length;
+        const ship_discount_amount = oneCart.info_cart?.ship_discount_amount;
+        console.log(oneCart.info_cart)
         var handleKeyPress = {
             onKeyUp: (event) => {
                 // event.preventDefault()
@@ -1344,6 +1346,7 @@ class PostOrder extends Component {
                                                             >
                                                                 Chiết khấu (F6)
                                                             </div>
+                                                         
                                                             <button
                                                                 className="trigger-discount"
                                                                 onClick={() =>
@@ -1368,7 +1371,22 @@ class PostOrder extends Component {
                                                             </button>
                                                         </div>
                                                     </Popover>
-
+                                                    {ship_discount_amount > 0 && (
+                                                        <div className="row item-info">
+                                                            <div className="item-discount-name col-6">
+                                                                Giảm phí vận chuyển
+                                                            </div>
+                                                            <span
+                                                                className="col-6"
+                                                                style={{ textAlign: "end" }}
+                                                            >
+                                                                -{" "}
+                                                                {formatNoD(
+                                                                    ship_discount_amount
+                                                                )}
+                                                            </span>
+                                                        </div>
+                                                    )}
                                                     <div className="row item-info">
                                                         <div
                                                             className="title-price col-6"

@@ -1,7 +1,7 @@
 import { data } from "jquery";
 import React, { Component } from "react";
 import getChannel, { IKITECH, IKIPOS } from "../../ultis/channel";
-import { filter_var, filter_arr, format, formatNoD , formatNumber } from "../../ultis/helpers";
+import { filter_var, filter_arr, format, formatNoD, formatNumber } from "../../ultis/helpers";
 import Modal from "./ModalPaymentPos";
 import * as Types from "../../constants/ActionType"
 import { connect } from "react-redux";
@@ -14,8 +14,8 @@ class TotalBill extends Component {
         super(props);
         this.state = {
             check: false,
-            total_shipping_fee : ""
-            
+            total_shipping_fee: ""
+
         }
 
         this.onCallApi = debounce(this.props.updateShip, 800);
@@ -24,23 +24,22 @@ class TotalBill extends Component {
 
     }
 
-    componentDidMount()
-    {   
-        console.log("yeah",this.props)
-        this.setState({total_shipping_fee : this.props.bill.total_shipping_fee})
+    componentDidMount() {
+        console.log("yeah", this.props)
+        this.setState({ total_shipping_fee: this.props.bill.total_shipping_fee })
     }
 
 
-    
+
 
     // componentDidUpdate(){
     //     var {store_code , order_code} = this.props
     //     var {total_shipping_fee} = this.state
-     
+
     //         this.onCallApi ({
     //             total_shipping_fee : total_shipping_fee
     //         } , store_code , order_code)
-        
+
     // }
 
     // componentWillReceiveProps(nextProps){
@@ -50,34 +49,33 @@ class TotalBill extends Component {
     //     }
     // }
 
-    shouldComponentUpdate(nextProps , nextState){
-        var {store_code , order_code} = this.props
-        var {total_shipping_fee} = this.state
-        if(!shallowEqual(this.state , nextState))
-        {
-            this.onCallApi ({
-                total_shipping_fee : nextState.total_shipping_fee
-            } , store_code , order_code , true)
+    shouldComponentUpdate(nextProps, nextState) {
+        var { store_code, order_code } = this.props
+        var { total_shipping_fee } = this.state
+        if (!shallowEqual(this.state, nextState)) {
+            this.onCallApi({
+                total_shipping_fee: nextState.total_shipping_fee
+            }, store_code, order_code, true)
         }
 
         return true
     }
 
-    onChange = (e) =>{
+    onChange = (e) => {
 
 
         var value = formatNumber(e.target.value);
 
-        this.setState({total_shipping_fee : value})
+        this.setState({ total_shipping_fee: value })
 
 
         // var {store_code , order_code} = this.props
         // var {total_shipping_fee} = this.state
- 
+
         //     this.onCallApi ({
         //         total_shipping_fee : total_shipping_fee
         //     } , store_code , order_code)
-        
+
     }
 
 
@@ -113,6 +111,8 @@ class TotalBill extends Component {
         var voucher_discount_amount = bill.voucher_discount_amount || 0
         var balance_collaborator_used = bill.balance_collaborator_used || 0
         var discount = bill.discount || 0
+        var ship_discount_amount = bill.ship_discount_amount
+        console.log(ship_discount_amount)
         var combo_discount_amount = bill.combo_discount_amount || 0
         console.log(combo_discount_amount, combo_discount_amount > 0)
         var total_final = bill.total_final
@@ -143,23 +143,23 @@ class TotalBill extends Component {
                         <div className="sale_user_label bold bold group-total">
                             <div>Phí giao hàng:</div>
                             <input
-                            style={{
-                                width: "85px",
-                                "text-align": "end",
-                                "border-bottom": "1px solid",
-                            }}
+                                style={{
+                                    width: "85px",
+                                    "text-align": "end",
+                                    "border-bottom": "1px solid",
+                                }}
                                 type="text"
                                 name="import_price"
                                 onChange={this.onChange}
                                 id="import_prices"
                                 defaultValue={total_shipping_fee}
                                 value={formatNoD(this.state.total_shipping_fee)}
-                                // {...handleKeyPress}
-                                // class="col-6 text-input-pos"
-                                // value={formatNoD(
-                                //     removeSignNumber(this.state.priceCustomer)
-                                // )}
-                                // onChange={this.handChange}
+                            // {...handleKeyPress}
+                            // class="col-6 text-input-pos"
+                            // value={formatNoD(
+                            //     removeSignNumber(this.state.priceCustomer)
+                            // )}
+                            // onChange={this.handChange}
                             ></input>
                             {/* <span>+&nbsp;{format(total_shipping_fee)}</span> */}
                         </div>
@@ -203,7 +203,14 @@ class TotalBill extends Component {
                         </div>
                     </div>
                     }
+                    {ship_discount_amount > 0 && <div id={`item_fee"}`}>
+                        <div className="sale_user_label bold bold group-total">
+                            <div> Giảm phí vận chuyển:</div>
 
+                            <span>-&nbsp;{format(ship_discount_amount)}</span>
+                        </div>
+                    </div>
+                    }
                     {bill.bonus_points_amount_used != null && bill.bonus_points_amount_used != 0 && <div>
                         <p className="sale_user_label bold bold group-total">
                             <div> Giảm giá xu:</div>
@@ -414,8 +421,8 @@ const mapDispatchToProps = (dispatch, props) => {
 
         },
 
-        updateShip : (data , store_code , order_code , noneLoading) =>{
-            dispatch(updateOrder(data , store_code , order_code , noneLoading))
+        updateShip: (data, store_code, order_code, noneLoading) => {
+            dispatch(updateOrder(data, store_code, order_code, noneLoading))
         }
 
     };
