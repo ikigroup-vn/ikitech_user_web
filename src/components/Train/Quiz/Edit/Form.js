@@ -47,7 +47,9 @@ class Form extends Component {
       txtMinute: "",
       auto_change_order_questions: false,
       auto_change_order_answer: false,
-      id: ""
+      id: "",
+      show : 1,
+
     };
   }
 
@@ -63,6 +65,7 @@ class Form extends Component {
         txtMinute: quiz.minute,
         auto_change_order_questions: quiz.auto_change_order_questions,
         auto_change_order_answer: quiz.auto_change_order_answer,
+        show : quiz.show == true ? 1 : 0,
 
       })
     }
@@ -109,7 +112,8 @@ class Form extends Component {
       txtMinute,
       auto_change_order_questions,
       auto_change_order_answer,
-      id
+      id,
+      show
     } = this.state
     if (txtTitle == null || !isEmpty(txtTitle)) {
       this.props.showError({
@@ -144,7 +148,9 @@ class Form extends Component {
       short_description: txtSumary,
       minute: txtMinute,
       auto_change_order_questions,
-      auto_change_order_answer
+      auto_change_order_answer,
+      show : Number(show) == 1 ? true : false
+
     }, store_code, null, function () {
       window.$(".modal").modal("hide");
 
@@ -161,8 +167,8 @@ class Form extends Component {
       txtSumary,
       txtMinute,
       auto_change_order_questions,
-      auto_change_order_answer
-
+      auto_change_order_answer,
+      show
     } = this.state;
 
     var { store_code } = this.props;
@@ -230,6 +236,20 @@ class Form extends Component {
                       name="txtMinute"
                     />
                   </div>
+                  <div class="form-group">
+                  <label for="product_name">Trạng thái</label>
+
+                  <select
+                    name="show"
+                    value={show}
+                    onChange={this.onChange}
+                    id="input"
+                    class="form-control"
+                  >
+                    <option value="1">Hiển thị</option>
+                    <option value="0">Tạm ẩn</option>
+                  </select>
+                </div>
                   <div class="form-group">
                     <label for="product_name">Mô tả ngắn</label>
 

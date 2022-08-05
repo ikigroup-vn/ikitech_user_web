@@ -157,6 +157,7 @@ class CustomerSale extends Component {
           workbook.Sheets[sheet] ,  {
             defval: ""        }
         );
+        console.log(rowObject)
         _this.setState({ importData: rowObject });
       });
     };

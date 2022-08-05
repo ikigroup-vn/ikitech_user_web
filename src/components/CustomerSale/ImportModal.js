@@ -70,13 +70,13 @@ class ImportModal extends Component {
 
         if (typeof value == "string" && value != null && value != "") {
 
-          if (!key.includes("STT")) {
+          // if (!key.includes("STT")) {
             var name = ""
             if (key != null) {
               if (key.includes("tên") || key.includes("Tên")) {
                 name = "class-name-product"
               }
-            }
+            
             object.push(
               <td className={name} >
                 <div style={{ maxHeight: "300px", overflow: "auto", maxWidth: "250px" }}>
@@ -109,8 +109,8 @@ class ImportModal extends Component {
     }
     if (data.length > 0) {
 
-      Object.entries({name : "" , phone_number : "" ,date_of_birth  : "", email : "" , address : ""}).forEach(([key, value], index) => {
-        if (!key.includes("STT")) {
+      Object.entries(data[0]).forEach(([key, value], index) => {
+        // if (!key.includes("STT")) {
           result.push(
             <th>
 
@@ -129,7 +129,7 @@ class ImportModal extends Component {
             </th>
 
           );
-        }
+        // }
       })
     } else {
       return result;
@@ -186,9 +186,10 @@ class ImportModal extends Component {
         if (this.checkExsit(type) == true) {
           for (const item of importData) {
             var newItem = {}
+            console.log(item)
             Object.entries(item).forEach(([key, value], index) => {
               console.log(key, value,index , type , newItem)
-              if (type["type" + index] !== "" && typeof type["type" + index] !== "undefined") {
+              if (type["type" + index] !== "" && typeof type["type" + index]  !== "undefined" &&  key) {
                 if(type["type" + index] == "date_of_birth")
                 newItem[type["type" + index]] = moment(value).format("YYYY-MM-DD")
 
@@ -296,7 +297,6 @@ class ImportModal extends Component {
                 <table class="table table-responsive table-border" style={{ fontSize: "13px" }}>
                   <thead>
                     <tr>
-                      <th>STT</th>
                       {this.showHeaderData(importData)}
                     </tr>
 

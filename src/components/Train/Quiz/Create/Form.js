@@ -47,6 +47,7 @@ class Form extends Component {
       txtMinute : "",
       auto_change_order_questions : false,
       auto_change_order_answer : false,
+      show : 1,
     };
   }
 
@@ -88,7 +89,8 @@ class Form extends Component {
       txtSumary,
       txtMinute,
       auto_change_order_questions,
-      auto_change_order_answer
+      auto_change_order_answer,
+      show
 
     } = this.state;
 
@@ -125,7 +127,9 @@ class Form extends Component {
       short_description: txtSumary,
       minute : txtMinute,
       auto_change_order_questions,
-      auto_change_order_answer
+      auto_change_order_answer,
+      show : Number(show) == 1 ? true : false
+
 
     },this, function(){
       window.$(".modal").modal("hide");
@@ -143,7 +147,8 @@ class Form extends Component {
       txtSumary,
       txtMinute,
       auto_change_order_questions,
-      auto_change_order_answer
+      auto_change_order_answer,
+      show
 
     } = this.state;
 
@@ -211,6 +216,21 @@ class Form extends Component {
                     onChange={this.onChange}
                     name="txtMinute"
                   />
+                </div>
+
+                <div class="form-group">
+                  <label for="product_name">Trạng thái</label>
+
+                  <select
+                    name="show"
+                    value={show}
+                    onChange={this.onChange}
+                    id="input"
+                    class="form-control"
+                  >
+                    <option value="1">Hiển thị</option>
+                    <option value="0">Tạm ẩn</option>
+                  </select>
                 </div>
 
                 <div class="form-group">

@@ -6604,6 +6604,14 @@ img {
 .gender>.radio>label {
     padding: 0px 10px 0px 10px;
 }
+.discount-for>.radio>label {
+    padding: 0px;
+    margin-right: 10px;
+}
+.discount-for input {
+    vertical-align: middle;
+}
+
 
 .table {
     color: black !important

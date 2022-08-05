@@ -204,7 +204,7 @@ class Form extends Component {
     }
 
     var state = this.state;
-    if (state.txtValueDiscount == null || !isEmpty(state.txtValueDiscount)) {
+    if ((state.txtValueDiscount == null || !isEmpty(state.txtValueDiscount)) && discount_for == 0) {
       this.props.showError({
 
         type: Types.ALERT_UID_STATUS,
@@ -218,7 +218,10 @@ class Form extends Component {
       )
       return;
     }
-    if(state.txtDiscountType == 0 && formatNumber(state.txtValueLimitTotal) < formatNumber(state.txtValueDiscount))
+    if(   state.txtDiscountType == 0 &&
+      formatNumber(state.txtValueLimitTotal) <
+        formatNumber(state.txtValueDiscount)
+        && discount_for == 0)
     {
       this.props.showError({
 
@@ -302,38 +305,28 @@ class Form extends Component {
   
       var dataShip = {}
       var formatShipDiscount = ship_discount_value ? formatNumber(ship_discount_value) : null
-      if (has_discount_ship == true) {
-        if (discount_for == 0) {
+      if (discount_for == 1) {
+        if (is_free_ship == true) {
+          dataShip = {
+            discount_for: discount_for,
+            is_free_ship: true,
+            ship_discount_value: null,
+            discount_type : null,
+            value_discount : null
+          };
+        } else {
           dataShip = {
             discount_for: discount_for,
             is_free_ship: false,
             ship_discount_value: formatShipDiscount,
-          }
-        }
-        else {
-          if (is_free_ship == true) {
-            dataShip = {
-              discount_for: discount_for,
-              is_free_ship: true,
-              ship_discount_value: null,
-            }
-          }
-          else {
-  
-            dataShip = {
-              discount_for: discount_for,
-              is_free_ship: false,
-              ship_discount_value: formatShipDiscount,
-            }
-  
-          }
+            discount_type : null,
+            value_discount : null
+          };
         }
       }
-      else {
+      else{
         dataShip = {
-          discount_for: 0,
-          is_free_ship: false,
-          ship_discount_value: null,
+          discount_for: discount_for,
         }
       }
 
@@ -620,128 +613,62 @@ class Form extends Component {
                   />
                 </div>
 
-                <div class="form-group">
-                  <label for="product_name">Loại giảm giá</label>
-
-
-                  <select value={txtDiscountType} name="" id="input" class="form-control" onChange={this.setTypeDiscount} >
-                    <option value="0">Giảm giá cố định</option>
-                    <option value="1">Giảm giá theo %</option>
-
-                  </select>
-
-                </div>
-                <div class={`form-group ${is_type_discount}`}>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="txtValueDiscount"
-                    name="txtValueDiscount"
-                    value={txtValueDiscount}
-                    placeholder="Nhập giá trị bạn muốn giảm (đ)"
-                    autocomplete="off"
+                <div className="form-group discount-for">
+                  <label htmlFor="discount_for"></label>
+                  <div
+                    style={{
+                      display: "flex",
+                      "justify-content": "space-between",
+                    }}
+                    className="radio discount-for"
                     onChange={this.onChange}
-                  />
-                </div>
-
-                <div className={`${is_limit}`}>
-                  <div class="form-group">
-                    <input
-                      type="text"
-                      class="form-control"
-                      id="txtValueDiscount"
-                      name="txtValueDiscount"
-                      value={txtValueDiscount}
-                      placeholder="Nhập giá trị bạn muốn giảm (%)"
-                      autocomplete="off"
-                      onChange={this.onChange}
-                    />
-
-                  </div>
-                  <div class="form-group">
-                    <label for="product_name">Giảm tối đa</label>
-
-
-                    <div class="checkbox" onChange={this.onChangeLimit}>
-                      <label>
-                        <input type="radio" checked={checkLimit} value="0" name="limit" />
-                        Chọn mức giảm
-                      </label>
-                      <label style={{ marginLeft: "20px" }}>
-                        <input type="radio" checked={!checkLimit} value="1" name="limit" />
-                        Không giới hạn
-                      </label>
-                    </div>
-
-
-                  </div>
-                  <div className={`${limit}`}>
-                    <input
-
-                      type="text"
-                      class="form-control"
-                      id="txtMaxValueDiscount"
-                      name="txtMaxValueDiscount"
-                      value={txtMaxValueDiscount}
-                      placeholder="Nhập giá trị bạn muốn giảm"
-                      autocomplete="off"
-                      onChange={this.onChange}
-                    />
-                  </div>
-
-                </div>
-                <div class="form-group">
-                  <div class="form-check">
-                    <input class="form-check-input" name="has_discount_ship" onChange={(e) => this.setState({ has_discount_ship: !has_discount_ship })} checked={has_discount_ship} type="checkbox" id="gridCheck" />
-                    <label class="form-check-label">
-                      Áp dụng giảm giá phí vận chuyển
+                  >
+                    <label>
+                      <input
+                        type="radio"
+                        name="discount_for"
+                        checked={discount_for == 0 ? true : false}
+                        className="discount_for"
+                        id="bill"
+                        value="0"
+                      />
+                      {"  "}Giảm giá cho đơn hàng
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="discount_for"
+                        checked={discount_for == 1 ? true : false}
+                        className="discount_for"
+                        id="ship"
+                        value="1"
+                      />
+                      {"  "} Giảm giá cho vận chuyển
                     </label>
                   </div>
-
                 </div>
-                {
-                  has_discount_ship === true && (
-                    <>
-                      {
-                        <select name="discount_for" value={discount_for} onChange={this.onChange} id="input" class="form-control"  >
-                          <option value="0">Giảm giá cho đơn hàng</option>
-                          <option value="1">Giảm giá cho phí vận chuyển</option>
 
-                        </select>
-
-                      }
-                      {
-                        discount_for == 1 && (
-                          <>
-                            <div class="form-group" style={{ marginTop: "10px" }}>
-                              <div class="form-check">
-                                <input class="form-check-input" name="is_free_ship" onChange={(e) => this.setState({ is_free_ship: !is_free_ship })} checked={is_free_ship} type="checkbox" />
-                                <label class="form-check-label">
-                                  Miễn phí vận chuyển
-                                </label>
-                              </div>
-
-                            </div>
-                            {
-                              is_free_ship == false && (
-                                <input
-                                  style={{ marginTop: "10px" }}
-                                  type="text"
-                                  class="form-control"
-                                  id="txtAmount"
-                                  name="ship_discount_value"
-                                  value={ship_discount_value}
-                                  placeholder="Nhập giá trị giảm"
-                                  autocomplete="off"
-                                  onChange={this.onChange}
-                                />
-                              )
-                            }
-                          </>
-                        )
-                      }
-                      {
-                        discount_for == 0 && (
+                {discount_for == 1 && (
+                  <>
+                    {discount_for == 1 && (
+                      <>
+                        <div class="form-group" style={{ marginTop: "10px" }}>
+                          <div class="form-check">
+                            <input
+                              class="form-check-input"
+                              name="is_free_ship"
+                              onChange={(e) =>
+                                this.setState({ is_free_ship: !is_free_ship })
+                              }
+                              checked={is_free_ship}
+                              type="checkbox"
+                            />
+                            <label class="form-check-label">
+                              Miễn phí vận chuyển
+                            </label>
+                          </div>
+                        </div>
+                        {is_free_ship == false && (
                           <input
                             style={{ marginTop: "10px" }}
                             type="text"
@@ -753,11 +680,83 @@ class Form extends Component {
                             autocomplete="off"
                             onChange={this.onChange}
                           />
-                        )
-                      }
-                    </>
-                  )
-                }
+                        )}
+                      </>
+                    )}
+                  </>
+                )}
+
+                {discount_for == 0 && (
+                  <>
+                    <div class="form-group">
+                      <label for="product_name">Loại giảm giá</label>
+
+                      <select
+                      value={txtDiscountType}
+                        name=""
+                        id="input"
+                        class="form-control"
+                        onChange={this.setTypeDiscount}
+                      >
+                        <option value="0">Giảm giá cố định</option>
+                        <option value="1">Giảm giá theo %</option>
+                      </select>
+                    </div>
+                    <div class={`form-group ${is_type_discount}`}>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="txtValueDiscount"
+                        name="txtValueDiscount"
+                        value={txtValueDiscount}
+                        placeholder="Nhập giá trị bạn muốn giảm (đ)"
+                        autocomplete="off"
+                        onChange={this.onChange}
+                      />
+                    </div>
+
+                    <div className={`${is_limit}`}>
+                      <div class="form-group">
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="txtValueDiscount"
+                          name="txtValueDiscount"
+                          value={txtValueDiscount}
+                          placeholder="Nhập giá trị bạn muốn giảm (%)"
+                          autocomplete="off"
+                          onChange={this.onChange}
+                        />
+                      </div>
+                      <div class="form-group">
+                        <label for="product_name">Giảm tối đa</label>
+
+                        <div class="checkbox" onChange={this.onChangeLimit}>
+                          <label>
+                            <input type="radio" value="0" name="limit" />
+                            Chọn mức giảm
+                          </label>
+                          <label style={{ marginLeft: "20px" }}>
+                            <input type="radio" value="1" name="limit" />
+                            Không giới hạn
+                          </label>
+                        </div>
+                      </div>
+                      <div className={`${limit}`}>
+                        <input
+                          type="text"
+                          class="form-control"
+                          id="txtMaxValueDiscount"
+                          name="txtMaxValueDiscount"
+                          value={txtMaxValueDiscount}
+                          placeholder="Nhập giá trị bạn muốn giảm"
+                          autocomplete="off"
+                          onChange={this.onChange}
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
 
 

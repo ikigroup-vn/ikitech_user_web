@@ -110,7 +110,7 @@ class Table extends Component {
             >
               <td>{per_page * (current_page - 1) + (index + 1)}</td>
               <td>
-                <Link to={action_create ? `/order/detail/chinhbv/${data.references_value}` : "#"}>{data.code}</Link>
+                <Link to={action_create ? `/order/detail/${store_code}/${data.references_value}` : "#"}>{data.code}</Link>
               </td>
               <td>
                 {data.is_revenue ? (

@@ -271,6 +271,18 @@ export const createMultiCustomerSale = (store_code, data) => {
         });
 
 
+        customerApi
+        .fetchAllCustomerSale(store_code, 1)
+        .then((res) => {
+
+          if (res.data.code !== 401)
+            dispatch({
+              type: Types.FETCH_ALL_CUSTOMER_SALE,
+              data: res.data.data,
+            });
+        });
+
+
       })
       .catch(function (error) {
         dispatch({

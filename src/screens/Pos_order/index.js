@@ -569,9 +569,10 @@ class PostOrder extends Component {
         if (
             !shallowEqual(nextProps.oneCart, this.props.oneCart) &&
             this.props.loadingHandleChangeQuantity == false
+            && typeof nextProps.oneCart != "undefined"
         ) {
             var discount = {}
-            if(nextProps.oneCart.id != this.props.oneCart.id)
+            if(nextProps.oneCart?.id != this.props.oneCart?.id)
             {
                 discount = {discount: nextProps.oneCart.discount}
                 this.setState({  priceCustomer: nextProps.oneCart.info_cart.total_final,

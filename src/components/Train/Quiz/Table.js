@@ -70,7 +70,8 @@ class Table extends Component {
 
       result = courses.map((data, index) => {
         var image_url = data.image_url == null || data.image_url == "" ? Env.IMG_NOT_FOUND : data.image_url
-
+        var show = data.show == true ? "Đang hiển thị" : "Tạm ẩn"
+        var showStatus = data.show == true ? "success" : "secondary"
         return (
           <tr className="hover-product" onClick={(e) => this.changePage(store_code, data.id,e)}>
 
@@ -83,7 +84,14 @@ class Table extends Component {
 
             <td style = {{maxWidth : "250px"}}>
           {data.short_description?.length > 120 ? data.short_description?.slice(0,120) + "..." : data.short_description}</td>
-
+          <td>
+              {" "}
+              <h5>
+                <span class={`badge badge-${showStatus}`}>
+                  {show}
+                </span>
+              </h5>
+            </td>
 
             <td className = "three-btn-group" style = {{maxWidth : "150px"}}>
               {/* <Link
