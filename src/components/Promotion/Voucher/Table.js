@@ -102,7 +102,10 @@ filterColDiscount = (data) => {
           }
         }
         else{
-          is_free_ship = true;
+          if(data.is_free_ship === true)
+          {
+            is_free_ship = true
+          }
           value_discount = formatNoD(data.ship_discount_value)
         }
 
