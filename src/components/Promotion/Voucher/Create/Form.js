@@ -35,7 +35,7 @@ class Form extends Component {
       limit: "hide",
       displayError: "hide",
       saveListProducts: [],
-      is_free_ship: true,
+      is_free_ship: false,
       ship_discount_value: null,
       discount_for: 0,
     };
@@ -516,7 +516,7 @@ class Form extends Component {
                   <div
                     style={{
                       display: "flex",
-                      "justify-content": "space-between",
+                      flexDirection : "column"
                     }}
                     className="radio discount-for"
                     onChange={this.onChange}

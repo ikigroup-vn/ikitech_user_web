@@ -10,7 +10,8 @@ import CurrencyInput from "react-currency-input-field";
 import Select from "react-select";
 import "./style.css";
 import themeData from "../../ultis/theme_data";
-
+import { Link } from "react-router-dom";
+import history from "../../history";
 class ModalDetail extends Component {
   constructor(props) {
     super(props);
@@ -167,9 +168,19 @@ class ModalDetail extends Component {
   }
 
   render() {
-    const { revenueExpendituresDetail, revenue_expenditure_id } = this.props;
+    const { revenueExpendituresDetail, revenue_expenditure_id, store_code } =
+      this.props;
+    var action_create =
+      revenueExpendituresDetail.action_create == 9 ||
+      revenueExpendituresDetail.action_create == 5 ||
+      revenueExpendituresDetail.action_create == 6 ||
+      revenueExpendituresDetail.action_create == 7 ||
+      revenueExpendituresDetail.action_create == 8 ||
+      revenueExpendituresDetail.action_create == 10 ||
+      revenueExpendituresDetail.action_create == 11
+        ? true
+        : false;
 
-    console.log(revenueExpendituresDetail);
     return (
       <div
         class="modal fade"
@@ -181,7 +192,10 @@ class ModalDetail extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+            <div
+              class="modal-header"
+              style={{ backgroundColor: themeData().backgroundColor }}
+            >
               <h4 class="modal-title">{revenueExpendituresDetail?.code}</h4>
 
               <button
@@ -201,6 +215,29 @@ class ModalDetail extends Component {
               id="createForm"
             >
               <div class="modal-body">
+                {action_create === true && (
+                  <div class="" >
+                    <label style={{ cursor: "pointer" }}>
+                      {" "}
+                      <a
+                      style={{color : "green" ,fontWeight : 500 }}
+                          onClick={()=>{
+                            window.$(".modal").modal("hide");
+
+                            history.push(
+                              action_create
+                              ? `/order/detail/${store_code}/${revenueExpendituresDetail.references_value}`
+                              : "#"
+                            )
+                          }}
+                      >
+                        Mã đơn hàng:{" "}
+                        #{revenueExpendituresDetail.references_value}
+                      </a>
+                    </label>
+                  </div>
+                )}
+
                 <div class="form-group">
                   <label>Hình thức thanh toán</label>
 

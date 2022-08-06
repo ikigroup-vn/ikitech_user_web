@@ -105,7 +105,7 @@ class Form extends Component {
         isLoading: true,
         loadCript: true,
         discount_for: voucher.discount_for,
-        is_free_ship: voucher.is_free_ship,
+        is_free_ship: (voucher.is_free_ship == null || voucher.is_free_ship == false) ? false : true,
         ship_discount_value: voucher.ship_discount_value,
         has_discount_ship: voucher.discount_for !== null ? true : false
       });
@@ -618,7 +618,7 @@ class Form extends Component {
                   <div
                     style={{
                       display: "flex",
-                      "justify-content": "space-between",
+                      flexDirection : "column"
                     }}
                     className="radio discount-for"
                     onChange={this.onChange}

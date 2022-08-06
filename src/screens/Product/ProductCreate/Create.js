@@ -26,7 +26,7 @@ class ProductCreate extends Component {
       total: "",
       isError: false,
       disableDistribute: false,
-      disableInventory: false
+      disableInventory: false,
     };
   }
 
@@ -86,11 +86,10 @@ class ProductCreate extends Component {
     });
   };
 
-
   checkDistribute = (status, _status) => {
     console.log(status, _status);
-    this.setState({ disableDistribute: status, disableInventory: _status })
-  }
+    this.setState({ disableDistribute: status, disableInventory: _status });
+  };
 
   postProduct = () => {
     var { store_code } = this.props;
@@ -99,8 +98,6 @@ class ProductCreate extends Component {
     form.index_image_avatar = 0;
 
     console.log(form.list_distribute);
-
-
 
     if (typeof form.list_distribute != "undefined") {
       if (typeof form.list_distribute[0] != "undefined") {
@@ -113,16 +110,16 @@ class ProductCreate extends Component {
                   const price =
                     element.price != null
                       ? element.price
-                        .toString()
-                        .replace(/,/g, "")
-                        .replace(/\./g, "")
+                          .toString()
+                          .replace(/,/g, "")
+                          .replace(/\./g, "")
                       : 0;
                   const import_price =
                     element.import_price != null
                       ? element.import_price
-                        .toString()
-                        .replace(/,/g, "")
-                        .replace(/\./g, "")
+                          .toString()
+                          .replace(/,/g, "")
+                          .replace(/\./g, "")
                       : 0;
                   const barcode =
                     element.barcode != null
@@ -131,16 +128,16 @@ class ProductCreate extends Component {
                   const quantity_in_stock =
                     element.quantity_in_stock != null
                       ? element.quantity_in_stock
-                        .toString()
-                        .replace(/,/g, "")
-                        .replace(/\./g, "")
+                          .toString()
+                          .replace(/,/g, "")
+                          .replace(/\./g, "")
                       : 0;
                   const cost_of_capital =
                     element.cost_of_capital != null
                       ? element.cost_of_capital
-                        .toString()
-                        .replace(/,/g, "")
-                        .replace(/\./g, "")
+                          .toString()
+                          .replace(/,/g, "")
+                          .replace(/\./g, "")
                       : 0;
                   form.list_distribute[0].element_distributes[index].price =
                     price;
@@ -170,23 +167,23 @@ class ProductCreate extends Component {
                             const price =
                               _element.price != null
                                 ? _element.price
-                                  .toString()
-                                  .replace(/,/g, "")
-                                  .replace(/\./g, "")
+                                    .toString()
+                                    .replace(/,/g, "")
+                                    .replace(/\./g, "")
                                 : 0;
                             const import_price =
                               _element.import_price != null
                                 ? _element.import_price
-                                  .toString()
-                                  .replace(/,/g, "")
-                                  .replace(/\./g, "")
+                                    .toString()
+                                    .replace(/,/g, "")
+                                    .replace(/\./g, "")
                                 : 0;
                             const cost_of_capital =
                               _element.cost_of_capital != null
                                 ? _element.cost_of_capital
-                                  .toString()
-                                  .replace(/,/g, "")
-                                  .replace(/\./g, "")
+                                    .toString()
+                                    .replace(/,/g, "")
+                                    .replace(/\./g, "")
                                 : 0;
                             const barcode =
                               _element.barcode != null
@@ -195,9 +192,9 @@ class ProductCreate extends Component {
                             const quantity_in_stock =
                               _element.quantity_in_stock != null
                                 ? _element.quantity_in_stock
-                                  .toString()
-                                  .replace(/,/g, "")
-                                  .replace(/\./g, "")
+                                    .toString()
+                                    .replace(/,/g, "")
+                                    .replace(/\./g, "")
                                 : 0;
 
                             form.list_distribute[0].element_distributes[
@@ -432,9 +429,8 @@ class ProductCreate extends Component {
       return;
     }
     if (this.state.checkDistribute == false) {
-      delete form.list_distribute
+      delete form.list_distribute;
     }
-
 
     this.props.postProductV2(store_code, branch_id, form);
   };
@@ -543,9 +539,10 @@ class ProductCreate extends Component {
             <div class="row">
               <div class="col-lg-6">
                 <div>
-                  <InfoProduct 
-                  store_code = {store_code}
-                  checkDistribute={this.checkDistribute}
+                  <InfoProduct
+                    badges={this.props.badges}
+                    store_code={store_code}
+                    checkDistribute={this.checkDistribute}
                     total={total}
                     handleDataFromInfo={this.handleDataFromInfo}
                     category_product={category_product}
@@ -557,17 +554,15 @@ class ProductCreate extends Component {
                 class="col-lg-6"
                 style={{ borderLeft: "0.5px solid #e6dfdf" }}
               >
-                         <div>
+                <div>
                   <Video
-                                    store_code = {store_code}
-
-                                    handleDataFromProductVideo={this.handleDataFromProductVideo}
+                    store_code={store_code}
+                    handleDataFromProductVideo={this.handleDataFromProductVideo}
                   />
                 </div>
                 <div>
                   <StoreImage
-                                    store_code = {store_code}
-
+                    store_code={store_code}
                     handleDataFromAvatarImg={this.handleDataFromAvatarImg}
                     handleDataFromProductImg={this.handleDataFromProductImg}
                   />
@@ -577,33 +572,38 @@ class ProductCreate extends Component {
           </div>
         </div>
 
-      {getChannel() == IKITECH &&        <div class="card mb-4">
-          <div class="card-body" style={{ padding: "0.8rem" }}>
-            <div class="row">
-              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <button
-                  class="btn btn-primary btn-sm"
-                  onClick={this.postProduct}
-                >
-                  <i class="fa fa-plus"></i> Tạo
-                </button>
-                <a
-                  style={{ marginLeft: "10px" }}
-                  onClick={this.goBack} class={`btn btn-warning btn-sm color-white `}
-                >
-                  <i class="fa fa-arrow-left"></i> Trở về
-                </a>
-          
+        {getChannel() == IKITECH && (
+          <div class="card mb-4">
+            <div class="card-body" style={{ padding: "0.8rem" }}>
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  <button
+                    class="btn btn-primary btn-sm"
+                    onClick={this.postProduct}
+                  >
+                    <i class="fa fa-plus"></i> Tạo
+                  </button>
+                  <a
+                    style={{ marginLeft: "10px" }}
+                    onClick={this.goBack}
+                    class={`btn btn-warning btn-sm color-white `}
+                  >
+                    <i class="fa fa-arrow-left"></i> Trở về
+                  </a>
+                </div>
               </div>
             </div>
           </div>
-        </div>}
+        )}
 
         <div
-          class={`card mb-4 ${typeof isShowAttr == "undefined" || isShowAttr == false || getChannel() == IKIPOS
-            ? "hide"
-            : ""
-            }`}
+          class={`card mb-4 ${
+            typeof isShowAttr == "undefined" ||
+            isShowAttr == false ||
+            getChannel() == IKIPOS
+              ? "hide"
+              : ""
+          }`}
         >
           <div class="card-header title_content">Thuộc tính sản phẩm</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>
@@ -633,7 +633,6 @@ class ProductCreate extends Component {
                   <div>
                     <div class="card-body" style={{ padding: "0.8rem" }}>
                       <Distribute
-
                         disableDistribute={disableDistribute}
                         disableInventory={disableInventory}
                         onChangeQuantityStock={this.onChangeQuantityStock}
@@ -647,18 +646,19 @@ class ProductCreate extends Component {
           </div>
         )}
 
-          {getChannel() == IKITECH &&    <div class="card mb-4">
-          <div class="card-header title_content">Nội dung chi tiết</div>
-          <div class="card-body" style={{ padding: "0.8rem" }}>
-            <div class="row">
-              <ContentDetail
-                      store_code={store_code}
-
-                handleDataFromContent={this.handleDataFromContent}
-              />
+        {getChannel() == IKITECH && (
+          <div class="card mb-4">
+            <div class="card-header title_content">Nội dung chi tiết</div>
+            <div class="card-body" style={{ padding: "0.8rem" }}>
+              <div class="row">
+                <ContentDetail
+                  store_code={store_code}
+                  handleDataFromContent={this.handleDataFromContent}
+                />
+              </div>
             </div>
           </div>
-        </div>}
+        )}
 
         {getChannel() == IKITECH && (
           <div class="card mb-4">
@@ -693,11 +693,11 @@ class ProductCreate extends Component {
                 </button>
                 <a
                   style={{ marginLeft: "10px" }}
-                  onClick={this.goBack} class={`btn btn-warning btn-sm color-white `}
+                  onClick={this.goBack}
+                  class={`btn btn-warning btn-sm color-white `}
                 >
                   <i class="fa fa-arrow-left"></i> Trở về
                 </a>
-          
               </div>
             </div>
           </div>
@@ -713,6 +713,7 @@ const mapStateToProps = (state) => {
     attributeP: state.attributePReducers.attribute_product.allAttrbute,
     category_product: state.categoryPReducers.category_product.allCategoryP,
     alert: state.productReducers.alert.alert_uid,
+    badges: state.badgeReducers.allBadge,
 
     blogs: state.blogReducers.blog.allBlog,
 

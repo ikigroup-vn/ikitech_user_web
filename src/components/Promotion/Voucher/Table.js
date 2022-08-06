@@ -87,19 +87,29 @@ filterColDiscount = (data) => {
 
       result = vouchers.map((data, index) => {
         var value_discount = ""
-        if( data.discount_type == 0 )
+        var is_free_ship = false
+        if(data.discount_for == 0)
         {
-          value_discount=  formatNoD(data.value_discount)
+          if( data.discount_type == 0 )
+          {
+            value_discount=  formatNoD(data.value_discount)
+          }
+   
+          else
+          {
+            value_discount=  data.value_discount + "%"
+  
+          }
         }
- 
-        else
-        {
-          value_discount=  data.value_discount + "%"
+        else{
+          is_free_ship = true;
+          value_discount = formatNoD(data.ship_discount_value)
+        }
 
-        }
         var status_limit_amount = data.set_limit_amount == true ? "" : "danger";
 
         var type_voucher = data.voucher_type == 0 ? "Toàn shop" : "Theo sản phảm"
+        var discount_for = data.discount_for == 0 ? "Đơn hàng" : "Vận chuyển"
         var type_discount = data.discount_type == 0 ? "Cố định" : "Theo %"
         var is_show_voucher = data.is_show_voucher == true ? "Hiển thị" : "Đang ẩn"
         var status_show_voucher = data.is_show_voucher == true ? "success" : "secondary"
@@ -123,7 +133,8 @@ filterColDiscount = (data) => {
 
             <td>{data.name}</td>
             <td>{type_voucher}</td>
-    
+            <td>{discount_for}</td>
+
             <td>{data.start_time}</td>
 
             <td>{data.end_time}</td>
@@ -136,8 +147,10 @@ filterColDiscount = (data) => {
 
             </td >  
             <td>
-
-            {value_discount}
+{
+  is_free_ship == true ? "Miễn phí vận chuyển" : value_discount
+}
+            {/* {value_discount} */}
 
             </td >  
 
@@ -194,6 +207,7 @@ filterColDiscount = (data) => {
               <th>STT</th>
               <th>Tên</th>
               <th>Loại voucher</th>
+              <th>Giảm giá cho</th>
 
               <th>Ngày bắt đầu</th>
               <th>Ngày kết thúc</th>

@@ -23,6 +23,8 @@ import Shopee from "../../components/Product/Ecomerce/Shopee";
 import Sendo from "../../components/Product/Ecomerce/Sendo";
 import getChannel, { IKITECH, IKIPOS } from "../../ultis/channel";
 import { getQueryParams } from "../../ultis/helpers"
+// import ModalCol from "../../components/Product/ModalCollaration"
+// import ModalConfirm from "../../components/Product/ComfirmCol"
 
 class Product extends Component {
   constructor(props) {
@@ -188,6 +190,11 @@ class Product extends Component {
             importData={importData}
             allow_skip_same_name={allow_skip_same_name}
           />
+                   {/* <ModalConfirm
+           
+          />
+          
+          <ModalCol></ModalCol> */}
           <Tiki store_code={store_code} />
           <Shopee store_code={store_code} />
           <Sendo store_code={store_code} />
@@ -305,6 +312,20 @@ class Product extends Component {
                           </span>
                           <span class="text">In mã vạch</span>
                         </Link>
+                        {/* <a
+                            data-toggle="modal"
+                            data-target="#colConfig"
+                          style={{ marginRight: "10px" }}
+                          class={`btn btn-danger btn-icon-split btn-sm  ${_export == true ? "show" : "hide"
+                            }`}
+                        >
+                          <span class="icon text-white-50">
+                            <i class="fas fa-file-export"></i>
+                          </span>
+                          <span style={{ color: "white" }} class="text">
+                            Cài đặt hoa hồng
+                          </span>
+                        </a> */}
                         <a
                           style={{ marginRight: "10px" }}
                           onClick={this.fetchAllListProduct}

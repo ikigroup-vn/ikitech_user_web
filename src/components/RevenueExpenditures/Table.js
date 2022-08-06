@@ -89,13 +89,13 @@ class Table extends Component {
     var result = null;
     if (listRevenueExpenditures.length > 0) {
       result = listRevenueExpenditures.map((data, index) => {
-        var action_create = (data.action_create == 9 ||
-          data.action_create == 5 ||
-          data.action_create == 6 ||
-          data.action_create == 7 ||
-          data.action_create == 8 ||
-          data.action_create == 10 ||
-          data.action_create == 11) ? true : false
+        // var action_create = (data.action_create == 9 ||
+        //   data.action_create == 5 ||
+        //   data.action_create == 6 ||
+        //   data.action_create == 7 ||
+        //   data.action_create == 8 ||
+        //   data.action_create == 10 ||
+        //   data.action_create == 11) ? true : false
         return (
           <React.Fragment>
             <tr
@@ -110,7 +110,8 @@ class Table extends Component {
             >
               <td>{per_page * (current_page - 1) + (index + 1)}</td>
               <td>
-                <Link to={action_create ? `/order/detail/${store_code}/${data.references_value}` : "#"}>{data.code}</Link>
+                {/* <Link to={action_create ? `/order/detail/${store_code}/${data.references_value}` : "#"}>{data.code}</Link> */}
+                {data.code}
               </td>
               <td>
                 {data.is_revenue ? (
