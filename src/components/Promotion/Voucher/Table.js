@@ -112,7 +112,7 @@ filterColDiscount = (data) => {
         var status_limit_amount = data.set_limit_amount == true ? "" : "danger";
 
         var type_voucher = data.voucher_type == 0 ? "Toàn shop" : "Theo sản phảm"
-        var discount_for = data.discount_for == 0 ? "Đơn hàng" : "Vận chuyển"
+        var discount_for = data.discount_for !== 1 ? "Vận chuyển" : "Đơn hàng"
         var type_discount = data.discount_type == 0 ? "Cố định" : "Theo %"
         var is_show_voucher = data.is_show_voucher == true ? "Hiển thị" : "Đang ẩn"
         var status_show_voucher = data.is_show_voucher == true ? "success" : "secondary"
