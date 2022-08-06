@@ -104,7 +104,7 @@ class Form extends Component {
         type: type,
         isLoading: true,
         loadCript: true,
-        discount_for: voucher.discount_for,
+        discount_for: voucher.discount_for != 1 ? 0 : 0,
         is_free_ship: (voucher.is_free_ship == null || voucher.is_free_ship == false) ? false : true,
         ship_discount_value: voucher.ship_discount_value,
         has_discount_ship: voucher.discount_for !== null ? true : false

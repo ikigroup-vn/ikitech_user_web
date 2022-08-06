@@ -88,7 +88,7 @@ filterColDiscount = (data) => {
       result = vouchers.map((data, index) => {
         var value_discount = ""
         var is_free_ship = false
-        if(data.discount_for == 0)
+        if(data.discount_for !== 1)
         {
           if( data.discount_type == 0 )
           {
