@@ -56,22 +56,10 @@ class Modal extends Component {
               >
                 <div class="modal-body">
                   <div class="form-group">
-                    <div class="form-check">
                       <label class="form-check-label" for="gridCheck">
-                        Thiết định % hoa hồng chung cho tất cả các sản phẩm
+                        Nhập giá trị hoa hồng
                       </label>
-                    </div>
-                    <input
-                      type="number"
-                      class="form-control"
-                      name="percent_commission_for_products"
-                      onChange={(e) => {
-                        this.setState({
-                          percent_commission_for_products: e.target.value,
-                        });
-                      }}
-                      value={percent_commission_for_products}
-                    ></input>
+            
                   </div>
                 </div>
                 <div class="modal-footer">

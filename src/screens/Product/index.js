@@ -23,8 +23,8 @@ import Shopee from "../../components/Product/Ecomerce/Shopee";
 import Sendo from "../../components/Product/Ecomerce/Sendo";
 import getChannel, { IKITECH, IKIPOS } from "../../ultis/channel";
 import { getQueryParams } from "../../ultis/helpers"
-// import ModalCol from "../../components/Product/ModalCollaration"
-// import ModalConfirm from "../../components/Product/ComfirmCol"
+import ModalCol from "../../components/Product/ModalCollaration"
+import ModalConfirm from "../../components/Product/ComfirmCol"
 
 class Product extends Component {
   constructor(props) {

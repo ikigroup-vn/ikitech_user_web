@@ -94,7 +94,13 @@ class ModalVoucher extends Component {
                                                         flexDirection: "column"
                                                     }}>
                                                         <div className='code' style={{ textAlign: "center" }}><span>{`Mã: ${item.code}`}</span></div>
-                                                        <div className='value' style={{ textAlign: 'center' }}>{`Giảm ${item.discount_type === 0 ? format(Number(item.value_discount)) : item.value_discount + "%"}`}</div>
+                                                        <div className='value' style={{ textAlign: 'center' }}>{
+                                                        `Giảm
+                                                        ${item.discount_for != 1 ? (
+                                                            item.discount_type === 0 ? format(Number(item.value_discount)) : item.value_discount + "%"
+                                                          ) : ( item.is_free_ship === true ? "Miễn phí vận chuyển" :format(Number(item.ship_discount_value)) )}
+                                                         `
+                                                         }</div>
 
                                                     </div>
                                                 </div>

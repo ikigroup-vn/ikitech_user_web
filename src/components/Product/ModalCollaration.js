@@ -58,13 +58,13 @@ class Modal extends Component {
               >
                 <div class="modal-body">
                   <div class="form-group">
-                    <div class="form-check">
+                  <div class="form-group">
                       <label class="form-check-label" for="gridCheck">
-                        Thiết định % hoa hồng chung cho tất cả các sản phẩm
+                        Nhập giá trị hoa hồng
                       </label>
-                    </div>
                     <input
                       type="number"
+                      placeholder="Thiết định % hoa hồng chung cho tất cả các sản phẩm"
                       class="form-control"
                       name="percent_commission_for_products"
                       onChange={(e) => {
@@ -74,6 +74,8 @@ class Modal extends Component {
                       }}
                       value={percent_commission_for_products}
                     ></input>
+                  </div>
+              
                   </div>
                 </div>
                 <div class="modal-footer">
@@ -85,7 +87,7 @@ class Modal extends Component {
                     Đóng
                   </button>
                   <button type="submit" class="btn btn-warning">
-                    Xóa
+                    Lưu
                   </button>
                 </div>
               </form>

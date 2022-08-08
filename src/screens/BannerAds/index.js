@@ -38,12 +38,10 @@ class BannerAds extends Component {
     $("#dataTable").DataTable().destroy();
     if (this.state.isLoading != true && typeof nextProps.permission.product_list != "undefined") {
       var permissions = nextProps.permission
-      var insert = permissions.post_category_add
-      var update = permissions.post_category_update
-      var _delete = permissions.post_category_remove
-      var isShow = permissions.post_category_list
 
-      this.setState({ isLoading: true, insert: true, update: true, _delete: true, isShow: true })
+      var isShow = permissions.web_theme_edit
+
+      this.setState({ isLoading: true, insert: true, update: true, _delete: true, isShow })
 
     }
   }

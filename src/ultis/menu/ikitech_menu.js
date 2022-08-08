@@ -532,6 +532,9 @@ export const ikitech_menu = [
             display: "hide",
             exact: true,
             to: "/banner_ads",
+            class: "web_theme_edit",
+
+            
           },
 
         
