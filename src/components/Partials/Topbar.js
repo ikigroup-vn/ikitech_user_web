@@ -25,7 +25,8 @@ class Topbar extends Component {
   componentDidMount() {
     this.props.fetchBranchStore(this.props.store_code);
     const branch_id = getBranchId()
-    if (getStoreCode() == "" || getStoreCode() == "undefined" || typeof getStoreCode() == "undefined") {
+    console.log(getStoreCode())
+    if (getStoreCode() == ""||getStoreCode() == null || getStoreCode() == "undefined" || typeof getStoreCode() == "undefined") {
       setStoreCode(this.props.store_code)
       // return;
     }

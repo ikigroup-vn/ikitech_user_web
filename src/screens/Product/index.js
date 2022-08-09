@@ -22,9 +22,9 @@ import { randomString } from "../../ultis/helpers";
 import Shopee from "../../components/Product/Ecomerce/Shopee";
 import Sendo from "../../components/Product/Ecomerce/Sendo";
 import getChannel, { IKITECH, IKIPOS } from "../../ultis/channel";
-import { getQueryParams } from "../../ultis/helpers"
-import ModalCol from "../../components/Product/ModalCollaration"
-import ModalConfirm from "../../components/Product/ComfirmCol"
+import { getQueryParams } from "../../ultis/helpers";
+import ModalCol from "../../components/Product/ModalCollaration";
+import ModalConfirm from "../../components/Product/ComfirmCol";
 
 class Product extends Component {
   constructor(props) {
@@ -46,6 +46,7 @@ class Product extends Component {
       allow_skip_same_name: false,
       page: 1,
       numPage: 20,
+      percent_col: 0,
     };
   }
 
@@ -66,10 +67,10 @@ class Product extends Component {
   componentDidMount() {
     var { page } = this.props.match.params;
     const branch_id = localStorage.getItem("branch_id");
-    var is_near_out_of_stock = getQueryParams("is_near_out_of_stock")
-    var params = null
+    var is_near_out_of_stock = getQueryParams("is_near_out_of_stock");
+    var params = null;
     if (is_near_out_of_stock) {
-      params = params + `&is_near_out_of_stock=true`
+      params = params + `&is_near_out_of_stock=true`;
     }
     if (
       typeof page != "undefined" &&
@@ -107,7 +108,7 @@ class Product extends Component {
       var ecommerce = permissions.product_list;
 
       var isShow = permissions.product_list;
-      var barcode_print = permissions.barcode_print
+      var barcode_print = permissions.barcode_print;
 
       this.setState({
         isLoading: true,
@@ -118,10 +119,14 @@ class Product extends Component {
         _export,
         isShow,
         ecommerce,
-        barcode_print
+        barcode_print,
       });
     }
   }
+
+  handleChangePerCol = (data) => {
+    this.setState({ percent_col: data });
+  };
 
   handleDelCallBack = (modal) => {
     this.setState({ modal: modal });
@@ -143,6 +148,14 @@ class Product extends Component {
   };
   showDialogImportExcel = () => {
     $("#file-excel-import").trigger("click");
+  };
+
+  onSaveChangePercent = () => {
+    var { store_code } = this.props.match.params;
+
+    this.props.changePercentCol(store_code, {
+      percent_collaborator: this.state.percent_col,
+    });
   };
 
   onChangeExcel = (evt) => {
@@ -180,8 +193,16 @@ class Product extends Component {
       var { store_code } = this.props.match.params;
       var { searchValue, importData, allow_skip_same_name, page, numPage } =
         this.state;
-      var { insert, update, _delete, _import, _export, isShow, ecommerce,barcode_print } =
-        this.state;
+      var {
+        insert,
+        update,
+        _delete,
+        _import,
+        _export,
+        isShow,
+        ecommerce,
+        barcode_print,
+      } = this.state;
 
       return (
         <div id="wrapper">
@@ -190,11 +211,9 @@ class Product extends Component {
             importData={importData}
             allow_skip_same_name={allow_skip_same_name}
           />
-                   {/* <ModalConfirm
-           
-          />
-          
-          <ModalCol></ModalCol> */}
+          <ModalConfirm percent_col ={this.state.percent_col} onSaveChangePercent={this.onSaveChangePercent} />
+
+          <ModalCol handleChangePerCol={this.handleChangePerCol}></ModalCol>
           <Tiki store_code={store_code} />
           <Shopee store_code={store_code} />
           <Sendo store_code={store_code} />
@@ -219,105 +238,105 @@ class Product extends Component {
                       </h4>
 
                       <div style={{ display: "flex" }}>
-                        {
-                          getChannel() == IKITECH && (
-                            <div
-                              class={`dropdown ${ecommerce == true ? "show" : "hide"
-                                }`}
+                        {getChannel() == IKITECH && (
+                          <div
+                            class={`dropdown ${
+                              ecommerce == true ? "show" : "hide"
+                            }`}
+                            style={{
+                              marginRight: "10px",
+                            }}
+                          >
+                            <button
                               style={{
-                                marginRight: "10px",
+                                border: "0px",
+                                color: "white",
+                                background: "cadetblue",
                               }}
+                              class="btn btn-secondary dropdown-toggle"
+                              type="button"
+                              id="dropdownMenuButton"
+                              data-toggle="dropdown"
+                              aria-haspopup="true"
+                              aria-expanded="false"
                             >
-                              <button
-                                style={{
-                                  border: "0px",
-                                  color: "white",
-                                  background: "cadetblue",
-                                }}
-                                class="btn btn-secondary dropdown-toggle"
-                                type="button"
-                                id="dropdownMenuButton"
-                                data-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false"
+                              Thương mại điện tử
+                            </button>
+                            <div
+                              class="dropdown-menu"
+                              style={{ width: "100%" }}
+                              aria-labelledby="dropdownMenuButton"
+                            >
+                              <a
+                                data-toggle="modal"
+                                data-target="#showTiki"
+                                class="dropdown-item"
                               >
-                                Thương mại điện tử
-                              </button>
-                              <div
-                                class="dropdown-menu"
-                                style={{ width: "100%" }}
-                                aria-labelledby="dropdownMenuButton"
+                                <img
+                                  style={{
+                                    maxWidth: "25px",
+                                    marginRight: "10px",
+                                  }}
+                                  src="https://chondeal247.com/wp-content/uploads/2020/11/icon-tiki.png"
+                                  class="img-responsive"
+                                  alt="Image"
+                                />
+                                <span>TIKI</span>
+                              </a>
+                              <a
+                                data-toggle="modal"
+                                data-target="#showSendo"
+                                class="dropdown-item"
                               >
-                                <a
-                                  data-toggle="modal"
-                                  data-target="#showTiki"
-                                  class="dropdown-item"
-                                >
-                                  <img
-                                    style={{
-                                      maxWidth: "25px",
-                                      marginRight: "10px",
-                                    }}
-                                    src="https://chondeal247.com/wp-content/uploads/2020/11/icon-tiki.png"
-                                    class="img-responsive"
-                                    alt="Image"
-                                  />
-                                  <span>TIKI</span>
-                                </a>
-                                <a
-                                  data-toggle="modal"
-                                  data-target="#showSendo"
-                                  class="dropdown-item"
-                                >
-                                  <img
-                                    style={{
-                                      maxWidth: "27px",
-                                      marginRight: "10px",
-                                    }}
-                                    src="https://bloggiamgia.vn/wp-content/uploads/2020/06/logo-sendo.png"
-                                    class="img-responsive"
-                                    alt="Image"
-                                  />
-                                  <span>SENDO</span>{" "}
-                                </a>
-                                <a
-                                  data-toggle="modal"
-                                  data-target="#showShopee"
-                                  class="dropdown-item"
-                                >
-                                  <img
-                                    style={{
-                                      maxWidth: "30px",
-                                      marginRight: "10px",
-                                    }}
-                                    src="https://images.pngnice.com/download/2007/Shopee-Logo-PNG-File.png"
-                                    class="img-responsive"
-                                    alt="Image"
-                                  />
-                                  <span>SHOPEE</span>{" "}
-                                </a>
-                              </div>
-                            </div> 
-                          )
-                        }
+                                <img
+                                  style={{
+                                    maxWidth: "27px",
+                                    marginRight: "10px",
+                                  }}
+                                  src="https://bloggiamgia.vn/wp-content/uploads/2020/06/logo-sendo.png"
+                                  class="img-responsive"
+                                  alt="Image"
+                                />
+                                <span>SENDO</span>{" "}
+                              </a>
+                              <a
+                                data-toggle="modal"
+                                data-target="#showShopee"
+                                class="dropdown-item"
+                              >
+                                <img
+                                  style={{
+                                    maxWidth: "30px",
+                                    marginRight: "10px",
+                                  }}
+                                  src="https://images.pngnice.com/download/2007/Shopee-Logo-PNG-File.png"
+                                  class="img-responsive"
+                                  alt="Image"
+                                />
+                                <span>SHOPEE</span>{" "}
+                              </a>
+                            </div>
+                          </div>
+                        )}
                         <Link
                           to={`/product/print_barcode/${store_code}`}
                           style={{ marginRight: "10px" }}
-                          class={`btn btn-info btn-icon-split btn-sm ${barcode_print == true ? "show" : "hide"
-                          
-                            }`}
+                          class={`btn btn-info btn-icon-split btn-sm ${
+                            barcode_print == true ? "show" : "hide"
+                          }`}
                         >
                           <span class="icon text-white-50">
                             <i class="fas fa-barcode"></i>
                           </span>
                           <span class="text">In mã vạch</span>
                         </Link>
-                        {/* <a
-                            data-toggle="modal"
-                            data-target="#colConfig"
+                        <a
+                          data-toggle="modal"
+                          data-target="#colConfig"
                           style={{ marginRight: "10px" }}
-                          class={`btn btn-danger btn-icon-split btn-sm  ${_export == true ? "show" : "hide"
-                            }`}
+                          class={`btn btn-danger btn-icon-split btn-sm  ${
+                            _export == true ? "show" : "hide"
+                          }`}
                         >
                           <span class="icon text-white-50">
                             <i class="fas fa-file-export"></i>
@@ -325,12 +344,13 @@ class Product extends Component {
                           <span style={{ color: "white" }} class="text">
                             Cài đặt hoa hồng
                           </span>
-                        </a> */}
+                        </a>
                         <a
                           style={{ marginRight: "10px" }}
                           onClick={this.fetchAllListProduct}
-                          class={`btn btn-danger btn-icon-split btn-sm  ${_export == true ? "show" : "hide"
-                            }`}
+                          class={`btn btn-danger btn-icon-split btn-sm  ${
+                            _export == true ? "show" : "hide"
+                          }`}
                         >
                           <span class="icon text-white-50">
                             <i class="fas fa-file-export"></i>
@@ -342,8 +362,9 @@ class Product extends Component {
                         <a
                           style={{ marginRight: "10px" }}
                           onClick={this.showDialogImportExcel}
-                          class={`btn btn-primary btn-icon-split btn-sm  ${_import == true ? "show" : "hide"
-                            }`}
+                          class={`btn btn-primary btn-icon-split btn-sm  ${
+                            _import == true ? "show" : "hide"
+                          }`}
                         >
                           <span class="icon text-white-50">
                             <i class="fas fa-file-import"></i>
@@ -359,16 +380,6 @@ class Product extends Component {
                           style={{ display: "none" }}
                           onChange={this.onChangeExcel}
                         />
-                        <Link
-                          to={`/product/create/${store_code}`}
-                          class={`btn btn-info btn-icon-split btn-sm ${insert == true ? "show" : "hide"
-                            }`}
-                        >
-                          <span class="icon text-white-50">
-                            <i class="fas fa-plus"></i>
-                          </span>
-                          <span class="text">Thêm sản phẩm</span>
-                        </Link>
                       </div>
                     </div>
                     <br></br>
@@ -381,9 +392,31 @@ class Product extends Component {
 
                     <div class="card shadow ">
                       <div className="card-header">
+                        <div    style={{
+                                display : "flex",
+                                justifyContent: "end",
+                                marginRight : "15px"
+                            }}> 
+                          <Link
+                         
+                            to={`/product/create/${store_code}`}
+                            class={`btn btn-info btn-icon-split btn-sm ${
+                              insert == true ? "show" : "hide"
+                            }`}
+                          >
+                            <span class="icon text-white-50">
+                              <i class="fas fa-plus"></i>
+                            </span>
+                            <span class="text">Thêm sản phẩm</span>
+                          </Link>
+                        </div>
                         <div
                           class="row"
-                          style={{ "justify-content": "space-between" , marginRight : "15px" , marginLeft : "15px" }}
+                          style={{
+                            "justify-content": "space-between",
+                            marginRight: "15px",
+                            marginLeft: "15px",
+                          }}
                         >
                           <form onSubmit={this.searchData}>
                             <div
@@ -391,7 +424,7 @@ class Product extends Component {
                               style={{ padding: "0 20px" }}
                             >
                               <input
-                                style={{ maxWidth: "400px", minWidth: "300px" }}
+                                style={{ maxWidth: "400px", minWidth: "200px" }}
                                 type="search"
                                 name="txtSearch"
                                 value={searchValue}
@@ -405,6 +438,7 @@ class Product extends Component {
                                 </button>
                               </div>
                             </div>
+
                             <p class="total-item" id="sale_user_name">
                               <span className="num-total_item">
                                 {products.total}&nbsp;
@@ -516,6 +550,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchAllListProduct: (store_code, searchValue) => {
       dispatch(productAction.fetchAllListProduct(store_code, searchValue));
+    },
+    changePercentCol: (store_code, data) => {
+      dispatch(productAction.changePercentCol(store_code, data));
     },
   };
 };

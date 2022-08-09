@@ -7,22 +7,30 @@ class Modal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      percent_collaborator : null
+      percent_collaborator: null,
     };
   }
   onSave = (e) => {
     e.preventDefault();
-    window.$(".modal").modal("hide")
-    window.$("#comfirmColModal").modal("show")
+    var { percent_collaborator } = this.state
+    if ((percent_collaborator > 100) || (percent_collaborator < 1)) return;
 
-    // var { id, store_code } = this.props.modal;
-    // this.props.destroyProduct(store_code, id);
+    this.props.handleChangePerCol(percent_collaborator);
+    window.$(".modal").modal("hide");
+    window.$("#comfirmColModal").modal("show");
 
   };
 
+  onChange = (e) =>{
+    var {value}  = e.target
+    if ((value > 100) || (value < 1)) return;
+
+    this.setState({ percent_collaborator: value });
+  }
+
   render() {
     var { modal } = this.props;
-    var {percent_commission_for_products} = this.state
+    var { percent_collaborator  } = this.state;
     return (
       <div
         class="modal fade"
@@ -58,24 +66,19 @@ class Modal extends Component {
               >
                 <div class="modal-body">
                   <div class="form-group">
-                  <div class="form-group">
+                    <div class="form-group">
                       <label class="form-check-label" for="gridCheck">
                         Nhập giá trị hoa hồng
                       </label>
-                    <input
-                      type="number"
-                      placeholder="Thiết định % hoa hồng chung cho tất cả các sản phẩm"
-                      class="form-control"
-                      name="percent_commission_for_products"
-                      onChange={(e) => {
-                        this.setState({
-                          percent_commission_for_products: e.target.value,
-                        });
-                      }}
-                      value={percent_commission_for_products}
-                    ></input>
-                  </div>
-              
+                      <input
+                        value={percent_collaborator}
+                        type="number"
+                        placeholder="Thiết định % hoa hồng chung cho tất cả các sản phẩm"
+                        class="form-control"
+                        name="percent_commission_for_products"
+                        onChange={this.onChange}
+                      ></input>
+                    </div>
                   </div>
                 </div>
                 <div class="modal-footer">

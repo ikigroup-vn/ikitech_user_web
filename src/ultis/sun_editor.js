@@ -23,7 +23,7 @@ export const handleImageUploadBefore = (files, info, uploadHandler) => {
     }
 }
 
-export const uploadImageCallBack = (file) => {
+export const uploadImageCallBack = (file , store_code = null) => {
     return new Promise(
         (resolve, reject) => {
             const xhr = new XMLHttpRequest();

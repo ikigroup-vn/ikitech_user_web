@@ -13,6 +13,7 @@ class Modal extends Component {
   onSave = (e) => {
     e.preventDefault();
     window.$(".modal").modal("hide");
+    this.props.onSaveChangePercent()
     // var { id, store_code } = this.props.modal;
     // this.props.destroyProduct(store_code, id);
     
@@ -57,7 +58,7 @@ class Modal extends Component {
                 <div class="modal-body">
                   <div class="form-group">
                       <label class="form-check-label" for="gridCheck">
-                        Nhập giá trị hoa hồng
+                      Bạn chắc chắn muốn cài đặt {this.props.percent_col}% hoa đồng cho tất cả sản phẩm không? Tất cả sản phẩm bạn cài đặt trước đó sẽ bị sửa!
                       </label>
             
                   </div>
@@ -71,7 +72,7 @@ class Modal extends Component {
                     Đóng
                   </button>
                   <button type="submit" class="btn btn-warning">
-                    Xóa
+                    Xác nhận
                   </button>
                 </div>
               </form>

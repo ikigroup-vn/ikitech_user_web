@@ -344,6 +344,8 @@ class InfoProduct extends Component {
       categorySearch
     } = this.state;
 
+    var {badges} = this.props
+    console.log(badges)
     return (
       <div class="card-body" style={{ padding: "0.8rem" }}>
         <div class="form-group">
@@ -668,6 +670,14 @@ class InfoProduct extends Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+      badges: state.badgeReducers.allBadge,
+   
+
+  };
+};
 const mapDispatchToProps = (dispatch, props) => {
   return {
 
@@ -677,6 +687,6 @@ const mapDispatchToProps = (dispatch, props) => {
 
   };
 };
-export default connect(null, mapDispatchToProps)(InfoProduct);
+export default connect(mapStateToProps, mapDispatchToProps)(InfoProduct);
 
 

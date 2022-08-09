@@ -102,7 +102,7 @@ export const ikitech_menu = [
           },
           {
             name: "Nhà cung cấp",
-            class: "web_theme_edit",
+            class: "supplier",
             display: "hide",
             exact: true,
             to: "/supplier",

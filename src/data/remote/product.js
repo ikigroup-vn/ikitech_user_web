@@ -80,3 +80,9 @@ export const updateAgencyPrice = (store_code,data,id) =>{
 export const editStock = (store_code,branch_id,data) =>{
   return callApi(`/store/${store_code}/${branch_id}/inventory/update_balance`, "put", data);
 }
+
+
+export const changePercentCol = (store_code , value) =>{
+  return callApi(`/store_v2/${store_code}/collaborator_products`, "post", value)
+
+}
