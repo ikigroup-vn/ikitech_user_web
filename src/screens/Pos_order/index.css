@@ -406,6 +406,7 @@ pre {
 }
 .btn-submit-pos{
     bottom: 0px;position: absolute;width: 100%;
+    background: white;
 }
 @media only screen and (max-width: 1350px) {
     /* For mobile phones: */

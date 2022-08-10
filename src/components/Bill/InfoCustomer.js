@@ -14,7 +14,7 @@ class InfoCustomer extends Component {
 
     render() {
         var { bill , store_code } = this.props
-        var { payment_method_id } = bill
+        var { payment_method_id , payment_method_name } = bill
 
         var customer = bill.customer;
         var phone_customer = typeof customer == "undefined" || customer == null ? null : customer.phone_number
@@ -83,6 +83,9 @@ class InfoCustomer extends Component {
                         </p>
                         <p class="sale_user_label" id="booking_time">
                             Thời gian: <span id="booking_time_txt">{orderTime}</span>
+                        </p>
+                        <p class="sale_user_label" id="booking_time">
+                            Phương thức thanh toán: <span id="booking_time_txt">{payment_method_name || ""}</span>
                         </p>
                         <p class="sale_user_label">
                             Ghi chú: <span id="user_note">{note}</span>

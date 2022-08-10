@@ -370,6 +370,7 @@ class Form extends Component {
       is_free_ship,
       ship_discount_value,
     } = this.state;
+
     console.log(this.state);
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
     var { products, store_code, vouchers } = this.props;
@@ -532,7 +533,8 @@ class Form extends Component {
                       />
                       {"  "}Giảm giá cho đơn hàng
                     </label>
-                    <label>
+                    {
+                      this.props.type !== "store" &&      <label>
                       <input
                         type="radio"
                         name="discount_for"
@@ -543,6 +545,8 @@ class Form extends Component {
                       />
                       {"  "} Giảm giá cho vận chuyển
                     </label>
+                    }
+               
                   </div>
                 </div>
 

@@ -692,6 +692,8 @@ class PostOrder extends Component {
 
         if (!shallowEqual(nextState.totalFinal, this.state.totalFinal)) {
             this.onGetSuggestion(nextState.totalFinal);
+            this.setState({priceCustomer : nextState.totalFinal});
+
         }
 
         if (
