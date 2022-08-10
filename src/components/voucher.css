@@ -1114,7 +1114,7 @@
     cursor: pointer;
 }
 
-.btn {
+/* .btn {
     overflow: hidden;
     display: -webkit-box;
     text-overflow: ellipsis;
@@ -1132,7 +1132,7 @@
     text-transform: capitalize;
     outline: 0;
     cursor: pointer
-}
+} */
 
 .btn--inline {
     display: inline-flex

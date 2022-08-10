@@ -680,7 +680,6 @@ class Form extends Component {
                     className="radio discount-for"
                     onChange={this.onChange}
                   >
-                    {type !== "store" && (
                       <label>
                         <input
                           type="radio"
@@ -692,7 +691,7 @@ class Form extends Component {
                         />
                         {"  "}Giảm giá cho đơn hàng
                       </label>
-                    )}
+                      {type === "store" &&
                     <label>
                       <input
                         type="radio"
@@ -704,6 +703,7 @@ class Form extends Component {
                       />
                       {"  "} Giảm giá cho vận chuyển
                     </label>
+  }
                   </div>
                 </div>
 
