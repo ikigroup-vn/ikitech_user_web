@@ -42,7 +42,7 @@ class ModalVoucher extends Component {
       pros = pros.substring(0, pros.length - 1);
     }
 
-    return pros;
+    return pros?.length > 60 ? pros.slice(0,60) + "..." : pros;
   };
   render() {
     var { listVoucher } = this.props;
@@ -232,7 +232,7 @@ class ModalVoucher extends Component {
                         </div>
                         <div className="gJh+4V jjYXLV fpTTCj">
                           Còn lại {formatNoD(Number(item.amount - item.used))}{" "}
-                          sản phẩm
+                          lượt sử dụng
                         </div>
                       </div>
                     </div>

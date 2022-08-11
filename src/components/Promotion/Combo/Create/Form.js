@@ -14,6 +14,8 @@ import MomentInput from "react-moment-input";
 import { formatNumber } from "../../../../ultis/helpers";
 import { isEmpty } from "../../../../ultis/helpers";
 import getChannel, { IKIPOS, IKITECH } from "../../../../ultis/channel";
+import * as AgencyAction from "../../../../actions/agency";
+
 class Form extends Component {
   constructor(props) {
     super(props);
@@ -28,6 +30,8 @@ class Form extends Component {
       listProducts: [],
       image: "", saveListProducts: [],
       displayError: "hide",
+      group_customer: 0,
+      agency_type_id: null,
     };
   }
   componentDidMount() {
@@ -38,6 +42,9 @@ class Form extends Component {
       document.getElementsByClassName("r-input")[1].placeholder =
         "Chọn ngày và thời gian";
     } catch (error) { }
+
+    this.props.fetchAllAgencyType(this.props.store_code);
+
   }
 
   onSaveProduct = () => {
@@ -176,7 +183,13 @@ class Form extends Component {
       "YYYY-MM-DD HH:mm:ss"
     );
 
+    var { group_customer, agency_type_id } = this.state;
+    var agency_type_name = this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]?.name || null;
+    console.log(this.props.types,agency_type_name)
     var form = {
+      group_customer,
+      agency_type_id,
+      agency_type_name,
       amount:
         state.txtAmount == null
           ? state.txtAmount
@@ -268,10 +281,12 @@ class Form extends Component {
       txtValueDiscount,
       image,
       displayError,
-      saveListProducts
+      saveListProducts,
+      group_customer,
+      agency_type_id,
     } = this.state;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
-    var { products, store_code, combos } = this.props;
+    var { products, store_code, combos , types } = this.props;
     var type_discount_default = txtDiscoutType == "0" ? "show" : "hide";
     var type_discount_percent = txtDiscoutType == "1" ? "show" : "hide";
 
@@ -368,7 +383,64 @@ class Form extends Component {
             </div>
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
               <div class="box-body">
+              <div className="form-group discount-for">
+              <label htmlFor="group_customer">Nhóm khách hàng</label>
+              <div
+                style={{
+                  display: "flex",
+                }}
+                className="radio discount-for"
+                onChange={this.onChange}
+              >
+                <label>
+                  <input
+                    type="radio"
+                    name="group_customer"
+                    checked={group_customer == 0 ? true : false}
+                    className="group_customer"
+                    id="ship"
+                    value="0"
+                  />
+                  {"  "} Khách hàng
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="group_customer"
+                    checked={group_customer == 2 ? true : false}
+                    className="group_customer"
+                    id="bill"
+                    value="2"
+                  />
+                  {"  "}Đại lý
+                </label>
 
+                <label>
+                  <input
+                    type="radio"
+                    name="group_customer"
+                    checked={group_customer == 1 ? true : false}
+                    className="group_customer"
+                    id="ship"
+                    value="1"
+                  />
+                  {"  "} Cộng tác viên
+                </label>
+              </div>
+              {group_customer == 2 && (
+                <select
+                  onChange={this.onChange}
+                  value={agency_type_id}
+                  name="agency_type_id"
+                  class="form-control"
+                >
+                  <option>--- Chọn cấp đại lý ---</option>
+                  {types.map((v) => {
+                    return <option value={v.id}>{v.name}</option>;
+                  })}
+                </select>
+              )}
+            </div>
                 <div class="form-group">
                   <label for="product_name">Giới hạn Combo</label>
                   <input
@@ -485,6 +557,8 @@ class Form extends Component {
 const mapStateToProps = (state) => {
   return {
     image: state.UploadReducers.comboImg.combo_img,
+    types: state.agencyReducers.agency.allAgencyType,
+
   };
 };
 
@@ -498,6 +572,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     initialUpload: () => {
       dispatch(comboAction.initialUpload());
+    },
+    fetchAllAgencyType: (store_code) => {
+      dispatch(AgencyAction.fetchAllAgencyType(store_code));
     },
   };
 };

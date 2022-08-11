@@ -7,12 +7,13 @@ import Datetime from "react-datetime";
 import ModalListProduct from "./ListProduct";
 import CKEditor from "ckeditor4-react";
 import ModalUpload from "../ModalUpload";
-import * as Env from "../../../../ultis/default"
-import MomentInput from 'react-moment-input';
-import { formatNumber } from "../../../../ultis/helpers"
-import { isEmpty } from "../../../../ultis/helpers"
+import * as Env from "../../../../ultis/default";
+import MomentInput from "react-moment-input";
+import { formatNumber } from "../../../../ultis/helpers";
+import { isEmpty } from "../../../../ultis/helpers";
 import * as Types from "../../../../constants/ActionType";
 import getChannel, { IKIPOS, IKITECH } from "../../../../ultis/channel";
+import * as AgencyAction from "../../../../actions/agency";
 
 class Form extends Component {
   constructor(props) {
@@ -27,23 +28,26 @@ class Form extends Component {
       saveListProducts: [],
       txtContent: "",
       image: "",
-      displayError: "hide"
+      displayError: "hide",
+      group_customer: 0,
+      agency_type_id: null,
     };
   }
   componentDidMount() {
-    this.props.initialUpload()
+    this.props.initialUpload();
     try {
-      document.getElementsByClassName('r-input')[0].placeholder = 'Chọn ngày và thời gian';
-      document.getElementsByClassName('r-input')[1].placeholder = 'Chọn ngày và thời gian';
-    } catch (error) {
+      document.getElementsByClassName("r-input")[0].placeholder =
+        "Chọn ngày và thời gian";
+      document.getElementsByClassName("r-input")[1].placeholder =
+        "Chọn ngày và thời gian";
+    } catch (error) {}
 
-    }
-
+    this.props.fetchAllAgencyType(this.props.store_code);
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.image !== nextProps.image) {
-      this.setState({ image: nextProps.image })
+      this.setState({ image: nextProps.image });
     }
   }
 
@@ -65,42 +69,35 @@ class Form extends Component {
           if (value.length < 3) {
             if (value == 0) {
               this.setState({ [name]: "" });
-            }
-            else {
+            } else {
               this.setState({ [name]: value });
-
             }
           }
-        }
-        else {
+        } else {
           if (value == 0) {
             this.setState({ [name]: "" });
-          }
-          else {
+          } else {
             this.setState({ [name]: value });
-
           }
         }
       }
-    }
-    else {
+    } else {
       this.setState({ [name]: value });
-
-    };
-  }
+    }
+  };
   onChangeStart = (e) => {
     var time = moment(e, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm");
-    var { txtEnd } = this.state
+    var { txtEnd } = this.state;
     if (e != "" && txtEnd != "") {
-
-      if (!moment(e, 'DD-MM-YYYY HH:mm').isBefore(moment(txtEnd, 'DD-MM-YYYY HH:mm'))) {
-
-        this.setState({ displayError: "show" })
-      }
-      else {
-        console.log("hidddeee")
-        this.setState({ displayError: "hide" })
-
+      if (
+        !moment(e, "DD-MM-YYYY HH:mm").isBefore(
+          moment(txtEnd, "DD-MM-YYYY HH:mm")
+        )
+      ) {
+        this.setState({ displayError: "show" });
+      } else {
+        console.log("hidddeee");
+        this.setState({ displayError: "hide" });
       }
     }
     this.setState({
@@ -110,17 +107,17 @@ class Form extends Component {
 
   onChangeEnd = (e) => {
     var time = moment(e, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm");
-    var { txtStart } = this.state
+    var { txtStart } = this.state;
 
     if (txtStart != "" && e != "") {
-
-      if (!moment(txtStart, 'DD-MM-YYYY HH:mm').isBefore(moment(e, 'DD-MM-YYYY HH:mm'))) {
-
-        this.setState({ displayError: "show" })
-      }
-      else {
-        this.setState({ displayError: "hide" })
-
+      if (
+        !moment(txtStart, "DD-MM-YYYY HH:mm").isBefore(
+          moment(e, "DD-MM-YYYY HH:mm")
+        )
+      ) {
+        this.setState({ displayError: "show" });
+      } else {
+        this.setState({ displayError: "hide" });
       }
     }
     this.setState({
@@ -128,33 +125,26 @@ class Form extends Component {
     });
   };
 
-    checkStatus = (start_time) => {
-    var now = moment().valueOf()
-    var start_time = moment(start_time, "YYYY-MM-DD HH:mm:ss").valueOf()
+  checkStatus = (start_time) => {
+    var now = moment().valueOf();
+    var start_time = moment(start_time, "YYYY-MM-DD HH:mm:ss").valueOf();
     if (now < start_time) {
       return "0";
+    } else {
+      return "2";
     }
-    else {
-      return "2"
-    }
-
-  }
-
-
-
-
+  };
 
   onSave = (e) => {
-    console.log("dadassss")
+    console.log("dadassss");
 
     e.preventDefault();
     if (this.state.displayError == "show") {
-      return
+      return;
     }
     var state = this.state;
     if (state.txtValue == null || !isEmpty(state.txtValue)) {
       this.props.showError({
-
         type: Types.ALERT_UID_STATUS,
         alert: {
           type: "danger",
@@ -162,39 +152,50 @@ class Form extends Component {
           disable: "show",
           content: "Vui lòng chọn giá trị giảm giá",
         },
-      }
-      )
+      });
       return;
     }
-    var { store_code } = this.props
-    var listProducts = state.saveListProducts
-    var product_ids = ""
+    var { store_code } = this.props;
+    var listProducts = state.saveListProducts;
+    var product_ids = "";
     listProducts.forEach((element, index) => {
       if (listProducts.length == index + 1)
-        product_ids = product_ids + element.id
-      else
-        product_ids = product_ids + element.id + ","
-
+        product_ids = product_ids + element.id;
+      else product_ids = product_ids + element.id + ",";
     });
-    var startTime = moment(state.txtStart, "DD-MM-YYYY HH:mm").format("YYYY-MM-DD HH:mm:ss");
-    var endTime = moment(state.txtEnd, "DD-MM-YYYY HH:mm").format("YYYY-MM-DD HH:mm:ss");
+    var startTime = moment(state.txtStart, "DD-MM-YYYY HH:mm").format(
+      "YYYY-MM-DD HH:mm:ss"
+    );
+    var endTime = moment(state.txtEnd, "DD-MM-YYYY HH:mm").format(
+      "YYYY-MM-DD HH:mm:ss"
+    );
+    var { group_customer, agency_type_id } = this.state;
+    var agency_type_name = this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]?.name || null;
+    console.log(this.props.types,agency_type_name)
     var form = {
+      group_customer,
+      agency_type_id,
+      agency_type_name,
       name: state.txtName,
       start_time: startTime == "Invalid date" ? null : startTime,
       end_time: endTime == "Invalid date" ? null : endTime,
-      value: state.txtValue == null ? state.txtValue : formatNumber(state.txtValue),
-      amount: state.txtAmount == null ? state.txtAmount : formatNumber(state.txtAmount),
+      value:
+        state.txtValue == null ? state.txtValue : formatNumber(state.txtValue),
+      amount:
+        state.txtAmount == null
+          ? state.txtAmount
+          : formatNumber(state.txtAmount),
       product_ids: product_ids,
       description: state.txtContent,
-      image_url: state.image
-
-    }
+      image_url: state.image,
+    };
     if (form.product_ids == "") {
-      delete form.product_ids
+      delete form.product_ids;
     }
-    form.set_limit_amount = form.amount == null || form.amount == "" ? false : true
-    console.log(form)
-    this.props.createDiscount(store_code, form , this.checkStatus(startTime))
+    form.set_limit_amount =
+      form.amount == null || form.amount == "" ? false : true;
+
+    this.props.createDiscount(store_code, form, this.checkStatus(startTime));
   };
   goBack = (e) => {
     e.preventDefault();
@@ -215,7 +216,7 @@ class Form extends Component {
         });
       }
     } else {
-      var checkExsit = true
+      var checkExsit = true;
       products.forEach((item, index) => {
         if (item.id === product.id) {
           checkExsit = false;
@@ -223,28 +224,40 @@ class Form extends Component {
         }
       });
       if (checkExsit == true) {
-        products.push(product)
+        products.push(product);
       }
     }
     if (onSave == true)
-      this.setState({ listProducts: products, saveListProducts: products })
-    else
-      this.setState({ listProducts: products })
+      this.setState({ listProducts: products, saveListProducts: products });
+    else this.setState({ listProducts: products });
   };
 
   onSaveProduct = () => {
-    this.setState({ saveListProducts: [...this.state.listProducts] })
-  }
-
+    this.setState({ saveListProducts: [...this.state.listProducts] });
+  };
 
   render() {
-    var { txtName, txtStart, txtEnd, txtValue, txtAmount, listProducts, txtContent, image, displayError, saveListProducts } = this.state;
+    var {
+      txtName,
+      txtStart,
+      txtEnd,
+      txtValue,
+      txtAmount,
+      listProducts,
+      txtContent,
+      image,
+      displayError,
+      saveListProducts,
+      group_customer,
+      agency_type_id,
+    } = this.state;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
-    var { products, store_code, discounts } = this.props;
+    var { products, store_code, discounts, types } = this.props;
+
+    console.log(types);
     return (
       <React.Fragment>
         <form role="form" onSubmit={this.onSave} method="post">
-
           <div class="box-body">
             {/* {
               getChannel() == IKITECH && (
@@ -272,7 +285,6 @@ class Form extends Component {
                 </React.Fragment>
               )} */}
 
-
             <div class="form-group">
               <label for="product_name">Tên chương trình</label>
               <input
@@ -295,34 +307,37 @@ class Form extends Component {
                 enableInputClick={true}
                 monthSelect={true}
                 readOnly={true}
-                translations={
-                  { DATE: "Ngày", TIME: "Giờ", SAVE: "Đóng", HOURS: "Giờ", MINUTES: "Phút" }
-                }
-                onSave={() => { }}
+                translations={{
+                  DATE: "Ngày",
+                  TIME: "Giờ",
+                  SAVE: "Đóng",
+                  HOURS: "Giờ",
+                  MINUTES: "Phút",
+                }}
+                onSave={() => {}}
                 onChange={this.onChangeStart}
               />
-
             </div>
 
             <div class="form-group">
               <label for="product_name">Ngày kết thúc</label>
               <MomentInput
-
                 min={moment()}
                 format="DD-MM-YYYY HH:mm"
                 options={true}
                 enableInputClick={true}
                 monthSelect={true}
                 readOnly={true}
-
-                translations={
-                  { DATE: "Ngày", TIME: "Giờ", SAVE: "Đóng", HOURS: "Giờ", MINUTES: "Phút" }
-                }
-                onSave={() => { }}
+                translations={{
+                  DATE: "Ngày",
+                  TIME: "Giờ",
+                  SAVE: "Đóng",
+                  HOURS: "Giờ",
+                  MINUTES: "Phút",
+                }}
+                onSave={() => {}}
                 onChange={this.onChangeEnd}
               />
-
-
             </div>
             <div class={`alert alert-danger ${displayError}`} role="alert">
               Thời gian kết thúc phải sau thời gian bắt đầu
@@ -330,20 +345,81 @@ class Form extends Component {
             <div class="form-group">
               <label for="product_name">Giảm giá (%)</label>
               <div class="input-group">
-
-                <input type="text"
+                <input
+                  type="text"
                   class="form-control"
                   id="txtValue"
                   name="txtValue"
                   value={txtValue}
                   placeholder="nhập giảm giá"
                   autocomplete="off"
-                  onChange={this.onChange} />
+                  onChange={this.onChange}
+                />
                 <div class="input-group-append">
-                  <span class="input-group-text" id="basic-addon2">%</span>
+                  <span class="input-group-text" id="basic-addon2">
+                    %
+                  </span>
                 </div>
               </div>
+            </div>
 
+            <div className="form-group discount-for">
+              <label htmlFor="group_customer">Nhóm khách hàng</label>
+              <div
+                style={{
+                  display: "flex",
+                }}
+                className="radio discount-for"
+                onChange={this.onChange}
+              >
+                <label>
+                  <input
+                    type="radio"
+                    name="group_customer"
+                    checked={group_customer == 0 ? true : false}
+                    className="group_customer"
+                    id="ship"
+                    value="0"
+                  />
+                  {"  "} Khách hàng
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="group_customer"
+                    checked={group_customer == 2 ? true : false}
+                    className="group_customer"
+                    id="bill"
+                    value="2"
+                  />
+                  {"  "}Đại lý
+                </label>
+
+                <label>
+                  <input
+                    type="radio"
+                    name="group_customer"
+                    checked={group_customer == 1 ? true : false}
+                    className="group_customer"
+                    id="ship"
+                    value="1"
+                  />
+                  {"  "} Cộng tác viên
+                </label>
+              </div>
+              {group_customer == 2 && (
+                <select
+                  onChange={this.onChange}
+                  value={agency_type_id}
+                  name="agency_type_id"
+                  class="form-control"
+                >
+                  <option>--- Chọn cấp đại lý ---</option>
+                  {types.map((v) => {
+                    return <option value={v.id}>{v.name}</option>;
+                  })}
+                </select>
+              )}
             </div>
             {/* {
               getChannel() == IKITECH &&
@@ -362,8 +438,10 @@ class Form extends Component {
             </div>
   } */}
 
-
-            <Table handleAddProduct={this.handleAddProduct} products={saveListProducts}></Table>
+            <Table
+              handleAddProduct={this.handleAddProduct}
+              products={saveListProducts}
+            ></Table>
             {/* {
               getChannel() == IKITECH &&
               <div class="form-group">
@@ -377,8 +455,7 @@ class Form extends Component {
           </div>
           <div class="box-footer">
             <button type="submit" class="btn btn-info   btn-sm">
-              <i class="fas fa-plus"></i>  Tạo
-
+              <i class="fas fa-plus"></i> Tạo
             </button>
             <button
               style={{ marginLeft: "10px" }}
@@ -386,10 +463,8 @@ class Form extends Component {
               class="btn btn-warning   btn-sm"
             >
               <i class="fas fa-arrow-left"></i> Trở về
-
             </button>
           </div>
-
         </form>
         <ModalUpload />
         <ModalListProduct
@@ -398,9 +473,9 @@ class Form extends Component {
           handleAddProduct={this.handleAddProduct}
           listProducts={listProducts}
           store_code={store_code}
-          products={products} />
+          products={products}
+        />
       </React.Fragment>
-
     );
   }
 }
@@ -408,21 +483,24 @@ class Form extends Component {
 const mapStateToProps = (state) => {
   return {
     image: state.UploadReducers.discountImg.discount_img,
+    types: state.agencyReducers.agency.allAgencyType,
   };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
     showError: (error) => {
-      dispatch(error)
+      dispatch(error);
     },
-    createDiscount: (store_code, discount , status) => {
-      dispatch(discountAction.createDiscount(store_code, discount , status));
+    createDiscount: (store_code, discount, status) => {
+      dispatch(discountAction.createDiscount(store_code, discount, status));
     },
     initialUpload: () => {
-      dispatch(discountAction.initialUpload())
-    }
-
+      dispatch(discountAction.initialUpload());
+    },
+    fetchAllAgencyType: (store_code) => {
+      dispatch(AgencyAction.fetchAllAgencyType(store_code));
+    },
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Form);

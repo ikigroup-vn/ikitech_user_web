@@ -99,7 +99,7 @@ class Accountant extends Component {
                         <TabList>
                           <Tab>
                        
-                            <Link to ={"?tab-index=1"}>     <i class="fa fa-calendar"></i>
+                            <Link to ={"?tab-index=0"}>     <i class="fa fa-calendar"></i>
                             <span style={{ fontSize: "0.8rem" }}>
                               Lịch thông báo đẩy
                             </span></Link>

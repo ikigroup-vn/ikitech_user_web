@@ -5,6 +5,7 @@ import Datetime from "react-datetime";
 import moment from "moment";
 import MomentInput from 'react-moment-input';
 import { isEmail, isEmpty, isPhone } from "../../../ultis/helpers";
+import * as AgencyAction from "../../../actions/agency";
 
 import * as Types from "../../../constants/ActionType";
 class Form extends Component {
@@ -15,6 +16,8 @@ class Form extends Component {
       day_of_week: 0,
       description: "",
       group_customer: "0",
+      group_customer: 0,
+      agency_type_id: null,
       status: 0,
       time_of_day: "00:00",
       time_run: moment(),
@@ -25,6 +28,11 @@ class Form extends Component {
   }
 
 
+  componentDidMount() {
+   
+
+    this.props.fetchAllAgencyType(this.props.store_code);
+  }
 
 
 
@@ -75,7 +83,13 @@ class Form extends Component {
       title,
       type_schedule,
     } = this.state;
+    var { group_customer, agency_type_id } = this.state;
+    var agency_type_name = this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]?.name || null;
+    console.log(this.props.types,agency_type_name)
     var form = {
+      group_customer,
+      agency_type_id,
+      agency_type_name,
       type_schedule,
       day_of_month,
       day_of_week,
@@ -161,11 +175,14 @@ class Form extends Component {
       time_run_near,
       title,
       type_schedule,
+      group_customer,
+      agency_type_id,
     } = this.state
     var disable_oneDay = type_schedule == "0" ? "show" : "hide"
     var disable_everyDay = type_schedule == "1" ? "show" : "hide"
     var disable_everyWeek = type_schedule == "2" ? "show" : "hide"
     var disable_everyMonth = type_schedule == "3" ? "show" : "hide"
+    var { types } = this.props;
 
 
     return (
@@ -215,7 +232,7 @@ class Form extends Component {
               </select>
 
             </div>
-
+         
             <div class="form-group">
               <label for="product_name">Kiểu thông báo</label>
 
@@ -392,7 +409,64 @@ class Form extends Component {
 
 
 
+            <div className="form-group discount-for">
+              <label htmlFor="group_customer">Nhóm khách hàng</label>
+              <div
+                style={{
+                  display: "flex",
+                }}
+                className="radio discount-for"
+                onChange={this.onChange}
+              >
+                <label>
+                  <input
+                    type="radio"
+                    name="group_customer"
+                    checked={group_customer == 0 ? true : false}
+                    className="group_customer"
+                    id="ship"
+                    value="0"
+                  />
+                  {"  "} Khách hàng
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="group_customer"
+                    checked={group_customer == 2 ? true : false}
+                    className="group_customer"
+                    id="bill"
+                    value="2"
+                  />
+                  {"  "}Đại lý
+                </label>
 
+                <label>
+                  <input
+                    type="radio"
+                    name="group_customer"
+                    checked={group_customer == 1 ? true : false}
+                    className="group_customer"
+                    id="ship"
+                    value="1"
+                  />
+                  {"  "} Cộng tác viên
+                </label>
+              </div>
+              {group_customer == 2 && (
+                <select
+                  onChange={this.onChange}
+                  value={agency_type_id}
+                  name="agency_type_id"
+                  class="form-control"
+                >
+                  <option>--- Chọn cấp đại lý ---</option>
+                  {types.map((v) => {
+                    return <option value={v.id}>{v.name}</option>;
+                  })}
+                </select>
+              )}
+            </div>
           </div>
           <div class="box-footer">
             <button type="submit" class="btn btn-info   btn-sm">
@@ -418,12 +492,19 @@ class Form extends Component {
     );
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    types: state.agencyReducers.agency.allAgencyType,
+  };
+};
 
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
 
-
+    fetchAllAgencyType: (store_code) => {
+      dispatch(AgencyAction.fetchAllAgencyType(store_code));
+    },
     createSchedule: (store_code, data) => {
       dispatch(ScheduleAction.createSchedule(store_code, data))
     },
@@ -433,4 +514,4 @@ const mapDispatchToProps = (dispatch, props) => {
 
   };
 };
-export default connect(null, mapDispatchToProps)(Form);
+export default connect(mapStateToProps, mapDispatchToProps)(Form);

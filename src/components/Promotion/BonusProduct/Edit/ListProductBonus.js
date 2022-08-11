@@ -56,12 +56,16 @@ class ListProduct extends Component {
 
   }
   checkExsit = (list, data) => {
-    if (list.length > 0) {
-      for (const element of list) {
-        // console.log(element,data,this.compareTwoProduct(element == data));
-
-        if (this.compareTwoProduct(element , data)) {
-          return true
+    if(
+      list )
+    {
+      if (list?.length > 0) {
+        for (const element of list) {
+          // console.log(element,data,this.compareTwoProduct(element == data));
+  
+          if (this.compareTwoProduct(element , data)) {
+            return true
+          }
         }
       }
     }

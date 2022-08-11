@@ -47,7 +47,8 @@ class ListProduct extends Component {
     delete product1.product;
     delete product2.quantity;
     delete product2.product;
-
+    delete product2.bonus_quantity;
+    delete product1.bonus_quantity
     console.log(product1,product2)
     if (shallowEqual(product1, product2)) {
       return true

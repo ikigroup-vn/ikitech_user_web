@@ -14,6 +14,8 @@ import MomentInput from "react-moment-input";
 import { formatNumber } from "../../../../ultis/helpers";
 import { isEmpty } from "../../../../ultis/helpers";
 import getChannel, { IKIPOS, IKITECH } from "../../../../ultis/channel";
+import * as AgencyAction from "../../../../actions/agency";
+
 class Form extends Component {
   constructor(props) {
     super(props);
@@ -38,6 +40,8 @@ class Form extends Component {
       is_free_ship: false,
       ship_discount_value: null,
       discount_for: 0,
+      group_customer: 0,
+      agency_type_id: null,
     };
   }
   componentDidMount() {
@@ -48,6 +52,8 @@ class Form extends Component {
         "Chọn ngày và thời gian";
     } catch (error) {}
     this.props.initialUpload();
+    this.props.fetchAllAgencyType(this.props.store_code);
+
   }
   onSaveProduct = () => {
     this.setState({ saveListProducts: [...this.state.listProducts] });
@@ -201,7 +207,13 @@ class Form extends Component {
       "YYYY-MM-DD HH:mm:ss"
     );
     var voucherType = type == "store" ? 0 : 1;
+    var { group_customer, agency_type_id } = this.state;
+    var agency_type_name = this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]?.name || null;
+    console.log(this.props.types,agency_type_name)
     var form = {
+      group_customer,
+      agency_type_id,
+      agency_type_name,
       name: state.txtName,
       start_time: startTime == "Invalid date" ? null : startTime,
       end_time: endTime == "Invalid date" ? null : endTime,
@@ -368,12 +380,14 @@ class Form extends Component {
       saveListProducts,
       discount_for,
       is_free_ship,
+      group_customer,
+      agency_type_id,
       ship_discount_value,
     } = this.state;
 
     console.log(this.state);
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
-    var { products, store_code, vouchers } = this.props;
+    var { products, store_code, vouchers , types } = this.props;
     var disableOfType = this.props.type == "store" ? "hide" : "show";
     return (
       <React.Fragment>
@@ -476,14 +490,6 @@ class Form extends Component {
                     onChange={this.onChangeEnd}
                   />
                 </div>
-              </div>
-            </div>
-            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-              <div class="box-body">
-                <div class={`alert alert-danger ${displayError}`} role="alert">
-                  Thời gian kết thúc phải sau thời gian bắt đầu
-                </div>
-
                 <div class="form-group">
                   <label for="product_name">Đơn tối thiểu</label>
                   <input
@@ -498,6 +504,72 @@ class Form extends Component {
                   />
                 </div>
 
+              </div>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+              <div class="box-body">
+                <div class={`alert alert-danger ${displayError}`} role="alert">
+                  Thời gian kết thúc phải sau thời gian bắt đầu
+                </div>
+                <div className="form-group discount-for">
+              <label htmlFor="group_customer">Nhóm khách hàng</label>
+              <div
+                style={{
+                  display: "flex",
+                }}
+                className="radio discount-for"
+                onChange={this.onChange}
+              >
+                <label>
+                  <input
+                    type="radio"
+                    name="group_customer"
+                    checked={group_customer == 0 ? true : false}
+                    className="group_customer"
+                    id="ship"
+                    value="0"
+                  />
+                  {"  "} Khách hàng
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="group_customer"
+                    checked={group_customer == 2 ? true : false}
+                    className="group_customer"
+                    id="bill"
+                    value="2"
+                  />
+                  {"  "}Đại lý
+                </label>
+
+                <label>
+                  <input
+                    type="radio"
+                    name="group_customer"
+                    checked={group_customer == 1 ? true : false}
+                    className="group_customer"
+                    id="ship"
+                    value="1"
+                  />
+                  {"  "} Cộng tác viên
+                </label>
+              </div>
+              {group_customer == 2 && (
+                <select
+                  onChange={this.onChange}
+                  value={agency_type_id}
+                  name="agency_type_id"
+                  class="form-control"
+                >
+                  <option>--- Chọn cấp đại lý ---</option>
+                  {types.map((v) => {
+                    return <option value={v.id}>{v.name}</option>;
+                  })}
+                </select>
+              )}
+            </div>
+               
                 <div class="form-group">
                   <label for="product_name">Số mã có thể sử dụng</label>
                   <input
@@ -661,6 +733,7 @@ class Form extends Component {
               </div>
             </div>
           </div>
+
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <div className={`${disableOfType}`}>
@@ -716,6 +789,8 @@ const mapStateToProps = (state) => {
   return {
     image: state.UploadReducers.voucherImg.voucher_img,
     state: state,
+    types: state.agencyReducers.agency.allAgencyType,
+
   };
 };
 
@@ -729,6 +804,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     initialUpload: () => {
       dispatch(voucherAction.initialUpload());
+    },
+    fetchAllAgencyType: (store_code) => {
+      dispatch(AgencyAction.fetchAllAgencyType(store_code));
     },
   };
 };

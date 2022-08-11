@@ -3,13 +3,19 @@ import * as Types from "../../../../constants/ActionType";
 import { connect } from "react-redux";
 import * as bonusProductAction from "../../../../actions/bonus_product";
 import Table from "./Table";
-import TableBonus from "./TableBonus";
 
 import { shallowEqual } from "../../../../ultis/shallowEqual";
 import moment from "moment";
 import Datetime from "react-datetime";
-import ModalListProduct from "../Create/ListProduct";
-import ModalListProductBonus from "../Create/ListProductBonus";
+import ModalListProduct from "./ListProduct";
+import ModalListProductLadder from "./../Create/ListProductLadder";
+
+import ModalListProductBonusLadder from "./../Create/ListProductBonusLadder";
+
+import ModalListProductBonus from "./ListProductBonus";
+import TableBonus from "./TableBonus";
+import TableBonusLadder from "./../Create/TableBonusLadder";
+
 import CKEditor from "ckeditor4-react";
 import ModalUpload from "../ModalUpload";
 import * as Env from "../../../../ultis/default";
@@ -18,6 +24,8 @@ import { formatNumber } from "../../../../ultis/helpers";
 import { isEmpty } from "../../../../ultis/helpers";
 import getChannel, { IKIPOS, IKITECH } from "../../../../ultis/channel";
 import history from "../../../../history";
+import TableLadder from "./../Create/TableLadder";
+import * as AgencyAction from "../../../../actions/agency";
 
 class Form extends Component {
   constructor(props) {
@@ -32,35 +40,52 @@ class Form extends Component {
       txtValueDiscount: "",
       listProducts: [],
       saveListProducts: [],
+      saveListProductsLadder: [],
+      group_customer: 0,
+      agency_type_id: null,
       listProductsBonus: [],
       saveListProductsBonus: [],
+      saveListProductsBonusLadder: [],
       image: "",
       displayError: "hide",
       multiply_by_number: false,
+      ladder_reward: false,
+      listProductsLadder: [],
+      listProductsBonusLadder: [],
       isLoading : false
+
     };
   }
+
+
   componentDidMount() {
     this.props.initialUpload();
+    this.props.fetchAllAgencyType(this.props.store_code);
+
     try {
       document.getElementsByClassName("r-input")[0].placeholder =
         "Chọn ngày và thời gian";
       document.getElementsByClassName("r-input")[1].placeholder =
         "Chọn ngày và thời gian";
-    } catch (error) { }
+    } catch (error) {}
   }
 
-  onSaveProduct = (isBonus) => {
-    if (isBonus)
-      this.setState({ saveListProductsBonus: [...this.state.listProductsBonus] })
-    else
-      this.setState({ saveListProducts: [...this.state.listProducts] })
-  }
-  // componentWillReceiveProps(nextProps) {
-  //   if (this.props.image !== nextProps.image) {
-  //     this.setState({ image: nextProps.image });
-  //   }
-  // }
+  onSaveProduct = (isBonus, isLadder, fromBonusLadder) => {
+    if (isBonus) {
+      this.setState({
+        saveListProductsBonus: [...this.state.listProductsBonus],
+      });
+    } else if (isLadder) {
+      this.setState({
+        saveListProductsLadder: [...this.state.listProductsLadder],
+      });
+    } else if (fromBonusLadder) {
+      // console.log(this.state.listProductsBonusLadder)
+      this.setState({
+        saveListProductsBonusLadder: [...this.state.listProductsBonusLadder],
+      });
+    } else this.setState({ saveListProducts: [...this.state.listProducts] });
+  };
   componentWillReceiveProps(nextProps) {
     if (!shallowEqual(nextProps.bonusProduct, this.props.bonusProduct)) {
       var { bonusProduct } = nextProps;
@@ -69,18 +94,82 @@ class Form extends Component {
       var startTime = bonusProduct.start_time == null || bonusProduct.start_time == "" ? "" : moment(bonusProduct.start_time).format("DD-MM-YYYY HH:mm");
       var endTime = bonusProduct.end_time == null || bonusProduct.end_time == "" ? "" : moment(bonusProduct.end_time).format("DD-MM-YYYY HH:mm");
       var listProductsBonus = []
-      if (bonusProduct.bonus_products?.length > 0) {
-        listProductsBonus = bonusProduct?.bonus_products.map((item) => {
-          return {
-            "id": item.product?.id,
-            "quantity": item.quantity,
-            "distribute_name": item.allows_choose_distribute === true ? null : item.distribute_name,
-            "element_distribute_name": item.allows_choose_distribute === true ? null : item.element_distribute_name,
-            "sub_element_distribute_name": item.allows_choose_distribute === true ? null : item.sub_element_distribute_name,
-            "sku": item.product?.sku,
-            "name": item.product?.name,
-            "allows_choose_distribute" : item.allows_choose_distribute,
-            product: {
+      var listProductsBonusLadder = []
+      var listProductsLadder = []
+
+      if(bonusProduct.ladder_reward === true)
+      {
+          if(bonusProduct.bonus_products_ladder?.length > 0)
+          {
+            var item = bonusProduct.bonus_products_ladder[0];
+            listProductsLadder = [{
+              "id": item.product?.id,
+              "distribute_name": item.distribute_name,
+              "element_distribute_name":  item.element_distribute_name,
+              "sub_element_distribute_name":  item.sub_element_distribute_name,
+              "sku": item.product?.sku,
+              "name": item.product?.name,
+              product: {
+                "id": item.product?.id,
+                "distribute_name": item.distribute_name,
+                "element_distribute_name":  item.element_distribute_name,
+                "sub_element_distribute_name":  item.sub_element_distribute_name,
+                "sku": item.product?.sku,
+                "name": item.product?.name,
+  
+              }
+            }]
+            // listProductsLadder = bonusProduct.bonus_products_ladder?.map((v,i)=>{
+            //   return {
+            //     "id": item.product?.id,
+            //     "distribute_name": item.allows_choose_distribute === true ? null : item.distribute_name,
+            //     "element_distribute_name": item.allows_choose_distribute === true ? null : item.element_distribute_name,
+            //     "sub_element_distribute_name": item.allows_choose_distribute === true ? null : item.sub_element_distribute_name,
+            //     "sku": item.product?.sku,
+            //     "name": item.product?.name,
+            //     product: {
+            //       "id": item.product?.id,
+            //       "distribute_name": item.allows_choose_distribute === true ? null : item.distribute_name,
+            //       "element_distribute_name": item.allows_choose_distribute === true ? null : item.element_distribute_name,
+            //       "sub_element_distribute_name": item.allows_choose_distribute === true ? null : item.sub_element_distribute_name,
+            //       "sku": item.product?.sku,
+            //       "name": item.product?.name,
+    
+            //     }
+            //   }
+            // })
+
+
+            listProductsBonusLadder = bonusProduct?.bonus_products_ladder.map((item) => {
+              return {
+                "id": item.bo_product?.id,
+                "quantity": item.from_quantity,
+                "bonus_quantity" : item.bo_quantity,
+                "distribute_name": item.distribute_name,
+                "element_distribute_name": item.element_distribute_name,
+                "sub_element_distribute_name": item.sub_element_distribute_name,
+                "sku": item.bo_product?.sku,
+                "name": item.bo_product?.name,
+                product: {
+                  "id": item.bo_product?.id,
+                  "quantity": item.quantity,
+                  "distribute_name": item.distribute_name,
+                  "element_distribute_name": item.element_distribute_name,
+                  "sub_element_distribute_name": item.sub_element_distribute_name,
+                  "sku": item.bo_product?.sku,
+                  "name": item.bo_product?.name,
+    
+                }
+              }
+            })
+
+          }
+         
+      }
+      else{
+        if (bonusProduct.bonus_products?.length > 0) {
+          listProductsBonus = bonusProduct?.bonus_products.map((item) => {
+            return {
               "id": item.product?.id,
               "quantity": item.quantity,
               "distribute_name": item.allows_choose_distribute === true ? null : item.distribute_name,
@@ -89,25 +178,25 @@ class Form extends Component {
               "sku": item.product?.sku,
               "name": item.product?.name,
               "allows_choose_distribute" : item.allows_choose_distribute,
-
+              product: {
+                "id": item.product?.id,
+                "quantity": item.quantity,
+                "distribute_name": item.allows_choose_distribute === true ? null : item.distribute_name,
+                "element_distribute_name": item.allows_choose_distribute === true ? null : item.element_distribute_name,
+                "sub_element_distribute_name": item.allows_choose_distribute === true ? null : item.sub_element_distribute_name,
+                "sku": item.product?.sku,
+                "name": item.product?.name,
+                "allows_choose_distribute" : item.allows_choose_distribute,
+  
+              }
             }
-          }
-        })
-      }
-
-      var listProducts = []
-      if (bonusProduct.select_products?.length > 0) {
-        listProducts = bonusProduct?.select_products.map((item) => {
-          return {
-            "id": item.product?.id,
-            "quantity": item.quantity,
-            "distribute_name": item.distribute_name,
-            "element_distribute_name": item.element_distribute_name,
-            "sub_element_distribute_name": item.sub_element_distribute_name,
-            "sku": item.product?.sku,
-            "name": item.product?.name,
-            "allows_all_distribute" : item.allows_all_distribute,
-            product: {
+          })
+        }
+  
+        var listProducts = []
+        if (bonusProduct.select_products?.length > 0) {
+          listProducts = bonusProduct?.select_products.map((item) => {
+            return {
               "id": item.product?.id,
               "quantity": item.quantity,
               "distribute_name": item.distribute_name,
@@ -116,13 +205,24 @@ class Form extends Component {
               "sku": item.product?.sku,
               "name": item.product?.name,
               "allows_all_distribute" : item.allows_all_distribute,
-
+              product: {
+                "id": item.product?.id,
+                "quantity": item.quantity,
+                "distribute_name": item.distribute_name,
+                "element_distribute_name": item.element_distribute_name,
+                "sub_element_distribute_name": item.sub_element_distribute_name,
+                "sku": item.product?.sku,
+                "name": item.product?.name,
+                "allows_all_distribute" : item.allows_all_distribute,
+  
+              }
             }
-          }
-        })
+          })
+        }
       }
 
-
+      console.log("vooo",listProductsBonusLadder,listProductsLadder)
+   
       this.setState({
         txtContent: bonusProduct.description,
         txtName: bonusProduct.name,
@@ -130,12 +230,19 @@ class Form extends Component {
         txtEnd: endTime,
         txtAmount: bonusProduct.amount == null ? null : new Intl.NumberFormat().format(bonusProduct.amount.toString()),
         multiply_by_number: bonusProduct.multiply_by_number,
+        ladder_reward : bonusProduct.ladder_reward,
+        listProducts: listProducts || [],
+        saveListProducts: listProducts || [],
+        listProductsLadder: listProductsLadder,
+        group_customer : bonusProduct.group_customer,
+        agency_type_id : bonusProduct.agency_type_id,
+        agency_type_name : bonusProduct.agency_type_name,
+        listProductsBonusLadder: listProductsBonusLadder,
+        saveListProductsBonusLadder: listProductsBonusLadder,
 
-        listProducts: listProducts,
-        saveListProducts: listProducts,
-
-        listProductsBonus: listProductsBonus,
-        saveListProductsBonus: listProductsBonus,
+        saveListProductsLadder: listProductsLadder,
+        listProductsBonus: listProductsBonus || [],
+        saveListProductsBonus: listProductsBonus || [],
 
         isLoading: true,
         loadCript: true,
@@ -146,6 +253,7 @@ class Form extends Component {
       this.setState({ image: nextProps.image })
     }
   }
+
   onChangeDecription = (evt) => {
     const data = evt.editor.getData();
     this.setState({ txtContent: data });
@@ -225,55 +333,99 @@ class Form extends Component {
     });
   };
 
+  checkStatus = (start_time) => {
+    var now = moment().valueOf();
+    var start_time = moment(start_time, "YYYY-MM-DD HH:mm:ss").valueOf();
+    if (now < start_time) {
+      return "0";
+    } else {
+      return "2";
+    }
+  };
+
   onSave = (e) => {
     e.preventDefault();
-    console.log(this.state.saveListProducts, this.state.saveListProductsBonus)
+    console.log(this.state);
+    console.log(this.state.saveListProducts, this.state.saveListProductsBonus);
     if (this.state.displayError == "show") {
       return;
     }
     var state = this.state;
 
-
     var { store_code , bonusProductId } = this.props;
 
     var listProducts = state.saveListProducts;
     var listProductsBonus = state.saveListProductsBonus;
-
+    var listProductsBonusLadder = state.saveListProductsBonusLadder;
+    var listProductsLadder = state.listProductsLadder;
+    var productBonus = {};
     var select_products = [];
-    listProducts.forEach((element, index) => {
-      var data = { ...element };
-      if (data.distribute_name == null)
-        delete data.distribute_name
-      if (data.element_distribute_name == null)
-        delete data.element_distribute_name
-      if (data.sub_element_distribute_name == null)
-        delete data.sub_element_distribute_name
-      delete data.sku
-      delete data.name
-      delete data.product
-      data.product_id = data.id
-      delete data.id
 
-      select_products.push(data);
-    });
+    if (state.ladder_reward === true) {
+      var data_ladder = {};
+      var list = [];
+      listProductsLadder.forEach((element, index) => {
+        data_ladder = {
+          product_id: element.id,
+          distribute_name: element.distribute_name,
+          element_distribute_name: element.element_distribute_name,
+          sub_element_distribute_name: element.sub_element_distribute_name,
+        };
+      });
 
-    var bonus_products = [];
-    listProductsBonus.forEach((element, index) => {
-      var data = { ...element };
-      if (data.distribute_name == null)
-        delete data.distribute_name
-      if (data.element_distribute_name == null)
-        delete data.element_distribute_name
-      if (data.sub_element_distribute_name == null)
-        delete data.sub_element_distribute_name
-      delete data.sku
-      delete data.name
-      delete data.product
-      data.product_id = data.id
-      delete data.id
+      listProductsBonusLadder.forEach((element, index) => {
+        list.push({
+          from_quantity: element.quantity,
+          bonus_quantity: element.bonus_quantity,
+          bo_product_id: element.id,
+          bo_element_distribute_name: element.element_distribute_name,
+          bo_sub_element_distribute_name: element.sub_element_distribute_name,
+        });
+      });
 
-      bonus_products.push(data);
-    });
+      data_ladder = { ...data_ladder, list };
+
+      productBonus = { data_ladder: data_ladder };
+    } else {
+      listProducts.forEach((element, index) => {
+        var data = { ...element };
+        if (data.distribute_name == null) delete data.distribute_name;
+        if (data.element_distribute_name == null)
+          delete data.element_distribute_name;
+        if (data.sub_element_distribute_name == null)
+          delete data.sub_element_distribute_name;
+        delete data.sku;
+        delete data.name;
+        delete data.product;
+        data.product_id = data.id;
+        delete data.id;
+
+        select_products.push(data);
+      });
+
+      var bonus_products = [];
+      listProductsBonus.forEach((element, index) => {
+        var data = { ...element };
+        if (data.distribute_name == null) delete data.distribute_name;
+        if (data.element_distribute_name == null)
+          delete data.element_distribute_name;
+        if (data.sub_element_distribute_name == null)
+          delete data.sub_element_distribute_name;
+        delete data.sku;
+        delete data.name;
+        delete data.product;
+        data.product_id = data.id;
+        delete data.id;
+
+        bonus_products.push(data);
+      });
+
+      productBonus = {
+        bonus_products,
+        select_products,
+      };
+    }
+
     var startTime = moment(state.txtStart, "DD-MM-YYYY HH:mm").format(
       "YYYY-MM-DD HH:mm:ss"
     );
@@ -281,7 +433,12 @@ class Form extends Component {
       "YYYY-MM-DD HH:mm:ss"
     );
 
+    var { group_customer, agency_type_id } = this.state;
+    var agency_type_name = this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]?.name || null;
     var form = {
+      group_customer,
+      agency_type_id,
+      agency_type_name,
       amount:
         state.txtAmount == null
           ? state.txtAmount
@@ -290,20 +447,19 @@ class Form extends Component {
       name: state.txtName,
       start_time: startTime == "Invalid date" ? null : startTime,
       end_time: endTime == "Invalid date" ? null : endTime,
-      bonus_products,
-      select_products,
+      ...productBonus,
+      ladder_reward : state.ladder_reward,
       description: state.txtContent,
       image_url: state.image,
       set_limit_amount: true,
-      multiply_by_number: state.multiply_by_number
+      multiply_by_number: state.multiply_by_number,
     };
     var amount = form.amount;
-    if (typeof amount == "undefined"
-      || amount == null  || !isEmpty(amount)
-   )
-      form.set_limit_amount = false
+    if (typeof amount == "undefined" || amount == null || !isEmpty(amount))
+      form.set_limit_amount = false;
     console.log(form);
-     this.props.updateBonusProduct(store_code, form , bonusProductId);
+    this.props.updateBonusProduct(store_code, form , bonusProductId);
+
   };
 
   goBack = (e) => {
@@ -312,35 +468,45 @@ class Form extends Component {
   };
 
   compareTwoProduct(item1, item2) {
-    var product1 = { ...item1 }
-    var product2 = { ...item2 }
+    var product1 = { ...item1 };
+    var product2 = { ...item2 };
 
     delete product1.quantity;
     delete product1.product;
     delete product2.quantity;
     delete product2.product;
+    delete product2.bonus_quantity;
+    delete product1.bonus_quantity;
+    console.log("compact", product1, product2);
 
-    console.log(product1, product2)
-    
     if (shallowEqual(product1, product2)) {
-      return true
+      return true;
     }
-    return false
-
+    return false;
   }
 
-  handleAddProduct = (product, id, type, onSave, isBonus) => {
-    if (isBonus)
-      var products = [...this.state.listProductsBonus];
-    else
-      var products = [...this.state.listProducts];
-    console.log(products,product,id,isBonus)
+  handleAddProduct = (
+    product,
+    id,
+    type,
+    onSave,
+    isBonus,
+    isLadder,
+    fromBonusLadder
+  ) => {
+    console.log(this.state.listProductsBonus);
+
+    if (isBonus) var products = [...this.state.listProductsBonus];
+    else if (isLadder) var products = [...this.state.listProductsLadder];
+    else if (fromBonusLadder)
+      var products = [...this.state.listProductsBonusLadder];
+    else var products = [...this.state.listProducts];
     if (product?.length > 0) {
       if (type == "remove") {
         if (products.length > 0) {
           products = products.filter((value) => {
-            return value.product.id !== product[0].id
-          })
+            return value.product.id !== product[0].id;
+          });
           // products.forEach((item, index) => {
           //   if (item.product.id === product[0].id) {
           //   // if (this.compareTwoProduct(item, product)) {
@@ -351,48 +517,72 @@ class Form extends Component {
       } else {
         var checkExsit = true;
         product.forEach((item, index) => {
-          var check = false
-          var _index = 0
+          var check = false;
+          var _index = 0;
 
           products.forEach((item1, index1) => {
             // if (this.compareTwoProduct(item, item1)) {
-              if (item.id == item1.id){
-
+            if (item.id == item1.id) {
               check = true;
-              _index = index1
-
+              _index = index1;
             }
-
           });
           if (check == false) {
-           
-            var product = { quantity: 1, product: item, allows_all_distribute : item.allows_all_distribute,allows_choose_distribute : item.allows_choose_distribute, id: item.id, sku: item.sku, name: item.name, distribute_name: item.distribute_name, element_distribute_name: item.element_distribute_name, sub_element_distribute_name: item.sub_element_distribute_name };
-            if(isBonus == false || typeof isBonus == "undefined")
-          delete item.allows_choose_distribute
-          else
-          delete item.allows_all_distribute
+            var product = {
+              quantity: 1,
+              product: item,
+              allows_all_distribute: item.allows_all_distribute,
+              allows_choose_distribute: item.allows_choose_distribute,
+              id: item.id,
+              sku: item.sku,
+              name: item.name,
+              bonus_quantity: 1,
+              distribute_name: item.distribute_name,
+              element_distribute_name: item.element_distribute_name,
+              sub_element_distribute_name: item.sub_element_distribute_name,
+            };
+            if (isBonus == false || typeof isBonus == "undefined")
+              delete item.allows_choose_distribute;
+            else delete item.allows_all_distribute;
+
+            if (fromBonusLadder == true)
+              delete product.allows_choose_distribute;
 
             products.push(product);
-          }
-          else
-          {
-            var product = { quantity: 1, product: item, allows_all_distribute : item.allows_all_distribute, allows_choose_distribute : item.allows_choose_distribute,id: item.id, sku: item.sku, name: item.name, distribute_name: item.distribute_name, element_distribute_name: item.element_distribute_name, sub_element_distribute_name: item.sub_element_distribute_name };
-            if(isBonus == false || typeof isBonus == "undefined")
-          delete item.allows_choose_distribute
-          else
-          delete item.allows_all_distribute
+          } else {
+            var product = {
+              quantity: 1,
+              product: item,
+              allows_all_distribute: item.allows_all_distribute,
+              allows_choose_distribute: item.allows_choose_distribute,
+              id: item.id,
+              bonus_quantity: 1,
+
+              sku: item.sku,
+              name: item.name,
+              distribute_name: item.distribute_name,
+              element_distribute_name: item.element_distribute_name,
+              sub_element_distribute_name: item.sub_element_distribute_name,
+            };
+            if (isBonus == false || typeof isBonus == "undefined")
+              delete item.allows_choose_distribute;
+            else delete item.allows_all_distribute;
+            if (fromBonusLadder == true)
+              delete product.allows_choose_distribute;
             products[_index] = product;
           }
         });
-
       }
-    }
-    else {
+    } else {
       if (type == "remove") {
         if (products.length > 0) {
           products = products.filter((item) => {
-            return !this.compareTwoProduct(item, product)
-          })
+            if (fromBonusLadder) {
+              var item = { ...item };
+              delete item.allows_all_distribute;
+            }
+            return !this.compareTwoProduct(item, product);
+          });
           // products.forEach((item, index) => {
           //   // if (item.product.id === id) {
           //   if (this.compareTwoProduct(item, product)) {
@@ -402,156 +592,144 @@ class Form extends Component {
         }
       } else {
         var checkExsit = true;
-        var _index = 0
+        var _index = 0;
 
         products.forEach((item, index) => {
-
-          if (item.id == product.id){
-
+          if (item.id == product.id) {
             checkExsit = false;
-            _index = index
-
+            _index = index;
           }
         });
         if (checkExsit == true) {
-          var product = { quantity: 1, product: product, allows_all_distribute : product.allows_all_distribute,allows_choose_distribute : product.allows_choose_distribute, id: product.id, sku: product.sku, name: product.name, distribute_name: product.distribute_name, element_distribute_name: product.element_distribute_name, sub_element_distribute_name: product.sub_element_distribute_name };
-          if(isBonus == false || typeof isBonus == "undefined")
-          delete product.allows_choose_distribute
-          else
-          delete product.allows_all_distribute
-          products.push(product);
-        }
-        else
-        {
-          var product = { quantity: 1, product: product, allows_all_distribute : product.allows_all_distribute, allows_choose_distribute : product.allows_choose_distribute, id: product.id, sku: product.sku, name: product.name, distribute_name: product.distribute_name, element_distribute_name: product.element_distribute_name, sub_element_distribute_name: product.sub_element_distribute_name };          products[_index] = product;
-          if(isBonus == false || typeof isBonus == "undefined")
-          delete product.allows_choose_distribute
-          else
-          delete product.allows_all_distribute
-          products[_index] = product;
+          var product = {
+            quantity: 1,
+            product: product,
+            allows_all_distribute: product.allows_all_distribute,
+            allows_choose_distribute: product.allows_choose_distribute,
+            id: product.id,
+            sku: product.sku,
+            bonus_quantity: 1,
 
+            name: product.name,
+            distribute_name: product.distribute_name,
+            element_distribute_name: product.element_distribute_name,
+            sub_element_distribute_name: product.sub_element_distribute_name,
+          };
+          if (isBonus == false || typeof isBonus == "undefined")
+            delete product.allows_choose_distribute;
+          else delete product.allows_all_distribute;
+          if (fromBonusLadder == true) delete product.allows_choose_distribute;
+          // products.push(product);
+          if (isLadder === true) products = [{ ...product }];
+          else products.push(product);
+        } else {
+          var product = {
+            quantity: 1,
+            product: product,
+            allows_all_distribute: product.allows_all_distribute,
+            allows_choose_distribute: product.allows_choose_distribute,
+            id: product.id,
+            bonus_quantity: 1,
+
+            sku: product.sku,
+            name: product.name,
+            distribute_name: product.distribute_name,
+            element_distribute_name: product.element_distribute_name,
+            sub_element_distribute_name: product.sub_element_distribute_name,
+          };
+          products[_index] = product;
+          if (isBonus == false || typeof isBonus == "undefined")
+            delete product.allows_choose_distribute;
+          else delete product.allows_all_distribute;
+          if (fromBonusLadder == true) delete product.allows_choose_distribute;
+          products[_index] = product;
         }
       }
     }
     if (onSave == true) {
       if (isBonus)
-        this.setState({ listProductsBonus: products, saveListProductsBonus: products })
-      else
-      
-        this.setState({ listProducts: products, saveListProducts: products })
-    }
+        this.setState({
+          listProductsBonus: products,
+          saveListProductsBonus: products,
+        });
+      else if (isLadder)
+        this.setState({
+          listProductsLadder: products,
+          saveListProductsLadder: products,
+        });
+      else if (fromBonusLadder) {
+        console.log("from_bonus_ladder: ", products);
+        this.setState({
+          listProductsBonusLadder: products,
+          saveListProductsBonusLadder: products,
+        });
+      } else
+        this.setState({ listProducts: products, saveListProducts: products });
+    } else {
+      if (isBonus) this.setState({ listProductsBonus: products });
+      else if (isLadder) this.setState({ listProductsLadder: products });
+      else if (fromBonusLadder) {
+        console.log("from_bonus_ladder: ", products);
 
-    else {
-      if (isBonus)
-        this.setState({ listProductsBonus: products })
-
-      else
-        this.setState({ listProducts: products })
+        this.setState({ listProductsBonusLadder: products });
+      } else this.setState({ listProducts: products });
     }
   };
-  // handleAddProduct = (product, id, type, onSave, isBonus) => {
-  //   if (isBonus)
-  //     var products = [...this.state.listProductsBonus];
-  //   else
-  //     var products = [...this.state.listProducts];
-  //   console.log(isBonus)
-  //   if (product?.length > 0) {
-  //     if (type == "remove") {
-  //       if (products.length > 0) {
-  //         products = products.filter((value) => {
-  //           return value.product.id !== product[0].id
-  //         })
-  //         // products.forEach((item, index) => {
-  //         //   if (item.product.id === product[0].id) {
-  //         //   // if (this.compareTwoProduct(item, product)) {
-  //         //     products.splice(index, 1);
-  //         //   }
-  //         // });
-  //       }
-  //     } else {
-  //       var checkExsit = true;
-  //       product.forEach((item, index) => {
-  //         var check = false
 
+  handleChangeQuantity = (
+    data,
+    quantity,
+    setIncrement = null,
+    set = true,
+    isBonus,
+    isBonusLadder,
+    name
+  ) => {
+    if (isBonus) var products = [...this.state.listProductsBonus];
+    if (isBonusLadder) var products = [...this.state.listProductsBonusLadder];
+    else var products = [...this.state.listProducts];
 
-  //         products.forEach((item1, index1) => {
-  //           if (this.compareTwoProduct(item, item1)) {
-  //             check = true;
-
-  //           }
-
-  //         });
-  //         if (check == false) {
-  //           var product = { quantity: 1, product: item, id: item.id, sku: item.sku, name: item.name, distribute_name: item.distribute_name, element_distribute_name: item.element_distribute_name, sub_element_distribute_name: item.sub_element_distribute_name };
-  //           products.push(product);
-  //         }
-  //       });
-
-  //     }
-  //   }
-  //   else {
-  //     if (type == "remove") {
-  //       if (products.length > 0) {
-  //         products = products.filter((item) => {
-  //           return !this.compareTwoProduct(item, product)
-  //         })
-  //         // products.forEach((item, index) => {
-  //         //   // if (item.product.id === id) {
-  //         //   if (this.compareTwoProduct(item, product)) {
-  //         //     products.splice(index, 1);
-  //         //   }
-  //         // });
-  //       }
-  //     } else {
-  //       var checkExsit = true;
-  //       products.forEach((item, index) => {
-
-  //         if (this.compareTwoProduct(item, product)) {
-  //           checkExsit = false;
-  //           return;
-  //         }
-  //       });
-  //       if (checkExsit == true) {
-  //         var product = { quantity: 1, product: product, id: product.id, sku: product.sku, name: product.name, distribute_name: product.distribute_name, element_distribute_name: product.element_distribute_name, sub_element_distribute_name: product.sub_element_distribute_name };
-  //         products.push(product);
-  //       }
-  //     }
-  //   }
-  //   if (onSave == true) {
-  //     if (isBonus)
-  //       this.setState({ listProductsBonus: products, saveListProductsBonus: products })
-  //     else
-  //       this.setState({ listProducts: products, saveListProducts: products })
-  //   }
-
-  //   else {
-  //     if (isBonus)
-  //       this.setState({ listProductsBonus: products })
-
-  //     else
-  //       this.setState({ listProducts: products })
-  //   }
-  // };
-
-  handleChangeQuantity = (data, quantity, setIncrement = null, set = true, isBonus) => {
-    if (isBonus)
-      var products = [...this.state.listProductsBonus];
-    else
-      var products = [...this.state.listProducts];
+    console.log(isBonusLadder, name, products);
     products.forEach((product, index) => {
-      // if (product.product.id == id) {
+      if (isBonusLadder) {
+        var product = { ...product };
+        delete product.allows_all_distribute;
+      }
+
+      console.log(this.compareTwoProduct(product, data));
       if (this.compareTwoProduct(product, data)) {
-        if (setIncrement == 1) products[index].quantity = product.quantity + 1;
-        else if (setIncrement == -1) {
-          if (product.quantity == 1) {
-          } else products[index].quantity = product.quantity - 1;
-        } else products[index].quantity = quantity;
+        if (setIncrement === 1) {
+          if (isBonusLadder) products[index][name] = product[name] + 1;
+          else products[index].quantity = parseInt(product.quantity) + 1;
+        } else if (setIncrement === -1) {
+          if (isBonusLadder) {
+            if (product[name] == 1) {
+            } else products[index][name] = parseInt(product[name]) - 1;
+          } else {
+            if (product.quantity == 1) {
+            } else products[index].quantity = product.quantity - 1;
+          }
+        } else {
+          if (isBonusLadder) {
+            console.log(products[index][name], name, index);
+            products[index][name] = quantity;
+          } else products[index].quantity = quantity;
+        }
       }
     });
+
+    console.log(products);
     if (isBonus)
-      this.setState({ listProductsBonus: products, saveListProductsBonus: products })
-    else
-      this.setState({ listProducts: products, saveListProducts: products })
+      this.setState({
+        listProductsBonus: products,
+        saveListProductsBonus: products,
+      });
+    if (isBonusLadder)
+      this.setState({
+        listProductsBonusLadder: products,
+        saveListProductsBonusLadder: products,
+      });
+    else this.setState({ listProducts: products, saveListProducts: products });
   };
 
   render() {
@@ -561,28 +739,35 @@ class Form extends Component {
       txtEnd,
       txtAmount,
       listProducts,
+      listProductsLadder,
+
       listProductsBonus,
-      multiply_by_number,
+      listProductsBonusLadder,
+
+      multiply_by_number,        
+      isLoading,
+      group_customer,
+      agency_type_id,
       txtContent,
       txtDiscoutType,
       txtValueDiscount,
       image,
+      saveListProductsLadder,
       displayError,
       saveListProducts,
-      isLoading,
-      saveListProductsBonus
+      ladder_reward,
+      saveListProductsBonus,
+      saveListProductsBonusLadder,
     } = this.state;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
-    var { products, store_code, combos , bonusProduct } = this.props;
+    var { products, store_code, combos   , types} = this.props;
     var type_discount_default = txtDiscoutType == "0" ? "show" : "hide";
     var type_discount_percent = txtDiscoutType == "1" ? "show" : "hide";
-    var now = moment().valueOf()
-    var end_time = moment(bonusProduct.end_time, "YYYY-MM-DD HH:mm:ss").valueOf()
-    var canOnsave = now < end_time
-    console.log(this.state);
+
+    console.log(ladder_reward);
     return (
       <React.Fragment>
-        <form role="form" onSubmit={(e) => canOnsave == true && this.onSave(e)} method="post">
+        <form role="form" onSubmit={this.onSave} method="post">
           <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
               <div class="box-body">
@@ -683,7 +868,6 @@ class Form extends Component {
             </div>
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
               <div class="box-body">
-
                 <div class="form-group">
                   <label for="product_name">Giới hạn số lần thưởng</label>
                   <input
@@ -697,18 +881,99 @@ class Form extends Component {
                     onChange={this.onChange}
                   />
                 </div>
+                <div className="form-group discount-for">
+              <label htmlFor="group_customer">Nhóm khách hàng</label>
+              <div
+                style={{
+                  display: "flex",
+                }}
+                className="radio discount-for"
+                onChange={this.onChange}
+              >
+                <label>
+                  <input
+                    type="radio"
+                    name="group_customer"
+                    checked={group_customer == 0 ? true : false}
+                    className="group_customer"
+                    id="ship"
+                    value="0"
+                  />
+                  {"  "} Khách hàng
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="group_customer"
+                    checked={group_customer == 2 ? true : false}
+                    className="group_customer"
+                    id="bill"
+                    value="2"
+                  />
+                  {"  "}Đại lý
+                </label>
 
+                <label>
+                  <input
+                    type="radio"
+                    name="group_customer"
+                    checked={group_customer == 1 ? true : false}
+                    className="group_customer"
+                    id="ship"
+                    value="1"
+                  />
+                  {"  "} Cộng tác viên
+                </label>
+              </div>
+              {group_customer == 2 && (
+                <select
+                  onChange={this.onChange}
+                  value={agency_type_id}
+                  name="agency_type_id"
+                  class="form-control"
+                >
+                  <option>--- Chọn cấp đại lý ---</option>
+                  {types.map((v) => {
+                    return <option value={v.id}>{v.name}</option>;
+                  })}
+                </select>
+              )}
+            </div>
                 <div class="form-group">
                   <div class="form-check">
-                    <input type="checkbox"
+                    <input
+                      type="checkbox"
                       checked={multiply_by_number}
-                      onChange={() => this.setState({ multiply_by_number: !multiply_by_number })}
-                      class="form-check-input" id="gridCheck" />
+                      onChange={() =>
+                        this.setState({
+                          multiply_by_number: !multiply_by_number,
+                        })
+                      }
+                      class="form-check-input"
+                      id="gridCheck"
+                    />
                     {/* <input class="form-check-input" name="is_set_order_max_point" type="checkbox" id="gridCheck" /> */}
                     <label class="form-check-label" for="gridCheck">
-                      Hàng tặng nhân theo số lượng mua                 </label>
+                      Hàng tặng nhân theo số lượng mua{" "}
+                    </label>
                   </div>
-
+                </div>
+                <div class="form-group">
+                  <div class="form-check">
+                    <input
+                      type="checkbox"
+                      checked={ladder_reward}
+                      onChange={() =>
+                        this.setState({ ladder_reward: !ladder_reward })
+                      }
+                      class="form-check-input"
+                      id="gridCheck"
+                    />
+                    {/* <input class="form-check-input" name="is_set_order_max_point" type="checkbox" id="gridCheck" /> */}
+                    <label class="form-check-label" for="gridCheck">
+                      Thưởng theo bật thang{" "}
+                    </label>
+                  </div>
                 </div>
               </div>
             </div>
@@ -716,11 +981,19 @@ class Form extends Component {
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <div>
-
-                <Table
-                  handleChangeQuantity={this.handleChangeQuantity}
-                  handleAddProduct={this.handleAddProduct}
-                  products={saveListProducts}                ></Table>
+                {ladder_reward === true ? (
+                  <TableLadder
+                    handleChangeQuantity={this.handleChangeQuantity}
+                    handleAddProduct={this.handleAddProduct}
+                    products={saveListProductsLadder}
+                  ></TableLadder>
+                ) : (
+                  <Table
+                    handleChangeQuantity={this.handleChangeQuantity}
+                    handleAddProduct={this.handleAddProduct}
+                    products={saveListProducts}
+                  ></Table>
+                )}
               </div>
               {/* {getChannel() == IKITECH &&
                 <div class="form-group">
@@ -736,11 +1009,19 @@ class Form extends Component {
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <div>
-
-                <TableBonus
-                  handleChangeQuantity={this.handleChangeQuantity}
-                  handleAddProduct={this.handleAddProduct}
-                  products={saveListProductsBonus}                ></TableBonus>
+                {ladder_reward == true ? (
+                  <TableBonusLadder
+                    handleChangeQuantity={this.handleChangeQuantity}
+                    handleAddProduct={this.handleAddProduct}
+                    products={saveListProductsBonusLadder}
+                  ></TableBonusLadder>
+                ) : (
+                  <TableBonus
+                    handleChangeQuantity={this.handleChangeQuantity}
+                    handleAddProduct={this.handleAddProduct}
+                    products={saveListProductsBonus}
+                  ></TableBonus>
+                )}
               </div>
               {/* {getChannel() == IKITECH &&
                 <div class="form-group">
@@ -756,18 +1037,16 @@ class Form extends Component {
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <div class="box-footer">
-              {canOnsave == true && <button type="submit" class="btn btn-info   btn-sm">
-              <i class="fas fa-save"></i>  Lưu
-
-            </button>}
+                <button type="submit" class="btn btn-info   btn-sm">
+                  <i class="fas fa-save"></i> Lưu
+                </button>
                 <button
-                type = "button"
+                  type="button"
                   style={{ marginLeft: "10px" }}
                   onClick={this.goBack}
                   class="btn btn-warning   btn-sm"
                 >
                   <i class="fas fa-arrow-left"></i> Trở về
-
                 </button>
               </div>
             </div>
@@ -777,16 +1056,30 @@ class Form extends Component {
         <ModalUpload />
         <ModalListProduct
           onSaveProduct={this.onSaveProduct}
-
           combos={combos}
           handleAddProduct={this.handleAddProduct}
           listProducts={listProducts}
           store_code={store_code}
           products={products}
         />
+        <ModalListProductLadder
+          onSaveProduct={this.onSaveProduct}
+          combos={combos}
+          handleAddProduct={this.handleAddProduct}
+          listProducts={listProductsLadder}
+          store_code={store_code}
+          products={products}
+        />
+        <ModalListProductBonusLadder
+          onSaveProduct={this.onSaveProduct}
+          combos={combos}
+          handleAddProduct={this.handleAddProduct}
+          listProducts={listProductsBonusLadder}
+          store_code={store_code}
+          products={products}
+        />
         <ModalListProductBonus
           onSaveProduct={this.onSaveProduct}
-
           combos={combos}
           handleAddProduct={this.handleAddProduct}
           listProducts={listProductsBonus}
@@ -801,6 +1094,8 @@ class Form extends Component {
 const mapStateToProps = (state) => {
   return {
     image: state.UploadReducers.comboImg.combo_img,
+    types: state.agencyReducers.agency.allAgencyType,
+
   };
 };
 
@@ -814,6 +1109,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     initialUpload: () => {
       dispatch(bonusProductAction.initialUpload());
+    },
+    fetchAllAgencyType: (store_code) => {
+      dispatch(AgencyAction.fetchAllAgencyType(store_code));
     },
   };
 };

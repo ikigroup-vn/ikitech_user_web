@@ -17,7 +17,7 @@ import ConfimUpdateUsed from "../../Discount/Edit/ConfimUpdateUsed";
 import getChannel, { IKIPOS, IKITECH } from "../../../../ultis/channel";
 import history from "../../../../history";
 import { getQueryParams } from "../../../../ultis/helpers";
-
+import * as AgencyAction from "../../../../actions/agency";
 class Form extends Component {
   constructor(props) {
     super(props);
@@ -42,7 +42,8 @@ class Form extends Component {
       limit: "hide",
       type: "",
       displayError: "hide",
-
+      group_customer: 0,
+      agency_type_id: null,
       isLoading: false,
       loadCript: false,
       form: {},
@@ -54,6 +55,7 @@ class Form extends Component {
   }
   componentDidMount() {
     this.props.initialUpload();
+    this.props.fetchAllAgencyType(this.props.store_code);
   }
   componentDidUpdate(prevProps, prevState) {
     try {
@@ -110,7 +112,8 @@ class Form extends Component {
         image: voucher.image_url,
         txtCode: voucher.code,
         saveListProducts: voucher.products,
-
+        group_customer: voucher.group_customer,
+        agency_type_id: voucher.agency_type_id,
         txtDiscountType: voucher.discount_type,
         txtValueDiscount:
           voucher.discount_type == null
@@ -291,8 +294,14 @@ class Form extends Component {
     );
     var voucherType = type == "store" ? 0 : 1;
     var txtIsShow = state.txtIsShow == "1" ? true : false;
-
+    var { group_customer, agency_type_id } = this.state;
+    var agency_type_name =
+      this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]
+        ?.name || null;
     var form = {
+      group_customer,
+      agency_type_id,
+      agency_type_name,
       name: state.txtName,
       start_time: startTime == "Invalid date" ? null : startTime,
       end_time: endTime == "Invalid date" ? null : endTime,
@@ -497,10 +506,12 @@ class Form extends Component {
       has_discount_ship,
       displayError,
       isLoading,
+      group_customer,
+      agency_type_id,
     } = this.state;
     console.log(txtDiscountType);
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
-    var { products, store_code, vouchers, voucher } = this.props;
+    var { products, store_code, vouchers, voucher , types } = this.props;
     var disableOfType = type == "store" ? "hide" : "show";
     var checkLimit = limit == "show" ? true : false;
     var now = moment().valueOf();
@@ -625,6 +636,19 @@ class Form extends Component {
                     />
                   ) : null}
                 </div>
+                <div class="form-group">
+                  <label for="product_name">Đơn tối thiểu</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="txtValueLimitTotal"
+                    name="txtValueLimitTotal"
+                    value={txtValueLimitTotal}
+                    placeholder="Nhập giá trị tối thiểu của đơn hàng"
+                    autocomplete="off"
+                    onChange={this.onChange}
+                  />
+                </div>
               </div>
             </div>
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -641,19 +665,63 @@ class Form extends Component {
                   </select>
 
                 </div> */}
-
-                <div class="form-group">
-                  <label for="product_name">Đơn tối thiểu</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="txtValueLimitTotal"
-                    name="txtValueLimitTotal"
-                    value={txtValueLimitTotal}
-                    placeholder="Nhập giá trị tối thiểu của đơn hàng"
-                    autocomplete="off"
+                <div className="form-group discount-for">
+                  <label htmlFor="group_customer">Nhóm khách hàng</label>
+                  <div
+                    style={{
+                      display: "flex",
+                    }}
+                    className="radio discount-for"
                     onChange={this.onChange}
-                  />
+                  >
+                    <label>
+                      <input
+                        type="radio"
+                        name="group_customer"
+                        checked={group_customer == 0 ? true : false}
+                        className="group_customer"
+                        id="ship"
+                        value="0"
+                      />
+                      {"  "} Khách hàng
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="group_customer"
+                        checked={group_customer == 2 ? true : false}
+                        className="group_customer"
+                        id="bill"
+                        value="2"
+                      />
+                      {"  "}Đại lý
+                    </label>
+
+                    <label>
+                      <input
+                        type="radio"
+                        name="group_customer"
+                        checked={group_customer == 1 ? true : false}
+                        className="group_customer"
+                        id="ship"
+                        value="1"
+                      />
+                      {"  "} Cộng tác viên
+                    </label>
+                  </div>
+                  {group_customer == 2 && (
+                    <select
+                      onChange={this.onChange}
+                      value={agency_type_id}
+                      name="agency_type_id"
+                      class="form-control"
+                    >
+                      <option>--- Chọn cấp đại lý ---</option>
+                      {types.map((v) => {
+                        return <option value={v.id}>{v.name}</option>;
+                      })}
+                    </select>
+                  )}
                 </div>
 
                 <div class="form-group">
@@ -680,30 +748,30 @@ class Form extends Component {
                     className="radio discount-for"
                     onChange={this.onChange}
                   >
-                      <label>
-                        <input
-                          type="radio"
-                          name="discount_for"
-                          checked={discount_for == 0 ? true : false}
-                          className="discount_for"
-                          id="bill"
-                          value="0"
-                        />
-                        {"  "}Giảm giá cho đơn hàng
-                      </label>
-                      {type === "store" &&
                     <label>
                       <input
                         type="radio"
                         name="discount_for"
-                        checked={discount_for == 1 ? true : false}
+                        checked={discount_for == 0 ? true : false}
                         className="discount_for"
-                        id="ship"
-                        value="1"
+                        id="bill"
+                        value="0"
                       />
-                      {"  "} Giảm giá cho vận chuyển
+                      {"  "}Giảm giá cho đơn hàng
                     </label>
-  }
+                    {type === "store" && (
+                      <label>
+                        <input
+                          type="radio"
+                          name="discount_for"
+                          checked={discount_for == 1 ? true : false}
+                          className="discount_for"
+                          id="ship"
+                          value="1"
+                        />
+                        {"  "} Giảm giá cho vận chuyển
+                      </label>
+                    )}
                   </div>
                 </div>
 
@@ -879,6 +947,8 @@ const mapStateToProps = (state) => {
   return {
     image: state.UploadReducers.voucherImg.voucher_img,
     state: state,
+    types: state.agencyReducers.agency.allAgencyType,
+
   };
 };
 
@@ -892,6 +962,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     initialUpload: () => {
       dispatch(voucherAction.initialUpload());
+    },
+    fetchAllAgencyType: (store_code) => {
+      dispatch(AgencyAction.fetchAllAgencyType(store_code));
     },
   };
 };

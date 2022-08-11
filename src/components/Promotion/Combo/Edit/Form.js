@@ -17,6 +17,7 @@ import ConfimUpdateUsed from "../../Discount/Edit/ConfimUpdateUsed";
 import getChannel, { IKIPOS, IKITECH } from "../../../../ultis/channel";
 import history from "../../../../history"
 import { getQueryParams } from "../../../../ultis/helpers"
+import * as AgencyAction from "../../../../actions/agency";
 
 class Form extends Component {
   constructor(props) {
@@ -32,7 +33,8 @@ class Form extends Component {
       listProducts: [],
       image: "",
       saveListProducts: [],
-
+      group_customer: 0,
+      agency_type_id: null,
       displayError: "hide",
 
       isLoading: false,
@@ -41,7 +43,10 @@ class Form extends Component {
   }
   componentDidMount() {
     this.props.initialUpload()
+    this.props.fetchAllAgencyType(this.props.store_code);
+
   }
+
   componentDidUpdate(prevProps, prevState) {
 
     try {
@@ -69,7 +74,8 @@ class Form extends Component {
 
         txtValueDiscount: combo.value_discount == null ? null : new Intl.NumberFormat().format(combo.value_discount.toString()),
         saveListProducts: combo.products,
-
+        group_customer : combo.group_customer,
+        agency_type_id : combo.agency_type_id,
         txtDiscoutType: combo.discount_type,
         listProducts: combo.products_combo,
         saveListProducts: combo.products_combo,
@@ -203,8 +209,12 @@ class Form extends Component {
     var startTime = moment(state.txtStart, "DD-MM-YYYY HH:mm").format("YYYY-MM-DD HH:mm:ss");
     var endTime = moment(state.txtEnd, "DD-MM-YYYY HH:mm").format("YYYY-MM-DD HH:mm:ss");
 
-
+    var { group_customer, agency_type_id } = this.state;
+    var agency_type_name = this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]?.name || null;
     var form = {
+      group_customer,
+      agency_type_id,
+      agency_type_name,
       amount: state.txtAmount == null ? state.txtAmount : formatNumber(state.txtAmount),
       value_discount: state.txtValueDiscount == null ? state.txtValueDiscount : formatNumber(state.txtValueDiscount),
       name: state.txtName,
@@ -321,11 +331,13 @@ class Form extends Component {
       txtValueDiscount,
       image,
       saveListProducts,
+      group_customer,
+      agency_type_id,
 
       displayError, isLoading
     } = this.state;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
-    var { products, store_code, combos, combo } = this.props;
+    var { products, store_code, combos, combo  , types} = this.props;
     var type_discount_default = txtDiscoutType == 0 ? "show" : "hide"
     var type_discount_percent = txtDiscoutType == 1 ? "show" : "hide"
     var now = moment().valueOf()
@@ -439,6 +451,64 @@ class Form extends Component {
 
               <div class="box-body">
              
+            <div className="form-group discount-for">
+              <label htmlFor="group_customer">Nhóm khách hàng</label>
+              <div
+                style={{
+                  display: "flex",
+                }}
+                className="radio discount-for"
+                onChange={this.onChange}
+              >
+                <label>
+                  <input
+                    type="radio"
+                    name="group_customer"
+                    checked={group_customer == 0 ? true : false}
+                    className="group_customer"
+                    id="ship"
+                    value="0"
+                  />
+                  {"  "} Khách hàng
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="group_customer"
+                    checked={group_customer == 2 ? true : false}
+                    className="group_customer"
+                    id="bill"
+                    value="2"
+                  />
+                  {"  "}Đại lý
+                </label>
+
+                <label>
+                  <input
+                    type="radio"
+                    name="group_customer"
+                    checked={group_customer == 1 ? true : false}
+                    className="group_customer"
+                    id="ship"
+                    value="1"
+                  />
+                  {"  "} Cộng tác viên
+                </label>
+              </div>
+              {group_customer == 2 && (
+                <select
+                  onChange={this.onChange}
+                  value={agency_type_id}
+                  name="agency_type_id"
+                  class="form-control"
+                >
+                  <option>--- Chọn cấp đại lý ---</option>
+                  {types.map((v) => {
+                    return <option value={v.id}>{v.name}</option>;
+                  })}
+                </select>
+              )}
+            </div>
                 <div class="form-group">
                   <label for="product_name">Giới hạn Combo</label>
                   <input
@@ -568,6 +638,8 @@ class Form extends Component {
 const mapStateToProps = (state) => {
   return {
     image: state.UploadReducers.comboImg.combo_img,
+    types: state.agencyReducers.agency.allAgencyType,
+
   };
 };
 
@@ -581,7 +653,10 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     initialUpload: () => {
       dispatch(comboAction.initialUpload())
-    }
+    },
+    fetchAllAgencyType: (store_code) => {
+      dispatch(AgencyAction.fetchAllAgencyType(store_code));
+    },
 
   };
 };

@@ -7,6 +7,7 @@ import MomentInput from 'react-moment-input';
 
 import { shallowEqual } from "../../../ultis/shallowEqual"
 import { isEmail, isEmpty, isPhone } from "../../../ultis/helpers";
+import * as AgencyAction from "../../../actions/agency";
 
 import * as Types from "../../../constants/ActionType";
 class Form extends Component {
@@ -23,7 +24,14 @@ class Form extends Component {
       time_run_near: "",
       title: "",
       type_schedule: "0",
+      group_customer: 0,
+      agency_type_id: null,
     };
+  }
+
+  componentDidMount() {
+  
+    this.props.fetchAllAgencyType(this.props.store_code);
   }
 
 
@@ -40,6 +48,9 @@ class Form extends Component {
               description: item.description,
               group_customer: item.group_customer,
               time_of_day: item.time_of_day,
+              group_customer : item.group_customer,
+              agency_type_id : item.agency_type_id,
+              agency_type_name : item.agency_type_name,
               time_run: moment(item.time_run, "YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY HH:mm:ss"),
               time_run_near: item.time_run_near,
               title: item.title,
@@ -99,7 +110,12 @@ class Form extends Component {
       title,
       type_schedule,
     } = this.state;
+    var { group_customer, agency_type_id } = this.state;
+    var agency_type_name = this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]?.name || null;
     var form = {
+      group_customer,
+      agency_type_id,
+      agency_type_name,
       type_schedule,
       day_of_month,
       day_of_week,
@@ -185,13 +201,15 @@ class Form extends Component {
       time_run_near,
       title,
       type_schedule,
+      group_customer,
+      agency_type_id
     } = this.state
     var disable_oneDay = type_schedule == "0" ? "show" : "hide"
     var disable_everyDay = type_schedule == "1" ? "show" : "hide"
     var disable_everyWeek = type_schedule == "2" ? "show" : "hide"
     var disable_everyMonth = type_schedule == "3" ? "show" : "hide"
 
-    console.log(time_run)
+    var {  types } = this.props;
     return (
       <React.Fragment>
         <form role="form" onSubmit={this.onSave} method="post">
@@ -394,6 +412,64 @@ class Form extends Component {
             </div>
 
 
+            <div className="form-group discount-for">
+              <label htmlFor="group_customer">Nhóm khách hàng</label>
+              <div
+                style={{
+                  display: "flex",
+                }}
+                className="radio discount-for"
+                onChange={this.onChange}
+              >
+                <label>
+                  <input
+                    type="radio"
+                    name="group_customer"
+                    checked={group_customer == 0 ? true : false}
+                    className="group_customer"
+                    id="ship"
+                    value="0"
+                  />
+                  {"  "} Khách hàng
+                </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="group_customer"
+                    checked={group_customer == 2 ? true : false}
+                    className="group_customer"
+                    id="bill"
+                    value="2"
+                  />
+                  {"  "}Đại lý
+                </label>
+
+                <label>
+                  <input
+                    type="radio"
+                    name="group_customer"
+                    checked={group_customer == 1 ? true : false}
+                    className="group_customer"
+                    id="ship"
+                    value="1"
+                  />
+                  {"  "} Cộng tác viên
+                </label>
+              </div>
+              {group_customer == 2 && (
+                <select
+                  onChange={this.onChange}
+                  value={agency_type_id}
+                  name="agency_type_id"
+                  class="form-control"
+                >
+                  <option>--- Chọn cấp đại lý ---</option>
+                  {types.map((v) => {
+                    return <option value={v.id}>{v.name}</option>;
+                  })}
+                </select>
+              )}
+            </div>
 
 
           </div>
@@ -420,6 +496,11 @@ class Form extends Component {
     );
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    types: state.agencyReducers.agency.allAgencyType,
+  };
+};
 
 
 const mapDispatchToProps = (dispatch, props) => {
@@ -432,7 +513,9 @@ const mapDispatchToProps = (dispatch, props) => {
     showError: (error) => {
       dispatch(error);
     },
-
+    fetchAllAgencyType: (store_code) => {
+      dispatch(AgencyAction.fetchAllAgencyType(store_code));
+    },
   };
 };
-export default connect(null, mapDispatchToProps)(Form);
+export default connect(mapStateToProps, mapDispatchToProps)(Form);

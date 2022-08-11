@@ -9,8 +9,10 @@ class Table extends Component {
     };
   }
 
-  onChange = (e, data) => {
-    this.props.handleChangeQuantity(data ,e.target.value ,null, true , true)
+  onChange = (e, data ,name) => {
+    this.props.handleChangeQuantity(data ,e.target.value ,null, true , false,true ,name )
+  
+
   };
 
   componentWillReceiveProps(nextProps) {
@@ -21,16 +23,16 @@ class Table extends Component {
 
 
   removeItem = (data) => {
-    this.props.handleAddProduct(data, data, "remove" , true , true)
+    this.props.handleAddProduct(data, data, "remove" , true , false,false,true)
   }
 
-  decrement = (data) => {
-    this.props.handleChangeQuantity(data ,null , -1 , true,true)
+  decrement = (data , name) => {
+    this.props.handleChangeQuantity(data ,null , -1 , true,false,true,name)
 
   }
-  increment = (data) => {
+  increment = (data , name) => {
 
-    this.props.handleChangeQuantity(data, null ,1 , true,true)
+    this.props.handleChangeQuantity(data, null ,1 , true,false,true,name)
 
   }
   showData = (products) => {
@@ -52,13 +54,22 @@ class Table extends Component {
 
             <td>{data.product.name}</td>
             <td>{data.allows_choose_distribute === true ? "Tự chọn phân loại" :  distribute}</td>
-
-            <td className="quantity" style = {{display:"flex"}}>
-              <span onClick={() => { this.decrement(data.product) }} class="input-quantity input-number-decrement">–</span>
-              <input class="input-number" name="txtQuantity" value={data.quantity} type="text" onChange={(e) => this.onChange(e, data.product)} />
-              <span onClick={() => this.increment(data.product)} class="input-quantity input-number-increment">+</span>
+            <td className="quantity" >
+             <div style = {{display:"flex"}}>
+             <span onClick={() => { this.decrement(data.product , "quantity") }} class="input-quantity input-number-decrement">–</span>
+              <input class="input-number" name="txtQuantity" value={data.quantity} type="text" onChange={(e) => this.onChange(e, data.product , "quantity")} />
+              <span onClick={() => this.increment(data.product , "quantity")} class="input-quantity input-number-increment">+</span>
+             </div>
             </td>
-
+            <td className="quantity" >
+             <div style = {{display:"flex"}}>
+             <span onClick={() => { this.decrement(data.product , "bonus_quantity") }} class="input-quantity input-number-decrement">–</span>
+             {/* Từ bonus */}
+              <input class="input-number" name="txtQuantity" value={data.bonus_quantity} type="text" onChange={(e) => this.onChange(e, data.product ,  "bonus_quantity")} /> 
+              <span onClick={() => this.increment(data.product , "bonus_quantity")} class="input-quantity input-number-increment">+</span>
+             </div>
+            </td>
+       
             <td>
               <button type="button" class="btn btn-danger btn-sm" onClick={() => this.removeItem(data.product)}>
 
@@ -88,8 +99,7 @@ class Table extends Component {
 
             style={{ marginLeft: "10px" }}
             data-toggle="modal"
-            data-target="#modalBonus
-            "
+            data-target="#modalBonusLadder"
           >
               <i class="fas fa-plus" ></i>
             <span class="text">&nbsp;Chọn sản phẩm</span>
@@ -108,7 +118,8 @@ class Table extends Component {
                     <th>Tên sản phẩm</th>
                     <th>Phân loại</th>
 
-                    <th>Số lượng</th>
+                    <th>Số lượng SP mua</th>
+                    <th>Số lượng SP tặng</th>
 
                     <th>Hành động</th>
                   </tr>

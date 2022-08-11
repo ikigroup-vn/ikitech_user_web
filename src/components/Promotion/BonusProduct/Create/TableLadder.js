@@ -10,7 +10,7 @@ class Table extends Component {
   }
 
   onChange = (e, data) => {
-    this.props.handleChangeQuantity(data ,e.target.value ,null, true , true)
+    this.props.handleChangeQuantity(data ,e.target.value ,null, true)
   };
 
   componentWillReceiveProps(nextProps) {
@@ -21,16 +21,16 @@ class Table extends Component {
 
 
   removeItem = (data) => {
-    this.props.handleAddProduct(data, data, "remove" , true , true)
+    this.props.handleAddProduct(data, data, "remove" , true ,false,true)
   }
 
   decrement = (data) => {
-    this.props.handleChangeQuantity(data ,null , -1 , true,true)
+    this.props.handleChangeQuantity(data ,null , -1 , true)
 
   }
   increment = (data) => {
 
-    this.props.handleChangeQuantity(data, null ,1 , true,true)
+    this.props.handleChangeQuantity(data, null ,1 , true)
 
   }
   showData = (products) => {
@@ -51,13 +51,9 @@ class Table extends Component {
             <td>{data.product.sku}</td>
 
             <td>{data.product.name}</td>
-            <td>{data.allows_choose_distribute === true ? "Tự chọn phân loại" :  distribute}</td>
+            <td>{data.allows_all_distribute === true ? "Tự chọn phân loại" :  distribute}</td>
 
-            <td className="quantity" style = {{display:"flex"}}>
-              <span onClick={() => { this.decrement(data.product) }} class="input-quantity input-number-decrement">–</span>
-              <input class="input-number" name="txtQuantity" value={data.quantity} type="text" onChange={(e) => this.onChange(e, data.product)} />
-              <span onClick={() => this.increment(data.product)} class="input-quantity input-number-increment">+</span>
-            </td>
+        
 
             <td>
               <button type="button" class="btn btn-danger btn-sm" onClick={() => this.removeItem(data.product)}>
@@ -80,7 +76,7 @@ class Table extends Component {
     return (
       <React.Fragment>
         <div class="form-group">
-          <label for="product_name">Chọn nhóm sản phẩm tặng</label>
+          <label for="product_name">Chọn sản phẩm mua</label>
 
           <button
             type="button"
@@ -88,15 +84,14 @@ class Table extends Component {
 
             style={{ marginLeft: "10px" }}
             data-toggle="modal"
-            data-target="#modalBonus
-            "
+            data-target="#showListProductLadder"
           >
               <i class="fas fa-plus" ></i>
             <span class="text">&nbsp;Chọn sản phẩm</span>
           </button>
         </div>
         <div class="form-group">
-          <label for="product_name">Nhóm sản phẩm tặng : </label>
+          <label for="product_name">Sản phẩm mua : </label>
 
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <div class="table-responsive">
@@ -108,7 +103,6 @@ class Table extends Component {
                     <th>Tên sản phẩm</th>
                     <th>Phân loại</th>
 
-                    <th>Số lượng</th>
 
                     <th>Hành động</th>
                   </tr>
