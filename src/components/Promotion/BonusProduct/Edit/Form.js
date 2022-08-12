@@ -7,12 +7,12 @@ import Table from "./Table";
 import { shallowEqual } from "../../../../ultis/shallowEqual";
 import moment from "moment";
 import Datetime from "react-datetime";
-import ModalListProduct from "./ListProduct";
+import ModalListProduct from "../Create/ListProduct";
+import ModalListProductBonus from "../Create/ListProductBonus";
 import ModalListProductLadder from "./../Create/ListProductLadder";
 
 import ModalListProductBonusLadder from "./../Create/ListProductBonusLadder";
 
-import ModalListProductBonus from "./ListProductBonus";
 import TableBonus from "./TableBonus";
 import TableBonusLadder from "./../Create/TableBonusLadder";
 
@@ -494,8 +494,13 @@ class Form extends Component {
     isLadder,
     fromBonusLadder
   ) => {
-    console.log(this.state.listProductsBonus);
-
+    console.log( product,
+      id,
+      type,
+      onSave,
+      isBonus,
+      isLadder,
+      fromBonusLadder)
     if (isBonus) var products = [...this.state.listProductsBonus];
     else if (isLadder) var products = [...this.state.listProductsLadder];
     else if (fromBonusLadder)
@@ -882,7 +887,7 @@ class Form extends Component {
                   />
                 </div>
                 <div className="form-group discount-for">
-              <label htmlFor="group_customer">Nhóm khách hàng</label>
+              <label htmlFor="group_customer">Áp dụng cho</label>
               <div
                 style={{
                   display: "flex",
@@ -899,7 +904,7 @@ class Form extends Component {
                     id="ship"
                     value="0"
                   />
-                  {"  "} Khách hàng
+                  {"  "} Tất cả
                 </label>
                 <label>
                   <input
@@ -1014,12 +1019,15 @@ class Form extends Component {
                     handleChangeQuantity={this.handleChangeQuantity}
                     handleAddProduct={this.handleAddProduct}
                     products={saveListProductsBonusLadder}
+                    fromProduct={saveListProductsLadder}
+
                   ></TableBonusLadder>
                 ) : (
                   <TableBonus
                     handleChangeQuantity={this.handleChangeQuantity}
                     handleAddProduct={this.handleAddProduct}
                     products={saveListProductsBonus}
+                    
                   ></TableBonus>
                 )}
               </div>

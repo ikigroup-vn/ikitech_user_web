@@ -69,3 +69,8 @@ export const postCashRefund = (order_code , data,store_code, branch_id) =>{
 export const getCalculate = (store_code , data, branch_id) =>{
   return callApi(`/store_v2/${store_code}/${branch_id}/pos/refund/calculate`, "post", data);
 }
+
+
+export const syncShipment = (store_code , order_code , data) =>{
+  return callApi(`/store/${store_code}/shipper/order_and_payment_status/${order_code}`, "post", data);
+}

@@ -384,7 +384,7 @@ class Form extends Component {
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
               <div class="box-body">
               <div className="form-group discount-for">
-              <label htmlFor="group_customer">Nhóm khách hàng</label>
+              <label htmlFor="group_customer">Áp dụng cho</label>
               <div
                 style={{
                   display: "flex",
@@ -401,7 +401,7 @@ class Form extends Component {
                     id="ship"
                     value="0"
                   />
-                  {"  "} Khách hàng
+                  {"  "} Tất cả
                 </label>
                 <label>
                   <input

@@ -47,7 +47,8 @@ class ListProduct extends Component {
     delete product1.product;
     delete product2.quantity;
     delete product2.product;
-
+    delete product2.bonus_quantity;
+    delete product1.bonus_quantity
     console.log(product1,product2)
     if (shallowEqual(product1, product2)) {
       return true
@@ -435,7 +436,7 @@ class ListProduct extends Component {
             <div class="modal-header" style={{ background: "white" }}>
 
               <div>
-                <h4 style={{ color: "black", display: "block" }}>Chọn nhóm sản phẩm tặng</h4>
+                <h4 style={{ color: "black", display: "block" }}>Chọn nhóm sản phẩsdam tặng</h4>
 
                 <i style={{ color: "red" }}> Những sản phẩm được tô đậm là những sản phẩm đang nằm trong các chương trình khuyến mại khác! Vui lòng xóa nếu muốn thêm vào chương trình này</i>
 

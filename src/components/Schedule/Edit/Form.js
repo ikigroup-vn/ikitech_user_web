@@ -250,12 +250,32 @@ class Form extends Component {
             <div class="form-group">
               <label for="product_name">Gửi tới</label>
 
-              <select name="group_customer" value={group_customer} onChange={this.onChange} id="input" class="form-control" >
+              <select
+                name="group_customer"
+                onChange={this.onChange}
+                id="input"
+                class="form-control"
+                value={group_customer}
+              >
                 <option value="0">Tất cả</option>
                 <option value="1">Khách hàng có ngày sinh nhật</option>
-
+                <option value="2">Đại lý</option>
+                <option value="2">Cộng tác viên</option>
               </select>
-
+              {group_customer == 2 && (
+                <select
+                  onChange={this.onChange}
+                  value={agency_type_id}
+                  name="agency_type_id"
+                  class="form-control"
+                  style={{marginTop: "10px"}}
+                >
+                  <option>--- Chọn cấp đại lý ---</option>
+                  {types.map((v) => {
+                    return <option value={v.id}>{v.name}</option>;
+                  })}
+                </select>
+              )}
             </div>
 
             <div class="form-group">
@@ -412,64 +432,7 @@ class Form extends Component {
             </div>
 
 
-            <div className="form-group discount-for">
-              <label htmlFor="group_customer">Nhóm khách hàng</label>
-              <div
-                style={{
-                  display: "flex",
-                }}
-                className="radio discount-for"
-                onChange={this.onChange}
-              >
-                <label>
-                  <input
-                    type="radio"
-                    name="group_customer"
-                    checked={group_customer == 0 ? true : false}
-                    className="group_customer"
-                    id="ship"
-                    value="0"
-                  />
-                  {"  "} Khách hàng
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="group_customer"
-                    checked={group_customer == 2 ? true : false}
-                    className="group_customer"
-                    id="bill"
-                    value="2"
-                  />
-                  {"  "}Đại lý
-                </label>
-
-                <label>
-                  <input
-                    type="radio"
-                    name="group_customer"
-                    checked={group_customer == 1 ? true : false}
-                    className="group_customer"
-                    id="ship"
-                    value="1"
-                  />
-                  {"  "} Cộng tác viên
-                </label>
-              </div>
-              {group_customer == 2 && (
-                <select
-                  onChange={this.onChange}
-                  value={agency_type_id}
-                  name="agency_type_id"
-                  class="form-control"
-                >
-                  <option>--- Chọn cấp đại lý ---</option>
-                  {types.map((v) => {
-                    return <option value={v.id}>{v.name}</option>;
-                  })}
-                </select>
-              )}
-            </div>
+          
 
 
           </div>

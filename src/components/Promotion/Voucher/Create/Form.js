@@ -512,7 +512,7 @@ class Form extends Component {
                   Thời gian kết thúc phải sau thời gian bắt đầu
                 </div>
                 <div className="form-group discount-for">
-              <label htmlFor="group_customer">Nhóm khách hàng</label>
+              <label htmlFor="group_customer">Áp dụng cho</label>
               <div
                 style={{
                   display: "flex",
@@ -529,7 +529,7 @@ class Form extends Component {
                     id="ship"
                     value="0"
                   />
-                  {"  "} Khách hàng
+                  {"  "} Tất cả
                 </label>
                 <label>
                   <input

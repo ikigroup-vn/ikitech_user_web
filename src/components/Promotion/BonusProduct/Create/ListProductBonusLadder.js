@@ -52,7 +52,7 @@ class ListProduct extends Component {
     delete product1.bonus_quantity
     
 
-    console.log(product1, product2)
+    console.log("hehe",product1, product2)
     if (shallowEqual(product1, product2)) {
       return true
     }
@@ -62,11 +62,9 @@ class ListProduct extends Component {
   checkExsit = (list, data) => {
     if (list.length > 0) {
       for (const element of list) {
-        // console.log(element,data,this.compareTwoProduct(element == data));
         console.log(this.compareTwoProduct(element, data),element,data)
 
         if (this.compareTwoProduct(element, data)) {
-          // console.log(this.compareTwoProduct(element, data),element,data)
 
           return true
         }

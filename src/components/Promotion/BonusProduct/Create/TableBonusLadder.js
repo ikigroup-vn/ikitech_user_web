@@ -40,6 +40,8 @@ class Table extends Component {
     if (typeof products === "undefined") {
       return result;
     }
+    var {fromProduct} = this.props
+    console.log("aaa" , fromProduct)
     if (products.length > 0) {
       result = products.map((data, index) => {
         var element_distribute_name  = data.element_distribute_name ? data.element_distribute_name : ""
@@ -48,12 +50,7 @@ class Table extends Component {
 
         return (
           <tr>
-            <td>{index + 1}</td>
-
-            <td>{data.product.sku}</td>
-
-            <td>{data.product.name}</td>
-            <td>{data.allows_choose_distribute === true ? "Tự chọn phân loại" :  distribute}</td>
+            <td>{fromProduct?.length > 0 ? fromProduct[0].name : ""}</td>
             <td className="quantity" >
              <div style = {{display:"flex"}}>
              <span onClick={() => { this.decrement(data.product , "quantity") }} class="input-quantity input-number-decrement">–</span>
@@ -61,6 +58,11 @@ class Table extends Component {
               <span onClick={() => this.increment(data.product , "quantity")} class="input-quantity input-number-increment">+</span>
              </div>
             </td>
+
+            <td>{data.product.name}</td>
+       
+            <td>{data.allows_choose_distribute === true ? "Tự chọn phân loại" :  distribute}</td>
+       
             <td className="quantity" >
              <div style = {{display:"flex"}}>
              <span onClick={() => { this.decrement(data.product , "bonus_quantity") }} class="input-quantity input-number-decrement">–</span>
@@ -113,12 +115,10 @@ class Table extends Component {
               <table class="table table-border table-hover">
                 <thead className="">
                   <tr>
-                    <th>STT</th>
-                    <th>Mã SKU</th>
-                    <th>Tên sản phẩm</th>
+                    <th>Sản phẩm mua</th>
+                    <th>Mua từ</th>
+                    <th>Sản phẩm tặng</th>
                     <th>Phân loại</th>
-
-                    <th>Số lượng SP mua</th>
                     <th>Số lượng SP tặng</th>
 
                     <th>Hành động</th>

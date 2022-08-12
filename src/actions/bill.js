@@ -4,29 +4,34 @@ import * as billApi from "../data/remote/bill";
 import * as chatApi from "../data/remote/chat";
 import * as uploadApi from "../data/remote/upload";
 import { compressed } from "../ultis/helpers";
-import { getBranchId } from "../ultis/branchUtils"
+import { getBranchId } from "../ultis/branchUtils";
 import moment from "moment";
-export const fetchAllBill = (store_code, page = 1, branch_id, params = null, params_agency = null) => {
-
+export const fetchAllBill = (
+  store_code,
+  page = 1,
+  branch_id,
+  params = null,
+  params_agency = null
+) => {
   if (branch_id != null) {
     return (dispatch) => {
       dispatch({
         type: Types.SHOW_LOADING_LAZY,
-        loading: "show"
-      })
-      billApi.fetchAllBill(store_code, page, branch_id, params, params_agency).then((res) => {
-        dispatch({
-          type: Types.SHOW_LOADING_LAZY,
-          loading: "hide"
-        })
-        if (res.data.code !== 401)
-          dispatch({
-            type: Types.FETCH_ALL_BILL,
-            data: res.data.data,
-          });
-
-
+        loading: "show",
       });
+      billApi
+        .fetchAllBill(store_code, page, branch_id, params, params_agency)
+        .then((res) => {
+          dispatch({
+            type: Types.SHOW_LOADING_LAZY,
+            loading: "hide",
+          });
+          if (res.data.code !== 401)
+            dispatch({
+              type: Types.FETCH_ALL_BILL,
+              data: res.data.data,
+            });
+        });
       billApi
         .fetchAllBill(store_code, page, branch_id, params, params_agency)
         .then((res) => {
@@ -42,7 +47,6 @@ export const fetchAllBill = (store_code, page = 1, branch_id, params = null, par
         });
     };
   }
-
 };
 
 export const fetchBillId = (store_code, order_code) => {
@@ -86,18 +90,16 @@ export const fetchBillId = (store_code, order_code) => {
   };
 };
 
-
 export const getCalculate = (store_code, data, branch_id = getBranchId()) => {
   return (dispatch) => {
-
     billApi
-      .getCalculate(store_code, data, branch_id = getBranchId())
+      .getCalculate(store_code, data, (branch_id = getBranchId()))
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING_LAZY,
           loading: "hide",
         });
-        console.log(res)
+        console.log(res);
         if (res.data.code !== 401)
           dispatch({
             type: Types.GET_CALCULATE,
@@ -108,8 +110,8 @@ export const getCalculate = (store_code, data, branch_id = getBranchId()) => {
             type: Types.GET_CALCULATE,
             data: {},
           });
-
-      }).catch(function (error) {
+      })
+      .catch(function (error) {
         dispatch({
           type: Types.GET_CALCULATE,
           data: {},
@@ -124,11 +126,8 @@ export const getCalculate = (store_code, data, branch_id = getBranchId()) => {
           },
         });
       });
-
   };
 };
-
-
 
 export const fetchBillHistory = (store_code, billId) => {
   if (
@@ -282,7 +281,13 @@ export const updateStatusPayment = (data, store_code, billId, order_code) => {
   };
 };
 
-export const sendOrderToDelivery = (data, store_code, billId, order_code, order_status_code) => {
+export const sendOrderToDelivery = (
+  data,
+  store_code,
+  billId,
+  order_code,
+  order_status_code
+) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -309,11 +314,9 @@ export const sendOrderToDelivery = (data, store_code, billId, order_code, order_
         billApi
           .updateStatusOrder(store_code, {
             order_code: order_code,
-            order_status_code: order_status_code
+            order_status_code: order_status_code,
           })
           .then((res) => {
-
-
             billApi.fetchBillId(store_code, order_code).then((res) => {
               if (res.data.code !== 401)
                 dispatch({
@@ -372,16 +375,15 @@ export const sendOrderToDelivery = (data, store_code, billId, order_code, order_
   };
 };
 
-export const updateOrder = (data, store_code, order_code , noneLoading) => {
+export const updateOrder = (data, store_code, order_code, noneLoading) => {
   return (dispatch) => {
-    if(noneLoading !== true)
-    {
+    if (noneLoading !== true) {
       dispatch({
         type: Types.SHOW_LOADING,
         loading: "show",
       });
     }
- 
+
     billApi
       .updateOrder(data, store_code, order_code)
       .then((res) => {
@@ -389,7 +391,7 @@ export const updateOrder = (data, store_code, order_code , noneLoading) => {
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
- 
+
         billApi.fetchBillId(store_code, order_code).then((res) => {
           if (res.data.code !== 401)
             dispatch({
@@ -406,8 +408,7 @@ export const updateOrder = (data, store_code, order_code , noneLoading) => {
               data: res.data.data,
             });
         });
-        if(noneLoading !== true)
-        {
+        if (noneLoading !== true) {
           dispatch({
             type: Types.ALERT_UID_STATUS,
             alert: {
@@ -418,8 +419,51 @@ export const updateOrder = (data, store_code, order_code , noneLoading) => {
             },
           });
         }
-     
-       
+      });
+  };
+};
+
+export const syncShipment = (store_code, order_code, data, syncArr) => {
+  return (dispatch) => {
+    billApi
+      .syncShipment(store_code, order_code, data)
+      .then((res) => {
+        if (res.data.code === 200) {
+          dispatch({
+            type: Types.UPDATE_STATUS_SYNC_SHIPMENT,
+            data: syncArr?.map((v) => {
+              if (v.order_code === order_code) {
+                return {
+                  order_code: order_code,
+                  payment_status: res.data.payment_status,
+                  order_status: res.data.order_status,
+                  status: Types.SUCCESS,
+                };
+              } else {
+                return v;
+              }
+            }),
+          });
+        }
+      })
+      .catch(function (error) {
+        console.log(order_code , syncArr)
+
+        dispatch({
+          type: Types.UPDATE_STATUS_SYNC_SHIPMENT,
+          data: syncArr?.map((v) => {
+            if (v.order_code === order_code) {
+              return {
+                order_code: order_code,
+                payment_status: null,
+                order_status: null,
+                status: Types.FAILURE,
+              };
+            } else {
+              return v;
+            }
+          }),
+        });
       });
   };
 };
@@ -618,20 +662,19 @@ export const uploadImgChat = function (store_code, customerId, files) {
   };
 };
 
-
 export const postRefund = (data, store_code, branch = getBranchId()) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     billApi
       .postRefund(data, store_code, branch)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -646,8 +689,8 @@ export const postRefund = (data, store_code, branch = getBranchId()) => {
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -661,14 +704,17 @@ export const postRefund = (data, store_code, branch = getBranchId()) => {
   };
 };
 
-
-
-export const postCashRefund = (order_code, data, store_code, branch = getBranchId()) => {
+export const postCashRefund = (
+  order_code,
+  data,
+  store_code,
+  branch = getBranchId()
+) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     billApi
       .postCashRefund(order_code, data, store_code, branch)
       .then((res) => {
@@ -682,14 +728,16 @@ export const postCashRefund = (order_code, data, store_code, branch = getBranchI
               type: Types.FETCH_ID_BILL,
               data: res.data.data,
             });
-    
-            billApi.fetchBillHistory(store_code, res.data.data.id).then((res) => {
-              if (res.data.code !== 401)
-                dispatch({
-                  type: Types.FETCH_BILL_HISTORY,
-                  data: res.data.data,
-                });
-            });
+
+            billApi
+              .fetchBillHistory(store_code, res.data.data.id)
+              .then((res) => {
+                if (res.data.code !== 401)
+                  dispatch({
+                    type: Types.FETCH_BILL_HISTORY,
+                    data: res.data.data,
+                  });
+              });
             billApi.fetchHistoryPay(store_code, order_code).then((res) => {
               if (res.data.code === 200)
                 dispatch({
@@ -697,7 +745,7 @@ export const postCashRefund = (order_code, data, store_code, branch = getBranchI
                   data: res.data.data,
                 });
             });
-    
+
             billApi
               .getHistoryDeliveryStatus(store_code, {
                 order_code: res.data.data.order_code,
@@ -711,7 +759,7 @@ export const postCashRefund = (order_code, data, store_code, branch = getBranchI
               });
           }
         });
-   
+
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -726,8 +774,8 @@ export const postCashRefund = (order_code, data, store_code, branch = getBranchI
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
