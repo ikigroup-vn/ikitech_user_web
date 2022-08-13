@@ -260,7 +260,7 @@ class Form extends Component {
                 <option value="0">Tất cả</option>
                 <option value="1">Khách hàng có ngày sinh nhật</option>
                 <option value="2">Đại lý</option>
-                <option value="2">Cộng tác viên</option>
+                <option value="3">Cộng tác viên</option>
               </select>
               {group_customer == 2 && (
                 <select

@@ -34,7 +34,9 @@ class Table extends Component {
       var {update , _delete} = this.props
 
       result = schedule.map((data, index) => {
-        var group_customer = data.group_customer == 0 ? "Tất cả" : "Khách hàng có ngày sinh nhật"
+        var group_customer = data.group_customer == 0 ? "Tất cả"
+         : data.group_customer == 1 ? "Khách hàng có ngày sinh nhật "
+          : data.group_customer == 2 ? "Đại lý" : "Cộng tác viên"
         var type_schedule = data.type_schedule == 0 ? "Chạy 1 lần duy nhất" : data.type_schedule == 1 ? "Hàng ngày"
           : data.type_schedule == 2 ? "Hàng tuần" : "Hàng tháng"
         var date = data.type_schedule == 0 ?  moment( data.time_run,"YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY")
