@@ -281,7 +281,7 @@ class Table extends Component {
 
         var item = this.checkLoadingSyncShip(data.order_code);
         var itemLoaded = this.checkLoaded(data.order_code);
-        console.log(item , data.order_code ,this.syncArr)
+        console.log(item , data.order_code ,this.syncArr,itemLoaded)
         return (
           <tr
             className="hover-product"
@@ -329,7 +329,7 @@ class Table extends Component {
                   style={{ fontWeight: "500" }}
                   className={_payment_status_code}
                 >
-                  {(itemLoaded && itemLoaded.status === "SUCCESS" && itemLoaded.payment_status_name!== null )
+                  {(itemLoaded && itemLoaded.status === "SUCCESS" && itemLoaded.payment_status_name!== null && typeof itemLoaded.payment_status_name !== "undefined" )
                     ? itemLoaded.payment_status_name
                     : data.payment_status_name}
                 </span>
@@ -356,7 +356,7 @@ class Table extends Component {
                     style={{ fontWeight: "500" }}
                     className={_order_status_name}
                   >
-                    {(itemLoaded && itemLoaded.status === "SUCCESS" && itemLoaded.order_status_name!== null)
+                    {(itemLoaded && itemLoaded.status === "SUCCESS" && itemLoaded.order_status_name!== null && typeof itemLoaded.order_status_name !== "undefined")
                       ? itemLoaded.order_status_name
                       : data.order_status_name}
                   </span>
@@ -533,15 +533,16 @@ class Table extends Component {
           var res = await billApi.syncShipment(store_code, order_code, {
             allow_update: true,
           });
+          console.log("data ne" , res.data)
           if (res.data.success == true) {
             data = this.syncArr?.map((v) => {
               if (v.order_code === order_code) {
                 return {
                   order_code: order_code,
-                  order_status_name: res.data.order_status_name,
-                  payment_status_name: res.data.payment_status_name,
-                  payment_status: res.data.payment_status,
-                  order_status: res.data.order_status,
+                  order_status_name: res.data?.data.order_status_name,
+                  payment_status_name: res.data?.data.payment_status_name,
+                  payment_status: res.data.data?.payment_status,
+                  order_status: res.data.data?.order_status,
                   status: Types.SUCCESS,
                 };
               } else {
