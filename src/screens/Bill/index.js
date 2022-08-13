@@ -17,7 +17,7 @@ import moment from "moment";
 import * as helper from "../../ultis/helpers";
 import { getBranchId } from "../../ultis/branchUtils";
 import history from "../../history";
-import { getQueryParams } from "../../ultis/helpers"
+import { getQueryParams } from "../../ultis/helpers";
 
 class Bill extends Component {
   constructor(props) {
@@ -30,14 +30,16 @@ class Bill extends Component {
       isSearch: false,
       searchValue: "",
       statusPayment: "",
+      runAsync : "",
       orderFrom: "",
       numPage: 20,
       agency_by_customer_id:
         queryString.parse(window.location.search).agency_by_customer_id || null,
       collaborator_by_customer_id:
-        queryString.parse(window.location.search).collaborator_by_customer_id || null,
+        queryString.parse(window.location.search).collaborator_by_customer_id ||
+        null,
       time_from: "",
-      time_to: ""
+      time_to: "",
     };
   }
   closeChatBox = (status) => {
@@ -48,7 +50,16 @@ class Bill extends Component {
 
   onChangeNumPage = (e) => {
     var { store_code } = this.props.match.params;
-    var { statusOrder, statusPayment, searchValue, orderFrom, time_from, time_to, orderFrom, collaborator_by_customer_id } = this.state;
+    var {
+      statusOrder,
+      statusPayment,
+      searchValue,
+      orderFrom,
+      time_from,
+      time_to,
+      orderFrom,
+      collaborator_by_customer_id,
+    } = this.state;
     var numPage = e.target.value;
     this.setState({
       numPage,
@@ -58,47 +69,54 @@ class Bill extends Component {
         ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
         : null;
 
-
-    var params = ""
-    params = params + this.getParams(null, null, null, statusOrder, statusPayment, numPage, orderFrom, collaborator_by_customer_id)
+    var params = "";
+    params =
+      params +
+      this.getParams(
+        null,
+        null,
+        null,
+        statusOrder,
+        statusPayment,
+        numPage,
+        orderFrom,
+        collaborator_by_customer_id
+      );
 
     // var params = `&search=${searchValue}&order_status_code=${statusOrder}&payment_status_code=${statusPayment}&limit=${numPage}`
-    const branch_id = localStorage.getItem("branch_id")
+    const branch_id = localStorage.getItem("branch_id");
     this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
-  }
+  };
   goBack = () => {
     var { store_code } = this.props.match.params;
-    var {collaborator_by_customer_id , agency_by_customer_id} = this.state
-    if(agency_by_customer_id != null)
-    history.replace(`/agency/${store_code}?tab-index=1`);
-    else
-    history.replace(`/collaborator/${store_code}?tab-index=1`);
-
+    var { collaborator_by_customer_id, agency_by_customer_id } = this.state;
+    if (agency_by_customer_id != null)
+      history.replace(`/agency/${store_code}?tab-index=1`);
+    else history.replace(`/collaborator/${store_code}?tab-index=1`);
   };
   componentDidMount() {
     var { store_code, status_code } = this.props.match.params;
-    var from = getQueryParams("from")
-    var to = getQueryParams("from")
-    var statusOrder = getQueryParams("order_status_code")
-    var statusPayment = getQueryParams("payment_status_code")
-    var {collaborator_by_customer_id} = this.state
-
-
+    var from = getQueryParams("from");
+    var to = getQueryParams("from");
+    var statusOrder = getQueryParams("order_status_code");
+    var statusPayment = getQueryParams("payment_status_code");
+    var { collaborator_by_customer_id } = this.state;
 
     if (
       this.props.customer.id !== this.state.agency_by_customer_id &&
       this.state.agency_by_customer_id != null
-    ) 
-    {
+    ) {
       this.props.fetchCustomerId(store_code, this.state.agency_by_customer_id);
     }
 
     if (
       this.props.customer.id !== this.state.collaborator_by_customer_id &&
       this.state.collaborator_by_customer_id != null
-    ) 
-    {
-      this.props.fetchCustomerId(store_code, this.state.collaborator_by_customer_id);
+    ) {
+      this.props.fetchCustomerId(
+        store_code,
+        this.state.collaborator_by_customer_id
+      );
     }
 
     var params_agency =
@@ -110,26 +128,36 @@ class Bill extends Component {
       typeof status_code == "undefined"
         ? null
         : status_code != "PAID"
-          ? `&field_by=order_status_code&field_by_value=${status_code}`
-          : `&field_by=payment_status_code&field_by_value=${status_code}`;
+        ? `&field_by=order_status_code&field_by_value=${status_code}`
+        : `&field_by=payment_status_code&field_by_value=${status_code}`;
     if (from && to) {
-      from = moment(from, "DD-MM-YYYY").format("YYYY-MM-DD")
-      to = moment(to, "DD-MM-YYYY").format("YYYY-MM-DD")
-      this.setState({ time_from: from, time_to: to })
+      from = moment(from, "DD-MM-YYYY").format("YYYY-MM-DD");
+      to = moment(to, "DD-MM-YYYY").format("YYYY-MM-DD");
+      this.setState({ time_from: from, time_to: to });
     }
-    params = params + this.getParams(from, to, null, statusOrder, statusPayment, null ,null, collaborator_by_customer_id)
+    params =
+      params +
+      this.getParams(
+        from,
+        to,
+        null,
+        statusOrder,
+        statusPayment,
+        null,
+        null,
+        collaborator_by_customer_id
+      );
 
-console.log(params);
+    console.log(params);
     var status_order = status == "PAID" ? null : status;
     var status_payment = status == "PAID" ? status : null;
     if (status_order != null) this.setState({ statusOrder: status_order });
     if (statusOrder) this.setState({ statusOrder: statusOrder });
     if (statusPayment) this.setState({ statusPayment: statusPayment });
 
-
     if (status_payment != null)
       this.setState({ statusPayment: status_payment });
-    const branch_id = getBranchId()
+    const branch_id = getBranchId();
     this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
   }
   handleShowChatBox = (customerId, customerImg, customerName, status) => {
@@ -153,38 +181,41 @@ console.log(params);
     this.setState({ statusPayment: data });
   };
   onchangeOrderFrom = (data) => {
-    this.setState({ orderFrom: data })
-
-  }
+    this.setState({ orderFrom: data });
+  };
   searchData = (e) => {
     e.preventDefault();
     var { store_code } = this.props.match.params;
     var { searchValue } = this.state;
     var params = `&search=${searchValue}`;
-    this.setState({ statusPayment: "", statusOrder: "", numPage: 20 })
-    var params_agency = this.state.agency_by_customer_id != null ? `&agency_by_customer_id=${this.state.agency_by_customer_id}` : null
-    const branch_id = localStorage.getItem("branch_id")
+    this.setState({ statusPayment: "", statusOrder: "", numPage: 20 });
+    var params_agency =
+      this.state.agency_by_customer_id != null
+        ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
+        : null;
+    const branch_id = localStorage.getItem("branch_id");
     this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
   };
 
   fetchAllData = () => {
     var { store_code } = this.props.match.params;
-    var params_agency = this.state.agency_by_customer_id != null ? `&agency_by_customer_id=${this.state.agency_by_customer_id}` : null
-    const branch_id = localStorage.getItem("branch_id")
+    var params_agency =
+      this.state.agency_by_customer_id != null
+        ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
+        : null;
+    const branch_id = localStorage.getItem("branch_id");
     this.props.fetchAllBill(store_code, 1, branch_id, null, params_agency);
   };
 
   getParamDate = () => {
-    const queryParams = new URLSearchParams(window.location.search)
-    const time_from = queryParams.get("time_from")
-    const time_to = queryParams.get("time_to")
+    const queryParams = new URLSearchParams(window.location.search);
+    const time_from = queryParams.get("time_from");
+    const time_to = queryParams.get("time_to");
     var params = `&time_from=${time_from}&time_to=${time_to}`;
     return params;
-  }
+  };
 
   componentWillReceiveProps(nextProps, nextState) {
-
-
     // if (this.state.paramDate != this.getParamDate() && this.state.paramDate.from != null) {
     //   this.setState({
     //     paramDate: this.getParamDate()
@@ -199,9 +230,6 @@ console.log(params);
     //   this.props.fetchAllBill(store_code, 1, branch_id, this.getParamDate(), params_agency);
     // }
 
-
-
-
     if (
       this.state.isLoading != true &&
       typeof nextProps.permission.product_list != "undefined"
@@ -214,16 +242,24 @@ console.log(params);
     }
   }
 
-
-  getParams = (from, to, searchValue, statusOrder, statusPayment, numPage, orderFrom, collaborator_by_customer_id) => {
+  getParams = (
+    from,
+    to,
+    searchValue,
+    statusOrder,
+    statusPayment,
+    numPage,
+    orderFrom,
+    collaborator_by_customer_id
+  ) => {
     var params = ``;
     if (to != "" && to != null) {
       params = params + `&time_to=${to}`;
-
     }
     if (searchValue != "" && searchValue != null) {
       params = params + `&search=${searchValue}`;
-    } if (from != "" && from != null) {
+    }
+    if (from != "" && from != null) {
       params = params + `&time_from=${from}`;
     }
     if (statusOrder != "" && statusOrder != null) {
@@ -238,16 +274,27 @@ console.log(params);
     if (orderFrom != "" && orderFrom != null) {
       params = params + `&order_from_list=${orderFrom}`;
     }
-    if (collaborator_by_customer_id != "" && collaborator_by_customer_id != null) {
-      params = params + `&collaborator_by_customer_id=${collaborator_by_customer_id}`
+    if (
+      collaborator_by_customer_id != "" &&
+      collaborator_by_customer_id != null
+    ) {
+      params =
+        params + `&collaborator_by_customer_id=${collaborator_by_customer_id}`;
     }
-    return params
-  }
+    return params;
+  };
 
   onchangeDateFromTo = (e) => {
     var from = "";
     var { store_code } = this.props.match.params;
-    var { searchValue, statusOrder, statusPayment, numPage, orderFrom,collaborator_by_customer_id } = this.state
+    var {
+      searchValue,
+      statusOrder,
+      statusPayment,
+      numPage,
+      orderFrom,
+      collaborator_by_customer_id,
+    } = this.state;
     var to = "";
     try {
       from = moment(e.value[0], "DD-MM-YYYY").format("YYYY-MM-DD");
@@ -261,15 +308,22 @@ console.log(params);
         ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
         : null;
 
-    var params = this.getParams(from, to, searchValue, statusOrder, statusPayment, numPage, orderFrom,collaborator_by_customer_id);
+    var params = this.getParams(
+      from,
+      to,
+      searchValue,
+      statusOrder,
+      statusPayment,
+      numPage,
+      orderFrom,
+      collaborator_by_customer_id
+    );
 
-
-    const branch_id = getBranchId()
-    console.log(from, to, params)
+    const branch_id = getBranchId();
+    console.log(from, to, params);
     this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
-    this.setState({ time_from: from, time_to: to })
-
-  }
+    this.setState({ time_from: from, time_to: to });
+  };
 
   render() {
     var { store_code } = this.props.match.params;
@@ -288,10 +342,12 @@ console.log(params);
       isShow,
       time_from,
       time_to,
-      orderFrom
+      orderFrom,
+      runAsync
     } = this.state;
-    console.log(time_from,
-      time_to)
+    console.log(time_from, time_to);
+    var listBill = typeof bills.data == "undefined" ? [] : bills.data;
+
     if (this.props.auth) {
       return (
         <div id="wrapper">
@@ -313,18 +369,24 @@ console.log(params);
                       <h4 className="h4 title_content mb-0 text-gray-800">
                         Đơn hàng{" "}
                         {typeof customer.id != "undefined" &&
-                          customer.id == this.state.agency_by_customer_id
+                        customer.id == this.state.agency_by_customer_id
                           ? `của Đại lý ${customer.name}`
                           : null}
-                              {typeof customer.id != "undefined" &&
-                          customer.id == this.state.collaborator_by_customer_id
+                        {typeof customer.id != "undefined" &&
+                        customer.id == this.state.collaborator_by_customer_id
                           ? `của CTV ${customer.name}`
                           : null}
                       </h4>{" "}
-                      {
-                        getQueryParams("tab-index") && <button style={{ marginRight: "10px" }} type="button" onClick={this.goBack} class="btn btn-warning  btn-sm"><i class="fas fa-arrow-left"></i>&nbsp;Trở về</button>
-
-                      }
+                      {getQueryParams("tab-index") && (
+                        <button
+                          style={{ marginRight: "10px" }}
+                          type="button"
+                          onClick={this.goBack}
+                          class="btn btn-warning  btn-sm"
+                        >
+                          <i class="fas fa-arrow-left"></i>&nbsp;Trở về
+                        </button>
+                      )}
                     </div>
 
                     <br></br>
@@ -332,7 +394,7 @@ console.log(params);
                       <div className="card-header py-3">
                         <div
                           class="row"
-                        // style={{ "justify-content": "space-between" }}
+                          // style={{ "justify-content": "space-between" }}
                         >
                           <form onSubmit={this.searchData}>
                             <div
@@ -355,7 +417,7 @@ console.log(params);
                               </div>
                             </div>
                           </form>
-
+                        
 
                           {/* <div style={{ display: "flex" }}>
                             <div style={{ display: "flex" }}>
@@ -396,7 +458,9 @@ console.log(params);
                             />
                           </div> */}
                         </div>
-                        <p class="total-item" id="sale_user_name">
+                        <div style={{display : "flex" , justifyContent: "space-between"}}>
+                    
+                          <p class="total-item" id="sale_user_name">
                           <span className="num-total_item">
                             {bills.total}&nbsp;
                           </span>
@@ -405,7 +469,10 @@ console.log(params);
                           </span>{" "}
                           &nbsp;&nbsp;
                           <DateRangePickerComponent
-                            value={[new Date(moment(time_from, "YYYY-MM-DD")), new Date(moment(time_to, "YYYY-MM-DD"))]}
+                            value={[
+                              new Date(moment(time_from, "YYYY-MM-DD")),
+                              new Date(moment(time_to, "YYYY-MM-DD")),
+                            ]}
                             id="daterangepicker"
                             placeholder="Khoảng thời gian..."
                             format="dd/MM/yyyy"
@@ -418,12 +485,26 @@ console.log(params);
                                 onChange={this.onchangeDateFromTo}
                               /> */}
                         </p>
+                        <button
+                            // onClick={(e) => this.handleMultiDelCallBack(e, selected)}
+                            // data-toggle="modal"
+                            // data-target="#removeMultiModal"
+                            style={{ 
+                              margin: "auto 0px"}}
+                            class={`btn btn-primary btn-sm`}
+                            title="Đồng bộ trạng thái đơn hàng với đơn vị vận chuyển"
+                            onClick={()=>{this.setState({runAsync  : helper.randomString(10)})}}
+                          >
+                            <i class="fa fa-sync"></i> Đồng bộ {listBill.length}{" "}
+                            đơn hàng
+                          </button>
+                        </div>
+                       
                       </div>
-
-
 
                       <div className="card-body">
                         <Table
+                        runAsync = {runAsync}
                           onchangeOrderFrom={this.onchangeOrderFrom}
                           getParams={this.getParams}
                           time_from={time_from}
@@ -521,7 +602,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     fetchAllBill: (id, page, branch_id, params, params_agency) => {
-      dispatch(billAction.fetchAllBill(id, page, branch_id, params, params_agency));
+      dispatch(
+        billAction.fetchAllBill(id, page, branch_id, params, params_agency)
+      );
     },
     fetchChatId: (store_code, customerId) => {
       dispatch(billAction.fetchChatId(store_code, customerId));

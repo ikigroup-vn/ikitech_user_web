@@ -26,6 +26,7 @@ class Table extends Component {
       selected: [],
     };
     this.syncArr = [];
+     this.asyncElm = null;
   }
 
   showChatBox = (customerId, customerImg, customerName, status) => {
@@ -129,6 +130,11 @@ class Table extends Component {
         statusOrder: nextProps.statusOrder,
         statusPayment: nextProps.statusPayment,
       });
+
+    if (nextProps.runAsync !== this.props.runAsync) {
+      console.log(this.asyncElm)
+      this.asyncElm?.click();
+    }
   }
   countItem = (list) => {
     var result = "";
@@ -246,7 +252,6 @@ class Table extends Component {
     return false;
   };
 
-
   showData = (bill, per_page, current_page) => {
     var { store_code } = this.props;
     var result = null;
@@ -281,7 +286,7 @@ class Table extends Component {
 
         var item = this.checkLoadingSyncShip(data.order_code);
         var itemLoaded = this.checkLoaded(data.order_code);
-        console.log(item , data.order_code ,this.syncArr,itemLoaded)
+        console.log(item, data.order_code, this.syncArr, itemLoaded);
         return (
           <tr
             className="hover-product"
@@ -313,31 +318,29 @@ class Table extends Component {
             <td>{data.created_at}</td>
 
             <td>
-
-            {item ? (
-                  <div style={{ textAlign: "center" }} class="fa-3x">
-                    <i
-                      style={{
-                        "font-size": "25px",
-                        color: "green",
-                      }}
-                      class="fas fa-spinner fa-spin"
-                    ></i>
-                  </div>
-                ) : (
-                  <span
+              {item ? (
+                <div style={{ textAlign: "center" }} class="fa-3x">
+                  <i
+                    style={{
+                      "font-size": "25px",
+                      color: "green",
+                    }}
+                    class="fas fa-spinner fa-spin"
+                  ></i>
+                </div>
+              ) : (
+                <span
                   style={{ fontWeight: "500" }}
                   className={_payment_status_code}
                 >
-                  {(itemLoaded && itemLoaded.status === "SUCCESS" && itemLoaded.payment_status_name!== null && typeof itemLoaded.payment_status_name !== "undefined" )
+                  {itemLoaded &&
+                  itemLoaded.status === "SUCCESS" &&
+                  itemLoaded.payment_status_name !== null &&
+                  typeof itemLoaded.payment_status_name !== "undefined"
                     ? itemLoaded.payment_status_name
                     : data.payment_status_name}
                 </span>
-                )}
-
-
-
-           
+              )}
             </td>
             {getChannel() == IKITECH && (
               <td>
@@ -356,7 +359,10 @@ class Table extends Component {
                     style={{ fontWeight: "500" }}
                     className={_order_status_name}
                   >
-                    {(itemLoaded && itemLoaded.status === "SUCCESS" && itemLoaded.order_status_name!== null && typeof itemLoaded.order_status_name !== "undefined")
+                    {itemLoaded &&
+                    itemLoaded.status === "SUCCESS" &&
+                    itemLoaded.order_status_name !== null &&
+                    typeof itemLoaded.order_status_name !== "undefined"
                       ? itemLoaded.order_status_name
                       : data.order_status_name}
                   </span>
@@ -514,9 +520,12 @@ class Table extends Component {
 
   handleSyncShipment = async () => {
     var data = [];
-    var bills = this.state.selected?.map((v, i) => v.order_code) || [];
-    var { store_code } = this.props;
+    var { store_code, bills } = this.props;
 
+    var listBill = typeof bills.data == "undefined" ? [] : bills.data;
+
+    var bills = listBill?.map((v, i) => v.order_code) || [];
+    console.log(bills);
     if (bills.length > 0) {
       this.syncArr = bills?.map((order_code) => {
         return {
@@ -533,7 +542,7 @@ class Table extends Component {
           var res = await billApi.syncShipment(store_code, order_code, {
             allow_update: true,
           });
-          console.log("data ne" , res.data)
+          console.log("data ne", res.data);
           if (res.data.success == true) {
             data = this.syncArr?.map((v) => {
               if (v.order_code === order_code) {
@@ -587,6 +596,18 @@ class Table extends Component {
     var multiPrint = selected.length > 0 ? "show" : "hide";
     return (
       <React.Fragment>
+        <button
+          // onClick={(e) => this.handleMultiDelCallBack(e, selected)}
+          // data-toggle="modal"
+          // data-target="#removeMultiModal"
+          ref={(ref)=>this.asyncElm = ref}
+          style={{ marginLeft: "10px", display: "none" }}
+          class={`btn btn-primary btn-sm`}
+          title="Đồng bộ trạng thái đơn hàng với đơn vị vận chuyển"
+          onClick={this.handleSyncShipment}
+        >
+          <i class="fa fa-sync"></i> Đồng bộ {listBill.length} đơn hàng
+        </button>
         <div class="table-responsive">
           <ReactToPrint
             trigger={() => {
@@ -605,17 +626,6 @@ class Table extends Component {
             }}
             content={() => this.componentRef}
           />
-          <button
-            // onClick={(e) => this.handleMultiDelCallBack(e, selected)}
-            // data-toggle="modal"
-            // data-target="#removeMultiModal"
-            style={{ marginLeft: "10px" }}
-            class={`btn btn-primary btn-sm ${multiPrint}`}
-            title="Đồng bộ trạng thái đơn hàng với đơn vị vận chuyển"
-            onClick={this.handleSyncShipment}
-          >
-            <i class="fa fa-sync"></i> Đồng bộ {selected.length} đơn hàng
-          </button>
 
           <div className="print-source " style={{ display: "none" }}>
             {getChannel() == IKITECH &&

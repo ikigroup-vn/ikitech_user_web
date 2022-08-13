@@ -26,7 +26,7 @@ class InfoShipper extends Component {
 
     componentDidMount() {
 
-        if (this.props.bill?.partner_shipper_id) {
+        if (this.props.bill?.partner_shipper_id !== null) {
             this.setState({ shipperId: this.props.bill?.partner_shipper_id })
         }
 
