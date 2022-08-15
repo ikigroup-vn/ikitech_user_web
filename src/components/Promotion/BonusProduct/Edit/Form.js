@@ -961,25 +961,29 @@ class Form extends Component {
                 </select>
               )}
             </div>
-                <div class="form-group">
-                  <div class="form-check">
-                    <input
-                      type="checkbox"
-                      checked={multiply_by_number}
-                      onChange={() =>
-                        this.setState({
-                          multiply_by_number: !multiply_by_number,
-                        })
-                      }
-                      class="form-check-input"
-                      id="gridCheck"
-                    />
-                    {/* <input class="form-check-input" name="is_set_order_max_point" type="checkbox" id="gridCheck" /> */}
-                    <label class="form-check-label" for="gridCheck">
-                      Hàng tặng nhân theo số lượng mua{" "}
-                    </label>
-                  </div>
-                </div>
+            {
+              ladder_reward !== true && <div class="form-group">
+              <div class="form-check">
+                <input
+                  type="checkbox"
+                  checked={multiply_by_number}
+                  onChange={() =>
+                    this.setState({
+                      multiply_by_number: !multiply_by_number,
+                    })
+                  }
+                  class="form-check-input"
+                  id="gridCheck"
+                />
+                {/* <input class="form-check-input" name="is_set_order_max_point" type="checkbox" id="gridCheck" /> */}
+                <label class="form-check-label" for="gridCheck">
+                  Hàng tặng nhân theo số lượng mua{" "}
+                </label>
+              </div>
+            </div>
+        
+            }
+               
               
               </div>
             </div>

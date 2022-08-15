@@ -172,17 +172,8 @@ class Form extends Component {
         <form role="form" onSubmit={this.onSave} >
           <div class="box-body">
             <div className="box-body">
-            <div class="form-group">
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" checked={checkedAllow} name="allow_use_point_order" onChange={this.onChangeCheckBox} id="gridCheck" />
-                  <label class="form-check-label" for="gridCheck">
-                    Cho phép sử dụng xu khi mua hàng
-                  </label>
-                </div>
-
-              </div>
-              {
-                checkedAllow == true && 
+         
+              
                 <React.Fragment>
                 <div className="form-group">
                   <label htmlFor="lname">Quy đổi xu thành VNĐ</label>
@@ -268,7 +259,20 @@ class Form extends Component {
                 </div>
   
           
+         
                 <div class="form-group">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" checked={checkedAllow} name="allow_use_point_order" onChange={this.onChangeCheckBox} id="gridCheck" />
+                  <label class="form-check-label" for="gridCheck">
+                    Cho phép sử dụng xu khi mua hàng
+                  </label>
+                </div>
+
+              </div>
+              {
+                checkedAllow == true && 
+                <>
+                       <div class="form-group">
                   <div class="form-check">
                     <input class="form-check-input" checked={checkMaxPoint} name="is_set_order_max_point" onChange={this.onChangeCheckBox} type="checkbox" id="gridCheck" />
                     <label class="form-check-label" for="gridCheck">
@@ -277,8 +281,7 @@ class Form extends Component {
                   </div>
   
                 </div>
-  
-                <div className={`form-group ${disableValueMaxPoint}`}>
+                  <div className={`form-group ${disableValueMaxPoint}`}>
                   <label htmlFor="phone">Số xu nhận được tối đa khi mua hàng</label>
                   <div className="group" style={{ display: "flex" }}>
                     <div style={{ display: "flex" }}>
@@ -305,7 +308,6 @@ class Form extends Component {
                   </div>
   
                 </div>
-  
                 <div className={`form-group ${disablePercentUseMaxPont}`}>
                   <label htmlFor="phone">Phần trăm số tiền tối đa sử dụng bằng xu trên mỗi đơn hàng</label>
                   <div className="group" style={{ display: "flex" }}>
@@ -322,8 +324,13 @@ class Form extends Component {
                     </div>
                   </div>
                 </div>
-                </React.Fragment>
+                </>
               }
+              
+  
+              
+                </React.Fragment>
+              
             
 
             </div>
