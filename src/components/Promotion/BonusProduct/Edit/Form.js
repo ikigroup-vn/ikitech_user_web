@@ -145,17 +145,17 @@ class Form extends Component {
                 "id": item.bo_product?.id,
                 "quantity": item.from_quantity,
                 "bonus_quantity" : item.bo_quantity,
-                "distribute_name": item.distribute_name,
-                "element_distribute_name": item.element_distribute_name,
-                "sub_element_distribute_name": item.sub_element_distribute_name,
+                "distribute_name": item.bo_distribute_name,
+                "element_distribute_name": item.bo_element_distribute_name,
+                "sub_element_distribute_name": item.bo_sub_element_distribute_name,
                 "sku": item.bo_product?.sku,
                 "name": item.bo_product?.name,
                 product: {
                   "id": item.bo_product?.id,
-                  "quantity": item.quantity,
-                  "distribute_name": item.distribute_name,
-                  "element_distribute_name": item.element_distribute_name,
-                  "sub_element_distribute_name": item.sub_element_distribute_name,
+                  "quantity": item.from_quantity,
+                  "distribute_name": item.bo_distribute_name,
+                  "element_distribute_name": item.bo_element_distribute_name,
+                  "sub_element_distribute_name": item.bo_sub_element_distribute_name,
                   "sku": item.bo_product?.sku,
                   "name": item.bo_product?.name,
     
@@ -776,6 +776,23 @@ class Form extends Component {
           <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
               <div class="box-body">
+              <div class="form-group">
+                  <div class="form-check">
+                    <input
+                      type="checkbox"
+                      checked={ladder_reward}
+                      onChange={() =>
+                        this.setState({ ladder_reward: !ladder_reward })
+                      }
+                      class="form-check-input"
+                      id="gridCheckLadder"
+                    />
+                    {/* <input class="form-check-input" name="is_set_order_max_point" type="checkbox" id="gridCheck" /> */}
+                    <label class="form-check-label" for="gridCheckLadder">
+                      Thưởng theo bật thang{" "}
+                    </label>
+                  </div>
+                </div>
                 {/* {
                   getChannel() == IKITECH && (
                     <React.Fragment>
@@ -963,23 +980,7 @@ class Form extends Component {
                     </label>
                   </div>
                 </div>
-                <div class="form-group">
-                  <div class="form-check">
-                    <input
-                      type="checkbox"
-                      checked={ladder_reward}
-                      onChange={() =>
-                        this.setState({ ladder_reward: !ladder_reward })
-                      }
-                      class="form-check-input"
-                      id="gridCheck"
-                    />
-                    {/* <input class="form-check-input" name="is_set_order_max_point" type="checkbox" id="gridCheck" /> */}
-                    <label class="form-check-label" for="gridCheck">
-                      Thưởng theo bật thang{" "}
-                    </label>
-                  </div>
-                </div>
+              
               </div>
             </div>
           </div>

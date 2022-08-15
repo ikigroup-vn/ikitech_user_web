@@ -57,6 +57,7 @@ class ProductEdit extends Component {
       formdata.percent_collaborator = data.txtPercentC;
       formdata.sku = data.sku
       formdata.check_inventory = data.check_inventory
+      formdata.point_for_agency = data.point_for_agency;
 
       var categories = [];
       var category_children_ids = [];

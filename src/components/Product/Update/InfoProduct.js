@@ -30,6 +30,8 @@ class InfoProduct extends Component {
       check_inventory: false,
       txtCostOfCapital: "",
       categorySearch: "",
+      point_for_agency : 0,
+
     };
   }
   handleChangeCheckParent(id) {
@@ -89,7 +91,9 @@ class InfoProduct extends Component {
       name == "txtPrice" ||
       name == "txtImportPrice" ||
       name == "txtPercentC" ||
-      name == "txtQuantityInStock"
+      name == "txtQuantityInStock" || 
+      name == "point_for_agency"
+
     ) {
       if (!isNaN(Number(_value))) {
         value = formatNoD(_value);
@@ -261,6 +265,8 @@ class InfoProduct extends Component {
       this.setState({
         txtName: product.name,
         txtPrice: _price,
+        point_for_agency : product.point_for_agency,
+
         txtImportPrice: _import_price,
         disabledPrice: _price == 0 ? true : false,
         txtPercentC: product.percent_collaborator,
@@ -355,6 +361,8 @@ class InfoProduct extends Component {
       txtCostOfCapital,
       checkHasDistribute,
       categorySearch,
+      point_for_agency
+
     } = this.state;
     console.log(checkHasDistribute);
     var txtQuantityInStock = txtQuantityInStock == -1 ? "" : txtQuantityInStock;
@@ -637,6 +645,29 @@ class InfoProduct extends Component {
                   </ul>
             </div>
           </div>
+        </div>
+        <div class="form-group">
+          <label for="product_name">
+           Xu cho đại lý
+          </label>
+          <i
+              style={{
+                display: "block",
+                marginBottom: "5px",
+              }}
+            >
+              Bỏ trống khi không xét xu cho đại lý
+            </i>
+          <input
+            type="text"
+            class="form-control"
+            id="txtCostOfCapital"
+            placeholder="Nhập xu"
+            autocomplete="off"
+            value={point_for_agency}
+            onChange={this.onChange}
+            name="point_for_agency"
+          />
         </div>
       </div>
     );

@@ -5,7 +5,11 @@ import * as CategoryPAction from "../../../actions/category_product";
 import Select from "react-select";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import * as helper from "../../../ultis/helpers";
-import { formatNumber, removeVietnameseTones , formatNoD } from "../../../ultis/helpers";
+import {
+  formatNumber,
+  removeVietnameseTones,
+  formatNoD,
+} from "../../../ultis/helpers";
 import getChannel, { IKITECH } from "../../../ultis/channel";
 class InfoProduct extends Component {
   constructor(props) {
@@ -13,7 +17,7 @@ class InfoProduct extends Component {
     this.state = {
       txtName: "",
       // txtBarcode: Math.random().toString().slice(2, 11),
-      txtBarcode:"",
+      txtBarcode: "",
 
       txtPrice: "",
       txtImportPrice: "",
@@ -30,13 +34,11 @@ class InfoProduct extends Component {
       txtCategory: [],
       checkHasDistribute: false,
       disabledPrice: false,
-      categorySearch: ""
+      categorySearch: "",
+      point_for_agency: null,
+      icon_for_point: false,
     };
   }
-
-
-
-
 
   componentDidMount() {
     var option = [];
@@ -107,7 +109,8 @@ class InfoProduct extends Component {
       name == "txtCostOfCapital" ||
       name == "txtImportPrice" ||
       name == "txtPercentC" ||
-      name == "txtQuantityInStock"
+      name == "txtQuantityInStock" ||
+      name == "point_for_agency"
     ) {
       if (!isNaN(Number(_value))) {
         value = formatNoD(_value);
@@ -121,9 +124,10 @@ class InfoProduct extends Component {
               this.setState({ [name]: value });
             }
           }
+          return;
         }
         if (name !== "txtPercentC") {
-          console.log(value.length)
+          console.log(value.length);
           if (value.length > 18) {
             return;
           }
@@ -139,7 +143,6 @@ class InfoProduct extends Component {
         if (helper.containsSpecialChars(value)) {
           return;
         }
-
       }
       this.setState({ [name]: value });
     }
@@ -155,14 +158,18 @@ class InfoProduct extends Component {
     } else {
       this.setState({ check_inventory: checked });
     }
-    this.props.checkDistribute(this.state.checkHasDistribute, !this.state.check_inventory)
-
+    this.props.checkDistribute(
+      this.state.checkHasDistribute,
+      !this.state.check_inventory
+    );
   };
   onChangeCheckHasDitribute = (e) => {
     this.setState({ checkHasDistribute: !this.state.checkHasDistribute });
-    this.props.checkDistribute(!this.state.checkHasDistribute, this.state.check_inventory)
+    this.props.checkDistribute(
+      !this.state.checkHasDistribute,
+      this.state.check_inventory
+    );
   };
-
 
   handleChangeCheckParent(id) {
     return this.state.category_parent.map((e) => e.id).indexOf(id) > -1;
@@ -293,13 +300,13 @@ class InfoProduct extends Component {
     this.setState({ even: !this.state.even });
   }
   onChangeIcon = () => {
-    this.setState({ icon: !this.state.icon })
-  }
+    this.setState({ icon: !this.state.icon });
+  };
   searchData = (e) => {
     e.preventDefault();
     var { store_code } = this.props;
     var { categorySearch, item1 } = this.state;
-    var resultSearch = []
+    var resultSearch = [];
     if (this.props.category_product?.length > 0) {
       for (const category of this.props.category_product) {
         if (category.name?.includes(categorySearch)) {
@@ -307,12 +314,12 @@ class InfoProduct extends Component {
             id: category.id,
             label: category.name,
             categories_child: category.category_children,
-          })
+          });
         }
       }
     }
 
-    this.setState({ listCategory: resultSearch })
+    this.setState({ listCategory: resultSearch });
     //   return {
     //     id: category.id,
     //     label: category.name,
@@ -341,11 +348,12 @@ class InfoProduct extends Component {
       check_inventory,
       txtCostOfCapital,
       checkHasDistribute,
-      categorySearch
+      categorySearch,
+      point_for_agency,
     } = this.state;
 
-    var {badges} = this.props
-    console.log(badges)
+    var { badges } = this.props;
+    console.log(badges);
     return (
       <div class="card-body" style={{ padding: "0.8rem" }}>
         <div class="form-group">
@@ -396,13 +404,16 @@ class InfoProduct extends Component {
               id="flexSwitchCheckDefault"
               checked={checkHasDistribute}
             />
-            <label style={{ fontWeight: "750" }} class="form-check-label" for="flexSwitchCheckDefault">
+            <label
+              style={{ fontWeight: "750" }}
+              class="form-check-label"
+              for="flexSwitchCheckDefault"
+            >
               Có phân loại
             </label>
           </div>
         </div>
         {!checkHasDistribute && (
-
           <div className="form-group">
             <div className="row">
               <div className="col-6">
@@ -456,12 +467,16 @@ class InfoProduct extends Component {
               id="flexSwitchCheckDefault"
               checked={check_inventory}
             />
-            <label style={{ fontWeight: "750" }} class="form-check-label" for="flexSwitchCheckDefault">
+            <label
+              style={{ fontWeight: "750" }}
+              class="form-check-label"
+              for="flexSwitchCheckDefault"
+            >
               Theo dõi hàng trong kho
             </label>
           </div>
         </div>
-        {(check_inventory && !checkHasDistribute) && (
+        {check_inventory && !checkHasDistribute && (
           <div class="form-group">
             <div className="row">
               <div className="col-6">
@@ -548,9 +563,8 @@ class InfoProduct extends Component {
             <div id="accordion">
               <div className="wrap_category" style={{ display: "flex" }}>
                 <input
-                                  onClick={this.onChangeIcon}
-
-                disabled
+                  onClick={this.onChangeIcon}
+                  disabled
                   type="text"
                   class="form-control"
                   placeholder="--Chọn danh mục--"
@@ -571,11 +585,17 @@ class InfoProduct extends Component {
                   data-target="#collapseOne"
                   aria-expanded="false"
                   aria-controls="collapseOne"
-                  style={{ position: "absolute", right: "27px" }}
+                  style={{
+                    position: "absolute",
+                    right: "27px",
+              
+                  }}
                 >
                   <i
-                    class={this.state.icon ? "fa fa-caret-down" : "fa fa-caret-down"}
-                  // style={{ fontSize: "0.2px", color: "#abacb4" }}
+                    class={
+                      this.state.icon ? "fa fa-caret-down" : "fa fa-caret-down"
+                    }
+                    // style={{ fontSize: "0.2px", color: "#abacb4" }}
                   ></i>
                 </button>
               </div>
@@ -612,59 +632,115 @@ class InfoProduct extends Component {
                   style={{ listStyle: "none", margin: "5px 0" }}
                   class="list-group"
                 >
-                  {
-                    listCategory?.length > 0 ? 
-                  
-                  listCategory.map((category, index) => (
-                    <li
-                      class=""
-                      style={{
-                        cursor: "pointer",
-                        paddingTop: "5px",
-                        paddingLeft: "5px",
-                      }}
-                    >
-                      <input
-                        type="checkbox"
+                  {listCategory?.length > 0 ? (
+                    listCategory.map((category, index) => (
+                      <li
+                        class=""
                         style={{
-                          marginRight: "10px",
-                          width: "30px",
-                          height: "15px",
+                          cursor: "pointer",
+                          paddingTop: "5px",
+                          paddingLeft: "5px",
                         }}
-                        checked={this.handleChangeCheckParent(category.id)}
-                        onChange={() => this.handleChangeParent(category)}
-                      />
-                      {category.label}
-                      <ul style={{ listStyle: "none", margin: "0px 45px" }}>
-                        {(category?.categories_child ?? []).map(
-                          (categoryChild, index) => (
-                            <li style={{ cursor: "pointer" }}>
-                              <input
-                                type="checkbox"
-                                style={{
-                                  marginRight: "10px",
-                                  width: "30px",
-                                  height: "15px",
-                                  marginTop: "3px",
-                                }}
-                                checked={this.handleChangeCheckChild(
-                                  categoryChild.id
-                                )}
-                                onChange={() =>
-                                  this.handleChangeChild(categoryChild)
-                                }
-                              />
-                              {categoryChild.name}
-                            </li>
-                          )
-                        )}
-                      </ul>
-                    </li>
-                  )) : <div>Không có kết quả</div>}
+                      >
+                        <input
+                          type="checkbox"
+                          style={{
+                            marginRight: "10px",
+                            width: "30px",
+                            height: "15px",
+                          }}
+                          checked={this.handleChangeCheckParent(category.id)}
+                          onChange={() => this.handleChangeParent(category)}
+                        />
+                        {category.label}
+                        <ul style={{ listStyle: "none", margin: "0px 45px" }}>
+                          {(category?.categories_child ?? []).map(
+                            (categoryChild, index) => (
+                              <li style={{ cursor: "pointer" }}>
+                                <input
+                                  type="checkbox"
+                                  style={{
+                                    marginRight: "10px",
+                                    width: "30px",
+                                    height: "15px",
+                                    marginTop: "3px",
+                                  }}
+                                  checked={this.handleChangeCheckChild(
+                                    categoryChild.id
+                                  )}
+                                  onChange={() =>
+                                    this.handleChangeChild(categoryChild)
+                                  }
+                                />
+                                {categoryChild.name}
+                              </li>
+                            )
+                          )}
+                        </ul>
+                      </li>
+                    ))
+                  ) : (
+                    <div>Không có kết quả</div>
+                  )}
                 </ul>
               </div>
             </div>
           </div>
+        </div>
+        {/* <button
+          onClick={()=>{this.setState({icon_for_point : !this.state.icon_for_point})}}
+          id="headingOne"
+          class="btn btn-link btn-collapse btn-accordion-collapse"
+          type="button"
+          style={{
+            width: "100%",
+            textAlign: "left",
+            marginLeft: "0px",
+            padding: "0rem 0rem",
+            border: "none",
+            paddingLeft: 0,
+            background: "white",
+            borderTop: "none",
+            borderBottom: "none",
+            paddingLeft: "0px",
+          }}
+        >
+          <h6
+            class="mb-0 f-flex"
+            style={{ fontWeight: "bold", position: "relative" }}
+          >
+            <label style={{fontSize : "14px"}}>Cài đặt nâng cao</label>{" "}
+            <i
+              class={
+                this.state.icon_for_point
+                  ? "fa fa-caret-down"
+                  : "fa fa-caret-up"
+              }
+            ></i>
+          </h6>
+        </button> */}
+        <div class="form-group">
+          <label for="product_name">
+           Xu cho đại lý
+          </label>
+          <i
+              style={{
+                display: "block",
+                marginBottom: "5px",
+              }}
+            >
+              Bỏ trống khi không xét xu cho đại lý
+            </i>
+          <input
+            type="text"
+            class="form-control"
+            id="txtCostOfCapital"
+            placeholder="Nhập xu"
+            autocomplete="off"
+            value={point_for_agency}
+            onChange={this.onChange}
+            name="point_for_agency"
+          />
         </div>
       </div>
     );
@@ -673,20 +749,14 @@ class InfoProduct extends Component {
 
 const mapStateToProps = (state) => {
   return {
-      badges: state.badgeReducers.allBadge,
-   
-
+    badges: state.badgeReducers.allBadge,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
-
     fetchAllCategoryP: (store_code, params) => {
       dispatch(CategoryPAction.fetchAllCategoryP(store_code, params));
     },
-
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(InfoProduct);
-
-

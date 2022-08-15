@@ -637,6 +637,23 @@ class Form extends Component {
                     </React.Fragment>
                   )
                 } */}
+                    <div class="form-group">
+                  <div class="form-check">
+                    <input
+                      type="checkbox"
+                      checked={ladder_reward}
+                      onChange={() =>
+                        this.setState({ ladder_reward: !ladder_reward })
+                      }
+                      class="form-check-input"
+                      id="gridCheckLadder"
+                    />
+                    {/* <input class="form-check-input" name="is_set_order_max_point" type="checkbox" id="gridCheck" /> */}
+                    <label class="form-check-label" for="gridCheckLadder">
+                      Thưởng theo bật thang{" "}
+                    </label>
+                  </div>
+                </div>
                 <div class="form-group">
                   <label for="product_name">Tên chương trình</label>
                   <input
@@ -788,23 +805,7 @@ class Form extends Component {
                     </label>
                   </div>
                 </div>
-                <div class="form-group">
-                  <div class="form-check">
-                    <input
-                      type="checkbox"
-                      checked={ladder_reward}
-                      onChange={() =>
-                        this.setState({ ladder_reward: !ladder_reward })
-                      }
-                      class="form-check-input"
-                      id="gridCheck"
-                    />
-                    {/* <input class="form-check-input" name="is_set_order_max_point" type="checkbox" id="gridCheck" /> */}
-                    <label class="form-check-label" for="gridCheck">
-                      Thưởng theo bật thang{" "}
-                    </label>
-                  </div>
-                </div>
+            
               </div>
             </div>
           </div>

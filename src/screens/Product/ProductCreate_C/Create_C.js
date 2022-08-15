@@ -53,6 +53,8 @@ class ProductEdit extends Component {
       formdata.import_price = data.txtImportPrice.toString().replace(/,/g, '').replace(/\./g, '');
       formdata.barcode = data.txtBarcode;
       formdata.status = data.txtStatus;
+      formdata.point_for_agency = data.point_for_agency;
+
       formdata.quantity_in_stock = data.txtQuantityInStock.toString().replace(/,/g, '').replace(/\./g, '');
       formdata.percent_collaborator = data.txtPercentC;
       formdata.sku = data.sku

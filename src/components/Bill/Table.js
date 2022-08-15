@@ -259,6 +259,8 @@ class Table extends Component {
       var { chat_allow } = this.props;
       result = bill.map((data, index) => {
         var checked = this.checkSelected(data.id);
+      
+
 
         var _order_status_name = this.colorWithOrderStatusColor(
           data.order_status_code
@@ -266,6 +268,15 @@ class Table extends Component {
         var _payment_status_code = this.colorWithPaymentColor(
           data.payment_status_code
         );
+
+        // if(itemLoaded &&
+        //   itemLoaded.status === "SUCCESS" &&
+        //   itemLoaded.payment_status_name !== null){
+        //   }{
+        //     _order_status_name = this.colorWithOrderStatusColor(
+        //       data.order_status_code
+        //     )
+        //   }
 
         var countItem = this.countItem(data.line_items_at_time);
         console.log(data.customer);
