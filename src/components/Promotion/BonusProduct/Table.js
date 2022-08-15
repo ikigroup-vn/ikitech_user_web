@@ -124,7 +124,7 @@ filterColDiscount = (data) => {
             <td>{data.end_time}</td>
 
             <td>
-              {data.amount == "" || data.amount == null ? "Không giới hạn" : formatNoD(data.amount -data.used)}
+              {data.amount == "" || data.amount == null ? "Không giới hạn" : (data.amount -data.used < 0 ? 0 : formatNoD(data.amount -data.used))}
 
 
             </td >  

@@ -12,7 +12,7 @@ import ListComponentToPrint from "../../screens/Bill/ListComponentPrint";
 import ReactToPrint from "react-to-print";
 import * as Types from "../../constants/ActionType";
 import * as billApi from "../../data/remote/bill";
-
+import "./style.css";
 import history from "../../history";
 
 class Table extends Component {
@@ -26,7 +26,7 @@ class Table extends Component {
       selected: [],
     };
     this.syncArr = [];
-     this.asyncElm = null;
+    this.asyncElm = null;
   }
 
   showChatBox = (customerId, customerImg, customerName, status) => {
@@ -132,7 +132,7 @@ class Table extends Component {
       });
 
     if (nextProps.runAsync !== this.props.runAsync) {
-      console.log(this.asyncElm)
+      console.log(this.asyncElm);
       this.asyncElm?.click();
     }
   }
@@ -259,8 +259,6 @@ class Table extends Component {
       var { chat_allow } = this.props;
       result = bill.map((data, index) => {
         var checked = this.checkSelected(data.id);
-      
-
 
         var _order_status_name = this.colorWithOrderStatusColor(
           data.order_status_code
@@ -330,16 +328,15 @@ class Table extends Component {
 
             <td>
               {item ? (
-                <div style={{ textAlign: "center" }} class="fa-3x">
-                  <i
-                    style={{
-                      "font-size": "25px",
-                      color: "green",
-                    }}
-                    class="fas fa-spinner fa-spin"
-                  ></i>
+                <div  style={{ display: "flex", "justify-content": "center" }}>
+                <div class="snippet" data-title=".dot-flashing">
+                  <div class="stage">
+                    <div class="dot-flashing"></div>
+                  </div>
                 </div>
+              </div>
               ) : (
+             
                 <span
                   style={{ fontWeight: "500" }}
                   className={_payment_status_code}
@@ -356,15 +353,13 @@ class Table extends Component {
             {getChannel() == IKITECH && (
               <td>
                 {item ? (
-                  <div style={{ textAlign: "center" }} class="fa-3x">
-                    <i
-                      style={{
-                        "font-size": "25px",
-                        color: "green",
-                      }}
-                      class="fas fa-spinner fa-spin"
-                    ></i>
-                  </div>
+                 <div  style={{ display: "flex", "justify-content": "center" }}>
+                 <div class="snippet" data-title=".dot-flashing">
+                   <div class="stage">
+                     <div class="dot-flashing"></div>
+                   </div>
+                 </div>
+               </div>
                 ) : (
                   <span
                     style={{ fontWeight: "500" }}
@@ -611,7 +606,7 @@ class Table extends Component {
           // onClick={(e) => this.handleMultiDelCallBack(e, selected)}
           // data-toggle="modal"
           // data-target="#removeMultiModal"
-          ref={(ref)=>this.asyncElm = ref}
+          ref={(ref) => (this.asyncElm = ref)}
           style={{ marginLeft: "10px", display: "none" }}
           class={`btn btn-primary btn-sm`}
           title="Đồng bộ trạng thái đơn hàng với đơn vị vận chuyển"

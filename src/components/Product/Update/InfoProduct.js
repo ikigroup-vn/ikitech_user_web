@@ -520,7 +520,29 @@ class InfoProduct extends Component {
             />
           </div>
         )}
-
+     <div class="form-group">
+          <label for="product_name">
+           Xu cho đại lý
+          </label>
+          <i
+              style={{
+                display: "block",
+                marginBottom: "5px",
+              }}
+            >
+              Bỏ trống khi không xét xu cho đại lý
+            </i>
+          <input
+            type="text"
+            class="form-control"
+            id="txtCostOfCapital"
+            placeholder="Nhập xu"
+            autocomplete="off"
+            value={point_for_agency}
+            onChange={this.onChange}
+            name="point_for_agency"
+          />
+        </div>
         {getChannel() == IKITECH && (
           <div class="form-group">
             <label for="product_name">Trạng thái</label>
@@ -646,29 +668,7 @@ class InfoProduct extends Component {
             </div>
           </div>
         </div>
-        <div class="form-group">
-          <label for="product_name">
-           Xu cho đại lý
-          </label>
-          <i
-              style={{
-                display: "block",
-                marginBottom: "5px",
-              }}
-            >
-              Bỏ trống khi không xét xu cho đại lý
-            </i>
-          <input
-            type="text"
-            class="form-control"
-            id="txtCostOfCapital"
-            placeholder="Nhập xu"
-            autocomplete="off"
-            value={point_for_agency}
-            onChange={this.onChange}
-            name="point_for_agency"
-          />
-        </div>
+     
       </div>
     );
   }
