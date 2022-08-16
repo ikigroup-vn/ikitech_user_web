@@ -87,7 +87,7 @@ class Form extends Component {
       group_customer,
       status,
       time_of_day,
-      time_run,
+      time_run: time_run != "" && time_run != null ? moment(time_run, "DD-MM-YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss") : null,
       time_run_near,
       title,
       type_schedule,
@@ -129,6 +129,7 @@ class Form extends Component {
       form.time_run_near = null;
     }
     console.log(form);
+    return;
     this.props.createSchedule(store_code, form);
   };
   goBack = () => {
@@ -175,6 +176,7 @@ class Form extends Component {
     var disable_everyMonth = type_schedule == "3" ? "show" : "hide";
     var { types } = this.props;
 
+    console.log("gio",time_run)
     return (
       <React.Fragment>
         <form role="form" onSubmit={this.onSave} method="post">

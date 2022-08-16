@@ -32,29 +32,23 @@ class Table extends Component {
     }
   }
 
-
   onChangeStatus = (e, id) => {
-    var checked = !this["checked" + id].checked
-    var status = checked == true ? 1 : 0
+    var checked = !this["checked" + id].checked;
+    var status = checked == true ? 1 : 0;
     this.props.updateAgency(this.props.store_code, id, {
-      status: status
-    }
-    )
-  }
+      status: status,
+    });
+  };
 
   changeAgencyType = (e, id) => {
-    var value = e.target.value
+    var value = e.target.value;
     this.props.updateAgency(this.props.store_code, id, {
-      agency_type_id: value
-    }
-    )
-  }
-
-
-
+      agency_type_id: value,
+    });
+  };
 
   showData = (topReport) => {
-    var { store_code } = this.props;
+    var { store_code , report_type } = this.props;
     var result = null;
     if (topReport.length > 0) {
       result = topReport.map((data, index) => {
@@ -67,37 +61,28 @@ class Table extends Component {
         var img_back =
           data.back_card == null ? Env.IMG_NOT_FOUND : data.back_card;
 
-        var address_default = ""
+        var address_default = "";
 
-    
         return (
           <React.Fragment>
             <tr class="sub-container hover-product">
-              <td>
-                {index + 1}
-              </td>{" "}
-              <td>
-                {data.customer?.name}
-              </td>{" "}
-              <td>
-                {data.customer?.phone_number}
-              </td>
-              <td>
-                {data.agency_type?.name}
-              </td>{" "}
-              <td>
-                {formatNoD(data.orders_count)}
-              </td>
-              <td>
-              {typeof data.sum_total_final != "undefined" ? format(Number(data.sum_total_final)) : null  }
+              <td>{index + 1}</td> <td>{data.customer?.name}</td>{" "}
+              <td>{data.customer?.phone_number}</td>
+              <td>{data.agency_type?.name}</td>{" "}
+              {report_type == "point" ? <td>{formatNoD(data.points_count)}</td> :<td>{formatNoD(data.orders_count)}</td>}
 
-                
-                </td>
-        
-           
-            
+              {report_type == "point" ?  <td>
+                {typeof data.sum_point != "undefined"
+                  ? formatNoD(Number(data.sum_point))
+                  : null}
+              </td> : <td>
+                {typeof data.sum_total_final != "undefined"
+                  ? format(Number(data.sum_total_final))
+                  : null}
+              </td>}
+
+             
             </tr>
-
           </React.Fragment>
         );
       });
@@ -112,6 +97,8 @@ class Table extends Component {
       typeof this.props.topReport.data == "undefined"
         ? []
         : this.props.topReport.data;
+
+    var { report_type } = this.props;
     return (
       <div class="table-responsive">
         <table class="table table-border">
@@ -122,10 +109,12 @@ class Table extends Component {
               <th>Số điện thoại</th>
 
               <th>Cấp đại lý</th>
-              <th>Số đơn hàng</th>
-
-              <th>Tổng doanh thu</th>
-     
+              {report_type == "point" ? <th>Số xu nhận được</th> : <th>Số đơn hàng</th>}
+              {report_type == "point" ? (
+                <th>Tổng số xu</th>
+              ) : (
+                <th>Tổng doanh thu</th>
+              )}
             </tr>
           </thead>
 
@@ -141,7 +130,6 @@ const mapDispatchToProps = (dispatch, props) => {
     updateAgency: (store_code, id, data) => {
       dispatch(agencyAction.updateAgency(store_code, id, data));
     },
-
   };
 };
 export default connect(null, mapDispatchToProps)(Table);

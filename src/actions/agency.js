@@ -43,7 +43,7 @@ async function saveAsExcel(value , title) {
     });
   });
 }
-export const exportTopten = (store_code, page, params) => {
+export const exportTopten = (store_code, page, params,report_type) => {
   return (dispatch) => {
     agencyApi.fetchAllTopReport(store_code, page, params).then((res) => {
       console.log(res);
@@ -56,12 +56,25 @@ export const exportTopten = (store_code, page, params) => {
 
               for (const item of res.data.data.data) {
                 var newItem = {};
-                var arangeKeyItem = {
-                  name: item.customer?.name,
-                  phone_number: item.customer?.phone_number,
-                  orders_count: item.orders_count,
-                  sum_total_final: item.sum_total_final,
-                };
+                var arangeKeyItem = {}
+                if(report_type === "point")
+                {
+                  arangeKeyItem = {
+                    name: item.customer?.name,
+                    phone_number: item.customer?.phone_number,
+                    points_count: item.points_count,
+                    sum_point: item.sum_point,
+                    
+                  };
+                }
+                else{
+                  arangeKeyItem = {
+                    name: item.customer?.name,
+                    phone_number: item.customer?.phone_number,
+                    orders_count: item.orders_count,
+                    sum_total_final: item.sum_total_final,
+                  };
+                }
                 Object.entries(arangeKeyItem).forEach(([key, value], index) => {
                   if (key == "name") {
                     newItem["Tên"] = value;
@@ -70,12 +83,24 @@ export const exportTopten = (store_code, page, params) => {
                     newItem["Số điện thoại"] = value;
                     // newItem["Tên sản phẩm"] = value
                   }
-                  if (key == "orders_count") {
-                    newItem["Số đơn hàng"] = value;
-                    // newItem["Tên sản phẩm"] = value
+                  if(report_type === "point")
+                  {
+                    if (key == "points_count") {
+                      newItem["Số xu"] = value;
+                      // newItem["Tên sản phẩm"] = value
+                    }
+                    if (key == "sum_point") {
+                      newItem["Tổng số xu"] = value;
+                    }
                   }
-                  if (key == "sum_total_final") {
-                    newItem["Tổng doanh thu"] = value;
+                  else{
+                    if (key == "orders_count") {
+                      newItem["Số đơn hàng"] = value;
+                      // newItem["Tên sản phẩm"] = value
+                    }
+                    if (key == "sum_total_final") {
+                      newItem["Tổng doanh thu"] = value;
+                    }
                   }
                 });
 

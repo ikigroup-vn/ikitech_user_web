@@ -208,8 +208,10 @@ class Form extends Component {
     var disable_everyDay = type_schedule == "1" ? "show" : "hide"
     var disable_everyWeek = type_schedule == "2" ? "show" : "hide"
     var disable_everyMonth = type_schedule == "3" ? "show" : "hide"
+    var { types } = this.props;
 
-    var {  types } = this.props;
+
+
     return (
       <React.Fragment>
         <form role="form" onSubmit={this.onSave} method="post">
@@ -299,7 +301,7 @@ class Form extends Component {
                 <div className="set-top-moment">
 
                   <MomentInput
-                    value={moment(time_run , "DD-MM-YYYY HH:mm")}
+                    value={time_run == "Invalid date" ? "" : moment(time_run , "DD-MM-YYYY HH:mm")}
                     format="DD-MM-YYYY HH:mm"
                     options={true}
                     enableInputClick={true}
