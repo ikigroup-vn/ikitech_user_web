@@ -161,7 +161,7 @@ class Table extends Component {
       return "dark";
     }
 
-    return Types.SUCCESS;
+    return "success";
   };
 
   colorWithOrderStatusColor = (order_status_code) => {
@@ -190,7 +190,7 @@ class Table extends Component {
       return "dark";
     }
 
-    return Types.SUCCESS;
+    return "success";
   };
   onChangeSelected = (e, data) => {
     var { checked } = e.target;

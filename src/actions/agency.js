@@ -62,7 +62,7 @@ export const exportTopten = (store_code, page, params,report_type) => {
                   arangeKeyItem = {
                     name: item.customer?.name,
                     phone_number: item.customer?.phone_number,
-                    points_count: item.points_count,
+                    // points_count: item.points_count,
                     sum_point: item.sum_point,
                     
                   };
@@ -85,10 +85,10 @@ export const exportTopten = (store_code, page, params,report_type) => {
                   }
                   if(report_type === "point")
                   {
-                    if (key == "points_count") {
-                      newItem["Số xu"] = value;
-                      // newItem["Tên sản phẩm"] = value
-                    }
+                    // if (key == "points_count") {
+                    //   newItem["Số xu"] = value;
+                    //   // newItem["Tên sản phẩm"] = value
+                    // }
                     if (key == "sum_point") {
                       newItem["Tổng số xu"] = value;
                     }

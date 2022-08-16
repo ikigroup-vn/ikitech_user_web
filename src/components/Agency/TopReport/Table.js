@@ -69,7 +69,7 @@ class Table extends Component {
               <td>{index + 1}</td> <td>{data.customer?.name}</td>{" "}
               <td>{data.customer?.phone_number}</td>
               <td>{data.agency_type?.name}</td>{" "}
-              {report_type == "point" ? <td>{formatNoD(data.points_count)}</td> :<td>{formatNoD(data.orders_count)}</td>}
+              {report_type == "order" && <td>{formatNoD(data.orders_count)}</td>}
 
               {report_type == "point" ?  <td>
                 {typeof data.sum_point != "undefined"
@@ -109,7 +109,7 @@ class Table extends Component {
               <th>Số điện thoại</th>
 
               <th>Cấp đại lý</th>
-              {report_type == "point" ? <th>Số xu nhận được</th> : <th>Số đơn hàng</th>}
+              {report_type == "order" &&  <th>Số đơn hàng</th>}
               {report_type == "point" ? (
                 <th>Tổng số xu</th>
               ) : (
