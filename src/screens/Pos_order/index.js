@@ -525,7 +525,7 @@ class PostOrder extends Component {
 
                 data = {
                     payment_method_id: this.state.payment_method_id,
-                    amount_money: 0,
+                    amount_money: formatNumber(this.state.priceCustomer),
                     allowAutoPrint: allowAutoPrint,
                     order_from: (oneCart?.total_shipping_fee > 0 || this.state.openShipment == true) && getChannel() == IKITECH ? OrderFrom.ORDER_FROM_POS_DELIVERY : OrderFrom.ORDER_FROM_POS_IN_STORE
                 };

@@ -122,7 +122,7 @@ class ModalDetail extends Component {
     }
     handleCallback = () => {
         var info = this.props.modal
-        const { distributeName,
+        var { distributeName,
             distributeValue,
             element_distributes,
             subElementNameDistributeSelected,
@@ -131,7 +131,7 @@ class ModalDetail extends Component {
             idElement,
             afterChoosePrice,
             afterPrice } = this.state
-
+            quantityInStock = 1
         if (info.distributeProduct.length === 0) {
             window.$('.modal').modal('hide');
 
