@@ -127,7 +127,7 @@ class TotalBill extends Component {
       this.props.order_allow_change_status == true ? "show" : "hide";
     var list_items = filter_arr(bill.line_items);
 
-    console.log(agree, cancel);
+    console.log("get bill" , bill);
     return (
       <div className="box box-warning cart_wrapper mb0">
         <Modal
@@ -264,7 +264,7 @@ class TotalBill extends Component {
                 </p>
               </div>
             )}
-          {bill.order_code_refund && (
+          {bill.remaining_amount > 0 && (
             <div>
               <p className="sale_user_label bold bold group-total">
                 <div>Đã thanh toán:</div>
@@ -296,9 +296,7 @@ class TotalBill extends Component {
             </div>
           )}
 
-          {(getChannel() == IKIPOS ||
-            bill.order_from == 2 ||
-            bill.order_from == null) && (
+          {(bill.remaining_amount > 0) && (
             <React.Fragment>
               {/* <div>
                                 <p className="sale_user_label bold">
@@ -310,11 +308,11 @@ class TotalBill extends Component {
                                 </p>
                             </div> */}
 
-              <div>
+              <div >
                 <p className="sale_user_label bold bold group-total">
-                  <div>Còn nợ:</div>
+                  <div style={{color : "red"}}>Còn nợ:</div>
 
-                  <span className="cart_payment_method">
+                  <span  style={{color : "red"}} className="cart_payment_method">
                     {format(bill.remaining_amount)}
                   </span>
                 </p>
