@@ -128,8 +128,7 @@ class Form extends Component {
       form.day_of_week = null;
       form.time_run_near = null;
     }
-    console.log(form);
-    return;
+ 
     this.props.createSchedule(store_code, form);
   };
   goBack = () => {

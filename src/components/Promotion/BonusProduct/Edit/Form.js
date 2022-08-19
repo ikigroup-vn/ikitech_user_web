@@ -492,7 +492,8 @@ class Form extends Component {
     onSave,
     isBonus,
     isLadder,
-    fromBonusLadder
+    fromBonusLadder,
+    indexRemove
   ) => {
     console.log( product,
       id,
@@ -506,10 +507,14 @@ class Form extends Component {
     else if (fromBonusLadder)
       var products = [...this.state.listProductsBonusLadder];
     else var products = [...this.state.listProducts];
+    console.log(products, product, id, isBonus);
     if (product?.length > 0) {
       if (type == "remove") {
         if (products.length > 0) {
-          products = products.filter((value) => {
+          products = products.filter((value , index) => {
+            if(typeof indexRemove !== "undefined")
+            return index !== indexRemove;
+            else
             return value.product.id !== product[0].id;
           });
           // products.forEach((item, index) => {
@@ -532,7 +537,7 @@ class Form extends Component {
               _index = index1;
             }
           });
-          if (check == false) {
+          if (check == false || fromBonusLadder == true  ) {
             var product = {
               quantity: 1,
               product: item,
@@ -581,11 +586,14 @@ class Form extends Component {
     } else {
       if (type == "remove") {
         if (products.length > 0) {
-          products = products.filter((item) => {
+          products = products.filter((item , index) => {
             if (fromBonusLadder) {
               var item = { ...item };
               delete item.allows_all_distribute;
             }
+            if(typeof indexRemove !== "undefined")
+            return index !== indexRemove;
+            else
             return !this.compareTwoProduct(item, product);
           });
           // products.forEach((item, index) => {
@@ -605,7 +613,7 @@ class Form extends Component {
             _index = index;
           }
         });
-        if (checkExsit == true) {
+        if (checkExsit == true || fromBonusLadder == true) {
           var product = {
             quantity: 1,
             product: product,
@@ -688,7 +696,8 @@ class Form extends Component {
     set = true,
     isBonus,
     isBonusLadder,
-    name
+    name,
+    indexRemove
   ) => {
     if (isBonus) var products = [...this.state.listProductsBonus];
     if (isBonusLadder) var products = [...this.state.listProductsBonusLadder];
@@ -701,24 +710,47 @@ class Form extends Component {
         delete product.allows_all_distribute;
       }
 
-      console.log(this.compareTwoProduct(product, data));
-      if (this.compareTwoProduct(product, data)) {
-        if (setIncrement === 1) {
-          if (isBonusLadder) products[index][name] = product[name] + 1;
-          else products[index].quantity = parseInt(product.quantity) + 1;
-        } else if (setIncrement === -1) {
-          if (isBonusLadder) {
-            if (product[name] == 1) {
-            } else products[index][name] = parseInt(product[name]) - 1;
+      if (typeof indexRemove !== "undefined") {
+        if(index == indexRemove)
+        {
+          if (setIncrement === 1) {
+            if (isBonusLadder) products[index][name] = product[name] + 1;
+            else products[index].quantity = parseInt(product.quantity) + 1;
+          } else if (setIncrement === -1) {
+            if (isBonusLadder) {
+              if (product[name] == 1) {
+              } else products[index][name] = parseInt(product[name]) - 1;
+            } else {
+              if (product.quantity == 1) {
+              } else products[index].quantity = product.quantity - 1;
+            }
           } else {
-            if (product.quantity == 1) {
-            } else products[index].quantity = product.quantity - 1;
+            if (isBonusLadder) {
+              console.log(products[index][name], name, index);
+              products[index][name] = quantity;
+            } else products[index].quantity = quantity;
           }
-        } else {
-          if (isBonusLadder) {
-            console.log(products[index][name], name, index);
-            products[index][name] = quantity;
-          } else products[index].quantity = quantity;
+        }
+      }
+      else{
+        if (this.compareTwoProduct(product, data)) {
+          if (setIncrement === 1) {
+            if (isBonusLadder) products[index][name] = product[name] + 1;
+            else products[index].quantity = parseInt(product.quantity) + 1;
+          } else if (setIncrement === -1) {
+            if (isBonusLadder) {
+              if (product[name] == 1) {
+              } else products[index][name] = parseInt(product[name]) - 1;
+            } else {
+              if (product.quantity == 1) {
+              } else products[index].quantity = product.quantity - 1;
+            }
+          } else {
+            if (isBonusLadder) {
+              console.log(products[index][name], name, index);
+              products[index][name] = quantity;
+            } else products[index].quantity = quantity;
+          }
         }
       }
     });

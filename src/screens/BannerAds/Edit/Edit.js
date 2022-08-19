@@ -49,7 +49,9 @@ class BannerAdsEdit extends Component {
                                 <div id="messages"></div>
 
                                 <div class="box">
+                                  {
                                   <Form history={history} bannerAdsId={bannerAdsId} banner_ads={banner_ads} store_code={store_code} />
+                                  }
                                 </div>
                               </div>
                             </div>

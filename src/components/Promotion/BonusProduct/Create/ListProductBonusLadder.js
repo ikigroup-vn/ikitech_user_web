@@ -30,10 +30,8 @@ class ListProduct extends Component {
       }
       else {
         this.props.handleAddProduct(data, data.id, "remove", null, false, false,true)
-
       }
     }
-
   }
 
   passNumPage = (page) => {
@@ -82,6 +80,7 @@ class ListProduct extends Component {
     return false
   }
   onSaveProduct = () => {
+    window.$('.checkbox').prop("checked", false);
     this.props.onSaveProduct(false,false,true)
     window.$("#modalBonusLadder").modal("hide");
 
@@ -275,10 +274,10 @@ class ListProduct extends Component {
                   <div class="form-check">
                     <input type="checkbox"
                       // disabled={disaled}
-                      checked={checked}
+                      // checked={checked}
                       onChange={this.onChange}
                       value={JSON.stringify(_data)}
-                      class="form-check-input" id="gridCheck" />
+                      class="form-check-input checkbox" id="gridCheck" />
                     {/* <input class="form-check-input" name="is_set_order_max_point" type="checkbox" id="gridCheck" /> */}
                     <label class="form-check-label" for="gridCheck">
                       {element.name}                  </label>
@@ -349,6 +348,7 @@ class ListProduct extends Component {
                 <label>
                   <input type="checkbox"
                     disabled={disaled}
+                    className = "checkbox"
                     // checked={checked}
                     onChange={(e) => this.onChange(e, "PARENT")}
                     value={this.getData(_data, listDistribute, data)} />

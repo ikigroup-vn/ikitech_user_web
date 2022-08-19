@@ -19,7 +19,7 @@ class ListProduct extends Component {
 
   onChange = (e) => {
     var { value, checked } = e.target
-    console.log(checked)
+
     var data = JSON.parse(value);
     if (checked == true)
       this.props.handleAddProduct(data, null, "add",null,false , true) // đến từ sản phẩm thưởng số lượng
@@ -479,6 +479,8 @@ class ListProduct extends Component {
   render() {
     var { products, store_code, listProducts, combos } = this.props
     var { searchValue } = this.state
+
+    
     return (
       <div
         class="modal fade"

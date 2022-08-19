@@ -25,14 +25,15 @@ class Form extends Component {
   componentWillReceiveProps(nextProps) {
     var { banner_ads } = this.props
     if (!shallowEqual(nextProps.banner_ads, banner_ads)) {
-      nextProps.banner_ads.forEach(item => {
+      nextProps?.banner_ads?.forEach(item => {
         if (item.id == Number(nextProps.bannerAdsId)) {
           this.setState(
             {
               title : item.title,
               type : item.type,
               image_url: item.image_url,
-              link_to  : item.link_to
+              link_to  : item.link_to,
+              id : item.id
 
            
             }
@@ -61,7 +62,7 @@ class Form extends Component {
   onSave = (e) => {
     var { store_code, bannerAdsId } = this.props
     e.preventDefault();
-    var {title , image_url , link_to , type} = this.state
+    var {title , image_url , link_to , type, id} = this.state
     if(image_url == null || !isEmpty(image_url))
     {
       this.props.showError({
@@ -91,7 +92,7 @@ class Form extends Component {
       )
       return;
     }
-    this.props.updateBannerAds(bannerAdsId, {
+    this.props.updateBannerAds(id, {
       title,
       type,
       link_to,
