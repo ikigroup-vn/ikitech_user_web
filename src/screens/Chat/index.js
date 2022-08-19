@@ -35,7 +35,7 @@ class Customer extends Component {
         var customer_id = this.props.match.params?.id
         var customerId = customer_id || nextProps.listChat.data[0].customer_id
 
-        this.setState({ isActive: customer_id || customer_id , isLoadFirstCustomer: true })
+        this.setState({ isActive: customerId || customer_id , isLoadFirstCustomer: true })
 
         this.props.fetchChatId(store_code, customerId);
       }
@@ -100,6 +100,8 @@ class Customer extends Component {
     var customerId = typeof listChat.data !== "undefined" && listChat.data.length > 0 ? listChat.data[0].customer_id : null
     var { store_code } = this.props.match.params
     var customerParam = this.props.match.params.id || null
+
+    console.log(customerId)
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
