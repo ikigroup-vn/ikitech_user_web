@@ -700,7 +700,7 @@ class Form extends Component {
     indexRemove
   ) => {
     if (isBonus) var products = [...this.state.listProductsBonus];
-    if (isBonusLadder) var products = [...this.state.listProductsBonusLadder];
+    else if (isBonusLadder) var products = [...this.state.listProductsBonusLadder];
     else var products = [...this.state.listProducts];
 
     console.log(isBonusLadder, name, products);
