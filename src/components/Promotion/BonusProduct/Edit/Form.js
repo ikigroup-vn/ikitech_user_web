@@ -761,7 +761,7 @@ class Form extends Component {
         listProductsBonus: products,
         saveListProductsBonus: products,
       });
-    if (isBonusLadder)
+      else if (isBonusLadder)
       this.setState({
         listProductsBonusLadder: products,
         saveListProductsBonusLadder: products,

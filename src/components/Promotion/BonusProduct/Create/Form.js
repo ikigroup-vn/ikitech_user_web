@@ -550,6 +550,7 @@ class Form extends Component {
       if (typeof indexRemove !== "undefined") {
         if(index == indexRemove)
         {
+          console.log("vaoooo")
           if (setIncrement === 1) {
             if (isBonusLadder) products[index][name] = product[name] + 1;
             else products[index].quantity = parseInt(product.quantity) + 1;
@@ -571,6 +572,7 @@ class Form extends Component {
       }
       else{
         if (this.compareTwoProduct(product, data)) {
+   
           if (setIncrement === 1) {
             if (isBonusLadder) products[index][name] = product[name] + 1;
             else products[index].quantity = parseInt(product.quantity) + 1;
@@ -592,13 +594,12 @@ class Form extends Component {
       }
     });
 
-    console.log(products);
     if (isBonus)
       this.setState({
         listProductsBonus: products,
         saveListProductsBonus: products,
       });
-    if (isBonusLadder)
+    else if (isBonusLadder)
       this.setState({
         listProductsBonusLadder: products,
         saveListProductsBonusLadder: products,
