@@ -164,6 +164,10 @@ export const footerImg = [
   },
   {
     index: 3,
+    footer: "https://i.imgur.com/b4WZ7LG.png",
+  },
+  {
+    index: 4,
     footer: "https://i.imgur.com/YKPn77N.png",
   },
 ];
