@@ -35,6 +35,10 @@ export const headerImg = [
     index: 9,
     header: "https://i.imgur.com/KAMl9hQ.png",
   },
+  {
+    index: 10,
+    header: "https://i.imgur.com/FHQihOD.png",
+  },
 ];
 export const bannerImg = [
   {
@@ -85,6 +89,14 @@ export const bannerImg = [
     width : "1024",
     height : "648"
   },
+  {
+    index: 9,
+    banner: "https://i.imgur.com/XExr64n.png",
+    width : "1024",
+    height : "648"
+  },
+
+  
 ];
 export const productImg = [
   {
@@ -121,6 +133,11 @@ export const productImg = [
     index: 8,
     product: "https://i.imgur.com/efnEpc2.png",
   },
+  {
+    index: 9,
+    product: "  https://i.imgur.com/qpJGuuH.png",
+  },
+
 ];
 export const blogImg = [
   {
@@ -169,5 +186,9 @@ export const footerImg = [
   {
     index: 4,
     footer: "https://i.imgur.com/YKPn77N.png",
+  },
+  {
+    index: 5,
+    footer: "https://i.imgur.com/yXPLWjo.png",
   },
 ];
