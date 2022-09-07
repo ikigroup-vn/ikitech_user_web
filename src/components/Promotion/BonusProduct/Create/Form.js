@@ -67,6 +67,8 @@ class Form extends Component {
   }
 
   onSaveProduct = (isBonus, isLadder, fromBonusLadder) => {
+
+
     if (isBonus) {
       this.setState({
         saveListProductsBonus: [...this.state.listProductsBonus],
@@ -185,11 +187,13 @@ class Form extends Component {
       for (const [index, element] of products.entries())
       {
         var filter = products.filter((v,i)=>{
-          if(element.id === v.id &&
-             parseInt(element.bonus_quantity) === parseInt(v.bonus_quantity) 
-             && parseInt(element.quantity) === parseInt(v.quantity)
-             && element.element_distribute_name == v.element_distribute_name
-             && element.sub_element_distribute_name == v.sub_element_distribute_name
+          if(
+            parseInt(element.quantity) === parseInt(v.quantity)
+            // element.id === v.id &&
+            //  parseInt(element.bonus_quantity) === parseInt(v.bonus_quantity) 
+            //  && parseInt(element.quantity) === parseInt(v.quantity)
+            //  && element.element_distribute_name == v.element_distribute_name
+            //  && element.sub_element_distribute_name == v.sub_element_distribute_name
              )
           {
             return true
@@ -230,7 +234,8 @@ class Form extends Component {
           type: "danger",
           title: "Lỗi",
           disable: "show",
-          content: `${listProductsLadder[0]?.name} mua ${itemLadderCheck.quantity} - tặng ${itemLadderCheck.bonus_quantity} ${itemLadderCheck.name}  bị trùng lặp`
+          // content: `${listProductsLadder[0]?.name} mua ${itemLadderCheck.quantity} - tặng ${itemLadderCheck.bonus_quantity} ${itemLadderCheck.name}  bị trùng lặp`
+          content : "Sản phẩm mua không được trùng về số lượng"
         },
       });
       return;
@@ -419,7 +424,7 @@ class Form extends Component {
           });
           if (check == false || fromBonusLadder == true  ) {
             var product = {
-              quantity: 1,
+              quantity: item.quantity > 1 ?  product.quantity : 1,
               product: item,
               allows_all_distribute: item.allows_all_distribute,
               allows_choose_distribute: item.allows_choose_distribute,
@@ -441,7 +446,7 @@ class Form extends Component {
             products.push(product);
           } else {
             var product = {
-              quantity: 1,
+              quantity: item.quantity > 1 ?  product.quantity : 1,
               product: item,
               allows_all_distribute: item.allows_all_distribute,
               allows_choose_distribute: item.allows_choose_distribute,
@@ -495,7 +500,7 @@ class Form extends Component {
         });
         if (checkExsit == true || fromBonusLadder == true) {
           var product = {
-            quantity: 1,
+            quantity: product.quantity > 1 ?  product.quantity : 1,
             product: product,
             allows_all_distribute: product.allows_all_distribute,
             allows_choose_distribute: product.allows_choose_distribute,
@@ -517,7 +522,7 @@ class Form extends Component {
           else products.push(product);
         } else {
           var product = {
-            quantity: 1,
+            quantity: product.quantity > 1 ?  product.quantity : 1,
             product: product,
             allows_all_distribute: product.allows_all_distribute,
             allows_choose_distribute: product.allows_choose_distribute,

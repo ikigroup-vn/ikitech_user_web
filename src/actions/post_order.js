@@ -491,6 +491,16 @@ export const fetchVoucher = (store_code, branch_id, id, data) => {
             type: Types.FETCH_LIST_CART_ITEM,
             data: res.data.data,
           });
+          window.$(".modal").modal("hide")
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "success",
+              title: "Thành công ",
+              disable: "show",
+              content: res.data.msg,
+            },
+          });
         }
         else{
           dispatch({

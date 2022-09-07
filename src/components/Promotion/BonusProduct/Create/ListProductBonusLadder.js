@@ -34,6 +34,19 @@ class ListProduct extends Component {
     }
   }
 
+  getMaxNumber = () =>{
+    var {listProducts} = this.props
+    var num = 0
+    listProducts.forEach(element => {
+      if(element.quantity > num)
+      {
+        num = parseInt(element.quantity)
+      }
+
+    });
+    return num
+  }
+
   passNumPage = (page) => {
     this.setState({ page: page })
   }
@@ -101,7 +114,7 @@ class ListProduct extends Component {
               result.push({
 
                 "id": product.id,
-                "quantity": 1,
+                "quantity": this.getMaxNumber() + 1,
                 "distribute_name": listDistribute.name,
                 "element_distribute_name": element.name,
                 "sub_element_distribute_name": sub_element.name,
@@ -117,7 +130,7 @@ class ListProduct extends Component {
             result.push({
 
               "id": product.id,
-              "quantity": 1,
+              "quantity": this.getMaxNumber() + 1,
               "distribute_name": listDistribute.name,
               "element_distribute_name": element.name,
               "sub_element_distribute_name": null,
@@ -161,7 +174,7 @@ class ListProduct extends Component {
               var length = listDistribute.element_distributes[0].sub_element_distributes ?? 0
               var _data = {
                 "id": product.id,
-                "quantity": 1,
+                "quantity": this.getMaxNumber() + 1,
                 "distribute_name": listDistribute.name,
                 "element_distribute_name": element.name,
                 "sub_element_distribute_name": sub_element.name,
@@ -173,7 +186,7 @@ class ListProduct extends Component {
               }
               var _dataAllowDistribute = {
                 "id": product.id,
-                "quantity": 1,
+                "quantity": this.getMaxNumber() + 1,
                 "distribute_name": null,
                 "element_distribute_name": null,
                 "sub_element_distribute_name": null,
@@ -209,7 +222,7 @@ class ListProduct extends Component {
           else {
             var _data = {
               "id": product.id,
-              "quantity": 1,
+              "quantity": this.getMaxNumber() + 1,
               "distribute_name": listDistribute.name,
               "element_distribute_name": element.name,
               "sub_element_distribute_name": null,
@@ -222,7 +235,7 @@ class ListProduct extends Component {
             var length = listDistribute.element_distributes.length ?? 0
             var _dataAllowDistribute = {
               "id": product.id,
-              "quantity": 1,
+              "quantity": this.getMaxNumber() + 1,
               "distribute_name": null,
               "element_distribute_name": null,
               "sub_element_distribute_name": null,
@@ -287,7 +300,7 @@ class ListProduct extends Component {
         var status = data.status == 0 ? "success" : data.status == 1 ? "secondary" : data.status == 2 ? "danger" : null
         var _data = {
           "id": data.id,
-          "quantity": 1,
+          "quantity": this.getMaxNumber() + 1,
           "distribute_name": null,
           "element_distribute_name": null,
           "sub_element_distribute_name": null,
