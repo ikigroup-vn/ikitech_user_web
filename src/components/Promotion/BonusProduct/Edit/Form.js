@@ -342,7 +342,26 @@ class Form extends Component {
       return "2";
     }
   };
-
+  checkProductSameQuantity = (ladder_reward = false , products) =>{
+    if(ladder_reward == true && products?.length > 0)
+    {
+      console.log(ladder_reward, products)
+      for (const [index, element] of products.entries())
+      {
+        var filter = products.filter((v,i)=>{
+          if(element.id === v.id && parseInt(element.bonus_quantity) === parseInt(v.bonus_quantity) && parseInt(element.quantity) === parseInt(v.quantity))
+          {
+            return true
+          }
+        })
+        if(filter?.length > 1)
+        {
+          return filter[0]
+        }
+      }
+      return true
+    }
+  } 
   onSave = (e) => {
     e.preventDefault();
     console.log(this.state);
@@ -360,7 +379,20 @@ class Form extends Component {
     var listProductsLadder = state.listProductsLadder;
     var productBonus = {};
     var select_products = [];
-
+    var itemLadderCheck = this.checkProductSameQuantity(state.ladder_reward , state.listProductsBonusLadder) 
+    if(itemLadderCheck !== true)
+    {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: `${listProductsLadder[0]?.name} mua ${itemLadderCheck.quantity} - tặng ${itemLadderCheck.bonus_quantity} ${itemLadderCheck.name}  bị trùng lặp`
+        },
+      });
+      return;
+    }
     if (state.ladder_reward === true) {
       var data_ladder = {};
       var list = [];
@@ -457,7 +489,7 @@ class Form extends Component {
     var amount = form.amount;
     if (typeof amount == "undefined" || amount == null || !isEmpty(amount))
       form.set_limit_amount = false;
-    console.log(form);
+ 
     this.props.updateBonusProduct(store_code, form , bonusProductId);
 
   };

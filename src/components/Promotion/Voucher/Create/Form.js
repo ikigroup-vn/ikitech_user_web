@@ -606,7 +606,7 @@ class Form extends Component {
                       {"  "}Giảm giá cho đơn hàng
                     </label>
                     {
-                      this.props.type === "store" &&      <label>
+                           <label>
                       <input
                         type="radio"
                         name="discount_for"
