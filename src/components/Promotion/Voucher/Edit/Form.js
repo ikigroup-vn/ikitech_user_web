@@ -759,7 +759,7 @@ class Form extends Component {
                       />
                       {"  "}Giảm giá cho đơn hàng
                     </label>
-                    {(
+                    {type === "store" && (
                       <label>
                         <input
                           type="radio"

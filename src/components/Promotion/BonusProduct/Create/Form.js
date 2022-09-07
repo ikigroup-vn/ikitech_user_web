@@ -185,7 +185,12 @@ class Form extends Component {
       for (const [index, element] of products.entries())
       {
         var filter = products.filter((v,i)=>{
-          if(element.id === v.id && parseInt(element.bonus_quantity) === parseInt(v.bonus_quantity) && parseInt(element.quantity) === parseInt(v.quantity))
+          if(element.id === v.id &&
+             parseInt(element.bonus_quantity) === parseInt(v.bonus_quantity) 
+             && parseInt(element.quantity) === parseInt(v.quantity)
+             && element.element_distribute_name == v.element_distribute_name
+             && element.sub_element_distribute_name == v.sub_element_distribute_name
+             )
           {
             return true
           }
@@ -197,7 +202,7 @@ class Form extends Component {
       }
       return true
     }
-  }
+  } 
 
   onSave = (e) => {
     e.preventDefault();
@@ -216,7 +221,7 @@ class Form extends Component {
     var listProductsLadder = state.listProductsLadder;
     var productBonus = {};
     var select_products = [];
-    var itemLadderCheck = this.checkProductSameQuantity(state.ladder_reward , state.listProductsBonusLadder) 
+    var itemLadderCheck = this.checkProductSameQuantity(state.ladder_reward , state.listProductsBonusLadder)
     if(itemLadderCheck !== true)
     {
       this.props.showError({

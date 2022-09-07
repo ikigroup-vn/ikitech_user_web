@@ -609,7 +609,7 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
     line-height: 1.375rem;
-    max-height: 2.75rem;
+    /* max-height: 2.75rem; */
     text-transform: uppercase;
     text-align: center
 }

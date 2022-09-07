@@ -184,43 +184,25 @@ class ListProduct extends Component {
               }
               var checked = this.checkExsit(list, _data)
               var checkedAllow = this.checkExsit(list, _dataAllowDistribute)
-              // result.push(
-              //   <>
-              //     {index == 0 && length > 1 && <div class="form-group">
-              //       <div class="form-check">
-              //         <input type="checkbox"
-              //           // disabled={disaled}
-              //           checked={checkedAllow}
-              //           onChange={this.onChange}
-              //           value={JSON.stringify(_dataAllowDistribute)}
-              //           class="form-check-input" id="gridCheck" />
-              //         <label class="form-check-label" for="gridCheck">
-              //           Cho phép tự chọn phân loại                  </label>
-              //       </div>
+              result.push(
+                <>
+               
+                  <div class="form-group">
+                    <div class="form-check">
+                      <input type="checkbox"
+                    
+                        onChange={this.onChange}
+                        value={JSON.stringify(_data)}
+                        class="form-check-input checkbox" id="gridCheck" />
+                      <label class="form-check-label" for="gridCheck">
+                        {element.name},{sub_element.name}                    </label>
+                    </div>
 
-              //     </div>
-              //     }
-              //     {/* <div className='wrap-item hover-product' > */}
+                  </div>
 
-              //     {/* <label style={{ color: "#ff8100" }}>&nbsp;Phân loại: </label>
-              //     <div className='name-distribute' >{element.name},{sub_element.name}</div> */}
-              //     <div class="form-group">
-              //       <div class="form-check">
-              //         <input type="checkbox"
-              //           // disabled={disaled}
-              //           checked={checked}
-              //           onChange={this.onChange}
-              //           value={JSON.stringify(_data)}
-              //           class="form-check-input" id="gridCheck" />
-              //         <label class="form-check-label" for="gridCheck">
-              //           {element.name},{sub_element.name}                    </label>
-              //       </div>
-
-              //     </div>
-
-              //     {/* </div> */}
-              //   </>
-              // )
+                  {/* </div> */}
+                </>
+              )
 
             })
           }
