@@ -40,6 +40,7 @@ class Bill extends Component {
         null,
       time_from: "",
       time_to: "",
+      loadingShipment : ""
     };
   }
   closeChatBox = (status) => {
@@ -159,6 +160,7 @@ class Bill extends Component {
       this.setState({ statusPayment: status_payment });
     const branch_id = getBranchId();
     this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
+    this.setState({loadingShipment : helper.randomString(10)})
   }
   handleShowChatBox = (customerId, customerImg, customerName, status) => {
     var { store_code } = this.props.match.params;
@@ -495,8 +497,8 @@ class Bill extends Component {
                             title="Đồng bộ trạng thái đơn hàng với đơn vị vận chuyển"
                             onClick={()=>{this.setState({runAsync  : helper.randomString(10)})}}
                           >
-                            <i class="fa fa-sync"></i> Đồng bộ {listBill.length}{" "}
-                            đơn hàng
+                            <i class="fa fa-sync"></i> Đồng bộ 
+                            trạng thái giao hàng
                           </button>
                         </div>
                        
@@ -504,6 +506,7 @@ class Bill extends Component {
 
                       <div className="card-body">
                         <Table
+                        isLoading  = {this.state.loadingShipment}
                         runAsync = {runAsync}
                           onchangeOrderFrom={this.onchangeOrderFrom}
                           getParams={this.getParams}

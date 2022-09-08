@@ -173,6 +173,83 @@ export const updateShipment = (store_code, id, data) => {
   };
 };
 
+
+export const loginShipment = (store_code, id, data) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show"
+    })
+    shipmentApi
+      .loginShipment(store_code, id, data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide"
+        })
+    
+        shipmentApi
+        .updateShipment(store_code, id, {token : res.data?.data?.token || ""})
+        .then((res) => {
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "success",
+              title: "Thành công ",
+              disable: "show",
+              content: res.data.msg,
+            },
+          });
+          shipmentApi.fetchAllShipment(store_code).then((res) => {
+            if (res.data.code !== 401)
+  
+              dispatch({
+                type: Types.FETCH_ALL_SHIPMENT,
+                data: res.data.data,
+              });
+         
+          });
+        })
+        .catch(function (error) {
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "danger",
+              title: "Lỗi",
+              disable: "show",
+              content: error?.response?.data?.msg,
+            },
+          });
+        })
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide"
+        })
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
 export const destroyShipment = (store_code, id) => {
 
   return (dispatch) => {

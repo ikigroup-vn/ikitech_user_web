@@ -16,9 +16,14 @@ export const updateShipment = (store_code,id ,data) =>{
   return callApi(`/store/${store_code}/shipments/${id}`, "put", data);
 }
 
+
+export const loginShipment = (store_code, id , data) =>{
+  return callApi(`/store/${store_code}/shipment_get_token/viettel`, "post", data);
+}
 export const destroyShipment = (store_code, id) =>{
   return callApi(`/store/${store_code}/shipments/${id}`, "delete", null);
 }
+
 
 export const calculate = (store_code, id , data) =>{
   return callApi(`/store/${store_code}/shipments/${id}/calculate`, "post", data);

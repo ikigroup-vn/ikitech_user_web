@@ -27,6 +27,7 @@ class Table extends Component {
     };
     this.syncArr = [];
     this.asyncElm = null;
+    this.useLoading = false;
   }
 
   showChatBox = (customerId, customerImg, customerName, status) => {
@@ -132,7 +133,18 @@ class Table extends Component {
       });
 
     if (nextProps.runAsync !== this.props.runAsync) {
-      console.log(this.asyncElm);
+      console.log("hehe", this.asyncElm);
+      this.useLoading = true;
+      this.asyncElm?.click();
+    }
+    console.log(nextProps.isLoading, this.props.isLoading);
+    if (
+      (nextProps.isLoading !== this.props.isLoading ||
+        !shallowEqual(nextProps.bills, this.props.bill)) &&
+      nextProps.runAsync == this.props.runAsync
+    ) {
+      console.log("loading ship");
+      this.useLoading = false;
       this.asyncElm?.click();
     }
   }
@@ -277,7 +289,7 @@ class Table extends Component {
         //   }
 
         var countItem = this.countItem(data.line_items_at_time);
-        console.log(data.customer);
+        console.log("useLoading", this.useLoading);
         var is_collaborator =
           data.collaborator_by_customer_id != null ? "check" : "close";
         var order_from =
@@ -327,16 +339,15 @@ class Table extends Component {
             <td>{data.created_at}</td>
 
             <td>
-              {item ? (
-                <div  style={{ display: "flex", "justify-content": "center" }}>
-                <div class="snippet" data-title=".dot-flashing">
-                  <div class="stage">
-                    <div class="dot-flashing"></div>
+              {item && this.useLoading == true ? (
+                <div style={{ display: "flex", "justify-content": "center" }}>
+                  <div class="snippet" data-title=".dot-flashing">
+                    <div class="stage">
+                      <div class="dot-flashing"></div>
+                    </div>
                   </div>
                 </div>
-              </div>
               ) : (
-             
                 <span
                   style={{ fontWeight: "500" }}
                   className={_payment_status_code}
@@ -352,14 +363,14 @@ class Table extends Component {
             </td>
             {getChannel() == IKITECH && (
               <td>
-                {item ? (
-                 <div  style={{ display: "flex", "justify-content": "center" }}>
-                 <div class="snippet" data-title=".dot-flashing">
-                   <div class="stage">
-                     <div class="dot-flashing"></div>
-                   </div>
-                 </div>
-               </div>
+                {item && this.useLoading == true ? (
+                  <div style={{ display: "flex", "justify-content": "center" }}>
+                    <div class="snippet" data-title=".dot-flashing">
+                      <div class="stage">
+                        <div class="dot-flashing"></div>
+                      </div>
+                    </div>
+                  </div>
                 ) : (
                   <span
                     style={{ fontWeight: "500" }}
@@ -610,9 +621,11 @@ class Table extends Component {
           style={{ marginLeft: "10px", display: "none" }}
           class={`btn btn-primary btn-sm`}
           title="Đồng bộ trạng thái đơn hàng với đơn vị vận chuyển"
-          onClick={this.handleSyncShipment}
+          onClick={() => {
+            this.handleSyncShipment();
+          }}
         >
-          <i class="fa fa-sync"></i> Đồng bộ {listBill.length} đơn hàng
+          <i class="fa fa-sync"></i> Đồng bộ {listBill.length} trạng thái giao hàng
         </button>
         <div class="table-responsive">
           <ReactToPrint
