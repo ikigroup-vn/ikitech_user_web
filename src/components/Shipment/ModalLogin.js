@@ -8,8 +8,8 @@ class ModalUpdate extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: "",
-      password: "",
+      USERNAME: "",
+      PASSWORD: "",
       toggle: false,
       iconShow: "fa fa-fw fa-eye",
       iconHide: "fa fa-fw fa-eye-slash",
@@ -28,9 +28,8 @@ class ModalUpdate extends Component {
 
   onSave = (e) => {
     e.preventDefault();
-    var {username , password} = this.state
-    if(!isEmpty(username) || !isEmpty(password))
-    {
+    var { USERNAME, PASSWORD } = this.state;
+    if (!isEmpty(USERNAME) || !isEmpty(PASSWORD)) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
         alert: {
@@ -42,20 +41,20 @@ class ModalUpdate extends Component {
       });
       return;
     }
-    
+
     this.props.loginShipment(this.props.store_code, this.props.modalId, {
-      username: username,
-      password: password,
+      USERNAME: USERNAME,
+      PASSWORD: PASSWORD,
     });
 
-    window.$(".modal").modal("hide")
+    window.$(".modal").modal("hide");
   };
 
-  togglePassword = () => {
+  togglePASSWORD = () => {
     this.setState({ toggle: !this.state.toggle });
   };
   render() {
-    var { password, username, toggle, iconHide, iconShow } = this.state;
+    var { PASSWORD, USERNAME, toggle, iconHide, iconShow } = this.state;
     return (
       <div
         class="modal fade"
@@ -87,34 +86,52 @@ class ModalUpdate extends Component {
               id="updateForm"
             >
               <div class="modal-body">
-                <div class="form-group">
-                  <label for="product_name">Tên tài khoản</label>
+                <div
+                  style={{
+                    textAlign: "center",
+                  }}
+                >
+                  <img src={this.props.imgViettelPost} />
+                </div>
+                <div style={{ marginTop: "7px" }}></div>
+                <span>
+                  Bạn cần đăng ký Viettel Post tại đây{" "}
+                  <a
+                    style={{ textDecoration: "underline", color: "blue" }}
+                    target="_bank"
+                    href="https://viettelpost.vn/"
+                  >
+                    https://viettelpost.vn {" "}
+                  </a>&nbsp;và cung cấp tài khoản của bạn ở đây để thực hiện kết nối và lấy token
+                </span>
+                <div class="form-group" style={{ marginTop: "15px" }}>
+                  <label for="product_name">Số điện thoại</label>
                   <input
                     type="text"
                     class="form-control"
                     id="txtToken"
-                    placeholder="Nhập tài khoản"
+                    placeholder="Nhập số điện thoại đăng nhập Viettel Post"
                     autocomplete="off"
-                    value={username}
+                    value={USERNAME}
                     onChange={this.onChange}
-                    name="username"
+                    name="USERNAME"
                   />
                 </div>
                 <div class="form-group">
                   <label for="product_name">Mật khẩu</label>
                   <input
-                    type={toggle == true ? "text" : "password"}
+                    type={toggle == true ? "text" : "PASSWORD"}
                     class="form-control"
                     id="txtToken"
                     placeholder="Nhập mật khẩu"
                     autocomplete="off"
-                    value={password}
+                    value={PASSWORD}
                     onChange={this.onChange}
-                    name="password"
+                    name="PASSWORD"
                   />
                   <span
-                    onClick={this.togglePassword}
-                    toggle="#password-field"
+                    onClick={this.togglePASSWORD}
+                    toggle="#PASSWORD-field"
                     class={toggle ? iconShow : iconHide}
                     style={{
                       float: "right",

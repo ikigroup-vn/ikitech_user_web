@@ -7,7 +7,8 @@ class Table extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalId : null
+      modalId : null,
+      imgViettelPost : null
     }
   }
 
@@ -140,7 +141,8 @@ class Table extends Component {
                 <button
                   style={{ marginLeft: "10px" }}
                   onClick={(e) => this.setState({
-                    modalId : data.id
+                    modalId : data.id , 
+                    imgViettelPost : data.image_url
                   })}
                   data-toggle="modal"
                   data-target="#modalLogin"
@@ -207,7 +209,7 @@ class Table extends Component {
 
           <tbody>{this.showData(this.props.shipment)}</tbody>
         </table>
-        <ModalLogin store_code = {this.props.store_code} modalId = {this.state.modalId}></ModalLogin>
+        <ModalLogin imgViettelPost = {this.state.imgViettelPost} store_code = {this.props.store_code} modalId = {this.state.modalId}></ModalLogin>
       </div>
     );
   }

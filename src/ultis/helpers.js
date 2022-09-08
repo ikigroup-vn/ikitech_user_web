@@ -14,6 +14,20 @@ export const randomString = (length) => {
   return result;
 };
 
+export const getDetailAdress = (address_detail , wards_name , district_name , province_name) => {
+  var detail = "";
+  if(address_detail)
+  detail = detail + address_detail + ", "
+  if(wards_name)
+  detail = detail + wards_name + ", "
+  if(district_name)
+  detail = detail + district_name + ", "
+  if(province_name)
+  detail = detail + province_name
+
+  return detail
+}
+
 
 export const contactOrNumber = (data) =>{
   if(getChannel() == IKIPOS)

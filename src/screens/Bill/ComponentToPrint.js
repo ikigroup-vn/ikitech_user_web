@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { shallowEqual } from "../../ultis/shallowEqual";
-import { filter_arr, format } from "../../ultis/helpers";
+import { filter_arr, format , getDetailAdress } from "../../ultis/helpers";
 
 export default class ComponentToPrint extends Component {
   constructor(props) {
@@ -39,14 +39,17 @@ export default class ComponentToPrint extends Component {
         if(typeof bill.customer_address != "undefined" && bill.customer_address != null){
           address = {
             customer_name: bill.customer_address.name,
-            customer_address: bill.customer_address.address_detail ?? "" + ", " + bill.customer_address?.wards_name ?? "" + ", " + bill.customer_address?.district_name ?? "" + ", " + bill.customer_address?.province_name ?? "",
+           
+            customer_address: getDetailAdress(bill.customer_address.address_detail ,bill.customer_address?.wards_name ,  bill.customer_address?.district_name , bill.customer_address?.province_name),
+           
             customer_phone: bill.customer_address.phone,
           }
          
         }else{
           address = {
             customer_name: bill.customer_name,
-            customer_address: bill.customer_address_detail ?? "" + ", " + bill.customer_address?.wards_name ?? "" + ", " + bill.customer_address?.district_name ?? "" + ", " + bill.customer_address?.province_name ?? "",
+            customer_address: getDetailAdress(bill.customer_address_detail ,bill.customer_address?.wards_name ,  bill.customer_address?.district_name , bill.customer_address?.province_name),
+           
             customer_phone: bill.customer_address?.phone,
           }
         }
