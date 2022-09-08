@@ -34,6 +34,7 @@ class Topbar extends Component {
       isShowScanner: false,
       numOfScanner: 1,
       startAsync: false,
+      isChangeValue : ""
     };
 
     this.refSearchProduct = React.createRef();
@@ -121,10 +122,9 @@ class Topbar extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     if (
       !shallowEqual(nextState.selectValue, this.state.selectValue) ||
-      this.state.isScan !== nextState.isScan
+      this.state.isScan !== nextState.isScan || nextState.isChangeValue !== this.state.isChangeValue
     ) {
       var { selectValue } = nextState;
-
       if (selectValue != null && selectValue.product != null) {
         var data = selectValue?.product;
         var { numOfScanner } = nextState;
@@ -144,7 +144,8 @@ class Topbar extends Component {
           data.product_discount,
           compareIsScan == true ? numOfScanner : 1,
           compareIsScan == true ? numOfScanner : 1,
-          data
+          data,
+          nextState.isChangeValue !== this.state.isChangeValue && shallowEqual(nextState.selectValue, this.state.selectValue)
         );
       }
     }
@@ -315,11 +316,14 @@ class Topbar extends Component {
     priceDiscount,
     quayntity,
     quantityDistribute,
-    product
+    product,
+    isChangeValue
   ) => {
     if (distributes.length > 0) {
       window.$("#modalDetail").modal("show");
+      
       this.setState({ isToggle: true });
+      if(isChangeValue == false)
       this.props.handleCallbackProduct({
         inventoryProduct: inventory,
         idProduct: id,
@@ -364,9 +368,8 @@ class Topbar extends Component {
 
   onChangeProduct = (selectValue) => {
 
-    this.setState({ selectValue });
-
-
+    this.setState({ selectValue , isChangeValue : randomString(10) });
+    // , isChangeValue : randomString(10)
     this.sleep(100).then(() => {
       if (this.refSearchProduct != null) {
         this.refSearchProduct.focus();

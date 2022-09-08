@@ -98,7 +98,7 @@ class ModalUpdate extends Component {
                   Bạn cần đăng ký Viettel Post tại đây{" "}
                   <a
                     style={{ textDecoration: "underline", color: "blue" }}
-                    target="_bank"
+                    target="_blank"
                     href="https://viettelpost.vn/"
                   >
                     https://viettelpost.vn {" "}

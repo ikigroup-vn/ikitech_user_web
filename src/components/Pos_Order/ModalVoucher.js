@@ -133,7 +133,6 @@ class ModalVoucher extends Component {
                           <div
                             className="RystvV hX0Gca C8GVIk"
                             onClick={() => this.handleOnclicks(item.code)}
-                            data-dismiss="modal"
                           >
                             <div>
                               <span className="io0LX9">
