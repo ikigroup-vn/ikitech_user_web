@@ -451,7 +451,7 @@ class Topbar extends Component {
         color: "black",
       }),
     };
-
+console.log("listt" , listPos);
     return (
       <div className="controller-top">
         <KeyboardEventHandler
@@ -549,7 +549,7 @@ class Topbar extends Component {
               </div>
               <div className="cart-list-banner">
                 <li class="nav-item">
-                  {listPos !== null && listPos.length > 0 ? (
+                  {(listPos !== null && listPos.length > 0) ? (
                     <ul class="navbar-nav" style={{ alignItems: "center" }}>
                       <li
                         onClick={() => this.handleChooseTab1(listPos[0].id)}

@@ -109,6 +109,18 @@ export default class ComponentToPrint extends Component {
     });
     arr.push(
       <React.Fragment>
+         {bill.total_shipping_fee > 0 && (
+          <tr>
+            <td></td>
+
+            <td style={{ textAlign: "start" }}>Phí vận chuyển</td>
+            <td></td>
+
+            <td style={{ textAlign: "end" }} colSpan="3">
+              + {format(bill.total_shipping_fee || 0)}
+            </td>
+          </tr>
+        )}
         <tr>
           <td></td>
 
@@ -124,6 +136,7 @@ export default class ComponentToPrint extends Component {
             )}
           </td>
         </tr>
+        
       </React.Fragment>
     );
     return arr;

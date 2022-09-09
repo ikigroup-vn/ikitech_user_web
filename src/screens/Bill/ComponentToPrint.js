@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { shallowEqual } from "../../ultis/shallowEqual";
-import { filter_arr, format , getDetailAdress } from "../../ultis/helpers";
+import { filter_arr, format, getDetailAdress } from "../../ultis/helpers";
 
 export default class ComponentToPrint extends Component {
   constructor(props) {
@@ -30,35 +30,42 @@ export default class ComponentToPrint extends Component {
       typeof this.state.customer_name == "undefined"
     ) {
       var bill = nextProps.bill;
-      if (
-        typeof bill.order_code != "undefined" &&
-        bill.order_code != null
-      )
-      {
-        var address = ""
-        if(typeof bill.customer_address != "undefined" && bill.customer_address != null){
+      if (typeof bill.order_code != "undefined" && bill.order_code != null) {
+        var address = "";
+        if (
+          typeof bill.customer_address != "undefined" &&
+          bill.customer_address != null
+        ) {
           address = {
             customer_name: bill.customer_address.name,
-           
-            customer_address: getDetailAdress(bill.customer_address.address_detail ,bill.customer_address?.wards_name ,  bill.customer_address?.district_name , bill.customer_address?.province_name),
-           
+
+            customer_address: getDetailAdress(
+              bill.customer_address.address_detail,
+              bill.customer_address?.wards_name,
+              bill.customer_address?.district_name,
+              bill.customer_address?.province_name
+            ),
+
             customer_phone: bill.customer_address.phone,
-          }
-         
-        }else{
+          };
+        } else {
           address = {
             customer_name: bill.customer_name,
-            customer_address: getDetailAdress(bill.customer_address_detail ,bill.customer_address?.wards_name ,  bill.customer_address?.district_name , bill.customer_address?.province_name),
-           
+            customer_address: getDetailAdress(
+              bill.customer_address_detail,
+              bill.customer_address?.wards_name,
+              bill.customer_address?.district_name,
+              bill.customer_address?.province_name
+            ),
+
             customer_phone: bill.customer_address?.phone,
-          }
+          };
         }
         this.setState({
-         ...address,
+          ...address,
           order_code: bill.order_code,
           order_date: bill.created_at,
           total_final: bill.total_final,
-
         });
       }
     }
@@ -79,32 +86,53 @@ export default class ComponentToPrint extends Component {
           <td>{index + 1}</td>
           <td style={{ textAlign: "start" }}>{element.name} </td>
           <td>{element.quantity}</td>
-          <td style={{ textAlign: "end" }}>{format((element.before_price || element.before_discount_price) * element.quantity)}</td>
+          <td style={{ textAlign: "end" }}>
+            {format(
+              (element.before_price || element.before_discount_price) *
+                element.quantity
+            )}
+          </td>
         </tr>
       );
     });
     arr.push(
       <React.Fragment>
- 
+        {bill.total_shipping_fee > 0 && (
+          <tr>
+            <td></td>
+
+            <td style={{ textAlign: "start" }}>Phí vận chuyển</td>
+            <td></td>
+
+            <td style={{ textAlign: "end" }} colSpan="3">
+              + {format(bill.total_shipping_fee || 0)}
+            </td>
+          </tr>
+        )}
         <tr>
           <td></td>
 
           <td style={{ textAlign: "start" }}>Giảm giá, Voucher, Combo</td>
           <td></td>
 
-          <td style={{ textAlign: "end" }} colSpan="3">- {format((bill.product_discount_amount || 0) + (bill.voucher_discount_amount || 0) + (bill.combo_discount_amount || 0))}</td>
+          <td style={{ textAlign: "end" }} colSpan="3">
+            -{" "}
+            {format(
+              (bill.product_discount_amount || 0) +
+                (bill.voucher_discount_amount || 0) +
+                (bill.combo_discount_amount || 0)
+            )}
+          </td>
         </tr>
-
       </React.Fragment>
-    )
+    );
     return arr;
   };
 
   showBonusAgency = () => {
-
     var bill = this.props.bill;
-    var { bonus_agency_history } = bill
-    var { reward_value, reward_name } = bonus_agency_history
+    var { bonus_agency_history } = bill;
+    var { reward_value, reward_name } = bonus_agency_history;
 
     var arr = [];
     arr.push(
@@ -113,7 +141,6 @@ export default class ComponentToPrint extends Component {
         <td style={{ textAlign: "end" }}>{format(reward_value)}</td>
       </tr>
     );
-
 
     return arr;
   };
@@ -125,8 +152,18 @@ export default class ComponentToPrint extends Component {
       Array.isArray(bill.line_items_at_time) == true
         ? bill.line_items_at_time.length
         : 0;
-    var store_address = typeof badges.address_pickup == "undefined" ? null : badges.address_pickup == null ? null : badges.address_pickup.address_detail + ", " +
-      badges.address_pickup.wards_name + ", " + badges.address_pickup.district_name + ", " + badges.address_pickup.province_name
+    var store_address =
+      typeof badges.address_pickup == "undefined"
+        ? null
+        : badges.address_pickup == null
+        ? null
+        : badges.address_pickup.address_detail +
+          ", " +
+          badges.address_pickup.wards_name +
+          ", " +
+          badges.address_pickup.district_name +
+          ", " +
+          badges.address_pickup.province_name;
     return (
       <div className="parent" style={{ margin: "30px" }}>
         <p className="order_code">Mã đơn hàng : {state.order_code}</p>
@@ -142,10 +179,12 @@ export default class ComponentToPrint extends Component {
                 </span>
               </p>
               <p class="" id="info">
-                <span>Chi nhánh: </span>{this.props.currentBranch.name}
+                <span>Chi nhánh: </span>
+                {this.props.currentBranch.name}
               </p>
               <p class="" id="info">
-                <span>Địa chỉ: </span>{store_address}
+                <span>Địa chỉ: </span>
+                {store_address}
               </p>
               <p class="" id="info">
                 <span>Số điện thoại:</span> {state.user_phone}
@@ -157,7 +196,9 @@ export default class ComponentToPrint extends Component {
               <strong>Đến:</strong>
 
               <p class="" id="sale_user_name">
-                <span style={{ fontWeight: "500" }}>Tên: {state.customer_name}</span>
+                <span style={{ fontWeight: "500" }}>
+                  Tên: {state.customer_name}
+                </span>
               </p>
               <p class="" id="info">
                 <span>Địa chỉ: </span> {state.customer_address}
@@ -206,12 +247,10 @@ export default class ComponentToPrint extends Component {
           </div>
         </div>
 
-        {
-          bill.bonus_agency_history != null && <div className="row">
+        {bill.bonus_agency_history != null && (
+          <div className="row">
             <div class="col-12-print">
-              <p className="order_code">
-                Thưởng cho đại lý
-              </p>
+              <p className="order_code">Thưởng cho đại lý</p>
 
               <table class="table table-hover">
                 <thead>
@@ -224,9 +263,11 @@ export default class ComponentToPrint extends Component {
               </table>
             </div>
           </div>
-
-        }
-        <div className="row" style={{ borderTop: "1px dashed", borderBottom: "1px dashed" }}>
+        )}
+        <div
+          className="row"
+          style={{ borderTop: "1px dashed", borderBottom: "1px dashed" }}
+        >
           <div class="col-6-not-border" style={{ position: "relative" }}>
             <p
               style={{
@@ -238,18 +279,38 @@ export default class ComponentToPrint extends Component {
               Tiền thu người nhận:
             </p>
 
-            <div >
+            <div>
               <div style={{ fontSize: "25px", textAlign: "center" }}>
-
-                <strong>            {format(state.total_final)}
-                </strong>
+                <strong> {format(state.total_final)}</strong>
               </div>
 
-              <div style={{ fontSize: "14px", position: "absolute", bottom: "5px" }}>
-                <div><center> <i>Quý khách vui lòng kiểm tra danh sách đơn hàng trước khi nhận hàng.</i> </center></div>
-                <div><center> <i>Cảm ơn quý khách đã tin tưởng sử dụng sản phẩm của {state.store_name}! </i></center></div>              </div>
+              <div
+                style={{
+                  fontSize: "14px",
+                  position: "absolute",
+                  bottom: "5px",
+                }}
+              >
+                <div>
+                  <center>
+                    {" "}
+                    <i>
+                      Quý khách vui lòng kiểm tra danh sách đơn hàng trước khi
+                      nhận hàng.
+                    </i>{" "}
+                  </center>
+                </div>
+                <div>
+                  <center>
+                    {" "}
+                    <i>
+                      Cảm ơn quý khách đã tin tưởng sử dụng sản phẩm của{" "}
+                      {state.store_name}!{" "}
+                    </i>
+                  </center>
+                </div>{" "}
+              </div>
             </div>
-
           </div>
           <div class="col-6-not-border">
             <div
