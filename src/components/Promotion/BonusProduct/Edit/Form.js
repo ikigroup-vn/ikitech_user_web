@@ -343,6 +343,8 @@ class Form extends Component {
     }
   };
   checkProductSameQuantity = (ladder_reward = false , products) =>{
+    if(ladder_reward !== true)
+    return true
     if(ladder_reward == true && products?.length > 0)
     {
       console.log(ladder_reward, products)

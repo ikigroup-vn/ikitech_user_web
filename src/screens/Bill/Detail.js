@@ -85,8 +85,8 @@ class Detail extends Component {
                         <div id="content-wrapper" className="d-flex flex-column">
                             <div style={{ marginBottom: "25px" }} id="content">
                                 <Topbar store_code={store_code} />
-                                {typeof isShow == "undefined" ? <div style={{ height: "500px" }}></div> :
-                                    isShow == true ?
+                                {/* {typeof isShow == "undefined" ? <div style={{ height: "500px" }}></div> :
+                                    isShow == true ? */}
                                         <div className="container-fluid">
 
                                             <Alert
@@ -145,7 +145,7 @@ class Detail extends Component {
                                             <Form shipment = {shipment} bills={bills} historyPay={historyPay} chat_allow={chat_allow} order_allow_change_status={order_allow_change_status} showChatBox={showChatBox} chat={chat} billId={billId} order_code={order_code} store_code={store_code} bill={bill} billHistoty={billHistoty}></Form>
 
                                         </div>
-                                        : <NotAccess />}
+                                        {/* : <NotAccess />} */}
 
                             </div>
 

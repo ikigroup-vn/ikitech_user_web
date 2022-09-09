@@ -148,6 +148,8 @@ class ListProduct extends Component {
     if (typeof listDistribute == "undefined" || listDistribute.length === 0) {
       return result
     }
+    var count = 0
+
     if (listDistribute.element_distributes) {
       listDistribute.element_distributes.map((element, _index) => {
         if (typeof element.sub_element_distributes != "undefined") {
@@ -155,7 +157,7 @@ class ListProduct extends Component {
             listDistribute.element_distributes[0].sub_element_distributes.map((sub_element, index) => {
               const cost_of_capital = listDistribute.element_distributes[_index].sub_element_distributes[index]?.cost_of_capital
               const stock = listDistribute.element_distributes[_index].sub_element_distributes[index]?.stock
-              var length = listDistribute.element_distributes[0].sub_element_distributes ?? 0
+              var length = listDistribute.element_distributes[0].sub_element_distributes?.length ?? 0
               var _data = {
                 "id": product.id,
                 "quantity": 1,
@@ -179,11 +181,12 @@ class ListProduct extends Component {
                 "allows_choose_distribute" : true
   
               }
+              count = count + 1
               var checked = this.checkExsit(list, _data)
               var checkedAllow = this.checkExsit(list, _dataAllowDistribute)
               result.push(
                 <>
-                  {index == 0 && length > 1 && <div class="form-group">
+                  {count == 1 && length > 1 && <div class="form-group">
                     <div class="form-check">
                       <input type="checkbox"
                         // disabled={disaled}
