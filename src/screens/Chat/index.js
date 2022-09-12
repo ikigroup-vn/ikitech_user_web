@@ -92,11 +92,21 @@ class Customer extends Component {
 
   }
 
+  getImg = (customerId) =>{
+    var { listChat } = this.props
+    var filter = (listChat.data ?? []).filter((v,i)=>{
+      return v.customer_id == customerId
+    })?.[0] ?? null
+
+    return filter;
+  }
+
+
   render() {
     var { listChat, chat, } = this.props
     var { isActive, isShow } = this.state
-    var customerImg = typeof listChat.data !== "undefined" && listChat.data.length > 0 ? listChat.data[0].customer.avatar_image : Env.IMG_NOT_FOUND
-    var customerImg = customerImg == null || customerImg == "" ? Env.IMG_NOT_FOUND : customerImg
+    var getCustomerImg = this.getImg(isActive)
+    var customerImg = getCustomerImg == null  ? Env.IMG_NOT_FOUND : getCustomerImg.customer?.avatar_image
     var customerId = typeof listChat.data !== "undefined" && listChat.data.length > 0 ? listChat.data[0].customer_id : null
     var { store_code } = this.props.match.params
     var customerParam = this.props.match.params.id || null
