@@ -121,7 +121,8 @@ class PostOrder extends Component {
         this.changeSearch = debounce(this.handleSearch, 1000);
         this.changeDiscount = debounce(this.handleDiscount, 1000);
         this.changePaymentMethod = debounce(this.handlePaymentMethod, 0);
-        this.changeNewState = debounce(this.handleNewState, 500);
+        this.changeNewState = debounce(this.handleNewState, 300);
+        this.loadFirst = true;
     }
 
     handleNewState = (newState) => {
@@ -578,6 +579,9 @@ class PostOrder extends Component {
                 this.setState({  priceCustomer: nextProps.oneCart.info_cart.total_final,
                 })
             }
+
+      
+
             this.setState({
                 code_voucher: nextProps.oneCart.code_voucher,
                 oneCart: nextProps.oneCart,

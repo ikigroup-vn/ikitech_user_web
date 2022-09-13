@@ -49,13 +49,15 @@ class PanelBottom extends Component {
             filter_desc: "",
             params: "",
             openIconFilter: false,
-            chooseTab: 2
+            chooseTab: 2,
 
         }
 
 
         this.onChangeNum = debounce(this.handleChangeNum, 0)
         this.onSearchCustomer = debounce(this.handleSearchCustomer, 500)
+        this.loadFirst = true
+
 
     }
     shouldComponentUpdate(nextProps, nextState) {
@@ -255,6 +257,12 @@ class PanelBottom extends Component {
             })
         }
 
+        if(nextProps.oneCart.id !== this.props.oneCart.id)
+        {
+            this.loadFirst = true
+
+        }
+
         if (!shallowEqual(nextProps.oneCart, this.props.oneCart)) {
             console.log(nextProps.oneCart)
 
@@ -283,42 +291,47 @@ class PanelBottom extends Component {
                 } catch (error) {
                     selectedDate = null
                 }
-                console.log(selectedDate)
-                this.setState(
-                    {
-                        ...this.state,
-                        cartId: oneCart.id,
-                        txtProvince: oneCart.province ?? "",
-                        txtDistrict: oneCart.district ?? "",
-                        txtWards: oneCart.wards ?? "",
-                        txtName: oneCart.customer_name ?? "",
-                        txtEmail: oneCart.customer_email ?? "",
-                        txtPhoneNumber: oneCart.customer_phone ?? "",
-                        txtSex: oneCart.customer_sex ?? "",
-                        txtAddressDetail: oneCart.address_detail ?? "",
-                        selectedDate: selectedDate,
-
-                        isDisabledButton: oneCart == null || oneCart.customer == null ? false : oneCart.customer.is_passersby,
-
-                        districtName: oneCart.district_name,
-                        wardsName: oneCart.wards_name,
-                        provinceName: oneCart.province_name,
-                        valueProvince: {
-                            label: oneCart.province_name,
-                            value: oneCart.province
-                        },
-
-                        valueDistrict: {
-                            label: oneCart.district_name,
-                            value: oneCart.district
-                        },
-
-                        valueWards: {
-                            label: oneCart.wards_name,
-                            value: oneCart.wards
-                        },
-                    }
-                )
+                
+                if(this.loadFirst == true && oneCart.id)
+                {
+                    this.setState(
+                        {
+                            ...this.state,
+                            cartId: oneCart.id,
+                            txtProvince: oneCart.province ?? "",
+                            txtDistrict: oneCart.district ?? "",
+                            txtWards: oneCart.wards ?? "",
+                            txtName: oneCart.customer_name ?? "",
+                            txtEmail: oneCart.customer_email ?? "",
+                            txtPhoneNumber: oneCart.customer_phone ?? "",
+                            txtSex: oneCart.customer_sex ?? "",
+                            txtAddressDetail: oneCart.address_detail ?? "",
+                            selectedDate: selectedDate,
+    
+                            isDisabledButton: oneCart == null || oneCart.customer == null ? false : oneCart.customer.is_passersby,
+    
+                            districtName: oneCart.district_name,
+                            wardsName: oneCart.wards_name,
+                            provinceName: oneCart.province_name,
+                            valueProvince: {
+                                label: oneCart.province_name,
+                                value: oneCart.province
+                            },
+    
+                            valueDistrict: {
+                                label: oneCart.district_name,
+                                value: oneCart.district
+                            },
+    
+                            valueWards: {
+                                label: oneCart.wards_name,
+                                value: oneCart.wards
+                            },
+                        }
+                    )
+                    this.loadFirst = false;
+                }
+          
             
 
 
