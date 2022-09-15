@@ -19,6 +19,7 @@ export const fetchAllBill = (
         type: Types.SHOW_LOADING_LAZY,
         loading: "show",
       });
+
       billApi
         .fetchAllBill(store_code, page, branch_id, params, params_agency)
         .then((res) => {
@@ -31,20 +32,13 @@ export const fetchAllBill = (
               type: Types.FETCH_ALL_BILL,
               data: res.data.data,
             });
-        });
-      billApi
-        .fetchAllBill(store_code, page, branch_id, params, params_agency)
-        .then((res) => {
+        }).catch(function (error) {
           dispatch({
             type: Types.SHOW_LOADING_LAZY,
             loading: "hide",
           });
-          if (res.data.code !== 401)
-            dispatch({
-              type: Types.FETCH_ALL_BILL,
-              data: res.data.data,
-            });
-        });
+    
+        });;
     };
   }
 };

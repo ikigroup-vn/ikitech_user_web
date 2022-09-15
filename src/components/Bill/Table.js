@@ -605,7 +605,7 @@ class Table extends Component {
     var { statusOrder, statusPayment, orderFrom, selected } = this.state;
     var per_page = bills.per_page;
     var current_page = bills.current_page;
-    var listBill = typeof bills.data == "undefined" ? [] : bills.data;
+    var listBill =  bills.data ?? [];
     var _selected =
       selected.length > 0 && selected.length == bills.data?.length
         ? true
