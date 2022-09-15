@@ -231,7 +231,10 @@ class PanelBottom extends Component {
   };
 
   componentWillUpdate(nextProps, nextState) {
-
+    if(this.props.openShipment === false)
+    {
+      return;
+    }
     this.props.onNewChange(nextState);
   }
 

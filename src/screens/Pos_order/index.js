@@ -1096,6 +1096,7 @@ class PostOrder extends Component {
 
 
                                         <Shipper
+                                        openShipment = {this.state.openShipment }
                                             total_shipping_fee={total_shipping_fee}
                                             totalFinal={totalFinal}
                                             passKeyPress={this.handleKeyboard}
