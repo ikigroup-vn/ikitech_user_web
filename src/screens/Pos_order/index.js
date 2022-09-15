@@ -186,6 +186,10 @@ class PostOrder extends Component {
             else {
                 total_shipping_fee = {}
             }
+
+
+            console.log(newState?.txtPhoneNumber)
+            
             this.setState({
                 modalUpdateCart: {
                     cartId: newState.cartId,

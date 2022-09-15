@@ -231,7 +231,7 @@ class PanelBottom extends Component {
   };
 
   componentWillUpdate(nextProps, nextState) {
-    console.log(nextState);
+
     this.props.onNewChange(nextState);
   }
 
@@ -305,7 +305,7 @@ class PanelBottom extends Component {
           // txtPhoneNumber: oneCart.customer_phone ?? "",
         };
       }
-      if(this.loadFirst == true && oneCart.id)
+      if(oneCart.id)
       {
         this.setState({
           ...this.state,

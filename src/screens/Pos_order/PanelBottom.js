@@ -292,7 +292,7 @@ class PanelBottom extends Component {
                     selectedDate = null
                 }
                 
-                if(this.loadFirst == true && oneCart.id)
+                if((this.loadFirst == true && oneCart.id) || (nextProps.oneCart?.id > 0 && this.props.openShipment == true))
                 {
                     this.setState(
                         {
