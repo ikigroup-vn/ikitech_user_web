@@ -233,6 +233,7 @@ class PanelBottom extends Component {
 
     componentWillUpdate(nextProps, nextState) {
 
+        if(this.loadFirst == false && nextProps.oneCart.id)
         this.props.onNewChange(nextState)
     }
 

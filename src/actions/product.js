@@ -1030,15 +1030,7 @@ export const updateDistribute = (store_code, data, productId, branchId) => {
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
-        dispatch({
-          type: Types.ALERT_UID_STATUS,
-          alert: {
-            type: "success",
-            title: "Thành công ",
-            disable: "show",
-            content: res.data.msg,
-          },
-        });
+ 
       })
       .catch(function (error) {});
   };
