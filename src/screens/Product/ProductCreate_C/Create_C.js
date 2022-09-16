@@ -371,7 +371,7 @@ class ProductEdit extends Component {
       return;
     }
 
-    if (form.barcode === form.sku) {
+    if (form.barcode === form.sku && isEmpty(form.sku)) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
         alert: {

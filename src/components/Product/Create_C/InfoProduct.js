@@ -277,7 +277,7 @@ class InfoProduct extends Component {
         category_parent: listcategorynew,
         category_children_ids: product.category_children,
         txtQuantityInStock: _quantity_stock,
-        sku:  isCopy ? Math.random().toString().slice(2, 11)  : product.sku || Math.random().toString().slice(2, 11),
+        sku: product.sku,
         checkHasDistribute,
         check_inventory: product.check_inventory,
         txtCostOfCapital: product.main_cost_of_capital,

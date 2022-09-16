@@ -5,6 +5,7 @@ import InfoProduct from "../../../components/Product/Update/InfoProduct";
 import ContentDetail from "../../../components/Product/Update/ContentDetail";
 import InfoDiscount from "../../../components/Product/Update/InfoDiscount";
 import Video from "../../../components/Product/Update/Video";
+import { isEmpty, removeVietnameseTones } from "../../../ultis/helpers";
 
 import * as blogAction from "../../../actions/blog";
 
@@ -225,6 +226,57 @@ class ProductEdit extends Component {
     if (typeof form.list_distribute != "undefined") {
       form.quantity_in_stock = form.list_distribute.length > 0 ? total : form.quantity_in_stock
 
+    }
+    if (form.name == null || !isEmpty(form.name)) {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng nhập tên sản phẩm",
+        },
+      });
+      return;
+    }
+
+    if (form.barcode === form.sku && isEmpty(form.sku)) {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Barcode không thể trùng với mã SKU",
+        },
+      });
+      return;
+    }
+    if (this.state.checkDistribute == false) {
+      if (form.price == null || !isEmpty(form.price)) {
+        this.props.showError({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: "Vui lòng nhập giá bán lẻ",
+          },
+        });
+        return;
+      }
+      if (form.import_price == null || !isEmpty(form.import_price)) {
+        this.props.showError({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: "Vui lòng nhập giá nhập",
+          },
+        });
+        return;
+      }
     }
     var { page, currentBranch } = this.props
     var list_distribute = form.list_distribute ?? []
@@ -618,6 +670,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchAllBlog: (id, page) => {
       dispatch(blogAction.fetchAllBlog(id, page));
+    },
+    showError: (error) => {
+      dispatch(error);
     },
   };
 };
