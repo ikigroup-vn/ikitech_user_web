@@ -776,6 +776,9 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchAllBlog: (id, page) => {
       dispatch(blogAction.fetchAllBlog(id, page));
     },
+    showError: (error) => {
+      dispatch(error);
+    },
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ProductEdit);
