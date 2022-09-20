@@ -99,6 +99,9 @@ class Table extends Component {
                   <span class="fa fa-plus"></span>
                 </button>
               </td>{" "}
+              <td>
+              {index + 1}
+              </td>{" "}
               <td style = {{textAlign : "center"}}>
                 <img
                   src={avatar}
@@ -295,6 +298,8 @@ class Table extends Component {
           <thead>
             <tr>
               <th></th>
+              <th>STT</th>
+
               <th style = {{textAlign : "center"}}>Ảnh</th>
 
               <th>Họ tên</th>

@@ -102,10 +102,10 @@ class Topbar extends Component {
     }
 
     if (!shallowEqual(this.props.listPos, nextProps.listPos)) {
-      if (nextProps.listPos.length > 0) {
+      if (nextProps.listPos?.length > 0) {
         this.props.handleCallbackTab(nextProps.listPos[0]?.id);
       } else {
-        if (nextProps.listPos.length == 0) {
+        if (nextProps.listPos?.length == 0) {
           this.handleCreateTab();
         }
       }
@@ -113,7 +113,7 @@ class Topbar extends Component {
     }
 
     if (this.props.loadingCart == true && nextProps.loadingCart == false) {
-      if (nextProps.listPos.length == 0) {
+      if (nextProps.listPos?.length == 0) {
         this.handleCreateTab();
       }
     }
