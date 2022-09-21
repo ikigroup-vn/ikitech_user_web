@@ -30,7 +30,7 @@ class Home_Screen extends Component {
         theme:
           "https://data1.ikitech.vn/public/api/SahaImages/ZQLqkbDnCg1654823729.webp",
         arr_index_component: [1, 1, 1, 1, 1],
-        demo_link: "https://taphoademo.myiki.vn/"
+        demo_link: "https://mobiledemo.myiki.vn/"
 
       },
       {
@@ -45,7 +45,7 @@ class Home_Screen extends Component {
         theme:
           "https://data1.ikitech.vn/public/api/SahaImages/slSAdCmQzc1654823854.webp",
         arr_index_component: [3, 3, 3, 3, 1],
-        demo_link: "https://moctamtra.myiki.vn/"
+        demo_link: "https://noithatdemo.myiki.vn/"
 
       },
       {
@@ -53,7 +53,7 @@ class Home_Screen extends Component {
         theme:
           "https://data1.ikitech.vn/public/api/SahaImages/uYJRbqpFYW1654823878.webp",
         arr_index_component: [4, 4, 4, 4, 1],
-        demo_link: "https://shopdecordemo.myiki.vn/"
+        demo_link: "https://myphamdemo.myiki.vn/"
       },
       {
         isVip: true,
@@ -61,36 +61,36 @@ class Home_Screen extends Component {
         theme:
           "https://data1.ikitech.vn/public/api/SahaImages/glDbUFhcrE1654823907.webp",
         arr_index_component: [5, 5, 5, 5, 2],
-        demo_link: "https://echoa.vn"
+        demo_link: "https://thoitrangdemo.myiki.vn/"
       },
       {
         isVip: true,
         index: 6,
-        theme: "https://data1.ikitech.vn/public/api/SahaImages/BeAfOxrRtf1654823930.webp",
+        theme: "https://data1.ikitech.vn/public/api/SahaImages/mIByceRszQ1654823953.webp",
         arr_index_component: [6, 6, 6, 6, 3],
-        demo_link: "https://daikamart.mydoapp.vn/"
+        demo_link: "https://nowshopdemo.myiki.vn/"
       },
       {
         isVip: false,
         index: 7,
-        theme: "https://data1.ikitech.vn/public/api/SahaImages/mIByceRszQ1654823953.webp",
+        theme: "https://data1.ikitech.vn/public/api/SahaImages/GZZBFLEWFG1654823972.webp",
         arr_index_component: [7, 7, 7, 3, 1],
-        demo_link: "https://nowshopdemo.mydoapp.vn/"
+        demo_link: "https://dogiadungdemo.myiki.vn/"
       },
       {
         isVip: false,
         index: 8,
-        theme: "https://data1.ikitech.vn/public/api/SahaImages/GZZBFLEWFG1654823972.webp",
-        arr_index_component: [8, 8, 7, 3, 2],
-        demo_link: "https://mediamartonline.mydoapp.vn/"
-      },
-      {
-        isVip: false,
-        index: 9,
         theme: "https://data1.ikitech.vn/public/api/SahaImages/ERQPMELUMR1654823991.webp",
-        arr_index_component: [9, 4, 6, 7, 1],
-        demo_link: "https://hoqua.isempai.net/"
+        arr_index_component: [8, 8, 7, 3, 2],
+        demo_link: "https://shophoaquademo.myiki.vn/"
       },
+      // {
+      //   isVip: false,
+      //   index: 9,
+      //   theme: "https://data1.ikitech.vn/public/api/SahaImages/ERQPMELUMR1654823991.webp",
+      //   arr_index_component: [9, 4, 6, 7, 1],
+      //   demo_link: "https://hoqua.myiki.net/"
+      // },
 
 
     ];
