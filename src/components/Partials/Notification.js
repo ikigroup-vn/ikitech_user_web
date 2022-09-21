@@ -72,9 +72,8 @@ class Notification extends Component {
         }
     }
 
-    fetchNotification = () => {
+    fetchNotification = e => {
         window.$('.notification-toggle').dropdown('toggle');
-
         this.props.fetchAllNotification(this.props.store_code);
 
     }
@@ -236,7 +235,7 @@ class Notification extends Component {
             var disableLoad = list_notification.last_page == 1 ? false : true
         return (
             <li class={`nav-item dropdown no-arrow mx-1 ${disable} ${allow_notification == true ? "show" : "hide"}`}>
-                <a onClick={this.fetchNotification} style={{ fontSize: "18px" }} class="nav-link notification-toggle dropdown-toggle"
+                <a key={Math.random()} onClick={this.fetchNotification} style={{ fontSize: "18px" }} class="nav-link notification-toggle dropdown-toggle"
                     aria-haspopup="false" aria-expanded="true">
                     <i style={{ color: "#8f8787" }} class="fa fa-bell"></i>
                     <span class={`badge badge-danger badge-counter ${badges?.notification_unread == 0 ? "hide" : "show"}`}>{badges?.notification_unread || 0}</span>

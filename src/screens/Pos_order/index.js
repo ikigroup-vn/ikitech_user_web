@@ -584,8 +584,6 @@ class PostOrder extends Component {
                 })
             }
 
-      
-
             this.setState({
                 code_voucher: nextProps.oneCart.code_voucher,
                 oneCart: nextProps.oneCart,

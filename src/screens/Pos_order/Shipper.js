@@ -4,7 +4,9 @@ import DatePicker from "react-datepicker";
 import CardProduct from "../../components/Pos_Order/CardProduct";
 import CardCombo from "../../components/Pos_Order/CardCombo";
 import * as shipmentAction from "../../actions/shipment";
-import * as customerAction from "../../data/remote/customer";
+import * as customerApi from "../../data/remote/customer";
+import * as customerAction from "../../actions/customer";
+
 import { Link } from "react-router-dom";
 import * as StoreAAction from "../../data/remote/store_address";
 import * as StoreAction from "../../actions/store_address";
@@ -308,7 +310,7 @@ class PanelBottom extends Component {
           // txtPhoneNumber: oneCart.customer_phone ?? "",
         };
       }
-      if(oneCart.id)
+      if((oneCart.id &&  this.loadFirst == true) || this.props.openShipment == false )
       {
         this.setState({
           ...this.state,
@@ -743,7 +745,7 @@ class PanelBottom extends Component {
     console.log("vaooooooooooooooooooo");
     var { store_code } = this.props;
     const params = `&search=${search}`;
-    const res = await customerAction.fetchAllCustomer(store_code, page, params);
+    const res = await customerApi.fetchAllCustomer(store_code, page, params);
     console.log(res);
     if (res.status != 200) {
       return {
