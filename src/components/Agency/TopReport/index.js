@@ -64,7 +64,7 @@ class ListAgency extends Component {
         date_from,
         date_to
     } = this.state
-    var params = `&date_from=${date_from}&date_to=${date_to}&agency_type_id=${this.state.agency_type_id}&report_type=${this.state.report_type}`;
+    var params = `&date_from=${date_from}&date_to=${date_to}&agency_type_id=${this.state.agency_type_id}&report_type=${value}`;
     this.props.fetchAllTopReport(this.props.store_code, 1, params);
     this.setState({
         report_type : value,
