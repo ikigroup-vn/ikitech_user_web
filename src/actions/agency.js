@@ -45,6 +45,12 @@ async function saveAsExcel(value , title) {
 }
 export const exportTopten = (store_code, page, params,report_type) => {
   return (dispatch) => {
+
+    dispatch({
+      type: Types.SHOW_LOADING_LAZY,
+      loading: "show"
+    })
+
     agencyApi.fetchAllTopReport(store_code, page, params).then((res) => {
       console.log(res);
 
@@ -113,6 +119,12 @@ export const exportTopten = (store_code, page, params,report_type) => {
                 });
               }
               console.log(header);
+
+              dispatch({
+                type: Types.SHOW_LOADING_LAZY,
+                loading: "hide"
+              })
+              
               saveAsExcel({ data: newArray, header: header } , "Danh sách Top CTV");
             }
           }

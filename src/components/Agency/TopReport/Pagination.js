@@ -12,7 +12,7 @@ class Pagination extends Component {
   }
 
   passPagination = (page) => {
-    this.props.fetchAllAgency(this.props.store_code , page)    
+    this.props.fetchAllTopReport(this.props.store_code , page, this.props.params)    
 }
 
 
@@ -68,8 +68,8 @@ class Pagination extends Component {
 const mapDispatchToProps = (dispatch, props) => {
   return {
 
-    fetchAllAgency: (store_code , page) => {
-      dispatch(agencyAction.fetchAllAgency(store_code , page));
+    fetchAllTopReport: (store_code , page, params) => {
+      dispatch(agencyAction.fetchAllTopReport(store_code , page, params));
     },
   };
 };

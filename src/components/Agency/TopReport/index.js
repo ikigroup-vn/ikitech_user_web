@@ -18,16 +18,19 @@ class ListAgency extends Component {
       date_from: "",
       date_to: "",
       report_type: "order",
+      params:"",
+      agency_type_id:""
     };
   }
 
   componentDidMount() {
     var date = helper.getDateForChartMonth();
-    var params = `&date_from=${date.from}&date_to=${date.to}`;
+    var params = `&date_from=${date.from}&date_to=${date.to}&agency_type_id=${this.state.agency_type_id}&report_type=${this.state.report_type}`;
     this.props.fetchAllTopReport(this.props.store_code, 1, params);
     this.setState({
       date_from: date.from,
       date_to: date.to,
+      params:params
     });
   }
   closeChatBox = (status) => {
@@ -45,11 +48,12 @@ class ListAgency extends Component {
       from = null;
       to = null;
     }
-    var params = `&date_from=${from}&date_to=${to}`;
+    var params = `&date_from=${from}&date_to=${to}&agency_type_id=${this.state.agency_type_id}&report_type=${this.state.report_type}`;
     this.props.fetchAllTopReport(this.props.store_code, 1, params);
     this.setState({
       date_from: from,
       date_to: to,
+      params:params
     });
   };
 
@@ -60,12 +64,34 @@ class ListAgency extends Component {
         date_from,
         date_to
     } = this.state
-    var params = `&date_from=${date_from}&date_to=${date_to}&report_type=${value}`;
+    var params = `&date_from=${date_from}&date_to=${date_to}&agency_type_id=${this.state.agency_type_id}&report_type=${this.state.report_type}`;
     this.props.fetchAllTopReport(this.props.store_code, 1, params);
     this.setState({
-        report_type : value
+        report_type : value,
+        params:params
     });
   }
+
+  onChangeAgencyType = (e) =>{
+    var {value} = e.target
+    var {
+        date_from,
+        date_to
+    } = this.state
+    var params = `&date_from=${date_from}&date_to=${date_to}&agency_type_id=${value}&report_type=${this.state.report_type}`;
+    this.props.fetchAllTopReport(this.props.store_code, 1, params);
+    this.setState({
+      agency_type_id : value,
+        params:params
+    });
+  }
+
+  onChange = (e) => {
+    var target = e.target;
+    var name = target.name;
+    var value = target.value;
+    this.setState({ [name]: value });
+  };
 
   onChangeDateFromComponent = (date) => {
     // var from = "";
@@ -77,16 +103,17 @@ class ListAgency extends Component {
     //     from = null
     //     to = null
     // }
-    var params = `&date_from=${date.from}&date_to=${date.to}&report_type=${this.state.report_type}`;
+    var params = `&date_from=${date.from}&date_to=${date.to}&agency_type_id=${this.state.agency_type_id}&report_type=${this.state.report_type}`;
     this.props.fetchAllTopReport(this.props.store_code, 1, params);
     this.setState({
       date_from: date.from,
       date_to: date.to,
+      params:params
     });
   };
   exportTopten = () => {
     var { date_from, date_to } = this.state;
-    var params = `&date_from=${date_from}&date_to=${date_to}&report_type=${this.state.report_type}`;
+    var params = `&date_from=${date_from}&date_to=${date_to}&agency_type_id=${this.state.agency_type_id}&report_type=${this.state.report_type}&limit=100000`;
     this.props.exportTopten(this.props.store_code, 1, params , this.state.report_type);
   };
   render() {
@@ -107,7 +134,8 @@ class ListAgency extends Component {
         ? "Trống"
         : customer.name;
 
-    var { showChatBox, report_type } = this.state;
+
+    var { showChatBox, report_type , agency_type_id,  params} = this.state;
     console.log(this.props.topReport);
     return (
       <div id="wrapper">
@@ -148,6 +176,29 @@ class ListAgency extends Component {
                   <option value="point">Xu</option>
                 </select>
               </div>
+              <div style={{ marginLeft: "15px", display: "flex" }}>
+                <span
+                  style={{
+           
+                    "fontWeight" : 600,
+
+                    margin: "auto",
+                  }}
+                >
+                  Cấp: {" "}
+                </span>
+                <select
+                  onChange={this.onChangeAgencyType}
+                  value={agency_type_id}
+                  name="agency_type_id"
+                  class="form-control"
+                >
+                  <option value="">Chọn cấp đại lý</option>
+                  {types.map((v) => {
+                    return <option value={v.id}>{v.name}</option>;
+                  })}
+                </select>
+              </div>
             </div>
             <button
               style={{ margin: "auto 0px" }}
@@ -173,7 +224,7 @@ class ListAgency extends Component {
               topReport={topReport}
             />
 
-            <Pagination store_code={store_code} topReport={topReport} />
+            <Pagination store_code={store_code} topReport={topReport} params={params}/>
           </div>
         </div>
 
