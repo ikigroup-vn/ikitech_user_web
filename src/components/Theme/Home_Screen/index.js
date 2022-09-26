@@ -84,13 +84,13 @@ class Home_Screen extends Component {
         arr_index_component: [8, 8, 7, 3, 2],
         demo_link: "https://shophoaquademo.myiki.vn/"
       },
-      // {
-      //   isVip: false,
-      //   index: 9,
-      //   theme: "https://data1.ikitech.vn/public/api/SahaImages/ERQPMELUMR1654823991.webp",
-      //   arr_index_component: [9, 4, 6, 7, 1],
-      //   demo_link: "https://hoqua.myiki.net/"
-      // },
+      {
+        isVip: false,
+        index: 9,
+        theme: "https://i.imgur.com/lTwsZhY.png",
+        arr_index_component: [10, 9, 9, 2, 5],
+        demo_link: "https://hahaha.isempai.net/"
+      },
 
 
     ];
