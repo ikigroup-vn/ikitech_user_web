@@ -11,7 +11,8 @@ class ModalUpdateCommission extends Component {
     super(props);
     this.state = {
       txtName: "",
-      id: ""
+      id: "",
+      valid: false
     };
   }
 
@@ -29,18 +30,21 @@ class ModalUpdateCommission extends Component {
         txtName: modalUpdateCommission.name,
         id: modalUpdateCommission.id,
         commission_percent: modalUpdateCommission.commission_percent,
+        valid: false
       })
     }
   }
 
 
   onSave = (e) => {
-    e.preventDefault();
+
+
     window.$('.modal').modal('hide');
+
     var { txtName, id, commission_percent } = this.state
     this.props.updateAgencyType(this.props.store_code, id,
       {
-        name: txtName,
+        name: this.props.modal?.name,
         commission_percent: parseFloat(commission_percent)
       });
     this.setState({
@@ -48,7 +52,7 @@ class ModalUpdateCommission extends Component {
     })
   };
   render() {
-    var { txtName, commission_percent, id } = this.state;
+    var { txtName, commission_percent, id, valid } = this.state;
     return (
       <div
         class="modal fade"
@@ -66,41 +70,69 @@ class ModalUpdateCommission extends Component {
               <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 
             </div>
-            <form
-              onSubmit={this.onSave}
-              role="form"
-              action="#"
-              method="post"
-            >
-              <div class="modal-body">
+
+            <div class="modal-body">
+
+              {valid == false ? <div class="form-group">
+                <label for="product_name">% Chiếu khấu sản phẩm</label>
+                <input
+                  required
+                  type="text"
+                  class="form-control"
+                  placeholder="Nhập %... VD: 50"
+                  autocomplete="off"
+                  value={commission_percent}
+                  onChange={this.onChange}
+                  name="commission_percent"
+                />
+              </div>
+                :
 
                 <div class="form-group">
-                  <label for="product_name">% Chiếu khấu sản phẩm</label>
-                  <input
-                    required
-                    type="text"
-                    class="form-control"
-                    placeholder="Nhập %... VD: 50"
-                    autocomplete="off"
-                    value={commission_percent}
-                    onChange={this.onChange}
-                    name="commission_percent"
-                  />
+                  <label for="product_name">Bạn có chắc chắn muốn cài đặt <span style={{ color: "red" }}>{commission_percent}%</span> hoa hồng cho tất cả sản phẩm không? Tất cả sản phẩm bạn cài đặt trước đó sẽ bị sửa!</label>
+
                 </div>
-              </div>
-              <div class="modal-footer">
+
+              }
+            </div>
+
+            <div class="modal-footer">
+              <button
+                onClick={() => {
+
+                  this.setState({
+                    valid: false
+                  })
+                  window.$('.modal').modal('hide');
+                }}
+
+                class="btn btn-default"
+                data-dismiss="modal"
+              >
+                Đóng
+              </button>
+              {valid == false ? <button onClick={() => {
+                this.setState({
+                  valid: true
+                })
+              }} class="btn btn-warning">
+                Lưu
+              </button>
+                :
                 <button
-                  type="button"
-                  class="btn btn-default"
-                  data-dismiss="modal"
-                >
-                  Đóng
+
+                  onClick={() => {
+                    this.onSave()
+                    this.setState({
+                      valid: false
+                    })
+                  }}
+                  class="btn btn-warning">
+                  Đồng ý
                 </button>
-                <button type="submit" class="btn btn-warning">
-                  Lưu
-                </button>
-              </div>
-            </form>
+              }
+            </div>
+
           </div>
         </div>
       </div>
