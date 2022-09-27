@@ -225,7 +225,7 @@ export const destroyStoreA = (store_code, id) => {
 
 
 
-export const updateStoreAPos = (storeAId, storeA, store_code, funcModal = null) => {
+export const updateStoreAPos = (storeAId, storeA, store_code, $this) => {
   return (dispatch) => {
 
     storeAApi
@@ -244,7 +244,8 @@ export const updateStoreAPos = (storeAId, storeA, store_code, funcModal = null) 
             type: Types.FETCH_ALL_BADGE,
             data: res.data.data,
           });
-      
+          $this.loadFirst = true
+
         
         }
         })

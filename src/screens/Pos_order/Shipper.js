@@ -717,6 +717,7 @@ class PanelBottom extends Component {
     };
 
     this.setState({ select_customer: selectValue, ...customer });
+    this.loadFirst = true
   };
   onChangeSelect4Addr = (selectValue) => {
     if (selectValue?.address_pickup) {
@@ -735,8 +736,11 @@ class PanelBottom extends Component {
           is_default_pickup: true,
           is_default_return: false,
         },
-        this.props.store_code
+        this.props.store_code ,
+        this
       );
+      this.loadFirst = true
+
     }
 
     // this.setState({ select_storeAddress: selectValue, ...store_address });
@@ -1835,8 +1839,8 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(shipmentAction.fetchAllShipment(store_code));
     },
 
-    updateStoreA: (storeAId, form, store_code) => {
-      dispatch(StoreAction.updateStoreAPos(storeAId, form, store_code));
+    updateStoreA: (storeAId, form, store_code , $this) => {
+      dispatch(StoreAction.updateStoreAPos(storeAId, form, store_code , $this));
     },
   };
 };

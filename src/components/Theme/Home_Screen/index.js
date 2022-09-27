@@ -67,21 +67,21 @@ class Home_Screen extends Component {
         isVip: true,
         index: 6,
         theme: "https://data1.ikitech.vn/public/api/SahaImages/mIByceRszQ1654823953.webp",
-        arr_index_component: [6, 6, 6, 6, 3],
+        arr_index_component: [7, 6, 6, 3, 1],
         demo_link: "https://nowshopdemo.myiki.vn/"
       },
       {
         isVip: false,
         index: 7,
         theme: "https://data1.ikitech.vn/public/api/SahaImages/GZZBFLEWFG1654823972.webp",
-        arr_index_component: [7, 7, 7, 3, 1],
+        arr_index_component: [8, 8, 7, 4, 2],
         demo_link: "https://dogiadungdemo.myiki.vn/"
       },
       {
         isVip: false,
         index: 8,
         theme: "https://data1.ikitech.vn/public/api/SahaImages/ERQPMELUMR1654823991.webp",
-        arr_index_component: [8, 8, 7, 3, 2],
+        arr_index_component: [9, 6, 5, 5, 5],
         demo_link: "https://shophoaquademo.myiki.vn/"
       },
       {
