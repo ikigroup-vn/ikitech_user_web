@@ -6,6 +6,8 @@ import * as agencyAction from "../../../actions/agency";
 import ModalRemove from "./ModalRemove"
 import ModalUpdate from "./ModalUpdate"
 
+import ModalUpdateCommission from "./Commission/ModalUpdateCommission"
+
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -29,6 +31,10 @@ class Table extends Component {
     this.setState({ modalUpdate: { name: name, id: id } })
   }
 
+  handleUpdateCommission = (ob) => {
+    this.setState({ modalUpdateCommission: ob })
+  }
+
   showData = (types) => {
     var { store_code } = this.props;
     var result = null;
@@ -49,6 +55,15 @@ class Table extends Component {
                   class={`btn btn-warning btn-sm `}
                 >
                   <i class="fa fa-edit"></i> Sửa
+                </button>
+                <button
+                  onClick={() => this.handleUpdateCommission(data)}
+                  style={{ marginLeft: "10px" }}
+                  data-toggle="modal"
+                  data-target="#updateCommission"
+                  class={`btn btn-warning btn-sm `}
+                >
+                  <i class="fa fa-edit"></i> % chiết khấu sản phẩm
                 </button>
                 <button
                   onClick={() => this.handleRemove(data.id, data.name)}
@@ -87,12 +102,13 @@ class Table extends Component {
         ? []
         : this.props.types;
 
-    var { modal, modalUpdate } = this.state
+    var { modal, modalUpdate, modalUpdateCommission } = this.state
     return (
       <div class="table-responsive">
         <ModalRemove modal={modal} store_code={this.props.store_code} />
         <ModalUpdate modal={modalUpdate} store_code={this.props.store_code} />
-
+        <ModalUpdateCommission modal={modalUpdateCommission} store_code={this.props.store_code} />
+        
         <table class="table table-border">
           <thead>
             <tr>
