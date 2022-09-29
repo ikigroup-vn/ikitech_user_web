@@ -89,7 +89,7 @@ class Home_Screen extends Component {
         index: 9,
         theme: "https://i.imgur.com/lTwsZhY.png",
         arr_index_component: [10, 9, 9, 2, 5],
-        demo_link: "https://hahaha.isempai.net/"
+        demo_link: "https://thucphamsach.myiki.vn/"
       },
 
 

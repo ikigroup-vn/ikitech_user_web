@@ -123,6 +123,8 @@ class PostOrder extends Component {
     this.changePaymentMethod = debounce(this.handlePaymentMethod, 0);
     this.changeNewState = debounce(this.handleNewState, 300);
     this.loadFirst = true;
+    this.loadFirstNote = true;
+
   }
 
   handleNewState = (newState) => {
@@ -614,6 +616,14 @@ class PostOrder extends Component {
           priceCustomer: nextProps.oneCart.info_cart.total_final,
         });
       }
+      var customerNote = {}
+      if(this.loadFirstNote == true)
+      {
+        customerNote = {
+            customerNote: nextProps.oneCart.customer_note ?? ""
+        }
+        this.loadFirstNote = false
+      }
 
       this.setState({
         code_voucher: nextProps.oneCart.code_voucher,
@@ -624,8 +634,8 @@ class PostOrder extends Component {
 
         namePos: nextProps.oneCart.name,
         fee: nextProps.oneCart.total_shipping_fee,
-        customerNote: nextProps.oneCart.customer_note ?? "",
-
+        // customerNote: nextProps.oneCart.customer_note ?? "",
+        ...customerNote,
         payment_method_id:
           nextProps.oneCart.payment_method_id ??
           (nextProps.total_shipping_fee > 0 || this.state.openShipment == true
