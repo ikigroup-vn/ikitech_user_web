@@ -1,10 +1,20 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as scheduleAction from "../../../actions/schedule";
+import ListProduct from "../TableProduct"
+import ListCProduct from "../TableC_Product"
+import ListCBlog from "../TableC_Blog"
+import * as productAction from "../../../actions/product";
+
+import * as popupAction from "../../../actions/popup";
+import ModalUpload from "../ModalUpload"
+import ListBlog from "../TableBlog";
 import Datetime from "react-datetime";
 import moment from "moment";
 import MomentInput from 'react-moment-input';
-
+import * as blogAction from "../../../actions/blog";
+import * as categoryBAction from "../../../actions/category_blog";
+import * as CategoryPAction from "../../../actions/category_product";
 import { shallowEqual } from "../../../ultis/shallowEqual"
 import { isEmail, isEmpty, isPhone } from "../../../ultis/helpers";
 import * as AgencyAction from "../../../actions/agency";
@@ -26,6 +36,13 @@ class Form extends Component {
       type_schedule: "0",
       group_customer: 0,
       agency_type_id: null,
+      type_action: "",
+      product: "",
+      category: "",
+      blog: "",
+      categoryBlog: "",
+      link_url: "",
+
     };
   }
 
@@ -39,8 +56,13 @@ class Form extends Component {
   componentWillReceiveProps(nextProps) {
     var { schedule } = this.props
     if (!shallowEqual(nextProps.schedule, schedule)) {
+      var link_url = "";
+
       nextProps.schedule.forEach(item => {
         if (item.id == Number(nextProps.scheduleId)) {
+          if (item.type_action == "LINK") {
+            link_url = item.value_action;
+          }
           this.setState(
             {
               day_of_month: item.day_of_month,
@@ -54,11 +76,44 @@ class Form extends Component {
               time_run: moment(item.time_run, "YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY HH:mm:ss"),
               time_run_near: item.time_run_near,
               title: item.title,
-              type_schedule: item.type_schedule
+              type_schedule: item.type_schedule,
+              type_action: item.type_action,
+              link_url: link_url,
             }
           )
         }
       });
+    }
+    if (
+      !shallowEqual(
+        nextProps._category_product,
+        this.props._category_product
+      ) ||
+      !shallowEqual(nextProps._category_blog, this.props._category_blog) ||
+      !shallowEqual(nextProps._product, this.props._product) ||
+      !shallowEqual(nextProps._blog, this.props._blog)
+    ) {
+      var { type_action } = this.state;
+      console.log(type_action , "heeeeeeeeeeeeeeeee")
+
+      if (type_action != "") {
+        switch (type_action) {
+          case "PRODUCT":
+            this.setState({ product: nextProps._product });
+            break;
+          case "POST":
+            this.setState({ blog: nextProps._blog });
+            break;
+          case "CATEGORY_PRODUCT":
+            this.setState({ category: nextProps._category_product });
+            break;
+          case "CATEGORY_POST":
+            this.setState({ categoryBlog: nextProps._category_blog });
+            break;
+          default:
+            break;
+        }
+      }
     }
 
     if (this.props.image !== nextProps.image) {
@@ -94,6 +149,39 @@ class Form extends Component {
   }
 
 
+  fetchAllProduct = () => {
+    this.props.fetchAllProduct(this.props.store_code);
+  };
+  fetchAllBlog = () => {
+    this.props.fetchAllBlog(this.props.store_code);
+  };
+  fetchAllCProduct = () => {
+    this.props.fetchAllCategoryP(this.props.store_code);
+  };
+  fetchAllCBlog = () => {
+    this.props.fetchAllCategoryB(this.props.store_code);
+  };
+  handleAddProduct = (product) => {
+    this.setState({
+      product,
+    });
+  };
+
+  handleAddCProduct = (category) => {
+    this.setState({
+      category,
+    });
+  };
+  handleAddCBlog = (categoryBlog) => {
+    this.setState({
+      categoryBlog,
+    });
+  };
+  handleAddBlog = (blog) => {
+    this.setState({
+      blog,
+    });
+  };
 
   onSave = (e) => {
     e.preventDefault();
@@ -109,7 +197,21 @@ class Form extends Component {
       time_run_near,
       title,
       type_schedule,
+      type_action,
+      image,
+      link_url,
+      product,
+      category,
+      blog,
+      categoryBlog,
     } = this.state;
+    var value_action = "";
+    if (type_action == "LINK") value_action = link_url;
+    else if (type_action == "PRODUCT") value_action = product.id;
+    else if (type_action == "CATEGORY_PRODUCT") value_action = category.id;
+    else if (type_action == "POST") value_action = blog.id;
+    else if (type_action == "CATEGORY_POST") value_action = categoryBlog.id;
+    else {}
     var { group_customer, agency_type_id } = this.state;
     var agency_type_name = this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]?.name || null;
     var form = {
@@ -127,6 +229,8 @@ class Form extends Component {
       time_run_near,
       title,
       type_schedule,
+      type_action: type_action,
+      value_action: value_action,
     };
     if (this.state.title == null || !isEmpty(this.state.title) || !isEmpty(this.state.description)) {
       this.props.showError({
@@ -202,18 +306,63 @@ class Form extends Component {
       title,
       type_schedule,
       group_customer,
-      agency_type_id
+      agency_type_id,
+      
     } = this.state
+    var {
+      type_action,
+      product,
+      category,
+      blog,
+      categoryBlog,
+      image,
+      link_url,
+    } = this.state;
+    var { store_code, products, category_product, blogs, category_blog } =
+    this.props;
+
     var disable_oneDay = type_schedule == "0" ? "show" : "hide"
     var disable_everyDay = type_schedule == "1" ? "show" : "hide"
     var disable_everyWeek = type_schedule == "2" ? "show" : "hide"
     var disable_everyMonth = type_schedule == "3" ? "show" : "hide"
     var { types } = this.props;
 
+    var disable_link = type_action == "LINK" ? "show" : "hide";
+    var disable_post = type_action == "POST" ? "show" : "hide";
+    var disable_category_post =
+      type_action == "CATEGORY_POST" ? "show" : "hide";
+    var disable_product = type_action == "PRODUCT" ? "show" : "hide";
+    var disable_category_product =
+      type_action == "CATEGORY_PRODUCT" ? "show" : "hide";
+    var showProduct = product != "" ? "show" : "hide";
+    var showCProduct = category != "" ? "show" : "hide";
+    var showBlog = blog != "" ? "show" : "hide";
+    var showCblog = categoryBlog != "" ? "show" : "hide";
 
+    console.log(products ,product)
 
     return (
       <React.Fragment>
+              <ListProduct
+          handleAddProduct={this.handleAddProduct}
+          store_code={store_code}
+          products={products}
+        />
+        <ListCProduct
+          handleAddCProduct={this.handleAddCProduct}
+          store_code={store_code}
+          categories={category_product}
+        />
+        <ListCBlog
+          handleAddCBlog={this.handleAddCBlog}
+          store_code={store_code}
+          category_blog={category_blog}
+        />
+        <ListBlog
+          handleAddBlog={this.handleAddBlog}
+          store_code={store_code}
+          blogs={blogs}
+        />
         <form role="form" onSubmit={this.onSave} method="post">
 
           <div class="box-body">
@@ -434,7 +583,169 @@ class Form extends Component {
             </div>
 
 
+            <div class="form-group">
+              <label for="product_name">Chọn loại chuyển hướng</label>
+
+              <select
+              value = {type_action}
+                name="type_action"
+                id="input"
+                class="form-control"
+                onChange={this.onChange}
+              >
+                <option value="LINK">Website</option>
+                <option value="PRODUCT">Sản phẩm</option>
+                <option value="CATEGORY_PRODUCT">Danh mục sản phẩm</option>
+                <option value="POST">Bài viết</option>
+                <option value="CATEGORY_POST">Danh mục bài viết</option>
+              </select>
+            </div>
+            <div class={`form-group ${disable_link}`}>
+              <label htmlFor="name">Địa chỉ website</label>
+
+              <input
+                value={link_url}
+                type="text"
+                class="form-control"
+                name="link_url"
+                onChange={this.onChange}
+                placeholder="Nhập đỉa chỉ web ( http:// )"
+              />
+            </div>
+
+            <div  className="support-theme">
+            <div class={`form-group ${disable_product}`}>
+              <label>Chọn Sản phẩm</label>
+
+              <div class="right-inner-addon input-container">
+                <i class="fa fa-caret-down"></i>
+                <input
+                readOnly
+                  data-toggle="modal"
+                  data-target="#showListProduct"
+                  onClick={this.fetchAllProduct}
+                  style={{ background: "white" }}
+                  type="text"
+                  name="product_name"
+                  placeholder="Chọn sản phẩm..."
+                  class="form-control"
+                  value={product.name}
+                />
+              </div>
+
+
+
           
+    
+              <br></br>
+              <div class={`media ${showProduct}`} id="product_preview">
+                <img
+                  width="100px"
+                  height="120px"
+                  src={product.img}
+                  alt=""
+                />
+                <div class="media-body" style={{ marginLeft: "10px" }}>
+                  {/* <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{product.name} </h5> */}
+                  {/* <p>{format(Number(product.price))}</p> */}
+                </div>
+              </div>
+            </div>
+            <div class={`form-group ${disable_category_product}`}>
+              <label>Chọn Danh mục sản phẩm</label>
+              <div class="right-inner-addon input-container">
+                <i class="fa fa-caret-down"></i>
+                <input
+                readOnly
+                  onClick={this.fetchAllCProduct}
+                  value={category.name}
+                  data-toggle="modal"
+                  data-target="#showListCProduct"
+                  type="text"
+                  name="product_name"
+                  class="form-control"
+                  placeholder="Chọn danh mục..."
+                />
+              </div>
+
+       
+              <br></br>
+              <div class={`media ${showCProduct}`} id="product_preview">
+                <img
+                  width="100px"
+                  height="120px"
+                  src={category.img}
+                  alt=""
+                />
+                {/* <div class="media-body" style={{ marginLeft: "10px" }}>
+                  <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{category.name} </h5>
+                </div> */}
+              </div>
+            </div>
+            <div class={`form-group ${disable_post}`}>
+              <label>Chọn Bài viết</label>
+              <div class="right-inner-addon input-container">
+                <i class="fa fa-caret-down"></i>
+                <input
+                  onClick={this.fetchAllBlog}
+                  value={blog.name}
+                  readOnly
+                  data-toggle="modal"
+                  data-target="#showListBlog"
+                  type="text"
+                  name="product_name"
+                  class="form-control"
+                  placeholder="Chọn bài viết..."
+                />
+              </div>
+            
+              <br></br>
+              <div class={`media ${showBlog}`} id="product_preview">
+                <img
+                  width="100px"
+                  height="120px"
+                  src={blog.img}
+                  alt=""
+                />
+                {/* <div class="media-body" style={{ marginLeft: "10px" }}>
+                  <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{blog.name} </h5>
+                </div> */}
+              </div>
+            </div>
+
+
+            <div class={`form-group ${disable_category_post}`}>
+              <label>Chọn danh mục bài viết</label>
+              <div class="right-inner-addon input-container">
+                <i class="fa fa-caret-down"></i>
+                <input
+                  onClick={this.fetchAllBlog}
+                  value={blog.name}
+                  readOnly
+                  data-toggle="modal"
+                  data-target="#showListCBlog"
+                  type="text"
+                  name="product_name"
+                  class="form-control"
+                  placeholder="Chọn danh mục..."
+                />
+              </div>
+          
+           
+              <br></br>
+              <div class={`media ${showCblog}`} id="product_preview">
+                <img
+                  width="100px"
+                  height="120px"
+                  src={categoryBlog.img}
+                  alt=""
+                />
+                {/* <div class="media-body" style={{ marginLeft: "10px" }}>
+                  <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{categoryBlog.name} </h5>
+                </div> */}
+              </div>
+            </div>
+            </div>
 
 
           </div>
@@ -464,6 +775,10 @@ class Form extends Component {
 const mapStateToProps = (state) => {
   return {
     types: state.agencyReducers.agency.allAgencyType,
+    category_blog: state.categoryBReducers.categoryBlog.allCategoryB,
+    products: state.productReducers.product.allProduct,
+    category_product: state.categoryPReducers.category_product.allCategoryP,
+    blogs: state.blogReducers.blog.allBlog,
   };
 };
 
@@ -480,6 +795,18 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchAllAgencyType: (store_code) => {
       dispatch(AgencyAction.fetchAllAgencyType(store_code));
+    },
+    fetchAllCategoryB: (id) => {
+      dispatch(categoryBAction.fetchAllCategoryB(id));
+    },
+    fetchAllBlog: (id) => {
+      dispatch(blogAction.fetchAllBlog(id));
+    },
+    fetchAllProduct: (store_code) => {
+      dispatch(productAction.fetchAllProduct(store_code));
+    },
+    fetchAllCategoryP: (store_code) => {
+      dispatch(CategoryPAction.fetchAllCategoryP(store_code));
     },
   };
 };

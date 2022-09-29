@@ -201,7 +201,6 @@ class Form extends Component {
     var showBlog = blog != "" ? "show" : "hide";
     var showCblog = categoryBlog != "" ? "show" : "hide";
     var image = image || Env.IMG_NOT_FOUND;
-    console.log(this.state)
     return (
       <React.Fragment>
         <ListProduct
