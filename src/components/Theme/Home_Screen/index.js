@@ -74,7 +74,7 @@ class Home_Screen extends Component {
         isVip: false,
         index: 7,
         theme: "https://data1.ikitech.vn/public/api/SahaImages/GZZBFLEWFG1654823972.webp",
-        arr_index_component: [8, 8, 6, 4, 2],
+        arr_index_component: [8, 8, 7, 4, 2],
         demo_link: "https://dogiadungdemo.myiki.vn/"
       },
       {
