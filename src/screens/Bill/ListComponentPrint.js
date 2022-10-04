@@ -14,6 +14,10 @@ export default class ListComponentToPrint extends Component {
         return (
             <div >
                 {bills.length > 0 && bills.map((bill,index) => {
+
+                    bill.store_code = badges?.store_code
+                    bill.store_name = badges?.store_name
+
                     return (
                         <React.Fragment>
                         <ComponentToPrint

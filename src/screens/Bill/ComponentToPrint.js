@@ -166,7 +166,7 @@ export default class ComponentToPrint extends Component {
           badges.address_pickup.province_name;
     return (
       <div className="parent" style={{ margin: "30px" }}>
-        <p className="order_code">Mã đơn hàng : {state.order_code}</p>
+        <p className="order_code">Mã đơn hàng : {state.order_code ?? bill.order_code}</p>
 
         <div className="row">
           <div className="col-6">
@@ -175,7 +175,7 @@ export default class ComponentToPrint extends Component {
               <p class="" id="sale_user_name">
                 <span style={{ fontWeight: "500" }}>
                   {" "}
-                  Tên: {state.store_name}
+                  Tên: {state.store_name  ?? bill.store_name }
                 </span>
               </p>
               <p class="" id="info">
@@ -187,7 +187,7 @@ export default class ComponentToPrint extends Component {
                 {store_address}
               </p>
               <p class="" id="info">
-                <span>Số điện thoại:</span> {state.user_phone}
+                <span>Số điện thoại:</span> {state.user_phone  ?? bill.user_phone}
               </p>
             </div>
           </div>
@@ -201,10 +201,10 @@ export default class ComponentToPrint extends Component {
                 </span>
               </p>
               <p class="" id="info">
-                <span>Địa chỉ: </span> {state.customer_address}
+                <span>Địa chỉ: </span> {state.customer_address  ?? bill.customer_address}
               </p>
               <p class="" id="info">
-                <span>Số điện thoại: </span> {state.customer_phone}
+                <span>Số điện thoại: </span> {state.customer_phone  ?? bill.customer_phone}
               </p>
             </div>
           </div>
