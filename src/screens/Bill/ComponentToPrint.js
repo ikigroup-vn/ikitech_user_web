@@ -197,14 +197,19 @@ export default class ComponentToPrint extends Component {
 
               <p class="" id="sale_user_name">
                 <span style={{ fontWeight: "500" }}>
-                  Tên: {state?.customer_name ?? ""}
+                  Tên: {state?.customer_name ?? bill.customer_name ?? bill?.customer?.name ?? ""}
                 </span>
               </p>
               <p class="" id="info">
-                <span>Địa chỉ: </span> {state?.customer_address == null ? "" : (bill?.customer?.customer_address ?? "")}
+                <span>Địa chỉ: </span> { getDetailAdress(
+              bill.customer_address?.address_detail,
+              bill.customer_address?.wards_name,
+              bill.customer_address?.district_name,
+              bill.customer_address?.province_name
+            )}
               </p>
               <p class="" id="info">
-                <span>Số điện thoại: </span> {state?.customer_phone == null ? "" : (bill?.customer?.phone_number ?? "")}
+                <span>Số điện thoại: </span> {state?.customer_phone ?? bill.customer_phone ?? bill?.customer?.phone_number ?? ""}
               </p>
             </div>
           </div>
