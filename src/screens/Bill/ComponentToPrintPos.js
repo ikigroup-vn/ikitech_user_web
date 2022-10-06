@@ -293,7 +293,7 @@ export default class ComponentToPrint extends Component {
 
             <div>
               <div style={{ fontSize: "25px", textAlign: "center" }}>
-                <strong> {format(state.total_final)}</strong>
+                <strong> {format(bill.total_final)}</strong>
               </div>
 
               <div
