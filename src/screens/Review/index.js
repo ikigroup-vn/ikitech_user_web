@@ -14,6 +14,7 @@ import General from "../../components/Review/General";
 import NotAccess from "../../components/Partials/NotAccess";
 
 import Pagination from "../../components/Review/Pagination";
+import { getQueryParams } from "../../ultis/helpers";
 
 class Store extends Component {
 
@@ -24,7 +25,8 @@ class Store extends Component {
         title: "",
         id: "",
         filter_by: null,
-        filter_by_value: null
+        filter_by_value: null,
+        page: 1
       },
     }
   }
@@ -35,7 +37,10 @@ class Store extends Component {
   };
   componentDidMount() {
 
-    this.props.fetchAllReview(this.props.match.params.store_code);
+
+    var page = getQueryParams("page") || 1
+
+    this.props.fetchAllReview(this.props.match.params.store_code, page);
 
   }
   componentDidUpdate() {
@@ -45,13 +50,13 @@ class Store extends Component {
       var isShow = permissions.customer_review_list
 
 
-      this.setState({ isLoading: true, censorship:true, isShow })
+      this.setState({ isLoading: true, censorship: true, isShow })
 
     }
   }
 
-  passFilter  = (filter_by, filter_by_value) =>{
-    this.setState({filter_by, filter_by_value})
+  passFilter = (filter_by, filter_by_value) => {
+    this.setState({ filter_by, filter_by_value })
   }
 
   getParams = (filter_by, filter_by_value) => {
@@ -66,7 +71,7 @@ class Store extends Component {
   render() {
     var { store_code } = this.props.match.params;
     var { alert, reviews } = this.props
-    var { modalremove, censorship, isShow ,filter_by_value ,filter_by} = this.state
+    var { modalremove, censorship, isShow, filter_by_value, filter_by } = this.state
     if (this.props.auth) {
       return (
         <div id="wrapper">
@@ -93,7 +98,7 @@ class Store extends Component {
                       </div>
                       <br></br>
 
-                      <General passFilter = {this.passFilter} reviews={reviews} store_code={store_code} />
+                      <General passFilter={this.passFilter} reviews={reviews} store_code={store_code} />
 
                       <div class="card shadow mb-4">
                         <div class="card-header py-3">
@@ -103,9 +108,9 @@ class Store extends Component {
                         </div>
                         <div class="card-body">
                           <ListReview
-                          filter_by = {filter_by}
-                          filter_by_value = {filter_by_value}
-                          getParams  = {this.getParams}
+                            filter_by={filter_by}
+                            filter_by_value={filter_by_value}
+                            getParams={this.getParams}
                             censorship={censorship}
                             handleDelCallBack={this.handleDelCallBack}
                             store_code={store_code}
@@ -149,8 +154,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, props) => {
   return {
 
-    fetchAllReview: (store_code) => {
-      dispatch(reviewAction.fetchAllReview(store_code));
+    fetchAllReview: (store_code, page) => {
+      dispatch(reviewAction.fetchAllReview(store_code, page));
     },
   };
 };

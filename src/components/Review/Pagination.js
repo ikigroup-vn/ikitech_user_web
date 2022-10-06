@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import * as reviewAction from "../../actions/review";
+import { setQueryParamInUrl } from "../../ultis/helpers";
 class Pagination extends Component {
   constructor(props) {
     super(props);
@@ -11,6 +12,7 @@ class Pagination extends Component {
   }
 
   passPagination = (page) => {
+    setQueryParamInUrl("page", page)
     this.props.fetchAllReview(this.props.store_code , page)    
 }
 

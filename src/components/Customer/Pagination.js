@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import getChannel from "../../ultis/channel"
 import * as customerAction from "../../actions/customer";
+import { setQueryParamInUrl } from "../../ultis/helpers";
 class Pagination extends Component {
   constructor(props) {
     super(props);
@@ -12,6 +13,7 @@ class Pagination extends Component {
 
   passPagination = (page) => {
     console.log("page in customer", page);
+    setQueryParamInUrl("pag", page)
     this.props.fetchAllCustomer(this.props.store_code, page);
     this.props.getPaginate(page)
   };

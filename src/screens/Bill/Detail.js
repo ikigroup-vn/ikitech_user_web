@@ -58,16 +58,18 @@ class Detail extends Component {
     }
 
     goBack = () => {
-        var { store_code } = this.props.match.params
+        // var { store_code } = this.props.match.params
 
-        var statusOrder = getQueryParams("order_status_code")
-        var statusPayment = getQueryParams("payment_status_code")
-        var params = "?params=true"
-        if (statusOrder)
-            params = params + `&order_status_code=${statusOrder}`
-        if (statusPayment)
-            params = params + `&payment_status_code=${statusPayment}`
-        history.replace(`/order/${store_code}${params}`);
+        // var statusOrder = getQueryParams("order_status_code")
+        // var statusPayment = getQueryParams("payment_status_code")
+        // var params = "?params=true"
+        // if (statusOrder)
+        //     params = params + `&order_status_code=${statusOrder}`
+        // if (statusPayment)
+        //     params = params + `&payment_status_code=${statusPayment}`
+        // history.replace(`/order/${store_code}${params}`);
+
+        history.goBack();
     };
     render() {
         var arrBills = []

@@ -2,7 +2,8 @@ import moment from "moment";
 import Compressor from "compressorjs";
 import * as Config from "../constants/Config";
 import Resizer from "react-image-file-resizer";
-import getChannel , {IKITECH , IKIPOS} from "./channel";
+import getChannel, { IKITECH, IKIPOS } from "./channel";
+import history from "../history";
 export const randomString = (length) => {
   var result = "";
   var characters =
@@ -14,44 +15,40 @@ export const randomString = (length) => {
   return result;
 };
 
-export const getDetailAdress = (address_detail , wards_name , district_name , province_name) => {
+export const getDetailAdress = (address_detail, wards_name, district_name, province_name) => {
   var detail = "";
-  if(address_detail)
-  detail = detail + address_detail + ", "
-  if(wards_name)
-  detail = detail + wards_name + ", "
-  if(district_name)
-  detail = detail + district_name + ", "
-  if(province_name)
-  detail = detail + province_name
+  if (address_detail)
+    detail = detail + address_detail + ", "
+  if (wards_name)
+    detail = detail + wards_name + ", "
+  if (district_name)
+    detail = detail + district_name + ", "
+  if (province_name)
+    detail = detail + province_name
 
   return detail
 }
 
 
-export const contactOrNumber = (data) =>{
-  if(getChannel() == IKIPOS)
-  {
+export const contactOrNumber = (data) => {
+  if (getChannel() == IKIPOS) {
     return data
   }
-  else
-  {
+  else {
     var string = data.slice(0, -2)
     console.log(string)
-    var newString =  string
-    .toString()
-    .replace(/\./g, "")
-    .toString()
-    .replace(/,/g, "")
-    .toString()
-    .replace(/-/g, "")
-    .toString()
-    if(newString  == 0)
-    {
+    var newString = string
+      .toString()
+      .replace(/\./g, "")
+      .toString()
+      .replace(/,/g, "")
+      .toString()
+      .replace(/-/g, "")
+      .toString()
+    if (newString == 0) {
       return "Liên hệ"
     }
-    else
-    {
+    else {
       return data
     }
   }
@@ -77,7 +74,7 @@ export const containsSpecialChars = (str) => {
 // };
 
 
-export const compressed = (file,maxWitdh = 1024, maxHeight = 1024) =>
+export const compressed = (file, maxWitdh = 1024, maxHeight = 1024) =>
   new Promise((resolve) => {
     Resizer.imageFileResizer(
       file,
@@ -119,8 +116,8 @@ export const isSpecialCharactor = (string) => {
 };
 
 export const isEmail = (email) => {
-  if(email)
-  var email = email.toString().replace(/ /g, "");
+  if (email)
+    var email = email.toString().replace(/ /g, "");
   const re =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
@@ -165,12 +162,12 @@ export const callUrlSocket = () => {
   return name;
 };
 
-export const loadFileInput = (name, upload = "#" , mp4 = false) => {
+export const loadFileInput = (name, upload = "#", mp4 = false) => {
   window.$(`#${name}`).fileinput({
     theme: "fa",
     overwriteInitial: true,
     uploadUrl: upload,
-    allowedFileExtensions: mp4 == true ? ["mp4"] :  ["jpg", "png", "jpeg" ],
+    allowedFileExtensions: mp4 == true ? ["mp4"] : ["jpg", "png", "jpeg"],
     maxFilesNum: 10,
     slugCallback: function (filename) {
       return filename.replace("(", "_").replace("]", "_");
@@ -220,11 +217,28 @@ export const formatNoD = (number) => {
 export const formatNoDWithEmpty = (number) => {
   if (number == "" || number == null) return "";
   var number = number.toString().replace(/\./g, ".");
-   number = parseInt(number);
+  number = parseInt(number);
 
   let dollarUSLocale = Intl.NumberFormat("en-US");
   return dollarUSLocale.format((number ?? 0));
 };
+
+function updateQueryStringParameter(uri, key, value) {
+  var re = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
+  var separator = uri.indexOf('?') !== -1 ? "&" : "?";
+  if (uri.match(re)) {
+    return uri.replace(re, '$1' + key + "=" + value + '$2');
+  }
+  else {
+    return uri + separator + key + "=" + value;
+  }
+}
+
+export const setQueryParamInUrl = (key, value) => {
+  var url = window.location.pathname + window.location.hash
+  url = updateQueryStringParameter(url, key, value)
+  history.replace(url);
+}
 
 export const loadExpandTable = () => {
   window.$(".exploder").unbind("click");
@@ -256,18 +270,18 @@ export const getDateForChartHour = () => {
 export const formatNumber = (value) => {
   var _value = value;
   var numStr =
-  (typeof _value !== "undefined" && _value != null)
-  ? _value
-    .toString()
-    .replace(/\./g, "")
-    .replace(/,/g, "")
-    .replace(/-/g, "")
-  : "";
+    (typeof _value !== "undefined" && _value != null)
+      ? _value
+        .toString()
+        .replace(/\./g, "")
+        .replace(/,/g, "")
+        .replace(/-/g, "")
+      : "";
   var numStr = parseFloat(numStr);
   return isNaN(numStr) ? 0 : numStr;
 };
 
-export const getQueryParams = (name) =>{
+export const getQueryParams = (name) => {
   return new URLSearchParams(
     window ? window.location.search : {}
   ).get(name);
@@ -297,7 +311,7 @@ export const getDateForChartDay = () => {
 
 export const stringToInit = (value) => {
   var _value = value;
-  var numStr = _value ;
+  var numStr = _value;
   var numStr = parseFloat(numStr);
   return isNaN(numStr) ? 0 : numStr;
 }

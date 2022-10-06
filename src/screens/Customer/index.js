@@ -11,9 +11,9 @@ import * as customerAction from "../../actions/customer";
 import Chat from "../../components/Chat";
 import * as Env from "../../ultis/default";
 import NotAccess from "../../components/Partials/NotAccess";
-import {getQueryParams} from "../../ultis/helpers"
+import { getQueryParams, setQueryParamInUrl } from "../../ultis/helpers"
 import ModalCreate from "../../components/Customer/ModalCreate"
-import getChannel , {IKIPOS ,IKITECH} from "../../ultis/channel";
+import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
 import * as placeAction from "../../actions/place";
 import ModalEdit from "../../components/Customer/ModalEdit"
 class Customer extends Component {
@@ -22,24 +22,24 @@ class Customer extends Component {
     this.state = {
       showChatBox: "hide",
       searchValue: "",
-      paginate : 1,
-      openModal : false,
-      openModalEdit : false,
+      paginate: 1,
+      openModal: false,
+      openModalEdit: false,
 
-      id_customer : "",
-      modal : ""
+      id_customer: "",
+      modal: ""
     };
   }
 
-  openModal = () =>{
-    this.setState({openModal : true})
+  openModal = () => {
+    this.setState({ openModal: true })
   }
-  resetModal = () =>{
-    this.setState({openModal : false})
+  resetModal = () => {
+    this.setState({ openModal: false })
 
   }
-  resetModalEdit = () =>{
-    this.setState({openModalEdit : false})
+  resetModalEdit = () => {
+    this.setState({ openModalEdit: false })
 
   }
 
@@ -79,37 +79,39 @@ class Customer extends Component {
   }
 
   componentDidMount() {
+    setQueryParamInUrl("pag", pag)
     var pag = getQueryParams("pag") || 1
-    
-    this.props.fetchAllCustomer(this.props.match.params.store_code , pag);
+
+
+    this.props.fetchAllCustomer(this.props.match.params.store_code, pag);
     this.props.fetchPlaceProvince()
 
   }
 
   handleSetIdCustomer = (id) => {
     this.setState({
-        id_supplier: id
+      id_supplier: id
     })
-}
+  }
 
-handleSetInfor = (item) => {
-  this.setState({ modal: item })
-}
+  handleSetInfor = (item) => {
+    this.setState({ modal: item })
+  }
 
   closeChatBox = (status) => {
     this.setState({
       showChatBox: status,
     });
   };
-  getPaginate = (num) =>{
-    this.setState({paginate : num})
+  getPaginate = (num) => {
+    this.setState({ paginate: num })
   }
   render() {
     var { customer, chat, customers } = this.props;
     console.log(customer, customers);
     var customerImg =
       typeof customer.avatar_image == "undefined" ||
-      customer.avatar_image == null
+        customer.avatar_image == null
         ? Env.IMG_NOT_FOUND
         : customer.avatar_image;
     var customerId =
@@ -122,15 +124,15 @@ handleSetInfor = (item) => {
         : customer.name;
 
     var { store_code } = this.props.match.params;
-    var { showChatBox, isShow, chat_allow, searchValue , paginate , openModal , modal , openModalEdit } = this.state;
+    var { showChatBox, isShow, chat_allow, searchValue, paginate, openModal, modal, openModalEdit } = this.state;
     var { wards, district, province } = this.props
 
     if (this.props.auth) {
       return (
         <div id="wrapper">
           <Sidebar store_code={store_code} />
-          <ModalCreate resetModal = {this.resetModal} openModal = {openModal} store_code={store_code} wards={wards} district={district} province={province} />
-          <ModalEdit openModalEdit= {openModalEdit} resetModal = {this.resetModalEdit} store_code={store_code} wards={wards} district={district} province={province} modal={modal} />
+          <ModalCreate resetModal={this.resetModal} openModal={openModal} store_code={store_code} wards={wards} district={district} province={province} />
+          <ModalEdit openModalEdit={openModalEdit} resetModal={this.resetModalEdit} store_code={store_code} wards={wards} district={district} province={province} modal={modal} />
 
           <div className="col-10 col-10-wrapper">
             <div id="content-wrapper" className="d-flex flex-column">
@@ -147,7 +149,7 @@ handleSetInfor = (item) => {
                       }}
                     >
                       <h4 className="h4 title_content mb-0 text-gray-800">
-                       Danh sách khách hàng
+                        Danh sách khách hàng
                       </h4>{" "}
                       <a
                         data-toggle="modal"
@@ -196,8 +198,8 @@ handleSetInfor = (item) => {
                       </div>
                       <div className="card-body">
                         <Table
-                    handleSetInfor = {this.handleSetInfor}
-                        paginate = {paginate}
+                          handleSetInfor={this.handleSetInfor}
+                          paginate={paginate}
                           chat_allow={chat_allow}
                           showChatBox={showChatBox}
                           handleShowChatBox={this.handleShowChatBox}
@@ -207,7 +209,7 @@ handleSetInfor = (item) => {
                         />
 
                         <Pagination
-                        getPaginate = {this.getPaginate}
+                          getPaginate={this.getPaginate}
 
                           store_code={store_code}
                           customers={customers}
@@ -269,8 +271,8 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchPlaceProvince: () => {
       dispatch(placeAction.fetchPlaceProvince());
-  },
-    
+    },
+
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Customer);
