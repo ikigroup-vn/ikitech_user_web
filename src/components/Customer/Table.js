@@ -42,16 +42,8 @@ class Table extends Component {
 
       result = customer.map((data, index) => {
         return (
-<<<<<<< HEAD
-          <tr
-            className="hover-product"
-            onClick={(e) => this.changePage(store_code, data.id, e)}
-          >
-            <td>{index + 1}</td>
-=======
           <tr className="hover-product" onClick={(e) => this.changePage(store_code, data.id,e)}>
             <td>{((getQueryParams("pag")-1)*20)+ index + 1}</td>
->>>>>>> dev
 
             <td>{data.name}</td>
             <td>{data.phone_number}</td>
