@@ -185,6 +185,23 @@ export const filter_arr = (variable) => {
     : variable;
 };
 
+export const formatNumberV2 = (str) => {
+  const strFormat = str.replace(
+    /[A-Za-z`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/g,
+    ""
+  );
+  if (Number(strFormat) >= 1000) {
+    return strFormat
+      .split("")
+      .reverse()
+      .reduce((prev, next, index) => {
+        return (index % 3 ? next : next + ".") + prev;
+      });
+  } else {
+    return Number(strFormat);
+  }
+};
+
 export const filter_var = (variable) => {
   return typeof variable == "undefined" || variable == null ? "" : variable;
 };
