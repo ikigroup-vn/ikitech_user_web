@@ -4,26 +4,32 @@ import { connect } from "react-redux";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import themeData from "../../../ultis/theme_data";
 
-import {formatNumber} from "../../../ultis/helpers"
+import { formatNumber } from "../../../ultis/helpers";
 
 class ModalUpdate extends Component {
   constructor(props) {
     super(props);
     this.state = {
       txtBonus: "",
-      id: '',
-      txtLimit: '',
+      id: "",
+      txtLimit: "",
     };
   }
 
   componentWillReceiveProps(nextProps) {
     if (!shallowEqual(nextProps.modal, this.props.modal)) {
-      var step = nextProps.modal
+      var step = nextProps.modal;
       this.setState({
-        txtLimit: step.limit == null ? null : new Intl.NumberFormat().format(step.limit.toString()) ,
+        txtLimit:
+          step.limit == null
+            ? null
+            : new Intl.NumberFormat().format(step.limit.toString()),
         id: step.id,
-        txtBonus:  step.bonus == null ? null : new Intl.NumberFormat().format(step.bonus.toString()) ,
-      })
+        txtBonus:
+          step.bonus == null
+            ? null
+            : new Intl.NumberFormat().format(step.bonus.toString()),
+      });
     }
   }
 
@@ -34,22 +40,19 @@ class ModalUpdate extends Component {
     const _value = formatNumber(value);
     if (!isNaN(Number(_value))) {
       value = new Intl.NumberFormat().format(_value);
-        this.setState({ [name]: value });
+      this.setState({ [name]: value });
     }
   };
 
   onSave = (e) => {
     e.preventDefault();
-    var {id , txtLimit , txtBonus} = this.state
-    window.$('.modal').modal('hide');
+    var { id, txtLimit, txtBonus } = this.state;
+    window.$(".modal").modal("hide");
 
-
-    this.props.updateStep(this.props.store_code, id, 
-      { 
-        bonus:   txtBonus == null ? txtBonus : formatNumber(txtBonus),
-        limit:   txtLimit == null ? txtLimit : formatNumber(txtLimit),
-      }
-      );
+    this.props.updateStep(this.props.store_code, id, {
+      bonus: txtBonus == null ? txtBonus : formatNumber(txtBonus),
+      limit: txtLimit == null ? txtLimit : formatNumber(txtLimit),
+    });
   };
 
   render() {
@@ -65,11 +68,20 @@ class ModalUpdate extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-          <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
-              <h4 style={{ color: "white" }}>Chỉnh sửa bậc thang</h4>       
+            <div
+              class="modal-header"
+              style={{ backgroundColor: themeData().backgroundColor }}
+            >
+              <h4 style={{ color: "white" }}>Chỉnh sửa bậc thang</h4>
 
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
             </div>
             <form
               onSubmit={this.onSave}
@@ -79,15 +91,14 @@ class ModalUpdate extends Component {
               id="removeForm"
             >
               <div class="modal-body">
-             
-              <div class="form-group">
+                <div class="form-group">
                   <label for="product_name">Mức doanh số</label>
                   <input
                     type="text"
                     class="form-control"
                     id="txtName"
                     placeholder="Nhập..."
-                    autocomplete="off"
+                    autoComplete="off"
                     value={txtLimit}
                     onChange={this.onChange}
                     name="txtLimit"
@@ -100,13 +111,12 @@ class ModalUpdate extends Component {
                     class="form-control"
                     id="txtName"
                     placeholder="Nhập..."
-                    autocomplete="off"
+                    autoComplete="off"
                     value={txtBonus}
                     onChange={this.onChange}
                     name="txtBonus"
                   />
                 </div>
-
               </div>
               <div class="modal-footer">
                 <button
@@ -127,9 +137,6 @@ class ModalUpdate extends Component {
     );
   }
 }
-
-
-
 
 const mapDispatchToProps = (dispatch, props) => {
   return {

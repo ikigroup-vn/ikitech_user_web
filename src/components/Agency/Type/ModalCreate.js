@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import * as agencyAction from "../../../actions/agency"
+import * as agencyAction from "../../../actions/agency";
 import { connect } from "react-redux";
 import themeData from "../../../ultis/theme_data";
-
 
 class ModalCreate extends Component {
   constructor(props) {
@@ -16,20 +15,18 @@ class ModalCreate extends Component {
     var target = e.target;
     var name = target.name;
     var value = target.value;
- this.setState({ [name]: value });
-    
+    this.setState({ [name]: value });
   };
   onSave = (e) => {
     e.preventDefault();
-    window.$('.modal').modal('hide');
-    var { txtName } = this.state
-    this.props.createAgencyType(this.props.store_code, 
-      { 
-        name:   txtName,
-      });
+    window.$(".modal").modal("hide");
+    var { txtName } = this.state;
+    this.props.createAgencyType(this.props.store_code, {
+      name: txtName,
+    });
     this.setState({
       txtName: "",
-    })
+    });
   };
   render() {
     var { txtName } = this.state;
@@ -44,19 +41,22 @@ class ModalCreate extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-              <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
-              <h4 style={{ color: "white" }}>Thêm cấp</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
-            </div>
-            <form
-              onSubmit={this.onSave}
-              role="form"
-              action="#"
-              method="post"
+            <div
+              class="modal-header"
+              style={{ backgroundColor: themeData().backgroundColor }}
             >
+              <h4 style={{ color: "white" }}>Thêm cấp</h4>
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
+            </div>
+            <form onSubmit={this.onSave} role="form" action="#" method="post">
               <div class="modal-body">
-      
                 <div class="form-group">
                   <label for="product_name">Tên cấp đại lý</label>
                   <input
@@ -64,7 +64,7 @@ class ModalCreate extends Component {
                     type="text"
                     class="form-control"
                     placeholder="Nhập..."
-                    autocomplete="off"
+                    autoComplete="off"
                     value={txtName}
                     onChange={this.onChange}
                     name="txtName"
@@ -90,8 +90,6 @@ class ModalCreate extends Component {
     );
   }
 }
-
-
 
 const mapDispatchToProps = (dispatch, props) => {
   return {

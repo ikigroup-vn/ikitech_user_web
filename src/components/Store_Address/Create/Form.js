@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as StoreAAction from "../../../actions/store_address";
 import * as placeAction from "../../../actions/place";
-import {shallowEqual} from "../../../ultis/shallowEqual"
+import { shallowEqual } from "../../../ultis/shallowEqual";
 import { isEmail, isEmpty, isPhone } from "../../../ultis/helpers";
 
 import * as Types from "../../../constants/ActionType";
@@ -12,7 +12,7 @@ class Form extends Component {
     super(props);
     this.state = {
       txtName: "",
-      txtPhone:"",
+      txtPhone: "",
       txtAddress_detail: "",
       txtCountry: 1,
       txtProvince: "",
@@ -21,22 +21,18 @@ class Form extends Component {
       txtEmail: "",
       txtPickup: "",
       txtReturn: "",
-      isLoaded : false,
-      listWards : [],
-      listDistrict : [],
+      isLoaded: false,
+      listWards: [],
+      listDistrict: [],
     };
   }
   onChangeCheck = (e) => {
-
     var target = e.target;
     var name = target.name;
     var value = target.value;
-    if (!e.target.checked)
-      this.setState({ [name]: "0" })
-    else
-      this.setState({ [name]: "1" })
-
-  }
+    if (!e.target.checked) this.setState({ [name]: "0" });
+    else this.setState({ [name]: "1" });
+  };
   onChange = (e) => {
     var target = e.target;
     var name = target.name;
@@ -50,34 +46,37 @@ class Form extends Component {
     var { history } = this.props;
     history.goBack();
   };
-  onChangeProvince = (e) =>{
-    console.log(e.target.value)
-    this.setState({txtProvince : e.target.value , isLoaded : true , txtDistrict : "" , txtWards : ""})
+  onChangeProvince = (e) => {
+    console.log(e.target.value);
+    this.setState({
+      txtProvince: e.target.value,
+      isLoaded: true,
+      txtDistrict: "",
+      txtWards: "",
+    });
     this.props.fetchPlaceDistrict_Wards(e.target.value);
-
-  }
-  onChangeDistrict = (e) =>{
-    this.setState({txtDistrict : e.target.value})
+  };
+  onChangeDistrict = (e) => {
+    this.setState({ txtDistrict: e.target.value });
     this.props.fetchPlaceWards(e.target.value);
-  }
-  componentWillReceiveProps(nextProps,nextState)
-  {
-
-    if(nextState.isLoaded == true)
-    {
+  };
+  componentWillReceiveProps(nextProps, nextState) {
+    if (nextState.isLoaded == true) {
       this.setState({
-        listWards : nextProps.wards,
-        listDistrict : nextProps.district,
-        isLoaded : false
-      })
+        listWards: nextProps.wards,
+        listDistrict: nextProps.district,
+        isLoaded: false,
+      });
     }
 
-    if(!shallowEqual(nextProps.wards , this.props.wards) || !shallowEqual(this.props.district ,nextProps.district))
-    {
+    if (
+      !shallowEqual(nextProps.wards, this.props.wards) ||
+      !shallowEqual(this.props.district, nextProps.district)
+    ) {
       this.setState({
-        listWards : nextProps.wards,
-        listDistrict : nextProps.district
-      })
+        listWards: nextProps.wards,
+        listDistrict: nextProps.district,
+      });
     }
     // if(!shallowEqual(nextProps.wards , this.props.wards))
     // {
@@ -85,12 +84,18 @@ class Form extends Component {
     // }
   }
   onSave = (e) => {
-    var { store_code } = this.props
+    var { store_code } = this.props;
 
-    var is_default_pickup = this.state.txtPickup == "0" ||  this.state.txtPickup == "" ? false : true
-    var is_default_return = this.state.txtReturn == "0" || this.state.txtPickup == ""? false : true
+    var is_default_pickup =
+      this.state.txtPickup == "0" || this.state.txtPickup == "" ? false : true;
+    var is_default_return =
+      this.state.txtReturn == "0" || this.state.txtPickup == "" ? false : true;
     e.preventDefault();
-    if (this.state.txtName == null || !isEmpty(this.state.txtName) || !isEmpty(this.state.txtAddress_detail)) {
+    if (
+      this.state.txtName == null ||
+      !isEmpty(this.state.txtName) ||
+      !isEmpty(this.state.txtAddress_detail)
+    ) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
         alert: {
@@ -102,7 +107,7 @@ class Form extends Component {
       });
       return;
     }
-    if ((isEmpty(this.state.txtEmail) && !isEmail(this.state.txtEmail))) {
+    if (isEmpty(this.state.txtEmail) && !isEmail(this.state.txtEmail)) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
         alert: {
@@ -138,60 +143,56 @@ class Form extends Component {
       email: this.state.txtEmail,
       phone: this.state.txtPhone,
       is_default_pickup: is_default_pickup,
-      is_default_return: is_default_return
-
+      is_default_return: is_default_return,
     });
   };
   showProvince = (places) => {
     var result = null;
     if (places.length > 0) {
       result = places.map((data, index) => {
-
-        return (
-          <option value={data.id}>{data.name}</option>
-        )
-
-      })
+        return <option value={data.id}>{data.name}</option>;
+      });
     }
-    return result
-
-  }
+    return result;
+  };
   showWards = (places) => {
     var result = null;
     if (places.length > 0) {
       result = places.map((data, index) => {
-
-        return (
-          <option value={data.id}>{data.name}</option>
-        )
-
-      })
+        return <option value={data.id}>{data.name}</option>;
+      });
     }
-    return result
-
-  }
+    return result;
+  };
 
   showDistrict = (places) => {
     var result = null;
     if (places.length > 0) {
       result = places.map((data, index) => {
-
-        return (
-          <option value={data.id}>{data.name}</option>
-        )
-
-      })
+        return <option value={data.id}>{data.name}</option>;
+      });
     }
-    return result
+    return result;
+  };
 
-  }
-  
   render() {
-    var {  province } = this.props
-    var { txtName, txtAddress_detail, txtProvince, txtDistrict, txtWards, txtEmail, txtPickup, txtReturn ,listDistrict,listWards,txtPhone } = this.state;
+    var { province } = this.props;
+    var {
+      txtName,
+      txtAddress_detail,
+      txtProvince,
+      txtDistrict,
+      txtWards,
+      txtEmail,
+      txtPickup,
+      txtReturn,
+      listDistrict,
+      listWards,
+      txtPhone,
+    } = this.state;
 
-    var checkPickup = txtPickup == "0" || txtPickup == "" ? false : true
-    var checkReturn = txtReturn == "0" || txtReturn == "" ? false : true
+    var checkPickup = txtPickup == "0" || txtPickup == "" ? false : true;
+    var checkReturn = txtReturn == "0" || txtReturn == "" ? false : true;
     return (
       <React.Fragment>
         <form role="form" onSubmit={this.onSave} method="post">
@@ -203,7 +204,7 @@ class Form extends Component {
                 class="form-control"
                 id="txtName"
                 placeholder="Nhập họ tên"
-                autocomplete="off"
+                autoComplete="off"
                 value={txtName || ""}
                 onChange={this.onChange}
                 name="txtName"
@@ -216,7 +217,7 @@ class Form extends Component {
                 class="form-control"
                 id="txtEmail"
                 placeholder="Nhập Email"
-                autocomplete="off"
+                autoComplete="off"
                 value={txtEmail || ""}
                 onChange={this.onChange}
                 name="txtEmail"
@@ -225,14 +226,14 @@ class Form extends Component {
             <div className="form-group">
               <label for="product_name">Số điện thoại</label>
               <input
-              type="text"
-              className="form-control"
-              id = "txtPhone"
-              placeholder="Nhập số điện thoại"
-              autocomplete="off"
-              value={txtPhone || ""}
-              onChange={this.onChange}
-              name="txtPhone"
+                type="text"
+                className="form-control"
+                id="txtPhone"
+                placeholder="Nhập số điện thoại"
+                autoComplete="off"
+                value={txtPhone || ""}
+                onChange={this.onChange}
+                name="txtPhone"
               />
             </div>
             <div class="form-group">
@@ -242,7 +243,7 @@ class Form extends Component {
                 class="form-control"
                 id="txtAddress_detail"
                 placeholder="Nhập chi tiết địa chỉ"
-                autocomplete="off"
+                autoComplete="off"
                 value={txtAddress_detail || ""}
                 onChange={this.onChange}
                 name="txtAddress_detail"
@@ -286,7 +287,7 @@ class Form extends Component {
                 onChange={this.onChangeDistrict}
                 name="txtDistrict"
               >
-                                <option value="">-- Chọn quận/huyện --</option>
+                <option value="">-- Chọn quận/huyện --</option>
 
                 {this.showDistrict(listDistrict)}
               </select>
@@ -301,45 +302,61 @@ class Form extends Component {
                 onChange={this.onChange}
                 name="txtWards"
               >
-                                <option value="">-- Chọn phường/xã --</option>
+                <option value="">-- Chọn phường/xã --</option>
 
                 {this.showWards(listWards)}
-
               </select>
             </div>
 
             <div class="form-group form-check">
-              <input type="checkbox" class="form-check-input" checked={checkPickup} id="exampleCheck1" name="txtPickup" onChange={this.onChangeCheck} value={txtPickup} />
-              <label class="form-check-label" for="exampleCheck1" >Đặt làm địa chỉ lấy hàng</label>
+              <input
+                type="checkbox"
+                class="form-check-input"
+                checked={checkPickup}
+                id="exampleCheck1"
+                name="txtPickup"
+                onChange={this.onChangeCheck}
+                value={txtPickup}
+              />
+              <label class="form-check-label" for="exampleCheck1">
+                Đặt làm địa chỉ lấy hàng
+              </label>
             </div>
 
             <div class="form-group form-check">
-              <input checked={checkReturn} value={txtReturn} onChange={this.onChangeCheck} name="txtReturn" type="checkbox" class="form-check-input" id="exampleCheck1" />
-              <label class="form-check-label" for="exampleCheck1">Đặt làm địa chỉ trả hàng</label>
+              <input
+                checked={checkReturn}
+                value={txtReturn}
+                onChange={this.onChangeCheck}
+                name="txtReturn"
+                type="checkbox"
+                class="form-check-input"
+                id="exampleCheck1"
+              />
+              <label class="form-check-label" for="exampleCheck1">
+                Đặt làm địa chỉ trả hàng
+              </label>
             </div>
           </div>
 
           <div class="box-footer">
-          <button type = "submit" class="btn btn-info   btn-sm">
-                  <i class="fas fa-plus"></i>  Tạo
-
-                </button>
-                <button
-                type = "button"
-                  style={{ marginLeft: "10px" }}
-                  onClick={this.goBack}
-                  class="btn btn-warning   btn-sm"
-                >
-                  <i class="fas fa-arrow-left"></i> Trở về
-
-                </button>
+            <button type="submit" class="btn btn-info   btn-sm">
+              <i class="fas fa-plus"></i> Tạo
+            </button>
+            <button
+              type="button"
+              style={{ marginLeft: "10px" }}
+              onClick={this.goBack}
+              class="btn btn-warning   btn-sm"
+            >
+              <i class="fas fa-arrow-left"></i> Trở về
+            </button>
           </div>
         </form>
       </React.Fragment>
     );
   }
 }
-
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
@@ -354,8 +371,8 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchPlaceDistrict_Wards: (id) => {
       dispatch(placeAction.fetchPlaceDistrict_Wards(id));
-    },  
-     showError: (error) => {
+    },
+    showError: (error) => {
       dispatch(error);
     },
   };

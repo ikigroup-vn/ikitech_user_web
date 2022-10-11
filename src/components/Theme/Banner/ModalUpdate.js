@@ -3,8 +3,8 @@ import * as themeAction from "../../../actions/theme";
 import { connect } from "react-redux";
 import * as helper from "../../../ultis/helpers";
 import { shallowEqual } from "../../../ultis/shallowEqual";
-import {compressed} from "../../../ultis/helpers"
-import {isEmpty} from "../../../ultis/helpers"
+import { compressed } from "../../../ultis/helpers";
+import { isEmpty } from "../../../ultis/helpers";
 import * as Types from "../../../constants/ActionType";
 
 class ModalUpdate extends Component {
@@ -12,33 +12,33 @@ class ModalUpdate extends Component {
     super(props);
     this.state = {
       title: "",
-      id : "",
-      image : "",
-      fileUpload: null
-
+      id: "",
+      image: "",
+      fileUpload: null,
     };
   }
 
   componentWillReceiveProps(nextProps) {
     if (!shallowEqual(nextProps.modal, this.props.modal)) {
-      var banner = nextProps.modal
+      var banner = nextProps.modal;
       this.setState({
         title: banner._title,
         id: banner.id,
-        image: banner.image_url
-      })
+        image: banner.image_url,
+      });
     }
   }
   componentDidMount() {
+    var _this = this;
 
-    var _this = this
-
-    window.$('#file-banner-update').on('fileloaded', function (event, file) {
-      _this.setState({ fileUpload: file })
+    window.$("#file-banner-update").on("fileloaded", function (event, file) {
+      _this.setState({ fileUpload: file });
     });
-    window.$('#file-banner-update').on('fileremoved', function (event, id, index) {
-      _this.setState({ fileUpload: null })
-    });
+    window
+      .$("#file-banner-update")
+      .on("fileremoved", function (event, id, index) {
+        _this.setState({ fileUpload: null });
+      });
 
     helper.loadFileInput("file-banner-update");
   }
@@ -53,27 +53,37 @@ class ModalUpdate extends Component {
   };
   onSave = async (e) => {
     e.preventDefault();
-    var { title , image , id } = this.state
+    var { title, image, id } = this.state;
 
-
-    window.$('.modal').modal('hide');
-    var { store_code, carousel_app_images , theme } = this.props
+    window.$(".modal").modal("hide");
+    var { store_code, carousel_app_images, theme } = this.props;
     var file = this.state.fileUpload;
-    window.$('#file-banner-update').fileinput('clear');
-
+    window.$("#file-banner-update").fileinput("clear");
 
     if (typeof file !== "undefined" && file != "" && file != null) {
-      this.props.updateBanner(store_code, {id:id, title: title, file: await compressed(file , 0 , 0)  , image : image}, carousel_app_images , theme);
-      this.setState({fileUpload: null})
-
-    }
-    else {
-      this.props.updateBanner(store_code, {id:id, title: title, file: ""  , image : image}, carousel_app_images , theme);
-
+      this.props.updateBanner(
+        store_code,
+        {
+          id: id,
+          title: title,
+          file: await compressed(file, 0, 0),
+          image: image,
+        },
+        carousel_app_images,
+        theme
+      );
+      this.setState({ fileUpload: null });
+    } else {
+      this.props.updateBanner(
+        store_code,
+        { id: id, title: title, file: "", image: image },
+        carousel_app_images,
+        theme
+      );
     }
   };
   render() {
-    var { title , image  } = this.state;
+    var { title, image } = this.state;
     return (
       <div
         class="modal fade"
@@ -85,11 +95,17 @@ class ModalUpdate extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" >
+            <div class="modal-header">
               <h4 class="modal-title">Cập nhật Banner</h4>
 
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
             </div>
             <form
               onSubmit={this.onSave}
@@ -106,7 +122,7 @@ class ModalUpdate extends Component {
                     class="form-control"
                     id="title"
                     placeholder="Nhập tiêu đề"
-                    autocomplete="off"
+                    autoComplete="off"
                     value={title}
                     onChange={this.onChange}
                     name="title"
@@ -116,7 +132,6 @@ class ModalUpdate extends Component {
                   <label>Ảnh: &nbsp; </label>
                   <img src={`${image}`} width="150" height="150" />
                 </div>
-
 
                 <div class="form-group">
                   <label for="product_name">Hình ảnh</label>
@@ -129,7 +144,6 @@ class ModalUpdate extends Component {
                     />
                   </div>
                 </div>
-         
               </div>
               <div class="modal-footer">
                 <button
@@ -144,7 +158,6 @@ class ModalUpdate extends Component {
                 </button>
               </div>
             </form>
-
           </div>
         </div>
       </div>
@@ -152,15 +165,13 @@ class ModalUpdate extends Component {
   }
 }
 
-
-
 const mapDispatchToProps = (dispatch, props) => {
   return {
     showError: (error) => {
-      dispatch(error)
+      dispatch(error);
     },
-    updateBanner: (id, form, banners , theme) => {
-      dispatch(themeAction.updateBanner(id, form, banners , theme));
+    updateBanner: (id, form, banners, theme) => {
+      dispatch(themeAction.updateBanner(id, form, banners, theme));
     },
   };
 };

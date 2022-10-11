@@ -30,8 +30,7 @@ import {
   audio,
 } from "suneditor/src/plugins";
 import imageGallery from "./../../imageGallery";
-import { getApiImageStore } from "../../../constants/Config"
-
+import { getApiImageStore } from "../../../constants/Config";
 
 class Form extends Component {
   constructor(props) {
@@ -101,7 +100,7 @@ class Form extends Component {
     this.setState({
       txtSeoTitle: data.txtSeoTitle,
       txtSeoDescription: data.txtSeoDescription,
-    })
+    });
   };
 
   onSave = (e) => {
@@ -115,7 +114,7 @@ class Form extends Component {
       txtPublished,
       txtCategories,
       txtSeoDescription,
-      txtSeoTitle
+      txtSeoTitle,
     } = this.state;
 
     if (txtTitle == null || !isEmpty(txtTitle)) {
@@ -162,7 +161,7 @@ class Form extends Component {
       summary: txtSumary,
       published: published,
       seo_title: txtSeoTitle,
-      seo_description: txtSeoDescription
+      seo_description: txtSeoDescription,
     });
   };
 
@@ -181,7 +180,7 @@ class Form extends Component {
       txtPublished,
       txtCategories,
       txtSeoDescription,
-      txtSeoTitle
+      txtSeoTitle,
     } = this.state;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
 
@@ -204,7 +203,7 @@ class Form extends Component {
                     id="txtTitle"
                     value={txtTitle}
                     placeholder="Nhập tên bài viết"
-                    autocomplete="off"
+                    autoComplete="off"
                     onChange={this.onChange}
                     name="txtTitle"
                   />
@@ -281,15 +280,12 @@ class Form extends Component {
                   showToolbar={true}
                   onChange={this.handleEditorChange}
                   setDefaultStyle="height: auto"
-
                   setOptions={{
                     requestHeaders: {
                       "X-Sample": "sample",
-                      "token": userLocalApi.getToken()
-
+                      token: userLocalApi.getToken(),
                     },
                     imageGalleryLoadURL: getApiImageStore(store_code),
-
 
                     plugins: [
                       imagePlugin,
@@ -307,7 +303,7 @@ class Form extends Component {
                       linkPlugin,
                       video,
                       audio,
-                      ],
+                    ],
 
                     buttonList: [
                       [
@@ -337,7 +333,7 @@ class Form extends Component {
                         "fullScreen",
                         "preview",
                         "codeView",
-                        "removeFormat"
+                        "removeFormat",
                       ],
                     ],
                   }}
@@ -345,8 +341,8 @@ class Form extends Component {
               </div>
             </div>
 
-            {
-              getChannel() == IKITECH && <div class="card mb-4">
+            {getChannel() == IKITECH && (
+              <div class="card mb-4">
                 <div class="card-header title_content">Tối ưu SEO</div>
                 <div class="card-body" style={{ padding: "0.8rem" }}>
                   <div class="row">
@@ -358,23 +354,19 @@ class Form extends Component {
                   </div>
                 </div>
               </div>
-            }
-
+            )}
           </div>
           <div class="box-footer">
             <button type="submit" class="btn btn-info   btn-sm">
-              <i class="fas fa-save"></i>  Tạo
-
+              <i class="fas fa-save"></i> Tạo
             </button>
             <button
               type="button"
-
               style={{ marginLeft: "10px" }}
               onClick={this.goBack}
               class="btn btn-warning   btn-sm"
             >
               <i class="fas fa-arrow-left"></i> Trở về
-
             </button>
           </div>
         </form>

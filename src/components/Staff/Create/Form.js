@@ -5,8 +5,13 @@ import * as staffAction from "../../../actions/staff";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import ModalUpload from "./ModalUpload";
 import * as Env from "../../../ultis/default";
-import { isEmpty, isEmail, isPhone , formatNumber } from "../../../ultis/helpers";
-import { getBranchId , getBranchName } from "../../../ultis/branchUtils"
+import {
+  isEmpty,
+  isEmail,
+  isPhone,
+  formatNumber,
+} from "../../../ultis/helpers";
+import { getBranchId, getBranchName } from "../../../ultis/branchUtils";
 
 class Form extends Component {
   constructor(props) {
@@ -29,35 +34,28 @@ class Form extends Component {
     var target = e.target;
     var name = target.name;
     var value_text = target.value;
-    var value = value_text
+    var value = value_text;
     const _value = formatNumber(value);
     if (name == "salary_one_hour") {
       if (!isNaN(Number(_value))) {
         value = new Intl.NumberFormat().format(_value);
-        value = value.toString().replace(/\./g, ',')
+        value = value.toString().replace(/\./g, ",");
         if (value_text == "") {
           this.setState({ [name]: "" });
-        }
-        else {
+        } else {
           this.setState({ [name]: value });
-
         }
       }
-    }
-
-    else {
+    } else {
       this.setState({ [name]: value });
     }
-
   };
 
-  componentDidMount(){
+  componentDidMount() {
     var { decentralizationArr } = this.state;
     var { decentralization } = this.props;
     console.log(decentralization);
-    if (
-      decentralization.length > 0
-    ) {
+    if (decentralization.length > 0) {
       this.setState({
         decentralizationArr: decentralization,
       });
@@ -140,17 +138,17 @@ class Form extends Component {
       return;
     }
 
-    this.props.createStaff(store_code , {
+    this.props.createStaff(store_code, {
       username: store_code + "_" + username,
       phone_number,
       email,
       name,
       sex,
       address,
-      salary_one_hour : formatNumber(salary_one_hour),
+      salary_one_hour: formatNumber(salary_one_hour),
       id_decentralization,
       password,
-      branch_id :  getBranchId()
+      branch_id: getBranchId(),
     });
   };
   goBack = () => {
@@ -167,19 +165,16 @@ class Form extends Component {
     }
     return result;
   };
-  getNameBranch = () =>{
-    var {branchStore} = this.props
-    var result = null
-    if(branchStore && branchStore.length > 0)
-    {
-       result = branchStore.filter(branch => branch.id == getBranchId());
+  getNameBranch = () => {
+    var { branchStore } = this.props;
+    var result = null;
+    if (branchStore && branchStore.length > 0) {
+      result = branchStore.filter((branch) => branch.id == getBranchId());
+    } else {
+      result = [{}];
     }
-    else
-    {
-      result = [{}]
-    }
-    return result[0].name
-  }
+    return result[0].name;
+  };
 
   render() {
     var {
@@ -194,8 +189,8 @@ class Form extends Component {
       decentralizationArr,
       password,
     } = this.state;
-    var { store_code , branchStore } = this.props;
-    console.log("test1",branchStore , getBranchId());
+    var { store_code, branchStore } = this.props;
+    console.log("test1", branchStore, getBranchId());
     return (
       <React.Fragment>
         <form role="form" onSubmit={this.onSave} method="post">
@@ -208,21 +203,21 @@ class Form extends Component {
                 value={name}
                 name="name"
                 placeholder="Nhập tên nhân viên"
-                autocomplete="off"
+                autoComplete="off"
                 onChange={this.onChange}
               />
             </div>
 
-                   <div class="form-group">
+            <div class="form-group">
               <label for="product_name">Chi nhánh</label>
               <input
-              disabled
+                disabled
                 type="text"
                 class="form-control"
                 value={this.getNameBranch()}
                 name="name"
                 placeholder="Nhập tên nhân viên"
-                autocomplete="off"
+                autoComplete="off"
                 onChange={this.onChange}
               />
             </div>
@@ -257,7 +252,7 @@ class Form extends Component {
                 value={password}
                 name="password"
                 placeholder="Nhập mật khẩu"
-                autocomplete="off"
+                autoComplete="off"
                 onChange={this.onChange}
               />
             </div>
@@ -270,7 +265,7 @@ class Form extends Component {
                 value={phone_number}
                 name="phone_number"
                 placeholder="Nhập SDT"
-                autocomplete="off"
+                autoComplete="off"
                 onChange={this.onChange}
               />
             </div>
@@ -278,14 +273,15 @@ class Form extends Component {
               <label for="product_name">Phân quyền</label>
               <select
                 onChange={this.onChange}
-
                 name="id_decentralization"
                 value={id_decentralization}
                 id="input"
                 class="form-control"
                 required="required"
               >
-                <option value="" disabled>--Vai trò--</option>
+                <option value="" disabled>
+                  --Vai trò--
+                </option>
                 {this.showAllDecentralization(decentralizationArr)}
               </select>
             </div>
@@ -294,7 +290,6 @@ class Form extends Component {
               <label for="product_name">Giới tính</label>
               <select
                 onChange={this.onChange}
-
                 name="sex"
                 value={sex}
                 id="input"
@@ -315,7 +310,7 @@ class Form extends Component {
                 value={address}
                 name="address"
                 placeholder="Nhập địa chỉ"
-                autocomplete="off"
+                autoComplete="off"
                 onChange={this.onChange}
               />
             </div>
@@ -328,7 +323,7 @@ class Form extends Component {
                 value={email}
                 name="email"
                 placeholder="Nhập Email"
-                autocomplete="off"
+                autoComplete="off"
                 onChange={this.onChange}
               />
             </div>
@@ -341,24 +336,22 @@ class Form extends Component {
                 value={salary_one_hour}
                 name="salary_one_hour"
                 placeholder="Lương theo giờ"
-                autocomplete="off"
+                autoComplete="off"
                 onChange={this.onChange}
               />
             </div>
           </div>
           <div class="box-footer">
-          <button type = "submit" class="btn btn-info   btn-sm">
-                  <i class="fas fa-save"></i>  Tạo
-
-                </button>
-                <button
-                  style={{ marginLeft: "10px" }}
-                  onClick={this.goBack}
-                  class="btn btn-warning   btn-sm"
-                >
-                  <i class="fas fa-arrow-left"></i> Trở về
-
-                </button>
+            <button type="submit" class="btn btn-info   btn-sm">
+              <i class="fas fa-save"></i> Tạo
+            </button>
+            <button
+              style={{ marginLeft: "10px" }}
+              onClick={this.goBack}
+              class="btn btn-warning   btn-sm"
+            >
+              <i class="fas fa-arrow-left"></i> Trở về
+            </button>
           </div>
         </form>
         <ModalUpload />
@@ -379,7 +372,7 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(error);
     },
 
-    createStaff: (store_code ,  data) => {
+    createStaff: (store_code, data) => {
       dispatch(staffAction.createStaff(store_code, data));
     },
   };

@@ -2,9 +2,9 @@ import React, { Component } from "react";
 import * as CategoryPAction from "../../actions/category_blog";
 import { connect } from "react-redux";
 import * as helper from "../../ultis/helpers";
-import { compressed } from "../../ultis/helpers"
+import { compressed } from "../../ultis/helpers";
 import { shallowEqual } from "../../ultis/shallowEqual";
-import {isEmpty} from "../../ultis/helpers"
+import { isEmpty } from "../../ultis/helpers";
 import * as Types from "../../constants/ActionType";
 import themeData from "../../ultis/theme_data";
 class ModalCreateChild extends Component {
@@ -12,23 +12,23 @@ class ModalCreateChild extends Component {
     super(props);
     this.state = {
       txtName: "",
-      fileUpload: null
-
+      fileUpload: null,
     };
   }
 
-
   componentDidMount() {
+    var _this = this;
 
-    var _this = this
-
-    window.$('#file-category-product-child').on('fileloaded', function (event, file) {
-      _this.setState({ fileUpload: file })
-    });
-    window.$('#file-category-product-child').on('fileremoved', function (event, id, index) {
-      _this.setState({ fileUpload: null })
-    });
-
+    window
+      .$("#file-category-product-child")
+      .on("fileloaded", function (event, file) {
+        _this.setState({ fileUpload: file });
+      });
+    window
+      .$("#file-category-product-child")
+      .on("fileremoved", function (event, id, index) {
+        _this.setState({ fileUpload: null });
+      });
 
     helper.loadFileInput("file-category-product-child");
   }
@@ -41,31 +41,28 @@ class ModalCreateChild extends Component {
       [name]: value,
     });
   };
-  componentWillReceiveProps(nextProps){
-    if(!shallowEqual(nextProps.category_blog , this.props.category_blog))
-    {
-      window.$('.modal').modal('hide');
-      window.$('#file-category-product-child').fileinput('clear');
+  componentWillReceiveProps(nextProps) {
+    if (!shallowEqual(nextProps.category_blog, this.props.category_blog)) {
+      window.$(".modal").modal("hide");
+      window.$("#file-category-product-child").fileinput("clear");
       this.setState({
-        txtName: ""
-      })
+        txtName: "",
+      });
     }
   }
-  handleClear  = () =>{
+  handleClear = () => {
     this.setState({
       txtName: "",
       fileUpload: null,
-    })
+    });
     window.$("#file-category-product-child").fileinput("clear");
-  }
+  };
   onSave = async (e) => {
     e.preventDefault();
     // window.$('.modal').modal('hide');
 
-    if( this.state.txtName == null || !isEmpty( this.state.txtName))
-    {
+    if (this.state.txtName == null || !isEmpty(this.state.txtName)) {
       this.props.showError({
-
         type: Types.ALERT_UID_STATUS,
         alert: {
           type: "danger",
@@ -73,8 +70,7 @@ class ModalCreateChild extends Component {
           disable: "show",
           content: "Tên danh mục không được để trống",
         },
-      }
-      )
+      });
       return;
     }
 
@@ -82,22 +78,21 @@ class ModalCreateChild extends Component {
     if (typeof file !== "undefined" && file != "" && file != null) {
       // window.$('#file-category-product').fileinput('clear');
       const fd = new FormData();
-      fd.append('image', await compressed(file))
-      fd.append('name', this.state.txtName)
-      var {store_code , modal} = this.props
-      this.props.createCategoryChild(store_code,modal.id ,fd);
-      this.setState({fileUpload: null})
-    }
-    else {
-      window.$('#file-category-product-child').fileinput('clear');
+      fd.append("image", await compressed(file));
+      fd.append("name", this.state.txtName);
+      var { store_code, modal } = this.props;
+      this.props.createCategoryChild(store_code, modal.id, fd);
+      this.setState({ fileUpload: null });
+    } else {
+      window.$("#file-category-product-child").fileinput("clear");
       const fd = new FormData();
-      fd.append('name', this.state.txtName)
-      this.props.createCategoryChild(this.props.store_code,this.props.modal.id, fd);
-
+      fd.append("name", this.state.txtName);
+      this.props.createCategoryChild(
+        this.props.store_code,
+        this.props.modal.id,
+        fd
+      );
     }
- 
-
-
   };
   render() {
     var { txtName } = this.state;
@@ -112,11 +107,21 @@ class ModalCreateChild extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{backgroundColor: themeData().backgroundColor}} >
+            <div
+              class="modal-header"
+              style={{ backgroundColor: themeData().backgroundColor }}
+            >
               <h4 class="modal-title">Thêm danh mục con</h4>
 
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true" onClick={this.handleClear}>&times;</button>
-
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+                onClick={this.handleClear}
+              >
+                &times;
+              </button>
             </div>
             <form
               onSubmit={this.onSave}
@@ -133,7 +138,7 @@ class ModalCreateChild extends Component {
                     class="form-control"
                     id="txtName"
                     placeholder="Nhập tên danh mục"
-                    autocomplete="off"
+                    autoComplete="off"
                     value={txtName}
                     onChange={this.onChange}
                     name="txtName"
@@ -143,7 +148,6 @@ class ModalCreateChild extends Component {
                   <label for="product_name">Hình ảnh</label>
                   <div className="file-loading">
                     <input
-
                       id="file-category-product-child"
                       type="file"
                       className="file"
@@ -167,7 +171,6 @@ class ModalCreateChild extends Component {
                 </button>
               </div>
             </form>
-
           </div>
         </div>
       </div>
@@ -175,15 +178,13 @@ class ModalCreateChild extends Component {
   }
 }
 
-
-
 const mapDispatchToProps = (dispatch, props) => {
   return {
     showError: (error) => {
-      dispatch(error)
+      dispatch(error);
     },
-    createCategoryChild: (store_code,id, form) => {
-      dispatch(CategoryPAction.createCategoryChild(store_code,id, form));
+    createCategoryChild: (store_code, id, form) => {
+      dispatch(CategoryPAction.createCategoryChild(store_code, id, form));
     },
   };
 };

@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import Select from "react-select";
 import { shallowEqual } from "../../../ultis/shallowEqual";
-import { formatNumber, formatNoD, getQueryParams } from "../../../ultis/helpers"
+import {
+  formatNumber,
+  formatNoD,
+  getQueryParams,
+} from "../../../ultis/helpers";
 import { product } from "../../../reducers/product/product";
 class InfoProduct extends Component {
   constructor(props) {
@@ -11,8 +15,7 @@ class InfoProduct extends Component {
       txtPrice: "",
 
       disabledPrice: false,
-      price : getQueryParams("price")  || null
-
+      price: getQueryParams("price") || null,
     };
   }
 
@@ -20,71 +23,55 @@ class InfoProduct extends Component {
     var target = e.target;
     var name = target.name;
     var value_text = target.value;
-    var value = value_text
+    var value = value_text;
     const valueFormat = formatNumber(value);
 
-    
     if (!isNaN(parseFloat(valueFormat))) {
-      console.log(value , valueFormat)
+      console.log(value, valueFormat);
       value = formatNoD(valueFormat);
-
 
       if (value === "") {
         this.setState({ [name]: "" });
-      }
-      else {
+      } else {
         this.setState({ [name]: value });
-
       }
-
     }
-
-
   };
 
-  componentDidMount()
-  {
-    if(typeof this.props.product.main_price != "undefined" )
-    {
+  componentDidMount() {
+    if (typeof this.props.product.main_price != "undefined") {
       var { product } = { ...this.props };
       // const price = formatNumber(product.main_price);
 
       var _price = parseFloat(product.main_price);
-       const price = formatNoD(_price);
-      
+      const price = formatNoD(_price);
+
       this.setState({
         txtName: product.name,
         txtPrice: price,
         // disabledPrice: _price == 0 ? true : false,
-
       });
     }
   }
 
   componentWillReceiveProps(nextProps) {
-
-
     if (!shallowEqual(nextProps.product, this.props.product)) {
       var { product } = { ...nextProps };
       // const price = formatNumber(product.main_price);
 
       var _price = parseFloat(product.main_price);
-       const price = formatNoD(_price);
-      
+      const price = formatNoD(_price);
+
       this.setState({
         txtName: product.name,
         txtPrice: price,
         // disabledPrice: _price == 0 ? true : false,
-
       });
-
     }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (
-      !shallowEqual(nextState, this.state)
-    ) {
+    if (!shallowEqual(nextState, this.state)) {
       this.props.handleDataFromInfo(nextState);
     }
 
@@ -92,28 +79,19 @@ class InfoProduct extends Component {
   }
 
   onChangePrice = (e) => {
-    var { checked } = e.target
+    var { checked } = e.target;
     if (checked == true) {
-      this.setState({ txtPrice: 0, disabledPrice: checked })
+      this.setState({ txtPrice: 0, disabledPrice: checked });
+    } else {
+      this.setState({ txtPrice: "", disabledPrice: checked });
     }
-    else {
-      this.setState({ txtPrice: "", disabledPrice: checked })
-
-    }
-  }
+  };
   render() {
-    var {
-
-      txtName,
-      disabledPrice,
-      txtPrice,
-    } = this.state;
-    var { product } = this.props
-    console.log(product)
+    var { txtName, disabledPrice, txtPrice } = this.state;
+    var { product } = this.props;
+    console.log(product);
     return (
       <div class="card-body" style={{ padding: "0.8rem" }}>
-
-
         {/* <div class="form-group">
           <label for="product_name">Tên sản phẩm</label>
           <input
@@ -121,7 +99,7 @@ class InfoProduct extends Component {
             class="form-control input-sm"
             id="txtName"
             placeholder="Nhập tên sản phẩm"
-            autocomplete="off"
+            autoComplete="off"
             value={txtName}
             onChange={this.onChange}
             name="txtName"
@@ -130,7 +108,7 @@ class InfoProduct extends Component {
         </div> */}
 
         <div style={{ display: "flex", justifyContent: "space-between" }}>
-          {product.distributes?.length > 0 &&
+          {product.distributes?.length > 0 && (
             <div className="form-group">
               <label htmlFor="name">Giá đại lý</label>
               <div class="form-group" style={{ display: "flex" }}>
@@ -141,7 +119,7 @@ class InfoProduct extends Component {
                   class="form-control"
                   id="txtEmail"
                   placeholder="Nhập giá"
-                  autocomplete="off"
+                  autoComplete="off"
                   value={0}
                   name="txtPrice"
                 />
@@ -153,11 +131,9 @@ class InfoProduct extends Component {
 
             </div> */}
               </div>
-
             </div>
-          }
-          {
-            product.distributes?.length <= 0 &&
+          )}
+          {product.distributes?.length <= 0 && (
             <React.Fragment>
               <div className="form-group">
                 <label htmlFor="name">Giá đại lý</label>
@@ -170,7 +146,7 @@ class InfoProduct extends Component {
                     class="form-control"
                     id="txtEmail"
                     placeholder="Nhập giá"
-                    autocomplete="off"
+                    autoComplete="off"
                     value={txtPrice}
                     onChange={this.onChange}
                     name="txtPrice"
@@ -183,7 +159,6 @@ class InfoProduct extends Component {
 
             </div> */}
                 </div>
-
               </div>
               <div className="form-group">
                 <label htmlFor="name">Giá bán lẻ</label>
@@ -195,7 +170,7 @@ class InfoProduct extends Component {
                     class="form-control"
                     id="txtEmail"
                     placeholder="Nhập giá"
-                    autocomplete="off"
+                    autoComplete="off"
                     value={formatNoD(this.state.price) ?? 0}
                   />
                   {/* <div class="form-check" style={{ margin: "auto 0" }}>
@@ -206,16 +181,10 @@ class InfoProduct extends Component {
 
             </div> */}
                 </div>
-
               </div>
             </React.Fragment>
-
-          }
-
-
+          )}
         </div>
-
-
       </div>
     );
   }

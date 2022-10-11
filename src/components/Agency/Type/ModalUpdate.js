@@ -1,16 +1,15 @@
 import React, { Component } from "react";
-import * as agencyAction from "../../../actions/agency"
+import * as agencyAction from "../../../actions/agency";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import { connect } from "react-redux";
 import themeData from "../../../ultis/theme_data";
-
 
 class ModalUpdate extends Component {
   constructor(props) {
     super(props);
     this.state = {
       txtName: "",
-      id : ""
+      id: "",
     };
   }
 
@@ -18,31 +17,28 @@ class ModalUpdate extends Component {
     var target = e.target;
     var name = target.name;
     var value = target.value;
- this.setState({ [name]: value });
-    
+    this.setState({ [name]: value });
   };
   componentWillReceiveProps(nextProps) {
     if (!shallowEqual(nextProps.modal, this.props.modal)) {
-      var type = nextProps.modal
+      var type = nextProps.modal;
       this.setState({
-        txtName: type.name ,
+        txtName: type.name,
         id: type.id,
-      })
+      });
     }
   }
 
-
   onSave = (e) => {
     e.preventDefault();
-    window.$('.modal').modal('hide');
-    var { txtName , id } = this.state
-    this.props.updateAgencyType(this.props.store_code, id,
-      { 
-        name:   txtName,
-      }  );
+    window.$(".modal").modal("hide");
+    var { txtName, id } = this.state;
+    this.props.updateAgencyType(this.props.store_code, id, {
+      name: txtName,
+    });
     this.setState({
       txtName: "",
-    })
+    });
   };
   render() {
     var { txtName } = this.state;
@@ -57,20 +53,23 @@ class ModalUpdate extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-          <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+            <div
+              class="modal-header"
+              style={{ backgroundColor: themeData().backgroundColor }}
+            >
               <h4 style={{ color: "white" }}>Chỉnh sửa cấp</h4>
 
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
             </div>
-            <form
-              onSubmit={this.onSave}
-              role="form"
-              action="#"
-              method="post"
-            >
+            <form onSubmit={this.onSave} role="form" action="#" method="post">
               <div class="modal-body">
-      
                 <div class="form-group">
                   <label for="product_name">Tên cấp đại lý</label>
                   <input
@@ -78,7 +77,7 @@ class ModalUpdate extends Component {
                     type="text"
                     class="form-control"
                     placeholder="Nhập..."
-                    autocomplete="off"
+                    autoComplete="off"
                     value={txtName}
                     onChange={this.onChange}
                     name="txtName"
@@ -105,12 +104,10 @@ class ModalUpdate extends Component {
   }
 }
 
-
-
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    updateAgencyType: (store_code , id, form) => {
-      dispatch(agencyAction.updateAgencyType(store_code , id, form));
+    updateAgencyType: (store_code, id, form) => {
+      dispatch(agencyAction.updateAgencyType(store_code, id, form));
     },
   };
 };

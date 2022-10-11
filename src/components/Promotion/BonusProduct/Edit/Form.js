@@ -52,11 +52,9 @@ class Form extends Component {
       ladder_reward: false,
       listProductsLadder: [],
       listProductsBonusLadder: [],
-      isLoading : false
-
+      isLoading: false,
     };
   }
-
 
   componentDidMount() {
     this.props.initialUpload();
@@ -90,153 +88,175 @@ class Form extends Component {
     if (!shallowEqual(nextProps.bonusProduct, this.props.bonusProduct)) {
       var { bonusProduct } = nextProps;
 
+      var startTime =
+        bonusProduct.start_time == null || bonusProduct.start_time == ""
+          ? ""
+          : moment(bonusProduct.start_time).format("DD-MM-YYYY HH:mm");
+      var endTime =
+        bonusProduct.end_time == null || bonusProduct.end_time == ""
+          ? ""
+          : moment(bonusProduct.end_time).format("DD-MM-YYYY HH:mm");
+      var listProductsBonus = [];
+      var listProductsBonusLadder = [];
+      var listProductsLadder = [];
 
-      var startTime = bonusProduct.start_time == null || bonusProduct.start_time == "" ? "" : moment(bonusProduct.start_time).format("DD-MM-YYYY HH:mm");
-      var endTime = bonusProduct.end_time == null || bonusProduct.end_time == "" ? "" : moment(bonusProduct.end_time).format("DD-MM-YYYY HH:mm");
-      var listProductsBonus = []
-      var listProductsBonusLadder = []
-      var listProductsLadder = []
-
-      if(bonusProduct.ladder_reward === true)
-      {
-          if(bonusProduct.bonus_products_ladder?.length > 0)
-          {
-            var item = bonusProduct.bonus_products_ladder[0];
-            listProductsLadder = [{
-              "id": item.product?.id,
-              "distribute_name": item.distribute_name,
-              "element_distribute_name":  item.element_distribute_name,
-              "sub_element_distribute_name":  item.sub_element_distribute_name,
-              "sku": item.product?.sku,
-              "name": item.product?.name,
+      if (bonusProduct.ladder_reward === true) {
+        if (bonusProduct.bonus_products_ladder?.length > 0) {
+          var item = bonusProduct.bonus_products_ladder[0];
+          listProductsLadder = [
+            {
+              id: item.product?.id,
+              distribute_name: item.distribute_name,
+              element_distribute_name: item.element_distribute_name,
+              sub_element_distribute_name: item.sub_element_distribute_name,
+              sku: item.product?.sku,
+              name: item.product?.name,
               product: {
-                "id": item.product?.id,
-                "distribute_name": item.distribute_name,
-                "element_distribute_name":  item.element_distribute_name,
-                "sub_element_distribute_name":  item.sub_element_distribute_name,
-                "sku": item.product?.sku,
-                "name": item.product?.name,
-  
-              }
-            }]
-            // listProductsLadder = bonusProduct.bonus_products_ladder?.map((v,i)=>{
-            //   return {
-            //     "id": item.product?.id,
-            //     "distribute_name": item.allows_choose_distribute === true ? null : item.distribute_name,
-            //     "element_distribute_name": item.allows_choose_distribute === true ? null : item.element_distribute_name,
-            //     "sub_element_distribute_name": item.allows_choose_distribute === true ? null : item.sub_element_distribute_name,
-            //     "sku": item.product?.sku,
-            //     "name": item.product?.name,
-            //     product: {
-            //       "id": item.product?.id,
-            //       "distribute_name": item.allows_choose_distribute === true ? null : item.distribute_name,
-            //       "element_distribute_name": item.allows_choose_distribute === true ? null : item.element_distribute_name,
-            //       "sub_element_distribute_name": item.allows_choose_distribute === true ? null : item.sub_element_distribute_name,
-            //       "sku": item.product?.sku,
-            //       "name": item.product?.name,
-    
-            //     }
-            //   }
-            // })
+                id: item.product?.id,
+                distribute_name: item.distribute_name,
+                element_distribute_name: item.element_distribute_name,
+                sub_element_distribute_name: item.sub_element_distribute_name,
+                sku: item.product?.sku,
+                name: item.product?.name,
+              },
+            },
+          ];
+          // listProductsLadder = bonusProduct.bonus_products_ladder?.map((v,i)=>{
+          //   return {
+          //     "id": item.product?.id,
+          //     "distribute_name": item.allows_choose_distribute === true ? null : item.distribute_name,
+          //     "element_distribute_name": item.allows_choose_distribute === true ? null : item.element_distribute_name,
+          //     "sub_element_distribute_name": item.allows_choose_distribute === true ? null : item.sub_element_distribute_name,
+          //     "sku": item.product?.sku,
+          //     "name": item.product?.name,
+          //     product: {
+          //       "id": item.product?.id,
+          //       "distribute_name": item.allows_choose_distribute === true ? null : item.distribute_name,
+          //       "element_distribute_name": item.allows_choose_distribute === true ? null : item.element_distribute_name,
+          //       "sub_element_distribute_name": item.allows_choose_distribute === true ? null : item.sub_element_distribute_name,
+          //       "sku": item.product?.sku,
+          //       "name": item.product?.name,
 
+          //     }
+          //   }
+          // })
 
-            listProductsBonusLadder = bonusProduct?.bonus_products_ladder.map((item) => {
+          listProductsBonusLadder = bonusProduct?.bonus_products_ladder.map(
+            (item) => {
               return {
-                "id": item.bo_product?.id,
-                "quantity": item.from_quantity,
-                "bonus_quantity" : item.bo_quantity,
-                "distribute_name": item.bo_distribute_name,
-                "element_distribute_name": item.bo_element_distribute_name,
-                "sub_element_distribute_name": item.bo_sub_element_distribute_name,
-                "sku": item.bo_product?.sku,
-                "name": item.bo_product?.name,
+                id: item.bo_product?.id,
+                quantity: item.from_quantity,
+                bonus_quantity: item.bo_quantity,
+                distribute_name: item.bo_distribute_name,
+                element_distribute_name: item.bo_element_distribute_name,
+                sub_element_distribute_name:
+                  item.bo_sub_element_distribute_name,
+                sku: item.bo_product?.sku,
+                name: item.bo_product?.name,
                 product: {
-                  "id": item.bo_product?.id,
-                  "quantity": item.from_quantity,
-                  "distribute_name": item.bo_distribute_name,
-                  "element_distribute_name": item.bo_element_distribute_name,
-                  "sub_element_distribute_name": item.bo_sub_element_distribute_name,
-                  "sku": item.bo_product?.sku,
-                  "name": item.bo_product?.name,
-    
-                }
-              }
-            })
-
-          }
-         
-      }
-      else{
+                  id: item.bo_product?.id,
+                  quantity: item.from_quantity,
+                  distribute_name: item.bo_distribute_name,
+                  element_distribute_name: item.bo_element_distribute_name,
+                  sub_element_distribute_name:
+                    item.bo_sub_element_distribute_name,
+                  sku: item.bo_product?.sku,
+                  name: item.bo_product?.name,
+                },
+              };
+            }
+          );
+        }
+      } else {
         if (bonusProduct.bonus_products?.length > 0) {
           listProductsBonus = bonusProduct?.bonus_products.map((item) => {
             return {
-              "id": item.product?.id,
-              "quantity": item.quantity,
-              "distribute_name": item.allows_choose_distribute === true ? null : item.distribute_name,
-              "element_distribute_name": item.allows_choose_distribute === true ? null : item.element_distribute_name,
-              "sub_element_distribute_name": item.allows_choose_distribute === true ? null : item.sub_element_distribute_name,
-              "sku": item.product?.sku,
-              "name": item.product?.name,
-              "allows_choose_distribute" : item.allows_choose_distribute,
+              id: item.product?.id,
+              quantity: item.quantity,
+              distribute_name:
+                item.allows_choose_distribute === true
+                  ? null
+                  : item.distribute_name,
+              element_distribute_name:
+                item.allows_choose_distribute === true
+                  ? null
+                  : item.element_distribute_name,
+              sub_element_distribute_name:
+                item.allows_choose_distribute === true
+                  ? null
+                  : item.sub_element_distribute_name,
+              sku: item.product?.sku,
+              name: item.product?.name,
+              allows_choose_distribute: item.allows_choose_distribute,
               product: {
-                "id": item.product?.id,
-                "quantity": item.quantity,
-                "distribute_name": item.allows_choose_distribute === true ? null : item.distribute_name,
-                "element_distribute_name": item.allows_choose_distribute === true ? null : item.element_distribute_name,
-                "sub_element_distribute_name": item.allows_choose_distribute === true ? null : item.sub_element_distribute_name,
-                "sku": item.product?.sku,
-                "name": item.product?.name,
-                "allows_choose_distribute" : item.allows_choose_distribute,
-  
-              }
-            }
-          })
+                id: item.product?.id,
+                quantity: item.quantity,
+                distribute_name:
+                  item.allows_choose_distribute === true
+                    ? null
+                    : item.distribute_name,
+                element_distribute_name:
+                  item.allows_choose_distribute === true
+                    ? null
+                    : item.element_distribute_name,
+                sub_element_distribute_name:
+                  item.allows_choose_distribute === true
+                    ? null
+                    : item.sub_element_distribute_name,
+                sku: item.product?.sku,
+                name: item.product?.name,
+                allows_choose_distribute: item.allows_choose_distribute,
+              },
+            };
+          });
         }
-  
-        var listProducts = []
+
+        var listProducts = [];
         if (bonusProduct.select_products?.length > 0) {
           listProducts = bonusProduct?.select_products.map((item) => {
             return {
-              "id": item.product?.id,
-              "quantity": item.quantity,
-              "distribute_name": item.distribute_name,
-              "element_distribute_name": item.element_distribute_name,
-              "sub_element_distribute_name": item.sub_element_distribute_name,
-              "sku": item.product?.sku,
-              "name": item.product?.name,
-              "allows_all_distribute" : item.allows_all_distribute,
+              id: item.product?.id,
+              quantity: item.quantity,
+              distribute_name: item.distribute_name,
+              element_distribute_name: item.element_distribute_name,
+              sub_element_distribute_name: item.sub_element_distribute_name,
+              sku: item.product?.sku,
+              name: item.product?.name,
+              allows_all_distribute: item.allows_all_distribute,
               product: {
-                "id": item.product?.id,
-                "quantity": item.quantity,
-                "distribute_name": item.distribute_name,
-                "element_distribute_name": item.element_distribute_name,
-                "sub_element_distribute_name": item.sub_element_distribute_name,
-                "sku": item.product?.sku,
-                "name": item.product?.name,
-                "allows_all_distribute" : item.allows_all_distribute,
-  
-              }
-            }
-          })
+                id: item.product?.id,
+                quantity: item.quantity,
+                distribute_name: item.distribute_name,
+                element_distribute_name: item.element_distribute_name,
+                sub_element_distribute_name: item.sub_element_distribute_name,
+                sku: item.product?.sku,
+                name: item.product?.name,
+                allows_all_distribute: item.allows_all_distribute,
+              },
+            };
+          });
         }
       }
 
-      console.log("vooo",listProductsBonusLadder,listProductsLadder)
-   
+      console.log("vooo", listProductsBonusLadder, listProductsLadder);
+
       this.setState({
         txtContent: bonusProduct.description,
         txtName: bonusProduct.name,
         txtStart: startTime,
         txtEnd: endTime,
-        txtAmount: bonusProduct.amount == null ? null : new Intl.NumberFormat().format(bonusProduct.amount.toString()),
+        txtAmount:
+          bonusProduct.amount == null
+            ? null
+            : new Intl.NumberFormat().format(bonusProduct.amount.toString()),
         multiply_by_number: bonusProduct.multiply_by_number,
-        ladder_reward : bonusProduct.ladder_reward,
+        ladder_reward: bonusProduct.ladder_reward,
         listProducts: listProducts || [],
         saveListProducts: listProducts || [],
         listProductsLadder: listProductsLadder,
-        group_customer : bonusProduct.group_customer,
-        agency_type_id : bonusProduct.agency_type_id,
-        agency_type_name : bonusProduct.agency_type_name,
+        group_customer: bonusProduct.group_customer,
+        agency_type_id: bonusProduct.agency_type_id,
+        agency_type_name: bonusProduct.agency_type_name,
         listProductsBonusLadder: listProductsBonusLadder,
         saveListProductsBonusLadder: listProductsBonusLadder,
 
@@ -246,11 +266,11 @@ class Form extends Component {
 
         isLoading: true,
         loadCript: true,
-        form: {}
+        form: {},
       });
     }
     if (this.props.image !== nextProps.image) {
-      this.setState({ image: nextProps.image })
+      this.setState({ image: nextProps.image });
     }
   }
 
@@ -342,36 +362,31 @@ class Form extends Component {
       return "2";
     }
   };
-  checkProductSameQuantity = (ladder_reward = false , products) =>{
-    if(ladder_reward !== true)
-    return true
-    if(ladder_reward == true && products?.length > 0)
-    {
-      console.log(ladder_reward, products)
-      for (const [index, element] of products.entries())
-      {
-        var filter = products.filter((v,i)=>{
-          if(
+  checkProductSameQuantity = (ladder_reward = false, products) => {
+    if (ladder_reward !== true) return true;
+    if (ladder_reward == true && products?.length > 0) {
+      console.log(ladder_reward, products);
+      for (const [index, element] of products.entries()) {
+        var filter = products.filter((v, i) => {
+          if (
             parseInt(element.quantity) === parseInt(v.quantity)
 
             // element.id === v.id &&
-            //  parseInt(element.bonus_quantity) === parseInt(v.bonus_quantity) 
+            //  parseInt(element.bonus_quantity) === parseInt(v.bonus_quantity)
             //  && parseInt(element.quantity) === parseInt(v.quantity)
             //  && element.element_distribute_name == v.element_distribute_name
             //  && element.sub_element_distribute_name == v.sub_element_distribute_name
-             )
-          {
-            return true
+          ) {
+            return true;
           }
-        })
-        if(filter?.length > 1)
-        {
-          return filter[0]
+        });
+        if (filter?.length > 1) {
+          return filter[0];
         }
       }
-      return true
+      return true;
     }
-  } 
+  };
   onSave = (e) => {
     e.preventDefault();
     console.log(this.state);
@@ -381,7 +396,7 @@ class Form extends Component {
     }
     var state = this.state;
 
-    var { store_code , bonusProductId } = this.props;
+    var { store_code, bonusProductId } = this.props;
 
     var listProducts = state.saveListProducts;
     var listProductsBonus = state.saveListProductsBonus;
@@ -389,18 +404,20 @@ class Form extends Component {
     var listProductsLadder = state.listProductsLadder;
     var productBonus = {};
     var select_products = [];
-    var itemLadderCheck = this.checkProductSameQuantity(state.ladder_reward , state.listProductsBonusLadder) 
+    var itemLadderCheck = this.checkProductSameQuantity(
+      state.ladder_reward,
+      state.listProductsBonusLadder
+    );
 
-    if(itemLadderCheck !== true)
-    {
+    if (itemLadderCheck !== true) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
         alert: {
           type: "danger",
           title: "Lỗi",
           disable: "show",
-                   // content: `${listProductsLadder[0]?.name} mua ${itemLadderCheck.quantity} - tặng ${itemLadderCheck.bonus_quantity} ${itemLadderCheck.name}  bị trùng lặp`
-                   content : "Sản phẩm mua không được trùng về số lượng"
+          // content: `${listProductsLadder[0]?.name} mua ${itemLadderCheck.quantity} - tặng ${itemLadderCheck.bonus_quantity} ${itemLadderCheck.name}  bị trùng lặp`
+          content: "Sản phẩm mua không được trùng về số lượng",
         },
       });
       return;
@@ -478,7 +495,9 @@ class Form extends Component {
     );
 
     var { group_customer, agency_type_id } = this.state;
-    var agency_type_name = this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]?.name || null;
+    var agency_type_name =
+      this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]
+        ?.name || null;
     var form = {
       group_customer,
       agency_type_id,
@@ -492,7 +511,7 @@ class Form extends Component {
       start_time: startTime == "Invalid date" ? null : startTime,
       end_time: endTime == "Invalid date" ? null : endTime,
       ...productBonus,
-      ladder_reward : state.ladder_reward,
+      ladder_reward: state.ladder_reward,
       description: state.txtContent,
       image_url: state.image,
       set_limit_amount: true,
@@ -501,9 +520,8 @@ class Form extends Component {
     var amount = form.amount;
     if (typeof amount == "undefined" || amount == null || !isEmpty(amount))
       form.set_limit_amount = false;
- 
-    this.props.updateBonusProduct(store_code, form , bonusProductId);
 
+    this.props.updateBonusProduct(store_code, form, bonusProductId);
   };
 
   goBack = (e) => {
@@ -539,13 +557,7 @@ class Form extends Component {
     fromBonusLadder,
     indexRemove
   ) => {
-    console.log( product,
-      id,
-      type,
-      onSave,
-      isBonus,
-      isLadder,
-      fromBonusLadder)
+    console.log(product, id, type, onSave, isBonus, isLadder, fromBonusLadder);
     if (isBonus) var products = [...this.state.listProductsBonus];
     else if (isLadder) var products = [...this.state.listProductsLadder];
     else if (fromBonusLadder)
@@ -555,11 +567,10 @@ class Form extends Component {
     if (product?.length > 0) {
       if (type == "remove") {
         if (products.length > 0) {
-          products = products.filter((value , index) => {
-            if(typeof indexRemove !== "undefined")
-            return index !== indexRemove;
-            else
-            return value.product.id !== product[0].id;
+          products = products.filter((value, index) => {
+            if (typeof indexRemove !== "undefined")
+              return index !== indexRemove;
+            else return value.product.id !== product[0].id;
           });
           // products.forEach((item, index) => {
           //   if (item.product.id === product[0].id) {
@@ -581,9 +592,9 @@ class Form extends Component {
               _index = index1;
             }
           });
-          if (check == false || fromBonusLadder == true  ) {
+          if (check == false || fromBonusLadder == true) {
             var product = {
-              quantity: item.quantity > 1 ?  product.quantity : 1,
+              quantity: item.quantity > 1 ? product.quantity : 1,
               product: item,
               allows_all_distribute: item.allows_all_distribute,
               allows_choose_distribute: item.allows_choose_distribute,
@@ -605,7 +616,7 @@ class Form extends Component {
             products.push(product);
           } else {
             var product = {
-              quantity: item.quantity > 1 ?  product.quantity : 1,
+              quantity: item.quantity > 1 ? product.quantity : 1,
               product: item,
               allows_all_distribute: item.allows_all_distribute,
               allows_choose_distribute: item.allows_choose_distribute,
@@ -630,15 +641,14 @@ class Form extends Component {
     } else {
       if (type == "remove") {
         if (products.length > 0) {
-          products = products.filter((item , index) => {
+          products = products.filter((item, index) => {
             if (fromBonusLadder) {
               var item = { ...item };
               delete item.allows_all_distribute;
             }
-            if(typeof indexRemove !== "undefined")
-            return index !== indexRemove;
-            else
-            return !this.compareTwoProduct(item, product);
+            if (typeof indexRemove !== "undefined")
+              return index !== indexRemove;
+            else return !this.compareTwoProduct(item, product);
           });
           // products.forEach((item, index) => {
           //   // if (item.product.id === id) {
@@ -659,7 +669,7 @@ class Form extends Component {
         });
         if (checkExsit == true || fromBonusLadder == true) {
           var product = {
-            quantity: product.quantity > 1 ?  product.quantity : 1,
+            quantity: product.quantity > 1 ? product.quantity : 1,
             product: product,
             allows_all_distribute: product.allows_all_distribute,
             allows_choose_distribute: product.allows_choose_distribute,
@@ -681,7 +691,7 @@ class Form extends Component {
           else products.push(product);
         } else {
           var product = {
-            quantity: product.quantity > 1 ?  product.quantity : 1,
+            quantity: product.quantity > 1 ? product.quantity : 1,
             product: product,
             allows_all_distribute: product.allows_all_distribute,
             allows_choose_distribute: product.allows_choose_distribute,
@@ -744,7 +754,8 @@ class Form extends Component {
     indexRemove
   ) => {
     if (isBonus) var products = [...this.state.listProductsBonus];
-    else if (isBonusLadder) var products = [...this.state.listProductsBonusLadder];
+    else if (isBonusLadder)
+      var products = [...this.state.listProductsBonusLadder];
     else var products = [...this.state.listProducts];
 
     console.log(isBonusLadder, name, products);
@@ -755,8 +766,7 @@ class Form extends Component {
       }
 
       if (typeof indexRemove !== "undefined") {
-        if(index == indexRemove)
-        {
+        if (index == indexRemove) {
           if (setIncrement === 1) {
             if (isBonusLadder) products[index][name] = product[name] + 1;
             else products[index].quantity = parseInt(product.quantity) + 1;
@@ -775,8 +785,7 @@ class Form extends Component {
             } else products[index].quantity = quantity;
           }
         }
-      }
-      else{
+      } else {
         if (this.compareTwoProduct(product, data)) {
           if (setIncrement === 1) {
             if (isBonusLadder) products[index][name] = product[name] + 1;
@@ -805,7 +814,7 @@ class Form extends Component {
         listProductsBonus: products,
         saveListProductsBonus: products,
       });
-      else if (isBonusLadder)
+    else if (isBonusLadder)
       this.setState({
         listProductsBonusLadder: products,
         saveListProductsBonusLadder: products,
@@ -825,7 +834,7 @@ class Form extends Component {
       listProductsBonus,
       listProductsBonusLadder,
 
-      multiply_by_number,        
+      multiply_by_number,
       isLoading,
       group_customer,
       agency_type_id,
@@ -841,7 +850,7 @@ class Form extends Component {
       saveListProductsBonusLadder,
     } = this.state;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
-    var { products, store_code, combos   , types} = this.props;
+    var { products, store_code, combos, types } = this.props;
     var type_discount_default = txtDiscoutType == "0" ? "show" : "hide";
     var type_discount_percent = txtDiscoutType == "1" ? "show" : "hide";
 
@@ -852,7 +861,7 @@ class Form extends Component {
           <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
               <div class="box-body">
-              <div class="form-group">
+                <div class="form-group">
                   <div class="form-check">
                     <input
                       type="checkbox"
@@ -903,17 +912,19 @@ class Form extends Component {
                     value={txtName}
                     name="txtName"
                     placeholder="Nhập tên chương trình"
-                    autocomplete="off"
+                    autoComplete="off"
                     onChange={this.onChange}
                   />
                 </div>
                 <div class="form-group">
                   <label for="product_name">Thời gian bắt đầu</label>
-                  {isLoading == true
-                    ?
+                  {isLoading == true ? (
                     <MomentInput
-                    defaultValue={txtStart == "" || txtStart == null ? "" : moment(txtStart, "DD-MM-YYYY HH:mm")}
-
+                      defaultValue={
+                        txtStart == "" || txtStart == null
+                          ? ""
+                          : moment(txtStart, "DD-MM-YYYY HH:mm")
+                      }
                       min={moment()}
                       format="DD-MM-YYYY HH:mm"
                       options={true}
@@ -927,37 +938,38 @@ class Form extends Component {
                         HOURS: "Giờ",
                         MINUTES: "Phút",
                       }}
-                      onSave={() => { }}
+                      onSave={() => {}}
                       onChange={this.onChangeStart}
                     />
-                : null}
+                  ) : null}
                 </div>
 
                 <div class="form-group">
                   <label for="product_name">Thời gian kết thúc</label>
-                  {isLoading == true
-                    ?
-                  <MomentInput
-                  defaultValue={txtEnd == "" || txtEnd == null ? "" : moment(txtEnd, "DD-MM-YYYY HH:mm")}
-
-                    min={moment()}
-                    format="DD-MM-YYYY HH:mm"
-                    options={true}
-                    enableInputClick={true}
-                    monthSelect={true}
-                    readOnly={true}
-                    translations={{
-                      DATE: "Ngày",
-                      TIME: "Giờ",
-                      SAVE: "Đóng",
-                      HOURS: "Giờ",
-                      MINUTES: "Phút",
-                    }}
-                    onSave={() => { }}
-                    onChange={this.onChangeEnd}
-                  />
-                  : null}
-
+                  {isLoading == true ? (
+                    <MomentInput
+                      defaultValue={
+                        txtEnd == "" || txtEnd == null
+                          ? ""
+                          : moment(txtEnd, "DD-MM-YYYY HH:mm")
+                      }
+                      min={moment()}
+                      format="DD-MM-YYYY HH:mm"
+                      options={true}
+                      enableInputClick={true}
+                      monthSelect={true}
+                      readOnly={true}
+                      translations={{
+                        DATE: "Ngày",
+                        TIME: "Giờ",
+                        SAVE: "Đóng",
+                        HOURS: "Giờ",
+                        MINUTES: "Phút",
+                      }}
+                      onSave={() => {}}
+                      onChange={this.onChangeEnd}
+                    />
+                  ) : null}
                 </div>
                 <div class={`alert alert-danger ${displayError}`} role="alert">
                   Thời gian kết thúc phải sau thời gian bắt đầu
@@ -975,92 +987,89 @@ class Form extends Component {
                     name="txtAmount"
                     value={txtAmount}
                     placeholder="Số lượng mã phiểu có thể sử dụng"
-                    autocomplete="off"
+                    autoComplete="off"
                     onChange={this.onChange}
                   />
                 </div>
                 <div className="form-group discount-for">
-              <label htmlFor="group_customer">Áp dụng cho</label>
-              <div
-                style={{
-                  display: "flex",
-                }}
-                className="radio discount-for"
-                onChange={this.onChange}
-              >
-                <label>
-                  <input
-                    type="radio"
-                    name="group_customer"
-                    checked={group_customer == 0 ? true : false}
-                    className="group_customer"
-                    id="ship"
-                    value="0"
-                  />
-                  {"  "} Tất cả
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="group_customer"
-                    checked={group_customer == 2 ? true : false}
-                    className="group_customer"
-                    id="bill"
-                    value="2"
-                  />
-                  {"  "}Đại lý
-                </label>
+                  <label htmlFor="group_customer">Áp dụng cho</label>
+                  <div
+                    style={{
+                      display: "flex",
+                    }}
+                    className="radio discount-for"
+                    onChange={this.onChange}
+                  >
+                    <label>
+                      <input
+                        type="radio"
+                        name="group_customer"
+                        checked={group_customer == 0 ? true : false}
+                        className="group_customer"
+                        id="ship"
+                        value="0"
+                      />
+                      {"  "} Tất cả
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="group_customer"
+                        checked={group_customer == 2 ? true : false}
+                        className="group_customer"
+                        id="bill"
+                        value="2"
+                      />
+                      {"  "}Đại lý
+                    </label>
 
-                <label>
-                  <input
-                    type="radio"
-                    name="group_customer"
-                    checked={group_customer == 1 ? true : false}
-                    className="group_customer"
-                    id="ship"
-                    value="1"
-                  />
-                  {"  "} Cộng tác viên
-                </label>
-              </div>
-              {group_customer == 2 && (
-                <select
-                  onChange={this.onChange}
-                  value={agency_type_id}
-                  name="agency_type_id"
-                  class="form-control"
-                >
-                  <option>--- Chọn cấp đại lý ---</option>
-                  {types.map((v) => {
-                    return <option value={v.id}>{v.name}</option>;
-                  })}
-                </select>
-              )}
-            </div>
-            {
-              ladder_reward !== true && <div class="form-group">
-              <div class="form-check">
-                <input
-                  type="checkbox"
-                  checked={multiply_by_number}
-                  onChange={() =>
-                    this.setState({
-                      multiply_by_number: !multiply_by_number,
-                    })
-                  }
-                  class="form-check-input"
-                  id="gridCheck"
-                />
-                {/* <input class="form-check-input" name="is_set_order_max_point" type="checkbox" id="gridCheck" /> */}
-                <label class="form-check-label" for="gridCheck">
-                  Hàng tặng nhân theo số lượng mua{" "}
-                </label>
-              </div>
-            </div>
-        
-            }
-               
-              
+                    <label>
+                      <input
+                        type="radio"
+                        name="group_customer"
+                        checked={group_customer == 1 ? true : false}
+                        className="group_customer"
+                        id="ship"
+                        value="1"
+                      />
+                      {"  "} Cộng tác viên
+                    </label>
+                  </div>
+                  {group_customer == 2 && (
+                    <select
+                      onChange={this.onChange}
+                      value={agency_type_id}
+                      name="agency_type_id"
+                      class="form-control"
+                    >
+                      <option>--- Chọn cấp đại lý ---</option>
+                      {types.map((v) => {
+                        return <option value={v.id}>{v.name}</option>;
+                      })}
+                    </select>
+                  )}
+                </div>
+                {ladder_reward !== true && (
+                  <div class="form-group">
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        checked={multiply_by_number}
+                        onChange={() =>
+                          this.setState({
+                            multiply_by_number: !multiply_by_number,
+                          })
+                        }
+                        class="form-check-input"
+                        id="gridCheck"
+                      />
+                      {/* <input class="form-check-input" name="is_set_order_max_point" type="checkbox" id="gridCheck" /> */}
+                      <label class="form-check-label" for="gridCheck">
+                        Hàng tặng nhân theo số lượng mua{" "}
+                      </label>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -1101,14 +1110,12 @@ class Form extends Component {
                     handleAddProduct={this.handleAddProduct}
                     products={saveListProductsBonusLadder}
                     fromProduct={saveListProductsLadder}
-
                   ></TableBonusLadder>
                 ) : (
                   <TableBonus
                     handleChangeQuantity={this.handleChangeQuantity}
                     handleAddProduct={this.handleAddProduct}
                     products={saveListProductsBonus}
-                    
                   ></TableBonus>
                 )}
               </div>
@@ -1184,7 +1191,6 @@ const mapStateToProps = (state) => {
   return {
     image: state.UploadReducers.comboImg.combo_img,
     types: state.agencyReducers.agency.allAgencyType,
-
   };
 };
 
@@ -1193,8 +1199,8 @@ const mapDispatchToProps = (dispatch, props) => {
     showError: (error) => {
       dispatch(error);
     },
-    updateBonusProduct: (store_code, form , id) => {
-      dispatch(bonusProductAction.updateBonusProduct(store_code, form , id));
+    updateBonusProduct: (store_code, form, id) => {
+      dispatch(bonusProductAction.updateBonusProduct(store_code, form, id));
     },
     initialUpload: () => {
       dispatch(bonusProductAction.initialUpload());

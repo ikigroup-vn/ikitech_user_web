@@ -6,11 +6,9 @@ class ModalCreate extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      content : "",
+      content: "",
       txtBlogs: {},
-      listBlog : {},
-
-
+      listBlog: {},
     };
   }
 
@@ -23,27 +21,28 @@ class ModalCreate extends Component {
       });
       this.setState({ listBlog: options });
     }
-
-
   }
 
-  componentWillReceiveProps(nextProps)
-  {
+  componentWillReceiveProps(nextProps) {
     if (!shallowEqual(nextProps.blogs, this.props.blogs)) {
-    var options = [];
-    var blogs = [...nextProps.blogs];
-    if (blogs.length > 0) {
-      options = blogs.map((blog, index) => {
-        return { value: blog.id, label: blog.title };
-      });
-      this.setState({ listBlog: options });
+      var options = [];
+      var blogs = [...nextProps.blogs];
+      if (blogs.length > 0) {
+        options = blogs.map((blog, index) => {
+          return { value: blog.id, label: blog.title };
+        });
+        this.setState({ listBlog: options });
+      }
     }
-
-  }
-  if (!shallowEqual(nextProps.item, this.props.item)) {
-    this.setState({content : nextProps.item.content , txtBlogs : {label : nextProps.item.post_name , value : nextProps.item.post_id}})
-  }
-
+    if (!shallowEqual(nextProps.item, this.props.item)) {
+      this.setState({
+        content: nextProps.item.content,
+        txtBlogs: {
+          label: nextProps.item.post_name,
+          value: nextProps.item.post_id,
+        },
+      });
+    }
   }
 
   onChange = (e) => {
@@ -60,19 +59,17 @@ class ModalCreate extends Component {
     this.setState({ txtBlogs: selectValue });
   };
 
-  
   onSave = async (e) => {
-    var content = this.state.content
-    var post_name = this.state.txtBlogs.label
-    var post_id = this.state.txtBlogs.value
-    window.$('.modal').modal('hide');
+    var content = this.state.content;
+    var post_name = this.state.txtBlogs.label;
+    var post_id = this.state.txtBlogs.value;
+    window.$(".modal").modal("hide");
 
-    this.props.editPromiton({content , post_name , post_id} , this.props.index)
-
+    this.props.editPromiton({ content, post_name, post_id }, this.props.index);
   };
   render() {
-    var {content , txtBlogs , listBlog} = this.state
-    console.log(this.props.item , this.state)
+    var { content, txtBlogs, listBlog } = this.state;
+    console.log(this.props.item, this.state);
     return (
       <div
         class="modal modalPromotion fade"
@@ -81,25 +78,25 @@ class ModalCreate extends Component {
         id="editPromotion"
         data-keyboard="false"
         data-backdrop="static"
-        style= {{height : "450px"}}
+        style={{ height: "450px" }}
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" >
+            <div class="modal-header">
               <h4 class="modal-title">Thêm khuyến mại</h4>
 
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
             </div>
-            <form
-              role="form"
-              action="#"
-              method="post"
-              id="createForm"
-            >
-            <div class="modal-body" style = {{    "min-height": "450px"
-}}>
-              <div class="form-group">
+            <form role="form" action="#" method="post" id="createForm">
+              <div class="modal-body" style={{ "min-height": "450px" }}>
+                <div class="form-group">
                   <label for="product_name">Bài viết</label>
                   <Select
                     placeholder="-- Chọn bài viết --"
@@ -118,14 +115,12 @@ class ModalCreate extends Component {
                     class="form-control"
                     id="content"
                     placeholder="Nhập nội dung"
-                    autocomplete="off"
+                    autoComplete="off"
                     value={content}
                     onChange={this.onChange}
                     name="content"
                   />
                 </div>
-    
-              
               </div>
 
               <div class="modal-footer">
@@ -136,12 +131,15 @@ class ModalCreate extends Component {
                 >
                   Đóng
                 </button>
-                <button onClick = {this.onSave} type="button" class="btn btn-info">
+                <button
+                  onClick={this.onSave}
+                  type="button"
+                  class="btn btn-info"
+                >
                   Tạo
                 </button>
               </div>
             </form>
-
           </div>
         </div>
       </div>
@@ -149,11 +147,7 @@ class ModalCreate extends Component {
   }
 }
 
-
-
 const mapDispatchToProps = (dispatch, props) => {
-  return {
-
-  };
+  return {};
 };
 export default connect(null, mapDispatchToProps)(ModalCreate);

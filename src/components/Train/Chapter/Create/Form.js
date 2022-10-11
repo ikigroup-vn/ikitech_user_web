@@ -30,11 +30,10 @@ import {
   table as tablePlugin,
   link as linkPlugin,
   video,
-  audio
+  audio,
 } from "suneditor/src/plugins";
 import imageGallery from "../../../imageGallery";
-import { getApiImageStore } from "../../../../constants/Config"
-
+import { getApiImageStore } from "../../../../constants/Config";
 
 class Form extends Component {
   constructor(props) {
@@ -45,9 +44,6 @@ class Form extends Component {
       txtContent: "",
     };
   }
-
-
-
 
   onChange = (e) => {
     var target = e.target;
@@ -65,15 +61,10 @@ class Form extends Component {
     });
   };
 
-
   onSave = (e) => {
-    var { store_code , courseId } = this.props;
+    var { store_code, courseId } = this.props;
     e.preventDefault();
-    var {
-      txtContent,
-      txtTitle,
-      txtSumary,
-    } = this.state;
+    var { txtContent, txtTitle, txtSumary } = this.state;
 
     if (txtTitle == null || !isEmpty(txtTitle)) {
       this.props.showError({
@@ -88,16 +79,19 @@ class Form extends Component {
       return;
     }
 
-
-    this.props.createChapter(store_code, {
-      // description: txtContent,
-      title: txtTitle,
-      short_description: txtSumary,
-      train_course_id : courseId
-    },this, function(){
-      window.$(".modal").modal("hide");
-
-    });
+    this.props.createChapter(
+      store_code,
+      {
+        // description: txtContent,
+        title: txtTitle,
+        short_description: txtSumary,
+        train_course_id: courseId,
+      },
+      this,
+      function () {
+        window.$(".modal").modal("hide");
+      }
+    );
   };
 
   goBack = () => {
@@ -105,79 +99,74 @@ class Form extends Component {
   };
 
   render() {
-    var {
-      txtTitle,
-      txtSumary,
-
-    } = this.state;
+    var { txtTitle, txtSumary } = this.state;
 
     var { store_code } = this.props;
 
     return (
       <React.Fragment>
         <div
-        class="modal fade"
-        tabindex="-1"
-        role="dialog"
-        id="createModal"
-        data-keyboard="false"
-        data-backdrop="static"
-      >
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div
-              class="modal-header"
-              style={{ backgroundColor: themeData().backgroundColor }}
-            >
-              <h4 class="modal-title">Thêm chương</h4>
-
-              <button
-                type="button"
-                class="close"
-                data-dismiss="modal"
-                aria-hidden="true"
-                onClick={this.handleClear}
+          class="modal fade"
+          tabindex="-1"
+          role="dialog"
+          id="createModal"
+          data-keyboard="false"
+          data-backdrop="static"
+        >
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div
+                class="modal-header"
+                style={{ backgroundColor: themeData().backgroundColor }}
               >
-                &times;
-              </button>
-            </div>
-            <form
-              onSubmit={this.onSave}
-              role="form"
-              action="#"
-              method="post"
-              id="createForm"
-            >
-              <div class="modal-body" style={{ padding: " 0 10px" }}>
-         
-                <div class="form-group">
-                  <label for="product_name">Tên chương</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="txtTitle"
-                    value={txtTitle}
-                    placeholder="Nhập tên khóa học"
-                    autocomplete="off"
-                    onChange={this.onChange}
-                    name="txtTitle"
-                  />
-                </div>
+                <h4 class="modal-title">Thêm chương</h4>
 
-                <div class="form-group">
-                  <label for="product_name">Mô tả ngắn</label>
+                <button
+                  type="button"
+                  class="close"
+                  data-dismiss="modal"
+                  aria-hidden="true"
+                  onClick={this.handleClear}
+                >
+                  &times;
+                </button>
+              </div>
+              <form
+                onSubmit={this.onSave}
+                role="form"
+                action="#"
+                method="post"
+                id="createForm"
+              >
+                <div class="modal-body" style={{ padding: " 0 10px" }}>
+                  <div class="form-group">
+                    <label for="product_name">Tên chương</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="txtTitle"
+                      value={txtTitle}
+                      placeholder="Nhập tên khóa học"
+                      autoComplete="off"
+                      onChange={this.onChange}
+                      name="txtTitle"
+                    />
+                  </div>
 
-                  <textarea
-                    name="txtSumary"
-                    onChange={this.onChange}
-                    value={txtSumary}
-                    id="input"
-                    class="form-control"
-                    rows="3"
-                  ></textarea>
-                </div>
+                  <div class="form-group">
+                    <label for="product_name">Mô tả ngắn</label>
 
-                {/* <div class="form-group">
+                    <textarea
+                      name="txtSumary"
+                      onChange={this.onChange}
+                      value={txtSumary}
+                      id="input"
+                      class="form-control"
+                      rows="3"
+                    ></textarea>
+                  </div>
+
+                  {/* <div class="form-group">
                   <label for="product_name">Nội dung</label>
                   <div className="editor">
                     <SunEditor
@@ -245,49 +234,41 @@ class Form extends Component {
                     />
                   </div>
                 </div> */}
-
-              </div>
-              <div class="modal-footer">
-                <button
-                  type="button"
-                  class="btn btn-default"
-                  data-dismiss="modal"
-                  onClick={this.handleClear}
-                >
-                  Đóng
-                </button>
-                <button
-                  type="submit"
-                  class="btn btn-warning"
-                >
-                  Tạo
-                </button>
-              </div>
-            </form>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-default"
+                    data-dismiss="modal"
+                    onClick={this.handleClear}
+                  >
+                    Đóng
+                  </button>
+                  <button type="submit" class="btn btn-warning">
+                    Tạo
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
-
-
-
       </React.Fragment>
     );
   }
 }
 
 const mapStateToProps = (state) => {
-  return {
-  };
+  return {};
 };
 
 const mapDispatchToProps = (dispatch, props) => {
-  return { 
+  return {
     showError: (error) => {
       dispatch(error);
     },
 
-    createChapter: (store_code, data , _this,resetModal) => {
-      dispatch(trainAction.createChapter(store_code, data , _this, resetModal));
+    createChapter: (store_code, data, _this, resetModal) => {
+      dispatch(trainAction.createChapter(store_code, data, _this, resetModal));
     },
   };
 };

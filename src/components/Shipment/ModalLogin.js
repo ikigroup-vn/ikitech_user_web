@@ -101,8 +101,10 @@ class ModalUpdate extends Component {
                     target="_blank"
                     href="https://viettelpost.vn/"
                   >
-                    https://viettelpost.vn {" "}
-                  </a>&nbsp;và cung cấp tài khoản của bạn ở đây để thực hiện kết nối và lấy token
+                    https://viettelpost.vn{" "}
+                  </a>
+                  &nbsp;và cung cấp tài khoản của bạn ở đây để thực hiện kết nối
+                  và lấy token
                 </span>
                 <div class="form-group" style={{ marginTop: "15px" }}>
                   <label for="product_name">Số điện thoại</label>
@@ -111,7 +113,7 @@ class ModalUpdate extends Component {
                     class="form-control"
                     id="txtToken"
                     placeholder="Nhập số điện thoại đăng nhập Viettel Post"
-                    autocomplete="off"
+                    autoComplete="off"
                     value={USERNAME}
                     onChange={this.onChange}
                     name="USERNAME"
@@ -124,7 +126,7 @@ class ModalUpdate extends Component {
                     class="form-control"
                     id="txtToken"
                     placeholder="Nhập mật khẩu"
-                    autocomplete="off"
+                    autoComplete="off"
                     value={PASSWORD}
                     onChange={this.onChange}
                     name="PASSWORD"

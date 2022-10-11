@@ -8,15 +8,15 @@ import moment from "moment";
 import Datetime from "react-datetime";
 import ModalListProduct from "../Create/ListProduct";
 import CKEditor from "ckeditor4-react";
-import ModalUpload from "../ModalUpload"
-import * as Env from "../../../../ultis/default"
-import MomentInput from 'react-moment-input';
-import { formatNumber } from "../../../../ultis/helpers"
-import { isEmpty } from "../../../../ultis/helpers"
+import ModalUpload from "../ModalUpload";
+import * as Env from "../../../../ultis/default";
+import MomentInput from "react-moment-input";
+import { formatNumber } from "../../../../ultis/helpers";
+import { isEmpty } from "../../../../ultis/helpers";
 import ConfimUpdateUsed from "../../Discount/Edit/ConfimUpdateUsed";
 import getChannel, { IKIPOS, IKITECH } from "../../../../ultis/channel";
-import history from "../../../../history"
-import { getQueryParams } from "../../../../ultis/helpers"
+import history from "../../../../history";
+import { getQueryParams } from "../../../../ultis/helpers";
 import * as AgencyAction from "../../../../actions/agency";
 
 class Form extends Component {
@@ -38,44 +38,55 @@ class Form extends Component {
       displayError: "hide",
 
       isLoading: false,
-      loadCript: false
+      loadCript: false,
     };
   }
   componentDidMount() {
-    this.props.initialUpload()
+    this.props.initialUpload();
     this.props.fetchAllAgencyType(this.props.store_code);
-
   }
 
   componentDidUpdate(prevProps, prevState) {
-
     try {
-      document.getElementsByClassName('r-input')[0].placeholder = 'Chọn ngày và thời gian';
-      document.getElementsByClassName('r-input')[1].placeholder = 'Chọn ngày và thời gian';
-    } catch (error) {
-
-    }
-
+      document.getElementsByClassName("r-input")[0].placeholder =
+        "Chọn ngày và thời gian";
+      document.getElementsByClassName("r-input")[1].placeholder =
+        "Chọn ngày và thời gian";
+    } catch (error) {}
   }
   componentWillReceiveProps(nextProps) {
     if (!shallowEqual(nextProps.combo, this.props.combo)) {
       var { combo } = nextProps;
 
-
-      var startTime = combo.start_time == null || combo.start_time == "" ? "" : moment(combo.start_time).format("DD-MM-YYYY HH:mm");
-      var endTime = combo.end_time == null || combo.end_time == "" ? "" : moment(combo.end_time).format("DD-MM-YYYY HH:mm");
+      var startTime =
+        combo.start_time == null || combo.start_time == ""
+          ? ""
+          : moment(combo.start_time).format("DD-MM-YYYY HH:mm");
+      var endTime =
+        combo.end_time == null || combo.end_time == ""
+          ? ""
+          : moment(combo.end_time).format("DD-MM-YYYY HH:mm");
       this.setState({
         txtContent: combo.description,
         txtName: combo.name,
         txtStart: startTime,
         txtEnd: endTime,
-        txtAmount: combo.amount == null ? null : new Intl.NumberFormat().format(combo.amount.toString()),
-        txtLastAmount: combo.amount == null ? null : new Intl.NumberFormat().format(combo.amount.toString()),
+        txtAmount:
+          combo.amount == null
+            ? null
+            : new Intl.NumberFormat().format(combo.amount.toString()),
+        txtLastAmount:
+          combo.amount == null
+            ? null
+            : new Intl.NumberFormat().format(combo.amount.toString()),
 
-        txtValueDiscount: combo.value_discount == null ? null : new Intl.NumberFormat().format(combo.value_discount.toString()),
+        txtValueDiscount:
+          combo.value_discount == null
+            ? null
+            : new Intl.NumberFormat().format(combo.value_discount.toString()),
         saveListProducts: combo.products,
-        group_customer : combo.group_customer,
-        agency_type_id : combo.agency_type_id,
+        group_customer: combo.group_customer,
+        agency_type_id: combo.agency_type_id,
         txtDiscoutType: combo.discount_type,
         listProducts: combo.products_combo,
         saveListProducts: combo.products_combo,
@@ -83,11 +94,11 @@ class Form extends Component {
         image: combo.image_url,
         isLoading: true,
         loadCript: true,
-        form: {}
+        form: {},
       });
     }
     if (this.props.image !== nextProps.image) {
-      this.setState({ image: nextProps.image })
+      this.setState({ image: nextProps.image });
     }
   }
 
@@ -105,72 +116,65 @@ class Form extends Component {
     if (name == "txtAmount" || name == "txtValueDiscount") {
       if (!isNaN(Number(_value))) {
         value = new Intl.NumberFormat().format(_value);
-        if ((name == "txtValueDiscount" && this.state.txtDiscoutType == "1")) {
+        if (name == "txtValueDiscount" && this.state.txtDiscoutType == "1") {
           if (value.length < 3) {
             if (value == 0) {
               this.setState({ [name]: "" });
-            }
-            else {
+            } else {
               this.setState({ [name]: value });
-
             }
           }
-        }
-        else {
+        } else {
           if (value == 0) {
             this.setState({ [name]: "" });
-          }
-          else {
+          } else {
             this.setState({ [name]: value });
-
           }
         }
       }
-    }
-    else {
+    } else {
       this.setState({ [name]: value });
-
-    };
+    }
   };
   onChangeType = (e) => {
     var target = e.target;
     var name = target.name;
     var value = target.value;
     this.setState({ [name]: value, txtValueDiscount: "" });
-
-  }
+  };
   onChangeStart = (e) => {
     var time = moment(e, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm");
-    var { txtEnd } = this.state
+    var { txtEnd } = this.state;
     if (e != "" && txtEnd != "") {
-
-      if (!moment(e, 'DD-MM-YYYY HH:mm').isBefore(moment(txtEnd, 'DD-MM-YYYY HH:mm'))) {
-
-        this.setState({ displayError: "show" })
+      if (
+        !moment(e, "DD-MM-YYYY HH:mm").isBefore(
+          moment(txtEnd, "DD-MM-YYYY HH:mm")
+        )
+      ) {
+        this.setState({ displayError: "show" });
+      } else {
+        console.log("hidddeee");
+        this.setState({ displayError: "hide" });
       }
-      else {
-        console.log("hidddeee")
-        this.setState({ displayError: "hide" })
-
-      }
-    } this.setState({
+    }
+    this.setState({
       txtStart: time,
     });
   };
 
   onChangeEnd = (e) => {
     var time = moment(e, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm");
-    var { txtStart } = this.state
+    var { txtStart } = this.state;
 
     if (txtStart != "" && e != "") {
-
-      if (!moment(txtStart, 'DD-MM-YYYY HH:mm').isBefore(moment(e, 'DD-MM-YYYY HH:mm'))) {
-
-        this.setState({ displayError: "show" })
-      }
-      else {
-        this.setState({ displayError: "hide" })
-
+      if (
+        !moment(txtStart, "DD-MM-YYYY HH:mm").isBefore(
+          moment(e, "DD-MM-YYYY HH:mm")
+        )
+      ) {
+        this.setState({ displayError: "show" });
+      } else {
+        this.setState({ displayError: "hide" });
       }
     }
     this.setState({
@@ -181,12 +185,11 @@ class Form extends Component {
   onSave = (e) => {
     e.preventDefault();
     if (this.state.displayError == "show") {
-      return
+      return;
     }
     var state = this.state;
     if (state.txtValueDiscount == null || !isEmpty(state.txtValueDiscount)) {
       this.props.showError({
-
         type: Types.ALERT_UID_STATUS,
         alert: {
           type: "danger",
@@ -194,29 +197,42 @@ class Form extends Component {
           disable: "show",
           content: "Vui lòng chọn giá trị giảm giá",
         },
-      }
-      )
+      });
       return;
     }
-    var { store_code, comboId } = this.props
+    var { store_code, comboId } = this.props;
 
-    var listProducts = state.saveListProducts
-    var combo_products = []
+    var listProducts = state.saveListProducts;
+    var combo_products = [];
     listProducts.forEach((element, index) => {
-      combo_products.push({ quantity: element.quantity, product_id: element.product.id })
-
+      combo_products.push({
+        quantity: element.quantity,
+        product_id: element.product.id,
+      });
     });
-    var startTime = moment(state.txtStart, "DD-MM-YYYY HH:mm").format("YYYY-MM-DD HH:mm:ss");
-    var endTime = moment(state.txtEnd, "DD-MM-YYYY HH:mm").format("YYYY-MM-DD HH:mm:ss");
+    var startTime = moment(state.txtStart, "DD-MM-YYYY HH:mm").format(
+      "YYYY-MM-DD HH:mm:ss"
+    );
+    var endTime = moment(state.txtEnd, "DD-MM-YYYY HH:mm").format(
+      "YYYY-MM-DD HH:mm:ss"
+    );
 
     var { group_customer, agency_type_id } = this.state;
-    var agency_type_name = this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]?.name || null;
+    var agency_type_name =
+      this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]
+        ?.name || null;
     var form = {
       group_customer,
       agency_type_id,
       agency_type_name,
-      amount: state.txtAmount == null ? state.txtAmount : formatNumber(state.txtAmount),
-      value_discount: state.txtValueDiscount == null ? state.txtValueDiscount : formatNumber(state.txtValueDiscount),
+      amount:
+        state.txtAmount == null
+          ? state.txtAmount
+          : formatNumber(state.txtAmount),
+      value_discount:
+        state.txtValueDiscount == null
+          ? state.txtValueDiscount
+          : formatNumber(state.txtValueDiscount),
       name: state.txtName,
       start_time: startTime == "Invalid date" ? null : startTime,
       end_time: endTime == "Invalid date" ? null : endTime,
@@ -225,43 +241,37 @@ class Form extends Component {
       image_url: state.image,
       discount_type: state.txtDiscoutType,
       set_limit_amount: true,
-
-    }
+    };
     var amount = form.amount;
-    if (typeof amount == "undefined"
-      || amount == null  || !isEmpty(amount)
-   )
-      form.set_limit_amount = false
+    if (typeof amount == "undefined" || amount == null || !isEmpty(amount))
+      form.set_limit_amount = false;
 
-    if (this.state.txtLastAmount != this.state.txtAmount && this.state.txtLastAmount != 0
-      && this.state.txtAmount != 0
+    if (
+      this.state.txtLastAmount != this.state.txtAmount &&
+      this.state.txtLastAmount != 0 &&
+      this.state.txtAmount != 0
     ) {
       this.setState({
-        form: form
-      })
-      window.$("#confimUpdateUsedModal").modal("show")
+        form: form,
+      });
+      window.$("#confimUpdateUsedModal").modal("show");
     } else {
-      this.props.updateCombo(store_code, form, comboId)
+      this.props.updateCombo(store_code, form, comboId);
     }
-
-
   };
 
   goBack = (e) => {
-    var { store_code } = this.props
+    var { store_code } = this.props;
 
-    e.preventDefault()
-    var type = getQueryParams("type")
-    if(type)
-    {
-      history.replace(`/combo/${store_code}?type=${type}`)
-    }
-    else
-    {
-      history.goBack()
+    e.preventDefault();
+    var type = getQueryParams("type");
+    if (type) {
+      history.replace(`/combo/${store_code}?type=${type}`);
+    } else {
+      history.goBack();
     }
   };
-  handleAddProduct = (product, id, type , onSave) => {
+  handleAddProduct = (product, id, type, onSave) => {
     var products = [...this.state.listProducts];
     console.log(products);
 
@@ -274,7 +284,7 @@ class Form extends Component {
         });
       }
     } else {
-      var checkExsit = true
+      var checkExsit = true;
       products.forEach((item, index) => {
         if (item.product.id === product.id) {
           checkExsit = false;
@@ -282,42 +292,35 @@ class Form extends Component {
         }
       });
       if (checkExsit == true) {
-        var product = { quantity: 1, product: product }
-        products.push(product)
+        var product = { quantity: 1, product: product };
+        products.push(product);
       }
     }
     if (onSave == true)
-      this.setState({ listProducts: products, saveListProducts: products })
-    else
-      this.setState({ listProducts: products })
+      this.setState({ listProducts: products, saveListProducts: products });
+    else this.setState({ listProducts: products });
   };
-  onSaveProduct = () =>{
-    this.setState({saveListProducts : [...this.state.listProducts]})
-  }
+  onSaveProduct = () => {
+    this.setState({ saveListProducts: [...this.state.listProducts] });
+  };
   handleChangeQuantity = (id, quantity, setIncrement = null) => {
     var products = [...this.state.listProducts];
     products.forEach((product, index) => {
-
       if (product.product.id == id) {
-        if (setIncrement == 1)
-          products[index].quantity = product.quantity + 1
+        if (setIncrement == 1) products[index].quantity = product.quantity + 1;
         else if (setIncrement == -1) {
-          if (product.quantity == 1) { }
-          else
-            products[index].quantity = product.quantity - 1
-        }
-        else
-          products[index].quantity = quantity
+          if (product.quantity == 1) {
+          } else products[index].quantity = product.quantity - 1;
+        } else products[index].quantity = quantity;
       }
-
     });
-    this.setState({ listProducts: products , saveListProducts : products })
-  }
+    this.setState({ listProducts: products, saveListProducts: products });
+  };
 
   onOkUpdate = () => {
-    var { store_code, comboId } = this.props
-    this.props.updateCombo(store_code, this.state.form, comboId)
-  }
+    var { store_code, comboId } = this.props;
+    this.props.updateCombo(store_code, this.state.form, comboId);
+  };
 
   render() {
     var {
@@ -334,23 +337,26 @@ class Form extends Component {
       group_customer,
       agency_type_id,
 
-      displayError, isLoading
+      displayError,
+      isLoading,
     } = this.state;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
-    var { products, store_code, combos, combo  , types} = this.props;
-    var type_discount_default = txtDiscoutType == 0 ? "show" : "hide"
-    var type_discount_percent = txtDiscoutType == 1 ? "show" : "hide"
-    var now = moment().valueOf()
-    var end_time = moment(combo.end_time, "YYYY-MM-DD HH:mm:ss").valueOf()
-    var canOnsave = now < end_time
+    var { products, store_code, combos, combo, types } = this.props;
+    var type_discount_default = txtDiscoutType == 0 ? "show" : "hide";
+    var type_discount_percent = txtDiscoutType == 1 ? "show" : "hide";
+    var now = moment().valueOf();
+    var end_time = moment(combo.end_time, "YYYY-MM-DD HH:mm:ss").valueOf();
+    var canOnsave = now < end_time;
     console.log(this.state);
     return (
       <React.Fragment>
-        <form role="form" onSubmit={(e) => canOnsave == true && this.onSave(e)} method="post">
-
+        <form
+          role="form"
+          onSubmit={(e) => canOnsave == true && this.onSave(e)}
+          method="post"
+        >
           <div class="row">
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-
               <div class="box-body">
                 {/* {
                   getChannel() == IKITECH && (
@@ -388,127 +394,131 @@ class Form extends Component {
                     value={txtName}
                     name="txtName"
                     placeholder="Nhập tên chương trình"
-                    autocomplete="off"
+                    autoComplete="off"
                     onChange={this.onChange}
                   />
                 </div>
 
-
-
                 <div class="form-group">
                   <label for="product_name">Thời gian bắt đầu</label>
-                  {isLoading == true
-                    ?
-                    (<MomentInput
-                      defaultValue={txtStart == "" || txtStart == null ? "" : moment(txtStart, "DD-MM-YYYY HH:mm")}
+                  {isLoading == true ? (
+                    <MomentInput
+                      defaultValue={
+                        txtStart == "" || txtStart == null
+                          ? ""
+                          : moment(txtStart, "DD-MM-YYYY HH:mm")
+                      }
                       min={moment()}
                       format="DD-MM-YYYY HH:mm"
                       options={true}
                       enableInputClick={true}
                       monthSelect={true}
                       readOnly={true}
-                      translations={
-                        { DATE: "Ngày", TIME: "Giờ", SAVE: "Đóng", HOURS: "Giờ", MINUTES: "Phút" }
-                      }
-                      onSave={() => { }}
+                      translations={{
+                        DATE: "Ngày",
+                        TIME: "Giờ",
+                        SAVE: "Đóng",
+                        HOURS: "Giờ",
+                        MINUTES: "Phút",
+                      }}
+                      onSave={() => {}}
                       onChange={this.onChangeStart}
-                    />) : null}
+                    />
+                  ) : null}
                 </div>
 
                 <div class="form-group">
                   <label for="product_name">Thời gian kết thúc</label>
-                  {isLoading == true
-                    ?
-                    (<MomentInput
-
-                      defaultValue={txtEnd == "" || txtEnd == null ? "" : moment(txtEnd, "DD-MM-YYYY HH:mm")}
-
+                  {isLoading == true ? (
+                    <MomentInput
+                      defaultValue={
+                        txtEnd == "" || txtEnd == null
+                          ? ""
+                          : moment(txtEnd, "DD-MM-YYYY HH:mm")
+                      }
                       min={moment()}
                       format="DD-MM-YYYY HH:mm"
                       options={true}
                       enableInputClick={true}
                       monthSelect={true}
                       readOnly={true}
-
-                      translations={
-                        { DATE: "Ngày", TIME: "Giờ", SAVE: "Đóng", HOURS: "Giờ", MINUTES: "Phút" }
-                      }
-                      onSave={() => { }}
+                      translations={{
+                        DATE: "Ngày",
+                        TIME: "Giờ",
+                        SAVE: "Đóng",
+                        HOURS: "Giờ",
+                        MINUTES: "Phút",
+                      }}
+                      onSave={() => {}}
                       onChange={this.onChangeEnd}
-                    />)
-                    : null
-                  }
+                    />
+                  ) : null}
                 </div>
                 <div class={`alert alert-danger ${displayError}`} role="alert">
                   Thời gian kết thúc phải sau thời gian bắt đầu
                 </div>
-
               </div>
-
-
             </div>
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-
               <div class="box-body">
-             
-            <div className="form-group discount-for">
-              <label htmlFor="group_customer">Áp dụng cho</label>
-              <div
-                style={{
-                  display: "flex",
-                }}
-                className="radio discount-for"
-                onChange={this.onChange}
-              >
-                <label>
-                  <input
-                    type="radio"
-                    name="group_customer"
-                    checked={group_customer == 0 ? true : false}
-                    className="group_customer"
-                    id="ship"
-                    value="0"
-                  />
-                  {"  "} Tất cả
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="group_customer"
-                    checked={group_customer == 2 ? true : false}
-                    className="group_customer"
-                    id="bill"
-                    value="2"
-                  />
-                  {"  "}Đại lý
-                </label>
+                <div className="form-group discount-for">
+                  <label htmlFor="group_customer">Áp dụng cho</label>
+                  <div
+                    style={{
+                      display: "flex",
+                    }}
+                    className="radio discount-for"
+                    onChange={this.onChange}
+                  >
+                    <label>
+                      <input
+                        type="radio"
+                        name="group_customer"
+                        checked={group_customer == 0 ? true : false}
+                        className="group_customer"
+                        id="ship"
+                        value="0"
+                      />
+                      {"  "} Tất cả
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="group_customer"
+                        checked={group_customer == 2 ? true : false}
+                        className="group_customer"
+                        id="bill"
+                        value="2"
+                      />
+                      {"  "}Đại lý
+                    </label>
 
-                <label>
-                  <input
-                    type="radio"
-                    name="group_customer"
-                    checked={group_customer == 1 ? true : false}
-                    className="group_customer"
-                    id="ship"
-                    value="1"
-                  />
-                  {"  "} Cộng tác viên
-                </label>
-              </div>
-              {group_customer == 2 && (
-                <select
-                  onChange={this.onChange}
-                  value={agency_type_id}
-                  name="agency_type_id"
-                  class="form-control"
-                >
-                  <option>--- Chọn cấp đại lý ---</option>
-                  {types.map((v) => {
-                    return <option value={v.id}>{v.name}</option>;
-                  })}
-                </select>
-              )}
-            </div>
+                    <label>
+                      <input
+                        type="radio"
+                        name="group_customer"
+                        checked={group_customer == 1 ? true : false}
+                        className="group_customer"
+                        id="ship"
+                        value="1"
+                      />
+                      {"  "} Cộng tác viên
+                    </label>
+                  </div>
+                  {group_customer == 2 && (
+                    <select
+                      onChange={this.onChange}
+                      value={agency_type_id}
+                      name="agency_type_id"
+                      class="form-control"
+                    >
+                      <option>--- Chọn cấp đại lý ---</option>
+                      {types.map((v) => {
+                        return <option value={v.id}>{v.name}</option>;
+                      })}
+                    </select>
+                  )}
+                </div>
                 <div class="form-group">
                   <label for="product_name">Giới hạn Combo</label>
                   <input
@@ -518,7 +528,7 @@ class Form extends Component {
                     name="txtAmount"
                     value={txtAmount}
                     placeholder="Số lượng mã phiểu có thể sử dụng"
-                    autocomplete="off"
+                    autoComplete="off"
                     onChange={this.onChange}
                   />
                 </div>
@@ -526,13 +536,16 @@ class Form extends Component {
                 <div class="form-group">
                   <label for="product_name">Loại giảm giá</label>
 
-
-                  <select value={txtDiscoutType} name="txtDiscoutType" id="input" class="form-control" onChange={this.onChangeType} >
+                  <select
+                    value={txtDiscoutType}
+                    name="txtDiscoutType"
+                    id="input"
+                    class="form-control"
+                    onChange={this.onChangeType}
+                  >
                     <option value="0">Giảm giá cố định</option>
                     <option value="1">Giảm giá theo %</option>
-
                   </select>
-
                 </div>
                 <div class={`form-group ${type_discount_default}`}>
                   <input
@@ -542,7 +555,7 @@ class Form extends Component {
                     name="txtValueDiscount"
                     value={txtValueDiscount}
                     placeholder="Nhập giá trị bạn muốn giảm (đ)"
-                    autocomplete="off"
+                    autoComplete="off"
                     onChange={this.onChange}
                   />
                 </div>
@@ -556,31 +569,22 @@ class Form extends Component {
                       name="txtValueDiscount"
                       value={txtValueDiscount}
                       placeholder="Nhập giá trị bạn muốn giảm (%)"
-                      autocomplete="off"
+                      autoComplete="off"
                       onChange={this.onChange}
                     />
-
                   </div>
-
-
-
                 </div>
-
               </div>
-
-
-
             </div>
-
-
-
           </div>
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-              <div >
-                <Table handleChangeQuantity={this.handleChangeQuantity} handleAddProduct={this.handleAddProduct} products={saveListProducts}></Table>
-
+              <div>
+                <Table
+                  handleChangeQuantity={this.handleChangeQuantity}
+                  handleAddProduct={this.handleAddProduct}
+                  products={saveListProducts}
+                ></Table>
               </div>
               {/* {getChannel() == IKITECH &&
 
@@ -597,40 +601,36 @@ class Form extends Component {
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <div class="box-footer">
-              {canOnsave == true && <button type="submit" class="btn btn-info   btn-sm">
-              <i class="fas fa-save"></i>  Lưu
-
-            </button>}
+                {canOnsave == true && (
+                  <button type="submit" class="btn btn-info   btn-sm">
+                    <i class="fas fa-save"></i> Lưu
+                  </button>
+                )}
                 <button
-                                type = "button"
-
+                  type="button"
                   style={{ marginLeft: "10px" }}
                   onClick={this.goBack}
                   class="btn btn-warning   btn-sm"
                 >
                   <i class="fas fa-arrow-left"></i> Trở về
-
                 </button>
               </div>
             </div>
           </div>
-
         </form>
-
 
         <ConfimUpdateUsed onOk={this.onOkUpdate} />
         <ModalUpload />
         <ModalListProduct
-                 onSaveProduct={this.onSaveProduct}
-
+          onSaveProduct={this.onSaveProduct}
           combo={combo}
           combos={combos}
           handleAddProduct={this.handleAddProduct}
           listProducts={listProducts}
           store_code={store_code}
-          products={products} />
+          products={products}
+        />
       </React.Fragment>
-
     );
   }
 }
@@ -639,25 +639,23 @@ const mapStateToProps = (state) => {
   return {
     image: state.UploadReducers.comboImg.combo_img,
     types: state.agencyReducers.agency.allAgencyType,
-
   };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
     showError: (error) => {
-      dispatch(error)
+      dispatch(error);
     },
     updateCombo: (store_code, form, comboId) => {
       dispatch(comboAction.updateCombo(store_code, form, comboId));
     },
     initialUpload: () => {
-      dispatch(comboAction.initialUpload())
+      dispatch(comboAction.initialUpload());
     },
     fetchAllAgencyType: (store_code) => {
       dispatch(AgencyAction.fetchAllAgencyType(store_code));
     },
-
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Form);

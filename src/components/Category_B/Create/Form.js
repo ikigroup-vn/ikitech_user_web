@@ -88,21 +88,16 @@ class Form extends Component {
                 value={txtTitle}
                 name="txtTitle"
                 placeholder="Nhập tên danh mục"
-                autocomplete="off"
+                autoComplete="off"
                 onChange={this.onChange}
               />
             </div>
-            <div
-              class="form-check"
-              style={{ marginTop: "10px", padding: "0" }}
-            >
+            <div class="form-check" style={{ marginTop: "10px", padding: "0" }}>
               <label class="form-check-label">
                 <input
                   type="checkbox"
                   name="even"
-                  onChange={() =>
-                    this.setState({ isShowHome: !isShowHome })
-                  }
+                  onChange={() => this.setState({ isShowHome: !isShowHome })}
                   checked={isShowHome}
                 />{" "}
                 Hiển thị danh mục ở trang chủ
@@ -146,20 +141,16 @@ class Form extends Component {
             </div>
           </div>
           <div class="box-footer">
-
             <button type="submit" class="btn btn-info   btn-sm">
-              <i class="fas fa-save"></i>  Tạo
-
+              <i class="fas fa-save"></i> Tạo
             </button>
             <button
               type="button"
-
               style={{ marginLeft: "10px" }}
               onClick={this.goBack}
               class="btn btn-warning   btn-sm"
             >
               <i class="fas fa-arrow-left"></i> Trở về
-
             </button>
           </div>
         </form>

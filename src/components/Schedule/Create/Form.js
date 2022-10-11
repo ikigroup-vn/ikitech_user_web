@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as ScheduleAction from "../../../actions/schedule";
-import Datetime from "react-datetime"
-import ListProduct from "../TableProduct"
-import ListCProduct from "../TableC_Product"
-import ListCBlog from "../TableC_Blog"
+import Datetime from "react-datetime";
+import ListProduct from "../TableProduct";
+import ListCProduct from "../TableC_Product";
+import ListCBlog from "../TableC_Blog";
 import * as popupAction from "../../../actions/popup";
-import ModalUpload from "../ModalUpload"
+import ModalUpload from "../ModalUpload";
 import ListBlog from "../TableBlog";
 import * as productAction from "../../../actions/product";
 import moment from "moment";
@@ -85,25 +85,26 @@ class Form extends Component {
       time_run_near,
       title,
       type_schedule,
-      link_url, product, category, blog, categoryBlog , type_action
+      link_url,
+      product,
+      category,
+      blog,
+      categoryBlog,
+      type_action,
     } = this.state;
     var { group_customer, agency_type_id } = this.state;
     var agency_type_name =
       this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]
         ?.name || null;
 
-        var value_action = ""
-        if (type_action == "LINK")
-          value_action = link_url
-        else if (type_action == "PRODUCT")
-          value_action = product.id
-        else if (type_action == "CATEGORY_PRODUCT")
-          value_action = category.id
-        else if (type_action == "POST")
-          value_action = blog.id
-        else if (type_action == "CATEGORY_POST")
-          value_action = categoryBlog.id
-        else { }
+    var value_action = "";
+    if (type_action == "LINK") value_action = link_url;
+    else if (type_action == "PRODUCT") value_action = product.id;
+    else if (type_action == "CATEGORY_PRODUCT") value_action = category.id;
+    else if (type_action == "POST") value_action = blog.id;
+    else if (type_action == "CATEGORY_POST") value_action = categoryBlog.id;
+    else {
+    }
     var form = {
       group_customer,
       agency_type_id,
@@ -115,12 +116,17 @@ class Form extends Component {
       group_customer,
       status,
       time_of_day,
-      time_run: time_run != "" && time_run != null ? moment(time_run, "DD-MM-YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss") : null,
+      time_run:
+        time_run != "" && time_run != null
+          ? moment(time_run, "DD-MM-YYYY HH:mm:ss").format(
+              "YYYY-MM-DD HH:mm:ss"
+            )
+          : null,
       time_run_near,
       title,
       type_schedule,
       type_action: type_action,
-      value_action: value_action
+      value_action: value_action,
     };
     if (
       this.state.title == null ||
@@ -158,7 +164,7 @@ class Form extends Component {
       form.day_of_week = null;
       form.time_run_near = null;
     }
- 
+
     this.props.createSchedule(store_code, form);
   };
   goBack = () => {
@@ -186,41 +192,37 @@ class Form extends Component {
 
   fetchAllProduct = () => {
     this.props.fetchAllProduct(this.props.store_code);
-
-  }
+  };
   fetchAllBlog = () => {
     this.props.fetchAllBlog(this.props.store_code);
-
-  }
+  };
   fetchAllCProduct = () => {
     this.props.fetchAllCategoryP(this.props.store_code);
-
-  }
+  };
   fetchAllCBlog = () => {
     this.props.fetchAllCategoryB(this.props.store_code);
-
-  }
+  };
   handleAddProduct = (product) => {
     this.setState({
-      product
-    })
-  }
+      product,
+    });
+  };
 
   handleAddCProduct = (category) => {
     this.setState({
-      category
-    })
-  }
+      category,
+    });
+  };
   handleAddCBlog = (categoryBlog) => {
     this.setState({
-      categoryBlog
-    })
-  }
+      categoryBlog,
+    });
+  };
   handleAddBlog = (blog) => {
     this.setState({
-      blog
-    })
-  }
+      blog,
+    });
+  };
   render() {
     var {
       type_schedule,
@@ -237,9 +239,18 @@ class Form extends Component {
       group_customer,
       agency_type_id,
     } = this.state;
-    var { type_action, product, category, blog, categoryBlog, image, link_url } = this.state;
+    var {
+      type_action,
+      product,
+      category,
+      blog,
+      categoryBlog,
+      image,
+      link_url,
+    } = this.state;
 
-    var { store_code, products, category_product, blogs, category_blog } = this.props
+    var { store_code, products, category_product, blogs, category_blog } =
+      this.props;
 
     var disable_oneDay = type_schedule == "0" ? "show" : "hide";
     var disable_everyDay = type_schedule == "1" ? "show" : "hide";
@@ -254,18 +265,34 @@ class Form extends Component {
     var disable_product = type_action == "PRODUCT" ? "show" : "hide";
     var disable_category_product =
       type_action == "CATEGORY_PRODUCT" ? "show" : "hide";
-    var showProduct = product != "" ? "show" : "hide"
-    var showCProduct = category != "" ? "show" : "hide"
-    var showBlog = blog != "" ? "show" : "hide"
-    var showCblog = categoryBlog != "" ? "show" : "hide"
+    var showProduct = product != "" ? "show" : "hide";
+    var showCProduct = category != "" ? "show" : "hide";
+    var showBlog = blog != "" ? "show" : "hide";
+    var showCblog = categoryBlog != "" ? "show" : "hide";
 
-    console.log("gio",time_run)
+    console.log("gio", time_run);
     return (
       <React.Fragment>
-                <ListProduct handleAddProduct={this.handleAddProduct} store_code={store_code} products={products} />
-        <ListCProduct handleAddCProduct={this.handleAddCProduct} store_code={store_code} categories={category_product} />
-        <ListCBlog handleAddCBlog={this.handleAddCBlog} store_code={store_code} category_blog={category_blog} />
-        <ListBlog handleAddBlog={this.handleAddBlog} store_code={store_code} blogs={blogs} />
+        <ListProduct
+          handleAddProduct={this.handleAddProduct}
+          store_code={store_code}
+          products={products}
+        />
+        <ListCProduct
+          handleAddCProduct={this.handleAddCProduct}
+          store_code={store_code}
+          categories={category_product}
+        />
+        <ListCBlog
+          handleAddCBlog={this.handleAddCBlog}
+          store_code={store_code}
+          category_blog={category_blog}
+        />
+        <ListBlog
+          handleAddBlog={this.handleAddBlog}
+          store_code={store_code}
+          blogs={blogs}
+        />
         <form role="form" onSubmit={this.onSave} method="post">
           <div class="box-body">
             <div class="form-group">
@@ -277,7 +304,7 @@ class Form extends Component {
                 value={title}
                 name="title"
                 placeholder="Nhập tiêu đề"
-                autocomplete="off"
+                autoComplete="off"
                 onChange={this.onChange}
               />
             </div>
@@ -291,7 +318,7 @@ class Form extends Component {
                 value={description}
                 name="description"
                 placeholder="Nhập mô tả"
-                autocomplete="off"
+                autoComplete="off"
                 onChange={this.onChange}
               />
             </div>
@@ -316,7 +343,7 @@ class Form extends Component {
                   value={agency_type_id}
                   name="agency_type_id"
                   class="form-control"
-                  style={{marginTop: "10px"}}
+                  style={{ marginTop: "10px" }}
                 >
                   <option>--- Chọn cấp đại lý ---</option>
                   {types.map((v) => {
@@ -538,18 +565,9 @@ class Form extends Component {
                   />
                 </div>
 
-
-
-
-
                 <br></br>
                 <div class={`media ${showProduct}`} id="product_preview">
-                  <img
-                    width="100px"
-                    height="120px"
-                    src={product.img}
-                    alt=""
-                  />
+                  <img width="100px" height="120px" src={product.img} alt="" />
                   <div class="media-body" style={{ marginLeft: "10px" }}>
                     {/* <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{product.name} </h5> */}
                     {/* <p>{format(Number(product.price))}</p> */}
@@ -573,7 +591,6 @@ class Form extends Component {
                   />
                 </div>
 
-
                 <br></br>
                 <div class={`media ${showCProduct}`} id="product_preview">
                   {/* <img
@@ -583,7 +600,9 @@ class Form extends Component {
                     alt=""
                   /> */}
                   <div class="media-body" style={{ marginLeft: "10px" }}>
-                    <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{category.name} </h5>
+                    <h5 style={{ fontSize: "18px" }} class="mt-0 h3">
+                      {category.name}{" "}
+                    </h5>
                   </div>
                 </div>
               </div>
@@ -606,18 +625,12 @@ class Form extends Component {
 
                 <br></br>
                 <div class={`media ${showBlog}`} id="product_preview">
-                  <img
-                    width="100px"
-                    height="120px"
-                    src={blog.img}
-                    alt=""
-                  />
+                  <img width="100px" height="120px" src={blog.img} alt="" />
                   {/* <div class="media-body" style={{ marginLeft: "10px" }}>
                     <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{blog.name} </h5>
                   </div> */}
                 </div>
               </div>
-
 
               <div class={`form-group ${disable_category_post}`}>
                 <label>Chọn danh mục bài viết</label>
@@ -635,7 +648,6 @@ class Form extends Component {
                     placeholder="Chọn danh mục..."
                   />
                 </div>
-
 
                 <br></br>
                 <div class={`media ${showCblog}`} id="product_preview">

@@ -170,8 +170,10 @@ class Form extends Component {
       "YYYY-MM-DD HH:mm:ss"
     );
     var { group_customer, agency_type_id } = this.state;
-    var agency_type_name = this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]?.name || null;
-    console.log(this.props.types,agency_type_name)
+    var agency_type_name =
+      this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]
+        ?.name || null;
+    console.log(this.props.types, agency_type_name);
     var form = {
       group_customer,
       agency_type_id,
@@ -293,7 +295,7 @@ class Form extends Component {
                 id="txtName"
                 value={txtName}
                 placeholder="Nhập tên chương trình"
-                autocomplete="off"
+                autoComplete="off"
                 onChange={this.onChange}
                 name="txtName"
               />
@@ -352,7 +354,7 @@ class Form extends Component {
                   name="txtValue"
                   value={txtValue}
                   placeholder="nhập giảm giá"
-                  autocomplete="off"
+                  autoComplete="off"
                   onChange={this.onChange}
                 />
                 <div class="input-group-append">
@@ -432,7 +434,7 @@ class Form extends Component {
                 id="txtAmount"
                 name="txtAmount"
                 placeholder="nhập số lượng (Mặc định : Không giới hạn)"
-                autocomplete="off"
+                autoComplete="off"
                 onChange={this.onChange}
               />
             </div>

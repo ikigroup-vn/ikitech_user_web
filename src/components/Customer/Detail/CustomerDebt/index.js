@@ -10,23 +10,21 @@ import * as dashboardAction from "../../../../actions/dashboard";
 import { connect } from "react-redux";
 import { shallowEqual } from "../../../../ultis/shallowEqual";
 import * as billAction from "../../../../actions/bill";
-import { getBranchId } from "../../../../ultis/branchUtils"
-import * as Env from "../../../../ultis/default"
+import { getBranchId } from "../../../../ultis/branchUtils";
+import * as Env from "../../../../ultis/default";
 import ModalDetail from "../../../RevenueExpenditures/ModalDetail";
-import * as helper from "../../../../ultis/helpers"
+import * as helper from "../../../../ultis/helpers";
 import Pagination from "../../../../components/RevenueExpenditures/Pagination";
 import { filter_arr, format } from "../../../../ultis/helpers";
-import { Link } from "react-router-dom"
-import * as Types from "../../../../constants/ActionType"
-
-
+import { Link } from "react-router-dom";
+import * as Types from "../../../../constants/ActionType";
 
 class Footer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isLoadRevenueExpenditures: false
-    }
+      isLoadRevenueExpenditures: false,
+    };
   }
   handleGetDatePost = (date, typeSelect) => {
     this.setState({
@@ -92,9 +90,8 @@ class Footer extends Component {
     ) {
       var permissions = nextProps.permission;
       var add_revenue = permissions.add_revenue;
-      var add_expenditure = permissions.add_expenditure
-      this.setState({ isLoading: true , add_revenue , add_expenditure });
-
+      var add_expenditure = permissions.add_expenditure;
+      this.setState({ isLoading: true, add_revenue, add_expenditure });
     }
     if (this.props.reportExpenditure !== nextProps.reportExpenditure) {
       const { datePrime } = this.state;
@@ -103,37 +100,39 @@ class Footer extends Component {
     }
 
     if (nextProps.status_revenue == true) {
-      this.setState({ isLoadRevenueExpenditures: true })
+      this.setState({ isLoadRevenueExpenditures: true });
       this.props.resetStatusRevenueExpenditures({
         type: Types.RESET_STATUS_LOADING,
-        data: false
-      })
+        data: false,
+      });
     }
   }
 
   componentDidMount() {
-    var { customer, store_code } = this.props
-    this.props.fetchAllRevenueExpenditures(store_code, getBranchId(), 1, `&recipient_group=0&recipient_references_id=${customer.id}`);
+    var { customer, store_code } = this.props;
+    this.props.fetchAllRevenueExpenditures(
+      store_code,
+      getBranchId(),
+      1,
+      `&recipient_group=0&recipient_references_id=${customer.id}`
+    );
     this.props.fetchAllStaff(store_code);
     this.props.fetchAllCustomer(store_code);
     this.props.fetchAllSupplier(store_code);
-
   }
 
-  componentWillUnmount()
-  {
+  componentWillUnmount() {
     if (this.status_revenue === true) {
       this.props.resetStatusRevenueExpenditures({
         type: Types.RESET_STATUS_LOADING,
-        data: false
-      })
+        data: false,
+      });
     }
   }
 
-
   destroyBanner = (e, id, title) => {
     this.setState({ modalremove: { title: "banner", id: id, _title: title } });
-  }
+  };
   shouldComponentUpdate(nextProps, nextState) {
     var { searchValue, numPage, revenueExpendituresValue } = this.state;
     if (this.state.datePrime !== nextState.datePrime) {
@@ -147,57 +146,56 @@ class Footer extends Component {
   }
 
   updateBanner = (e, id, title, img) => {
-    this.setState({ modalupdate: { title: "banner", id: id, _title: title, image_url: img } });
-  }
-  showRevenues = (listBills , per_page , current_page) => {
+    this.setState({
+      modalupdate: { title: "banner", id: id, _title: title, image_url: img },
+    });
+  };
+  showRevenues = (listBills, per_page, current_page) => {
     var result = null;
-    var { store_code } = this.props
+    var { store_code } = this.props;
 
     if (typeof listBills == "undefined") {
-      return result
+      return result;
     }
     if (listBills.length > 0) {
       result = listBills.map((data, index) => {
-
         return (
-          <tr style={{ cursor: "pointer" }} data-toggle="modal"
+          <tr
+            style={{ cursor: "pointer" }}
+            data-toggle="modal"
             data-target="#modalDetail"
             onClick={() =>
               this.setState({
                 idModalShow: data.id,
               })
-            }>
-               <td>{per_page * (current_page - 1) + (index + 1)}</td>
-              <td>{data.code}</td>
-              <td>
-                {data.is_revenue ? (
-                  <p style={{ color: " rgb(54 185 204)" }}>Phiếu thu</p>
-                ) : (
-                  <p style={{ color: "rgb(231 74 59)" }}>Phiếu chi</p>
-                )}
-              </td>
-              <td>
-                {new Intl.NumberFormat("vi-VN", {
-                  style: "currency",
-                  currency: "VND",
-                }).format(data?.change_money)}
-              </td>
-              <td>
-                {new Intl.NumberFormat("vi-VN", {
-                  style: "currency",
-                  currency: "VND",
-                }).format(data?.current_money)}
-              </td>
-        
-          
+            }
+          >
+            <td>{per_page * (current_page - 1) + (index + 1)}</td>
+            <td>{data.code}</td>
+            <td>
+              {data.is_revenue ? (
+                <p style={{ color: " rgb(54 185 204)" }}>Phiếu thu</p>
+              ) : (
+                <p style={{ color: "rgb(231 74 59)" }}>Phiếu chi</p>
+              )}
+            </td>
+            <td>
+              {new Intl.NumberFormat("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              }).format(data?.change_money)}
+            </td>
+            <td>
+              {new Intl.NumberFormat("vi-VN", {
+                style: "currency",
+                currency: "VND",
+              }).format(data?.current_money)}
+            </td>
 
-              <td>{data.created_at}</td>
-        
-    
-              <td>{data?.type_action_name}</td>
+            <td>{data.created_at}</td>
 
+            <td>{data?.type_action_name}</td>
           </tr>
-
         );
       });
     } else {
@@ -205,7 +203,6 @@ class Footer extends Component {
     }
     return result;
   };
-
 
   render() {
     var { store_code, revenueExpenditures, searchValue, numPage, customer } =
@@ -228,7 +225,7 @@ class Footer extends Component {
       total,
       datePrime,
       add_revenue,
-      add_expenditure
+      add_expenditure,
     } = this.state;
     var {
       // revenueExpenditures,
@@ -239,7 +236,8 @@ class Footer extends Component {
       reportExpenditure,
     } = this.props;
     var per_page = revenueExpenditures.per_page;
-    var current_page = revenueExpenditures.current_page;    return (
+    var current_page = revenueExpenditures.current_page;
+    return (
       <div className="support">
         <div
           style={{
@@ -247,20 +245,17 @@ class Footer extends Component {
             justifyContent: "space-between",
           }}
         >
-          <h4 className="h4 title_content mb-0 text-gray-800">
-          </h4>{" "}
+          <h4 className="h4 title_content mb-0 text-gray-800"></h4>{" "}
           <div>
             <a
               data-toggle="modal"
               data-target="#modalRevenue"
-              class={`btn btn-info btn-icon-split btn-sm ${add_revenue == true ? "show" : "hide"
-                }`}
+              class={`btn btn-info btn-icon-split btn-sm ${
+                add_revenue == true ? "show" : "hide"
+              }`}
               style={{ marginRight: "1rem" }}
             >
-              <span
-                class="icon text-white-50"
-                style={{ marginRight: 0 }}
-              >
+              <span class="icon text-white-50" style={{ marginRight: 0 }}>
                 <i class="fas fa-plus"></i>
               </span>
               <span style={{ color: "white" }} class={`text `}>
@@ -270,13 +265,11 @@ class Footer extends Component {
             <a
               data-toggle="modal"
               data-target="#modalExpenditures"
-              class={`btn btn-danger btn-icon-split btn-sm ${add_expenditure ==true ? "show" : "hide"
-                }`}
+              class={`btn btn-danger btn-icon-split btn-sm ${
+                add_expenditure == true ? "show" : "hide"
+              }`}
             >
-              <span
-                class="icon text-white-50"
-                style={{ marginRight: 0 }}
-              >
+              <span class="icon text-white-50" style={{ marginRight: 0 }}>
                 <i class="fas fa-plus"></i>
               </span>
               <span style={{ color: "white" }} class={`text `}>
@@ -285,52 +278,47 @@ class Footer extends Component {
             </a>
           </div>
         </div>
-        <form role="form" onSubmit={this.onSave} >
-
+        <form role="form" onSubmit={this.onSave}>
           <div class="box-body">
-            <div style={{
-              display: "flex",
-              justifyContent: "space-evenly"
-            }}>
-
-
-
-
-            </div>
-
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "space-evenly",
+              }}
+            ></div>
 
             <div className="form-group">
-              <label htmlFor="name">Nợ hiện tại:&nbsp;{ format(customer.debt || 0)}</label>
+              <label htmlFor="name">
+                Nợ hiện tại:&nbsp;{format(customer.debt || 0)}
+              </label>
 
               <div class="table-responsive">
                 <table class="table table-hover table-border">
                   <thead>
                     <tr>
-                    <th>STT</th>
-                <th>Mã</th>
-                <th>
-                 Loại phiếu</th>
-                <th>Số tiền thay đổi</th>
+                      <th>STT</th>
+                      <th>Mã</th>
+                      <th>Loại phiếu</th>
+                      <th>Số tiền thay đổi</th>
 
-                <th>Số nợ hiện tại</th>
-                <th>Ngày tạo</th>
+                      <th>Số nợ hiện tại</th>
+                      <th>Ngày tạo</th>
 
-                <th>Trạng thái</th>
+                      <th>Trạng thái</th>
                     </tr>
                   </thead>
                   <tbody>
-                    {
-                      this.state.isLoadRevenueExpenditures == true && this.showRevenues(revenueExpenditures.data , per_page, current_page)
-
-                    }
+                    {this.state.isLoadRevenueExpenditures == true &&
+                      this.showRevenues(
+                        revenueExpenditures.data,
+                        per_page,
+                        current_page
+                      )}
                   </tbody>
                 </table>
               </div>
-
             </div>
-
           </div>
-
         </form>
         <Pagination
           limit={20}
@@ -352,8 +340,7 @@ class Footer extends Component {
           customers.data !== undefined &&
           staff.length !== 0 && (
             <ModalRevenue
-            getFor = "CUSTOMER"
-
+              getFor="CUSTOMER"
               notDate={true}
               store_code={store_code}
               branch_id={branch_id}
@@ -372,11 +359,9 @@ class Footer extends Component {
           customers.data !== undefined &&
           staff.length !== 0 && (
             <ModalExpenditures
-            getFor = "CUSTOMER"
-
+              getFor="CUSTOMER"
               customer={customer}
               notDate={true}
-
               store_code={store_code}
               branch_id={branch_id}
               revenueExpenditures={reportExpenditure}
@@ -391,10 +376,8 @@ class Footer extends Component {
           )}
       </div>
     );
-
   }
 }
-
 
 const mapStateToProps = (state) => {
   return {
@@ -404,15 +387,13 @@ const mapStateToProps = (state) => {
     revenueExpenditures:
       state.revenueExpendituresReducers.revenueExpenditures
         .allRevenueExpenditures,
-        status_revenue:
-      state.revenueExpendituresReducers.revenueExpenditures
-        .status,
+    status_revenue:
+      state.revenueExpendituresReducers.revenueExpenditures.status,
     customer: state.customerReducers.customer.customerID,
     bills: state.billReducers.bill.allBill,
     permission: state.authReducers.permission.data,
 
     theme: state.themeReducers.theme,
-
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -434,7 +415,9 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(themeAction.fetchTheme(store_code));
     },
     fetchAllBill: (id, page, branch_id, params, params_agency) => {
-      dispatch(billAction.fetchAllBill(id, page, branch_id, params, params_agency));
+      dispatch(
+        billAction.fetchAllBill(id, page, branch_id, params, params_agency)
+      );
     },
     fetchAllRevenueExpenditures: (id, branch_id, page, params) => {
       dispatch(
@@ -447,8 +430,8 @@ const mapDispatchToProps = (dispatch, props) => {
       );
     },
     resetStatusRevenueExpenditures: (status) => {
-      dispatch(status)
-    }
+      dispatch(status);
+    },
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Footer);

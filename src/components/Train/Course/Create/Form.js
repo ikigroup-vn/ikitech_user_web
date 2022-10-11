@@ -30,11 +30,10 @@ import {
   table as tablePlugin,
   link as linkPlugin,
   video,
-  audio
+  audio,
 } from "suneditor/src/plugins";
 import imageGallery from "./../../../imageGallery";
-import { getApiImageStore } from "../../../../constants/Config"
-
+import { getApiImageStore } from "../../../../constants/Config";
 
 class Form extends Component {
   constructor(props) {
@@ -44,21 +43,16 @@ class Form extends Component {
       txtSumary: "",
       txtContent: "",
       image: "",
-
     };
   }
 
   componentWillReceiveProps(nextProps) {
-
-
     if (this.props.image !== nextProps.image) {
       this.setState({ image: nextProps.image });
     }
   }
 
   componentDidMount() {
-
-
     this.props.initialUpload();
   }
 
@@ -78,16 +72,10 @@ class Form extends Component {
     });
   };
 
-
   onSave = (e) => {
     var { store_code } = this.props;
     e.preventDefault();
-    var {
-      txtContent,
-      txtTitle,
-      txtSumary,
-      image
-    } = this.state;
+    var { txtContent, txtTitle, txtSumary, image } = this.state;
 
     if (txtTitle == null || !isEmpty(txtTitle)) {
       this.props.showError({
@@ -102,13 +90,11 @@ class Form extends Component {
       return;
     }
 
-
     this.props.createCourse(store_code, {
       description: txtContent,
       title: txtTitle,
       short_description: txtSumary,
       image_url: image,
-
     });
   };
 
@@ -117,12 +103,7 @@ class Form extends Component {
   };
 
   render() {
-    var {
-      txtTitle,
-      txtSumary,
-      image,
-
-    } = this.state;
+    var { txtTitle, txtSumary, image } = this.state;
 
     var { store_code } = this.props;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
@@ -136,7 +117,7 @@ class Form extends Component {
                 class="col-12"
                 style={{ borderRight: "0.5px solid #cac9c9" }}
               >
-                   <div class="form-group">
+                <div class="form-group">
                   <label>Ảnh: &nbsp; </label>
                   <img src={`${image}`} width="150" height="150" />
                 </div>
@@ -162,7 +143,7 @@ class Form extends Component {
                     id="txtTitle"
                     value={txtTitle}
                     placeholder="Nhập tên khóa học"
-                    autocomplete="off"
+                    autoComplete="off"
                     onChange={this.onChange}
                     name="txtTitle"
                   />
@@ -180,7 +161,7 @@ class Form extends Component {
                     rows="3"
                   ></textarea>
                 </div>
-{/* 
+                {/* 
                 <div class="form-group">
                   <label for="product_name">Nội dung</label>
                   <div className="editor">
@@ -249,29 +230,20 @@ class Form extends Component {
                     />
                   </div>
                 </div> */}
-
               </div>
-
-
             </div>
-
-
-
           </div>
           <div class="box-footer">
             <button type="submit" class="btn btn-info   btn-sm">
-              <i class="fas fa-save"></i>  Tạo
-
+              <i class="fas fa-save"></i> Tạo
             </button>
             <button
               type="button"
-
               style={{ marginLeft: "10px" }}
               onClick={this.goBack}
               class="btn btn-warning   btn-sm"
             >
               <i class="fas fa-arrow-left"></i> Trở về
-
             </button>
           </div>
         </form>
@@ -285,12 +257,11 @@ class Form extends Component {
 const mapStateToProps = (state) => {
   return {
     image: state.UploadReducers.blogImg.blog_img,
-
   };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
-  return { 
+  return {
     showError: (error) => {
       dispatch(error);
     },

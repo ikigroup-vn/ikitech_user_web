@@ -30,11 +30,10 @@ import {
   table as tablePlugin,
   link as linkPlugin,
   video,
-  audio
+  audio,
 } from "suneditor/src/plugins";
 import imageGallery from "../../../imageGallery";
-import { getApiImageStore } from "../../../../constants/Config"
-
+import { getApiImageStore } from "../../../../constants/Config";
 
 class Form extends Component {
   constructor(props) {
@@ -43,12 +42,9 @@ class Form extends Component {
       txtTitle: "",
       txtSumary: "",
       txtContent: "",
-      link_video_youtube : "",
+      link_video_youtube: "",
     };
   }
-
-
-
 
   onChange = (e) => {
     var target = e.target;
@@ -66,16 +62,10 @@ class Form extends Component {
     });
   };
 
-
   onSave = (e) => {
-    var { store_code , chapterId , courseId} = this.props;
+    var { store_code, chapterId, courseId } = this.props;
     e.preventDefault();
-    var {
-      txtContent,
-      txtTitle,
-      txtSumary,
-      link_video_youtube
-    } = this.state;
+    var { txtContent, txtTitle, txtSumary, link_video_youtube } = this.state;
 
     if (txtTitle == null || !isEmpty(txtTitle)) {
       this.props.showError({
@@ -90,17 +80,21 @@ class Form extends Component {
       return;
     }
 
-
-    this.props.createLesson(store_code, courseId ,{
-      description: txtContent,
-      link_video_youtube : link_video_youtube,
-      title: txtTitle,
-      short_description: txtSumary,
-      train_chapter_id : chapterId
-    },this, function(){
-      window.$(".modal").modal("hide");
-
-    });
+    this.props.createLesson(
+      store_code,
+      courseId,
+      {
+        description: txtContent,
+        link_video_youtube: link_video_youtube,
+        title: txtTitle,
+        short_description: txtSumary,
+        train_chapter_id: chapterId,
+      },
+      this,
+      function () {
+        window.$(".modal").modal("hide");
+      }
+    );
   };
 
   goBack = () => {
@@ -108,206 +102,191 @@ class Form extends Component {
   };
 
   render() {
-    var {
-      txtTitle,
-      txtSumary,
-      link_video_youtube,
-      txtContent
-      
-    } = this.state;
+    var { txtTitle, txtSumary, link_video_youtube, txtContent } = this.state;
 
     var { store_code } = this.props;
 
     return (
       <React.Fragment>
         <div
-        class="modal fade"
-        tabindex="-1"
-        role="dialog"
-        id="createLessonModal"
-        data-keyboard="false"
-        data-backdrop="static"
-      >
-        <div class="modal-dialog modal-xl" role="document">
-          <div class="modal-content">
-            <div
-              class="modal-header"
-              style={{ backgroundColor: themeData().backgroundColor }}
-            >
-              <h4 class="modal-title">Thêm bài học</h4>
-
-              <button
-                type="button"
-                class="close"
-                data-dismiss="modal"
-                aria-hidden="true"
-                onClick={this.handleClear}
+          class="modal fade"
+          tabindex="-1"
+          role="dialog"
+          id="createLessonModal"
+          data-keyboard="false"
+          data-backdrop="static"
+        >
+          <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content">
+              <div
+                class="modal-header"
+                style={{ backgroundColor: themeData().backgroundColor }}
               >
-                &times;
-              </button>
-            </div>
-            <form
-              onSubmit={this.onSave}
-              role="form"
-              action="#"
-              method="post"
-              id="createForm"
-            >
-              <div class="modal-body" style={{ padding: " 0 10px" }}>
-         
-                <div class="form-group">
-                  <label for="product_name">Tên bài học</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="txtTitle"
-                    value={txtTitle}
-                    placeholder="Nhập tên bài học"
-                    autocomplete="off"
-                    onChange={this.onChange}
-                    name="txtTitle"
-                  />
-                </div>
+                <h4 class="modal-title">Thêm bài học</h4>
 
-                <div class="form-group">
-                  <label for="product_name">Link video bài học</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="txtTitle"
-                    value={link_video_youtube}
-                    placeholder="Nhập link..."
-                    autocomplete="off"
-                    onChange={this.onChange}
-                    name="link_video_youtube"
-                  />
-                </div>
-
-                <div class="form-group">
-                  <label for="product_name">Mô tả ngắn</label>
-
-                  <textarea
-                    name="txtSumary"
-                    onChange={this.onChange}
-                    value={txtSumary}
-                    id="input"
-                    class="form-control"
-                    rows="3"
-                  ></textarea>
-                </div>
-
-                <div class="form-group">
-                  <label for="product_name">Nội dung</label>
-                  <div className="editor">
-                    <SunEditor
-                      onImageUploadBefore={handleImageUploadBefore}
-                      showToolbar={true}
-                      onChange={this.handleEditorChange}
-                      setDefaultStyle="height: auto"
-                      setContents={txtContent}
-
-                      setOptions={{
-                        requestHeaders: {
-                          "X-Sample": "sample",
-                          "token": userLocalApi.getToken()
-
-                        },
-                        imageGalleryLoadURL: getApiImageStore(store_code),
-
-
-                        plugins: [
-                          imagePlugin,
-                          imageGallery,
-                          font,
-                          fontSize,
-                          formatBlock,
-                          paragraphStyle,
-                          blockquote,
-                          fontColor,
-                          textStyle,
-                          list,
-                          lineHeight,
-                          tablePlugin,
-                          linkPlugin,
-                          video,
-                          audio],
-
-                        buttonList: [
-                          [
-                            "undo",
-                            "redo",
-                            "font",
-                            "fontSize",
-                            "formatBlock",
-                            "paragraphStyle",
-                            "blockquote",
-                            "bold",
-                            "underline",
-                            "italic",
-                            "fontColor",
-                            "textStyle",
-                            "outdent",
-                            "align",
-                            "horizontalRule",
-                            "list",
-                            "lineHeight",
-                            "table",
-                            "link",
-                            "image",
-                            "video",
-                            "audio",
-                            "imageGallery",
-                            "fullScreen",
-                            "preview",
-                          ],
-                        ],
-                      }}
-                    />
-                  </div>
-                </div>
-
-              </div>
-              <div class="modal-footer">
                 <button
                   type="button"
-                  class="btn btn-default"
+                  class="close"
                   data-dismiss="modal"
+                  aria-hidden="true"
                   onClick={this.handleClear}
                 >
-                  Đóng
-                </button>
-                <button
-                  type="submit"
-                  class="btn btn-warning"
-                >
-                  Tạo
+                  &times;
                 </button>
               </div>
-            </form>
+              <form
+                onSubmit={this.onSave}
+                role="form"
+                action="#"
+                method="post"
+                id="createForm"
+              >
+                <div class="modal-body" style={{ padding: " 0 10px" }}>
+                  <div class="form-group">
+                    <label for="product_name">Tên bài học</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="txtTitle"
+                      value={txtTitle}
+                      placeholder="Nhập tên bài học"
+                      autoComplete="off"
+                      onChange={this.onChange}
+                      name="txtTitle"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="product_name">Link video bài học</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="txtTitle"
+                      value={link_video_youtube}
+                      placeholder="Nhập link..."
+                      autoComplete="off"
+                      onChange={this.onChange}
+                      name="link_video_youtube"
+                    />
+                  </div>
+
+                  <div class="form-group">
+                    <label for="product_name">Mô tả ngắn</label>
+
+                    <textarea
+                      name="txtSumary"
+                      onChange={this.onChange}
+                      value={txtSumary}
+                      id="input"
+                      class="form-control"
+                      rows="3"
+                    ></textarea>
+                  </div>
+
+                  <div class="form-group">
+                    <label for="product_name">Nội dung</label>
+                    <div className="editor">
+                      <SunEditor
+                        onImageUploadBefore={handleImageUploadBefore}
+                        showToolbar={true}
+                        onChange={this.handleEditorChange}
+                        setDefaultStyle="height: auto"
+                        setContents={txtContent}
+                        setOptions={{
+                          requestHeaders: {
+                            "X-Sample": "sample",
+                            token: userLocalApi.getToken(),
+                          },
+                          imageGalleryLoadURL: getApiImageStore(store_code),
+
+                          plugins: [
+                            imagePlugin,
+                            imageGallery,
+                            font,
+                            fontSize,
+                            formatBlock,
+                            paragraphStyle,
+                            blockquote,
+                            fontColor,
+                            textStyle,
+                            list,
+                            lineHeight,
+                            tablePlugin,
+                            linkPlugin,
+                            video,
+                            audio,
+                          ],
+
+                          buttonList: [
+                            [
+                              "undo",
+                              "redo",
+                              "font",
+                              "fontSize",
+                              "formatBlock",
+                              "paragraphStyle",
+                              "blockquote",
+                              "bold",
+                              "underline",
+                              "italic",
+                              "fontColor",
+                              "textStyle",
+                              "outdent",
+                              "align",
+                              "horizontalRule",
+                              "list",
+                              "lineHeight",
+                              "table",
+                              "link",
+                              "image",
+                              "video",
+                              "audio",
+                              "imageGallery",
+                              "fullScreen",
+                              "preview",
+                            ],
+                          ],
+                        }}
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-default"
+                    data-dismiss="modal"
+                    onClick={this.handleClear}
+                  >
+                    Đóng
+                  </button>
+                  <button type="submit" class="btn btn-warning">
+                    Tạo
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
-
-
-
       </React.Fragment>
     );
   }
 }
 
 const mapStateToProps = (state) => {
-  return {
-  };
+  return {};
 };
 
 const mapDispatchToProps = (dispatch, props) => {
-  return { 
+  return {
     showError: (error) => {
       dispatch(error);
     },
 
-    createLesson: (store_code,courseId, data , _this,resetModal) => {
-      dispatch(trainAction.createLesson(store_code,courseId, data , _this, resetModal));
+    createLesson: (store_code, courseId, data, _this, resetModal) => {
+      dispatch(
+        trainAction.createLesson(store_code, courseId, data, _this, resetModal)
+      );
     },
   };
 };

@@ -8,17 +8,17 @@ import moment from "moment";
 import Datetime from "react-datetime";
 import ModalListProduct from "../Create/ListProduct";
 import CKEditor from "ckeditor4-react";
-import ModalUpload from "../ModalUpload"
-import * as Env from "../../../../ultis/default"
-import MomentInput from 'react-moment-input';
-import { formatNumber } from "../../../../ultis/helpers"
-import { isEmpty } from "../../../../ultis/helpers"
+import ModalUpload from "../ModalUpload";
+import * as Env from "../../../../ultis/default";
+import MomentInput from "react-moment-input";
+import { formatNumber } from "../../../../ultis/helpers";
+import { isEmpty } from "../../../../ultis/helpers";
 import ConfimUpdateUsed from "./ConfimUpdateUsed";
 import getChannel, { IKIPOS, IKITECH } from "../../../../ultis/channel";
-import { getQueryParams } from "../../../../ultis/helpers"
-import history from "../../../../history"
+import { getQueryParams } from "../../../../ultis/helpers";
+import history from "../../../../history";
 import * as AgencyAction from "../../../../actions/agency";
-
+import * as groupCustomerAction from "../../../../actions/group_customer";
 class Form extends Component {
   constructor(props) {
     super(props);
@@ -36,55 +36,71 @@ class Form extends Component {
       saveListProducts: [],
       group_customer: 0,
       agency_type_id: null,
+      group_type_id: null,
       isLoading: false,
       loadCript: false,
-      form: {}
+      form: {},
     };
   }
 
   componentDidMount() {
-  
     this.props.fetchAllAgencyType(this.props.store_code);
+    this.props.fetchGroupCustomer(this.props.store_code);
   }
 
   componentDidUpdate(prevProps, prevState) {
-
     try {
-      document.getElementsByClassName('r-input')[0].placeholder = 'Chọn ngày và thời gian';
-      document.getElementsByClassName('r-input')[1].placeholder = 'Chọn ngày và thời gian';
-    } catch (error) {
-
-    }
-
+      document.getElementsByClassName("r-input")[0].placeholder =
+        "Chọn ngày và thời gian";
+      document.getElementsByClassName("r-input")[1].placeholder =
+        "Chọn ngày và thời gian";
+    } catch (error) {}
   }
   componentWillReceiveProps(nextProps) {
     if (!shallowEqual(nextProps.discount, this.props.discount)) {
       var { discount } = nextProps;
-      var startTime = discount.start_time == null || discount.start_time == "" ? "" : moment(discount.start_time).format("DD-MM-YYYY HH:mm");
-      var endTime = discount.end_time == null || discount.end_time == "" ? "" : moment(discount.end_time).format("DD-MM-YYYY HH:mm");
+      var startTime =
+        discount.start_time == null || discount.start_time == ""
+          ? ""
+          : moment(discount.start_time).format("DD-MM-YYYY HH:mm");
+      var endTime =
+        discount.end_time == null || discount.end_time == ""
+          ? ""
+          : moment(discount.end_time).format("DD-MM-YYYY HH:mm");
 
       this.setState({
         txtName: discount.name,
         txtStart: startTime,
         txtEnd: endTime,
-        txtValue: discount.value == null ? null : new Intl.NumberFormat().format(discount.value.toString()),
-        txtAmount: discount.amount == null ? null : new Intl.NumberFormat().format(discount.amount.toString()),
-        lastAmount: discount.amount == null ? null : new Intl.NumberFormat().format(discount.amount.toString()),
+        txtValue:
+          discount.value == null
+            ? null
+            : new Intl.NumberFormat().format(discount.value.toString()),
+        txtAmount:
+          discount.amount == null
+            ? null
+            : new Intl.NumberFormat().format(discount.amount.toString()),
+        lastAmount:
+          discount.amount == null
+            ? null
+            : new Intl.NumberFormat().format(discount.amount.toString()),
         listProducts: discount.products,
         saveListProducts: discount.products,
-        group_customer : discount.group_customer,
-        agency_type_id : discount.agency_type_id,
-        agency_type_name : discount.agency_type_name,
+        group_customer: discount.group_customer,
+        agency_type_id: discount.agency_type_id,
+        agency_type_name: discount.agency_type_name,
+        group_type_id: discount.group_type_id || nextProps.groupCustomer[0].id,
         txtContent: discount.description,
         image: discount.image_url,
         isLoading: true,
-        loadCript: true
+        loadCript: true,
       });
     }
     if (this.props.image !== nextProps.image) {
-      this.setState({ image: nextProps.image })
+      this.setState({ image: nextProps.image });
     }
   }
+
   onChange = (e) => {
     var target = e.target;
     var name = target.name;
@@ -98,42 +114,35 @@ class Form extends Component {
           if (value.length < 3) {
             if (value == 0) {
               this.setState({ [name]: 0 });
-            }
-            else {
+            } else {
               this.setState({ [name]: value });
-
             }
           }
-        }
-        else {
+        } else {
           if (value == 0) {
             this.setState({ [name]: 0 });
-          }
-          else {
+          } else {
             this.setState({ [name]: value });
-
           }
         }
       }
-    }
-    else {
+    } else {
       this.setState({ [name]: value });
-
-    };
+    }
   };
   onChangeStart = (e) => {
     var time = moment(e, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm");
-    var { txtEnd } = this.state
+    var { txtEnd } = this.state;
     if (e != "" && txtEnd != "") {
-
-      if (!moment(e, 'DD-MM-YYYY HH:mm').isBefore(moment(txtEnd, 'DD-MM-YYYY HH:mm'))) {
-
-        this.setState({ displayError: "show" })
-      }
-      else {
-        console.log("hidddeee")
-        this.setState({ displayError: "hide" })
-
+      if (
+        !moment(e, "DD-MM-YYYY HH:mm").isBefore(
+          moment(txtEnd, "DD-MM-YYYY HH:mm")
+        )
+      ) {
+        this.setState({ displayError: "show" });
+      } else {
+        console.log("hidddeee");
+        this.setState({ displayError: "hide" });
       }
     }
     this.setState({
@@ -143,17 +152,17 @@ class Form extends Component {
 
   onChangeEnd = (e) => {
     var time = moment(e, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm");
-    var { txtStart } = this.state
+    var { txtStart } = this.state;
 
     if (txtStart != "" && e != "") {
-
-      if (!moment(txtStart, 'DD-MM-YYYY HH:mm').isBefore(moment(e, 'DD-MM-YYYY HH:mm'))) {
-
-        this.setState({ displayError: "show" })
-      }
-      else {
-        this.setState({ displayError: "hide" })
-
+      if (
+        !moment(txtStart, "DD-MM-YYYY HH:mm").isBefore(
+          moment(e, "DD-MM-YYYY HH:mm")
+        )
+      ) {
+        this.setState({ displayError: "show" });
+      } else {
+        this.setState({ displayError: "hide" });
       }
     }
     this.setState({
@@ -167,19 +176,17 @@ class Form extends Component {
   };
 
   onOkUpdate = () => {
-
-    var { store_code, discountId } = this.props
-    this.props.updateDiscount(store_code, this.state.form, discountId)
-  }
+    var { store_code, discountId } = this.props;
+    this.props.updateDiscount(store_code, this.state.form, discountId);
+  };
   onSave = (e) => {
     e.preventDefault();
     if (this.state.displayError == "show") {
-      return
+      return;
     }
     var state = this.state;
     if (state.txtValue == null || !isEmpty(state.txtValue)) {
       this.props.showError({
-
         type: Types.ALERT_UID_STATUS,
         alert: {
           type: "danger",
@@ -187,66 +194,72 @@ class Form extends Component {
           disable: "show",
           content: "Vui lòng chọn giá trị giảm giá",
         },
-      }
-      )
+      });
       return;
     }
-    var { store_code, discountId } = this.props
-    var listProducts = state.saveListProducts
-    var product_ids = ""
+    var { store_code, discountId } = this.props;
+    var listProducts = state.saveListProducts;
+    var product_ids = "";
     listProducts.forEach((element, index) => {
       if (listProducts.length == index + 1)
-        product_ids = product_ids + element.id
-      else
-        product_ids = product_ids + element.id + ","
-
+        product_ids = product_ids + element.id;
+      else product_ids = product_ids + element.id + ",";
     });
-    var startTime = moment(state.txtStart, "DD-MM-YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
-    var endTime = moment(state.txtEnd, "DD-MM-YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss");
-    var { group_customer, agency_type_id } = this.state;
-    var agency_type_name = this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]?.name || null;
+    var startTime = moment(state.txtStart, "DD-MM-YYYY HH:mm:ss").format(
+      "YYYY-MM-DD HH:mm:ss"
+    );
+    var endTime = moment(state.txtEnd, "DD-MM-YYYY HH:mm:ss").format(
+      "YYYY-MM-DD HH:mm:ss"
+    );
+    var { group_customer, agency_type_id, group_type_id } = this.state;
+    var agency_type_name =
+      this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]
+        ?.name || null;
     var form = {
       group_customer,
       agency_type_id,
+      group_type_id,
       agency_type_name,
       name: state.txtName,
       start_time: startTime == "Invalid date" ? null : startTime,
       end_time: endTime == "Invalid date" ? null : endTime,
-      value: state.txtValue == null ? state.txtValue : formatNumber(state.txtValue),
-      amount: state.txtAmount == null ? state.txtAmount : formatNumber(state.txtAmount),
+      value:
+        state.txtValue == null ? state.txtValue : formatNumber(state.txtValue),
+      amount:
+        state.txtAmount == null
+          ? state.txtAmount
+          : formatNumber(state.txtAmount),
       product_ids: product_ids,
       description: state.txtContent,
-      image_url: state.image
-    }
+      image_url: state.image,
+    };
     if (form.product_ids == "") {
-      delete form.product_ids
+      delete form.product_ids;
     }
-    form.set_limit_amount = form.amount == null || form.amount == "" ? false : true
+    form.set_limit_amount =
+      form.amount == null || form.amount == "" ? false : true;
 
-
-    if (this.state.lastAmount != this.state.txtAmount && this.state.lastAmount != 0
-      && this.state.txtAmount != 0
+    if (
+      this.state.lastAmount != this.state.txtAmount &&
+      this.state.lastAmount != 0 &&
+      this.state.txtAmount != 0
     ) {
       this.setState({
-        form: form
-      })
-      window.$("#confimUpdateUsedModal").modal("show")
+        form: form,
+      });
+      window.$("#confimUpdateUsedModal").modal("show");
     } else {
-      this.props.updateDiscount(store_code, form, discountId)
+      this.props.updateDiscount(store_code, form, discountId);
     }
-
-
-
   };
   goBack = (e) => {
-    var { store_code } = this.props
+    var { store_code } = this.props;
 
-    var type = getQueryParams("type")
+    var type = getQueryParams("type");
     if (type) {
-      history.replace(`/discount/${store_code}?type=${type}`)
-    }
-    else {
-      history.goBack()
+      history.replace(`/discount/${store_code}?type=${type}`);
+    } else {
+      history.goBack();
     }
   };
 
@@ -263,7 +276,7 @@ class Form extends Component {
         });
       }
     } else {
-      var checkExsit = true
+      var checkExsit = true;
       products.forEach((item, index) => {
         if (item.id === product.id) {
           checkExsit = false;
@@ -271,32 +284,48 @@ class Form extends Component {
         }
       });
       if (checkExsit == true) {
-        products.push(product)
+        products.push(product);
       }
     }
     if (onSave == true)
-      this.setState({ listProducts: products, saveListProducts: products })
-    else
-      this.setState({ listProducts: products })
+      this.setState({ listProducts: products, saveListProducts: products });
+    else this.setState({ listProducts: products });
   };
 
-
   onSaveProduct = () => {
-    this.setState({ saveListProducts: [...this.state.listProducts] })
-  }
+    this.setState({ saveListProducts: [...this.state.listProducts] });
+  };
   render() {
-    var { txtName, txtStart, txtEnd, txtValue, txtAmount, listProducts, image, txtContent, displayError, isLoading, saveListProducts ,    group_customer,
-      agency_type_id, } = this.state;
+    var {
+      txtName,
+      txtStart,
+      txtEnd,
+      txtValue,
+      txtAmount,
+      listProducts,
+      image,
+      txtContent,
+      displayError,
+      isLoading,
+      saveListProducts,
+      group_customer,
+      agency_type_id,
+      group_type_id,
+    } = this.state;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
 
-    var { products, store_code, discounts, discount , types } = this.props;
-    var now = moment().valueOf()
-    var end_time = moment(discount.end_time, "YYYY-MM-DD HH:mm:ss").valueOf()
-    var canOnsave = now < end_time
+    var { products, store_code, discounts, discount, types, groupCustomer } =
+      this.props;
+    var now = moment().valueOf();
+    var end_time = moment(discount.end_time, "YYYY-MM-DD HH:mm:ss").valueOf();
+    var canOnsave = now < end_time;
     return (
       <React.Fragment>
-
-        <form role="form" onSubmit={(e) => canOnsave == true && this.onSave(e)} method="post">
+        <form
+          role="form"
+          onSubmit={(e) => canOnsave == true && this.onSave(e)}
+          method="post"
+        >
           <div class="box-body">
             {/* {
               getChannel() == IKITECH && (
@@ -334,57 +363,64 @@ class Form extends Component {
                 value={txtName}
                 name="txtName"
                 placeholder="Nhập tên cửa hàng"
-                autocomplete="off"
+                autoComplete="off"
                 onChange={this.onChange}
               />
             </div>
             <div class="form-group">
               <label for="product_name">Ngày bắt đầu</label>
-              {isLoading == true
-                ?
-                (<MomentInput
-                  defaultValue={txtStart == "" || txtStart == null ? "" : moment(txtStart, "DD-MM-YYYY HH:mm")}
+              {isLoading == true ? (
+                <MomentInput
+                  defaultValue={
+                    txtStart == "" || txtStart == null
+                      ? ""
+                      : moment(txtStart, "DD-MM-YYYY HH:mm")
+                  }
                   min={moment()}
                   format="DD-MM-YYYY HH:mm"
                   options={true}
                   enableInputClick={true}
                   monthSelect={true}
                   readOnly={true}
-                  translations={
-                    { DATE: "Ngày", TIME: "Giờ", SAVE: "Đóng", HOURS: "Giờ", MINUTES: "Phút" }
-                  }
-                  onSave={() => { }}
+                  translations={{
+                    DATE: "Ngày",
+                    TIME: "Giờ",
+                    SAVE: "Đóng",
+                    HOURS: "Giờ",
+                    MINUTES: "Phút",
+                  }}
+                  onSave={() => {}}
                   onChange={this.onChangeStart}
-                />) : null}
-
-
-
+                />
+              ) : null}
             </div>
 
             <div class="form-group">
               <label for="product_name">Ngày kết thúc</label>
-              {isLoading == true
-                ?
-                (<MomentInput
-
-                  defaultValue={txtEnd == "" || txtEnd == null ? "" : moment(txtEnd, "DD-MM-YYYY HH:mm")}
-
+              {isLoading == true ? (
+                <MomentInput
+                  defaultValue={
+                    txtEnd == "" || txtEnd == null
+                      ? ""
+                      : moment(txtEnd, "DD-MM-YYYY HH:mm")
+                  }
                   min={moment()}
                   format="DD-MM-YYYY HH:mm"
                   options={true}
                   enableInputClick={true}
                   monthSelect={true}
                   readOnly={true}
-
-                  translations={
-                    { DATE: "Ngày", TIME: "Giờ", SAVE: "Đóng", HOURS: "Giờ", MINUTES: "Phút" }
-                  }
-                  onSave={() => { }}
+                  translations={{
+                    DATE: "Ngày",
+                    TIME: "Giờ",
+                    SAVE: "Đóng",
+                    HOURS: "Giờ",
+                    MINUTES: "Phút",
+                  }}
+                  onSave={() => {}}
                   onChange={this.onChangeEnd}
-                />)
-                : null
-              }
-
+                />
+              ) : null}
             </div>
             <div class={`alert alert-danger ${displayError}`} role="alert">
               Thời gian kết thúc phải sau thời gian bắt đầu
@@ -392,20 +428,22 @@ class Form extends Component {
             <div class="form-group">
               <label for="product_name">Giảm giá (%)</label>
               <div class="input-group">
-
-                <input type="text"
+                <input
+                  type="text"
                   class="form-control"
                   id="txtValue"
                   name="txtValue"
                   value={txtValue}
                   placeholder="nhập giảm giá"
-                  autocomplete="off"
-                  onChange={this.onChange} />
+                  autoComplete="off"
+                  onChange={this.onChange}
+                />
                 <div class="input-group-append">
-                  <span class="input-group-text" id="basic-addon2">%</span>
+                  <span class="input-group-text" id="basic-addon2">
+                    %
+                  </span>
                 </div>
               </div>
-
             </div>
 
             <div className="form-group discount-for">
@@ -451,6 +489,17 @@ class Form extends Component {
                   />
                   {"  "} Cộng tác viên
                 </label>
+                <label>
+                  <input
+                    type="radio"
+                    name="group_customer"
+                    checked={group_customer == 4 ? true : false}
+                    className="group_customer"
+                    id="ship"
+                    value="4"
+                  />
+                  {"  "} Nhóm khách hàng
+                </label>
               </div>
               {group_customer == 2 && (
                 <select
@@ -459,10 +508,31 @@ class Form extends Component {
                   name="agency_type_id"
                   class="form-control"
                 >
-                  <option>--- Chọn cấp đại lý ---</option>
+                  <option value={0}>Tất cả</option>
                   {types.map((v) => {
-                    return <option value={v.id}>{v.name}</option>;
+                    return (
+                      <option value={v.id} key={v.id}>
+                        {v.name}
+                      </option>
+                    );
                   })}
+                </select>
+              )}
+              {group_customer == 4 && (
+                <select
+                  onChange={this.onChange}
+                  value={group_type_id}
+                  name="group_type_id"
+                  class="form-control"
+                >
+                  {groupCustomer.length > 0 &&
+                    groupCustomer.map((group) => {
+                      return (
+                        <option value={group.id} key={group.id}>
+                          {group.name}
+                        </option>
+                      );
+                    })}
                 </select>
               )}
             </div>
@@ -477,14 +547,16 @@ class Form extends Component {
                   id="txtAmount"
                   name="txtAmount"
                   placeholder="nhập số lượng (Mặc định : Không giới hạn)"
-                  autocomplete="off"
+                  autoComplete="off"
                   onChange={this.onChange}
                 />
               </div>
             } */}
 
-
-            <Table products={saveListProducts} handleAddProduct={this.handleAddProduct} ></Table>
+            <Table
+              products={saveListProducts}
+              handleAddProduct={this.handleAddProduct}
+            ></Table>
             {/* {
               getChannel() == IKITECH &&
               <div class="form-group">
@@ -497,10 +569,11 @@ class Form extends Component {
             } */}
           </div>
           <div class="box-footer">
-            {canOnsave == true && <button type="submit" class="btn btn-info   btn-sm">
-              <i class="fas fa-save"></i>  Lưu
-
-            </button>}
+            {canOnsave == true && (
+              <button type="submit" class="btn btn-info   btn-sm">
+                <i class="fas fa-save"></i> Lưu
+              </button>
+            )}
 
             <button
               type="button"
@@ -509,18 +582,22 @@ class Form extends Component {
               class="btn btn-warning   btn-sm"
             >
               <i class="fas fa-arrow-left"></i> Trở về
-
             </button>
           </div>
-
         </form>
         <ModalUpload />
 
         <ConfimUpdateUsed onOk={this.onOkUpdate} />
-        <ModalListProduct onSaveProduct={this.onSaveProduct}
-          discounts={discounts} discount={discount} handleAddProduct={this.handleAddProduct} listProducts={listProducts} store_code={store_code} products={products} />
+        <ModalListProduct
+          onSaveProduct={this.onSaveProduct}
+          discounts={discounts}
+          discount={discount}
+          handleAddProduct={this.handleAddProduct}
+          listProducts={listProducts}
+          store_code={store_code}
+          products={products}
+        />
       </React.Fragment>
-
     );
   }
 }
@@ -528,20 +605,23 @@ const mapStateToProps = (state) => {
   return {
     image: state.UploadReducers.discountImg.discount_img,
     types: state.agencyReducers.agency.allAgencyType,
-
+    groupCustomer: state.groupCustomerReducers.group_customer.groupCustomer,
   };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
     showError: (error) => {
-      dispatch(error)
+      dispatch(error);
     },
     updateDiscount: (store_code, discount, id) => {
       dispatch(discountAction.updateDiscount(store_code, discount, id));
     },
     fetchAllAgencyType: (store_code) => {
       dispatch(AgencyAction.fetchAllAgencyType(store_code));
+    },
+    fetchGroupCustomer: (store_code) => {
+      dispatch(groupCustomerAction.fetchGroupCustomer(store_code));
     },
   };
 };

@@ -11,16 +11,13 @@ class ModalCreate extends Component {
     this.state = {
       old_password: "",
       new_password: "",
-      toggleOld : false,
-      toggleNew : false,
+      toggleOld: false,
+      toggleNew: false,
 
-      iconShow : "fa fa-fw fa-eye",
-      iconHide : "fa fa-fw fa-eye-slash",
-
-
+      iconShow: "fa fa-fw fa-eye",
+      iconHide: "fa fa-fw fa-eye-slash",
     };
   }
-
 
   onChange = (e) => {
     var target = e.target;
@@ -32,25 +29,33 @@ class ModalCreate extends Component {
     });
   };
 
-
   onSave = async (e) => {
     e.preventDefault();
     // window.$('.modal').modal('hide');
-    var { old_password, new_password } = this.state
-    this.props.changePassword({ old_password, new_password }, function () {
-      window.$('.modal').modal('hide')
-    }, this)
-
+    var { old_password, new_password } = this.state;
+    this.props.changePassword(
+      { old_password, new_password },
+      function () {
+        window.$(".modal").modal("hide");
+      },
+      this
+    );
   };
-  toggleOld = () =>{
-    this.setState({toggleOld : !this.state.toggleOld})
-  }
-  toggleNew = () =>{
-    this.setState({toggleNew : !this.state.toggleNew})
-  }
+  toggleOld = () => {
+    this.setState({ toggleOld: !this.state.toggleOld });
+  };
+  toggleNew = () => {
+    this.setState({ toggleNew: !this.state.toggleNew });
+  };
   render() {
     console.log("render");
-    var { old_password, new_password , toggleNew , toggleOld , iconHide , iconShow
+    var {
+      old_password,
+      new_password,
+      toggleNew,
+      toggleOld,
+      iconHide,
+      iconShow,
     } = this.state;
     return (
       <div
@@ -91,47 +96,55 @@ class ModalCreate extends Component {
                     Mật khẩu cũ
                   </div>
                   <input
-              type={toggleOld == true ? "text" : "password"}
-              class="form-control"
+                    type={toggleOld == true ? "text" : "password"}
+                    class="form-control"
                     id="txtName"
                     placeholder="Nhập mật khẩu cũ"
-                    autocomplete="off"
+                    autoComplete="off"
                     value={old_password}
                     onChange={this.onChange}
                     name="old_password"
                   />
-                  <span onClick={this.toggleOld} toggle="#password-field" class={toggleOld? iconShow : iconHide} style={{
-                    float: "right",
-                    marginRight: "10px",
-                    marginTop: "-26px",
-                    position: "relative",
-                    zIndex: "2"
-                  }}></span>
-
+                  <span
+                    onClick={this.toggleOld}
+                    toggle="#password-field"
+                    class={toggleOld ? iconShow : iconHide}
+                    style={{
+                      float: "right",
+                      marginRight: "10px",
+                      marginTop: "-26px",
+                      position: "relative",
+                      zIndex: "2",
+                    }}
+                  ></span>
                 </div>
                 <div class="form-group">
                   <div style={{ fontWeight: "bold" }} for="product_name">
                     Mật khẩu mới
                   </div>
                   <input
-              type={toggleNew == true ? "text" : "password"}
-              class="form-control"
+                    type={toggleNew == true ? "text" : "password"}
+                    class="form-control"
                     id="txtName"
                     placeholder="Nhập mật khẩu mới"
-                    autocomplete="off"
+                    autoComplete="off"
                     value={new_password}
                     onChange={this.onChange}
                     name="new_password"
                   />
-                  <span onClick={this.toggleNew} toggle="#password-field" class={toggleNew? iconShow : iconHide} style={{
-                    float: "right",
-                    marginRight: "10px",
-                    marginTop: "-26px",
-                    position: "relative",
-                    zIndex: "2"
-                  }}></span>
+                  <span
+                    onClick={this.toggleNew}
+                    toggle="#password-field"
+                    class={toggleNew ? iconShow : iconHide}
+                    style={{
+                      float: "right",
+                      marginRight: "10px",
+                      marginTop: "-26px",
+                      position: "relative",
+                      zIndex: "2",
+                    }}
+                  ></span>
                 </div>
-
               </div>
               <div class="modal-footer">
                 <button
@@ -141,10 +154,7 @@ class ModalCreate extends Component {
                 >
                   Đóng
                 </button>
-                <button
-                  type="submit"
-                  class="btn btn-warning"
-                >
+                <button type="submit" class="btn btn-warning">
                   Lưu
                 </button>
               </div>
@@ -164,7 +174,6 @@ const mapDispatchToProps = (dispatch, props) => {
     changePassword: ($form, funcModal, $this) => {
       dispatch(auth.changePassword($form, funcModal, $this));
     },
-
   };
 };
 export default connect(null, mapDispatchToProps)(ModalCreate);

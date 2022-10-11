@@ -4,33 +4,34 @@ import { connect } from "react-redux";
 import ModalUpload from "./ModalUpload";
 import * as Env from "../../../ultis/default";
 import { isEmpty } from "../../../ultis/helpers";
-import Table from "./List"
-import * as decentralization from "../../../actions/decentralization"
-import { shallowEqual } from "../../../ultis/shallowEqual"
-import permission , {initialPermission} from "../../../ultis/permission"
+import Table from "./List";
+import * as decentralization from "../../../actions/decentralization";
+import { shallowEqual } from "../../../ultis/shallowEqual";
+import permission, { initialPermission } from "../../../ultis/permission";
 import { forEach } from "lodash";
 
 class Form extends Component {
   constructor(props) {
     super(props);
-    this.state = initialPermission()
-    this.initialTable = permission()
-    this.isLoading = false
+    this.state = initialPermission();
+    this.initialTable = permission();
+    this.isLoading = false;
   }
-
 
   componentDidMount() {
-    var { data, id } = this.props
-    this.getData(data, id)
+    var { data, id } = this.props;
+    this.getData(data, id);
   }
 
-
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps.data)
-    if (!shallowEqual(nextProps.data, this.props.data) || this.isLoading == false) {
-      this.isLoading = true
-      var { data, id } = nextProps
-      this.getData(data, id)
+    console.log(nextProps.data);
+    if (
+      !shallowEqual(nextProps.data, this.props.data) ||
+      this.isLoading == false
+    ) {
+      this.isLoading = true;
+      var { data, id } = nextProps;
+      this.getData(data, id);
     }
   }
 
@@ -38,15 +39,14 @@ class Form extends Component {
     if (data.length > 0) {
       for (const item of data) {
         if (item.id == id) {
-          var newItem = {...this.state}
+          var newItem = { ...this.state };
           for (const [key, value] of Object.entries(item)) {
-            if(typeof newItem[key] != "undefined")
-            {
-              newItem[key] = value
+            if (typeof newItem[key] != "undefined") {
+              newItem[key] = value;
             }
           }
-          console.log(newItem)
-          this.setState({...newItem})
+          console.log(newItem);
+          this.setState({ ...newItem });
           // this.setState({
           //   order_list: item.order_list,
           //   order_allow_change_status: item.order_allow_change_status,
@@ -140,27 +140,25 @@ class Form extends Component {
           //   staff_remove: item.staff_remove,
           //   staff_delegating: item.staff_delegating,
 
-
-
-
           // })
         }
       }
     }
-  }
-
+  };
 
   handleChangeValue = (checked, item) => {
-
-    this.setState({ [item]: checked })
-  }
+    this.setState({ [item]: checked });
+  };
 
   showListTable = (data) => {
-
     return (
-      <Table handleChangeValue={this.handleChangeValue} state={this.state} data={data} />
-    )
-  }
+      <Table
+        handleChangeValue={this.handleChangeValue}
+        state={this.state}
+        data={data}
+      />
+    );
+  };
 
   onChange = (e) => {
     var target = e.target;
@@ -171,7 +169,6 @@ class Form extends Component {
       [name]: value,
     });
   };
-
 
   onSave = (e) => {
     var { store_code, id } = this.props;
@@ -196,15 +193,13 @@ class Form extends Component {
     history.goBack();
   };
   render() {
-    console.log(this.state)
+    console.log(this.state);
     var { name, description } = this.state;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
 
     return (
       <React.Fragment>
-        <form
-          role="form"
-          onSubmit={this.onSave}      >
+        <form role="form" onSubmit={this.onSave}>
           <div class="box-body">
             <div class="form-group">
               <label for="group_name">Tên phân quyền</label>
@@ -216,7 +211,7 @@ class Form extends Component {
                 id="group_name"
                 name="name"
                 placeholder="Nhập tên phân quyền"
-                autocomplete="off"
+                autoComplete="off"
                 onChange={this.onChange}
               />
             </div>
@@ -225,41 +220,30 @@ class Form extends Component {
               <label for="group_name">Mô tả phân quyền</label>
               <input
                 type="text"
-
                 value={description}
                 class="form-control"
                 id="id_group"
                 name="description"
                 placeholder="Nhập mô tả"
-                autocomplete="off"
+                autoComplete="off"
                 onChange={this.onChange}
-
               />
-
-
             </div>
             {this.showListTable(this.initialTable)}
-
-
-
-
           </div>
 
           <div class="box-footer">
-          <button type = "submit" class="btn btn-info   btn-sm">
-                  <i class="fas fa-save"></i>  Lưu
-
-                </button>
-                <button
-                  style={{ marginLeft: "10px" }}
-                  type = "button"
-
-                  onClick={this.goBack}
-                  class="btn btn-warning   btn-sm"
-                >
-                  <i class="fas fa-arrow-left"></i> Trở về
-
-                </button>
+            <button type="submit" class="btn btn-info   btn-sm">
+              <i class="fas fa-save"></i> Lưu
+            </button>
+            <button
+              style={{ marginLeft: "10px" }}
+              type="button"
+              onClick={this.goBack}
+              class="btn btn-warning   btn-sm"
+            >
+              <i class="fas fa-arrow-left"></i> Trở về
+            </button>
           </div>
         </form>
         <ModalUpload />
@@ -269,18 +253,17 @@ class Form extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {
-  };
+  return {};
 };
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
     showError: (error) => {
-      dispatch(error)
+      dispatch(error);
     },
     updateDecentralization: (id, data, store_code) => {
-      dispatch(decentralization.updateDecentralization(id, data, store_code))
-    }
+      dispatch(decentralization.updateDecentralization(id, data, store_code));
+    },
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Form);

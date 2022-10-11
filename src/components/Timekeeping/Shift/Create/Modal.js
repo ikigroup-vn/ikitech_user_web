@@ -10,7 +10,7 @@ import moment from "moment";
 import MomentInput from "react-moment-input";
 import "./style.css";
 import themeData from "../../../../ultis/theme_data";
-import { randomString } from "../../../../ultis/helpers"
+import { randomString } from "../../../../ultis/helpers";
 class Modal extends Component {
   constructor(props) {
     super(props);
@@ -23,7 +23,7 @@ class Modal extends Component {
       end_work_minute: 0,
       start_break_hour: 0,
       start_break_minute: 0,
-      icon :false,
+      icon: false,
 
       end_break_hour: 0,
       end_break_minute: 0,
@@ -72,7 +72,7 @@ class Modal extends Component {
     };
   }
 
-  componentDidMount() { }
+  componentDidMount() {}
 
   onChange = (e) => {
     var target = e.target;
@@ -330,22 +330,22 @@ class Modal extends Component {
       });
     }
   };
-  onChangeIcon = () =>
-  {
-    this.setState({icon: !this.state.icon})
-  }
+  onChangeIcon = () => {
+    this.setState({ icon: !this.state.icon });
+  };
   handleCheck = (e) => {
     if (e.target.checked == true) {
       this.setState({
-        days_of_week_list: [...this.state.list_days_of_week_list], isCheck: e.target.checked
+        days_of_week_list: [...this.state.list_days_of_week_list],
+        isCheck: e.target.checked,
+      });
+    } else {
+      this.setState({
+        days_of_week_list: [],
+        isCheck: e.target.checked,
       });
     }
-    else {
-      this.setState({
-        days_of_week_list: [], isCheck: e.target.checked
-      });
-  }
-}
+  };
   render() {
     const {
       name,
@@ -379,7 +379,10 @@ class Modal extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+            <div
+              class="modal-header"
+              style={{ backgroundColor: themeData().backgroundColor }}
+            >
               <h4 class="modal-title">Thêm ca chấm công</h4>
 
               <button
@@ -408,7 +411,7 @@ class Modal extends Component {
                     value={name}
                     name="name"
                     placeholder="Nhập tên ca"
-                    autocomplete="off"
+                    autoComplete="off"
                     onChange={this.onChange}
                   />
                 </div>
@@ -421,7 +424,7 @@ class Modal extends Component {
                     value={code}
                     name="code"
                     placeholder="Nhập mã ca"
-                    autocomplete="off"
+                    autoComplete="off"
                     onChange={this.onChange}
                   />
                 </div> */}
@@ -450,9 +453,9 @@ class Modal extends Component {
                     onSave={this.onChangeStart}
                     onChange={this.onChangeStart}
                     style={{ marginBottom: "0.5rem" }}
-                  // onChange={(date) => {
-                  //   console.log(date);
-                  // }}
+                    // onChange={(date) => {
+                    //   console.log(date);
+                    // }}
                   />
 
                   <MomentInput
@@ -503,9 +506,9 @@ class Modal extends Component {
                     onSave={this.onChangeStart2}
                     onChange={this.onChangeStart2}
                     style={{ marginBottom: "0.5rem" }}
-                  // onChange={(date) => {
-                  //   console.log(date);
-                  // }}
+                    // onChange={(date) => {
+                    //   console.log(date);
+                    // }}
                   />
 
                   <MomentInput
@@ -528,7 +531,7 @@ class Modal extends Component {
                     }}
                     onSave={this.onChangeEnd2}
                     onChange={this.onChangeEnd2}
-                  // onChange={this.onChangeEnd}
+                    // onChange={this.onChangeEnd}
                   />
                 </div>
 
@@ -543,7 +546,12 @@ class Modal extends Component {
                           class="form-check-input"
                           type="checkbox"
                           id="flexCheckDefault"
-                          checked={list_days_of_week_list.length === this.state.days_of_week_list?.length ? true : false}
+                          checked={
+                            list_days_of_week_list.length ===
+                            this.state.days_of_week_list?.length
+                              ? true
+                              : false
+                          }
                           onChange={this.handleCheck}
                         />
                         <label class="form-check-label" for="flexCheckDefault">
@@ -559,14 +567,15 @@ class Modal extends Component {
                         return (
                           <button
                             type="button"
-                            class={`btn btn-primary btn-day ${days_of_week_list.some(
-                              (e) =>
-                                Object.entries(e).toString() ===
-                                Object.entries(value).toString()
-                            )
+                            class={`btn btn-primary btn-day ${
+                              days_of_week_list.some(
+                                (e) =>
+                                  Object.entries(e).toString() ===
+                                  Object.entries(value).toString()
+                              )
                                 ? "active"
                                 : ""
-                              }`}
+                            }`}
                             index={value.id}
                             onClick={() => {
                               this.handleDayClick(value);
@@ -636,7 +645,7 @@ class Modal extends Component {
                               id="minutes_late_allow"
                               value={minutes_late_allow}
                               name="minutes_late_allow"
-                              autocomplete="off"
+                              autoComplete="off"
                               onChange={this.onChange}
                               min={0}
                             />
@@ -658,7 +667,7 @@ class Modal extends Component {
                               id="minutes_early_leave_allow"
                               value={minutes_early_leave_allow}
                               name="minutes_early_leave_allow"
-                              autocomplete="off"
+                              autoComplete="off"
                               onChange={this.onChange}
                               min={0}
                             />
@@ -682,9 +691,7 @@ class Modal extends Component {
                 </button>
                 <button type="submit" class="btn btn-warning">
                   Tạo
-
                 </button>
-
               </div>
             </form>
           </div>

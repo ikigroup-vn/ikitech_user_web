@@ -3,9 +3,9 @@ import * as categoryBAction from "../../actions/category_blog";
 import { connect } from "react-redux";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import * as helper from "../../ultis/helpers";
-import * as Env from "../../ultis/default"
-import {compressed} from "../../ultis/helpers"
-import {isEmpty} from "../../ultis/helpers"
+import * as Env from "../../ultis/default";
+import { compressed } from "../../ultis/helpers";
+import { isEmpty } from "../../ultis/helpers";
 import * as Types from "../../constants/ActionType";
 import themeData from "../../ultis/theme_data";
 
@@ -14,41 +14,40 @@ class ModalUpdateChild extends Component {
     super(props);
     this.state = {
       txtName: "",
-      id: '',
-      idChild:"",
-      image: '',
-      fileUpload: null
-
+      id: "",
+      idChild: "",
+      image: "",
+      fileUpload: null,
     };
   }
 
   componentWillReceiveProps(nextProps) {
     if (!shallowEqual(nextProps.modal, this.props.modal)) {
-      var category = nextProps.modal
-      console.log('category',category)
+      var category = nextProps.modal;
+      console.log("category", category);
       this.setState({
         txtName: category.name,
         idChild: category.idChild,
         id: category.id,
-        image: category.image
-      })
+        image: category.image,
+      });
     }
-
   }
 
-  shouldComponentUpdate(nextProps, nextState)
-  {
-    if(!shallowEqual(nextProps.category_product , this.props.category_product) || nextState.fileUpload == "")
-    {
-      console.log("asdas")
-      window.$('.modal').modal('hide');
-       window.$('#file-category-product-update-child').fileinput('clear');
+  shouldComponentUpdate(nextProps, nextState) {
+    if (
+      !shallowEqual(nextProps.category_product, this.props.category_product) ||
+      nextState.fileUpload == ""
+    ) {
+      console.log("asdas");
+      window.$(".modal").modal("hide");
+      window.$("#file-category-product-update-child").fileinput("clear");
       this.setState({
         txtName: "",
-        fileUpload : null
-      })
+        fileUpload: null,
+      });
     }
-    return true
+    return true;
   }
 
   onChange = (e) => {
@@ -63,10 +62,8 @@ class ModalUpdateChild extends Component {
 
   onSave = async (e) => {
     e.preventDefault();
-    if( this.state.txtName == null || !isEmpty( this.state.txtName))
-    {
+    if (this.state.txtName == null || !isEmpty(this.state.txtName)) {
       this.props.showError({
-
         type: Types.ALERT_UID_STATUS,
         alert: {
           type: "danger",
@@ -74,51 +71,58 @@ class ModalUpdateChild extends Component {
           disable: "show",
           content: "Tên danh mục không được để trống",
         },
-      }
-      )
+      });
       return;
     }
-    var category = this.state
+    var category = this.state;
     var file = this.state.fileUpload;
     const fd = new FormData();
 
-    if(typeof file !== "undefined" && file != "" && file != null )
-    {
+    if (typeof file !== "undefined" && file != "" && file != null) {
       console.log("dsa");
       // window.$('#file-category-product-update').fileinput('clear');
-      fd.append('image' , await compressed(file))
+      fd.append("image", await compressed(file));
 
-      fd.append('name' , this.state.txtName)
+      fd.append("name", this.state.txtName);
 
-      this.props.updateCategoryChild(this.props.store_code,category.id, category.idChild, fd);
-      this.setState({fileUpload : ""})
+      this.props.updateCategoryChild(
+        this.props.store_code,
+        category.id,
+        category.idChild,
+        fd
+      );
+      this.setState({ fileUpload: "" });
+    } else {
+      fd.append("name", this.state.txtName);
 
+      this.props.updateCategoryChild(
+        this.props.store_code,
+        category.id,
+        category.idChild,
+        fd
+      );
     }
-    else
-    {
-      fd.append('name' , this.state.txtName)
-
-      this.props.updateCategoryChild(this.props.store_code,category.id, category.idChild, fd);
-    }
-
   };
   componentDidMount() {
+    var _this = this;
 
-    var _this = this
-
-    window.$('#file-category-product-update-child').on('fileloaded', function (event, file) {
-      _this.setState({ fileUpload: file })
-    });
-    window.$('#file-category-product-update-child').on('fileremoved', function (event, id, index) {
-      _this.setState({ fileUpload: null })
-    });
+    window
+      .$("#file-category-product-update-child")
+      .on("fileloaded", function (event, file) {
+        _this.setState({ fileUpload: file });
+      });
+    window
+      .$("#file-category-product-update-child")
+      .on("fileremoved", function (event, id, index) {
+        _this.setState({ fileUpload: null });
+      });
 
     helper.loadFileInput("file-category-product-update-child");
   }
   render() {
     var { txtName, image } = this.state;
-    console.log('image',image)
-    var image = image == null || image == "" ? Env.IMG_NOT_FOUND : image
+    console.log("image", image);
+    var image = image == null || image == "" ? Env.IMG_NOT_FOUND : image;
     return (
       <div
         class="modal fade"
@@ -130,11 +134,20 @@ class ModalUpdateChild extends Component {
       >
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{backgroundColor: themeData().backgroundColor}} >
+            <div
+              class="modal-header"
+              style={{ backgroundColor: themeData().backgroundColor }}
+            >
               <h4 class="modal-title">Chỉnh sửa danh mục con</h4>
 
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
             </div>
             <form
               onSubmit={this.onSave}
@@ -151,7 +164,7 @@ class ModalUpdateChild extends Component {
                     class="form-control"
                     id="txtName"
                     placeholder="Nhập tên danh mục"
-                    autocomplete="off"
+                    autoComplete="off"
                     value={txtName}
                     onChange={this.onChange}
                     name="txtName"
@@ -174,7 +187,6 @@ class ModalUpdateChild extends Component {
                   <img src={`${image}`} width="150" height="150" />
                 </div>
                 </div> */}
-
               </div>
               <div class="modal-footer">
                 <button
@@ -196,17 +208,15 @@ class ModalUpdateChild extends Component {
   }
 }
 
-
-
-
 const mapDispatchToProps = (dispatch, props) => {
   return {
-
     showError: (error) => {
-      dispatch(error)
+      dispatch(error);
     },
-    updateCategoryChild: (store_code, id,idChild, data) => {
-      dispatch(categoryBAction.updateCategoryChild(store_code,id, idChild, data));
+    updateCategoryChild: (store_code, id, idChild, data) => {
+      dispatch(
+        categoryBAction.updateCategoryChild(store_code, id, idChild, data)
+      );
     },
   };
 };

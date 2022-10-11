@@ -61,14 +61,11 @@ class Form extends Component {
         "Chọn ngày và thời gian";
       document.getElementsByClassName("r-input")[1].placeholder =
         "Chọn ngày và thời gian";
-        this.props.fetchAllAgencyType(this.props.store_code);
-
+      this.props.fetchAllAgencyType(this.props.store_code);
     } catch (error) {}
   }
 
   onSaveProduct = (isBonus, isLadder, fromBonusLadder) => {
-
-
     if (isBonus) {
       this.setState({
         saveListProductsBonus: [...this.state.listProductsBonus],
@@ -179,35 +176,29 @@ class Form extends Component {
     }
   };
 
-
-  checkProductSameQuantity = (ladder_reward = false , products) =>{
-    if(ladder_reward !== true)
-    return true
-    if(ladder_reward == true && products?.length > 0)
-    {
-      for (const [index, element] of products.entries())
-      {
-        var filter = products.filter((v,i)=>{
-          if(
+  checkProductSameQuantity = (ladder_reward = false, products) => {
+    if (ladder_reward !== true) return true;
+    if (ladder_reward == true && products?.length > 0) {
+      for (const [index, element] of products.entries()) {
+        var filter = products.filter((v, i) => {
+          if (
             parseInt(element.quantity) === parseInt(v.quantity)
             // element.id === v.id &&
-            //  parseInt(element.bonus_quantity) === parseInt(v.bonus_quantity) 
+            //  parseInt(element.bonus_quantity) === parseInt(v.bonus_quantity)
             //  && parseInt(element.quantity) === parseInt(v.quantity)
             //  && element.element_distribute_name == v.element_distribute_name
             //  && element.sub_element_distribute_name == v.sub_element_distribute_name
-             )
-          {
-            return true
+          ) {
+            return true;
           }
-        })
-        if(filter?.length > 1)
-        {
-          return filter[0]
+        });
+        if (filter?.length > 1) {
+          return filter[0];
         }
       }
-      return true
+      return true;
     }
-  } 
+  };
 
   onSave = (e) => {
     e.preventDefault();
@@ -226,9 +217,11 @@ class Form extends Component {
     var listProductsLadder = state.listProductsLadder;
     var productBonus = {};
     var select_products = [];
-    var itemLadderCheck = this.checkProductSameQuantity(state.ladder_reward , state.listProductsBonusLadder)
-    if(itemLadderCheck !== true)
-    {
+    var itemLadderCheck = this.checkProductSameQuantity(
+      state.ladder_reward,
+      state.listProductsBonusLadder
+    );
+    if (itemLadderCheck !== true) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
         alert: {
@@ -236,7 +229,7 @@ class Form extends Component {
           title: "Lỗi",
           disable: "show",
           // content: `${listProductsLadder[0]?.name} mua ${itemLadderCheck.quantity} - tặng ${itemLadderCheck.bonus_quantity} ${itemLadderCheck.name}  bị trùng lặp`
-          content : "Sản phẩm mua không được trùng về số lượng"
+          content: "Sản phẩm mua không được trùng về số lượng",
         },
       });
       return;
@@ -313,8 +306,10 @@ class Form extends Component {
       "YYYY-MM-DD HH:mm:ss"
     );
     var { group_customer, agency_type_id } = this.state;
-    var agency_type_name = this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]?.name || null;
-    console.log(this.props.types,agency_type_name)
+    var agency_type_name =
+      this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]
+        ?.name || null;
+    console.log(this.props.types, agency_type_name);
     var form = {
       group_customer,
       agency_type_id,
@@ -328,7 +323,7 @@ class Form extends Component {
       start_time: startTime == "Invalid date" ? null : startTime,
       end_time: endTime == "Invalid date" ? null : endTime,
       ...productBonus,
-      ladder_reward : state.ladder_reward,
+      ladder_reward: state.ladder_reward,
       description: state.txtContent,
       image_url: state.image,
       set_limit_amount: true,
@@ -367,10 +362,6 @@ class Form extends Component {
     return false;
   }
 
-
-
-
-
   handleAddProduct = (
     product,
     id,
@@ -381,13 +372,7 @@ class Form extends Component {
     fromBonusLadder,
     indexRemove
   ) => {
-    console.log( product,
-      id,
-      type,
-      onSave,
-      isBonus,
-      isLadder,
-      fromBonusLadder)
+    console.log(product, id, type, onSave, isBonus, isLadder, fromBonusLadder);
     if (isBonus) var products = [...this.state.listProductsBonus];
     else if (isLadder) var products = [...this.state.listProductsLadder];
     else if (fromBonusLadder)
@@ -397,11 +382,10 @@ class Form extends Component {
     if (product?.length > 0) {
       if (type == "remove") {
         if (products.length > 0) {
-          products = products.filter((value , index) => {
-            if(typeof indexRemove !== "undefined")
-            return index !== indexRemove;
-            else
-            return value.product.id !== product[0].id;
+          products = products.filter((value, index) => {
+            if (typeof indexRemove !== "undefined")
+              return index !== indexRemove;
+            else return value.product.id !== product[0].id;
           });
           // products.forEach((item, index) => {
           //   if (item.product.id === product[0].id) {
@@ -423,9 +407,9 @@ class Form extends Component {
               _index = index1;
             }
           });
-          if (check == false || fromBonusLadder == true  ) {
+          if (check == false || fromBonusLadder == true) {
             var product = {
-              quantity: item.quantity > 1 ?  product.quantity : 1,
+              quantity: item.quantity > 1 ? product.quantity : 1,
               product: item,
               allows_all_distribute: item.allows_all_distribute,
               allows_choose_distribute: item.allows_choose_distribute,
@@ -447,7 +431,7 @@ class Form extends Component {
             products.push(product);
           } else {
             var product = {
-              quantity: item.quantity > 1 ?  product.quantity : 1,
+              quantity: item.quantity > 1 ? product.quantity : 1,
               product: item,
               allows_all_distribute: item.allows_all_distribute,
               allows_choose_distribute: item.allows_choose_distribute,
@@ -472,15 +456,14 @@ class Form extends Component {
     } else {
       if (type == "remove") {
         if (products.length > 0) {
-          products = products.filter((item , index) => {
+          products = products.filter((item, index) => {
             if (fromBonusLadder) {
               var item = { ...item };
               delete item.allows_all_distribute;
             }
-            if(typeof indexRemove !== "undefined")
-            return index !== indexRemove;
-            else
-            return !this.compareTwoProduct(item, product);
+            if (typeof indexRemove !== "undefined")
+              return index !== indexRemove;
+            else return !this.compareTwoProduct(item, product);
           });
           // products.forEach((item, index) => {
           //   // if (item.product.id === id) {
@@ -501,7 +484,7 @@ class Form extends Component {
         });
         if (checkExsit == true || fromBonusLadder == true) {
           var product = {
-            quantity: product.quantity > 1 ?  product.quantity : 1,
+            quantity: product.quantity > 1 ? product.quantity : 1,
             product: product,
             allows_all_distribute: product.allows_all_distribute,
             allows_choose_distribute: product.allows_choose_distribute,
@@ -523,7 +506,7 @@ class Form extends Component {
           else products.push(product);
         } else {
           var product = {
-            quantity: product.quantity > 1 ?  product.quantity : 1,
+            quantity: product.quantity > 1 ? product.quantity : 1,
             product: product,
             allows_all_distribute: product.allows_all_distribute,
             allows_choose_distribute: product.allows_choose_distribute,
@@ -586,7 +569,8 @@ class Form extends Component {
     indexRemove
   ) => {
     if (isBonus) var products = [...this.state.listProductsBonus];
-    else if (isBonusLadder) var products = [...this.state.listProductsBonusLadder];
+    else if (isBonusLadder)
+      var products = [...this.state.listProductsBonusLadder];
     else var products = [...this.state.listProducts];
 
     console.log(isBonusLadder, name, products);
@@ -597,9 +581,8 @@ class Form extends Component {
       }
 
       if (typeof indexRemove !== "undefined") {
-        if(index == indexRemove)
-        {
-          console.log("vaoooo")
+        if (index == indexRemove) {
+          console.log("vaoooo");
           if (setIncrement === 1) {
             if (isBonusLadder) products[index][name] = product[name] + 1;
             else products[index].quantity = parseInt(product.quantity) + 1;
@@ -618,10 +601,8 @@ class Form extends Component {
             } else products[index].quantity = quantity;
           }
         }
-      }
-      else{
+      } else {
         if (this.compareTwoProduct(product, data)) {
-   
           if (setIncrement === 1) {
             if (isBonusLadder) products[index][name] = product[name] + 1;
             else products[index].quantity = parseInt(product.quantity) + 1;
@@ -637,8 +618,7 @@ class Form extends Component {
             if (isBonusLadder) {
               console.log(products[index][name], name, index);
               products[index][name] = quantity;
-            } else 
-            {
+            } else {
               products[index].quantity = quantity;
             }
           }
@@ -685,11 +665,11 @@ class Form extends Component {
       saveListProductsBonusLadder,
     } = this.state;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
-    var { products, store_code, combos , types } = this.props;
+    var { products, store_code, combos, types } = this.props;
     var type_discount_default = txtDiscoutType == "0" ? "show" : "hide";
     var type_discount_percent = txtDiscoutType == "1" ? "show" : "hide";
 
-    console.log("product ne",saveListProductsLadder);
+    console.log("product ne", saveListProductsLadder);
     return (
       <React.Fragment>
         <form role="form" onSubmit={this.onSave} method="post">
@@ -721,7 +701,7 @@ class Form extends Component {
                     </React.Fragment>
                   )
                 } */}
-                    <div class="form-group">
+                <div class="form-group">
                   <div class="form-check">
                     <input
                       type="checkbox"
@@ -747,7 +727,7 @@ class Form extends Component {
                     value={txtName}
                     name="txtName"
                     placeholder="Nhập tên chương trình"
-                    autocomplete="off"
+                    autoComplete="off"
                     onChange={this.onChange}
                   />
                 </div>
@@ -808,91 +788,89 @@ class Form extends Component {
                     name="txtAmount"
                     value={txtAmount}
                     placeholder="Số lượng mã phiểu có thể sử dụng"
-                    autocomplete="off"
+                    autoComplete="off"
                     onChange={this.onChange}
                   />
                 </div>
                 <div className="form-group discount-for">
-              <label htmlFor="group_customer">Áp dụng cho</label>
-              <div
-                style={{
-                  display: "flex",
-                }}
-                className="radio discount-for"
-                onChange={this.onChange}
-              >
-                <label>
-                  <input
-                    type="radio"
-                    name="group_customer"
-                    checked={group_customer == 0 ? true : false}
-                    className="group_customer"
-                    id="ship"
-                    value="0"
-                  />
-                  {"  "} Tất cả
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="group_customer"
-                    checked={group_customer == 2 ? true : false}
-                    className="group_customer"
-                    id="bill"
-                    value="2"
-                  />
-                  {"  "}Đại lý
-                </label>
+                  <label htmlFor="group_customer">Áp dụng cho</label>
+                  <div
+                    style={{
+                      display: "flex",
+                    }}
+                    className="radio discount-for"
+                    onChange={this.onChange}
+                  >
+                    <label>
+                      <input
+                        type="radio"
+                        name="group_customer"
+                        checked={group_customer == 0 ? true : false}
+                        className="group_customer"
+                        id="ship"
+                        value="0"
+                      />
+                      {"  "} Tất cả
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="group_customer"
+                        checked={group_customer == 2 ? true : false}
+                        className="group_customer"
+                        id="bill"
+                        value="2"
+                      />
+                      {"  "}Đại lý
+                    </label>
 
-                <label>
-                  <input
-                    type="radio"
-                    name="group_customer"
-                    checked={group_customer == 1 ? true : false}
-                    className="group_customer"
-                    id="ship"
-                    value="1"
-                  />
-                  {"  "} Cộng tác viên
-                </label>
-              </div>
-              {group_customer == 2 && (
-                <select
-                  onChange={this.onChange}
-                  value={agency_type_id}
-                  name="agency_type_id"
-                  class="form-control"
-                >
-                  <option>--- Chọn cấp đại lý ---</option>
-                  {types.map((v) => {
-                    return <option value={v.id}>{v.name}</option>;
-                  })}
-                </select>
-              )}
-            </div>
-            {
-              ladder_reward !== true && <div class="form-group">
-              <div class="form-check">
-                <input
-                  type="checkbox"
-                  checked={multiply_by_number}
-                  onChange={() =>
-                    this.setState({
-                      multiply_by_number: !multiply_by_number,
-                    })
-                  }
-                  class="form-check-input"
-                  id="gridCheck"
-                />
-                {/* <input class="form-check-input" name="is_set_order_max_point" type="checkbox" id="gridCheck" /> */}
-                <label class="form-check-label" for="gridCheck">
-                  Hàng tặng nhân theo số lượng mua{" "}
-                </label>
-              </div>
-            </div>
-        
-            }
-                
+                    <label>
+                      <input
+                        type="radio"
+                        name="group_customer"
+                        checked={group_customer == 1 ? true : false}
+                        className="group_customer"
+                        id="ship"
+                        value="1"
+                      />
+                      {"  "} Cộng tác viên
+                    </label>
+                  </div>
+                  {group_customer == 2 && (
+                    <select
+                      onChange={this.onChange}
+                      value={agency_type_id}
+                      name="agency_type_id"
+                      class="form-control"
+                    >
+                      <option>--- Chọn cấp đại lý ---</option>
+                      {types.map((v) => {
+                        return <option value={v.id}>{v.name}</option>;
+                      })}
+                    </select>
+                  )}
+                </div>
+                {ladder_reward !== true && (
+                  <div class="form-group">
+                    <div class="form-check">
+                      <input
+                        type="checkbox"
+                        checked={multiply_by_number}
+                        onChange={() =>
+                          this.setState({
+                            multiply_by_number: !multiply_by_number,
+                          })
+                        }
+                        class="form-check-input"
+                        id="gridCheck"
+                      />
+                      {/* <input class="form-check-input" name="is_set_order_max_point" type="checkbox" id="gridCheck" /> */}
+                      <label class="form-check-label" for="gridCheck">
+                        Hàng tặng nhân theo số lượng mua{" "}
+                      </label>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -933,7 +911,6 @@ class Form extends Component {
                     handleAddProduct={this.handleAddProduct}
                     products={saveListProductsBonusLadder}
                     fromProduct={saveListProductsLadder}
-
                   ></TableBonusLadder>
                 ) : (
                   <TableBonus
@@ -1015,7 +992,6 @@ const mapStateToProps = (state) => {
   return {
     image: state.UploadReducers.comboImg.combo_img,
     types: state.agencyReducers.agency.allAgencyType,
-
   };
 };
 

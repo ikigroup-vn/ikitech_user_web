@@ -27,7 +27,6 @@ import CustomerDetail from "./screens/Customer/Detail";
 import CustomerDetailPos from "./screens/Customer/DetailPos/index";
 import SupplierDetailPos from "./screens/Supplier/DetailPos/index";
 
-
 import RevenueExpenditures from "./screens/RevenueExpenditures";
 import RewardPoint from "./screens/RewardPoint/index";
 
@@ -67,13 +66,11 @@ import CategoryB from "./screens/Category_B/index";
 import CategoryBEdit from "./screens/Category_B/Edit/index";
 import CategoryBCreate from "./screens/Category_B/Create";
 
-
 import Course from "./screens/Train/Course/index";
 import CourseEdit from "./screens/Train/Course//Edit/index";
 import CourseCreate from "./screens/Train/Course/Create";
 
 import QuizQuestion from "./screens/Train/Question/index";
-
 
 import Chapter from "./screens/Train/Chapter/index";
 import Lesson from "./screens/Train/Lesson/index";
@@ -147,13 +144,11 @@ import CreateImportStock from "./screens/ImportStock/create";
 import DetailImportStock from "./screens/ImportStock/detail";
 import EditImportStock from "./screens/ImportStock/edit";
 
-
 import TransferStock from "./screens/TransferStock/index";
 
 import CreateTransferStock from "./screens/TransferStock/Sender/create";
 import DetailTransferStock from "./screens/TransferStock/Sender/detail";
 import EditTransferStock from "./screens/TransferStock/Sender/edit";
-
 
 import ReportInventory from "./screens/Report/ReportInventory";
 import ImportExpostStock from "./screens/Report/import_export/ImportExpostStock";
@@ -170,6 +165,7 @@ import getChannel, { IKIPOS, IKITECH } from "./ultis/channel";
 import PrintOrderScreen from "./screens/Bill/PrintOrderScreen";
 import PrintBarcode from "./screens/PrintBarcode";
 import CustomerSale from "./screens/CustomerSale";
+import GroupCustomer from "./screens/GroupCustomer";
 const routes = [
   {
     path: "/decentralization/index/:store_code",
@@ -245,9 +241,6 @@ const routes = [
     ),
   },
 
-
-
-
   {
     path: "/transfer_stocks/index/:store_code",
     exact: true,
@@ -281,10 +274,6 @@ const routes = [
     ),
   },
 
-
-
-
-  
   {
     path: "/import_stocks/index/:store_code",
     exact: true,
@@ -317,9 +306,6 @@ const routes = [
       <DetailImportStock match={match} history={history} />
     ),
   },
-
-
-
 
   {
     path: "/branch/index/:store_code",
@@ -399,8 +385,9 @@ const routes = [
     path: "/supplier/detail/:store_code/:supplierId",
     exact: true,
 
-    main: ({ match, history }) =>
+    main: ({ match, history }) => (
       <SupplierDetailPos match={match} history={history} />
+    ),
   },
 
   {
@@ -516,6 +503,12 @@ const routes = [
 
     main: ({ match }) => <Customer match={match} />,
   },
+  {
+    path: "/group_customer/:store_code",
+    exact: true,
+
+    main: ({ match }) => <GroupCustomer match={match} />,
+  },
 
   {
     path: "/customer_sales/:store_code",
@@ -524,17 +517,15 @@ const routes = [
     main: ({ match }) => <CustomerSale match={match} />,
   },
 
-
   {
     path: "/customer/detail/:store_code/:customerId",
     exact: true,
 
     main: ({ match, history }) => (
       <CustomerDetailPos match={match} history={history} />
-
-    )
+    ),
   },
-  
+
   {
     path: "/revenue_expenditure/:store_code",
     exact: true,
@@ -553,7 +544,9 @@ const routes = [
     path: "/product/print_barcode/:store_code",
     exact: true,
 
-    main: ({ match, history }) => <PrintBarcode match={match} history={history} />,
+    main: ({ match, history }) => (
+      <PrintBarcode match={match} history={history} />
+    ),
   },
   {
     path: "/product/index/:store_code/:page?",
@@ -689,7 +682,6 @@ const routes = [
     ),
   },
 
-
   {
     path: "/bonus_product/:store_code",
     exact: true,
@@ -701,7 +693,9 @@ const routes = [
     path: "/bonus_product/edit/:store_code/:bonusProductId",
     exact: true,
 
-    main: ({ match, history }) => <BonusProductEdit match={match} history={history} />,
+    main: ({ match, history }) => (
+      <BonusProductEdit match={match} history={history} />
+    ),
   },
 
   {
@@ -862,7 +856,6 @@ const routes = [
 
     main: ({ match }) => <CategoryB match={match} />,
   },
-
 
   {
     path: "/posts/category/create/:store_code",

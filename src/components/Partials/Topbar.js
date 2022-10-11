@@ -10,7 +10,14 @@ import * as Env from "../../ultis/default";
 import Notification from "./Notification";
 import * as helper from "../../ultis/helpers";
 import { shallowEqual } from "../../ultis/shallowEqual";
-import { getBranchId, setBranchId, getBranchName, setBranchName, setStoreCode, getStoreCode } from "../../ultis/branchUtils";
+import {
+  getBranchId,
+  setBranchId,
+  getBranchName,
+  setBranchName,
+  setStoreCode,
+  getStoreCode,
+} from "../../ultis/branchUtils";
 import { Redirect } from "react-router-dom";
 import * as notificationAction from "../../actions/notification";
 class Topbar extends Component {
@@ -24,20 +31,18 @@ class Topbar extends Component {
 
   componentDidMount() {
     this.props.fetchBranchStore(this.props.store_code);
-    const branch_id = getBranchId()
-    console.log(getStoreCode())
-    if (getStoreCode() == ""||getStoreCode() == null || getStoreCode() == "undefined" || typeof getStoreCode() == "undefined") {
-      setStoreCode(this.props.store_code)
+    const branch_id = getBranchId();
+    if (
+      getStoreCode() == "" ||
+      getStoreCode() == null ||
+      getStoreCode() == "undefined" ||
+      typeof getStoreCode() == "undefined"
+    ) {
+      setStoreCode(this.props.store_code);
       // return;
     }
 
-
-
-
-
     this.props.fetchAllBadge(this.props.store_code, branch_id);
-
-
 
     if (!this.props.isExistUser) this.props.fetchUserId();
     if (!this.props.isExsitStore) {
@@ -48,14 +53,10 @@ class Topbar extends Component {
     this.setState({ txtBranch: branchId });
   }
 
-
   componentWillReceiveProps(nextProps) {
-
-
     if (!shallowEqual(nextProps.branchStore, this.props.branchStore)) {
       const branch_id = getBranchId();
       const branch_name = getBranchName();
-
 
       if (nextProps.branchStore != null && nextProps.branchStore.length > 0) {
         if (branch_id != null) {
@@ -69,26 +70,23 @@ class Topbar extends Component {
 
             this.setState({ txtBranch: value });
             this.props.changeBranch(nextProps.branchStore[0]);
-            setBranchId(value)
+            setBranchId(value);
 
-            setBranchName(name)
+            setBranchName(name);
           } else {
             this.props.changeBranch(selectedBranch);
           }
-
         } else {
           const value = nextProps.branchStore[0]?.id;
           const name = nextProps.branchStore[0]?.name;
 
           this.props.changeBranch(nextProps.branchStore[0]);
-          setBranchId(value)
-          setBranchName(name)
+          setBranchId(value);
+          setBranchName(name);
 
           this.setState({ txtBranch: value });
         }
       }
-
-
     }
     if (
       this.state.isLoading != true &&
@@ -96,7 +94,7 @@ class Topbar extends Component {
     ) {
       var permissions = nextProps.permission;
 
-      var isShow = permissions.store_info
+      var isShow = permissions.store_info;
       this.setState({ isLoading: true, isShow });
     }
   }
@@ -130,8 +128,19 @@ class Topbar extends Component {
       result = stores.map((data, index) => {
         var selected = data.store_code === store_code ? true : false;
         return (
-          <option value={data.id} key={index} selected={selected} data-branch-type="(CN mặc định)" className={data.is_default_order_online == true ? "active-branch-default" : ""}>
-            {data.name}      {data.is_default_order_online == true ? "(Mặc định)" : ""}
+          <option
+            value={data.id}
+            key={index}
+            selected={selected}
+            data-branch-type="(CN mặc định)"
+            className={
+              data.is_default_order_online == true
+                ? "active-branch-default"
+                : ""
+            }
+          >
+            {data.name}{" "}
+            {data.is_default_order_online == true ? "(Mặc định)" : ""}
           </option>
         );
       });
@@ -142,14 +151,16 @@ class Topbar extends Component {
   };
 
   getNameBranch = (stores) => {
-    var result = ""
+    var result = "";
     if (stores && stores.length > 0) {
-      var item = stores.filter(store => store.store_code == this.props.store_code);
-      result = item.length > 0 ? item[0].name : ""
+      var item = stores.filter(
+        (store) => store.store_code == this.props.store_code
+      );
+      result = item.length > 0 ? item[0].name : "";
     }
 
-    return result
-  }
+    return result;
+  };
 
   showNotification = (
     isNotification,
@@ -185,12 +196,11 @@ class Topbar extends Component {
         : user.name;
     var image =
       typeof user.avatar_image == "undefined" ||
-        user.avatar_image == "" ||
-        user.avatar_image == null
+      user.avatar_image == "" ||
+      user.avatar_image == null
         ? Env.IMG_NOT_AVATAR
         : user.avatar_image;
     var disable = typeof this.props.isHome == "undefined" ? "show" : "hide";
-    console.log(isShow)
     return (
       <React.Fragment>
         <div>
@@ -213,7 +223,9 @@ class Topbar extends Component {
                 value={txtBranch}
                 onChange={this.onChange}
               >
-                <option value="" disabled>-- Chọn chi nhánh --</option>
+                <option value="" disabled>
+                  -- Chọn chi nhánh --
+                </option>
                 {this.showData(branchStore)}
               </select>
             </div>
@@ -222,7 +234,6 @@ class Topbar extends Component {
               <li className="nav-item dropdown no-arrow d-sm-none">
                 <div
                   className="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-
                   aria-labelledby="searchDropdown"
                 >
                   <form className="form-inline mr-auto w-100 navbar-search">
@@ -246,7 +257,7 @@ class Topbar extends Component {
 
               <li className="nav-item dropdown no-arrow">
                 {typeof isShow == "undefined" ? (
-                  <div ></div>
+                  <div></div>
                 ) : isShow == true ? (
                   <Link className="show-store" to={`/home`}>
                     <i
@@ -258,12 +269,10 @@ class Topbar extends Component {
                         color: "#ec0c38",
                       }}
                     ></i>
-                    {
-                      stores?.length > 0 && this.getNameBranch(stores)
-                    }
+                    {stores?.length > 0 && this.getNameBranch(stores)}
                   </Link>
                 ) : (
-                  <a className="show-store" >
+                  <a className="show-store">
                     <i
                       class="fas fa-store"
                       style={{
@@ -273,11 +282,10 @@ class Topbar extends Component {
                         color: "#ec0c38",
                       }}
                     ></i>
-                    {
-                      stores?.length > 0 && this.getNameBranch(stores)
-                    }
+                    {stores?.length > 0 && this.getNameBranch(stores)}
                   </a>
-                )}              </li>
+                )}{" "}
+              </li>
 
               <div className="topbar-divider d-none d-sm-block"></div>
 
@@ -301,7 +309,6 @@ class Topbar extends Component {
                 </a>
                 <div
                   className="dropdown-menu dropdown-menu-right shadow animated--grow-in"
-
                   aria-labelledby="userDropdown"
                 >
                   <Link
@@ -347,7 +354,6 @@ const mapStateToProps = (state) => {
     branchStore: state.storeReducers.store.branchStore,
     currentBranch: state.branchReducers.branch.currentBranch,
     permission: state.authReducers.permission.data,
-
   };
 };
 const mapDispatchToProps = (dispatch, props) => {

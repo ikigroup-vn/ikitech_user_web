@@ -30,8 +30,7 @@ class InfoProduct extends Component {
       check_inventory: false,
       txtCostOfCapital: "",
       categorySearch: "",
-      point_for_agency : 0,
-
+      point_for_agency: 0,
     };
   }
   handleChangeCheckParent(id) {
@@ -91,9 +90,8 @@ class InfoProduct extends Component {
       name == "txtPrice" ||
       name == "txtImportPrice" ||
       name == "txtPercentC" ||
-      name == "txtQuantityInStock" || 
+      name == "txtQuantityInStock" ||
       name == "point_for_agency"
-
     ) {
       if (!isNaN(Number(_value))) {
         value = formatNoD(_value);
@@ -233,7 +231,7 @@ class InfoProduct extends Component {
     }
     if (!shallowEqual(nextProps.product, this.props.product)) {
       var { product } = { ...nextProps };
-      var {isCopy} = nextProps
+      var { isCopy } = nextProps;
       var categories = [];
       var listcategorynew = [];
       categories = product.categories.map((category, index) => {
@@ -265,13 +263,13 @@ class InfoProduct extends Component {
       this.setState({
         txtName: product.name,
         txtPrice: _price,
-        point_for_agency : product.point_for_agency,
+        point_for_agency: product.point_for_agency,
 
         txtImportPrice: _import_price,
         disabledPrice: _price == 0 ? true : false,
         txtPercentC: product.percent_collaborator,
         // txtBarcode: isCopy ? Math.random().toString().slice(2, 11) :  product.barcode || Math.random().toString().slice(2, 11),
-        txtBarcode: product.barcode ,
+        txtBarcode: product.barcode,
 
         txtStatus: product.status,
         category_parent: listcategorynew,
@@ -320,7 +318,7 @@ class InfoProduct extends Component {
     e.preventDefault();
     var { store_code } = this.props;
     var { categorySearch, item1 } = this.state;
-    var resultSearch = []
+    var resultSearch = [];
     if (this.props.category_product?.length > 0) {
       for (const category of this.props.category_product) {
         if (category.name?.includes(categorySearch)) {
@@ -328,12 +326,12 @@ class InfoProduct extends Component {
             id: category.id,
             label: category.name,
             categories_child: category.category_children,
-          })
+          });
         }
       }
     }
 
-    this.setState({ listCategory: resultSearch })
+    this.setState({ listCategory: resultSearch });
     //   return {
     //     id: category.id,
     //     label: category.name,
@@ -361,12 +359,11 @@ class InfoProduct extends Component {
       txtCostOfCapital,
       checkHasDistribute,
       categorySearch,
-      point_for_agency
-
+      point_for_agency,
     } = this.state;
     console.log(checkHasDistribute);
     var txtQuantityInStock = txtQuantityInStock == -1 ? "" : txtQuantityInStock;
-    var {isCopy}   = this.props
+    var { isCopy } = this.props;
     return (
       <div class="card-body" style={{ padding: "0.8rem" }}>
         <div class="form-group">
@@ -376,7 +373,7 @@ class InfoProduct extends Component {
             class="form-control input-sm"
             id="txtName"
             placeholder="Nhập tên sản phẩm"
-            autocomplete="off"
+            autoComplete="off"
             value={txtName}
             onChange={this.onChange}
             name="txtName"
@@ -389,7 +386,7 @@ class InfoProduct extends Component {
             class="form-control input-sm"
             id="sku"
             placeholder="Nhập mã SKU"
-            autocomplete="off"
+            autoComplete="off"
             value={sku}
             name="sku"
             onChange={this.onChange}
@@ -402,7 +399,7 @@ class InfoProduct extends Component {
             class="form-control input-sm"
             id="txtBarcode"
             placeholder="Nhập barcode"
-            autocomplete="off"
+            autoComplete="off"
             value={txtBarcode}
             name="txtBarcode"
             onChange={this.onChange}
@@ -442,7 +439,7 @@ class InfoProduct extends Component {
                     class="form-control"
                     id="txtEmail"
                     placeholder="Nhập giá bán lẻ"
-                    autocomplete="off"
+                    autoComplete="off"
                     value={txtPrice}
                     onChange={this.onChange}
                     name="txtPrice"
@@ -462,7 +459,7 @@ class InfoProduct extends Component {
                     class="form-control"
                     id="txtEmail"
                     placeholder="Nhập giá nhập"
-                    autocomplete="off"
+                    autoComplete="off"
                     value={txtImportPrice}
                     onChange={this.onChange}
                     name="txtImportPrice"
@@ -513,31 +510,29 @@ class InfoProduct extends Component {
               class="form-control"
               id="txtEmail"
               placeholder="Nhập %"
-              autocomplete="off"
+              autoComplete="off"
               value={txtPercentC}
               onChange={this.onChange}
               name="txtPercentC"
             />
           </div>
         )}
-     <div class="form-group">
-          <label for="product_name">
-           Xu cho đại lý
-          </label>
+        <div class="form-group">
+          <label for="product_name">Xu cho đại lý</label>
           <i
-              style={{
-                display: "block",
-                marginBottom: "5px",
-              }}
-            >
-              Bỏ trống khi không xét xu cho đại lý
-            </i>
+            style={{
+              display: "block",
+              marginBottom: "5px",
+            }}
+          >
+            Bỏ trống khi không xét xu cho đại lý
+          </i>
           <input
             type="text"
             class="form-control"
             id="txtCostOfCapital"
             placeholder="Nhập xu"
-            autocomplete="off"
+            autoComplete="off"
             value={point_for_agency}
             onChange={this.onChange}
             name="point_for_agency"
@@ -565,7 +560,7 @@ class InfoProduct extends Component {
           <div className="Choose-category-product">
             <div className="wrap_category" style={{ display: "flex" }}>
               <input
-              disabled
+                disabled
                 type="text"
                 class="form-control"
                 placeholder="--Chọn danh mục--"
@@ -621,54 +616,56 @@ class InfoProduct extends Component {
                 style={{ listStyle: "none", margin: "5px 0" }}
                 class="list-group"
               >
-                {
-                    listCategory?.length > 0 ? listCategory.map((category) => (
-                  <li
-                    class=""
-                    style={{ cursor: "pointer", paddingLeft: "5px" }}
-                  >
-                    <input
-                      type="checkbox"
-                      style={{
-                        marginRight: "10px",
-                        width: "30px",
-                        height: "15px",
-                      }}
-                      checked={this.handleChangeCheckParent(category.id)}
-                      onChange={() => this.handleChangeParent(category)}
-                    />
-                    {category.label}
-                    <ul style={{ listStyle: "none", margin: "0px 45px" }}>
-                      {(category?.categories_child ?? []).map(
-                        (categoryChild) => (
-                          <li style={{ cursor: "pointer" }}>
-                            <input
-                              type="checkbox"
-                              style={{
-                                marginRight: "10px",
-                                width: "30px",
-                                height: "15px",
-                                marginTop: "3px",
-                              }}
-                              checked={this.handleChangeCheckChild(
-                                categoryChild.id
-                              )}
-                              onChange={() =>
-                                this.handleChangeChild(categoryChild)
-                              }
-                            />
-                            {categoryChild.name}
-                          </li>
-                        )
-                      )}
-                    </ul>
-                  </li>
-                  )) : <div>Không có kết quả</div>}
-                  </ul>
+                {listCategory?.length > 0 ? (
+                  listCategory.map((category) => (
+                    <li
+                      class=""
+                      style={{ cursor: "pointer", paddingLeft: "5px" }}
+                    >
+                      <input
+                        type="checkbox"
+                        style={{
+                          marginRight: "10px",
+                          width: "30px",
+                          height: "15px",
+                        }}
+                        checked={this.handleChangeCheckParent(category.id)}
+                        onChange={() => this.handleChangeParent(category)}
+                      />
+                      {category.label}
+                      <ul style={{ listStyle: "none", margin: "0px 45px" }}>
+                        {(category?.categories_child ?? []).map(
+                          (categoryChild) => (
+                            <li style={{ cursor: "pointer" }}>
+                              <input
+                                type="checkbox"
+                                style={{
+                                  marginRight: "10px",
+                                  width: "30px",
+                                  height: "15px",
+                                  marginTop: "3px",
+                                }}
+                                checked={this.handleChangeCheckChild(
+                                  categoryChild.id
+                                )}
+                                onChange={() =>
+                                  this.handleChangeChild(categoryChild)
+                                }
+                              />
+                              {categoryChild.name}
+                            </li>
+                          )
+                        )}
+                      </ul>
+                    </li>
+                  ))
+                ) : (
+                  <div>Không có kết quả</div>
+                )}
+              </ul>
             </div>
           </div>
         </div>
-    
       </div>
     );
   }
@@ -676,11 +673,9 @@ class InfoProduct extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-
     fetchAllCategoryP: (store_code, params) => {
       dispatch(CategoryPAction.fetchAllCategoryP(store_code, params));
     },
-
   };
 };
 export default connect(null, mapDispatchToProps)(InfoProduct);
