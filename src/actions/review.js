@@ -85,7 +85,7 @@ export const destroyReview = (store_code , id) => {
   };
 };
 
-export const changeStatus = (store_code,id,data) => {
+export const changeStatus = (store_code,id,data, page) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -98,7 +98,7 @@ export const changeStatus = (store_code,id,data) => {
           type: Types.SHOW_LOADING,
           loading : "hide"
         })
-        reviewApi.fetchAllReview(store_code).then((res) => {
+        reviewApi.fetchAllReview(store_code,page).then((res) => {
           if(res.data.code !== 401)
 
           dispatch({

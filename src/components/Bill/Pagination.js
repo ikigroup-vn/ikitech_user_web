@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import * as billAction from "../../actions/bill";
 import { getBranchId } from "../../ultis/branchUtils";
 import getChannel from "../../ultis/channel";
+import { setQueryParamInUrl } from "../../ultis/helpers";
 
 class Pagination extends Component {
   constructor(props) {
@@ -33,6 +34,7 @@ class Pagination extends Component {
      {
       params = params + `&time_from=${time_from}`;
     }
+    setQueryParamInUrl("page", page)
     this.props.fetchAllBill(store_code, page, params);
 
   }
@@ -87,7 +89,6 @@ class Pagination extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-
     fetchAllBill: (id, page, params) => {
       dispatch(billAction.fetchAllBill(id, page, params));
     },

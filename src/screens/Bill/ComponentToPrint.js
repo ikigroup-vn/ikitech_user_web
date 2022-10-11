@@ -84,12 +84,12 @@ export default class ComponentToPrint extends Component {
       arr.push(
         <tr>
           <td>{index + 1}</td>
-          <td style={{ textAlign: "start" }}>{element.name} </td>
+          <td style={{ textAlign: "start" }}>{element.name} {element.is_bonus == true ? "(Thưởng)" : ""}</td>
           <td>{element.quantity}</td>
           <td style={{ textAlign: "end" }}>
-            {format(
+            {element.is_bonus == true ? format(0) : format(
               (element.before_price || element.before_discount_price) *
-                element.quantity
+              element.quantity
             )}
           </td>
         </tr>
@@ -119,8 +119,8 @@ export default class ComponentToPrint extends Component {
             -{" "}
             {format(
               (bill.product_discount_amount || 0) +
-                (bill.voucher_discount_amount || 0) +
-                (bill.combo_discount_amount || 0)
+              (bill.voucher_discount_amount || 0) +
+              (bill.combo_discount_amount || 0)
             )}
           </td>
         </tr>
@@ -156,8 +156,8 @@ export default class ComponentToPrint extends Component {
       typeof badges.address_pickup == "undefined"
         ? null
         : badges.address_pickup == null
-        ? null
-        : badges.address_pickup.address_detail +
+          ? null
+          : badges.address_pickup.address_detail +
           ", " +
           badges.address_pickup.wards_name +
           ", " +
@@ -175,7 +175,7 @@ export default class ComponentToPrint extends Component {
               <p class="" id="sale_user_name">
                 <span style={{ fontWeight: "500" }}>
                   {" "}
-                  Tên: {state.store_name  ?? bill.store_name }
+                  Tên: {state.store_name ?? bill.store_name}
                 </span>
               </p>
               <p class="" id="info">
@@ -187,7 +187,7 @@ export default class ComponentToPrint extends Component {
                 {store_address}
               </p>
               <p class="" id="info">
-                <span>Số điện thoại:</span> {state.user_phone  ?? bill.user_phone}
+                <span>Số điện thoại:</span> {state.user_phone ?? bill.user_phone}
               </p>
             </div>
           </div>
@@ -197,14 +197,19 @@ export default class ComponentToPrint extends Component {
 
               <p class="" id="sale_user_name">
                 <span style={{ fontWeight: "500" }}>
-                  Tên: {state.customer_name}
+                  Tên: {state?.customer_name ?? bill.customer_name ?? bill?.customer?.name ?? ""}
                 </span>
               </p>
               <p class="" id="info">
-                <span>Địa chỉ: </span> {state.customer_address  ?? bill.customer_address}
+                <span>Địa chỉ: </span> { getDetailAdress(
+              bill.customer_address?.address_detail,
+              bill.customer_address?.wards_name,
+              bill.customer_address?.district_name,
+              bill.customer_address?.province_name
+            )}
               </p>
               <p class="" id="info">
-                <span>Số điện thoại: </span> {state.customer_phone  ?? bill.customer_phone}
+                <span>Số điện thoại: </span> {state?.customer_phone ?? bill.customer_phone ?? bill?.customer?.phone_number ?? ""}
               </p>
             </div>
           </div>
@@ -281,7 +286,7 @@ export default class ComponentToPrint extends Component {
 
             <div>
               <div style={{ fontSize: "25px", textAlign: "center" }}>
-                <strong> {format(state.total_final)}</strong>
+                <strong> {format(bill.total_final)}</strong>
               </div>
 
               <div

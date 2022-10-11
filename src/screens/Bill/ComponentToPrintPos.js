@@ -95,16 +95,16 @@ export default class ComponentToPrint extends Component {
     bill.line_items_at_time.forEach((element, index) => {
       arr.push(
         <tr>
-          <td>{index + 1}</td>
-          <td style={{ textAlign: "start" }}>{element.name} </td>
-          <td>{element.quantity}</td>
-          <td style={{ textAlign: "end" }}>
-            {format(
-              (element.before_price || element.before_discount_price) *
-                element.quantity
-            )}
-          </td>
-        </tr>
+        <td>{index + 1}</td>
+        <td style={{ textAlign: "start" }}>{element.name} {element.is_bonus == true ? ("Thưởng"):"" }</td>
+        <td>{element.quantity}</td>
+        <td style={{ textAlign: "end" }}>
+          { element.is_bonus == true ? format(0)  : format(
+            (element.before_price || element.before_discount_price) *
+              element.quantity
+          )}
+        </td>
+      </tr>
       );
     });
     arr.push(
@@ -293,7 +293,7 @@ export default class ComponentToPrint extends Component {
 
             <div>
               <div style={{ fontSize: "25px", textAlign: "center" }}>
-                <strong> {format(state.total_final)}</strong>
+                <strong> {format(bill.total_final)}</strong>
               </div>
 
               <div

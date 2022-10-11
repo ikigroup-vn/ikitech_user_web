@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
-import { filter_arr, format, randomString } from "../../ultis/helpers";
+import { filter_arr, format, getQueryParams, randomString } from "../../ultis/helpers";
 import { connect } from "react-redux";
 import Pagination from "../../components/Bill/Pagination";
 import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
@@ -218,10 +218,10 @@ class Table extends Component {
     }
     this.setState({ selected });
   };
-  changePage = (e, store_code, order_code) => {
+  onClickItemOrder = (e, store_code, order_code) => {
     if (e.target.name !== "checked") {
       var { statusOrder, statusPayment } = this.state;
-      var params = "?param=true";
+      var params = `?param=true&page=${getQueryParams("page")}`;
       if (statusOrder) params = params + `&order_status_code=${statusOrder}`;
       if (statusPayment)
         params = params + `&payment_status_code=${statusPayment}`;
@@ -296,14 +296,14 @@ class Table extends Component {
           data.order_from == OrderFrom.ORDER_FROM_APP
             ? "App"
             : data.order_from == OrderFrom.ORDER_FROM_POS_DELIVERY
-            ? "POS giao vận"
-            : data.order_from == OrderFrom.ORDER_FROM_POS_IN_STORE
-            ? "POS tại quầy"
-            : data.order_from == OrderFrom.ORDER_FROM_POS_SHIPPER
-            ? "POS vận chuyển"
-            : data.order_from == OrderFrom.ORDER_FROM_WEB
-            ? "Web"
-            : "Pos tại quầy";
+              ? "POS giao vận"
+              : data.order_from == OrderFrom.ORDER_FROM_POS_IN_STORE
+                ? "POS tại quầy"
+                : data.order_from == OrderFrom.ORDER_FROM_POS_SHIPPER
+                  ? "POS vận chuyển"
+                  : data.order_from == OrderFrom.ORDER_FROM_WEB
+                    ? "Web"
+                    : "Pos tại quầy";
 
         var item = this.checkLoadingSyncShip(data.order_code);
         var itemLoaded = this.checkLoaded(data.order_code);
@@ -311,7 +311,7 @@ class Table extends Component {
         return (
           <tr
             className="hover-product"
-            onClick={(e) => this.changePage(e, store_code, data.order_code)}
+            onClick={(e) => this.onClickItemOrder(e, store_code, data.order_code)}
           >
             <td>
               {" "}
@@ -353,9 +353,9 @@ class Table extends Component {
                   className={_payment_status_code}
                 >
                   {itemLoaded &&
-                  itemLoaded.status === "SUCCESS" &&
-                  itemLoaded.payment_status_name !== null &&
-                  typeof itemLoaded.payment_status_name !== "undefined"
+                    itemLoaded.status === "SUCCESS" &&
+                    itemLoaded.payment_status_name !== null &&
+                    typeof itemLoaded.payment_status_name !== "undefined"
                     ? itemLoaded.payment_status_name
                     : data.payment_status_name}
                 </span>
@@ -377,9 +377,9 @@ class Table extends Component {
                     className={_order_status_name}
                   >
                     {itemLoaded &&
-                    itemLoaded.status === "SUCCESS" &&
-                    itemLoaded.order_status_name !== null &&
-                    typeof itemLoaded.order_status_name !== "undefined"
+                      itemLoaded.status === "SUCCESS" &&
+                      itemLoaded.order_status_name !== null &&
+                      typeof itemLoaded.order_status_name !== "undefined"
                       ? itemLoaded.order_status_name
                       : data.order_status_name}
                   </span>
@@ -389,24 +389,7 @@ class Table extends Component {
 
             {getChannel() == IKITECH && (
               <td className="">
-                {/* <Link
-                to={`/order/detail/${store_code}/${data.order_code}`}
-                class="btn btn-primary-no-background btn-sm"
-              >
-                <i class="fa fa-eye"></i> Xem
-              </Link> */}
 
-                {/* {
-                getChannel() == IKITECH && <button
-
-                  onClick={() => this.showChatBox(data.customer != null ? data.customer.id : null, data.customer != null ? data.customer.avatar_image : null, data.customer != null ? data.customer.name : null, "show")}
-                  type="button"
-                  class={`btn btn-primary btn-sm ${chat_allow == true ? "show" : "hide"}`}
-
-                >
-                  <i class="fa fa-comment-alt"></i> Chat
-                </button>
-              } */}
               </td>
             )}
           </tr>
@@ -605,7 +588,7 @@ class Table extends Component {
     var { statusOrder, statusPayment, orderFrom, selected } = this.state;
     var per_page = bills.per_page;
     var current_page = bills.current_page;
-    var listBill =  bills.data ?? [];
+    var listBill = bills.data ?? [];
     var _selected =
       selected.length > 0 && selected.length == bills.data?.length
         ? true

@@ -159,7 +159,9 @@ class Bill extends Component {
     if (status_payment != null)
       this.setState({ statusPayment: status_payment });
     const branch_id = getBranchId();
-    this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
+
+    var page = getQueryParams("page") ?? 1;
+    this.props.fetchAllBill(store_code, page, branch_id, params, params_agency);
     this.setState({loadingShipment : helper.randomString(10)})
   }
   handleShowChatBox = (customerId, customerImg, customerName, status) => {
@@ -604,7 +606,9 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
+ 
     fetchAllBill: (id, page, branch_id, params, params_agency) => {
+      var page = getQueryParams("page")
       dispatch(
         billAction.fetchAllBill(id, page, branch_id, params, params_agency)
       );

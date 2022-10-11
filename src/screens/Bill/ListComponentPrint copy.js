@@ -59,9 +59,14 @@ export default class ComponentToPrint extends Component {
       arr.push(
         <tr>
           <td>{index + 1}</td>
-          <td style={{ textAlign: "start" }}>{element.name} </td>
+          <td style={{ textAlign: "start" }}>{element.name} {element.is_bonus == true ? ("Thưởng") : ""}</td>
           <td>{element.quantity}</td>
-          <td style={{ textAlign: "end" }}>{format((element.before_price || element.before_discount_price) * element.quantity)}</td>
+          <td style={{ textAlign: "end" }}>
+            {element.is_bonus == true ? format(0) : format(
+              (element.before_price || element.before_discount_price) *
+              element.quantity
+            )}
+          </td>
         </tr>
       );
     });
@@ -110,10 +115,10 @@ export default class ComponentToPrint extends Component {
     var store_address = typeof badges.address_pickup == "undefined" ? null : badges.address_pickup == null ? null : badges.address_pickup.address_detail + ", " +
       badges.address_pickup.wards_name + ", " + badges.address_pickup.district_name + ", " + badges.address_pickup.province_name
     return (
-      <div style={{  overflow : "scroll" }}>
+      <div style={{ overflow: "scroll" }}>
         <div
           // style = {{overflow : "scroll"}}
-          className="parent " 
+          className="parent "
           style={{ margin: "30px" }}>
           <p className="order_code">Mã đơn hàng : {state.order_code}</p>
 
@@ -227,7 +232,7 @@ export default class ComponentToPrint extends Component {
               <div >
                 <div style={{ fontSize: "25px", textAlign: "center" }}>
 
-                  <strong>            {format(state.total_final)}
+                  <strong>            {format(bill.total_final)}
                   </strong>
                 </div>
 
@@ -263,7 +268,7 @@ export default class ComponentToPrint extends Component {
             </div>
           </div>
         </div>
-       
+
       </div>
     );
   }

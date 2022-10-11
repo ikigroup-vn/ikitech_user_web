@@ -19,8 +19,7 @@ class PaymentHistory extends Component {
 
         return (
           <tr>
-            {/* <td><a href={`/order/detail/${store_code}/${bill.order_code}`} >{bill.order_code}</a></td> */}
-
+      
             <td>
               { formatNoD(bill.money) }
             </td>

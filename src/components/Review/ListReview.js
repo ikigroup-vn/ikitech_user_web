@@ -69,7 +69,7 @@ class ListReview extends Component {
         return (
           <div>
             <img
-              style={{ marginRight: "10px"  , marginBottom : "10px"}}
+              style={{ marginRight: "10px", marginBottom: "10px" }}
               src={data}
               class="img-responsive"
               width="120px"
@@ -128,7 +128,7 @@ class ListReview extends Component {
               : "danger";
         var disable_Confirm =
           data.status == 0 || data.status == -1 ? "show" : "hide";
-          var disable_Delete =
+        var disable_Delete =
           data.status == -1 ? "show" : "hide";
         var disable_Cancel =
           data.status == 0 || data.status == 1 ? "show" : "hide";
@@ -198,7 +198,7 @@ class ListReview extends Component {
                   <i class="fa fa-trash"></i> Xóa
                 </button>
                 <button
-                                style = {{marginLeft : "10px"}}
+                  style={{ marginLeft: "10px" }}
 
                   type="submit"
                   class={`btn btn-info  btn-sm ${disable_Confirm} ${censorship == true ? "show" : "hide"}`}
@@ -206,18 +206,18 @@ class ListReview extends Component {
                     this.changeStatus(data.id, 1);
                   }}
                 >
-                    <i class="fas fa-check"></i>                 Duyệt
+                  <i class="fas fa-check"></i>                 Duyệt
 
                 </button>
                 <button
-                style = {{marginLeft : "10px"}}
+                  style={{ marginLeft: "10px" }}
                   onClick={() => {
                     this.changeStatus(data.id, -1);
                   }}
                   class={`btn btn-warning  btn-sm ${disable_Cancel} ${censorship == true ? "show" : "hide"} `}
                 >
-                    <i class="fas fa-times"></i>Hủy
-                 
+                  <i class="fas fa-times"></i>Hủy
+
                 </button>
               </td>
             </tr>
@@ -280,7 +280,7 @@ class ListReview extends Component {
                       <p class="sale_user_label" id="sale_user_name">
                         Hình ảnh:
                       </p>
-                      <div class="" style = {{display : "flex" , flexWrap : "wrap"}}>{this.showListImg(image_review)}</div>
+                      <div class="" style={{ display: "flex", flexWrap: "wrap" }}>{this.showListImg(image_review)}</div>
                       <p class="sale_user_label" id="sale_user_name">
                         Thời gian: {time}
                       </p>
@@ -338,7 +338,7 @@ class ListReview extends Component {
               "justify-content": "center"
             }}>
               <select value={filter_by_stars} style={{ maxWidth: "150px" }} name="" id="input" className="form-control" onChange={this.searchStars}>
-                <option  disabled>-- Sao đánh giá --</option>
+                <option disabled>-- Sao đánh giá --</option>
 
                 <option value="">Tất cả sao</option>
                 <option value="5">5 sao</option>
@@ -358,7 +358,7 @@ class ListReview extends Component {
               </select> */}
             </th>
 
-            <th style ={{paddingLeft : "25px"}}>Hành động</th>
+            <th style={{ paddingLeft: "25px" }}>Hành động</th>
           </tr>
         </thead>
         <tbody>{this.showData(reviews)}</tbody>
@@ -370,7 +370,8 @@ class ListReview extends Component {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     changeStatus: (store_code, id, data) => {
-      dispatch(reviewAction.changeStatus(store_code, id, data));
+      var page = helper.getQueryParams("page")
+      dispatch(reviewAction.changeStatus(store_code, id, data, page));
     },
     fetchAllReview: (store_code, page, params) => {
       dispatch(reviewAction.fetchAllReview(store_code, page, params));
