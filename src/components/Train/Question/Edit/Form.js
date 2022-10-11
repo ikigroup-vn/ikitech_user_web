@@ -28,11 +28,10 @@ import {
   table as tablePlugin,
   link as linkPlugin,
   video,
-  audio
+  audio,
 } from "suneditor/src/plugins";
 import imageGallery from "../../../imageGallery";
-import { getApiImageStore } from "../../../../constants/Config"
-
+import { getApiImageStore } from "../../../../constants/Config";
 
 class Form extends Component {
   constructor(props) {
@@ -46,27 +45,27 @@ class Form extends Component {
       right_answer: "",
       image: "",
       fileUpload: null,
-      id : ""
-
+      id: "",
     };
   }
-
 
   componentDidMount() {
     console.log("componentDidMount");
     var _this = this;
 
-    window.$("#file-quiz-question-update").on("fileloaded", function (event, file) {
-      _this.setState({ fileUpload: file });
-    });
+    window
+      .$("#file-quiz-question-update")
+      .on("fileloaded", function (event, file) {
+        _this.setState({ fileUpload: file });
+      });
     window
       .$("#file-quiz-question-update")
       .on("fileremoved", function (event, id, index) {
         _this.setState({ fileUpload: null });
       });
 
-      helper.loadFileInput("file-quiz-question-update");
-    }
+    helper.loadFileInput("file-quiz-question-update");
+  }
 
   componentWillReceiveProps(nextProps) {
     if (!shallowEqual(nextProps.modal, this.props.modal)) {
@@ -78,8 +77,7 @@ class Form extends Component {
         answer_d,
         right_answer,
         question_image,
-        id
-  
+        id,
       } = nextProps.modal;
       this.setState({
         question,
@@ -89,14 +87,12 @@ class Form extends Component {
         id,
         answer_d,
         right_answer,
-        image : question_image
-      })
+        image: question_image,
+      });
     }
-
   }
 
   // componentWillReceiveProps(nextProps) {
-
 
   //   if (this.props.image !== nextProps.image) {
   //     this.setState({ image: nextProps.image });
@@ -104,7 +100,6 @@ class Form extends Component {
   // }
 
   // componentDidMount() {
-
 
   //   this.props.initialUpload();
   // }
@@ -125,7 +120,6 @@ class Form extends Component {
     });
   };
 
-
   onSave = async (e) => {
     var { store_code, courseId, quizId } = this.props;
     e.preventDefault();
@@ -137,32 +131,36 @@ class Form extends Component {
       answer_d,
       right_answer,
       fileUpload,
-      id
+      id,
     } = this.state;
-    var image = null
-    var file = fileUpload
+    var image = null;
+    var file = fileUpload;
     if (typeof file !== "undefined" && file != "" && file != null) {
       // window.$('#file-quiz-question-update').fileinput('clear');
-      image =  await compressed(file);
-      console.log(image)
+      image = await compressed(file);
+      console.log(image);
+    }
 
-    } 
-
-    this.props.updateQuestion(id, {
-      question,
-      answer_a,
-      answer_b,
-      answer_c,
-      answer_d,
-      right_answer,
-      image
-
-    }, store_code, null, function () {
-      window.$(".modal").modal("hide");
-
-    },courseId,quizId)
-  }
-
+    this.props.updateQuestion(
+      id,
+      {
+        question,
+        answer_a,
+        answer_b,
+        answer_c,
+        answer_d,
+        right_answer,
+        image,
+      },
+      store_code,
+      null,
+      function () {
+        window.$(".modal").modal("hide");
+      },
+      courseId,
+      quizId
+    );
+  };
 
   //   this.props.createQuestion(store_code, {
   //     question,
@@ -172,7 +170,6 @@ class Form extends Component {
   //     answer_d,
   //     right_answer,
   //     image
-
 
   //   }, this, function () {
   //     window.$(".modal").modal("hide");
@@ -192,8 +189,7 @@ class Form extends Component {
       answer_c,
       answer_d,
       right_answer,
-      image
-
+      image,
     } = this.state;
 
     var { store_code } = this.props;
@@ -234,18 +230,23 @@ class Form extends Component {
                 method="post"
                 id="createForm"
               >
-                <div class="modal-body" style={{ padding: " 0 10px" , display : "flex" }}>
-                  <div style = {{width : "60%" , paddingRight : "10px"}}>
+                <div
+                  class="modal-body"
+                  style={{ padding: " 0 10px", display: "flex" }}
+                >
+                  <div style={{ width: "60%", paddingRight: "10px" }}>
                     <div class="form-group">
                       <label for="product_name">Câu hỏi</label>
-                      
-                      <textarea  value={question}
+
+                      <textarea
+                        value={question}
                         placeholder="Nhập câu hỏi"
-                        autocomplete="off"
+                        autoComplete="off"
                         onChange={this.onChange}
-                        name="question" class="form-control" rows="3" ></textarea>
-                      
-                    
+                        name="question"
+                        class="form-control"
+                        rows="3"
+                      ></textarea>
                     </div>
                     <div class="form-group">
                       <label for="product_name">Câu trả lời A</label>
@@ -255,7 +256,7 @@ class Form extends Component {
                         id="answer_a"
                         value={answer_a}
                         placeholder="Nhập câu trả lời"
-                        autocomplete="off"
+                        autoComplete="off"
                         onChange={this.onChange}
                         name="answer_a"
                       />
@@ -268,7 +269,7 @@ class Form extends Component {
                         id="answer_b"
                         value={answer_b}
                         placeholder="Nhập câu trả lời"
-                        autocomplete="off"
+                        autoComplete="off"
                         onChange={this.onChange}
                         name="answer_b"
                       />
@@ -281,7 +282,7 @@ class Form extends Component {
                         id="answer_c"
                         value={answer_c}
                         placeholder="Nhập câu trả lời"
-                        autocomplete="off"
+                        autoComplete="off"
                         onChange={this.onChange}
                         name="answer_c"
                       />
@@ -294,48 +295,60 @@ class Form extends Component {
                         id="answer_d"
                         value={answer_d}
                         placeholder="Nhập câu trả lời"
-                        autocomplete="off"
+                        autoComplete="off"
                         onChange={this.onChange}
                         name="answer_d"
                       />
                     </div>
                     <div class="form-group">
                       <label for="product_name">Câu trả lời đúng</label>
-               
-                      <select name="right_answer" value={right_answer} id="input" class="form-control"  onChange={this.onChange}
->
+
+                      <select
+                        name="right_answer"
+                        value={right_answer}
+                        id="input"
+                        class="form-control"
+                        onChange={this.onChange}
+                      >
                         <option value="A">A</option>
                         <option value="B">B</option>
 
                         <option value="C">C</option>
                         <option value="D">D</option>
-
                       </select>
                     </div>
                   </div>
-                  <div style = {{paddingLeft : "10px",
+                  <div
+                    style={{
+                      paddingLeft: "10px",
 
-    "border-left": "1px solid #dcd0d0"}}>
-                     <div class="form-group" style={{display:"flex",flexDirection:"column",marginLeft:"20px"}}>
-                    <label>Ảnh: &nbsp; </label>
-                    <img src={`${image}`} width="150" height="150" />
+                      "border-left": "1px solid #dcd0d0",
+                    }}
+                  >
+                    <div
+                      class="form-group"
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        marginLeft: "20px",
+                      }}
+                    >
+                      <label>Ảnh: &nbsp; </label>
+                      <img src={`${image}`} width="150" height="150" />
+                    </div>
+                    <div class="form-group">
+                      <label for="product_name" style={{ margin: 0 }}>
+                        Hình ảnh
+                      </label>
+                      <div className="file-loading">
+                        <input
+                          id="file-quiz-question-update"
+                          type="file"
+                          className="file"
+                        />
+                      </div>
+                    </div>
                   </div>
-                   <div class="form-group">
-                  <label for="product_name" style={{ margin: 0 }}>
-                    Hình ảnh
-                  </label>
-                  <div className="file-loading">
-                    <input
-                      id="file-quiz-question-update"
-                      type="file"
-                      className="file"
-            
-                    />
-                  </div>
-                </div>
-                  </div>
-
-
 
                   {/* <div class="form-group">
                   <label for="product_name">Nội dung</label>
@@ -405,7 +418,6 @@ class Form extends Component {
                     />
                   </div>
                 </div> */}
-
                 </div>
                 <div class="modal-footer">
                   <button
@@ -416,10 +428,7 @@ class Form extends Component {
                   >
                     Đóng
                   </button>
-                  <button
-                    type="submit"
-                    class="btn btn-warning"
-                  >
+                  <button type="submit" class="btn btn-warning">
                     Lưu
                   </button>
                 </div>
@@ -429,8 +438,6 @@ class Form extends Component {
         </div>
 
         <ModalUpload store_code={store_code} />
-
-
       </React.Fragment>
     );
   }
@@ -439,7 +446,6 @@ class Form extends Component {
 const mapStateToProps = (state) => {
   return {
     image: state.UploadReducers.blogImg.blog_img,
-
   };
 };
 
@@ -451,8 +457,26 @@ const mapDispatchToProps = (dispatch, props) => {
     initialUpload: () => {
       dispatch(blogAction.initialUpload());
     },
-    updateQuestion: (id, data, store_code, _this, resetModal,courseId,quizId) => {
-      dispatch(trainAction.updateQuestion(id, data, store_code, _this, resetModal,courseId,quizId));
+    updateQuestion: (
+      id,
+      data,
+      store_code,
+      _this,
+      resetModal,
+      courseId,
+      quizId
+    ) => {
+      dispatch(
+        trainAction.updateQuestion(
+          id,
+          data,
+          store_code,
+          _this,
+          resetModal,
+          courseId,
+          quizId
+        )
+      );
     },
   };
 };

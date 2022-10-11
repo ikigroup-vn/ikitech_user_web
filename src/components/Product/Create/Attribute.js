@@ -83,7 +83,7 @@ class Attribute extends Component {
             <td>
               <input
                 type="text"
-                autocomplete="off"
+                autoComplete="off"
                 name={`txt` + data}
                 value={value}
                 onChange={(e) => this.onChange(e, data)}

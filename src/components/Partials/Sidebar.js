@@ -15,39 +15,27 @@ class Sidebar extends Component {
     };
   }
 
-  componentWillReceiveProps() {
-    console.log(1)
-  }
-
-
-
   componentDidUpdate(prevProps, prevState) {
     const location = window.location.pathname;
-    console.log("open", menu)
-    console.log("lo ne", location)
     for (const item of menu[0]?.link) {
-      console.log("item hehe", item)
-      var exsit = false
+      var exsit = false;
       if (item.open) {
         if (item.ExcludeSetOpenKey?.length > 0) {
-
-
-          for (const element of item.ExcludeSetOpenKey
-          ) {
+          for (const element of item.ExcludeSetOpenKey) {
             if (location.includes(element)) {
               exsit = true;
             }
           }
         }
-        if (exsit == true)
-          continue
+        if (exsit == true) continue;
 
         if (item.setOpenKey?.length > 0) {
-          for (const element of item.setOpenKey
-          ) {
+          for (const element of item.setOpenKey) {
             if (location.includes(element)) {
-              console.log("itemmm", item.open)
-              if (window.$(`.${item.open}-collapse`).attr("aria-expanded") == "false") {
+              if (
+                window.$(`.${item.open}-collapse`).attr("aria-expanded") ==
+                "false"
+              ) {
                 window.$(`.${item.open}-collapse`).trigger("click");
                 return;
               }
@@ -55,17 +43,16 @@ class Sidebar extends Component {
           }
         }
       }
-    };
-
+    }
   }
   setActiveLocation = (location) => {
     return location.includes("/create")
       ? location.replace("/create", "")
       : location.includes("/edit")
-        ? location.replace("/edit", "")
-        : location.includes("/detail")
-          ? location.replace("/detail", "")
-          : location;
+      ? location.replace("/edit", "")
+      : location.includes("/detail")
+      ? location.replace("/detail", "")
+      : location;
   };
 
   MenuLink_3 = (link) => {
@@ -78,12 +65,8 @@ class Sidebar extends Component {
         total_status_2,
         total_status_3,
         total,
-      } = this.props.customers
+      } = this.props.customers;
 
-      console.log( total_status_0,
-        total_status_1,
-        total_status_2,
-        total_status_3,)
       result = link.map((link, index) => {
         return (
           <Route
@@ -93,46 +76,56 @@ class Sidebar extends Component {
             exact={link.exact}
             children={({ match }) => {
               const location = window.location.pathname;
-              console.log(location)
               const newLocation = this.setActiveLocation(location);
               // const isActive = newLocation.includes(link.to + "/");
               var isActive = false;
-              var name = link.name
+              var name = link.name;
 
               if (link.params) {
-                isActive = newLocation.includes(link.to + "/" + this.props.store_code) && link.params == `?status=${this.props.currentParams}`;
-                var param = link.params.replace("?status=", "")
+                isActive =
+                  newLocation.includes(link.to + "/" + this.props.store_code) &&
+                  link.params == `?status=${this.props.currentParams}`;
+                var param = link.params.replace("?status=", "");
                 if (param == "") {
-                  name = name + ` (${ total_status_0 +total_status_1 +total_status_2 +total_status_3})`
+                  name =
+                    name +
+                    ` (${
+                      total_status_0 +
+                      total_status_1 +
+                      total_status_2 +
+                      total_status_3
+                    })`;
                 }
                 if (param == "0") {
-                  name = name + ` (${total_status_0})`
+                  name = name + ` (${total_status_0})`;
                 }
                 if (param == "1") {
-                  name = name + ` (${total_status_1})`
+                  name = name + ` (${total_status_1})`;
                 }
                 if (param == "2") {
-                  name = name + ` (${total_status_2})`
+                  name = name + ` (${total_status_2})`;
                 }
                 if (param == "3") {
-                  name = name + ` (${total_status_3})`
+                  name = name + ` (${total_status_3})`;
                 }
-              }
-              else {
+              } else {
                 isActive = newLocation.includes(link.to + "/");
-
               }
               var active = isActive ? "active-col" : "";
 
               // var _class = this.props.permission
               return (
                 <Link
-                  className={`collapse-item  ${active} ${_class[link.class] == true ||
-                    typeof link.class == "undefined" || link.class == null
-                    ? "show"
-                    : "hide"
-                    }`}
-                  to={link.to + "/" + this.props.store_code + (link.params || "")}
+                  className={`collapse-item  ${active} ${
+                    _class[link.class] == true ||
+                    typeof link.class == "undefined" ||
+                    link.class == null
+                      ? "show"
+                      : "hide"
+                  }`}
+                  to={
+                    link.to + "/" + this.props.store_code + (link.params || "")
+                  }
                 >
                   {name}
                 </Link>
@@ -214,20 +207,23 @@ class Sidebar extends Component {
               );
               var active = isActive ? "active" : "";
               var displayWithTabItem = this.displayItemWithGroup(
-                link.itemHasTabName, link
+                link.itemHasTabName,
+                link
               );
-              console.log(link, displayWithTabItem)
               return (
                 <li
-                  className={`nav-item   ${active} ${displayWithTabItem}  ${_class[link.class] == true ||
+                  className={`nav-item   ${active} ${displayWithTabItem}  ${
+                    _class[link.class] == true ||
                     (link.class == "isVip" &&
                       this.props.badges.config_user_vip != null &&
                       typeof this.props.badges.config_user_vip !=
-                      "undefined") ||
-                    typeof link.class == "undefined" || link.class == null || displayWithTabItem == "show"
-                    ? "show"
-                    : "hide"
-                    }`}
+                        "undefined") ||
+                    typeof link.class == "undefined" ||
+                    link.class == null ||
+                    displayWithTabItem == "show"
+                      ? "show"
+                      : "hide"
+                  }`}
                 >
                   <Link
                     className="nav-link"
@@ -249,22 +245,18 @@ class Sidebar extends Component {
 
   displayItemWithGroup = (item, link) => {
     var _class = this.props.permission;
-    console.log(link)
     if (typeof link.class != "undefined") {
       if (Array.isArray(link.class)) {
-        var check = true
+        var check = true;
         for (const data of link.class) {
-
-
           if (_class[data] == true) {
-            check = false
+            check = false;
           }
         }
-        console.log(check)
-        var result = check == false ? "show" : "hide"
+        console.log(check);
+        var result = check == false ? "show" : "hide";
 
-        return result
-
+        return result;
       }
     }
     if (typeof _class.collaborator_config == "undefined") {
@@ -285,7 +277,6 @@ class Sidebar extends Component {
 
   checkDisplayTitle = (link) => {
     var result = true;
-    console.log(link);
     var _class = this.props.permission;
     if (link?.length > 0) {
       for (const item of link) {
@@ -295,23 +286,17 @@ class Sidebar extends Component {
             ? true
             : false;
         }
-        console.log(item)
         if (typeof item.class == "undefined" || item.class == null) {
           return false;
-        }
-        else if (Array.isArray(item.class)) {
+        } else if (Array.isArray(item.class)) {
           for (const data of item.class) {
-
-            console.log(_class[data])
-            var check = true
+            var check = true;
             if (_class[data] == true) {
-              check = false
+              check = false;
             }
           }
-          return check
-
-        }
-        else {
+          return check;
+        } else {
           if (_class[item.class] == true) {
             return false;
           }
@@ -347,15 +332,13 @@ class Sidebar extends Component {
   };
   componentDidMount() {
     window.loadScript();
-    var {customers ,store_code} = this.props
-    if(typeof customers.total === "undefined"){
+    var { customers, store_code } = this.props;
+    if (typeof customers.total === "undefined") {
       this.props.fetchAllCustomerSale(store_code, 1);
-
     }
   }
   render() {
     var { badges, stores, permission } = this.props;
-    console.log(badges, stores, permission);
     return (
       <div className="col-2 col-2-nav">
         <ul
@@ -381,8 +364,8 @@ class Sidebar extends Component {
                     ? badges?.config_user_vip?.url_logo_small_image
                     : themeData().logoTab
                 }
-                class="img-responsive"
-                alt="Image"
+                className="img-responsive"
+                alt="logo_image"
               />
             </div>
             <div className="sidebar-brand-text">
@@ -393,8 +376,8 @@ class Sidebar extends Component {
                     ? badges?.config_user_vip?.url_logo_image
                     : themeData().logo
                 }
-                class="img-responsive"
-                alt="Image"
+                className="img-responsive"
+                alt="logo_text"
               />
             </div>
           </Link>
@@ -419,7 +402,6 @@ const mapStateToProps = (state) => {
     isLoadPermission: state.authReducers.permission.isLoadPermission,
     badges: state.badgeReducers.allBadge,
     customers: state.customerSaleReducers.customer_sales.allCustomer,
-
   };
 };
 const mapDispatchToProps = (dispatch, props) => {

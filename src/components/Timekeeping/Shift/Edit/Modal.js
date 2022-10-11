@@ -9,7 +9,7 @@ import { isEmpty } from "../../../../ultis/helpers";
 import moment from "moment";
 import MomentInput from "react-moment-input";
 import "../Create/style.css";
-import { randomString } from "../../../../ultis/helpers"
+import { randomString } from "../../../../ultis/helpers";
 
 // import { compressed } from "../../ultis/helpers";
 // import * as helper from "../../ultis/helpers";
@@ -79,7 +79,7 @@ class Modal extends Component {
     };
   }
 
-  componentDidMount() { }
+  componentDidMount() {}
   onChange = (e) => {
     var target = e.target;
     var name = target.name;
@@ -134,7 +134,11 @@ class Modal extends Component {
         start_break_hour: shiftDetail?.start_break_hour,
         start_break_minute: shiftDetail?.start_break_minute,
         end_break_hour: shiftDetail?.end_break_hour,
-        icon: shiftDetail?.minutes_late_allow > 0 || shiftDetail?.minutes_early_leave_allow > 0 ? true : false,
+        icon:
+          shiftDetail?.minutes_late_allow > 0 ||
+          shiftDetail?.minutes_early_leave_allow > 0
+            ? true
+            : false,
 
         end_break_minute: shiftDetail?.end_break_minute,
         minutes_late_allow: shiftDetail?.minutes_late_allow,
@@ -192,8 +196,7 @@ class Modal extends Component {
       return;
     }
     if (code == null || !isEmpty(code)) {
-      code = randomString(8)
-
+      code = randomString(8);
     }
     if (days_of_week_list.length === 0) {
       this.props.showError({
@@ -225,12 +228,14 @@ class Modal extends Component {
       }
     }
     var start2 = moment(
-      `${start_break_hour !== null ? start_break_hour : "00"}:${start_break_minute !== null ? start_break_minute : "00"
+      `${start_break_hour !== null ? start_break_hour : "00"}:${
+        start_break_minute !== null ? start_break_minute : "00"
       }`,
       "HH:mm"
     );
     var end2 = moment(
-      `${end_break_hour !== null ? end_break_hour : "00"}:${end_break_minute !== null ? end_break_minute : "00"
+      `${end_break_hour !== null ? end_break_hour : "00"}:${
+        end_break_minute !== null ? end_break_minute : "00"
       }`,
       "HH:mm"
     );
@@ -361,12 +366,13 @@ class Modal extends Component {
   handleCheck = (e) => {
     if (e.target.checked == true) {
       this.setState({
-        days_of_week_list: [...this.state.list_days_of_week_list], isCheck: e.target.checked
+        days_of_week_list: [...this.state.list_days_of_week_list],
+        isCheck: e.target.checked,
       });
-    }
-    else {
+    } else {
       this.setState({
-        days_of_week_list: [], isCheck: e.target.checked
+        days_of_week_list: [],
+        isCheck: e.target.checked,
       });
     }
     // if (this.state.days_of_week_list.length === 7) {
@@ -380,8 +386,8 @@ class Modal extends Component {
     // }
   };
   onChangeIcon = () => {
-    this.setState({ icon: !this.state.icon })
-  }
+    this.setState({ icon: !this.state.icon });
+  };
   render() {
     const { shiftDetail, shift_id } = this.props;
 
@@ -416,7 +422,10 @@ class Modal extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+            <div
+              class="modal-header"
+              style={{ backgroundColor: themeData().backgroundColor }}
+            >
               <h4 class="modal-title">Sửa ca chấm công</h4>
 
               <button
@@ -445,7 +454,7 @@ class Modal extends Component {
                     value={name}
                     name="name"
                     placeholder="Nhập tên ca"
-                    autocomplete="off"
+                    autoComplete="off"
                     onChange={this.onChange}
                   />
                 </div>
@@ -459,7 +468,7 @@ class Modal extends Component {
                     value={code}
                     name="code"
                     placeholder="Nhập mã ca"
-                    autocomplete="off"
+                    autoComplete="off"
                     onChange={this.onChange}
                   />
                 </div> */}
@@ -487,9 +496,9 @@ class Modal extends Component {
                     onSave={this.onChangeStart}
                     onChange={this.onChangeStart}
                     style={{ marginBottom: "0.5rem" }}
-                  // onChange={(date) => {
-                  //   console.log(date);
-                  // }}
+                    // onChange={(date) => {
+                    //   console.log(date);
+                    // }}
                   />
 
                   <MomentInput
@@ -519,7 +528,8 @@ class Modal extends Component {
                   <MomentInput
                     placeholder="Chọn thời gian bắt đầu"
                     value={moment(
-                      `${start_break_hour ? start_break_hour : 0}:${start_break_minute ? start_break_minute : 0
+                      `${start_break_hour ? start_break_hour : 0}:${
+                        start_break_minute ? start_break_minute : 0
                       }`,
                       "HH:mm"
                     )}
@@ -538,14 +548,15 @@ class Modal extends Component {
                     onSave={this.onChangeStart2}
                     onChange={this.onChangeStart2}
                     style={{ marginBottom: "0.5rem" }}
-                  // onChange={(date) => {
-                  //   console.log(date);
-                  // }}
+                    // onChange={(date) => {
+                    //   console.log(date);
+                    // }}
                   />
 
                   <MomentInput
                     value={moment(
-                      `${end_break_hour ? end_break_hour : 0}:${end_break_minute ? end_break_minute : 0
+                      `${end_break_hour ? end_break_hour : 0}:${
+                        end_break_minute ? end_break_minute : 0
                       }`,
                       "HH:mm"
                     )}
@@ -564,7 +575,7 @@ class Modal extends Component {
                     }}
                     onSave={this.onChangeEnd2}
                     onChange={this.onChangeEnd2}
-                  // onChange={this.onChangeEnd}
+                    // onChange={this.onChangeEnd}
                   />
                 </div>
                 <div class="form-group">
@@ -580,7 +591,13 @@ class Modal extends Component {
                             type="checkbox"
                             id="inlineCheckbox1"
                             value="option1"
-                            checked={list_days_of_week_list.length === this.state.days_of_week_list?.length ? true : false}                            onChange={this.handleCheck}
+                            checked={
+                              list_days_of_week_list.length ===
+                              this.state.days_of_week_list?.length
+                                ? true
+                                : false
+                            }
+                            onChange={this.handleCheck}
                           />
                           <label class="form-check-label" for="inlineCheckbox1">
                             Tất cả
@@ -596,14 +613,15 @@ class Modal extends Component {
                         return (
                           <button
                             type="button"
-                            class={`btn btn-primary btn-day ${this.state.days_of_week_list?.some(
-                              (e) =>
-                                Object.entries(e).toString() ===
-                                Object.entries(value).toString()
-                            )
-                              ? "active"
-                              : ""
-                              }`}
+                            class={`btn btn-primary btn-day ${
+                              this.state.days_of_week_list?.some(
+                                (e) =>
+                                  Object.entries(e).toString() ===
+                                  Object.entries(value).toString()
+                              )
+                                ? "active"
+                                : ""
+                            }`}
                             index={value.id}
                             onClick={() => {
                               this.handleDayClick(value);
@@ -673,7 +691,7 @@ class Modal extends Component {
                               id="minutes_late_allow"
                               value={minutes_late_allow}
                               name="minutes_late_allow"
-                              autocomplete="off"
+                              autoComplete="off"
                               onChange={this.onChange}
                               min={0}
                             />
@@ -695,7 +713,7 @@ class Modal extends Component {
                               id="minutes_early_leave_allow"
                               value={minutes_early_leave_allow}
                               name="minutes_early_leave_allow"
-                              autocomplete="off"
+                              autoComplete="off"
                               onChange={this.onChange}
                               min={0}
                             />
@@ -729,9 +747,7 @@ class Modal extends Component {
                 </button> */}
                 <button type="submit" class="btn btn-warning">
                   Lưu
-
                 </button>
-
 
                 {/* <button type="submit" class="btn btn-info">
                         Tạo

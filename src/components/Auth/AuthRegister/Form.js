@@ -11,7 +11,7 @@ class Form extends Component {
       txtOTP: "",
       canSendOtp: true,
       secondCountDown: 30,
-      isSendToPhone:true
+      isSendToPhone: true,
     };
   }
 
@@ -23,7 +23,6 @@ class Form extends Component {
       alert,
     });
 
-  
     this.onSendOtp();
   }
 
@@ -32,13 +31,11 @@ class Form extends Component {
     if (this.state.canSendOtp == true) {
       this.startTimer();
 
-      if(this.state.isSendToPhone) {
+      if (this.state.isSendToPhone) {
         this.props.sendOTP(formData.formData.phone_number);
       } else {
         this.props.sendOTPToEmail(formData.formData.email);
       }
-    
-   
     }
   };
 
@@ -54,7 +51,6 @@ class Form extends Component {
         var seconds = this.state.secondCountDown - 1;
         this.setState({ secondCountDown: seconds });
         this.countDown();
-    
       }, 1000);
     }
 
@@ -63,12 +59,11 @@ class Form extends Component {
     }
   };
 
-
   onChangeSendTo = () => {
     var isSendToPhone = !this.state.isSendToPhone;
-    this.setState({ isSendToPhone:isSendToPhone});
-    this.props.onChangeIsSendToPhone(isSendToPhone)
-  }
+    this.setState({ isSendToPhone: isSendToPhone });
+    this.props.onChangeIsSendToPhone(isSendToPhone);
+  };
 
   onChange = (e) => {
     var target = e.target;
@@ -84,12 +79,12 @@ class Form extends Component {
     e.preventDefault();
     var data = this.props.formData;
     this.props.registerOTP({
-      name : data.txtName,
+      name: data.txtName,
       phone_number: data.txtPhone,
       email: data.txtEmail,
       password: data.txtPassword,
       otp: this.state.txtOTP,
-      otp_from:this.state.isSendToPhone ? "phone" : "email"
+      otp_from: this.state.isSendToPhone ? "phone" : "email",
     });
   };
   goBack = (e) => {
@@ -108,9 +103,12 @@ class Form extends Component {
             <input
               className="form-control form-control-user"
               id="exampleInputEmail"
-              placeholder= {!this.state.isSendToPhone ? 
-              "Nhập mã xác nhận từ Email" : "Nhập mã xác nhận từ SĐT" }
-              autocomplete="off"
+              placeholder={
+                !this.state.isSendToPhone
+                  ? "Nhập mã xác nhận từ Email"
+                  : "Nhập mã xác nhận từ SĐT"
+              }
+              autoComplete="off"
               name="txtOTP"
               value={txtOTP}
               onChange={this.onChange}
@@ -121,8 +119,6 @@ class Form extends Component {
           </button>
 
           <div class="row  justify-content-around">
-
-       
             <div
               className="text-center"
               onClick={this.onChangeSendTo}
@@ -130,61 +126,56 @@ class Form extends Component {
                 cursor: "pointer",
                 marginTop: 10,
                 marginBottom: 20,
-             
               }}
             >
-              <a type = "button">   {this.state.isSendToPhone ? 
-              "Xác thực bằng email" : "Xác thực bằng số điện thoại" }</a>
+              <a type="button">
+                {" "}
+                {this.state.isSendToPhone
+                  ? "Xác thực bằng email"
+                  : "Xác thực bằng số điện thoại"}
+              </a>
             </div>
-         
-          {this.state.canSendOtp ? (
-            <div
-              className="text-center"
-              onClick={this.onSendOtp}
-              style={{
-                cursor: "pointer",
-                marginTop: 10,
-                marginBottom: 20,
-            
-              }}
-            >
-              <a type = "button">Gửi lại mã</a>
-            </div>
-          ) : (
-            <div
-              className="text-center"
-              style={{
-                cursor: "pointer",
-                marginTop: 10,
-                marginBottom: 20,
-             
-              }}
-            >
-              Nhận lại mã sau {this.state.secondCountDown}
-            </div>
-          )}
 
+            {this.state.canSendOtp ? (
+              <div
+                className="text-center"
+                onClick={this.onSendOtp}
+                style={{
+                  cursor: "pointer",
+                  marginTop: 10,
+                  marginBottom: 20,
+                }}
+              >
+                <a type="button">Gửi lại mã</a>
+              </div>
+            ) : (
+              <div
+                className="text-center"
+                style={{
+                  cursor: "pointer",
+                  marginTop: 10,
+                  marginBottom: 20,
+                }}
+              >
+                Nhận lại mã sau {this.state.secondCountDown}
+              </div>
+            )}
           </div>
 
           <div
-           onClick={this.goBack}
-              
-       
-              style={{
-                marginTop: 10,
-                marginBottom: 20,
-                
-              }}
-            >
-              <a type = "button"> 	&#8592; Trở lại</a>
-            </div>
-
+            onClick={this.goBack}
+            style={{
+              marginTop: 10,
+              marginBottom: 20,
+            }}
+          >
+            <a type="button"> &#8592; Trở lại</a>
+          </div>
         </form>
       </React.Fragment>
     );
   }
 }
-
 
 const mapDispatchToProps = (dispatch, props) => {
   return {

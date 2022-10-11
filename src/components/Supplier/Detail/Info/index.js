@@ -5,11 +5,11 @@ import Loading from "../../../../screens/Loading";
 import * as dashboardAction from "../../../../actions/dashboard";
 import * as Env from "../../../../ultis/default";
 import moment from "moment";
-import { getQueryParams } from "../../../../ultis/helpers"
+import { getQueryParams } from "../../../../ultis/helpers";
 import * as placeAction from "../../../../actions/place";
-import { shallowEqual } from '../../../../ultis/shallowEqual';
+import { shallowEqual } from "../../../../ultis/shallowEqual";
 import history from "../../../../history";
-import MomentInput from 'react-moment-input';
+import MomentInput from "react-moment-input";
 
 class Supplier extends Component {
   constructor(props) {
@@ -31,9 +31,7 @@ class Supplier extends Component {
       txtPhone_branch: "",
       txtEmail_branch: "",
       idSupplier: "",
-
-
-    }
+    };
   }
   onChange = (e) => {
     var target = e.target;
@@ -47,7 +45,6 @@ class Supplier extends Component {
 
   componentWillMount() {
     if (typeof this.props.supplier.id != "undefined") {
-
       this.setState({
         txtName_branch: this.props.supplier.name,
         txtPhone_branch: this.props.supplier.phone,
@@ -58,86 +55,81 @@ class Supplier extends Component {
         txtAddress_detail: this.props.supplier.address_detail,
         idSupplier: this.props.supplier.id,
         goFirst: false,
-       
-      })
+      });
     }
 
     if (this.state.isLoaded === true) {
       this.setState({
         listWards: this.props.wards,
         listDistrict: this.props.district,
-        isLoaded: false
-      })
+        isLoaded: false,
+      });
     }
 
     if (this.props.wards) {
       this.setState({
         listWards: this.props.wards,
-        listDistrict: this.props.district
-      })
+        listDistrict: this.props.district,
+      });
     }
-
   }
-
 
   componentDidMount() {
     var { store_code, supplierId } = this.props;
     this.props.fetchSupplierId(store_code, supplierId);
-    this.props.fetchPlaceProvince()
-
+    this.props.fetchPlaceProvince();
   }
-
-
-
 
   onChangeWards = (e) => {
-    this.setState({ txtWards: e.target.value, isLoaded: true })
-    var indexWards = this.props.wards.map(e => e.id).indexOf(parseInt(e.target.value))
+    this.setState({ txtWards: e.target.value, isLoaded: true });
+    var indexWards = this.props.wards
+      .map((e) => e.id)
+      .indexOf(parseInt(e.target.value));
     if (indexWards !== -1) {
-      var nameWards = this.props.wards[indexWards].name
-      this.setState({ wardsName: nameWards })
+      var nameWards = this.props.wards[indexWards].name;
+      this.setState({ wardsName: nameWards });
     }
-  }
+  };
 
   goBack = () => {
     var { store_code } = this.props;
     var pag = getQueryParams("pag");
     var redirect_report = getQueryParams("redirect_report");
 
-    if(redirect_report)
-    history.replace(`/supplier_debt/${store_code}}`);
-    else if(pag)
-    {
+    if (redirect_report) history.replace(`/supplier_debt/${store_code}}`);
+    else if (pag) {
       history.replace(`/supplier/${store_code}/?pag=${getQueryParams("pag")}`);
-    }
-    else{
+    } else {
       history.replace(`/supplier/${store_code}`);
-
     }
   };
   onChangeProvince = (e) => {
-    this.setState({ txtProvince: e.target.value, isLoaded: true })
+    this.setState({ txtProvince: e.target.value, isLoaded: true });
     this.props.fetchPlaceDistrict(e.target.value);
-    var indexProvince = this.props.province.map(e => e.id).indexOf(parseInt(e.target.value))
+    var indexProvince = this.props.province
+      .map((e) => e.id)
+      .indexOf(parseInt(e.target.value));
     if (indexProvince !== -1) {
-      var nameProvince = this.props.province[indexProvince].name
-      this.setState({ provinceName: nameProvince })
+      var nameProvince = this.props.province[indexProvince].name;
+      this.setState({ provinceName: nameProvince });
     }
-  }
+  };
   onChangeDistrict = (e) => {
-    this.setState({ txtDistrict: e.target.value })
-    this.props.fetchPlaceWards(e.target.value)
-    var indexDistrict = this.props.district.map(e => e.id).indexOf(parseInt(e.target.value))
+    this.setState({ txtDistrict: e.target.value });
+    this.props.fetchPlaceWards(e.target.value);
+    var indexDistrict = this.props.district
+      .map((e) => e.id)
+      .indexOf(parseInt(e.target.value));
     if (indexDistrict !== -1) {
-      var nameDistrict = this.props.district[indexDistrict].name
-      this.setState({ districtName: nameDistrict })
+      var nameDistrict = this.props.district[indexDistrict].name;
+      this.setState({ districtName: nameDistrict });
     }
-  }
+  };
 
   componentWillReceiveProps(nextProps, nextState) {
     if (!shallowEqual(nextProps.supplier, this.props.supplier)) {
       this.props.fetchPlaceDistrict(nextProps.supplier.province);
-      this.props.fetchPlaceWards(nextProps.supplier.district)
+      this.props.fetchPlaceWards(nextProps.supplier.district);
       this.setState({
         txtName_branch: nextProps.supplier.name,
         txtPhone_branch: nextProps.supplier.phone,
@@ -148,23 +140,25 @@ class Supplier extends Component {
         txtAddress_detail: nextProps.supplier.address_detail,
         idSupplier: nextProps.supplier.id,
         goFirst: false,
-  
-      })
+      });
     }
 
     if (nextState.isLoaded === true) {
       this.setState({
         listWards: nextProps.wards,
         listDistrict: nextProps.district,
-        isLoaded: false
-      })
+        isLoaded: false,
+      });
     }
 
-    if (!shallowEqual(nextProps.wards, this.props.wards) || !shallowEqual(this.props.district, nextProps.district)) {
+    if (
+      !shallowEqual(nextProps.wards, this.props.wards) ||
+      !shallowEqual(this.props.district, nextProps.district)
+    ) {
       this.setState({
         listWards: nextProps.wards,
-        listDistrict: nextProps.district
-      })
+        listDistrict: nextProps.district,
+      });
     }
 
     if (
@@ -176,12 +170,20 @@ class Supplier extends Component {
       var isShow = permissions.supplier;
       this.setState({ isLoading: true, isShow });
     }
-
   }
   handleOnClick = (e) => {
-    e.preventDefault()
-    var { txtAddress_detail, txtDistrict, txtProvince, txtWards, txtName_branch, txtPhone_branch, txtEmail_branch, idSupplier } = this.state
-    const { store_code } = this.props
+    e.preventDefault();
+    var {
+      txtAddress_detail,
+      txtDistrict,
+      txtProvince,
+      txtWards,
+      txtName_branch,
+      txtPhone_branch,
+      txtEmail_branch,
+      idSupplier,
+    } = this.state;
+    const { store_code } = this.props;
     const Formdata = {
       name: txtName_branch,
       phone: txtPhone_branch,
@@ -190,46 +192,31 @@ class Supplier extends Component {
       district: txtDistrict,
       wards: txtWards,
       address_detail: txtAddress_detail,
-
-
-    }
-    console.log("Formdata", Formdata)
+    };
+    console.log("Formdata", Formdata);
     this.props.editSupplier(store_code, idSupplier, Formdata);
-
-
   };
   showProvince = (places) => {
     var result = null;
     if (places.length > 0) {
       result = places.map((data, index) => {
-
-        return (
-          <option value={data.id}>{data.name}</option>
-        )
-
-      })
+        return <option value={data.id}>{data.name}</option>;
+      });
     }
-    return result
-
-  }
+    return result;
+  };
   showWards = (places) => {
     var result = null;
     if (places.length > 0) {
       result = places.map((data, index) => {
-
-        return (
-          <option value={data.id}>{data.name}</option>
-        )
-
-      })
+        return <option value={data.id}>{data.name}</option>;
+      });
     }
-    return result
-
-  }
+    return result;
+  };
 
   // goBack = () => {
   //   var { store_code } = this.props;
-
 
   //   history.replace(`/supplier/${store_code}/?pag=${getQueryParams("pag")}`);
   // };
@@ -238,27 +225,34 @@ class Supplier extends Component {
     var result = null;
     if (places.length > 0) {
       result = places.map((data, index) => {
-
-        return (
-          <option value={data.id}>{data.name}</option>
-        )
-
-      })
+        return <option value={data.id}>{data.name}</option>;
+      });
     }
-    return result
-
-  }
+    return result;
+  };
   render() {
-    var { province } = this.props
-    var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards,isShow } = this.state;
-    var { txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state;
+    var { province } = this.props;
+    var {
+      txtAddress_detail,
+      txtProvince,
+      txtDistrict,
+      txtWards,
+      listDistrict,
+      listWards,
+      isShow,
+    } = this.state;
+    var {
+      txtName_branch,
+      txtPhone_branch,
+      txtCode_branch,
+      txtPost_branch,
+      txtEmail_branch,
+    } = this.state;
 
-    console.log(this.props.supplier)
+    console.log(this.props.supplier);
     return (
       <form role="form" method="post">
         <div class="box-body">
-
-
           <div class="form-group">
             <label for="product_name">Tên Nhà cung cấp</label>
             <input
@@ -266,14 +260,13 @@ class Supplier extends Component {
               class="form-control"
               id="txtName_branch"
               placeholder="Nhập tên Nhà cung cấp"
-              autocomplete="off"
+              autoComplete="off"
               value={txtName_branch || ""}
               onChange={this.onChange}
               name="txtName_branch"
             />
           </div>
-       
-    
+
           <div class="form-group">
             <label for="product_name">Số điện thoại</label>
             <input
@@ -281,7 +274,7 @@ class Supplier extends Component {
               class="form-control"
               id="txtPhone_branch"
               placeholder="Nhập số điện thoại"
-              autocomplete="off"
+              autoComplete="off"
               value={txtPhone_branch || ""}
               onChange={this.onChange}
               name="txtPhone_branch"
@@ -294,7 +287,7 @@ class Supplier extends Component {
               class="form-control"
               id="txtEmail_branch"
               placeholder="Nhập email"
-              autocomplete="off"
+              autoComplete="off"
               value={txtEmail_branch || ""}
               onChange={this.onChange}
               name="txtEmail_branch"
@@ -308,7 +301,7 @@ class Supplier extends Component {
             class="form-control"
             id="txtAddress_detail"
             placeholder="Nhập chi tiết địa chỉ"
-            autocomplete="off"
+            autoComplete="off"
             value={txtAddress_detail || ""}
             onChange={this.onChange}
             name="txtAddress_detail"
@@ -354,24 +347,24 @@ class Supplier extends Component {
           >
             <option value="">-- Chọn phường/xã --</option>
             {this.showWards(listWards)}
-
           </select>
         </div>
 
         <div class="box-footer">
-        <button
-                  class={`btn btn-primary btn-sm ${isShow == true ? "show" : "hide"}`}
-                  onClick={this.handleOnClick}
-                >
-                  <i class="fa fa-save"></i> Lưu
-                </button>
-                <a
-                  style={{ marginLeft: "10px" }}
-                  onClick={this.goBack} class={`btn btn-warning btn-sm color-white `}
-                >
-                  <i class="fa fa-arrow-left"></i> Trở về
-                </a>
-          
+          <button
+            class={`btn btn-primary btn-sm ${isShow == true ? "show" : "hide"}`}
+            onClick={this.handleOnClick}
+          >
+            <i class="fa fa-save"></i> Lưu
+          </button>
+          <a
+            style={{ marginLeft: "10px" }}
+            onClick={this.goBack}
+            class={`btn btn-warning btn-sm color-white `}
+          >
+            <i class="fa fa-arrow-left"></i> Trở về
+          </a>
+
           {/* <button onClick={this.handleOnClick} class="btn btn-info btn-icon-split btn-sm">
             <span class="icon text-white-50">
               <i class="fas fa-save"></i>
@@ -391,7 +384,6 @@ class Supplier extends Component {
         </div>
       </form>
     );
-
   }
 }
 
@@ -404,7 +396,7 @@ const mapStateToProps = (state) => {
     permission: state.authReducers.permission.data,
     wards: state.placeReducers.wards,
     province: state.placeReducers.province,
-    district: state.placeReducers.district
+    district: state.placeReducers.district,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {

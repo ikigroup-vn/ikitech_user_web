@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as billAction from "../../actions/bill";
-import { filter_var, formatNumber, format, formatVND, formatNoD } from "../../ultis/helpers";
+import {
+  filter_var,
+  formatNumber,
+  format,
+  formatVND,
+  formatNoD,
+} from "../../ultis/helpers";
 import themeData from "../../ultis/theme_data";
 
 class ModalPayment extends Component {
@@ -15,13 +21,8 @@ class ModalPayment extends Component {
   onSave = (e) => {
     e.preventDefault();
     window.$(".modal").modal("hide");
-    var {total_shipping_fee} = this.state
-    this.props.updateShip(
-      
-        total_shipping_fee,
-      
-   
-    );
+    var { total_shipping_fee } = this.state;
+    this.props.updateShip(total_shipping_fee);
   };
   componentDidMount() {
     this.setState({ total_shipping_fee: this.props.total_shipping_fee });
@@ -42,7 +43,7 @@ class ModalPayment extends Component {
   render() {
     var { total_shipping_fee } = this.state;
 
-    console.log(total_shipping_fee)
+    console.log(total_shipping_fee);
     return (
       <div
         class="modal fade"
@@ -86,7 +87,7 @@ class ModalPayment extends Component {
                       value={formatNoD(total_shipping_fee)}
                       name="txtName"
                       placeholder="Số tiền KH cần thanh toán"
-                      autocomplete="off"
+                      autoComplete="off"
                       onChange={this.onChange}
                     />
                   </div>

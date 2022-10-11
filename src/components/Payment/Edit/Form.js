@@ -3,8 +3,8 @@ import { connect } from "react-redux";
 import * as paymentAction from "../../../actions/payment";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import CKEditor from "ckeditor4-react";
-import ModalCreate from "../ModalCreate"
-import ModalUpdate from "../ModalUpdate"
+import ModalCreate from "../ModalCreate";
+import ModalUpdate from "../ModalUpdate";
 
 class Form extends Component {
   constructor(props) {
@@ -15,67 +15,69 @@ class Form extends Component {
       txtName: "",
       defind_field: [],
       field: {},
-      editPayment: {}
+      editPayment: {},
     };
   }
 
   addPayment = (payment) => {
-    console.log(this.state.field)
-    var field = { ...this.state.field }
-    var payments = [...field.payment_guide]
-    payments.push(payment)
-    field.payment_guide = payments
+    console.log(this.state.field);
+    var field = { ...this.state.field };
+    var payments = [...field.payment_guide];
+    payments.push(payment);
+    field.payment_guide = payments;
 
-    var { store_code, paymentId } = this.props
+    var { store_code, paymentId } = this.props;
     var { txtContent, txtUse } = this.state;
-    var use = txtUse == "1" ? true : false
+    var use = txtUse == "1" ? true : false;
     var form = {
       description: txtContent,
       use: use,
-    }
+    };
     Object.entries(field).forEach(([name, value], index) => {
-      form[name] = value
-    })
+      form[name] = value;
+    });
     this.props.updatePaymentMethod(store_code, paymentId, form);
-
-
-  }
+  };
   componentWillReceiveProps(nextProps) {
     if (!shallowEqual(nextProps.payments, this.props.payments)) {
-      console.log(nextProps.payments)
-      nextProps.payments.forEach(payment => {
+      console.log(nextProps.payments);
+      nextProps.payments.forEach((payment) => {
         if (payment.id == Number(nextProps.paymentId)) {
           var use = payment.use == true ? "1" : "0";
-          var field = { ...this.state.field }
-          var config = payment.config || {}
+          var field = { ...this.state.field };
+          var config = payment.config || {};
           if (payment.field.length > 0) {
             payment.field.forEach((element, index) => {
               if (element == "payment_guide" && config == null) {
-                field[element] = []
-              }
-              else if ((element == "token_key" || element == "security_code" || element == "payment_key") && config == null) {
+                field[element] = [];
+              } else if (
+                (element == "token_key" ||
+                  element == "security_code" ||
+                  element == "payment_key") &&
+                config == null
+              ) {
                 // var itemConfig = typeof config[element] === "undefined" || config[element] == "nothing" ? "" : config[element]
-                field[element] = ""
-              }
-              else {
+                field[element] = "";
+              } else {
                 // console.log(itemConfig , config , element)
                 // if()
-                var itemConfig = typeof config[element] === "undefined" || config[element] == "nothing" ? "" : config[element]
-                field[element] = itemConfig
+                var itemConfig =
+                  typeof config[element] === "undefined" ||
+                  config[element] == "nothing"
+                    ? ""
+                    : config[element];
+                field[element] = itemConfig;
               }
-
             });
           }
 
-          this.setState(
-            {
-              txtName: payment.name,
-              txtContent: payment.description,
-              txtUse: use,
-              field: field,
-              defind_field: payment.define_field
-            }
-          )
+          this.setState({
+            txtName: payment.name,
+            txtContent: payment.description,
+            txtUse: use,
+            field: field,
+            defind_field: payment.define_field,
+          });
         }
       });
     }
@@ -85,69 +87,58 @@ class Form extends Component {
     var name = target.name;
     var value = target.value;
     var newField = { ...this.state.field };
-    newField[name] = value
+    newField[name] = value;
     this.setState({
-      field: newField
+      field: newField,
     });
-  }
+  };
   editPayment = (index, data) => {
-    this.setState({ editPayment: { index, data } })
-  }
+    this.setState({ editPayment: { index, data } });
+  };
   showPaymentGuide = (payments) => {
     var result = null;
     if (payments.length > 0) {
       result = payments.map((data, index) => {
+        return (
+          <tr>
+            <td>{index + 1}</td>
+            <td>{data.account_name}</td>
+            <td>{data.account_number}</td>
+            <td>{data.bank}</td>
+            <td>{data.branch}</td>
+            <td>
+              <button
+                onClick={() => this.editPayment(index, JSON.stringify(data))}
+                type="button"
+                data-toggle="modal"
+                data-target="#updateModal"
+                class="btn btn-warning btn-sm"
+              >
+                <i class="fa fa-edit"></i> Sửa
+              </button>
 
-        return <tr>
-          <td>
-            {index + 1}
-          </td>
-          <td>
-            {data.account_name}
-          </td>
-          <td>
-            {data.account_number}
-          </td>
-          <td>
-            {data.bank}
-          </td>
-          <td>
-            {data.branch}
-          </td>
-          <td >
-            <button
-              onClick={() => this.editPayment(index, JSON.stringify(data))}
-              type="button"
-              data-toggle="modal"
-              data-target="#updateModal"
-              class="btn btn-warning btn-sm"
-            >
-              <i class="fa fa-edit"></i> Sửa
-            </button>
-
-            <button
-              onClick={() => this.deletePayment(index)}
-              type="button"
-              style={{ marginLeft: "7px" }}
-              class="btn btn-danger btn-sm"
-            >
-
-              <i class="fa fa-trash"></i> Xóa
-            </button>
-          </td>
-        </tr>
-      })
+              <button
+                onClick={() => this.deletePayment(index)}
+                type="button"
+                style={{ marginLeft: "7px" }}
+                class="btn btn-danger btn-sm"
+              >
+                <i class="fa fa-trash"></i> Xóa
+              </button>
+            </td>
+          </tr>
+        );
+      });
     }
-    return result
-  }
+    return result;
+  };
 
   showField = (field, defind_field) => {
-    console.log(field, defind_field)
+    console.log(field, defind_field);
     var result = [];
     Object.entries(field).forEach(([name, value], index) => {
-      console.log(name, value)
+      console.log(name, value);
       if (name == "payment_guide") {
-
         result.push(
           <div class="form-group">
             <label for="product_name">Danh sách tài khoản thanh toán</label>
@@ -161,30 +152,23 @@ class Form extends Component {
                     <th>Ngân hàng</th>
                     <th>Chi nhánh</th>
                     <th>
-
                       <button
                         type="button"
                         data-toggle="modal"
                         data-target="#createModal"
                         class="btn btn-primary btn-sm"
                       >
-
                         <i class="fa fa-plus"></i> Thêm tài khoản
                       </button>
                     </th>
-
                   </tr>
                 </thead>
-                <tbody>
-                  {this.showPaymentGuide(value)}
-                </tbody>
+                <tbody>{this.showPaymentGuide(value)}</tbody>
               </table>
             </div>
           </div>
-        )
-
-      }
-      else {
+        );
+      } else {
         result.push(
           <div class="form-group">
             <label for="product_name">{defind_field[index]}</label>
@@ -193,16 +177,16 @@ class Form extends Component {
               class="form-control"
               value={value}
               placeholder={"Nhập " + defind_field[index]}
-              autocomplete="off"
+              autoComplete="off"
               onChange={this.onChangeField}
               name={name}
             />
           </div>
-        )
+        );
       }
     });
-    return result
-  }
+    return result;
+  };
 
   onChange = (e) => {
     var target = e.target;
@@ -220,17 +204,17 @@ class Form extends Component {
   };
 
   onSave = (e) => {
-    var { store_code, paymentId } = this.props
+    var { store_code, paymentId } = this.props;
     e.preventDefault();
     var { txtContent, txtUse, field } = this.state;
-    var use = txtUse == "1" ? true : false
+    var use = txtUse == "1" ? true : false;
     var form = {
       description: txtContent,
       use: use,
-    }
+    };
     Object.entries(field).forEach(([name, value], index) => {
-      form[name] = value
-    })
+      form[name] = value;
+    });
     this.props.updatePayment(store_code, paymentId, form);
   };
   goBack = () => {
@@ -240,104 +224,100 @@ class Form extends Component {
   HandleEditPayment = (payment, index) => {
     console.log(payment, index);
 
-    var field = { ...this.state.field }
-    var payments = [...field.payment_guide]
+    var field = { ...this.state.field };
+    var payments = [...field.payment_guide];
     payments.forEach((item, _index) => {
       if (index == _index) {
-        console.log(index, _index)
-        payments[index] = payment
+        console.log(index, _index);
+        payments[index] = payment;
       }
     });
-    field.payment_guide = payments
-    var { store_code, paymentId } = this.props
+    field.payment_guide = payments;
+    var { store_code, paymentId } = this.props;
     var { txtContent, txtUse } = this.state;
-    var use = txtUse == "1" ? true : false
+    var use = txtUse == "1" ? true : false;
     var form = {
       description: txtContent,
       use: use,
-    }
+    };
     Object.entries(field).forEach(([name, value], index) => {
-      form[name] = value
-    })
+      form[name] = value;
+    });
     console.log(form);
 
     this.props.updatePaymentMethod(store_code, paymentId, form);
-  }
+  };
   deletePayment = (index) => {
-    var field = { ...this.state.field }
-    var payments = [...field.payment_guide]
+    var field = { ...this.state.field };
+    var payments = [...field.payment_guide];
     payments.forEach((item, _index) => {
       if (index == _index) {
         payments.splice(index, 1);
       }
     });
-    field.payment_guide = payments
+    field.payment_guide = payments;
 
-    var { store_code, paymentId } = this.props
+    var { store_code, paymentId } = this.props;
     var { txtContent, txtUse } = this.state;
-    var use = txtUse == "1" ? true : false
+    var use = txtUse == "1" ? true : false;
     var form = {
       description: txtContent,
       use: use,
-    }
+    };
     Object.entries(field).forEach(([name, value], index) => {
-      form[name] = value
-    })
+      form[name] = value;
+    });
     this.props.updatePaymentMethod(store_code, paymentId, form);
-  }
+  };
 
   render() {
-
-    var { txtName, txtContent, txtUse, field, defind_field, editPayment } = this.state
+    var { txtName, txtContent, txtUse, field, defind_field, editPayment } =
+      this.state;
     return (
       <React.Fragment>
         <ModalCreate addPayment={this.addPayment} />
-        <ModalUpdate payment={editPayment} HandleEditPayment={this.HandleEditPayment} />
-
+        <ModalUpdate
+          payment={editPayment}
+          HandleEditPayment={this.HandleEditPayment}
+        />
 
         <form role="form" onSubmit={this.onSave} method="post">
-
           <div class="box-body">
-
             <div class="form-group">
               <label for="product_name">Tên phương thức</label>
               <input
                 type="text"
                 class="form-control"
                 value={txtName}
-                autocomplete="off"
+                autoComplete="off"
                 disabled
               />
             </div>
 
-
-
-
             <div class="form-group">
               <label for="product_name">Trạng thái</label>
 
-              <select name="txtUse" id="inputisUse" class="form-control" value={txtUse} onChange={this.onChange} >
+              <select
+                name="txtUse"
+                id="inputisUse"
+                class="form-control"
+                value={txtUse}
+                onChange={this.onChange}
+              >
                 <option value="1">Đang hoạt động</option>
                 <option value="0">Tạm dừng hoạt động</option>
-
               </select>
-
             </div>
             {this.showField(field, defind_field)}
 
             <div class="form-group">
               <label for="product_name">Nội dung</label>
-              <CKEditor
-                data={txtContent}
-                onChange={this.onChangeDecription}
-              />
+              <CKEditor data={txtContent} onChange={this.onChangeDecription} />
             </div>
-
           </div>
           <div class="box-footer">
             <button type="submit" class="btn btn-info   btn-sm">
-              <i class="fas fa-save"></i>  Lưu
-
+              <i class="fas fa-save"></i> Lưu
             </button>
             <button
               type="button"
@@ -346,34 +326,26 @@ class Form extends Component {
               class="btn btn-warning   btn-sm"
             >
               <i class="fas fa-arrow-left"></i> Trở về
-
             </button>
           </div>
-
         </form>
-
       </React.Fragment>
-
     );
   }
 }
 
 const mapStateToProps = (state) => {
-  return {
-
-  };
+  return {};
 };
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-
     updatePayment: (store_code, paymentId, data) => {
-      dispatch(paymentAction.updatePayment(store_code, paymentId, data))
+      dispatch(paymentAction.updatePayment(store_code, paymentId, data));
     },
     updatePaymentMethod: (store_code, paymentId, data) => {
-      dispatch(paymentAction.updatePaymentMethod(store_code, paymentId, data))
-    }
-
+      dispatch(paymentAction.updatePaymentMethod(store_code, paymentId, data));
+    },
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Form);

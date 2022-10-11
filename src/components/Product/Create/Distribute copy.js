@@ -177,7 +177,7 @@ class Distribute extends Component {
         typeof list_distribute[0].element_distributes[0]
           .sub_element_distributes != "undefined")
     ) {
-      list_distribute[0].element_distributes[0].sub_element_distributes = []
+      list_distribute[0].element_distributes[0].sub_element_distributes = [];
 
       list_distribute[0].sub_element_distribute_name = null;
       var newObject = {
@@ -228,19 +228,22 @@ class Distribute extends Component {
 
   removeRow = () => {
     var list_distribute = [...this.state.list_distribute];
-    console.log(list_distribute)
-    if (typeof list_distribute[0].sub_element_distribute_name !== "undefined" && list_distribute[0].element_distributes[0].sub_element_distributes.length > 0) {
-      list_distribute[0].name = list_distribute[0].sub_element_distribute_name
+    console.log(list_distribute);
+    if (
+      typeof list_distribute[0].sub_element_distribute_name !== "undefined" &&
+      list_distribute[0].element_distributes[0].sub_element_distributes.length >
+        0
+    ) {
+      list_distribute[0].name = list_distribute[0].sub_element_distribute_name;
 
-      list_distribute[0].element_distributes = [...list_distribute[0].element_distributes[0].sub_element_distributes]
-      delete list_distribute[0].sub_element_distribute_name
-
-    }
-    else {
-      console.log("asdas")
-      delete list_distribute[0].name
-      list_distribute[0].element_distributes = []
-
+      list_distribute[0].element_distributes = [
+        ...list_distribute[0].element_distributes[0].sub_element_distributes,
+      ];
+      delete list_distribute[0].sub_element_distribute_name;
+    } else {
+      console.log("asdas");
+      delete list_distribute[0].name;
+      list_distribute[0].element_distributes = [];
     }
     this.setState({ list_distribute: list_distribute });
   };
@@ -594,9 +597,9 @@ class Distribute extends Component {
                   var value_barcode =
                     list_distribute[0].element_distributes[_index]
                       .sub_element_distributes[index].barcode;
-                      var value_barcode =
-                      list_distribute[0].element_distributes[_index]
-                        .sub_element_distributes[index].barcode;
+                  var value_barcode =
+                    list_distribute[0].element_distributes[_index]
+                      .sub_element_distributes[index].barcode;
                   const _values =
                     value_price_main != null
                       ? formatNumber(value_price_main)
@@ -685,7 +688,7 @@ class Distribute extends Component {
                             class="form-control input-sm"
                             id="input"
                             placeholder="Nhập barcode"
-                            autocomplete="off"
+                            autoComplete="off"
                             required="required"
                             value={barcode}
                             onChange={(e) =>

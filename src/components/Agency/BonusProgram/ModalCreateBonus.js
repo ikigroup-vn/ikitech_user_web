@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import * as agencyAction from "../../../actions/agency"
+import * as agencyAction from "../../../actions/agency";
 import { connect } from "react-redux";
 import * as helper from "../../../ultis/helpers";
-import { formatNumber } from "../../../ultis/helpers"
+import { formatNumber } from "../../../ultis/helpers";
 import ModalUpload from "./ModalUpload";
 
 class ModalCreateBonus extends Component {
@@ -14,8 +14,7 @@ class ModalCreateBonus extends Component {
       reward_description: "",
       reward_image_url: "",
       reward_value: 0,
-      limit: 0
-
+      limit: 0,
     };
   }
 
@@ -34,42 +33,42 @@ class ModalCreateBonus extends Component {
   };
   onSave = (e) => {
     e.preventDefault();
-    window.$('.modal').modal('hide');
-    var { threshold,
+    window.$(".modal").modal("hide");
+    var {
+      threshold,
       reward_name,
       reward_description,
       reward_image_url,
       reward_value,
-      limit } = this.state
-    this.props.addBonusSteps(this.props.store_code,
-      {
-
-        threshold: threshold == null ? threshold : formatNumber(threshold),
-        reward_name: reward_name,
-        reward_description: reward_description,
-        reward_image_url: reward_image_url,
-        reward_value: reward_value == null ? reward_value : formatNumber(reward_value),
-        limit: limit == null ? limit : formatNumber(limit),
-
-      });
+      limit,
+    } = this.state;
+    this.props.addBonusSteps(this.props.store_code, {
+      threshold: threshold == null ? threshold : formatNumber(threshold),
+      reward_name: reward_name,
+      reward_description: reward_description,
+      reward_image_url: reward_image_url,
+      reward_value:
+        reward_value == null ? reward_value : formatNumber(reward_value),
+      limit: limit == null ? limit : formatNumber(limit),
+    });
     this.setState({
       threshold: 0,
       reward_name: "",
       reward_description: "",
       reward_image_url: "",
       reward_value: 0,
-      limit: 0
-
-    })
-
+      limit: 0,
+    });
   };
   render() {
-    var { threshold,
+    var {
+      threshold,
       reward_name,
       reward_description,
       reward_image_url,
       reward_value,
-      limit } = this.state;
+      limit,
+    } = this.state;
     return (
       <div
         class="modal fade"
@@ -82,41 +81,39 @@ class ModalCreateBonus extends Component {
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header" style={{ background: "white" }}>
-              <h4 class="modal-title" style={{ color: "black" }}>Thêm bật thang thưởng</h4>
+              <h4 class="modal-title" style={{ color: "black" }}>
+                Thêm bật thang thưởng
+              </h4>
 
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
             </div>
-            <form
-              onSubmit={this.onSave}
-              role="form"
-              action="#"
-              method="post"
-            >
+            <form onSubmit={this.onSave} role="form" action="#" method="post">
               <div class="modal-body">
-            
-               
-              <div class="form-group">
-              <label>Ảnh: &nbsp; </label>
-              <img src={`${"image"}`} width="150" height="150" />
-            </div>
-            <div class="form-group">
-
-              <div class="kv-avatar">
-                <div >
-                  <button
-                    type="button"
-                    class="btn btn-primary btn-sm"
-                    data-toggle="modal"
-                    data-target="#uploadModalBannerAds"
-                  >
-                    <i class="fa fa-plus"></i> Upload ảnh
-                  </button>
+                <div class="form-group">
+                  <label>Ảnh: &nbsp; </label>
+                  <img src={`${"image"}`} width="150" height="150" />
                 </div>
-              </div>
-
-            </div>
-            
+                <div class="form-group">
+                  <div class="kv-avatar">
+                    <div>
+                      <button
+                        type="button"
+                        class="btn btn-primary btn-sm"
+                        data-toggle="modal"
+                        data-target="#uploadModalBannerAds"
+                      >
+                        <i class="fa fa-plus"></i> Upload ảnh
+                      </button>
+                    </div>
+                  </div>
+                </div>
 
                 <div class="form-group">
                   <label for="product_name">Số tiền đơn hàng tối thiểu</label>
@@ -126,7 +123,7 @@ class ModalCreateBonus extends Component {
                     class="form-control"
                     id="threshold"
                     placeholder="Nhập..."
-                    autocomplete="off"
+                    autoComplete="off"
                     value={threshold}
                     onChange={this.onChange}
                     name="threshold"
@@ -140,7 +137,7 @@ class ModalCreateBonus extends Component {
                     class="form-control"
                     id="reward_name"
                     placeholder="Nhập..."
-                    autocomplete="off"
+                    autoComplete="off"
                     value={reward_name}
                     onChange={this.onChange}
                     name="reward_name"
@@ -155,7 +152,7 @@ class ModalCreateBonus extends Component {
                     class="form-control"
                     id="reward_description"
                     placeholder="Nhập..."
-                    autocomplete="off"
+                    autoComplete="off"
                     value={reward_description}
                     onChange={this.onChange}
                     name="reward_description"
@@ -170,7 +167,7 @@ class ModalCreateBonus extends Component {
                     class="form-control"
                     id="reward_value"
                     placeholder="Nhập..."
-                    autocomplete="off"
+                    autoComplete="off"
                     value={reward_value}
                     onChange={this.onChange}
                     name="reward_value"
@@ -185,14 +182,12 @@ class ModalCreateBonus extends Component {
                     class="form-control"
                     id="limit"
                     placeholder="Nhập..."
-                    autocomplete="off"
+                    autoComplete="off"
                     value={limit}
                     onChange={this.onChange}
                     name="limit"
                   />
                 </div>
-
-
               </div>
               <div class="modal-footer">
                 <button
@@ -215,8 +210,6 @@ class ModalCreateBonus extends Component {
     );
   }
 }
-
-
 
 const mapDispatchToProps = (dispatch, props) => {
   return {

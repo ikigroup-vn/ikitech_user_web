@@ -15,7 +15,11 @@ import SeoOption from "./SeoOption";
 import history from "../../../../history";
 import * as userLocalApi from "../../../../data/local/user";
 import themeData from "../../../../ultis/theme_data";
-import { formatNumber, removeVietnameseTones , formatNoD } from "../../../../ultis/helpers";
+import {
+  formatNumber,
+  removeVietnameseTones,
+  formatNoD,
+} from "../../../../ultis/helpers";
 
 import {
   image as imagePlugin,
@@ -31,11 +35,10 @@ import {
   table as tablePlugin,
   link as linkPlugin,
   video,
-  audio
+  audio,
 } from "suneditor/src/plugins";
 import imageGallery from "../../../imageGallery";
-import { getApiImageStore } from "../../../../constants/Config"
-
+import { getApiImageStore } from "../../../../constants/Config";
 
 class Form extends Component {
   constructor(props) {
@@ -48,16 +51,19 @@ class Form extends Component {
       auto_change_order_questions: false,
       auto_change_order_answer: false,
       id: "",
-      show : 1,
-
+      show: 1,
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps.modal, this.props.modal, shallowEqual(nextProps.modal, this.props.modal))
+    console.log(
+      nextProps.modal,
+      this.props.modal,
+      shallowEqual(nextProps.modal, this.props.modal)
+    );
 
     if (!shallowEqual(nextProps.modal, this.props.modal)) {
-      var quiz = nextProps.modal
+      var quiz = nextProps.modal;
       this.setState({
         txtSumary: quiz.short_description,
         id: quiz.id,
@@ -65,36 +71,26 @@ class Form extends Component {
         txtMinute: quiz.minute,
         auto_change_order_questions: quiz.auto_change_order_questions,
         auto_change_order_answer: quiz.auto_change_order_answer,
-        show : quiz.show == true ? 1 : 0,
-
-      })
+        show: quiz.show == true ? 1 : 0,
+      });
     }
-
   }
 
-
-
-    onChange = (e) => {
-      var target = e.target;
-      var name = target.name;
-      var value = target.value;
-      if(name == "txtMinute")
-      {
-        var _value = formatNumber(value);
-        this.setState({
-          [name]: _value,
-        });
-      }
-      else
-      {
-        this.setState({
-          [name]: value,
-        });
-      }
-   
-    };
-  
-   
+  onChange = (e) => {
+    var target = e.target;
+    var name = target.name;
+    var value = target.value;
+    if (name == "txtMinute") {
+      var _value = formatNumber(value);
+      this.setState({
+        [name]: _value,
+      });
+    } else {
+      this.setState({
+        [name]: value,
+      });
+    }
+  };
 
   handleEditorChange = (editorState) => {
     this.setState({
@@ -102,19 +98,19 @@ class Form extends Component {
     });
   };
 
-
   onSave = (e) => {
-    var { store_code , courseId } = this.props
+    var { store_code, courseId } = this.props;
 
     e.preventDefault();
-    var { txtTitle,
+    var {
+      txtTitle,
       txtSumary,
       txtMinute,
       auto_change_order_questions,
       auto_change_order_answer,
       id,
-      show
-    } = this.state
+      show,
+    } = this.state;
     if (txtTitle == null || !isEmpty(txtTitle)) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
@@ -127,8 +123,12 @@ class Form extends Component {
       });
       return;
     }
-    
-    if (txtMinute == null || !isEmpty(txtMinute) || parseInt(txtMinute ?? 0) <= 0) {
+
+    if (
+      txtMinute == null ||
+      !isEmpty(txtMinute) ||
+      parseInt(txtMinute ?? 0) <= 0
+    ) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
         alert: {
@@ -141,20 +141,23 @@ class Form extends Component {
       return;
     }
 
-
-
-    this.props.updateQuiz(id, {
-      title: txtTitle,
-      short_description: txtSumary,
-      minute: txtMinute,
-      auto_change_order_questions,
-      auto_change_order_answer,
-      show : Number(show) == 1 ? true : false
-
-    }, store_code, null, function () {
-      window.$(".modal").modal("hide");
-
-    },courseId);
+    this.props.updateQuiz(
+      id,
+      {
+        title: txtTitle,
+        short_description: txtSumary,
+        minute: txtMinute,
+        auto_change_order_questions,
+        auto_change_order_answer,
+        show: Number(show) == 1 ? true : false,
+      },
+      store_code,
+      null,
+      function () {
+        window.$(".modal").modal("hide");
+      },
+      courseId
+    );
   };
 
   goBack = () => {
@@ -168,11 +171,11 @@ class Form extends Component {
       txtMinute,
       auto_change_order_questions,
       auto_change_order_answer,
-      show
+      show,
     } = this.state;
 
     var { store_code } = this.props;
-    console.log(this.state)
+    console.log(this.state);
     return (
       <React.Fragment>
         <div
@@ -189,7 +192,7 @@ class Form extends Component {
                 class="modal-header"
                 style={{ backgroundColor: themeData().backgroundColor }}
               >
-              <h4 class="modal-title">Sửa bài trắc nghiệm</h4>
+                <h4 class="modal-title">Sửa bài trắc nghiệm</h4>
 
                 <button
                   type="button"
@@ -209,16 +212,15 @@ class Form extends Component {
                 id="createForm"
               >
                 <div class="modal-body" style={{ padding: " 0 10px" }}>
-
                   <div class="form-group">
-                  <label for="product_name">Tên bài trắc nghiệm</label>
+                    <label for="product_name">Tên bài trắc nghiệm</label>
                     <input
                       type="text"
                       class="form-control"
                       id="txtTitle"
                       value={txtTitle}
                       placeholder="Nhập tên bài trắc nghiệm"
-                      autocomplete="off"
+                      autoComplete="off"
                       onChange={this.onChange}
                       name="txtTitle"
                     />
@@ -231,25 +233,25 @@ class Form extends Component {
                       id="txtMinute"
                       value={formatNoD(txtMinute)}
                       placeholder="Nhập số phút"
-                      autocomplete="off"
+                      autoComplete="off"
                       onChange={this.onChange}
                       name="txtMinute"
                     />
                   </div>
                   <div class="form-group">
-                  <label for="product_name">Trạng thái</label>
+                    <label for="product_name">Trạng thái</label>
 
-                  <select
-                    name="show"
-                    value={show}
-                    onChange={this.onChange}
-                    id="input"
-                    class="form-control"
-                  >
-                    <option value="1">Hiển thị</option>
-                    <option value="0">Tạm ẩn</option>
-                  </select>
-                </div>
+                    <select
+                      name="show"
+                      value={show}
+                      onChange={this.onChange}
+                      id="input"
+                      class="form-control"
+                    >
+                      <option value="1">Hiển thị</option>
+                      <option value="0">Tạm ẩn</option>
+                    </select>
+                  </div>
                   <div class="form-group">
                     <label for="product_name">Mô tả ngắn</label>
 
@@ -265,23 +267,42 @@ class Form extends Component {
 
                   <div class="form-group">
                     <div class="form-check">
-                      <input class="form-check-input" checked={auto_change_order_questions} name="auto_change_order_questions" onChange={() => { this.setState({ auto_change_order_questions: !auto_change_order_questions }) }} type="checkbox" id="gridCheck" />
+                      <input
+                        class="form-check-input"
+                        checked={auto_change_order_questions}
+                        name="auto_change_order_questions"
+                        onChange={() => {
+                          this.setState({
+                            auto_change_order_questions:
+                              !auto_change_order_questions,
+                          });
+                        }}
+                        type="checkbox"
+                        id="gridCheck"
+                      />
                       <label class="form-check-label" for="gridCheck">
                         cho phép tự động đổi vị trí câu hỏi
-
                       </label>
                     </div>
-
                   </div>
                   <div class="form-group">
                     <div class="form-check">
-                      <input class="form-check-input" checked={auto_change_order_answer} name="auto_change_order_answer" onChange={() => { this.setState({ auto_change_order_answer: !auto_change_order_answer }) }} type="checkbox" id="gridCheck1" />
+                      <input
+                        class="form-check-input"
+                        checked={auto_change_order_answer}
+                        name="auto_change_order_answer"
+                        onChange={() => {
+                          this.setState({
+                            auto_change_order_answer: !auto_change_order_answer,
+                          });
+                        }}
+                        type="checkbox"
+                        id="gridCheck1"
+                      />
                       <label class="form-check-label" for="gridCheck1">
                         cho phép tự động đổi vị trí câu trả lời
-
                       </label>
                     </div>
-
                   </div>
                   {/* <div class="form-group">
                   <label for="product_name">Nội dung</label>
@@ -351,7 +372,6 @@ class Form extends Component {
                     />
                   </div>
                 </div> */}
-
                 </div>
                 <div class="modal-footer">
                   <button
@@ -362,10 +382,7 @@ class Form extends Component {
                   >
                     Đóng
                   </button>
-                  <button
-                    type="submit"
-                    class="btn btn-warning"
-                  >
+                  <button type="submit" class="btn btn-warning">
                     Lưu
                   </button>
                 </div>
@@ -373,17 +390,13 @@ class Form extends Component {
             </div>
           </div>
         </div>
-
-
-
       </React.Fragment>
     );
   }
 }
 
 const mapStateToProps = (state) => {
-  return {
-  };
+  return {};
 };
 
 const mapDispatchToProps = (dispatch, props) => {
@@ -392,8 +405,17 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(error);
     },
 
-    updateQuiz: (id, data, store_code, _this, resetModal,courseId) => {
-      dispatch(trainAction.updateQuiz(id, data, store_code, _this, resetModal,courseId));
+    updateQuiz: (id, data, store_code, _this, resetModal, courseId) => {
+      dispatch(
+        trainAction.updateQuiz(
+          id,
+          data,
+          store_code,
+          _this,
+          resetModal,
+          courseId
+        )
+      );
     },
   };
 };

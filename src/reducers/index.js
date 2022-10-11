@@ -14,6 +14,7 @@ import { blogReducers } from "./blog/index";
 import { shipmentReducers } from "./shipment/index";
 import { paymentReducers } from "./payment/index";
 import { customerReducers } from "./customer/index";
+import { groupCustomerReducers } from "./group_customer/index";
 import { customerSaleReducers } from "./customer_sales/index";
 import { userReducers } from "./user/index";
 import { billReducers } from "./bill/index";
@@ -48,8 +49,7 @@ import { requestMobileReducers } from "./request_mobile/index";
 import { requestRemoteReducers } from "./request_remote/index";
 import { mobileCheckinReducers } from "./mobile_checkin/index";
 import { bonusProductReducers } from "./bonus_product/index";
-import {trainReducers } from "./train/index";
-
+import { trainReducers } from "./train/index";
 
 const appReducers = combineReducers({
   authReducers,
@@ -68,6 +68,7 @@ const appReducers = combineReducers({
   shipmentReducers,
   paymentReducers,
   customerReducers,
+  groupCustomerReducers,
   customerSaleReducers,
   userReducers,
   billReducers,
@@ -102,7 +103,7 @@ const appReducers = combineReducers({
   requestRemoteReducers,
   mobileCheckinReducers,
   bonusProductReducers,
-  trainReducers
+  trainReducers,
 });
 
 export default appReducers;

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as Types from "../../../constants/ActionType";
-import { isEmail , isPhone } from "../../../ultis/helpers"
+import { isEmail, isPhone } from "../../../ultis/helpers";
 import * as auth from "../../../actions/auth";
 class Form extends Component {
   constructor(props) {
@@ -11,27 +11,25 @@ class Form extends Component {
       txtOTP: "",
       canSendOtp: true,
       secondCountDown: 30,
-      toggle : false,
-      iconShow : "fa fa-fw fa-eye",
-      iconHide : "fa fa-fw fa-eye-slash",
+      toggle: false,
+      iconShow: "fa fa-fw fa-eye",
+      iconHide: "fa fa-fw fa-eye-slash",
     };
   }
 
-  componentDidMount(){
+  componentDidMount() {
     var { alert } = { ...this.props };
     alert.disable = "hide";
     this.props.alert({
       type: Types.ALERT_UID_STATUS,
       alert,
     });
-    console.log(this.props)
-    if(isEmail(this.props.formData?.formData.email)) {
+    console.log(this.props);
+    if (isEmail(this.props.formData?.formData.email)) {
       this.onSendOtpToEmail();
     } else {
       this.onSendOtp();
     }
-   
-
   }
 
   onSendOtpToEmail = () => {
@@ -39,7 +37,6 @@ class Form extends Component {
     if (this.state.canSendOtp == true) {
       this.startTimer();
       this.props.sendOTPToEmail(formData.formData.email);
-   
     }
   };
 
@@ -48,7 +45,6 @@ class Form extends Component {
     if (this.state.canSendOtp == true) {
       this.startTimer();
       this.props.sendOTP(formData.formData.phone_number);
-   
     }
   };
 
@@ -64,7 +60,6 @@ class Form extends Component {
         var seconds = this.state.secondCountDown - 1;
         this.setState({ secondCountDown: seconds });
         this.countDown();
-    
       }, 1000);
     }
 
@@ -87,8 +82,11 @@ class Form extends Component {
     this.props.forgotOTP({
       password: this.state.txtPassword,
       otp: this.state.txtOTP,
-      email_or_phone_number : this.props.phone_number == "" ? this.props.email :  this.props.phone_number,
-      otp_from:isEmail(this.props.email) ? "email" : "phone"
+      email_or_phone_number:
+        this.props.phone_number == ""
+          ? this.props.email
+          : this.props.phone_number,
+      otp_from: isEmail(this.props.email) ? "email" : "phone",
     });
   };
   goBack = (e) => {
@@ -98,12 +96,11 @@ class Form extends Component {
     history.push("/forgot?redirect_forgot=true");
   };
 
-  togglePassword = () =>{
-    this.setState({toggle : !this.state.toggle})
-  }
+  togglePassword = () => {
+    this.setState({ toggle: !this.state.toggle });
+  };
   render() {
-      
-    var { txtOTP, txtPassword , toggle , iconHide , iconShow } = this.state;
+    var { txtOTP, txtPassword, toggle, iconHide, iconShow } = this.state;
     return (
       <React.Fragment>
         <form onSubmit={this.onSave} className="user">
@@ -113,8 +110,12 @@ class Form extends Component {
               className="form-control form-control-user"
               id="exampleInputEmail"
               aria-describedby="emailHelp"
-              placeholder={isEmail(this.props.email) ? "Nhập mã xác nhận từ Email"  : "Nhập mã xác nhận từ số điện thoại"}
-              autocomplete="off"
+              placeholder={
+                isEmail(this.props.email)
+                  ? "Nhập mã xác nhận từ Email"
+                  : "Nhập mã xác nhận từ số điện thoại"
+              }
+              autoComplete="off"
               name="txtOTP"
               value={txtOTP}
               onChange={this.onChange}
@@ -126,22 +127,25 @@ class Form extends Component {
               type={toggle == true ? "text" : "password"}
               className="form-control form-control-user"
               placeholder="Nhập mật khẩu mới"
-              autocomplete="off"
+              autoComplete="off"
               value={txtPassword}
-              onChange = {this.onChange}
-              name = "txtPassword"
-
+              onChange={this.onChange}
+              name="txtPassword"
             />
-            <span onClick = {this.togglePassword} toggle="#password-field" class={toggle ? iconShow : iconHide} style={{
-               float: "right",
-               marginRight: "10px",
-               marginTop: "-30px",
-               position: "relative",
-               zIndex: "2"
-            }}></span>
+            <span
+              onClick={this.togglePassword}
+              toggle="#password-field"
+              class={toggle ? iconShow : iconHide}
+              style={{
+                float: "right",
+                marginRight: "10px",
+                marginTop: "-30px",
+                position: "relative",
+                zIndex: "2",
+              }}
+            ></span>
           </div>
 
-    
           <button type="submit" className="btn btn-primary btn-user btn-block">
             Xác nhận
           </button>
@@ -149,13 +153,17 @@ class Form extends Component {
           {this.state.canSendOtp ? (
             <div
               className="text-center"
-              onClick={isEmail(this.props.phone_number) ? this.onSendOtpToEmail : this.onSendOtp}
+              onClick={
+                isEmail(this.props.phone_number)
+                  ? this.onSendOtpToEmail
+                  : this.onSendOtp
+              }
               style={{
                 marginTop: 10,
                 marginBottom: 20,
               }}
             >
-              <a type = "button">Gửi lại mã</a>
+              <a type="button">Gửi lại mã</a>
             </div>
           ) : (
             <div
@@ -170,25 +178,19 @@ class Form extends Component {
           )}
 
           <div
-           onClick={this.goBack}
-              
-       
-              style={{
-                marginTop: 10,
-                marginBottom: 20,
-                
-              }}
-            >
-              <a type = "button"> 	&#8592; Trở lại</a>
-            </div>
-
-        
+            onClick={this.goBack}
+            style={{
+              marginTop: 10,
+              marginBottom: 20,
+            }}
+          >
+            <a type="button"> &#8592; Trở lại</a>
+          </div>
         </form>
       </React.Fragment>
     );
   }
 }
-
 
 const mapDispatchToProps = (dispatch, props) => {
   return {

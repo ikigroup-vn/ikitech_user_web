@@ -30,11 +30,10 @@ import {
   table as tablePlugin,
   link as linkPlugin,
   video,
-  audio
+  audio,
 } from "suneditor/src/plugins";
 import imageGallery from "../../../imageGallery";
-import { getApiImageStore } from "../../../../constants/Config"
-
+import { getApiImageStore } from "../../../../constants/Config";
 
 class Form extends Component {
   constructor(props) {
@@ -44,13 +43,13 @@ class Form extends Component {
       txtSumary: "",
       txtContent: "",
       id: "",
-      link_video_youtube: ""
+      link_video_youtube: "",
     };
   }
 
   componentWillReceiveProps(nextProps) {
     if (!shallowEqual(nextProps.modal, this.props.modal)) {
-      var lesson = nextProps.modal
+      var lesson = nextProps.modal;
       this.setState({
         txtSumary: lesson.short_description,
         id: lesson.id,
@@ -58,13 +57,9 @@ class Form extends Component {
         train_chapter_id: lesson.train_chapter_id,
         link_video_youtube: lesson.link_video_youtube,
         txtContent: lesson.description,
-
-
-      })
+      });
     }
-
   }
-
 
   onChange = (e) => {
     var target = e.target;
@@ -82,16 +77,20 @@ class Form extends Component {
     });
   };
 
-
   onSave = (e) => {
-    var { store_code, courseId } = this.props
+    var { store_code, courseId } = this.props;
 
     e.preventDefault();
-    var { txtTitle, txtSumary, id, train_chapter_id, txtContent, link_video_youtube
-    } = this.state
+    var {
+      txtTitle,
+      txtSumary,
+      id,
+      train_chapter_id,
+      txtContent,
+      link_video_youtube,
+    } = this.state;
     if (txtTitle == null || !isEmpty(txtTitle)) {
       this.props.showError({
-
         type: Types.ALERT_UID_STATUS,
         alert: {
           type: "danger",
@@ -99,22 +98,26 @@ class Form extends Component {
           disable: "show",
           content: "Tiêu đề không được để trống",
         },
-      }
-      )
+      });
       return;
     }
 
-
-    this.props.updateLesson(id, {
-      train_chapter_id: train_chapter_id,
-      title: txtTitle,
-      short_description: txtSumary,
-      link_video_youtube: link_video_youtube,
-      description: txtContent,
-    }, store_code, courseId, null, function () {
-      window.$(".modal").modal("hide");
-
-    });
+    this.props.updateLesson(
+      id,
+      {
+        train_chapter_id: train_chapter_id,
+        title: txtTitle,
+        short_description: txtSumary,
+        link_video_youtube: link_video_youtube,
+        description: txtContent,
+      },
+      store_code,
+      courseId,
+      null,
+      function () {
+        window.$(".modal").modal("hide");
+      }
+    );
   };
 
   goBack = () => {
@@ -122,16 +125,10 @@ class Form extends Component {
   };
 
   render() {
-    var {
-      txtTitle,
-      txtSumary,
-      link_video_youtube,
-      txtContent
-
-    } = this.state;
+    var { txtTitle, txtSumary, link_video_youtube, txtContent } = this.state;
 
     var { store_code } = this.props;
-    console.log(this.state)
+    console.log(this.state);
     return (
       <React.Fragment>
         <div
@@ -168,7 +165,6 @@ class Form extends Component {
                 id="createForm"
               >
                 <div class="modal-body" style={{ padding: " 0 10px" }}>
-
                   <div class="form-group">
                     <label for="product_name">Tên bài học</label>
                     <input
@@ -177,7 +173,7 @@ class Form extends Component {
                       id="txtTitle"
                       value={txtTitle}
                       placeholder="Nhập tên bài học"
-                      autocomplete="off"
+                      autoComplete="off"
                       onChange={this.onChange}
                       name="txtTitle"
                     />
@@ -190,7 +186,7 @@ class Form extends Component {
                       id="txtTitle"
                       value={link_video_youtube}
                       placeholder="Nhập link..."
-                      autocomplete="off"
+                      autoComplete="off"
                       onChange={this.onChange}
                       name="link_video_youtube"
                     />
@@ -217,15 +213,12 @@ class Form extends Component {
                         onChange={this.handleEditorChange}
                         setDefaultStyle="height: auto"
                         setContents={txtContent}
-
                         setOptions={{
                           requestHeaders: {
                             "X-Sample": "sample",
-                            "token": userLocalApi.getToken()
-
+                            token: userLocalApi.getToken(),
                           },
                           imageGalleryLoadURL: getApiImageStore(store_code),
-
 
                           plugins: [
                             imagePlugin,
@@ -242,7 +235,8 @@ class Form extends Component {
                             tablePlugin,
                             linkPlugin,
                             video,
-                            audio],
+                            audio,
+                          ],
 
                           buttonList: [
                             [
@@ -277,7 +271,6 @@ class Form extends Component {
                       />
                     </div>
                   </div>
-
                 </div>
                 <div class="modal-footer">
                   <button
@@ -288,10 +281,7 @@ class Form extends Component {
                   >
                     Đóng
                   </button>
-                  <button
-                    type="submit"
-                    class="btn btn-warning"
-                  >
+                  <button type="submit" class="btn btn-warning">
                     Lưu
                   </button>
                 </div>
@@ -299,17 +289,13 @@ class Form extends Component {
             </div>
           </div>
         </div>
-
-
-
       </React.Fragment>
     );
   }
 }
 
 const mapStateToProps = (state) => {
-  return {
-  };
+  return {};
 };
 
 const mapDispatchToProps = (dispatch, props) => {
@@ -318,8 +304,24 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(error);
     },
 
-    updateLesson: (id, data, store_code, train_course_id, _this, resetModal) => {
-      dispatch(trainAction.updateLesson(id, data, store_code, train_course_id, _this, resetModal));
+    updateLesson: (
+      id,
+      data,
+      store_code,
+      train_course_id,
+      _this,
+      resetModal
+    ) => {
+      dispatch(
+        trainAction.updateLesson(
+          id,
+          data,
+          store_code,
+          train_course_id,
+          _this,
+          resetModal
+        )
+      );
     },
   };
 };

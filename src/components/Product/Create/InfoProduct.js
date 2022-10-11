@@ -363,7 +363,7 @@ class InfoProduct extends Component {
             class="form-control input-sm"
             id="txtName"
             placeholder="Nhập tên sản phẩm"
-            autocomplete="off"
+            autoComplete="off"
             value={txtName}
             onChange={this.onChange}
             name="txtName"
@@ -376,7 +376,7 @@ class InfoProduct extends Component {
             class="form-control input-sm"
             id="sku"
             placeholder="Nhập mã sản phẩm"
-            autocomplete="off"
+            autoComplete="off"
             value={sku}
             onChange={this.onChange}
             name="sku"
@@ -389,7 +389,7 @@ class InfoProduct extends Component {
             class="form-control input-sm"
             id="txtBarcode"
             placeholder="Nhập barcode"
-            autocomplete="off"
+            autoComplete="off"
             value={txtBarcode}
             onChange={this.onChange}
             name="txtBarcode"
@@ -448,7 +448,7 @@ class InfoProduct extends Component {
                     class="form-control"
                     id="txtEmail"
                     placeholder="Nhập giá nhập"
-                    autocomplete="off"
+                    autoComplete="off"
                     value={txtImportPrice}
                     onChange={this.onChange}
                     name="txtImportPrice"
@@ -489,7 +489,7 @@ class InfoProduct extends Component {
                   class="form-control"
                   id="txtAddress_detail"
                   placeholder="Nhập số lượng"
-                  autocomplete="off"
+                  autoComplete="off"
                   value={txtQuantityInStock}
                   onChange={this.onChange}
                   name="txtQuantityInStock"
@@ -506,7 +506,7 @@ class InfoProduct extends Component {
                   class="form-control"
                   id="txtCostOfCapital"
                   placeholder="Nhập giá vốn"
-                  autocomplete="off"
+                  autoComplete="off"
                   value={txtCostOfCapital}
                   onChange={this.onChange}
                   name="txtCostOfCapital"
@@ -532,31 +532,29 @@ class InfoProduct extends Component {
               class="form-control"
               id="txtEmail"
               placeholder="Nhập %"
-              autocomplete="off"
+              autoComplete="off"
               value={txtPercentC}
               onChange={this.onChange}
               name="txtPercentC"
             />
           </div>
         )}
-     <div class="form-group">
-          <label for="product_name">
-           Xu cho đại lý
-          </label>
+        <div class="form-group">
+          <label for="product_name">Xu cho đại lý</label>
           <i
-              style={{
-                display: "block",
-                marginBottom: "5px",
-              }}
-            >
-              Bỏ trống khi không xét xu cho đại lý
-            </i>
+            style={{
+              display: "block",
+              marginBottom: "5px",
+            }}
+          >
+            Bỏ trống khi không xét xu cho đại lý
+          </i>
           <input
             type="text"
             class="form-control"
             id="txtCostOfCapital"
             placeholder="Nhập xu"
-            autocomplete="off"
+            autoComplete="off"
             value={point_for_agency}
             onChange={this.onChange}
             name="point_for_agency"
@@ -610,7 +608,6 @@ class InfoProduct extends Component {
                   style={{
                     position: "absolute",
                     right: "27px",
-              
                   }}
                 >
                   <i
@@ -741,7 +738,6 @@ class InfoProduct extends Component {
             ></i>
           </h6>
         </button> */}
-   
       </div>
     );
   }

@@ -101,7 +101,6 @@ class ModalCreate extends Component {
     console.log("render");
     var { txtName, isShowHome } = this.state;
     return (
-        
       <div
         class="modal fade"
         tabindex="-1"
@@ -145,7 +144,7 @@ class ModalCreate extends Component {
                     class="form-control"
                     id="txtName"
                     placeholder="Nhập tên danh mục"
-                    autocomplete="off"
+                    autoComplete="off"
                     value={txtName}
                     onChange={this.onChange}
                     name="txtName"
@@ -191,10 +190,7 @@ class ModalCreate extends Component {
                 >
                   Đóng
                 </button>
-                <button
-                  type="submit"
-                  class="btn btn-warning"
-                >
+                <button type="submit" class="btn btn-warning">
                   Tạo
                 </button>
               </div>

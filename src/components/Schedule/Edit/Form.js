@@ -1,21 +1,21 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as scheduleAction from "../../../actions/schedule";
-import ListProduct from "../TableProduct"
-import ListCProduct from "../TableC_Product"
-import ListCBlog from "../TableC_Blog"
+import ListProduct from "../TableProduct";
+import ListCProduct from "../TableC_Product";
+import ListCBlog from "../TableC_Blog";
 import * as productAction from "../../../actions/product";
 
 import * as popupAction from "../../../actions/popup";
-import ModalUpload from "../ModalUpload"
+import ModalUpload from "../ModalUpload";
 import ListBlog from "../TableBlog";
 import Datetime from "react-datetime";
 import moment from "moment";
-import MomentInput from 'react-moment-input';
+import MomentInput from "react-moment-input";
 import * as blogAction from "../../../actions/blog";
 import * as categoryBAction from "../../../actions/category_blog";
 import * as CategoryPAction from "../../../actions/category_product";
-import { shallowEqual } from "../../../ultis/shallowEqual"
+import { shallowEqual } from "../../../ultis/shallowEqual";
 import { isEmail, isEmpty, isPhone } from "../../../ultis/helpers";
 import * as AgencyAction from "../../../actions/agency";
 
@@ -42,45 +42,41 @@ class Form extends Component {
       blog: "",
       categoryBlog: "",
       link_url: "",
-
     };
   }
 
   componentDidMount() {
-  
     this.props.fetchAllAgencyType(this.props.store_code);
   }
 
-
-
   componentWillReceiveProps(nextProps) {
-    var { schedule } = this.props
+    var { schedule } = this.props;
     if (!shallowEqual(nextProps.schedule, schedule)) {
       var link_url = "";
 
-      nextProps.schedule.forEach(item => {
+      nextProps.schedule.forEach((item) => {
         if (item.id == Number(nextProps.scheduleId)) {
           if (item.type_action == "LINK") {
             link_url = item.value_action;
           }
-          this.setState(
-            {
-              day_of_month: item.day_of_month,
-              day_of_week: item.day_of_week,
-              description: item.description,
-              group_customer: item.group_customer,
-              time_of_day: item.time_of_day,
-              group_customer : item.group_customer,
-              agency_type_id : item.agency_type_id,
-              agency_type_name : item.agency_type_name,
-              time_run: moment(item.time_run, "YYYY-MM-DD HH:mm:ss").format("DD-MM-YYYY HH:mm:ss"),
-              time_run_near: item.time_run_near,
-              title: item.title,
-              type_schedule: item.type_schedule,
-              type_action: item.type_action,
-              link_url: link_url,
-            }
-          )
+          this.setState({
+            day_of_month: item.day_of_month,
+            day_of_week: item.day_of_week,
+            description: item.description,
+            group_customer: item.group_customer,
+            time_of_day: item.time_of_day,
+            group_customer: item.group_customer,
+            agency_type_id: item.agency_type_id,
+            agency_type_name: item.agency_type_name,
+            time_run: moment(item.time_run, "YYYY-MM-DD HH:mm:ss").format(
+              "DD-MM-YYYY HH:mm:ss"
+            ),
+            time_run_near: item.time_run_near,
+            title: item.title,
+            type_schedule: item.type_schedule,
+            type_action: item.type_action,
+            link_url: link_url,
+          });
         }
       });
     }
@@ -94,7 +90,7 @@ class Form extends Component {
       !shallowEqual(nextProps._blog, this.props._blog)
     ) {
       var { type_action } = this.state;
-      console.log(type_action , "heeeeeeeeeeeeeeeee")
+      console.log(type_action, "heeeeeeeeeeeeeeeee");
 
       if (type_action != "") {
         switch (type_action) {
@@ -117,37 +113,32 @@ class Form extends Component {
     }
 
     if (this.props.image !== nextProps.image) {
-      this.setState({ image: nextProps.image })
+      this.setState({ image: nextProps.image });
     }
   }
 
   onChange = (e) => {
-    var { value, name } = e.target
+    var { value, name } = e.target;
     if (name == "type_schedule") {
-      this.setState({ [name]: value, time_of_day: "00:00" })
-
+      this.setState({ [name]: value, time_of_day: "00:00" });
     } else {
-      this.setState({ [name]: value })
+      this.setState({ [name]: value });
     }
-
-  }
-
+  };
 
   showAllDayofMonth = () => {
-    var numDays = moment().daysInMonth()
-    var result = []
+    var numDays = moment().daysInMonth();
+    var result = [];
     if (numDays > 0) {
       for (let index = 1; index < numDays + 1; index++) {
-        result.push(<option value={index}>{index}</option>)
+        result.push(<option value={index}>{index}</option>);
       }
 
-      return result
+      return result;
+    } else {
+      return null;
     }
-    else {
-      return null
-    }
-  }
-
+  };
 
   fetchAllProduct = () => {
     this.props.fetchAllProduct(this.props.store_code);
@@ -211,9 +202,12 @@ class Form extends Component {
     else if (type_action == "CATEGORY_PRODUCT") value_action = category.id;
     else if (type_action == "POST") value_action = blog.id;
     else if (type_action == "CATEGORY_POST") value_action = categoryBlog.id;
-    else {}
+    else {
+    }
     var { group_customer, agency_type_id } = this.state;
-    var agency_type_name = this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]?.name || null;
+    var agency_type_name =
+      this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]
+        ?.name || null;
     var form = {
       group_customer,
       agency_type_id,
@@ -225,14 +219,23 @@ class Form extends Component {
       group_customer,
       status,
       time_of_day,
-      time_run: time_run != "" && time_run != null ? moment(time_run, "DD-MM-YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm:ss") : null,
+      time_run:
+        time_run != "" && time_run != null
+          ? moment(time_run, "DD-MM-YYYY HH:mm:ss").format(
+              "YYYY-MM-DD HH:mm:ss"
+            )
+          : null,
       time_run_near,
       title,
       type_schedule,
       type_action: type_action,
       value_action: value_action,
     };
-    if (this.state.title == null || !isEmpty(this.state.title) || !isEmpty(this.state.description)) {
+    if (
+      this.state.title == null ||
+      !isEmpty(this.state.title) ||
+      !isEmpty(this.state.description)
+    ) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
         alert: {
@@ -245,30 +248,26 @@ class Form extends Component {
       return;
     }
     if (Number(type_schedule) == 0) {
-      console.log("dadsasdasdadasd")
-      form.time_of_day = null
-      form.day_of_week = null
-      form.day_of_month = null
-      form.time_run_near = null
+      console.log("dadsasdasdadasd");
+      form.time_of_day = null;
+      form.day_of_week = null;
+      form.day_of_month = null;
+      form.time_run_near = null;
+    } else if (Number(type_schedule) == 1) {
+      form.time_run = null;
+      form.day_of_week = null;
+      form.day_of_month = null;
+      form.time_run_near = null;
+    } else if (Number(type_schedule) == 2) {
+      form.time_run = null;
+      form.day_of_month = null;
+      form.time_run_near = null;
+    } else {
+      form.time_run = null;
+      form.day_of_week = null;
+      form.time_run_near = null;
     }
-    else if (Number(type_schedule) == 1) {
-      form.time_run = null
-      form.day_of_week = null
-      form.day_of_month = null
-      form.time_run_near = null
-    }
-    else if (Number(type_schedule) == 2) {
-      form.time_run = null
-      form.day_of_month = null
-      form.time_run_near = null
-    }
-    else {
-      form.time_run = null
-      form.day_of_week = null
-      form.time_run_near = null
-
-    }
-    var { scheduleId, store_code } = this.props
+    var { scheduleId, store_code } = this.props;
     this.props.updateSchedule(scheduleId, form, store_code);
   };
   goBack = () => {
@@ -277,13 +276,13 @@ class Form extends Component {
   };
 
   onChangeDate = (e, name) => {
-    var time = ""
+    var time = "";
     switch (name) {
       case "time_run":
         time = moment(e, "DD-MM-YYYY HH:mm:ss").format("DD-MM-YYYY HH:mm:ss");
         break;
       case "time_of_day":
-        time = moment(e, "HH:mm:ss").format("HH:mm:ss")
+        time = moment(e, "HH:mm:ss").format("HH:mm:ss");
         break;
       default:
         break;
@@ -294,7 +293,8 @@ class Form extends Component {
     });
   };
   render() {
-    var { type_schedule,
+    var {
+      type_schedule,
       day_of_month,
       day_of_week,
       description,
@@ -307,8 +307,7 @@ class Form extends Component {
       type_schedule,
       group_customer,
       agency_type_id,
-      
-    } = this.state
+    } = this.state;
     var {
       type_action,
       product,
@@ -319,12 +318,12 @@ class Form extends Component {
       link_url,
     } = this.state;
     var { store_code, products, category_product, blogs, category_blog } =
-    this.props;
+      this.props;
 
-    var disable_oneDay = type_schedule == "0" ? "show" : "hide"
-    var disable_everyDay = type_schedule == "1" ? "show" : "hide"
-    var disable_everyWeek = type_schedule == "2" ? "show" : "hide"
-    var disable_everyMonth = type_schedule == "3" ? "show" : "hide"
+    var disable_oneDay = type_schedule == "0" ? "show" : "hide";
+    var disable_everyDay = type_schedule == "1" ? "show" : "hide";
+    var disable_everyWeek = type_schedule == "2" ? "show" : "hide";
+    var disable_everyMonth = type_schedule == "3" ? "show" : "hide";
     var { types } = this.props;
 
     var disable_link = type_action == "LINK" ? "show" : "hide";
@@ -339,11 +338,11 @@ class Form extends Component {
     var showBlog = blog != "" ? "show" : "hide";
     var showCblog = categoryBlog != "" ? "show" : "hide";
 
-    console.log(products ,product)
+    console.log(products, product);
 
     return (
       <React.Fragment>
-              <ListProduct
+        <ListProduct
           handleAddProduct={this.handleAddProduct}
           store_code={store_code}
           products={products}
@@ -364,11 +363,7 @@ class Form extends Component {
           blogs={blogs}
         />
         <form role="form" onSubmit={this.onSave} method="post">
-
           <div class="box-body">
-
-
-
             <div class="form-group">
               <label for="product_name">Tiêu đề</label>
               <input
@@ -378,11 +373,10 @@ class Form extends Component {
                 value={title}
                 name="title"
                 placeholder="Nhập tiêu đề"
-                autocomplete="off"
+                autoComplete="off"
                 onChange={this.onChange}
               />
             </div>
-
 
             <div class="form-group">
               <label for="product_name">Mô tả</label>
@@ -393,7 +387,7 @@ class Form extends Component {
                 value={description}
                 name="description"
                 placeholder="Nhập mô tả"
-                autocomplete="off"
+                autoComplete="off"
                 onChange={this.onChange}
               />
             </div>
@@ -419,7 +413,7 @@ class Form extends Component {
                   value={agency_type_id}
                   name="agency_type_id"
                   class="form-control"
-                  style={{marginTop: "10px"}}
+                  style={{ marginTop: "10px" }}
                 >
                   <option>--- Chọn cấp đại lý ---</option>
                   {types.map((v) => {
@@ -432,47 +426,53 @@ class Form extends Component {
             <div class="form-group">
               <label for="product_name">Kiểu thông báo</label>
 
-              <select name="type_schedule" value={type_schedule} id="input" class="form-control" onChange={this.onChange}>
+              <select
+                name="type_schedule"
+                value={type_schedule}
+                id="input"
+                class="form-control"
+                onChange={this.onChange}
+              >
                 <option value="0">Một lần</option>
 
                 <option value="1">Hàng ngày</option>
                 <option value="2">Hàng tuần</option>
                 <option value="3">Hàng tháng</option>
-
-
               </select>
-
             </div>
 
             <div className={disable_oneDay}>
-              <div class="form-group" >
+              <div class="form-group">
                 <label for="product_name">Thời gian thông báo trong ngày</label>
                 <div className="set-top-moment">
-
                   <MomentInput
-                    value={time_run == "Invalid date" ? "" : moment(time_run , "DD-MM-YYYY HH:mm")}
+                    value={
+                      time_run == "Invalid date"
+                        ? ""
+                        : moment(time_run, "DD-MM-YYYY HH:mm")
+                    }
                     format="DD-MM-YYYY HH:mm"
                     options={true}
                     enableInputClick={true}
                     monthSelect={true}
                     readOnly={true}
-                    translations={
-                      { DATE: "Ngày", TIME: "Giờ", SAVE: "Lưu", HOURS: "Giờ", MINUTES: "Phút" }
-                    }
-                    onSave={() => { }}
+                    translations={{
+                      DATE: "Ngày",
+                      TIME: "Giờ",
+                      SAVE: "Lưu",
+                      HOURS: "Giờ",
+                      MINUTES: "Phút",
+                    }}
+                    onSave={() => {}}
                     onChange={(e) => this.onChangeDate(e, "time_run")}
                   />
                 </div>
-
               </div>
-
             </div>
             <div className={disable_everyDay}>
-
               <div class="form-group">
                 <label for="product_name">Thời gian thông báo trong ngày</label>
                 <div className="set-top-moment">
-
                   <MomentInput
                     value={moment(time_of_day, "HH:mm")}
                     format="HH:mm"
@@ -480,29 +480,29 @@ class Form extends Component {
                     enableInputClick={true}
                     readOnly={true}
                     tab={1}
-
                     translations={{
-
                       SAVE: "Lưu",
                       HOURS: "Giờ",
                       MINUTES: "Phút",
                     }}
-                    onSave={() => { }}
+                    onSave={() => {}}
                     onChange={(e) => this.onChangeDate(e, "time_of_day")}
                   />
                 </div>
-
               </div>
             </div>
 
             <div className={disable_everyWeek}>
-
               <div class="form-group">
                 <label for="product_name">Chọn ngày</label>
 
-
-                <select name="day_of_week" value={day_of_week} onChange={this.onChange} id="input" class="form-control" >
-
+                <select
+                  name="day_of_week"
+                  value={day_of_week}
+                  onChange={this.onChange}
+                  id="input"
+                  class="form-control"
+                >
                   <option value="0">Thứ 2</option>
                   <option value="1">Thứ 3</option>
                   <option value="2">Thứ 4</option>
@@ -510,17 +510,12 @@ class Form extends Component {
                   <option value="4">Thứ 6</option>
                   <option value="5">Thứ 7</option>
                   <option value="6">Chủ Nhật</option>
-
                 </select>
-
-
               </div>
-
 
               <div class="form-group">
                 <label for="product_name">Thời gian thông báo trong ngày</label>
                 <div className="set-top-moment">
-
                   <MomentInput
                     value={moment(time_of_day, "HH:mm")}
                     format="HH:mm"
@@ -528,37 +523,34 @@ class Form extends Component {
                     enableInputClick={true}
                     readOnly={true}
                     tab={1}
-
                     translations={{
-
                       SAVE: "Lưu",
                       HOURS: "Giờ",
                       MINUTES: "Phút",
                     }}
-                    onSave={() => { }}
+                    onSave={() => {}}
                     onChange={(e) => this.onChangeDate(e, "time_of_day")}
                   />
                 </div>
-
               </div>
             </div>
             <div className={disable_everyMonth}>
-
               <div class="form-group">
                 <label for="product_name">Chọn ngày</label>
 
-
-                <select name="day_of_month" value={day_of_month} onChange={this.onChange} id="input" class="form-control" >
-
+                <select
+                  name="day_of_month"
+                  value={day_of_month}
+                  onChange={this.onChange}
+                  id="input"
+                  class="form-control"
+                >
                   {this.showAllDayofMonth()}
                 </select>
-
-
               </div>
               <div class="form-group">
                 <label for="product_name">Thời gian thông báo trong ngày</label>
                 <div className="set-top-moment">
-
                   <MomentInput
                     value={moment(time_of_day, "HH:mm")}
                     format="HH:mm"
@@ -566,28 +558,23 @@ class Form extends Component {
                     enableInputClick={true}
                     readOnly={true}
                     tab={1}
-
                     translations={{
-
                       SAVE: "Lưu",
                       HOURS: "Giờ",
                       MINUTES: "Phút",
                     }}
-                    onSave={() => { }}
+                    onSave={() => {}}
                     onChange={(e) => this.onChangeDate(e, "time_of_day")}
                   />
                 </div>
-
               </div>
-
             </div>
-
 
             <div class="form-group">
               <label for="product_name">Chọn loại chuyển hướng</label>
 
               <select
-              value = {type_action}
+                value={type_action}
                 name="type_action"
                 id="input"
                 class="form-control"
@@ -613,146 +600,121 @@ class Form extends Component {
               />
             </div>
 
-            <div  className="support-theme">
-            <div class={`form-group ${disable_product}`}>
-              <label>Chọn Sản phẩm</label>
+            <div className="support-theme">
+              <div class={`form-group ${disable_product}`}>
+                <label>Chọn Sản phẩm</label>
 
-              <div class="right-inner-addon input-container">
-                <i class="fa fa-caret-down"></i>
-                <input
-                readOnly
-                  data-toggle="modal"
-                  data-target="#showListProduct"
-                  onClick={this.fetchAllProduct}
-                  style={{ background: "white" }}
-                  type="text"
-                  name="product_name"
-                  placeholder="Chọn sản phẩm..."
-                  class="form-control"
-                  value={product.name}
-                />
+                <div class="right-inner-addon input-container">
+                  <i class="fa fa-caret-down"></i>
+                  <input
+                    readOnly
+                    data-toggle="modal"
+                    data-target="#showListProduct"
+                    onClick={this.fetchAllProduct}
+                    style={{ background: "white" }}
+                    type="text"
+                    name="product_name"
+                    placeholder="Chọn sản phẩm..."
+                    class="form-control"
+                    value={product.name}
+                  />
+                </div>
+
+                <br></br>
+                <div class={`media ${showProduct}`} id="product_preview">
+                  <img width="100px" height="120px" src={product.img} alt="" />
+                  <div class="media-body" style={{ marginLeft: "10px" }}>
+                    {/* <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{product.name} </h5> */}
+                    {/* <p>{format(Number(product.price))}</p> */}
+                  </div>
+                </div>
+              </div>
+              <div class={`form-group ${disable_category_product}`}>
+                <label>Chọn Danh mục sản phẩm</label>
+                <div class="right-inner-addon input-container">
+                  <i class="fa fa-caret-down"></i>
+                  <input
+                    readOnly
+                    onClick={this.fetchAllCProduct}
+                    value={category.name}
+                    data-toggle="modal"
+                    data-target="#showListCProduct"
+                    type="text"
+                    name="product_name"
+                    class="form-control"
+                    placeholder="Chọn danh mục..."
+                  />
+                </div>
+
+                <br></br>
+                <div class={`media ${showCProduct}`} id="product_preview">
+                  <img width="100px" height="120px" src={category.img} alt="" />
+                  {/* <div class="media-body" style={{ marginLeft: "10px" }}>
+                  <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{category.name} </h5>
+                </div> */}
+                </div>
+              </div>
+              <div class={`form-group ${disable_post}`}>
+                <label>Chọn Bài viết</label>
+                <div class="right-inner-addon input-container">
+                  <i class="fa fa-caret-down"></i>
+                  <input
+                    onClick={this.fetchAllBlog}
+                    value={blog.name}
+                    readOnly
+                    data-toggle="modal"
+                    data-target="#showListBlog"
+                    type="text"
+                    name="product_name"
+                    class="form-control"
+                    placeholder="Chọn bài viết..."
+                  />
+                </div>
+
+                <br></br>
+                <div class={`media ${showBlog}`} id="product_preview">
+                  <img width="100px" height="120px" src={blog.img} alt="" />
+                  {/* <div class="media-body" style={{ marginLeft: "10px" }}>
+                  <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{blog.name} </h5>
+                </div> */}
+                </div>
               </div>
 
+              <div class={`form-group ${disable_category_post}`}>
+                <label>Chọn danh mục bài viết</label>
+                <div class="right-inner-addon input-container">
+                  <i class="fa fa-caret-down"></i>
+                  <input
+                    onClick={this.fetchAllBlog}
+                    value={blog.name}
+                    readOnly
+                    data-toggle="modal"
+                    data-target="#showListCBlog"
+                    type="text"
+                    name="product_name"
+                    class="form-control"
+                    placeholder="Chọn danh mục..."
+                  />
+                </div>
 
-
-          
-    
-              <br></br>
-              <div class={`media ${showProduct}`} id="product_preview">
-                <img
-                  width="100px"
-                  height="120px"
-                  src={product.img}
-                  alt=""
-                />
-                <div class="media-body" style={{ marginLeft: "10px" }}>
-                  {/* <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{product.name} </h5> */}
-                  {/* <p>{format(Number(product.price))}</p> */}
+                <br></br>
+                <div class={`media ${showCblog}`} id="product_preview">
+                  <img
+                    width="100px"
+                    height="120px"
+                    src={categoryBlog.img}
+                    alt=""
+                  />
+                  {/* <div class="media-body" style={{ marginLeft: "10px" }}>
+                  <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{categoryBlog.name} </h5>
+                </div> */}
                 </div>
               </div>
             </div>
-            <div class={`form-group ${disable_category_product}`}>
-              <label>Chọn Danh mục sản phẩm</label>
-              <div class="right-inner-addon input-container">
-                <i class="fa fa-caret-down"></i>
-                <input
-                readOnly
-                  onClick={this.fetchAllCProduct}
-                  value={category.name}
-                  data-toggle="modal"
-                  data-target="#showListCProduct"
-                  type="text"
-                  name="product_name"
-                  class="form-control"
-                  placeholder="Chọn danh mục..."
-                />
-              </div>
-
-       
-              <br></br>
-              <div class={`media ${showCProduct}`} id="product_preview">
-                <img
-                  width="100px"
-                  height="120px"
-                  src={category.img}
-                  alt=""
-                />
-                {/* <div class="media-body" style={{ marginLeft: "10px" }}>
-                  <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{category.name} </h5>
-                </div> */}
-              </div>
-            </div>
-            <div class={`form-group ${disable_post}`}>
-              <label>Chọn Bài viết</label>
-              <div class="right-inner-addon input-container">
-                <i class="fa fa-caret-down"></i>
-                <input
-                  onClick={this.fetchAllBlog}
-                  value={blog.name}
-                  readOnly
-                  data-toggle="modal"
-                  data-target="#showListBlog"
-                  type="text"
-                  name="product_name"
-                  class="form-control"
-                  placeholder="Chọn bài viết..."
-                />
-              </div>
-            
-              <br></br>
-              <div class={`media ${showBlog}`} id="product_preview">
-                <img
-                  width="100px"
-                  height="120px"
-                  src={blog.img}
-                  alt=""
-                />
-                {/* <div class="media-body" style={{ marginLeft: "10px" }}>
-                  <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{blog.name} </h5>
-                </div> */}
-              </div>
-            </div>
-
-
-            <div class={`form-group ${disable_category_post}`}>
-              <label>Chọn danh mục bài viết</label>
-              <div class="right-inner-addon input-container">
-                <i class="fa fa-caret-down"></i>
-                <input
-                  onClick={this.fetchAllBlog}
-                  value={blog.name}
-                  readOnly
-                  data-toggle="modal"
-                  data-target="#showListCBlog"
-                  type="text"
-                  name="product_name"
-                  class="form-control"
-                  placeholder="Chọn danh mục..."
-                />
-              </div>
-          
-           
-              <br></br>
-              <div class={`media ${showCblog}`} id="product_preview">
-                <img
-                  width="100px"
-                  height="120px"
-                  src={categoryBlog.img}
-                  alt=""
-                />
-                {/* <div class="media-body" style={{ marginLeft: "10px" }}>
-                  <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{categoryBlog.name} </h5>
-                </div> */}
-              </div>
-            </div>
-            </div>
-
-
           </div>
           <div class="box-footer">
             <button type="submit" class="btn btn-info   btn-sm">
-              <i class="fas fa-save"></i>  Lưu
-
+              <i class="fas fa-save"></i> Lưu
             </button>
             <button
               type="button"
@@ -761,14 +723,10 @@ class Form extends Component {
               class="btn btn-warning   btn-sm"
             >
               <i class="fas fa-arrow-left"></i> Trở về
-
             </button>
           </div>
-
         </form>
-
       </React.Fragment>
-
     );
   }
 }
@@ -782,13 +740,10 @@ const mapStateToProps = (state) => {
   };
 };
 
-
 const mapDispatchToProps = (dispatch, props) => {
   return {
-
-
     updateSchedule: (id, data, store_code) => {
-      dispatch(scheduleAction.updateSchedule(id, data, store_code))
+      dispatch(scheduleAction.updateSchedule(id, data, store_code));
     },
     showError: (error) => {
       dispatch(error);

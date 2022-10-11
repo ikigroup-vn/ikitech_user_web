@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import * as collaboratorAction from "../../../actions/collaborator"
+import * as collaboratorAction from "../../../actions/collaborator";
 import { connect } from "react-redux";
 import * as helper from "../../../ultis/helpers";
-import {formatNumber} from "../../../ultis/helpers"
+import { formatNumber } from "../../../ultis/helpers";
 import themeData from "../../../ultis/theme_data";
 
 class ModalCreate extends Component {
@@ -10,7 +10,7 @@ class ModalCreate extends Component {
     super(props);
     this.state = {
       txtLimit: "",
-      txtBonus: ""
+      txtBonus: "",
     };
   }
 
@@ -22,22 +22,21 @@ class ModalCreate extends Component {
     const _value = formatNumber(value);
     if (!isNaN(Number(_value))) {
       value = new Intl.NumberFormat().format(_value);
-        this.setState({ [name]: value });
+      this.setState({ [name]: value });
     }
   };
   onSave = (e) => {
     e.preventDefault();
-    window.$('.modal').modal('hide');
-    var { txtBonus, txtLimit } = this.state
-    this.props.createStep(this.props.store_code, 
-      { 
-        bonus:   txtBonus == null ? txtBonus : formatNumber(txtBonus),
-        limit:   txtLimit == null ? txtLimit : formatNumber(txtLimit),
-      });
+    window.$(".modal").modal("hide");
+    var { txtBonus, txtLimit } = this.state;
+    this.props.createStep(this.props.store_code, {
+      bonus: txtBonus == null ? txtBonus : formatNumber(txtBonus),
+      limit: txtLimit == null ? txtLimit : formatNumber(txtLimit),
+    });
     this.setState({
       txtLimit: "",
-      txtBonus: ""
-    })
+      txtBonus: "",
+    });
   };
   render() {
     var { txtBonus, txtLimit } = this.state;
@@ -52,19 +51,22 @@ class ModalCreate extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-          <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
-              <h4 style={{ color: "white" }}>Thêm bậc thang</h4>
-              
-
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
-            </div>
-            <form
-              onSubmit={this.onSave}
-              role="form"
-              action="#"
-              method="post"
+            <div
+              class="modal-header"
+              style={{ backgroundColor: themeData().backgroundColor }}
             >
+              <h4 style={{ color: "white" }}>Thêm bậc thang</h4>
+
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
+            </div>
+            <form onSubmit={this.onSave} role="form" action="#" method="post">
               <div class="modal-body">
                 <div class="form-group">
                   <label for="product_name">Mức doanh số</label>
@@ -74,7 +76,7 @@ class ModalCreate extends Component {
                     class="form-control"
                     id="txtName"
                     placeholder="Nhập..."
-                    autocomplete="off"
+                    autoComplete="off"
                     value={txtLimit}
                     onChange={this.onChange}
                     name="txtLimit"
@@ -88,7 +90,7 @@ class ModalCreate extends Component {
                     class="form-control"
                     id="txtName"
                     placeholder="Nhập..."
-                    autocomplete="off"
+                    autoComplete="off"
                     value={txtBonus}
                     onChange={this.onChange}
                     name="txtBonus"
@@ -114,8 +116,6 @@ class ModalCreate extends Component {
     );
   }
 }
-
-
 
 const mapDispatchToProps = (dispatch, props) => {
   return {

@@ -10,11 +10,9 @@ class ModalCreate extends Component {
       account_name: "",
       account_number: "",
       bank: "",
-      branch: ""
+      branch: "",
     };
   }
-
-
 
   onChange = (e) => {
     var target = e.target;
@@ -27,30 +25,26 @@ class ModalCreate extends Component {
   };
 
   onSave = (e) => {
-    e.preventDefault()
-    window.$('.modal').modal('hide');
+    e.preventDefault();
+    window.$(".modal").modal("hide");
 
-    var payment = this.state
+    var payment = this.state;
     this.props.addPayment({
       account_name: payment.account_name,
       account_number: payment.account_number,
       bank: payment.bank,
-      branch: payment.branch
-    })
+      branch: payment.branch,
+    });
 
     this.setState({
       account_name: "",
       account_number: "",
       bank: "",
-      branch: ""
-    })
-
+      branch: "",
+    });
   };
   render() {
-    var { account_name,
-      account_number,
-      bank,
-      branch } = this.state;
+    var { account_name, account_number, bank, branch } = this.state;
     return (
       <div
         class="modal fade"
@@ -62,11 +56,17 @@ class ModalCreate extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" >
+            <div class="modal-header">
               <h4 class="modal-title">Thêm tài khoản</h4>
 
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
             </div>
             <form
               onSubmit={this.onSave}
@@ -83,7 +83,7 @@ class ModalCreate extends Component {
                     class="form-control"
                     id="txtName"
                     placeholder="Nhập tên chủ tài khoản"
-                    autocomplete="off"
+                    autoComplete="off"
                     value={account_name}
                     onChange={this.onChange}
                     name="account_name"
@@ -96,7 +96,7 @@ class ModalCreate extends Component {
                     class="form-control"
                     id="txtName"
                     placeholder="Nhập số tài khoản"
-                    autocomplete="off"
+                    autoComplete="off"
                     value={account_number}
                     onChange={this.onChange}
                     name="account_number"
@@ -109,7 +109,7 @@ class ModalCreate extends Component {
                     class="form-control"
                     id="txtName"
                     placeholder="Nhập ngân hàng"
-                    autocomplete="off"
+                    autoComplete="off"
                     value={bank}
                     onChange={this.onChange}
                     name="bank"
@@ -122,7 +122,7 @@ class ModalCreate extends Component {
                     class="form-control"
                     id="txtName"
                     placeholder="Nhập chi nhánh"
-                    autocomplete="off"
+                    autoComplete="off"
                     value={branch}
                     onChange={this.onChange}
                     name="branch"
@@ -142,15 +142,12 @@ class ModalCreate extends Component {
                 </button>
               </div>
             </form>
-
           </div>
         </div>
       </div>
     );
   }
 }
-
-
 
 const mapDispatchToProps = (dispatch, props) => {
   return {

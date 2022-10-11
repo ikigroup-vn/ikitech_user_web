@@ -4,27 +4,23 @@ import { connect } from "react-redux";
 import ModalUpload from "./ModalUpload";
 import * as Env from "../../../ultis/default";
 import { isEmpty } from "../../../ultis/helpers";
-import Table from "./List"
-import * as decentralization from "../../../actions/decentralization"
-import permission , {initialPermission} from "../../../ultis/permission"
+import Table from "./List";
+import * as decentralization from "../../../actions/decentralization";
+import permission, { initialPermission } from "../../../ultis/permission";
 class Form extends Component {
   constructor(props) {
     super(props);
-    this.state = initialPermission()
-    this.initialTable = permission()
+    this.state = initialPermission();
+    this.initialTable = permission();
   }
-
 
   handleChangeValue = (checked, item) => {
-
-    this.setState({ [item]: checked })
-  }
+    this.setState({ [item]: checked });
+  };
 
   showListTable = (data) => {
-    return (
-      <Table handleChangeValue={this.handleChangeValue} data={data} />
-    )
-  }
+    return <Table handleChangeValue={this.handleChangeValue} data={data} />;
+  };
 
   onChange = (e) => {
     var target = e.target;
@@ -35,7 +31,6 @@ class Form extends Component {
       [name]: value,
     });
   };
-
 
   onSave = (e) => {
     var { store_code } = this.props;
@@ -60,15 +55,13 @@ class Form extends Component {
     history.goBack();
   };
   render() {
-    console.log(this.state)
+    console.log(this.state);
     var { name, description } = this.state;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
 
     return (
       <React.Fragment>
-        <form
-          role="form"
-          onSubmit={this.onSave}      >
+        <form role="form" onSubmit={this.onSave}>
           <div class="box-body">
             <div class="form-group">
               <label for="group_name">Tên phân quyền</label>
@@ -80,7 +73,7 @@ class Form extends Component {
                 id="group_name"
                 name="name"
                 placeholder="Nhập tên phân quyền"
-                autocomplete="off"
+                autoComplete="off"
                 onChange={this.onChange}
               />
             </div>
@@ -89,40 +82,30 @@ class Form extends Component {
               <label for="group_name">Mô tả phân quyền</label>
               <input
                 type="text"
-
                 value={description}
                 class="form-control"
                 id="id_group"
                 name="description"
                 placeholder="Nhập mô tả"
-                autocomplete="off"
+                autoComplete="off"
                 onChange={this.onChange}
-
               />
-
-
             </div>
             {this.showListTable(this.initialTable)}
-
-
-
-
           </div>
 
           <div class="box-footer">
-          <button type = "submit" class="btn btn-info   btn-sm">
-                  <i class="fas fa-save"></i>  Tạo
-
-                </button>
-                <button
-                  style={{ marginLeft: "10px" }}
-                  onClick={this.goBack}
-                  type = "button"
-                  class="btn btn-warning   btn-sm"
-                >
-                  <i class="fas fa-arrow-left"></i> Trở về
-
-                </button>
+            <button type="submit" class="btn btn-info   btn-sm">
+              <i class="fas fa-save"></i> Tạo
+            </button>
+            <button
+              style={{ marginLeft: "10px" }}
+              onClick={this.goBack}
+              type="button"
+              class="btn btn-warning   btn-sm"
+            >
+              <i class="fas fa-arrow-left"></i> Trở về
+            </button>
           </div>
         </form>
         <ModalUpload />
@@ -132,18 +115,17 @@ class Form extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {
-  };
+  return {};
 };
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
     showError: (error) => {
-      dispatch(error)
+      dispatch(error);
     },
     createDecentralization: (store_code, data) => {
-      dispatch(decentralization.createDecentralization(store_code, data))
-    }
+      dispatch(decentralization.createDecentralization(store_code, data));
+    },
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Form);

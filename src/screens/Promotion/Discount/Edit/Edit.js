@@ -1,10 +1,7 @@
 import React, { Component } from "react";
-
 import Form from "../../../../components/Promotion/Discount/Edit/Form";
-import * as Types from "../../../../constants/ActionType"
-
+import * as Types from "../../../../constants/ActionType";
 import Alert from "../../../../components/Partials/Alert";
-
 import { connect } from "react-redux";
 import * as discountAction from "../../../../actions/discount";
 import * as productAction from "../../../../actions/product";
@@ -19,7 +16,6 @@ class Edit extends Component {
     this.props.fetchDiscountId(store_code, discountId);
     this.props.fetchAllProduct(store_code);
     this.props.fetchAllDiscount(store_code);
-
   }
 
   render() {
@@ -27,15 +23,9 @@ class Edit extends Component {
     var { store_code, discountId } = this.props;
 
     return (
-
       <div class="container-fluid">
-        <Alert
-          type={Types.ALERT_UID_STATUS}
-          alert={this.props.alert}
-        />
-        <div
-          style={{ display: "flex", justifyContent: "space-between" }}
-        >
+        <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h4 className="h4 title_content mb-0 text-gray-800">
             Chỉnh sửa chương trình
           </h4>
@@ -58,19 +48,13 @@ class Edit extends Component {
                       discounts={discounts}
                     />
                   </div>
-
-
                 </div>
               </div>
-
             </section>
           </div>
-
         </div>
-
       </div>
-    )
-
+    );
   }
 }
 
@@ -81,8 +65,6 @@ const mapStateToProps = (state) => {
     products: state.productReducers.product.allProduct,
     discounts: state.discountReducers.discount.allDiscount,
     alert: state.discountReducers.alert.alert_uid,
-
-
   };
 };
 const mapDispatchToProps = (dispatch, props) => {

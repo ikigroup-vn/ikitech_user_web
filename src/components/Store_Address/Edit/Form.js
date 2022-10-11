@@ -27,39 +27,39 @@ class Form extends Component {
     };
   }
   componentWillReceiveProps(nextProps) {
-    var { store_address } = this.props
+    var { store_address } = this.props;
     if (!shallowEqual(nextProps.store_address, store_address)) {
-      nextProps.store_address.forEach(store => {
+      nextProps.store_address.forEach((store) => {
         if (store.id == nextProps.storeAId) {
           this.props.fetchPlaceWards(store.district);
           this.props.fetchPlaceDistrict(store.province);
 
+          var ckeckPickup = store.is_default_pickup == true ? "1" : "0";
+          var ckeckReturn = store.is_default_return == true ? "1" : "0";
 
-          var ckeckPickup = store.is_default_pickup == true ? "1" : "0"
-          var ckeckReturn = store.is_default_return == true ? "1" : "0"
-
-          this.setState(
-            {
-              txtName: store.name,
-              txtAddress_detail: store.address_detail,
-              txtCountry: store.country,
-              txtProvince: store.province,
-              txtDistrict: store.district,
-              txtWards: store.wards,
-              txtEmail: store.email,
-              txtPhone: store.phone,
-              txtPickup: ckeckPickup,
-              txtReturn: ckeckReturn,
-            }
-          )
+          this.setState({
+            txtName: store.name,
+            txtAddress_detail: store.address_detail,
+            txtCountry: store.country,
+            txtProvince: store.province,
+            txtDistrict: store.district,
+            txtWards: store.wards,
+            txtEmail: store.email,
+            txtPhone: store.phone,
+            txtPickup: ckeckPickup,
+            txtReturn: ckeckReturn,
+          });
         }
       });
     }
-    if (!shallowEqual(nextProps.wards, this.props.wards) || !shallowEqual(this.props.district, nextProps.district)) {
+    if (
+      !shallowEqual(nextProps.wards, this.props.wards) ||
+      !shallowEqual(this.props.district, nextProps.district)
+    ) {
       this.setState({
         listWards: nextProps.wards,
-        listDistrict: nextProps.district
-      })
+        listDistrict: nextProps.district,
+      });
     }
   }
 
@@ -67,45 +67,30 @@ class Form extends Component {
     var result = null;
     if (places.length > 0) {
       result = places.map((data, index) => {
-
-        return (
-          <option value={data.id}>{data.name}</option>
-        )
-
-      })
+        return <option value={data.id}>{data.name}</option>;
+      });
     }
-    return result
-
-  }
+    return result;
+  };
   showWards = (places) => {
     var result = null;
     if (places.length > 0) {
       result = places.map((data, index) => {
-
-        return (
-          <option value={data.id}>{data.name}</option>
-        )
-
-      })
+        return <option value={data.id}>{data.name}</option>;
+      });
     }
-    return result
-
-  }
+    return result;
+  };
 
   showDistrict = (places) => {
     var result = null;
     if (places.length > 0) {
       result = places.map((data, index) => {
-
-        return (
-          <option value={data.id}>{data.name}</option>
-        )
-
-      })
+        return <option value={data.id}>{data.name}</option>;
+      });
     }
-    return result
-
-  }
+    return result;
+  };
   onChange = (e) => {
     var target = e.target;
     var name = target.name;
@@ -116,38 +101,44 @@ class Form extends Component {
     });
   };
   onChangeProvince = (e) => {
-    console.log(e.target.value)
-    this.setState({ txtProvince: e.target.value, isLoaded: true, txtDistrict: "", txtWards: "" })
+    console.log(e.target.value);
+    this.setState({
+      txtProvince: e.target.value,
+      isLoaded: true,
+      txtDistrict: "",
+      txtWards: "",
+    });
     this.props.fetchPlaceDistrict_Wards(e.target.value);
-
-  }
+  };
   onChangeDistrict = (e) => {
-    this.setState({ txtDistrict: e.target.value })
+    this.setState({ txtDistrict: e.target.value });
     this.props.fetchPlaceWards(e.target.value);
-  }
+  };
   goBack = () => {
     var { history } = this.props;
     history.goBack();
   };
   onChangeCheck = (e) => {
-
     var target = e.target;
     var name = target.name;
     var value = target.value;
-    if (!e.target.checked)
-      this.setState({ [name]: "0" })
-    else
-      this.setState({ [name]: "1" })
-
-  }
+    if (!e.target.checked) this.setState({ [name]: "0" });
+    else this.setState({ [name]: "1" });
+  };
   onSave = (e) => {
     e.preventDefault();
 
-    var { storeAId, store_code } = this.props
-    var is_default_pickup = this.state.txtPickup == "0" || this.state.txtPickup == "" ? false : true
-    var is_default_return = this.state.txtReturn == "0" || this.state.txtPickup == "" ? false : true
+    var { storeAId, store_code } = this.props;
+    var is_default_pickup =
+      this.state.txtPickup == "0" || this.state.txtPickup == "" ? false : true;
+    var is_default_return =
+      this.state.txtReturn == "0" || this.state.txtPickup == "" ? false : true;
 
-    if (this.state.txtName == null || !isEmpty(this.state.txtName) || !isEmpty(this.state.txtAddress_detail)) {
+    if (
+      this.state.txtName == null ||
+      !isEmpty(this.state.txtName) ||
+      !isEmpty(this.state.txtAddress_detail)
+    ) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
         alert: {
@@ -159,7 +150,7 @@ class Form extends Component {
       });
       return;
     }
-    if ((isEmpty(this.state.txtEmail) && !isEmail(this.state.txtEmail))) {
+    if (isEmpty(this.state.txtEmail) && !isEmail(this.state.txtEmail)) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
         alert: {
@@ -186,27 +177,42 @@ class Form extends Component {
       }
     }
 
-    this.props.updateStoreA(storeAId, {
-      name: this.state.txtName,
-      address_detail: this.state.txtAddress_detail,
-      country: this.state.txtCountry,
-      province: this.state.txtProvince,
-      district: this.state.txtDistrict,
-      wards: this.state.txtWards,
-      email: this.state.txtEmail,
-      phone: this.state.txtPhone,
-      is_default_pickup: is_default_pickup,
-      is_default_return: is_default_return
-
-    }, store_code);
+    this.props.updateStoreA(
+      storeAId,
+      {
+        name: this.state.txtName,
+        address_detail: this.state.txtAddress_detail,
+        country: this.state.txtCountry,
+        province: this.state.txtProvince,
+        district: this.state.txtDistrict,
+        wards: this.state.txtWards,
+        email: this.state.txtEmail,
+        phone: this.state.txtPhone,
+        is_default_pickup: is_default_pickup,
+        is_default_return: is_default_return,
+      },
+      store_code
+    );
   };
 
   render() {
-    var { province } = this.props
+    var { province } = this.props;
 
-    var { txtName, txtAddress_detail, txtProvince, txtDistrict, txtWards, txtEmail, txtPickup, txtReturn, listDistrict, listWards, txtPhone } = this.state;
-    var checkPickup = txtPickup == "0" || txtPickup == "" ? false : true
-    var checkReturn = txtReturn == "0" || txtReturn == "" ? false : true
+    var {
+      txtName,
+      txtAddress_detail,
+      txtProvince,
+      txtDistrict,
+      txtWards,
+      txtEmail,
+      txtPickup,
+      txtReturn,
+      listDistrict,
+      listWards,
+      txtPhone,
+    } = this.state;
+    var checkPickup = txtPickup == "0" || txtPickup == "" ? false : true;
+    var checkReturn = txtReturn == "0" || txtReturn == "" ? false : true;
     return (
       <React.Fragment>
         <form role="form" onSubmit={this.onSave} method="post">
@@ -218,7 +224,7 @@ class Form extends Component {
                 class="form-control"
                 id="txtName"
                 placeholder="Nhập họ tên"
-                autocomplete="off"
+                autoComplete="off"
                 value={txtName}
                 onChange={this.onChange}
                 name="txtName"
@@ -231,20 +237,20 @@ class Form extends Component {
                 class="form-control"
                 id="txtEmail"
                 placeholder="Nhập Email"
-                autocomplete="off"
+                autoComplete="off"
                 value={txtEmail}
                 onChange={this.onChange}
                 name="txtEmail"
               />
             </div>
             <div class="form-group">
-            <label for="product_name">Số điện thoại</label>
+              <label for="product_name">Số điện thoại</label>
               <input
                 type="text"
                 class="form-control"
                 id="txtPhone"
                 placeholder="Nhập số điện thoại"
-                autocomplete="off"
+                autoComplete="off"
                 value={txtPhone}
                 onChange={this.onChange}
                 name="txtPhone"
@@ -257,7 +263,7 @@ class Form extends Component {
                 class="form-control"
                 id="txtAddress_detail"
                 placeholder="Nhập chi tiết địa chỉ"
-                autocomplete="off"
+                autoComplete="off"
                 value={txtAddress_detail}
                 onChange={this.onChange}
                 name="txtAddress_detail"
@@ -319,24 +325,42 @@ class Form extends Component {
                 <option value="">-- Chọn phường/xã --</option>
 
                 {this.showWards(listWards)}
-
               </select>
             </div>
             <div class="form-group form-check">
-              <input type="checkbox" class="form-check-input" checked={checkPickup} id="exampleCheck1" name="txtPickup" onChange={this.onChangeCheck} value={txtPickup} />
-              <label class="form-check-label" for="exampleCheck1" >Đặt làm địa chỉ lấy hàng</label>
+              <input
+                type="checkbox"
+                class="form-check-input"
+                checked={checkPickup}
+                id="exampleCheck1"
+                name="txtPickup"
+                onChange={this.onChangeCheck}
+                value={txtPickup}
+              />
+              <label class="form-check-label" for="exampleCheck1">
+                Đặt làm địa chỉ lấy hàng
+              </label>
             </div>
 
             <div class="form-group form-check">
-              <input checked={checkReturn} value={txtReturn} onChange={this.onChangeCheck} name="txtReturn" type="checkbox" class="form-check-input" id="exampleCheck1" />
-              <label class="form-check-label" for="exampleCheck1">Đặt làm địa chỉ trả hàng</label>
+              <input
+                checked={checkReturn}
+                value={txtReturn}
+                onChange={this.onChangeCheck}
+                name="txtReturn"
+                type="checkbox"
+                class="form-check-input"
+                id="exampleCheck1"
+              />
+              <label class="form-check-label" for="exampleCheck1">
+                Đặt làm địa chỉ trả hàng
+              </label>
             </div>
           </div>
 
           <div class="box-footer">
             <button type="submit" class="btn btn-info   btn-sm">
-              <i class="fas fa-save"></i>  Lưu
-
+              <i class="fas fa-save"></i> Lưu
             </button>
             <button
               type="button"
@@ -345,7 +369,6 @@ class Form extends Component {
               class="btn btn-warning   btn-sm"
             >
               <i class="fas fa-arrow-left"></i> Trở về
-
             </button>
           </div>
         </form>
@@ -353,9 +376,6 @@ class Form extends Component {
     );
   }
 }
-
-
-
 
 const mapDispatchToProps = (dispatch, props) => {
   return {

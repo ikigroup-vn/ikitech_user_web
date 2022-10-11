@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { isEmail, isPhone } from "../../../ultis/helpers"
-import {getQueryParams} from "../../../ultis/helpers"
+import { isEmail, isPhone } from "../../../ultis/helpers";
+import { getQueryParams } from "../../../ultis/helpers";
 
 import * as auth from "../../../actions/auth";
 
@@ -11,24 +11,24 @@ class Form extends Component {
     this.state = {
       txtPhone: "",
       txtEmail: "",
-      txtFormat: ""
+      txtFormat: "",
     };
   }
 
-
-  componentWillMount()
-  {
-    var redirect_forgot = getQueryParams("redirect_forgot")
-    console.log(redirect_forgot ,  this.props.user)
-    if(redirect_forgot && ( typeof this.props.user.phone_number != "undefined" || typeof this.props.user.email != "undefined"))
-    {
-      var {user} = this.props
+  componentWillMount() {
+    var redirect_forgot = getQueryParams("redirect_forgot");
+    console.log(redirect_forgot, this.props.user);
+    if (
+      redirect_forgot &&
+      (typeof this.props.user.phone_number != "undefined" ||
+        typeof this.props.user.email != "undefined")
+    ) {
+      var { user } = this.props;
       this.setState({
         txtFormat: user.phone_number == "" ? user.email : user.phone_number,
-      })
+      });
     }
   }
-
 
   onChange = (e) => {
     var target = e.target;
@@ -42,15 +42,13 @@ class Form extends Component {
 
   onSave = (e) => {
     e.preventDefault();
-    var { txtPhone, txtEmail, txtFormat } = this.state
+    var { txtPhone, txtEmail, txtFormat } = this.state;
     if (isEmail(txtFormat))
       this.props.forgot({ txtPhone: "", txtEmail: txtFormat });
     else if (isPhone(txtFormat)) {
       this.props.forgot({ txtPhone: txtFormat, txtEmail: "" });
-    }
-    else {
+    } else {
       this.props.forgot({ txtPhone: txtFormat, txtEmail: "" });
-
     }
   };
 
@@ -68,7 +66,7 @@ class Form extends Component {
               id="exampleInputEmail"
               aria-describedby="emailHelp"
               placeholder="Nhập số điện thoại hoặc Email"
-              autocomplete="off"
+              autoComplete="off"
               name="txtFormat"
               value={txtFormat}
               onChange={this.onChange}

@@ -2,28 +2,26 @@ import React, { Component } from "react";
 import * as themeAction from "../../../actions/theme";
 import { connect } from "react-redux";
 import * as helper from "../../../ultis/helpers";
-import { compressed } from "../../../ultis/helpers"
-import { isEmpty } from "../../../ultis/helpers"
+import { compressed } from "../../../ultis/helpers";
+import { isEmpty } from "../../../ultis/helpers";
 import * as Types from "../../../constants/ActionType";
 class ModalCreate extends Component {
   constructor(props) {
     super(props);
     this.state = {
       title: "",
-      fileUpload: null
-
+      fileUpload: null,
     };
   }
 
-
   componentDidMount() {
-    var _this = this
+    var _this = this;
 
-    window.$('#file-banner').on('fileloaded', function (event, file) {
-      _this.setState({ fileUpload: file })
+    window.$("#file-banner").on("fileloaded", function (event, file) {
+      _this.setState({ fileUpload: file });
     });
-    window.$('#file-banner').on('fileremoved', function (event, id, index) {
-      _this.setState({ fileUpload: null })
+    window.$("#file-banner").on("fileremoved", function (event, id, index) {
+      _this.setState({ fileUpload: null });
     });
     helper.loadFileInput("file-banner");
   }
@@ -39,28 +37,25 @@ class ModalCreate extends Component {
   onSave = async (e) => {
     e.preventDefault();
 
-    var { title } = this.state
+    var { title } = this.state;
 
-
-
-
-    var { store_code, carousel_app_images, theme } = this.props
+    var { store_code, carousel_app_images, theme } = this.props;
     var file = this.state.fileUpload;
 
-
     if (typeof file !== "undefined" && file != "" && file != null) {
-      window.$('.modal').modal('hide');
+      window.$(".modal").modal("hide");
 
-      window.$('#file-banner').fileinput('clear');
+      window.$("#file-banner").fileinput("clear");
 
-      this.props.createBanner(store_code, { title: title, file: await compressed(file, 0, 0) }, carousel_app_images, theme);
-      this.setState({ fileUpload: null,  title: "",
-    })
-     
-    }
-    else {
+      this.props.createBanner(
+        store_code,
+        { title: title, file: await compressed(file, 0, 0) },
+        carousel_app_images,
+        theme
+      );
+      this.setState({ fileUpload: null, title: "" });
+    } else {
       this.props.showError({
-
         type: Types.ALERT_UID_STATUS,
         alert: {
           type: "danger",
@@ -68,13 +63,10 @@ class ModalCreate extends Component {
           disable: "show",
           content: "Vui lòng chọn ảnh banner",
         },
-      }
-      )
+      });
 
       // this.props.createBanner(store_code, { title: title, file: "" }, carousel_app_images,theme);
-
     }
-  
   };
   render() {
     var { title } = this.state;
@@ -89,11 +81,17 @@ class ModalCreate extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" >
+            <div class="modal-header">
               <h4 class="modal-title">Thêm Banner</h4>
 
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
             </div>
             <form
               onSubmit={this.onSave}
@@ -106,12 +104,11 @@ class ModalCreate extends Component {
                 <div class="form-group">
                   <label for="product_name">Tên tiêu đề</label>
                   <input
-
                     type="text"
                     class="form-control"
                     id="title"
                     placeholder="Nhập tiêu đề"
-                    autocomplete="off"
+                    autoComplete="off"
                     value={title}
                     onChange={this.onChange}
                     name="title"
@@ -143,7 +140,6 @@ class ModalCreate extends Component {
                 </button>
               </div>
             </form>
-
           </div>
         </div>
       </div>
@@ -151,12 +147,10 @@ class ModalCreate extends Component {
   }
 }
 
-
-
 const mapDispatchToProps = (dispatch, props) => {
   return {
     showError: (error) => {
-      dispatch(error)
+      dispatch(error);
     },
     createBanner: (id, form, banners, theme) => {
       dispatch(themeAction.createBanner(id, form, banners, theme));

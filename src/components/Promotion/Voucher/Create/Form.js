@@ -15,6 +15,7 @@ import { formatNumber } from "../../../../ultis/helpers";
 import { isEmpty } from "../../../../ultis/helpers";
 import getChannel, { IKIPOS, IKITECH } from "../../../../ultis/channel";
 import * as AgencyAction from "../../../../actions/agency";
+import * as groupCustomerAction from "../../../../actions/group_customer";
 
 class Form extends Component {
   constructor(props) {
@@ -42,6 +43,7 @@ class Form extends Component {
       discount_for: 0,
       group_customer: 0,
       agency_type_id: null,
+      group_type_id: null,
     };
   }
   componentDidMount() {
@@ -53,7 +55,7 @@ class Form extends Component {
     } catch (error) {}
     this.props.initialUpload();
     this.props.fetchAllAgencyType(this.props.store_code);
-
+    this.props.fetchGroupCustomer(this.props.store_code);
   }
   onSaveProduct = () => {
     this.setState({ saveListProducts: [...this.state.listProducts] });
@@ -61,6 +63,11 @@ class Form extends Component {
   componentWillReceiveProps(nextProps) {
     if (this.props.image !== nextProps.image) {
       this.setState({ image: nextProps.image });
+    }
+    if (!shallowEqual(nextProps.discount, this.props.discount)) {
+      this.setState({
+        group_type_id: nextProps.groupCustomer[0].id,
+      });
     }
   }
 
@@ -79,9 +86,8 @@ class Form extends Component {
       name == "txtValueLimitTotal" ||
       name == "txtAmount" ||
       name == "txtValueDiscount" ||
-      name == "txtMaxValueDiscount" || 
+      name == "txtMaxValueDiscount" ||
       name == "ship_discount_value"
-
     ) {
       if (!isNaN(Number(_value))) {
         value = new Intl.NumberFormat().format(_value);
@@ -161,7 +167,10 @@ class Form extends Component {
       return;
     }
     var state = this.state;
-    if ((state.txtValueDiscount == null || !isEmpty(state.txtValueDiscount)) && discount_for == 0) {
+    if (
+      (state.txtValueDiscount == null || !isEmpty(state.txtValueDiscount)) &&
+      discount_for == 0
+    ) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
         alert: {
@@ -176,8 +185,8 @@ class Form extends Component {
     if (
       state.txtDiscountType == 0 &&
       formatNumber(state.txtValueLimitTotal) <
-        formatNumber(state.txtValueDiscount)
-        && discount_for == 0
+        formatNumber(state.txtValueDiscount) &&
+      discount_for == 0
     ) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
@@ -207,13 +216,16 @@ class Form extends Component {
       "YYYY-MM-DD HH:mm:ss"
     );
     var voucherType = type == "store" ? 0 : 1;
-    var { group_customer, agency_type_id } = this.state;
-    var agency_type_name = this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]?.name || null;
-    console.log(this.props.types,agency_type_name)
+    var { group_customer, agency_type_id, group_type_id } = this.state;
+    var agency_type_name =
+      this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]
+        ?.name || null;
+    console.log(this.props.types, agency_type_name);
     var form = {
       group_customer,
       agency_type_id,
       agency_type_name,
+      group_type_id,
       name: state.txtName,
       start_time: startTime == "Invalid date" ? null : startTime,
       end_time: endTime == "Invalid date" ? null : endTime,
@@ -253,11 +265,7 @@ class Form extends Component {
       delete form.product_ids;
     }
     console.log(form);
-    var {
-      discount_for,
-      is_free_ship,
-      ship_discount_value,
-    } = this.state;
+    var { discount_for, is_free_ship, ship_discount_value } = this.state;
 
     var dataShip = {};
     var formatShipDiscount = ship_discount_value
@@ -269,23 +277,22 @@ class Form extends Component {
           discount_for: discount_for,
           is_free_ship: true,
           ship_discount_value: null,
-          discount_type : null,
-          value_discount : null
+          discount_type: null,
+          value_discount: null,
         };
       } else {
         dataShip = {
           discount_for: discount_for,
           is_free_ship: false,
           ship_discount_value: formatShipDiscount,
-          discount_type : null,
-          value_discount : null
+          discount_type: null,
+          value_discount: null,
         };
       }
-    }
-    else{
+    } else {
       dataShip = {
         discount_for: discount_for,
-      }
+      };
     }
     this.props.createVoucher(
       store_code,
@@ -382,12 +389,13 @@ class Form extends Component {
       is_free_ship,
       group_customer,
       agency_type_id,
+      group_type_id,
       ship_discount_value,
     } = this.state;
+    console.log("Form ~ render ~ group_type_id", group_type_id);
 
-    console.log(this.state);
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
-    var { products, store_code, vouchers , types } = this.props;
+    var { products, store_code, vouchers, types, groupCustomer } = this.props;
     var disableOfType = this.props.type == "store" ? "hide" : "show";
     return (
       <React.Fragment>
@@ -431,7 +439,7 @@ class Form extends Component {
                     value={txtName}
                     name="txtName"
                     placeholder="Nhập tên chương trình"
-                    autocomplete="off"
+                    autoComplete="off"
                     onChange={this.onChange}
                   />
                 </div>
@@ -445,7 +453,7 @@ class Form extends Component {
                     value={txtCode}
                     name="txtCode"
                     placeholder="Nhập mã giảm giá"
-                    autocomplete="off"
+                    autoComplete="off"
                     onChange={this.onChange}
                   />
                 </div>
@@ -499,11 +507,10 @@ class Form extends Component {
                     name="txtValueLimitTotal"
                     value={txtValueLimitTotal}
                     placeholder="Nhập giá trị tối thiểu của đơn hàng"
-                    autocomplete="off"
+                    autoComplete="off"
                     onChange={this.onChange}
                   />
                 </div>
-
               </div>
             </div>
             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
@@ -512,64 +519,96 @@ class Form extends Component {
                   Thời gian kết thúc phải sau thời gian bắt đầu
                 </div>
                 <div className="form-group discount-for">
-              <label htmlFor="group_customer">Áp dụng cho</label>
-              <div
-                style={{
-                  display: "flex",
-                }}
-                className="radio discount-for"
-                onChange={this.onChange}
-              >
-                <label>
-                  <input
-                    type="radio"
-                    name="group_customer"
-                    checked={group_customer == 0 ? true : false}
-                    className="group_customer"
-                    id="ship"
-                    value="0"
-                  />
-                  {"  "} Tất cả
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="group_customer"
-                    checked={group_customer == 2 ? true : false}
-                    className="group_customer"
-                    id="bill"
-                    value="2"
-                  />
-                  {"  "}Đại lý
-                </label>
+                  <label htmlFor="group_customer">Áp dụng cho</label>
+                  <div
+                    style={{
+                      display: "flex",
+                    }}
+                    className="radio discount-for"
+                    onChange={this.onChange}
+                  >
+                    <label>
+                      <input
+                        type="radio"
+                        name="group_customer"
+                        checked={group_customer == 0 ? true : false}
+                        className="group_customer"
+                        id="ship"
+                        value="0"
+                      />
+                      {"  "} Tất cả
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="group_customer"
+                        checked={group_customer == 2 ? true : false}
+                        className="group_customer"
+                        id="bill"
+                        value="2"
+                      />
+                      {"  "}Đại lý
+                    </label>
 
-                <label>
-                  <input
-                    type="radio"
-                    name="group_customer"
-                    checked={group_customer == 1 ? true : false}
-                    className="group_customer"
-                    id="ship"
-                    value="1"
-                  />
-                  {"  "} Cộng tác viên
-                </label>
-              </div>
-              {group_customer == 2 && (
-                <select
-                  onChange={this.onChange}
-                  value={agency_type_id}
-                  name="agency_type_id"
-                  class="form-control"
-                >
-                  <option>--- Chọn cấp đại lý ---</option>
-                  {types.map((v) => {
-                    return <option value={v.id}>{v.name}</option>;
-                  })}
-                </select>
-              )}
-            </div>
-               
+                    <label>
+                      <input
+                        type="radio"
+                        name="group_customer"
+                        checked={group_customer == 1 ? true : false}
+                        className="group_customer"
+                        id="ship"
+                        value="1"
+                      />
+                      {"  "} Cộng tác viên
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="group_customer"
+                        checked={group_customer == 4 ? true : false}
+                        className="group_customer"
+                        id="ship"
+                        value="4"
+                      />
+                      {"  "} Nhóm khách hàng
+                    </label>
+                  </div>
+                  {group_customer == 2 && (
+                    <select
+                      onChange={this.onChange}
+                      value={agency_type_id}
+                      name="agency_type_id"
+                      class="form-control"
+                    >
+                      <option value={0}>Tất cả</option>
+                      {types.map((v) => {
+                        return (
+                          <option value={v.id} key={v.id}>
+                            {v.name}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  )}
+                  {group_customer == 4 && (
+                    <select
+                      onChange={this.onChange}
+                      value={group_type_id}
+                      name="group_type_id"
+                      class="form-control"
+                    >
+                      {groupCustomer.length > 0 &&
+                        groupCustomer.map((group) => {
+                          return (
+                            <option value={group.id} key={group.id}>
+                              {group.name}
+                            </option>
+                          );
+                        })}
+                    </select>
+                  )}
+                </div>
+
                 <div class="form-group">
                   <label for="product_name">Số mã có thể sử dụng</label>
                   <input
@@ -579,7 +618,7 @@ class Form extends Component {
                     name="txtAmount"
                     value={txtAmount}
                     placeholder="Số lượng mã phiểu có thể sử dụng"
-                    autocomplete="off"
+                    autoComplete="off"
                     onChange={this.onChange}
                   />
                 </div>
@@ -589,7 +628,7 @@ class Form extends Component {
                   <div
                     style={{
                       display: "flex",
-                      flexDirection : "column"
+                      flexDirection: "column",
                     }}
                     className="radio discount-for"
                     onChange={this.onChange}
@@ -605,20 +644,19 @@ class Form extends Component {
                       />
                       {"  "}Giảm giá cho đơn hàng
                     </label>
-                    {
-                      this.props.type === "store" &&      <label>
-                      <input
-                        type="radio"
-                        name="discount_for"
-                        checked={discount_for == 1 ? true : false}
-                        className="discount_for"
-                        id="ship"
-                        value="1"
-                      />
-                      {"  "} Giảm giá cho vận chuyển
-                    </label>
-                    }
-               
+                    {this.props.type === "store" && (
+                      <label>
+                        <input
+                          type="radio"
+                          name="discount_for"
+                          checked={discount_for == 1 ? true : false}
+                          className="discount_for"
+                          id="ship"
+                          value="1"
+                        />
+                        {"  "} Giảm giá cho vận chuyển
+                      </label>
+                    )}
                   </div>
                 </div>
 
@@ -651,7 +689,7 @@ class Form extends Component {
                             name="ship_discount_value"
                             value={ship_discount_value}
                             placeholder="Nhập giá trị giảm"
-                            autocomplete="off"
+                            autoComplete="off"
                             onChange={this.onChange}
                           />
                         )}
@@ -683,7 +721,7 @@ class Form extends Component {
                         name="txtValueDiscount"
                         value={txtValueDiscount}
                         placeholder="Nhập giá trị bạn muốn giảm (đ)"
-                        autocomplete="off"
+                        autoComplete="off"
                         onChange={this.onChange}
                       />
                     </div>
@@ -697,7 +735,7 @@ class Form extends Component {
                           name="txtValueDiscount"
                           value={txtValueDiscount}
                           placeholder="Nhập giá trị bạn muốn giảm (%)"
-                          autocomplete="off"
+                          autoComplete="off"
                           onChange={this.onChange}
                         />
                       </div>
@@ -723,7 +761,7 @@ class Form extends Component {
                           name="txtMaxValueDiscount"
                           value={txtMaxValueDiscount}
                           placeholder="Nhập giá trị bạn muốn giảm"
-                          autocomplete="off"
+                          autoComplete="off"
                           onChange={this.onChange}
                         />
                       </div>
@@ -788,9 +826,8 @@ class Form extends Component {
 const mapStateToProps = (state) => {
   return {
     image: state.UploadReducers.voucherImg.voucher_img,
-    state: state,
     types: state.agencyReducers.agency.allAgencyType,
-
+    groupCustomer: state.groupCustomerReducers.group_customer.groupCustomer,
   };
 };
 
@@ -807,6 +844,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchAllAgencyType: (store_code) => {
       dispatch(AgencyAction.fetchAllAgencyType(store_code));
+    },
+    fetchGroupCustomer: (store_code) => {
+      dispatch(groupCustomerAction.fetchGroupCustomer(store_code));
     },
   };
 };

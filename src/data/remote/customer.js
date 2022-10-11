@@ -12,7 +12,11 @@ export const fetchAllCustomer = (
         "get",
         null
       )
-    : callApi(`/store/${store_code}/customers?page=${page}&referral_phone_number=${referral_phone_number}`, "get", null);
+    : callApi(
+        `/store/${store_code}/customers?page=${page}&referral_phone_number=${referral_phone_number}`,
+        "get",
+        null
+      );
 };
 
 export const fetchCustomerId = (store_code, blogId) => {
@@ -24,6 +28,16 @@ export const createCustomer = (store_code, data) => {
 export const editCustomer = (store_code, id, data) => {
   return callApi(`/store/${store_code}/customers/${id}`, "put", data);
 };
-export const fetchAllPointHistory = (id, store_code,page, branch_id, params) =>{
-  return callApi(`/store/${store_code}/customers/${id}/history_points?page=${page}`, "get", null);
-}
+export const fetchAllPointHistory = (
+  id,
+  store_code,
+  page,
+  branch_id,
+  params
+) => {
+  return callApi(
+    `/store/${store_code}/customers/${id}/history_points?page=${page}`,
+    "get",
+    null
+  );
+};

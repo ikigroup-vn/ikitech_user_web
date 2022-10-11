@@ -4,9 +4,9 @@ import { connect } from "react-redux";
 import ModalUpload from "./ModalUpload";
 import * as Env from "../../../ultis/default";
 import { isEmpty } from "../../../ultis/helpers";
-import Table from "./List"
-import * as decentralization from "../../../actions/decentralization"
-import { shallowEqual } from "../../../ultis/shallowEqual"
+import Table from "./List";
+import * as decentralization from "../../../actions/decentralization";
+import { shallowEqual } from "../../../ultis/shallowEqual";
 class Form extends Component {
   constructor(props) {
     super(props);
@@ -45,7 +45,7 @@ class Form extends Component {
       promotion_combo_update: false,
       promotion_combo_end: false,
       order_list: true,
-      order_allow_change_status : true,
+      order_allow_change_status: true,
       post_list: false,
       post_add: false,
       post_update: false,
@@ -106,19 +106,28 @@ class Form extends Component {
 
     this.initialData = [
       { value: "order_list", name: "Xem danh sách đơn hàng" },
-      { value: "order_allow_change_status", name: "Thay đổi trạng thái đơn hàng" },
+      {
+        value: "order_allow_change_status",
+        name: "Thay đổi trạng thái đơn hàng",
+      },
 
       { value: "product_list", name: "Xem danh sách sản phẩm" },
       { value: "product_add", name: "Thêm sản phẩm" },
       { value: "product_update", name: "Cập nhật sản phẩm" },
       { value: "product_remove_hide", name: "Xóa sản phẩm" },
-      { value: "product_category_list", name: "Xem danh sách danh mục sản phẩm" },
+      {
+        value: "product_category_list",
+        name: "Xem danh sách danh mục sản phẩm",
+      },
       { value: "product_category_add", name: "Thêm danh mục sản phẩm" },
       { value: "product_category_update", name: "Cập nhật danh mục sản phẩm" },
       { value: "product_category_remove", name: "Xóa danh mục sản phẩm" },
       { value: "product_attribute_list", name: "Xem thuộc tính sản phẩm" },
       { value: "product_attribute_add", name: "Thêm thuộc tính sản phẩm" },
-      { value: "product_attribute_update", name: "Cập nhật thuộc tính sản phẩm" },
+      {
+        value: "product_attribute_update",
+        name: "Cập nhật thuộc tính sản phẩm",
+      },
       { value: "product_attribute_remove", name: "Xóa thuộc tính sản phẩm" },
       { value: "product_ecommerce", name: "Lấy sản phảm từ sàn TMĐT " },
       { value: "product_import_from_exel", name: "Import Excel sản phẩm" },
@@ -126,18 +135,54 @@ class Form extends Component {
       { value: "customer_list", name: "Xem danh sách khách hàng" },
       { value: "customer_config_point", name: "Cấu hình điểm thưởng" },
       { value: "customer_review_list", name: "Xem danh sáchđánh giá" },
-      { value: "promotion_discount_list", name: "Xem danh sách Chương trình giảm giá sản phẩm" },
-      { value: "promotion_discount_add", name: "Thêm Chương trình giảm giá sản phẩm" },
-      { value: "promotion_discount_update", name: "Cập nhật Chương trình giảm giá sản phẩm" },
-      { value: "promotion_discount_end", name: "Kết thúc Chương trình giảm giá sản phẩm" },
-      { value: "promotion_voucher_list", name: "Xem danh sách Chương trình Voucher sản phẩm" },
-      { value: "promotion_voucher_add", name: "Thêm Chương trình Voucher sản phẩm" },
-      { value: "promotion_voucher_update", name: "Cập nhật Chương trình Voucher sản phẩm" },
-      { value: "promotion_voucher_end", name: "Kết thúc Chương trình Voucher sản phẩm" },
-      { value: "promotion_combo_list", name: "Xem danh sách Chương trình Combo sản phẩm" },
-      { value: "promotion_combo_add", name: "Thêm Chương trình Combo sản phẩm" },
-      { value: "promotion_combo_update", name: "Cập nhật Chương trình Combo sản phẩm" },
-      { value: "promotion_combo_end", name: "Kết thúc Chương trình Combo sản phẩm" },
+      {
+        value: "promotion_discount_list",
+        name: "Xem danh sách Chương trình giảm giá sản phẩm",
+      },
+      {
+        value: "promotion_discount_add",
+        name: "Thêm Chương trình giảm giá sản phẩm",
+      },
+      {
+        value: "promotion_discount_update",
+        name: "Cập nhật Chương trình giảm giá sản phẩm",
+      },
+      {
+        value: "promotion_discount_end",
+        name: "Kết thúc Chương trình giảm giá sản phẩm",
+      },
+      {
+        value: "promotion_voucher_list",
+        name: "Xem danh sách Chương trình Voucher sản phẩm",
+      },
+      {
+        value: "promotion_voucher_add",
+        name: "Thêm Chương trình Voucher sản phẩm",
+      },
+      {
+        value: "promotion_voucher_update",
+        name: "Cập nhật Chương trình Voucher sản phẩm",
+      },
+      {
+        value: "promotion_voucher_end",
+        name: "Kết thúc Chương trình Voucher sản phẩm",
+      },
+      {
+        value: "promotion_combo_list",
+        name: "Xem danh sách Chương trình Combo sản phẩm",
+      },
+      {
+        value: "promotion_combo_add",
+        name: "Thêm Chương trình Combo sản phẩm",
+      },
+      {
+        value: "promotion_combo_update",
+        name: "Cập nhật Chương trình Combo sản phẩm",
+      },
+      {
+        value: "promotion_combo_end",
+        name: "Kết thúc Chương trình Combo sản phẩm",
+      },
       { value: "post_list", name: "Xem danh sách bài viết" },
       { value: "post_add", name: "Thêm bài viết" },
       { value: "post_update", name: "Sửa bài viết" },
@@ -151,7 +196,10 @@ class Form extends Component {
       { value: "app_theme_button_contact", name: "Nút liên hệ App" },
       { value: "app_theme_home_screen", name: "Màn hình trang chủ App" },
       { value: "app_theme_main_component", name: "Thành phần chính App" },
-      { value: "app_theme_category_product", name: "Màn hình danh mục sản phẩm App " },
+      {
+        value: "app_theme_category_product",
+        name: "Màn hình danh mục sản phẩm App ",
+      },
       { value: "app_theme_product_screen", name: "Màn hình  sản phẩm App" },
       { value: "app_theme_contact_screen", name: "Màn hình liên hệ App" },
       { value: "web_theme_edit", name: "Cập nhật web" },
@@ -160,24 +208,48 @@ class Form extends Component {
       { value: "web_theme_help", name: "Hỗ trợ web" },
       { value: "web_theme_footer", name: "Chân trang web" },
       { value: "web_theme_banner", name: "Banner web" },
-      { value: "delivery_pick_address_list", name: "Xem danh sách danh mục sản phẩm" },
-      { value: "delivery_pick_address_update", name: "Cập nhật địa chỉ lấy hàng" },
-      { value: "delivery_provider_update", name: "Cập nhật bên cung cấp giao vận" },
+      {
+        value: "delivery_pick_address_list",
+        name: "Xem danh sách danh mục sản phẩm",
+      },
+      {
+        value: "delivery_pick_address_update",
+        name: "Cập nhật địa chỉ lấy hàng",
+      },
+      {
+        value: "delivery_provider_update",
+        name: "Cập nhật bên cung cấp giao vận",
+      },
       { value: "payment_list", name: "Danh sách thanh toán" },
       { value: "payment_on_off", name: "Bật tắt nhà thanh toán" },
       { value: "notification_schedule_list", name: "Danh sách lịch thông báo" },
       { value: "notification_schedule_add", name: "Thêm lịch thông báo" },
-      { value: "notification_schedule_remove_pause", name: "Xóa lịch thông báo" },
-      { value: "notification_schedule_update", name: "Cập nhật lịch/Tiếp tục/Tạm dừng" },
+      {
+        value: "notification_schedule_remove_pause",
+        name: "Xóa lịch thông báo",
+      },
+      {
+        value: "notification_schedule_update",
+        name: "Cập nhật lịch/Tiếp tục/Tạm dừng",
+      },
       { value: "popup_list", name: "Xem danh sách Popup" },
       { value: "popup_add", name: "Thêm  Popup" },
       { value: "popup_update", name: "Cập nhật  Popup" },
       { value: "popup_remove", name: "Xòa Popup" },
       { value: "collaborator_config", name: "Cấu hình cộng tác viên" },
       { value: "collaborator_list", name: "Danh sách cộng tác viên" },
-      { value: "collaborator_payment_request_list", name: "Danh sách yêu cầu thanh toán" },
-      { value: "collaborator_payment_request_solve", name: "Cho phép hủy hoặc thanh toán" },
-      { value: "collaborator_payment_request_history", name: "Lịch sử yêu cầu thanh toán" },
+      {
+        value: "collaborator_payment_request_list",
+        name: "Danh sách yêu cầu thanh toán",
+      },
+      {
+        value: "collaborator_payment_request_solve",
+        name: "Cho phép hủy hoặc thanh toán",
+      },
+      {
+        value: "collaborator_payment_request_history",
+        name: "Lịch sử yêu cầu thanh toán",
+      },
       { value: "notification_to_stote", name: "Xem thông báo đến cửa hàng" },
       { value: "chat_list", name: "Danh sách chat" },
       { value: "chat_allow", name: "Cho phép chat với khách hàng" },
@@ -195,27 +267,23 @@ class Form extends Component {
       { value: "staff_add", name: "Thêm nhân viên" },
       { value: "staff_remove", name: "Xóa nhân viên" },
       // { value: "staff_delegating", name: "Uỷ quyền cho nhân viên" },
-    ]
-
+    ];
   }
-
 
   componentWillReceiveProps(nextProps) {
     if (!shallowEqual(nextProps.data, this.props.data)) {
-      var { data, id } = nextProps
-      this.getData(data,id)
+      var { data, id } = nextProps;
+      this.getData(data, id);
     }
   }
 
-  componentDidMount()
-  {
-    var { data, id } = this.props
+  componentDidMount() {
+    var { data, id } = this.props;
 
-    this.getData(data,id)
-
+    this.getData(data, id);
   }
 
-  getData = (data,id) =>{
+  getData = (data, id) => {
     if (data.length > 0) {
       for (const item of data) {
         if (item.id == id) {
@@ -228,7 +296,9 @@ class Form extends Component {
             product_remove_hide: item.product_remove_hide,
             product_category_list: item.product_category_list,
             product_category_add: item.product_category_add,
-            product_category_update: item.product_category_update, item, item,
+            product_category_update: item.product_category_update,
+            item,
+            item,
             product_category_remove: item.product_category_remove,
             product_attribute_list: item.product_attribute_list,
             product_attribute_add: item.product_attribute_add,
@@ -282,7 +352,8 @@ class Form extends Component {
             payment_on_off: item.payment_on_off,
             notification_schedule_list: item.notification_schedule_list,
             notification_schedule_add: item.notification_schedule_add,
-            notification_schedule_remove_pause: item.notification_schedule_remove_pause,
+            notification_schedule_remove_pause:
+              item.notification_schedule_remove_pause,
             notification_schedule_update: item.notification_schedule_update,
             popup_list: item.popup_list,
             popup_add: item.popup_add,
@@ -290,9 +361,12 @@ class Form extends Component {
             popup_remove: item.popup_remove,
             collaborator_config: item.collaborator_config,
             collaborator_list: item.collaborator_list,
-            collaborator_payment_request_list: item.collaborator_payment_request_list,
-            collaborator_payment_request_solve: item.collaborator_payment_request_solve,
-            collaborator_payment_request_history: item.collaborator_payment_request_history,
+            collaborator_payment_request_list:
+              item.collaborator_payment_request_list,
+            collaborator_payment_request_solve:
+              item.collaborator_payment_request_solve,
+            collaborator_payment_request_history:
+              item.collaborator_payment_request_history,
             notification_to_stote: item.notification_to_stote,
             chat_list: item.chat_list,
             chat_allow: item.chat_allow,
@@ -309,31 +383,33 @@ class Form extends Component {
             staff_add: item.staff_add,
             staff_remove: item.staff_remove,
             staff_delegating: item.staff_delegating,
-          })
+          });
         }
       }
     }
-  }
+  };
 
   handleChangeValue = (checked, item) => {
-
-    this.setState({ [item]: checked })
-  }
+    this.setState({ [item]: checked });
+  };
 
   showListPermission = (data) => {
-    var result = null
-    var state = { ...this.state }
+    var result = null;
+    var state = { ...this.state };
     result = data.map((item, index) => {
-      var disable = state[item.value] == true ? "show" : "hide"
+      var disable = state[item.value] == true ? "show" : "hide";
       return (
         <tr className={disable}>
-          <td>  <i class="fas fa-arrow-alt-circle-right"></i>
-            &nbsp;{item.name}</td>
+          <td>
+            {" "}
+            <i class="fas fa-arrow-alt-circle-right"></i>
+            &nbsp;{item.name}
+          </td>
         </tr>
-      )
+      );
     });
-    return result
-  }
+    return result;
+  };
 
   onChange = (e) => {
     var target = e.target;
@@ -344,7 +420,6 @@ class Form extends Component {
       [name]: value,
     });
   };
-
 
   onSave = (e) => {
     var { store_code, id } = this.props;
@@ -369,15 +444,13 @@ class Form extends Component {
     history.goBack();
   };
   render() {
-    console.log(this.state)
+    console.log(this.state);
     var { name, description } = this.state;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
 
     return (
       <React.Fragment>
-        <form
-          role="form"
-          onSubmit={this.onSave}      >
+        <form role="form" onSubmit={this.onSave}>
           <div class="box-body">
             <div class="form-group">
               <label for="group_name">Tên phân quyền</label>
@@ -389,7 +462,7 @@ class Form extends Component {
                 id="group_name"
                 name="name"
                 placeholder="Nhập tên phân quyền"
-                autocomplete="off"
+                autoComplete="off"
                 onChange={this.onChange}
               />
             </div>
@@ -398,44 +471,25 @@ class Form extends Component {
               <label for="group_name">Mô tả phân quyền</label>
               <input
                 type="text"
-
                 value={description}
                 class="form-control"
                 id="id_group"
                 name="description"
                 placeholder="Nhập mô tả"
-                autocomplete="off"
+                autoComplete="off"
                 onChange={this.onChange}
-
               />
-
-
             </div>
-
-
 
             <div class="form-group">
               <label for="group_name">Quyền truy cập</label>
               <table class="table table-border table-hover">
-
-                <tbody>
-
-                  {this.showListPermission(this.initialData)}
-
-                </tbody>
+                <tbody>{this.showListPermission(this.initialData)}</tbody>
               </table>
-
-
             </div>
-
-
-
-
-
           </div>
 
           <div class="box-footer">
- 
             <a
               style={{ marginLeft: "10px" }}
               onClick={this.goBack}
@@ -456,18 +510,17 @@ class Form extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {
-  };
+  return {};
 };
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
     showError: (error) => {
-      dispatch(error)
+      dispatch(error);
     },
     updateDecentralization: (id, data, store_code) => {
-      dispatch(decentralization.updateDecentralization(id, data, store_code))
-    }
+      dispatch(decentralization.updateDecentralization(id, data, store_code));
+    },
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Form);

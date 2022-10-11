@@ -69,7 +69,7 @@ class ModalCreate extends Component {
                     class="form-control"
                     id="txtName"
                     placeholder="Nhập tên thuộc tính"
-                    autocomplete="off"
+                    autoComplete="off"
                     value={txtName}
                     onChange={this.onChange}
                     name="txtName"

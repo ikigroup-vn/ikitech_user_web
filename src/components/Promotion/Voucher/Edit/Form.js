@@ -511,7 +511,7 @@ class Form extends Component {
     } = this.state;
     console.log(txtDiscountType);
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
-    var { products, store_code, vouchers, voucher , types } = this.props;
+    var { products, store_code, vouchers, voucher, types } = this.props;
     var disableOfType = type == "store" ? "hide" : "show";
     var checkLimit = limit == "show" ? true : false;
     var now = moment().valueOf();
@@ -563,7 +563,7 @@ class Form extends Component {
                     value={txtName}
                     name="txtName"
                     placeholder="Nhập tên chương trình"
-                    autocomplete="off"
+                    autoComplete="off"
                     onChange={this.onChange}
                   />
                 </div>
@@ -577,7 +577,7 @@ class Form extends Component {
                     value={txtCode}
                     name="txtCode"
                     placeholder="Nhập mã giảm giá"
-                    autocomplete="off"
+                    autoComplete="off"
                     onChange={this.onChange}
                   />
                 </div>
@@ -645,7 +645,7 @@ class Form extends Component {
                     name="txtValueLimitTotal"
                     value={txtValueLimitTotal}
                     placeholder="Nhập giá trị tối thiểu của đơn hàng"
-                    autocomplete="off"
+                    autoComplete="off"
                     onChange={this.onChange}
                   />
                 </div>
@@ -733,7 +733,7 @@ class Form extends Component {
                     name="txtAmount"
                     value={txtAmount}
                     placeholder="Số lượng mã phiểu có thể sử dụng"
-                    autocomplete="off"
+                    autoComplete="off"
                     onChange={this.onChange}
                   />
                 </div>
@@ -804,7 +804,7 @@ class Form extends Component {
                             name="ship_discount_value"
                             value={ship_discount_value}
                             placeholder="Nhập giá trị giảm"
-                            autocomplete="off"
+                            autoComplete="off"
                             onChange={this.onChange}
                           />
                         )}
@@ -837,7 +837,7 @@ class Form extends Component {
                         name="txtValueDiscount"
                         value={txtValueDiscount}
                         placeholder="Nhập giá trị bạn muốn giảm (đ)"
-                        autocomplete="off"
+                        autoComplete="off"
                         onChange={this.onChange}
                       />
                     </div>
@@ -851,7 +851,7 @@ class Form extends Component {
                           name="txtValueDiscount"
                           value={txtValueDiscount}
                           placeholder="Nhập giá trị bạn muốn giảm (%)"
-                          autocomplete="off"
+                          autoComplete="off"
                           onChange={this.onChange}
                         />
                       </div>
@@ -877,7 +877,7 @@ class Form extends Component {
                           name="txtMaxValueDiscount"
                           value={txtMaxValueDiscount}
                           placeholder="Nhập giá trị bạn muốn giảm"
-                          autocomplete="off"
+                          autoComplete="off"
                           onChange={this.onChange}
                         />
                       </div>
@@ -948,7 +948,6 @@ const mapStateToProps = (state) => {
     image: state.UploadReducers.voucherImg.voucher_img,
     state: state,
     types: state.agencyReducers.agency.allAgencyType,
-
   };
 };
 

@@ -3,35 +3,30 @@ import * as themeAction from "../../../actions/theme";
 import { connect } from "react-redux";
 import * as helper from "../../../ultis/helpers";
 import { shallowEqual } from "../../../ultis/shallowEqual";
-import {compressed} from "../../../ultis/helpers"
-import {isEmpty} from "../../../ultis/helpers"
+import { compressed } from "../../../ultis/helpers";
+import { isEmpty } from "../../../ultis/helpers";
 import * as Types from "../../../constants/ActionType";
-import * as TransferAction from "../../../actions/transfer_stock"
+import * as TransferAction from "../../../actions/transfer_stock";
 
 class ModalUpdate extends Component {
   constructor(props) {
     super(props);
     this.state = {
       note: "",
-  
-
     };
   }
 
-  componentDidMount()
-  {
+  componentDidMount() {
     this.setState({
       note: this.props.note,
-  
-    })
+    });
   }
 
   componentWillReceiveProps(nextProps) {
     if (this.props.note != nextProps.note) {
       this.setState({
         note: nextProps.note,
-    
-      })
+      });
     }
   }
 
@@ -44,24 +39,29 @@ class ModalUpdate extends Component {
       [name]: value,
     });
   };
-  onSave =  (e) => {
-    e.preventDefault();       
-    const { store_code,id , transfer_stock_items , to_branch_id } = this.props
-    const branch_id = localStorage.getItem('branch_id')
-    window.$('.modal').modal('hide');
+  onSave = (e) => {
+    e.preventDefault();
+    const { store_code, id, transfer_stock_items, to_branch_id } = this.props;
+    const branch_id = localStorage.getItem("branch_id");
+    window.$(".modal").modal("hide");
 
     const formData = {
-        note: this.state.note,
-        to_branch_id : to_branch_id,
+      note: this.state.note,
+      to_branch_id: to_branch_id,
 
-        transfer_stock_items: transfer_stock_items
-    }
-    var redirect  = false
-    this.props.updateTransferStock(store_code, branch_id, id, formData , redirect)
-
+      transfer_stock_items: transfer_stock_items,
+    };
+    var redirect = false;
+    this.props.updateTransferStock(
+      store_code,
+      branch_id,
+      id,
+      formData,
+      redirect
+    );
   };
   render() {
-    var { note  } = this.state;
+    var { note } = this.state;
     return (
       <div
         class="modal fade"
@@ -73,11 +73,17 @@ class ModalUpdate extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" >
+            <div class="modal-header">
               <h4 class="modal-title">Chỉnh sửa ghi chú</h4>
 
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
             </div>
             <form
               onSubmit={this.onSave}
@@ -94,17 +100,12 @@ class ModalUpdate extends Component {
                     class="form-control"
                     id="note"
                     placeholder="Nhập ghi chú"
-                    autocomplete="off"
+                    autoComplete="off"
                     value={note}
                     onChange={this.onChange}
                     name="note"
                   />
                 </div>
-             
-
-
-        
-         
               </div>
               <div class="modal-footer">
                 <button
@@ -119,7 +120,6 @@ class ModalUpdate extends Component {
                 </button>
               </div>
             </form>
-
           </div>
         </div>
       </div>
@@ -127,17 +127,23 @@ class ModalUpdate extends Component {
   }
 }
 
-
-
 const mapDispatchToProps = (dispatch, props) => {
   return {
     showError: (error) => {
-      dispatch(error)
+      dispatch(error);
     },
 
-    updateTransferStock: (store_code, branch_id,id, data,redirect) => {
-      dispatch(TransferAction.updateTransferStock(store_code, branch_id,id, data,redirect))
-  },
+    updateTransferStock: (store_code, branch_id, id, data, redirect) => {
+      dispatch(
+        TransferAction.updateTransferStock(
+          store_code,
+          branch_id,
+          id,
+          data,
+          redirect
+        )
+      );
+    },
   };
 };
 export default connect(null, mapDispatchToProps)(ModalUpdate);

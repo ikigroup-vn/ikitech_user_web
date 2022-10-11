@@ -29,18 +29,14 @@ export const ikitech_menu = [
         to: "/order",
       },
 
-     
       {
         name: "Sản phẩm",
-        setOpenKey : ["/product/"],
+        setOpenKey: ["/product/"],
 
         icon: "fas fa-th-large",
         open: "product",
         children: [
           {
-           
-
-
             class: "product_category_list",
             display: "hide",
             name: "Danh mục sản phẩm",
@@ -67,7 +63,13 @@ export const ikitech_menu = [
 
       {
         name: "Kho",
-        setOpenKey : ["/product_inventory/index" , "/inventory/index" , "/import_stocks/index" , "/transfer_stocks/index" , "/supplier" ],
+        setOpenKey: [
+          "/product_inventory/index",
+          "/inventory/index",
+          "/import_stocks/index",
+          "/transfer_stocks/index",
+          "/supplier",
+        ],
 
         icon: "fas fa-store",
         open: "inventory",
@@ -110,10 +112,9 @@ export const ikitech_menu = [
         ],
       },
 
-
       {
         name: "Tin tức - Bài viết",
-        setOpenKey : ["/posts/category" , "/posts/index"],
+        setOpenKey: ["/posts/category", "/posts/index"],
 
         icon: "fas fa-newspaper",
         open: "posts",
@@ -142,11 +143,10 @@ export const ikitech_menu = [
           // },
         ],
       },
-       
-   
+
       {
         name: "Báo cáo",
-        setOpenKey : ["/report" , "/report_"],
+        setOpenKey: ["/report", "/report_"],
 
         icon: "fas fa-chart-bar",
         open: "report",
@@ -179,12 +179,11 @@ export const ikitech_menu = [
           //   exact: true,
           //   to: "/revenue_expenditure",
           // },
-         
         ],
-      }, 
+      },
       {
         name: "Kế toán",
-        setOpenKey : ["/revenue_expenditure" , "/accountant/time_sheet/"],
+        setOpenKey: ["/revenue_expenditure", "/accountant/time_sheet/"],
 
         icon: "fas fa-coins",
         open: "revenue_expenditure",
@@ -198,7 +197,6 @@ export const ikitech_menu = [
           },
 
           {
-
             name: "Bảng công",
             class: "timekeeping",
 
@@ -207,14 +205,12 @@ export const ikitech_menu = [
             exact: true,
             to: "/accountant/time_sheet",
           },
-        
-         
         ],
       },
       {
         name: "Khách hàng",
-        setOpenKey : ["/customer" , "/reward_point" , "chat"],
-        ExcludeSetOpenKey : ["customer_sales"],
+        setOpenKey: ["/customer", "/reward_point", "chat", "/group_customer"],
+        ExcludeSetOpenKey: ["customer_sales"],
         icon: "fas fa-user",
         open: "customer",
         children: [
@@ -240,11 +236,19 @@ export const ikitech_menu = [
             exact: true,
             to: "/chat",
           },
+          {
+            name: "Nhóm khách hàng",
+            class: "chat_list",
+            display: "hide",
+            icon: "fa fa-comment-alt",
+            exact: true,
+            to: "/group_customer",
+          },
         ],
       },
       {
         name: "Onsale",
-        setOpenKey : ["/customer_sales"],
+        setOpenKey: ["/customer_sales"],
         icon: "fas fa-user",
         open: "onsale",
         children: [
@@ -253,7 +257,7 @@ export const ikitech_menu = [
             display: "hide",
             name: "Tất cả",
             exact: true,
-            params : "?status=",
+            params: "?status=",
 
             to: "/customer_sales",
           },
@@ -262,7 +266,7 @@ export const ikitech_menu = [
             display: "hide",
             name: "Cần tư vấn",
             exact: true,
-            params : "?status=0",
+            params: "?status=0",
 
             to: "/customer_sales",
           },
@@ -271,7 +275,7 @@ export const ikitech_menu = [
             display: "hide",
             name: "Đang tư vấn",
             exact: true,
-            params : "?status=1",
+            params: "?status=1",
             to: "/customer_sales",
           },
           {
@@ -279,7 +283,7 @@ export const ikitech_menu = [
             display: "hide",
             name: "Thành công",
             exact: true,
-            params : "?status=2",
+            params: "?status=2",
 
             to: "/customer_sales",
           },
@@ -289,7 +293,7 @@ export const ikitech_menu = [
             name: "Thất bại",
 
             exact: true,
-            params : "?status=3",
+            params: "?status=3",
 
             to: "/customer_sales",
           },
@@ -297,7 +301,7 @@ export const ikitech_menu = [
       },
       {
         name: "Đối tác bán hàng",
-        setOpenKey : ["/collaborator" , "/agency"],
+        setOpenKey: ["/collaborator", "/agency"],
         icon: "fa fa-user",
         open: "setting2",
         children: [
@@ -316,7 +320,7 @@ export const ikitech_menu = [
             exact: true,
             to: "/agency",
           },
-        ]
+        ],
       },
 
       // {
@@ -329,14 +333,18 @@ export const ikitech_menu = [
       //   itemHasTabName: "agency",
       // },
 
-    
-
       {
         name: "Chấm công",
         icon: "fa fa-calendar",
         class: "timekeeping",
-        setOpenKey : ["/shift" , "/calendar_shift" , "/time_sheet" , "/work_location" , "/request"],       
-        ExcludeSetOpenKey : ["/accountant/time_sheet/"],
+        setOpenKey: [
+          "/shift",
+          "/calendar_shift",
+          "/time_sheet",
+          "/work_location",
+          "/request",
+        ],
+        ExcludeSetOpenKey: ["/accountant/time_sheet/"],
 
         open: "timekeeping",
 
@@ -352,7 +360,6 @@ export const ikitech_menu = [
             // class: "timekeeping_shift",
           },
           {
-
             name: "Lịch làm việc",
             class: "timekeeping",
             display: "hide",
@@ -361,7 +368,6 @@ export const ikitech_menu = [
             to: "/calendar_shift",
           },
           {
-
             name: "Bảng công",
             class: "timekeeping",
 
@@ -371,7 +377,6 @@ export const ikitech_menu = [
             to: "/time_sheet",
           },
           {
-
             name: "Địa điểm làm việc",
             class: "timekeeping",
             display: "hide",
@@ -381,7 +386,6 @@ export const ikitech_menu = [
             to: "/work_location",
           },
           {
-
             name: "Xử lý yêu cầu",
             class: "timekeeping",
             display: "hide",
@@ -392,25 +396,25 @@ export const ikitech_menu = [
           },
         ],
       },
-         {
-          name: "Đào tạo",
-          class: "train",
+      {
+        name: "Đào tạo",
+        class: "train",
 
-          icon: "fas fa-book-open",
-          exact: true,
-          to: "/train/course",
-        },
+        icon: "fas fa-book-open",
+        exact: true,
+        to: "/train/course",
+      },
       // {
       //   name: "Đào tạo",
       //   icon: "fas fa-book-open",
       //   class: "timekeeping",
-      //   setOpenKey : ["/shift" , "/calendar_shift" , "/time_sheet" , "/work_location" , "/request"],       
+      //   setOpenKey : ["/shift" , "/calendar_shift" , "/time_sheet" , "/work_location" , "/request"],
       //   ExcludeSetOpenKey : ["/accountant/time_sheet/"],
 
       //   open: "timekeeping",
 
       //   children: [
-          
+
       //     {
 
       //       name: "Khóa học",
@@ -434,12 +438,11 @@ export const ikitech_menu = [
       //   ],
       // },
 
-
       {
         class: "promotion",
         name: "Chương trình khuyến mại",
         icon: "fas fa-money-bill-alt",
-        setOpenKey : ["/discount" , "/voucher" , "/combo" , "/bonus_product"],
+        setOpenKey: ["/discount", "/voucher", "/combo", "/bonus_product"],
 
         open: "promotion",
         children: [
@@ -466,7 +469,7 @@ export const ikitech_menu = [
             icon: "fas fa-fw fa-cog",
             exact: true,
             to: "/combo",
-        },
+          },
           {
             name: "Thưởng sản phẩm",
             class: "promotion",
@@ -475,22 +478,19 @@ export const ikitech_menu = [
             exact: true,
             to: "/bonus_product",
           },
-
-          
         ],
       },
-
-
-
-    
-
-
 
       {
         name: "Cài đặt",
 
         icon: "fas fa-cogs",
-        setOpenKey : ["/theme" , "/branch/index" , "/staff/index" , "/decentralization/index" ],
+        setOpenKey: [
+          "/theme",
+          "/branch/index",
+          "/staff/index",
+          "/decentralization/index",
+        ],
 
         open: "setting",
         children: [
@@ -501,7 +501,7 @@ export const ikitech_menu = [
             exact: true,
             to: "/theme",
           },
-       
+
           {
             name: "Chi nhánh",
             class: "branch_list",
@@ -516,7 +516,7 @@ export const ikitech_menu = [
             exact: true,
             to: "/staff/index",
           },
-        
+
           {
             name: "Cài đặt phân quyền",
             class: "decentralization_list",
@@ -525,19 +525,13 @@ export const ikitech_menu = [
             to: "/decentralization/index",
           },
 
-        
-
           {
             name: "Cài đặt quảng cáo",
             display: "hide",
             exact: true,
             to: "/banner_ads",
             class: "web_theme_edit",
-
-            
           },
-
-        
 
           {
             name: "Cài đặt chung",
@@ -553,7 +547,14 @@ export const ikitech_menu = [
         name: "Khác",
         icon: "fas fa-th-list",
         open: "another",
-        setOpenKey : ["/store_address" , "/shipment" , "payment" , "review" , "/notifications/schedule" , "popup"],
+        setOpenKey: [
+          "/store_address",
+          "/shipment",
+          "payment",
+          "review",
+          "/notifications/schedule",
+          "popup",
+        ],
 
         children: [
           {
@@ -573,7 +574,6 @@ export const ikitech_menu = [
             to: "/shipment",
           },
 
-   
           {
             name: "Phương thức thanh toán",
             class: "payment_list",
@@ -582,8 +582,6 @@ export const ikitech_menu = [
             exact: true,
             to: "/payment",
           },
-
-      
 
           {
             name: "Đánh giá",
@@ -609,7 +607,6 @@ export const ikitech_menu = [
           //   exact: true,
           //   to: "/popup",
           // },
-
         ],
       },
     ],

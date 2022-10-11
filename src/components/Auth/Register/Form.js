@@ -1,10 +1,16 @@
 import React, { Component } from "react";
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
-import * as Types from "../../../constants/ActionType"
-import * as auth from "../../../actions/auth"
-import { isEmpty, isPhone, isEmail, isSpecialCharactor, countString } from "../../../ultis/helpers"
-import { getQueryParams } from "../../../ultis/helpers"
+import * as Types from "../../../constants/ActionType";
+import * as auth from "../../../actions/auth";
+import {
+  isEmpty,
+  isPhone,
+  isEmail,
+  isSpecialCharactor,
+  countString,
+} from "../../../ultis/helpers";
+import { getQueryParams } from "../../../ultis/helpers";
 
 class Form extends Component {
   constructor(props) {
@@ -25,25 +31,28 @@ class Form extends Component {
   }
 
   componentWillMount() {
-    var redirect_register = getQueryParams("redirect_register")
-    if (redirect_register && typeof this.props.user.phone_number != "undefined") {
-      var { user } = this.props
+    var redirect_register = getQueryParams("redirect_register");
+    if (
+      redirect_register &&
+      typeof this.props.user.phone_number != "undefined"
+    ) {
+      var { user } = this.props;
       this.setState({
         txtName: user.name,
         txtPhone: user.phone_number,
         txtEmail: user.email,
         txtPassword: user.password,
         txtCPassword: user.password,
-      })
+      });
     }
   }
   toggleCPassword = () => {
-    this.setState({ toggleC: !this.state.toggleC })
-  }
+    this.setState({ toggleC: !this.state.toggleC });
+  };
 
   togglePassword = () => {
-    this.setState({ toggle: !this.state.toggle })
-  }
+    this.setState({ toggle: !this.state.toggle });
+  };
 
   onChange = (e) => {
     var target = e.target;
@@ -51,9 +60,9 @@ class Form extends Component {
     var value = target.value;
 
     this.setState({
-      [name]: value
-    })
-  }
+      [name]: value,
+    });
+  };
 
   onSave = (e) => {
     e.preventDefault();
@@ -68,8 +77,7 @@ class Form extends Component {
           content: "Vui lòng nhập đầy đủ các thông tin",
         },
       });
-    }
-    else {
+    } else {
       if (!isEmail(txtEmail) && isEmpty(txtEmail)) {
         this.props.alert({
           type: Types.ALERT_UID_STATUS,
@@ -131,9 +139,8 @@ class Form extends Component {
         return;
       }
       if (this.state.txtCPassword === this.state.txtPassword) {
-        this.props.register(this.state)
-      }
-      else {
+        this.props.register(this.state);
+      } else {
         this.props.alert({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -145,14 +152,14 @@ class Form extends Component {
         });
       }
     }
-  }
+  };
 
   render() {
     var { txtName, txtEmail, txtPhone, txtPassword, txtCPassword } = this.state;
-    var { products } = this.props
+    var { products } = this.props;
     var { toggleC, toggle, iconHide, iconShow } = this.state;
 
-    console.log(products)
+    console.log(products);
     return (
       <React.Fragment>
         <form onSubmit={this.onSave} className="user">
@@ -163,11 +170,10 @@ class Form extends Component {
                 className="form-control form-control-user"
                 id="exampleFirstName"
                 placeholder="Họ và tên"
-                autocomplete="off"
+                autoComplete="off"
                 name="txtName"
                 value={txtName}
                 onChange={this.onChange}
-
               />
             </div>
             <div className="col-sm-6">
@@ -176,7 +182,7 @@ class Form extends Component {
                 className="form-control form-control-user"
                 id="exampleLastName"
                 placeholder="Số điện thoại"
-                autocomplete="off"
+                autoComplete="off"
                 name="txtPhone"
                 value={txtPhone}
                 onChange={this.onChange}
@@ -189,7 +195,7 @@ class Form extends Component {
               className="form-control form-control-user"
               id="exampleInputEmail"
               placeholder="Email"
-              autocomplete="off"
+              autoComplete="off"
               name="txtEmail"
               value={txtEmail}
               onChange={this.onChange}
@@ -201,42 +207,49 @@ class Form extends Component {
                 type={toggle == true ? "text" : "password"}
                 className="form-control form-control-user"
                 placeholder="Mật khẩu"
-                autocomplete="off"
+                autoComplete="off"
                 name="txtPassword"
                 value={txtPassword}
                 onChange={this.onChange}
               />
-              <span onClick={this.togglePassword} toggle="#password-field" class={toggle ? iconShow : iconHide} style={{
-                float: "right",
-                marginRight: "10px",
-                marginTop: "-30px",
-                position: "relative",
-                zIndex: "2"
-              }}></span>
+              <span
+                onClick={this.togglePassword}
+                toggle="#password-field"
+                class={toggle ? iconShow : iconHide}
+                style={{
+                  float: "right",
+                  marginRight: "10px",
+                  marginTop: "-30px",
+                  position: "relative",
+                  zIndex: "2",
+                }}
+              ></span>
             </div>
             <div className="col-sm-6">
               <input
                 type={toggleC == true ? "text" : "password"}
                 className="form-control form-control-user"
                 placeholder="Nhập lại mật khẩu"
-                autocomplete="off"
+                autoComplete="off"
                 name="txtCPassword"
                 value={txtCPassword}
                 onChange={this.onChange}
               />
-              <span onClick={this.toggleCPassword} toggle="#password-field" class={toggleC ? iconShow : iconHide} style={{
-                float: "right",
-                marginRight: "10px",
-                marginTop: "-30px",
-                position: "relative",
-                zIndex: "2"
-              }}></span>
+              <span
+                onClick={this.toggleCPassword}
+                toggle="#password-field"
+                class={toggleC ? iconShow : iconHide}
+                style={{
+                  float: "right",
+                  marginRight: "10px",
+                  marginTop: "-30px",
+                  position: "relative",
+                  zIndex: "2",
+                }}
+              ></span>
             </div>
           </div>
-          <button
-            type="submit"
-            className="btn btn-primary btn-user btn-block"
-          >
+          <button type="submit" className="btn btn-primary btn-user btn-block">
             Đăng kí
           </button>
         </form>
@@ -245,22 +258,21 @@ class Form extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     products: state.products,
-    user: state.authReducers.register.user
-
-  }
-}
+    user: state.authReducers.register.user,
+  };
+};
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
     register: ($form) => {
-      dispatch(auth.register($form))
+      dispatch(auth.register($form));
     },
     alert: (form) => {
       dispatch(form);
     },
-  }
-}
+  };
+};
 export default connect(mapStateToProps, mapDispatchToProps)(Form);

@@ -2,7 +2,7 @@ import moment from "moment";
 import Compressor from "compressorjs";
 import * as Config from "../constants/Config";
 import Resizer from "react-image-file-resizer";
-import getChannel , {IKITECH , IKIPOS} from "./channel";
+import getChannel, { IKITECH, IKIPOS } from "./channel";
 export const randomString = (length) => {
   var result = "";
   var characters =
@@ -14,54 +14,47 @@ export const randomString = (length) => {
   return result;
 };
 
-export const getDetailAdress = (address_detail , wards_name , district_name , province_name) => {
+export const getDetailAdress = (
+  address_detail,
+  wards_name,
+  district_name,
+  province_name
+) => {
   var detail = "";
-  if(address_detail)
-  detail = detail + address_detail + ", "
-  if(wards_name)
-  detail = detail + wards_name + ", "
-  if(district_name)
-  detail = detail + district_name + ", "
-  if(province_name)
-  detail = detail + province_name
+  if (address_detail) detail = detail + address_detail + ", ";
+  if (wards_name) detail = detail + wards_name + ", ";
+  if (district_name) detail = detail + district_name + ", ";
+  if (province_name) detail = detail + province_name;
 
-  return detail
-}
+  return detail;
+};
 
-
-export const contactOrNumber = (data) =>{
-  if(getChannel() == IKIPOS)
-  {
-    return data
-  }
-  else
-  {
-    var string = data.slice(0, -2)
-    console.log(string)
-    var newString =  string
-    .toString()
-    .replace(/\./g, "")
-    .toString()
-    .replace(/,/g, "")
-    .toString()
-    .replace(/-/g, "")
-    .toString()
-    if(newString  == 0)
-    {
-      return "Liên hệ"
-    }
-    else
-    {
-      return data
+export const contactOrNumber = (data) => {
+  if (getChannel() == IKIPOS) {
+    return data;
+  } else {
+    var string = data.slice(0, -2);
+    console.log(string);
+    var newString = string
+      .toString()
+      .replace(/\./g, "")
+      .toString()
+      .replace(/,/g, "")
+      .toString()
+      .replace(/-/g, "")
+      .toString();
+    if (newString == 0) {
+      return "Liên hệ";
+    } else {
+      return data;
     }
   }
-}
+};
 
 export const containsSpecialChars = (str) => {
   const specialChars = /[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
   return specialChars.test(str);
-}
-
+};
 
 // export const compressed = (file, maxWitdh = 1024, maxHeight = 1024) => {
 //   return new Promise((resolve, reject) => {
@@ -76,8 +69,7 @@ export const containsSpecialChars = (str) => {
 //   });
 // };
 
-
-export const compressed = (file,maxWitdh = 1024, maxHeight = 1024) =>
+export const compressed = (file, maxWitdh = 1024, maxHeight = 1024) =>
   new Promise((resolve) => {
     Resizer.imageFileResizer(
       file,
@@ -92,9 +84,6 @@ export const compressed = (file,maxWitdh = 1024, maxHeight = 1024) =>
       "file"
     );
   });
-
-
-
 
 export const isPhone = (phone) => {
   var vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
@@ -119,8 +108,7 @@ export const isSpecialCharactor = (string) => {
 };
 
 export const isEmail = (email) => {
-  if(email)
-  var email = email.toString().replace(/ /g, "");
+  if (email) var email = email.toString().replace(/ /g, "");
   const re =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   return re.test(String(email).toLowerCase());
@@ -165,12 +153,12 @@ export const callUrlSocket = () => {
   return name;
 };
 
-export const loadFileInput = (name, upload = "#" , mp4 = false) => {
+export const loadFileInput = (name, upload = "#", mp4 = false) => {
   window.$(`#${name}`).fileinput({
     theme: "fa",
     overwriteInitial: true,
     uploadUrl: upload,
-    allowedFileExtensions: mp4 == true ? ["mp4"] :  ["jpg", "png", "jpeg" ],
+    allowedFileExtensions: mp4 == true ? ["mp4"] : ["jpg", "png", "jpeg"],
     maxFilesNum: 10,
     slugCallback: function (filename) {
       return filename.replace("(", "_").replace("]", "_");
@@ -205,12 +193,16 @@ export const format = (number) => {
   });
 };
 export const formatNoD = (number) => {
-  if (number == "" || number == null || isNaN(Number(number)) || !number || typeof number == "undefined") number = 0;
+  if (
+    number == "" ||
+    number == null ||
+    isNaN(Number(number)) ||
+    !number ||
+    typeof number == "undefined"
+  )
+    number = 0;
 
-
-
-
-  return number.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+  return number.toString()?.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   // var number = number.toString().replace(/\./g, ".");
   //  number = parseInt(number);
 
@@ -220,10 +212,10 @@ export const formatNoD = (number) => {
 export const formatNoDWithEmpty = (number) => {
   if (number == "" || number == null) return "";
   var number = number.toString().replace(/\./g, ".");
-   number = parseInt(number);
+  number = parseInt(number);
 
   let dollarUSLocale = Intl.NumberFormat("en-US");
-  return dollarUSLocale.format((number ?? 0));
+  return dollarUSLocale.format(number ?? 0);
 };
 
 export const loadExpandTable = () => {
@@ -252,29 +244,35 @@ export const getDateForChartHour = () => {
   };
 };
 
-
 export const formatNumber = (value) => {
   var _value = value;
   var numStr =
-  (typeof _value !== "undefined" && _value != null)
-  ? _value
-    .toString()
-    .replace(/\./g, "")
-    .replace(/,/g, "")
-    .replace(/-/g, "")
-  : "";
+    typeof _value !== "undefined" && _value != null
+      ? _value.toString().replace(/\./g, "").replace(/,/g, "").replace(/-/g, "")
+      : "";
   var numStr = parseFloat(numStr);
   return isNaN(numStr) ? 0 : numStr;
 };
 
-export const getQueryParams = (name) =>{
-  return new URLSearchParams(
-    window ? window.location.search : {}
-  ).get(name);
-}
-
-
-
+export const getQueryParams = (name) => {
+  return new URLSearchParams(window ? window.location.search : {}).get(name);
+};
+export const formatNumberV2 = (str) => {
+  const strFormat = str.replace(
+    /[A-Za-z`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/g,
+    ""
+  );
+  if (Number(strFormat) >= 1000) {
+    return strFormat
+      .split("")
+      .reverse()
+      .reduce((prev, next, index) => {
+        return (index % 3 ? next : next + ".") + prev;
+      });
+  } else {
+    return Number(strFormat);
+  }
+};
 
 export const removeSignNumber = (value) => {
   var _value = value;
@@ -297,11 +295,10 @@ export const getDateForChartDay = () => {
 
 export const stringToInit = (value) => {
   var _value = value;
-  var numStr = _value ;
+  var numStr = _value;
   var numStr = parseFloat(numStr);
   return isNaN(numStr) ? 0 : numStr;
-}
-
+};
 
 export const getDateForChartWeek = () => {
   console.log(moment().day());
@@ -339,14 +336,15 @@ export const getDateForChartYear = () => {
   };
 };
 export const removeVietnameseTones = (str) => {
-
   try {
-    return str = false ? null : str
-      .normalize("NFD")
-      .replace(/[\u0300-\u036f]/g, "")
-      .replace(/\s/g, "")
-      .trim();
+    return (str = false
+      ? null
+      : str
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .replace(/\s/g, "")
+          .trim());
   } catch (error) {
-    return str
+    return str;
   }
 };

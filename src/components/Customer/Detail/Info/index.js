@@ -5,11 +5,11 @@ import Loading from "../../../../screens/Loading";
 import * as customerAction from "../../../../actions/customer";
 import * as Env from "../../../../ultis/default";
 import moment from "moment";
-import { getQueryParams , isEmpty } from "../../../../ultis/helpers"
+import { getQueryParams, isEmpty } from "../../../../ultis/helpers";
 import * as placeAction from "../../../../actions/place";
-import { shallowEqual } from '../../../../ultis/shallowEqual';
+import { shallowEqual } from "../../../../ultis/shallowEqual";
 import history from "../../../../history";
-import MomentInput from 'react-moment-input';
+import MomentInput from "react-moment-input";
 import * as Types from "../../../../constants/ActionType";
 import Datetime from "react-datetime";
 
@@ -35,9 +35,7 @@ class Customer extends Component {
       idCustomer: "",
       txtDateOfBirth: "null",
       txtSex: "",
-
-
-    }
+    };
   }
   onChange = (e) => {
     var target = e.target;
@@ -51,7 +49,6 @@ class Customer extends Component {
 
   componentWillMount() {
     if (typeof this.props.customer.id != "undefined") {
-
       this.setState({
         txtName_branch: this.props.customer.name,
         txtPhone_branch: this.props.customer.phone_number,
@@ -63,89 +60,87 @@ class Customer extends Component {
         idCustomer: this.props.customer.id,
         goFirst: false,
         txtDateOfBirth:
-          this.props.customer.date_of_birth != null && this.props.customer.date_of_birth != ""
-            ? moment(this.props.customer.date_of_birth, "YYYY-MM-DD HH:mm:ss").format(
-              "DD-MM-YYYY"
-            )
+          this.props.customer.date_of_birth != null &&
+          this.props.customer.date_of_birth != ""
+            ? moment(
+                this.props.customer.date_of_birth,
+                "YYYY-MM-DD HH:mm:ss"
+              ).format("DD-MM-YYYY")
             : null,
         txtSex: this.props.customer.sex,
-      })
+      });
     }
 
     if (this.state.isLoaded === true) {
       this.setState({
         listWards: this.props.wards,
         listDistrict: this.props.district,
-        isLoaded: false
-      })
+        isLoaded: false,
+      });
     }
 
     if (this.props.wards) {
       this.setState({
         listWards: this.props.wards,
-        listDistrict: this.props.district
-      })
+        listDistrict: this.props.district,
+      });
     }
-
   }
-
 
   componentDidMount() {
     var { store_code, customerId } = this.props;
     this.props.fetchCustomerId(store_code, customerId);
-    this.props.fetchPlaceProvince()
-
+    this.props.fetchPlaceProvince();
   }
-
-
-
 
   onChangeWards = (e) => {
-    this.setState({ txtWards: e.target.value, isLoaded: true })
-    var indexWards = this.props.wards.map(e => e.id).indexOf(parseInt(e.target.value))
+    this.setState({ txtWards: e.target.value, isLoaded: true });
+    var indexWards = this.props.wards
+      .map((e) => e.id)
+      .indexOf(parseInt(e.target.value));
     if (indexWards !== -1) {
-      var nameWards = this.props.wards[indexWards].name
-      this.setState({ wardsName: nameWards })
+      var nameWards = this.props.wards[indexWards].name;
+      this.setState({ wardsName: nameWards });
     }
-  }
+  };
   goBack = () => {
     var { store_code } = this.props;
     var pag = getQueryParams("pag");
     var redirect_report = getQueryParams("redirect_report");
-    if(redirect_report)
-    history.replace(`/customer_debt/${store_code}`);
-    else if(pag)
-    {
+    if (redirect_report) history.replace(`/customer_debt/${store_code}`);
+    else if (pag) {
       history.replace(`/customer/${store_code}/?pag=${getQueryParams("pag")}`);
-    }
-    else{
+    } else {
       history.replace(`/customer/${store_code}`);
-
     }
   };
   onChangeProvince = (e) => {
-    this.setState({ txtProvince: e.target.value, isLoaded: true })
+    this.setState({ txtProvince: e.target.value, isLoaded: true });
     this.props.fetchPlaceDistrict(e.target.value);
-    var indexProvince = this.props.province.map(e => e.id).indexOf(parseInt(e.target.value))
+    var indexProvince = this.props.province
+      .map((e) => e.id)
+      .indexOf(parseInt(e.target.value));
     if (indexProvince !== -1) {
-      var nameProvince = this.props.province[indexProvince].name
-      this.setState({ provinceName: nameProvince })
+      var nameProvince = this.props.province[indexProvince].name;
+      this.setState({ provinceName: nameProvince });
     }
-  }
+  };
   onChangeDistrict = (e) => {
-    this.setState({ txtDistrict: e.target.value })
-    this.props.fetchPlaceWards(e.target.value)
-    var indexDistrict = this.props.district.map(e => e.id).indexOf(parseInt(e.target.value))
+    this.setState({ txtDistrict: e.target.value });
+    this.props.fetchPlaceWards(e.target.value);
+    var indexDistrict = this.props.district
+      .map((e) => e.id)
+      .indexOf(parseInt(e.target.value));
     if (indexDistrict !== -1) {
-      var nameDistrict = this.props.district[indexDistrict].name
-      this.setState({ districtName: nameDistrict })
+      var nameDistrict = this.props.district[indexDistrict].name;
+      this.setState({ districtName: nameDistrict });
     }
-  }
+  };
 
   componentWillReceiveProps(nextProps, nextState) {
     if (!shallowEqual(nextProps.customer, this.props.customer)) {
       this.props.fetchPlaceDistrict(nextProps.customer.province);
-      this.props.fetchPlaceWards(nextProps.customer.district)
+      this.props.fetchPlaceWards(nextProps.customer.district);
       this.setState({
         txtName_branch: nextProps.customer.name,
         txtPhone_branch: nextProps.customer.phone_number,
@@ -157,28 +152,33 @@ class Customer extends Component {
         idCustomer: nextProps.customer.id,
         goFirst: false,
         txtDateOfBirth:
-          nextProps.customer.date_of_birth != null && nextProps.customer.date_of_birth != ""
-            ? moment(nextProps.customer.date_of_birth, "YYYY-MM-DD HH:mm:ss").format(
-              "DD-MM-YYYY"
-            )
+          nextProps.customer.date_of_birth != null &&
+          nextProps.customer.date_of_birth != ""
+            ? moment(
+                nextProps.customer.date_of_birth,
+                "YYYY-MM-DD HH:mm:ss"
+              ).format("DD-MM-YYYY")
             : null,
         txtSex: nextProps.customer.sex,
-      })
+      });
     }
 
     if (nextState.isLoaded === true) {
       this.setState({
         listWards: nextProps.wards,
         listDistrict: nextProps.district,
-        isLoaded: false
-      })
+        isLoaded: false,
+      });
     }
 
-    if (!shallowEqual(nextProps.wards, this.props.wards) || !shallowEqual(this.props.district, nextProps.district)) {
+    if (
+      !shallowEqual(nextProps.wards, this.props.wards) ||
+      !shallowEqual(this.props.district, nextProps.district)
+    ) {
       this.setState({
         listWards: nextProps.wards,
-        listDistrict: nextProps.district
-      })
+        listDistrict: nextProps.district,
+      });
     }
 
     if (
@@ -190,27 +190,39 @@ class Customer extends Component {
       var isShow = permissions.customer_list;
       this.setState({ isLoading: true, isShow });
     }
-
   }
   handleOnClick = (e) => {
-    e.preventDefault()
-    if(moment(this.state.txtDateOfBirth, "DD-MM-YYYY").format("YYYY-MM-DD HH:mm:ss") == "Invalid date" && isEmpty(this.state.txtDateOfBirth))
-    {
-      this.props.showErrors(
-            {
-              type: Types.ALERT_UID_STATUS,
-              alert: {
-                type: "danger",
-                title: "Lỗi ",
-                disable: "show",
-                content: "Ngày sinh không đúng định dạng (DD-MM-YYYY)",
-              },
-            }
-          )
-          return;
+    e.preventDefault();
+    if (
+      moment(this.state.txtDateOfBirth, "DD-MM-YYYY").format(
+        "YYYY-MM-DD HH:mm:ss"
+      ) == "Invalid date" &&
+      isEmpty(this.state.txtDateOfBirth)
+    ) {
+      this.props.showErrors({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi ",
+          disable: "show",
+          content: "Ngày sinh không đúng định dạng (DD-MM-YYYY)",
+        },
+      });
+      return;
     }
-    var { txtAddress_detail, txtDistrict, txtProvince, txtWards, txtName_branch, txtPhone_branch, txtEmail_branch, idCustomer, txtDateOfBirth, txtSex } = this.state
-    const { store_code } = this.props
+    var {
+      txtAddress_detail,
+      txtDistrict,
+      txtProvince,
+      txtWards,
+      txtName_branch,
+      txtPhone_branch,
+      txtEmail_branch,
+      idCustomer,
+      txtDateOfBirth,
+      txtSex,
+    } = this.state;
+    const { store_code } = this.props;
     const Formdata = {
       name: txtName_branch,
       phone_number: txtPhone_branch,
@@ -219,56 +231,39 @@ class Customer extends Component {
       district: txtDistrict,
       wards: txtWards,
       address_detail: txtAddress_detail,
-      sex : txtSex,
-      date_of_birth :  moment(txtDateOfBirth, "DD-MM-YYYY").format(
-        "YYYY-MM-DD"
-      )
-
-    }
-    console.log("Formdata", Formdata)
+      sex: txtSex,
+      date_of_birth: moment(txtDateOfBirth, "DD-MM-YYYY").format("YYYY-MM-DD"),
+    };
+    console.log("Formdata", Formdata);
     this.props.editCustomer(store_code, idCustomer, Formdata);
-
-
   };
   showProvince = (places) => {
     var result = null;
     if (places.length > 0) {
       result = places.map((data, index) => {
-
-        return (
-          <option value={data.id}>{data.name}</option>
-        )
-
-      })
+        return <option value={data.id}>{data.name}</option>;
+      });
     }
-    return result
-
-  }
+    return result;
+  };
   showWards = (places) => {
     var result = null;
     if (places.length > 0) {
       result = places.map((data, index) => {
-
-        return (
-          <option value={data.id}>{data.name}</option>
-        )
-
-      })
+        return <option value={data.id}>{data.name}</option>;
+      });
     }
-    return result
-
-  }
+    return result;
+  };
   onChangeSex = (e) => {
-    this.setState({ txtSex: e.target.value })
-  }
+    this.setState({ txtSex: e.target.value });
+  };
   onChangeStart = (e) => {
     var time = moment(e, "DD-MM-YYYY").format("DD-MM-YYYY");
     var { txtDateOfBirth } = this.state;
     if (e != "" && txtDateOfBirth != "") {
       if (
-        !moment(e, "DD-MM-YYYY").isBefore(
-          moment(txtDateOfBirth, "DD-MM-YYYY")
-        )
+        !moment(e, "DD-MM-YYYY").isBefore(moment(txtDateOfBirth, "DD-MM-YYYY"))
       ) {
         // this.setState({ displayError: "show" });
       } else {
@@ -283,7 +278,6 @@ class Customer extends Component {
   // goBack = () => {
   //   var { store_code } = this.props;
 
-
   //   history.replace(`/customer/${store_code}/?pag=${getQueryParams("pag")}`);
   // };
 
@@ -291,18 +285,12 @@ class Customer extends Component {
     var result = null;
     if (places.length > 0) {
       result = places.map((data, index) => {
-
-        return (
-          <option value={data.id}>{data.name}</option>
-        )
-
-      })
+        return <option value={data.id}>{data.name}</option>;
+      });
     }
-    return result
+    return result;
+  };
 
-
-  }
-  
   onChangeDate = (e) => {
     // var time = moment(e, "DD-MM-YYYY").format("DD-MM-YYYY");
     this.setState({
@@ -310,16 +298,30 @@ class Customer extends Component {
     });
   };
   render() {
-    var { province } = this.props
-    var { txtAddress_detail, txtProvince, txtDistrict, txtWards, listDistrict, listWards, txtDateOfBirth, txtSex , isShow } = this.state;
-    var { txtName_branch, txtPhone_branch, txtCode_branch, txtPost_branch, txtEmail_branch } = this.state;
+    var { province } = this.props;
+    var {
+      txtAddress_detail,
+      txtProvince,
+      txtDistrict,
+      txtWards,
+      listDistrict,
+      listWards,
+      txtDateOfBirth,
+      txtSex,
+      isShow,
+    } = this.state;
+    var {
+      txtName_branch,
+      txtPhone_branch,
+      txtCode_branch,
+      txtPost_branch,
+      txtEmail_branch,
+    } = this.state;
 
-    console.log(txtDateOfBirth, txtSex)
+    console.log(txtDateOfBirth, txtSex);
     return (
       <form role="form" method="post">
         <div class="box-body">
-
-
           <div class="form-group">
             <label for="product_name">Tên khách hàng</label>
             <input
@@ -327,7 +329,7 @@ class Customer extends Component {
               class="form-control"
               id="txtName_branch"
               placeholder="Nhập tên khách hàng"
-              autocomplete="off"
+              autoComplete="off"
               value={txtName_branch || ""}
               onChange={this.onChange}
               name="txtName_branch"
@@ -335,18 +337,20 @@ class Customer extends Component {
           </div>
 
           <div className="form-group">
-                <label htmlFor="fname">Ngày sinh</label>
-                {txtDateOfBirth !== "null" && <Datetime
-                  inputProps={{
-                    placeholder: "Chưa cập nhật",
-                  }}
-                  initialValue={txtDateOfBirth}
-                  value = {txtDateOfBirth}
-                  onChange={this.onChangeDate}
-                  dateFormat="DD-MM-YYYY"
-                  timeFormat={false}
-                />}
-              </div>
+            <label htmlFor="fname">Ngày sinh</label>
+            {txtDateOfBirth !== "null" && (
+              <Datetime
+                inputProps={{
+                  placeholder: "Chưa cập nhật",
+                }}
+                initialValue={txtDateOfBirth}
+                value={txtDateOfBirth}
+                onChange={this.onChangeDate}
+                dateFormat="DD-MM-YYYY"
+                timeFormat={false}
+              />
+            )}
+          </div>
 
           {/* <div class="form-group">
             <label for="product_name">Ngày sinh</label>
@@ -374,7 +378,9 @@ class Customer extends Component {
               value={txtSex}
               onChange={this.onChangeSex}
               name="txtSex"
-              class="form-control customerInfo px-1" id="customerGender">
+              class="form-control customerInfo px-1"
+              id="customerGender"
+            >
               <option>- Giới tính -</option>
               <option value="1">Nam</option>
               <option value="2">Nữ</option>
@@ -388,7 +394,7 @@ class Customer extends Component {
               class="form-control"
               id="txtPhone_branch"
               placeholder="Nhập số điện thoại"
-              autocomplete="off"
+              autoComplete="off"
               value={txtPhone_branch || ""}
               onChange={this.onChange}
               name="txtPhone_branch"
@@ -401,7 +407,7 @@ class Customer extends Component {
               class="form-control"
               id="txtEmail_branch"
               placeholder="Nhập email"
-              autocomplete="off"
+              autoComplete="off"
               value={txtEmail_branch || ""}
               onChange={this.onChange}
               name="txtEmail_branch"
@@ -415,7 +421,7 @@ class Customer extends Component {
             class="form-control"
             id="txtAddress_detail"
             placeholder="Nhập chi tiết địa chỉ"
-            autocomplete="off"
+            autoComplete="off"
             value={txtAddress_detail || ""}
             onChange={this.onChange}
             name="txtAddress_detail"
@@ -461,24 +467,24 @@ class Customer extends Component {
           >
             <option value="">-- Chọn phường/xã --</option>
             {this.showWards(listWards)}
-
           </select>
         </div>
 
         <div class="box-footer">
-                <button
-                  class={`btn btn-primary btn-sm ${isShow == true ? "show" : "hide"}`}
-                  onClick={this.handleOnClick}
-                >
-                  <i class="fa fa-save"></i> Lưu
-                </button>
-                <a
-                  style={{ marginLeft: "10px" }}
-                  onClick={this.goBack} class={`btn btn-warning btn-sm color-white `}
-                >
-                  <i class="fa fa-arrow-left"></i> Trở về
-                </a>
-          
+          <button
+            class={`btn btn-primary btn-sm ${isShow == true ? "show" : "hide"}`}
+            onClick={this.handleOnClick}
+          >
+            <i class="fa fa-save"></i> Lưu
+          </button>
+          <a
+            style={{ marginLeft: "10px" }}
+            onClick={this.goBack}
+            class={`btn btn-warning btn-sm color-white `}
+          >
+            <i class="fa fa-arrow-left"></i> Trở về
+          </a>
+
           {/* <button onClick={this.handleOnClick} class="btn btn-info btn-icon-split btn-sm">
             <span class="icon text-white-50">
               <i class="fas fa-save"></i>
@@ -498,7 +504,6 @@ class Customer extends Component {
         </div>
       </form>
     );
-
   }
 }
 
@@ -511,7 +516,7 @@ const mapStateToProps = (state) => {
     permission: state.authReducers.permission.data,
     wards: state.placeReducers.wards,
     province: state.placeReducers.province,
-    district: state.placeReducers.district
+    district: state.placeReducers.district,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -535,8 +540,8 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(placeAction.fetchPlaceProvince());
     },
     showErrors: (alert) => {
-      dispatch(alert)
-    }
+      dispatch(alert);
+    },
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Customer);
