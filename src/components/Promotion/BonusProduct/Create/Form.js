@@ -26,6 +26,7 @@ import getChannel, { IKIPOS, IKITECH } from "../../../../ultis/channel";
 import history from "../../../../history";
 import TableLadder from "./TableLadder";
 import * as AgencyAction from "../../../../actions/agency";
+import * as groupCustomerAction from "../../../../actions/group_customer";
 
 class Form extends Component {
   constructor(props) {
@@ -43,6 +44,7 @@ class Form extends Component {
       saveListProductsLadder: [],
       group_customer: 0,
       agency_type_id: null,
+      group_type_id: null,
       listProductsBonus: [],
       saveListProductsBonus: [],
       saveListProductsBonusLadder: [],
@@ -62,6 +64,7 @@ class Form extends Component {
       document.getElementsByClassName("r-input")[1].placeholder =
         "Chọn ngày và thời gian";
       this.props.fetchAllAgencyType(this.props.store_code);
+      this.props.fetchGroupCustomer(this.props.store_code);
     } catch (error) {}
   }
 
@@ -82,8 +85,15 @@ class Form extends Component {
     } else this.setState({ saveListProducts: [...this.state.listProducts] });
   };
   componentWillReceiveProps(nextProps) {
+    const { group_type_id } = this.state;
     if (this.props.image !== nextProps.image) {
       this.setState({ image: nextProps.image });
+    }
+    if (group_type_id === null && nextProps.groupCustomer.length > 0) {
+      this.setState({
+        group_type_id: nextProps.groupCustomer[0].id,
+        agency_type_id: -1,
+      });
     }
   }
 
@@ -305,7 +315,7 @@ class Form extends Component {
     var endTime = moment(state.txtEnd, "DD-MM-YYYY HH:mm").format(
       "YYYY-MM-DD HH:mm:ss"
     );
-    var { group_customer, agency_type_id } = this.state;
+    var { group_customer, agency_type_id, group_type_id } = this.state;
     var agency_type_name =
       this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]
         ?.name || null;
@@ -314,6 +324,7 @@ class Form extends Component {
       group_customer,
       agency_type_id,
       agency_type_name,
+      group_type_id,
       amount:
         state.txtAmount == null
           ? state.txtAmount
@@ -649,6 +660,7 @@ class Form extends Component {
       listProductsLadder,
       group_customer,
       agency_type_id,
+      group_type_id,
       listProductsBonus,
       listProductsBonusLadder,
 
@@ -664,12 +676,12 @@ class Form extends Component {
       saveListProductsBonus,
       saveListProductsBonusLadder,
     } = this.state;
+
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
-    var { products, store_code, combos, types } = this.props;
+    var { products, store_code, combos, types, groupCustomer } = this.props;
     var type_discount_default = txtDiscoutType == "0" ? "show" : "hide";
     var type_discount_percent = txtDiscoutType == "1" ? "show" : "hide";
 
-    console.log("product ne", saveListProductsLadder);
     return (
       <React.Fragment>
         <form role="form" onSubmit={this.onSave} method="post">
@@ -835,6 +847,17 @@ class Form extends Component {
                       />
                       {"  "} Cộng tác viên
                     </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="group_customer"
+                        checked={group_customer == 4 ? true : false}
+                        className="group_customer"
+                        id="ship"
+                        value="4"
+                      />
+                      {"  "} Nhóm khách hàng
+                    </label>
                   </div>
                   {group_customer == 2 && (
                     <select
@@ -843,10 +866,32 @@ class Form extends Component {
                       name="agency_type_id"
                       class="form-control"
                     >
-                      <option>--- Chọn cấp đại lý ---</option>
+                      <option value={-1}>--- Chọn cấp đại lý ---</option>
+                      <option value={0}>Tất cả</option>
                       {types.map((v) => {
-                        return <option value={v.id}>{v.name}</option>;
+                        return (
+                          <option value={v.id} key={v.id}>
+                            {v.name}
+                          </option>
+                        );
                       })}
+                    </select>
+                  )}
+                  {group_customer == 4 && (
+                    <select
+                      onChange={this.onChange}
+                      value={group_type_id}
+                      name="group_type_id"
+                      class="form-control"
+                    >
+                      {groupCustomer.length > 0 &&
+                        groupCustomer.map((group) => {
+                          return (
+                            <option value={group.id} key={group.id}>
+                              {group.name}
+                            </option>
+                          );
+                        })}
                     </select>
                   )}
                 </div>
@@ -992,6 +1037,7 @@ const mapStateToProps = (state) => {
   return {
     image: state.UploadReducers.comboImg.combo_img,
     types: state.agencyReducers.agency.allAgencyType,
+    groupCustomer: state.groupCustomerReducers.group_customer.groupCustomer,
   };
 };
 
@@ -1008,6 +1054,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchAllAgencyType: (store_code) => {
       dispatch(AgencyAction.fetchAllAgencyType(store_code));
+    },
+    fetchGroupCustomer: (store_code) => {
+      dispatch(groupCustomerAction.fetchGroupCustomer(store_code));
     },
   };
 };

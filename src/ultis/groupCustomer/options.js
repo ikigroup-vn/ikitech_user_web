@@ -1,11 +1,11 @@
 export const options = [
   {
     id: 0,
-    title: "Tổng bán (trừ trả hàng)",
+    title: "Tổng mua (Chỉ đơn hoàn thành trừ trả hàng)",
   },
   {
     id: 1,
-    title: "Tổng bán",
+    title: "Tổng mua (Tất cả trạng thái đơn trừ trả hàng)",
   },
   {
     id: 2,
@@ -34,5 +34,13 @@ export const options = [
   {
     id: 8,
     title: "Ngày đăng ký",
+  },
+  {
+    id: 9,
+    title: "Cộng tác viên",
+  },
+  {
+    id: 10,
+    title: "Đại lý",
   },
 ];

@@ -8,6 +8,10 @@ const ConditionGroupCustomerStyles = styled.div`
   display: flex;
   align-items: center;
   column-gap: 20px;
+  input,
+  select {
+    background-color: white;
+  }
   .form-condition-type {
     width: 45%;
     display: flex;
@@ -24,6 +28,7 @@ const ConditionGroupCustomerStyles = styled.div`
       padding: 10px 0;
       border: transparent;
       border-bottom: 1px solid #dadae1;
+      background-color: white;
       outline: none;
     }
   }
@@ -120,7 +125,13 @@ class ConditionGroupCustomer extends PureComponent {
               ) === 6 ||
               Number(
                 this.props.conditionItems[index].typeCompareGroupCustomer
-              ) === 7
+              ) === 7 ||
+              Number(
+                this.props.conditionItems[index].typeCompareGroupCustomer
+              ) === 9 ||
+              Number(
+                this.props.conditionItems[index].typeCompareGroupCustomer
+              ) === 10
             }
             style={{
               opacity:
@@ -129,7 +140,13 @@ class ConditionGroupCustomer extends PureComponent {
                 ) === 6 ||
                 Number(
                   this.props.conditionItems[index].typeCompareGroupCustomer
-                ) === 7
+                ) === 7 ||
+                Number(
+                  this.props.conditionItems[index].typeCompareGroupCustomer
+                ) === 9 ||
+                Number(
+                  this.props.conditionItems[index].typeCompareGroupCustomer
+                ) === 10
                   ? "0.6"
                   : "1",
             }}
@@ -158,7 +175,7 @@ class ConditionGroupCustomer extends PureComponent {
               />
               {Number(
                 this.props.conditionItems[index].typeCompareGroupCustomer
-              ) < 3 && <span>đ</span>}
+              ) < 2 && <span>đ</span>}
             </div>
           ) : Number(
               this.props.conditionItems[index].typeCompareGroupCustomer
@@ -226,7 +243,9 @@ class ConditionGroupCustomer extends PureComponent {
                   </option>
                 ))}
             </select>
-          ) : (
+          ) : Number(
+              this.props.conditionItems[index].typeCompareGroupCustomer
+            ) === 8 ? (
             <div>
               <input
                 type="date"
@@ -239,6 +258,38 @@ class ConditionGroupCustomer extends PureComponent {
                 name="valueCompareGroupCustomer"
               />
             </div>
+          ) : Number(
+              this.props.conditionItems[index].typeCompareGroupCustomer
+            ) === 9 ? (
+            <div>
+              <input
+                type="text"
+                className="form-group-input form-group-input-number"
+                autoComplete="off"
+                value="All"
+                disabled
+                onChange={(e) => this.props.handleChangeInput(e, index)}
+                name="valueCompareGroupCustomer"
+              />
+            </div>
+          ) : (
+            <select
+              className="form-condition-select"
+              value={this.props.conditionItems[index].valueCompareGroupCustomer}
+              name="valueCompareGroupCustomer"
+              onChange={(e) => this.props.handleChangeInput(e, index)}
+            >
+              <option value="-1" disabled>
+                Chọn cấp đại lý
+              </option>
+              <option value="0">Tất cả</option>
+              {this.props.types.length > 0 &&
+                this.props.types.map((type, index) => (
+                  <option key={type.id} value={type.id}>
+                    {type.name}
+                  </option>
+                ))}
+            </select>
           )}
 
           {index > 0 ? (

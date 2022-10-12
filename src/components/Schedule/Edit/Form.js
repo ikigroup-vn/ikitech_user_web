@@ -18,7 +18,7 @@ import * as CategoryPAction from "../../../actions/category_product";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import { isEmail, isEmpty, isPhone } from "../../../ultis/helpers";
 import * as AgencyAction from "../../../actions/agency";
-
+import * as groupCustomerAction from "../../../actions/group_customer";
 import * as Types from "../../../constants/ActionType";
 class Form extends Component {
   constructor(props) {
@@ -47,6 +47,7 @@ class Form extends Component {
 
   componentDidMount() {
     this.props.fetchAllAgencyType(this.props.store_code);
+    this.props.fetchGroupCustomer(this.props.store_code);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -65,8 +66,8 @@ class Form extends Component {
             description: item.description,
             group_customer: item.group_customer,
             time_of_day: item.time_of_day,
-            group_customer: item.group_customer,
             agency_type_id: item.agency_type_id,
+            group_type_id: item.group_type_id,
             agency_type_name: item.agency_type_name,
             time_run: moment(item.time_run, "YYYY-MM-DD HH:mm:ss").format(
               "DD-MM-YYYY HH:mm:ss"
@@ -204,7 +205,7 @@ class Form extends Component {
     else if (type_action == "CATEGORY_POST") value_action = categoryBlog.id;
     else {
     }
-    var { group_customer, agency_type_id } = this.state;
+    var { group_customer, agency_type_id, group_type_id } = this.state;
     var agency_type_name =
       this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]
         ?.name || null;
@@ -213,10 +214,10 @@ class Form extends Component {
       agency_type_id,
       agency_type_name,
       type_schedule,
+      group_type_id,
       day_of_month,
       day_of_week,
       description,
-      group_customer,
       status,
       time_of_day,
       time_run:
@@ -227,7 +228,6 @@ class Form extends Component {
           : null,
       time_run_near,
       title,
-      type_schedule,
       type_action: type_action,
       value_action: value_action,
     };
@@ -299,26 +299,22 @@ class Form extends Component {
       day_of_week,
       description,
       group_customer,
-      status,
       time_of_day,
       time_run,
-      time_run_near,
       title,
-      type_schedule,
-      group_customer,
       agency_type_id,
+      group_type_id,
     } = this.state;
+    var { type_action, product, category, blog, categoryBlog, link_url } =
+      this.state;
     var {
-      type_action,
-      product,
-      category,
-      blog,
-      categoryBlog,
-      image,
-      link_url,
-    } = this.state;
-    var { store_code, products, category_product, blogs, category_blog } =
-      this.props;
+      store_code,
+      products,
+      category_product,
+      blogs,
+      category_blog,
+      groupCustomer,
+    } = this.props;
 
     var disable_oneDay = type_schedule == "0" ? "show" : "hide";
     var disable_everyDay = type_schedule == "1" ? "show" : "hide";
@@ -406,6 +402,7 @@ class Form extends Component {
                 <option value="1">Khách hàng có ngày sinh nhật</option>
                 <option value="2">Đại lý</option>
                 <option value="3">Cộng tác viên</option>
+                <option value="4">Nhóm khách hàng</option>
               </select>
               {group_customer == 2 && (
                 <select
@@ -415,10 +412,28 @@ class Form extends Component {
                   class="form-control"
                   style={{ marginTop: "10px" }}
                 >
-                  <option>--- Chọn cấp đại lý ---</option>
+                  <option value={0}>Tất cả</option>
                   {types.map((v) => {
                     return <option value={v.id}>{v.name}</option>;
                   })}
+                </select>
+              )}
+              {group_customer == 4 && (
+                <select
+                  onChange={this.onChange}
+                  value={group_type_id}
+                  name="group_type_id"
+                  class="form-control"
+                  style={{ marginTop: "10px" }}
+                >
+                  {groupCustomer.length > 0 &&
+                    groupCustomer.map((group) => {
+                      return (
+                        <option value={group.id} key={group.id}>
+                          {group.name}
+                        </option>
+                      );
+                    })}
                 </select>
               )}
             </div>
@@ -737,6 +752,7 @@ const mapStateToProps = (state) => {
     products: state.productReducers.product.allProduct,
     category_product: state.categoryPReducers.category_product.allCategoryP,
     blogs: state.blogReducers.blog.allBlog,
+    groupCustomer: state.groupCustomerReducers.group_customer.groupCustomer,
   };
 };
 
@@ -762,6 +778,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchAllCategoryP: (store_code) => {
       dispatch(CategoryPAction.fetchAllCategoryP(store_code));
+    },
+    fetchGroupCustomer: (store_code) => {
+      dispatch(groupCustomerAction.fetchGroupCustomer(store_code));
     },
   };
 };

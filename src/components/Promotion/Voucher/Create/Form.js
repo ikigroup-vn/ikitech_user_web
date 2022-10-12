@@ -61,12 +61,14 @@ class Form extends Component {
     this.setState({ saveListProducts: [...this.state.listProducts] });
   };
   componentWillReceiveProps(nextProps) {
+    const { group_type_id } = this.state;
     if (this.props.image !== nextProps.image) {
       this.setState({ image: nextProps.image });
     }
-    if (!shallowEqual(nextProps.discount, this.props.discount)) {
+    if (group_type_id === null && nextProps.groupCustomer.length > 0) {
       this.setState({
         group_type_id: nextProps.groupCustomer[0].id,
+        agency_type_id: -1,
       });
     }
   }
@@ -392,8 +394,6 @@ class Form extends Component {
       group_type_id,
       ship_discount_value,
     } = this.state;
-    console.log("Form ~ render ~ group_type_id", group_type_id);
-
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
     var { products, store_code, vouchers, types, groupCustomer } = this.props;
     var disableOfType = this.props.type == "store" ? "hide" : "show";
@@ -431,7 +431,7 @@ class Form extends Component {
               )} */}
 
                 <div class="form-group">
-                  <label for="product_name">Tên chương trình</label>
+                  <label htmlFor="product_name">Tên chương trình</label>
                   <input
                     type="text"
                     class="form-control"
@@ -445,7 +445,7 @@ class Form extends Component {
                 </div>
 
                 <div class="form-group">
-                  <label for="product_name">Mã giảm giá</label>
+                  <label htmlFor="product_name">Mã giảm giá</label>
                   <input
                     type="text"
                     class="form-control"
@@ -459,7 +459,7 @@ class Form extends Component {
                 </div>
 
                 <div class="form-group">
-                  <label for="product_name">Thời gian bắt đầu</label>
+                  <label htmlFor="product_name">Thời gian bắt đầu</label>
                   <MomentInput
                     min={moment()}
                     format="DD-MM-YYYY HH:mm"
@@ -479,7 +479,7 @@ class Form extends Component {
                   />
                 </div>
                 <div class="form-group">
-                  <label for="product_name">Thời gian kết thúc</label>
+                  <label htmlFor="product_name">Thời gian kết thúc</label>
                   <MomentInput
                     min={moment()}
                     format="DD-MM-YYYY HH:mm"
@@ -499,7 +499,7 @@ class Form extends Component {
                   />
                 </div>
                 <div class="form-group">
-                  <label for="product_name">Đơn tối thiểu</label>
+                  <label htmlFor="product_name">Đơn tối thiểu</label>
                   <input
                     type="text"
                     class="form-control"
@@ -580,6 +580,7 @@ class Form extends Component {
                       name="agency_type_id"
                       class="form-control"
                     >
+                      <option value={-1}>--- Chọn cấp đại lý ---</option>
                       <option value={0}>Tất cả</option>
                       {types.map((v) => {
                         return (
@@ -610,7 +611,7 @@ class Form extends Component {
                 </div>
 
                 <div class="form-group">
-                  <label for="product_name">Số mã có thể sử dụng</label>
+                  <label htmlFor="product_name">Số mã có thể sử dụng</label>
                   <input
                     type="text"
                     class="form-control"
@@ -701,7 +702,7 @@ class Form extends Component {
                 {discount_for == 0 && (
                   <>
                     <div class="form-group">
-                      <label for="product_name">Loại giảm giá</label>
+                      <label htmlFor="product_name">Loại giảm giá</label>
 
                       <select
                         name=""
@@ -740,7 +741,7 @@ class Form extends Component {
                         />
                       </div>
                       <div class="form-group">
-                        <label for="product_name">Giảm tối đa</label>
+                        <label htmlFor="product_name">Giảm tối đa</label>
 
                         <div class="checkbox" onChange={this.onChangeLimit}>
                           <label>
@@ -782,7 +783,7 @@ class Form extends Component {
               </div>
               {getChannel == IKITECH && (
                 <div class="form-group">
-                  <label for="product_name">Mô tả</label>
+                  <label htmlFor="product_name">Mô tả</label>
                   <CKEditor
                     data={txtContent}
                     onChange={this.onChangeDecription}
