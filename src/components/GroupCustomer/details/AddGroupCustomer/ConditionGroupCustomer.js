@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { expressions } from "../../../../ultis/groupCustomer/expressions";
 import { genders } from "../../../../ultis/groupCustomer/genders";
 import { options } from "../../../../ultis/groupCustomer/options";
+import * as Types from "../../../../constants/ActionType";
 
 const ConditionGroupCustomerStyles = styled.div`
   display: flex;
@@ -122,31 +123,31 @@ class ConditionGroupCustomer extends PureComponent {
             disabled={
               Number(
                 this.props.conditionItems[index].typeCompareGroupCustomer
-              ) === 6 ||
+              ) === Types.TYPE_COMPARE_SEX ||
               Number(
                 this.props.conditionItems[index].typeCompareGroupCustomer
-              ) === 7 ||
+              ) === Types.TYPE_COMPARE_PROVINCE ||
               Number(
                 this.props.conditionItems[index].typeCompareGroupCustomer
-              ) === 9 ||
+              ) === Types.TYPE_COMPARE_CTV ||
               Number(
                 this.props.conditionItems[index].typeCompareGroupCustomer
-              ) === 10
+              ) === Types.TYPE_COMPARE_AGENCY
             }
             style={{
               opacity:
                 Number(
                   this.props.conditionItems[index].typeCompareGroupCustomer
-                ) === 6 ||
+                ) === Types.TYPE_COMPARE_SEX ||
                 Number(
                   this.props.conditionItems[index].typeCompareGroupCustomer
-                ) === 7 ||
+                ) === Types.TYPE_COMPARE_PROVINCE ||
                 Number(
                   this.props.conditionItems[index].typeCompareGroupCustomer
-                ) === 9 ||
+                ) === Types.TYPE_COMPARE_CTV ||
                 Number(
                   this.props.conditionItems[index].typeCompareGroupCustomer
-                ) === 10
+                ) === Types.TYPE_COMPARE_AGENCY
                   ? "0.6"
                   : "1",
             }}
@@ -161,7 +162,7 @@ class ConditionGroupCustomer extends PureComponent {
         </div>
         <div className="form-condition-value">
           {Number(this.props.conditionItems[index].typeCompareGroupCustomer) <
-          4 ? (
+          Types.TYPE_COMPARE_MONTH_BIRTH ? (
             <div>
               <input
                 type="text"
@@ -175,11 +176,11 @@ class ConditionGroupCustomer extends PureComponent {
               />
               {Number(
                 this.props.conditionItems[index].typeCompareGroupCustomer
-              ) < 2 && <span>đ</span>}
+              ) < Types.TYPE_COMPARE_POINT && <span>đ</span>}
             </div>
           ) : Number(
               this.props.conditionItems[index].typeCompareGroupCustomer
-            ) === 4 ? (
+            ) === Types.TYPE_COMPARE_MONTH_BIRTH ? (
             <select
               className="form-condition-select"
               name="valueCompareGroupCustomer"
@@ -196,7 +197,7 @@ class ConditionGroupCustomer extends PureComponent {
             </select>
           ) : Number(
               this.props.conditionItems[index].typeCompareGroupCustomer
-            ) === 5 ? (
+            ) === Types.TYPE_COMPARE_AGE ? (
             <div>
               <input
                 type="number"
@@ -213,7 +214,7 @@ class ConditionGroupCustomer extends PureComponent {
             </div>
           ) : Number(
               this.props.conditionItems[index].typeCompareGroupCustomer
-            ) === 6 ? (
+            ) === Types.TYPE_COMPARE_SEX ? (
             <select
               className="form-condition-select"
               name="valueCompareGroupCustomer"
@@ -229,7 +230,7 @@ class ConditionGroupCustomer extends PureComponent {
             </select>
           ) : Number(
               this.props.conditionItems[index].typeCompareGroupCustomer
-            ) === 7 ? (
+            ) === Types.TYPE_COMPARE_PROVINCE ? (
             <select
               className="form-condition-select"
               value={this.props.conditionItems[index].valueCompareGroupCustomer}
@@ -245,7 +246,7 @@ class ConditionGroupCustomer extends PureComponent {
             </select>
           ) : Number(
               this.props.conditionItems[index].typeCompareGroupCustomer
-            ) === 8 ? (
+            ) === Types.TYPE_COMPARE_DATE_REG ? (
             <div>
               <input
                 type="date"
@@ -260,7 +261,7 @@ class ConditionGroupCustomer extends PureComponent {
             </div>
           ) : Number(
               this.props.conditionItems[index].typeCompareGroupCustomer
-            ) === 9 ? (
+            ) === Types.TYPE_COMPARE_CTV ? (
             <div>
               <input
                 type="text"
