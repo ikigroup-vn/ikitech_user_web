@@ -18,7 +18,7 @@ import getChannel, { IKIPOS, IKITECH } from "../../../../ultis/channel";
 import history from "../../../../history";
 import { getQueryParams } from "../../../../ultis/helpers";
 import * as AgencyAction from "../../../../actions/agency";
-
+import * as groupCustomerAction from "../../../../actions/group_customer";
 class Form extends Component {
   constructor(props) {
     super(props);
@@ -35,8 +35,8 @@ class Form extends Component {
       saveListProducts: [],
       group_customer: 0,
       agency_type_id: null,
+      group_type_id: null,
       displayError: "hide",
-
       isLoading: false,
       loadCript: false,
     };
@@ -44,6 +44,7 @@ class Form extends Component {
   componentDidMount() {
     this.props.initialUpload();
     this.props.fetchAllAgencyType(this.props.store_code);
+    this.props.fetchGroupCustomer(this.props.store_code);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -87,6 +88,7 @@ class Form extends Component {
         saveListProducts: combo.products,
         group_customer: combo.group_customer,
         agency_type_id: combo.agency_type_id,
+        group_type_id: combo.group_type_id,
         txtDiscoutType: combo.discount_type,
         listProducts: combo.products_combo,
         saveListProducts: combo.products_combo,
@@ -217,7 +219,7 @@ class Form extends Component {
       "YYYY-MM-DD HH:mm:ss"
     );
 
-    var { group_customer, agency_type_id } = this.state;
+    var { group_customer, agency_type_id, group_type_id } = this.state;
     var agency_type_name =
       this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]
         ?.name || null;
@@ -225,6 +227,7 @@ class Form extends Component {
       group_customer,
       agency_type_id,
       agency_type_name,
+      group_type_id,
       amount:
         state.txtAmount == null
           ? state.txtAmount
@@ -336,18 +339,18 @@ class Form extends Component {
       saveListProducts,
       group_customer,
       agency_type_id,
-
+      group_type_id,
       displayError,
       isLoading,
     } = this.state;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
-    var { products, store_code, combos, combo, types } = this.props;
+    var { products, store_code, combos, combo, types, groupCustomer } =
+      this.props;
     var type_discount_default = txtDiscoutType == 0 ? "show" : "hide";
     var type_discount_percent = txtDiscoutType == 1 ? "show" : "hide";
     var now = moment().valueOf();
     var end_time = moment(combo.end_time, "YYYY-MM-DD HH:mm:ss").valueOf();
     var canOnsave = now < end_time;
-    console.log(this.state);
     return (
       <React.Fragment>
         <form
@@ -504,6 +507,17 @@ class Form extends Component {
                       />
                       {"  "} Cộng tác viên
                     </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="group_customer"
+                        checked={group_customer == 4 ? true : false}
+                        className="group_customer"
+                        id="ship"
+                        value="4"
+                      />
+                      {"  "} Nhóm khách hàng
+                    </label>
                   </div>
                   {group_customer == 2 && (
                     <select
@@ -512,10 +526,32 @@ class Form extends Component {
                       name="agency_type_id"
                       class="form-control"
                     >
-                      <option>--- Chọn cấp đại lý ---</option>
+                      <option value={-1}>--- Chọn cấp đại lý ---</option>
+                      <option value={0}>Tất cả</option>
                       {types.map((v) => {
-                        return <option value={v.id}>{v.name}</option>;
+                        return (
+                          <option value={v.id} key={v.id}>
+                            {v.name}
+                          </option>
+                        );
                       })}
+                    </select>
+                  )}
+                  {group_customer == 4 && (
+                    <select
+                      onChange={this.onChange}
+                      value={group_type_id}
+                      name="group_type_id"
+                      class="form-control"
+                    >
+                      {groupCustomer.length > 0 &&
+                        groupCustomer.map((group) => {
+                          return (
+                            <option value={group.id} key={group.id}>
+                              {group.name}
+                            </option>
+                          );
+                        })}
                     </select>
                   )}
                 </div>
@@ -639,6 +675,7 @@ const mapStateToProps = (state) => {
   return {
     image: state.UploadReducers.comboImg.combo_img,
     types: state.agencyReducers.agency.allAgencyType,
+    groupCustomer: state.groupCustomerReducers.group_customer.groupCustomer,
   };
 };
 
@@ -655,6 +692,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchAllAgencyType: (store_code) => {
       dispatch(AgencyAction.fetchAllAgencyType(store_code));
+    },
+    fetchGroupCustomer: (store_code) => {
+      dispatch(groupCustomerAction.fetchGroupCustomer(store_code));
     },
   };
 };

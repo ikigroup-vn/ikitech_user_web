@@ -89,7 +89,7 @@ class Form extends Component {
         group_customer: discount.group_customer,
         agency_type_id: discount.agency_type_id,
         agency_type_name: discount.agency_type_name,
-        group_type_id: discount.group_type_id || nextProps.groupCustomer[0].id,
+        group_type_id: discount.group_type_id,
         txtContent: discount.description,
         image: discount.image_url,
         isLoading: true,
@@ -313,7 +313,6 @@ class Form extends Component {
       group_type_id,
     } = this.state;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
-
     var { products, store_code, discounts, discount, types, groupCustomer } =
       this.props;
     var now = moment().valueOf();
@@ -508,6 +507,7 @@ class Form extends Component {
                   name="agency_type_id"
                   class="form-control"
                 >
+                  <option value={-1}>--- Chọn cấp đại lý ---</option>
                   <option value={0}>Tất cả</option>
                   {types.map((v) => {
                     return (

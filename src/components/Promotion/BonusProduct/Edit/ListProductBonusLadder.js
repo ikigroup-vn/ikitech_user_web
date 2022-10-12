@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Pagination from "../../../Product/Pagination"
-import { format, formatNumber, contactOrNumber } from "../../../../ultis/helpers";
+import Pagination from "../../../Product/Pagination";
+import {
+  format,
+  formatNumber,
+  contactOrNumber,
+} from "../../../../ultis/helpers";
 import themeData from "../../../../ultis/theme_data";
 import * as productAction from "../../../../actions/product";
 import * as Env from "../../../../ultis/default";
@@ -18,235 +22,249 @@ class ListProduct extends Component {
   }
 
   onChange = (e) => {
-    var { value, checked } = e.target
-    console.log(checked)
+    var { value, checked } = e.target;
+    console.log(checked);
     var data = JSON.parse(value);
     if (checked == true)
-      this.props.handleAddProduct(data, null, "add", null,false, false,true) // true đến từ sản phẩm bonus
+      this.props.handleAddProduct(
+        data,
+        null,
+        "add",
+        null,
+        false,
+        false,
+        true
+      ); // true đến từ sản phẩm bonus
     else {
       if (data.length > 0) {
-        this.props.handleAddProduct(data, data.id, "remove", null, false,false, true)
-
-      }
-      else {
-        this.props.handleAddProduct(data, data.id, "remove", null, false, false,true)
-
+        this.props.handleAddProduct(
+          data,
+          data.id,
+          "remove",
+          null,
+          false,
+          false,
+          true
+        );
+      } else {
+        this.props.handleAddProduct(
+          data,
+          data.id,
+          "remove",
+          null,
+          false,
+          false,
+          true
+        );
       }
     }
-
-  }
-
+  };
 
   passNumPage = (page) => {
-    this.setState({ page: page })
-  }
+    this.setState({ page: page });
+  };
   compareTwoProduct(item1, item2) {
-    var product1 = { ...item1 }
-    var product2 = { ...item2 }
+    var product1 = { ...item1 };
+    var product2 = { ...item2 };
 
     delete product1.quantity;
     delete product1.product;
     delete product2.quantity;
     delete product2.product;
     delete product2.bonus_quantity;
-    delete product1.bonus_quantity
-    console.log(product1,product2)
+    delete product1.bonus_quantity;
+    console.log(product1, product2);
     if (shallowEqual(product1, product2)) {
-      return true
+      return true;
     }
-    return false
-
+    return false;
   }
 
-
   checkExsit = (list, data) => {
-    if(
-      list )
-    {
+    if (list) {
       if (list?.length > 0) {
         for (const element of list) {
           // console.log(element,data,this.compareTwoProduct(element == data));
-  
-          if (this.compareTwoProduct(element , data)) {
-            return true
+
+          if (this.compareTwoProduct(element, data)) {
+            return true;
           }
         }
       }
     }
-    return false
-  }
-
+    return false;
+  };
 
   checkDisable = (combos, id) => {
-    return false
+    return false;
     console.log(combos);
     if (combos.length > 0) {
       for (const element of combos) {
         for (const item of element.products_combo) {
           if (item.product.id == id) {
-            return true
+            return true;
           }
         }
-
       }
     }
-    return false
-  }
+    return false;
+  };
   onSaveProduct = () => {
-    this.props.onSaveProduct(true)
+    this.props.onSaveProduct(true);
     window.$("#modalBonus").modal("hide");
-
-  }
+  };
 
   getistribute = (listDistribute, product) => {
-    var result = []
+    var result = [];
     if (typeof listDistribute == "undefined" || listDistribute.length === 0) {
-      return result
+      return result;
     }
     if (listDistribute.element_distributes) {
       listDistribute.element_distributes.map((element, _index) => {
         if (typeof element.sub_element_distributes != "undefined") {
-          if (listDistribute.element_distributes[0].sub_element_distributes.length > 0) {
-            listDistribute.element_distributes[0].sub_element_distributes.map((sub_element, index) => {
-              const cost_of_capital = listDistribute.element_distributes[_index].sub_element_distributes[index]?.cost_of_capital
-              const stock = listDistribute.element_distributes[_index].sub_element_distributes[index]?.stock
-              result.push({
-
-                "id": product.id,
-                "quantity": 1,
-                "distribute_name": listDistribute.name,
-                "element_distribute_name": element.name,
-                "sub_element_distribute_name": sub_element.name,
-                "sku" :  product.sku,
-                "name" : product.name
-
-
-              })
-
-            })
-          }
-          else {
+          if (
+            listDistribute.element_distributes[0].sub_element_distributes
+              .length > 0
+          ) {
+            listDistribute.element_distributes[0].sub_element_distributes.map(
+              (sub_element, index) => {
+                const cost_of_capital =
+                  listDistribute.element_distributes[_index]
+                    .sub_element_distributes[index]?.cost_of_capital;
+                const stock =
+                  listDistribute.element_distributes[_index]
+                    .sub_element_distributes[index]?.stock;
+                result.push({
+                  id: product.id,
+                  quantity: 1,
+                  distribute_name: listDistribute.name,
+                  element_distribute_name: element.name,
+                  sub_element_distribute_name: sub_element.name,
+                  sku: product.sku,
+                  name: product.name,
+                });
+              }
+            );
+          } else {
             result.push({
-
-              "id": product.id,
-              "quantity": 1,
-              "distribute_name": listDistribute.name,
-              "element_distribute_name": element.name,
-              "sub_element_distribute_name": null,
-              "sku" :  product.sku,
-              "name" : product.name
-
-
-            })
-
-
+              id: product.id,
+              quantity: 1,
+              distribute_name: listDistribute.name,
+              element_distribute_name: element.name,
+              sub_element_distribute_name: null,
+              sku: product.sku,
+              name: product.name,
+            });
           }
         }
-      })
+      });
     }
-    return result
-  }
+    return result;
+  };
 
   getData = (data, listDistribute, id) => {
-    var dataDistribute = this.getistribute(listDistribute, id)
+    var dataDistribute = this.getistribute(listDistribute, id);
     if (dataDistribute.length == 0) {
-      return JSON.stringify(data)
+      return JSON.stringify(data);
+    } else {
+      return JSON.stringify(dataDistribute);
     }
-    else {
-      return JSON.stringify(dataDistribute)
-
-    }
-  }
+  };
 
   showDistribute = (listDistribute, product, list) => {
-    var result = []
+    var result = [];
     if (typeof listDistribute == "undefined" || listDistribute.length === 0) {
-      return result
+      return result;
     }
     if (listDistribute.element_distributes) {
       listDistribute.element_distributes.map((element, _index) => {
         if (typeof element.sub_element_distributes != "undefined") {
-          if (listDistribute.element_distributes[0].sub_element_distributes.length > 0) {
-            listDistribute.element_distributes[0].sub_element_distributes.map((sub_element, index) => {
-              const cost_of_capital = listDistribute.element_distributes[_index].sub_element_distributes[index]?.cost_of_capital
-              const stock = listDistribute.element_distributes[_index].sub_element_distributes[index]?.stock
-              var _data = {
-                "id": product.id,
-                "quantity": 1,
-                "distribute_name": listDistribute.name,
-                "element_distribute_name": element.name,
-                "sub_element_distribute_name": sub_element.name,
-                "sku" :  product.sku,
-                "name" : product.name
+          if (
+            listDistribute.element_distributes[0].sub_element_distributes
+              .length > 0
+          ) {
+            listDistribute.element_distributes[0].sub_element_distributes.map(
+              (sub_element, index) => {
+                const cost_of_capital =
+                  listDistribute.element_distributes[_index]
+                    .sub_element_distributes[index]?.cost_of_capital;
+                const stock =
+                  listDistribute.element_distributes[_index]
+                    .sub_element_distributes[index]?.stock;
+                var _data = {
+                  id: product.id,
+                  quantity: 1,
+                  distribute_name: listDistribute.name,
+                  element_distribute_name: element.name,
+                  sub_element_distribute_name: sub_element.name,
+                  sku: product.sku,
+                  name: product.name,
+                };
+                var checked = this.checkExsit(list, _data);
 
-              }
-              var checked = this.checkExsit(list, _data)
-
-              result.push(
-                <div className='wrap-item hover-product' >
-
-                  {/* <label style={{ color: "#ff8100" }}>&nbsp;Phân loại: </label>
+                result.push(
+                  <div className="wrap-item hover-product">
+                    {/* <label style={{ color: "#ff8100" }}>&nbsp;Phân loại: </label>
                   <div className='name-distribute' >{element.name},{sub_element.name}</div> */}
-                  <div class="form-group">
-                    <div class="form-check">
-                      <input type="checkbox"
-                        // disabled={disaled}
-                        checked={checked}
-                        onChange={this.onChange}
-                        value={JSON.stringify(_data)}
-                        class="form-check-input" id="gridCheck" />
-                      <label class="form-check-label" for="gridCheck">
-                        {element.name},{sub_element.name}                    </label>
+                    <div class="form-group">
+                      <div class="form-check">
+                        <input
+                          type="checkbox"
+                          // disabled={disaled}
+                          checked={checked}
+                          onChange={this.onChange}
+                          value={JSON.stringify(_data)}
+                          class="form-check-input"
+                          id="gridCheck"
+                        />
+                        <label class="form-check-label" for="gridCheck">
+                          {element.name},{sub_element.name}{" "}
+                        </label>
+                      </div>
                     </div>
-
                   </div>
-
-                </div>
-              )
-
-            })
-          }
-          else {
+                );
+              }
+            );
+          } else {
             var _data = {
-              "id": product.id,
-              "quantity": 1,
-              "distribute_name": listDistribute.name,
-              "element_distribute_name": element.name,
-              "sub_element_distribute_name": null,
-              "sku" :  product.sku,
-              "name" : product.name
-
-            }
-            var checked = this.checkExsit(list, _data)
+              id: product.id,
+              quantity: 1,
+              distribute_name: listDistribute.name,
+              element_distribute_name: element.name,
+              sub_element_distribute_name: null,
+              sku: product.sku,
+              name: product.name,
+            };
+            var checked = this.checkExsit(list, _data);
 
             result.push(
-              <div >
-
-
-
-
+              <div>
                 <div class="form-group">
                   <div class="form-check">
-                    <input type="checkbox"
+                    <input
+                      type="checkbox"
                       // disabled={disaled}
                       checked={checked}
                       onChange={this.onChange}
                       value={JSON.stringify(_data)}
-                      class="form-check-input" id="gridCheck" />
+                      class="form-check-input"
+                      id="gridCheck"
+                    />
                     {/* <input class="form-check-input" name="is_set_order_max_point" type="checkbox" id="gridCheck" /> */}
                     <label class="form-check-label" for="gridCheck">
-                      {element.name}                  </label>
+                      {element.name}{" "}
+                    </label>
                   </div>
-
                 </div>
               </div>
-            )
+            );
           }
         }
-      })
+      });
     }
-    return result
-  }
+    return result;
+  };
 
   showData = (products, list, combos) => {
     var result = null;
@@ -255,22 +273,34 @@ class ListProduct extends Component {
     }
     if (products.length > 0) {
       result = products.map((data, index) => {
-
-        var status_name = data.status == 0 ? "Còn hàng" : data.status == 1 ? "Đã ẩn" : data.status == 2 ? "Hết hàng" : null
-        var status = data.status == 0 ? "success" : data.status == 1 ? "secondary" : data.status == 2 ? "danger" : null
+        var status_name =
+          data.status == 0
+            ? "Còn hàng"
+            : data.status == 1
+            ? "Đã ẩn"
+            : data.status == 2
+            ? "Hết hàng"
+            : null;
+        var status =
+          data.status == 0
+            ? "success"
+            : data.status == 1
+            ? "secondary"
+            : data.status == 2
+            ? "danger"
+            : null;
         var _data = {
-          "id": data.id,
-          "quantity": 1,
-          "distribute_name": null,
-          "element_distribute_name": null,
-          "sub_element_distribute_name": null,
-          "sku" :  data.sku,
-          "name" : data.name
-
-        }
-        var checked = this.checkExsit(list, _data)
+          id: data.id,
+          quantity: 1,
+          distribute_name: null,
+          element_distribute_name: null,
+          sub_element_distribute_name: null,
+          sku: data.sku,
+          name: data.name,
+        };
+        var checked = this.checkExsit(list, _data);
         var disaled = this.checkDisable(combos, data.id, list);
-        var background_disable = disaled == true ? "#55b8c3" : "white"
+        var background_disable = disaled == true ? "#55b8c3" : "white";
         const {
           product_discount,
           min_price,
@@ -285,29 +315,36 @@ class ListProduct extends Component {
           status_stock,
           discount,
           historyInventory,
-          distributes
+          distributes,
         } = data;
         let discount_percent = null;
 
         if (product_discount) {
           discount_percent = product_discount.value;
         }
-        const listDistribute = data.inventory?.distributes !== null && data.inventory?.distributes.length > 0 ? data.inventory?.distributes[0] : []
+        const listDistribute =
+          data.inventory?.distributes !== null &&
+          data.inventory?.distributes.length > 0
+            ? data.inventory?.distributes[0]
+            : [];
 
         return (
-          <tr className={disaled == true ? "" : "hover-product"} style={{ background: background_disable }}>
+          <tr
+            className={disaled == true ? "" : "hover-product"}
+            style={{ background: background_disable }}
+          >
             <td>
-
               <div class="checkbox">
                 <label>
-                  <input type="checkbox"
+                  <input
+                    type="checkbox"
                     // disabled={disaled}
                     // checked={checked}
                     onChange={(e) => this.onChange(e, "PARENT")}
-                    value={this.getData(_data, listDistribute, data)} />
+                    value={this.getData(_data, listDistribute, data)}
+                  />
                 </label>
               </div>
-
             </td>
             <td>
               <img
@@ -318,34 +355,42 @@ class ListProduct extends Component {
                 }
                 className="img-responsive"
                 alt="Image"
-                style={{ width: "100%", height: "59px", background: "#0000000d" }}
+                style={{
+                  width: "100%",
+                  height: "59px",
+                  background: "#0000000d",
+                }}
               />
             </td>
             <td>{data.sku}</td>
 
             <td>{data.name}</td>
-            <td>            {this.showDistribute(listDistribute, data,list)}
-            </td>
+            <td> {this.showDistribute(listDistribute, data, list)}</td>
             <td>
-              {product_discount == null &&
-                <div className="eea"
-                >
+              {product_discount == null && (
+                <div className="eea">
                   {min_price === max_price ? (
-                    contactOrNumber(format(
-                      Number(
-                        discount_percent == null
-                          ? min_price
-                          : min_price - min_price * discount_percent * 0.01
+                    contactOrNumber(
+                      format(
+                        Number(
+                          discount_percent == null
+                            ? min_price
+                            : min_price - min_price * discount_percent * 0.01
+                        )
                       )
                     )
-                    )) : distributes && distributes.length == 0 ? contactOrNumber(format(
-                      Number(
-                        discount_percent == null
-                          ? min_price
-                          : min_price - min_price * discount_percent * 0.01
-                      ))) : (
-                    <div className="ae"
-                    >
+                  ) : distributes && distributes.length == 0 ? (
+                    contactOrNumber(
+                      format(
+                        Number(
+                          discount_percent == null
+                            ? min_price
+                            : min_price - min_price * discount_percent * 0.01
+                        )
+                      )
+                    )
+                  ) : (
+                    <div className="ae">
                       {format(
                         Number(
                           discount_percent == null
@@ -364,7 +409,7 @@ class ListProduct extends Component {
                     </div>
                   )}
                 </div>
-              }
+              )}
 
               {product_discount && (
                 <div
@@ -378,9 +423,11 @@ class ListProduct extends Component {
                   ) : (
                     <div className="row e">
                       <div
-                        style={{
-                          // textDecoration: "line-through",
-                        }}
+                        style={
+                          {
+                            // textDecoration: "line-through",
+                          }
+                        }
                       >
                         {format(Number(min_price))}
                         {" - "}
@@ -393,11 +440,6 @@ class ListProduct extends Component {
                 </div>
               )}
             </td>
-
-
-
-
-
           </tr>
         );
       });
@@ -410,8 +452,8 @@ class ListProduct extends Component {
     this.setState({ searchValue: e.target.value });
   };
   passNumPage = (page) => {
-    this.setState({ page: page })
-  }
+    this.setState({ page: page });
+  };
   searchData = (e) => {
     e.preventDefault();
     var { store_code } = this.props;
@@ -421,10 +463,9 @@ class ListProduct extends Component {
     this.props.fetchAllProductV2(store_code, branch_id, 1, params);
   };
 
-
   render() {
-    var { products, store_code, listProducts, combos } = this.props
-    var { searchValue } = this.state
+    var { products, store_code, listProducts, combos } = this.props;
+    var { searchValue } = this.state;
     return (
       <div
         class="modal fade"
@@ -437,22 +478,30 @@ class ListProduct extends Component {
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content" style={{ maxHeight: "630px" }}>
             <div class="modal-header" style={{ background: "white" }}>
-
               <div>
-                <h4 style={{ color: "black", display: "block" }}>Chọn nhóm sản phẩm tặng</h4>
+                <h4 style={{ color: "black", display: "block" }}>
+                  Chọn nhóm sản phẩm tặng
+                </h4>
 
-                <i style={{ color: "red" }}> Những sản phẩm được tô đậm là những sản phẩm đang nằm trong các chương trình khuyến mại khác! Vui lòng xóa nếu muốn thêm vào chương trình này</i>
-
+                <i style={{ color: "red" }}>
+                  {" "}
+                  Những sản phẩm được tô đậm là những sản phẩm đang nằm trong
+                  các chương trình khuyến mại khác! Vui lòng xóa nếu muốn thêm
+                  vào chương trình này
+                </i>
               </div>
 
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
             </div>
             <form style={{ marginTop: "10px" }} onSubmit={this.searchData}>
-              <div
-                class="input-group mb-6"
-                style={{ padding: "0 20px" }}
-              >
+              <div class="input-group mb-6" style={{ padding: "0 20px" }}>
                 <input
                   style={{ maxWidth: "280px", minWidth: "150px" }}
                   type="search"
@@ -468,7 +517,6 @@ class ListProduct extends Component {
                   </button>
                 </div>
               </div>
-
             </form>
             <div class="table-responsive">
               <table class="table table-hover table-border">
@@ -485,19 +533,28 @@ class ListProduct extends Component {
                   </tr>
                 </thead>
 
-                <tbody>{this.showData(products.data, listProducts, combos)}</tbody>
+                <tbody>
+                  {this.showData(products.data, listProducts, combos)}
+                </tbody>
               </table>
             </div>
 
-
-            <div class="group-pagination_flex col-xs-12 col-sm-12 col-md-12 col-lg-12" style={{ display: "flex", justifyContent: "space-between" }}>
-
-              <Pagination style="float-fix" store_code={store_code} products={products} passNumPage={this.passNumPage} limit={this.state.numPage} />
+            <div
+              class="group-pagination_flex col-xs-12 col-sm-12 col-md-12 col-lg-12"
+              style={{ display: "flex", justifyContent: "space-between" }}
+            >
+              <Pagination
+                style="float-fix"
+                store_code={store_code}
+                products={products}
+                passNumPage={this.passNumPage}
+                limit={this.state.numPage}
+              />
               <div style={{ marginTop: "10px" }}>
                 <button
                   style={{
                     border: "1px solid",
-                    marginRight: "10px"
+                    marginRight: "10px",
                   }}
                   type="button"
                   class="btn btn-default"
@@ -505,21 +562,21 @@ class ListProduct extends Component {
                 >
                   Hủy
                 </button>
-                <button style={{ backgroundColor: themeData().backgroundColor }} onClick={this.onSaveProduct} class="btn btn-info">
+                <button
+                  style={{ backgroundColor: themeData().backgroundColor }}
+                  onClick={this.onSaveProduct}
+                  class="btn btn-info"
+                >
                   Xác nhận
                 </button>
               </div>
             </div>
-
-
           </div>
         </div>
       </div>
     );
   }
 }
-
-
 
 const mapDispatchToProps = (dispatch, props) => {
   return {

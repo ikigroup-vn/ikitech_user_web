@@ -74,6 +74,7 @@ export const createGroupCustomer = (store_code, data) => {
                   data: res.data.data,
                 });
               }
+              console.log("hihi: ", res.data);
               dispatch({
                 type: Types.ALERT_UID_STATUS,
                 alert: {

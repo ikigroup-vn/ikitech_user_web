@@ -11,8 +11,8 @@ import * as customerAction from "../../actions/customer";
 import Chat from "../../components/Chat";
 import * as Env from "../../ultis/default";
 import NotAccess from "../../components/Partials/NotAccess";
-import { getQueryParams, setQueryParamInUrl } from "../../ultis/helpers"
-import ModalCreate from "../../components/Customer/ModalCreate"
+import { getQueryParams, setQueryParamInUrl } from "../../ultis/helpers";
+import ModalCreate from "../../components/Customer/ModalCreate";
 import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
 import * as placeAction from "../../actions/place";
 import ModalEdit from "../../components/Customer/ModalEdit";
@@ -27,23 +27,19 @@ class Customer extends Component {
       openModalEdit: false,
 
       id_customer: "",
-      modal: ""
+      modal: "",
     };
   }
 
   openModal = () => {
-    this.setState({ openModal: true })
-  }
+    this.setState({ openModal: true });
+  };
   resetModal = () => {
-    this.setState({ openModal: false })
-
-  }
+    this.setState({ openModal: false });
+  };
   resetModalEdit = () => {
-    this.setState({ openModalEdit: false })
-
-  }
-
-
+    this.setState({ openModalEdit: false });
+  };
 
   handleShowChatBox = (customerId, status) => {
     this.setState({
@@ -79,12 +75,11 @@ class Customer extends Component {
   }
 
   componentDidMount() {
-    setQueryParamInUrl("pag", pag)
-    var pag = getQueryParams("pag") || 1
-
+    setQueryParamInUrl("pag", pag);
+    var pag = getQueryParams("pag") || 1;
 
     this.props.fetchAllCustomer(this.props.match.params.store_code, pag);
-    this.props.fetchPlaceProvince()
+    this.props.fetchPlaceProvince();
 
     this.props.fetchAllCustomer(this.props.match.params.store_code, pag);
     this.props.fetchPlaceProvince();
@@ -92,13 +87,13 @@ class Customer extends Component {
 
   handleSetIdCustomer = (id) => {
     this.setState({
-      id_supplier: id
-    })
-  }
+      id_supplier: id,
+    });
+  };
 
   handleSetInfor = (item) => {
-    this.setState({ modal: item })
-  }
+    this.setState({ modal: item });
+  };
 
   closeChatBox = (status) => {
     this.setState({
@@ -106,13 +101,13 @@ class Customer extends Component {
     });
   };
   getPaginate = (num) => {
-    this.setState({ paginate: num })
-  }
+    this.setState({ paginate: num });
+  };
   render() {
     var { customer, chat, customers } = this.props;
     var customerImg =
       typeof customer.avatar_image == "undefined" ||
-        customer.avatar_image == null
+      customer.avatar_image == null
         ? Env.IMG_NOT_FOUND
         : customer.avatar_image;
     var customerId =
@@ -125,15 +120,39 @@ class Customer extends Component {
         : customer.name;
 
     var { store_code } = this.props.match.params;
-    var { showChatBox, isShow, chat_allow, searchValue, paginate, openModal, modal, openModalEdit } = this.state;
-    var { wards, district, province } = this.props
+    var {
+      showChatBox,
+      isShow,
+      chat_allow,
+      searchValue,
+      paginate,
+      openModal,
+      modal,
+      openModalEdit,
+    } = this.state;
+    var { wards, district, province } = this.props;
 
     if (this.props.auth) {
       return (
         <div id="wrapper">
           <Sidebar store_code={store_code} />
-          <ModalCreate resetModal={this.resetModal} openModal={openModal} store_code={store_code} wards={wards} district={district} province={province} />
-          <ModalEdit openModalEdit={openModalEdit} resetModal={this.resetModalEdit} store_code={store_code} wards={wards} district={district} province={province} modal={modal} />
+          <ModalCreate
+            resetModal={this.resetModal}
+            openModal={openModal}
+            store_code={store_code}
+            wards={wards}
+            district={district}
+            province={province}
+          />
+          <ModalEdit
+            openModalEdit={openModalEdit}
+            resetModal={this.resetModalEdit}
+            store_code={store_code}
+            wards={wards}
+            district={district}
+            province={province}
+            modal={modal}
+          />
 
           <div className="col-10 col-10-wrapper">
             <div id="content-wrapper" className="d-flex flex-column">
