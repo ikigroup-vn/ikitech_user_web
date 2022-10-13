@@ -54,7 +54,7 @@ class Form extends Component {
     }
     if (group_type_id === null && nextProps.groupCustomer.length > 0) {
       this.setState({
-        group_type_id: nextProps.groupCustomer[0].id,
+        group_type_id: -1,
         agency_type_id: -1,
       });
     }
@@ -455,6 +455,7 @@ class Form extends Component {
                   name="group_type_id"
                   class="form-control"
                 >
+                  <option value={-1}>--- Chọn nhóm khách hàng ---</option>
                   {groupCustomer.length > 0 &&
                     groupCustomer.map((group) => {
                       return (

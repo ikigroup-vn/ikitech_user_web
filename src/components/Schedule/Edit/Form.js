@@ -305,6 +305,7 @@ class Form extends Component {
       agency_type_id,
       group_type_id,
     } = this.state;
+
     var { type_action, product, category, blog, categoryBlog, link_url } =
       this.state;
     var {
@@ -412,6 +413,7 @@ class Form extends Component {
                   class="form-control"
                   style={{ marginTop: "10px" }}
                 >
+                  <option value={-1}>--- Chọn cấp đại lý ---</option>
                   <option value={0}>Tất cả</option>
                   {types.map((v) => {
                     return <option value={v.id}>{v.name}</option>;
@@ -426,6 +428,7 @@ class Form extends Component {
                   class="form-control"
                   style={{ marginTop: "10px" }}
                 >
+                  <option value={-1}>--- Chọn nhóm khách hàng ---</option>
                   {groupCustomer.length > 0 &&
                     groupCustomer.map((group) => {
                       return (

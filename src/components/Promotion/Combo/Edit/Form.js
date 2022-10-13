@@ -343,6 +343,7 @@ class Form extends Component {
       displayError,
       isLoading,
     } = this.state;
+
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
     var { products, store_code, combos, combo, types, groupCustomer } =
       this.props;
@@ -544,6 +545,7 @@ class Form extends Component {
                       name="group_type_id"
                       class="form-control"
                     >
+                      <option value={-1}>--- Chọn nhóm khách hàng ---</option>
                       {groupCustomer.length > 0 &&
                         groupCustomer.map((group) => {
                           return (

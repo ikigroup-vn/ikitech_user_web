@@ -60,7 +60,7 @@ class Form extends Component {
     }
     if (group_type_id === null && nextProps.groupCustomer.length > 0) {
       this.setState({
-        group_type_id: nextProps.groupCustomer[0].id,
+        group_type_id: -1,
         agency_type_id: -1,
       });
     }
@@ -291,8 +291,7 @@ class Form extends Component {
       agency_type_id,
       group_type_id,
     } = this.state;
-    console.log("Form ~ render ~ agency_type_id", agency_type_id);
-    console.log("Form ~ render ~ group_type_id", group_type_id);
+
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
     var { products, store_code, combos, types, groupCustomer } = this.props;
     var type_discount_default = txtDiscoutType == "0" ? "show" : "hide";
@@ -471,6 +470,7 @@ class Form extends Component {
                       name="group_type_id"
                       class="form-control"
                     >
+                      <option value={-1}>--- Chọn nhóm khách hàng ---</option>
                       {groupCustomer.length > 0 &&
                         groupCustomer.map((group) => {
                           return (
