@@ -5,7 +5,7 @@ git pull
 git checkout dev
 git merge son
 git add .
-git commit -m "Merge son"
+git commit -m "Merge huy"
 git push
 npm run build
 rm -rf ../ikitech_user_build/*
