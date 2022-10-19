@@ -221,7 +221,7 @@ class ModalActionChangeGroupCustomer extends Component {
             newConditionItems.push({
               ...conditionItem,
               [name]: value,
-              comparisonExpressionGroupCustomer: expressions[2].value,
+              comparisonExpressionGroupCustomer: expressions[0].value,
               valueCompareGroupCustomer: genders[0].value,
             });
           } else {

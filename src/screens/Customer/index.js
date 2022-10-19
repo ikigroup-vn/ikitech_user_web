@@ -11,11 +11,115 @@ import * as customerAction from "../../actions/customer";
 import Chat from "../../components/Chat";
 import * as Env from "../../ultis/default";
 import NotAccess from "../../components/Partials/NotAccess";
-import { getQueryParams, setQueryParamInUrl } from "../../ultis/helpers";
+import {
+  formatNumberV2,
+  getQueryParams,
+  setQueryParamInUrl,
+} from "../../ultis/helpers";
 import ModalCreate from "../../components/Customer/ModalCreate";
 import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
 import * as placeAction from "../../actions/place";
 import ModalEdit from "../../components/Customer/ModalEdit";
+import SidebarFilterCustomer from "../../components/Customer/SidebarFilterCustomer";
+import * as AgencyAction from "../../actions/agency";
+import styled from "styled-components";
+import { options } from "../../ultis/groupCustomer/options";
+import * as Types from "../../constants/ActionType";
+import { genders } from "../../ultis/groupCustomer/genders";
+
+const CustomerStyles = styled.div`
+  .filter-search-customer {
+    position: relative;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.35rem;
+    border: 1px solid #d1d3e2;
+    border-right-color: transparent;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+    font-size: 15px;
+    &:hover .filter-search-customer-dropdown {
+      opacity: 1;
+      visibility: visible;
+    }
+    span:last-of-type {
+      margin-left: 5px;
+      i {
+        margin-top: -5px;
+      }
+    }
+    .filter-search-customer-count {
+      font-size: 14px;
+    }
+    .filter-search-customer-dropdown {
+      position: absolute;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+      top: calc(100% + 10px);
+      left: 0;
+      width: max-content;
+      border-radius: 6px;
+      box-shadow: 0 0 6px 2px rgba(0, 0, 0, 0.1);
+      color: #2d3436;
+      background-color: white;
+      padding: 0.375rem 0.75rem;
+      font-size: 14px;
+      width: 450px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      &::before {
+        content: "";
+        position: absolute;
+        z-index: 20;
+        top: -7px;
+        left: 10%;
+        width: 16px;
+        background-color: white;
+        transform: rotate(45deg);
+        height: 16px;
+        border-radius: 2px;
+        border: 1px solid transparent;
+        border-left-color: rgb(218, 218, 225);
+        border-top-color: rgb(218, 218, 225);
+      }
+      p {
+        display: block;
+        width: 100%;
+        margin-bottom: 10px;
+      }
+      .filter-search-customer-dropdown-btnFilter {
+        margin: 10px 0;
+        display: block;
+        width: 100%;
+        button {
+          padding: 0.375rem 0.75rem;
+          border-radius: 0.35rem;
+        }
+      }
+      .filter-search-customer-dropdown-item {
+        display: inline-block;
+        padding: 6px 12px;
+        border: 1px solid #d1d3e2;
+        overflow: hidden;
+        border-radius: 6px;
+        .filter-search-customer-dropdown-item-btnDelete {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  .btn-filter-search {
+    color: white;
+    margin-left: 20px;
+    padding: 0.375rem 0.75rem;
+    border-radius: 0.35rem;
+    cursor: pointer;
+  }
+`;
 class Customer extends Component {
   constructor(props) {
     super(props);
@@ -25,12 +129,11 @@ class Customer extends Component {
       paginate: 1,
       openModal: false,
       openModalEdit: false,
-
       id_customer: "",
       modal: "",
+      showFilterSearch: false,
     };
   }
-
   openModal = () => {
     this.setState({ openModal: true });
   };
@@ -56,9 +159,10 @@ class Customer extends Component {
   };
   searchData = (e) => {
     e.preventDefault();
-    var { store_code } = this.props.match.params;
-    var { searchValue } = this.state;
-    var params = `&search=${searchValue}`;
+    const { store_code } = this.props.match.params;
+    const { searchValue } = this.state;
+    const jsonListFilter = localStorage.getItem("optionsFilter");
+    var params = `&search=${searchValue}&json_list_filter=${jsonListFilter}`;
     this.props.fetchAllCustomer(store_code, 1, params);
   };
   componentWillReceiveProps(nextProps) {
@@ -80,11 +184,26 @@ class Customer extends Component {
 
     this.props.fetchAllCustomer(this.props.match.params.store_code, pag);
     this.props.fetchPlaceProvince();
-
-    this.props.fetchAllCustomer(this.props.match.params.store_code, pag);
-    this.props.fetchPlaceProvince();
+    this.props.fetchAllAgencyType(this.props.match.params.store_code);
   }
 
+  setShowFilterSearch = (isShowed) => {
+    this.setState({
+      showFilterSearch: isShowed,
+    });
+  };
+
+  handleShowFilterSearch = (e) => {
+    const sidebarFilter = document.querySelector(".sidebar-filter");
+    const btnFilterSearch = document.querySelector(".btn-filter-search");
+    if (
+      sidebarFilter.contains(e.target) ||
+      btnFilterSearch.contains(e.target)
+    ) {
+      return;
+    }
+    this.setShowFilterSearch(false);
+  };
   handleSetIdCustomer = (id) => {
     this.setState({
       id_supplier: id,
@@ -102,6 +221,109 @@ class Customer extends Component {
   };
   getPaginate = (num) => {
     this.setState({ paginate: num });
+  };
+  handleShowTypeCondition = () => {
+    const newOptions = [];
+    const optionFilteredCustomer =
+      JSON.parse(localStorage.getItem("optionsFilter")) || [];
+    options.forEach((option) => {
+      optionFilteredCustomer.forEach((optionFiter) => {
+        if (option.id === Number(optionFiter.type_compare)) {
+          newOptions.push({
+            id: option.id,
+            type_compare: option.title,
+            comparison_expression: optionFiter.comparison_expression,
+            value_compare: this.handleFilterValueCompare(
+              Number(optionFiter.type_compare),
+              optionFiter.value_compare
+            ),
+          });
+          return;
+        }
+        return;
+      });
+    });
+    return newOptions.map((option) => (
+      <div key={option.id} className="filter-search-customer-dropdown-item">
+        {option.type_compare} {option.comparison_expression}{" "}
+        {option.value_compare}{" "}
+        <span
+          className="filter-search-customer-dropdown-item-btnDelete"
+          onClick={() => this.handleDeleteOptionFilterById(option.id)}
+        >
+          <i className="fa fa-times"></i>
+        </span>
+      </div>
+    ));
+  };
+  handleFilterValueCompare = (type, value) => {
+    var genderFilter = [];
+    var province = [];
+    var typeAgencySelected = [];
+
+    if (type === Types.TYPE_COMPARE_SEX) {
+      genderFilter = genders.filter(
+        (gender) => Number(gender.value) === Number(value)
+      );
+    }
+    if (type === Types.TYPE_COMPARE_PROVINCE) {
+      province = this.props.province.filter(
+        (province) => province.id === Number(value)
+      );
+    }
+    if (type === Types.TYPE_COMPARE_AGENCY) {
+      if (Number(value) === 0) {
+        typeAgencySelected = [{ name: "Tất cả" }];
+      } else {
+        typeAgencySelected = this.props.types.filter((typeAgency) => {
+          return typeAgency.id === Number(value);
+        });
+      }
+    }
+    const valueConvert =
+      type === Types.TYPE_COMPARE_TOTAL_FINAL_COMPLETED ||
+      type === Types.TYPE_COMPARE_TOTAL_FINAL_WITH_REFUND ||
+      type === Types.TYPE_COMPARE_POINT
+        ? `${value}đ`
+        : type === Types.TYPE_COMPARE_COUNT_ORDER
+        ? `${value}`
+        : type === Types.TYPE_COMPARE_SEX
+        ? `${genderFilter[0].type}`
+        : type === Types.TYPE_COMPARE_PROVINCE
+        ? province[0]?.name
+        : type === Types.TYPE_COMPARE_CTV
+        ? "Tất cả"
+        : type === Types.TYPE_COMPARE_AGENCY
+        ? typeAgencySelected[0].name
+        : value;
+    return valueConvert;
+  };
+  handleDeleteOptionFilterById = (idOptionType) => {
+    var { store_code } = this.props.match.params;
+    var { searchValue } = this.state;
+    const newOptionConditionFormat = [];
+
+    const optionFilteredCustomer =
+      JSON.parse(localStorage.getItem("optionsFilter")) || [];
+    const newOptionCondition = optionFilteredCustomer.filter(
+      (option) => Number(option.type_compare) !== Number(idOptionType)
+    );
+
+    newOptionCondition.forEach((option) => {
+      newOptionConditionFormat.push({
+        type_compare: option.type_compare,
+        comparison_expression: option.comparison_expression,
+        value_compare: option.value_compare.toString().replace(/\./g, ""),
+      });
+    });
+    this.setState({
+      optionsFilter: newOptionCondition,
+    });
+    var params = `&search=${searchValue}&json_list_filter=${JSON.stringify(
+      newOptionConditionFormat
+    )}`;
+    this.props.fetchAllCustomer(store_code, 1, params);
+    localStorage.setItem("optionsFilter", JSON.stringify(newOptionCondition));
   };
   render() {
     var { customer, chat, customers } = this.props;
@@ -129,12 +351,13 @@ class Customer extends Component {
       openModal,
       modal,
       openModalEdit,
+      showFilterSearch,
     } = this.state;
-    var { wards, district, province } = this.props;
+    const { wards, district, province, types } = this.props;
 
     if (this.props.auth) {
       return (
-        <div id="wrapper">
+        <CustomerStyles id="wrapper">
           <Sidebar store_code={store_code} />
           <ModalCreate
             resetModal={this.resetModal}
@@ -153,7 +376,6 @@ class Customer extends Component {
             province={province}
             modal={modal}
           />
-
           <div className="col-10 col-10-wrapper">
             <div id="content-wrapper" className="d-flex flex-column">
               <div id="content">
@@ -199,6 +421,38 @@ class Customer extends Component {
                             class="input-group mb-6"
                             style={{ marginTop: "10px" }}
                           >
+                            <div class="input-group-append filter-search-customer">
+                              {JSON.parse(localStorage.getItem("optionsFilter"))
+                                ?.length > 0 && (
+                                <span className="filter-search-customer-count">
+                                  {`(${
+                                    JSON.parse(
+                                      localStorage.getItem("optionsFilter")
+                                    ).length
+                                  })`}
+                                </span>
+                              )}
+                              <span>Lọc khách hàng</span>
+                              <span>
+                                <i class="fa fa-sort-down"></i>
+                              </span>
+                              <div className="filter-search-customer-dropdown">
+                                <p>Hiển thị khách hàng theo:</p>
+                                {this.handleShowTypeCondition()}
+                                <div className="filter-search-customer-dropdown-btnFilter">
+                                  <div
+                                    className="btn-primary btn"
+                                    onClick={() =>
+                                      this.setShowFilterSearch(
+                                        !this.state.showFilterSearch
+                                      )
+                                    }
+                                  >
+                                    Bộ lọc
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                             <input
                               style={{ maxWidth: "400px" }}
                               type="search"
@@ -209,9 +463,26 @@ class Customer extends Component {
                               placeholder="Tìm khách hàng"
                             />
                             <div class="input-group-append">
-                              <button class="btn btn-primary" type="submit">
+                              <button
+                                class="btn btn-primary"
+                                type="submit"
+                                style={{
+                                  borderTopRightRadius: "0.375rem",
+                                  borderBottomRightRadius: "0.375rem",
+                                }}
+                              >
                                 <i class="fa fa-search"></i>
                               </button>
+                            </div>
+                            <div
+                              className="btn-filter-search btn-primary"
+                              onClick={() =>
+                                this.setShowFilterSearch(
+                                  !this.state.showFilterSearch
+                                )
+                              }
+                            >
+                              Bộ lọc
                             </div>
                           </div>
                         </form>
@@ -255,7 +526,16 @@ class Customer extends Component {
               showChatBox={showChatBox}
             ></Chat>
           </div>
-        </div>
+          <SidebarFilterCustomer
+            showFilterSearch={showFilterSearch}
+            setShowFilterSearch={this.setShowFilterSearch}
+            types={types}
+            province={province}
+            searchValue={searchValue}
+            store_code={store_code}
+            fetchAllCustomer={this.props.fetchAllCustomer}
+          ></SidebarFilterCustomer>
+        </CustomerStyles>
       );
     } else if (this.props.auth === false) {
       return <Redirect to="/login" />;
@@ -275,6 +555,7 @@ const mapStateToProps = (state) => {
     wards: state.placeReducers.wards,
     province: state.placeReducers.province,
     district: state.placeReducers.district,
+    types: state.agencyReducers.agency.allAgencyType,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -290,6 +571,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchPlaceProvince: () => {
       dispatch(placeAction.fetchPlaceProvince());
+    },
+    fetchAllAgencyType: (store_code) => {
+      dispatch(AgencyAction.fetchAllAgencyType(store_code));
     },
   };
 };

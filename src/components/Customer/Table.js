@@ -46,12 +46,17 @@ class Table extends Component {
             className="hover-product"
             onClick={(e) => this.changePage(store_code, data.id, e)}
           >
-            <td>{(getQueryParams("pag") - 1) * 20 + index + 1}</td>
+            <td>{(this.props.paginate - 1) * 20 + index + 1}</td>
 
             <td>{data.name}</td>
             <td>{data.phone_number}</td>
 
             <td>{data.email == null ? "Chưa cập nhật" : data.email}</td>
+            <td>
+              {data.province_name == null
+                ? "Chưa cập nhật"
+                : data.province_name}
+            </td>
             <td>
               {data.points ? new Intl.NumberFormat().format(data.points) : 0}
             </td>
@@ -139,6 +144,7 @@ class Table extends Component {
 
               <th>Số điện thoại</th>
               <th>Gmail</th>
+              <th>Tỉnh / Thành phố</th>
               <th>Xu</th>
               <th>Số nợ hiện tại</th>
 

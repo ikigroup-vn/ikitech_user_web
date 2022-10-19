@@ -53,8 +53,8 @@ class Form extends Component {
     const { groupCustomer } = nextProps;
     if (group_type_id === null && groupCustomer.length > 0) {
       this.setState({
-        group_type_id: groupCustomer[0].id,
-        agency_type_id: 0,
+        group_type_id: -1,
+        agency_type_id: -1,
       });
     }
     return true;
@@ -362,6 +362,7 @@ class Form extends Component {
                   class="form-control"
                   style={{ marginTop: "10px" }}
                 >
+                  <option value={-1}>--- Chọn cấp đại lý ---</option>
                   <option value={0}>Tất cả</option>
                   {types.map((v) => {
                     return (
@@ -380,6 +381,7 @@ class Form extends Component {
                   class="form-control"
                   style={{ marginTop: "10px" }}
                 >
+                  <option value={-1}>--- Chọn nhóm khách hàng ---</option>
                   {groupCustomer.length > 0 &&
                     groupCustomer.map((group) => {
                       return (

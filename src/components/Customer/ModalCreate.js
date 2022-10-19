@@ -292,7 +292,6 @@ class ModalCreate extends Component {
     var isFemail = txtSex == "2" ? true : false;
     var isAnother = txtSex == "0" ? true : false;
 
-    console.log(isEmail(txtEmail_branch), isEmpty());
     return (
       <>
         {this.state.status && (
