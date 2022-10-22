@@ -50,7 +50,7 @@ class Footer extends Component {
                         </td>
 
                         <td>
-                            {bill.updated_at}
+                            {bill.created_at}
                         </td>
 
                     </tr>
