@@ -93,14 +93,14 @@ class Product extends Component {
   componentDidUpdate() {
     if (this.state.isLoading != true && typeof this.props.permission.product_list != "undefined") {
       var permissions = this.props.permission
-      var insert = permissions.product_add
-      var update = permissions.product_update
-      var _delete = permissions.product_remove_hide
-      var _import = permissions.product_import_from_exel
-      var _export = permissions.product_export_to_exel
-      var ecommerce = permissions.product_ecommerce
+      var insert =  true
+      var update = true
+      var _delete = true
+      var _import = true
+      var _export = true
+      var ecommerce = true
 
-      var isShow = permissions.product_list
+      var isShow =  true
 
 
       this.setState({ isLoading: true, insert, update, _delete, _import, _export, isShow , ecommerce })
