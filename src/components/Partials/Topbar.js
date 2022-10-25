@@ -267,21 +267,21 @@ class Topbar extends Component {
                   }}>
 
                     {badges != null && badges.domain_customer != null &&
-                    
+
                       <div>
-                         <i
-                        class="fas fa-globe"
-                        style={{
-                          marginRight: "10px",
-                          marginTop: "23px",
-                          fontSize: "20px",
-                          color: "rgb(12 124 236)",
-                        }}
-                      ></i>
+                        <i
+                          class="fas fa-globe"
+                          style={{
+                            marginRight: "10px",
+                            marginTop: "23px",
+                            fontSize: "20px",
+                            color: "rgb(12 124 236)",
+                          }}
+                        ></i>
 
                         Web mua hàng:
-                       
-                        <a style={{marginRight:15, marginLeft:5}} href={badges.domain_customer} target="_blank">{badges.domain_customer}</a>
+
+                        <a style={{ marginRight: 15, marginLeft: 5 }} href={badges.domain_customer} target="_blank">{badges.domain_customer.replace("https://", "").replace("http://", "")}</a>
 
                       </div>
                     }
