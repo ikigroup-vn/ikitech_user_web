@@ -186,7 +186,7 @@ class Topbar extends Component {
 
   render() {
     var chooseStore = this.props.isHome ? "hide" : "show";
-    var { user, store_code, stores, store, branchStore } = this.props;
+    var { user, store_code, stores, store, branchStore, badges } = this.props;
     var { isLoadNotification, txtBranch, isShow } = this.state;
     var stores = typeof stores == "undefined" ? [] : stores;
     var branchStore = typeof branchStore == "undefined" ? [] : branchStore;
@@ -196,8 +196,8 @@ class Topbar extends Component {
         : user.name;
     var image =
       typeof user.avatar_image == "undefined" ||
-      user.avatar_image == "" ||
-      user.avatar_image == null
+        user.avatar_image == "" ||
+        user.avatar_image == null
         ? Env.IMG_NOT_AVATAR
         : user.avatar_image;
     var disable = typeof this.props.isHome == "undefined" ? "show" : "hide";
@@ -259,18 +259,46 @@ class Topbar extends Component {
                 {typeof isShow == "undefined" ? (
                   <div></div>
                 ) : isShow == true ? (
-                  <Link className="show-store" to={`/home`}>
-                    <i
-                      class="fas fa-store"
-                      style={{
-                        marginRight: "10px",
-                        marginTop: "23px",
-                        fontSize: "20px",
-                        color: "#ec0c38",
-                      }}
-                    ></i>
-                    {stores?.length > 0 && this.getNameBranch(stores)}
-                  </Link>
+
+                  <div style={{
+                    display: "flex",
+                    alignItems: "flex-end",
+                    alignContent: "center",
+                  }}>
+
+                    {badges != null && badges.domain_customer != null &&
+                    
+                      <div>
+                         <i
+                        class="fas fa-globe"
+                        style={{
+                          marginRight: "10px",
+                          marginTop: "23px",
+                          fontSize: "20px",
+                          color: "rgb(12 124 236)",
+                        }}
+                      ></i>
+
+                        Web mua hàng:
+                       
+                        <a style={{marginRight:15, marginLeft:5}} href={badges.domain_customer} target="_blank">{badges.domain_customer}</a>
+
+                      </div>
+                    }
+
+                    <Link className="show-store" to={`/home`}>
+                      <i
+                        class="fas fa-store"
+                        style={{
+                          marginRight: "10px",
+                          marginTop: "23px",
+                          fontSize: "20px",
+                          color: "#ec0c38",
+                        }}
+                      ></i>
+                      {stores?.length > 0 && this.getNameBranch(stores)}
+                    </Link>
+                  </div>
                 ) : (
                   <a className="show-store">
                     <i
@@ -288,6 +316,7 @@ class Topbar extends Component {
               </li>
 
               <div className="topbar-divider d-none d-sm-block"></div>
+
 
               <li className="nav-item dropdown no-arrow">
                 <a
@@ -340,8 +369,8 @@ class Topbar extends Component {
               )}
             </ul>
           </nav>
-        </div>
-      </React.Fragment>
+        </div >
+      </React.Fragment >
     );
   }
 }
@@ -354,6 +383,7 @@ const mapStateToProps = (state) => {
     branchStore: state.storeReducers.store.branchStore,
     currentBranch: state.branchReducers.branch.currentBranch,
     permission: state.authReducers.permission.data,
+    badges: state.badgeReducers.allBadge,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {

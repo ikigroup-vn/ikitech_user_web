@@ -40,7 +40,7 @@ class ListStore extends Component {
                         <div class="card list-group-item list-group-item-action list-group-item-light" 
                         style={{ border: "1px solid #8e8a8a", margin: "10px 0" }} 
                         onClick={()=>this.handleSetbranch(item.id , item.store_code)}>
-                            <Link to={`/`}>
+                            <a href={`/`}>
                                 <div class="card-body" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0px" }}>
                                     <div className='wrap-list' style={{ display: "flex", alignItems: "center" }}>
                                         <div className='img-list'>
@@ -72,7 +72,7 @@ class ListStore extends Component {
                                         </button>
                                     </div>
                                 </div>
-                            </Link>
+                            </a>
                         </div>
                     )
                 })}

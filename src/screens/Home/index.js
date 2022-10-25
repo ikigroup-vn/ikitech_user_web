@@ -57,6 +57,7 @@ class Home extends Component {
   }
   render() {
     var { isShow } = this.state
+  
     console.log(this.props.auth)
     if (this.props.auth) {
       return (
