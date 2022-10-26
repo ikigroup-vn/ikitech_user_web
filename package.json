@@ -16,7 +16,6 @@
     "axios": "^0.19.2",
     "chart.js": "2.9.4",
     "ckeditor4-react": "^1.4.2",
-    "compressorjs": "^1.0.7",
     "datatables.net-dt": "^1.1.0",
     "dotenv": "^10.0.0",
     "draft-js": "0.11.7",

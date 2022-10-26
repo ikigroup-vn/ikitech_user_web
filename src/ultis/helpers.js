@@ -1,5 +1,4 @@
 import moment from "moment";
-import Compressor from "compressorjs";
 import * as Config from "../constants/Config";
 import Resizer from "react-image-file-resizer";
 import getChannel, { IKITECH, IKIPOS } from "./channel";
@@ -74,8 +73,8 @@ export const compressed = (file, maxWitdh = 1024, maxHeight = 1024) =>
   new Promise((resolve) => {
     Resizer.imageFileResizer(
       file,
-      maxWitdh <= 0 ? 1024 : maxWitdh,
-      maxHeight <= 0 ? 1024 : maxHeight,
+      maxWitdh <= 0 ? 2048 : maxWitdh,
+      maxHeight <= 0 ? 2048 : maxHeight,
       "WEBP",
       100,
       0,
