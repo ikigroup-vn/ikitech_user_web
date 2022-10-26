@@ -1,14 +1,12 @@
 import React, { Component } from "react";
 import * as themeAction from "../../../actions/theme";
 import { connect } from "react-redux";
+import styled from "styled-components";
 
-const Hover = ({ onHover, children }) => (
-  <div className="hover">
-    <div className="hover__no-hover">{children}</div>
-    <div className="hover__hover">{onHover}</div>
-  </div>
-)
 
+
+
+const ItemThemeStyles = styled.div``
 
 class ItemTheme extends Component {
   constructor(props) {
@@ -67,7 +65,7 @@ class ItemTheme extends Component {
         : [];
 
     return (
-      <div
+      <ItemThemeStyles
         onMouseEnter={() => {
 
           this.onChangeShowButton(true)
@@ -92,6 +90,7 @@ class ItemTheme extends Component {
             position: "relative",
             margin: "auto",
             justifyContent: "center",
+            width: "100%"
           }}>
             <img
               style={{ display: "block", objectFit: "cover" }}
@@ -166,7 +165,9 @@ class ItemTheme extends Component {
 
               }
             </div>
-
+              <p className="theme__title">
+                {v.name}
+              </p>
             {home_page_type === v.index && <a onClick={this.props.goBack} class="ahef" style={{
 
             }}><span>Tùy chỉnh</span></a>}
@@ -174,7 +175,7 @@ class ItemTheme extends Component {
           </div>
 
         </div>
-      </div>
+      </ItemThemeStyles>
     );
   }
 }
