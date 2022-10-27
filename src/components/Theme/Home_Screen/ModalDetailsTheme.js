@@ -169,6 +169,7 @@ class ModalDetailsTheme extends Component {
                 <a
                   className="btn btn-primary btn-sm"
                   href={themeInfo.demo_link}
+                  target="_blank"
                 >
                   Xem Demo
                 </a>
