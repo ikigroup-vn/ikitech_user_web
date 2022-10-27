@@ -2,6 +2,7 @@ import { Component } from "react";
 import ReactDOM from "react-dom";
 import styled from "styled-components";
 import themeData from "../../../ultis/theme_data";
+
 const ModalDetailsThemeStyles = styled.div`
   position: fixed;
   z-index: 1100;
@@ -24,7 +25,7 @@ const ModalDetailsThemeStyles = styled.div`
     position: absolute;
     z-index: 1102;
     width: 1000px;
-    height: 80%;
+    height: 580px;
     background-color: white;
     border-radius: 10px;
     animation: fadeDownAnimation 0.8s linear 1;
@@ -32,7 +33,7 @@ const ModalDetailsThemeStyles = styled.div`
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 20px 15px 30px;
+      padding: 20px 20px 30px;
       span {
         width: 24px;
         height: 24px;
@@ -42,6 +43,44 @@ const ModalDetailsThemeStyles = styled.div`
           &:hover {
             transform: scale(1.05);
             color: #34495e;
+          }
+        }
+      }
+    }
+    .modal-theme__body {
+      display: flex;
+      padding: 0 20px;
+      .modal-theme__left {
+        .modal-theme__description {
+          margin-bottom: 10px;
+        }
+        .modal-theme__btn {
+          margin-bottom: 30px;
+          display: flex;
+          column-gap: 20px;
+        }
+        .modal-theme__bannerType {
+          margin-bottom: 5px;
+          span {
+            font-weight: 600;
+          }
+        }
+        .modal-theme__bannerSize {
+          span {
+            font-weight: 600;
+          }
+        }
+      }
+      .modal-theme__right {
+        width: 530px;
+        flex-shrink: 0;
+        .modal-theme__img {
+          width: 100%;
+          height: 480px;
+          overflow: auto;
+          img {
+            border-radius: 0 !important;
+            width: 100%;
           }
         }
       }
@@ -81,9 +120,13 @@ class ModalDetailsTheme extends Component {
     super(props);
     this.state = {};
   }
+
+  handleChooseTheme = (themeInfo) => {
+    this.props.chooseTheme(themeInfo);
+    this.props.setShowModalDetailsTheme(false);
+  };
   render() {
     const { themeInfo } = this.props;
-    console.log("ModalDetailsTheme ~ themeInfo", themeInfo);
     return ReactDOM.createPortal(
       <ModalDetailsThemeStyles className="modal-theme">
         <div
@@ -113,10 +156,35 @@ class ModalDetailsTheme extends Component {
           </div>
           <div className="modal-theme__body">
             <div className="modal-theme__left">
-              <p>{themeInfo.description}</p>
+              <p className="modal-theme__description">
+                {themeInfo.description}
+              </p>
+              <div className="modal-theme__btn">
+                <button
+                  className="btn btn-success btn-sm"
+                  onClick={() => this.handleChooseTheme(themeInfo)}
+                >
+                  Chọn
+                </button>
+                <a
+                  className="btn btn-primary btn-sm"
+                  href={themeInfo.demo_link}
+                >
+                  Xem Demo
+                </a>
+              </div>
+              <p className="modal-theme__bannerType">
+                <span>Loại banner: </span> {themeInfo.banner_type}
+              </p>
+              <p className="modal-theme__bannerSize">
+                <span>Tỷ lệ kích thước: </span>
+                {themeInfo.banner_width} x {themeInfo.banner_height} (px)
+              </p>
             </div>
-            <div className="modal-theme__right" width="640px">
-              <div className="modal-theme__img"></div>
+            <div className="modal-theme__right">
+              <div className="modal-theme__img">
+                <img src={themeInfo.theme}></img>
+              </div>
             </div>
           </div>
         </div>

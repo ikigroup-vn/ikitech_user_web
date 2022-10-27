@@ -18,6 +18,9 @@ const ItemThemeStyles = styled.div`
         padding: 10px;
         position: relative;
         border-top: 1px solid rgba(0, 0, 0, 0.07);
+        background-color: #fafafa;
+        font-weight: 600;
+        white-space: nowrap;
         .theme__title-actived {
           position: absolute;
           padding: 0 10px;
@@ -31,11 +34,20 @@ const ItemThemeStyles = styled.div`
           justify-content: space-between;
           align-items: center;
           transition: all 0.3s ease-in;
+          & > span {
+            white-space: pre-wrap;
+          }
           .theme__title__btnActive {
             padding: 4px 10px;
             background-color: #2980b9;
             border-radius: 5px;
           }
+        }
+      }
+      .btnTheme {
+        button {
+          background-color: rgba(0, 0, 0, 0.8);
+          color: white;
         }
       }
     }
@@ -129,10 +141,15 @@ class ItemTheme extends Component {
             }}
           >
             <img
-              style={{ display: "block", objectFit: "cover" }}
+              style={{
+                display: "block",
+                objectFit: "cover",
+                objectPosition: "top",
+              }}
               src={v.theme}
               width="100%"
               height={200}
+              loading="lazy"
               onMouseEnter={() => {
                 this.onChangeShowButton(true);
               }}
@@ -153,12 +170,12 @@ class ItemTheme extends Component {
               }}
             >
               {show_button == true && (
-                <div style={{ display: "flex " }}>
+                <div style={{ display: "flex " }} className="btnTheme">
                   <button
                     onClick={() => this.chooseTheme(v)}
                     style={{ margin: "10px auto" }}
                     type="button"
-                    class={`btn btn-primary btn-sm ${
+                    className={`btn  btn-sm ${
                       home_page_type !== v.index ? "show" : "hide"
                     }`}
                   >
@@ -170,7 +187,7 @@ class ItemTheme extends Component {
                     <button
                       style={{ margin: "10px auto" }}
                       type="button"
-                      class={`btn btn-primary btn-sm ${
+                      className={`btn  btn-sm ${
                         home_page_type !== v.index ? "show" : "hide"
                       }`}
                     >
@@ -182,7 +199,7 @@ class ItemTheme extends Component {
                     onClick={() => this.handleShowDetailTheme(v)}
                     style={{ margin: "10px auto" }}
                     type="button"
-                    class={`btn btn-primary btn-sm ${
+                    className={`btn  btn-sm ${
                       home_page_type !== v.index ? "show" : "hide"
                     }`}
                   >
@@ -201,14 +218,14 @@ class ItemTheme extends Component {
               )}
             </div>
             <div className="theme__title">
-              Giao diện: <span>{v.name}</span>
+              <span>{v.name}</span>
               <div
                 className="theme__title-actived"
                 style={{
                   top: home_page_type === v.index ? "0" : "100%",
                 }}
               >
-                <span>Kích hoạt: {v.name}</span>
+                <span>Đã chọn: {v.name}</span>
                 <a
                   onClick={this.props.goBack}
                   className="theme__title__btnActive"

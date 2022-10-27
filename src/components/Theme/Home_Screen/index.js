@@ -16,6 +16,16 @@ const HomeScreenStyles = styled.div`
     gap: 20px;
     margin-top: 20px;
   }
+  @media screen and (max-width: 992px) {
+    .theme__list {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media screen and (max-width: 768px) {
+    .theme__list {
+      grid-template-columns: repeat(1, 1fr);
+    }
+  }
 `;
 
 class Home_Screen extends Component {
@@ -42,55 +52,51 @@ class Home_Screen extends Component {
     this.initTheme = [
       {
         index: 1,
-        theme:
-          "https://data1.ikitech.vn/public/api/SahaImages/ZQLqkbDnCg1654823729.webp",
+        theme: "../images/Dienthoailaptop_1.png",
         arr_index_component: [1, 1, 1, 1, 1],
         demo_link: "https://mobiledemo.myiki.vn/",
-        name: "Shop bán đồ điện tử",
+        name: "Đồ điện tử",
         banner_type: "Banner kết hợp danh mục và quảng cáo",
-        banner_height: "426px",
-        banner_width: "743px",
+        banner_height: "426",
+        banner_width: "743",
         description:
           "Giao diện giúp cho cửa hàng có thể dễ dàng bán các sản phẩm điện tử cho chính mình",
         carrers: "Đồ điện tử, gia dụng",
       },
       {
         index: 2,
-        theme:
-          "https://data1.ikitech.vn/public/api/SahaImages/UreKuxWypW1654823828.webp",
+        theme: "../images/Mevabe_2.png",
         arr_index_component: [2, 2, 2, 2, 1],
         demo_link: "https://shopmevabe.myiki.vn/",
-        name: "Shop bán đồ trẻ em",
+        name: "Đồ trẻ em",
         banner_type: "Banner kết hợp danh mục",
-        banner_height: "410px",
-        banner_width: "915px",
+        banner_height: "410",
+        banner_width: "915",
         description:
           "Giao diện được thiết kế phù hợp trẻ trung, tươi mới phù hợp với bán các sản phẩm cho bé",
       },
       {
         index: 3,
-        theme:
-          "https://data1.ikitech.vn/public/api/SahaImages/slSAdCmQzc1654823854.webp",
+        theme: "../images/Noithat_3.png",
         arr_index_component: [3, 3, 3, 3, 1],
         demo_link: "https://noithatdemo.myiki.vn/",
-        name: "Shop bán đồ nội thất",
+        name: "Đồ nội thất",
         banner_type: "Banner trải dài",
-        banner_height: "1530px",
-        banner_width: "580px",
+        banner_height: "1530",
+        banner_width: "580",
         description:
           "Giao diện được thiết kế phù hợp với bán các sản phẩm nội thát",
         carrers: "Nội thất, Trang điểm",
       },
       {
         index: 4,
-        theme:
-          "https://data1.ikitech.vn/public/api/SahaImages/uYJRbqpFYW1654823878.webp",
+        theme: "../images/Mypham_4.png",
         arr_index_component: [4, 4, 4, 4, 1],
         demo_link: "https://myphamdemo.myiki.vn/",
-        name: "Shop mỹ phẩm",
+        name: "Mỹ phẩm",
         banner_type: "Banner trải dài",
-        banner_height: "1481px",
-        banner_width: "475px",
+        banner_height: "1481",
+        banner_width: "475",
         description:
           "Giao diện được thiết kế trẻ trung, phong cách phù với bán các sản phẩm mỹ phẩm, thời trang",
         carrers: "Thời trang, Mỹ phẩm",
@@ -98,14 +104,13 @@ class Home_Screen extends Component {
       {
         isVip: false,
         index: 5,
-        theme:
-          "https://data1.ikitech.vn/public/api/SahaImages/glDbUFhcrE1654823907.webp",
+        theme: "../images/Thoitrang_5.png",
         arr_index_component: [5, 5, 5, 5, 2],
         demo_link: "https://thoitrangdemo.myiki.vn/",
-        name: "Shop thời trang",
+        name: "Thời trang",
         banner_type: "Banner kết hợp danh mục và quảng cáo",
-        banner_height: "410px",
-        banner_width: "673px",
+        banner_height: "410",
+        banner_width: "673",
         description:
           "Giao diện được thiết kế trẻ trung, phong cách phù với bán các sản phẩm mỹ phẩm, thời trang",
         carrers: "Thời trang, Trang điểm",
@@ -113,14 +118,13 @@ class Home_Screen extends Component {
       {
         isVip: false,
         index: 6,
-        theme:
-          "https://data1.ikitech.vn/public/api/SahaImages/mIByceRszQ1654823953.webp",
+        theme: "../images/Doanvat_6.png",
         arr_index_component: [7, 6, 6, 3, 1],
         demo_link: "https://nowshopdemo.myiki.vn/",
-        name: "Shop đồ ăn vặt",
+        name: "Đồ ăn vặt",
         banner_type: "Banner trải dài",
-        banner_height: "412px",
-        banner_width: "1170px",
+        banner_height: "412",
+        banner_width: "1170",
         description:
           "Giao diện được thiết kế với gam màu rực rỡ phù hợp với bán các sản phẩm đồ ăn, hoa quả",
         carrers: "Đồ ăn, hoa quả",
@@ -128,14 +132,13 @@ class Home_Screen extends Component {
       {
         isVip: false,
         index: 7,
-        theme:
-          "https://data1.ikitech.vn/public/api/SahaImages/GZZBFLEWFG1654823972.webp",
+        theme: "../images/Dogiadung_7.png",
         arr_index_component: [8, 8, 7, 4, 2],
         demo_link: "https://dogiadungdemo.myiki.vn/",
-        name: "Shop đồ gia dụng",
+        name: "Đồ gia dụng",
         banner_type: "Banner kết hợp danh mục và quảng cáo",
-        banner_height: "410px",
-        banner_width: "685px",
+        banner_height: "410",
+        banner_width: "685",
         description:
           "Giao diện được thiết kết phù hợp với các sản phẩm đồ gia dụng, đồ điện tử",
         carrers: "Đồ gia dụng, đồ điện tử",
@@ -143,14 +146,13 @@ class Home_Screen extends Component {
       {
         isVip: false,
         index: 8,
-        theme:
-          "https://data1.ikitech.vn/public/api/SahaImages/ERQPMELUMR1654823991.webp",
+        theme: "../images/Hoaquanhapkhau_8.png",
         arr_index_component: [9, 6, 5, 5, 5],
         demo_link: "https://shophoaquademo.myiki.vn/",
-        name: "Shop hoa quả",
+        name: "Hoa quả",
         banner_type: "Banner trải dài",
-        banner_height: "1481px",
-        banner_width: "440px",
+        banner_height: "1481",
+        banner_width: "440",
         description:
           "Giao diện được thiết kế phù hợp với bán các mặt hàng đồ ăn, hoa quả",
         carrers: "Đồ ăn, hoa quả",
@@ -158,13 +160,13 @@ class Home_Screen extends Component {
       {
         isVip: false,
         index: 9,
-        theme: "https://i.imgur.com/lTwsZhY.png",
+        theme: "../images/Thucphamsach_9.png",
         arr_index_component: [10, 9, 9, 2, 5],
         demo_link: "https://thucphamsach.myiki.vn/",
-        name: "Shop thực phẩm",
+        name: "Thực phẩm",
         banner_type: "Banner kết hợp danh mục và quảng cáo",
-        banner_height: "355px",
-        banner_width: "702px",
+        banner_height: "355",
+        banner_width: "702",
         description:
           "Giao diện phù hợp với bán các sản phẩm liên quan đến đồ ăn, hoa quả",
         carrers: "Đồ ăn, hoa quả",
@@ -172,14 +174,13 @@ class Home_Screen extends Component {
       {
         isVip: false,
         index: 10,
-        theme:
-          "https://www.cgv.vn/media/catalog/product/cache/1/image/c5f0a1eff4c394a251036189ccddaacd/p/o/poster_adam_4_1.jpg",
+        theme: "../images/Thoitrang_10.png",
         arr_index_component: [11, 10, 10, 8, 6],
         demo_link: "https://thucphamsach.myiki.vn/",
-        name: "Shop thời trang 2",
+        name: "Thời trang 2",
         banner_type: "Banner trải dài",
-        banner_height: "677px",
-        banner_width: "1481px",
+        banner_height: "677",
+        banner_width: "1481",
         description:
           "Giao diện được thiết kế trẻ trung, phong cách phù với bán các sản phẩm mỹ phẩm, thời trang",
         carrers: "Thời trang, trang điểm",
@@ -330,6 +331,7 @@ class Home_Screen extends Component {
                 <ModalDetailsTheme
                   themeInfo={this.state.infoDetailsTheme}
                   setShowModalDetailsTheme={this.setShowModalDetailsTheme}
+                  chooseTheme={this.chooseTheme}
                 />
               )}
           </div>
