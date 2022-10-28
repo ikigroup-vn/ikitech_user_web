@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import * as themeAction from "../../../actions/theme";
 import { connect } from "react-redux";
 import styled from "styled-components";
-
+import { getBranchId } from "../../../ultis/branchUtils";
+import * as notificationAction from "../../../actions/notification";
 const ItemThemeStyles = styled.div`
   .card {
     border: none;
@@ -45,9 +46,11 @@ const ItemThemeStyles = styled.div`
         }
       }
       .btnTheme {
-        button {
+        button,
+        .btnViewWeb {
           background-color: rgba(0, 0, 0, 0.8);
           color: white;
+          border: none !important;
         }
       }
     }
@@ -62,7 +65,10 @@ class ItemTheme extends Component {
       show_button: false,
     };
   }
-
+  componentDidMount = () => {
+    const branch_id = getBranchId();
+    this.props.fetchAllBadge(this.props.store_code, branch_id);
+  };
   onChangeShowButton = (value) => {
     this.setState({
       show_button: value,
@@ -99,6 +105,7 @@ class ItemTheme extends Component {
     this.props.setShowModalDetailsTheme(true);
     this.props.setInfoDetailsTheme(infoDetails);
   };
+
   render() {
     var { home_page_type, v } = this.props;
     var { show_button } = this.state;
@@ -146,7 +153,7 @@ class ItemTheme extends Component {
                 objectFit: "cover",
                 objectPosition: "top",
               }}
-              src={v.theme}
+              src={v.themeTop}
               width="100%"
               height={200}
               loading="lazy"
@@ -205,15 +212,17 @@ class ItemTheme extends Component {
                   >
                     Xem chi tiết
                   </button>
-                  <button
+                  <a
+                    href={this.props.badges.domain_customer}
+                    target="_blank"
                     style={{ margin: "10px auto" }}
                     type="button"
-                    class={`btn btn-secondary btn-sm ${
+                    className={`btnViewWeb btn btn-secondary btn-sm ${
                       home_page_type === v.index ? "show" : "hide"
                     }`}
                   >
-                    <i class="fa fa-check"></i> Đã chọn
-                  </button>
+                    Xem Website
+                  </a>
                 </div>
               )}
             </div>
@@ -242,12 +251,17 @@ class ItemTheme extends Component {
 }
 
 const mapStateToProps = (state) => {
-  return {};
+  return {
+    badges: state.badgeReducers.allBadge,
+  };
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
     updateTheme: (store_code, theme) => {
       dispatch(themeAction.updateTheme(store_code, theme));
+    },
+    fetchAllBadge: (store_code, branch_id) => {
+      dispatch(notificationAction.fetchAllBadge(store_code, branch_id));
     },
   };
 };
