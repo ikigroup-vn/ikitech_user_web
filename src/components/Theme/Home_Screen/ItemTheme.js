@@ -153,6 +153,7 @@ class ItemTheme extends Component {
                 objectFit: "cover",
                 objectPosition: "top",
               }}
+              alt={v.name}
               src={v.themeTop}
               width="100%"
               height={200}

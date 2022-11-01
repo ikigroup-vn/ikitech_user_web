@@ -38,7 +38,7 @@ class Custom_Screen extends Component {
   };
 
   render() {
-    var { footer_type, v } = this.props;
+    var { footer_type, v, indexFooter } = this.props;
 
     var isVip =
       typeof this.props.badges.config_user_vip == "undefined" ||
@@ -85,7 +85,9 @@ class Custom_Screen extends Component {
           </div>
           <div class="col-12 col-footer">
             <img src={v.footer} />
-            <span>Footer {v.index}</span>
+            <span>
+              Footer {indexFooter + 1} #{v.index}
+            </span>
           </div>
         </div>
       </div>

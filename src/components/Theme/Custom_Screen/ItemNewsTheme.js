@@ -38,7 +38,7 @@ class Custom_Screen extends Component {
   };
 
   render() {
-    var { post_home_type, v } = this.props;
+    var { post_home_type, v, indexNews } = this.props;
 
     var isVip =
       typeof this.props.badges.config_user_vip == "undefined" ||
@@ -85,7 +85,9 @@ class Custom_Screen extends Component {
           </div>
           <div class="col-12 col-blog">
             <img src={v.blog} />
-            <span>Blog {v.index}</span>
+            <span>
+              Blog {indexNews + 1} #{v.index}
+            </span>
           </div>
         </div>
       </div>

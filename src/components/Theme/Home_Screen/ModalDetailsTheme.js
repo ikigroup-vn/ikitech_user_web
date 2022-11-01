@@ -170,6 +170,7 @@ class ModalDetailsTheme extends Component {
                   className="btn btn-primary btn-sm"
                   href={themeInfo.demo_link}
                   target="_blank"
+                  rel="noreferrer"
                 >
                   Xem Demo
                 </a>
@@ -184,7 +185,11 @@ class ModalDetailsTheme extends Component {
             </div>
             <div className="modal-theme__right">
               <div className="modal-theme__img">
-                <img src={themeInfo.theme}></img>
+                <img
+                  src={themeInfo.theme}
+                  alt={themeInfo.name}
+                  loading="lazy"
+                ></img>
               </div>
             </div>
           </div>

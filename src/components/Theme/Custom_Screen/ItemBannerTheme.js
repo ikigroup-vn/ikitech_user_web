@@ -38,7 +38,7 @@ class Custom_Screen extends Component {
   };
 
   render() {
-    var { banner_type, v } = this.props;
+    var { banner_type, v, indexBanner } = this.props;
 
     var isVip =
       typeof this.props.badges.config_user_vip == "undefined" ||
@@ -85,11 +85,14 @@ class Custom_Screen extends Component {
           </div>
           <div class="col-12 col-banner">
             <img src={v.banner} />
-            <span>Banner {v.index}</span>
+            <span>
+              Banner {indexBanner + 1} #{v.index}
+            </span>
           </div>
-          <div className="col-12" style = {{textAlign : "center"}}>
-          <span >Kích thước banner: {v.width} x {v.height}</span>
-
+          <div className="col-12" style={{ textAlign: "center" }}>
+            <span>
+              Kích thước banner: {v.width} x {v.height}
+            </span>
           </div>
         </div>
       </div>
