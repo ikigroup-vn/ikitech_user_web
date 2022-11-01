@@ -1,195 +1,177 @@
 export const headerImg = [
   {
     index: 1,
-    header: "https://i.imgur.com/VNNLEEM.png",
+    header: "../images/header/Header_1.png",
   },
   {
     index: 2,
-    header: "https://i.imgur.com/5hykNfv.png",
+    header: "../images/header/Header_2.png",
   },
   {
     index: 3,
-    header: "https://i.imgur.com/Iau7FFv.png",
+    header: "../images/header/Header_3.png",
   },
   {
     index: 4,
-    header: "https://i.imgur.com/RxlSZq5.png",
+    header: "../images/header/Header_4.png",
   },
   {
     index: 5,
-    header: "https://i.imgur.com/bkA4MSp.png",
-  },
-  {
-    index: 6,
-    header: "https://i.imgur.com/hL1npwI.png",
+    header: "../images/header/Header_5.png",
   },
   {
     index: 7,
-    header: "https://i.imgur.com/AKgtOj5.png",
+    header: "../images/header/Header_6.png",
   },
   {
     index: 8,
-    header: "https://i.imgur.com/xu5BZ92.png",
+    header: "../images/header/Header_7.png",
   },
   {
     index: 9,
-    header: "https://i.imgur.com/KAMl9hQ.png",
+    header: "../images/header/Header_8.png",
   },
   {
     index: 10,
-    header: "https://i.imgur.com/FHQihOD.png",
+    header: "../images/header/Header_9.png",
+  },
+  {
+    index: 11,
+    header: "../images/header/Header_10.png",
   },
 ];
 export const bannerImg = [
   {
     index: 1,
-    banner: "https://i.imgur.com/FHLz6wR.png",
-    width: "1024",
-    height: "460",
+    banner: "../images/banner/Banner_1.png",
+    width: "743",
+    height: "426",
   },
   {
     index: 2,
-    banner: "https://i.imgur.com/wmt3VYB.png",
-    width: "1024",
-    height: "482",
+    banner: "../images/banner/Banner_2.png",
+    width: "915",
+    height: "410",
   },
   {
     index: 3,
-    banner: "https://i.imgur.com/IEUr1Gq.png",
-    width: "1024",
-    height: "576",
+    banner: "../images/banner/Banner_3.png",
+    width: "1530",
+    height: "580",
   },
   {
     index: 4,
-    banner: "https://i.imgur.com/eIOA3Ef.png",
-    width: "1024",
-    height: "403",
+    banner: "../images/banner/Banner_4.png",
+    width: "1481",
+    height: "475",
   },
   {
     index: 5,
-    banner: "https://i.imgur.com/Z7dC8RG.png",
-    width: "1024",
-    height: "340",
-  },
-  {
-    index: 6,
-    banner: "https://i.imgur.com/xHcw53r.png",
-    width: "1024",
-    height: "403",
+    banner: "../images/banner/Banner_5.png",
+    width: "673",
+    height: "410",
   },
   {
     index: 7,
-    banner: "https://i.imgur.com/WFGLPGE.png",
-    width: "1024",
-    height: "612",
+    banner: "../images/banner/Banner_6.png",
+    width: "1170",
+    height: "412",
   },
   {
     index: 8,
-    banner: "https://i.imgur.com/TVeGGTP.png",
-    width: "1024",
-    height: "648",
+    banner: "../images/banner/Banner_7.png",
+    width: "685",
+    height: "410",
   },
   {
     index: 9,
-    banner: "https://i.imgur.com/XExr64n.png",
-    width: "1024",
-    height: "648",
+    banner: "../images/banner/Banner_8.png",
+    width: "702",
+    height: "355",
   },
   {
     index: 10,
-    banner: "https://i.imgur.com/XExr64n.png",
-    width: "1024",
-    height: "648",
+    banner: "../images/banner/Banner_9.png",
+    width: "1481",
+    height: "677 ",
   },
 ];
 export const productImg = [
   {
     index: 1,
-    product: "https://i.imgur.com/hhVP2Af.png",
+    product: "../images/product/Product_1.png",
   },
   {
     index: 2,
-    product: "https://i.imgur.com/nGD1XGf.png",
+    product: "../images/product/Product_2.png",
   },
   {
     index: 3,
-    product: "https://i.imgur.com/PDCmjDb.png",
-  },
-  {
-    index: 4,
-    product: "https://i.imgur.com/EW2WoCE.png",
+    product: "../images/product/Product_3.png",
   },
   {
     index: 5,
-    product: "https://i.imgur.com/nLJ5A41.png",
+    product: "../images/product/Product_4.png",
   },
   {
-    index: 6,
-    product: "https://i.imgur.com/t3Nc1HH.png",
+    index: 4,
+    product: "../images/product/Product_5.png",
   },
   {
     index: 7,
-    product: "https://i.imgur.com/Iyzb3fw.png",
-  },
-
-  {
-    index: 8,
-    product: "https://i.imgur.com/efnEpc2.png",
+    product: "../images/product/Product_6.png",
   },
   {
     index: 9,
-    product: "  https://i.imgur.com/qpJGuuH.png",
+    product: "../images/product/Product_7.png",
+  },
+
+  {
+    index: 10,
+    product: "../images/product/Product_8.png",
   },
 ];
 export const blogImg = [
   {
-    index: 1,
-    blog: "https://i.imgur.com/HosiZpK.png",
-  },
-  {
     index: 2,
-    blog: "https://i.imgur.com/zAYi9N6.png",
+    blog: "../images/blog/Tintuc_1.png",
   },
   {
     index: 3,
-    blog: "https://i.imgur.com/gu0oCuM.png",
-  },
-  {
-    index: 4,
-    blog: "https://i.imgur.com/zCVz5V9.png",
+    blog: "../images/blog/Tintuc_2.png",
   },
   {
     index: 5,
-    blog: "https://i.imgur.com/XjrSTHq.png",
+    blog: "../images/blog/Tintuc_3.png",
   },
   {
-    index: 6,
-    blog: "https://i.imgur.com/i4uOtvD.png",
+    index: 4,
+    blog: "../images/blog/Tintuc_4.png",
   },
   {
-    index: 7,
-    blog: "https://i.imgur.com/jtCHo6Y.png",
+    index: 8,
+    blog: "../images/blog/Tintuc_5.png",
+  },
+  {
+    index: 1,
+    blog: "../images/blog/Tintuc_6.png",
   },
 ];
 export const footerImg = [
   {
     index: 1,
-    footer: "https://i.imgur.com/gHJuRNh.png",
+    footer: "../images/footer/Footer_1.png",
   },
   {
     index: 2,
-    footer: "https://i.imgur.com/V5T6fvN.png",
-  },
-  {
-    index: 3,
-    footer: "https://i.imgur.com/b4WZ7LG.png",
-  },
-  {
-    index: 4,
-    footer: "https://i.imgur.com/YKPn77N.png",
+    footer: "../images/footer/Footer_2.png",
   },
   {
     index: 5,
-    footer: "https://i.imgur.com/yXPLWjo.png",
+    footer: "../images/footer/Footer_3.png",
+  },
+  {
+    index: 6,
+    footer: "../images/footer/Footer_4.png",
   },
 ];
