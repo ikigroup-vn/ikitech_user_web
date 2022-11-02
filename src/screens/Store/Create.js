@@ -88,7 +88,7 @@ class StoreCreate extends Component {
       if (this.isLoading == false) {
         this.isLoading = true;
         this.setState({ txtType: types[0].id });
-        this.setState({ txtCareer: types[0].childs[12].id });
+        this.setState({ txtCareer: types[0].childs[10].id });
         this.fetchAllCareer(types[0].id);
       }
       result = types.map((type, index) => {
