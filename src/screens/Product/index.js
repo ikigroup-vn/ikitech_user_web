@@ -65,6 +65,9 @@ class Product extends Component {
     this.setState({ searchValue: e.target.value });
   };
   componentDidMount() {
+    this.handleFetchAllProduct();
+  }
+  handleFetchAllProduct = () => {
     var { page } = this.props.match.params;
     const branch_id = localStorage.getItem("branch_id");
     var is_near_out_of_stock = getQueryParams("is_near_out_of_stock");
@@ -92,8 +95,7 @@ class Product extends Component {
         params
       );
     }
-  }
-
+  };
   componentDidUpdate() {
     if (
       this.state.isLoading != true &&
@@ -211,7 +213,10 @@ class Product extends Component {
             importData={importData}
             allow_skip_same_name={allow_skip_same_name}
           />
-          <ModalConfirm percent_col ={this.state.percent_col} onSaveChangePercent={this.onSaveChangePercent} />
+          <ModalConfirm
+            percent_col={this.state.percent_col}
+            onSaveChangePercent={this.onSaveChangePercent}
+          />
 
           <ModalCol handleChangePerCol={this.handleChangePerCol}></ModalCol>
           <Tiki store_code={store_code} />
@@ -392,13 +397,14 @@ class Product extends Component {
 
                     <div class="card shadow ">
                       <div className="card-header">
-                        <div    style={{
-                                display : "flex",
-                                justifyContent: "end",
-                                marginRight : "15px"
-                            }}> 
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "end",
+                            marginRight: "15px",
+                          }}
+                        >
                           <Link
-                         
                             to={`/product/create/${store_code}`}
                             class={`btn btn-info btn-icon-split btn-sm ${
                               insert == true ? "show" : "hide"
@@ -496,6 +502,7 @@ class Product extends Component {
                           page={page}
                           handleDelCallBack={this.handleDelCallBack}
                           handleMultiDelCallBack={this.handleMultiDelCallBack}
+                          handleFetchAllProduct={this.handleFetchAllProduct}
                           store_code={store_code}
                           products={products}
                         />

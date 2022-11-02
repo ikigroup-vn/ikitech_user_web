@@ -1,10 +1,42 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
 import getChannel, { IKITECH } from "../../ultis/channel";
 import { filter_arr, format } from "../../ultis/helpers";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import AlertInfor from "./Modal/AlertInfor";
 import ShowData from "./ShowData";
+import * as productAction from "../../actions/product";
+import { connect } from "react-redux";
+
+const TableProductStyles = styled.div`
+  .status-product {
+    width: 42px;
+    height: 24px;
+    border-radius: 100rem;
+    background-color: #ecf0f1;
+    border: 1px solid #dfe6e9;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s;
+    padding: 0 2px;
+    cursor: pointer;
+    & > div {
+      width: 18px;
+      height: 18px;
+      border-radius: 100rem;
+      background-color: #7f8c8d;
+      transition: all 0.3s;
+    }
+    &:has(input:checked) {
+      background-color: #2ecc71;
+    }
+    input:checked + div {
+      transform: translateX(100%);
+      background-color: white;
+    }
+  }
+`;
 
 class Table extends Component {
   constructor(props) {
@@ -123,7 +155,7 @@ class Table extends Component {
         var min_price = data.min_price;
         var max_price = data.max_price;
         var product_discount = data.product_discount;
-        var distributes = data.distributes
+        var distributes = data.distributes;
         return (
           <ShowData
             _delete={_delete}
@@ -144,10 +176,12 @@ class Table extends Component {
             current_page={current_page}
             index={index}
             store_code={store_code}
+            updateProduct={this.props.updateProduct}
             discount={discount}
-            distributes = {distributes}
+            distributes={distributes}
             handleCallBackElement={this.handleCallBackElement}
             handleCallBackSubElement={this.handleCallBackSubElement}
+            handleFetchAllProduct={this.props.handleFetchAllProduct}
           />
         );
       });
@@ -190,7 +224,7 @@ class Table extends Component {
     var { _delete, update, insert } = this.props;
     console.log(products);
     return (
-      <div>
+      <TableProductStyles>
         <button
           onClick={(e) => this.handleMultiDelCallBack(e, selected)}
           data-toggle="modal"
@@ -236,9 +270,18 @@ class Table extends Component {
         </table>
 
         <AlertInfor formData={formData} store_code={store_code} />
-      </div>
+      </TableProductStyles>
     );
   }
 }
 
-export default Table;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    updateProduct: (store_code, product, productId, page) => {
+      dispatch(
+        productAction.updateProduct(store_code, product, productId, page)
+      );
+    },
+  };
+};
+export default connect(null, mapDispatchToProps)(Table);
