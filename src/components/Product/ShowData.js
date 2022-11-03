@@ -202,7 +202,6 @@ class ShowData extends Component {
   handleChangeStatusProduct = () => {
     const { store_code, updateProduct, data, page, handleFetchAllProduct } =
       this.props;
-    console.log(this.props);
     updateProduct(
       store_code,
       {
@@ -247,7 +246,6 @@ class ShowData extends Component {
     if (product_discount) {
       discount_percent = product_discount.value;
     }
-
     return (
       <tr className="hover-product">
         <td className={`${_delete == true ? "show" : "hide"} `}>
@@ -386,6 +384,9 @@ class ShowData extends Component {
           <Link
             to={`/product/create/${store_code}/${data.id}`}
             class={`btn btn-primary btn-sm ${insert == true ? "show" : "hide"}`}
+            style={{
+              marginLeft: "5px",
+            }}
           >
             <i class="fa fa-copy"></i> Sao chép
           </Link>
