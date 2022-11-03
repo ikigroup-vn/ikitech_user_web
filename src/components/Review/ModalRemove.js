@@ -4,12 +4,23 @@ import { connect } from "react-redux";
 import themeData from "../../ultis/theme_data";
 
 class ModalRemove extends Component {
-    
   onSave = (e) => {
     e.preventDefault();
-    window.$('.modal').modal('hide');
-    var {store_code , modal} = this.props
-    this.props.destroyReview(store_code,modal.id);
+    window.$(".modal").modal("hide");
+
+    var { store_code, modal, filter_by, filter_by_value, page } = this.props;
+    const params = `&filter_by=${filter_by}&filter_by_value=${filter_by_value}`;
+    this.props.destroyReview(
+      store_code,
+      modal.id,
+      page,
+      filter_by !== undefined &&
+        filter_by_value !== undefined &&
+        filter_by !== null &&
+        filter_by_value !== null
+        ? params
+        : null
+    );
   };
 
   render() {
@@ -25,8 +36,12 @@ class ModalRemove extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-          <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
-              <h4 style={{ color: "white" }}>Thông báo</h4>              <button
+            <div
+              class="modal-header"
+              style={{ backgroundColor: themeData().backgroundColor }}
+            >
+              <h4 style={{ color: "white" }}>Thông báo</h4>{" "}
+              <button
                 type="button"
                 class="close"
                 data-dismiss="modal"
@@ -57,7 +72,6 @@ class ModalRemove extends Component {
                 </button>
                 <button type="submit" class="btn btn-warning">
                   Xóa
-                  
                 </button>
               </div>
             </form>
@@ -70,8 +84,8 @@ class ModalRemove extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    destroyReview: (store_code,id) => {
-      dispatch(reviewAction.destroyReview(store_code,id));
+    destroyReview: (store_code, id, page, params) => {
+      dispatch(reviewAction.destroyReview(store_code, id, page, params));
     },
   };
 };
