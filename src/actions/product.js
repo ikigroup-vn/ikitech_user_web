@@ -954,6 +954,63 @@ export const updateAgencyPrice = (
   };
 };
 
+export const updateOneFieldProduct = (
+  store_code,
+  name_field,
+  value_field,
+  productId,
+  page
+) => {
+  const data = {
+    one_field: true,
+    name_field,
+    value_field,
+  };
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    productApi
+      .updateProduct(store_code, data, productId, page)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+        history.push(`/product/index/${store_code}/${page}`);
+      })
+      .catch(function (error) {
+        var content = "";
+        if (typeof error.response.data.msg == "undefined")
+          content = "Vui lòng chọn ảnh và nhập đầy đủ các thông tin";
+        else content = error.response.data.msg;
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: content,
+          },
+        });
+      });
+  };
+};
+
 export const updateProduct = (store_code, data, productId, page) => {
   return (dispatch) => {
     const _value_price = data.price.toString().replace(/,/g, "");

@@ -176,7 +176,7 @@ class Table extends Component {
             current_page={current_page}
             index={index}
             store_code={store_code}
-            updateProduct={this.props.updateProduct}
+            updateOneFieldProduct={this.props.updateOneFieldProduct}
             discount={discount}
             distributes={distributes}
             handleCallBackElement={this.handleCallBackElement}
@@ -277,9 +277,14 @@ class Table extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateProduct: (store_code, product, productId, page) => {
+    updateOneFieldProduct: (store_code, product, productId, page) => {
       dispatch(
-        productAction.updateProduct(store_code, product, productId, page)
+        productAction.updateOneFieldProduct(
+          store_code,
+          product,
+          productId,
+          page
+        )
       );
     },
   };

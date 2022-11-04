@@ -200,14 +200,17 @@ class ShowData extends Component {
     return result;
   };
   handleChangeStatusProduct = () => {
-    const { store_code, updateProduct, data, page, handleFetchAllProduct } =
-      this.props;
-    updateProduct(
+    const {
       store_code,
-      {
-        ...data,
-        status: data.status === 0 ? -1 : 0,
-      },
+      updateOneFieldProduct,
+      data,
+      page,
+      handleFetchAllProduct,
+    } = this.props;
+    updateOneFieldProduct(
+      store_code,
+      "status",
+      data.status === 0 ? -1 : 0,
       data.id,
       page
     );
