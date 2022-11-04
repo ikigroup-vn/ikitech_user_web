@@ -7,7 +7,6 @@ const SidebarFilterStyles = styled.div`
   right: 0;
   z-index: 100;
   height: 100vh;
-  width: 500px;
   background-color: white;
   box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.1);
   overflow-y: auto;
@@ -42,19 +41,24 @@ class SidebarFilter extends Component {
     this.state = {};
   }
   render() {
+    const { title, widthSideBar } = this.props;
+
     return (
       <SidebarFilterStyles
         className="sidebar-filter"
         style={{
-          transform: !this.props.showFilterSearch
+          transform: !this.props.showCustomersByReferralPhone
             ? "translateX(100%)"
             : "translateX(0)",
+          width: widthSideBar !== undefined ? widthSideBar : "500px",
         }}
       >
         <div className="sidebar-filter__content">
           <div className="sidebar-filter__content__header">
-            <h4>Bộ lọc</h4>
-            <div onClick={() => this.props.setShowFilterSearch(false)}>
+            <h4>{title}</h4>
+            <div
+              onClick={() => this.props.setShowCustomersByReferralPhone(false)}
+            >
               <i className="fa fa-times"></i>
             </div>
           </div>

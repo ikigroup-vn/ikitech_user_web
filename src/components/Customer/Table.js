@@ -4,6 +4,7 @@ import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
 import history from "../../history";
 import { filter_arr, format, getQueryParams } from "../../ultis/helpers";
 import Pagination from "../../components/RevenueExpenditures/Pagination";
+import { formatDDMMYYYY } from "../../ultis/date";
 
 class Table extends Component {
   constructor(props) {
@@ -17,11 +18,18 @@ class Table extends Component {
     this.props.handleSetInfor(item);
   };
   changePage = (store_code, customerId, e) => {
-    var { paginate } = this.props;
-    if (e.target.name == "action") return;
-    history.push(
-      `/customer/detail/${store_code}/${customerId}?pag=${paginate}`
-    );
+    if (e.target.className !== "total_referral") {
+      var { paginate } = this.props;
+      if (e.target.name == "action") return;
+      history.push(
+        `/customer/detail/${store_code}/${customerId}?pag=${paginate}`
+      );
+    }
+  };
+  handleShowCustomersByReferralPhone = (customerInfo) => {
+    const { setCustomerInfo, setShowCustomersByReferralPhone } = this.props;
+    setCustomerInfo(customerInfo);
+    setShowCustomersByReferralPhone(true);
   };
   showData = (customer) => {
     var { store_code, paginate } = this.props;
@@ -56,6 +64,13 @@ class Table extends Component {
               {data.province_name == null
                 ? "Chưa cập nhật"
                 : data.province_name}
+            </td>
+            <td>{formatDDMMYYYY(data.created_at)}</td>
+            <td
+              className="total_referral"
+              onClick={() => this.handleShowCustomersByReferralPhone(data)}
+            >
+              {data.total_referrals}
             </td>
             <td>
               {data.points ? new Intl.NumberFormat().format(data.points) : 0}
@@ -145,6 +160,8 @@ class Table extends Component {
               <th>Số điện thoại</th>
               <th>Gmail</th>
               <th>Tỉnh / Thành phố</th>
+              <th>Ngày đăng ký</th>
+              <th>Số lượng người giới thiệu</th>
               <th>Xu</th>
               <th>Số nợ hiện tại</th>
 

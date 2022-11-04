@@ -2,11 +2,12 @@ import * as Types from "../../constants/ActionType";
 
 var initialState = {
   allCustomer: [],
+  allCustomerByInferralPhone: [],
   customerID: {},
   type: [],
   isFromPosAndSave: false,
   customerCreated: {},
-  pointHistory: []
+  pointHistory: [],
 };
 
 export const customer = (state = initialState, action) => {
@@ -14,6 +15,9 @@ export const customer = (state = initialState, action) => {
   switch (action.type) {
     case Types.FETCH_ALL_CUSTOMER:
       newState.allCustomer = action.data;
+      return newState;
+    case Types.FETCH_ALL_CUSTOMER_BY_INFERRAL_PHONE:
+      newState.allCustomerByInferralPhone = action.data;
       return newState;
     case Types.FETCH_ID_CUSTOMER:
       newState.customerID = action.data;
@@ -23,8 +27,8 @@ export const customer = (state = initialState, action) => {
       newState.customerCreated = action.data;
       return newState;
     case Types.FETCH_ALL_POINT_HISTORY:
-    newState.pointHistory = action.data;
-      return newState
+      newState.pointHistory = action.data;
+      return newState;
     default:
       return newState;
   }

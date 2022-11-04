@@ -29,6 +29,32 @@ export const fetchAllCustomer = (
       });
   };
 };
+export const fetchAllCustomerByInferralPhone = (
+  store_code,
+  page,
+  params,
+  referral_phone_number
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    customerApi
+      .fetchAllCustomer(store_code, page, params, referral_phone_number)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        if (res.data.code !== 401)
+          dispatch({
+            type: Types.FETCH_ALL_CUSTOMER_BY_INFERRAL_PHONE,
+            data: res.data.data,
+          });
+      });
+  };
+};
 export const fetchChatId = (store_code, customerId, pag = 1) => {
   return (dispatch) => {
     chatApi
@@ -65,13 +91,19 @@ export const fetchCustomerId = (store_code, customerId) => {
   };
 };
 
-export const fetchAllPointHistory = (id, store_code,page, branch_id, params) =>{
+export const fetchAllPointHistory = (
+  id,
+  store_code,
+  page,
+  branch_id,
+  params
+) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
     });
-    customerApi.fetchAllPointHistory(id , store_code, page).then((res) => {
+    customerApi.fetchAllPointHistory(id, store_code, page).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
         loading: "hide",
@@ -83,32 +115,30 @@ export const fetchAllPointHistory = (id, store_code,page, branch_id, params) =>{
         });
     });
   };
-}
+};
 
-export const createCustomer = (store_code,id , funcModal = null) => {
-
+export const createCustomer = (store_code, id, funcModal = null) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
-    })
+      loading: "show",
+    });
     customerApi
-      .createCustomer(store_code,id)
+      .createCustomer(store_code, id)
       .then((res) => {
-        if(res.data.success && funcModal != null)
-        {
-          console.log("da vao r")
-          funcModal()
+        if (res.data.success && funcModal != null) {
+          console.log("da vao r");
+          funcModal();
         }
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
-          tryShow:true,
+          tryShow: true,
           alert: {
-            tryShow:true,
+            tryShow: true,
             type: "success",
             title: "Thành công ",
             disable: "show",
@@ -117,47 +147,44 @@ export const createCustomer = (store_code,id , funcModal = null) => {
         });
         dispatch({
           type: Types.CREATED_CUSTOMER,
-          isFromPosAndSave : id.isFromPosAndSave == null ? false : id.isFromPosAndSave,
+          isFromPosAndSave:
+            id.isFromPosAndSave == null ? false : id.isFromPosAndSave,
           data: res.data.data,
-        })
-        
-        if(id.isFromPosAndSave != true) {
+        });
+
+        if (id.isFromPosAndSave != true) {
           customerApi
-          .fetchAllCustomer(store_code)
-          .then((res) => {
-            if(res.data.code !== 401)
-
-            dispatch({
-              type: Types.FETCH_ALL_CUSTOMER,
-              data: res.data.data,
-            });
-          })
-          .catch(function (error) {
-            dispatch({
-              type: Types.SHOW_LOADING,
-              loading: "hide"
+            .fetchAllCustomer(store_code)
+            .then((res) => {
+              if (res.data.code !== 401)
+                dispatch({
+                  type: Types.FETCH_ALL_CUSTOMER,
+                  data: res.data.data,
+                });
             })
-            dispatch({
-              type: Types.ALERT_UID_STATUS,
-              alert: {
-                type: "danger",
-                title: "Lỗi",
-                disable: "show",
-                content: error?.response?.data?.msg,
-              },
+            .catch(function (error) {
+              dispatch({
+                type: Types.SHOW_LOADING,
+                loading: "hide",
+              });
+              dispatch({
+                type: Types.ALERT_UID_STATUS,
+                alert: {
+                  type: "danger",
+                  title: "Lỗi",
+                  disable: "show",
+                  content: error?.response?.data?.msg,
+                },
+              });
             });
-          });
         }
-       
-
-
       })
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
-    
+          loading: "hide",
+        });
+
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -171,25 +198,23 @@ export const createCustomer = (store_code,id , funcModal = null) => {
   };
 };
 
-export const editCustomer = (store_code,id,data , funcModal = null) => {
-
+export const editCustomer = (store_code, id, data, funcModal = null) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
-    })
+      loading: "show",
+    });
     customerApi
-      .editCustomer(store_code,id,data)
+      .editCustomer(store_code, id, data)
       .then((res) => {
-        if(res.data.success && funcModal != null)
-        {
-          console.log("da vao r")
-          funcModal()
+        if (res.data.success && funcModal != null) {
+          console.log("da vao r");
+          funcModal();
         }
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
-        })
+          loading: "hide",
+        });
         customerApi.fetchCustomerId(store_code, id).then((res) => {
           dispatch({
             type: Types.SHOW_LOADING,
@@ -200,23 +225,23 @@ export const editCustomer = (store_code,id,data , funcModal = null) => {
               type: Types.FETCH_ID_CUSTOMER,
               data: res.data.data,
             });
-            dispatch({
-              type: Types.ALERT_UID_STATUS,
-              alert: {
-                type: "success",
-                title: "Thành công ",
-                disable: "show",
-                content: res.data.msg,
-              },
-            });
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "success",
+              title: "Thành công ",
+              disable: "show",
+              content: res.data.msg,
+            },
+          });
         });
       })
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
-    
+          loading: "hide",
+        });
+
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {

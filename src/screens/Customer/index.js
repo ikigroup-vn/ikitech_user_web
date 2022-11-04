@@ -26,6 +26,7 @@ import styled from "styled-components";
 import { options } from "../../ultis/groupCustomer/options";
 import * as Types from "../../constants/ActionType";
 import { genders } from "../../ultis/groupCustomer/genders";
+import SidebarShowCustomersByReferralPhone from "../../components/Customer/SidebarShowCustomersByReferralPhone";
 
 const CustomerStyles = styled.div`
   .filter-search-customer {
@@ -119,6 +120,13 @@ const CustomerStyles = styled.div`
     border-radius: 0.35rem;
     cursor: pointer;
   }
+  tr {
+    .total_referral {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
 `;
 class Customer extends Component {
   constructor(props) {
@@ -129,9 +137,10 @@ class Customer extends Component {
       paginate: 1,
       openModal: false,
       openModalEdit: false,
-      id_customer: "",
+      customerInfo: {},
       modal: "",
       showFilterSearch: false,
+      showCustomersByReferralPhone: false,
     };
   }
   openModal = () => {
@@ -325,6 +334,16 @@ class Customer extends Component {
     this.props.fetchAllCustomer(store_code, 1, params);
     localStorage.setItem("optionsFilter", JSON.stringify(newOptionCondition));
   };
+  setShowCustomersByReferralPhone = (isShowed) => {
+    this.setState({
+      showCustomersByReferralPhone: isShowed,
+    });
+  };
+  setCustomerInfo = (cusInfo) => {
+    this.setState({
+      customerInfo: cusInfo,
+    });
+  };
   render() {
     var { customer, chat, customers } = this.props;
     var customerImg =
@@ -352,9 +371,11 @@ class Customer extends Component {
       modal,
       openModalEdit,
       showFilterSearch,
+      showCustomersByReferralPhone,
+      customerInfo,
     } = this.state;
     const { wards, district, province, types } = this.props;
-
+    console.log("customers:  ", this.props.customersByInferralPhone);
     if (this.props.auth) {
       return (
         <CustomerStyles id="wrapper">
@@ -497,6 +518,10 @@ class Customer extends Component {
                           store_code={store_code}
                           handleDelCallBack={this.handleDelCallBack}
                           customers={customers}
+                          setCustomerInfo={this.setCustomerInfo}
+                          setShowCustomersByReferralPhone={
+                            this.setShowCustomersByReferralPhone
+                          }
                         />
 
                         <Pagination
@@ -526,6 +551,42 @@ class Customer extends Component {
               showChatBox={showChatBox}
             ></Chat>
           </div>
+          <SidebarShowCustomersByReferralPhone
+            showCustomersByReferralPhone={showCustomersByReferralPhone}
+            setShowCustomersByReferralPhone={
+              this.setShowCustomersByReferralPhone
+            }
+            customerInfo={customerInfo}
+            store_code={store_code}
+            fetchAllCustomerByInferralPhone={
+              this.props.fetchAllCustomerByInferralPhone
+            }
+          >
+            {this.props.customersByInferralPhone?.data?.length > 0 && (
+              <div className="card-body">
+                <Table
+                  handleSetInfor={this.handleSetInfor}
+                  paginate={paginate}
+                  chat_allow={chat_allow}
+                  showChatBox={showChatBox}
+                  handleShowChatBox={this.handleShowChatBox}
+                  store_code={store_code}
+                  handleDelCallBack={this.handleDelCallBack}
+                  customers={this.props.customersByInferralPhone}
+                  setCustomerInfo={this.setCustomerInfo}
+                  setShowCustomersByReferralPhone={
+                    this.setShowCustomersByReferralPhone
+                  }
+                />
+
+                <Pagination
+                  getPaginate={this.getPaginate}
+                  store_code={store_code}
+                  customers={this.props.customersByInferralPhone.data}
+                />
+              </div>
+            )}
+          </SidebarShowCustomersByReferralPhone>
           <SidebarFilterCustomer
             showFilterSearch={showFilterSearch}
             setShowFilterSearch={this.setShowFilterSearch}
@@ -548,6 +609,8 @@ class Customer extends Component {
 const mapStateToProps = (state) => {
   return {
     customers: state.customerReducers.customer.allCustomer,
+    customersByInferralPhone:
+      state.customerReducers.customer.allCustomerByInferralPhone,
     auth: state.authReducers.login.authentication,
     customer: state.customerReducers.customer.customerID,
     chat: state.chatReducers.chat.chatID,
@@ -562,6 +625,21 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     fetchAllCustomer: (id, page, params) => {
       dispatch(customerAction.fetchAllCustomer(id, page, params));
+    },
+    fetchAllCustomerByInferralPhone: (
+      store_code,
+      page,
+      params,
+      referral_phone_number
+    ) => {
+      dispatch(
+        customerAction.fetchAllCustomerByInferralPhone(
+          store_code,
+          page,
+          params,
+          referral_phone_number
+        )
+      );
     },
     fetchCustomerId: (store_code, customerId) => {
       dispatch(customerAction.fetchCustomerId(store_code, customerId));
