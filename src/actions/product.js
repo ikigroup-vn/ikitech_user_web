@@ -41,7 +41,7 @@ export const fetchAllProductV2 = (
   params,
   agency_type_id
 ) => {
-  console.log([params])
+  console.log([params]);
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -161,16 +161,16 @@ export const fetchAllListProduct = (store_code, search) => {
               for (const item of res.data.data.data) {
                 var newItem = {};
                 var arangeKeyItem = {
-                  images : item.images,
-                  sku : item.sku,
-                  name : item.name,
-                  price : item.price,
-                  quantity_in_stock : item.quantity_in_stock,
-                  categories : item.categories,
-                  categories : item.categories,
-                  percent_collaborator : item.percent_collaborator,
-                  full_description : item.full_description
-                }
+                  images: item.images,
+                  sku: item.sku,
+                  name: item.name,
+                  price: item.price,
+                  quantity_in_stock: item.quantity_in_stock,
+                  categories: item.categories,
+                  categories: item.categories,
+                  percent_collaborator: item.percent_collaborator,
+                  full_description: item.full_description,
+                };
                 Object.entries(arangeKeyItem).forEach(([key, value], index) => {
                   if (key == "full_description") {
                     if (value != null && value.length < 32000) {
@@ -180,9 +180,7 @@ export const fetchAllListProduct = (store_code, search) => {
                     }
                   }
                   if (key == "percent_collaborator") {
-                  
-                      newItem["Hoa hồng CTV (%)"] = value ?? 0;
-                    
+                    newItem["Hoa hồng CTV (%)"] = value ?? 0;
                   }
                   if (key == "name") {
                     newItem["Tên sản phẩm"] = formatStringCharactor(value);
@@ -440,7 +438,13 @@ export const uploadAvataProduct = (file) => {
   };
 };
 
-export const editStock = (store_code, branch_id, data, page = 1, params = null) => {
+export const editStock = (
+  store_code,
+  branch_id,
+  data,
+  page = 1,
+  params = null
+) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -464,7 +468,7 @@ export const editStock = (store_code, branch_id, data, page = 1, params = null) 
           },
         });
         productApi
-          .fetchAllProductV2(store_code, branch_id, page , params)
+          .fetchAllProductV2(store_code, branch_id, page, params)
           .then((res) => {
             dispatch({
               type: Types.SHOW_LOADING,
@@ -820,7 +824,6 @@ export const postProductV2 = (store_code, branch_id, data) => {
 };
 
 export const postMultiProduct = (store_code, data) => {
-
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -880,10 +883,15 @@ export const postMultiProduct = (store_code, data) => {
   };
 };
 
-export const updateAgencyPrice = (store_code, data, productId, page,url=null) => {
+export const updateAgencyPrice = (
+  store_code,
+  data,
+  productId,
+  page,
+  url = null
+) => {
   return (dispatch) => {
-    if(data.main_price)
-    {
+    if (data.main_price) {
       const _value_price = data.main_price.toString().replace(/,/g, "");
       if (isNaN(Number(_value_price))) {
         dispatch({
@@ -920,11 +928,66 @@ export const updateAgencyPrice = (store_code, data, productId, page,url=null) =>
             content: res.data.msg,
           },
         });
-        if(url)
-        history.replace(url)
-        else
+        if (url) history.replace(url);
         // history.push(`/product/index/${store_code}/${page}`);
-        history.goBack();
+        else history.goBack();
+      })
+      .catch(function (error) {
+        var content = "";
+        if (typeof error.response.data.msg == "undefined")
+          content = "Vui lòng chọn ảnh và nhập đầy đủ các thông tin";
+        else content = error.response.data.msg;
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: content,
+          },
+        });
+      });
+  };
+};
+
+export const updateOneFieldProduct = (
+  store_code,
+  name_field,
+  value_field,
+  productId,
+  page
+) => {
+  const data = {
+    one_field: true,
+    name_field,
+    value_field,
+  };
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    productApi
+      .updateProduct(store_code, data, productId, page)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+        history.push(`/product/index/${store_code}/${page}`);
       })
       .catch(function (error) {
         var content = "";
@@ -990,7 +1053,6 @@ export const updateProduct = (store_code, data, productId, page) => {
             content: res.data.msg,
           },
         });
-        console.log(page, store_code);
         history.push(`/product/index/${store_code}/${page}`);
         // history.goBack();
       })
@@ -1030,7 +1092,6 @@ export const updateDistribute = (store_code, data, productId, branchId) => {
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
- 
       })
       .catch(function (error) {});
   };
@@ -1199,24 +1260,22 @@ export const fetchProductId = (store_code, id) => {
   };
 };
 export const uploadVideoProduct = (file) => {
-  
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
-    })
+      loading: "show",
+    });
     uploadApi
       .uploadVideo(file)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.UPLOAD_PRODUCT_VIDEO,
           data: res.data.data,
         });
-
       })
       .catch(function (error) {
         dispatch({
@@ -1232,19 +1291,19 @@ export const uploadVideoProduct = (file) => {
   };
 };
 
-export const changePercentCol = (store_code,data) => {
+export const changePercentCol = (store_code, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
-    })
+      loading: "show",
+    });
     productApi
-      .changePercentCol(store_code,data)
+      .changePercentCol(store_code, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -1258,8 +1317,8 @@ export const changePercentCol = (store_code,data) => {
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -1272,4 +1331,3 @@ export const changePercentCol = (store_code,data) => {
       });
   };
 };
-

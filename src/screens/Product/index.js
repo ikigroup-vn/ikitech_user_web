@@ -25,6 +25,7 @@ import getChannel, { IKITECH, IKIPOS } from "../../ultis/channel";
 import { getQueryParams } from "../../ultis/helpers";
 import ModalCol from "../../components/Product/ModalCollaration";
 import ModalConfirm from "../../components/Product/ComfirmCol";
+import history from "../../history";
 
 class Product extends Component {
   constructor(props) {
@@ -65,35 +66,36 @@ class Product extends Component {
     this.setState({ searchValue: e.target.value });
   };
   componentDidMount() {
+    this.handleFetchAllProduct();
+  }
+  shouldComponentUpdate = (nextProps, nextState) => {
+    const {
+      match: { params },
+    } = nextProps;
+    const { page } = this.state;
+    if (params.page !== undefined && page !== params.page) {
+      this.passNumPage(params.page);
+      this.handleFetchAllProduct(params.page);
+    }
+    return true;
+  };
+  handleFetchAllProduct = (pageParams) => {
     var { page } = this.props.match.params;
+    var { searchValue, page: pagePagination, numPage } = this.state;
     const branch_id = localStorage.getItem("branch_id");
     var is_near_out_of_stock = getQueryParams("is_near_out_of_stock");
-    var params = null;
+    var params = `&search=${searchValue}&limit=${numPage}`;
     if (is_near_out_of_stock) {
       params = params + `&is_near_out_of_stock=true`;
     }
-    if (
-      typeof page != "undefined" &&
-      page != null &&
-      page != "" &&
-      !isNaN(Number(page))
-    ) {
-      this.props.fetchAllProductV2(
-        this.props.match.params.store_code,
-        branch_id,
-        page,
-        params
-      );
-    } else {
-      this.props.fetchAllProductV2(
-        this.props.match.params.store_code,
-        branch_id,
-        1,
-        params
-      );
-    }
-  }
 
+    this.props.fetchAllProductV2(
+      this.props.match.params.store_code,
+      branch_id,
+      pageParams || page || pagePagination,
+      params
+    );
+  };
   componentDidUpdate() {
     if (
       this.state.isLoading != true &&
@@ -142,6 +144,7 @@ class Product extends Component {
     var params = `&search=${searchValue}`;
     this.setState({ numPage: 20 });
     this.props.fetchAllProductV2(store_code, branch_id, 1, params);
+    history.push(`/product/index/${store_code}/1`);
   };
   fetchAllData = () => {
     this.props.fetchAllProduct(this.props.match.params.store_code);
@@ -211,7 +214,10 @@ class Product extends Component {
             importData={importData}
             allow_skip_same_name={allow_skip_same_name}
           />
-          <ModalConfirm percent_col ={this.state.percent_col} onSaveChangePercent={this.onSaveChangePercent} />
+          <ModalConfirm
+            percent_col={this.state.percent_col}
+            onSaveChangePercent={this.onSaveChangePercent}
+          />
 
           <ModalCol handleChangePerCol={this.handleChangePerCol}></ModalCol>
           <Tiki store_code={store_code} />
@@ -392,13 +398,14 @@ class Product extends Component {
 
                     <div class="card shadow ">
                       <div className="card-header">
-                        <div    style={{
-                                display : "flex",
-                                justifyContent: "end",
-                                marginRight : "15px"
-                            }}> 
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "end",
+                            marginRight: "15px",
+                          }}
+                        >
                           <Link
-                         
                             to={`/product/create/${store_code}`}
                             class={`btn btn-info btn-icon-split btn-sm ${
                               insert == true ? "show" : "hide"
@@ -496,6 +503,7 @@ class Product extends Component {
                           page={page}
                           handleDelCallBack={this.handleDelCallBack}
                           handleMultiDelCallBack={this.handleMultiDelCallBack}
+                          handleFetchAllProduct={this.handleFetchAllProduct}
                           store_code={store_code}
                           products={products}
                         />

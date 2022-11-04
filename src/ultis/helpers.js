@@ -34,7 +34,6 @@ export const contactOrNumber = (data) => {
     return data;
   } else {
     var string = data.slice(0, -2);
-    console.log(string);
     var newString = string
       .toString()
       .replace(/\./g, "")
