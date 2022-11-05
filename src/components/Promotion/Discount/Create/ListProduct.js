@@ -1,10 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Pagination from "../../../../components/Product/Pagination"
+import Pagination from "../../../../components/Product/Pagination";
 import themeData from "../../../../ultis/theme_data";
 import * as productAction from "../../../../actions/product";
 import * as Env from "../../../../ultis/default";
-import { format, formatNumber, contactOrNumber } from "../../../../ultis/helpers";
+import {
+  format,
+  formatNumber,
+  contactOrNumber,
+} from "../../../../ultis/helpers";
 
 class ListProduct extends Component {
   constructor(props) {
@@ -14,26 +18,22 @@ class ListProduct extends Component {
       page: 1,
       numPage: 20,
       searchValue: "",
-
     };
   }
 
   onChange = (e) => {
-    var { value, checked } = e.target
-    console.log(checked)
+    var { value, checked } = e.target;
+    console.log(checked);
     var data = JSON.parse(value);
-    if (checked == true)
-      this.props.handleAddProduct(data, null, "add")
-    else
-      this.props.handleAddProduct(null, data.id, "remove")
-
-  }
+    if (checked == true) this.props.handleAddProduct(data, null, "add");
+    else this.props.handleAddProduct(null, data.id, "remove");
+  };
   onChangeSearch = (e) => {
     this.setState({ searchValue: e.target.value });
   };
   passNumPage = (page) => {
-    this.setState({ page: page })
-  }
+    this.setState({ page: page });
+  };
   searchData = (e) => {
     e.preventDefault();
     var { store_code } = this.props;
@@ -47,31 +47,30 @@ class ListProduct extends Component {
     if (list.length > 0) {
       for (const element of list) {
         if (element.id == id) {
-          return true
+          return true;
         }
       }
     }
-    return false
-  }
+    return false;
+  };
 
   checkDisable = (discounts, id) => {
     if (discounts.length > 0) {
       for (const element of discounts) {
         for (const item of element.products) {
           if (item.id == id) {
-            return true
+            return true;
           }
         }
-
       }
     }
-    return false
-  }
+    return false;
+  };
 
   onSaveProduct = () => {
-    this.props.onSaveProduct()
+    this.props.onSaveProduct();
     window.$(".modal").modal("hide");
-  }
+  };
 
   showData = (products, list, discounts) => {
     var result = null;
@@ -80,12 +79,25 @@ class ListProduct extends Component {
     }
     if (products.length > 0) {
       result = products.map((data, index) => {
-
-        var status_name = data.status == 0 ? "Còn hàng" : data.status == 1 ? "Đã ẩn" : data.status == 2 ? "Hết hàng" : null
-        var status = data.status == 0 ? "success" : data.status == 1 ? "secondary" : data.status == 2 ? "danger" : null
+        var status_name =
+          data.status == 0
+            ? "Còn hàng"
+            : data.status == 1
+            ? "Đã ẩn"
+            : data.status == 2
+            ? "Hết hàng"
+            : null;
+        var status =
+          data.status == 0
+            ? "success"
+            : data.status == 1
+            ? "secondary"
+            : data.status == 2
+            ? "danger"
+            : null;
         var checked = this.checkExsit(list, data.id);
         var disaled = this.checkDisable(discounts, data.id);
-        var background_disable = disaled == true ? "#55b8c3" : "white"
+        var background_disable = disaled == true ? "#55b8c3" : "white";
         const {
           product_discount,
           min_price,
@@ -100,7 +112,7 @@ class ListProduct extends Component {
           status_stock,
           discount,
           historyInventory,
-          distributes
+          distributes,
         } = data;
         let discount_percent = null;
 
@@ -108,114 +120,123 @@ class ListProduct extends Component {
           discount_percent = product_discount.value;
         }
         return (
-          <tr className={disaled == true ? "" : "hover-product"} style={{ background: background_disable }}>
-    
+          <tr
+            className={disaled == true ? "" : "hover-product"}
+            style={{ background: background_disable }}
+          >
             <td>
-
               <div class="checkbox">
                 <label>
-                  <input type="checkbox"
+                  <input
+                    type="checkbox"
                     disabled={disaled}
                     checked={checked}
                     onChange={this.onChange}
-                    value={JSON.stringify(data)} />
+                    value={JSON.stringify(data)}
+                  />
                 </label>
               </div>
-
             </td>
             <td>
-            <img
-              src={
-                data.images.length > 0
-                  ? data.images[0].image_url
-                  : Env.IMG_NOT_FOUND
-              }
-              className="img-responsive"
-              alt="Image"
-              style={{ width: "100%", height: "59px", background: "#0000000d" }}
-            />
-          </td>
+              <img
+                src={
+                  data.images.length > 0
+                    ? data.images[0].image_url
+                    : Env.IMG_NOT_FOUND
+                }
+                className="img-responsive"
+                alt="Image"
+                style={{
+                  width: "100%",
+                  height: "59px",
+                  background: "#0000000d",
+                }}
+              />
+            </td>
             <td>{data.sku}</td>
 
             <td>{data.name}</td>
 
             <td>
-        { product_discount == null &&
-          <div className="eea"
-          >
-            {min_price === max_price ? (
-              contactOrNumber(format(
-                Number(
-                  discount_percent == null
-                    ? min_price
-                    : min_price - min_price * discount_percent * 0.01
-                )
-              )
-              )) : distributes && distributes.length == 0 ? contactOrNumber(format(
-                Number(
-                  discount_percent == null
-                    ? min_price
-                    : min_price - min_price * discount_percent * 0.01
-                ))) : (
-              <div className="ae"
-              >
-                {format(
-                  Number(
-                    discount_percent == null
-                      ? min_price
-                      : min_price - min_price * discount_percent * 0.01
-                  )
-                )}
-                {" - "}
-                {format(
-                  Number(
-                    discount_percent == null
-                      ? max_price
-                      : max_price - max_price * discount_percent * 0.01
-                  )
-                )}
-              </div>
-            )}
-          </div>
-          }
-
-          {product_discount && (
-            <div
-              className="a"
-              style={{
-                float: "left",
-              }}
-            >
-              {min_price === max_price ? (
-                contactOrNumber(format(Number(min_price)))
-              ) : (
-                <div className="row e">
-                  <div
-                    style={{
-                      // textDecoration: "line-through",
-                    }}
-                  >
-                    {format(Number(min_price))}
-                    {" - "}
-                    {format(Number(max_price))}
-                  </div>
-
-                  {/* <div className="discount e">&emsp; -{discount_percent}%</div> */}
+              {product_discount == null && (
+                <div className="eea">
+                  {min_price === max_price ? (
+                    contactOrNumber(
+                      format(
+                        Number(
+                          discount_percent == null
+                            ? min_price
+                            : min_price - min_price * discount_percent * 0.01
+                        )
+                      )
+                    )
+                  ) : distributes && distributes.length == 0 ? (
+                    contactOrNumber(
+                      format(
+                        Number(
+                          discount_percent == null
+                            ? min_price
+                            : min_price - min_price * discount_percent * 0.01
+                        )
+                      )
+                    )
+                  ) : (
+                    <div className="ae">
+                      {format(
+                        Number(
+                          discount_percent == null
+                            ? min_price
+                            : min_price - min_price * discount_percent * 0.01
+                        )
+                      )}
+                      {" - "}
+                      {format(
+                        Number(
+                          discount_percent == null
+                            ? max_price
+                            : max_price - max_price * discount_percent * 0.01
+                        )
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
-            </div>
-          )}
-        </td>
+
+              {product_discount && (
+                <div
+                  className="a"
+                  style={{
+                    float: "left",
+                  }}
+                >
+                  {min_price === max_price ? (
+                    contactOrNumber(format(Number(min_price)))
+                  ) : (
+                    <div className="row e">
+                      <div
+                        style={
+                          {
+                            // textDecoration: "line-through",
+                          }
+                        }
+                      >
+                        {format(Number(min_price))}
+                        {" - "}
+                        {format(Number(max_price))}
+                      </div>
+
+                      {/* <div className="discount e">&emsp; -{discount_percent}%</div> */}
+                    </div>
+                  )}
+                </div>
+              )}
+            </td>
 
             {/* <td> <h5>
               <span class={`badge badge-${status}`}>
                 {status_name}
               </span>
             </h5></td> */}
-
-
-
-
           </tr>
         );
       });
@@ -226,8 +247,8 @@ class ListProduct extends Component {
   };
 
   render() {
-    var { products, store_code, listProducts, discounts } = this.props
-    var { searchValue } = this.state
+    var { products, store_code, listProducts, discounts } = this.props;
+    var { searchValue } = this.state;
     console.log(discounts);
     return (
       <div
@@ -242,21 +263,30 @@ class ListProduct extends Component {
           <div class="modal-content" style={{ maxHeight: "630px" }}>
             <div class="modal-header" style={{ background: "white" }}>
               <div>
-                <h4 style={{ color: "black", display: "block" }}>Chọn sản phẩm</h4>
+                <h4 style={{ color: "black", display: "block" }}>
+                  Chọn sản phẩm
+                </h4>
 
-                <i style={{ color: "red" }}> Những sản phẩm được tô đậm là những sản phẩm đang nằm trong các chương trình khuyến mại khác! Vui lòng xóa nếu muốn thêm vào chương trình này</i>
-
+                <i style={{ color: "red" }}>
+                  {" "}
+                  Những sản phẩm được tô đậm là những sản phẩm đang nằm trong
+                  các chương trình khuyến mại khác! Vui lòng xóa nếu muốn thêm
+                  vào chương trình này
+                </i>
               </div>
 
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
             </div>
 
-            <form style={{marginTop : "10px"}} onSubmit={this.searchData}>
-              <div
-                class="input-group mb-6"
-                style={{ padding: "0 20px" }}
-              >
+            <form style={{ marginTop: "10px" }} onSubmit={this.searchData}>
+              <div class="input-group mb-6" style={{ padding: "0 20px" }}>
                 <input
                   style={{ maxWidth: "280px", minWidth: "150px" }}
                   type="search"
@@ -272,17 +302,17 @@ class ListProduct extends Component {
                   </button>
                 </div>
               </div>
-        
             </form>
 
-
-
             <div class="table-responsive">
-              <table class="table  table-hover table-border" style={{ color: "black" }}>
+              <table
+                class="table  table-hover table-border"
+                style={{ color: "black" }}
+              >
                 <thead>
                   <tr>
                     <th></th>
-                    <th style = {{width : "13%"}}>Hình ảnh</th>
+                    <th style={{ width: "13%" }}>Hình ảnh</th>
 
                     <th>Mã SKU</th>
                     <th>Tên sản phẩm</th>
@@ -290,20 +320,30 @@ class ListProduct extends Component {
                   </tr>
                 </thead>
 
-                <tbody>{this.showData(products?.data, listProducts, discounts)}</tbody>
+                <tbody>
+                  {this.showData(products?.data, listProducts, discounts)}
+                </tbody>
               </table>
             </div>
 
-            <div class="group-pagination_flex col-xs-12 col-sm-12 col-md-12 col-lg-12" style={{ display: "flex", justifyContent: "space-between" }}>
-
-             {
-              products &&  <Pagination style="float-fix" store_code={store_code} products={products} passNumPage={this.passNumPage} limit={this.state.numPage} />
-             }
+            <div
+              class="group-pagination_flex col-xs-12 col-sm-12 col-md-12 col-lg-12"
+              style={{ display: "flex", justifyContent: "space-between" }}
+            >
+              {products && (
+                <Pagination
+                  style="float-fix"
+                  store_code={store_code}
+                  products={products}
+                  passNumPage={this.passNumPage}
+                  limit={this.state.numPage}
+                />
+              )}
               <div style={{ marginTop: "10px" }}>
                 <button
                   style={{
                     border: "1px solid",
-                    marginRight: "10px"
+                    marginRight: "10px",
                   }}
                   type="button"
                   class="btn btn-default"
@@ -311,20 +351,21 @@ class ListProduct extends Component {
                 >
                   Hủy
                 </button>
-                <button style={{ backgroundColor: themeData().backgroundColor }} onClick={this.onSaveProduct} class="btn btn-info">
+                <button
+                  style={{ backgroundColor: themeData().backgroundColor }}
+                  onClick={this.onSaveProduct}
+                  class="btn btn-info"
+                >
                   Xác nhận
                 </button>
               </div>
             </div>
-
           </div>
         </div>
       </div>
     );
   }
 }
-
-
 
 const mapDispatchToProps = (dispatch, props) => {
   return {

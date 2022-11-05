@@ -127,6 +127,11 @@ const CustomerStyles = styled.div`
       }
     }
   }
+  .totalContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 `;
 class Customer extends Component {
   constructor(props) {
@@ -141,6 +146,7 @@ class Customer extends Component {
       modal: "",
       showFilterSearch: false,
       showCustomersByReferralPhone: false,
+      pageReferralPhone: 1,
     };
   }
   openModal = () => {
@@ -344,6 +350,11 @@ class Customer extends Component {
       customerInfo: cusInfo,
     });
   };
+  setPageReferralPhone = (page) => {
+    this.setState({
+      pageReferralPhone: page,
+    });
+  };
   render() {
     var { customer, chat, customers } = this.props;
     var customerImg =
@@ -373,9 +384,9 @@ class Customer extends Component {
       showFilterSearch,
       showCustomersByReferralPhone,
       customerInfo,
+      pageReferralPhone,
     } = this.state;
     const { wards, district, province, types } = this.props;
-    console.log("customers:  ", this.props.customersByInferralPhone);
     if (this.props.auth) {
       return (
         <CustomerStyles id="wrapper">
@@ -561,6 +572,7 @@ class Customer extends Component {
             fetchAllCustomerByInferralPhone={
               this.props.fetchAllCustomerByInferralPhone
             }
+            pageReferralPhone={pageReferralPhone}
           >
             {this.props.customersByInferralPhone?.data?.length > 0 && (
               <div className="card-body">
@@ -578,12 +590,21 @@ class Customer extends Component {
                     this.setShowCustomersByReferralPhone
                   }
                 />
-
-                <Pagination
-                  getPaginate={this.getPaginate}
-                  store_code={store_code}
-                  customers={this.props.customersByInferralPhone.data}
-                />
+                <div className="totalContent">
+                  <div className="totalCustomers">
+                    Hiển thị 1{" "}
+                    {this.props.customersByInferralPhone.data.length > 1
+                      ? `đến ${this.props.customersByInferralPhone.data.length}`
+                      : null}{" "}
+                    trong số {this.props.customersByInferralPhone.total} khách
+                    hàng
+                  </div>
+                  <Pagination
+                    setPageReferralPhone={this.setPageReferralPhone}
+                    store_code={store_code}
+                    customers={this.props.customersByInferralPhone}
+                  />
+                </div>
               </div>
             )}
           </SidebarShowCustomersByReferralPhone>

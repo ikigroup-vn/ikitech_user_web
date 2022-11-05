@@ -328,8 +328,8 @@ class SidebarFilterCustomer extends Component {
     return (
       <>
         <SidebarFilter
-          showFilterSearch={this.props.showFilterSearch}
-          setShowFilterSearch={this.props.setShowFilterSearch}
+          showSidebar={this.props.showFilterSearch}
+          setShowSidebar={this.props.setShowFilterSearch}
           title="Bộ lọc"
         >
           <SidebarFilterCustomerStyles className="sidebar__conditions">

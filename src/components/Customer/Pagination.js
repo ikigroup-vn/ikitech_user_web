@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import getChannel from "../../ultis/channel"
+import getChannel from "../../ultis/channel";
 import * as customerAction from "../../actions/customer";
 import { setQueryParamInUrl } from "../../ultis/helpers";
 class Pagination extends Component {
@@ -13,11 +13,13 @@ class Pagination extends Component {
 
   passPagination = (page) => {
     console.log("page in customer", page);
-    setQueryParamInUrl("pag", page)
+    setQueryParamInUrl("pag", page);
     this.props.fetchAllCustomer(this.props.store_code, page);
-    this.props.getPaginate(page)
+    this.props.getPaginate(page);
   };
-
+  handlePaginationReferralPhone = (page) => {
+    this.props.setPageReferralPhone(page);
+  };
   showData = (links) => {
     var result = null;
     var url = null;
@@ -42,12 +44,27 @@ class Pagination extends Component {
         } else {
           return (
             <li class={`page-item ${active} `}>
-              <a
-                onClick={() => this.passPagination(data.url.split("?page=")[1])}
-                class="page-link"
-              >
-                {label}
-              </a>
+              {this.props.setPageReferralPhone === undefined ? (
+                <a
+                  onClick={() =>
+                    this.passPagination(data.url.split("?page=")[1])
+                  }
+                  class="page-link"
+                >
+                  {label}
+                </a>
+              ) : (
+                <a
+                  onClick={() =>
+                    this.handlePaginationReferralPhone(
+                      data.url.split("?page=")[1]
+                    )
+                  }
+                  class="page-link"
+                >
+                  {label}
+                </a>
+              )}
             </li>
           );
         }
@@ -60,7 +77,10 @@ class Pagination extends Component {
 
   render() {
     return (
-      <nav aria-label="Page navigation" className={`float-pagination ${getChannel()}`}>
+      <nav
+        aria-label="Page navigation"
+        className={`float-pagination ${getChannel()}`}
+      >
         <ul class="pagination  tab-pagination pg-blue">
           {this.showData(this.props.customers.links)}
         </ul>

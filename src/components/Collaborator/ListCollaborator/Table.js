@@ -7,26 +7,28 @@ import { format, randomString } from "../../../ultis/helpers";
 import { connect } from "react-redux";
 import * as collaboratorAction from "../../../actions/collaborator";
 import ModalListReferences from "./ModalListReferences";
-import ModalImg from "../ModalImg"
-import moment from "moment"
+import ModalImg from "../ModalImg";
+import moment from "moment";
+import SidebarListReferences from "./SidebarListReferences";
 class Table extends Component {
   constructor(props) {
     super(props);
     this.state = {
       loadFrist: false,
       referral_phone_number: "",
-      modalImg : ""
+      modalImg: "",
+      showSidebarListReferences: false,
+      customerInfo: {},
     };
   }
-
   showChatBox = (collaboratorId, status) => {
     this.props.handleShowChatBox(collaboratorId, status);
   };
 
   showReferences = (referral_phone_number) => {
     this.setState({
-      referral_phone_number: referral_phone_number
-    })
+      referral_phone_number: referral_phone_number,
+    });
   };
 
   componentDidMount() {
@@ -43,18 +45,16 @@ class Table extends Component {
     }
   }
 
-
   onChangeStatus = (e, id) => {
-    var checked = !this["checked" + id].checked
-    var status = checked == true ? 1 : 0
+    var checked = !this["checked" + id].checked;
+    var status = checked == true ? 1 : 0;
     this.props.updateCollaborator(this.props.store_code, id, {
-      status: status
-    }
-    )
-  }
-  showModalImg = (url) =>{
-    this.setState({modalImg : url})
-  }
+      status: status,
+    });
+  };
+  showModalImg = (url) => {
+    this.setState({ modalImg: url });
+  };
 
   showData = (collaborators) => {
     var { store_code } = this.props;
@@ -70,22 +70,35 @@ class Table extends Component {
         var img_back =
           data.back_card == null ? Env.IMG_NOT_FOUND : data.back_card;
 
-        var address_default = ""
+        var address_default = "";
 
         if (data.customer != null && typeof data.customer != "undefined") {
-            if (data.customer.address_detail !== null && data.customer.address_detail !== "") {
-              address_default = address_default + data.customer.address_detail + ", "
-            }
-            if (data.customer.wards_name !== null && data.customer.wards_name !== "") {
-              address_default = address_default + data.customer.wards_name + ", "
-            }
-            if (data.customer.district_name !== null && data.customer.district_name !== "") {
-              address_default = address_default + data.customer.district_name + ", "
-            }
-            if (data.customer.province_name !== null && data.customer.province_name !== "") {
-              address_default = address_default + data.customer.province_name
-            }
-          
+          if (
+            data.customer.address_detail !== null &&
+            data.customer.address_detail !== ""
+          ) {
+            address_default =
+              address_default + data.customer.address_detail + ", ";
+          }
+          if (
+            data.customer.wards_name !== null &&
+            data.customer.wards_name !== ""
+          ) {
+            address_default = address_default + data.customer.wards_name + ", ";
+          }
+          if (
+            data.customer.district_name !== null &&
+            data.customer.district_name !== ""
+          ) {
+            address_default =
+              address_default + data.customer.district_name + ", ";
+          }
+          if (
+            data.customer.province_name !== null &&
+            data.customer.province_name !== ""
+          ) {
+            address_default = address_default + data.customer.province_name;
+          }
         }
         return (
           <React.Fragment>
@@ -99,10 +112,8 @@ class Table extends Component {
                   <span class="fa fa-plus"></span>
                 </button>
               </td>{" "}
-              <td>
-              {index + 1}
-              </td>{" "}
-              <td style = {{textAlign : "center"}}>
+              <td>{index + 1}</td>{" "}
+              <td style={{ textAlign: "center" }}>
                 <img
                   src={avatar}
                   class="img-responsive"
@@ -111,10 +122,9 @@ class Table extends Component {
                   alt="Image"
                 />
               </td>
-
               <td>{data.customer.name}</td>
               <td>{data.customer.phone_number}</td>
-{/* 
+              {/* 
               <td>
                 {" "}
                 {data.customer.points == null
@@ -124,15 +134,29 @@ class Table extends Component {
                   )}
               </td> */}
               <td>{data.customer.referral_phone_number || null}</td>
-
               <td>
-                <div className="on-off" onClick={(e) => { this.onChangeStatus(e, data.id) }}>
-                  <input ref={(ref) => this["checked" + data.id] = ref} type="checkbox" class="checkbox" name={`${randomString(10)}`} checked={data.status == 1 ? true : false} />
+                <div
+                  className="on-off"
+                  onClick={(e) => {
+                    this.onChangeStatus(e, data.id);
+                  }}
+                >
+                  <input
+                    ref={(ref) => (this["checked" + data.id] = ref)}
+                    type="checkbox"
+                    class="checkbox"
+                    name={`${randomString(10)}`}
+                    checked={data.status == 1 ? true : false}
+                  />
 
-             
                   <label for="checkbox" class="switch">
                     <span class="switch__circle">
-                      <span style = {{backgroundColor : data.status == 1 ? "white" : "gray"}} class="switch__circle-inner"></span>
+                      <span
+                        style={{
+                          backgroundColor: data.status == 1 ? "white" : "gray",
+                        }}
+                        class="switch__circle-inner"
+                      ></span>
                     </span>
                     <span class="switch__left"></span>
                     <span class="switch__right"></span>
@@ -154,10 +178,8 @@ class Table extends Component {
                   <i class="fa fa-phone"></i> Gọi ngay
                 </a>
                 &nbsp;
-
                 <Link
                   style={{ margin: "2px 0" }}
-
                   to={`/order/${this.props.store_code}?collaborator_by_customer_id=${data.customer_id}&tab-index=1`}
                   class="btn btn-danger btn-sm"
                 >
@@ -166,27 +188,26 @@ class Table extends Component {
                 &nbsp;
                 <Link
                   style={{ margin: "2px 0" }}
-
                   to={`/collaborator/${this.props.store_code}/report/${data.customer.id}`}
                   class="btn btn-info btn-sm"
                 >
                   <i class="fa fa-bar-chart"></i> Báo cáo
                 </Link>
                 &nbsp;
-
-
                 <a
-
-                  data-toggle="modal" data-target="#modalListReferences"
                   class="btn btn-info btn-sm"
-                  onClick={() => this.showReferences(data.customer.phone_number)}
+                  onClick={() =>
+                    this.handleShowSidebarListReferences(data.customer)
+                  }
                 >
                   <span class="icon text-white">
                     <i class="fa fa-users"></i>
                   </span>
-                  <span style={{ color: "white" }} class={`text `}> Danh sách giới thiệu</span>
+                  <span style={{ color: "white" }} class={`text `}>
+                    {" "}
+                    Danh sách giới thiệu ({data.customer.total_referrals})
+                  </span>
                 </a>
-
               </td>
             </tr>
             <tr class="explode hide" style={{ background: "rgb(200 234 222)" }}>
@@ -217,9 +238,7 @@ class Table extends Component {
                       </p>
                       <p class="sale_user_label">
                         Tên CMND:{" "}
-                        <span id="user_tel">
-                          {data.first_and_last_name}
-                        </span>
+                        <span id="user_tel">{data.first_and_last_name}</span>
                       </p>
 
                       <p class="sale_user_label" id="sale_user_name">
@@ -231,20 +250,27 @@ class Table extends Component {
                       </p>
                       <p class="sale_user_label" id="sale_user_name">
                         Ngày đăng ký CTV:{" "}
-                        <span id="user_name">{moment(data.created_a).format("DD-MM-YYYY")} </span>
+                        <span id="user_name">
+                          {moment(data.created_a).format("DD-MM-YYYY")}{" "}
+                        </span>
                       </p>
-                      {address_default !== "" &&  <p class="sale_user_label" id="sale_user_name">
-                        Địa chỉ:{" "}
-                        <span id="user_name"> {address_default} </span>
-                      </p>}
-                     
+                      {address_default !== "" && (
+                        <p class="sale_user_label" id="sale_user_name">
+                          Địa chỉ:{" "}
+                          <span id="user_name"> {address_default} </span>
+                        </p>
+                      )}
                     </div>
                   </div>
                   <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
                     <div class="info_user">
                       <div class="row">
-                        <div  data-toggle="modal"
-                      data-target="#modalImg" style={{ textAlign: "center" , cursor : "pointer"}} onClick = {()=>this.showModalImg(img_front)}>
+                        <div
+                          data-toggle="modal"
+                          data-target="#modalImg"
+                          style={{ textAlign: "center", cursor: "pointer" }}
+                          onClick={() => this.showModalImg(img_front)}
+                        >
                           <img
                             width="120"
                             height="125px"
@@ -257,8 +283,12 @@ class Table extends Component {
                           </p>
                         </div>
 
-                        <div  data-toggle="modal"
-                      data-target="#modalImg" style={{ textAlign: "center" ,  cursor : "pointer" }} onClick = {()=>this.showModalImg(img_back)}>
+                        <div
+                          data-toggle="modal"
+                          data-target="#modalImg"
+                          style={{ textAlign: "center", cursor: "pointer" }}
+                          onClick={() => this.showModalImg(img_back)}
+                        >
                           <img
                             width="120px"
                             height="125px"
@@ -285,14 +315,23 @@ class Table extends Component {
     }
     return result;
   };
-
+  setShowSidebarListReferences = (showSidebarListReferences) => {
+    this.setState({ showSidebarListReferences });
+  };
+  handleShowSidebarListReferences = (cusInfo) => {
+    this.setState({ customerInfo: cusInfo });
+    this.setShowSidebarListReferences(true);
+  };
+  setCustomerInfo = (cusInfo) => {
+    this.setState({ customerInfo: cusInfo });
+  };
   render() {
     var collaborators =
       typeof this.props.collaborators.data == "undefined"
         ? []
         : this.props.collaborators.data;
     return (
-      <div class=""  style = {{overflow : "auto"}}>
+      <div class="" style={{ overflow: "auto" }}>
         <ModalImg img={this.state.modalImg}></ModalImg>
         <table class="table table-border">
           <thead>
@@ -300,7 +339,7 @@ class Table extends Component {
               <th></th>
               <th>STT</th>
 
-              <th style = {{textAlign : "center"}}>Ảnh</th>
+              <th style={{ textAlign: "center" }}>Ảnh</th>
 
               <th>Họ tên</th>
               <th>Số điện thoại</th>
@@ -316,7 +355,17 @@ class Table extends Component {
 
           <tbody>{this.showData(collaborators)}</tbody>
         </table>
-        <ModalListReferences store_code={this.props.store_code} referral_phone_number={this.state.referral_phone_number} />
+        <ModalListReferences
+          store_code={this.props.store_code}
+          referral_phone_number={this.state.referral_phone_number}
+        />
+        <SidebarListReferences
+          store_code={this.props.store_code}
+          customerInfo={this.state.customerInfo}
+          setCustomerInfo={this.setCustomerInfo}
+          showSidebarListReferences={this.state.showSidebarListReferences}
+          setShowSidebarListReferences={this.setShowSidebarListReferences}
+        ></SidebarListReferences>
       </div>
     );
   }
@@ -327,7 +376,6 @@ const mapDispatchToProps = (dispatch, props) => {
     updateCollaborator: (store_code, id, data) => {
       dispatch(collaboratorAction.updateCollaborator(store_code, id, data));
     },
-
   };
 };
 export default connect(null, mapDispatchToProps)(Table);

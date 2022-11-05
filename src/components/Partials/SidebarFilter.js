@@ -47,7 +47,7 @@ class SidebarFilter extends Component {
       <SidebarFilterStyles
         className="sidebar-filter"
         style={{
-          transform: !this.props.showCustomersByReferralPhone
+          transform: !this.props.showSidebar
             ? "translateX(100%)"
             : "translateX(0)",
           width: widthSideBar !== undefined ? widthSideBar : "500px",
@@ -56,9 +56,7 @@ class SidebarFilter extends Component {
         <div className="sidebar-filter__content">
           <div className="sidebar-filter__content__header">
             <h4>{title}</h4>
-            <div
-              onClick={() => this.props.setShowCustomersByReferralPhone(false)}
-            >
+            <div onClick={() => this.props.setShowSidebar(false)}>
               <i className="fa fa-times"></i>
             </div>
           </div>
