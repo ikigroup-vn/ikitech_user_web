@@ -490,6 +490,7 @@ class Product extends Component {
                               passNumPage={this.passNumPage}
                               store_code={store_code}
                               products={products}
+                              pageProduct={true}
                             />
                           </div>
                         </div>
@@ -513,6 +514,7 @@ class Product extends Component {
                           passNumPage={this.passNumPage}
                           store_code={store_code}
                           products={products}
+                          pageProduct={true}
                         />
                       </div>
                     </div>

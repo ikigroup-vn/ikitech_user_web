@@ -11,9 +11,23 @@ class Pagination extends Component {
     };
   }
 
-  passPagination = (page) => {
+  passPaginationProduct = (page) => {
     var { store_code } = this.props;
     history.push(`/product/index/${store_code}/${page}`);
+  };
+  passPagination = (page) => {
+    var { store_code, limit, searchValue, bonusParam, listType, params } =
+      this.props;
+    // if (listType == 1) {
+    //   // params = `&limit=${limit}${bonusParam}`
+    // } else {
+    //   params = `&limit=${limit}`
+    // }
+    var param = "";
+    if (params) param = params;
+    const branch_id = localStorage.getItem("branch_id");
+    this.props.fetchAllProductV2(store_code, branch_id, page, param);
+    this.props.passNumPage(page);
   };
 
   passNumPage = (page) => {
@@ -44,12 +58,25 @@ class Pagination extends Component {
         } else {
           return (
             <li class={`page-item ${active} `}>
-              <a
-                onClick={() => this.passPagination(data.url.split("?page=")[1])}
-                class="page-link"
-              >
-                {label}
-              </a>
+              {this.props.pageProduct ? (
+                <a
+                  onClick={() =>
+                    this.passPaginationProduct(data.url.split("?page=")[1])
+                  }
+                  class="page-link"
+                >
+                  {label}
+                </a>
+              ) : (
+                <a
+                  onClick={() =>
+                    this.passPagination(data.url.split("?page=")[1])
+                  }
+                  class="page-link"
+                >
+                  {label}
+                </a>
+              )}
             </li>
           );
         }
