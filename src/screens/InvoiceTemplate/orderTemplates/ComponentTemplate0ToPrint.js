@@ -148,7 +148,7 @@ export default class ComponentTemplate0ToPrint extends Component {
 
   render() {
     var state = this.state;
-    var { bill, badges } = this.props;
+    var { bill, badges, store } = this.props;
     var total_product =
       Array.isArray(bill.line_items_at_time) == true
         ? bill.line_items_at_time.length
