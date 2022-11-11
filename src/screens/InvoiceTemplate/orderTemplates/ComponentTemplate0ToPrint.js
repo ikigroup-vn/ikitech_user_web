@@ -185,10 +185,10 @@ export default class ComponentTemplate0ToPrint extends Component {
               </p>
               <p class="" id="info">
                 <span>Địa chỉ: </span>
-                {store_address}
+                {store.address}
               </p>
               <p class="" id="info">
-                <span>Số điện thoại:</span> {state.user_phone ?? bill.user_phone}
+                <span>Số điện thoại:</span> {store.user?.phone_number ?? bill.user_phone}
               </p>
             </div>
           </div>
