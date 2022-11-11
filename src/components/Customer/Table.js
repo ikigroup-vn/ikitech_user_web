@@ -59,7 +59,7 @@ class Table extends Component {
             <td>{data.name}</td>
             <td>{data.phone_number}</td>
 
-            <td>{data.email == null ? "Chưa cập nhật" : data.email}</td>
+            {/* <td>{data.email == null ? "Chưa cập nhật" : data.email}</td> */}
             <td>
               {data.province_name == null
                 ? "Chưa cập nhật"
@@ -158,7 +158,7 @@ class Table extends Component {
               <th>Họ tên</th>
 
               <th>Số điện thoại</th>
-              <th>Gmail</th>
+            
               <th>Tỉnh / Thành phố</th>
               <th>Ngày đăng ký</th>
               <th>Số lượng người giới thiệu</th>
