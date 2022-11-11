@@ -635,12 +635,13 @@ class Table extends Component {
               currentBranch != null &&
               stores.length > 0 && (
                 <ListComponentToPrint
+                currentBranch={currentBranch}
                   badges={badges}
                   bills={selected}
                   store_code={store_code}
                   stores={stores}
                   ref={(el) => (this.componentRef = el)}
-                  currentBranch={this.props.currentBranch}
+                 
                 />
               )}
           </div>

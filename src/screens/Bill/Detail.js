@@ -108,11 +108,11 @@ class Detail extends Component {
 
                                                     <ReactToPrint
                                                         trigger={() => {
-
                                                             return <button type="button" class="btn btn-danger  btn-sm"><i class="fas fa-print"></i>&nbsp;In hóa đơn</button>;
                                                         }}
                                                         content={() => this.componentRef}
                                                     />
+
                                                     <div className="print-source " style={{ display: "none" }} >
 
                                                         {

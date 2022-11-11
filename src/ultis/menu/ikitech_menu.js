@@ -518,6 +518,13 @@ export const ikitech_menu = [
           },
 
           {
+            name: "Chọn mẫu in",
+            class: "config_setting",
+            display: "hide",
+            exact: true,
+            to: "/invoice_template/index",
+          },
+          {
             name: "Cài đặt phân quyền",
             class: "decentralization_list",
             display: "hide",

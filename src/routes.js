@@ -166,7 +166,14 @@ import PrintOrderScreen from "./screens/Bill/PrintOrderScreen";
 import PrintBarcode from "./screens/PrintBarcode";
 import CustomerSale from "./screens/CustomerSale";
 import GroupCustomer from "./screens/GroupCustomer";
+import InvoiceTemplate from "./screens/InvoiceTemplate";
 const routes = [
+  {
+    path: "/invoice_template/index/:store_code",
+    exact: true,
+
+    main: ({ match }) => <InvoiceTemplate match={match} />,
+  },
   {
     path: "/decentralization/index/:store_code",
     exact: true,
