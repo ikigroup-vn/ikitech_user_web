@@ -127,6 +127,36 @@ export default class ComponentTemplate1ToPrint extends Component {
         </tr>
       </React.Fragment>
     );
+    arr.push(
+      <React.Fragment>
+        <tr>
+          <td></td>
+
+          <td style={{ textAlign: "start" }}>Tổng</td>
+          <td></td>
+
+          <td style={{ textAlign: "end" }} colSpan="3">
+            {format(
+              (bill.total_final || 0)
+            )}
+          </td>
+        </tr>
+      </React.Fragment>
+    );
+    arr.push(
+      <React.Fragment>
+        <tr>
+          <td></td>
+
+          <td style={{ textAlign: "start" }}>Điểm/Xu</td>
+          <td></td>
+
+          <td style={{ textAlign: "end" }} colSpan="3">
+            {(bill.points_awarded_to_customer || 0)}
+          </td>
+        </tr>
+      </React.Fragment>
+    );
     return arr;
   };
 
@@ -171,7 +201,7 @@ export default class ComponentTemplate1ToPrint extends Component {
 
 
     return (
-      <div style={{ margin: "30px" }}>
+      <div style={{ margin: "30px", fontSize: "26px" }}>
 
         <div className="row">
 
@@ -189,32 +219,50 @@ export default class ComponentTemplate1ToPrint extends Component {
           </div>
 
 
-          <div className="col-8">
+          <div className="col-8" >
 
-            <div class="">
+            <div style={{
+              lineHeight: "0px",
+
+            }}>
 
               <p class="" id="sale_user_name">
                 <span style={{
                   fontWeight: "bold",
-                  textTransform: "uppercase"
+                  textTransform: "uppercase",
+                  fontSize: 30,
+                  margin: 0,
+                  padding: 0
                 }}>
                   {" "}
                   {store.name ?? bill.store_name}
                 </span>
               </p>
-              <p class="" id="info">
+              <p class="" id="info" style={{
+                margin: 0,
+                padding: 0
+              }}>
                 <span><b>Địa chỉ:</b> </span>
                 {store.address}
               </p>
 
-              <p class="" id="info">
-                <span><b>SĐT/Zalo:</b></span> {store.user?.phone_number ?? bill.user_phone}
+              <p class="" id="info" style={{
+                margin: 0,
+                padding: 0
+              }}>
+                <span><b>SĐT/Zalo:</b> {store.user?.phone_number ?? bill.user_phone}  <b> - Mã số thuế:</b> {currentBranch.txt_code ?? ""}</span>
               </p>
-              <p class="" id="info">
+              <p class="" id="info" style={{
+                margin: 0,
+                padding: 0
+              }}>
                 <span><b>Website:</b></span> {badges.domain_customer ?? ""}
               </p>
 
-              <p class="" id="info">
+              <p class="" id="info" style={{
+                margin: 0,
+                padding: 0
+              }}>
                 <span><b>STK:</b></span> {currentBranch.account_number ?? ""} {currentBranch.bank ?? ""} {currentBranch.account_name ?? ""}
               </p>
 
@@ -228,17 +276,27 @@ export default class ComponentTemplate1ToPrint extends Component {
             <center>
               <p
                 style={{
-                  fontSize: "25px",
-                  fontWeight: "500",
+                  fontSize: "30px",
+                  fontWeight: "bold",
                   textAlign: "center",
+
+                  margin: 0,
+                  padding: 0
+
                 }}
               >
                 HÓA ĐƠN BÁN HÀNG
               </p>
               <p
-                style={{ fontSize: "15px", textAlign: "center" }}
+                style={{
+                  fontSize: "23px", textAlign: "center", margin: 0,
+                  padding: 0
+                }}
                 className="order_code">Mã: {bill.order_code ?? bill.order_code}</p>
-              <div style={{ fontSize: "15px", textAlign: "center" }}>
+              <div style={{
+                fontSize: "23px", textAlign: "center", margin: 0,
+                padding: 0
+              }}>
                 Ngày: {getDDMMYYYHis(bill.created_at)}
               </div>
             </center>
@@ -247,20 +305,23 @@ export default class ComponentTemplate1ToPrint extends Component {
 
 
         <div className="parent" style={{
-          border: "none"
+          border: "none",
+          fontSize: "26px"
         }}>
 
           <div className="row">
-            <div class="col-12-print">
+            <div class="col-12-print" style={{
+              fontSize: "26px"
+            }}>
 
               <div class="">
 
                 <p class="" id="sale_user_name">
-                  <span style={{ fontWeight: "500" }}>
+                  <span style={{ fontWeight: "500", fontSize: "26px" }}>
                     <b> Tên khách hàng: </b>{state?.customer_name ?? bill.customer_name ?? bill?.customer?.name ?? ""}
                   </span>
                 </p>
-                <p class="" id="info">
+                <p class="" id="info" style={{ fontSize: "26px" }}>
                   <span><b>Địa chỉ: </b></span> {getDetailAdress(
                     bill.customer_address?.address_detail,
                     bill.customer_address?.wards_name,
@@ -268,11 +329,11 @@ export default class ComponentTemplate1ToPrint extends Component {
                     bill.customer_address?.province_name
                   )}
                 </p>
-                <p class="" id="info">
+                <p class="" id="info" style={{ fontSize: "26px" }}>
                   <span><b>Số điện thoại:  </b></span> {state?.customer_phone ?? bill.customer_phone ?? bill?.customer?.phone_number ?? ""}
                 </p>
-                <p class="" id="info">
-                  <span><b>Điểm:  </b></span> {bill?.customer?.point ?? "0"}
+                <p class="" id="info" style={{ fontSize: "26px" }}>
+                  <span><b>Điểm/Xu:  </b></span> {bill?.customer?.point ?? "0"}
                 </p>
               </div>
 
@@ -317,45 +378,56 @@ export default class ComponentTemplate1ToPrint extends Component {
           )}
           <div
             className="row"
-            style={{ borderTop: "1px dashed", borderBottom: "1px dashed" }}
+
           >
             <div class="col-6-not-border" style={{ position: "relative" }}>
               <p
                 style={{
-                  fontSize: "25px",
-                  fontWeight: "500",
+                  fontSize: "26px",
+                  fontWeight: "600",
                   textAlign: "center",
                 }}
               >
-                Tiền thu người nhận:
+                Người mua hàng
               </p>
 
               <div>
-                <div style={{ fontSize: "25px", textAlign: "center" }}>
-                  <strong> {format(bill.total_final)}</strong>
-                </div>
+
 
                 <div
                   style={{
-                    fontSize: "14px",
+                    fontSize: "26px",
                     position: "absolute",
                     bottom: "5px",
                   }}
                 >
-                  
+
                 </div>
               </div>
             </div>
-            <div class="col-6-not-border">
-              <div
+            <div class="col-6-not-border" style={{ position: "relative" }}>
+              <p
                 style={{
-                  height: "190px",
-                  margin: "10px",
-                 
-                  padding: "10px",
+                  fontSize: "26px",
+                  fontWeight: "600",
+                  textAlign: "center",
                 }}
               >
-               
+                Người bán hàng
+              </p>
+
+              <div>
+
+
+                <div
+                  style={{
+                    fontSize: "26px",
+                    position: "absolute",
+                    bottom: "5px",
+                  }}
+                >
+
+                </div>
               </div>
             </div>
           </div>
