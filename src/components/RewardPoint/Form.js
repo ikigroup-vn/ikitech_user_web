@@ -35,25 +35,24 @@ class Form extends Component {
     var target = e.target;
     var name = target.name;
     var value = target.value;
+
+    if (name == "percent_refund") {
+      this.setState({ [name]: value });
+      return;
+    }
+
     if (name == "percent_use_max_point") {
       if ((parseInt(value) || 0) < 100)
         this.setState({ [name]: value });
       else
         return;
     }
+
+
     const valueFormat = formatNumber(value);
     console.log(valueFormat)
     if (!isNaN(Number(valueFormat))) {
-      if (name == "percent_refund") {
-        if (parseInt(valueFormat) < 100) {
-          if (valueFormat === 0)
-            this.setState({ [name]: "" });
-          else
-            this.setState({ [name]: valueFormat });
-
-
-        }
-      } else if (name == "percent_use_max_point") {
+      if (name == "percent_use_max_point") {
         if (parseInt(valueFormat) < 100) {
           if (valueFormat === 0)
             this.setState({ [name]: "" });
@@ -209,7 +208,7 @@ class Form extends Component {
                     </div>
                     <div class="input-group" style={{ marginLeft: "20px", maxWidth: "100%" }}>
 
-                      <input type="text" class="form-control" value={percent_refund} onChange={this.onChange} name="percent_refund" placeholder="Nhập phần trăm..." />
+                      <input type="text" class="form-control" value={percent_refund} onChange={this.onChange} name="percent_refund" placeholder="Nhập phần trăm... VD: 0.1" />
                       <div class="input-group-append">
                         <span class="input-group-text" id="basic-addon2">%</span>
                       </div>
