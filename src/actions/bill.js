@@ -22,7 +22,7 @@ export const exportAllListOrder = (store_code,
       type: Types.SHOW_LOADING,
       loading: "show",
     });
-    billApi.fetchAllBill(store_code, page, branch_id, params, params_agency)
+    billApi.fetchAllBill(store_code, page, branch_id, params, params_agency, true)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
