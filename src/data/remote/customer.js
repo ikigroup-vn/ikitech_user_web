@@ -4,16 +4,17 @@ export const fetchAllCustomer = (
   store_code,
   page,
   params,
-  referral_phone_number = ""
+  referral_phone_number = "",
+  is_export = false
 ) => {
   return params
     ? callApi(
-        `/store/${store_code}/customers?page=${page}${params}&referral_phone_number=${referral_phone_number}`,
+        `/store/${store_code}/customers?page=${page}${params}&referral_phone_number=${referral_phone_number}&is_export=${is_export}`,
         "get",
         null
       )
     : callApi(
-        `/store/${store_code}/customers?page=${page}&referral_phone_number=${referral_phone_number}`,
+        `/store/${store_code}/customers?page=${page}&referral_phone_number=${referral_phone_number}&is_export=${is_export}`,
         "get",
         null
       );

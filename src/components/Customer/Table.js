@@ -75,7 +75,7 @@ class Table extends Component {
             <td>
               {data.points ? new Intl.NumberFormat().format(data.points) : 0}
             </td>
-
+            <td>{data.total_final_without_refund ? new Intl.NumberFormat().format(data.total_final_without_refund) : 0}</td>
             <td>{data.debt ? new Intl.NumberFormat().format(data.debt) : 0}</td>
             {getChannel() == IKITECH && (
               <td
@@ -161,8 +161,9 @@ class Table extends Component {
             
               <th>Tỉnh / Thành phố</th>
               <th>Ngày đăng ký</th>
-              <th>Số lượng người giới thiệu</th>
+              <th>Giới thiệu</th>
               <th>Xu</th>
+              <th>Tổng mua</th>
               <th>Số nợ hiện tại</th>
 
               {getChannel() == IKITECH && <th>Vai trò</th>}

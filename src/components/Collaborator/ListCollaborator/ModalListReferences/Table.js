@@ -86,7 +86,7 @@ class Table extends Component {
               <th>Họ tên</th>
 
               <th>Cộng tác viên</th>
-              <th>Số lượng người giới thiệu</th>
+              <th>Giới thiệu</th>
               <th>Số điện thoại</th>
               <th>Gmail</th>
             </tr>

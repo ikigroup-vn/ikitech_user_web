@@ -147,6 +147,7 @@ class Customer extends Component {
       showFilterSearch: false,
       showCustomersByReferralPhone: false,
       pageReferralPhone: 1,
+      currentParams: ""
     };
   }
   openModal = () => {
@@ -178,8 +179,15 @@ class Customer extends Component {
     const { searchValue } = this.state;
     const jsonListFilter = localStorage.getItem("optionsFilter");
     var params = `&search=${searchValue}&json_list_filter=${jsonListFilter}`;
-    this.props.fetchAllCustomer(store_code, 1, params);
+    this.fetchAllCustomer(store_code, 1, params);
   };
+
+  fetchAllCustomer = (store_code, page, params) => {
+    this.setState({
+      currentParams: params
+    })
+    this.props.fetchAllCustomer(store_code, page, params);
+  }
   componentWillReceiveProps(nextProps) {
     if (
       this.state.isLoading != true &&
@@ -193,11 +201,17 @@ class Customer extends Component {
     }
   }
 
+  exportAllListOrder = () => {
+    var { store_code } = this.props.match.params;
+    this.props.exportAllListCustomer(store_code, this.state.currentParams);
+
+  };
+
   componentDidMount() {
     setQueryParamInUrl("pag", pag);
     var pag = getQueryParams("pag") || 1;
 
-    this.props.fetchAllCustomer(this.props.match.params.store_code, pag);
+    this.fetchAllCustomer(this.props.match.params.store_code, pag);
     this.props.fetchPlaceProvince();
     this.props.fetchAllAgencyType(this.props.match.params.store_code);
   }
@@ -297,20 +311,20 @@ class Customer extends Component {
     }
     const valueConvert =
       type === Types.TYPE_COMPARE_TOTAL_FINAL_COMPLETED ||
-      type === Types.TYPE_COMPARE_TOTAL_FINAL_WITH_REFUND ||
-      type === Types.TYPE_COMPARE_POINT
+        type === Types.TYPE_COMPARE_TOTAL_FINAL_WITH_REFUND ||
+        type === Types.TYPE_COMPARE_POINT
         ? `${value}đ`
         : type === Types.TYPE_COMPARE_COUNT_ORDER
-        ? `${value}`
-        : type === Types.TYPE_COMPARE_SEX
-        ? `${genderFilter[0].type}`
-        : type === Types.TYPE_COMPARE_PROVINCE
-        ? province[0]?.name
-        : type === Types.TYPE_COMPARE_CTV
-        ? "Tất cả"
-        : type === Types.TYPE_COMPARE_AGENCY
-        ? typeAgencySelected[0].name
-        : value;
+          ? `${value}`
+          : type === Types.TYPE_COMPARE_SEX
+            ? `${genderFilter[0].type}`
+            : type === Types.TYPE_COMPARE_PROVINCE
+              ? province[0]?.name
+              : type === Types.TYPE_COMPARE_CTV
+                ? "Tất cả"
+                : type === Types.TYPE_COMPARE_AGENCY
+                  ? typeAgencySelected[0].name
+                  : value;
     return valueConvert;
   };
   handleDeleteOptionFilterById = (idOptionType) => {
@@ -337,7 +351,7 @@ class Customer extends Component {
     var params = `&search=${searchValue}&json_list_filter=${JSON.stringify(
       newOptionConditionFormat
     )}`;
-    this.props.fetchAllCustomer(store_code, 1, params);
+    this.fetchAllCustomer(store_code, 1, params);
     localStorage.setItem("optionsFilter", JSON.stringify(newOptionCondition));
   };
   setShowCustomersByReferralPhone = (isShowed) => {
@@ -359,7 +373,7 @@ class Customer extends Component {
     var { customer, chat, customers } = this.props;
     var customerImg =
       typeof customer.avatar_image == "undefined" ||
-      customer.avatar_image == null
+        customer.avatar_image == null
         ? Env.IMG_NOT_FOUND
         : customer.avatar_image;
     var customerId =
@@ -425,24 +439,41 @@ class Customer extends Component {
                       <h4 className="h4 title_content mb-0 text-gray-800">
                         Danh sách khách hàng
                       </h4>{" "}
-                      <a
-                        data-toggle="modal"
-                        data-target="#modalCreateCustomer"
-                        class="btn btn-info btn-icon-split btn-sm"
-                        style={{ height: "fit-content", width: "fit-content" }}
-                      >
-                        <span class="icon text-white-50">
-                          <i class="fas fa-plus"></i>
-                        </span>
-                        <span
-                          style={{
-                            color: "white",
-                          }}
-                          class={`text `}
+
+                      <div>
+
+                        <button
+                          style={{ margin: "auto 0px", marginRight: 15 }}
+                          onClick={this.exportAllListOrder}
+                          class={`btn btn-success btn-icon-split btn-sm `}
                         >
-                          Thêm khách hàng
-                        </span>
-                      </a>
+                          <span class="icon text-white-50">
+                            <i class="fas fa-file-export"></i>
+                          </span>
+                          <span style={{ color: "white" }} class="text">
+                            Export Excel
+                          </span>
+                        </button>
+
+                        <a
+                          data-toggle="modal"
+                          data-target="#modalCreateCustomer"
+                          class="btn btn-info btn-icon-split btn-sm"
+                          style={{ height: "fit-content", width: "fit-content" }}
+                        >
+                          <span class="icon text-white-50">
+                            <i class="fas fa-plus"></i>
+                          </span>
+                          <span
+                            style={{
+                              color: "white",
+                            }}
+                            class={`text `}
+                          >
+                            Thêm khách hàng
+                          </span>
+                        </a>
+                      </div>
                     </div>
 
                     <br></br>
@@ -456,14 +487,13 @@ class Customer extends Component {
                             <div class="input-group-append filter-search-customer">
                               {JSON.parse(localStorage.getItem("optionsFilter"))
                                 ?.length > 0 && (
-                                <span className="filter-search-customer-count">
-                                  {`(${
-                                    JSON.parse(
+                                  <span className="filter-search-customer-count">
+                                    {`(${JSON.parse(
                                       localStorage.getItem("optionsFilter")
                                     ).length
-                                  })`}
-                                </span>
-                              )}
+                                      })`}
+                                  </span>
+                                )}
                               <span>Lọc khách hàng</span>
                               <span>
                                 <i class="fa fa-sort-down"></i>
@@ -615,7 +645,7 @@ class Customer extends Component {
             province={province}
             searchValue={searchValue}
             store_code={store_code}
-            fetchAllCustomer={this.props.fetchAllCustomer}
+            fetchAllCustomer={this.fetchAllCustomer}
           ></SidebarFilterCustomer>
         </CustomerStyles>
       );
@@ -646,6 +676,9 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     fetchAllCustomer: (id, page, params) => {
       dispatch(customerAction.fetchAllCustomer(id, page, params));
+    },
+    exportAllListCustomer: (store_code, params) => {
+      dispatch(customerAction.exportAllListCustomer(store_code, params));
     },
     fetchAllCustomerByInferralPhone: (
       store_code,
