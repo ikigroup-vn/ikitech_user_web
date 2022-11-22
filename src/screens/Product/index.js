@@ -354,7 +354,7 @@ class Product extends Component {
                         <a
                           style={{ marginRight: "10px" }}
                           onClick={this.fetchAllListProduct}
-                          class={`btn btn-danger btn-icon-split btn-sm  ${
+                          class={`btn btn-success btn-icon-split btn-sm  ${
                             _export == true ? "show" : "hide"
                           }`}
                         >

@@ -30,7 +30,7 @@ class Bill extends Component {
       isSearch: false,
       searchValue: "",
       statusPayment: "",
-      runAsync : "",
+      runAsync: "",
       orderFrom: "",
       numPage: 20,
       agency_by_customer_id:
@@ -40,7 +40,7 @@ class Bill extends Component {
         null,
       time_from: "",
       time_to: "",
-      loadingShipment : ""
+      loadingShipment: ""
     };
   }
   closeChatBox = (status) => {
@@ -129,8 +129,8 @@ class Bill extends Component {
       typeof status_code == "undefined"
         ? null
         : status_code != "PAID"
-        ? `&field_by=order_status_code&field_by_value=${status_code}`
-        : `&field_by=payment_status_code&field_by_value=${status_code}`;
+          ? `&field_by=order_status_code&field_by_value=${status_code}`
+          : `&field_by=payment_status_code&field_by_value=${status_code}`;
     if (from && to) {
       from = moment(from, "DD-MM-YYYY").format("YYYY-MM-DD");
       to = moment(to, "DD-MM-YYYY").format("YYYY-MM-DD");
@@ -162,7 +162,7 @@ class Bill extends Component {
 
     var page = getQueryParams("page") ?? 1;
     this.props.fetchAllBill(store_code, page, branch_id, params, params_agency);
-    this.setState({loadingShipment : helper.randomString(10)})
+    this.setState({ loadingShipment: helper.randomString(10) })
   }
   handleShowChatBox = (customerId, customerImg, customerName, status) => {
     var { store_code } = this.props.match.params;
@@ -288,6 +288,42 @@ class Bill extends Component {
     return params;
   };
 
+
+  exportAllListOrder = () => {
+    var { store_code } = this.props.match.params;
+
+    var {
+      time_from,
+      time_to,
+      searchValue,
+      statusOrder,
+      statusPayment,
+      numPage,
+      orderFrom,
+      collaborator_by_customer_id,
+    } = this.state;
+
+    var params = this.getParams(
+      time_from,
+      time_to,
+      searchValue,
+      statusOrder,
+      statusPayment,
+      numPage,
+      orderFrom,
+      collaborator_by_customer_id
+    );
+
+    const branch_id = getBranchId();
+    var params_agency =
+    this.state.agency_by_customer_id != null
+      ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
+      : null;
+    this.props.exportAllListOrder(store_code, 1, branch_id, params, params_agency);
+
+  };
+
+
   onchangeDateFromTo = (e) => {
     var from = "";
     var { store_code } = this.props.match.params;
@@ -373,11 +409,11 @@ class Bill extends Component {
                       <h4 className="h4 title_content mb-0 text-gray-800">
                         Đơn hàng{" "}
                         {typeof customer.id != "undefined" &&
-                        customer.id == this.state.agency_by_customer_id
+                          customer.id == this.state.agency_by_customer_id
                           ? `của Đại lý ${customer.name}`
                           : null}
                         {typeof customer.id != "undefined" &&
-                        customer.id == this.state.collaborator_by_customer_id
+                          customer.id == this.state.collaborator_by_customer_id
                           ? `của CTV ${customer.name}`
                           : null}
                       </h4>{" "}
@@ -398,7 +434,7 @@ class Bill extends Component {
                       <div className="card-header py-3">
                         <div
                           class="row"
-                          // style={{ "justify-content": "space-between" }}
+                        // style={{ "justify-content": "space-between" }}
                         >
                           <form onSubmit={this.searchData}>
                             <div
@@ -421,95 +457,77 @@ class Bill extends Component {
                               </div>
                             </div>
                           </form>
+
+
                         
-
-                          {/* <div style={{ display: "flex" }}>
-                            <div style={{ display: "flex" }}>
-                              <span
-                                style={{
-                                  margin: "20px 10px auto auto",
-                                }}
-                              >
-                                Hiển thị
-                              </span>
-                              <select
-                                style={{
-                                  margin: "auto",
-                                  marginTop: "10px",
-                                  marginRight: "20px",
-                                  width: "70px",
-                                }}
-                                onChange={this.onChangeNumPage}
-                                value={numPage}
-                                name="numPage"
-                                class="form-control"
-                              >
-                                <option value="10">10</option>
-                                <option value="20" selected>
-                                  20
-                                </option>
-                                <option value="50">50</option>
-                              </select>
-                            </div>
-
-                            <Pagination
-                              searchValue={searchValue}
-                              limit={numPage}
-                              status_payment={statusPayment}
-                              store_code={store_code}
-                              bills={bills}
-                              status_order={statusOrder}
-                            />
-                          </div> */}
                         </div>
-                        <div style={{display : "flex" , justifyContent: "space-between"}}>
-                    
+                        <div style={{ display: "flex", justifyContent: "space-between" }}>
+
                           <p class="total-item" id="sale_user_name">
-                          <span className="num-total_item">
-                            {bills.total}&nbsp;
-                          </span>
-                          <span className="text-total_item" id="user_name">
-                            hóa đơn
-                          </span>{" "}
-                          &nbsp;&nbsp;
-                          <DateRangePickerComponent
-                            value={[
-                              new Date(moment(time_from, "YYYY-MM-DD")),
-                              new Date(moment(time_to, "YYYY-MM-DD")),
-                            ]}
-                            id="daterangepicker"
-                            placeholder="Khoảng thời gian..."
-                            format="dd/MM/yyyy"
-                            onChange={this.onchangeDateFromTo}
-                          />
-                          {/* <DateRangePickerComponent
+                            <span className="num-total_item">
+                              {bills.total}&nbsp;
+                            </span>
+                            <span className="text-total_item" id="user_name">
+                              hóa đơn
+                            </span>{" "}
+                            &nbsp;&nbsp;
+                            <DateRangePickerComponent
+                              value={[
+                                new Date(moment(time_from, "YYYY-MM-DD")),
+                                new Date(moment(time_to, "YYYY-MM-DD")),
+                              ]}
+                              id="daterangepicker"
+                              placeholder="Khoảng thời gian..."
+                              format="dd/MM/yyyy"
+                              onChange={this.onchangeDateFromTo}
+                            />
+                            {/* <DateRangePickerComponent
                                 id="daterangepicker"
                                 placeholder="Khoảng thời gian..."
                                 format="dd/MM/yyyy"
                                 onChange={this.onchangeDateFromTo}
                               /> */}
-                        </p>
-                        <button
-                            // onClick={(e) => this.handleMultiDelCallBack(e, selected)}
-                            // data-toggle="modal"
-                            // data-target="#removeMultiModal"
-                            style={{ 
-                              margin: "auto 0px"}}
-                            class={`btn btn-primary btn-sm`}
-                            title="Đồng bộ trạng thái đơn hàng với đơn vị vận chuyển"
-                            onClick={()=>{this.setState({runAsync  : helper.randomString(10)})}}
-                          >
-                            <i class="fa fa-sync"></i> Đồng bộ 
-                            trạng thái giao hàng
-                          </button>
+                          </p>
+
+                          <div>
+
+                            <button
+                              style={{ margin: "auto 0px", marginRight:15 }}
+                              onClick={this.exportAllListOrder}
+                              class={`btn btn-success btn-icon-split btn-sm `}
+                            >
+                              <span class="icon text-white-50">
+                                <i class="fas fa-file-export"></i>
+                              </span>
+                              <span style={{ color: "white" }} class="text">
+                                Export Excel
+                              </span>
+                            </button>
+
+                            <button
+                              // onClick={(e) => this.handleMultiDelCallBack(e, selected)}
+                              // data-toggle="modal"
+                              // data-target="#removeMultiModal"
+                              style={{
+                                margin: "auto 0px"
+                              }}
+                              class={`btn btn-primary btn-sm`}
+                              title="Đồng bộ trạng thái đơn hàng với đơn vị vận chuyển"
+                              onClick={() => { this.setState({ runAsync: helper.randomString(10) }) }}
+                            >
+                              <i class="fa fa-sync"></i> Đồng bộ
+                              trạng thái giao hàng
+                            </button>
+
+                          </div>
                         </div>
-                       
+
                       </div>
 
                       <div className="card-body">
                         <Table
-                        isLoading  = {this.state.loadingShipment}
-                        runAsync = {runAsync}
+                          isLoading={this.state.loadingShipment}
+                          runAsync={runAsync}
                           onchangeOrderFrom={this.onchangeOrderFrom}
                           getParams={this.getParams}
                           time_from={time_from}
@@ -606,7 +624,7 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
- 
+
     fetchAllBill: (id, page, branch_id, params, params_agency) => {
       var page = getQueryParams("page")
       dispatch(
@@ -619,6 +637,9 @@ const mapDispatchToProps = (dispatch, props) => {
 
     fetchCustomerId: (store_code, customerId) => {
       dispatch(customerAction.fetchCustomerId(store_code, customerId));
+    },
+    exportAllListOrder: (id, page, branch_id, params, params_agency) => {
+      dispatch(billAction.exportAllListOrder(id, page, branch_id, params, params_agency));
     },
   };
 };
