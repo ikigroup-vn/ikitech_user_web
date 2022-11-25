@@ -71,9 +71,13 @@ class InfoProductPos extends Component {
             {distribute.name !== null ? (
               <div>
                 <p class=" bold sale_user_label">
-                  {distribute.name}:
+                  Phân loại:
                   <span class="cart_payment_method">{distribute.value}</span>
                 </p>
+              {distribute.sub_element_distributes != null && distribute.sub_element_distributes!= "" &&  <p class=" bold sale_user_label">
+                  
+                  <span class="cart_payment_method">{distribute.sub_element_distributes}</span> 
+                </p>}
               </div>
             ) : null}
           </>
