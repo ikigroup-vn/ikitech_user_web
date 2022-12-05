@@ -32,26 +32,21 @@ class Table extends Component {
     }
   }
 
-
   onChangeStatus = (e, id) => {
-    var checked = !this["checked" + id].checked
-    var status = checked == true ? 1 : 0
+    var checked = !this["checked" + id].checked;
+    var status = checked == true ? 1 : 0;
     this.props.updateAgency(this.props.store_code, id, {
-      status: status
-    }
-    )
-  }
+      status: status,
+    });
+  };
 
   changeAgencyType = (e, id) => {
-    var value = e.target.value
+    var value = e.target.value;
+    if (value == 0) return;
     this.props.updateAgency(this.props.store_code, id, {
-      agency_type_id: value
-    }
-    )
-  }
-
-
-
+      agency_type_id: value,
+    });
+  };
 
   showData = (agencys) => {
     var { store_code } = this.props;
@@ -67,30 +62,54 @@ class Table extends Component {
         var img_back =
           data.back_card == null ? Env.IMG_NOT_FOUND : data.back_card;
 
-        var address_default = ""
+        var address_default = "";
 
         if (data.customer != null && typeof data.customer != "undefined") {
-          if (typeof data.customer.default_address === 'object' && data.customer.default_address !== null) {
-            if (data.customer.default_address.address_detail !== null && data.customer.default_address.address_detail !== "") {
-              address_default = address_default + data.customer.default_address.address_detail + ", "
+          if (
+            typeof data.customer.default_address === "object" &&
+            data.customer.default_address !== null
+          ) {
+            if (
+              data.customer.default_address.address_detail !== null &&
+              data.customer.default_address.address_detail !== ""
+            ) {
+              address_default =
+                address_default +
+                data.customer.default_address.address_detail +
+                ", ";
             }
-            if (data.customer.default_address.wards_name !== null && data.customer.default_address.wards_name !== "") {
-              address_default = address_default + data.customer.default_address.wards_name + ", "
+            if (
+              data.customer.default_address.wards_name !== null &&
+              data.customer.default_address.wards_name !== ""
+            ) {
+              address_default =
+                address_default +
+                data.customer.default_address.wards_name +
+                ", ";
             }
-            if (data.customer.default_address.district_name !== null && data.customer.default_address.district_name !== "") {
-              address_default = address_default + data.customer.default_address.district_name + ", "
+            if (
+              data.customer.default_address.district_name !== null &&
+              data.customer.default_address.district_name !== ""
+            ) {
+              address_default =
+                address_default +
+                data.customer.default_address.district_name +
+                ", ";
             }
-            if (data.customer.default_address.province_name !== null && data.customer.default_address.province_name !== "") {
-              address_default = address_default + data.customer.default_address.province_name
+            if (
+              data.customer.default_address.province_name !== null &&
+              data.customer.default_address.province_name !== ""
+            ) {
+              address_default =
+                address_default + data.customer.default_address.province_name;
             }
           }
-        } console.log("check", data.agency_type_id == null);
+        }
+        console.log("check", data.agency_type_id == null);
         return (
           <React.Fragment>
             <tr class="sub-container hover-product">
-              <td>
-                {index + 1}
-              </td>{" "}
+              <td>{index + 1}</td>{" "}
               <td style={{ textAlign: "center" }}>
                 <img
                   src={avatar}
@@ -100,48 +119,66 @@ class Table extends Component {
                   alt="Image"
                 />
               </td>
-
               <td>{data.customer.name}</td>
               <td>{data.customer.phone_number}</td>
               <td>
                 {data.customer.email == null ? "Trống" : data.customer.email}
               </td>
               <td>
-
-                <select style={{ width: "100%" }} name="agency_type_id" id="input" value={data.agency_type_id} required="required" onChange={(e) => this.changeAgencyType(e, data.id)}>
-                  {
-                    data.agency_type_id == null && <option value="">--Chưa chọn--</option>
-
-                  }                  {
-                    this.props.types.map((data, index) => {
-                      return (<React.Fragment>
-
+                <select
+                  style={{ width: "100%" }}
+                  name="agency_type_id"
+                  id="input"
+                  value={data.agency_type_id}
+                  required="required"
+                  onChange={(e) => this.changeAgencyType(e, data.id)}
+                >
+                  {<option value="0">--Chưa chọn--</option>}{" "}
+                  {this.props.types.map((data, index) => {
+                    return (
+                      <React.Fragment>
                         <option value={data.id}>{data.name}</option>
                       </React.Fragment>
-                      )
-
-                    })}
+                    );
+                  })}
                 </select>
-
               </td>
-
               <td>
-                <div style={{ display: "flex", justifyContent: "center" }} className="on-off" onClick={(e) => { this.onChangeStatus(e, data.id) }}>
-                  <input ref={(ref) => this["checked" + data.id] = ref} type="checkbox" class="checkbox" name={`${randomString(10)}`} checked={data.status == 1 ? true : false} />
+                <div
+                  style={{ display: "flex", justifyContent: "center" }}
+                  className="on-off"
+                  onClick={(e) => {
+                    this.onChangeStatus(e, data.id);
+                  }}
+                >
+                  <input
+                    ref={(ref) => (this["checked" + data.id] = ref)}
+                    type="checkbox"
+                    class="checkbox"
+                    name={`${randomString(10)}`}
+                    checked={data.status == 1 ? true : false}
+                  />
 
                   <label for="checkbox" class="switch">
                     <span class="switch__circle">
-                      <span style={{ backgroundColor: data.status == 1 ? "white" : "gray" }} class="switch__circle-inner"></span>
+                      <span
+                        style={{
+                          backgroundColor: data.status == 1 ? "white" : "gray",
+                        }}
+                        class="switch__circle-inner"
+                      ></span>
                     </span>
                     <span class="switch__left"></span>
                     <span class="switch__right"></span>
                   </label>
                 </div>
               </td>
-              <td style={{
-                display: "flex",
-                "flex-direction": "column"
-              }}>
+              <td
+                style={{
+                  display: "flex",
+                  "flex-direction": "column",
+                }}
+              >
                 <button
                   style={{ margin: "2px 0" }}
                   onClick={() => this.showChatBox(data.customer.id, "show")}
@@ -152,7 +189,6 @@ class Table extends Component {
 
                 <a
                   style={{ margin: "2px 0" }}
-
                   href={`tel:${data.customer.phone_number}`}
                   class="btn btn-primary btn-sm"
                 >
@@ -160,7 +196,6 @@ class Table extends Component {
                 </a>
                 <Link
                   style={{ margin: "2px 0" }}
-
                   to={`/order/${this.props.store_code}?agency_by_customer_id=${data.customer_id}&tab-index=1`}
                   class="btn btn-danger btn-sm"
                 >
@@ -169,7 +204,6 @@ class Table extends Component {
 
                 <Link
                   style={{ margin: "2px 0" }}
-
                   to={`/agency/${this.props.store_code}/report/${data.customer_id}?tab-index=1`}
                   class="btn btn-info btn-sm"
                 >
@@ -177,7 +211,6 @@ class Table extends Component {
                 </Link>
               </td>
             </tr>
-
           </React.Fragment>
         );
       });
@@ -187,29 +220,26 @@ class Table extends Component {
     return result;
   };
   optionsType = () => {
-    var result = null
-    var { types } = this.props
+    var result = null;
+    var { types } = this.props;
     if (types.length > 0) {
       result = types.map((data) => {
-        return (
-          <option value={data.id}>{data.name}</option>
-        )
-      })
+        return <option value={data.id}>{data.name}</option>;
+      });
     }
-    return result
-  }
+    return result;
+  };
   onChangeType = (e) => {
-    var { value } = e.target
-    this.setState({ txtType: value })
+    var { value } = e.target;
+    this.setState({ txtType: value });
     this.props.passType(value);
-
-  }
+  };
   render() {
     var agencys =
       typeof this.props.agencys.data == "undefined"
         ? []
         : this.props.agencys.data;
-    var { txtType } = this.state
+    var { txtType } = this.state;
     return (
       <div class="" style={{ overflow: "auto" }}>
         <table class="table table-border">
@@ -223,17 +253,19 @@ class Table extends Component {
               <th>Gmail</th>
 
               <th>
-
-                <select name="txtType" value={txtType} id="input" className="form-control" onChange={this.onChangeType}>
+                <select
+                  name="txtType"
+                  value={txtType}
+                  id="input"
+                  className="form-control"
+                  onChange={this.onChangeType}
+                >
                   <option disabled>-- Cấp đại lý --</option>
-                  <option value="" >Tất cả</option>
+                  <option value="">Tất cả</option>
 
                   {this.optionsType()}
-
                 </select>
-
               </th>
-
 
               <th>Trạng thái hoạt động</th>
 
@@ -256,7 +288,6 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchAllAgency: (store_code, page, params) => {
       dispatch(agencyAction.fetchAllAgency(store_code, page, params));
     },
-
   };
 };
 export default connect(null, mapDispatchToProps)(Table);

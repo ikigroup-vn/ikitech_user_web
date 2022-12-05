@@ -29,6 +29,13 @@ export const createCustomer = (store_code, data) => {
 export const editCustomer = (store_code, id, data) => {
   return callApi(`/store/${store_code}/customers/${id}`, "put", data);
 };
+export const changeTypeRoleCustomer = (store_code, id, data) => {
+  return callApi(
+    `/store/${store_code}/customers/${id}/sale_type`,
+    "post",
+    data
+  );
+};
 export const fetchAllPointHistory = (
   id,
   store_code,

@@ -167,6 +167,7 @@ import PrintBarcode from "./screens/PrintBarcode";
 import CustomerSale from "./screens/CustomerSale";
 import GroupCustomer from "./screens/GroupCustomer";
 import InvoiceTemplate from "./screens/InvoiceTemplate";
+import Manual from "./screens/Manual";
 const routes = [
   {
     path: "/invoice_template/index/:store_code",
@@ -1086,6 +1087,12 @@ const routes = [
     main: ({ match, history }) => (
       <ScheduleEdit match={match} history={history} />
     ),
+  },
+  {
+    path: "/manual/:store_code",
+    exact: true,
+
+    main: ({ match }) => <Manual match={match} />,
   },
 
   {

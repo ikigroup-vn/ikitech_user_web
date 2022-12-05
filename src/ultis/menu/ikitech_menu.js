@@ -606,6 +606,14 @@ export const ikitech_menu = [
             exact: true,
             to: "/notifications/schedule",
           },
+          {
+            name: "Hỗ trợ & hướng dẫn",
+            class: "notification_schedule_list",
+            display: "hide",
+            icon: "fa fa-bell",
+            exact: true,
+            to: "/manual",
+          },
           // {
           //   name: "Cài đặt Popup",
           //   class: "popup_list",
