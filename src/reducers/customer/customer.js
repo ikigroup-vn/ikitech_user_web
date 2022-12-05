@@ -29,6 +29,19 @@ export const customer = (state = initialState, action) => {
     case Types.FETCH_ALL_POINT_HISTORY:
       newState.pointHistory = action.data;
       return newState;
+    case Types.UPDATE_ROLE_CUSTOMER_FOR_INTERFACE:
+      const copyState = JSON.parse(JSON.stringify(newState));
+      const newAllCustomers = [];
+      copyState.allCustomer.data.forEach((element) => {
+        if (element.id === action.data.id) {
+          newAllCustomers.push(action.data);
+          return;
+        }
+        newAllCustomers.push(element);
+      });
+      copyState.allCustomer.data = newAllCustomers;
+      newState.allCustomer = copyState.allCustomer;
+      return newState;
     default:
       return newState;
   }

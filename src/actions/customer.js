@@ -33,10 +33,7 @@ export const fetchAllCustomer = (
   };
 };
 
-export const exportAllListCustomer = (
-  store_code,
-  params,
-) => {
+export const exportAllListCustomer = (store_code, params) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -50,8 +47,6 @@ export const exportAllListCustomer = (
           loading: "hide",
         });
 
-
-
         if (res.data.code == 200) {
           if (res.data.data.data.length > 0) {
             var newArray = [];
@@ -59,15 +54,22 @@ export const exportAllListCustomer = (
             for (const item of res.data.data.data) {
               var newItem = {};
               var arangeKeyItem = {
-
                 name: item.name ?? "",
                 phone_number: item.phone_number ?? "",
                 address_detail: item.address_detail ?? "",
                 wards_name: item.wards_name ?? "",
                 district_name: item.district_name ?? "",
                 province_name: item.province_name ?? "",
-                sex: item.sex == 1 ? 'Nữ' : item.sex == 2 ? 'Nam' : 'Không xác định',
-                date_of_birth: item.date_of_birth == null ? "" : formatDDMMYYYY(item.date_of_birth),
+                sex:
+                  item.sex == 1
+                    ? "Nữ"
+                    : item.sex == 2
+                    ? "Nam"
+                    : "Không xác định",
+                date_of_birth:
+                  item.date_of_birth == null
+                    ? ""
+                    : formatDDMMYYYY(item.date_of_birth),
                 points: item.points ?? "",
                 official: item.official,
                 created_at: item.created_at,
@@ -75,10 +77,8 @@ export const exportAllListCustomer = (
                 debt: item.debt,
                 total_final_all_status: item.total_final_all_status,
                 total_final_without_refund: item.total_final_without_refund,
-
               };
               Object.entries(arangeKeyItem).forEach(([key, value], index) => {
-
                 if (key == "name") {
                   newItem["Tên khách hàng"] = value;
                 }
@@ -154,7 +154,6 @@ function getSheetData(data, header) {
 }
 
 async function saveAsExcel(value) {
-
   var data = value.data;
   var data_header = value.header;
   XlsxPopulate.fromBlankAsync().then(async (workbook) => {
@@ -171,7 +170,6 @@ async function saveAsExcel(value) {
 
     sheet1.range("A1:" + endColumn + "1").style("fill", "F4D03F");
     range.style("border", true);
-
 
     return workbook.outputAsync().then((res) => {
       saveAs(res, "DANH SACH KHACH HANG.xlsx");
@@ -399,6 +397,50 @@ export const editCustomer = (store_code, id, data, funcModal = null) => {
             title: "Lỗi",
             disable: "show",
             content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+export const changeTypeRoleCustomer = (store_code, id, data) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    customerApi
+      .changeTypeRoleCustomer(store_code, id, data)
+      .then((res) => {
+        dispatch({
+          type: Types.UPDATE_ROLE_CUSTOMER_FOR_INTERFACE,
+          data: res.data.data,
+        });
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.message,
           },
         });
       });

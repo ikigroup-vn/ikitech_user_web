@@ -16,7 +16,7 @@ function getSheetData(data, header) {
   return sheetData;
 }
 
-async function saveAsExcel(value , title) {
+async function saveAsExcel(value, title) {
   // var data = [
   //   { name: "John", city: "Seattle" },
   //   { name: "Mike", city: "Los Angeles" },
@@ -43,13 +43,12 @@ async function saveAsExcel(value , title) {
     });
   });
 }
-export const exportTopten = (store_code, page, params,report_type) => {
+export const exportTopten = (store_code, page, params, report_type) => {
   return (dispatch) => {
-
     dispatch({
       type: Types.SHOW_LOADING_LAZY,
-      loading: "show"
-    })
+      loading: "show",
+    });
 
     agencyApi.fetchAllTopReport(store_code, page, params).then((res) => {
       console.log(res);
@@ -62,18 +61,15 @@ export const exportTopten = (store_code, page, params,report_type) => {
 
               for (const item of res.data.data.data) {
                 var newItem = {};
-                var arangeKeyItem = {}
-                if(report_type === "point")
-                {
+                var arangeKeyItem = {};
+                if (report_type === "point") {
                   arangeKeyItem = {
                     name: item.customer?.name,
                     phone_number: item.customer?.phone_number,
                     // points_count: item.points_count,
                     sum_point: item.sum_point,
-                    
                   };
-                }
-                else{
+                } else {
                   arangeKeyItem = {
                     name: item.customer?.name,
                     phone_number: item.customer?.phone_number,
@@ -89,8 +85,7 @@ export const exportTopten = (store_code, page, params,report_type) => {
                     newItem["Số điện thoại"] = value;
                     // newItem["Tên sản phẩm"] = value
                   }
-                  if(report_type === "point")
-                  {
+                  if (report_type === "point") {
                     // if (key == "points_count") {
                     //   newItem["Số xu"] = value;
                     //   // newItem["Tên sản phẩm"] = value
@@ -98,8 +93,7 @@ export const exportTopten = (store_code, page, params,report_type) => {
                     if (key == "sum_point") {
                       newItem["Tổng số xu"] = value;
                     }
-                  }
-                  else{
+                  } else {
                     if (key == "orders_count") {
                       newItem["Số đơn hàng"] = value;
                       // newItem["Tên sản phẩm"] = value
@@ -122,10 +116,13 @@ export const exportTopten = (store_code, page, params,report_type) => {
 
               dispatch({
                 type: Types.SHOW_LOADING_LAZY,
-                loading: "hide"
-              })
-              
-              saveAsExcel({ data: newArray, header: header } , "Danh sách Top CTV");
+                loading: "hide",
+              });
+
+              saveAsExcel(
+                { data: newArray, header: header },
+                "Danh sách Top CTV"
+              );
             }
           }
         }
@@ -142,16 +139,17 @@ export const exportListAgency = (store_code, page, params) => {
             if (typeof res.data.data.data != "undefined") {
               if (res.data.data.data.length > 0) {
                 var newArray = [];
-                var index = 0
+                var index = 0;
                 for (const item of res.data.data.data) {
-                  index = index + 1
+                  index = index + 1;
                   var newItem = {};
                   var arangeKeyItem = {
-                    order : index,
+                    order: index,
                     name: item.customer?.name,
                     phone_number: item.customer?.phone_number,
                     email: item.customer.email,
-                    status : item.status == 1 ? "Đã kích hoạt" : "Chưa kích hoạt"
+                    status:
+                      item.status == 1 ? "Đã kích hoạt" : "Chưa kích hoạt",
                   };
                   Object.entries(arangeKeyItem).forEach(
                     ([key, value], index) => {
@@ -184,7 +182,10 @@ export const exportListAgency = (store_code, page, params) => {
                   });
                 }
                 console.log(header);
-                saveAsExcel({ data: newArray, header: header } , "Danh sách Đại lý");
+                saveAsExcel(
+                  { data: newArray, header: header },
+                  "Danh sách Đại lý"
+                );
               }
             }
           }
@@ -195,13 +196,13 @@ export const fetchAgencyConf = (store_code) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING_LAZY,
-      loading: "show"
-    })
+      loading: "show",
+    });
     agencyApi.fetchAgencyConf(store_code).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING_LAZY,
-        loading: "hide"
-      })
+        loading: "hide",
+      });
       if (res.data.code !== 401)
         dispatch({
           type: Types.FETCH_ALL_AGENCY_CONFIG,
@@ -211,20 +212,17 @@ export const fetchAgencyConf = (store_code) => {
   };
 };
 
-
-
-
 export const fetchAllAgencyType = (store_code) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING_LAZY,
-      loading: "show"
-    })
+      loading: "show",
+    });
     agencyApi.fetchAllAgencyType(store_code).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING_LAZY,
-        loading: "hide"
-      })
+        loading: "hide",
+      });
       if (res.data.code !== 401)
         dispatch({
           type: Types.FETCH_ALL_AGENCY_TYPE,
@@ -238,14 +236,14 @@ export const fetchAllHistory = (store_code) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING_LAZY,
-      loading: "show"
-    })
+      loading: "show",
+    });
     agencyApi.fetchAllHistory(store_code).then((res) => {
-      console.log(res)
+      console.log(res);
       dispatch({
         type: Types.SHOW_LOADING_LAZY,
-        loading: "hide"
-      })
+        loading: "hide",
+      });
       if (res.data.code !== 401)
         dispatch({
           type: Types.FETCH_ALL_AGENCY_HISTORY_PAYMENT,
@@ -259,14 +257,14 @@ export const fetchAllTopReport = (store_code, page = 1, params) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING_LAZY,
-      loading: "show"
-    })
+      loading: "show",
+    });
     agencyApi.fetchAllTopReport(store_code, page, params).then((res) => {
-      console.log(res)
+      console.log(res);
       dispatch({
         type: Types.SHOW_LOADING_LAZY,
-        loading: "hide"
-      })
+        loading: "hide",
+      });
       if (res.data.code !== 401)
         dispatch({
           type: Types.FETCH_ALL_AGENCY_TOP_REPORT,
@@ -280,14 +278,13 @@ export const getBonusAgencyConfig = (store_code) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING_LAZY,
-      loading: "show"
-    })
+      loading: "show",
+    });
     agencyApi.getBonusAgencyConfig(store_code).then((res) => {
-
       dispatch({
         type: Types.SHOW_LOADING_LAZY,
-        loading: "hide"
-      })
+        loading: "hide",
+      });
       if (res.data.code !== 401)
         dispatch({
           type: Types.GET_BONUS_AGENCY_CONFIG,
@@ -301,25 +298,24 @@ export const updateBonusAgencyConfig = (store_code, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING_LAZY,
-      loading: "show"
-    })
+      loading: "show",
+    });
     agencyApi.updateBonusAgencyConfig(store_code, data).then((res) => {
-      console.log(res)
+      console.log(res);
       dispatch({
         type: Types.SHOW_LOADING_LAZY,
-        loading: "hide"
-      })
+        loading: "hide",
+      });
       if (res.data.code !== 401) {
         dispatch({
           type: Types.UPDATE_BONUS_AGENCY_CONFIG,
           data: res.data.data,
         });
         agencyApi.getBonusAgencyConfig(store_code).then((res) => {
-
           dispatch({
             type: Types.SHOW_LOADING_LAZY,
-            loading: "hide"
-          })
+            loading: "hide",
+          });
           if (res.data.code !== 401)
             dispatch({
               type: Types.GET_BONUS_AGENCY_CONFIG,
@@ -327,58 +323,55 @@ export const updateBonusAgencyConfig = (store_code, data) => {
             });
         });
       }
-
-
     });
   };
 };
 
 export const addBonusSteps = (store_code, data) => {
   return (dispatch) => {
-
-    agencyApi.addBonusSteps(store_code, data).then((res) => {
-      console.log(res)
-      dispatch({
-        type: Types.SHOW_LOADING_LAZY,
-        loading: "hide"
-      })
-      if (res.data.code !== 401) {
-
-
+    agencyApi
+      .addBonusSteps(store_code, data)
+      .then((res) => {
+        console.log(res);
         dispatch({
-          type: Types.ADD_BONUS_STEP_AGENCY,
-          data: res.data.data,
+          type: Types.SHOW_LOADING_LAZY,
+          loading: "hide",
         });
-        agencyApi.getBonusAgencyConfig(store_code).then((res) => {
-
+        if (res.data.code !== 401) {
           dispatch({
-            type: Types.SHOW_LOADING_LAZY,
-            loading: "hide"
-          })
-          if (res.data.code !== 401)
+            type: Types.ADD_BONUS_STEP_AGENCY,
+            data: res.data.data,
+          });
+          agencyApi.getBonusAgencyConfig(store_code).then((res) => {
             dispatch({
-              type: Types.GET_BONUS_AGENCY_CONFIG,
-              data: res.data.data,
+              type: Types.SHOW_LOADING_LAZY,
+              loading: "hide",
             });
-        });
+            if (res.data.code !== 401)
+              dispatch({
+                type: Types.GET_BONUS_AGENCY_CONFIG,
+                data: res.data.data,
+              });
+          });
 
-        history.push('/agency/'+store_code+'?tab-index=3');
-      }
-    }).catch(function (error) {
-      dispatch({
-        type: Types.SHOW_LOADING,
-        loading: "hide"
+          history.push("/agency/" + store_code + "?tab-index=3");
+        }
       })
-      dispatch({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "danger",
-          title: "Lỗi",
-          disable: "show",
-          content: error?.response?.data?.msg,
-        },
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
       });
-    });
   };
 };
 
@@ -386,88 +379,86 @@ export const updateBonusSteps = (store_code, id, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING_LAZY,
-      loading: "show"
-    })
-    agencyApi.updateBonusSteps(store_code, id, data).then((res) => {
-      console.log(res)
-      dispatch({
-        type: Types.SHOW_LOADING_LAZY,
-        loading: "hide"
-      })
-      if (res.data.code === 200) {
-        dispatch({
-          type: Types.UPDATE_BONUS_STEP_AGENCY,
-          data: res.data.data,
-        });
-        agencyApi.getBonusAgencyConfig(store_code).then((res) => {
-
-          dispatch({
-            type: Types.SHOW_LOADING_LAZY,
-            loading: "hide"
-          })
-          if (res.data.code !== 401)
-            dispatch({
-              type: Types.GET_BONUS_AGENCY_CONFIG,
-              data: res.data.data,
-            });
-        });
-        history.push('/agency/'+store_code+'?tab-index=3');
-      }
-    }).catch(function (error) {
-      dispatch({
-        type: Types.SHOW_LOADING,
-        loading: "hide"
-      })
-      dispatch({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "danger",
-          title: "Lỗi",
-          disable: "show",
-          content: error?.response?.data?.msg,
-        },
-      });
+      loading: "show",
     });
+    agencyApi
+      .updateBonusSteps(store_code, id, data)
+      .then((res) => {
+        console.log(res);
+        dispatch({
+          type: Types.SHOW_LOADING_LAZY,
+          loading: "hide",
+        });
+        if (res.data.code === 200) {
+          dispatch({
+            type: Types.UPDATE_BONUS_STEP_AGENCY,
+            data: res.data.data,
+          });
+          agencyApi.getBonusAgencyConfig(store_code).then((res) => {
+            dispatch({
+              type: Types.SHOW_LOADING_LAZY,
+              loading: "hide",
+            });
+            if (res.data.code !== 401)
+              dispatch({
+                type: Types.GET_BONUS_AGENCY_CONFIG,
+                data: res.data.data,
+              });
+          });
+          history.push("/agency/" + store_code + "?tab-index=3");
+        }
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
     dispatch({
       type: Types.SHOW_LOADING_LAZY,
-      loading: "hide"
-    })
+      loading: "hide",
+    });
   };
 };
-
 
 export const deleteBonusSteps = (store_code, id) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING_LAZY,
-      loading: "show"
-    })
+      loading: "show",
+    });
     agencyApi.deleteBonusSteps(store_code, id).then((res) => {
-      console.log(res)
+      console.log(res);
       dispatch({
         type: Types.SHOW_LOADING_LAZY,
-        loading: "hide"
-      })
+        loading: "hide",
+      });
       if (res.data.code !== 401) {
         dispatch({
           type: Types.DELETE_BONUS_STEP_AGENCY,
           data: res.data.data,
         });
         agencyApi.getBonusAgencyConfig(store_code).then((res) => {
-
           dispatch({
             type: Types.SHOW_LOADING_LAZY,
-            loading: "hide"
-          })
+            loading: "hide",
+          });
           if (res.data.code !== 401)
             dispatch({
               type: Types.GET_BONUS_AGENCY_CONFIG,
               data: res.data.data,
             });
         });
-
       }
-
     });
   };
 };
@@ -476,18 +467,17 @@ export const updateAllRequestPayment = (store_code) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     agencyApi
       .updateAllRequestPayment(store_code)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         agencyApi.fetchAllRequestPayment(store_code).then((res) => {
           if (res.data.code !== 401)
-
             dispatch({
               type: Types.FETCH_ALL_AGENCY_REQUEST_PAYMENT,
               data: res.data.data,
@@ -506,8 +496,8 @@ export const updateAllRequestPayment = (store_code) => {
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -521,8 +511,8 @@ export const updateAllRequestPayment = (store_code) => {
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -536,20 +526,19 @@ export const updateAllRequestPayment = (store_code) => {
   };
 };
 
-
 export const updateAgency = (store_code, id, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     agencyApi
       .updateAgency(store_code, id, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -560,11 +549,11 @@ export const updateAgency = (store_code, id, data) => {
           },
         });
         agencyApi.fetchAllAgency(store_code, 1).then((res) => {
-          console.log(res)
+          console.log(res);
           dispatch({
             type: Types.SHOW_LOADING_LAZY,
-            loading: "hide"
-          })
+            loading: "hide",
+          });
           if (res.data.code !== 401)
             dispatch({
               type: Types.FETCH_ALL_AGENCY,
@@ -575,8 +564,8 @@ export const updateAgency = (store_code, id, data) => {
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -590,8 +579,8 @@ export const updateAgency = (store_code, id, data) => {
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -606,22 +595,21 @@ export const updateAgency = (store_code, id, data) => {
 };
 
 export const updateRequestPayment = (store_code, data) => {
-  console.log(store_code, data)
+  console.log(store_code, data);
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     agencyApi
       .updateRequestPayment(store_code, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         agencyApi.fetchAllRequestPayment(store_code).then((res) => {
           if (res.data.code !== 401)
-
             dispatch({
               type: Types.FETCH_ALL_AGENCY_REQUEST_PAYMENT,
               data: res.data.data,
@@ -640,8 +628,8 @@ export const updateRequestPayment = (store_code, data) => {
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -655,8 +643,8 @@ export const updateRequestPayment = (store_code, data) => {
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -670,19 +658,18 @@ export const updateRequestPayment = (store_code, data) => {
   };
 };
 
-
 export const fetchAllRequestPayment = (store_code) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING_LAZY,
-      loading: "show"
-    })
+      loading: "show",
+    });
     agencyApi.fetchAllRequestPayment(store_code).then((res) => {
-      console.log(res)
+      console.log(res);
       dispatch({
         type: Types.SHOW_LOADING_LAZY,
-        loading: "hide"
-      })
+        loading: "hide",
+      });
       if (res.data.code !== 401)
         dispatch({
           type: Types.FETCH_ALL_AGENCY_REQUEST_PAYMENT,
@@ -696,14 +683,14 @@ export const fetchAllAgency = (store_code, page = 1, params = null) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING_LAZY,
-      loading: "show"
-    })
-    agencyApi.fetchAllAgency(store_code, page,params).then((res) => {
-      console.log(res)
+      loading: "show",
+    });
+    agencyApi.fetchAllAgency(store_code, page, params).then((res) => {
+      console.log(res);
       dispatch({
         type: Types.SHOW_LOADING_LAZY,
-        loading: "hide"
-      })
+        loading: "hide",
+      });
       if (res.data.code !== 401)
         dispatch({
           type: Types.FETCH_ALL_AGENCY,
@@ -715,34 +702,33 @@ export const fetchAllAgency = (store_code, page = 1, params = null) => {
 
 export const fetchChatId = (store_code, customerId, pag = 1) => {
   return (dispatch) => {
-
-    chatApi.fetchChatId(store_code, customerId, pag).then((res) => {
-
-      if (res.data.code !== 401)
-        dispatch({
-          type: Types.FETCH_ID_CHAT,
-          data: res.data.data,
-        });
-    }).catch(function (errors) {
-      console.log(errors)
-    });
+    chatApi
+      .fetchChatId(store_code, customerId, pag)
+      .then((res) => {
+        if (res.data.code !== 401)
+          dispatch({
+            type: Types.FETCH_ID_CHAT,
+            data: res.data.data,
+          });
+      })
+      .catch(function (errors) {
+        console.log(errors);
+      });
   };
 };
-
-
 
 export const fetchAllSteps = (store_code) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING_LAZY,
-      loading: "show"
-    })
+      loading: "show",
+    });
     agencyApi.fetchAllSteps(store_code).then((res) => {
-      console.log(res)
+      console.log(res);
       dispatch({
         type: Types.SHOW_LOADING_LAZY,
-        loading: "hide"
-      })
+        loading: "hide",
+      });
       if (res.data.code !== 401)
         dispatch({
           type: Types.FETCH_ALL_AGENCY_STEP,
@@ -752,26 +738,22 @@ export const fetchAllSteps = (store_code) => {
   };
 };
 
-
-
-
 export const createAgencyType = (store_code, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     agencyApi
       .createAgencyType(store_code, data)
       .then((res) => {
-        console.log(res)
+        console.log(res);
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         agencyApi.fetchAllAgencyType(store_code).then((res) => {
           if (res.data.code !== 401)
-
             dispatch({
               type: Types.FETCH_ALL_AGENCY_TYPE,
               data: res.data.data,
@@ -790,8 +772,8 @@ export const createAgencyType = (store_code, data) => {
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -816,23 +798,21 @@ export const createAgencyType = (store_code, data) => {
   };
 };
 
-
 export const createStep = (store_code, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     agencyApi
       .createStep(store_code, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         agencyApi.fetchAllSteps(store_code).then((res) => {
           if (res.data.code !== 401)
-
             dispatch({
               type: Types.FETCH_ALL_AGENCY_STEP,
               data: res.data.data,
@@ -851,8 +831,8 @@ export const createStep = (store_code, data) => {
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -877,26 +857,23 @@ export const createStep = (store_code, data) => {
   };
 };
 
-
 export const destroyType = (store_code, id) => {
-
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     agencyApi
       .destroyType(store_code, id)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         agencyApi
           .fetchAllAgencyType(store_code)
           .then((res) => {
             if (res.data.code !== 401)
-
               dispatch({
                 type: Types.FETCH_ALL_AGENCY_TYPE,
                 data: res.data.data,
@@ -938,24 +915,22 @@ export const destroyType = (store_code, id) => {
 };
 
 export const destroyStep = (store_code, id) => {
-
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     agencyApi
       .destroyStep(store_code, id)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         agencyApi
           .fetchAllSteps(store_code)
           .then((res) => {
             if (res.data.code !== 401)
-
               dispatch({
                 type: Types.FETCH_ALL_AGENCY_STEP,
                 data: res.data.data,
@@ -996,25 +971,21 @@ export const destroyStep = (store_code, id) => {
   };
 };
 
-
-
-
 export const updateAgencyType = (store_code, id, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     agencyApi
       .updateAgencyType(store_code, id, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         agencyApi.fetchAllAgencyType(store_code).then((res) => {
           if (res.data.code !== 401)
-
             dispatch({
               type: Types.FETCH_ALL_AGENCY_TYPE,
               data: res.data.data,
@@ -1044,8 +1015,8 @@ export const updateAgencyType = (store_code, id, data) => {
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -1062,18 +1033,17 @@ export const updateStep = (store_code, id, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     agencyApi
       .updateStep(store_code, id, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         agencyApi.fetchAllSteps(store_code).then((res) => {
           if (res.data.code !== 401)
-
             dispatch({
               type: Types.FETCH_ALL_AGENCY_STEP,
               data: res.data.data,
@@ -1103,8 +1073,8 @@ export const updateStep = (store_code, id, data) => {
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -1122,18 +1092,17 @@ export const updateConfig = (store_code, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     agencyApi
       .updateConfig(store_code, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         agencyApi.fetchAgencyConf(store_code).then((res) => {
           if (res.data.code !== 401)
-
             dispatch({
               type: Types.FETCH_ALL_AGENCY_CONFIG,
               data: res.data.data,
@@ -1163,8 +1132,8 @@ export const updateConfig = (store_code, data) => {
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {

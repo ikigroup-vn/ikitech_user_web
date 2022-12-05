@@ -5,12 +5,108 @@ import history from "../../history";
 import { filter_arr, format, getQueryParams } from "../../ultis/helpers";
 import Pagination from "../../components/RevenueExpenditures/Pagination";
 import { formatDDMMYYYY } from "../../ultis/date";
+import styled from "styled-components";
+import ModalChangeRoleCustomer from "./ModalChangeRoleCustomer";
+import { connect, shallowEqual } from "react-redux";
+import * as customerAction from "../../actions/customer";
+import * as agencyAction from "../../actions/agency";
 
+const typeRoleCustomer = [
+  {
+    id: 1,
+    sale_type: 0,
+    name: "Khách hàng",
+  },
+  {
+    id: 2,
+    sale_type: 1,
+    name: "Cộng tác viên",
+  },
+  {
+    id: 3,
+    sale_type: 2,
+    name: "Đại lý",
+  },
+];
+
+const TableStyles = styled.div`
+  .select-role {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  .select-role-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    background-color: white;
+    border-radius: 6px;
+    box-shadow: 0 0px 2px rgba(0, 0, 0, 0.3);
+    & > div {
+      & > div {
+        padding: 8px 18px;
+        color: black;
+        white-space: nowrap;
+        &:hover {
+          background-color: rgba(0, 0, 0, 0.05);
+        }
+        &:not(:last-child) {
+          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+      }
+    }
+  }
+  .list-agencies {
+    position: absolute;
+    top: 0;
+    right: 100%;
+    z-index: 10;
+    background-color: white;
+    border-radius: 6px;
+    overflow: hidden;
+    box-shadow: 0 0px 2px rgba(0, 0, 0, 0.3);
+    & > div {
+      padding: 8px 18px;
+      color: black;
+      white-space: nowrap;
+      &:hover {
+        background-color: rgba(0, 0, 0, 0.05);
+      }
+      &:not(:last-child) {
+        border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      }
+    }
+  }
+`;
 class Table extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      idCustomerSelected: null,
+      openModalChangeRole: false,
+      typeSaleCustomer: null,
+      showListAgencies: false,
+      typeAgency: null,
+    };
   }
 
+  componentDidMount() {
+    const { fetchAllAgencyType, store_code } = this.props;
+    fetchAllAgencyType(store_code);
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    const { customers } = this.props;
+    const { customers: customersNext } = nextProps;
+
+    if (!shallowEqual(customers, customersNext)) {
+      this.setOpenShowModalChangeRole(false);
+      this.setIdCustomerSelected(null);
+      this.setTypeSaleCustomer(null);
+      this.setTypeAgency(null);
+    }
+    return true;
+  }
   showChatBox = (customerId, status) => {
     this.props.handleShowChatBox(customerId, status);
   };
@@ -18,7 +114,10 @@ class Table extends Component {
     this.props.handleSetInfor(item);
   };
   changePage = (store_code, customerId, e) => {
-    if (e.target.className !== "total_referral") {
+    if (
+      e.target.className !== "total_referral" &&
+      !e.target.closest(".select-role")
+    ) {
       var { paginate } = this.props;
       if (e.target.name == "action") return;
       history.push(
@@ -31,8 +130,57 @@ class Table extends Component {
     setCustomerInfo(customerInfo);
     setShowCustomersByReferralPhone(true);
   };
+
+  handleChangeSaleType = (typeSale, typeAgency) => {
+    this.setTypeSaleCustomer(typeSale);
+    this.setOpenShowModalChangeRole(true);
+    if (typeAgency === undefined) return;
+    this.setTypeAgency(typeAgency);
+  };
+
+  handlleIdCustomerSelected = (e, idCustomer) => {
+    if (e.target.closest(".select-role-dropdown")) return;
+    this.setState({
+      idCustomerSelected:
+        idCustomer === this.state.idCustomerSelected ? null : idCustomer,
+    });
+  };
+  setIdCustomerSelected = (idCustomer) => {
+    this.setState({
+      idCustomerSelected: idCustomer,
+    });
+  };
+
+  setOpenShowModalChangeRole = (showModal) => {
+    this.setState({
+      openModalChangeRole: showModal,
+    });
+  };
+
+  setTypeSaleCustomer = (typeSale) => {
+    this.setState({
+      typeSaleCustomer: typeSale,
+    });
+  };
+  setShowListAgencies = (isShowedListAgencies) => {
+    this.setState({
+      showListAgencies: isShowedListAgencies,
+    });
+  };
+  setTypeAgency = (typeAgency) => {
+    this.setState({
+      typeAgency,
+    });
+  };
+  handleShowListAgencies = (e) => {
+    const { showListAgencies } = this.state;
+    if (e.target.closest(".list-agencies")) return;
+    this.setShowListAgencies(!showListAgencies);
+  };
+
   showData = (customer) => {
-    var { store_code, paginate } = this.props;
+    var { store_code, paginate, types } = this.props;
+    const { idCustomerSelected } = this.state;
     var result = null;
     if (customer.length > 0) {
       var { chat_allow } = this.props;
@@ -47,7 +195,6 @@ class Table extends Component {
       //   data.is_agency == false
       //   ? "Không"
       //   : "Có"
-
       result = customer.map((data, index) => {
         return (
           <tr
@@ -75,48 +222,93 @@ class Table extends Component {
             <td>
               {data.points ? new Intl.NumberFormat().format(data.points) : 0}
             </td>
-            <td>{data.total_final_without_refund ? new Intl.NumberFormat().format(data.total_final_without_refund) : 0}</td>
+            <td>
+              {data.total_final_without_refund
+                ? new Intl.NumberFormat().format(
+                    data.total_final_without_refund
+                  )
+                : 0}
+            </td>
             <td>{data.debt ? new Intl.NumberFormat().format(data.debt) : 0}</td>
             {getChannel() == IKITECH && (
               <td
-                className={
+                className={`${
                   data.is_collaborator === true
-                    ? "success"
+                    ? "warning"
                     : data.is_agency === true
-                    ? "primary"
-                    : ""
-                }
+                    ? "danger"
+                    : "primary"
+                } select-role`}
+                style={{
+                  position: "relative",
+                }}
+                onClick={(e) => this.handlleIdCustomerSelected(e, data.id)}
               >
                 {data.is_collaborator === true
                   ? "Cộng tác viên"
                   : data.is_agency === true
                   ? "Đại lý"
-                  : "Không"}
+                  : "Khách hàng"}
+                {idCustomerSelected !== data.id ? null : (
+                  <div class="select-role-dropdown">
+                    {typeRoleCustomer.map((customer) => (
+                      <div key={customer.id}>
+                        {customer.sale_type !== 2 ? (
+                          <div
+                            onClick={() =>
+                              this.handleChangeSaleType(customer.sale_type)
+                            }
+                          >
+                            {customer.name}
+                          </div>
+                        ) : (
+                          <>
+                            {types.length === 0 ? (
+                              <div
+                                onClick={() =>
+                                  this.handleChangeSaleType(customer.sale_type)
+                                }
+                              >
+                                {customer.name}
+                              </div>
+                            ) : (
+                              <div
+                                style={{
+                                  position: "relative",
+                                }}
+                                onClick={this.handleShowListAgencies}
+                              >
+                                {customer.name}
+                                {this.state.showListAgencies ? (
+                                  <div className="list-agencies">
+                                    {types.map((type) => (
+                                      <div
+                                        key={type.id}
+                                        onClick={() =>
+                                          this.handleChangeSaleType(
+                                            customer.sale_type,
+                                            type.id
+                                          )
+                                        }
+                                      >
+                                        {type.name}
+                                      </div>
+                                    ))}
+                                  </div>
+                                ) : null}
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                )}
               </td>
             )}
-            {/* {getChannel() == IKITECH && <td className= {data.is_agency === true ?  "success" : "danger"}>
-
-              {data.is_agency === true ?  "Có" : "Không"}
-            </td>} */}
 
             {getChannel() == IKIPOS && (
               <td className="">
-                {/* {getChannel() == IKITECH && <Link
-                to={`/customer/detail/${store_code}/${data.id}?pag=${paginate}`}
-                class="btn btn-success btn-sm"
-              >
-                <i class="fa fa-eye"></i> Xem
-              </Link>} */}
-
-                {/* <button
-                style={{ marginLeft: "10px" }}
-                name = "action"
-                onClick={() => this.showChatBox(data.id, "show")}
-                class={`btn btn-primary btn-sm ${chat_allow == true ? "show" : "hide"
-                  }`}
-              >
-                <i class="fa fa-comment-alt"></i> Chat
-              </button>  */}
                 {getChannel() == IKIPOS && (
                   <Link
                     to={`/customer/detail/${store_code}/${data.id}?pag=${paginate}`}
@@ -143,9 +335,15 @@ class Table extends Component {
         ? []
         : this.props.customers.data;
 
-    var store_code = this.props;
+    var { store_code } = this.props;
+    const {
+      openModalChangeRole,
+      idCustomerSelected,
+      typeSaleCustomer,
+      typeAgency,
+    } = this.state;
     return (
-      <div class="table-responsive">
+      <TableStyles class="table-responsive">
         <table
           class="table table-border "
           id="dataTable"
@@ -158,7 +356,7 @@ class Table extends Component {
               <th>Họ tên</th>
 
               <th>Số điện thoại</th>
-            
+
               <th>Tỉnh / Thành phố</th>
               <th>Ngày đăng ký</th>
               <th>Giới thiệu</th>
@@ -173,9 +371,36 @@ class Table extends Component {
           </thead>
           <tbody>{this.showData(customers)}</tbody>
         </table>
-      </div>
+        {openModalChangeRole ? (
+          <ModalChangeRoleCustomer
+            setOpenShowModalChangeRole={this.setOpenShowModalChangeRole}
+            setIdCustomerSelected={this.setIdCustomerSelected}
+            setTypeSaleCustomer={this.setTypeSaleCustomer}
+            setTypeAgency={this.setTypeAgency}
+            idCustomerSelected={idCustomerSelected}
+            typeSaleCustomer={typeSaleCustomer}
+            typeAgency={typeAgency}
+            store_code={store_code}
+          ></ModalChangeRoleCustomer>
+        ) : null}
+      </TableStyles>
     );
   }
 }
 
-export default Table;
+const mapStateToProps = (state) => {
+  return {
+    customers: state.customerReducers.customer.allCustomer,
+    types: state.agencyReducers.agency.allAgencyType,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchAllAgencyType: (store_code) => {
+      dispatch(agencyAction.fetchAllAgencyType(store_code));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Table);
