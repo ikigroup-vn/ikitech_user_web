@@ -83,11 +83,12 @@ class Table extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      idCustomerSelected: null,
+      customerSelected: null,
       openModalChangeRole: false,
       typeSaleCustomer: null,
       showListAgencies: false,
       typeAgency: null,
+      nameCustomer: "",
     };
   }
 
@@ -101,9 +102,10 @@ class Table extends Component {
 
     if (!shallowEqual(customers, customersNext)) {
       this.setOpenShowModalChangeRole(false);
-      this.setIdCustomerSelected(null);
+      this.setCustomerSelected(null);
       this.setTypeSaleCustomer(null);
       this.setTypeAgency(null);
+      this.setShowListAgencies(false);
     }
     return true;
   }
@@ -138,16 +140,16 @@ class Table extends Component {
     this.setTypeAgency(typeAgency);
   };
 
-  handlleIdCustomerSelected = (e, idCustomer) => {
+  handlleCustomerSelected = (e, customer) => {
     if (e.target.closest(".select-role-dropdown")) return;
     this.setState({
-      idCustomerSelected:
-        idCustomer === this.state.idCustomerSelected ? null : idCustomer,
+      customerSelected:
+        customer.id === this.state.customerSelected?.id ? null : customer,
     });
   };
-  setIdCustomerSelected = (idCustomer) => {
+  setCustomerSelected = (customer) => {
     this.setState({
-      idCustomerSelected: idCustomer,
+      customerSelected: customer,
     });
   };
 
@@ -172,6 +174,7 @@ class Table extends Component {
       typeAgency,
     });
   };
+
   handleShowListAgencies = (e) => {
     const { showListAgencies } = this.state;
     if (e.target.closest(".list-agencies")) return;
@@ -180,21 +183,9 @@ class Table extends Component {
 
   showData = (customer) => {
     var { store_code, paginate, types } = this.props;
-    const { idCustomerSelected } = this.state;
+    const { customerSelected } = this.state;
     var result = null;
     if (customer.length > 0) {
-      var { chat_allow } = this.props;
-      // var is_collaborator  = data.is_collaborator == null ||
-      //   data.is_collaborator == "" ||
-      //   data.is_collaborator == false
-      //   ? "Không"
-      //   : "Có"
-
-      //   var is_agency  = data.is_agency == null ||
-      //   data.is_agency == "" ||
-      //   data.is_agency == false
-      //   ? "Không"
-      //   : "Có"
       result = customer.map((data, index) => {
         return (
           <tr
@@ -242,14 +233,14 @@ class Table extends Component {
                 style={{
                   position: "relative",
                 }}
-                onClick={(e) => this.handlleIdCustomerSelected(e, data.id)}
+                onClick={(e) => this.handlleCustomerSelected(e, data)}
               >
                 {data.is_collaborator === true
                   ? "Cộng tác viên"
                   : data.is_agency === true
                   ? "Đại lý"
                   : "Khách hàng"}
-                {idCustomerSelected !== data.id ? null : (
+                {customerSelected?.id !== data.id ? null : (
                   <div class="select-role-dropdown">
                     {typeRoleCustomer.map((customer) => (
                       <div key={customer.id}>
@@ -338,7 +329,7 @@ class Table extends Component {
     var { store_code } = this.props;
     const {
       openModalChangeRole,
-      idCustomerSelected,
+      customerSelected,
       typeSaleCustomer,
       typeAgency,
     } = this.state;
@@ -374,10 +365,11 @@ class Table extends Component {
         {openModalChangeRole ? (
           <ModalChangeRoleCustomer
             setOpenShowModalChangeRole={this.setOpenShowModalChangeRole}
-            setIdCustomerSelected={this.setIdCustomerSelected}
+            setCustomerSelected={this.setCustomerSelected}
             setTypeSaleCustomer={this.setTypeSaleCustomer}
+            setShowListAgencies={this.setShowListAgencies}
             setTypeAgency={this.setTypeAgency}
-            idCustomerSelected={idCustomerSelected}
+            customerSelected={customerSelected}
             typeSaleCustomer={typeSaleCustomer}
             typeAgency={typeAgency}
             store_code={store_code}

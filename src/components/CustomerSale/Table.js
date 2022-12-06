@@ -2,7 +2,13 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
 import history from "../../history";
-import { filter_arr, format,isEmail, isEmpty, isPhone } from "../../ultis/helpers";
+import {
+  filter_arr,
+  format,
+  isEmail,
+  isEmpty,
+  isPhone,
+} from "../../ultis/helpers";
 import Pagination from "../../components/RevenueExpenditures/Pagination";
 import * as customerAction from "../../actions/customer_sales";
 import { connect } from "react-redux";
@@ -18,7 +24,7 @@ class Table extends Component {
       filter_by_status: "",
       modalDelete: {},
       selected: [],
-      staff_id: null
+      staff_id: null,
     };
   }
 
@@ -70,8 +76,8 @@ class Table extends Component {
     this.setState({ selected });
   };
   showData = (customer, per_page, current_page) => {
-    var { store_code, paginate, staff  , is_user} = this.props;
-    var {remove , assignment,edit} = this.props
+    var { store_code, paginate, staff, is_user } = this.props;
+    var { remove, assignment, edit } = this.props;
     var result = null;
     if (customer.length > 0) {
       var { chat_allow } = this.props;
@@ -99,9 +105,9 @@ class Table extends Component {
             handleSetInfor={this.props.handleSetInfor}
             store_code={store_code}
             index={index}
-            remove = {remove}
-            edit = {edit}
-            assignment = {assignment}
+            remove={remove}
+            edit={edit}
+            assignment={assignment}
             paginate={paginate}
             numPage={per_page * (current_page - 1) + (index + 1)}
             key={data.id}
@@ -144,20 +150,19 @@ class Table extends Component {
   };
 
   buildOptionStaff = () => {
-    var { staff } = this.props
+    var { staff } = this.props;
 
-    return (staff ?? []).map((ele) =>
+    return (staff ?? []).map((ele) => (
       <option value={ele.id}>{ele.name}</option>
-    )
-
-  }
+    ));
+  };
 
   handleMultiUpdateCallBack = (e, data) => {
     var { store_code } = this.props;
-    var {staff_id} = this.state
+    var { staff_id } = this.state;
     e.preventDefault();
 
-    if (staff_id == null || !isEmpty(staff_id) ) {
+    if (staff_id == null || !isEmpty(staff_id)) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
         alert: {
@@ -169,24 +174,34 @@ class Table extends Component {
       });
       return;
     }
-    var newData = [...data]
-    if(newData.length > 0)
-    data.forEach((data , index)=> {
-      newData[index].staff_id = staff_id
-      delete newData[index].staff
-      delete newData[index].address
-      delete newData[index].email
-      delete newData[index].name
-      delete newData[index].date_of_birth
-      delete newData[index].phone_number
-      delete newData[index].sex
+    var newData = [...data];
+    if (newData.length > 0)
+      data.forEach((data, index) => {
+        newData[index].staff_id = staff_id;
+        delete newData[index].staff;
+        delete newData[index].address;
+        delete newData[index].email;
+        delete newData[index].name;
+        delete newData[index].date_of_birth;
+        delete newData[index].phone_number;
+        delete newData[index].sex;
+      });
 
-      
-    });
-
-    console.log(newData)
-    this.props.editMultiCustomerSale(store_code , {list : newData} , this)
+    console.log(newData);
+    this.props.editMultiCustomerSale(store_code, { list: newData }, this);
   };
+  handleMultiAddAccount(e, data) {
+    var { store_code, createMultiAccountForCustomerSale } = this.props;
+    const listIdCustomersOnSale = data.reduce(
+      (customersPrev, customersNext) => {
+        return [...customersPrev, customersNext.id];
+      },
+      []
+    );
+    createMultiAccountForCustomerSale(store_code, {
+      list_ids: listIdCustomersOnSale,
+    });
+  }
 
   render() {
     var customers =
@@ -205,22 +220,35 @@ class Table extends Component {
       selected.length > 0 && selected.length == customers.length ? true : false;
 
     var multiDelete = selected.length > 0 ? "show" : "hide";
-    var {is_user , add,edit,remove,add,assignment} = this.props
+    var { is_user, add, edit, remove, add, assignment } = this.props;
     return (
       <div class="">
         <ModalDelete store_code={store_code} modal={this.state.modalDelete} />
         <div className={multiDelete} style={{ display: "flex" }}>
-          <select style={{ maxWidth: "250px" }} name="" value={staff_id} id="input" class="form-control" onChange={(e) => this.setState({ staff_id: e.target.value })}>
+          <select
+            style={{ maxWidth: "250px" }}
+            name=""
+            value={staff_id}
+            id="input"
+            class="form-control"
+            onChange={(e) => this.setState({ staff_id: e.target.value })}
+          >
             <option value={null}>--Chọn nhân viên--</option>
             {this.buildOptionStaff()}
           </select>
           <button
             onClick={(e) => this.handleMultiUpdateCallBack(e, selected)}
-
             style={{ marginLeft: "10px" }}
             class={`btn btn-primary btn-sm ${multiDelete}`}
           >
             <i class="fa fa-edit"></i> Lưu
+          </button>
+          <button
+            onClick={(e) => this.handleMultiAddAccount(e, selected)}
+            style={{ marginLeft: "10px" }}
+            className={`btn btn-warning btn-sm`}
+          >
+            <i className="fa fa-plus"></i> Create Account
           </button>
         </div>
         <table
@@ -228,18 +256,22 @@ class Table extends Component {
           id="dataTable"
           width="100%"
           cellspacing="0"
+          style={{
+            marginTop: "20px",
+          }}
         >
           <thead>
             <tr>
-            {remove === true && assignment == true &&   <th >
-                <input
-                  type="checkbox"
-                  checked={_selected}
-                  onChange={this.onChangeSelectAll}
-                />
-              </th>} 
+              {remove === true && assignment == true && (
+                <th>
+                  <input
+                    type="checkbox"
+                    checked={_selected}
+                    onChange={this.onChangeSelectAll}
+                  />
+                </th>
+              )}
 
-           
               <th>Họ tên/SĐT</th>
               {/* <th className="content-onsale">
                 <select
@@ -257,11 +289,11 @@ class Table extends Component {
                   <option value="3">Thất bại ({this.props.customers?.total_status_3})</option>
                 </select>
               </th> */}
-              <th  className="content-onsale">Nội dung tư vấn lần 1</th>
-              <th  className="content-onsale">Nội dung tư vấn lần 2</th>
-              <th  className="content-onsale">Nội dung tư vấn lần 3</th>
+              <th className="content-onsale">Nội dung tư vấn lần 1</th>
+              <th className="content-onsale">Nội dung tư vấn lần 2</th>
+              <th className="content-onsale">Nội dung tư vấn lần 3</th>
 
-             {edit === true && assignment == true && <th>Nhân viên sale</th>} 
+              {edit === true && assignment == true && <th>Nhân viên sale</th>}
               {/* <th>Hành động</th> */}
             </tr>
           </thead>
@@ -278,9 +310,14 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchAllCustomerSale: (id, page, params) => {
       dispatch(customerAction.fetchAllCustomerSale(id, page, params));
     },
-    editMultiCustomerSale: (store_code, data , _this) => {
-      dispatch(customerAction.editMultiCustomerSale(store_code, data , _this));
-  },
+    editMultiCustomerSale: (store_code, data, _this) => {
+      dispatch(customerAction.editMultiCustomerSale(store_code, data, _this));
+    },
+    createMultiAccountForCustomerSale: (store_code, data) => {
+      dispatch(
+        customerAction.createMultiAccountForCustomerSale(store_code, data)
+      );
+    },
     showError: (error) => {
       dispatch(error);
     },

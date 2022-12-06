@@ -45,96 +45,81 @@ async function saveAsExcel(value) {
   });
 }
 
-export const saveAllListCustomer = (
-  store_code,
-
-) => {
+export const saveAllListCustomer = (store_code) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
     });
-    customerApi
-      .fetchAllCustomerSale(store_code, 1, "", 1000)
-      .then((res) => {
-        dispatch({
-          type: Types.SHOW_LOADING,
-          loading: "hide",
-        });
-
-
-        if (res.data.data.data.length > 0) {
-          var newArray = [];
-
-          var i = 1;
-          for (const item of res.data.data.data) {
-            var newItem = {};
-            var arangeKeyItem = {
-              stt: i,
-              name: item.name,
-              phone_number: item.phone_number,
-              email: item.email,
-              sex: item.sex,
-
-              date_of_birth: item.date_of_birth,
-              address: item.address,
-
-            }
-            Object.entries(arangeKeyItem).forEach(([key, value], index) => {
-              if (key == "stt") {
-                newItem["STT"] = value;
-                // newItem["Tên sản phẩm"] = value
-              }
-
-              if (key == "name") {
-                newItem["Tên khách hàng"] = value;
-                // newItem["Tên sản phẩm"] = value
-              }
-              if (key == "date_of_birth") {
-                newItem["Ngày sinh"] = value ? moment(value).format("DD-MM-YYYY") : "";
-                // newItem["Tên sản phẩm"] = value
-              }
-              if (key == "phone_number") {
-                newItem["Số điện thoại"] = value;
-                // newItem["Tên sản phẩm"] = value
-              }
-              if (key == "email") {
-                newItem["Email"] = value;
-                // newItem["Tên sản phẩm"] = value
-              }
-           
-
-              if (key == "address") {
-                newItem["Địa chỉ"] = value;
-              }
-
-
-            });
-
-            i++;
-            newArray.push(newItem);
-          }
-          var header = [];
-          if (newArray.length > 0) {
-            Object.entries(newArray[0]).forEach(([key, value], index) => {
-              header.push(key);
-            });
-          }
-          console.log(header);
-          saveAsExcel({ data: newArray, header: header });
-        }
-
-
+    customerApi.fetchAllCustomerSale(store_code, 1, "", 1000).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide",
       });
+
+      if (res.data.data.data.length > 0) {
+        var newArray = [];
+
+        var i = 1;
+        for (const item of res.data.data.data) {
+          var newItem = {};
+          var arangeKeyItem = {
+            stt: i,
+            name: item.name,
+            phone_number: item.phone_number,
+            email: item.email,
+            sex: item.sex,
+
+            date_of_birth: item.date_of_birth,
+            address: item.address,
+          };
+          Object.entries(arangeKeyItem).forEach(([key, value], index) => {
+            if (key == "stt") {
+              newItem["STT"] = value;
+              // newItem["Tên sản phẩm"] = value
+            }
+
+            if (key == "name") {
+              newItem["Tên khách hàng"] = value;
+              // newItem["Tên sản phẩm"] = value
+            }
+            if (key == "date_of_birth") {
+              newItem["Ngày sinh"] = value
+                ? moment(value).format("DD-MM-YYYY")
+                : "";
+              // newItem["Tên sản phẩm"] = value
+            }
+            if (key == "phone_number") {
+              newItem["Số điện thoại"] = value;
+              // newItem["Tên sản phẩm"] = value
+            }
+            if (key == "email") {
+              newItem["Email"] = value;
+              // newItem["Tên sản phẩm"] = value
+            }
+
+            if (key == "address") {
+              newItem["Địa chỉ"] = value;
+            }
+          });
+
+          i++;
+          newArray.push(newItem);
+        }
+        var header = [];
+        if (newArray.length > 0) {
+          Object.entries(newArray[0]).forEach(([key, value], index) => {
+            header.push(key);
+          });
+        }
+        console.log(header);
+        saveAsExcel({ data: newArray, header: header });
+      }
+    });
   };
 };
 
-export const fetchAllCustomerSale = (
-  store_code,
-  page,
-  params,
-  limit
-) => {
+export const fetchAllCustomerSale = (store_code, page, params, limit) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -156,24 +141,29 @@ export const fetchAllCustomerSale = (
   };
 };
 
-export const destroyCustomerSale = (store_code, id, page, params, branch_id) => {
-
+export const destroyCustomerSale = (
+  store_code,
+  id,
+  page,
+  params,
+  branch_id
+) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     customerApi
       .destroyCustomerSale(store_code, id)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
-        customerApi.fetchAllCustomerSale(store_code, page, params)
+          loading: "hide",
+        });
+        customerApi
+          .fetchAllCustomerSale(store_code, page, params)
           .then((res) => {
             if (res.data.code !== 401)
-
               dispatch({
                 type: Types.FETCH_ALL_CUSTOMER_SALE,
                 data: res.data.data,
@@ -203,8 +193,8 @@ export const destroyCustomerSale = (store_code, id, page, params, branch_id) => 
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -239,20 +229,18 @@ export const fetchCustomerSaleId = (store_code, customerId) => {
 };
 
 export const createMultiCustomerSale = (store_code, data) => {
-
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     customerApi
       .createMultiCustomerSale(store_code, data)
       .then((res) => {
-
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           tryShow: true,
@@ -267,28 +255,22 @@ export const createMultiCustomerSale = (store_code, data) => {
                 <span> - Tổng số được thêm mới: ${res.data.data.total_new_add}</span>
                           </div>
                 `,
-          }
+          },
         });
 
-
-        customerApi
-        .fetchAllCustomerSale(store_code, 1)
-        .then((res) => {
-
+        customerApi.fetchAllCustomerSale(store_code, 1).then((res) => {
           if (res.data.code !== 401)
             dispatch({
               type: Types.FETCH_ALL_CUSTOMER_SALE,
               data: res.data.data,
             });
         });
-
-
       })
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
 
         dispatch({
           type: Types.ALERT_UID_STATUS,
@@ -303,26 +285,30 @@ export const createMultiCustomerSale = (store_code, data) => {
   };
 };
 
-export const createCustomerSale = (store_code, id, funcModal = null, _this, resetModal) => {
-
+export const createCustomerSale = (
+  store_code,
+  id,
+  funcModal = null,
+  _this,
+  resetModal
+) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     customerApi
       .createCustomerSale(store_code, id)
       .then((res) => {
         if (res.data.success && funcModal != null) {
-          console.log("da vao r")
-          funcModal()
-          if (_this && resetModal)
-            resetModal(_this)
+          console.log("da vao r");
+          funcModal();
+          if (_this && resetModal) resetModal(_this);
         }
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           tryShow: true,
@@ -336,16 +322,16 @@ export const createCustomerSale = (store_code, id, funcModal = null, _this, rese
         });
         dispatch({
           type: Types.CREATED_CUSTOMER_SALE,
-          isFromPosAndSave: id.isFromPosAndSave == null ? false : id.isFromPosAndSave,
+          isFromPosAndSave:
+            id.isFromPosAndSave == null ? false : id.isFromPosAndSave,
           data: res.data.data,
-        })
+        });
 
         if (id.isFromPosAndSave != true) {
           customerApi
             .fetchAllCustomerSale(store_code)
             .then((res) => {
               if (res.data.code !== 401)
-
                 dispatch({
                   type: Types.FETCH_ALL_CUSTOMER_SALE,
                   data: res.data.data,
@@ -354,8 +340,8 @@ export const createCustomerSale = (store_code, id, funcModal = null, _this, rese
             .catch(function (error) {
               dispatch({
                 type: Types.SHOW_LOADING,
-                loading: "hide"
-              })
+                loading: "hide",
+              });
               dispatch({
                 type: Types.ALERT_UID_STATUS,
                 alert: {
@@ -367,15 +353,12 @@ export const createCustomerSale = (store_code, id, funcModal = null, _this, rese
               });
             });
         }
-
-
-
       })
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
 
         dispatch({
           type: Types.ALERT_UID_STATUS,
@@ -390,24 +373,20 @@ export const createCustomerSale = (store_code, id, funcModal = null, _this, rese
   };
 };
 
-
-
-export const editMultiCustomerSale = (store_code, data , _this) => {
-
+export const editMultiCustomerSale = (store_code, data, _this) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     customerApi
       .editMultiCustomerSale(store_code, data)
       .then((res) => {
-
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
-        _this.setState({selected : []})
+          loading: "hide",
+        });
+        _this.setState({ selected: [] });
         customerApi
           .fetchAllCustomerSale(store_code, 1, null, 20)
           .then((res) => {
@@ -425,13 +404,13 @@ export const editMultiCustomerSale = (store_code, data , _this) => {
                 type: Types.FETCH_ALL_CUSTOMER_SALE,
                 data: res.data.data,
               });
-          })
+          });
       })
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
 
         dispatch({
           type: Types.ALERT_UID_STATUS,
@@ -446,23 +425,22 @@ export const editMultiCustomerSale = (store_code, data , _this) => {
   };
 };
 export const editCustomerSale = (store_code, id, data, funcModal = null) => {
-
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     customerApi
       .editCustomerSale(store_code, id, data)
       .then((res) => {
         if (res.data.success && funcModal != null) {
-          console.log("da vao r")
-          funcModal()
+          console.log("da vao r");
+          funcModal();
         }
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         customerApi.fetchCustomerSaleId(store_code, id).then((res) => {
           dispatch({
             type: Types.SHOW_LOADING,
@@ -487,9 +465,57 @@ export const editCustomerSale = (store_code, id, data, funcModal = null) => {
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
 
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+export const createMultiAccountForCustomerSale = (store_code, data) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    customerApi
+      .createMultiAccountForCustomerSale(store_code, data)
+      .then((res) => {
+        dispatch({
+          type: Types.CREATE_ACCOUNT_FOR_CUSTOMER_SALE,
+          data,
+        });
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: `<div>
+            <p>- Tổng số yêu cầu: ${res.data.data.total_ids}</p>
+            <p>- Số tài khoản đã tồn tại: ${res.data.data.total_has}</p>
+            <p>- Số tài khoản vừa thêm: ${res.data.data.total_success}</p>
+            </div>`,
+          },
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {

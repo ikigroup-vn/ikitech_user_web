@@ -28,22 +28,23 @@ const ModalChangeRoleCustomerStyles = styled.div`
 class ModalChangeRoleCustomer extends PureComponent {
   handleCloseModalChangeRoleCustomer = () => {
     this.props.setOpenShowModalChangeRole(false);
-    this.props.setIdCustomerSelected(null);
+    this.props.setCustomerSelected(null);
     this.props.setTypeSaleCustomer(null);
     this.props.setTypeAgency(null);
+    this.props.setShowListAgencies(false);
   };
   handleChangeRoleCustomer = (e) => {
     e.preventDefault();
-    const { store_code, idCustomerSelected, typeSaleCustomer, typeAgency } =
+    const { store_code, customerSelected, typeSaleCustomer, typeAgency } =
       this.props;
     if (typeAgency !== null) {
-      this.props.changeTypeRoleCustomer(store_code, idCustomerSelected, {
+      this.props.changeTypeRoleCustomer(store_code, customerSelected.id, {
         sale_type: typeSaleCustomer,
         agency_type_id: typeAgency,
       });
       return;
     }
-    this.props.changeTypeRoleCustomer(store_code, idCustomerSelected, {
+    this.props.changeTypeRoleCustomer(store_code, customerSelected.id, {
       sale_type: typeSaleCustomer,
     });
   };
@@ -74,7 +75,12 @@ class ModalChangeRoleCustomer extends PureComponent {
               <div class="modal-body">
                 <input type="hidden" name="remove_id_store" />
                 <div className="alert-remove"></div>
-                Bạn có muốn thay đổi vai trò của khách hàng
+                Bạn có muốn thay đổi vai trò của{" "}
+                {this.props.customerSelected.is_collaborator === true
+                  ? "Cộng tác viên"
+                  : this.props.customerSelected.is_agency === true
+                  ? "Đại lý"
+                  : "Khách hàng"}
               </div>
               <div class="modal-footer">
                 <button
