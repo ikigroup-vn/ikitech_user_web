@@ -643,6 +643,12 @@ const routes = [
     main: ({ match, history }) => <PostOrder match={match} history={history} />,
   },
   {
+    path: "/pos/:store_code/:order_code",
+    exact: true,
+
+    main: ({ match, history }) => <PostOrder match={match} history={history} />,
+  },
+  {
     path: "/discount/:store_code",
     exact: true,
 

@@ -273,10 +273,9 @@ export const getQueryParams = (name) => {
   return new URLSearchParams(window ? window.location.search : {}).get(name);
 };
 export const formatNumberV2 = (str) => {
-  const strFormat = str.replace(
-    /[A-Za-z`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/g,
-    ""
-  );
+  const strFormat = str
+    .toString()
+    .replace(/[A-Za-z`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/g, "");
   if (Number(strFormat) >= 1000) {
     return strFormat
       .split("")

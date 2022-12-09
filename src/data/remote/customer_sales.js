@@ -1,11 +1,6 @@
 import callApi from "../../ultis/apiCaller";
 
-export const fetchAllCustomerSale = (
-  store_code,
-  page,
-  params,
-  limit = 20
-) => {
+export const fetchAllCustomerSale = (store_code, page, params, limit = 20) => {
   return params
     ? callApi(
         `/store/${store_code}/customer_sales?page=${page}${params}&limit=${limit}`,
@@ -29,10 +24,14 @@ export const editCustomerSale = (store_code, id, data) => {
 };
 export const destroyCustomerSale = (store_code, id) => {
   return callApi(`/store/${store_code}/customer_sales/${id}`, "delete", null);
-}
-
-
-
+};
 export const editMultiCustomerSale = (store_code, data) => {
   return callApi(`/store/${store_code}/customer_sales`, "put", data);
+};
+export const createMultiAccountForCustomerSale = (store_code, data) => {
+  return callApi(
+    `/store/${store_code}/customer_sales_send_to_customer`,
+    "post",
+    data
+  );
 };

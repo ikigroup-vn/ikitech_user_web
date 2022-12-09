@@ -1,4 +1,4 @@
-import * as Types from "../../constants/ActionType"
+import * as Types from "../../constants/ActionType";
 
 var initialState = {
   listPosOrder: [],
@@ -8,28 +8,31 @@ var initialState = {
   loadingHandleChangeQuantity: false,
   orderAfterPayment: {},
   loadingOrder: false,
-  allowAutoPrint: true
+  allowAutoPrint: true,
+  fromEditOrder: false,
+  updatedPrice: {},
 };
 
 export const pos_reducer = (state = initialState, action) => {
   let newState = { ...state };
   switch (action.type) {
-
     case Types.POS_ORDER_PAYMENT_LOADING:
       newState.orderAfterPayment = {};
-      newState.loadingOrder = true;
+      newState.loadingOrder = action.loadingOrder;
       return newState;
     case Types.CHANGE_STATUS_ALLOW_PRINT:
-
       newState.allowAutoPrint = action.data;
       return newState;
 
     case Types.POS_ORDER_PAYMENT_SUCCESS:
       newState.orderAfterPayment = action.data.orderAfterPayment;
       newState.loadingOrder = false;
+      newState.fromEditOrder = true;
       // newState.allowAutoPrint = action.data.allowAutoPrint;
       return newState;
-
+    case Types.FROM_EDIT_ORDER:
+      newState.fromEditOrder = action.data;
+      return newState;
     case Types.POS_ORDER_PAYMENT_FAILD:
       newState.orderAfterPayment = {};
       newState.loadingOrder = false;
@@ -61,6 +64,10 @@ export const pos_reducer = (state = initialState, action) => {
       return newState;
     case Types.FETCH_INFO_CUSTOMER:
       newState.inforCustomer = action.data;
+      return newState;
+    case Types.UPDATE_PRICE_ITEM:
+      newState.oneCart = action.data;
+      newState.updatedPrice = action.data;
       return newState;
     default:
       return newState;

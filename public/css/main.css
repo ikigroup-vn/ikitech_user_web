@@ -7111,7 +7111,7 @@ p {
 }
 
 .header-pos {
-    background-color: #cf7a37 !important;
+    background-color: #c62025 !important;
 }
 
 .activess {
@@ -7143,14 +7143,28 @@ p {
     width: 63%;
     font-size: 29px;
     color: #fff;
-    background-color: #E56F25;
-    border-color: #E56F25;
+    background-color: #2B9138;
+    border-color: #2B9138;
 }
 
 .btn-pay:hover {
     color: #fff;
-    background-color: #9c4d10;
-    border-color: #9c4d10;
+    background-color: #298A35;
+    border-color: #298A35;
+}
+.btn-pay-update{
+    width: 63%;
+    font-size: 29px;
+    color: #fff;
+    background-color: #5B96C0;
+    border-color: #5B96C0;
+}
+.btn-pay-update:hover{
+    width: 63%;
+    font-size: 29px;
+    color: #fff;
+    background-color: #5389B0;
+    border-color: #5389B0;
 }
 
 
