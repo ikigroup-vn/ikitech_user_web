@@ -233,8 +233,8 @@ class PanelBottom extends Component {
 
     componentWillUpdate(nextProps, nextState) {
 
-        if(this.loadFirst == false && nextProps.oneCart.id)
-        this.props.onNewChange(nextState)
+        if (this.loadFirst == false && nextProps.oneCart.id)
+            this.props.onNewChange(nextState)
     }
 
     componentWillReceiveProps(nextProps, nextState) {
@@ -258,8 +258,7 @@ class PanelBottom extends Component {
             })
         }
 
-        if(nextProps.oneCart.id !== this.props.oneCart.id)
-        {
+        if (nextProps.oneCart.id !== this.props.oneCart.id) {
             this.loadFirst = true
 
         }
@@ -285,55 +284,64 @@ class PanelBottom extends Component {
             )
 
             // if (oneCart.noUpdateUI != true) {
-                var selectedDate = null
-                try {
-                    console.log(oneCart.customer_date_of_birth)
-                    selectedDate = oneCart == null || oneCart.customer_date_of_birth == null || oneCart.customer_date_of_birth == "0000-00-00" || oneCart.customer_date_of_birth == "0000-00-00 00:00:00" ? "" : new Date(oneCart.customer_date_of_birth)
-                } catch (error) {
-                    selectedDate = null
+            var selectedDate = null
+            try {
+                console.log(oneCart.customer_date_of_birth)
+                selectedDate = oneCart == null || oneCart.customer_date_of_birth == null || oneCart.customer_date_of_birth == "0000-00-00" || oneCart.customer_date_of_birth == "0000-00-00 00:00:00" ? "" : new Date(oneCart.customer_date_of_birth)
+            } catch (error) {
+                selectedDate = null
+            }
+
+            if ((this.loadFirst == true && oneCart.id) || (nextProps.oneCart?.id > 0 && this.props.openShipment == true)) {
+                var isDisabledButtonInput = false;
+                if (oneCart == null || oneCart.customer == null) {
+                    isDisabledButtonInput = false;
+                } else if (oneCart.edit_order_code != null) {
+                    isDisabledButtonInput = false;
+                } else {
+                    isDisabledButtonInput = oneCart.customer.is_passersby;
                 }
-                
-                if((this.loadFirst == true && oneCart.id) || (nextProps.oneCart?.id > 0 && this.props.openShipment == true))
-                {
-                    this.setState(
-                        {
-                            ...this.state,
-                            cartId: oneCart.id,
-                            txtProvince: oneCart.province ?? "",
-                            txtDistrict: oneCart.district ?? "",
-                            txtWards: oneCart.wards ?? "",
-                            txtName: oneCart.customer_name ?? "",
-                            txtEmail: oneCart.customer_email ?? "",
-                            txtPhoneNumber: oneCart.customer_phone ?? "",
-                            txtSex: oneCart.customer_sex ?? "",
-                            txtAddressDetail: oneCart.address_detail ?? "",
-                            selectedDate: selectedDate,
-    
-                            isDisabledButton: oneCart == null || oneCart.customer == null ? false : oneCart.customer.is_passersby,
-    
-                            districtName: oneCart.district_name,
-                            wardsName: oneCart.wards_name,
-                            provinceName: oneCart.province_name,
-                            valueProvince: {
-                                label: oneCart.province_name,
-                                value: oneCart.province
-                            },
-    
-                            valueDistrict: {
-                                label: oneCart.district_name,
-                                value: oneCart.district
-                            },
-    
-                            valueWards: {
-                                label: oneCart.wards_name,
-                                value: oneCart.wards
-                            },
-                        }
-                    )
-                    this.loadFirst = false;
-                }
-          
-            
+
+
+                this.setState(
+                    {
+                        ...this.state,
+                        cartId: oneCart.id,
+                        txtProvince: oneCart.province ?? "",
+                        txtDistrict: oneCart.district ?? "",
+                        txtWards: oneCart.wards ?? "",
+                        txtName: oneCart.customer_name ?? "",
+                        txtEmail: oneCart.customer_email ?? "",
+                        txtPhoneNumber: oneCart.customer_phone ?? "",
+                        txtSex: oneCart.customer_sex ?? "",
+                        txtAddressDetail: oneCart.address_detail ?? "",
+                        selectedDate: selectedDate,
+
+                        isDisabledButton: isDisabledButtonInput,
+
+                        districtName: oneCart.district_name,
+                        wardsName: oneCart.wards_name,
+                        provinceName: oneCart.province_name,
+                        valueProvince: {
+                            label: oneCart.province_name,
+                            value: oneCart.province
+                        },
+
+                        valueDistrict: {
+                            label: oneCart.district_name,
+                            value: oneCart.district
+                        },
+
+                        valueWards: {
+                            label: oneCart.wards_name,
+                            value: oneCart.wards
+                        },
+                    }
+                )
+                this.loadFirst = false;
+            }
+
+
 
 
             // this.onSelectChangeProvinceById(customer.province)

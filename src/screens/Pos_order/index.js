@@ -624,12 +624,15 @@ class PostOrder extends Component {
     }
 
     if (
-      (typeof nextProps.oneCart != "undefined" &&
+      typeof nextProps.oneCart != "undefined"  && typeof nextProps.oneCart.info_cart != "undefined" && ((
         !shallowEqual(nextProps.oneCart, this.props.oneCart) &&
         this.props.loadingHandleChangeQuantity == false
-      ) ||
-      !shallowEqual(this.props.loadingHandleChangePriceItem, nextProps.loadingHandleChangePriceItem)
-    ) {
+      )
+        ||
+
+        !shallowEqual(this.props.loadingHandleChangePriceItem, nextProps.loadingHandleChangePriceItem)
+      )
+      ) {
       var discount = {};
       if (nextProps.oneCart?.id != this.props.oneCart?.id) {
         discount = { discount: nextProps.oneCart.discount };
@@ -648,7 +651,7 @@ class PostOrder extends Component {
       this.setState({
         code_voucher: nextProps.oneCart.code_voucher,
         oneCart: nextProps.oneCart,
-        totalFinal: nextProps.oneCart.info_cart.total_final,
+        totalFinal: nextProps.oneCart?.info_cart?.total_final ?? 0,
         totalAfterDiscount: nextProps.oneCart.info_cart.total_after_discount,
         selectPrice: -1,
 
