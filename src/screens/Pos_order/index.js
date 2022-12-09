@@ -622,10 +622,13 @@ class PostOrder extends Component {
       console.log("123123132: ", nextProps.oneCart);
       this.setState({ oneCart: nextProps.oneCart });
     }
+
     if (
-      !shallowEqual(nextProps.oneCart, this.props.oneCart) &&
-      (this.props.loadingHandleChangeQuantity == false || this.props.loadingHandleChangePriceItem == false) &&
-      typeof nextProps.oneCart != "undefined"
+      (typeof nextProps.oneCart != "undefined" &&
+        !shallowEqual(nextProps.oneCart, this.props.oneCart) &&
+        (this.props.loadingHandleChangeQuantity == false)
+      ) ||
+      !shallowEqual(this.props.loadingHandleChangePriceItem, nextProps.loadingHandleChangePriceItem)
     ) {
       var discount = {};
       if (nextProps.oneCart?.id != this.props.oneCart?.id) {
