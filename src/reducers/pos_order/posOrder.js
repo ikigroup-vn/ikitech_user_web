@@ -12,6 +12,7 @@ var initialState = {
   allowAutoPrint: true,
   fromEditOrder: false,
   updatedPrice: {},
+  loadingHandleUseVoucher: null,
 };
 
 export const pos_reducer = (state = initialState, action) => {
@@ -61,7 +62,12 @@ export const pos_reducer = (state = initialState, action) => {
       newState.loadingHandleChangeQuantity = false;
       return newState;
 
-    case Types.FETCH_LIST_CART_ITEM:
+    case Types.USE_VOUCHER_CART_LOAD:
+      newState.loadingHandleUseVoucher = true;
+      newState.oneCart = action.data;
+      return newState;
+    case Types.USE_VOUCHER_CART_DONE:
+      newState.loadingHandleUseVoucher = false;
       newState.oneCart = action.data;
       return newState;
     case Types.FETCH_INFO_CUSTOMER:

@@ -452,12 +452,16 @@ export const refreshEditOrder = (data) => {
 
 export const fetchVoucher = (store_code, branch_id, id, data) => {
   return (dispatch) => {
+    
+    dispatch({
+      type: Types.USE_VOUCHER_CART_LOAD,
+    });
     PosApi.fetchVoucher(store_code, branch_id, id, data)
       .then((res) => {
         console.log(res.data);
         if (res.data.success === true) {
           dispatch({
-            type: Types.FETCH_LIST_CART_ITEM,
+            type: Types.USE_VOUCHER_CART_DONE,
             data: res.data.data,
           });
           window.$(".modal").modal("hide");
