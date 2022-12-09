@@ -577,7 +577,7 @@ class PostOrder extends Component {
           order_from:
             (oneCart?.total_shipping_fee > 0 ||
               this.state.openShipment == true) &&
-            getChannel() == IKITECH
+              getChannel() == IKITECH
               ? OrderFrom.ORDER_FROM_POS_DELIVERY
               : OrderFrom.ORDER_FROM_POS_IN_STORE,
         };
@@ -589,7 +589,7 @@ class PostOrder extends Component {
           order_from:
             (oneCart?.total_shipping_fee > 0 ||
               this.state.openShipment == true) &&
-            getChannel() == IKITECH
+              getChannel() == IKITECH
               ? OrderFrom.ORDER_FROM_POS_DELIVERY
               : OrderFrom.ORDER_FROM_POS_IN_STORE,
         };
@@ -602,7 +602,7 @@ class PostOrder extends Component {
         order_from:
           (oneCart?.total_shipping_fee > 0 ||
             this.state.openShipment == true) &&
-          getChannel() == IKITECH
+            getChannel() == IKITECH
             ? OrderFrom.ORDER_FROM_POS_DELIVERY
             : OrderFrom.ORDER_FROM_POS_IN_STORE,
       };
@@ -624,7 +624,7 @@ class PostOrder extends Component {
     }
     if (
       !shallowEqual(nextProps.oneCart, this.props.oneCart) &&
-      this.props.loadingHandleChangeQuantity == false &&
+      (this.props.loadingHandleChangeQuantity == false || this.props.loadingHandleChangeQuantity == false) &&
       typeof nextProps.oneCart != "undefined"
     ) {
       var discount = {};
@@ -750,11 +750,11 @@ class PostOrder extends Component {
         var { store_code } = this.props.match.params;
         history.replace(
           "/order/print/" +
-            store_code +
-            "/" +
-            this.props.orderAfterPayment.order_code +
-            "?defaultHrefBack=" +
-            btoa(window.location.pathname)
+          store_code +
+          "/" +
+          this.props.orderAfterPayment.order_code +
+          "?defaultHrefBack=" +
+          btoa(window.location.pathname)
         );
         this.onSave = false;
       }
@@ -1006,9 +1006,9 @@ class PostOrder extends Component {
     var colPayman =
       this.state.openShipment == true && getChannel() == IKITECH
         ? {
-            width: "55%",
-            padding: "0 5px",
-          }
+          width: "55%",
+          padding: "0 5px",
+        }
         : null;
     var total_shipping_fee = oneCart?.total_shipping_fee;
     return (
@@ -1226,14 +1226,13 @@ class PostOrder extends Component {
                                   style={{
                                     paddingLeft: 16,
                                   }}
-                                >{`Dùng ${
-                                  oneCart.info_cart?.total_points_can_use
-                                } xu [${format(
-                                  Number(
-                                    oneCart.info_cart
-                                      ?.bonus_points_amount_can_use
-                                  )
-                                )}]`}</div>
+                                >{`Dùng ${oneCart.info_cart?.total_points_can_use
+                                  } xu [${format(
+                                    Number(
+                                      oneCart.info_cart
+                                        ?.bonus_points_amount_can_use
+                                    )
+                                  )}]`}</div>
                                 <form action="/action_page.php">
                                   <div class="custom-control custom-switch">
                                     <input
@@ -1442,7 +1441,7 @@ class PostOrder extends Component {
                                     ? this.state.discount
                                     : this.state.beforeDiscount
                                 }
-                                // data-toggle="modal" data-target="#modalDiscount"
+                              // data-toggle="modal" data-target="#modalDiscount"
                               >
                                 {formatNoD(
                                   this.state.typeDiscount == 0
@@ -1524,7 +1523,7 @@ class PostOrder extends Component {
                                       }}
                                       className={
                                         this.state.priceCustomer ===
-                                        suggesionPrice
+                                          suggesionPrice
                                           ? "activesss item-recomment"
                                           : "item-recomment"
                                       }
@@ -1806,8 +1805,8 @@ class PostOrder extends Component {
                                 onClick={this.handlePayment}
                               >
                                 {this.state.openShipment == true ||
-                                (total_shipping_fee > 0 &&
-                                  getChannel() == IKITECH)
+                                  (total_shipping_fee > 0 &&
+                                    getChannel() == IKITECH)
                                   ? "Lên đơn (F9)"
                                   : "Thanh toán (F9)"}
                               </button>
@@ -1856,6 +1855,8 @@ const mapStateToProps = (state) => {
     allowAutoPrint: state.posReducers.pos_reducer.allowAutoPrint,
     loadingHandleChangeQuantity:
       state.posReducers.pos_reducer.loadingHandleChangeQuantity,
+    loadingHandleChangePriceItem:
+      state.posReducers.pos_reducer.loadingHandleChangePriceItem,
     listPertion: state.orderReducers.order_product.listPertion,
     listVoucher: state.orderReducers.order_product.listVoucher,
     inforCustomer: state.posReducers.pos_reducer.inforCustomer,

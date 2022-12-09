@@ -6,6 +6,7 @@ var initialState = {
   loadingCart: true,
   inforCustomer: "",
   loadingHandleChangeQuantity: false,
+  loadingHandleChangePriceItem: false,
   orderAfterPayment: {},
   loadingOrder: false,
   allowAutoPrint: true,
@@ -54,6 +55,7 @@ export const pos_reducer = (state = initialState, action) => {
 
     case Types.LOADING_CHANGE_QUANTITY_LINE_ITEM:
       newState.loadingHandleChangeQuantity = true;
+      newState.loadingHandleChangePriceItem = true;
       return newState;
     case Types.NONE_CHANGE_QUANTITY_LINE_ITEM:
       newState.loadingHandleChangeQuantity = false;
@@ -66,6 +68,7 @@ export const pos_reducer = (state = initialState, action) => {
       newState.inforCustomer = action.data;
       return newState;
     case Types.UPDATE_PRICE_ITEM:
+      newState.loadingHandleChangePriceItem = false;
       newState.oneCart = action.data;
       newState.updatedPrice = action.data;
       return newState;
