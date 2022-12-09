@@ -480,9 +480,10 @@ class ItemInCart extends Component {
 
     const maxQuantity = stockOfProduct(
       item.product,
-      item.distributes_selected[0]?.value,
-      item.distributes_selected[0]?.sub_element_distributes
+      item?.distributes_selected != null ?  item?.distributes_selected[0]?.value : null,
+      item?.distributes_selected != null ? item?.distributes_selected[0]?.sub_element_distributes: null,
     );
+
     const allowAdd = true;
 
     var itemParent =
