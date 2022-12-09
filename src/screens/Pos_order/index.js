@@ -626,7 +626,7 @@ class PostOrder extends Component {
     if (
       (typeof nextProps.oneCart != "undefined" &&
         !shallowEqual(nextProps.oneCart, this.props.oneCart) &&
-        (this.props.loadingHandleChangeQuantity == false)
+        this.props.loadingHandleChangeQuantity == false
       ) ||
       !shallowEqual(this.props.loadingHandleChangePriceItem, nextProps.loadingHandleChangePriceItem)
     ) {
