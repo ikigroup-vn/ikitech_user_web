@@ -3,26 +3,32 @@ import history from "../history";
 import * as billApi from "../data/remote/bill";
 import * as chatApi from "../data/remote/chat";
 import * as uploadApi from "../data/remote/upload";
-import { compressed, formatStringCharactor, getDetailAdress } from "../ultis/helpers";
+import {
+  compressed,
+  formatStringCharactor,
+  getDetailAdress,
+} from "../ultis/helpers";
 import { getBranchId } from "../ultis/branchUtils";
 import moment from "moment";
 import XlsxPopulate from "xlsx-populate";
 import { saveAs } from "file-saver";
 import * as OrderFrom from "../ultis/order_from";
 
-export const exportAllListOrder = (store_code,
+export const exportAllListOrder = (
+  store_code,
   page = 1,
   branch_id,
   params = null,
-  params_agency = null) => {
-
-  console.log('xxx')
+  params_agency = null
+) => {
+  console.log("xxx");
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
     });
-    billApi.fetchAllBill(store_code, page, branch_id, params, params_agency, true)
+    billApi
+      .fetchAllBill(store_code, page, branch_id, params, params_agency, true)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
@@ -44,15 +50,14 @@ export const exportAllListOrder = (store_code,
                     created_at: item.created_at,
                     updated_at: item.updated_at,
 
-
                     receiver_customer_phone: item.customer_phone,
                     receiver_customer_name: item.customer_name,
                     receiver_customer_email: item.customer_email,
                     receiver_customer_wards: item.customer_wards_name,
                     receiver_customer_district: item.customer_district_name,
                     receiver_customer_province: item.customer_province_name,
-                    receiver_customer_address_detail: item.customer_address_detail,
-
+                    receiver_customer_address_detail:
+                      item.customer_address_detail,
 
                     orderer_customer_phone: item.customer?.phone_number,
                     orderer_customer_name: item.customer?.name,
@@ -60,14 +65,21 @@ export const exportAllListOrder = (store_code,
                     orderer_customer_wards: item.customer?.wards_name,
                     orderer_customer_district: item.customer?.district_name,
                     orderer_customer_province: item.customer?.province_name,
-                    orderer_customer_address_detail: item.customer?.address_detail,
+                    orderer_customer_address_detail:
+                      item.customer?.address_detail,
 
-                    order_from: item.order_from == OrderFrom.ORDER_FROM_APP ? "App"
-                      : item.order_from == OrderFrom.ORDER_FROM_POS_DELIVERY ? "POS giao vận"
-                        : item.order_from == OrderFrom.ORDER_FROM_POS_IN_STORE ? "POS tại quầy"
-                          : item.order_from == OrderFrom.ORDER_FROM_POS_SHIPPER ? "POS vận chuyển"
-                            : item.order_from == OrderFrom.ORDER_FROM_WEB ? "Web"
-                              : "POS tại quầy",
+                    order_from:
+                      item.order_from == OrderFrom.ORDER_FROM_APP
+                        ? "App"
+                        : item.order_from == OrderFrom.ORDER_FROM_POS_DELIVERY
+                        ? "POS giao vận"
+                        : item.order_from == OrderFrom.ORDER_FROM_POS_IN_STORE
+                        ? "POS tại quầy"
+                        : item.order_from == OrderFrom.ORDER_FROM_POS_SHIPPER
+                        ? "POS vận chuyển"
+                        : item.order_from == OrderFrom.ORDER_FROM_WEB
+                        ? "Web"
+                        : "POS tại quầy",
 
                     partner_shipper_name: item.partner_shipper_name,
                     customer_note: item.customer_note,
@@ -78,7 +90,6 @@ export const exportAllListOrder = (store_code,
                     combo_discount_amount: item.combo_discount_amount,
                     product_discount_amount: item.product_discount_amount,
                     voucher_discount_amount: item.voucher_discount_amount,
-
 
                     total_after_discount: item.total_after_discount,
                     total_before_discount: item.total_before_discount,
@@ -95,139 +106,136 @@ export const exportAllListOrder = (store_code,
                     payment_status: item.payment_status_name,
 
                     order_status: item.order_status_name,
-
                   };
-                  Object.entries(arangeKeyItem).forEach(([key, value], index) => {
+                  Object.entries(arangeKeyItem).forEach(
+                    ([key, value], index) => {
+                      if (key == "branch") {
+                        newItem["Chi nhánh"] = value;
+                      }
+                      if (key == "order_code") {
+                        newItem["Mã đơn hàng"] = value;
+                      }
+                      if (key == "ship_code") {
+                        newItem["Mã vận đơn"] = value;
+                      }
+                      if (key == "created_at") {
+                        newItem["Ngày tạo"] = value;
+                      }
+                      if (key == "updated_at") {
+                        newItem["Ngày cập nhật"] = value;
+                      }
+                      if (key == "receiver_customer_phone") {
+                        newItem["Số điện thoại người nhận"] = value;
+                      }
+                      if (key == "receiver_customer_name") {
+                        newItem["Tên người nhận"] = value;
+                      }
+                      if (key == "receiver_customer_email") {
+                        newItem["Email người nhận"] = value;
+                      }
+                      if (key == "receiver_customer_wards") {
+                        newItem["Phường/Xã người nhận"] = value;
+                      }
+                      if (key == "receiver_customer_district") {
+                        newItem["Quận/Huyện người nhận"] = value;
+                      }
+                      if (key == "receiver_customer_province") {
+                        newItem["Tỉnh/TP người nhận"] = value;
+                      }
+                      if (key == "receiver_customer_address_detail") {
+                        newItem["Chi tiết địa chỉ người nhận"] = value;
+                      }
+                      if (key == "receiver_customer_address_detail") {
+                        newItem["Chi tiết địa chỉ người nhận"] = value;
+                      }
 
-                    if (key == "branch") {
-                      newItem["Chi nhánh"] = value;
-                    }
-                    if (key == "order_code") {
-                      newItem["Mã đơn hàng"] = value;
-                    }
-                    if (key == "ship_code") {
-                      newItem["Mã vận đơn"] = value;
-                    }
-                    if (key == "created_at") {
-                      newItem["Ngày tạo"] = value;
-                    }
-                    if (key == "updated_at") {
-                      newItem["Ngày cập nhật"] = value;
-                    }
-                    if (key == "receiver_customer_phone") {
-                      newItem["Số điện thoại người nhận"] = value;
-                    }
-                    if (key == "receiver_customer_name") {
-                      newItem["Tên người nhận"] = value;
-                    }
-                    if (key == "receiver_customer_email") {
-                      newItem["Email người nhận"] = value;
-                    }
-                    if (key == "receiver_customer_wards") {
-                      newItem["Phường/Xã người nhận"] = value;
-                    }
-                    if (key == "receiver_customer_district") {
-                      newItem["Quận/Huyện người nhận"] = value;
-                    }
-                    if (key == "receiver_customer_province") {
-                      newItem["Tỉnh/TP người nhận"] = value;
-                    }
-                    if (key == "receiver_customer_address_detail") {
-                      newItem["Chi tiết địa chỉ người nhận"] = value;
-                    }
-                    if (key == "receiver_customer_address_detail") {
-                      newItem["Chi tiết địa chỉ người nhận"] = value;
-                    }
+                      if (key == "orderer_customer_phone") {
+                        newItem["Số điện thoại người gửi"] = value;
+                      }
+                      if (key == "orderer_customer_name") {
+                        newItem["Tên người gửi"] = value;
+                      }
+                      if (key == "orderer_customer_email") {
+                        newItem["Email người gửi"] = value;
+                      }
+                      if (key == "orderer_customer_wards") {
+                        newItem["Phường/Xã người gửi"] = value;
+                      }
+                      if (key == "orderer_customer_district") {
+                        newItem["Quận/Huyện người gửi"] = value;
+                      }
+                      if (key == "orderer_customer_province") {
+                        newItem["Tỉnh/TP người gửi"] = value;
+                      }
+                      if (key == "orderer_customer_address_detail") {
+                        newItem["Chi tiết địa chỉ người gửi"] = value;
+                      }
+                      if (key == "orderer_customer_address_detail") {
+                        newItem["Chi tiết địa chỉ người gửi"] = value;
+                      }
 
+                      if (key == "order_from") {
+                        newItem["Đặt hàng từ"] = value;
+                      }
 
-                    if (key == "orderer_customer_phone") {
-                      newItem["Số điện thoại người gửi"] = value;
-                    }
-                    if (key == "orderer_customer_name") {
-                      newItem["Tên người gửi"] = value;
-                    }
-                    if (key == "orderer_customer_email") {
-                      newItem["Email người gửi"] = value;
-                    }
-                    if (key == "orderer_customer_wards") {
-                      newItem["Phường/Xã người gửi"] = value;
-                    }
-                    if (key == "orderer_customer_district") {
-                      newItem["Quận/Huyện người gửi"] = value;
-                    }
-                    if (key == "orderer_customer_province") {
-                      newItem["Tỉnh/TP người gửi"] = value;
-                    }
-                    if (key == "orderer_customer_address_detail") {
-                      newItem["Chi tiết địa chỉ người gửi"] = value;
-                    }
-                    if (key == "orderer_customer_address_detail") {
-                      newItem["Chi tiết địa chỉ người gửi"] = value;
-                    }
+                      if (key == "partner_shipper_name") {
+                        newItem["Đơn vị vận chuyển"] = value;
+                      }
 
-                    if (key == "order_from") {
-                      newItem["Đặt hàng từ"] = value;
-                    }
+                      if (key == "customer_note") {
+                        newItem["Ghi chú"] = value;
+                      }
 
-                    if (key == "partner_shipper_name") {
-                      newItem["Đơn vị vận chuyển"] = value;
-                    }
+                      if (key == "total_final") {
+                        newItem["Tổng tiền"] = value;
+                      }
+                      if (key == "total_shipping_fee") {
+                        newItem["Phí vận chuyển"] = value;
+                      }
 
-                    if (key == "customer_note") {
-                      newItem["Ghi chú"] = value;
-                    }
+                      if (key == "remaining_amount") {
+                        newItem["Thanh toán còn lại"] = value;
+                      }
 
-                    if (key == "total_final") {
-                      newItem["Tổng tiền"] = value;
-                    }
-                    if (key == "total_shipping_fee") {
-                      newItem["Phí vận chuyển"] = value;
-                    }
+                      if (key == "payment_status") {
+                        newItem["Trạng thái thanh toán"] = value ?? "";
+                      }
 
-                    if (key == "remaining_amount") {
-                      newItem["Thanh toán còn lại"] = value;
-                    }
+                      if (key == "order_status") {
+                        newItem["Trạng thái đơn hàng"] = value ?? "";
+                      }
 
-                    if (key == "payment_status") {
-                      newItem["Trạng thái thanh toán"] = value  ?? "";
-                    }
+                      if (key == "combo_discount_amount") {
+                        newItem["Giảm giá combo"] = value;
+                      }
 
-                    if (key == "order_status") {
-                      newItem["Trạng thái đơn hàng"] = value ?? "";
-                    }
+                      if (key == "product_discount_amount") {
+                        newItem["Giảm giá sản phẩm"] = value;
+                      }
+                      if (key == "voucher_discount_amount") {
+                        newItem["Giảm giá voucher"] = value;
+                      }
 
-                    if (key == "combo_discount_amount") {
-                      newItem["Giảm giá combo"] = value;
-                    }
+                      if (key == "total_after_discount") {
+                        newItem["Trước khi giảm giá"] = value;
+                      }
+                      if (key == "total_before_discount") {
+                        newItem["Sau khi giảm giá"] = value;
+                      }
 
-                    if (key == "product_discount_amount") {
-                      newItem["Giảm giá sản phẩm"] = value;
-                    }
-                    if (key == "voucher_discount_amount") {
-                      newItem["Giảm giá voucher"] = value;
-                    }
+                      if (key == "balance_collaborator_used") {
+                        newItem["Số dư CTV đã sử dụng"] = value;
+                      }
 
-                    if (key == "total_after_discount") {
-                      newItem["Trước khi giảm giá"] = value;
-                    }
-                    if (key == "total_before_discount") {
-                      newItem["Sau khi giảm giá"] = value;
-                    }
+                      if (key == "bonus_points_amount_used") {
+                        newItem["Số xu đã sử dụng"] = value;
+                      }
 
-                    if (key == "balance_collaborator_used") {
-                      newItem["Số dư CTV đã sử dụng"] = value;
+                      if (key == "share_collaborator") {
+                        newItem["Số tiền chia sẻ cho CTV"] = value;
+                      }
                     }
-
-                    if (key == "bonus_points_amount_used") {
-                      newItem["Số xu đã sử dụng"] = value;
-                    }
-
-                    if (key == "share_collaborator") {
-                      newItem["Số tiền chia sẻ cho CTV"] = value;
-                    }
-
-
-                  });
+                  );
 
                   newArray.push(newItem);
                 }
@@ -258,9 +266,7 @@ function getSheetData(data, header) {
   return sheetData;
 }
 
-
 async function saveAsExcel(value) {
-
   var data = value.data;
   var data_header = value.header;
   XlsxPopulate.fromBlankAsync().then(async (workbook) => {
@@ -271,9 +277,9 @@ async function saveAsExcel(value) {
 
     sheet1.cell("A1").value(sheetData);
     const range = sheet1.usedRange();
-   // const endColumn = String.fromCharCode(64 + totalColumns);
+    // const endColumn = String.fromCharCode(64 + totalColumns);
 
-    const endColumn = 'Z';
+    const endColumn = "Z";
     sheet1.row(1).style("bold", true);
 
     sheet1.range("A1:" + endColumn + "1").style("fill", "F4D03F");
@@ -314,13 +320,13 @@ export const fetchAllBill = (
               type: Types.FETCH_ALL_BILL,
               data: res.data.data,
             });
-        }).catch(function (error) {
+        })
+        .catch(function (error) {
           dispatch({
             type: Types.SHOW_LOADING_LAZY,
             loading: "hide",
           });
-
-        });;
+        });
     };
   }
 };
@@ -723,7 +729,7 @@ export const syncShipment = (store_code, order_code, data, syncArr) => {
         }
       })
       .catch(function (error) {
-        console.log(order_code, syncArr)
+        console.log(order_code, syncArr);
 
         dispatch({
           type: Types.UPDATE_STATUS_SYNC_SHIPMENT,
@@ -1048,6 +1054,44 @@ export const postCashRefund = (
         // history.goBack();
       })
       .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+
+export const deleteOrder = (store_code, order_code) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    billApi
+      .deleteOrder(store_code, order_code)
+      .then((res) => {
+        if (res.data.code === 200) {
+          dispatch({
+            type: Types.SHOW_LOADING,
+            loading: "hide",
+          });
+          dispatch({
+            type: Types.DELETE_ORDER,
+            data: res.data,
+          });
+        }
+      })
+      .catch((error) => {
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",
