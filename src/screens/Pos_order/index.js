@@ -388,8 +388,10 @@ class PostOrder extends Component {
     this.props.fetchAllBadge(this.props.match.params.store_code, branch_id);
     this.props.fetchAllCategoryP(this.props.match.params.store_code);
 
-    if (order_code === undefined || this.props.fromEditOrder) return;
-    this.props.createCartEditOrder(store_code, order_code);
+    if (order_code != null && order_code != "" && this.props.fromEditOrder == true) {
+      this.props.createCartEditOrder(store_code, order_code);
+    }
+
   }
 
   refreshProductList = () => {
@@ -624,7 +626,7 @@ class PostOrder extends Component {
     }
 
     if (
-      typeof nextProps.oneCart != "undefined"  && typeof nextProps.oneCart.info_cart != "undefined" && ((
+      typeof nextProps.oneCart != "undefined" && typeof nextProps.oneCart.info_cart != "undefined" && ((
         !shallowEqual(nextProps.oneCart, this.props.oneCart) &&
         this.props.loadingHandleChangeQuantity == false
       )
@@ -632,7 +634,7 @@ class PostOrder extends Component {
 
         !shallowEqual(this.props.loadingHandleChangePriceItem, nextProps.loadingHandleChangePriceItem)
       )
-      ) {
+    ) {
       var discount = {};
       if (nextProps.oneCart?.id != this.props.oneCart?.id) {
         discount = { discount: nextProps.oneCart.discount };
