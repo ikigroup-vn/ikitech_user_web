@@ -636,7 +636,7 @@ class PostOrder extends Component {
         !shallowEqual(this.props.loadingHandleChangePriceItem, nextProps.loadingHandleChangePriceItem)
         ||
 
-        !shallowEqual(this.props.loadingHandleUseVoucher, nextProps.loadingHandleUseVoucher) && nextProps.loadingHandleUseVoucher != null
+        (!shallowEqual(this.props.loadingHandleUseVoucher, nextProps.loadingHandleUseVoucher) && nextProps.loadingHandleUseVoucher != null)
 
       )
     ) {

@@ -66,6 +66,9 @@ export const pos_reducer = (state = initialState, action) => {
       newState.loadingHandleUseVoucher = true;
       newState.oneCart = action.data;
       return newState;
+    case Types.FETCH_LIST_CART_ITEM:
+      newState.oneCart = action.data;
+      return newState;
     case Types.USE_VOUCHER_CART_DONE:
       newState.loadingHandleUseVoucher = false;
       newState.oneCart = action.data;
