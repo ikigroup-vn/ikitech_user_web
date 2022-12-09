@@ -388,7 +388,8 @@ class PostOrder extends Component {
     this.props.fetchAllBadge(this.props.match.params.store_code, branch_id);
     this.props.fetchAllCategoryP(this.props.match.params.store_code);
 
-    if (order_code != null && order_code != "" && this.props.fromEditOrder == true) {
+
+    if (order_code != null && order_code != "" ) {
       this.props.createCartEditOrder(store_code, order_code);
     }
 
