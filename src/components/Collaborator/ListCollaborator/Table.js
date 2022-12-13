@@ -187,19 +187,19 @@ class Table extends Component {
               <td>{data.customer.name}</td>
               <td>{data.customer.phone_number}</td>
               <td>
-                {data.balance > 0 ? (
-                  <div
-                    className="collaborators_balance"
-                    onClick={() => this.setCollaboratorSelected(data)}
-                  >
-                    <span>{helper.formatNumberV2(data.balance) + " VND"}</span>
-                    <span>
-                      <i className="fa fa-history"></i>
-                    </span>
-                  </div>
-                ) : (
-                  "0 VND"
-                )}
+                <div
+                  className="collaborators_balance"
+                  onClick={() => this.setCollaboratorSelected(data)}
+                >
+                  <span>
+                    {data.balance < 0
+                      ? "-" + helper.formatNumberV2(data.balance) + " VND"
+                      : helper.formatNumberV2(data.balance) + " VND"}
+                  </span>
+                  <span>
+                    <i className="fa fa-history"></i>
+                  </span>
+                </div>
               </td>
               {/* 
               <td>
