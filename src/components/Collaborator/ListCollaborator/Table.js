@@ -10,6 +10,39 @@ import ModalListReferences from "./ModalListReferences";
 import ModalImg from "../ModalImg";
 import moment from "moment";
 import SidebarListReferences from "./SidebarListReferences";
+import styled from "styled-components";
+import ModalHistoryBalance from "./ModalHistoryBalance";
+import ModalChangeBalance from "./ModalChangeBalance";
+
+const ListCollaboratorStyles = styled.div`
+  .exploder {
+    border: 1px solid;
+    border-radius: 3px;
+    span {
+      margin: 3px 0;
+      &:hover {
+        color: white;
+      }
+    }
+  }
+  .collaborators_balance {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+    color: #2980b9;
+    &:hover {
+      color: #3498db;
+    }
+  }
+  .btn-exploder {
+    span {
+      margin: 3px 0;
+      &:hover {
+        color: white;
+      }
+    }
+  }
+`;
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -19,8 +52,30 @@ class Table extends Component {
       modalImg: "",
       showSidebarListReferences: false,
       customerInfo: {},
+      collaboratorSelected: {},
+      collaboratorSelectedForChangeBalance: {},
+      isSub: true,
     };
   }
+  setIsSub = (isSub) => {
+    this.setState({ isSub });
+  };
+  setCollaboratorSelected = (collab) => {
+    this.setState({
+      collaboratorSelected: collab,
+    });
+  };
+  setCollaboratorSelectedForChangeBalance = (collab) => {
+    this.setState({
+      collaboratorSelectedForChangeBalance: collab,
+    });
+  };
+  handleOpenModalChangeBalance = (collab, isSub) => {
+    this.setState({
+      collaboratorSelectedForChangeBalance: collab,
+      isSub,
+    });
+  };
   showChatBox = (collaboratorId, status) => {
     this.props.handleShowChatBox(collaboratorId, status);
   };
@@ -43,6 +98,13 @@ class Table extends Component {
     ) {
       helper.loadExpandTable();
     }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (!shallowEqual(this.props.collaborators, nextProps.collaborators)) {
+      this.setCollaboratorSelectedForChangeBalance({});
+    }
+    return true;
   }
 
   onChangeStatus = (e, id) => {
@@ -107,7 +169,7 @@ class Table extends Component {
                 <button
                   type="button"
                   style={{ width: "25px" }}
-                  className=" btn-success exploder"
+                  className=" btn-outline-success exploder"
                 >
                   <span class="fa fa-plus"></span>
                 </button>
@@ -117,13 +179,28 @@ class Table extends Component {
                 <img
                   src={avatar}
                   class="img-responsive"
-                  width="100px"
-                  height="115px"
+                  width="70px"
+                  height="70px"
                   alt="Image"
                 />
               </td>
               <td>{data.customer.name}</td>
               <td>{data.customer.phone_number}</td>
+              <td>
+                {data.balance > 0 ? (
+                  <div
+                    className="collaborators_balance"
+                    onClick={() => this.setCollaboratorSelected(data)}
+                  >
+                    <span>{helper.formatNumberV2(data.balance) + " VND"}</span>
+                    <span>
+                      <i className="fa fa-history"></i>
+                    </span>
+                  </div>
+                ) : (
+                  "0 VND"
+                )}
+              </td>
               {/* 
               <td>
                 {" "}
@@ -164,20 +241,6 @@ class Table extends Component {
                 </div>
               </td>
               <td className="btn-voucher">
-                <button
-                  onClick={() => this.showChatBox(data.customer.id, "show")}
-                  class="btn btn-success btn-sm"
-                >
-                  <i class="fa fa-comment-alt"></i> Chat
-                </button>
-                &nbsp;
-                <a
-                  href={`tel:${data.customer.phone_number}`}
-                  class="btn btn-primary btn-sm"
-                >
-                  <i class="fa fa-phone"></i> Gọi ngay
-                </a>
-                &nbsp;
                 <Link
                   style={{ margin: "2px 0" }}
                   to={`/order/${this.props.store_code}?collaborator_by_customer_id=${data.customer_id}&tab-index=1`}
@@ -194,24 +257,10 @@ class Table extends Component {
                   <i class="fa fa-bar-chart"></i> Báo cáo
                 </Link>
                 &nbsp;
-                <a
-                  class="btn btn-info btn-sm"
-                  onClick={() =>
-                    this.handleShowSidebarListReferences(data.customer)
-                  }
-                >
-                  <span class="icon text-white">
-                    <i class="fa fa-users"></i>
-                  </span>
-                  <span style={{ color: "white" }} class={`text `}>
-                    {" "}
-                    Danh sách giới thiệu ({data.customer.total_referrals})
-                  </span>
-                </a>
               </td>
             </tr>
-            <tr class="explode hide" style={{ background: "rgb(200 234 222)" }}>
-              <td colSpan={9}>
+            <tr class="explode hide">
+              <td colSpan={8}>
                 <div class="row">
                   <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                     <div class="info_user">
@@ -230,11 +279,52 @@ class Table extends Component {
                         <span id="user_tel">             {data.customer.email == null ? "Trống" : data.customer.email}
                         </span>
                       </p> */}
-                      <p class="sale_user_label">
-                        Tiền thưởng:{" "}
-                        <span id="user_tel">
+                      <p
+                        class="sale_user_label"
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        Số dư:{" "}
+                        <span
+                          id="user_tel"
+                          style={{
+                            color: "#2980b9",
+                            marginLeft: "2px",
+                          }}
+                        >
                           {format(Number(data.balance))}
                         </span>
+                        <div
+                          style={{
+                            marginLeft: "15px",
+                            display: "flex",
+                            alignItems: "center",
+                            columnGap: "5px",
+                          }}
+                        >
+                          <button
+                            type="button"
+                            style={{ width: "25px" }}
+                            className=" btn-outline-success btn-exploder"
+                            onClick={() =>
+                              this.handleOpenModalChangeBalance(data, false)
+                            }
+                          >
+                            <span className="fa fa-plus"></span>
+                          </button>
+                          <button
+                            type="button"
+                            style={{ width: "25px" }}
+                            className=" btn-outline-danger btn-exploder"
+                            onClick={() =>
+                              this.handleOpenModalChangeBalance(data, true)
+                            }
+                          >
+                            <span className="fa fa-minus"></span>
+                          </button>
+                        </div>
                       </p>
                       <p class="sale_user_label">
                         Tên CMND:{" "}
@@ -306,6 +396,51 @@ class Table extends Component {
                   </div>
                 </div>
               </td>
+              <td>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    rowGap: "5px",
+                  }}
+                >
+                  <button
+                    onClick={() => this.showChatBox(data.customer.id, "show")}
+                    class="btn btn-success btn-sm"
+                    style={{
+                      width: "fit-content",
+                    }}
+                  >
+                    <i class="fa fa-comment-alt"></i> Chat
+                  </button>
+                  <a
+                    href={`tel:${data.customer.phone_number}`}
+                    class="btn btn-primary btn-sm"
+                    style={{
+                      width: "fit-content",
+                    }}
+                  >
+                    <i class="fa fa-phone"></i> Gọi ngay
+                  </a>
+                  <a
+                    class="btn btn-info btn-sm"
+                    style={{
+                      width: "fit-content",
+                    }}
+                    onClick={() =>
+                      this.handleShowSidebarListReferences(data.customer)
+                    }
+                  >
+                    <span class="icon text-white">
+                      <i class="fa fa-users"></i>
+                    </span>
+                    <span style={{ color: "white" }} class={`text `}>
+                      {" "}
+                      Danh sách giới thiệu ({data.customer.total_referrals})
+                    </span>
+                  </a>
+                </div>
+              </td>
             </tr>
           </React.Fragment>
         );
@@ -330,8 +465,10 @@ class Table extends Component {
       typeof this.props.collaborators.data == "undefined"
         ? []
         : this.props.collaborators.data;
+    const { collaboratorSelected, collaboratorSelectedForChangeBalance } =
+      this.state;
     return (
-      <div class="" style={{ overflow: "auto" }}>
+      <ListCollaboratorStyles class="" style={{ overflow: "auto" }}>
         <ModalImg img={this.state.modalImg}></ModalImg>
         <table class="table table-border">
           <thead>
@@ -343,6 +480,7 @@ class Table extends Component {
 
               <th>Họ tên</th>
               <th>Số điện thoại</th>
+              <th>Số dư</th>
 
               {/* <th>Điểm</th> */}
               <th>Mã giới thiệu</th>
@@ -366,7 +504,26 @@ class Table extends Component {
           showSidebarListReferences={this.state.showSidebarListReferences}
           setShowSidebarListReferences={this.setShowSidebarListReferences}
         ></SidebarListReferences>
-      </div>
+        {Object.entries(collaboratorSelected).length > 0 ? (
+          <ModalHistoryBalance
+            store_code={this.props.store_code}
+            collaboratorSelected={collaboratorSelected}
+            setCollaboratorSelected={this.setCollaboratorSelected}
+          />
+        ) : null}
+        {Object.entries(collaboratorSelectedForChangeBalance).length > 0 ? (
+          <ModalChangeBalance
+            store_code={this.props.store_code}
+            isSub={this.state.isSub}
+            collaboratorSelectedForChangeBalance={
+              collaboratorSelectedForChangeBalance
+            }
+            setCollaboratorSelectedForChangeBalance={
+              this.setCollaboratorSelectedForChangeBalance
+            }
+          />
+        ) : null}
+      </ListCollaboratorStyles>
     );
   }
 }

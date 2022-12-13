@@ -1,27 +1,16 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import { Component } from "react";
 
-import * as collaboratorAction from "../../../actions/collaborator";
-class Pagination extends Component {
+class PaginationHistory extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      page: 1,
-    };
+    this.state = {};
   }
 
   passPagination = (page) => {
-    var { searchValue, getParams } = this.props;
-    this.props.fetchAllCollaborator(
-      this.props.store_code,
-      page,
-      getParams(searchValue)
-    );
+    this.props.setPage(page);
   };
-
   showData = (links) => {
     var result = null;
-    var url = null;
     if (typeof links == "undefined") {
       return result;
     }
@@ -36,19 +25,19 @@ class Pagination extends Component {
             : data.label;
         if (data.url == null) {
           return (
-            <li class={`page-item ${active} `}>
-              <a class="page-link">{label}</a>
+            <li class={`page-item ${active} `} key={index}>
+              <span class="page-link">{label}</span>
             </li>
           );
         } else {
           return (
-            <li class={`page-item ${active} `}>
-              <a
+            <li class={`page-item ${active} `} key={index}>
+              <span
                 onClick={() => this.passPagination(data.url.split("?page=")[1])}
-                class="page-link"
+                className="page-link"
               >
                 {label}
-              </a>
+              </span>
             </li>
           );
         }
@@ -58,25 +47,15 @@ class Pagination extends Component {
     }
     return result;
   };
-
   render() {
     return (
       <nav aria-label="Page navigation" className="float-pagination">
         <ul class="pagination  tab-pagination pg-blue">
-          {this.showData(this.props.collaborators.links)}
+          {this.showData(this.props.allHistoriesBalance.links)}
         </ul>
       </nav>
     );
   }
 }
 
-const mapDispatchToProps = (dispatch, props) => {
-  return {
-    fetchAllCollaborator: (store_code, page, params) => {
-      dispatch(
-        collaboratorAction.fetchAllCollaborator(store_code, page, params)
-      );
-    },
-  };
-};
-export default connect(null, mapDispatchToProps)(Pagination);
+export default PaginationHistory;
