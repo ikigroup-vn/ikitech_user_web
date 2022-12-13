@@ -236,7 +236,7 @@ export const setQueryParamInUrl = (key, value) => {
 export const loadExpandTable = () => {
   window.$(".exploder").unbind("click");
   window.$(".exploder").click(function () {
-    window.$(this).toggleClass("btn-success btn-danger");
+    window.$(this).toggleClass("btn-outline-success btn-outline-danger");
 
     window.$(this).children("span").toggleClass("fa-plus fa-minus");
 

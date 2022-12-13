@@ -388,11 +388,9 @@ class PostOrder extends Component {
     this.props.fetchAllBadge(this.props.match.params.store_code, branch_id);
     this.props.fetchAllCategoryP(this.props.match.params.store_code);
 
-
     if (order_code != null && order_code != "") {
       this.props.createCartEditOrder(store_code, order_code);
     }
-
   }
 
   refreshProductList = () => {
@@ -580,7 +578,7 @@ class PostOrder extends Component {
           order_from:
             (oneCart?.total_shipping_fee > 0 ||
               this.state.openShipment == true) &&
-              getChannel() == IKITECH
+            getChannel() == IKITECH
               ? OrderFrom.ORDER_FROM_POS_DELIVERY
               : OrderFrom.ORDER_FROM_POS_IN_STORE,
         };
@@ -592,7 +590,7 @@ class PostOrder extends Component {
           order_from:
             (oneCart?.total_shipping_fee > 0 ||
               this.state.openShipment == true) &&
-              getChannel() == IKITECH
+            getChannel() == IKITECH
               ? OrderFrom.ORDER_FROM_POS_DELIVERY
               : OrderFrom.ORDER_FROM_POS_IN_STORE,
         };
@@ -605,7 +603,7 @@ class PostOrder extends Component {
         order_from:
           (oneCart?.total_shipping_fee > 0 ||
             this.state.openShipment == true) &&
-            getChannel() == IKITECH
+          getChannel() == IKITECH
             ? OrderFrom.ORDER_FROM_POS_DELIVERY
             : OrderFrom.ORDER_FROM_POS_IN_STORE,
       };
@@ -621,24 +619,27 @@ class PostOrder extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    if (!shallowEqual(nextProps.oneCart, this.props.oneCart)) {
-      console.log("123123132: ", nextProps.oneCart);
+    if (
+      !shallowEqual(nextProps.oneCart, this.props.oneCart) &&
+      nextProps.oneCart !== undefined
+    ) {
       this.setState({ oneCart: nextProps.oneCart });
     }
 
     if (
-      typeof nextProps.oneCart != "undefined" && typeof nextProps.oneCart.info_cart != "undefined" && ((
-        !shallowEqual(nextProps.oneCart, this.props.oneCart) &&
-        this.props.loadingHandleChangeQuantity == false
-      )
-        ||
-
-        !shallowEqual(this.props.loadingHandleChangePriceItem, nextProps.loadingHandleChangePriceItem)
-        ||
-
-        (!shallowEqual(this.props.loadingHandleUseVoucher, nextProps.loadingHandleUseVoucher) && nextProps.loadingHandleUseVoucher != null)
-
-      )
+      typeof nextProps.oneCart != "undefined" &&
+      typeof nextProps.oneCart.info_cart != "undefined" &&
+      ((!shallowEqual(nextProps.oneCart, this.props.oneCart) &&
+        this.props.loadingHandleChangeQuantity == false) ||
+        !shallowEqual(
+          this.props.loadingHandleChangePriceItem,
+          nextProps.loadingHandleChangePriceItem
+        ) ||
+        (!shallowEqual(
+          this.props.loadingHandleUseVoucher,
+          nextProps.loadingHandleUseVoucher
+        ) &&
+          nextProps.loadingHandleUseVoucher != null))
     ) {
       var discount = {};
       if (nextProps.oneCart?.id != this.props.oneCart?.id) {
@@ -763,11 +764,11 @@ class PostOrder extends Component {
         var { store_code } = this.props.match.params;
         history.replace(
           "/order/print/" +
-          store_code +
-          "/" +
-          this.props.orderAfterPayment.order_code +
-          "?defaultHrefBack=" +
-          btoa(window.location.pathname)
+            store_code +
+            "/" +
+            this.props.orderAfterPayment.order_code +
+            "?defaultHrefBack=" +
+            btoa(window.location.pathname)
         );
         this.onSave = false;
       }
@@ -990,6 +991,7 @@ class PostOrder extends Component {
       idCart,
     } = this.state;
     const length = oneCart.info_cart?.line_items.length;
+    console.log("hiiiiiiiiiiiiiii: ", oneCart);
     const ship_discount_amount = oneCart.info_cart?.ship_discount_amount;
     console.log(oneCart.info_cart);
     var handleKeyPress = {
@@ -1019,9 +1021,9 @@ class PostOrder extends Component {
     var colPayman =
       this.state.openShipment == true && getChannel() == IKITECH
         ? {
-          width: "55%",
-          padding: "0 5px",
-        }
+            width: "55%",
+            padding: "0 5px",
+          }
         : null;
     var total_shipping_fee = oneCart?.total_shipping_fee;
     return (
@@ -1066,7 +1068,7 @@ class PostOrder extends Component {
                               }
                               store_code={store_code}
                               products={products?.data || []}
-                              listItemPos={this.props.oneCart}
+                              listItemPos={oneCart}
                               idCart={this.state.idCart}
                               handleDelete={this.handleDelete}
                             />
@@ -1232,20 +1234,21 @@ class PostOrder extends Component {
                               marginRight: "13px",
                             }}
                           >
-                            {this.props.oneCart.customer?.name ? (
+                            {this.props.oneCart?.customer?.name ? (
                               <>
                                 <div
                                   className="title-price"
                                   style={{
                                     paddingLeft: 16,
                                   }}
-                                >{`Dùng ${oneCart.info_cart?.total_points_can_use
-                                  } xu [${format(
-                                    Number(
-                                      oneCart.info_cart
-                                        ?.bonus_points_amount_can_use
-                                    )
-                                  )}]`}</div>
+                                >{`Dùng ${
+                                  oneCart.info_cart?.total_points_can_use
+                                } xu [${format(
+                                  Number(
+                                    oneCart.info_cart
+                                      ?.bonus_points_amount_can_use
+                                  )
+                                )}]`}</div>
                                 <form action="/action_page.php">
                                   <div class="custom-control custom-switch">
                                     <input
@@ -1454,7 +1457,7 @@ class PostOrder extends Component {
                                     ? this.state.discount
                                     : this.state.beforeDiscount
                                 }
-                              // data-toggle="modal" data-target="#modalDiscount"
+                                // data-toggle="modal" data-target="#modalDiscount"
                               >
                                 {formatNoD(
                                   this.state.typeDiscount == 0
@@ -1536,7 +1539,7 @@ class PostOrder extends Component {
                                       }}
                                       className={
                                         this.state.priceCustomer ===
-                                          suggesionPrice
+                                        suggesionPrice
                                           ? "activesss item-recomment"
                                           : "item-recomment"
                                       }
@@ -1818,8 +1821,8 @@ class PostOrder extends Component {
                                 onClick={this.handlePayment}
                               >
                                 {this.state.openShipment == true ||
-                                  (total_shipping_fee > 0 &&
-                                    getChannel() == IKITECH)
+                                (total_shipping_fee > 0 &&
+                                  getChannel() == IKITECH)
                                   ? "Lên đơn (F9)"
                                   : "Thanh toán (F9)"}
                               </button>

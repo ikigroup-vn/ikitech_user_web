@@ -15,7 +15,7 @@ function getSheetData(data, header) {
   return sheetData;
 }
 
-async function saveAsExcel(value , title) {
+async function saveAsExcel(value, title) {
   // var data = [
   //   { name: "John", city: "Seattle" },
   //   { name: "Mike", city: "Los Angeles" },
@@ -52,16 +52,17 @@ export const exportListCollaborator = (store_code, page, params) => {
             if (typeof res.data.data.data != "undefined") {
               if (res.data.data.data.length > 0) {
                 var newArray = [];
-                var index = 0
+                var index = 0;
                 for (const item of res.data.data.data) {
-                  index = index + 1
+                  index = index + 1;
                   var newItem = {};
                   var arangeKeyItem = {
-                    order : index,
+                    order: index,
                     name: item.customer?.name,
                     phone_number: item.customer?.phone_number,
                     referral_phone_number: item.customer.referral_phone_number,
-                    status : item.status == 1 ? "Đã kích hoạt" : "Chưa kích hoạt"
+                    status:
+                      item.status == 1 ? "Đã kích hoạt" : "Chưa kích hoạt",
                   };
                   Object.entries(arangeKeyItem).forEach(
                     ([key, value], index) => {
@@ -94,7 +95,10 @@ export const exportListCollaborator = (store_code, page, params) => {
                   });
                 }
                 console.log(header);
-                saveAsExcel({ data: newArray, header: header } , "Danh sách CTV");
+                saveAsExcel(
+                  { data: newArray, header: header },
+                  "Danh sách CTV"
+                );
               }
             }
           }
@@ -147,7 +151,10 @@ export const exportTopten = (store_code, page, params) => {
                 });
               }
               console.log(header);
-              saveAsExcel({ data: newArray, header: header } , "Danh sách Top CTV");
+              saveAsExcel(
+                { data: newArray, header: header },
+                "Danh sách Top CTV"
+              );
             }
           }
         }
@@ -709,6 +716,81 @@ export const updateConfig = (store_code, data) => {
             content: error?.response?.data?.msg,
           },
         });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+
+export const historiesBalanceCollaborator = (store_code, id, queryString) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    collaboratorApi
+      .historiesBalanceCollaborator(store_code, id, queryString)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        if (res.data.code === 200) {
+          dispatch({
+            type: Types.FETCH_HISTORIES_BALANCE_COLLABORATOR,
+            data: res.data.data,
+          });
+        }
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+export const changePriceBalance = (store_code, id, data) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    collaboratorApi
+      .changePriceBalance(store_code, id, data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        if (res.data.code === 200) {
+          dispatch({
+            type: Types.CHANGE_PRICE_BALANCE,
+            data: res.data.data,
+          });
+        }
       })
       .catch(function (error) {
         dispatch({
