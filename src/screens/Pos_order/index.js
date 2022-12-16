@@ -623,14 +623,17 @@ class PostOrder extends Component {
       !shallowEqual(nextProps.oneCart, this.props.oneCart) &&
       nextProps.oneCart !== undefined
     ) {
-      this.setState({ oneCart: nextProps.oneCart });
+      this.setState({
+        oneCart: nextProps.oneCart,
+        // idCart: nextProps.oneCart.id,
+      });
     }
 
     if (
       typeof nextProps.oneCart != "undefined" &&
       typeof nextProps.oneCart.info_cart != "undefined" &&
-      ((!shallowEqual(nextProps.oneCart, this.props.oneCart) &&
-        this.props.loadingHandleChangeQuantity == false) ||
+      (!shallowEqual(nextProps.oneCart, this.props.oneCart) ||
+        // && this.props.loadingHandleChangeQuantity == false
         !shallowEqual(
           this.props.loadingHandleChangePriceItem,
           nextProps.loadingHandleChangePriceItem
@@ -733,7 +736,6 @@ class PostOrder extends Component {
       (nextState.listPosItem.product_id != null &&
         this.state.isScan != nextState.isScan)
     ) {
-      console.log(nextState.listPosItem);
       const formData = {
         product_id: nextState.listPosItem.product_id,
         quantity: nextState.listPosItem.stock ?? 1,
@@ -747,6 +749,7 @@ class PostOrder extends Component {
       this.props.addProductInCart(store_code, branch_id, id, formData);
     }
     if (!shallowEqual(nextState.priceCustomer, this.state.priceCustomer)) {
+      console.log("priceCustomer: ", nextState.priceCustomer);
       this.setState({
         exchange:
           removeSignNumber(nextState.priceCustomer) -
@@ -787,7 +790,6 @@ class PostOrder extends Component {
         exchange: 0,
         totalFinal: 0,
       });
-
       this.refreshProductList();
     }
 
@@ -1107,9 +1109,13 @@ class PostOrder extends Component {
                               ></img>
                               <div
                                 className="title-list-pos "
-                                style={{ color: "black" }}
+                                style={{
+                                  color: "black",
+                                  marginTop: "10px",
+                                  fontSize: "16px",
+                                }}
                               >
-                                Đơn hàng của bạn chưa có sản phẩm nào
+                                Đơn hàng của bạn chưa có sản phẩm nào!
                               </div>
                             </div>
                           </div>
@@ -1164,9 +1170,7 @@ class PostOrder extends Component {
                   className="row-payman"
                   style={{
                     ...rowPayman,
-                    // "flex-flow": "column",
-                    // position: "relative",
-                    // "z-index": "-1"
+                    fontSize: "13px",
                   }}
                 >
                   {/* {this.state.openShipment && getChannel() == IKITECH && ( */}
@@ -1211,7 +1215,7 @@ class PostOrder extends Component {
                           className="price-info"
                           style={{
                             margin: "10px 0px",
-                            fontSize: "17px",
+                            fontSize: "13px",
                             marginLeft: "5px",
                           }}
                         >
@@ -1492,7 +1496,7 @@ class PostOrder extends Component {
                               style={{
                                 textAlign: "end",
                                 color: "red",
-                                fontSize: "22px",
+                                fontSize: "20px",
                               }}
                             >
                               {formatNoD(totalFinal)}
@@ -1517,6 +1521,9 @@ class PostOrder extends Component {
                                   id="import_prices"
                                   {...handleKeyPress}
                                   class="col-6 text-input-pos"
+                                  style={{
+                                    fontSize: "24px",
+                                  }}
                                   value={formatNoD(
                                     removeSignNumber(this.state.priceCustomer)
                                   )}
@@ -1605,6 +1612,7 @@ class PostOrder extends Component {
                                 border: 0,
                                 borderRadius: 0,
                                 borderBottom: "2px solid gray",
+                                fontSize: "13px",
                               }}
                               value={this.state.customerNote}
                               onChange={this.handleChange}

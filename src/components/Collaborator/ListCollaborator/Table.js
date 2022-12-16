@@ -120,6 +120,8 @@ class Table extends Component {
 
   showData = (collaborators) => {
     var { store_code } = this.props;
+    const permissionChangeBalance =
+      this.props?.permission?.collaborator_add_sub_balance || false;
     var result = null;
     if (collaborators.length > 0) {
       result = collaborators.map((data, index) => {
@@ -296,35 +298,37 @@ class Table extends Component {
                         >
                           {format(Number(data.balance))}
                         </span>
-                        <div
-                          style={{
-                            marginLeft: "15px",
-                            display: "flex",
-                            alignItems: "center",
-                            columnGap: "5px",
-                          }}
-                        >
-                          <button
-                            type="button"
-                            style={{ width: "25px" }}
-                            className=" btn-outline-success btn-exploder"
-                            onClick={() =>
-                              this.handleOpenModalChangeBalance(data, false)
-                            }
+                        {permissionChangeBalance ? (
+                          <div
+                            style={{
+                              marginLeft: "15px",
+                              display: "flex",
+                              alignItems: "center",
+                              columnGap: "5px",
+                            }}
                           >
-                            <span className="fa fa-plus"></span>
-                          </button>
-                          <button
-                            type="button"
-                            style={{ width: "25px" }}
-                            className=" btn-outline-danger btn-exploder"
-                            onClick={() =>
-                              this.handleOpenModalChangeBalance(data, true)
-                            }
-                          >
-                            <span className="fa fa-minus"></span>
-                          </button>
-                        </div>
+                            <button
+                              type="button"
+                              style={{ width: "25px" }}
+                              className=" btn-outline-success btn-exploder"
+                              onClick={() =>
+                                this.handleOpenModalChangeBalance(data, false)
+                              }
+                            >
+                              <span className="fa fa-plus"></span>
+                            </button>
+                            <button
+                              type="button"
+                              style={{ width: "25px" }}
+                              className=" btn-outline-danger btn-exploder"
+                              onClick={() =>
+                                this.handleOpenModalChangeBalance(data, true)
+                              }
+                            >
+                              <span className="fa fa-minus"></span>
+                            </button>
+                          </div>
+                        ) : null}
                       </p>
                       <p class="sale_user_label">
                         Tên CMND:{" "}
@@ -528,6 +532,12 @@ class Table extends Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    permission: state.authReducers.permission.data,
+  };
+};
+
 const mapDispatchToProps = (dispatch, props) => {
   return {
     updateCollaborator: (store_code, id, data) => {
@@ -535,4 +545,4 @@ const mapDispatchToProps = (dispatch, props) => {
     },
   };
 };
-export default connect(null, mapDispatchToProps)(Table);
+export default connect(mapStateToProps, mapDispatchToProps)(Table);
