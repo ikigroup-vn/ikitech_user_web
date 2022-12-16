@@ -480,8 +480,12 @@ class ItemInCart extends Component {
 
     const maxQuantity = stockOfProduct(
       item.product,
-      item?.distributes_selected != null ?  item?.distributes_selected[0]?.value : null,
-      item?.distributes_selected != null ? item?.distributes_selected[0]?.sub_element_distributes: null,
+      item?.distributes_selected != null
+        ? item?.distributes_selected[0]?.value
+        : null,
+      item?.distributes_selected != null
+        ? item?.distributes_selected[0]?.sub_element_distributes
+        : null
     );
 
     const allowAdd = true;
@@ -505,7 +509,7 @@ class ItemInCart extends Component {
         class={`card card-item-pos ${
           is_bonus === true ? "border-item-bonus1" : ""
         }`}
-        style={{ marginBottom: "10px" }}
+        style={{ marginBottom: "10px", fontSize: "13px" }}
         key={index}
       >
         <div class="card-body" style={{ padding: "0", position: "relative" }}>
@@ -547,6 +551,7 @@ class ItemInCart extends Component {
                   overflow: "hidden",
                   whiteSpace: "nowrap",
                   textOverflow: "ellipsis",
+                  fontSize: "13px",
                 }}
               >
                 {item.product.name}
@@ -554,12 +559,19 @@ class ItemInCart extends Component {
               {item.product.distributes?.length > 0 && (
                 <div
                   className="wrap-distributes_selected"
-                  style={{ fontSize: "12px", fontStyle: "italic" }}
+                  style={{ fontSize: "13px", fontStyle: "italic" }}
                 >
                   <div class="_34KJXV">
                     {/* <div class="_34KJXV" onClick={() => this.passData(item.product.id, item.product, currentQuantity, item.distributes_selected)} > */}
                     <div class="aUj6f2">
-                      <div class="_1XT_GF" role="button" tabindex="0">
+                      <div
+                        class="_1XT_GF"
+                        role="button"
+                        tabindex="0"
+                        style={{
+                          fontSize: "11px",
+                        }}
+                      >
                         <div
                           class="Qtk_DO"
                           id={`item_pos_${this.props.key}`}
@@ -690,7 +702,12 @@ class ItemInCart extends Component {
                                         </div>
                                       </div>
                                       <div class="_3gvvQI">
-                                        <div class="_3_Bulc">
+                                        <div
+                                          class="_3_Bulc"
+                                          style={{
+                                            fontSize: "13px",
+                                          }}
+                                        >
                                           {itemParent.name}
                                         </div>
                                         {itemParent.element_distributes &&
@@ -892,6 +909,7 @@ class ItemInCart extends Component {
                     width: "40px",
                     textAlign: "center",
                     fontWeight: "400",
+                    fontSize: "13px",
                   }}
                   value={currentQuantity}
                 ></input>
@@ -916,7 +934,7 @@ class ItemInCart extends Component {
             </div>
             <div
               className="cost inputCost"
-              style={{ width: "15%", fontWeight: "400" }}
+              style={{ width: "15%", fontWeight: "400", fontSize: "13px" }}
             >
               {!showEditCost ? (
                 <div>
@@ -976,7 +994,7 @@ class ItemInCart extends Component {
             {is_bonus === true ? (
               <div
                 className="total-price"
-                style={{ width: "13%", fontWeight: "500" }}
+                style={{ width: "13%", fontWeight: "500", fontSize: "13px" }}
               >
                 {/* {item.bonus_product_name ?? "Thưởng sản pham"} */}
                 Sản phẩm tặng
@@ -984,7 +1002,7 @@ class ItemInCart extends Component {
             ) : (
               <div
                 className="total-price"
-                style={{ width: "13%", fontWeight: "500" }}
+                style={{ width: "13%", fontWeight: "500", fontSize: "13px" }}
               >
                 {format(Number(item.item_price * currentQuantity))}
               </div>
@@ -994,7 +1012,7 @@ class ItemInCart extends Component {
                 <i
                   class="fa fa-gift"
                   style={{
-                    "font-size": "40px",
+                    "font-size": "30px",
                     color: "darkorange",
                     /* float: right; */
                     padding: "12px",
@@ -1011,6 +1029,9 @@ class ItemInCart extends Component {
                       item.distributes_selected
                     )
                   }
+                  style={{
+                    fontSize: "18px",
+                  }}
                 ></i>
               )}
             </div>

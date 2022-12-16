@@ -1078,7 +1078,14 @@ export const updateProduct = (store_code, data, productId, page) => {
   };
 };
 
-export const updateDistribute = (store_code, data, productId, branchId) => {
+export const updateDistribute = (
+  store_code,
+  data,
+  productId,
+  branchId,
+  form,
+  page
+) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -1087,11 +1094,13 @@ export const updateDistribute = (store_code, data, productId, branchId) => {
     productApi
       .updateDistribute(store_code, data, productId, branchId)
       .then((res) => {
-        console.log(res);
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
+        if (res.data.code === 200) {
+          dispatch(updateProduct(store_code, form, productId, page));
+        }
       })
       .catch(function (error) {});
   };

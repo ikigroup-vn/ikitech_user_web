@@ -691,6 +691,10 @@ class PanelBottom extends Component {
                 id="customerName"
                 placeholder="Tên khách"
                 autocomplete="new-password"
+                style={{
+                  fontSize: "13px",
+                  height: `calc(2.25rem + 2px)`,
+                }}
               />
             </div>
 
@@ -711,6 +715,10 @@ class PanelBottom extends Component {
                 id="customerName"
                 placeholder="Email"
                 autocomplete="new-password"
+                style={{
+                  fontSize: "13px",
+                  height: `calc(2.25rem + 2px)`,
+                }}
               />
             </div>
           </div>
@@ -736,6 +744,7 @@ class PanelBottom extends Component {
                   <select
                     style={{
                       background: isDisabledButton ? "#eaecf4" : "white",
+                      fontSize: "13px",
                     }}
                     onClick={() => {
                       this.toggleOpenProvince();
@@ -801,6 +810,7 @@ class PanelBottom extends Component {
                     class="form-control select-has-search-box customerInfo select2-hidden-accessible"
                     style={{
                       background: isDisabledButton ? "#eaecf4" : "white",
+                      fontSize: "13px",
                     }}
                     onClick={() => {
                       this.toggleOpenDistrict();
@@ -866,6 +876,7 @@ class PanelBottom extends Component {
                   <select
                     style={{
                       background: isDisabledButton ? "#eaecf4" : "white",
+                      fontSize: "13px",
                     }}
                     onClick={() => {
                       this.toggleOpenWards();
@@ -922,6 +933,9 @@ class PanelBottom extends Component {
                 name="txtSex"
                 class="form-control customerInfo px-1"
                 id="customerGender"
+                style={{
+                  fontSize: "13px",
+                }}
               >
                 <option value="" disabled>
                   - Giới tính -
@@ -1040,6 +1054,9 @@ class PanelBottom extends Component {
                 class="form-control txtAutoHeight customerInfo"
                 placeholder="Địa chỉ chi tiết"
                 id="customerAddress"
+                style={{
+                  fontSize: "13px",
+                }}
               ></textarea>
             </div>
           </div>
@@ -1246,6 +1263,7 @@ class PanelBottom extends Component {
         style={{
           "padding-bottom": "25px",
           paddingTop: "8px",
+          fontSize: "13px",
         }}
       >
         <div className={`filter-product-pos ${show}`}>
@@ -1269,6 +1287,9 @@ class PanelBottom extends Component {
                 // onChange={this.onChange}
                 id="input"
                 class="form-control"
+                style={{
+                  fontSize: "13px",
+                }}
               >
                 <option disabled value="">
                   --Chọn danh mục--
@@ -1386,6 +1407,9 @@ class PanelBottom extends Component {
               onClick={() => {
                 this.setState({ isShow: false });
               }}
+              style={{
+                fontSize: "13px",
+              }}
             >
               Đóng
             </button>
@@ -1393,6 +1417,9 @@ class PanelBottom extends Component {
               onClick={this.postFilterProduct}
               type="submit"
               class="btn btn-warning"
+              style={{
+                fontSize: "13px",
+              }}
             >
               Lọc
             </button>
@@ -1523,6 +1550,7 @@ class PanelBottom extends Component {
                 style={{
                   "margin-top": "5px",
                   "margin-bottom": "2px",
+                  fontSize: "13px",
                 }}
                 id="btnSaveCustomer"
                 onClick={this.onSaveCustomer}

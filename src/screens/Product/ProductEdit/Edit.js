@@ -26,15 +26,14 @@ class ProductEdit extends Component {
       form: {},
       total: "",
       disableDistribute: false,
-      disableInventory: false
+      disableInventory: false,
     };
-
   }
 
   checkDistribute = (status, _status) => {
     console.log(status, _status);
-    this.setState({ disableDistribute: status, disableInventory: _status })
-  }
+    this.setState({ disableDistribute: status, disableInventory: _status });
+  };
 
   componentDidMount() {
     var { store_code, productId } = this.props;
@@ -42,22 +41,29 @@ class ProductEdit extends Component {
     this.props.fetchAllAttributeP(store_code);
     this.props.fetchAllCategoryP(store_code);
     this.props.fetchAllBlog(store_code, 1);
-
   }
 
   handleDataFromInfo = (data) => {
-
     this.setState((prevState, props) => {
       var formdata = { ...prevState.form };
       formdata.name = data.txtName;
-      formdata.price = data.txtPrice.toString().replace(/,/g, '').replace(/\./g, '');
-      formdata.import_price = data.txtImportPrice.toString().replace(/,/g, '').replace(/\./g, '');
+      formdata.price = data.txtPrice
+        .toString()
+        .replace(/,/g, "")
+        .replace(/\./g, "");
+      formdata.import_price = data.txtImportPrice
+        .toString()
+        .replace(/,/g, "")
+        .replace(/\./g, "");
       formdata.barcode = data.txtBarcode;
       formdata.status = data.txtStatus;
-      formdata.quantity_in_stock = data.txtQuantityInStock.toString().replace(/,/g, '').replace(/\./g, '');
+      formdata.quantity_in_stock = data.txtQuantityInStock
+        .toString()
+        .replace(/,/g, "")
+        .replace(/\./g, "");
       formdata.percent_collaborator = data.txtPercentC;
-      formdata.sku = data.sku
-      formdata.check_inventory = data.check_inventory
+      formdata.sku = data.sku;
+      formdata.check_inventory = data.check_inventory;
       formdata.point_for_agency = data.point_for_agency;
 
       var categories = [];
@@ -68,9 +74,11 @@ class ProductEdit extends Component {
         });
       }
       if (data.category_children_ids.length > 0) {
-        category_children_ids = data.category_children_ids.map((categoryChild, index) => {
-          return categoryChild.id;
-        });
+        category_children_ids = data.category_children_ids.map(
+          (categoryChild, index) => {
+            return categoryChild.id;
+          }
+        );
       }
       formdata.categories = categories;
       formdata.category_children_ids = category_children_ids;
@@ -83,50 +91,38 @@ class ProductEdit extends Component {
       var formdata = { ...prevState.form };
       formdata.images = data.listImgProduct;
       return { form: formdata };
-
     });
-
-
   };
-
 
   handleDataFromAvatarImg = (data) => {
     this.setState((prevState, props) => {
       var formdata = { ...prevState.form };
-      formdata.index_image_avatar = data.avatar_product
+      formdata.index_image_avatar = data.avatar_product;
       return { form: formdata };
-
     });
-
-
   };
-
 
   handleDataFromDiscount = (data) => {
     this.setState((prevState, props) => {
       var formdata = { ...prevState.form };
-      formdata.list_promotion = data
+      formdata.list_promotion = data;
       return { form: formdata };
-
     });
-
-
   };
 
   handleDataFromContent = (data) => {
     this.setState((prevState, props) => {
       var formdata = { ...prevState.form };
-      formdata.content_for_collaborator = data.txtContentC
-      formdata.description = data.txtContent
-      formdata.seo_title = data.txtSeoTitle
-      formdata.seo_description = data.txtSeoDescription
+      formdata.content_for_collaborator = data.txtContentC;
+      formdata.description = data.txtContent;
+      formdata.seo_title = data.txtSeoTitle;
+      formdata.seo_description = data.txtSeoDescription;
 
-      return { form: formdata }
+      return { form: formdata };
     });
   };
 
   handleDataFromAttribute = (data) => {
-
     this.setState((prevState, props) => {
       var formdata = { ...prevState.form };
       var listAttribute = [];
@@ -157,75 +153,146 @@ class ProductEdit extends Component {
       var formdata = { ...prevState.form };
       formdata.list_distribute = data;
       return { form: formdata };
-
     });
-
-
-
   };
 
   postProduct = () => {
     var { store_code, productId } = this.props;
-    var form = { ...this.state.form };
-    form.index_image_avatar = 0
+    var form = {
+      ...this.state.form,
+      import_price: Number(this.state.form?.import_price),
+      price: Number(this.state.form?.price),
+      quantity_in_stock: Number(this.state.form?.quantity_in_stock),
+    };
+    console.log("formmmmm: ", form);
+    form.index_image_avatar = 0;
     if (typeof form.list_distribute != "undefined") {
       if (typeof form.list_distribute[0] != "undefined") {
-
-
         if (typeof form.list_distribute[0].element_distributes != "undefined") {
           if (form.list_distribute[0].element_distributes.length > 0) {
-            form.list_distribute[0].element_distributes.forEach((element, index) => {
-              try {
-                const price = element.price != null ? element.price.toString().replace(/,/g, '').replace(/\./g, '') : 0;
-                const barcode = element.barcode != null ? element.barcode.toString() : 0;
+            form.list_distribute[0].element_distributes.forEach(
+              (element, index) => {
+                try {
+                  const price =
+                    element.price != null
+                      ? element.price
+                          .toString()
+                          .replace(/,/g, "")
+                          .replace(/\./g, "")
+                      : 0;
+                  const barcode =
+                    element.barcode != null ? element.barcode.toString() : 0;
 
-                const quantity_in_stock = element.quantity_in_stock != null ? element.quantity_in_stock.toString().replace(/,/g, '').replace(/\./g, '') : 0;
-                const import_price = element.import_price != null ? element.import_price.toString().replace(/,/g, '').replace(/\./g, '') : 0;
-                form.list_distribute[0].element_distributes[index].price = price
-                form.list_distribute[0].element_distributes[index].import_price = import_price
+                  const quantity_in_stock =
+                    element.quantity_in_stock != null
+                      ? element.quantity_in_stock
+                          .toString()
+                          .replace(/,/g, "")
+                          .replace(/\./g, "")
+                      : 0;
+                  const import_price =
+                    element.import_price != null
+                      ? element.import_price
+                          .toString()
+                          .replace(/,/g, "")
+                          .replace(/\./g, "")
+                      : 0;
+                  form.list_distribute[0].element_distributes[index].price =
+                    Number(price);
+                  form.list_distribute[0].element_distributes[
+                    index
+                  ].import_price = Number(import_price);
 
-                form.list_distribute[0].element_distributes[index].quantity_in_stock = quantity_in_stock
-                form.list_distribute[0].element_distributes[index].barcode = barcode
-                if (typeof element.sub_element_distributes != "undefined") {
-                  if (element.sub_element_distributes.length > 0) {
-
-                    element.sub_element_distributes.forEach((_element, _index) => {
-                      try {
-                        const price = _element.price != null ? _element.price.toString().replace(/,/g, '').replace(/\./g, '') : 0;
-                        const barcode = _element.barcode != null ? _element.barcode.toString() : "";
-                        const quantity_in_stock = _element.quantity_in_stock != null ? _element.quantity_in_stock.toString().replace(/,/g, '').replace(/\./g, '') : 0;
-                        const import_price = _element.import_price != null ? _element.import_price.toString().replace(/,/g, '').replace(/\./g, '') : 0;
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].import_price = import_price
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].price = price
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].quantity_in_stock = quantity_in_stock
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].barcode = barcode
-
-
-                      } catch (error) {
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].price = 0
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].quantity_in_stock = 0
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].barcode = ""
-                      }
-                    });
+                  form.list_distribute[0].element_distributes[
+                    index
+                  ].quantity_in_stock = Number(quantity_in_stock);
+                  form.list_distribute[0].element_distributes[index].barcode =
+                    barcode;
+                  if (typeof element.sub_element_distributes != "undefined") {
+                    if (element.sub_element_distributes.length > 0) {
+                      element.sub_element_distributes.forEach(
+                        (_element, _index) => {
+                          try {
+                            const price =
+                              _element.price != null
+                                ? _element.price
+                                    .toString()
+                                    .replace(/,/g, "")
+                                    .replace(/\./g, "")
+                                : 0;
+                            const barcode =
+                              _element.barcode != null
+                                ? _element.barcode.toString()
+                                : "";
+                            const quantity_in_stock =
+                              _element.quantity_in_stock != null
+                                ? _element.quantity_in_stock
+                                    .toString()
+                                    .replace(/,/g, "")
+                                    .replace(/\./g, "")
+                                : 0;
+                            const import_price =
+                              _element.import_price != null
+                                ? _element.import_price
+                                    .toString()
+                                    .replace(/,/g, "")
+                                    .replace(/\./g, "")
+                                : 0;
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[_index].import_price =
+                              Number(import_price);
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[_index].price =
+                              Number(price);
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[
+                              _index
+                            ].quantity_in_stock = Number(quantity_in_stock);
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[_index].barcode = barcode;
+                          } catch (error) {
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[_index].price = 0;
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[
+                              _index
+                            ].quantity_in_stock = 0;
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[_index].barcode = "";
+                          }
+                        }
+                      );
+                    }
                   }
-
+                } catch (error) {
+                  console.log(error);
+                  form.list_distribute[0].element_distributes[index].price = 0;
+                  form.list_distribute[0].element_distributes[
+                    index
+                  ].quantity_in_stock = 0;
+                  form.list_distribute[0].element_distributes[index].barcode =
+                    "";
                 }
-
-              } catch (error) {
-                console.log(error)
-                form.list_distribute[0].element_distributes[index].price = 0
-                form.list_distribute[0].element_distributes[index].quantity_in_stock = 0
-                form.list_distribute[0].element_distributes[index].barcode = ""
               }
-            });
+            );
           }
         }
       }
     }
-    var total = this.state.total.toString().replace(/,/g, '').replace(/\./g, '');
+    var total = this.state.total
+      .toString()
+      .replace(/,/g, "")
+      .replace(/\./g, "");
     if (typeof form.list_distribute != "undefined") {
-      form.quantity_in_stock = form.list_distribute.length > 0 ? total : form.quantity_in_stock
-
+      form.quantity_in_stock =
+        form.list_distribute.length > 0 ? total : form.quantity_in_stock;
     }
     if (form.name == null || !isEmpty(form.name)) {
       this.props.showError({
@@ -278,9 +345,8 @@ class ProductEdit extends Component {
         return;
       }
     }
-    var { page, currentBranch } = this.props
-    var list_distribute = form.list_distribute ?? []
-
+    var { page, currentBranch } = this.props;
+    var list_distribute = form.list_distribute ?? [];
 
     //Chuẩn hóa distribute
 
@@ -297,78 +363,99 @@ class ProductEdit extends Component {
     //   return ele
     // })
 
-
     if (list_distribute.length > 0) {
-      list_distribute[0].element_distributes = list_distribute[0].element_distributes.map((ele) => {
-        if (ele.id != null) {
-          ele.is_edit = true
-        } else {
-          ele.is_edit = false
-        }
+      list_distribute[0].element_distributes =
+        list_distribute[0].element_distributes.map((ele) => {
+          if (ele.id != null) {
+            ele.is_edit = true;
+          } else {
+            ele.is_edit = false;
+          }
 
-        if (ele.id != null && ele.before_name == null) {
-          ele.before_name = ele.name
-          ele.is_edit = true
-        }
+          if (ele.id != null && ele.before_name == null) {
+            ele.before_name = ele.name;
+            ele.is_edit = true;
+          }
 
-        return ele
-      }
-      )
-      list_distribute[0].element_distributes = list_distribute[0].element_distributes.map((ele) => {
+          return ele;
+        });
+      list_distribute[0].element_distributes =
+        list_distribute[0].element_distributes.map((ele) => {
+          if (
+            ele != null &&
+            ele.sub_element_distributes != null &&
+            ele.sub_element_distributes.length > 0
+          ) {
+            ele.sub_element_distributes = ele.sub_element_distributes.map(
+              (sub) => {
+                if (sub.id != null) {
+                  sub.is_edit = true;
+                } else {
+                  sub.is_edit = false;
+                }
 
-        if (ele != null && ele.sub_element_distributes != null && ele.sub_element_distributes.length > 0) {
-          ele.sub_element_distributes = ele.sub_element_distributes.
-            map((sub) => {
-              if (sub.id != null) {
-                sub.is_edit = true
-              } else {
-                sub.is_edit = false
+                if (sub.id != null && sub.before_name == null) {
+                  sub.before_name = sub.name;
+                  sub.is_edit = true;
+                }
+
+                return sub;
               }
-
-              if (sub.id != null && sub.before_name == null) {
-                sub.before_name = sub.name
-                sub.is_edit = true
-              }
-
-              return sub
-            })
-        }
-        return ele
-      })
+            );
+          }
+          return ele;
+        });
     }
 
     /////
 
-
-    var distributeData = {}
-    form.list_distribute = null
-    this.props.updateProduct(store_code, form, productId, page)
+    var distributeData = {};
+    form.list_distribute = null;
+    // this.props.updateProduct(store_code, form, productId, page);
 
     distributeData = {
       has_distribute: false,
-      has_sub: false
-    }
+      has_sub: false,
+    };
 
-    if (list_distribute != null && list_distribute.length > 0 && list_distribute[0].element_distributes != null
-      && list_distribute[0].element_distributes.length > 0 && this.state.disableDistribute == true
+    if (
+      list_distribute != null &&
+      list_distribute.length > 0 &&
+      list_distribute[0].element_distributes != null &&
+      list_distribute[0].element_distributes.length > 0 &&
+      this.state.disableDistribute == true
     ) {
-      distributeData.has_distribute = true
-      distributeData.distribute_name = list_distribute[0].name
-      if (list_distribute[0].element_distributes[0] && list_distribute[0].element_distributes[0].sub_element_distributes != null &&
-        list_distribute[0].element_distributes[0] && list_distribute[0].element_distributes[0].sub_element_distributes.length > 0) {
-        distributeData.has_sub = true
-        distributeData.sub_element_distribute_name = list_distribute[0].sub_element_distribute_name
-
+      distributeData.has_distribute = true;
+      distributeData.distribute_name = list_distribute[0].name;
+      if (
+        list_distribute[0].element_distributes[0] &&
+        list_distribute[0].element_distributes[0].sub_element_distributes !=
+          null &&
+        list_distribute[0].element_distributes[0] &&
+        list_distribute[0].element_distributes[0].sub_element_distributes
+          .length > 0
+      ) {
+        distributeData.has_sub = true;
+        distributeData.sub_element_distribute_name =
+          list_distribute[0].sub_element_distribute_name;
       }
     }
 
-    distributeData.element_distributes = list_distribute.length > 0 ? list_distribute[0].element_distributes : distributeData
+    distributeData.element_distributes =
+      list_distribute.length > 0
+        ? list_distribute[0].element_distributes
+        : distributeData;
 
-    console.log(distributeData, form);
+    console.log(form);
 
-
-    this.props.updateDistribute(store_code, distributeData, productId, currentBranch?.id)
-
+    this.props.updateDistribute(
+      store_code,
+      distributeData,
+      productId,
+      currentBranch?.id,
+      form,
+      page
+    );
   };
   goBack = (e) => {
     e.preventDefault();
@@ -376,47 +463,37 @@ class ProductEdit extends Component {
     history.goBack();
   };
   onChangeQuantityStock = (total) => {
-    this.setState({ total: total })
-  }
-
+    this.setState({ total: total });
+  };
 
   checkHasAttribute = (element, arr) => {
-    var check = false
+    var check = false;
     for (const item of arr) {
       if (item == element) {
-        check = true
-
+        check = true;
       }
     }
-    return check
-  }
-
+    return check;
+  };
 
   afterAttribute = () => {
     var { attributeP, product } = this.props;
     if (product?.attributes?.length > 0) {
-
-
       var ListDistributeWithName = product?.attributes.map((data) => {
-        return data.name
-      })
-      console.log(ListDistributeWithName)
-      var newListDistributeWithName = [...ListDistributeWithName]
+        return data.name;
+      });
+      console.log(ListDistributeWithName);
+      var newListDistributeWithName = [...ListDistributeWithName];
       for (const item1 of attributeP) {
         if (this.checkHasAttribute(item1, ListDistributeWithName) == false) {
-          newListDistributeWithName.push(item1)
+          newListDistributeWithName.push(item1);
         }
-
-
       }
-      return newListDistributeWithName
-
+      return newListDistributeWithName;
+    } else {
+      return attributeP;
     }
-    else {
-      return attributeP
-    }
-
-  }
+  };
   handleDataFromProductVideo = (video) => {
     console.log(video);
     this.setState((prevState, props) => {
@@ -428,37 +505,35 @@ class ProductEdit extends Component {
 
   render() {
     var { store_code } = this.props;
-    var { category_product, attributeP, auth, product, isShowAttr, isCreate, isRemove } = this.props;
+    var {
+      category_product,
+      attributeP,
+      auth,
+      product,
+      isShowAttr,
+      isCreate,
+      isRemove,
+    } = this.props;
     var { total, disableInventory, disableDistribute } = this.state;
-    var afterAttribute = this.afterAttribute()
-    console.log(afterAttribute)
+    var afterAttribute = this.afterAttribute();
+    console.log(afterAttribute);
     return (
-
-
       <div class="container-fluid">
-        <Alert
-          type={Types.ALERT_UID_STATUS}
-          alert={this.props.alert}
-        />
-        <div
-          style={{ display: "flex", justifyContent: "space-between" }}
-        >
+        <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h4 className="h4 title_content mb-0 text-gray-800">
             Chỉnh sửa sản phẩm:&nbsp;{product.name}
           </h4>
         </div>
         <br></br>
         <div class="card mb-4">
-          <div class="card-header title_content">
-            Nhập thông tin sản phẩm
-          </div>
+          <div class="card-header title_content">Nhập thông tin sản phẩm</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
               <div class="col-lg-6">
                 <div>
                   <InfoProduct
                     store_code={store_code}
-
                     checkDistribute={this.checkDistribute}
                     total={total}
                     product={product}
@@ -472,30 +547,25 @@ class ProductEdit extends Component {
                 class="col-lg-6"
                 style={{ borderLeft: "0.5px solid #e6dfdf" }}
               >
-                   <div>
+                <div>
                   <Video
-                                    store_code = {store_code}
-                                    product={product}
-
-                                    handleDataFromProductVideo={this.handleDataFromProductVideo}
+                    store_code={store_code}
+                    product={product}
+                    handleDataFromProductVideo={this.handleDataFromProductVideo}
                   />
                 </div>
                 <div>
                   <StoreImage
-
                     handleDataFromAvatarImg={this.handleDataFromAvatarImg}
-
                     product={product}
-                    handleDataFromProductImg={
-                      this.handleDataFromProductImg
-                    }
+                    handleDataFromProductImg={this.handleDataFromProductImg}
                   />
                 </div>
               </div>
             </div>
           </div>
         </div>
-        {getChannel() == IKITECH &&
+        {getChannel() == IKITECH && (
           <div class="card mb-4">
             <div class="card-body" style={{ padding: "0.8rem" }}>
               <div class="row">
@@ -508,20 +578,26 @@ class ProductEdit extends Component {
                   </button>
                   <a
                     style={{ marginLeft: "10px" }}
-                    onClick={this.goBack} class={`btn btn-warning btn-sm color-white `}
+                    onClick={this.goBack}
+                    class={`btn btn-warning btn-sm color-white `}
                   >
                     <i class="fa fa-arrow-left"></i> Trở về
                   </a>
-
                 </div>
               </div>
             </div>
           </div>
-        }
-        <div class={`card mb-4 ${typeof isShowAttr == "undefined" || isShowAttr == false || getChannel() == IKIPOS ? "hide" : ""}`}>
-          <div class="card-header title_content">
-            Thuộc tính sản phẩm
-          </div>
+        )}
+        <div
+          class={`card mb-4 ${
+            typeof isShowAttr == "undefined" ||
+            isShowAttr == false ||
+            getChannel() == IKIPOS
+              ? "hide"
+              : ""
+          }`}
+        >
+          <div class="card-header title_content">Thuộc tính sản phẩm</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
               <div class="col-lg-12">
@@ -531,9 +607,7 @@ class ProductEdit extends Component {
                       isCreate={isCreate}
                       isRemove={isRemove}
                       product={product}
-                      handleDataFromAttribute={
-                        this.handleDataFromAttribute
-                      }
+                      handleDataFromAttribute={this.handleDataFromAttribute}
                       store_code={store_code}
                       attributeP={afterAttribute}
                     />
@@ -544,10 +618,12 @@ class ProductEdit extends Component {
           </div>
         </div>
 
-        <div class={`card mb-4 ${this.state.disableDistribute == true ? "" : "hide"}`}>
-          <div class="card-header title_content">
-            Phân loại sản phẩm
-          </div>
+        <div
+          class={`card mb-4 ${
+            this.state.disableDistribute == true ? "" : "hide"
+          }`}
+        >
+          <div class="card-header title_content">Phân loại sản phẩm</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
               <div class="col-lg-12">
@@ -558,9 +634,7 @@ class ProductEdit extends Component {
                       disableInventory={disableInventory}
                       onChangeQuantityStock={this.onChangeQuantityStock}
                       product={product}
-                      handleDataFromDistribute={
-                        this.handleDataFromDistribute
-                      }
+                      handleDataFromDistribute={this.handleDataFromDistribute}
                     />
                   </div>
                 </div>
@@ -568,23 +642,23 @@ class ProductEdit extends Component {
             </div>
           </div>
         </div>
-        {getChannel() == IKITECH && <div class="card mb-4">
-          <div class="card-header title_content">Nội dung chi tiết</div>
-          <div class="card-body" style={{ padding: "0.8rem" }}>
-            <div class="row">
-              <ContentDetail
-                                    store_code={store_code}
-
-                product={product}
-                handleDataFromContent={this.handleDataFromContent}
-              />
+        {getChannel() == IKITECH && (
+          <div class="card mb-4">
+            <div class="card-header title_content">Nội dung chi tiết</div>
+            <div class="card-body" style={{ padding: "0.8rem" }}>
+              <div class="row">
+                <ContentDetail
+                  store_code={store_code}
+                  product={product}
+                  handleDataFromContent={this.handleDataFromContent}
+                />
+              </div>
             </div>
           </div>
-        </div>}
+        )}
 
-
-        {
-          getChannel() == IKITECH && <div class="card mb-4">
+        {getChannel() == IKITECH && (
+          <div class="card mb-4">
             <div class="card-header title_content">Tối ưu SEO</div>
             <div class="card-body" style={{ padding: "0.8rem" }}>
               <div class="row">
@@ -595,7 +669,7 @@ class ProductEdit extends Component {
               </div>
             </div>
           </div>
-        }
+        )}
         {/* <div class="card mb-4">
           <div class="card-header title_content">Thông tin khuyến mại</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>
@@ -621,20 +695,17 @@ class ProductEdit extends Component {
                 <a
                   className="color-white"
                   style={{ marginLeft: "10px" }}
-                  onClick={this.goBack} class={`btn btn-warning btn-sm color-white `}
+                  onClick={this.goBack}
+                  class={`btn btn-warning btn-sm color-white `}
                 >
                   <i class="fa fa-arrow-left"></i> Trở về
                 </a>
-
               </div>
             </div>
           </div>
         </div>
       </div>
-
-
     );
-
   }
 }
 
@@ -645,7 +716,7 @@ const mapStateToProps = (state) => {
     product: state.productReducers.product.productId,
     alert: state.productReducers.alert.alert_uid,
     blogs: state.blogReducers.blog.allBlog,
-    currentBranch: state.branchReducers.branch.currentBranch
+    currentBranch: state.branchReducers.branch.currentBranch,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -663,10 +734,28 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(productAction.fetchProductId(store_code, productId));
     },
     updateProduct: (store_code, product, productId, page) => {
-      dispatch(productAction.updateProduct(store_code, product, productId, page));
+      dispatch(
+        productAction.updateProduct(store_code, product, productId, page)
+      );
     },
-    updateDistribute: (store_code, product, productId, branchId) => {
-      dispatch(productAction.updateDistribute(store_code, product, productId, branchId));
+    updateDistribute: (
+      store_code,
+      product,
+      productId,
+      branchId,
+      data,
+      page
+    ) => {
+      dispatch(
+        productAction.updateDistribute(
+          store_code,
+          product,
+          productId,
+          branchId,
+          data,
+          page
+        )
+      );
     },
     fetchAllBlog: (id, page) => {
       dispatch(blogAction.fetchAllBlog(id, page));

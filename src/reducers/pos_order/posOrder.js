@@ -30,6 +30,7 @@ export const pos_reducer = (state = initialState, action) => {
       newState.orderAfterPayment = action.data.orderAfterPayment;
       newState.loadingOrder = false;
       newState.fromEditOrder = true;
+      newState.oneCart = [];
       // newState.allowAutoPrint = action.data.allowAutoPrint;
       return newState;
     case Types.FROM_EDIT_ORDER:

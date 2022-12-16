@@ -932,7 +932,10 @@ class PanelBottom extends Component {
       >
         <div class="" style={{ marginTop: "8px" }}>
           <div>
-            <div className="select-async" style={{ marginBottom: "8px" }}>
+            <div
+              className="select-async"
+              style={{ marginBottom: "8px", fontSize: "13px" }}
+            >
               <AsyncPaginate
                 placeholder="Tìm khách hàng"
                 value={select_customer}
@@ -1119,6 +1122,10 @@ class PanelBottom extends Component {
                 id="customerName"
                 placeholder="Tên khách"
                 autocomplete="new-password"
+                style={{
+                  fontSize: "13px",
+                  height: `calc(2.25rem + 2px)`,
+                }}
               />
             </div>
           </div>
@@ -1144,6 +1151,7 @@ class PanelBottom extends Component {
                   <select
                     style={{
                       background: isDisabledButton ? "#eaecf4" : "white",
+                      fontSize: "13px",
                     }}
                     onClick={() => {
                       this.toggleOpenProvince();
@@ -1209,6 +1217,7 @@ class PanelBottom extends Component {
                     class="form-control select-has-search-box customerInfo select2-hidden-accessible"
                     style={{
                       background: isDisabledButton ? "#eaecf4" : "white",
+                      fontSize: "13px",
                     }}
                     onClick={() => {
                       this.toggleOpenDistrict();
@@ -1274,6 +1283,7 @@ class PanelBottom extends Component {
                   <select
                     style={{
                       background: isDisabledButton ? "#eaecf4" : "white",
+                      fontSize: "13px",
                     }}
                     onClick={() => {
                       this.toggleOpenWards();
@@ -1327,7 +1337,7 @@ class PanelBottom extends Component {
               </div>
               <textarea
                 rows="3"
-                style={{ height: "70px" }}
+                style={{ height: "70px", fontSize: "13px" }}
                 {...handleKeyPress}
                 disabled={isDisabledButton}
                 value={txtAddressDetail || ""}
@@ -1349,6 +1359,9 @@ class PanelBottom extends Component {
               class="form-control"
               name="type_ship"
               value={this.state.type_ship}
+              style={{
+                fontSize: "13px",
+              }}
             >
               <option value="0">Miễn phí giao hàng</option>
               <option value="1">Phí dự kiến của đối tác vận chuyển</option>

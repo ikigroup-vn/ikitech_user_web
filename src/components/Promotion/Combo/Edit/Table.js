@@ -74,7 +74,7 @@ class Table extends Component {
     return (
       <React.Fragment>
         <div class="form-group">
-        <label for="product_name">Sản phẩm được áp dụng</label>
+        <label for="product_name">   được áp dụng</label>
 
           <button
             type="button"

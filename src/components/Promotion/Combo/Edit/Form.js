@@ -352,6 +352,7 @@ class Form extends Component {
     var now = moment().valueOf();
     var end_time = moment(combo.end_time, "YYYY-MM-DD HH:mm:ss").valueOf();
     var canOnsave = now < end_time;
+
     return (
       <React.Fragment>
         <form

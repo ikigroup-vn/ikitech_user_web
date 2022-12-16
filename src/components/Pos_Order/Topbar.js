@@ -423,7 +423,7 @@ class Topbar extends Component {
     const customStyles = {
       menu: (styles) => ({
         ...styles,
-        width: "600px",
+        width: "520px",
       }),
       option: (provided, state) => ({
         ...provided,
@@ -448,6 +448,7 @@ class Topbar extends Component {
             style={{
               alignItems: "center",
               width: "100%",
+              fontSize: "13px",
             }}
           >
             <div className="group-controller-first">
@@ -727,7 +728,11 @@ class Topbar extends Component {
                   <li className="nav-item" style={{ margin: "0 0px" }}>
                     <button
                       className="btn"
-                      style={{ color: "white", border: "1px solid" }}
+                      style={{
+                        color: "white",
+                        border: "1px solid",
+                        fontSize: "13px",
+                      }}
                       data-toggle="modal"
                       data-target="#modalKeyboard"
                     >
