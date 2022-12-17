@@ -98,7 +98,6 @@ class ProductCreate extends Component {
     const branch_id = localStorage.getItem("branch_id");
     var form = { ...this.state.form };
     form.index_image_avatar = 0;
-
     console.log(form.list_distribute);
 
     if (typeof form.list_distribute != "undefined") {
@@ -433,7 +432,6 @@ class ProductCreate extends Component {
     if (this.state.checkDistribute == false) {
       delete form.list_distribute;
     }
-
     this.props.postProductV2(store_code, branch_id, form);
   };
 
