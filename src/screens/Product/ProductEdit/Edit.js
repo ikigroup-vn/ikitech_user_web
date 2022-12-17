@@ -164,7 +164,6 @@ class ProductEdit extends Component {
       price: Number(this.state.form?.price),
       quantity_in_stock: Number(this.state.form?.quantity_in_stock),
     };
-    console.log("formmmmm: ", form);
     form.index_image_avatar = 0;
     if (typeof form.list_distribute != "undefined") {
       if (typeof form.list_distribute[0] != "undefined") {
@@ -444,9 +443,7 @@ class ProductEdit extends Component {
     distributeData.element_distributes =
       list_distribute.length > 0
         ? list_distribute[0].element_distributes
-        : distributeData;
-
-    console.log(form);
+        : distributeData.element_distributes;
 
     this.props.updateDistribute(
       store_code,
