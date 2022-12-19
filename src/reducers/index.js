@@ -15,6 +15,7 @@ import { shipmentReducers } from "./shipment/index";
 import { paymentReducers } from "./payment/index";
 import { customerReducers } from "./customer/index";
 import { groupCustomerReducers } from "./group_customer/index";
+import { historyOperationReducers } from "./history_operation/index";
 import { customerSaleReducers } from "./customer_sales/index";
 import { userReducers } from "./user/index";
 import { billReducers } from "./bill/index";
@@ -94,6 +95,7 @@ const appReducers = combineReducers({
   inventoryReducers,
   importStockReducers,
   posReducers,
+  historyOperationReducers,
 
   revenueExpendituresReducers,
   shiftReducers,

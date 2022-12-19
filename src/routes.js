@@ -168,6 +168,7 @@ import CustomerSale from "./screens/CustomerSale";
 import GroupCustomer from "./screens/GroupCustomer";
 import InvoiceTemplate from "./screens/InvoiceTemplate";
 import Manual from "./screens/Manual";
+import HistoryOperation from "./screens/HistoryOperation";
 const routes = [
   {
     path: "/invoice_template/index/:store_code",
@@ -516,6 +517,14 @@ const routes = [
     exact: true,
 
     main: ({ match }) => <GroupCustomer match={match} />,
+  },
+  {
+    path: "/history_operation/:store_code",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <HistoryOperation match={match} history={history} />
+    ),
   },
 
   {
