@@ -1,13 +1,29 @@
 import moment from "moment";
 import { PureComponent } from "react";
 import * as Types from "../../constants/ActionType";
+import Select from "react-select";
+import { getBranchId } from "../../ultis/branchUtils";
+import { connect } from "react-redux";
+import * as staffAction from "../../actions/staff";
 
 class Table extends PureComponent {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      currentStaff: null,
+    };
+  }
+  componentDidMount() {
+    var params = `branch_id=${getBranchId()}`;
+
+    this.props.fetchAllStaff(this.props.store_code, null, params, null);
   }
 
+  setCurrentStaff = (staff) => {
+    this.setState({
+      currentStaff: staff,
+    });
+  };
   handleChangeHistoryOperationFunction = (e) => {
     const value = e.target.value;
     const { setParams } = this.props;
@@ -22,14 +38,14 @@ class Table extends PureComponent {
     const { params } = this.props;
     return (
       <select
-        value={params.action_type || ""}
+        value={params.function_type || ""}
         name=""
         id="input"
         class="form-control"
         style={{
           width: "150px",
         }}
-        onChange={this.handleChangeHistoryOperationAction}
+        onChange={this.handleChangeHistoryOperationFunction}
       >
         <option
           value=""
@@ -48,6 +64,7 @@ class Table extends PureComponent {
         <option value={Types.FUNCTION_TYPE_CATEGORY_POST}>Thêm danh mục</option>
         <option value={Types.FUNCTION_TYPE_ORDER}>Đơn hàng</option>
         <option value={Types.FUNCTION_TYPE_THEME}>Mẫu</option>
+        <option value={Types.FUNCTION_TYPE_PROMOTION}>Khuyến mãi</option>
       </select>
     );
   };
@@ -55,14 +72,14 @@ class Table extends PureComponent {
     const { params } = this.props;
     return (
       <select
-        value={params.function_type || ""}
+        value={params.action_type || ""}
         name=""
         id="input"
         class="form-control"
         style={{
           width: "130px",
         }}
-        onChange={this.handleChangeHistoryOperationFunction}
+        onChange={this.handleChangeHistoryOperationAction}
       >
         <option
           value=""
@@ -101,11 +118,30 @@ class Table extends PureComponent {
     return name;
   };
 
+  handleChangeStaffSelect = (staffs) => {
+    const options = staffs.reduce((dataStore, currentStaff) => {
+      return [
+        ...dataStore,
+        {
+          value: currentStaff.id,
+          label: currentStaff.name,
+        },
+      ];
+    }, []);
+    return options;
+  };
+  handleChangeStaff = (event) => {
+    this.setCurrentStaff(event);
+    const { setParams } = this.props;
+    setParams("staff_id", event.value);
+  };
+
   showData = (historiesOperation) => {
+    const { per_page, current_page } = this.props;
     if (historiesOperation.length > 0) {
       return historiesOperation.map((history, index) => (
         <tr className="hover-product" key={history.id}>
-          <td>{(this.props.params.page - 1) * 20 + index + 1}</td>
+          <td>{(current_page - 1) * per_page + index + 1}</td>
           <td>{history.staff_id ? history.staff_name : history.user_name}</td>
           <td>{history.function_type_name}</td>
           <td>{this.handleDisplayNameAction(history.action_type)}</td>
@@ -131,6 +167,7 @@ class Table extends PureComponent {
   render() {
     const histories =
       typeof this.props.histories === "undefined" ? [] : this.props.histories;
+    const { currentStaff } = this.state;
     return (
       <div class="table-responsive">
         <table
@@ -142,7 +179,20 @@ class Table extends PureComponent {
           <thead>
             <tr>
               <th>STT</th>
-              <th>Nhân viên</th>
+              <th
+                style={{
+                  width: "180px",
+                }}
+              >
+                <Select
+                  options={this.handleChangeStaffSelect(this.props.staff)}
+                  placeholder="Nhân viên"
+                  className="select-staff"
+                  onChange={this.handleChangeStaff}
+                  value={currentStaff}
+                  noOptionsMessage={() => "Không tìm thấy kết quả"}
+                ></Select>
+              </th>
               <th>{this.functionsHistoryOperation()}</th>
               <th>{this.actionsHistoryOperation()}</th>
               <th>Thời gian</th>
@@ -156,4 +206,17 @@ class Table extends PureComponent {
   }
 }
 
-export default Table;
+const mapStateToProps = (state) => {
+  return {
+    staff: state.staffReducers.staff.allStaff,
+  };
+};
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    fetchAllStaff: (id, page, params, branch_id) => {
+      dispatch(staffAction.fetchAllStaff(id, page, params, branch_id));
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Table);
