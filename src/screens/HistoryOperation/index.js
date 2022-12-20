@@ -126,6 +126,7 @@ class HistoryOperation extends Component {
         page: 1,
         function_type: "",
         action_type: "",
+        staff_id: "",
       },
       searchInput: "",
     };
@@ -147,7 +148,7 @@ class HistoryOperation extends Component {
     e.preventDefault();
 
     const { params, searchInput } = this.state;
-    const paramsFilter = `page=${params.page}&search=${searchInput}&function_type=${params.function_type}&action_type=${params.action_type}`;
+    const paramsFilter = `page=${params.page}&search=${searchInput}&type=${params.function_type}&action=${params.action_type}&staff_id=${params.staff_id}`;
     this.handleFetchHistoryOperation(paramsFilter);
   };
 
@@ -160,7 +161,7 @@ class HistoryOperation extends Component {
 
   componentDidMount() {
     const { params, searchInput } = this.state;
-    const paramsFilter = `page=${params.page}&search=${searchInput}&function_type=${params.function_type}&action_type=${params.action_type}`;
+    const paramsFilter = `page=${params.page}&search=${searchInput}&type=${params.function_type}&action=${params.action_type}&staff_id=${params.staff_id}`;
     this.handleFetchHistoryOperation(paramsFilter);
   }
   handleFetchHistoryOperation = (params) => {
@@ -172,7 +173,7 @@ class HistoryOperation extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     const { params, searchInput } = this.state;
     if (!shallowEqual(params, nextState.params)) {
-      const paramsFilter = `page=${nextState.params.page}&search=${searchInput}&function_type=${nextState.params.function_type}&action_type=${nextState.params.action_type}`;
+      const paramsFilter = `page=${nextState.params.page}&search=${searchInput}&type=${nextState.params.function_type}&action=${nextState.params.action_type}&staff_id=${nextState.params.staff_id}`;
       this.handleFetchHistoryOperation(paramsFilter);
     }
     return true;
@@ -245,6 +246,8 @@ class HistoryOperation extends Component {
                           histories={data}
                           setParams={this.setParams}
                           params={params}
+                          per_page={historyOperation.per_page}
+                          current_page={historyOperation.current_page}
                         />
 
                         <Pagination
@@ -263,52 +266,6 @@ class HistoryOperation extends Component {
               <Footer />
             </div>
           </div>
-          {/* <SidebarShowCustomersByReferralPhone
-            showCustomersByReferralPhone={showCustomersByReferralPhone}
-            setShowCustomersByReferralPhone={
-              this.setShowCustomersByReferralPhone
-            }
-            customerInfo={customerInfo}
-            store_code={store_code}
-            fetchAllCustomerByInferralPhone={
-              this.props.fetchAllCustomerByInferralPhone
-            }
-            pageReferralPhone={pageReferralPhone}
-          >
-            {this.props.customersByInferralPhone?.data?.length > 0 && (
-              <div className="card-body">
-                <Table
-                  handleSetInfor={this.handleSetInfor}
-                  paginate={paginate}
-                  chat_allow={chat_allow}
-                  showChatBox={showChatBox}
-                  handleShowChatBox={this.handleShowChatBox}
-                  store_code={store_code}
-                  handleDelCallBack={this.handleDelCallBack}
-                  customers={this.props.customersByInferralPhone}
-                  setCustomerInfo={this.setCustomerInfo}
-                  setShowCustomersByReferralPhone={
-                    this.setShowCustomersByReferralPhone
-                  }
-                />
-                <div className="totalContent">
-                  <div className="totalCustomers">
-                    Hiển thị 1{" "}
-                    {this.props.customersByInferralPhone.data.length > 1
-                      ? `đến ${this.props.customersByInferralPhone.data.length}`
-                      : null}{" "}
-                    trong số {this.props.customersByInferralPhone.total} khách
-                    hàng
-                  </div>
-                  <Pagination
-                    setPageReferralPhone={this.setPageReferralPhone}
-                    store_code={store_code}
-                    customers={this.props.customersByInferralPhone}
-                  />
-                </div>
-              </div>
-            )}
-          </SidebarShowCustomersByReferralPhone> */}
         </HistoryOperationStyles>
       );
     } else if (this.props.auth === false) {
