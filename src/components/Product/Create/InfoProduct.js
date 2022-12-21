@@ -581,9 +581,16 @@ class InfoProduct extends Component {
           <label for="product_name">Danh mục</label>
           <div className="Choose-category-product">
             <div id="accordion">
-              <div className="wrap_category" style={{ display: "flex" }}>
+              <div
+                className="wrap_category"
+                style={{ display: "flex" }}
+                onClick={this.onChangeIcon}
+                data-toggle="collapse"
+                data-target="#collapseOne"
+                aria-expanded="false"
+                aria-controls="collapseOne"
+              >
                 <input
-                  onClick={this.onChangeIcon}
                   disabled
                   type="text"
                   class="form-control"
@@ -598,13 +605,8 @@ class InfoProduct extends Component {
                   value={this.getNameSelected()}
                 ></input>
                 <button
-                  onClick={this.onChangeIcon}
-                  data-toggle="collapse"
                   class="btn btn-link btn-collapse btn-accordion-collapse collapsed"
                   id="headingOne"
-                  data-target="#collapseOne"
-                  aria-expanded="false"
-                  aria-controls="collapseOne"
                   style={{
                     position: "absolute",
                     right: "27px",

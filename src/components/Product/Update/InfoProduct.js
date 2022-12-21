@@ -558,7 +558,13 @@ class InfoProduct extends Component {
         <div class="form-group">
           <label for="product_name">Danh mục</label>
           <div className="Choose-category-product">
-            <div className="wrap_category" style={{ display: "flex" }}>
+            <div
+              className="wrap_category"
+              style={{ display: "flex" }}
+              onClick={this.onChangeIcon}
+              data-toggle="collapse"
+              data-target="#demo2"
+            >
               <input
                 disabled
                 type="text"
@@ -574,9 +580,6 @@ class InfoProduct extends Component {
                 value={this.getNameSelected()}
               ></input>
               <button
-                onClick={this.onChangeIcon}
-                data-toggle="collapse"
-                data-target="#demo2"
                 class="btn"
                 style={{ position: "absolute", right: "27px" }}
               >
