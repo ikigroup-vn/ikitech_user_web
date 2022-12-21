@@ -146,6 +146,7 @@ class Table extends PureComponent {
           <td>{history.function_type_name}</td>
           <td>{this.handleDisplayNameAction(history.action_type)}</td>
           <td>{moment(history.created_at).format("YYYY-MM-DD HH:mm:ss")}</td>
+          <td>{history.ip}</td>
           <td>{history.content}</td>
         </tr>
       ));
@@ -196,6 +197,7 @@ class Table extends PureComponent {
               <th>{this.functionsHistoryOperation()}</th>
               <th>{this.actionsHistoryOperation()}</th>
               <th>Thời gian</th>
+              <th>IP</th>
               <th>Nội dung</th>
             </tr>
           </thead>

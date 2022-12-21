@@ -223,7 +223,7 @@ class HistoryOperation extends Component {
                               value={searchInput}
                               onChange={this.handleChangeSearchInput}
                               class="form-control"
-                              placeholder="Tìm khách hàng"
+                              placeholder="Tìm kiếm"
                             />
                             <div class="input-group-append">
                               <button
