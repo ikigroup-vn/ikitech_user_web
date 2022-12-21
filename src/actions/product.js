@@ -113,7 +113,7 @@ function getSheetData(data, header) {
   return sheetData;
 }
 
-async function saveAsExcel(value) {
+async function saveAsExcel(value, nameFile = "Danh sách sản phẩm") {
   // var data = [
   //   { name: "John", city: "Seattle" },
   //   { name: "Mike", city: "Los Angeles" },
@@ -136,7 +136,7 @@ async function saveAsExcel(value) {
     range.style("border", true);
     return workbook.outputAsync().then((res) => {
       console.log(res);
-      saveAs(res, "Danh sách sản phẩm.xlsx");
+      saveAs(res, `${nameFile}.xlsx`);
     });
   });
 }
@@ -160,17 +160,26 @@ export const fetchAllListProduct = (store_code, search) => {
 
               for (const item of res.data.data.data) {
                 var newItem = {};
+                var isCheckedDistribute = false;
                 var arangeKeyItem = {
-                  images: item.images,
-                  sku: item.sku,
                   name: item.name,
-                  price: item.price,
+                  sku: item.sku,
+                  barcode: item.barcode,
+                  check_inventory: item.check_inventory,
                   quantity_in_stock: item.quantity_in_stock,
                   categories: item.categories,
-                  categories: item.categories,
+                  attributes: item.attributes,
+                  distributes: item.distributes,
                   percent_collaborator: item.percent_collaborator,
+                  point_for_agency: item.point_for_agency,
                   full_description: item.full_description,
+                  content_for_collaborator: item.content_for_collaborator,
+                  images: item.images,
+                  status: item.status,
+                  seo_title: item.seo_title,
+                  seo_description: item.seo_description,
                 };
+                // eslint-disable-next-line no-loop-func
                 Object.entries(arangeKeyItem).forEach(([key, value], index) => {
                   if (key == "full_description") {
                     if (value != null && value.length < 32000) {
@@ -180,7 +189,7 @@ export const fetchAllListProduct = (store_code, search) => {
                     }
                   }
                   if (key == "percent_collaborator") {
-                    newItem["Hoa hồng CTV (%)"] = value ?? 0;
+                    newItem["Hoa hồng CTV (%)"] = `${value}`;
                   }
                   if (key == "name") {
                     newItem["Tên sản phẩm"] = formatStringCharactor(value);
@@ -190,61 +199,296 @@ export const fetchAllListProduct = (store_code, search) => {
                     newItem["Mã SKU"] = value;
                     // newItem["Tên sản phẩm"] = value
                   }
-                  if (key == "price") {
-                    newItem["Giá bán lẻ"] = value;
-                  }
+                  // if (key == "price") {
+                  //   newItem["Giá bán lẻ"] = value;
+                  // }
                   // if (key == "quantity_in_stock") {
                   //   newItem["Tồn kho"] =
                   //     value == -1 ? "Vô hạn" : value == 0 ? "Hết hàng" : value;
                   // }
                   if (key == "categories") {
                     if (Array.isArray(value)) {
-                      if (value.length > 0) {
-                        var stringCategory = "";
-                        for (const [index, category] of value.entries()) {
-                          if (
-                            category.name != null &&
-                            typeof category.name != "undefined"
-                          ) {
-                            if (index == value.length - 1) {
-                              stringCategory =
-                                stringCategory +
-                                formatStringCharactor(category.name);
-                            } else {
-                              stringCategory =
-                                stringCategory +
-                                formatStringCharactor(category.name) +
-                                ",";
+                      var stringCategory = "";
+                      for (const [index, category] of value.entries()) {
+                        if (
+                          category.name != null &&
+                          typeof category.name != "undefined"
+                        ) {
+                          var stringCategoryChild = "";
+                          for (const [
+                            index,
+                            categoryChild,
+                          ] of category.category_children.entries()) {
+                            if (categoryChild.name) {
+                              stringCategoryChild += `${formatStringCharactor(
+                                categoryChild.name
+                              )}${
+                                index == category.category_children.length - 1
+                                  ? ""
+                                  : ","
+                              }`;
                             }
                           }
+                          if (index == value.length - 1) {
+                            stringCategory =
+                              stringCategory +
+                              formatStringCharactor(category.name) +
+                              `${
+                                stringCategoryChild != ""
+                                  ? `[${stringCategoryChild}]`
+                                  : ""
+                              }`;
+                          } else {
+                            stringCategory =
+                              stringCategory +
+                              formatStringCharactor(category.name) +
+                              `${
+                                stringCategoryChild != ""
+                                  ? `[${stringCategoryChild}]`
+                                  : ""
+                              }` +
+                              ",";
+                          }
                         }
-                        newItem["Danh mục"] = stringCategory;
                       }
+                      newItem["Danh mục"] = stringCategory;
                     }
                   }
                   if (key == "images") {
                     if (Array.isArray(value)) {
-                      if (value.length > 0) {
-                        var stringImg = "";
-                        for (const [index, img] of value.entries()) {
-                          if (
-                            img.image_url != null &&
-                            typeof img.image_url != "undefined"
-                          ) {
-                            if (index == value.length - 1) {
-                              stringImg = stringImg + img.image_url;
+                      var stringImg = "";
+                      for (const [index, img] of value.entries()) {
+                        if (
+                          img.image_url != null &&
+                          typeof img.image_url != "undefined"
+                        ) {
+                          if (index == value.length - 1) {
+                            stringImg = stringImg + img.image_url;
+                          } else {
+                            stringImg = stringImg + img.image_url + ",";
+                          }
+                        }
+                      }
+                      newItem["Hình ảnh"] = stringImg;
+                    }
+                  }
+                  if (key == "barcode") {
+                    newItem["Mã BARCODE"] = value;
+                  }
+                  if (key == "check_inventory") {
+                    newItem["Theo dõi kho"] = `${value}`;
+                  }
+                  if (key == "point_for_agency") {
+                    newItem["Xu cho đại lý"] = `${value ? value : 0}`;
+                  }
+                  if (key == "content_for_collaborator") {
+                    newItem["Nội dung cho CTV"] = `${value ? value : ""}`;
+                  }
+                  if (key == "status") {
+                    newItem["Trạng thái"] = `${value == 0 ? "true" : "false"}`;
+                  }
+                  if (key == "seo_title") {
+                    newItem["Tiêu đề SEO"] = `${value ? value : ""}`;
+                  }
+                  if (key == "seo_description") {
+                    newItem["Miêu tả SEO"] = `${value ? value : ""}`;
+                  }
+                  if (key == "attributes") {
+                    if (Array.isArray(value)) {
+                      var stringAttribute = "";
+                      for (const [index, attribute] of value.entries()) {
+                        if (
+                          attribute.name != null &&
+                          typeof attribute.name != "undefined"
+                        ) {
+                          if (index == value.length - 1) {
+                            stringAttribute += `${formatStringCharactor(
+                              attribute.name
+                            )}:${attribute.value}`;
+                          } else {
+                            stringAttribute += `${formatStringCharactor(
+                              attribute.name
+                            )}:${attribute.value};`;
+                          }
+                        }
+                      }
+                      newItem["Thuộc tính"] = stringAttribute;
+                    }
+                  }
+                  if (key == "distributes") {
+                    if (value.length > 0) {
+                      isCheckedDistribute = true;
+                      const typeDistributeOrigin = value[0].name;
+                      const typeDistributeSub = value[0]
+                        .sub_element_distribute_name
+                        ? `${value[0].sub_element_distribute_name}`
+                        : "";
+                      if (value[0].element_distributes.length > 0) {
+                        for (const [
+                          index,
+                          element,
+                        ] of value[0].element_distributes.entries()) {
+                          let checkedDistributeExist = false;
+                          let checkedDistributeExist2 = false;
+                          if (element.sub_element_distributes?.length > 0) {
+                            for (const [
+                              index2,
+                              elementSub,
+                            ] of element.sub_element_distributes.entries()) {
+                              if (
+                                index == 0 &&
+                                checkedDistributeExist === false &&
+                                checkedDistributeExist2 === false
+                              ) {
+                                newItem["Có phân loại"] = "true";
+                                newItem["Phân loại chính"] =
+                                  typeDistributeOrigin;
+                                newItem["Phân loại phụ"] = typeDistributeSub;
+                                newItem["DS phân loại"] = "";
+                                if (checkedDistributeExist === false) {
+                                  newItem["Hình ảnh"] = "";
+                                }
+                                newItem["Giá bán lẻ"] = "";
+                                newItem["Giá nhập"] = "";
+                                newItem["Tồn kho"] = "";
+                                newArray.push(newItem);
+
+                                const newItemEmpty = {};
+                                for (const key of Object.keys(arangeKeyItem)) {
+                                  newItemEmpty[key] = "";
+                                }
+                                newItemEmpty["DS phân loại"] = `${
+                                  element.name
+                                },${elementSub.name}${
+                                  index !== element.length - 1 ? "" : ","
+                                }`;
+                                if (checkedDistributeExist2 === false) {
+                                  newItemEmpty["Hình ảnh"] = element.image_url
+                                    ? element.image_url
+                                    : "";
+                                  checkedDistributeExist2 = true;
+                                }
+                                newItemEmpty["Giá bán lẻ"] = `${
+                                  elementSub.price ? elementSub.price : "0"
+                                }`;
+                                newItemEmpty["Giá nhập"] = `${
+                                  elementSub.import_price
+                                    ? elementSub.import_price
+                                    : "0"
+                                }`;
+                                newItemEmpty[
+                                  "Tồn kho"
+                                ] = `${elementSub.quantity_in_stock}`;
+                                newArray.push(newItemEmpty);
+                              } else {
+                                const newItemEmpty = {};
+
+                                for (const key of Object.keys(arangeKeyItem)) {
+                                  newItemEmpty[key] = "";
+                                }
+                                newItemEmpty["DS phân loại"] = `${
+                                  element.name
+                                },${elementSub.name}${
+                                  index !== element.length - 1 ? "" : ","
+                                }`;
+
+                                newItemEmpty["Hình ảnh"] = element.image_url
+                                  ? element.image_url
+                                  : "";
+
+                                newItemEmpty["Giá bán lẻ"] = `${
+                                  elementSub.price ? elementSub.price : "0"
+                                }`;
+                                newItemEmpty["Giá nhập"] = `${
+                                  elementSub.import_price
+                                    ? elementSub.import_price
+                                    : "0"
+                                }`;
+                                newItemEmpty[
+                                  "Tồn kho"
+                                ] = `${elementSub.quantity_in_stock}`;
+                                newArray.push(newItemEmpty);
+                              }
+                            }
+                          } else {
+                            if (index == 0) {
+                              newItem["Có phân loại"] = "true";
+                              newItem["Phân loại chính"] = typeDistributeOrigin;
+                              newItem["Phân loại phụ"] = typeDistributeSub;
+                              newItem["DS phân loại"] = "";
+
+                              newItem["Hình ảnh"] = "";
+                              newItem["Giá bán lẻ"] = "";
+                              newItem["Giá nhập"] = "";
+                              newItem["Tồn kho"] = "";
+                              newArray.push(newItem);
+
+                              const newItemEmpty = {};
+
+                              for (const key of Object.keys(arangeKeyItem)) {
+                                newItemEmpty[key] = "";
+                              }
+                              newItemEmpty["Giá bán lẻ"] = `${
+                                element.price ? element.price : "0"
+                              }`;
+                              newItemEmpty["Giá nhập"] = `${
+                                element.import_price
+                                  ? element.import_price
+                                  : "0"
+                              }`;
+                              newItemEmpty["Hình ảnh"] = element.image_url
+                                ? element.image_url
+                                : "";
+                              newItemEmpty["DS phân loại"] = `${element.name}`;
+                              newItemEmpty[
+                                "Tồn kho"
+                              ] = `${element.quantity_in_stock}`;
+                              newArray.push(newItemEmpty);
                             } else {
-                              stringImg = stringImg + img.image_url + ",";
+                              const newItemEmpty = {};
+
+                              for (const key of Object.keys(arangeKeyItem)) {
+                                newItemEmpty[key] = "";
+                              }
+                              newItemEmpty["DS phân loại"] = `${element.name}`;
+                              newItemEmpty["Hình ảnh"] = element.image_url
+                                ? element.image_url
+                                : "";
+                              newItemEmpty["Giá bán lẻ"] = `${
+                                element.price ? element.price : "0"
+                              }`;
+                              newItemEmpty["Giá nhập"] = `${
+                                element.import_price
+                                  ? element.import_price
+                                  : "0"
+                              }`;
+                              newItemEmpty[
+                                "Tồn kho"
+                              ] = `${element.quantity_in_stock}`;
+                              newArray.push(newItemEmpty);
                             }
                           }
                         }
-                        newItem["Hình ảnh"] = stringImg;
                       }
+                    } else {
+                      newItem["Có phân loại"] = "false";
+                      newItem["Phân loại chính"] = "";
+                      newItem["Phân loại phụ"] = "";
+                      newItem["DS phân loại"] = "";
+                      newItem["Giá bán lẻ"] = `${
+                        item.price ? item.price : "0"
+                      }`;
+                      newItem["Giá nhập"] = `${
+                        item.import_price ? item.import_price : "0"
+                      }`;
+                      newItem["Hình ảnh"] = "";
+                      newItem["Tồn kho"] = `${item.quantity_in_stock}`;
                     }
                   }
                 });
-
-                newArray.push(newItem);
+                if (!isCheckedDistribute) {
+                  newArray.push(newItem);
+                }
               }
               var header = [];
               if (newArray.length > 0) {
@@ -252,13 +496,215 @@ export const fetchAllListProduct = (store_code, search) => {
                   header.push(key);
                 });
               }
-              console.log(header);
+
               saveAsExcel({ data: newArray, header: header });
             }
           }
         }
       }
     });
+  };
+};
+export const fetchProductInventory = (store_code, branch_id, params) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    productApi
+      .fetchAllProductV2(store_code, branch_id, null, params)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        if (res.data.code !== 401) {
+          if (res.data.data.data.length > 0) {
+            var newArray = [];
+
+            for (const item of res.data.data.data) {
+              var newItem = {};
+              var isCheckedDistribute = false;
+              var arangeKeyItem = {
+                name: item.name,
+                sku: item.sku,
+                barcode: item.barcode,
+                distributes: item.inventory.distributes,
+              };
+              // eslint-disable-next-line no-loop-func
+              Object.entries(arangeKeyItem).forEach(([key, value], index) => {
+                if (key == "name") {
+                  newItem["Tên sản phẩm"] = formatStringCharactor(value);
+                  // newItem["Tên sản phẩm"] = value
+                }
+                if (key == "sku") {
+                  newItem["Mã SKU"] = value;
+                  // newItem["Tên sản phẩm"] = value
+                }
+                if (key == "barcode") {
+                  newItem["Mã BARCODE"] = value;
+                }
+                if (key == "distributes") {
+                  if (value.length > 0) {
+                    isCheckedDistribute = true;
+                    if (value[0].element_distributes.length > 0) {
+                      for (const [
+                        index,
+                        element,
+                      ] of value[0].element_distributes.entries()) {
+                        let checkedDistributeExist = false;
+                        let checkedDistributeExist2 = false;
+                        if (element.sub_element_distributes?.length > 0) {
+                          for (const [
+                            index2,
+                            elementSub,
+                          ] of element.sub_element_distributes.entries()) {
+                            if (
+                              index == 0 &&
+                              checkedDistributeExist === false &&
+                              checkedDistributeExist2 === false
+                            ) {
+                              newItem["Có phân loại"] = "true";
+                              newItem["DS phân loại"] = "";
+                              newItem["Giá bán lẻ"] = "";
+                              newItem["Giá vốn"] = "";
+                              newItem["Giá nhập"] = "";
+                              newItem["Tồn kho"] = "";
+                              newArray.push(newItem);
+
+                              const newItemEmpty = {};
+                              for (const key of Object.keys(arangeKeyItem)) {
+                                newItemEmpty[key] = "";
+                              }
+                              newItemEmpty["DS phân loại"] = `${element.name},${
+                                elementSub.name
+                              }${index !== element.length - 1 ? "" : ","}`;
+                              newItemEmpty["Giá bán lẻ"] = `${
+                                elementSub.price ? elementSub.price : "0"
+                              }`;
+                              newItemEmpty["Giá vốn"] = `${
+                                elementSub.cost_of_capital
+                                  ? elementSub.cost_of_capital
+                                  : "0"
+                              }`;
+                              newItemEmpty["Giá nhập"] = `${
+                                elementSub.import_price
+                                  ? elementSub.import_price
+                                  : "0"
+                              }`;
+                              newItemEmpty["Tồn kho"] = `${elementSub.stock}`;
+                              newArray.push(newItemEmpty);
+                            } else {
+                              const newItemEmpty = {};
+
+                              for (const key of Object.keys(arangeKeyItem)) {
+                                newItemEmpty[key] = "";
+                              }
+                              newItemEmpty["DS phân loại"] = `${element.name},${
+                                elementSub.name
+                              }${index !== element.length - 1 ? "" : ","}`;
+
+                              newItemEmpty["Giá bán lẻ"] = `${
+                                elementSub.price ? elementSub.price : "0"
+                              }`;
+                              newItemEmpty["Giá vốn"] = `${
+                                elementSub.cost_of_capital
+                                  ? elementSub.cost_of_capital
+                                  : "0"
+                              }`;
+                              newItemEmpty["Giá nhập"] = `${
+                                elementSub.import_price
+                                  ? elementSub.import_price
+                                  : "0"
+                              }`;
+                              newItemEmpty["Tồn kho"] = `${elementSub.stock}`;
+                              newArray.push(newItemEmpty);
+                            }
+                          }
+                        } else {
+                          if (index == 0) {
+                            newItem["Có phân loại"] = "true";
+                            newItem["DS phân loại"] = "";
+                            newItem["Giá bán lẻ"] = "";
+                            newItem["Giá vốn"] = "";
+                            newItem["Giá nhập"] = "";
+                            newItem["Tồn kho"] = "";
+                            newArray.push(newItem);
+
+                            const newItemEmpty = {};
+
+                            for (const key of Object.keys(arangeKeyItem)) {
+                              newItemEmpty[key] = "";
+                            }
+                            newItemEmpty["Giá bán lẻ"] = `${
+                              element.price ? element.price : "0"
+                            }`;
+                            newItemEmpty["Giá vốn"] = `${
+                              element.cost_of_capital
+                                ? element.cost_of_capital
+                                : "0"
+                            }`;
+                            newItemEmpty["Giá nhập"] = `${
+                              element.import_price ? element.import_price : "0"
+                            }`;
+                            newItemEmpty["DS phân loại"] = `${element.name}`;
+                            newItemEmpty["Tồn kho"] = `${element.stock}`;
+                            newArray.push(newItemEmpty);
+                          } else {
+                            const newItemEmpty = {};
+
+                            for (const key of Object.keys(arangeKeyItem)) {
+                              newItemEmpty[key] = "";
+                            }
+                            newItemEmpty["DS phân loại"] = `${element.name}`;
+                            newItemEmpty["Giá bán lẻ"] = `${
+                              element.price ? element.price : "0"
+                            }`;
+                            newItemEmpty["Giá vốn"] = `${
+                              element.cost_of_capital
+                                ? element.cost_of_capital
+                                : "0"
+                            }`;
+                            newItemEmpty["Giá nhập"] = `${
+                              element.import_price ? element.import_price : "0"
+                            }`;
+                            newItemEmpty["Tồn kho"] = `${element.stock}`;
+                            newArray.push(newItemEmpty);
+                          }
+                        }
+                      }
+                    }
+                  } else {
+                    newItem["Có phân loại"] = "false";
+                    newItem["DS phân loại"] = "";
+                    newItem["Giá bán lẻ"] = `${item.price ? item.price : "0"}`;
+                    newItem[
+                      "Giá vốn"
+                    ] = `${item.inventory.main_cost_of_capital}`;
+                    newItem["Giá nhập"] = `${
+                      item.import_price ? item.import_price : "0"
+                    }`;
+                    newItem["Tồn kho"] = `${item.inventory.main_stock}`;
+                  }
+                }
+              });
+              if (!isCheckedDistribute) {
+                newArray.push(newItem);
+              }
+            }
+            var header = [];
+            if (newArray.length > 0) {
+              Object.entries(newArray[0]).forEach(([key, value], index) => {
+                header.push(key);
+              });
+            }
+            saveAsExcel(
+              { data: newArray, header: header },
+              "Danh sách sản phẩm theo kho"
+            );
+          }
+        }
+      });
   };
 };
 
