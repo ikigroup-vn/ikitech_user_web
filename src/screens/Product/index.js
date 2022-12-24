@@ -26,7 +26,7 @@ import { getQueryParams } from "../../ultis/helpers";
 import ModalCol from "../../components/Product/ModalCollaration";
 import ModalConfirm from "../../components/Product/ComfirmCol";
 import history from "../../history";
-import ModalChooseTypeImport from "../../components/Product/ImportProductInWeb/ModalChooseTypeImport.";
+import ModalChooseTypeImport from "../../components/Product/ImportProductInWeb/ModalChooseTypeImport";
 
 class Product extends Component {
   constructor(props) {
