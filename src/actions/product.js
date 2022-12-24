@@ -345,11 +345,11 @@ export const fetchAllListProduct = (store_code, search) => {
                                   typeDistributeOrigin;
                                 newItem["Phân loại phụ"] = typeDistributeSub;
                                 newItem["DS phân loại"] = "";
+                                newItem["Giá bán lẻ"] = "";
+                                newItem["Giá nhập"] = "";
                                 if (checkedDistributeExist === false) {
                                   newItem["Hình ảnh"] = "";
                                 }
-                                newItem["Giá bán lẻ"] = "";
-                                newItem["Giá nhập"] = "";
                                 newArray.push(newItem);
 
                                 const newItemEmpty = {};
@@ -361,12 +361,6 @@ export const fetchAllListProduct = (store_code, search) => {
                                 },${elementSub.name}${
                                   index !== element.length - 1 ? "" : ","
                                 }`;
-                                if (checkedDistributeExist2 === false) {
-                                  newItemEmpty["Hình ảnh"] = element.image_url
-                                    ? element.image_url
-                                    : "";
-                                  checkedDistributeExist2 = true;
-                                }
                                 newItemEmpty["Giá bán lẻ"] = `${
                                   elementSub.price ? elementSub.price : "0"
                                 }`;
@@ -375,6 +369,12 @@ export const fetchAllListProduct = (store_code, search) => {
                                     ? elementSub.import_price
                                     : "0"
                                 }`;
+                                if (checkedDistributeExist2 === false) {
+                                  newItemEmpty["Hình ảnh"] = element.image_url
+                                    ? element.image_url
+                                    : "";
+                                  checkedDistributeExist2 = true;
+                                }
                                 newArray.push(newItemEmpty);
                               } else {
                                 const newItemEmpty = {};
@@ -388,10 +388,6 @@ export const fetchAllListProduct = (store_code, search) => {
                                   index !== element.length - 1 ? "" : ","
                                 }`;
 
-                                newItemEmpty["Hình ảnh"] = element.image_url
-                                  ? element.image_url
-                                  : "";
-
                                 newItemEmpty["Giá bán lẻ"] = `${
                                   elementSub.price ? elementSub.price : "0"
                                 }`;
@@ -400,6 +396,9 @@ export const fetchAllListProduct = (store_code, search) => {
                                     ? elementSub.import_price
                                     : "0"
                                 }`;
+                                newItemEmpty["Hình ảnh"] = element.image_url
+                                  ? element.image_url
+                                  : "";
                                 newArray.push(newItemEmpty);
                               }
                             }
@@ -410,9 +409,9 @@ export const fetchAllListProduct = (store_code, search) => {
                               newItem["Phân loại phụ"] = typeDistributeSub;
                               newItem["DS phân loại"] = "";
 
-                              newItem["Hình ảnh"] = "";
                               newItem["Giá bán lẻ"] = "";
                               newItem["Giá nhập"] = "";
+                              newItem["Hình ảnh"] = "";
                               newArray.push(newItem);
 
                               const newItemEmpty = {};
@@ -428,10 +427,10 @@ export const fetchAllListProduct = (store_code, search) => {
                                   ? element.import_price
                                   : "0"
                               }`;
+                              newItemEmpty["DS phân loại"] = `${element.name}`;
                               newItemEmpty["Hình ảnh"] = element.image_url
                                 ? element.image_url
                                 : "";
-                              newItemEmpty["DS phân loại"] = `${element.name}`;
                               newArray.push(newItemEmpty);
                             } else {
                               const newItemEmpty = {};
@@ -440,9 +439,6 @@ export const fetchAllListProduct = (store_code, search) => {
                                 newItemEmpty[key] = "";
                               }
                               newItemEmpty["DS phân loại"] = `${element.name}`;
-                              newItemEmpty["Hình ảnh"] = element.image_url
-                                ? element.image_url
-                                : "";
                               newItemEmpty["Giá bán lẻ"] = `${
                                 element.price ? element.price : "0"
                               }`;
@@ -451,6 +447,9 @@ export const fetchAllListProduct = (store_code, search) => {
                                   ? element.import_price
                                   : "0"
                               }`;
+                              newItemEmpty["Hình ảnh"] = element.image_url
+                                ? element.image_url
+                                : "";
                               newArray.push(newItemEmpty);
                             }
                           }
