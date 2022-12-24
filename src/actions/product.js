@@ -247,7 +247,7 @@ export const fetchAllListProduct = (store_code, search) => {
                                   ? `[${stringCategoryChild}]`
                                   : ""
                               }` +
-                              ",";
+                              ";";
                           }
                         }
                       }
@@ -1268,6 +1268,7 @@ export const postMultiProduct = (store_code, data) => {
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
+        dispatch({ type: Types.IMPORT_FILE_PRODUCTS, data: res.data.data });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {

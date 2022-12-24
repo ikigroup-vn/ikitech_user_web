@@ -26,6 +26,7 @@ import { getQueryParams } from "../../ultis/helpers";
 import ModalCol from "../../components/Product/ModalCollaration";
 import ModalConfirm from "../../components/Product/ComfirmCol";
 import history from "../../history";
+import ModalChooseTypeImport from "../../components/Product/ImportProductInWeb/ModalChooseTypeImport.";
 
 class Product extends Component {
   constructor(props) {
@@ -48,8 +49,17 @@ class Product extends Component {
       page: 1,
       numPage: 20,
       percent_col: 0,
+      openModalTypeImport: false,
     };
   }
+
+  setAllowSkipSameName = (isAllowed) => {
+    this.setState({ allow_skip_same_name: isAllowed });
+  };
+
+  setOpenModalTypeImport = (isOpenedModal) => {
+    this.setState({ openModalTypeImport: isOpenedModal });
+  };
 
   onChangeNumPage = (e) => {
     var { store_code } = this.props.match.params;
@@ -150,7 +160,8 @@ class Product extends Component {
     this.props.fetchAllProduct(this.props.match.params.store_code);
   };
   showDialogImportExcel = () => {
-    $("#file-excel-import").trigger("click");
+    // $("#file-excel-import").trigger("click");
+    this.setOpenModalTypeImport(true);
   };
 
   onSaveChangePercent = () => {
@@ -165,7 +176,7 @@ class Product extends Component {
     var f = evt.target.files[0];
     const reader = new FileReader();
     window.$("#importModal").modal("show");
-    this.setState({ allow_skip_same_name: randomString(10) });
+    // this.setState({ allow_skip_same_name: randomString(10) });
     var _this = this;
     reader.onload = function (evt) {
       const bstr = evt.target.result;
@@ -192,7 +203,7 @@ class Product extends Component {
 
   render() {
     if (this.props.auth) {
-      var { products, allProductList } = this.props;
+      var { products, allProductList, setAllowSkipSameName } = this.props;
       var { store_code } = this.props.match.params;
       var { searchValue, importData, allow_skip_same_name, page, numPage } =
         this.state;
@@ -205,6 +216,7 @@ class Product extends Component {
         isShow,
         ecommerce,
         barcode_print,
+        openModalTypeImport,
       } = this.state;
 
       return (
@@ -218,12 +230,17 @@ class Product extends Component {
             percent_col={this.state.percent_col}
             onSaveChangePercent={this.onSaveChangePercent}
           />
-
-          <ModalCol handleChangePerCol={this.handleChangePerCol}></ModalCol>
+          <ModalChooseTypeImport
+            store_code={store_code}
+            openModal={openModalTypeImport}
+            allow_skip_same_name={allow_skip_same_name}
+            setOpenModal={this.setOpenModalTypeImport}
+            setAllowSkipSameName={this.setAllowSkipSameName}
+          />
+          <ModalCol handleChangePerCol={this.handleChangePerCol}></ModalCol>{" "}
           <Tiki store_code={store_code} />
           <Shopee store_code={store_code} />
           <Sendo store_code={store_code} />
-
           <Sidebar store_code={store_code} />
           <div className="col-10 col-10-wrapper">
             <div id="content-wrapper" className="d-flex flex-column">
