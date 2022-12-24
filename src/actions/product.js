@@ -247,7 +247,7 @@ export const fetchAllListProduct = (store_code, search) => {
                                   ? `[${stringCategoryChild}]`
                                   : ""
                               }` +
-                              ",";
+                              ";";
                           }
                         }
                       }
@@ -350,7 +350,6 @@ export const fetchAllListProduct = (store_code, search) => {
                                 }
                                 newItem["Giá bán lẻ"] = "";
                                 newItem["Giá nhập"] = "";
-                                newItem["Tồn kho"] = "";
                                 newArray.push(newItem);
 
                                 const newItemEmpty = {};
@@ -376,9 +375,6 @@ export const fetchAllListProduct = (store_code, search) => {
                                     ? elementSub.import_price
                                     : "0"
                                 }`;
-                                newItemEmpty[
-                                  "Tồn kho"
-                                ] = `${elementSub.quantity_in_stock}`;
                                 newArray.push(newItemEmpty);
                               } else {
                                 const newItemEmpty = {};
@@ -404,9 +400,6 @@ export const fetchAllListProduct = (store_code, search) => {
                                     ? elementSub.import_price
                                     : "0"
                                 }`;
-                                newItemEmpty[
-                                  "Tồn kho"
-                                ] = `${elementSub.quantity_in_stock}`;
                                 newArray.push(newItemEmpty);
                               }
                             }
@@ -420,7 +413,6 @@ export const fetchAllListProduct = (store_code, search) => {
                               newItem["Hình ảnh"] = "";
                               newItem["Giá bán lẻ"] = "";
                               newItem["Giá nhập"] = "";
-                              newItem["Tồn kho"] = "";
                               newArray.push(newItem);
 
                               const newItemEmpty = {};
@@ -440,9 +432,6 @@ export const fetchAllListProduct = (store_code, search) => {
                                 ? element.image_url
                                 : "";
                               newItemEmpty["DS phân loại"] = `${element.name}`;
-                              newItemEmpty[
-                                "Tồn kho"
-                              ] = `${element.quantity_in_stock}`;
                               newArray.push(newItemEmpty);
                             } else {
                               const newItemEmpty = {};
@@ -462,9 +451,6 @@ export const fetchAllListProduct = (store_code, search) => {
                                   ? element.import_price
                                   : "0"
                               }`;
-                              newItemEmpty[
-                                "Tồn kho"
-                              ] = `${element.quantity_in_stock}`;
                               newArray.push(newItemEmpty);
                             }
                           }
@@ -482,7 +468,6 @@ export const fetchAllListProduct = (store_code, search) => {
                         item.import_price ? item.import_price : "0"
                       }`;
                       newItem["Hình ảnh"] = "";
-                      newItem["Tồn kho"] = `${item.quantity_in_stock}`;
                     }
                   }
                 });
@@ -1283,6 +1268,7 @@ export const postMultiProduct = (store_code, data) => {
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
+        dispatch({ type: Types.IMPORT_FILE_PRODUCTS, data: res.data.data });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
