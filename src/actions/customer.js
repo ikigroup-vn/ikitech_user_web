@@ -46,7 +46,7 @@ export const exportAllListCustomer = (store_code, params) => {
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
-
+        console.log("all customers: ", res.data.data);
         if (res.data.code == 200) {
           if (res.data.data.data.length > 0) {
             var newArray = [];
@@ -77,6 +77,12 @@ export const exportAllListCustomer = (store_code, params) => {
                 debt: item.debt,
                 total_final_all_status: item.total_final_all_status,
                 total_final_without_refund: item.total_final_without_refund,
+                role: item.is_agency
+                  ? "Đại lý"
+                  : item.is_collaborator
+                  ? "Cộng tác viên"
+                  : "Khách hàng",
+                agency_type: item.agency_type,
               };
               Object.entries(arangeKeyItem).forEach(([key, value], index) => {
                 if (key == "name") {
@@ -124,6 +130,12 @@ export const exportAllListCustomer = (store_code, params) => {
                 if (key == "total_final_without_refund") {
                   newItem["Tổng bán trừ trả hàng và hủy"] = value;
                 }
+                if (key == "role") {
+                  newItem["Vai trò"] = value;
+                }
+                if (key == "agency_type") {
+                  newItem["Cấp đại lý"] = value ? value.name : "";
+                }
               });
 
               newArray.push(newItem);
@@ -138,6 +150,45 @@ export const exportAllListCustomer = (store_code, params) => {
             saveAsExcel({ data: newArray, header: header });
           }
         }
+      });
+  };
+};
+
+export const importAllListCustomer = (store_code, data) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    customerApi
+      .importAllCustomerFromXLSX(store_code, data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          tryShow: true,
+          alert: {
+            tryShow: true,
+            type: "success",
+            title: res.data.msg,
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
       });
   };
 };

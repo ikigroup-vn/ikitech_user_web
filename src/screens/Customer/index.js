@@ -16,6 +16,8 @@ import {
   getQueryParams,
   setQueryParamInUrl,
 } from "../../ultis/helpers";
+import $ from "jquery";
+import * as XLSX from "xlsx";
 import ModalCreate from "../../components/Customer/ModalCreate";
 import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
 import * as placeAction from "../../actions/place";
@@ -27,6 +29,7 @@ import { options } from "../../ultis/groupCustomer/options";
 import * as Types from "../../constants/ActionType";
 import { genders } from "../../ultis/groupCustomer/genders";
 import SidebarShowCustomersByReferralPhone from "../../components/Customer/SidebarShowCustomersByReferralPhone";
+import moment from "moment";
 
 const CustomerStyles = styled.div`
   .filter-search-customer {
@@ -148,6 +151,7 @@ class Customer extends Component {
       showCustomersByReferralPhone: false,
       pageReferralPhone: 1,
       currentParams: "",
+      fields: ["Tên khách hàng", "Số điện thoại"],
     };
   }
 
@@ -369,6 +373,95 @@ class Customer extends Component {
       pageReferralPhone: page,
     });
   };
+  showDialogImportExcel = () => {
+    $("#file-excel-import-customer").trigger("click");
+  };
+  onChangeExcel = (evt) => {
+    const { showError } = this.props;
+    const { fields } = this.state;
+
+    var f = evt.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      const bstr = evt.target.result;
+      const wb = XLSX.read(bstr, { type: "binary" });
+      const wsname = wb.SheetNames[0];
+      const ws = wb.Sheets[wsname];
+      const data = XLSX.utils.sheet_to_json(ws, { header: 2 });
+      const xlsxFields = data[0];
+      //Check Valid XLSX Field
+      let isCheckedValidField = true;
+      const lengthXlsxFields = Object.keys(xlsxFields).length;
+      if (fields.length > lengthXlsxFields.length) isCheckedValidField = false;
+      else {
+        const arraysXlsxFields = Object.keys(xlsxFields);
+        fields.forEach((element) => {
+          if (!arraysXlsxFields.includes(element)) {
+            isCheckedValidField = false;
+            return;
+          }
+        });
+      }
+      if (!isCheckedValidField) {
+        showError({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: "Trường 'Tên khách hàng' và 'Số điện thoại' không hợp lệ!",
+          },
+        });
+        return;
+      }
+
+      //Filter Data
+      const newListCustomers = [];
+      for (var item of data) {
+        const newCustomer = {};
+        newCustomer["name"] = item["Tên khách hàng"];
+        newCustomer["phone_number"] = item["Số điện thoại"];
+        newCustomer["address_detail"] = item["Địa chỉ chi tiết"];
+        newCustomer["wards_name"] = item["Phường/Xã"];
+        newCustomer["district_name"] = item["Quận/Huyện"];
+        newCustomer["province_name"] = item["Tỉnh/TP"];
+        newCustomer["date_of_birth"] = item["Ngày sinh"]
+          ? moment(item["Ngày sinh"]).format("YYYY-MM-DD")
+          : "";
+        newCustomer["points"] = item["Xu hiện tại"] ? item["Xu hiện tại"] : "";
+        newCustomer["official"] = item["Chính thức"] ? true : false;
+        newCustomer["created_at"] = item["Ngày tạo"];
+        newCustomer["updated_at"] = item["Ngày cập nhật"];
+        newCustomer["debt"] = item["Nợ hiện tại"] ? item["Nợ hiện tại"] : "";
+        newCustomer["total_final_all_status"] = item["Tổng bán"]
+          ? item["Tổng bán"]
+          : "";
+        newCustomer["total_final_without_refund"] = item[
+          "Tổng bán trừ trả hàng và hủy"
+        ]
+          ? item["Tổng bán trừ trả hàng và hủy"]
+          : "";
+        newCustomer["is_agency"] = item["Vai trò"] === "Đại lý";
+        newCustomer["is_collaborator"] = item["Vai trò"] === "Cộng tác viên";
+        if (item["Cấp đại lý"]) {
+          newCustomer["agency_type"] = item["Cấp đại lý"];
+        }
+        newListCustomers.push(newCustomer);
+      }
+
+      const { store_code } = this.props.match.params;
+      const { importAllListCustomer } = this.props;
+
+      const dataImport = {
+        is_update_password: true,
+        password: "123456",
+        list: newListCustomers,
+      };
+      importAllListCustomer(store_code, dataImport);
+    };
+    document.getElementById("file-excel-import-customer").value = null;
+    reader.readAsBinaryString(f);
+  };
   render() {
     var { customer, chat, customers } = this.props;
     var customerImg =
@@ -452,7 +545,25 @@ class Customer extends Component {
                             Export Excel
                           </span>
                         </button>
-
+                        <button
+                          style={{ marginRight: "10px" }}
+                          onClick={this.showDialogImportExcel}
+                          class={`btn btn-primary btn-icon-split btn-sm `}
+                        >
+                          <span class="icon text-white-50">
+                            <i class="fas fa-file-import"></i>
+                          </span>
+                          <span style={{ color: "white" }} class="text">
+                            Import Excel
+                          </span>
+                        </button>
+                        <input
+                          id="file-excel-import-customer"
+                          type="file"
+                          name="name"
+                          hidden
+                          onChange={this.onChangeExcel}
+                        />
                         <a
                           data-toggle="modal"
                           data-target="#modalCreateCustomer"
@@ -682,6 +793,9 @@ const mapDispatchToProps = (dispatch, props) => {
     exportAllListCustomer: (store_code, params) => {
       dispatch(customerAction.exportAllListCustomer(store_code, params));
     },
+    importAllListCustomer: (store_code, data) => {
+      dispatch(customerAction.importAllListCustomer(store_code, data));
+    },
     fetchAllCustomerByInferralPhone: (
       store_code,
       page,
@@ -708,6 +822,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchAllAgencyType: (store_code) => {
       dispatch(AgencyAction.fetchAllAgencyType(store_code));
+    },
+    showError: (error) => {
+      dispatch(error);
     },
   };
 };
