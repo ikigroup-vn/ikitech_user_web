@@ -12,6 +12,7 @@ class ModalUpdate extends Component {
     super(props);
     this.state = {
       title: "",
+      link: "",
       id: "",
       image: "",
       fileUpload: null,
@@ -21,8 +22,13 @@ class ModalUpdate extends Component {
   componentWillReceiveProps(nextProps) {
     if (!shallowEqual(nextProps.modal, this.props.modal)) {
       var banner = nextProps.modal;
+      console.log(
+        "🚀 ~ file: ModalUpdate.js:25 ~ ModalUpdate ~ componentWillReceiveProps ~ banner",
+        banner
+      );
       this.setState({
         title: banner._title,
+        link: banner.link_to,
         id: banner.id,
         image: banner.image_url,
       });
@@ -53,7 +59,7 @@ class ModalUpdate extends Component {
   };
   onSave = async (e) => {
     e.preventDefault();
-    var { title, image, id } = this.state;
+    var { title, image, id, link } = this.state;
 
     window.$(".modal").modal("hide");
     var { store_code, carousel_app_images, theme } = this.props;
@@ -66,6 +72,7 @@ class ModalUpdate extends Component {
         {
           id: id,
           title: title,
+          link_to: link,
           file: await compressed(file, 0, 0),
           image: image,
         },
@@ -76,14 +83,14 @@ class ModalUpdate extends Component {
     } else {
       this.props.updateBanner(
         store_code,
-        { id: id, title: title, file: "", image: image },
+        { id: id, title: title, link_to: link, file: "", image: image },
         carousel_app_images,
         theme
       );
     }
   };
   render() {
-    var { title, image } = this.state;
+    var { title, image, link } = this.state;
     return (
       <div
         class="modal fade"
@@ -143,6 +150,19 @@ class ModalUpdate extends Component {
                       data-overwrite-initial="false"
                     />
                   </div>
+                </div>
+                <div class="form-group">
+                  <label for="product_link">URL trang đích</label>
+                  <input
+                    id="product_link"
+                    type="text"
+                    className="form-control"
+                    placeholder="VD: https://sy.ikiglobal.com/san-pham/Day-dong-ho-cho-Apple-Watch-Nike+-38-40mm-2220"
+                    autoComplete="off"
+                    value={link}
+                    onChange={this.onChange}
+                    name="link"
+                  />
                 </div>
               </div>
               <div class="modal-footer">
