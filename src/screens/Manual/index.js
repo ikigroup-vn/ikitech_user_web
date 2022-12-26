@@ -21,6 +21,9 @@ const ManualStyles = styled.div`
   }
   .contact {
     margin-top: 20px;
+    p {
+      margin-bottom: 8px;
+    }
   }
 `;
 
@@ -46,7 +49,6 @@ class Manual extends Component {
                 </h4>
               </div>
               <div className="manual">
-                <h4>Hướng dẫn sử dụng web iktech</h4>
                 <div>
                   <p>
                     {" "}
@@ -79,11 +81,19 @@ class Manual extends Component {
                     dụng các tính năng quản lý bán hàng tuyệt vời mà nó mang lại
                   </p>
                 </div>
+                <h2>1. Hướng dẫn sử dụng IKITECH WEB</h2>
+                <h3>1.1 Tài liệu hướng dẫn sử dụng IKITECH WEB</h3>
                 <p>
-                  {" "}
-                  Chào mừng bạn đến với iKiTech - Nền tảng quản lí và bán hàng
-                  ĐA KÊNH tốt nhất!{" "}
+                  Link tham khảo:{" "}
+                  <a
+                    href="https://tailieuweb.myiki.vn/"
+                    alt="link_suggest"
+                    target={"_blank"}
+                  >
+                    https://tailieuweb.myiki.vn/
+                  </a>
                 </p>
+                <h3>1.2 Video hướng dẫn sử dụng IKITECH WEB</h3>
                 <div className="video">
                   <iframe
                     width="560"
@@ -96,12 +106,19 @@ class Manual extends Component {
                   ></iframe>
                 </div>
                 <div className="appIki">
-                  <h4>Hướng dẫn sử dụng app iktech</h4>
+                  <h2>2. Hướng dẫn sử dụng APP IKITECH</h2>
+                  <h3>2.1 Tài liệu hướng dẫn sử dụng APP IKITECH</h3>
                   <p>
-                    {" "}
-                    Chào mừng bạn đến với iKiTech - Nền tảng quản lí và bán hàng
-                    ĐA KÊNH tốt nhất!{" "}
+                    Link tham khảo:{" "}
+                    <a
+                      href=" https://tailieuapp.myiki.vn/"
+                      alt="link_suggest"
+                      target={"_blank"}
+                    >
+                      https://tailieuapp.myiki.vn/
+                    </a>
                   </p>
+                  <h3>2.2 Video hướng dẫn sử dụng APP IKITECH</h3>
                   <div className="video">
                     <iframe
                       width="560"
@@ -127,8 +144,8 @@ class Manual extends Component {
                   </div>
                 </div>
                 <div className="contact">
-                  CÔNG TY CỔ PHẦN IKI TECH VIỆT NAM. Nền tảng tạo App & Web bán
-                  hàng chuyên nghiệp
+                  <h2>CÔNG TY CỔ PHẦN IKI TECH VIỆT NAM</h2>
+                  <p>Nền tảng tạo App & Web bán hàng chuyên nghiệp</p>
                   <p>Tel: 0246.0278.753</p>
                   <p>Hotline: 09846.35577</p>
                   <p>Hỗ trợ kỹ thuật: 0976.686.500</p>

@@ -30,6 +30,7 @@ import * as Types from "../../constants/ActionType";
 import { genders } from "../../ultis/groupCustomer/genders";
 import SidebarShowCustomersByReferralPhone from "../../components/Customer/SidebarShowCustomersByReferralPhone";
 import moment from "moment";
+import ModalUpdatePasswordImport from "./ModalUpdatePasswordImport";
 
 const CustomerStyles = styled.div`
   .filter-search-customer {
@@ -152,8 +153,16 @@ class Customer extends Component {
       pageReferralPhone: 1,
       currentParams: "",
       fields: ["Tên khách hàng", "Số điện thoại"],
+      openModalImport: false,
+      isUpdatedPasswordImport: false,
     };
   }
+  setOpenModalImport = (isOpenedModal) => {
+    this.setState({ openModalImport: isOpenedModal });
+  };
+  setIsUpdatedPasswordImport = (isUpdatedPasswordImport) => {
+    this.setState({ isUpdatedPasswordImport });
+  };
 
   openModal = () => {
     this.setState({ openModal: true });
@@ -374,11 +383,11 @@ class Customer extends Component {
     });
   };
   showDialogImportExcel = () => {
-    $("#file-excel-import-customer").trigger("click");
+    this.setOpenModalImport(true);
   };
   onChangeExcel = (evt) => {
     const { showError } = this.props;
-    const { fields } = this.state;
+    const { fields, isUpdatedPasswordImport } = this.state;
 
     var f = evt.target.files[0];
     const reader = new FileReader();
@@ -453,7 +462,7 @@ class Customer extends Component {
       const { importAllListCustomer } = this.props;
 
       const dataImport = {
-        is_update_password: true,
+        is_update_password: isUpdatedPasswordImport,
         password: "123456",
         list: newListCustomers,
       };
@@ -492,6 +501,7 @@ class Customer extends Component {
       showCustomersByReferralPhone,
       customerInfo,
       pageReferralPhone,
+      openModalImport,
     } = this.state;
     const { wards, district, province, types } = this.props;
     if (this.props.auth) {
@@ -515,6 +525,11 @@ class Customer extends Component {
             province={province}
             modal={modal}
           />
+          <ModalUpdatePasswordImport
+            openModal={openModalImport}
+            setOpenModal={this.setOpenModalImport}
+            setIsUpdatedPasswordImport={this.setIsUpdatedPasswordImport}
+          ></ModalUpdatePasswordImport>
           <div className="col-10 col-10-wrapper">
             <div id="content-wrapper" className="d-flex flex-column">
               <div id="content">

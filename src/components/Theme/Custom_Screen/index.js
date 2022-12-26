@@ -24,6 +24,33 @@ import "slick-carousel/slick/slick.css";
 
 import "slick-carousel/slick/slick-theme.css";
 import ModalDefaultReset from "../Home_Screen/ModalDefaultReset";
+import styled from "styled-components";
+
+const OverviewStyles = styled.div`
+  .price__display {
+    .price__display__title {
+      font-size: 18px;
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+    .price__display__content {
+      display: flex;
+      column-gap: 15px;
+      .price__display__item {
+        display: flex;
+        align-items: center;
+        column-gap: 3px;
+        label {
+          margin-bottom: 0;
+          cursor: pointer;
+        }
+        input {
+          cursor: pointer;
+        }
+      }
+    }
+  }
+`;
 class Custom_Screen extends Component {
   constructor(props) {
     super(props);
@@ -217,6 +244,14 @@ class Custom_Screen extends Component {
 
     return false;
   };
+  onChangePriceShow = (e) => {
+    const { store_code, updateTheme, theme } = this.props;
+    const form = {
+      ...theme,
+      option_total_show_type: e.target.value,
+    };
+    updateTheme(store_code, form);
+  };
 
   render() {
     const setting = {
@@ -253,9 +288,9 @@ class Custom_Screen extends Component {
       html_footer,
       tabId,
     } = this.state;
-    var { badges, store_code } = this.props;
+    var { badges, store_code, theme } = this.props;
     return (
-      <div className="overview " style={{ marginLeft: "25px" }}>
+      <OverviewStyles className="overview " style={{ marginLeft: "25px" }}>
         <div className="row justify-content-between  align-items-center">
           <button
             style={{ marginRight: "10px", marginBottom: 25, marginTop: 10 }}
@@ -490,7 +525,12 @@ class Custom_Screen extends Component {
                 </Tab>
               </TabList>
             </div>
-            <div className="col-10 col-10-wrapper">
+            <div
+              className="col-10 col-10-wrapper"
+              style={{
+                border: "none",
+              }}
+            >
               <form role="form">
                 <div class="box-body">
                   <TabPanel>
@@ -527,6 +567,52 @@ class Custom_Screen extends Component {
                     </Slider>
                   </TabPanel>
                   <TabPanel>
+                    <div className="price__display">
+                      <div className="price__display__title">
+                        Hiển thị bộ đếm
+                      </div>
+                      <div className="price__display__content">
+                        <div className="price__display__item">
+                          <input
+                            type="radio"
+                            name="price__show"
+                            id="price__viewed"
+                            value={0}
+                            checked={theme.option_total_show_type === 0}
+                            onChange={this.onChangePriceShow}
+                          />
+                          <label htmlFor="price__viewed">
+                            Chỉ hiển thị đã xem
+                          </label>
+                        </div>
+                        <div className="price__display__item">
+                          <input
+                            type="radio"
+                            name="price__show"
+                            id="price__buyed"
+                            value={1}
+                            checked={theme.option_total_show_type === 1}
+                            onChange={this.onChangePriceShow}
+                          />
+                          <label htmlFor="price__buyed">
+                            Chỉ hiển thị đã bán
+                          </label>
+                        </div>
+                        <div className="price__display__item">
+                          <input
+                            type="radio"
+                            name="price__show"
+                            id="price__all"
+                            value={2}
+                            checked={theme.option_total_show_type === 2}
+                            onChange={this.onChangePriceShow}
+                          />
+                          <label htmlFor="price__all">
+                            Hiển thị đã xem và đã bán
+                          </label>
+                        </div>
+                      </div>
+                    </div>
                     <Slider
                       {...setting}
                       ref={(sliderProduct) =>
@@ -638,7 +724,7 @@ class Custom_Screen extends Component {
             </div>
           </div>
         </Tabs>
-      </div>
+      </OverviewStyles>
     );
   }
 }

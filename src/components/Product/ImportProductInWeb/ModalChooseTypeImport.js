@@ -307,7 +307,11 @@ class ModalChooseTypeImport extends Component {
               </button>
             </div>
             <div className="modalImport__override">
-              <input type="checkbox" onChange={this.handleChangeOverride} />
+              <input
+                type="checkbox"
+                onChange={this.handleChangeOverride}
+                id="overridePermission"
+              />
               <label for="overridePermission">
                 Cho phép bỏ qua các sản phẩm trùng tên
               </label>

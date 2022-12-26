@@ -247,6 +247,29 @@ export const ikitech_menu = [
         ],
       },
       {
+        name: "Đối tác bán hàng",
+        setOpenKey: ["/collaborator", "/agency"],
+        icon: "fa fa-user",
+        open: "setting2",
+        children: [
+          {
+            name: "Cộng tác viên",
+            class: "collaborator_list",
+            display: "hide",
+            exact: true,
+            to: "/collaborator",
+          },
+          {
+            name: "Đại lý",
+            class: "agency_list",
+            display: "hide",
+            icon: "fa fa-bell",
+            exact: true,
+            to: "/agency",
+          },
+        ],
+      },
+      {
         name: "Onsale",
         setOpenKey: ["/customer_sales"],
         icon: "fas fa-user",
@@ -296,29 +319,6 @@ export const ikitech_menu = [
             params: "?status=3",
 
             to: "/customer_sales",
-          },
-        ],
-      },
-      {
-        name: "Đối tác bán hàng",
-        setOpenKey: ["/collaborator", "/agency"],
-        icon: "fa fa-user",
-        open: "setting2",
-        children: [
-          {
-            name: "Cộng tác viên",
-            class: "collaborator_list",
-            display: "hide",
-            exact: true,
-            to: "/collaborator",
-          },
-          {
-            name: "Đại lý",
-            class: "agency_list",
-            display: "hide",
-            icon: "fa fa-bell",
-            exact: true,
-            to: "/agency",
           },
         ],
       },

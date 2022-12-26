@@ -19,6 +19,7 @@ class Footer extends Component {
       },
       modalupdate: {
         title: "",
+        link_to: "",
         id: "",
         image_url: "",
       },
@@ -58,9 +59,15 @@ class Footer extends Component {
     this.setState({ modalremove: { title: "banner", id: id, _title: title } });
   };
 
-  updateBanner = (e, id, title, img) => {
+  updateBanner = (e, id, title, img, link_to) => {
     this.setState({
-      modalupdate: { title: "banner", id: id, _title: title, image_url: img },
+      modalupdate: {
+        title: "banner",
+        id: id,
+        _title: title,
+        image_url: img,
+        link_to,
+      },
     });
   };
   showBanners = (banners) => {
@@ -94,7 +101,9 @@ class Footer extends Component {
             <td className="btn-voucher">
               <button
                 type="button"
-                onClick={(e) => this.updateBanner(e, index, data.title, img)}
+                onClick={(e) =>
+                  this.updateBanner(e, index, data.title, img, data.link_to)
+                }
                 data-toggle="modal"
                 data-target="#updateModal"
                 class="btn btn-warning btn-sm"

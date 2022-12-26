@@ -50,7 +50,6 @@ class Custom_Screen extends Component {
       this.props.badges.config_user_vip != null
         ? this.props.badges.config_user_vip.list_id_theme_vip
         : [];
-
     return (
       <div
         class={`form-group col-xs-12 col-lg-12 col-md-12 col-sm-12 ${

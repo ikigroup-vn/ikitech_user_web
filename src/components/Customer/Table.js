@@ -4,7 +4,7 @@ import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
 import history from "../../history";
 import { filter_arr, format, getQueryParams } from "../../ultis/helpers";
 import Pagination from "../../components/RevenueExpenditures/Pagination";
-import { formatDDMMYYYY } from "../../ultis/date";
+import { formatDDMMYYYY, getDDMMYYYHis } from "../../ultis/date";
 import styled from "styled-components";
 import ModalChangeRoleCustomer from "./ModalChangeRoleCustomer";
 import { connect, shallowEqual } from "react-redux";
@@ -203,7 +203,7 @@ class Table extends Component {
                 ? "Chưa cập nhật"
                 : data.province_name}
             </td>
-            <td>{formatDDMMYYYY(data.created_at)}</td>
+            <td>{getDDMMYYYHis(data.created_at)}</td>
             <td
               className="total_referral"
               onClick={() => this.handleShowCustomersByReferralPhone(data)}
