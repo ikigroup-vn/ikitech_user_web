@@ -148,7 +148,7 @@ class HistoryOperation extends Component {
     e.preventDefault();
 
     const { params, searchInput } = this.state;
-    const paramsFilter = `page=${params.page}&search=${searchInput}&type=${params.function_type}&action=${params.action_type}&staff_id=${params.staff_id}`;
+    const paramsFilter = `page=${params.page}&search=${searchInput}&function_type=${params.function_type}&action_type=${params.action_type}&staff_id=${params.staff_id}`;
     this.handleFetchHistoryOperation(paramsFilter);
   };
 
@@ -161,7 +161,7 @@ class HistoryOperation extends Component {
 
   componentDidMount() {
     const { params, searchInput } = this.state;
-    const paramsFilter = `page=${params.page}&search=${searchInput}&type=${params.function_type}&action=${params.action_type}&staff_id=${params.staff_id}`;
+    const paramsFilter = `page=${params.page}&search=${searchInput}&function_type=${params.function_type}&action_type=${params.action_type}&staff_id=${params.staff_id}`;
     this.handleFetchHistoryOperation(paramsFilter);
   }
   handleFetchHistoryOperation = (params) => {
@@ -173,7 +173,7 @@ class HistoryOperation extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     const { params, searchInput } = this.state;
     if (!shallowEqual(params, nextState.params)) {
-      const paramsFilter = `page=${nextState.params.page}&search=${searchInput}&type=${nextState.params.function_type}&action=${nextState.params.action_type}&staff_id=${nextState.params.staff_id}`;
+      const paramsFilter = `page=${nextState.params.page}&search=${searchInput}&function_type=${nextState.params.function_type}&action_type=${nextState.params.action_type}&staff_id=${nextState.params.staff_id}`;
       this.handleFetchHistoryOperation(paramsFilter);
     }
     return true;

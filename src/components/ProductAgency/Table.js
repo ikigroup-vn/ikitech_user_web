@@ -1,7 +1,13 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import history from "../../history";
-import { filter_arr, filter_var, format ,formatNumber, contactOrNumber} from "../../ultis/helpers";
+import {
+  filter_arr,
+  filter_var,
+  format,
+  formatNumber,
+  contactOrNumber,
+} from "../../ultis/helpers";
 
 import { shallowEqual } from "../../ultis/shallowEqual";
 class Table extends Component {
@@ -64,15 +70,16 @@ class Table extends Component {
     e.preventDefault();
   };
 
- 
-  changePage = (data) =>{
-    var {store_code , page , agency_type_id} = this.props
-    var price = window.$(`.price-${data.id} > input`).val()
-    history.push(`/product-agency/edit-price/${store_code}/${data.id}/${agency_type_id}?page=${page}&price=${price}`)
-  }
+  changePage = (data) => {
+    var { store_code, page, agency_type_id, numPage, searchValue } = this.props;
+    var price = window.$(`.price-${data.id} > input`).val();
+    history.push(
+      `/product-agency/edit-price/${store_code}/${data.id}/${agency_type_id}?page=${page}&limit=${numPage}&search=${searchValue}&price=${price}`
+    );
+  };
   showData = (products, per_page, current_page) => {
     var result = null;
-    var { store_code, page,agency_type_id} = this.props;
+    var { store_code, page, agency_type_id } = this.props;
     if (typeof products === "undefined") {
       return result;
     }
@@ -84,198 +91,222 @@ class Table extends Component {
         if (data.product_discount) {
           discount_percent = data.product_discount?.value;
         }
-    
+
         var min_price = data.min_price;
         var max_price = data.max_price;
         var product_discount = data.product_discount;
-        var distributes = data.distributes
+        var distributes = data.distributes;
 
         var a_min_price = null;
         var a_max_price = null;
-        var a_distributes = null
-        if(data.agency_price)
-        {
-
-           a_min_price = data.agency_price.min_price;
-           a_max_price = data.agency_price.max_price;
-           a_distributes = data.agency_price.distributes
+        var a_distributes = null;
+        if (data.agency_price) {
+          a_min_price = data.agency_price.min_price;
+          a_max_price = data.agency_price.max_price;
+          a_distributes = data.agency_price.distributes;
         }
         return (
-          <tr className = "hover-product">
-        
+          <tr className="hover-product">
             <td>{per_page * (current_page - 1) + (index + 1)}</td>
 
             <td>{data.sku}</td>
 
-            <td
-            >
-              <Link to={`/product/edit/${store_code}/${data.id}/${page}?page=${page}?`}>
+            <td>
+              <Link
+                to={`/product/edit/${store_code}/${data.id}/${page}?page=${page}?`}
+              >
                 {data.name}
               </Link>
             </td>
             <td>
-        { product_discount == null &&
-          <div className={`price-${data.id}`}
-          >
-            {min_price === max_price ? (
-                  <>
-                  <input type={"hidden"} value ={ discount_percent == null
-                    ? min_price
-                    : min_price - min_price * discount_percent * 0.01} ></input>
-                  {contactOrNumber(format(
-                Number(
-                  discount_percent == null
-                    ? min_price
-                    : min_price - min_price * discount_percent * 0.01
-                )
-              )
-              )      }            </>
-            ) : distributes && distributes.length == 0 ? 
-            (
-            <>
-            
-            <input type={"hidden"} value ={  discount_percent == null
-                    ? min_price
-                    : min_price - min_price * discount_percent * 0.01} ></input>
-            {contactOrNumber(format(
-                Number(
-                  discount_percent == null
-                    ? min_price
-                    : min_price - min_price * discount_percent * 0.01
-                )))} </>): (
-              <div className="price"
-              >
-                {format(
-                  Number(
-                    discount_percent == null
-                      ? min_price
-                      : min_price - min_price * discount_percent * 0.01
-                  )
-                )}
-                {" - "}
-                {format(
-                  Number(
-                    discount_percent == null
-                      ? max_price
-                      : max_price - max_price * discount_percent * 0.01
-                  )
-                )}
-              </div>
-            )}
-          </div>
-          }
-
-          {product_discount && (
-            <div
-              className={`price-${data.id}`}
-              style={{
-                float: "left",
-              }}
-            >
-              {min_price === max_price ? (
-                <>
-                <input type={"hidden"} value ={min_price} ></input>
-                {contactOrNumber(format(Number(min_price)))}
-                </>
-              ) : (
-                <div className="row e">
-                  <div
-                    style={{
-                      // textDecoration: "line-through",
-                    }}
-                  >
-                    {format(Number(min_price))}
-                    {" - "}
-                    {format(Number(max_price))}
-                  </div>
-
-                  {/* <div className="discount e">&emsp; -{discount_percent}%</div> */}
+              {product_discount == null && (
+                <div className={`price-${data.id}`}>
+                  {min_price === max_price ? (
+                    <>
+                      <input
+                        type={"hidden"}
+                        value={
+                          discount_percent == null
+                            ? min_price
+                            : min_price - min_price * discount_percent * 0.01
+                        }
+                      ></input>
+                      {contactOrNumber(
+                        format(
+                          Number(
+                            discount_percent == null
+                              ? min_price
+                              : min_price - min_price * discount_percent * 0.01
+                          )
+                        )
+                      )}{" "}
+                    </>
+                  ) : distributes && distributes.length == 0 ? (
+                    <>
+                      <input
+                        type={"hidden"}
+                        value={
+                          discount_percent == null
+                            ? min_price
+                            : min_price - min_price * discount_percent * 0.01
+                        }
+                      ></input>
+                      {contactOrNumber(
+                        format(
+                          Number(
+                            discount_percent == null
+                              ? min_price
+                              : min_price - min_price * discount_percent * 0.01
+                          )
+                        )
+                      )}{" "}
+                    </>
+                  ) : (
+                    <div className="price">
+                      {format(
+                        Number(
+                          discount_percent == null
+                            ? min_price
+                            : min_price - min_price * discount_percent * 0.01
+                        )
+                      )}
+                      {" - "}
+                      {format(
+                        Number(
+                          discount_percent == null
+                            ? max_price
+                            : max_price - max_price * discount_percent * 0.01
+                        )
+                      )}
+                    </div>
+                  )}
                 </div>
               )}
-            </div>
-          )}
-        </td>
-        <td  >
-        { product_discount == null &&
-          <div className="eea"
-          >
-            {a_min_price === a_max_price ? (
-              contactOrNumber(format(
-                Number(
-                  discount_percent == null
-                    ? a_min_price
-                    : a_min_price - a_min_price * discount_percent * 0.01
-                )
-              )
-              )) : distributes && distributes.length == 0 ? contactOrNumber(format(
-                Number(
-                  discount_percent == null
-                    ? a_min_price
-                    : a_min_price - a_min_price * discount_percent * 0.01
-                ))) : (
-              <div className="ae"
-              >
-                {format(
-                  Number(
-                    discount_percent == null
-                      ? a_min_price
-                      : a_min_price - a_min_price * discount_percent * 0.01
-                  )
-                )}
-                {" - "}
-                {format(
-                  Number(
-                    discount_percent == null
-                      ?a_max_price
-                      : a_max_price - a_max_price * discount_percent * 0.01
-                  )
-                )}
-              </div>
-            )}
-          </div>
-          }
 
-          {product_discount && (
-            <div
-              className="a"
-              style={{
-                float: "left",
-              }}
-            >
-              {a_min_price === a_max_price ? (
-                contactOrNumber(format(Number(a_min_price)))
-              ) : (
-                <div className="row e">
-                  <div
-                    style={{
-                      // textDecoration: "line-through",
-                    }}
-                  >
-                    {format(Number(a_min_price))}
-                    {" - "}
-                    {format(Number(a_max_price))}
-                  </div>
+              {product_discount && (
+                <div
+                  className={`price-${data.id}`}
+                  style={{
+                    float: "left",
+                  }}
+                >
+                  {min_price === max_price ? (
+                    <>
+                      <input type={"hidden"} value={min_price}></input>
+                      {contactOrNumber(format(Number(min_price)))}
+                    </>
+                  ) : (
+                    <div className="row e">
+                      <div
+                        style={
+                          {
+                            // textDecoration: "line-through",
+                          }
+                        }
+                      >
+                        {format(Number(min_price))}
+                        {" - "}
+                        {format(Number(max_price))}
+                      </div>
 
-                  {/* <div className="discount e">&emsp; -{discount_percent}%</div> */}
+                      {/* <div className="discount e">&emsp; -{discount_percent}%</div> */}
+                    </div>
+                  )}
                 </div>
               )}
-            </div>
-          )}
-        </td>
+            </td>
+            <td>
+              {product_discount == null && (
+                <div className="eea">
+                  {a_min_price === a_max_price ? (
+                    contactOrNumber(
+                      format(
+                        Number(
+                          discount_percent == null
+                            ? a_min_price
+                            : a_min_price -
+                                a_min_price * discount_percent * 0.01
+                        )
+                      )
+                    )
+                  ) : distributes && distributes.length == 0 ? (
+                    contactOrNumber(
+                      format(
+                        Number(
+                          discount_percent == null
+                            ? a_min_price
+                            : a_min_price -
+                                a_min_price * discount_percent * 0.01
+                        )
+                      )
+                    )
+                  ) : (
+                    <div className="ae">
+                      {format(
+                        Number(
+                          discount_percent == null
+                            ? a_min_price
+                            : a_min_price -
+                                a_min_price * discount_percent * 0.01
+                        )
+                      )}
+                      {" - "}
+                      {format(
+                        Number(
+                          discount_percent == null
+                            ? a_max_price
+                            : a_max_price -
+                                a_max_price * discount_percent * 0.01
+                        )
+                      )}
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {product_discount && (
+                <div
+                  className="a"
+                  style={{
+                    float: "left",
+                  }}
+                >
+                  {a_min_price === a_max_price ? (
+                    contactOrNumber(format(Number(a_min_price)))
+                  ) : (
+                    <div className="row e">
+                      <div
+                        style={
+                          {
+                            // textDecoration: "line-through",
+                          }
+                        }
+                      >
+                        {format(Number(a_min_price))}
+                        {" - "}
+                        {format(Number(a_max_price))}
+                      </div>
+
+                      {/* <div className="discount e">&emsp; -{discount_percent}%</div> */}
+                    </div>
+                  )}
+                </div>
+              )}
+            </td>
             {/* <td>{format(Number(data.price))}</td> */}
-    
+
             {/* <td>{typeof data.agency_price != "undefined" ? format(Number(data.agency_price.main_price)) : null  }</td> */}
 
-            <td             onClick={()=>{this.changePage(data)}}
->
+            <td
+              onClick={() => {
+                this.changePage(data);
+              }}
+            >
               <button
-              
-                class={`btn btn-warning btn-sm ${update == true ? "" : "hide"
-                  }`}
+                class={`btn btn-warning btn-sm ${update == true ? "" : "hide"}`}
               >
                 <i class="fa fa-edit"></i> Chỉnh sửa giá
               </button>
-
             </td>
           </tr>
         );
@@ -317,7 +348,7 @@ class Table extends Component {
         : false;
     var multiDelete = selected.length > 0 ? "show" : "hide";
     var { _delete, update, insert } = this.props;
-    console.log(products)
+    console.log(products);
     return (
       <div>
         <button
@@ -337,14 +368,13 @@ class Table extends Component {
         >
           <thead>
             <tr>
-       
               <th>STT</th>
               <th>Mã SKU</th>
 
               <th>Tên sản phẩm</th>
 
               <th>Giá bán lẻ</th>
-       
+
               <th>Giá đại lý</th>
 
               <th>Hành động</th>

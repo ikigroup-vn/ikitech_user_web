@@ -154,7 +154,7 @@ class Table extends PureComponent {
     return (
       <tr className="hover-product">
         <td
-          colSpan={6}
+          colSpan={7}
           style={{
             textAlign: "center",
           }}
@@ -170,7 +170,12 @@ class Table extends PureComponent {
       typeof this.props.histories === "undefined" ? [] : this.props.histories;
     const { currentStaff } = this.state;
     return (
-      <div class="table-responsive">
+      <div
+        class="table-responsive"
+        style={{
+          overflow: "visible",
+        }}
+      >
         <table
           className="table table-border "
           id="dataTable"
