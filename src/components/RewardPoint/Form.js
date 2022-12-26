@@ -24,7 +24,7 @@ class Form extends Component {
       point_introduce_customer: "",
       point_review: "",
       store_id: "",
-      ex: 100000,
+      ex: 1000000,
       percent_use_max_point: "",
       is_percent_use_max_point: false,
       bonus_point_bonus_product_to_agency: false,
