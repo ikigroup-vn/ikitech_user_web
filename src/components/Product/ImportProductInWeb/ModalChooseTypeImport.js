@@ -270,6 +270,7 @@ class ModalChooseTypeImport extends Component {
       };
       postMultiProduct(store_code, dataPostProducts);
     };
+    document.getElementById("import_file_iki").value = null;
     reader.readAsBinaryString(file);
   };
   render() {

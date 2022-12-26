@@ -49,3 +49,6 @@ export const fetchAllPointHistory = (
     null
   );
 };
+export const importAllCustomerFromXLSX = (store_code, data) => {
+  return callApi(`/store/${store_code}/all_customers`, "post", data);
+};
