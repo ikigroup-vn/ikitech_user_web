@@ -8,13 +8,15 @@ const ConditionFilterCustomerStyles = styled.div`
   display: flex;
   column-gap: 20px;
   max-height: 38px;
+
   .sidebar__conditions__dropdown__expression {
     height: 100%;
-    width: 30%;
+    width: 80px;
+    flex-shrink: 0;
     select {
-      border: 1px solid #d1d3e2;
+      border: 1px solid transparent;
+      border-bottom-color: #d1d3e2;
       padding: 0.375rem 0.75rem;
-      border-radius: 0.35rem;
       width: 100%;
       outline: none;
       height: 38px;
@@ -22,12 +24,12 @@ const ConditionFilterCustomerStyles = styled.div`
     }
   }
   .sidebar__conditions__dropdown__value {
-    width: 100%;
+    width: 180px;
     & > div {
       display: flex;
-      border: 1px solid #d1d3e2;
+      border: 1px solid transparent;
+      border-bottom-color: #d1d3e2;
       padding: 0.375rem 0.75rem;
-      border-radius: 0.35rem;
       height: 38px;
 
       input {
@@ -45,9 +47,9 @@ const ConditionFilterCustomerStyles = styled.div`
     }
     select {
       width: 100%;
-      border: 1px solid #d1d3e2;
+      border: 1px solid transparent;
+      border-bottom-color: #d1d3e2;
       padding: 0.375rem 0.75rem;
-      border-radius: 0.35rem;
       height: 38px;
       outline: none;
     }
