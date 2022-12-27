@@ -195,8 +195,8 @@ class Table extends Component {
                 >
                   <span>
                     {data.balance < 0
-                      ? "-" + helper.formatNumberV2(data.balance) + " VND"
-                      : helper.formatNumberV2(data.balance) + " VND"}
+                      ? "-" + format(Number(data.balance))
+                      : format(Number(data.balance))}
                   </span>
                   <span>
                     <i className="fa fa-history"></i>
