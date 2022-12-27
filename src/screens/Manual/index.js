@@ -25,6 +25,12 @@ const ManualStyles = styled.div`
       margin-bottom: 8px;
     }
   }
+  h2 {
+    font-size: 28px;
+  }
+  h3 {
+    font-size: 24px;
+  }
 `;
 
 class Manual extends Component {
@@ -94,17 +100,27 @@ class Manual extends Component {
                   </a>
                 </p>
                 <h3>1.2 Video hướng dẫn sử dụng IKITECH WEB</h3>
-                <div className="video">
+                <p>
+                  Video hướng dẫn:{" "}
+                  <a
+                    href="https://www.youtube.com/watch?v=TBf0rDEsIk8&list=PLDB1hwWRDPdDxSFv5tKBHBvQ1OpyE_4Io"
+                    alt="link_suggest"
+                    target={"_blank"}
+                  >
+                    https://www.youtube.com/watch?v=TBf0rDEsIk8&list=PLDB1hwWRDPdDxSFv5tKBHBvQ1OpyE_4Io
+                  </a>
+                </p>
+                {/* <div className="video">
                   <iframe
                     width="560"
                     height="315"
-                    src="https://www.youtube.com/embed/5oOMU5Jqtjc"
+                    src="https://www.youtube.com/embed/TBf0rDEsIk8"
                     title="YouTube video player"
                     frameborder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen
                   ></iframe>
-                </div>
+                </div> */}
                 <div className="appIki">
                   <h2>2. Hướng dẫn sử dụng APP IKITECH</h2>
                   <h3>2.1 Tài liệu hướng dẫn sử dụng APP IKITECH</h3>
@@ -119,17 +135,27 @@ class Manual extends Component {
                     </a>
                   </p>
                   <h3>2.2 Video hướng dẫn sử dụng APP IKITECH</h3>
-                  <div className="video">
+                  <p>
+                    Video hướng dẫn:{" "}
+                    <a
+                      href="https://www.youtube.com/watch?v=CzibaqyfRiQ&list=PLDB1hwWRDPdCP5dsAZitpy1PDfT9ZxNTm"
+                      alt="link_suggest"
+                      target={"_blank"}
+                    >
+                      https://www.youtube.com/watch?v=CzibaqyfRiQ&list=PLDB1hwWRDPdCP5dsAZitpy1PDfT9ZxNTm
+                    </a>
+                  </p>
+                  {/* <div className="video">
                     <iframe
                       width="560"
                       height="315"
-                      src="https://www.youtube.com/embed/TBf0rDEsIk8"
+                      src="https://www.youtube.com/embed/CzibaqyfRiQ"
                       title="YouTube video player"
                       frameborder="0"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowfullscreen
                     ></iframe>
-                  </div>
+                  </div> */}
                   <div>
                     <p>
                       Những ưu điểm nổi trội của App IKITECH Đáp ứng như cầu bán
