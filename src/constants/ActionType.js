@@ -343,6 +343,7 @@ export const TYPE_COMPARE_PROVINCE = 7; // tỉnh,
 export const TYPE_COMPARE_DATE_REG = 8; // ngày đăng ký
 export const TYPE_COMPARE_CTV = 9; // cộng tác viên
 export const TYPE_COMPARE_AGENCY = 10; // Đại lý
+export const TYPE_COMPARE_GROUP_CUSTOMER = 11; // Theo nhóm khách hàng
 
 // HISTORY OPERATION
 export const GET_HISTORY_OPERATION = "GET_HISTORY_OPERATION";
