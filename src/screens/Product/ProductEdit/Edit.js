@@ -115,6 +115,13 @@ class ProductEdit extends Component {
       var formdata = { ...prevState.form };
       formdata.content_for_collaborator = data.txtContentC;
       formdata.description = data.txtContent;
+
+      return { form: formdata };
+    });
+  };
+  handleDataFromCustomizeSEO = (data) => {
+    this.setState((prevState, props) => {
+      var formdata = { ...prevState.form };
       formdata.seo_title = data.txtSeoTitle;
       formdata.seo_description = data.txtSeoDescription;
 
@@ -661,7 +668,7 @@ class ProductEdit extends Component {
               <div class="row">
                 <SeoOption
                   product={product}
-                  handleDataFromContent={this.handleDataFromContent}
+                  handleDataFromContent={this.handleDataFromCustomizeSEO}
                 />
               </div>
             </div>
