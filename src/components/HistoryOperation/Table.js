@@ -49,7 +49,6 @@ class Table extends PureComponent {
       >
         <option
           value=""
-          disabled
           style={{
             fontWeight: "600",
           }}
@@ -57,13 +56,15 @@ class Table extends PureComponent {
           Chức năng
         </option>
         <option value={Types.FUNCTION_TYPE_PRODUCT}>Sản phẩm</option>
-        <option value={Types.FUNCTION_TYPE_INVENTORY}>Hàng tồn kho</option>
+        <option value={Types.FUNCTION_TYPE_INVENTORY}>Kho</option>
         <option value={Types.FUNCTION_TYPE_CATEGORY_PRODUCT}>
-          Loại sản phẩm
+          Danh mục sản phẩm
         </option>
-        <option value={Types.FUNCTION_TYPE_CATEGORY_POST}>Thêm danh mục</option>
+        <option value={Types.FUNCTION_TYPE_CATEGORY_POST}>
+          Danh mục tin tức
+        </option>
         <option value={Types.FUNCTION_TYPE_ORDER}>Đơn hàng</option>
-        <option value={Types.FUNCTION_TYPE_THEME}>Mẫu</option>
+        <option value={Types.FUNCTION_TYPE_THEME}>Giao diện</option>
         <option value={Types.FUNCTION_TYPE_PROMOTION}>Khuyến mãi</option>
       </select>
     );
@@ -83,7 +84,6 @@ class Table extends PureComponent {
       >
         <option
           value=""
-          disabled
           style={{
             fontWeight: "600",
           }}
@@ -91,7 +91,7 @@ class Table extends PureComponent {
           Thao tác
         </option>
         <option value={Types.OPERATION_ACTION_ADD}>Thêm</option>
-        <option value={Types.OPERATION_ACTION_UPDATE}>Sửa</option>
+        <option value={Types.OPERATION_ACTION_UPDATE}>Cập nhập</option>
         <option value={Types.OPERATION_ACTION_DELETE}>Xóa</option>
         <option value={Types.OPERATION_ACTION_CANCEL}>Hủy</option>
       </select>
@@ -128,7 +128,13 @@ class Table extends PureComponent {
         },
       ];
     }, []);
-    return options;
+    return [
+      {
+        value: "",
+        label: "Nhân viên",
+      },
+      ...options,
+    ];
   };
   handleChangeStaff = (event) => {
     this.setCurrentStaff(event);

@@ -503,6 +503,12 @@ class ProductCreate extends Component {
       var formdata = { ...prevState.form };
       formdata.content_for_collaborator = data.txtContentC;
       formdata.description = data.txtContent;
+      return { form: formdata };
+    });
+  };
+  handleDataFromCustomizeSEO = (data) => {
+    this.setState((prevState, props) => {
+      var formdata = { ...prevState.form };
       formdata.seo_description = data.txtSeoDescription;
       formdata.seo_title = data.txtSeoTitle;
       return { form: formdata };
@@ -665,7 +671,9 @@ class ProductCreate extends Component {
             <div class="card-header title_content">Tối ưu SEO</div>
             <div class="card-body" style={{ padding: "0.8rem" }}>
               <div class="row">
-                <SeoOption handleDataFromContent={this.handleDataFromContent} />
+                <SeoOption
+                  handleDataFromContent={this.handleDataFromCustomizeSEO}
+                />
               </div>
             </div>
           </div>
