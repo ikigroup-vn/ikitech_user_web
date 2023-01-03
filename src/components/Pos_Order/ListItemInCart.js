@@ -133,10 +133,15 @@ class ListItemInCart extends Component {
         distributes: nextState.modalAdd.distributesProduct,
       };
       formDataAdd = {
-        distribute_name: formDataAdd?.distributes[0]?.name,
-        element_distribute_name: formDataAdd?.distributes[0]?.value,
-        sub_element_distribute_name:
-          formDataAdd?.distributes[0]?.sub_element_distributes,
+        distribute_name: formDataAdd?.distributes
+          ? formDataAdd?.distributes[0]?.name
+          : "",
+        element_distribute_name: formDataAdd?.distributes
+          ? formDataAdd?.distributes[0]?.value
+          : "",
+        sub_element_distribute_name: formDataAdd?.distributes
+          ? formDataAdd?.distributes[0]?.sub_element_distributes
+          : "",
         line_item_id: formDataAdd.line_item_id,
         product_id: formDataAdd.product_id,
         quantity: formDataAdd.quantity,
