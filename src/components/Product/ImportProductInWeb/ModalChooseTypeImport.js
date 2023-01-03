@@ -201,8 +201,12 @@ class ModalChooseTypeImport extends Component {
           };
           newDistributes.push(dataDistribute);
         } else {
-          const nameProductDistributeTemp = product[9].split(",")[0];
-          const nameProductSubDistributeTemp = product[9].split(",")[1];
+          const nameProductDistributeTemp = product[9]
+            ? product[9].split(",")[0]
+            : "";
+          const nameProductSubDistributeTemp = product[9]
+            ? product[9].split(",")[1]
+            : "";
           const imagesProductDistributeTemp = !product[12]
             ? []
             : product[12].split(",");
@@ -268,6 +272,7 @@ class ModalChooseTypeImport extends Component {
         allow_skip_same_name,
         list: newProducts,
       };
+      console.log(JSON.stringify(dataPostProducts));
       postMultiProduct(store_code, dataPostProducts);
     };
     document.getElementById("import_file_iki").value = null;
