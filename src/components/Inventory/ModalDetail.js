@@ -116,6 +116,14 @@ class ModalDetail extends Component {
 
   handleClickElement = (nameElement, price, index, id) => {
     var { sub_element_distributes } = this.state.elementObject;
+    console.log("sub_element_distributes name", nameElement);
+    console.log("sub_element_distributes price", price);
+    console.log("sub_element_distributes index", index);
+    console.log("sub_element_distributes id", id);
+    console.log(
+      "ModalDetail ~ sub_element_distributes",
+      sub_element_distributes
+    );
     if (this.props.modal.discountProduct) {
       var { value } = this.props.modal.discountProduct;
       this.setState({
