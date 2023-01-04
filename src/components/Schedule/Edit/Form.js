@@ -120,8 +120,19 @@ class Form extends Component {
 
   onChange = (e) => {
     var { value, name } = e.target;
+
     if (name == "type_schedule") {
-      this.setState({ [name]: value, time_of_day: "00:00" });
+      if (value == "0") {
+        this.setState({
+          [name]: value,
+          time_run: "",
+        });
+      } else {
+        this.setState({
+          [name]: value,
+          time_of_day: "00:00",
+        });
+      }
     } else {
       this.setState({ [name]: value });
     }
@@ -276,6 +287,11 @@ class Form extends Component {
   };
 
   onChangeDate = (e, name) => {
+    console.log(
+      `name:: ${name}, e:: ${moment(e, "DD-MM-YYYY HH:mm:ss").format(
+        "DD-MM-YYYY HH:mm:ss"
+      )}`
+    );
     var time = "";
     switch (name) {
       case "time_run":

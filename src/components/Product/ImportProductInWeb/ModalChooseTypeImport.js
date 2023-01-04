@@ -107,7 +107,7 @@ class ModalChooseTypeImport extends Component {
       dataXlsxEmptyTitle.forEach((product, index) => {
         const newProduct = {};
 
-        if (product[6] === "false") {
+        if (product[6] === "false" || product[6] === "FALSE") {
           newProduct["name"] = product[0];
           newProduct["sku"] = product[1];
           newProduct["barcode"] = product[2];
@@ -118,7 +118,8 @@ class ModalChooseTypeImport extends Component {
           newProduct["status"] = product[17] == "true" ? 0 : -1;
           newProduct["seo_title"] = product[18];
           newProduct["seo_description"] = product[19];
-          newProduct["check_inventory"] = product[3] === "true" ? true : false;
+          newProduct["check_inventory"] =
+            product[3] === "true" || product[3] === "TRUE" ? true : false;
           // Hanlde Categories
           newProduct["list_category"] = product[4]
             ? product[4].split(";").reduce((prevCategory, currentCategory) => {
@@ -153,7 +154,7 @@ class ModalChooseTypeImport extends Component {
           newProduct["import_price"] = !product[11] ? 0 : Number(product[11]);
 
           newProducts.push(newProduct);
-        } else if (product[6] === "true") {
+        } else if (product[6] === "true" || product[6] === "TRUE") {
           newProductHasDistribute["name"] = product[0];
           newProductHasDistribute["sku"] = product[1];
           newProductHasDistribute["barcode"] = product[2];
@@ -165,7 +166,7 @@ class ModalChooseTypeImport extends Component {
           newProductHasDistribute["seo_title"] = product[18];
           newProductHasDistribute["seo_description"] = product[19];
           newProductHasDistribute["check_inventory"] =
-            product[3] === "true" ? true : false;
+            product[3] === "true" || product[3] === "TRUE" ? true : false;
           // Hanlde Categories
           newProductHasDistribute["list_category"] = product[4]
             ? product[4].split(";").reduce((prevCategory, currentCategory) => {
@@ -215,12 +216,12 @@ class ModalChooseTypeImport extends Component {
             positionDistributeProduct++;
             newDistributes[0]["element_distributes"].push({
               name: nameProductDistributeTemp,
-              price: nameProductSubDistributeTemp
+              price: nameProductDistributeTemp
                 ? !product[10]
                   ? 0
                   : Number(product[10])
                 : 0,
-              import_price: nameProductSubDistributeTemp
+              import_price: nameProductDistributeTemp
                 ? !product[11]
                   ? 0
                   : Number(product[11])
@@ -272,7 +273,6 @@ class ModalChooseTypeImport extends Component {
         allow_skip_same_name,
         list: newProducts,
       };
-      console.log(JSON.stringify(dataPostProducts));
       postMultiProduct(store_code, dataPostProducts);
     };
     document.getElementById("import_file_iki").value = null;
