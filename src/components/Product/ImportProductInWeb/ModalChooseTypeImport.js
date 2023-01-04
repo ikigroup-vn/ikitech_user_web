@@ -152,7 +152,6 @@ class ModalChooseTypeImport extends Component {
           newProduct["images"] = !product[12] ? [] : product[12].split(",");
           newProduct["price"] = !product[10] ? 0 : Number(product[10]);
           newProduct["import_price"] = !product[11] ? 0 : Number(product[11]);
-
           newProducts.push(newProduct);
         } else if (product[6] === "true" || product[6] === "TRUE") {
           newProductHasDistribute["name"] = product[0];
@@ -201,7 +200,7 @@ class ModalChooseTypeImport extends Component {
             element_distributes: [],
           };
           newDistributes.push(dataDistribute);
-        } else {
+        } else if (product[9]) {
           const nameProductDistributeTemp = product[9]
             ? product[9].split(",")[0]
             : "";

@@ -59,6 +59,7 @@ class ModalDetail extends Component {
                 this.setState({
                   elementObject: elment,
                   messageErr: "",
+                  afterChoosePrice: "",
                 });
             }
           } else {
@@ -71,6 +72,7 @@ class ModalDetail extends Component {
                 this.setState({
                   elementObject: elments,
                   messageErr: "",
+                  afterChoosePrice: "",
                 });
             }
           }
@@ -114,16 +116,8 @@ class ModalDetail extends Component {
     }
   };
 
-  handleClickElement = (nameElement, price, index, id) => {
+  handleClickElement = (nameElement, import_price, index, id) => {
     var { sub_element_distributes } = this.state.elementObject;
-    console.log("sub_element_distributes name", nameElement);
-    console.log("sub_element_distributes price", price);
-    console.log("sub_element_distributes index", index);
-    console.log("sub_element_distributes id", id);
-    console.log(
-      "ModalDetail ~ sub_element_distributes",
-      sub_element_distributes
-    );
     if (this.props.modal.discountProduct) {
       var { value } = this.props.modal.discountProduct;
       this.setState({
@@ -156,9 +150,15 @@ class ModalDetail extends Component {
           .indexOf(nameElement);
         var sub_elements = sub_element_distributes[indexDistributes];
         this.setState({
-          afterChoosePrice: sub_elements.cost_of_capital,
+          afterChoosePrice:
+            this.props.modal.distributes[0].element_distributes[
+              this.state.distributeSelected
+            ].sub_element_distributes[index].import_price,
           priceBeforeDiscount: sub_elements.price,
-          quantityInStock: sub_elements.stock,
+          quantityInStock:
+            this.props.modal.distributes[0].element_distributes[
+              this.state.distributeSelected
+            ].sub_element_distributes[index].quantity_in_stock,
           idElement: id,
           messageErr: "",
         });
@@ -301,14 +301,10 @@ class ModalDetail extends Component {
   render() {
     var inforProduct = this.props.modal;
     var itemParent =
-      inforProduct &&
-      inforProduct.inventoryProduct &&
-      inforProduct.inventoryProduct.distributes !== null &&
-      inforProduct.inventoryProduct.distributes.length > 0
-        ? inforProduct.inventoryProduct.distributes[0]
-        : [];
+      inforProduct.distributes?.length > 0 ? inforProduct.distributes[0] : [];
 
     console.log("123:", this.props.modal);
+    console.log("itemParent:", itemParent);
     console.log(this.state);
     return (
       <div class="modal" id="modalDetails">
@@ -464,7 +460,7 @@ class ModalDetail extends Component {
                                         itemParent.name,
                                         index,
                                         itemChild.id,
-                                        itemChild.stock
+                                        itemChild.quantity_in_stock
                                       )
                                     }
                                   >
@@ -499,7 +495,7 @@ class ModalDetail extends Component {
                                 onClick={() =>
                                   this.handleClickElement(
                                     itemChild.name,
-                                    itemChild.price,
+                                    itemChild.import_price,
                                     index,
                                     itemChild.id
                                   )
