@@ -45,7 +45,7 @@ class Product extends Component {
       },
       searchValue: "",
       importData: [],
-      allow_skip_same_name: false,
+      allow_skip_same_name: true,
       page: 1,
       numPage: 20,
       percent_col: 0,

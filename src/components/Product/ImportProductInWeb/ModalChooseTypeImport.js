@@ -16,7 +16,7 @@ const ModalChooseTypeImportStyles = styled.div`
       column-gap: 10px;
     }
     .modalImport__override {
-      margin-top: 15px;
+      margin-bottom: 15px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -36,9 +36,7 @@ const ModalChooseTypeImportStyles = styled.div`
 class ModalChooseTypeImport extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      isConfirmed: false,
-    };
+    this.state = {};
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -48,16 +46,9 @@ class ModalChooseTypeImport extends Component {
       !shallowEqual(messageImport, nextProps.messageImport)
     ) {
       setOpenModal(false);
-      this.setIsConfirmed(false);
     }
 
     return true;
-  }
-
-  setIsConfirmed(isConfirmed) {
-    this.setState({
-      isConfirmed,
-    });
   }
 
   handleImportOutSide = () => {
@@ -311,11 +302,9 @@ class ModalChooseTypeImport extends Component {
   handleCloseModal = (isClosed) => {
     const { setOpenModal } = this.props;
     setOpenModal(isClosed);
-    this.setIsConfirmed(isClosed);
   };
   render() {
-    const { openModal } = this.props;
-    const { isConfirmed } = this.state;
+    const { openModal, allow_skip_same_name } = this.props;
     return (
       <ModalCustom
         title="Chọn loại import"
@@ -333,43 +322,31 @@ class ModalChooseTypeImport extends Component {
               hidden
               onChange={this.handleChangeFile}
             />
-            {isConfirmed ? (
-              <div className="modalImport__btn">
-                <button
-                  className="btn btn-outline-success"
-                  onClick={this.handleImportIki}
-                >
-                  Import từ IKITECH
-                </button>
-                <button
-                  className="btn btn-outline-primary"
-                  onClick={this.handleImportOutSide}
-                >
-                  Import từ bên ngoài
-                </button>
-              </div>
-            ) : (
-              <>
-                <div className="modalImport__override">
-                  <input
-                    type="checkbox"
-                    onChange={this.handleChangeOverride}
-                    id="overridePermission"
-                  />
-                  <label for="overridePermission">
-                    Cho phép bỏ qua các sản phẩm trùng tên
-                  </label>
-                </div>
-                <div className="modalImport__confirm">
-                  <button
-                    className="btn btn-primary"
-                    onClick={() => this.setIsConfirmed(true)}
-                  >
-                    Xác nhận
-                  </button>
-                </div>
-              </>
-            )}
+            <div className="modalImport__override">
+              <input
+                type="checkbox"
+                onChange={this.handleChangeOverride}
+                id="overridePermission"
+                checked={allow_skip_same_name}
+              />
+              <label for="overridePermission">
+                Cho phép bỏ qua các sản phẩm trùng tên
+              </label>
+            </div>
+            <div className="modalImport__btn">
+              <button
+                className="btn btn-outline-success"
+                onClick={this.handleImportIki}
+              >
+                Import từ IKITECH
+              </button>
+              <button
+                className="btn btn-outline-primary"
+                onClick={this.handleImportOutSide}
+              >
+                Import từ bên ngoài
+              </button>
+            </div>
           </div>
         </ModalChooseTypeImportStyles>
       </ModalCustom>
