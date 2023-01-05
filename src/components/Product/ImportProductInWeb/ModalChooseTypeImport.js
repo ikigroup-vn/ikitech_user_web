@@ -25,13 +25,20 @@ const ModalChooseTypeImportStyles = styled.div`
         margin-bottom: 0;
       }
     }
+    .modalImport__confirm {
+      display: flex;
+      justify-content: center;
+      padding: 10px 0;
+    }
   }
 `;
 
 class ModalChooseTypeImport extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      isConfirmed: false,
+    };
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -41,9 +48,16 @@ class ModalChooseTypeImport extends Component {
       !shallowEqual(messageImport, nextProps.messageImport)
     ) {
       setOpenModal(false);
+      this.setIsConfirmed(false);
     }
 
     return true;
+  }
+
+  setIsConfirmed(isConfirmed) {
+    this.setState({
+      isConfirmed,
+    });
   }
 
   handleImportOutSide = () => {
@@ -109,7 +123,7 @@ class ModalChooseTypeImport extends Component {
       dataXlsxEmptyTitle.forEach((product, index) => {
         const newProduct = {};
 
-        if (product[13]?.toString().toLowerCase() === "không") {
+        if (product[13]?.toString().toLowerCase().trim() === "không") {
           newProduct["name"] = product[0];
           newProduct["sku"] = product[1];
           newProduct["barcode"] = product[2];
@@ -118,11 +132,11 @@ class ModalChooseTypeImport extends Component {
           newProduct["description"] = product[8];
           newProduct["content_for_collaborator"] = product[9];
           newProduct["status"] =
-            product[10]?.toString().toLowerCase() === "hiện" ? 0 : -1;
+            product[10]?.toString().toLowerCase().trim() === "hiện" ? 0 : -1;
           newProduct["seo_title"] = product[11];
           newProduct["seo_description"] = product[12];
           newProduct["check_inventory"] =
-            product[3]?.toString().toLowerCase() === "có" ? true : false;
+            product[3]?.toString().toLowerCase().trim() === "có" ? true : false;
           // Hanlde Categories
           newProduct["list_category"] = product[4]
             ? product[4]
@@ -160,7 +174,7 @@ class ModalChooseTypeImport extends Component {
           newProduct["price"] = !product[17] ? 0 : Number(product[17]);
           newProduct["import_price"] = !product[18] ? 0 : Number(product[18]);
           newProducts.push(newProduct);
-        } else if (product[13]?.toString().toLowerCase() === "có") {
+        } else if (product[13]?.toString().toLowerCase().trim() === "có") {
           newProductHasDistribute["name"] = product[0];
           newProductHasDistribute["sku"] = product[1];
           newProductHasDistribute["barcode"] = product[2];
@@ -169,11 +183,14 @@ class ModalChooseTypeImport extends Component {
           newProductHasDistribute["description"] = product[8];
           newProductHasDistribute["content_for_collaborator"] = product[9];
           newProductHasDistribute["status"] =
-            product[10]?.toString().toLowerCase() === "hiện" ? 0 : -1;
+            product[10]?.toString().toLowerCase().trim() === "hiện" ? 0 : -1;
           newProductHasDistribute["seo_title"] = product[11];
           newProductHasDistribute["seo_description"] = product[12];
           newProductHasDistribute["check_inventory"] =
-            product[3]?.toString().toLowerCase() === "có" ? true : false;
+            product[3]?.toString().toLowerCase().trim() === "có" ? true : false;
+          newProductHasDistribute["images"] = !product[19]
+            ? []
+            : product[19].split(",");
           // Hanlde Categories
           newProductHasDistribute["list_category"] = product[4]
             ? product[4]
@@ -220,7 +237,7 @@ class ModalChooseTypeImport extends Component {
             ? product[16]?.toString().split(",")[1]
             : "";
           const imagesProductDistributeTemp = !product[19]
-            ? []
+            ? ""
             : product[19]?.split(",");
           isDistributeProduct = true;
           if (nameElementDistribute !== nameProductDistributeTemp) {
@@ -237,7 +254,9 @@ class ModalChooseTypeImport extends Component {
                   ? 0
                   : Number(product[18])
                 : 0,
-              images: imagesProductDistributeTemp,
+              image_url: imagesProductDistributeTemp
+                ? imagesProductDistributeTemp[0]
+                : "",
               element_sub_distributes: [],
             });
             nameElementDistribute = nameProductDistributeTemp;
@@ -289,13 +308,19 @@ class ModalChooseTypeImport extends Component {
     document.getElementById("import_file_iki").value = null;
     reader.readAsBinaryString(file);
   };
+  handleCloseModal = (isClosed) => {
+    const { setOpenModal } = this.props;
+    setOpenModal(isClosed);
+    this.setIsConfirmed(isClosed);
+  };
   render() {
-    const { openModal, setOpenModal } = this.props;
+    const { openModal } = this.props;
+    const { isConfirmed } = this.state;
     return (
       <ModalCustom
         title="Chọn loại import"
         openModal={openModal}
-        setOpenModal={setOpenModal}
+        setOpenModal={this.handleCloseModal}
         style={{
           height: "200px",
         }}
@@ -308,30 +333,43 @@ class ModalChooseTypeImport extends Component {
               hidden
               onChange={this.handleChangeFile}
             />
-            <div className="modalImport__btn">
-              <button
-                className="btn btn-outline-success"
-                onClick={this.handleImportIki}
-              >
-                Import từ IKITECH
-              </button>
-              <button
-                className="btn btn-outline-primary"
-                onClick={this.handleImportOutSide}
-              >
-                Import từ bên ngoài
-              </button>
-            </div>
-            <div className="modalImport__override">
-              <input
-                type="checkbox"
-                onChange={this.handleChangeOverride}
-                id="overridePermission"
-              />
-              <label for="overridePermission">
-                Cho phép bỏ qua các sản phẩm trùng tên
-              </label>
-            </div>
+            {isConfirmed ? (
+              <div className="modalImport__btn">
+                <button
+                  className="btn btn-outline-success"
+                  onClick={this.handleImportIki}
+                >
+                  Import từ IKITECH
+                </button>
+                <button
+                  className="btn btn-outline-primary"
+                  onClick={this.handleImportOutSide}
+                >
+                  Import từ bên ngoài
+                </button>
+              </div>
+            ) : (
+              <>
+                <div className="modalImport__override">
+                  <input
+                    type="checkbox"
+                    onChange={this.handleChangeOverride}
+                    id="overridePermission"
+                  />
+                  <label for="overridePermission">
+                    Cho phép bỏ qua các sản phẩm trùng tên
+                  </label>
+                </div>
+                <div className="modalImport__confirm">
+                  <button
+                    className="btn btn-primary"
+                    onClick={() => this.setIsConfirmed(true)}
+                  >
+                    Xác nhận
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </ModalChooseTypeImportStyles>
       </ModalCustom>
