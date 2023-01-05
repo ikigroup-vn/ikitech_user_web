@@ -102,7 +102,7 @@ class ShowData extends Component {
                     <td className="item">
                       <img
                         src={
-                          element.image_url != null
+                          element.image_url
                             ? element.image_url
                             : Env.IMG_NOT_FOUND
                         }
@@ -173,9 +173,7 @@ class ShowData extends Component {
                 <td className="item">
                   <img
                     src={
-                      element.image_url != null
-                        ? element.image_url
-                        : Env.IMG_NOT_FOUND
+                      element.image_url ? element.image_url : Env.IMG_NOT_FOUND
                     }
                     alt=""
                     width="40px"
