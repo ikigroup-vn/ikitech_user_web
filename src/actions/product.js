@@ -169,15 +169,15 @@ export const fetchAllListProduct = (store_code, search) => {
                   quantity_in_stock: item.quantity_in_stock,
                   categories: item.categories,
                   attributes: item.attributes,
-                  distributes: item.distributes,
                   percent_collaborator: item.percent_collaborator,
                   point_for_agency: item.point_for_agency,
                   full_description: item.full_description,
                   content_for_collaborator: item.content_for_collaborator,
-                  images: item.images,
                   status: item.status,
                   seo_title: item.seo_title,
                   seo_description: item.seo_description,
+                  distributes: item.distributes,
+                  images: item.images,
                 };
                 // eslint-disable-next-line no-loop-func
                 Object.entries(arangeKeyItem).forEach(([key, value], index) => {
@@ -276,7 +276,9 @@ export const fetchAllListProduct = (store_code, search) => {
                     newItem["Mã BARCODE"] = value;
                   }
                   if (key == "check_inventory") {
-                    newItem["Theo dõi kho"] = `${value}`;
+                    newItem["Theo dõi kho (Có/Không)"] = `${
+                      value ? "Có" : "Không"
+                    }`;
                   }
                   if (key == "point_for_agency") {
                     newItem["Xu cho đại lý"] = `${value ? value : 0}`;
@@ -285,7 +287,9 @@ export const fetchAllListProduct = (store_code, search) => {
                     newItem["Nội dung cho CTV"] = `${value ? value : ""}`;
                   }
                   if (key == "status") {
-                    newItem["Trạng thái"] = `${value == 0 ? "true" : "false"}`;
+                    newItem["Trạng thái (Ẩn/Hiện)"] = `${
+                      value == 0 ? "Hiện" : "Ẩn"
+                    }`;
                   }
                   if (key == "seo_title") {
                     newItem["Tiêu đề SEO"] = `${value ? value : ""}`;
@@ -340,7 +344,7 @@ export const fetchAllListProduct = (store_code, search) => {
                                 checkedDistributeExist === false &&
                                 checkedDistributeExist2 === false
                               ) {
-                                newItem["Có phân loại"] = "true";
+                                newItem["Có phân loại (Có/Không)"] = "Có";
                                 newItem["Phân loại chính"] =
                                   typeDistributeOrigin;
                                 newItem["Phân loại phụ"] = typeDistributeSub;
@@ -404,7 +408,7 @@ export const fetchAllListProduct = (store_code, search) => {
                             }
                           } else {
                             if (index == 0) {
-                              newItem["Có phân loại"] = "true";
+                              newItem["Có phân loại (Có/Không)"] = "Có";
                               newItem["Phân loại chính"] = typeDistributeOrigin;
                               newItem["Phân loại phụ"] = typeDistributeSub;
                               newItem["DS phân loại"] = "";
@@ -456,7 +460,7 @@ export const fetchAllListProduct = (store_code, search) => {
                         }
                       }
                     } else {
-                      newItem["Có phân loại"] = "false";
+                      newItem["Có phân loại (Có/Không)"] = "Không";
                       newItem["Phân loại chính"] = "";
                       newItem["Phân loại phụ"] = "";
                       newItem["DS phân loại"] = "";
@@ -548,7 +552,7 @@ export const fetchProductInventory = (store_code, branch_id, params) => {
                               checkedDistributeExist === false &&
                               checkedDistributeExist2 === false
                             ) {
-                              newItem["Có phân loại"] = "true";
+                              newItem["Có phân loại (Có/Không)"] = "Có";
                               newItem["DS phân loại"] = "";
                               newItem["Giá bán lẻ"] = "";
                               newItem["Giá vốn"] = "";
@@ -607,7 +611,7 @@ export const fetchProductInventory = (store_code, branch_id, params) => {
                           }
                         } else {
                           if (index == 0) {
-                            newItem["Có phân loại"] = "true";
+                            newItem["Có phân loại (Có/Không)"] = "Có";
                             newItem["DS phân loại"] = "";
                             newItem["Giá bán lẻ"] = "";
                             newItem["Giá vốn"] = "";
@@ -659,7 +663,7 @@ export const fetchProductInventory = (store_code, branch_id, params) => {
                       }
                     }
                   } else {
-                    newItem["Có phân loại"] = "false";
+                    newItem["Có phân loại (Có/Không)"] = "Không";
                     newItem["DS phân loại"] = "";
                     newItem["Giá bán lẻ"] = `${item.price ? item.price : "0"}`;
                     newItem[
