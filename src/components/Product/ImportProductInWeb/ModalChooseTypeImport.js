@@ -96,6 +96,8 @@ class ModalChooseTypeImport extends Component {
       }
       //Filter Data
       //Index: 0: "Tên sản phẩm", 1: "Mã SKU", 2: "Mã BARCODE", 3: "Theo dõi kho", 4: "Danh mục", 5: "Thuộc tính", 6: "Có phân loại", 7: "Phân loại chính", 8: "Phân loại phụ", 9: "DS phân loại", 10: "Giá bán lẻ", 11: "Giá nhập", 12: "Hình ảnh", 13: "Hoa hồng CTV (%)", 14: "Xu cho đại lý", 15: "Mô tả", 16: "Nội dung cho CTV", 17: "Trạng thái", 18: "Tiêu đề SEO", 19: "Miêu tả SEO",
+
+      //Index: 0: "Tên sản phẩm", 1: "Mã SKU", 2: "Mã BARCODE", 3: "Theo dõi kho (Có/Không)", 4: "Danh mục", 5: "Thuộc tính", 6: "Hoa hồng CTV (%)", 7: "Xu cho đại lý",8: "Mô tả", 9: "Nội dung cho CTV", 10: "Trạng thái (Ẩn/Hiện)", 11: "Tiêu đề SEO", 12: "Miêu tả SEO", 13: "Có phân loại (Có/Không)", 14: "Phân loại chính", 15: "Phân loại phụ", 16: "DS phân loại", 17: "Giá bán lẻ", 18: "Giá nhập", 19: "Hình ảnh",
       const dataXlsxEmptyTitle = data.slice(1);
       const newProducts = [];
 
@@ -107,40 +109,45 @@ class ModalChooseTypeImport extends Component {
       dataXlsxEmptyTitle.forEach((product, index) => {
         const newProduct = {};
 
-        if (product[6] === "false" || product[6] === "FALSE") {
+        if (product[13]?.toString().toLowerCase() === "không") {
           newProduct["name"] = product[0];
           newProduct["sku"] = product[1];
           newProduct["barcode"] = product[2];
-          newProduct["percent_collaborator"] = product[13];
-          newProduct["point_for_agency"] = product[14];
-          newProduct["description"] = product[15];
-          newProduct["content_for_collaborator"] = product[16];
-          newProduct["status"] = product[17] == "true" ? 0 : -1;
-          newProduct["seo_title"] = product[18];
-          newProduct["seo_description"] = product[19];
+          newProduct["percent_collaborator"] = product[6];
+          newProduct["point_for_agency"] = product[7];
+          newProduct["description"] = product[8];
+          newProduct["content_for_collaborator"] = product[9];
+          newProduct["status"] =
+            product[10]?.toString().toLowerCase() === "hiện" ? 0 : -1;
+          newProduct["seo_title"] = product[11];
+          newProduct["seo_description"] = product[12];
           newProduct["check_inventory"] =
-            product[3] === "true" || product[3] === "TRUE" ? true : false;
+            product[3]?.toString().toLowerCase() === "có" ? true : false;
           // Hanlde Categories
           newProduct["list_category"] = product[4]
-            ? product[4].split(";").reduce((prevCategory, currentCategory) => {
-                const newCategory = {};
-                const childs = currentCategory.substring(
-                  currentCategory.indexOf("[") + 1,
-                  currentCategory.lastIndexOf("]")
-                );
+            ? product[4]
+                ?.toString()
+                .split(";")
+                .reduce((prevCategory, currentCategory) => {
+                  const newCategory = {};
+                  const childs = currentCategory.substring(
+                    currentCategory.indexOf("[") + 1,
+                    currentCategory.lastIndexOf("]")
+                  );
 
-                newCategory.name = currentCategory.split("[")[0];
-                newCategory.childs = !childs
-                  ? []
-                  : childs.split(",").map((childCategory) => childCategory);
-                return [...prevCategory, newCategory];
-              }, [])
+                  newCategory.name = currentCategory.split("[")[0];
+                  newCategory.childs = !childs
+                    ? []
+                    : childs.split(",").map((childCategory) => childCategory);
+                  return [...prevCategory, newCategory];
+                }, [])
             : [];
 
           // Handle Attributes
           newProduct["list_attribute"] = !product[5]
             ? []
             : product[5]
+                ?.toString()
                 .split(";")
                 .reduce((prevAttribute, currentAttribute) => {
                   const newAttribute = {};
@@ -149,44 +156,49 @@ class ModalChooseTypeImport extends Component {
                   return [...prevAttribute, newAttribute];
                 }, []);
           newProduct["distributes"] = [];
-          newProduct["images"] = !product[12] ? [] : product[12].split(",");
-          newProduct["price"] = !product[10] ? 0 : Number(product[10]);
-          newProduct["import_price"] = !product[11] ? 0 : Number(product[11]);
+          newProduct["images"] = !product[19] ? [] : product[19].split(",");
+          newProduct["price"] = !product[17] ? 0 : Number(product[17]);
+          newProduct["import_price"] = !product[18] ? 0 : Number(product[18]);
           newProducts.push(newProduct);
-        } else if (product[6] === "true" || product[6] === "TRUE") {
+        } else if (product[13]?.toString().toLowerCase() === "có") {
           newProductHasDistribute["name"] = product[0];
           newProductHasDistribute["sku"] = product[1];
           newProductHasDistribute["barcode"] = product[2];
-          newProductHasDistribute["percent_collaborator"] = product[13];
-          newProductHasDistribute["point_for_agency"] = product[14];
-          newProductHasDistribute["description"] = product[15];
-          newProductHasDistribute["content_for_collaborator"] = product[16];
-          newProductHasDistribute["status"] = product[17] == "true" ? 0 : -1;
-          newProductHasDistribute["seo_title"] = product[18];
-          newProductHasDistribute["seo_description"] = product[19];
+          newProductHasDistribute["percent_collaborator"] = product[6];
+          newProductHasDistribute["point_for_agency"] = product[7];
+          newProductHasDistribute["description"] = product[8];
+          newProductHasDistribute["content_for_collaborator"] = product[9];
+          newProductHasDistribute["status"] =
+            product[10]?.toString().toLowerCase() === "hiện" ? 0 : -1;
+          newProductHasDistribute["seo_title"] = product[11];
+          newProductHasDistribute["seo_description"] = product[12];
           newProductHasDistribute["check_inventory"] =
-            product[3] === "true" || product[3] === "TRUE" ? true : false;
+            product[3]?.toString().toLowerCase() === "có" ? true : false;
           // Hanlde Categories
           newProductHasDistribute["list_category"] = product[4]
-            ? product[4].split(";").reduce((prevCategory, currentCategory) => {
-                const newCategory = {};
-                const childs = currentCategory.substring(
-                  currentCategory.indexOf("[") + 1,
-                  currentCategory.lastIndexOf("]")
-                );
+            ? product[4]
+                ?.toString()
+                .split(";")
+                .reduce((prevCategory, currentCategory) => {
+                  const newCategory = {};
+                  const childs = currentCategory.substring(
+                    currentCategory.indexOf("[") + 1,
+                    currentCategory.lastIndexOf("]")
+                  );
 
-                newCategory.name = currentCategory.split("[")[0];
-                newCategory.childs = !childs
-                  ? []
-                  : childs.split(",").map((childCategory) => childCategory);
-                return [...prevCategory, newCategory];
-              }, [])
+                  newCategory.name = currentCategory.split("[")[0];
+                  newCategory.childs = !childs
+                    ? []
+                    : childs.split(",").map((childCategory) => childCategory);
+                  return [...prevCategory, newCategory];
+                }, [])
             : [];
 
           // Handle Attributes
           newProductHasDistribute["list_attribute"] = !product[5]
             ? []
             : product[5]
+                ?.toString()
                 .split(";")
                 .reduce((prevAttribute, currentAttribute) => {
                   const newAttribute = {};
@@ -195,35 +207,35 @@ class ModalChooseTypeImport extends Component {
                   return [...prevAttribute, newAttribute];
                 }, []);
           const dataDistribute = {
-            name: product[7],
-            sub_distributes_name: !product[8] ? "" : product[8],
+            name: product[14],
+            sub_distributes_name: !product[15] ? "" : product[15],
             element_distributes: [],
           };
           newDistributes.push(dataDistribute);
-        } else if (product[9]) {
-          const nameProductDistributeTemp = product[9]
-            ? product[9].split(",")[0]
+        } else if (product[16]) {
+          const nameProductDistributeTemp = product[16]
+            ? product[16]?.toString().split(",")[0]
             : "";
-          const nameProductSubDistributeTemp = product[9]
-            ? product[9].split(",")[1]
+          const nameProductSubDistributeTemp = product[16]
+            ? product[16]?.toString().split(",")[1]
             : "";
-          const imagesProductDistributeTemp = !product[12]
+          const imagesProductDistributeTemp = !product[19]
             ? []
-            : product[12].split(",");
+            : product[19]?.split(",");
           isDistributeProduct = true;
           if (nameElementDistribute !== nameProductDistributeTemp) {
             positionDistributeProduct++;
             newDistributes[0]["element_distributes"].push({
               name: nameProductDistributeTemp,
               price: nameProductDistributeTemp
-                ? !product[10]
+                ? !product[17]
                   ? 0
-                  : Number(product[10])
+                  : Number(product[17])
                 : 0,
               import_price: nameProductDistributeTemp
-                ? !product[11]
+                ? !product[18]
                   ? 0
-                  : Number(product[11])
+                  : Number(product[18])
                 : 0,
               images: imagesProductDistributeTemp,
               element_sub_distributes: [],
@@ -235,8 +247,8 @@ class ModalChooseTypeImport extends Component {
               "element_sub_distributes"
             ].push({
               name: nameProductSubDistributeTemp,
-              price: !product[10] ? 0 : Number(product[10]),
-              import_price: !product[11] ? 0 : Number(product[11]),
+              price: !product[17] ? 0 : Number(product[17]),
+              import_price: !product[18] ? 0 : Number(product[18]),
             });
           }
         }
