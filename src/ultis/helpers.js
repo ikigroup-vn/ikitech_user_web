@@ -88,7 +88,7 @@ export const isPhone = (phone) => {
   var vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
   return vnf_regex.test(phone);
 };
-function removeAscent(str) {
+export function removeAscent(str) {
   if (str === null || str === undefined) return str;
   str = str.toLowerCase();
   str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");

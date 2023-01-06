@@ -229,8 +229,7 @@ export const getTypeProductDistribute = (product) => {
 };
 
 export const findMaxImportPrice = (product) => {
-  var max = 0;
-  max = product.import_price;
+  var max = product.import_price || 0;
 
   if (getTypeProductDistribute(product) == NO_ELE_SUB) {
     return max;
@@ -238,7 +237,6 @@ export const findMaxImportPrice = (product) => {
   if (getTypeProductDistribute(product) == HAS_ELE) {
     if (product.distributes != null && product.distributes.length > 0) {
       const distributes = product.distributes[0];
-
       if (
         distributes != null &&
         distributes.element_distributes != null &&
@@ -263,15 +261,13 @@ export const findMaxImportPrice = (product) => {
       max =
         distributes.element_distributes[0].sub_element_distributes[0]
           .import_price;
-
       if (
         distributes != null &&
         distributes.element_distributes != null &&
         distributes.element_distributes.length > 0
       ) {
         const element_distributes = distributes.element_distributes;
-
-        for (var ele in element_distributes) {
+        for (var ele of element_distributes) {
           if (
             ele.sub_element_distributes != null &&
             ele.sub_element_distributes.length > 0

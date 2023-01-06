@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
+import { connect, shallowEqual } from "react-redux";
 import Sidebar from "../../../components/Partials/Sidebar";
 import Topbar from "../../../components/Partials/Topbar";
 import Footer from "../../../components/Partials/Footer";
@@ -9,14 +9,36 @@ import Table from "../../../components/Promotion/BonusProduct/Table";
 import Pagination from "../../../components/Promotion/BonusProduct/Pagination";
 import { Link, Redirect } from "react-router-dom";
 import * as bonusProductAction from "../../../actions/bonus_product";
-import ModalDelete from "../../../components/Promotion/BonusProduct/Delete/Modal"
-import ModalIsEnd from "../../../components/Promotion/BonusProduct/Edit/Modal"
+import ModalDelete from "../../../components/Promotion/BonusProduct/Delete/Modal";
+import ModalIsEnd from "../../../components/Promotion/BonusProduct/Edit/Modal";
 import NotAccess from "../../../components/Partials/NotAccess";
-import { getQueryParams } from "../../../ultis/helpers"
-
-
+import { getQueryParams, removeAscent } from "../../../ultis/helpers";
 import Loading from "../../Loading";
-
+import styled from "styled-components";
+const BonusProductStyles = styled.div`
+  .form-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row-reverse;
+    .form-inputSearch {
+      max-width: 25%;
+      width: 100%;
+      position: relative;
+      input {
+        width: 100%;
+        padding-right: 30px !important;
+      }
+      .search-icon {
+        position: absolute;
+        z-index: 10;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+    }
+  }
+`;
 class BonusProduct extends Component {
   constructor(props) {
     super(props);
@@ -25,24 +47,31 @@ class BonusProduct extends Component {
       modal: {
         table: "",
         id: "",
-        store_code: ""
+        store_code: "",
       },
-      modalIsEnd: {}
+      modalIsEnd: {},
+      searchValue: "",
+      bonusProducts: [],
     };
   }
 
+  setBonusProducts = (bonus) => {
+    this.setState({
+      bonusProducts: bonus,
+    });
+  };
   onChange = (e) => {
     var target = e.target;
     var name = target.name;
     var value = Number(target.value);
-    this.setState({ [name]: value });
+    this.setState({ [name]: value, searchValue: "" });
   };
   handleDelCallBack = (modal) => {
     this.setState({ modal: modal });
   };
   handleIsEndCallback = (modal) => {
     this.setState({ modalIsEnd: modal });
-  }
+  };
   shouldComponentUpdate(nextProps, nextState) {
     if (nextState.is_end !== this.state.is_end) {
       var { store_code } = this.props.match.params;
@@ -61,14 +90,18 @@ class BonusProduct extends Component {
           break;
       }
     }
+    const { bonusProducts } = this.props;
+    if (!shallowEqual(bonusProducts, nextProps.bonusProducts)) {
+      this.setBonusProducts(nextProps.bonusProducts);
+    }
     return true;
   }
 
   componentDidMount() {
-    var type = getQueryParams("type")
+    var type = getQueryParams("type");
     var { store_code } = this.props.match.params;
 
-    if (type && type == 0 || type == 1 || type == 2) {
+    if ((type && type == 0) || type == 1 || type == 2) {
       var type = Number(type);
 
       switch (type) {
@@ -84,86 +117,164 @@ class BonusProduct extends Component {
         default:
           break;
       }
-      this.setState({ is_end: type })
-    }
-    else {
+      this.setState({ is_end: type });
+    } else {
       this.props.fetchAllBonusProduct(this.props.match.params.store_code);
-
     }
   }
   componentDidUpdate() {
-    if (this.state.isLoading != true && typeof this.props.permission.product_list != "undefined") {
-      var permissions = this.props.permission
+    if (
+      this.state.isLoading != true &&
+      typeof this.props.permission.product_list != "undefined"
+    ) {
+      var permissions = this.props.permission;
 
+      var isShow = permissions.promotion;
 
-      var isShow = permissions.promotion
-
-
-      this.setState({ isLoading: true, insert: true, update: true, _delete: true, isShow })
-
+      this.setState({
+        isLoading: true,
+        insert: true,
+        update: true,
+        _delete: true,
+        isShow,
+      });
     }
   }
+  handleSearchValueChange = (e) => {
+    const value = e.target.value;
+    const { bonusProducts } = this.props;
+
+    this.setState({
+      searchValue: value,
+    });
+    if (value === "") {
+      this.setBonusProducts(bonusProducts);
+    } else {
+      let newBonusProducts = JSON.parse(JSON.stringify(bonusProducts));
+      if (Array.isArray(bonusProducts)) {
+        newBonusProducts = bonusProducts.filter((product) =>
+          removeAscent(product.name.trim().toLowerCase()).includes(
+            removeAscent(e.target.value.trim().toLowerCase())
+          )
+        );
+      } else {
+        newBonusProducts.data = bonusProducts.data.filter((product) =>
+          removeAscent(product.name.trim().toLowerCase()).includes(
+            removeAscent(e.target.value.trim().toLowerCase())
+          )
+        );
+      }
+      this.setBonusProducts(newBonusProducts);
+    }
+  };
   render() {
     var { params } = this.props.match;
-    var { is_end, modal, modalIsEnd } = this.state;
+    var {
+      is_end,
+      modal,
+      modalIsEnd,
+      searchValue,
+      bonusProducts: bonusProductsAll,
+    } = this.state;
     var { bonusProducts } = this.props;
     var displayPag = is_end == 0 ? "hide" : null;
-    var { store_code } = this.props.match.params
-    var { insert, update, _delete, isShow } = this.state
-    console.log(bonusProducts)
+    var { store_code } = this.props.match.params;
+    var { insert, update, _delete, isShow } = this.state;
+    console.log(bonusProducts);
     if (this.props.auth) {
       return (
-        <div id="wrapper">
+        <BonusProductStyles id="wrapper">
           <Sidebar store_code={store_code} />
           <div className="col-10 col-10-wrapper">
-
             <div id="content-wrapper" className="d-flex flex-column">
               <div id="content">
                 <Topbar store_code={params.store_code} />
-                {typeof isShow == "undefined" ? <div></div> : isShow == true ?
-
+                {typeof isShow == "undefined" ? (
+                  <div></div>
+                ) : isShow == true ? (
                   <div class="container-fluid">
                     <Alert
                       type={Types.ALERT_UID_STATUS}
                       alert={this.props.alert}
-
                     />
                     <div
-                      style={{ display: "flex", justifyContent: "space-between" }}
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
                     >
-                      <h3 class="h3 title_content mb-2 text-gray-800">Thưởng sản phẩm</h3>
+                      <h3 class="h3 title_content mb-2 text-gray-800">
+                        Thưởng sản phẩm
+                      </h3>
                       <Link
                         to={`/bonus_product/create/${params.store_code}`}
-                        class={`btn btn-info btn-icon-split  ${insert == true ? "show" : "hide"}`}
+                        class={`btn btn-info btn-icon-split  ${
+                          insert == true ? "show" : "hide"
+                        }`}
                       >
-                        <span style={{
-                          display: "flex", margin: "auto", height: "100%",
-                          "justify-content": "center",
-                          "align-items": "center"
-                        }} class="icon text-white-50">
+                        <span
+                          style={{
+                            display: "flex",
+                            margin: "auto",
+                            height: "100%",
+                            "justify-content": "center",
+                            "align-items": "center",
+                          }}
+                          class="icon text-white-50"
+                        >
                           <i class="fas fa-plus"></i>
                         </span>
-                        <span style={{ margin: "auto" }} class="text">Tạo CT thưởng sản phẩm</span>
+                        <span style={{ margin: "auto" }} class="text">
+                          Tạo CT thưởng sản phẩm
+                        </span>
                       </Link>
                     </div>
 
-                    <div class="form-group">
-
-                      <div class="col-sm-3" style={{ paddingLeft: "0px" }}>
-                        <select
-                          name="is_end"
-                          id="input"
-                          class="form-control"
-                          required="required"
-                          value={is_end}
-                          onChange={this.onChange}
-                        >                      <option value="0">Chuẩn bị diễn ra</option>
-
-                          <option value="2">Đang diễn ra</option>
-
-
-                          <option value="1">Đã kết thúc</option>
-                        </select>
+                    <div
+                      class="form-group"
+                      style={{
+                        marginTop: "20px",
+                      }}
+                    >
+                      <div className="form-header">
+                        <div
+                          class="col-sm-3"
+                          style={{
+                            paddingLeft: "0px",
+                            paddingRight: 0,
+                            maxWidth: "20%",
+                          }}
+                        >
+                          <select
+                            name="is_end"
+                            id="input"
+                            class="form-control"
+                            required="required"
+                            value={is_end}
+                            onChange={this.onChange}
+                          >
+                            {" "}
+                            <option value="0">Chuẩn bị diễn ra</option>
+                            <option value="2">Đang diễn ra</option>
+                            <option value="1">Đã kết thúc</option>
+                          </select>
+                        </div>
+                        <div className="form-inputSearch">
+                          {is_end != 1 ? (
+                            <>
+                              <input
+                                className="form-control"
+                                value={searchValue}
+                                onChange={this.handleSearchValueChange}
+                                type="text"
+                                placeholder="Tìm kiếm sản phẩm tặng thưởng..."
+                              />
+                              <span className="search-icon">
+                                <i className="fa fa-search"></i>
+                              </span>
+                            </>
+                          ) : null}
+                        </div>
                       </div>
                     </div>
 
@@ -174,18 +285,27 @@ class BonusProduct extends Component {
                         </h6>
                       </div>
                       <div class="card-body">
-                        <Table update={update} _delete={_delete} is_end={is_end} handleIsEndCallback={this.handleIsEndCallback} handleDelCallBack={this.handleDelCallBack} params={params} bonusProducts={bonusProducts} />
+                        <Table
+                          update={update}
+                          _delete={_delete}
+                          is_end={is_end}
+                          handleIsEndCallback={this.handleIsEndCallback}
+                          handleDelCallBack={this.handleDelCallBack}
+                          params={params}
+                          bonusProducts={bonusProductsAll}
+                        />
                         <Pagination
                           display={displayPag}
                           params={params}
-                          bonusProducts={bonusProducts}
+                          bonusProducts={bonusProductsAll}
                           store_code={store_code}
                         />
                       </div>
                     </div>
                   </div>
-                  : <NotAccess />}
-
+                ) : (
+                  <NotAccess />
+                )}
               </div>
               <ModalDelete modal={modal} />
               <ModalIsEnd modal={modalIsEnd} />
@@ -193,8 +313,7 @@ class BonusProduct extends Component {
               <Footer />
             </div>
           </div>
-        </div>
-
+        </BonusProductStyles>
       );
     } else if (this.props.auth === false) {
       return <Redirect to="/login" />;
@@ -210,7 +329,6 @@ const mapStateToProps = (state) => {
     bonusProducts: state.bonusProductReducers.bonusProduct.allBonusProduct,
     alert: state.bonusProductReducers.alert.alert_success,
     permission: state.authReducers.permission.data,
-
   };
 };
 const mapDispatchToProps = (dispatch, props) => {

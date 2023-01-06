@@ -9,7 +9,13 @@ import {
   formatNumber,
   contactOrNumber,
 } from "../../../../ultis/helpers";
+import styled from "styled-components";
 
+const ListProductStyles = styled.tr`
+  &:hover {
+    color: white !important;
+  }
+`;
 class ListProduct extends Component {
   constructor(props) {
     super(props);
@@ -97,7 +103,7 @@ class ListProduct extends Component {
             : null;
         var checked = this.checkExsit(list, data.id);
         var disaled = this.checkDisable(discounts, data.id);
-        var background_disable = disaled == true ? "#55b8c3" : "white";
+        var background_disable = disaled == true ? "#ff8d77" : "white";
         const {
           product_discount,
           min_price,
@@ -120,7 +126,7 @@ class ListProduct extends Component {
           discount_percent = product_discount.value;
         }
         return (
-          <tr
+          <ListProductStyles
             className={disaled == true ? "" : "hover-product"}
             style={{ background: background_disable }}
           >
@@ -237,7 +243,7 @@ class ListProduct extends Component {
                 {status_name}
               </span>
             </h5></td> */}
-          </tr>
+          </ListProductStyles>
         );
       });
     } else {
