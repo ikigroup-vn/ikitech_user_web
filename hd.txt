@@ -8,6 +8,7 @@ git add .
 git commit -m "Merge huy"
 git push
 npm run build
+
 rm -rf ../ikitech_user_build/*
 mv ./build/* ../ikitech_user_build/
 cd ../ikitech_user_build 
