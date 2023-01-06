@@ -142,8 +142,8 @@ async function saveAsExcel(value, nameFile = "Danh sách sản phẩm") {
     });
   });
 }
+
 export const fetchAllListProduct = (store_code, search) => {
-  console.log(search);
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
