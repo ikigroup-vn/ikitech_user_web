@@ -132,8 +132,10 @@ async function saveAsExcel(value, nameFile = "Danh sách sản phẩm") {
     const range = sheet1.usedRange();
     const endColumn = String.fromCharCode(64 + totalColumns);
     sheet1.row(1).style("bold", true);
-    sheet1.range("A1:" + endColumn + "1").style("fill", "F4D03F");
-    range.style("border", true);
+    sheet1.range("A1:M1").style("fill", "F4D03F");
+    sheet1.range("N1:" + endColumn + "1").style("fill", "92d050");
+    // range.style("border", true);
+    sheet1.freezePanes(1, 1);
     return workbook.outputAsync().then((res) => {
       console.log(res);
       saveAs(res, `${nameFile}.xlsx`);
