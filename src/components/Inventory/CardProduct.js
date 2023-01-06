@@ -50,7 +50,6 @@ class CardProduct extends Component {
     var result = null;
     if (products.length > 0) {
       result = products.map((data, index) => {
-        console.log("result=products.map ~ products", products);
         var maxPrice = findMaxImportPrice(data);
         var minPrice = findMinImportPrice(data);
 
