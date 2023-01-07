@@ -160,6 +160,11 @@ class Table extends Component {
     }
     return true;
   }
+  componentDidUpdate(prevProps, prevState) {
+    if (!shallowEqual(prevProps.customers, this.props.customers)) {
+      helper.loadExpandTable();
+    }
+  }
 
   showChatBox = (customerId, status) => {
     this.props.handleShowChatBox(customerId, status);
