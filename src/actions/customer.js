@@ -497,3 +497,41 @@ export const changeTypeRoleCustomer = (store_code, id, data) => {
       });
   };
 };
+
+export const changePointForCustomer = (store_code, id, data) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    customerApi
+      .changePointForCustomer(store_code, id, data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        if (res.data.code === 200) {
+          dispatch({
+            type: Types.ADD_SUB_POINT_CUSTOMER,
+            data: res.data.data,
+          });
+        }
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};

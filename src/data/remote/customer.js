@@ -52,3 +52,10 @@ export const fetchAllPointHistory = (
 export const importAllCustomerFromXLSX = (store_code, data) => {
   return callApi(`/store/${store_code}/all_customers`, "post", data);
 };
+export const changePointForCustomer = (store_code, id, data) => {
+  return callApi(
+    `/store/${store_code}/customers/${id}/add_sub_point`,
+    "post",
+    data
+  );
+};

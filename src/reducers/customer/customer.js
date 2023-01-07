@@ -42,6 +42,19 @@ export const customer = (state = initialState, action) => {
       copyState.allCustomer.data = newAllCustomers;
       newState.allCustomer = copyState.allCustomer;
       return newState;
+    case Types.ADD_SUB_POINT_CUSTOMER:
+      const cloneState = JSON.parse(JSON.stringify(newState));
+      const newAllCustomersChangePoint = [];
+      cloneState.allCustomer.data.forEach((customer) => {
+        if (customer.id === action.data.id) {
+          newAllCustomersChangePoint.push(action.data);
+          return;
+        }
+        newAllCustomersChangePoint.push(customer);
+      });
+      cloneState.allCustomer.data = newAllCustomersChangePoint;
+      newState.allCustomer = cloneState.allCustomer;
+      return newState;
     default:
       return newState;
   }
