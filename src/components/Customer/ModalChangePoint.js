@@ -1,18 +1,17 @@
 import { Component } from "react";
-import themeData from "../../../ultis/theme_data";
 import styled from "styled-components";
 import { connect } from "react-redux";
-import * as collaboratorAction from "../../../actions/collaborator";
-import { formatNumberV2 } from "../../../ultis/helpers";
+import * as customerAction from "../../actions/customer";
+import { formatNumberV2 } from "../../ultis/helpers";
 import moment from "moment";
 
-const ModalChangeBalanceStyles = styled.div`
+const ModalChangePointStyles = styled.div`
   background-color: rgba(0, 0, 0, 0.3);
-  .formBalance {
+  .formPoint {
     h5 {
       margin-bottom: 20px;
     }
-    .item-balance {
+    .item-point {
       display: flex;
       flex-direction: column;
       row-gap: 5px;
@@ -48,65 +47,57 @@ const ModalChangeBalanceStyles = styled.div`
   }
 `;
 
-class ModalChangeBalance extends Component {
+class ModalChangePoint extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      errorPrice: "",
-      balance: {
-        money: "",
+      errorPoint: "",
+      coin: {
+        point: "",
         reason: "",
       },
     };
   }
 
-  handleCloseModalDeleteOrder = () => {
-    this.props.setCollaboratorSelectedForChangeBalance({});
+  handleCloseModalChangePoint = () => {
+    this.props.setCustomerSelectedPoint({});
   };
   convertDate = (date) => {
     const newDate = moment(date).format("YYYY-MM-DD HH:mm:ss");
     return newDate;
   };
-  handleChangeBalance = (e) => {
+  handleChangePoint = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-    const { balance } = this.state;
+    const { coin } = this.state;
     this.setState({
-      balance: {
-        ...balance,
-        [name]: name === "money" ? formatNumberV2(value) : value,
+      coin: {
+        ...coin,
+        [name]: name === "point" ? formatNumberV2(value) : value,
       },
     });
   };
-  handleSubmitChangeBalance = (e) => {
-    const { balance } = this.state;
-    const {
-      changePriceBalance,
-      store_code,
-      collaboratorSelectedForChangeBalance,
-      isSub,
-    } = this.props;
+  handleSubmitChangePoint = (e) => {
+    const { coin } = this.state;
+    const { changePointForCustomer, store_code, customerSelectedPoint, isSub } =
+      this.props;
     e.preventDefault();
-    if (balance.money === "") {
-      this.setState({ errorPrice: "Vui lòng nhập số tiền!" });
+    if (coin.point === "" || Number(coin.point) === 0) {
+      this.setState({ errorPoint: "Vui lòng nhập số xu!" });
       return;
     }
-    const newBalance = {
-      ...balance,
+    const newPoint = {
+      ...coin,
       is_sub: isSub,
-      money: Number(balance.money.toString().replace(/\./g, "")),
+      point: Number(coin.point.toString().replace(/\./g, "")),
     };
-    changePriceBalance(
-      store_code,
-      collaboratorSelectedForChangeBalance.id,
-      newBalance
-    );
+    changePointForCustomer(store_code, customerSelectedPoint.id, newPoint);
   };
 
   render() {
-    const { collaboratorSelectedForChangeBalance } = this.props;
+    const { customerSelectedPoint } = this.props;
     return (
-      <ModalChangeBalanceStyles
+      <ModalChangePointStyles
         className="modal "
         style={{
           display: "block",
@@ -126,65 +117,62 @@ class ModalChangeBalance extends Component {
                   marginBottom: "0px",
                 }}
               >
-                Thay đổi số dư
+                Thay đổi số xu
               </h4>
               <button
                 type="button"
                 className="close"
-                onClick={this.handleCloseModalDeleteOrder}
+                onClick={this.handleCloseModalChangePoint}
               >
                 <span>&times;</span>
               </button>
             </div>
             <div class="modal-body">
               <form
-                onSubmit={this.handleSubmitChangeBalance}
-                className="formBalance"
+                onSubmit={this.handleSubmitChangePoint}
+                className="formPoint"
               >
                 <h5>
-                  Số dư hiện tại:{" "}
+                  Số xu hiện tại:{" "}
                   <span
                     style={{
                       fontWeight: "600",
                       fontSize: "18px",
                     }}
                   >
-                    {formatNumberV2(
-                      collaboratorSelectedForChangeBalance.balance
-                    )}{" "}
-                    VND
+                    {formatNumberV2(customerSelectedPoint.points)}{" "}
                   </span>
                 </h5>
-                <div className="item-balance">
-                  <label htmlFor="money">Tiền</label>
+                <div className="item-point">
+                  <label htmlFor="point">Xu</label>
                   <input
                     type="text"
-                    id="money"
-                    placeholder="0.00 ₫"
-                    name="money"
-                    value={this.state.balance.money}
-                    onChange={this.handleChangeBalance}
+                    id="point"
+                    placeholder="0"
+                    name="point"
+                    value={this.state.coin.point}
+                    onChange={this.handleChangePoint}
                   />
-                  {this.state.errorPrice !== "" ? (
+                  {this.state.errorPoint !== "" ? (
                     <div
                       style={{
                         fontSize: "14px",
                         color: "#e74c3c",
                       }}
                     >
-                      {this.state.errorPrice}
+                      {this.state.errorPoint}
                     </div>
                   ) : null}
                 </div>
-                <div className="item-balance">
+                <div className="item-point">
                   <label htmlFor="reason">Lý do</label>
                   <input
                     type="text"
                     id="reason"
                     placeholder="Lý do..."
                     name="reason"
-                    value={this.state.balance.reason}
-                    onChange={this.handleChangeBalance}
+                    value={this.state.coin.reason}
+                    onChange={this.handleChangePoint}
                   />
                 </div>
                 <div
@@ -202,7 +190,7 @@ class ModalChangeBalance extends Component {
                   <button
                     type="button"
                     className="btn btn-outline-danger"
-                    onClick={this.handleCloseModalDeleteOrder}
+                    onClick={this.handleCloseModalChangePoint}
                   >
                     Hủy
                   </button>
@@ -211,19 +199,19 @@ class ModalChangeBalance extends Component {
             </div>
           </div>
         </div>
-      </ModalChangeBalanceStyles>
+      </ModalChangePointStyles>
     );
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    changePriceBalance: (store_code, idCollaborator, data) => {
+    changePointForCustomer: (store_code, idCustomer, data) => {
       dispatch(
-        collaboratorAction.changePriceBalance(store_code, idCollaborator, data)
+        customerAction.changePointForCustomer(store_code, idCustomer, data)
       );
     },
   };
 };
 
-export default connect(null, mapDispatchToProps)(ModalChangeBalance);
+export default connect(null, mapDispatchToProps)(ModalChangePoint);
