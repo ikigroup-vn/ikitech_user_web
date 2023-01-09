@@ -95,7 +95,7 @@ class ModalChangePoint extends Component {
   };
 
   render() {
-    const { customerSelectedPoint } = this.props;
+    const { customerSelectedPoint, isSub } = this.props;
     return (
       <ModalChangePointStyles
         className="modal "
@@ -117,7 +117,7 @@ class ModalChangePoint extends Component {
                   marginBottom: "0px",
                 }}
               >
-                Thay đổi số xu
+                {isSub ? "Trừ xu" : "Cộng xu"}
               </h4>
               <button
                 type="button"
@@ -148,7 +148,9 @@ class ModalChangePoint extends Component {
                   <input
                     type="text"
                     id="point"
-                    placeholder="0"
+                    placeholder={`Nhập số xu ${
+                      isSub ? "cần trừ..." : "cần cộng..."
+                    }`}
                     name="point"
                     value={this.state.coin.point}
                     onChange={this.handleChangePoint}

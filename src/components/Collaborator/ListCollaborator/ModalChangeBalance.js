@@ -104,7 +104,7 @@ class ModalChangeBalance extends Component {
   };
 
   render() {
-    const { collaboratorSelectedForChangeBalance } = this.props;
+    const { collaboratorSelectedForChangeBalance, isSub } = this.props;
     return (
       <ModalChangeBalanceStyles
         className="modal "
@@ -126,7 +126,7 @@ class ModalChangeBalance extends Component {
                   marginBottom: "0px",
                 }}
               >
-                Thay đổi số dư
+                {isSub ? "Trừ số dư" : "Cộng số dư"}
               </h4>
               <button
                 type="button"
@@ -160,7 +160,9 @@ class ModalChangeBalance extends Component {
                   <input
                     type="text"
                     id="money"
-                    placeholder="0.00 ₫"
+                    placeholder={`Nhập số dư ${
+                      isSub ? "cần trừ..." : "cần cộng..."
+                    }`}
                     name="money"
                     value={this.state.balance.money}
                     onChange={this.handleChangeBalance}
