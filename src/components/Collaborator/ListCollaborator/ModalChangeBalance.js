@@ -160,7 +160,7 @@ class ModalChangeBalance extends Component {
                   <input
                     type="text"
                     id="money"
-                    placeholder={`Nhập số dư ${
+                    placeholder={`Nhập số tiền ${
                       isSub ? "cần trừ..." : "cần cộng..."
                     }`}
                     name="money"
