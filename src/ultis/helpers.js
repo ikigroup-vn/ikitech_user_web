@@ -264,10 +264,11 @@ export const insertParam = (params2) => {
   }
 
   // can return this or...
-  let params = kvp.join('&');
+  let params = "?"+kvp.join('&');
 
   // reload page with new params
-  document.location.search = params;
+  window.history.replaceState(null, null, params);
+
 }
 
 export const setQueryParamInUrl = (key, value) => {
