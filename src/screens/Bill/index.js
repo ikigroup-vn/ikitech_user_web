@@ -325,6 +325,7 @@ class Bill extends Component {
 
 
   onchangeDateFromTo = (e) => {
+    console.log("xxxxxx")
     var from = "";
     var { store_code } = this.props.match.params;
     var {
@@ -362,13 +363,21 @@ class Bill extends Component {
     const branch_id = getBranchId();
     console.log(from, to, params);
 
-    var from2 = moment(e.value[0], "YYYY-MM-DD").format("DD-MM-YYYY");
-    var to2 = moment(e.value[1], "YYYY-MM-DD").format("DD-MM-YYYY");
-
-    insertParam({
-      from: from2,
-      to: to2,
-    });
+    if(e != null && e.value != null && e.value[0] != null && e.value[1] != null) {
+      var from2 = moment(e.value[0], "YYYY-MM-DD").format("DD-MM-YYYY");
+      var to2 = moment(e.value[1], "YYYY-MM-DD").format("DD-MM-YYYY");
+  
+      insertParam({
+        from: from2,
+        to: to2,
+      });
+    } else {
+      insertParam({
+        from: "",
+        to: "",
+      });
+    }
+ 
 
     this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
     this.setState({ time_from: from, time_to: to });
