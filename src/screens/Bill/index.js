@@ -18,6 +18,7 @@ import * as helper from "../../ultis/helpers";
 import { getBranchId } from "../../ultis/branchUtils";
 import history from "../../history";
 import { getQueryParams } from "../../ultis/helpers";
+import { insertParam } from "../../ultis/helpers";
 
 class Bill extends Component {
   constructor(props) {
@@ -361,6 +362,13 @@ class Bill extends Component {
 
     const branch_id = getBranchId();
     console.log(from, to, params);
+
+    if(from != null) {
+      var from2 = moment(from, "YYYY-MM-DD").format("DD-MM-YYYY");
+      var to2 = moment(to, "YYYY-MM-DD").format("DD-MM-YYYY");
+      insertParam({from:from2,to:to2})
+    }
+   
     this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
     this.setState({ time_from: from, time_to: to });
   };
