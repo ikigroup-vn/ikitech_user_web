@@ -133,13 +133,20 @@ export const exportTopten = (store_code, page, params) => {
                     newItem["Số điện thoại"] = value;
                     // newItem["Tên sản phẩm"] = value
                   }
+                  if (key == "balance") {
+                    newItem["Tổng dư hiện tại"] = value;
+                  }
                   if (key == "orders_count") {
                     newItem["Số đơn hàng"] = value;
                     // newItem["Tên sản phẩm"] = value
                   }
-                  if (key == "sum_total_final") {
-                    newItem["Tổng doanh thu"] = value;
+                  if (key == "sum_share_collaborator") {
+                    newItem["Tổng hoa hồng"] = value;
                   }
+                  if (key == "sum_total_before_discount") {
+                    newItem["Tổng doanh số"] = value;
+                  }
+
                 });
 
                 newArray.push(newItem);

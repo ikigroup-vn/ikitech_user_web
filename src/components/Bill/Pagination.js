@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import * as billAction from "../../actions/bill";
 import { getBranchId } from "../../ultis/branchUtils";
 import getChannel from "../../ultis/channel";
-import { setQueryParamInUrl } from "../../ultis/helpers";
+import { insertParam } from "../../ultis/helpers";
 
 class Pagination extends Component {
   constructor(props) {
@@ -34,7 +34,8 @@ class Pagination extends Component {
      {
       params = params + `&time_from=${time_from}`;
     }
-    setQueryParamInUrl("page", page)
+    
+    insertParam({page: page})
     this.props.fetchAllBill(store_code, page, params);
 
   }
