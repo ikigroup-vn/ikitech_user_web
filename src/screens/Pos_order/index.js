@@ -727,7 +727,11 @@ class PostOrder extends Component {
         history.push(link);
       }
     }
-    if (!shallowEqual(nextProps.oneCart, this.props.oneCart) && order_code) {
+    if (
+      nextProps.oneCart &&
+      !shallowEqual(nextProps.oneCart, this.props.oneCart) &&
+      order_code
+    ) {
       this.setState({ idCart: nextProps.oneCart.id });
     }
     if (
