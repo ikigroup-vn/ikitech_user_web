@@ -962,7 +962,6 @@ class PostOrder extends Component {
   };
 
   onNewChange = (state) => {
-    console.log("vo state", state, this.state);
     this.changeNewState({
       ...this.state,
       ...state,
