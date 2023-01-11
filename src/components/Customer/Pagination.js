@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import getChannel from "../../ultis/channel";
 import * as customerAction from "../../actions/customer";
-import { setQueryParamInUrl } from "../../ultis/helpers";
+import history from "../../history";
+
 class Pagination extends Component {
   constructor(props) {
     super(props);
@@ -12,9 +13,10 @@ class Pagination extends Component {
   }
 
   passPagination = (page) => {
-    console.log("page in customer", page);
-    setQueryParamInUrl("pag", page);
-    this.props.fetchAllCustomer(this.props.store_code, page);
+    const { searchValue, store_code } = this.props;
+    history.push(`/customer/${store_code}?page=${page}&search=${searchValue}`);
+    const params = `&search=${searchValue}`;
+    this.props.fetchAllCustomer(store_code, page, params);
     this.props.getPaginate(page);
   };
   handlePaginationReferralPhone = (page) => {
@@ -91,8 +93,8 @@ class Pagination extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllCustomer: (store_code, page) => {
-      dispatch(customerAction.fetchAllCustomer(store_code, page));
+    fetchAllCustomer: (store_code, page, params) => {
+      dispatch(customerAction.fetchAllCustomer(store_code, page, params));
     },
   };
 };

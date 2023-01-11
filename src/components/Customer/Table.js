@@ -173,6 +173,7 @@ class Table extends Component {
     this.props.handleSetInfor(item);
   };
   changePage = (store_code, customerId, e) => {
+    const { searchValue } = this.props;
     if (
       e.target.className !== "total_referral" &&
       !e.target.closest(".select-role") &&
@@ -181,7 +182,7 @@ class Table extends Component {
       var { paginate } = this.props;
       if (e.target.name == "action") return;
       history.push(
-        `/customer/detail/${store_code}/${customerId}?pag=${paginate}`
+        `/customer/detail/${store_code}/${customerId}?page=${paginate}&search=${searchValue}`
       );
     }
   };
@@ -274,7 +275,9 @@ class Table extends Component {
                   <span class="fa fa-plus"></span>
                 </button>
               </td>{" "}
-              <td>{(this.props.paginate - 1) * 20 + index + 1}</td>
+              <td>
+                {(this.props.customers.current_page - 1) * 20 + index + 1}
+              </td>
               <td>{data.name}</td>
               <td>{data.phone_number}</td>
               {/* <td>{data.email == null ? "Chưa cập nhật" : data.email}</td> */}
