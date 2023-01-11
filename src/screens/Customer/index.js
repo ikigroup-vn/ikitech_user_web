@@ -31,6 +31,7 @@ import { genders } from "../../ultis/groupCustomer/genders";
 import SidebarShowCustomersByReferralPhone from "../../components/Customer/SidebarShowCustomersByReferralPhone";
 import moment from "moment";
 import ModalUpdatePasswordImport from "./ModalUpdatePasswordImport";
+import history from "../../history";
 
 const CustomerStyles = styled.div`
   .filter-search-customer {
@@ -192,7 +193,9 @@ class Customer extends Component {
     const { store_code } = this.props.match.params;
     const { searchValue } = this.state;
     const jsonListFilter = localStorage.getItem("optionsFilter");
-    var params = `&search=${searchValue}&json_list_filter=${jsonListFilter}`;
+
+    history.push(`/customer/${store_code}?page=1&search=${searchValue}`);
+    const params = `&search=${searchValue}&json_list_filter=${jsonListFilter}`;
     this.fetchAllCustomer(store_code, 1, params);
   };
 
@@ -221,10 +224,15 @@ class Customer extends Component {
   };
 
   componentDidMount() {
-    setQueryParamInUrl("pag", pag);
-    var pag = getQueryParams("pag") || 1;
+    const page = getQueryParams("page") || 1;
+    const search = getQueryParams("search") || "";
 
-    this.fetchAllCustomer(this.props.match.params.store_code, pag);
+    const params = `&search=${search}`;
+    this.setState({
+      paginate: page,
+      searchValue: search,
+    });
+    this.fetchAllCustomer(this.props.match.params.store_code, page, params);
     this.props.fetchPlaceProvince();
     this.props.fetchAllAgencyType(this.props.match.params.store_code);
   }
@@ -515,6 +523,7 @@ class Customer extends Component {
             wards={wards}
             district={district}
             province={province}
+            customers={customers}
           />
           <ModalEdit
             openModalEdit={openModalEdit}
@@ -681,6 +690,7 @@ class Customer extends Component {
                         <Table
                           handleSetInfor={this.handleSetInfor}
                           paginate={paginate}
+                          searchValue={searchValue}
                           chat_allow={chat_allow}
                           showChatBox={showChatBox}
                           handleShowChatBox={this.handleShowChatBox}
@@ -696,6 +706,7 @@ class Customer extends Component {
                         <Pagination
                           getPaginate={this.getPaginate}
                           store_code={store_code}
+                          searchValue={searchValue}
                           customers={customers}
                         />
                       </div>

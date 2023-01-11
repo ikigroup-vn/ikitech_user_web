@@ -140,6 +140,24 @@ class ModalCreate extends Component {
       });
       this.props.resetModal();
     }
+    if (!shallowEqual(this.props.customers, nextProps.customers)) {
+      this.setState({
+        provinceName: "",
+        districtName: "",
+        wardsName: "",
+        txtAddress_detail: "",
+        txtCountry: 1,
+        txtProvince: "",
+        txtDistrict: "",
+        txtWards: "",
+        isLoaded: false,
+        listWards: [],
+        listDistrict: [],
+        txtName_branch: "",
+        txtPhone_branch: "",
+        txtEmail_branch: "",
+      });
+    }
   }
   onChangeGender = (e) => {
     var target = e.target;
