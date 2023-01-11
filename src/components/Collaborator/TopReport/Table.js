@@ -82,14 +82,15 @@ class Table extends Component {
               <td>
                 {data.customer?.phone_number}
               </td>
-        
+              <td>
+              {typeof data.balance != "undefined" ? format(Number(data.balance)) : null  }
+                </td>
               <td>
                 {formatNoD(data.orders_count)}
               </td>
-              <td>
-              {typeof data.sum_total_final != "undefined" ? format(Number(data.sum_total_final)) : null  }
-
-                
+             
+                <td>
+              {typeof data.sum_total_after_discount != "undefined" ? format(Number(data.sum_total_after_discount)) : null  }
                 </td>
         
            
@@ -118,10 +119,11 @@ class Table extends Component {
               <th>STT</th>
               <th>Họ tên</th>
               <th>Số điện thoại</th>
+              <th>Số dư hiện tại</th>
 
               <th>Số đơn hàng</th>
 
-              <th>Tổng doanh thu</th>
+              <th>Tổng doanh số</th>
      
             </tr>
           </thead>

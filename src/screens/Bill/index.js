@@ -17,7 +17,7 @@ import moment from "moment";
 import * as helper from "../../ultis/helpers";
 import { getBranchId } from "../../ultis/branchUtils";
 import history from "../../history";
-import { getQueryParams } from "../../ultis/helpers";
+import { getQueryParams,insertParam } from "../../ultis/helpers";
 
 class Bill extends Component {
   constructor(props) {
@@ -98,7 +98,7 @@ class Bill extends Component {
   componentDidMount() {
     var { store_code, status_code } = this.props.match.params;
     var from = getQueryParams("from");
-    var to = getQueryParams("from");
+    var to = getQueryParams("to");
     var statusOrder = getQueryParams("order_status_code");
     var statusPayment = getQueryParams("payment_status_code");
     var { collaborator_by_customer_id } = this.state;
@@ -316,15 +316,16 @@ class Bill extends Component {
 
     const branch_id = getBranchId();
     var params_agency =
-    this.state.agency_by_customer_id != null
-      ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
-      : null;
+      this.state.agency_by_customer_id != null
+        ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
+        : null;
     this.props.exportAllListOrder(store_code, 1, branch_id, params, params_agency);
 
   };
 
 
   onchangeDateFromTo = (e) => {
+    console.log("xxxxxx")
     var from = "";
     var { store_code } = this.props.match.params;
     var {
@@ -361,6 +362,23 @@ class Bill extends Component {
 
     const branch_id = getBranchId();
     console.log(from, to, params);
+
+    if(e != null && e.value != null && e.value[0] != null && e.value[1] != null) {
+      var from2 = moment(e.value[0], "YYYY-MM-DD").format("DD-MM-YYYY");
+      var to2 = moment(e.value[1], "YYYY-MM-DD").format("DD-MM-YYYY");
+  
+      insertParam({
+        from: from2,
+        to: to2,
+      });
+    } else {
+      insertParam({
+        from: "",
+        to: "",
+      });
+    }
+ 
+
     this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
     this.setState({ time_from: from, time_to: to });
   };
@@ -459,7 +477,7 @@ class Bill extends Component {
                           </form>
 
 
-                        
+
                         </div>
                         <div style={{ display: "flex", justifyContent: "space-between" }}>
 
@@ -492,7 +510,7 @@ class Bill extends Component {
                           <div>
 
                             <button
-                              style={{ margin: "auto 0px", marginRight:15 }}
+                              style={{ margin: "auto 0px", marginRight: 15 }}
                               onClick={this.exportAllListOrder}
                               class={`btn btn-success btn-icon-split btn-sm `}
                             >
