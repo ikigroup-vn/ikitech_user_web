@@ -359,3 +359,16 @@ export const FUNCTION_TYPE_CATEGORY_POST = "FUNCTION_TYPE_CATEGORY_POST";
 export const FUNCTION_TYPE_ORDER = "FUNCTION_TYPE_ORDER";
 export const FUNCTION_TYPE_THEME = "FUNCTION_TYPE_THEME";
 export const FUNCTION_TYPE_PROMOTION = "FUNCTION_TYPE_PROMOTION";
+
+// Manage Inventory
+export const TYPE_EDIT_STOCK = 0; //Cân bằng sửa kho
+export const TYPE_TALLY_SHEET_STOCK = 1; //Cân bằng kiểm kho
+export const TYPE_IMPORT_STOCK = 2; //Nhập kho
+export const TYPE_INIT_STOCK = 3; //Khởi tạo kho
+export const TYPE_EXPORT_ORDER_STOCK = 4; //Xuất đơn hàng
+export const TYPE_REFUND_IMPORT_STOCK = 5; //Hoàn trả nhập hàng
+export const TYPE_REFUND_ORDER = 6; //Hoàn trả đơn hàng
+export const TYPE_EDIT_COST_OF_CAPITAL = 7; //Điều chỉnh giá vốn
+export const TYPE_IMPORT_AUTO_CHANGE_COST_OF_CAPITAL = 8; //Tự động điều chỉnh giá vốn khi nhập hàng
+export const TYPE_TRANSFER_STOCK_RECEIVER = 9; //Nhận hàng từ chi nhánh khách
+export const TYPE_TRANSFER_STOCK_SENDER = 10; //Chuyển hàng đến chi nhánh khác

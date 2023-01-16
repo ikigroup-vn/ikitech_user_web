@@ -231,6 +231,8 @@ class ShowData extends Component {
       index,
       store_code,
       page,
+      searchValue,
+      limit,
       status,
       status_name,
       status_stock,
@@ -379,7 +381,9 @@ class ShowData extends Component {
 
         <td className="btn-voucher">
           <Link
-            to={`/product/edit/${store_code}/${data.id}/${page}`}
+            to={`/product/edit/${store_code}/${data.id}?page=${page}${
+              searchValue ? `&search=${searchValue}` : ""
+            }&limit=${limit}`}
             class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
           >
             <i class="fa fa-edit"></i> Sửa

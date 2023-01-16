@@ -20,6 +20,7 @@ class Inventory extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      page: 1,
       searchValue: "",
       filterStatus: getQueryParams("status") || null,
     };
@@ -27,25 +28,44 @@ class Inventory extends Component {
   componentDidMount() {
     const { store_code } = this.props.match.params;
     const branch_id = localStorage.getItem("branch_id");
-    var { filterStatus } = this.state;
-    var params = "";
-    if (filterStatus) params = params + `&status=${filterStatus}`;
-    this.props.fetchAllInventory(store_code, branch_id, 1, params);
+    // var { filterStatus } = this.state;
+    // var params = "";
+    // if (filterStatus) params = params + `&status=${filterStatus}`;
+
+    const page = getQueryParams("page") || 1;
+    const search = getQueryParams("search") || "";
+
+    const params = `&search=${search}`;
+    this.setState({
+      page: page,
+      searchValue: search,
+    });
+    this.props.fetchAllInventory(store_code, branch_id, page, params);
   }
   onChangeSearch = (e) => {
     this.setState({ searchValue: e.target.value });
   };
 
+  setPage = (page) => {
+    this.setState({ page });
+  };
   searchData = (e) => {
     e.preventDefault();
     const { store_code } = this.props.match.params;
     const branch_id = localStorage.getItem("branch_id");
+    this.setState({
+      page: 1,
+    });
     const value = this.state.searchValue;
+    history.push(`/inventory/index/${store_code}?page=1&search=${value}`);
     const params = `&search=${value}`;
     this.props.fetchAllInventory(store_code, branch_id, 1, params);
   };
   changePage = (store_code, order_code) => {
-    history.push(`/inventory/detail/${store_code}/${order_code}`);
+    const { page, searchValue } = this.state;
+    history.push(
+      `/inventory/detail/${store_code}/${order_code}?page=${page}&search=${searchValue}`
+    );
   };
 
   componentWillReceiveProps(nextProps, nextState) {
@@ -201,6 +221,8 @@ class Inventory extends Component {
                         </table>
                       </div>
                       <Pagination
+                        setPage={this.setPage}
+                        searchValue={searchValue}
                         store_code={store_code}
                         sheetsInventory={sheetsInventory}
                       />

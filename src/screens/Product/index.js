@@ -27,6 +27,7 @@ import ModalCol from "../../components/Product/ModalCollaration";
 import ModalConfirm from "../../components/Product/ComfirmCol";
 import history from "../../history";
 import ModalChooseTypeImport from "../../components/Product/ImportProductInWeb/ModalChooseTypeImport";
+import { getBranchId } from "../../ultis/branchUtils";
 
 class Product extends Component {
   constructor(props) {
@@ -43,11 +44,11 @@ class Product extends Component {
         data: [],
         store_code: "",
       },
-      searchValue: "",
+      searchValue: getQueryParams("search") || "",
+      page: getQueryParams("page") || 1,
+      numPage: getQueryParams("limit") || 20,
       importData: [],
       allow_skip_same_name: true,
-      page: 1,
-      numPage: 20,
       percent_col: 0,
       openModalTypeImport: false,
     };
@@ -67,10 +68,13 @@ class Product extends Component {
     var numPage = e.target.value;
     this.setState({
       numPage,
+      page: 1,
     });
-    var params = `&search=${searchValue}&limit=${numPage}`;
-
-    this.props.fetchAllProduct(store_code, 1, params);
+    var params = `${
+      searchValue ? `&search=${searchValue}` : ""
+    }&limit=${numPage}`;
+    history.push(`/product/index/${store_code}?page=1${params}`);
+    this.props.fetchAllProductV2(store_code, getBranchId(), 1, params);
   };
   onChangeSearch = (e) => {
     this.setState({ searchValue: e.target.value });
@@ -78,20 +82,9 @@ class Product extends Component {
   componentDidMount() {
     this.handleFetchAllProduct();
   }
-  shouldComponentUpdate = (nextProps, nextState) => {
-    const {
-      match: { params },
-    } = nextProps;
-    const { page } = this.state;
-    if (params.page !== undefined && page !== params.page) {
-      this.passNumPage(params.page);
-      this.handleFetchAllProduct(params.page);
-    }
-    return true;
-  };
   handleFetchAllProduct = (pageParams) => {
-    var { page } = this.props.match.params;
-    var { searchValue, page: pagePagination, numPage } = this.state;
+    const { store_code } = this.props.match.params;
+    const { searchValue, page, numPage } = this.state;
     const branch_id = localStorage.getItem("branch_id");
     var is_near_out_of_stock = getQueryParams("is_near_out_of_stock");
     var params = `&search=${searchValue}&limit=${numPage}`;
@@ -100,9 +93,9 @@ class Product extends Component {
     }
 
     this.props.fetchAllProductV2(
-      this.props.match.params.store_code,
+      store_code,
       branch_id,
-      pageParams || page || pagePagination,
+      pageParams || page,
       params
     );
   };
@@ -149,12 +142,14 @@ class Product extends Component {
   searchData = (e) => {
     e.preventDefault();
     var { store_code } = this.props.match.params;
-    var { searchValue } = this.state;
+    var { searchValue, numPage } = this.state;
     const branch_id = localStorage.getItem("branch_id");
-    var params = `&search=${searchValue}`;
-    this.setState({ numPage: 20 });
+    var params = `${
+      searchValue ? `&search=${searchValue}` : ""
+    }&limit=${numPage}`;
+    this.setState({ page: 1 });
+    history.push(`/product/index/${store_code}?page=1${params}`);
     this.props.fetchAllProductV2(store_code, branch_id, 1, params);
-    history.push(`/product/index/${store_code}/1`);
   };
   fetchAllData = () => {
     this.props.fetchAllProduct(this.props.match.params.store_code);
@@ -519,6 +514,8 @@ class Product extends Component {
                           _delete={_delete}
                           update={update}
                           page={page}
+                          limit={numPage}
+                          searchValue={searchValue}
                           handleDelCallBack={this.handleDelCallBack}
                           handleMultiDelCallBack={this.handleMultiDelCallBack}
                           handleFetchAllProduct={this.handleFetchAllProduct}
@@ -543,7 +540,12 @@ class Product extends Component {
 
               <Footer />
             </div>
-            <ModalDelete modal={this.state.modal} />
+            <ModalDelete
+              modal={this.state.modal}
+              page={page}
+              limit={numPage}
+              searchValue={searchValue}
+            />
             <ModalMultiDelete multi={this.state.multi} />
           </div>
         </div>

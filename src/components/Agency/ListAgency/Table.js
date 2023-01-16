@@ -109,7 +109,7 @@ class Table extends Component {
         return (
           <React.Fragment>
             <tr class="sub-container hover-product">
-              <td>{index + 1}</td>{" "}
+              <td>{(this.props.agencys.current_page - 1) * 20 + index + 1}</td>{" "}
               <td style={{ textAlign: "center" }}>
                 <img
                   src={avatar}
@@ -196,7 +196,7 @@ class Table extends Component {
                 </a>
                 <Link
                   style={{ margin: "2px 0" }}
-                  to={`/order/${this.props.store_code}?agency_by_customer_id=${data.customer_id}&tab-index=1`}
+                  to={`/order/${this.props.store_code}?agency_by_customer_id=${data.customer_id}&tab-index=1&page=${this.props.page}&search=${this.props.searchValue}`}
                   class="btn btn-danger btn-sm"
                 >
                   <i class="fa fa-history"></i> Lịch sử đơn hàng

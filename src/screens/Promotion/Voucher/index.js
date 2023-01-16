@@ -17,6 +17,7 @@ import { getQueryParams, removeAscent } from "../../../ultis/helpers";
 
 import Loading from "../../Loading";
 import styled from "styled-components";
+import history from "../../../history";
 
 const VoucherStyles = styled.div`
   .form-header {
@@ -46,18 +47,21 @@ class Voucher extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      is_end: 2,
       modal: {
         table: "",
         id: "",
         store_code: "",
       },
       modalIsEnd: {},
-      searchValue: "",
       voucherProducts: [],
+      is_end: getQueryParams("type") || 2,
+      page: getQueryParams("page") || 1,
+      searchValue: getQueryParams("search") || "",
     };
   }
-
+  setPage = (page) => {
+    this.setState({ page });
+  };
   setVoucherProducts = (vouchers) => {
     this.setState({
       voucherProducts: vouchers,
@@ -67,6 +71,9 @@ class Voucher extends Component {
     var target = e.target;
     var name = target.name;
     var value = Number(target.value);
+    var { store_code } = this.props.match.params;
+    var params = `?type=${value}`;
+    history.push(`/voucher/${store_code}${params}`);
     this.setState({ [name]: value, searchValue: "" });
   };
   handleDelCallBack = (modal) => {
@@ -78,13 +85,14 @@ class Voucher extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     if (nextState.is_end !== this.state.is_end) {
       var { store_code } = this.props.match.params;
+      const { page } = this.state;
       var is_end = Number(nextState.is_end);
       switch (is_end) {
         case 0:
           this.props.fetchAllVoucher(store_code);
           break;
         case 1:
-          this.props.fetchAllVoucherEnd(store_code);
+          this.props.fetchAllVoucherEnd(store_code, page);
           break;
         case 2:
           this.props.fetchAllVoucher(store_code);
@@ -94,8 +102,23 @@ class Voucher extends Component {
       }
     }
     const { vouchers } = this.props;
+    const { searchValue } = this.state;
     if (!shallowEqual(vouchers, nextProps.vouchers)) {
-      this.setVoucherProducts(nextProps.vouchers);
+      let newVoucherProducts = JSON.parse(JSON.stringify(nextProps.vouchers));
+      if (Array.isArray(nextProps.vouchers)) {
+        newVoucherProducts = nextProps.vouchers.filter((product) =>
+          removeAscent(product.name.trim().toLowerCase()).includes(
+            removeAscent(searchValue.trim().toLowerCase())
+          )
+        );
+      } else {
+        newVoucherProducts.data = nextProps.vouchers.data.filter((product) =>
+          removeAscent(product.name.trim().toLowerCase()).includes(
+            removeAscent(searchValue.trim().toLowerCase())
+          )
+        );
+      }
+      this.setVoucherProducts(newVoucherProducts);
     }
     return true;
   }
@@ -103,16 +126,16 @@ class Voucher extends Component {
   componentDidMount() {
     var type = getQueryParams("type");
     var { store_code } = this.props.match.params;
-
-    if ((type && type == 0) || type == 1 || type == 2) {
-      var type = Number(type);
+    const { page, is_end } = this.state;
+    if ((is_end && is_end == 0) || is_end == 1 || is_end == 2) {
+      var type = Number(is_end);
 
       switch (type) {
         case 0:
           this.props.fetchAllVoucher(store_code);
           break;
         case 1:
-          this.props.fetchAllVoucherEnd(store_code);
+          this.props.fetchAllVoucherEnd(store_code, page);
           break;
         case 2:
           this.props.fetchAllVoucher(store_code);
@@ -120,7 +143,6 @@ class Voucher extends Component {
         default:
           break;
       }
-      this.setState({ is_end: type });
     } else {
       this.props.fetchAllVoucher(this.props.match.params.store_code);
     }
@@ -145,10 +167,20 @@ class Voucher extends Component {
   handleSearchValueChange = (e) => {
     const value = e.target.value;
     const { vouchers } = this.props;
+    const { store_code } = this.props.match.params;
+    const { is_end } = this.state;
 
     this.setState({
       searchValue: value,
+      page: 1,
     });
+    var params = "";
+    if (Number(is_end) === 1) {
+      params += `?page=1&type=${is_end}`;
+    } else {
+      params += `?search=${value}&type=${is_end}`;
+    }
+    history.push(`/voucher/${store_code}${params}`);
     if (value === "") {
       this.setVoucherProducts(vouchers);
     } else {
@@ -175,8 +207,15 @@ class Voucher extends Component {
     var { vouchers } = this.props;
     var displayPag = is_end == 0 ? "hide" : null;
     var { store_code } = this.props.match.params;
-    var { insert, update, _delete, isShow, voucherProducts, searchValue } =
-      this.state;
+    var {
+      insert,
+      update,
+      _delete,
+      isShow,
+      voucherProducts,
+      searchValue,
+      page,
+    } = this.state;
     console.log(is_end);
     if (this.props.auth) {
       return (
@@ -290,6 +329,8 @@ class Voucher extends Component {
                           update={update}
                           _delete={_delete}
                           is_end={is_end}
+                          page={page}
+                          searchValue={searchValue}
                           handleIsEndCallback={this.handleIsEndCallback}
                           handleDelCallBack={this.handleDelCallBack}
                           params={params}
@@ -300,6 +341,7 @@ class Voucher extends Component {
                           params={params}
                           vouchers={voucherProducts}
                           store_code={store_code}
+                          setPage={this.setPage}
                         />
                       </div>
                     </div>
@@ -337,8 +379,8 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchAllVoucher: (store_code) => {
       dispatch(voucherAction.fetchAllVoucher(store_code));
     },
-    fetchAllVoucherEnd: (store_code) => {
-      dispatch(voucherAction.fetchAllVoucherEnd(store_code));
+    fetchAllVoucherEnd: (store_code, page) => {
+      dispatch(voucherAction.fetchAllVoucherEnd(store_code, page));
     },
   };
 };

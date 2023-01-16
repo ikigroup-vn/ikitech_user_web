@@ -158,6 +158,12 @@ class Customer extends Component {
       isUpdatedPasswordImport: false,
     };
   }
+
+  setSearchValue = (value) => {
+    this.setState({
+      searchValue: value,
+    });
+  };
   setOpenModalImport = (isOpenedModal) => {
     this.setState({ openModalImport: isOpenedModal });
   };
@@ -194,6 +200,9 @@ class Customer extends Component {
     const { searchValue } = this.state;
     const jsonListFilter = localStorage.getItem("optionsFilter");
 
+    this.setState({
+      paginate: 1,
+    });
     history.push(`/customer/${store_code}?page=1&search=${searchValue}`);
     const params = `&search=${searchValue}&json_list_filter=${jsonListFilter}`;
     this.fetchAllCustomer(store_code, 1, params);
@@ -524,6 +533,7 @@ class Customer extends Component {
             district={district}
             province={province}
             customers={customers}
+            setSearchValue={this.setSearchValue}
           />
           <ModalEdit
             openModalEdit={openModalEdit}

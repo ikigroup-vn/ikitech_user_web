@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import history from "../../history";
 import * as productAction from "../../actions/product";
 import getChannel from "../../ultis/channel";
+import { getBranchId } from "../../ultis/branchUtils";
 class Pagination extends Component {
   constructor(props) {
     super(props);
@@ -12,8 +13,13 @@ class Pagination extends Component {
   }
 
   passPaginationProduct = (page) => {
-    var { store_code } = this.props;
-    history.push(`/product/index/${store_code}/${page}`);
+    var { store_code, limit, searchValue, passNumPage } = this.props;
+    const params = `&limit=${limit}${
+      searchValue ? `&search=${searchValue}` : ""
+    }`;
+    passNumPage(page);
+    history.push(`/product/index/${store_code}?page=${page}${params}`);
+    this.props.fetchAllProductV2(store_code, getBranchId(), page, params);
   };
   passPagination = (page) => {
     var { store_code, limit, searchValue, bonusParam, listType, params } =

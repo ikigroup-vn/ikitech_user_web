@@ -5,7 +5,11 @@ import InfoProduct from "../../../components/Product/Update/InfoProduct";
 import ContentDetail from "../../../components/Product/Update/ContentDetail";
 import InfoDiscount from "../../../components/Product/Update/InfoDiscount";
 import Video from "../../../components/Product/Update/Video";
-import { isEmpty, removeVietnameseTones } from "../../../ultis/helpers";
+import {
+  getQueryParams,
+  isEmpty,
+  removeVietnameseTones,
+} from "../../../ultis/helpers";
 
 import * as blogAction from "../../../actions/blog";
 
@@ -452,13 +456,18 @@ class ProductEdit extends Component {
         ? list_distribute[0].element_distributes
         : distributeData.element_distributes;
 
+    const pageNum = getQueryParams("page") || 1;
+    const limit = getQueryParams("limit") || 20;
+    const search = getQueryParams("search") || "";
+    const params = `&limit=${limit}${search ? `&search=${search}` : ""}`;
     this.props.updateDistribute(
       store_code,
       distributeData,
       productId,
       currentBranch?.id,
       form,
-      page
+      pageNum,
+      params
     );
   };
   goBack = (e) => {
@@ -748,7 +757,8 @@ const mapDispatchToProps = (dispatch, props) => {
       productId,
       branchId,
       data,
-      page
+      page,
+      params
     ) => {
       dispatch(
         productAction.updateDistribute(
@@ -757,7 +767,8 @@ const mapDispatchToProps = (dispatch, props) => {
           productId,
           branchId,
           data,
-          page
+          page,
+          params
         )
       );
     },

@@ -87,7 +87,11 @@ export const updateDiscount = (store_code, discount, id) => {
           },
         });
         history.replace(
-          `/discount/${store_code}?type=${getQueryParams("type") ?? 1}`
+          `/discount/${store_code}?type=${getQueryParams("type") ?? 1}${
+            getQueryParams("search")
+              ? `&search=${getQueryParams("search")}`
+              : ""
+          }`
         );
       })
       .catch(function (error) {

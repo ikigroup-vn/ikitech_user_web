@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import Form from "../../../../components/Promotion/BonusProduct/Edit/Form";
-import * as Types from "../../../../constants/ActionType"
+import * as Types from "../../../../constants/ActionType";
 
 import Alert from "../../../../components/Partials/Alert";
 
@@ -10,6 +10,7 @@ import * as bonusProductAction from "../../../../actions/bonus_product";
 
 import * as comboAction from "../../../../actions/combo";
 import * as productAction from "../../../../actions/product";
+import { getQueryParams } from "../../../../ultis/helpers";
 
 class Edit extends Component {
   constructor(props) {
@@ -19,10 +20,9 @@ class Edit extends Component {
   componentDidMount() {
     var { store_code, bonusProductId } = this.props;
     this.props.fetchBonusProductId(store_code, bonusProductId);
-    const branch_id = localStorage.getItem('branch_id');
+    const branch_id = localStorage.getItem("branch_id");
     this.props.fetchAllProductV2(store_code, branch_id, 1, null);
-        this.props.fetchAllCombo(store_code);
-
+    this.props.fetchAllCombo(store_code);
   }
 
   render() {
@@ -30,17 +30,13 @@ class Edit extends Component {
     var { store_code, bonusProductId } = this.props;
 
     return (
-
       <div class="container-fluid">
-        <Alert
-          type={Types.ALERT_UID_STATUS}
-          alert={this.props.alert}
-        />
-        <div
-          style={{ display: "flex", justifyContent: "space-between" }}
-        >
+        <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h4 className="h4 title_content mb-0 text-gray-800">
-            Chỉnh sửa chương trình thưởng sản phẩm
+            {getQueryParams("type") == 1
+              ? "Chương trình thưởng sản phẩm đã kết thúc"
+              : "Chỉnh sửa chương trình thưởng sản phẩm"}
           </h4>
         </div>
         <br></br>
@@ -61,21 +57,13 @@ class Edit extends Component {
                       combos={combos}
                     />
                   </div>
-
-
                 </div>
               </div>
-
             </section>
           </div>
-
         </div>
-
       </div>
-
-
-    )
-
+    );
   }
 }
 
@@ -86,8 +74,6 @@ const mapStateToProps = (state) => {
     products: state.productReducers.product.allProduct,
     combos: state.comboReducers.combo.allCombo,
     alert: state.comboReducers.alert.alert_uid,
-
-
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -96,7 +82,9 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(bonusProductAction.fetchBonusProductId(store_code, comboId));
     },
     fetchAllProductV2: (store_code, branch_id, page, params) => {
-      dispatch(productAction.fetchAllProductV2(store_code, branch_id, page, params));
+      dispatch(
+        productAction.fetchAllProductV2(store_code, branch_id, page, params)
+      );
     },
     fetchAllCombo: (store_code) => {
       dispatch(comboAction.fetchAllCombo(store_code));

@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import * as collaboratorAction from "../../../actions/collaborator";
+import { insertParam } from "../../../ultis/helpers";
 class Pagination extends Component {
   constructor(props) {
     super(props);
@@ -11,7 +12,9 @@ class Pagination extends Component {
   }
 
   passPagination = (page) => {
-    var { searchValue, getParams } = this.props;
+    var { searchValue, getParams, setPage } = this.props;
+    insertParam({ page: page });
+    setPage(page);
     this.props.fetchAllCollaborator(
       this.props.store_code,
       page,

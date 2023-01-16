@@ -11,8 +11,8 @@ export const fetchAllBill = (
   var stringURL = `/store/${store_code}/orders?page=${page}&is_export=${is_export}`;
 
   if (branch_id) stringURL = stringURL + `&branch_id=${branch_id}`;
-  if (params && params != "null") stringURL = stringURL + params;
-  if (params_agency && params_agency != "null")
+  if (params && params != null) stringURL = stringURL + params;
+  if (params_agency && params_agency != null)
     stringURL = stringURL + params_agency;
 
   return callApi(stringURL, "get", null);

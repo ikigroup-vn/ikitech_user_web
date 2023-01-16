@@ -117,7 +117,7 @@ export const fetchBranchStore = (store_code) => {
 };
 export const fetchAllSupplier = (store_code, page, params) => {
   return callApi(
-    `/store/${store_code}/suppliers?page=${page}&${params}`,
+    `/store/${store_code}/suppliers?page=${page}${params}`,
     "get",
     null
   );
