@@ -73,6 +73,7 @@ class Table extends Component {
     );
     insertParam({
       order_status_code: value,
+      page: 1,
     });
     this.props.onchangeStatusOrder(value);
 
@@ -104,6 +105,7 @@ class Table extends Component {
     );
     insertParam({
       payment_status_code: value,
+      page: 1,
     });
     this.props.onchangeStatusPayment(value);
     this.props.fetchAllBill(store_code, 1, branch_id, params);
@@ -135,6 +137,7 @@ class Table extends Component {
     );
     insertParam({
       order_from_list: value,
+      page: 1,
     });
     this.props.onchangeOrderFrom(value);
     this.props.fetchAllBill(store_code, 1, branch_id, params);
