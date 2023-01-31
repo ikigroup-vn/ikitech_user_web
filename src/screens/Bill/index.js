@@ -252,7 +252,7 @@ class Bill extends Component {
       orderFrom,
       collaborator_by_customer_id
     );
-    history.push(`/order/hahaha?page=1${params ? `${params}` : ""}`);
+    history.push(`/order/${store_code}?page=1${params ? `${params}` : ""}`);
 
     // this.setState({ statusPayment: "", statusOrder: "", numPage: 20 });
     var params_agency =
