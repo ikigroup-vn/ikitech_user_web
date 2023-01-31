@@ -118,7 +118,7 @@ class Table extends Component {
   };
   showData = (products, per_page, current_page) => {
     var result = null;
-    var { store_code, page } = this.props;
+    var { store_code, page, searchValue, limit } = this.props;
     if (typeof products === "undefined") {
       return result;
     }
@@ -168,6 +168,8 @@ class Table extends Component {
             checked={checked}
             onChangeSelected={this.onChangeSelected}
             page={page}
+            limit={limit}
+            searchValue={searchValue}
             status={status}
             status_name={status_name}
             status_stock={status_stock}

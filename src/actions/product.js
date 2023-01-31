@@ -1448,7 +1448,7 @@ export const updateOneFieldProduct = (
   };
 };
 
-export const updateProduct = (store_code, data, productId, page) => {
+export const updateProduct = (store_code, data, productId, page, params) => {
   return (dispatch) => {
     const _value_price = data.price.toString().replace(/,/g, "");
     const _value_quantity_in_stock = data.quantity_in_stock
@@ -1490,7 +1490,7 @@ export const updateProduct = (store_code, data, productId, page) => {
             content: res.data.msg,
           },
         });
-        history.push(`/product/index/${store_code}/${page}`);
+        history.push(`/product/index/${store_code}?page=${page}${params}`);
         // history.goBack();
       })
       .catch(function (error) {
@@ -1521,7 +1521,8 @@ export const updateDistribute = (
   productId,
   branchId,
   form,
-  page
+  page,
+  params
 ) => {
   return (dispatch) => {
     dispatch({
@@ -1548,7 +1549,7 @@ export const updateDistribute = (
         });
       })
       .finally(() => {
-        dispatch(updateProduct(store_code, form, productId, page));
+        dispatch(updateProduct(store_code, form, productId, page, params));
       });
   };
 };
@@ -1560,7 +1561,7 @@ export const removeItemImgDis = (data) => {
   };
 };
 
-export const destroyProduct = (store_code, id) => {
+export const destroyProduct = (store_code, id, branch_id, page, params) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -1574,7 +1575,7 @@ export const destroyProduct = (store_code, id) => {
           loading: "hide",
         });
         productApi
-          .fetchAllData(store_code)
+          .fetchAllProductV2(store_code, branch_id, page, params)
           .then((res) => {
             if (res.data.code !== 401)
               dispatch({

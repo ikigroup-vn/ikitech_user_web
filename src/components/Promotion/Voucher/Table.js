@@ -50,10 +50,19 @@ class Table extends Component {
   };
 
   changePage = (e, store_code, supplierId) => {
-    var is_end = this.props.is_end;
+    const { is_end, page, searchValue } = this.props;
 
-    if (e.target.name !== "toggle" && e.target.parentNode.name !== "toggle")
-      history.push(`/voucher/edit/${store_code}/${supplierId}?type=${is_end}`);
+    if (e.target.name !== "toggle" && e.target.parentNode.name !== "toggle") {
+      if (Number(is_end) === 1) {
+        history.push(
+          `/voucher/edit/${store_code}/${supplierId}?type=${is_end}&page=${page}`
+        );
+      } else {
+        history.push(
+          `/voucher/edit/${store_code}/${supplierId}?type=${is_end}&search=${searchValue}`
+        );
+      }
+    }
   };
   filterColDiscount = (data) => {
     var is_end = this.props.is_end;

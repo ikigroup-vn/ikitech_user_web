@@ -16,6 +16,7 @@ import { getQueryParams, removeAscent } from "../../../ultis/helpers";
 
 import Loading from "../../Loading";
 import styled from "styled-components";
+import history from "../../../history";
 
 const DiscountStyles = styled.div`
   .form-header {
@@ -45,18 +46,22 @@ class Discount extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      is_end: 2,
       modal: {
         table: "",
         id: "",
         store_code: "",
       },
       modalIsEnd: {},
-      searchValue: "",
       discountProducts: [],
+      is_end: getQueryParams("type") || 2,
+      page: getQueryParams("page") || 1,
+      searchValue: getQueryParams("search") || "",
     };
   }
 
+  setPage = (page) => {
+    this.setState({ page });
+  };
   setDiscountProducts = (discounts) => {
     this.setState({
       discountProducts: discounts,
@@ -66,6 +71,9 @@ class Discount extends Component {
     var target = e.target;
     var name = target.name;
     var value = Number(target.value);
+    var { store_code } = this.props.match.params;
+    var params = `?type=${value}`;
+    history.push(`/discount/${store_code}${params}`);
     this.setState({ [name]: value, searchValue: "" });
   };
   handleDelCallBack = (modal) => {
@@ -77,13 +85,14 @@ class Discount extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     if (nextState.is_end !== this.state.is_end) {
       var { store_code } = this.props.match.params;
+      const { page } = this.state;
       var is_end = Number(nextState.is_end);
       switch (is_end) {
         case 0:
           this.props.fetchAllDiscount(store_code);
           break;
         case 1:
-          this.props.fetchAllDiscountEnd(store_code);
+          this.props.fetchAllDiscountEnd(store_code, page);
           break;
         case 2:
           this.props.fetchAllDiscount(store_code);
@@ -93,25 +102,40 @@ class Discount extends Component {
       }
     }
     const { discounts } = this.props;
+    const { searchValue } = this.state;
     if (!shallowEqual(discounts, nextProps.discounts)) {
-      this.setDiscountProducts(nextProps.discounts);
+      let newDiscountProducts = JSON.parse(JSON.stringify(nextProps.discounts));
+      if (Array.isArray(nextProps.discounts)) {
+        newDiscountProducts = nextProps.discounts.filter((product) =>
+          removeAscent(product.name.trim().toLowerCase()).includes(
+            removeAscent(searchValue.trim().toLowerCase())
+          )
+        );
+      } else {
+        newDiscountProducts.data = nextProps.discounts.data.filter((product) =>
+          removeAscent(product.name.trim().toLowerCase()).includes(
+            removeAscent(searchValue.trim().toLowerCase())
+          )
+        );
+      }
+      this.setDiscountProducts(newDiscountProducts);
     }
     return true;
   }
 
   componentDidMount() {
-    var type = getQueryParams("type");
     var { store_code } = this.props.match.params;
+    const { page, is_end } = this.state;
 
-    if ((type && type == 0) || type == 1 || type == 2) {
-      var type = Number(type);
+    if ((is_end && is_end == 0) || is_end == 1 || is_end == 2) {
+      var type = Number(is_end);
 
       switch (type) {
         case 0:
           this.props.fetchAllDiscount(store_code);
           break;
         case 1:
-          this.props.fetchAllDiscountEnd(store_code);
+          this.props.fetchAllDiscountEnd(store_code, page);
           break;
         case 2:
           this.props.fetchAllDiscount(store_code);
@@ -119,7 +143,6 @@ class Discount extends Component {
         default:
           break;
       }
-      this.setState({ is_end: type });
     } else {
       this.props.fetchAllDiscount(this.props.match.params.store_code);
     }
@@ -146,10 +169,20 @@ class Discount extends Component {
   handleSearchValueChange = (e) => {
     const value = e.target.value;
     const { discounts } = this.props;
+    const { store_code } = this.props.match.params;
+    const { is_end } = this.state;
 
     this.setState({
       searchValue: value,
+      page: 1,
     });
+    var params = "";
+    if (Number(is_end) === 1) {
+      params += `?page=1&type=${is_end}`;
+    } else {
+      params += `?search=${value}&type=${is_end}`;
+    }
+    history.push(`/discount/${store_code}${params}`);
     if (value === "") {
       this.setDiscountProducts(discounts);
     } else {
@@ -178,7 +211,7 @@ class Discount extends Component {
     var { discounts } = this.props;
     var { store_code } = this.props.match.params;
     var displayPag = is_end == 0 ? "hide" : null;
-    var { insert, update, _delete, isShow } = this.state;
+    var { insert, update, _delete, isShow, page } = this.state;
     if (this.props.auth) {
       return (
         <DiscountStyles id="wrapper">
@@ -289,6 +322,8 @@ class Discount extends Component {
                           update={update}
                           _delete={_delete}
                           is_end={is_end}
+                          page={page}
+                          searchValue={searchValue}
                           handleIsEndCallback={this.handleIsEndCallback}
                           handleDelCallBack={this.handleDelCallBack}
                           params={params}
@@ -299,6 +334,7 @@ class Discount extends Component {
                           params={params}
                           discounts={discountProducts}
                           store_code={store_code}
+                          setPage={this.setPage}
                         />
                       </div>
                     </div>
@@ -336,8 +372,8 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchAllDiscount: (store_code) => {
       dispatch(discountAction.fetchAllDiscount(store_code));
     },
-    fetchAllDiscountEnd: (store_code) => {
-      dispatch(discountAction.fetchAllDiscountEnd(store_code));
+    fetchAllDiscountEnd: (store_code, page) => {
+      dispatch(discountAction.fetchAllDiscountEnd(store_code, page));
     },
   };
 };

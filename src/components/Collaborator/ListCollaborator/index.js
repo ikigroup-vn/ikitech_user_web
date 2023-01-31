@@ -6,13 +6,15 @@ import * as Env from "../../../ultis/default";
 import Table from "./Table";
 import * as customerAction from "../../../actions/customer";
 import Pagination from "./Pagination";
+import { getQueryParams, insertParam } from "../../../ultis/helpers";
 
 class ListCollaborator extends Component {
   constructor(props) {
     super(props);
     this.state = {
       showChatBox: "hide",
-      searchValue: "",
+      page: getQueryParams("page") || 1,
+      searchValue: getQueryParams("search") || "",
     };
   }
 
@@ -28,7 +30,9 @@ class ListCollaborator extends Component {
   };
 
   componentDidMount() {
-    this.props.fetchAllCollaborator(this.props.store_code);
+    const { page, searchValue } = this.state;
+    const params = this.getParams(searchValue);
+    this.props.fetchAllCollaborator(this.props.store_code, page, params);
   }
   closeChatBox = (status) => {
     this.setState({
@@ -49,10 +53,19 @@ class ListCollaborator extends Component {
 
     return params;
   };
+  setPage = (page) => {
+    this.setState({ page });
+  };
   searchData = (e) => {
     e.preventDefault();
     var { searchValue } = this.state;
     var params = this.getParams(searchValue);
+    this.setPage(1);
+    insertParam({ search: searchValue });
+    const page = getQueryParams("page");
+    if (page) {
+      insertParam({ page: 1 });
+    }
     this.props.fetchAllCollaborator(this.props.store_code, 1, params);
   };
 
@@ -78,7 +91,7 @@ class ListCollaborator extends Component {
         ? "Trống"
         : customer.name;
 
-    var { showChatBox, searchValue } = this.state;
+    var { showChatBox, searchValue, page } = this.state;
     console.log(this.props.state);
     return (
       <div id="">
@@ -122,6 +135,8 @@ class ListCollaborator extends Component {
             handleShowChatBox={this.handleShowChatBox}
             store_code={store_code}
             collaborators={collaborators}
+            page={page}
+            searchValue={searchValue}
           />
 
           <Pagination
@@ -129,6 +144,7 @@ class ListCollaborator extends Component {
             getParams={this.getParams}
             store_code={store_code}
             collaborators={collaborators}
+            setPage={this.setPage}
           />
         </div>
 

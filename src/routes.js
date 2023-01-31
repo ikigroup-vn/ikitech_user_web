@@ -566,7 +566,7 @@ const routes = [
     ),
   },
   {
-    path: "/product/index/:store_code/:page?",
+    path: "/product/index/:store_code",
     exact: true,
 
     main: ({ match }) => <Product match={match} />,
@@ -604,7 +604,7 @@ const routes = [
   },
 
   {
-    path: "/product/edit/:store_code/:productId/:page?",
+    path: "/product/edit/:store_code/:productId",
     exact: true,
 
     main: ({ match, history }) => (

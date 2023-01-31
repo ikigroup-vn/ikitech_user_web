@@ -268,8 +268,20 @@ class Form extends Component {
 
     e.preventDefault();
     var type = getQueryParams("type");
+    var page = getQueryParams("page");
+    var search = getQueryParams("search");
     if (type) {
-      history.replace(`/combo/${store_code}?type=${type}`);
+      if (Number(type) === 1) {
+        history.replace(
+          `/combo/${store_code}?type=${type}${page ? `&page=${page}` : ""}`
+        );
+      } else {
+        history.replace(
+          `/combo/${store_code}?type=${type}${
+            search ? `&search=${search}` : ""
+          }`
+        );
+      }
     } else {
       history.goBack();
     }

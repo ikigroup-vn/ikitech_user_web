@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import * as dashboardAction from "../../actions/dashboard";
+import history from "../../history";
 class Pagination extends Component {
   constructor(props) {
     super(props);
@@ -11,8 +12,12 @@ class Pagination extends Component {
   }
 
   passPagination = (page) => {
-    this.props.fetchAllSupplier(this.props.store_code, page);
-    this.props.getPaginate(page)
+    const { searchValue, store_code } = this.props;
+
+    history.push(`/supplier/${store_code}?page=${page}&search=${searchValue}`);
+    const params = `&search=${searchValue}`;
+    this.props.fetchAllSupplier(store_code, page, params);
+    this.props.getPaginate(page);
   };
 
   showData = (links) => {
@@ -68,8 +73,8 @@ class Pagination extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllSupplier: (store_code, page) => {
-      dispatch(dashboardAction.fetchAllSupplier(store_code, page));
+    fetchAllSupplier: (store_code, page, params) => {
+      dispatch(dashboardAction.fetchAllSupplier(store_code, page, params));
     },
   };
 };

@@ -19,6 +19,7 @@ import * as Types from "../../constants/ActionType";
 import * as billApi from "../../data/remote/bill";
 import "./style.css";
 import history from "../../history";
+import { insertParam } from "../../ultis/helpers";
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -51,7 +52,14 @@ class Table extends Component {
     var { value } = e.target;
     this.setState({ statusOrder: value });
     var { statusPayment, statusOrder, orderFrom } = this.state;
-    var { store_code, time_from, time_to, numPage, searchValue } = this.props;
+    var {
+      store_code,
+      time_from,
+      time_to,
+      numPage,
+      searchValue,
+      collaborator_by_customer_id,
+    } = this.props;
     const branch_id = getBranchId();
     var params = this.props.getParams(
       time_from,
@@ -60,8 +68,13 @@ class Table extends Component {
       value,
       statusPayment,
       numPage,
-      orderFrom
+      orderFrom,
+      collaborator_by_customer_id
     );
+    insertParam({
+      order_status_code: value,
+      page: 1,
+    });
     this.props.onchangeStatusOrder(value);
 
     this.props.fetchAllBill(store_code, 1, branch_id, params);
@@ -70,7 +83,14 @@ class Table extends Component {
     var { value } = e.target;
     this.setState({ statusPayment: value });
     var { statusPayment, statusOrder, orderFrom } = this.state;
-    var { store_code, time_from, time_to, numPage, searchValue } = this.props;
+    var {
+      store_code,
+      time_from,
+      time_to,
+      numPage,
+      searchValue,
+      collaborator_by_customer_id,
+    } = this.props;
     const branch_id = getBranchId();
 
     var params = this.props.getParams(
@@ -80,8 +100,13 @@ class Table extends Component {
       statusOrder,
       value,
       numPage,
-      orderFrom
+      orderFrom,
+      collaborator_by_customer_id
     );
+    insertParam({
+      payment_status_code: value,
+      page: 1,
+    });
     this.props.onchangeStatusPayment(value);
     this.props.fetchAllBill(store_code, 1, branch_id, params);
   };
@@ -90,7 +115,14 @@ class Table extends Component {
     var { value } = e.target;
     this.setState({ orderFrom: value });
     var { statusPayment, statusOrder, orderFrom } = this.state;
-    var { store_code, time_from, time_to, numPage, searchValue } = this.props;
+    var {
+      store_code,
+      time_from,
+      time_to,
+      numPage,
+      searchValue,
+      collaborator_by_customer_id,
+    } = this.props;
     const branch_id = getBranchId();
 
     var params = this.props.getParams(
@@ -100,8 +132,13 @@ class Table extends Component {
       statusOrder,
       statusPayment,
       numPage,
-      value
+      value,
+      collaborator_by_customer_id
     );
+    insertParam({
+      order_from_list: value,
+      page: 1,
+    });
     this.props.onchangeOrderFrom(value);
     this.props.fetchAllBill(store_code, 1, branch_id, params);
   };
@@ -428,6 +465,7 @@ class Table extends Component {
   };
 
   optionsOrderFrom = (orderFrom) => {
+    console.log("orderrrr: ", orderFrom);
     return (
       <select
         value={orderFrom || ""}
@@ -667,7 +705,7 @@ class Table extends Component {
                 } */}
                 <th>Tổng tiền</th>
                 {getChannel() == IKITECH && (
-                  <th>{this.optionsOrderFrom(orderFrom)}</th>
+                  <th>{this.optionsOrderFrom(this.props.orderFrom)}</th>
                 )}
                 <th>Thời gian tạo đơn</th>
 

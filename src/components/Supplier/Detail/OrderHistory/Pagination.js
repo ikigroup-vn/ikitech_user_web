@@ -1,9 +1,4 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import getChanel from "../../../ultis/channel";
-
-import * as bonusProductsAction from "../../../actions/bonus_product";
-import { insertParam } from "../../../ultis/helpers";
 class Pagination extends Component {
   constructor(props) {
     super(props);
@@ -12,13 +7,8 @@ class Pagination extends Component {
     };
   }
 
-  fetchAllBonusProductEnd = (page) => {
-    var { store_code, setPage } = this.props;
-    insertParam({
-      page,
-    });
-    setPage(page);
-    this.props.fetchAllBonusProductEnd(store_code, page);
+  passPagination = (page) => {
+    this.props.handleFetchAllListImportStock(page);
   };
 
   showData = (links) => {
@@ -46,9 +36,7 @@ class Pagination extends Component {
           return (
             <li class={`page-item ${active} `}>
               <a
-                onClick={() =>
-                  this.fetchAllBonusProductEnd(data.url.split("?page=")[1])
-                }
+                onClick={() => this.passPagination(data.url.split("?page=")[1])}
                 class="page-link"
               >
                 {label}
@@ -64,27 +52,14 @@ class Pagination extends Component {
   };
 
   render() {
-    var { display, bonusProducts } = this.props;
-    var links =
-      typeof bonusProducts.links !== "undefined" ? bonusProducts.links : [];
     return (
-      <nav
-        aria-label="Page navigation"
-        className={`float-pagination ${display} ${getChanel()}`}
-      >
+      <nav aria-label="Page navigation" className="float-pagination">
         <ul class="pagination  tab-pagination pg-blue">
-          {this.showData(links)}
+          {this.showData(this.props.listImportStock.links)}
         </ul>
       </nav>
     );
   }
 }
 
-const mapDispatchToProps = (dispatch, props) => {
-  return {
-    fetchAllBonusProductEnd: (store_code, page) => {
-      dispatch(bonusProductsAction.fetchAllBonusProductEnd(store_code, page));
-    },
-  };
-};
-export default connect(null, mapDispatchToProps)(Pagination);
+export default Pagination;

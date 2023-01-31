@@ -353,13 +353,15 @@ export const createCustomer = (store_code, id, funcModal = null) => {
 
         if (id.isFromPosAndSave != true) {
           customerApi
-            .fetchAllCustomer(store_code)
+            .fetchAllCustomer(store_code, 1)
             .then((res) => {
-              if (res.data.code !== 401)
+              if (res.data.code !== 401) {
                 dispatch({
                   type: Types.FETCH_ALL_CUSTOMER,
                   data: res.data.data,
                 });
+                history.push(`/customer/${store_code}`);
+              }
             })
             .catch(function (error) {
               dispatch({
