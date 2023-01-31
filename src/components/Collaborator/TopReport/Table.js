@@ -90,6 +90,9 @@ class Table extends Component {
               </td>
              
                 <td>
+              {typeof data.sum_share_collaborator != "undefined" ? format(Number(data.sum_share_collaborator)) : null  }
+                </td>
+                <td>
               {typeof data.sum_total_after_discount != "undefined" ? format(Number(data.sum_total_after_discount)) : null  }
                 </td>
         
@@ -123,6 +126,7 @@ class Table extends Component {
 
               <th>Số đơn hàng</th>
 
+              <th>Tổng hoa hồng</th>
               <th>Tổng doanh số</th>
      
             </tr>
