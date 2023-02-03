@@ -280,7 +280,11 @@ class ShowData extends Component {
         <td>{data.sku}</td>
 
         <td>
-          <Link to={`/product/edit/${store_code}/${data.id}/${page}`}>
+          <Link
+            to={`/product/edit/${store_code}/${data.id}?page=${page}${
+              searchValue ? `&search=${searchValue}` : ""
+            }&limit=${limit}`}
+          >
             {data.name}
           </Link>
         </td>
