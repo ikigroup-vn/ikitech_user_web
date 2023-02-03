@@ -110,7 +110,11 @@ class InfoShipper extends Component {
                 onClick={() => this.sendOrderToDelivery()}
                 className="btn btn-primary  btn-sm"
                 style={{ marginRight: "10px" }}
-                disabled={this.state.shipperId === null ? true : false}
+                disabled={
+                  this.state.shipperId === null || this.state.shipperId < 0
+                    ? true
+                    : false
+                }
               >
                 <i className="fas fa-location-arrow" />
                 &nbsp;Đăng đơn hàng
