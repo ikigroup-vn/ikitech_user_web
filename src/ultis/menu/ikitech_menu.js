@@ -443,7 +443,6 @@ export const ikitech_menu = [
         name: "Chương trình khuyến mại",
         icon: "fas fa-money-bill-alt",
         setOpenKey: ["/discount", "/voucher", "/combo", "/bonus_product"],
-
         open: "promotion",
         children: [
           {
@@ -482,8 +481,29 @@ export const ikitech_menu = [
       },
 
       {
+        name: "Gamification",
+        icon: "fas fa-dice-d20",
+        setOpenKey: ["/game_spin_wheels", "/game_predict_outcome"],
+        open: "gamification",
+        children: [
+          {
+            name: "Game quay thưởng",
+            class: "gamification",
+            display: "show",
+            exact: true,
+            to: "/game_spin_wheels",
+          },
+          {
+            name: "Game dự đoán kết quả",
+            class: "gamification",
+            display: "show",
+            exact: true,
+            to: "/game_predict_outcome",
+          },
+        ],
+      },
+      {
         name: "Cài đặt",
-
         icon: "fas fa-cogs",
         setOpenKey: [
           "/theme",

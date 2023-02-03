@@ -18,20 +18,25 @@ const ModalCustomStyles = styled.div`
     height: 250px;
     background-color: white;
     border-radius: 5px;
+    overflow: hidden;
     margin: 5% 0;
+    display: flex;
+    flex-direction: column;
     .modalCustom__header {
       padding: 10px;
       position: relative;
       .modalCustom__header__title {
         font-size: 20px;
         font-weight: 600;
-        color: black;
       }
       .close {
         position: absolute;
         top: 10px;
         right: 10px;
       }
+    }
+    .modalCustom__content {
+      flex-grow: 1;
     }
   }
   &.modal__show {

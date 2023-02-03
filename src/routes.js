@@ -169,6 +169,8 @@ import GroupCustomer from "./screens/GroupCustomer";
 import InvoiceTemplate from "./screens/InvoiceTemplate";
 import Manual from "./screens/Manual";
 import HistoryOperation from "./screens/HistoryOperation";
+import SpinWheel from "./screens/Gamification/SpinWheel";
+import ActionsGameSpinWheel from "./screens/Gamification/SpinWheel/ActionsGameSpinWheel";
 const routes = [
   {
     path: "/invoice_template/index/:store_code",
@@ -524,6 +526,28 @@ const routes = [
 
     main: ({ match, history }) => (
       <HistoryOperation match={match} history={history} />
+    ),
+  },
+  {
+    path: "/game_spin_wheels/:store_code",
+    exact: true,
+
+    main: ({ match, history }) => <SpinWheel match={match} history={history} />,
+  },
+  {
+    path: "/game_spin_wheels/:store_code/create",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <ActionsGameSpinWheel match={match} history={history} />
+    ),
+  },
+  {
+    path: "/game_spin_wheels/:store_code/update/:idGameSpinWheel",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <ActionsGameSpinWheel match={match} history={history} />
     ),
   },
 

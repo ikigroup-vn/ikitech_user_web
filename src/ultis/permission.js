@@ -297,6 +297,11 @@ const permission = (channel) => {
         body: ["customer_list", "staff_list", "supplier"],
       },
       {
+        name: "Gamification",
+        header: ["Cài đặt Game"],
+        body: ["gamification"],
+      },
+      {
         name: "Cài đặt",
         header: [
           "Cài đặt máy in",
@@ -470,6 +475,7 @@ export const initialPermission = () => {
     app_theme_contact_screen: false,
     order_list: true,
     order_allow_change_status: true,
+    gamification: false,
     web_theme_edit: false,
     web_theme_overview: false,
     web_theme_contact: false,

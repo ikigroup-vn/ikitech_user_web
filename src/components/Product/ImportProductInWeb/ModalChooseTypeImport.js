@@ -313,6 +313,9 @@ class ModalChooseTypeImport extends Component {
         style={{
           height: "200px",
         }}
+        styleHeader={{
+          color: "black",
+        }}
       >
         <ModalChooseTypeImportStyles>
           <div className="modalImport__content">
