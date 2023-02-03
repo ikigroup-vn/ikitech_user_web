@@ -12,6 +12,7 @@ import Pagination from "../../../components/Gamification/SpinWheel/Pagination";
 import { getQueryParams } from "../../../ultis/helpers";
 import ModalDeleteGameSpinWheel from "../../../components/Gamification/SpinWheel/ModalDeleteGameSpinWheel";
 import * as Types from "../../../constants/ActionType";
+import Footer from "../../../components/Partials/Footer";
 const SpinWheelStyles = styled.div`
   .btn-addSpinWheel {
     display: flex;
@@ -131,6 +132,7 @@ class SpinWheel extends Component {
                 ) : (
                   <NotAccess></NotAccess>
                 )}
+                <Footer />
                 <ModalDeleteGameSpinWheel
                   store_code={store_code}
                   idGameSpinWheel={idGameSpinWheel}

@@ -385,8 +385,20 @@ export const ADD_GIFT_GAME_SPIN_WHEELS = "ADD_GIFT_GAME_SPIN_WHEELS";
 export const UPDATE_GIFT_GAME_SPIN_WHEELS = "UPDATE_GIFT_GAME_SPIN_WHEELS";
 export const DELETE_GIFT_GAME_SPIN_WHEELS = "DELETE_GIFT_GAME_SPIN_WHEELS";
 
-//Mini Game For
+//Spin Wheel For
 export const GROUP_CUSTOMER_ALL = 0;
 export const GROUP_CUSTOMER_CTV = 1;
 export const GROUP_CUSTOMER_AGENCY = 2;
 export const GROUP_CUSTOMER_BY_CONDITION = 4;
+
+// Status spin wheel
+export const PROGRESSING = 0;
+export const CANCELED = 1;
+export const COMPLETED = 2;
+
+// Type Gift
+export const GIFT_IS_COIN = 0;
+export const GIFT_IS_ITEM = 1;
+export const GIFT_IS_TEXT = 2;
+export const GIFT_IS_LUCKY_AFTER = 3;
+export const GIFT_IS_LOST_TURN = 4;

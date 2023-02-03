@@ -7,6 +7,7 @@ import Topbar from "../../../components/Partials/Topbar";
 import Loading from "../../Loading";
 import NotAccess from "../../../components/Partials/NotAccess";
 import ActionsGameSpinWheelContent from "./ActionsGameSpinWheelContent";
+import Footer from "../../../components/Partials/Footer";
 const ActionsGameSpinWheelStyles = styled.div``;
 
 class ActionsGameSpinWheel extends Component {
@@ -60,6 +61,7 @@ class ActionsGameSpinWheel extends Component {
                   <NotAccess></NotAccess>
                 )}
               </div>
+              <Footer />
             </div>
           </div>
         </ActionsGameSpinWheelStyles>
