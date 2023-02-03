@@ -32,7 +32,7 @@ class Bill extends Component {
       statusPayment: "",
       runAsync: "",
       orderFrom: "",
-      numPage: 20,
+      numPage: 10,
       agency_by_customer_id:
         queryString.parse(window.location.search).agency_by_customer_id || null,
       collaborator_by_customer_id:
@@ -117,7 +117,7 @@ class Bill extends Component {
     var to = getQueryParams("to");
     var statusOrder = getQueryParams("order_status_code");
     var statusPayment = getQueryParams("payment_status_code");
-    var { collaborator_by_customer_id } = this.state;
+    var { collaborator_by_customer_id, numPage } = this.state;
 
     if (
       this.props.customer.id !== this.state.agency_by_customer_id &&
@@ -185,7 +185,7 @@ class Bill extends Component {
         search,
         statusOrder,
         statusPayment,
-        limit,
+        limit || numPage,
         orderFrom,
         collaborator_by_customer_id
       );

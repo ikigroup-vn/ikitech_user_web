@@ -111,7 +111,9 @@ class InfoShipper extends Component {
                 className="btn btn-primary  btn-sm"
                 style={{ marginRight: "10px" }}
                 disabled={
-                  typeof this.state.shipperId === "undefined" ? true : false
+                  this.state.shipperId === null || this.state.shipperId < 0
+                    ? true
+                    : false
                 }
               >
                 <i className="fas fa-location-arrow" />
