@@ -1188,12 +1188,12 @@ class Form extends Component {
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <div class="box-footer">
-                {getQueryParams("type") == 1 ? null : (
+                {/* {getQueryParams("type") == 1 ? null :  */}
                   <button type="submit" class="btn btn-info   btn-sm">
                     <i class="fas fa-save"></i> Lưu
                   </button>
-                )}
-
+                
+             
                 <button
                   type="button"
                   style={{ marginLeft: "10px" }}
