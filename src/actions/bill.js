@@ -682,13 +682,6 @@ export const updateOrder = (data, store_code, order_code) => {
         }
       })
       .catch(function (error) {
-        // billApi.fetchBillId(store_code, order_code).then((res) => {
-        //   if (res.data.code === 200)
-        //     dispatch({
-        //       type: Types.FETCH_ID_BILL,
-        //       data: res.data.data,
-        //     });
-        // });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {

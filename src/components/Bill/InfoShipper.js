@@ -42,7 +42,6 @@ class InfoShipper extends Component {
   showShipment = () => {
     var result = null;
     var { shipment } = this.props;
-    console.log("van chuyen", shipment);
     if (shipment?.length > 0) {
       result = shipment.map((data) => {
         return <option value={data.id}>{data.name}</option>;
