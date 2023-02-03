@@ -657,50 +657,40 @@ export const sendOrderToDelivery = (
   };
 };
 
-export const updateOrder = (data, store_code, order_code, noneLoading) => {
+export const updateOrder = (data, store_code, order_code) => {
   return (dispatch) => {
-    if (noneLoading !== true) {
-      dispatch({
-        type: Types.SHOW_LOADING,
-        loading: "show",
-      });
-    }
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
 
     billApi
       .updateOrder(data, store_code, order_code)
       .then((res) => {
-        dispatch({
-          type: Types.SHOW_LOADING,
-          loading: "hide",
-        });
-
-        billApi.fetchBillId(store_code, order_code).then((res) => {
-          if (res.data.code !== 401)
-            dispatch({
-              type: Types.FETCH_ID_BILL,
-              data: res.data.data,
-            });
-        });
-      })
-      .catch(function (error) {
-        billApi.fetchBillId(store_code, order_code).then((res) => {
-          if (res.data.code === 200)
-            dispatch({
-              type: Types.FETCH_ID_BILL,
-              data: res.data.data,
-            });
-        });
-        if (noneLoading !== true) {
+        if (res.data.code === 200) {
           dispatch({
-            type: Types.ALERT_UID_STATUS,
-            alert: {
-              type: "danger",
-              title: "Lỗi",
-              disable: "show",
-              content: error?.response?.data?.msg,
-            },
+            type: Types.SHOW_LOADING,
+            loading: "hide",
+          });
+          billApi.fetchBillId(store_code, order_code).then((res) => {
+            if (res.data.code === 200)
+              dispatch({
+                type: Types.FETCH_ID_BILL,
+                data: res.data.data,
+              });
           });
         }
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
       });
   };
 };
