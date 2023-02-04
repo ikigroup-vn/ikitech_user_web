@@ -20,7 +20,7 @@ import CKEditor from "ckeditor4-react";
 import ModalUpload from "../ModalUpload";
 import * as Env from "../../../../ultis/default";
 import MomentInput from "react-moment-input";
-import { formatNumber } from "../../../../ultis/helpers";
+import { formatNumber, getQueryParams } from "../../../../ultis/helpers";
 import { isEmpty } from "../../../../ultis/helpers";
 import getChannel, { IKIPOS, IKITECH } from "../../../../ultis/channel";
 import history from "../../../../history";
@@ -528,8 +528,28 @@ class Form extends Component {
   };
 
   goBack = (e) => {
-    // e.preventDefault();
-    history.goBack();
+    var { store_code } = this.props;
+
+    var type = getQueryParams("type");
+    var page = getQueryParams("page");
+    var search = getQueryParams("search");
+    if (type) {
+      if (Number(type) === 1) {
+        history.replace(
+          `/bonus_product/${store_code}?type=${type}${
+            page ? `&page=${page}` : ""
+          }`
+        );
+      } else {
+        history.replace(
+          `/bonus_product/${store_code}?type=${type}${
+            search ? `&search=${search}` : ""
+          }`
+        );
+      }
+    } else {
+      history.goBack();
+    }
   };
 
   compareTwoProduct(item1, item2) {
@@ -1168,9 +1188,12 @@ class Form extends Component {
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <div class="box-footer">
-                <button type="submit" class="btn btn-info   btn-sm">
-                  <i class="fas fa-save"></i> Lưu
-                </button>
+                {/* {getQueryParams("type") == 1 ? null :  */}
+                  <button type="submit" class="btn btn-info   btn-sm">
+                    <i class="fas fa-save"></i> Lưu
+                  </button>
+                
+             
                 <button
                   type="button"
                   style={{ marginLeft: "10px" }}

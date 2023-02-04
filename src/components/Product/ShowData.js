@@ -199,7 +199,23 @@ class ShowData extends Component {
     }
     return result;
   };
-
+  handleChangeStatusProduct = () => {
+    const {
+      store_code,
+      updateOneFieldProduct,
+      data,
+      page,
+      handleFetchAllProduct,
+    } = this.props;
+    updateOneFieldProduct(
+      store_code,
+      "status",
+      data.status === 0 ? -1 : 0,
+      data.id,
+      page
+    );
+    handleFetchAllProduct();
+  };
   render() {
     const {
       product_discount,
@@ -215,16 +231,18 @@ class ShowData extends Component {
       index,
       store_code,
       page,
+      searchValue,
+      limit,
       status,
       status_name,
       status_stock,
       discount,
       historyInventory,
-      distributes
+      distributes,
     } = this.props;
     const listDistribute =
       data.inventory?.distributes !== null &&
-        data.inventory?.distributes.length > 0
+      data.inventory?.distributes.length > 0
         ? data.inventory?.distributes[0]
         : [];
 
@@ -233,7 +251,6 @@ class ShowData extends Component {
     if (product_discount) {
       discount_percent = product_discount.value;
     }
-
     return (
       <tr className="hover-product">
         <td className={`${_delete == true ? "show" : "hide"} `}>
@@ -263,50 +280,59 @@ class ShowData extends Component {
         <td>{data.sku}</td>
 
         <td>
-          <Link to={`/product/edit/${store_code}/${data.id}/${page}`}>
+          <Link
+            to={`/product/edit/${store_code}/${data.id}?page=${page}${
+              searchValue ? `&search=${searchValue}` : ""
+            }&limit=${limit}`}
+          >
             {data.name}
           </Link>
         </td>
 
         <td>
-        { product_discount == null &&
-          <div className="eea"
-          >
-            {min_price === max_price ? (
-              contactOrNumber(format(
-                Number(
-                  discount_percent == null
-                    ? min_price
-                    : min_price - min_price * discount_percent * 0.01
+          {product_discount == null && (
+            <div className="eea">
+              {min_price === max_price ? (
+                contactOrNumber(
+                  format(
+                    Number(
+                      discount_percent == null
+                        ? min_price
+                        : min_price - min_price * discount_percent * 0.01
+                    )
+                  )
                 )
-              )
-              )) : distributes && distributes.length == 0 ? contactOrNumber(format(
-                Number(
-                  discount_percent == null
-                    ? min_price
-                    : min_price - min_price * discount_percent * 0.01
-                ))) : (
-              <div className="ae"
-              >
-                {format(
-                  Number(
-                    discount_percent == null
-                      ? min_price
-                      : min_price - min_price * discount_percent * 0.01
+              ) : distributes && distributes.length == 0 ? (
+                contactOrNumber(
+                  format(
+                    Number(
+                      discount_percent == null
+                        ? min_price
+                        : min_price - min_price * discount_percent * 0.01
+                    )
                   )
-                )}
-                {" - "}
-                {format(
-                  Number(
-                    discount_percent == null
-                      ? max_price
-                      : max_price - max_price * discount_percent * 0.01
-                  )
-                )}
-              </div>
-            )}
-          </div>
-          }
+                )
+              ) : (
+                <div className="ae">
+                  {format(
+                    Number(
+                      discount_percent == null
+                        ? min_price
+                        : min_price - min_price * discount_percent * 0.01
+                    )
+                  )}
+                  {" - "}
+                  {format(
+                    Number(
+                      discount_percent == null
+                        ? max_price
+                        : max_price - max_price * discount_percent * 0.01
+                    )
+                  )}
+                </div>
+              )}
+            </div>
+          )}
 
           {product_discount && (
             <div
@@ -320,9 +346,11 @@ class ShowData extends Component {
               ) : (
                 <div className="row e">
                   <div
-                    style={{
-                      // textDecoration: "line-through",
-                    }}
+                    style={
+                      {
+                        // textDecoration: "line-through",
+                      }
+                    }
                   >
                     {format(Number(min_price))}
                     {" - "}
@@ -339,9 +367,16 @@ class ShowData extends Component {
         {getChannel() == IKITECH && (
           <td>
             {" "}
-            <h5>
+            {/* <h5>
               <span class={`badge badge-${status}`}>{status_name}</span>
-            </h5>
+            </h5> */}
+            <label
+              className="status-product"
+              onClick={this.handleChangeStatusProduct}
+            >
+              <input type="checkbox" hidden checked={data.status === 0} />
+              <div></div>
+            </label>
           </td>
         )}
 
@@ -350,16 +385,19 @@ class ShowData extends Component {
 
         <td className="btn-voucher">
           <Link
-            to={`/product/edit/${store_code}/${data.id}/${page}`}
-            class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"
-              }`}
+            to={`/product/edit/${store_code}/${data.id}?page=${page}${
+              searchValue ? `&search=${searchValue}` : ""
+            }&limit=${limit}`}
+            class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
           >
             <i class="fa fa-edit"></i> Sửa
           </Link>
           <Link
             to={`/product/create/${store_code}/${data.id}`}
-            class={`btn btn-primary btn-sm ${insert == true ? "show" : "hide"
-              }`}
+            class={`btn btn-primary btn-sm ${insert == true ? "show" : "hide"}`}
+            style={{
+              marginLeft: "5px",
+            }}
           >
             <i class="fa fa-copy"></i> Sao chép
           </Link>
@@ -369,8 +407,7 @@ class ShowData extends Component {
             }
             data-toggle="modal"
             data-target="#removeModal"
-            class={`btn btn-danger btn-sm ${_delete == true ? "show" : "hide"
-              }`}
+            class={`btn btn-danger btn-sm ${_delete == true ? "show" : "hide"}`}
           >
             <i class="fa fa-trash"></i> Xóa
           </button>

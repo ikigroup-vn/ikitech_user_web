@@ -45,7 +45,6 @@ export default function (endpoint, method, body) {
         return response;
       },
       function (error) {
-
         try {
           if (error.response.data.code == 404) {
             store.dispatch({

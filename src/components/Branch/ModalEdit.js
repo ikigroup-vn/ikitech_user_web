@@ -120,6 +120,11 @@ class ModalEdit extends Component {
         txtAddress_detail: nextProps.modal.address_detail,
         txtPost_branch: nextProps.modal.postcode,
         is_default: nextProps.modal.is_default,
+
+        txtTaxCode: nextProps.modal.txt_code,
+        txtAccountNumber: nextProps.modal.account_number,
+        txtAccountName: nextProps.modal.account_name,
+        txtBank: nextProps.modal.bank,
       });
     }
 
@@ -155,6 +160,10 @@ class ModalEdit extends Component {
       txtCode_branch,
       txtPost_branch,
       txtEmail_branch,
+      txtTaxCode,
+      txtAccountNumber,
+      txtAccountName,
+      txtBank,
     } = this.state;
     const { store_code } = this.props;
     var error = false;
@@ -192,6 +201,12 @@ class ModalEdit extends Component {
       address_detail: txtAddress_detail,
       postcode: txtPost_branch,
       is_default: is_default,
+
+      txt_code: txtTaxCode,
+      account_number: txtAccountNumber,
+      account_name: txtAccountName,
+      bank: txtBank,
+
     };
     this.props.updateBranchStore(
       store_code,
@@ -214,6 +229,10 @@ class ModalEdit extends Component {
       isLoaded: false,
       listWards: [],
       listDistrict: [],
+      txtTaxCode: "",
+      txtAccountNumber: "",
+      txtAccountName: "",
+      txtBank: "",
       ...this.listErrors(),
     });
   };
@@ -266,6 +285,10 @@ class ModalEdit extends Component {
       txtPost_branch,
       txtEmail_branch,
       is_default,
+      txtTaxCode,
+      txtAccountNumber,
+      txtAccountName,
+      txtBank,
     } = this.state;
     return (
       <>
@@ -389,19 +412,66 @@ class ModalEdit extends Component {
                             name="txtCode_branch"
                           />
                         </div>
+
                         <div class="form-group">
-                          <label for="product_name">Mã bưu điện</label>
+                          <label for="product_name">Mã số thuế</label>
                           <input
                             type="text"
                             class="form-control"
-                            id="txtPost_branch"
-                            placeholder="Nhập mã bưu điện"
+                            id="txtTaxCode"
+                            placeholder="Nhập mã số thuế"
                             autoComplete="off"
-                            value={txtPost_branch || ""}
+                            value={txtTaxCode || ""}
                             onChange={this.onChange}
-                            name="txtPost_branch"
+                            name="txtTaxCode"
                           />
                         </div>
+
+                        <div class="form-group">
+                          <label for="product_name">Số tài khoản</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="txtAccountNumber"
+                            placeholder="Nhập số tài khoản"
+                            autoComplete="off"
+                            value={txtAccountNumber || ""}
+                            onChange={this.onChange}
+                            name="txtAccountNumber"
+                          />
+                        </div>
+
+                        <div class="form-group">
+                          <label for="product_name">Tên chủ tài khoản</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="txtAccountName"
+                            placeholder="Nhập tên chủ tài khoản"
+                            autoComplete="off"
+                            value={txtAccountName || ""}
+                            onChange={this.onChange}
+                            name="txtAccountName"
+                          />
+                        </div>
+
+
+                        <div class="form-group">
+                          <label for="product_name">Tên ngân hàng</label>
+                          <input
+                            type="text"
+                            class="form-control"
+                            id="txtBank"
+                            placeholder="Nhập tên ngân hàng"
+                            autoComplete="off"
+                            value={txtBank || ""}
+                            onChange={this.onChange}
+                            name="txtBank"
+                          />
+                        </div>
+
+
+                     
                       </div>
                       <div class="col-6 box-body-right">
                         <div class="form-group">

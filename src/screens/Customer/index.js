@@ -16,6 +16,8 @@ import {
   getQueryParams,
   setQueryParamInUrl,
 } from "../../ultis/helpers";
+import $ from "jquery";
+import * as XLSX from "xlsx";
 import ModalCreate from "../../components/Customer/ModalCreate";
 import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
 import * as placeAction from "../../actions/place";
@@ -26,6 +28,10 @@ import styled from "styled-components";
 import { options } from "../../ultis/groupCustomer/options";
 import * as Types from "../../constants/ActionType";
 import { genders } from "../../ultis/groupCustomer/genders";
+import SidebarShowCustomersByReferralPhone from "../../components/Customer/SidebarShowCustomersByReferralPhone";
+import moment from "moment";
+import ModalUpdatePasswordImport from "./ModalUpdatePasswordImport";
+import history from "../../history";
 
 const CustomerStyles = styled.div`
   .filter-search-customer {
@@ -119,6 +125,18 @@ const CustomerStyles = styled.div`
     border-radius: 0.35rem;
     cursor: pointer;
   }
+  tr {
+    .total_referral {
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+  .totalContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 `;
 class Customer extends Component {
   constructor(props) {
@@ -129,11 +147,30 @@ class Customer extends Component {
       paginate: 1,
       openModal: false,
       openModalEdit: false,
-      id_customer: "",
+      customerInfo: {},
       modal: "",
       showFilterSearch: false,
+      showCustomersByReferralPhone: false,
+      pageReferralPhone: 1,
+      currentParams: "",
+      fields: ["Tên khách hàng", "Số điện thoại"],
+      openModalImport: false,
+      isUpdatedPasswordImport: false,
     };
   }
+
+  setSearchValue = (value) => {
+    this.setState({
+      searchValue: value,
+    });
+  };
+  setOpenModalImport = (isOpenedModal) => {
+    this.setState({ openModalImport: isOpenedModal });
+  };
+  setIsUpdatedPasswordImport = (isUpdatedPasswordImport) => {
+    this.setState({ isUpdatedPasswordImport });
+  };
+
   openModal = () => {
     this.setState({ openModal: true });
   };
@@ -162,8 +199,20 @@ class Customer extends Component {
     const { store_code } = this.props.match.params;
     const { searchValue } = this.state;
     const jsonListFilter = localStorage.getItem("optionsFilter");
-    var params = `&search=${searchValue}&json_list_filter=${jsonListFilter}`;
-    this.props.fetchAllCustomer(store_code, 1, params);
+
+    this.setState({
+      paginate: 1,
+    });
+    history.push(`/customer/${store_code}?page=1&search=${searchValue}`);
+    const params = `&search=${searchValue}&json_list_filter=${jsonListFilter}`;
+    this.fetchAllCustomer(store_code, 1, params);
+  };
+
+  fetchAllCustomer = (store_code, page, params) => {
+    this.setState({
+      currentParams: params,
+    });
+    this.props.fetchAllCustomer(store_code, page, params);
   };
   componentWillReceiveProps(nextProps) {
     if (
@@ -178,11 +227,21 @@ class Customer extends Component {
     }
   }
 
-  componentDidMount() {
-    setQueryParamInUrl("pag", pag);
-    var pag = getQueryParams("pag") || 1;
+  exportAllListOrder = () => {
+    var { store_code } = this.props.match.params;
+    this.props.exportAllListCustomer(store_code, this.state.currentParams);
+  };
 
-    this.props.fetchAllCustomer(this.props.match.params.store_code, pag);
+  componentDidMount() {
+    const page = getQueryParams("page") || 1;
+    const search = getQueryParams("search") || "";
+
+    const params = `&search=${search}`;
+    this.setState({
+      paginate: page,
+      searchValue: search,
+    });
+    this.fetchAllCustomer(this.props.match.params.store_code, page, params);
     this.props.fetchPlaceProvince();
     this.props.fetchAllAgencyType(this.props.match.params.store_code);
   }
@@ -322,8 +381,112 @@ class Customer extends Component {
     var params = `&search=${searchValue}&json_list_filter=${JSON.stringify(
       newOptionConditionFormat
     )}`;
-    this.props.fetchAllCustomer(store_code, 1, params);
+    this.fetchAllCustomer(store_code, 1, params);
     localStorage.setItem("optionsFilter", JSON.stringify(newOptionCondition));
+  };
+  setShowCustomersByReferralPhone = (isShowed) => {
+    this.setState({
+      showCustomersByReferralPhone: isShowed,
+    });
+  };
+  setCustomerInfo = (cusInfo) => {
+    this.setState({
+      customerInfo: cusInfo,
+    });
+  };
+  setPageReferralPhone = (page) => {
+    this.setState({
+      pageReferralPhone: page,
+    });
+  };
+  showDialogImportExcel = () => {
+    this.setOpenModalImport(true);
+  };
+  onChangeExcel = (evt) => {
+    const { showError } = this.props;
+    const { fields, isUpdatedPasswordImport } = this.state;
+
+    var f = evt.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      const bstr = evt.target.result;
+      const wb = XLSX.read(bstr, { type: "binary" });
+      const wsname = wb.SheetNames[0];
+      const ws = wb.Sheets[wsname];
+      const data = XLSX.utils.sheet_to_json(ws, { header: 2 });
+      const xlsxFields = data[0];
+      //Check Valid XLSX Field
+      let isCheckedValidField = true;
+      const lengthXlsxFields = Object.keys(xlsxFields).length;
+      if (fields.length > lengthXlsxFields.length) isCheckedValidField = false;
+      else {
+        const arraysXlsxFields = Object.keys(xlsxFields);
+        fields.forEach((element) => {
+          if (!arraysXlsxFields.includes(element)) {
+            isCheckedValidField = false;
+            return;
+          }
+        });
+      }
+      if (!isCheckedValidField) {
+        showError({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: "Trường 'Tên khách hàng' và 'Số điện thoại' không hợp lệ!",
+          },
+        });
+        return;
+      }
+
+      //Filter Data
+      const newListCustomers = [];
+      for (var item of data) {
+        const newCustomer = {};
+        newCustomer["name"] = item["Tên khách hàng"];
+        newCustomer["phone_number"] = item["Số điện thoại"];
+        newCustomer["address_detail"] = item["Địa chỉ chi tiết"];
+        newCustomer["wards_name"] = item["Phường/Xã"];
+        newCustomer["district_name"] = item["Quận/Huyện"];
+        newCustomer["province_name"] = item["Tỉnh/TP"];
+        newCustomer["date_of_birth"] = item["Ngày sinh"]
+          ? moment(item["Ngày sinh"]).format("YYYY-MM-DD")
+          : "";
+        newCustomer["points"] = item["Xu hiện tại"] ? item["Xu hiện tại"] : "";
+        newCustomer["official"] = item["Chính thức"] ? true : false;
+        newCustomer["created_at"] = item["Ngày tạo"];
+        newCustomer["updated_at"] = item["Ngày cập nhật"];
+        newCustomer["debt"] = item["Nợ hiện tại"] ? item["Nợ hiện tại"] : "";
+        newCustomer["total_final_all_status"] = item["Tổng bán"]
+          ? item["Tổng bán"]
+          : "";
+        newCustomer["total_final_without_refund"] = item[
+          "Tổng bán trừ trả hàng và hủy"
+        ]
+          ? item["Tổng bán trừ trả hàng và hủy"]
+          : "";
+        newCustomer["is_agency"] = item["Vai trò"] === "Đại lý";
+        newCustomer["is_collaborator"] = item["Vai trò"] === "Cộng tác viên";
+        if (item["Cấp đại lý"]) {
+          newCustomer["agency_type"] = item["Cấp đại lý"];
+        }
+        newListCustomers.push(newCustomer);
+      }
+
+      const { store_code } = this.props.match.params;
+      const { importAllListCustomer } = this.props;
+
+      const dataImport = {
+        is_update_password: isUpdatedPasswordImport,
+        password: "123456",
+        list: newListCustomers,
+      };
+      importAllListCustomer(store_code, dataImport);
+    };
+    document.getElementById("file-excel-import-customer").value = null;
+    reader.readAsBinaryString(f);
   };
   render() {
     var { customer, chat, customers } = this.props;
@@ -352,9 +515,12 @@ class Customer extends Component {
       modal,
       openModalEdit,
       showFilterSearch,
+      showCustomersByReferralPhone,
+      customerInfo,
+      pageReferralPhone,
+      openModalImport,
     } = this.state;
     const { wards, district, province, types } = this.props;
-
     if (this.props.auth) {
       return (
         <CustomerStyles id="wrapper">
@@ -366,6 +532,8 @@ class Customer extends Component {
             wards={wards}
             district={district}
             province={province}
+            customers={customers}
+            setSearchValue={this.setSearchValue}
           />
           <ModalEdit
             openModalEdit={openModalEdit}
@@ -376,6 +544,11 @@ class Customer extends Component {
             province={province}
             modal={modal}
           />
+          <ModalUpdatePasswordImport
+            openModal={openModalImport}
+            setOpenModal={this.setOpenModalImport}
+            setIsUpdatedPasswordImport={this.setIsUpdatedPasswordImport}
+          ></ModalUpdatePasswordImport>
           <div className="col-10 col-10-wrapper">
             <div id="content-wrapper" className="d-flex flex-column">
               <div id="content">
@@ -393,24 +566,60 @@ class Customer extends Component {
                       <h4 className="h4 title_content mb-0 text-gray-800">
                         Danh sách khách hàng
                       </h4>{" "}
-                      <a
-                        data-toggle="modal"
-                        data-target="#modalCreateCustomer"
-                        class="btn btn-info btn-icon-split btn-sm"
-                        style={{ height: "fit-content", width: "fit-content" }}
-                      >
-                        <span class="icon text-white-50">
-                          <i class="fas fa-plus"></i>
-                        </span>
-                        <span
-                          style={{
-                            color: "white",
-                          }}
-                          class={`text `}
+                      <div>
+                        <button
+                          style={{ margin: "auto 0px", marginRight: 15 }}
+                          onClick={this.exportAllListOrder}
+                          class={`btn btn-success btn-icon-split btn-sm `}
                         >
-                          Thêm khách hàng
-                        </span>
-                      </a>
+                          <span class="icon text-white-50">
+                            <i class="fas fa-file-export"></i>
+                          </span>
+                          <span style={{ color: "white" }} class="text">
+                            Export Excel
+                          </span>
+                        </button>
+                        <button
+                          style={{ marginRight: "10px" }}
+                          onClick={this.showDialogImportExcel}
+                          class={`btn btn-primary btn-icon-split btn-sm `}
+                        >
+                          <span class="icon text-white-50">
+                            <i class="fas fa-file-import"></i>
+                          </span>
+                          <span style={{ color: "white" }} class="text">
+                            Import Excel
+                          </span>
+                        </button>
+                        <input
+                          id="file-excel-import-customer"
+                          type="file"
+                          name="name"
+                          hidden
+                          onChange={this.onChangeExcel}
+                        />
+                        <a
+                          data-toggle="modal"
+                          data-target="#modalCreateCustomer"
+                          class="btn btn-info btn-icon-split btn-sm"
+                          style={{
+                            height: "fit-content",
+                            width: "fit-content",
+                          }}
+                        >
+                          <span class="icon text-white-50">
+                            <i class="fas fa-plus"></i>
+                          </span>
+                          <span
+                            style={{
+                              color: "white",
+                            }}
+                            class={`text `}
+                          >
+                            Thêm khách hàng
+                          </span>
+                        </a>
+                      </div>
                     </div>
 
                     <br></br>
@@ -491,17 +700,23 @@ class Customer extends Component {
                         <Table
                           handleSetInfor={this.handleSetInfor}
                           paginate={paginate}
+                          searchValue={searchValue}
                           chat_allow={chat_allow}
                           showChatBox={showChatBox}
                           handleShowChatBox={this.handleShowChatBox}
                           store_code={store_code}
                           handleDelCallBack={this.handleDelCallBack}
-                          customers={customers}
+                          // customers={customers}
+                          setCustomerInfo={this.setCustomerInfo}
+                          setShowCustomersByReferralPhone={
+                            this.setShowCustomersByReferralPhone
+                          }
                         />
 
                         <Pagination
                           getPaginate={this.getPaginate}
                           store_code={store_code}
+                          searchValue={searchValue}
                           customers={customers}
                         />
                       </div>
@@ -526,6 +741,52 @@ class Customer extends Component {
               showChatBox={showChatBox}
             ></Chat>
           </div>
+          <SidebarShowCustomersByReferralPhone
+            showCustomersByReferralPhone={showCustomersByReferralPhone}
+            setShowCustomersByReferralPhone={
+              this.setShowCustomersByReferralPhone
+            }
+            customerInfo={customerInfo}
+            store_code={store_code}
+            fetchAllCustomerByInferralPhone={
+              this.props.fetchAllCustomerByInferralPhone
+            }
+            pageReferralPhone={pageReferralPhone}
+          >
+            {this.props.customersByInferralPhone?.data?.length > 0 && (
+              <div className="card-body">
+                <Table
+                  handleSetInfor={this.handleSetInfor}
+                  paginate={paginate}
+                  chat_allow={chat_allow}
+                  showChatBox={showChatBox}
+                  handleShowChatBox={this.handleShowChatBox}
+                  store_code={store_code}
+                  handleDelCallBack={this.handleDelCallBack}
+                  customers={this.props.customersByInferralPhone}
+                  setCustomerInfo={this.setCustomerInfo}
+                  setShowCustomersByReferralPhone={
+                    this.setShowCustomersByReferralPhone
+                  }
+                />
+                <div className="totalContent">
+                  <div className="totalCustomers">
+                    Hiển thị 1{" "}
+                    {this.props.customersByInferralPhone.data.length > 1
+                      ? `đến ${this.props.customersByInferralPhone.data.length}`
+                      : null}{" "}
+                    trong số {this.props.customersByInferralPhone.total} khách
+                    hàng
+                  </div>
+                  <Pagination
+                    setPageReferralPhone={this.setPageReferralPhone}
+                    store_code={store_code}
+                    customers={this.props.customersByInferralPhone}
+                  />
+                </div>
+              </div>
+            )}
+          </SidebarShowCustomersByReferralPhone>
           <SidebarFilterCustomer
             showFilterSearch={showFilterSearch}
             setShowFilterSearch={this.setShowFilterSearch}
@@ -533,7 +794,7 @@ class Customer extends Component {
             province={province}
             searchValue={searchValue}
             store_code={store_code}
-            fetchAllCustomer={this.props.fetchAllCustomer}
+            fetchAllCustomer={this.fetchAllCustomer}
           ></SidebarFilterCustomer>
         </CustomerStyles>
       );
@@ -548,6 +809,8 @@ class Customer extends Component {
 const mapStateToProps = (state) => {
   return {
     customers: state.customerReducers.customer.allCustomer,
+    customersByInferralPhone:
+      state.customerReducers.customer.allCustomerByInferralPhone,
     auth: state.authReducers.login.authentication,
     customer: state.customerReducers.customer.customerID,
     chat: state.chatReducers.chat.chatID,
@@ -563,6 +826,27 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchAllCustomer: (id, page, params) => {
       dispatch(customerAction.fetchAllCustomer(id, page, params));
     },
+    exportAllListCustomer: (store_code, params) => {
+      dispatch(customerAction.exportAllListCustomer(store_code, params));
+    },
+    importAllListCustomer: (store_code, data) => {
+      dispatch(customerAction.importAllListCustomer(store_code, data));
+    },
+    fetchAllCustomerByInferralPhone: (
+      store_code,
+      page,
+      params,
+      referral_phone_number
+    ) => {
+      dispatch(
+        customerAction.fetchAllCustomerByInferralPhone(
+          store_code,
+          page,
+          params,
+          referral_phone_number
+        )
+      );
+    },
     fetchCustomerId: (store_code, customerId) => {
       dispatch(customerAction.fetchCustomerId(store_code, customerId));
     },
@@ -574,6 +858,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchAllAgencyType: (store_code) => {
       dispatch(AgencyAction.fetchAllAgencyType(store_code));
+    },
+    showError: (error) => {
+      dispatch(error);
     },
   };
 };

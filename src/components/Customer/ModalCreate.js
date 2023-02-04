@@ -140,6 +140,24 @@ class ModalCreate extends Component {
       });
       this.props.resetModal();
     }
+    if (!shallowEqual(this.props.customers, nextProps.customers)) {
+      this.setState({
+        provinceName: "",
+        districtName: "",
+        wardsName: "",
+        txtAddress_detail: "",
+        txtCountry: 1,
+        txtProvince: "",
+        txtDistrict: "",
+        txtWards: "",
+        isLoaded: false,
+        listWards: [],
+        listDistrict: [],
+        txtName_branch: "",
+        txtPhone_branch: "",
+        txtEmail_branch: "",
+      });
+    }
   }
   onChangeGender = (e) => {
     var target = e.target;
@@ -202,7 +220,7 @@ class ModalCreate extends Component {
         txtDateOfBirth,
         txtSex,
       } = this.state;
-      const { store_code } = this.props;
+      const { store_code, setSearchValue } = this.props;
       const Formdata = {
         name: txtName_branch,
         phone_number: txtPhone_branch,
@@ -218,6 +236,7 @@ class ModalCreate extends Component {
       };
 
       this.props.createCustomer(store_code, Formdata, function () {
+        setSearchValue("");
         window.$(".modal").modal("hide");
       });
     }

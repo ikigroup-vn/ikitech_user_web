@@ -1,8 +1,8 @@
 import * as Types from "../../constants/ActionType";
 
 var initialState = {
- data : {},
- isLoadPermission : false
+  data: {},
+  isLoadPermission: false,
 };
 
 export const permission = (state = initialState, action) => {
@@ -11,9 +11,9 @@ export const permission = (state = initialState, action) => {
     case Types.FETCH_PERMISSION:
       newState.data = action.data;
       return newState;
-      case Types.LOAD_PERMISSION:
-        newState.isLoadPermission = action.data;
-        return newState;
+    case Types.LOAD_PERMISSION:
+      newState.isLoadPermission = action.data;
+      return newState;
     default:
       return newState;
   }

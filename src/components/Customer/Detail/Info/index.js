@@ -105,11 +105,12 @@ class Customer extends Component {
   };
   goBack = () => {
     var { store_code } = this.props;
-    var pag = getQueryParams("pag");
+    var page = getQueryParams("page");
+    var search = getQueryParams("search");
     var redirect_report = getQueryParams("redirect_report");
     if (redirect_report) history.replace(`/customer_debt/${store_code}`);
-    else if (pag) {
-      history.replace(`/customer/${store_code}/?pag=${getQueryParams("pag")}`);
+    else if (page || search) {
+      history.replace(`/customer/${store_code}?page=${page}&search=${search}`);
     } else {
       history.replace(`/customer/${store_code}`);
     }

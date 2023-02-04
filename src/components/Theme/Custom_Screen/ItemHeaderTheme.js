@@ -39,7 +39,7 @@ class Custom_Screen extends Component {
   };
 
   render() {
-    var { header_type, v } = this.props;
+    var { header_type, v, indexHeader } = this.props;
 
     var isVip =
       typeof this.props.badges.config_user_vip == "undefined" ||
@@ -86,7 +86,9 @@ class Custom_Screen extends Component {
           </div>
           <div class="col-12 col-header">
             <img src={v.header} />
-            <span>Header {v.index}</span>
+            <span>
+              Header {indexHeader + 1} #{v.index}
+            </span>
           </div>
         </div>
       </div>

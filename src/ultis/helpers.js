@@ -3,6 +3,7 @@ import * as Config from "../constants/Config";
 import Resizer from "react-image-file-resizer";
 import getChannel, { IKITECH, IKIPOS } from "./channel";
 import history from "../history";
+import { includes } from "lodash";
 export const randomString = (length) => {
   var result = "";
   var characters =
@@ -34,7 +35,6 @@ export const contactOrNumber = (data) => {
     return data;
   } else {
     var string = data.slice(0, -2);
-    console.log(string);
     var newString = string
       .toString()
       .replace(/\./g, "")
@@ -89,7 +89,7 @@ export const isPhone = (phone) => {
   var vnf_regex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
   return vnf_regex.test(phone);
 };
-function removeAscent(str) {
+export function removeAscent(str) {
   if (str === null || str === undefined) return str;
   str = str.toLowerCase();
   str = str.replace(/à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ/g, "a");
@@ -228,6 +228,49 @@ function updateQueryStringParameter(uri, key, value) {
   }
 }
 
+export const insertParam = (params2) => {
+
+  // kvp looks like ['key1=value1', 'key2=value2', ...]
+  var kvp = document.location.search.substr(1).split('&');
+
+  let i = 0;
+
+
+  kvp = kvp.filter(function (item) {
+    var has = false
+    for (var [key, value] of Object.entries(params2)) {
+      if (item.includes(key)) {
+        has = true
+      }
+    }
+    return !has
+  })
+
+  for (; i < kvp.length; i++) {
+    if (kvp[i].startsWith(key + '=')) {
+      let pair = kvp[i].split('=');
+      pair[1] = value;
+      kvp[i] = pair.join('=');
+      break;
+    }
+  }
+
+
+  for (var [key, value] of Object.entries(params2)) {
+    if (i >= kvp.length) {
+      kvp[kvp.length] = [key, value].join('=');
+    }
+    i++;
+  }
+
+  // can return this or...
+  let params = "?"+kvp.join('&');
+
+  // reload page with new params
+  window.history.replaceState(null, null, params);
+
+}
+
 export const setQueryParamInUrl = (key, value) => {
   var url = window.location.pathname + window.location.hash;
   url = updateQueryStringParameter(url, key, value);
@@ -237,7 +280,7 @@ export const setQueryParamInUrl = (key, value) => {
 export const loadExpandTable = () => {
   window.$(".exploder").unbind("click");
   window.$(".exploder").click(function () {
-    window.$(this).toggleClass("btn-success btn-danger");
+    window.$(this).toggleClass("btn-outline-success btn-outline-danger");
 
     window.$(this).children("span").toggleClass("fa-plus fa-minus");
 
@@ -274,10 +317,9 @@ export const getQueryParams = (name) => {
   return new URLSearchParams(window ? window.location.search : {}).get(name);
 };
 export const formatNumberV2 = (str) => {
-  const strFormat = str.replace(
-    /[A-Za-z`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/g,
-    ""
-  );
+  const strFormat = str
+    .toString()
+    .replace(/[A-Za-z`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/g, "");
   if (Number(strFormat) >= 1000) {
     return strFormat
       .split("")
@@ -356,10 +398,10 @@ export const removeVietnameseTones = (str) => {
     return (str = false
       ? null
       : str
-          .normalize("NFD")
-          .replace(/[\u0300-\u036f]/g, "")
-          .replace(/\s/g, "")
-          .trim());
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/\s/g, "")
+        .trim());
   } catch (error) {
     return str;
   }

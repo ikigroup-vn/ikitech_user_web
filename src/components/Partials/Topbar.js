@@ -281,7 +281,7 @@ class Topbar extends Component {
 
                         Web mua hàng:
 
-                        <a style={{ marginRight: 15, marginLeft: 5 }} href={badges.domain_customer} target="_blank">{badges.domain_customer.replace("https://", "").replace("http://", "")}</a>
+                        <a style={{ marginRight: 15, marginLeft: 5 }} href={ "https://"+badges.domain_customer.replace("https://", "").replace("http://", "")} target="_blank">{badges.domain_customer.replace("https://", "").replace("http://", "")}</a>
 
                       </div>
                     }

@@ -12,15 +12,15 @@ import * as customerAction from "../../actions/customer_sales";
 import Chat from "../../components/Chat";
 import * as Env from "../../ultis/default";
 import NotAccess from "../../components/Partials/NotAccess";
-import { getQueryParams } from "../../ultis/helpers"
-import ModalCreate from "../../components/CustomerSale/ModalCreate"
+import { getQueryParams } from "../../ultis/helpers";
+import ModalCreate from "../../components/CustomerSale/ModalCreate";
 import * as staffAction from "../../actions/staff";
-import { getBranchId } from "../../ultis/branchUtils"
+import { getBranchId } from "../../ultis/branchUtils";
 
 import * as placeAction from "../../actions/place";
 import $ from "jquery";
-import ModalEdit from "../../components/CustomerSale/ModalEdit"
-import * as XLSX from 'xlsx';
+import ModalEdit from "../../components/CustomerSale/ModalEdit";
+import * as XLSX from "xlsx";
 import { randomString } from "../../ultis/helpers";
 import ImportModal from "../../components/CustomerSale/ImportModal";
 class CustomerSale extends Component {
@@ -36,26 +36,21 @@ class CustomerSale extends Component {
       id_customer: "",
       modal: {},
       modalDelete: {},
-      filter_by_status: ""
+      filter_by_status: "",
     };
 
     this.currentStatus = "";
   }
 
-
   openModal = () => {
-    this.setState({ openModal: true })
-  }
+    this.setState({ openModal: true });
+  };
   resetModal = () => {
-    this.setState({ openModal: false })
-
-  }
+    this.setState({ openModal: false });
+  };
   resetModalEdit = () => {
-    this.setState({ openModalEdit: false })
-
-  }
-
-
+    this.setState({ openModalEdit: false });
+  };
 
   handleShowChatBox = (customerId, status) => {
     this.setState({
@@ -80,12 +75,11 @@ class CustomerSale extends Component {
   componentWillReceiveProps(nextProps) {
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
-    var status = urlParams.get('status');
+    var status = urlParams.get("status");
     var { store_code } = this.props.match.params;
 
-    if(status !==  this.currentStatus)
-    {
-      this.currentStatus = status
+    if (status !== this.currentStatus) {
+      this.currentStatus = status;
       var params = this.getParams(status);
       this.props.fetchAllCustomerSale(store_code, 1, params);
     }
@@ -97,22 +91,34 @@ class CustomerSale extends Component {
       var permissions = nextProps.permission;
 
       var isShow = permissions.onsale;
-      var edit = permissions.onsale_edit
-      var add = permissions.onsale_add
-      var remove = permissions.onsale_remove
-      var assignment = permissions.onsale_assignment
-      this.setState({ isLoading: true, isShow, chat_allow: true , edit,add : true,remove,assignment });
+      var edit = permissions.onsale_edit;
+      var add = permissions.onsale_add;
+      var remove = permissions.onsale_remove;
+      var assignment = permissions.onsale_assignment;
+      this.setState({
+        isLoading: true,
+        isShow,
+        chat_allow: true,
+        edit,
+        add: true,
+        remove,
+        assignment,
+      });
     }
   }
 
   componentDidMount() {
-    var pag = getQueryParams("pag") || 1
+    var pag = getQueryParams("pag") || 1;
 
     this.props.fetchAllCustomerSale(this.props.match.params.store_code, pag);
-    this.props.fetchPlaceProvince()
-    var params = `branch_id=${getBranchId()}`
-    this.props.fetchAllStaff(this.props.match.params.store_code, null, params, null);
-
+    this.props.fetchPlaceProvince();
+    var params = `branch_id=${getBranchId()}`;
+    this.props.fetchAllStaff(
+      this.props.match.params.store_code,
+      null,
+      params,
+      null
+    );
   }
 
   saveAllListCustomer = () => {
@@ -122,15 +128,13 @@ class CustomerSale extends Component {
 
   handleSetIdCustomer = (id) => {
     this.setState({
-      id_supplier: id
-    })
-  }
+      id_supplier: id,
+    });
+  };
 
   handleSetInfor = (item) => {
-
-
-    this.setState({ modal: item })
-  }
+    this.setState({ modal: item });
+  };
 
   closeChatBox = (status) => {
     this.setState({
@@ -138,8 +142,8 @@ class CustomerSale extends Component {
     });
   };
   getPaginate = (num) => {
-    this.setState({ paginate: num })
-  }
+    this.setState({ paginate: num });
+  };
   showDialogImportExcel = () => {
     $("#file-excel-import").trigger("click");
   };
@@ -154,10 +158,12 @@ class CustomerSale extends Component {
       const workbook = XLSX.read(bstr, { type: "binary" });
       workbook.SheetNames.forEach((sheet) => {
         let rowObject = XLSX.utils.sheet_to_row_object_array(
-          workbook.Sheets[sheet] ,  {
-            defval: ""        }
+          workbook.Sheets[sheet],
+          {
+            defval: "",
+          }
         );
-        console.log(rowObject)
+        console.log(rowObject);
         _this.setState({ importData: rowObject });
       });
     };
@@ -173,21 +179,20 @@ class CustomerSale extends Component {
       params = params + `&page=${page}`;
     }
 
-    return params
-  }
+    return params;
+  };
   passFilterStatus = (filter_by_status) => {
     this.setState({
-      filter_by_status
-    })
-  }
-
+      filter_by_status,
+    });
+  };
 
   render() {
     var { customer, chat, customers, staff } = this.props;
     console.log(customer, customers);
     var customerImg =
       typeof customer.avatar_image == "undefined" ||
-        customer.avatar_image == null
+      customer.avatar_image == null
         ? Env.IMG_NOT_FOUND
         : customer.avatar_image;
     var customerId =
@@ -200,21 +205,46 @@ class CustomerSale extends Component {
         : customer.name;
 
     var { store_code } = this.props.match.params;
-    var { showChatBox, isShow, chat_allow, searchValue, paginate, openModal, modal, openModalEdit, filter_by_status,edit,add,remove,assignment } = this.state;
-    var { wards, district, province } = this.props
-    var importData = this.state.importData
+    var {
+      showChatBox,
+      isShow,
+      chat_allow,
+      searchValue,
+      paginate,
+      openModal,
+      modal,
+      openModalEdit,
+      filter_by_status,
+      edit,
+      add,
+      remove,
+      assignment,
+    } = this.state;
+    var { wards, district, province } = this.props;
+    var importData = this.state.importData;
 
-    console.log(isShow)
+    console.log(isShow);
     if (this.props.auth) {
       return (
         <div id="wrapper">
-          <Sidebar store_code={store_code} 
-         
-
-
-           currentParams = {this.currentStatus}/>
-          <ModalCreate resetModal={this.resetModal} openModal={openModal} store_code={store_code} wards={wards} district={district} province={province} />
-          <ModalEdit openModalEdit={openModalEdit} resetModal={this.resetModalEdit} store_code={store_code} wards={wards} district={district} province={province} modal={modal} />
+          <Sidebar store_code={store_code} currentParams={this.currentStatus} />
+          <ModalCreate
+            resetModal={this.resetModal}
+            openModal={openModal}
+            store_code={store_code}
+            wards={wards}
+            district={district}
+            province={province}
+          />
+          <ModalEdit
+            openModalEdit={openModalEdit}
+            resetModal={this.resetModalEdit}
+            store_code={store_code}
+            wards={wards}
+            district={district}
+            province={province}
+            modal={modal}
+          />
 
           <ImportModal
             store_code={store_code}
@@ -239,12 +269,13 @@ class CustomerSale extends Component {
                       <h4 className="h4 title_content mb-0 text-gray-800">
                         Khách hàng tiềm năng
                       </h4>{" "}
-
                       <div>
                         <a
                           style={{ marginRight: "10px" }}
                           onClick={this.showDialogImportExcel}
-                          class={`btn btn-primary btn-icon-split btn-sm  ${add == true && assignment == true ? "" : "hide"}
+                          class={`btn btn-primary btn-icon-split btn-sm  ${
+                            add == true && assignment == true ? "" : "hide"
+                          }
                             `}
                         >
                           <span class="icon text-white-50">
@@ -254,13 +285,13 @@ class CustomerSale extends Component {
                             Import Excel
                           </span>
                         </a>
-                        <input
+                        {/* <input
                           id="file-excel-import"
                           type="file"
                           name="name"
                           style={{ display: "none" }}
                           onChange={this.onChangeExcel}
-                        />
+                        /> */}
 
                         <a
                           style={{ marginRight: "10px" }}
@@ -280,7 +311,10 @@ class CustomerSale extends Component {
                           data-toggle="modal"
                           data-target="#modalCreateCustomer"
                           class="btn btn-info btn-icon-split btn-sm"
-                          style={{ height: "fit-content", width: "fit-content" }}
+                          style={{
+                            height: "fit-content",
+                            width: "fit-content",
+                          }}
                         >
                           <span class="icon text-white-50">
                             <i class="fas fa-plus"></i>
@@ -294,7 +328,6 @@ class CustomerSale extends Component {
                             Thêm khách hàng
                           </span>
                         </a>
-
                       </div>
                     </div>
 
@@ -325,8 +358,13 @@ class CustomerSale extends Component {
                       </div>
                       <div className="card-body">
                         <Table
-                        edit = {edit} add = {add} remove = {remove} assignment = {assignment}
-                          is_user={this.props.badges.is_staff === false ? true : false}
+                          edit={edit}
+                          add={add}
+                          remove={remove}
+                          assignment={assignment}
+                          is_user={
+                            this.props.badges.is_staff === false ? true : false
+                          }
                           passFilterStatus={this.passFilterStatus}
                           handleSetInfor={this.handleSetInfor}
                           paginate={paginate}
@@ -358,7 +396,6 @@ class CustomerSale extends Component {
               <Footer />
             </div>
             {/* <Chat customerImg = {customerImg} customerId = {customerId} chat = {chat} store_code = {store_code}/> */}
-
           </div>
         </div>
       );
@@ -382,7 +419,6 @@ const mapStateToProps = (state) => {
     district: state.placeReducers.district,
     staff: state.staffReducers.staff.allStaff,
     badges: state.badgeReducers.allBadge,
-
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -394,7 +430,6 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(customerAction.saveAllListCustomer(id, page, params));
     },
 
-
     fetchCustomerSaleId: (store_code, customerId) => {
       dispatch(customerAction.fetchCustomerSaleId(store_code, customerId));
     },
@@ -404,7 +439,6 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchAllStaff: (id, page, params, branch_id) => {
       dispatch(staffAction.fetchAllStaff(id, page, params, branch_id));
     },
-
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CustomerSale);

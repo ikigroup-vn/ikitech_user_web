@@ -4,11 +4,11 @@ var initialState = {
   allProduct: {},
   productId: {},
   allProductList: {},
-  allProductTiki : {},
-  allProductSendo : {},
-  allProductShopee : {},
-  product_agency_price_id  : {}
-
+  allProductTiki: {},
+  allProductSendo: {},
+  allProductShopee: {},
+  product_agency_price_id: {},
+  messageImport: {},
 };
 
 export const product = (state = initialState, action) => {
@@ -23,18 +23,21 @@ export const product = (state = initialState, action) => {
     case Types.FETCH_ALL_PRODUCT_LIST:
       newState.allProductList = action.data;
       return newState;
-      case Types.FETCH_ALL_PRODUCT_TIKI:
-        newState.allProductTiki = action.data;
-        return newState;
-        case Types.FETCH_ALL_PRODUCT_SHOPEE:
-          newState.allProductShopee = action.data;
-          return newState;
-          case Types.FETCH_ALL_PRODUCT_SENDO:
-            newState.allProductSendo = action.data;
-            return newState;
-            case Types.FETCH_ID_PRODUCT_AGENCY_PRICE:
-              newState.product_agency_price_id = action.data;
-              return newState;
+    case Types.FETCH_ALL_PRODUCT_TIKI:
+      newState.allProductTiki = action.data;
+      return newState;
+    case Types.FETCH_ALL_PRODUCT_SHOPEE:
+      newState.allProductShopee = action.data;
+      return newState;
+    case Types.FETCH_ALL_PRODUCT_SENDO:
+      newState.allProductSendo = action.data;
+      return newState;
+    case Types.FETCH_ID_PRODUCT_AGENCY_PRICE:
+      newState.product_agency_price_id = action.data;
+      return newState;
+    case Types.IMPORT_FILE_PRODUCTS:
+      newState.messageImport = action.data;
+      return newState;
     default:
       return newState;
   }

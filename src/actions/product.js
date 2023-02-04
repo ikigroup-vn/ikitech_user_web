@@ -41,7 +41,7 @@ export const fetchAllProductV2 = (
   params,
   agency_type_id
 ) => {
-  console.log([params])
+  console.log([params]);
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -113,7 +113,7 @@ function getSheetData(data, header) {
   return sheetData;
 }
 
-async function saveAsExcel(value) {
+async function saveAsExcel(value, nameFile = "Danh sách sản phẩm") {
   // var data = [
   //   { name: "John", city: "Seattle" },
   //   { name: "Mike", city: "Los Angeles" },
@@ -132,16 +132,18 @@ async function saveAsExcel(value) {
     const range = sheet1.usedRange();
     const endColumn = String.fromCharCode(64 + totalColumns);
     sheet1.row(1).style("bold", true);
-    sheet1.range("A1:" + endColumn + "1").style("fill", "F4D03F");
-    range.style("border", true);
+    sheet1.range("A1:M1").style("fill", "F4D03F");
+    sheet1.range("N1:" + endColumn + "1").style("fill", "92d050");
+    // range.style("border", true);
+    sheet1.freezePanes(1, 1);
     return workbook.outputAsync().then((res) => {
       console.log(res);
-      saveAs(res, "Danh sách sản phẩm.xlsx");
+      saveAs(res, `${nameFile}.xlsx`);
     });
   });
 }
+
 export const fetchAllListProduct = (store_code, search) => {
-  console.log(search);
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -160,17 +162,26 @@ export const fetchAllListProduct = (store_code, search) => {
 
               for (const item of res.data.data.data) {
                 var newItem = {};
+                var isCheckedDistribute = false;
                 var arangeKeyItem = {
-                  images : item.images,
-                  sku : item.sku,
-                  name : item.name,
-                  price : item.price,
-                  quantity_in_stock : item.quantity_in_stock,
-                  categories : item.categories,
-                  categories : item.categories,
-                  percent_collaborator : item.percent_collaborator,
-                  full_description : item.full_description
-                }
+                  name: item.name,
+                  sku: item.sku,
+                  barcode: item.barcode,
+                  check_inventory: item.check_inventory,
+                  quantity_in_stock: item.quantity_in_stock,
+                  categories: item.categories,
+                  attributes: item.attributes,
+                  percent_collaborator: item.percent_collaborator,
+                  point_for_agency: item.point_for_agency,
+                  full_description: item.full_description,
+                  content_for_collaborator: item.content_for_collaborator,
+                  status: item.status,
+                  seo_title: item.seo_title,
+                  seo_description: item.seo_description,
+                  distributes: item.distributes,
+                  images: item.images,
+                };
+                // eslint-disable-next-line no-loop-func
                 Object.entries(arangeKeyItem).forEach(([key, value], index) => {
                   if (key == "full_description") {
                     if (value != null && value.length < 32000) {
@@ -180,9 +191,7 @@ export const fetchAllListProduct = (store_code, search) => {
                     }
                   }
                   if (key == "percent_collaborator") {
-                  
-                      newItem["Hoa hồng CTV (%)"] = value ?? 0;
-                    
+                    newItem["Hoa hồng CTV (%)"] = `${value}`;
                   }
                   if (key == "name") {
                     newItem["Tên sản phẩm"] = formatStringCharactor(value);
@@ -192,61 +201,284 @@ export const fetchAllListProduct = (store_code, search) => {
                     newItem["Mã SKU"] = value;
                     // newItem["Tên sản phẩm"] = value
                   }
-                  if (key == "price") {
-                    newItem["Giá bán lẻ"] = value;
-                  }
+                  // if (key == "price") {
+                  //   newItem["Giá bán lẻ"] = value;
+                  // }
                   // if (key == "quantity_in_stock") {
                   //   newItem["Tồn kho"] =
                   //     value == -1 ? "Vô hạn" : value == 0 ? "Hết hàng" : value;
                   // }
                   if (key == "categories") {
                     if (Array.isArray(value)) {
-                      if (value.length > 0) {
-                        var stringCategory = "";
-                        for (const [index, category] of value.entries()) {
-                          if (
-                            category.name != null &&
-                            typeof category.name != "undefined"
-                          ) {
-                            if (index == value.length - 1) {
-                              stringCategory =
-                                stringCategory +
-                                formatStringCharactor(category.name);
-                            } else {
-                              stringCategory =
-                                stringCategory +
-                                formatStringCharactor(category.name) +
-                                ",";
+                      var stringCategory = "";
+                      for (const [index, category] of value.entries()) {
+                        if (
+                          category.name != null &&
+                          typeof category.name != "undefined"
+                        ) {
+                          var stringCategoryChild = "";
+                          for (const [
+                            index,
+                            categoryChild,
+                          ] of category.category_children.entries()) {
+                            if (categoryChild.name) {
+                              stringCategoryChild += `${formatStringCharactor(
+                                categoryChild.name
+                              )}${
+                                index == category.category_children.length - 1
+                                  ? ""
+                                  : ","
+                              }`;
                             }
                           }
+                          if (index == value.length - 1) {
+                            stringCategory =
+                              stringCategory +
+                              formatStringCharactor(category.name) +
+                              `${
+                                stringCategoryChild != ""
+                                  ? `[${stringCategoryChild}]`
+                                  : ""
+                              }`;
+                          } else {
+                            stringCategory =
+                              stringCategory +
+                              formatStringCharactor(category.name) +
+                              `${
+                                stringCategoryChild != ""
+                                  ? `[${stringCategoryChild}]`
+                                  : ""
+                              }` +
+                              ";";
+                          }
                         }
-                        newItem["Danh mục"] = stringCategory;
                       }
+                      newItem["Danh mục"] = stringCategory;
                     }
                   }
                   if (key == "images") {
                     if (Array.isArray(value)) {
-                      if (value.length > 0) {
-                        var stringImg = "";
-                        for (const [index, img] of value.entries()) {
-                          if (
-                            img.image_url != null &&
-                            typeof img.image_url != "undefined"
-                          ) {
-                            if (index == value.length - 1) {
-                              stringImg = stringImg + img.image_url;
+                      var stringImg = "";
+                      for (const [index, img] of value.entries()) {
+                        if (
+                          img.image_url != null &&
+                          typeof img.image_url != "undefined"
+                        ) {
+                          if (index == value.length - 1) {
+                            stringImg = stringImg + img.image_url;
+                          } else {
+                            stringImg = stringImg + img.image_url + ",";
+                          }
+                        }
+                      }
+                      newItem["Hình ảnh"] = stringImg;
+                    }
+                  }
+                  if (key == "barcode") {
+                    newItem["Mã BARCODE"] = value;
+                  }
+                  if (key == "check_inventory") {
+                    newItem["Theo dõi kho (Có/Không)"] = `${
+                      value ? "Có" : "Không"
+                    }`;
+                  }
+                  if (key == "point_for_agency") {
+                    newItem["Xu cho đại lý"] = `${value ? value : 0}`;
+                  }
+                  if (key == "content_for_collaborator") {
+                    newItem["Nội dung cho CTV"] = `${value ? value : ""}`;
+                  }
+                  if (key == "status") {
+                    newItem["Trạng thái (Ẩn/Hiện)"] = `${
+                      value == 0 ? "Hiện" : "Ẩn"
+                    }`;
+                  }
+                  if (key == "seo_title") {
+                    newItem["Tiêu đề SEO"] = `${value ? value : ""}`;
+                  }
+                  if (key == "seo_description") {
+                    newItem["Miêu tả SEO"] = `${value ? value : ""}`;
+                  }
+                  if (key == "attributes") {
+                    if (Array.isArray(value)) {
+                      var stringAttribute = "";
+                      for (const [index, attribute] of value.entries()) {
+                        if (
+                          attribute.name != null &&
+                          typeof attribute.name != "undefined"
+                        ) {
+                          if (index == value.length - 1) {
+                            stringAttribute += `${formatStringCharactor(
+                              attribute.name
+                            )}:${attribute.value}`;
+                          } else {
+                            stringAttribute += `${formatStringCharactor(
+                              attribute.name
+                            )}:${attribute.value};`;
+                          }
+                        }
+                      }
+                      newItem["Thuộc tính"] = stringAttribute;
+                    }
+                  }
+                  if (key == "distributes") {
+                    if (value.length > 0) {
+                      isCheckedDistribute = true;
+                      const typeDistributeOrigin = value[0].name;
+                      const typeDistributeSub = value[0]
+                        .sub_element_distribute_name
+                        ? `${value[0].sub_element_distribute_name}`
+                        : "";
+                      if (value[0].element_distributes.length > 0) {
+                        for (const [
+                          index,
+                          element,
+                        ] of value[0].element_distributes.entries()) {
+                          let checkedDistributeExist = false;
+                          let checkedDistributeExist2 = false;
+                          if (element.sub_element_distributes?.length > 0) {
+                            for (const [
+                              index2,
+                              elementSub,
+                            ] of element.sub_element_distributes.entries()) {
+                              if (
+                                index == 0 &&
+                                checkedDistributeExist === false &&
+                                checkedDistributeExist2 === false
+                              ) {
+                                newItem["Có phân loại (Có/Không)"] = "Có";
+                                newItem["Phân loại chính"] =
+                                  typeDistributeOrigin;
+                                newItem["Phân loại phụ"] = typeDistributeSub;
+                                newItem["DS phân loại"] = "";
+                                newItem["Giá bán lẻ"] = "";
+                                newItem["Giá nhập"] = "";
+                                if (checkedDistributeExist === false) {
+                                  newItem["Hình ảnh"] = "";
+                                }
+                                newArray.push(newItem);
+
+                                const newItemEmpty = {};
+                                for (const key of Object.keys(arangeKeyItem)) {
+                                  newItemEmpty[key] = "";
+                                }
+                                newItemEmpty["DS phân loại"] = `${
+                                  element.name
+                                },${elementSub.name}${
+                                  index !== element.length - 1 ? "" : ","
+                                }`;
+                                newItemEmpty["Giá bán lẻ"] = `${
+                                  elementSub.price ? elementSub.price : "0"
+                                }`;
+                                newItemEmpty["Giá nhập"] = `${
+                                  elementSub.import_price
+                                    ? elementSub.import_price
+                                    : "0"
+                                }`;
+                                if (checkedDistributeExist2 === false) {
+                                  newItemEmpty["Hình ảnh"] = element.image_url
+                                    ? element.image_url
+                                    : "";
+                                  checkedDistributeExist2 = true;
+                                }
+                                newArray.push(newItemEmpty);
+                              } else {
+                                const newItemEmpty = {};
+
+                                for (const key of Object.keys(arangeKeyItem)) {
+                                  newItemEmpty[key] = "";
+                                }
+                                newItemEmpty["DS phân loại"] = `${
+                                  element.name
+                                },${elementSub.name}${
+                                  index !== element.length - 1 ? "" : ","
+                                }`;
+
+                                newItemEmpty["Giá bán lẻ"] = `${
+                                  elementSub.price ? elementSub.price : "0"
+                                }`;
+                                newItemEmpty["Giá nhập"] = `${
+                                  elementSub.import_price
+                                    ? elementSub.import_price
+                                    : "0"
+                                }`;
+                                newItemEmpty["Hình ảnh"] = element.image_url
+                                  ? element.image_url
+                                  : "";
+                                newArray.push(newItemEmpty);
+                              }
+                            }
+                          } else {
+                            if (index == 0) {
+                              newItem["Có phân loại (Có/Không)"] = "Có";
+                              newItem["Phân loại chính"] = typeDistributeOrigin;
+                              newItem["Phân loại phụ"] = typeDistributeSub;
+                              newItem["DS phân loại"] = "";
+
+                              newItem["Giá bán lẻ"] = "";
+                              newItem["Giá nhập"] = "";
+                              newItem["Hình ảnh"] = "";
+                              newArray.push(newItem);
+
+                              const newItemEmpty = {};
+
+                              for (const key of Object.keys(arangeKeyItem)) {
+                                newItemEmpty[key] = "";
+                              }
+                              newItemEmpty["Giá bán lẻ"] = `${
+                                element.price ? element.price : "0"
+                              }`;
+                              newItemEmpty["Giá nhập"] = `${
+                                element.import_price
+                                  ? element.import_price
+                                  : "0"
+                              }`;
+                              newItemEmpty["DS phân loại"] = `${element.name}`;
+                              newItemEmpty["Hình ảnh"] = element.image_url
+                                ? element.image_url
+                                : "";
+                              newArray.push(newItemEmpty);
                             } else {
-                              stringImg = stringImg + img.image_url + ",";
+                              const newItemEmpty = {};
+
+                              for (const key of Object.keys(arangeKeyItem)) {
+                                newItemEmpty[key] = "";
+                              }
+                              newItemEmpty["DS phân loại"] = `${element.name}`;
+                              newItemEmpty["Giá bán lẻ"] = `${
+                                element.price ? element.price : "0"
+                              }`;
+                              newItemEmpty["Giá nhập"] = `${
+                                element.import_price
+                                  ? element.import_price
+                                  : "0"
+                              }`;
+                              newItemEmpty["Hình ảnh"] = element.image_url
+                                ? element.image_url
+                                : "";
+                              newArray.push(newItemEmpty);
                             }
                           }
                         }
-                        newItem["Hình ảnh"] = stringImg;
                       }
+                    } else {
+                      newItem["Có phân loại (Có/Không)"] = "Không";
+                      newItem["Phân loại chính"] = "";
+                      newItem["Phân loại phụ"] = "";
+                      newItem["DS phân loại"] = "";
+                      newItem["Giá bán lẻ"] = `${
+                        item.price ? item.price : "0"
+                      }`;
+                      newItem["Giá nhập"] = `${
+                        item.import_price ? item.import_price : "0"
+                      }`;
+                      newItem["Hình ảnh"] = "";
                     }
                   }
                 });
-
-                newArray.push(newItem);
+                if (!isCheckedDistribute) {
+                  newArray.push(newItem);
+                }
               }
               var header = [];
               if (newArray.length > 0) {
@@ -254,13 +486,215 @@ export const fetchAllListProduct = (store_code, search) => {
                   header.push(key);
                 });
               }
-              console.log(header);
+
               saveAsExcel({ data: newArray, header: header });
             }
           }
         }
       }
     });
+  };
+};
+export const fetchProductInventory = (store_code, branch_id, params) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    productApi
+      .fetchAllProductV2(store_code, branch_id, null, params)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        if (res.data.code !== 401) {
+          if (res.data.data.data.length > 0) {
+            var newArray = [];
+
+            for (const item of res.data.data.data) {
+              var newItem = {};
+              var isCheckedDistribute = false;
+              var arangeKeyItem = {
+                name: item.name,
+                sku: item.sku,
+                barcode: item.barcode,
+                distributes: item.inventory.distributes,
+              };
+              // eslint-disable-next-line no-loop-func
+              Object.entries(arangeKeyItem).forEach(([key, value], index) => {
+                if (key == "name") {
+                  newItem["Tên sản phẩm"] = formatStringCharactor(value);
+                  // newItem["Tên sản phẩm"] = value
+                }
+                if (key == "sku") {
+                  newItem["Mã SKU"] = value;
+                  // newItem["Tên sản phẩm"] = value
+                }
+                if (key == "barcode") {
+                  newItem["Mã BARCODE"] = value;
+                }
+                if (key == "distributes") {
+                  if (value.length > 0) {
+                    isCheckedDistribute = true;
+                    if (value[0].element_distributes.length > 0) {
+                      for (const [
+                        index,
+                        element,
+                      ] of value[0].element_distributes.entries()) {
+                        let checkedDistributeExist = false;
+                        let checkedDistributeExist2 = false;
+                        if (element.sub_element_distributes?.length > 0) {
+                          for (const [
+                            index2,
+                            elementSub,
+                          ] of element.sub_element_distributes.entries()) {
+                            if (
+                              index == 0 &&
+                              checkedDistributeExist === false &&
+                              checkedDistributeExist2 === false
+                            ) {
+                              newItem["Có phân loại (Có/Không)"] = "Có";
+                              newItem["DS phân loại"] = "";
+                              newItem["Giá bán lẻ"] = "";
+                              newItem["Giá vốn"] = "";
+                              newItem["Giá nhập"] = "";
+                              newItem["Tồn kho"] = "";
+                              newArray.push(newItem);
+
+                              const newItemEmpty = {};
+                              for (const key of Object.keys(arangeKeyItem)) {
+                                newItemEmpty[key] = "";
+                              }
+                              newItemEmpty["DS phân loại"] = `${element.name},${
+                                elementSub.name
+                              }${index !== element.length - 1 ? "" : ","}`;
+                              newItemEmpty["Giá bán lẻ"] = `${
+                                elementSub.price ? elementSub.price : "0"
+                              }`;
+                              newItemEmpty["Giá vốn"] = `${
+                                elementSub.cost_of_capital
+                                  ? elementSub.cost_of_capital
+                                  : "0"
+                              }`;
+                              newItemEmpty["Giá nhập"] = `${
+                                elementSub.import_price
+                                  ? elementSub.import_price
+                                  : "0"
+                              }`;
+                              newItemEmpty["Tồn kho"] = `${elementSub.stock}`;
+                              newArray.push(newItemEmpty);
+                            } else {
+                              const newItemEmpty = {};
+
+                              for (const key of Object.keys(arangeKeyItem)) {
+                                newItemEmpty[key] = "";
+                              }
+                              newItemEmpty["DS phân loại"] = `${element.name},${
+                                elementSub.name
+                              }${index !== element.length - 1 ? "" : ","}`;
+
+                              newItemEmpty["Giá bán lẻ"] = `${
+                                elementSub.price ? elementSub.price : "0"
+                              }`;
+                              newItemEmpty["Giá vốn"] = `${
+                                elementSub.cost_of_capital
+                                  ? elementSub.cost_of_capital
+                                  : "0"
+                              }`;
+                              newItemEmpty["Giá nhập"] = `${
+                                elementSub.import_price
+                                  ? elementSub.import_price
+                                  : "0"
+                              }`;
+                              newItemEmpty["Tồn kho"] = `${elementSub.stock}`;
+                              newArray.push(newItemEmpty);
+                            }
+                          }
+                        } else {
+                          if (index == 0) {
+                            newItem["Có phân loại (Có/Không)"] = "Có";
+                            newItem["DS phân loại"] = "";
+                            newItem["Giá bán lẻ"] = "";
+                            newItem["Giá vốn"] = "";
+                            newItem["Giá nhập"] = "";
+                            newItem["Tồn kho"] = "";
+                            newArray.push(newItem);
+
+                            const newItemEmpty = {};
+
+                            for (const key of Object.keys(arangeKeyItem)) {
+                              newItemEmpty[key] = "";
+                            }
+                            newItemEmpty["Giá bán lẻ"] = `${
+                              element.price ? element.price : "0"
+                            }`;
+                            newItemEmpty["Giá vốn"] = `${
+                              element.cost_of_capital
+                                ? element.cost_of_capital
+                                : "0"
+                            }`;
+                            newItemEmpty["Giá nhập"] = `${
+                              element.import_price ? element.import_price : "0"
+                            }`;
+                            newItemEmpty["DS phân loại"] = `${element.name}`;
+                            newItemEmpty["Tồn kho"] = `${element.stock}`;
+                            newArray.push(newItemEmpty);
+                          } else {
+                            const newItemEmpty = {};
+
+                            for (const key of Object.keys(arangeKeyItem)) {
+                              newItemEmpty[key] = "";
+                            }
+                            newItemEmpty["DS phân loại"] = `${element.name}`;
+                            newItemEmpty["Giá bán lẻ"] = `${
+                              element.price ? element.price : "0"
+                            }`;
+                            newItemEmpty["Giá vốn"] = `${
+                              element.cost_of_capital
+                                ? element.cost_of_capital
+                                : "0"
+                            }`;
+                            newItemEmpty["Giá nhập"] = `${
+                              element.import_price ? element.import_price : "0"
+                            }`;
+                            newItemEmpty["Tồn kho"] = `${element.stock}`;
+                            newArray.push(newItemEmpty);
+                          }
+                        }
+                      }
+                    }
+                  } else {
+                    newItem["Có phân loại (Có/Không)"] = "Không";
+                    newItem["DS phân loại"] = "";
+                    newItem["Giá bán lẻ"] = `${item.price ? item.price : "0"}`;
+                    newItem[
+                      "Giá vốn"
+                    ] = `${item.inventory.main_cost_of_capital}`;
+                    newItem["Giá nhập"] = `${
+                      item.import_price ? item.import_price : "0"
+                    }`;
+                    newItem["Tồn kho"] = `${item.inventory.main_stock}`;
+                  }
+                }
+              });
+              if (!isCheckedDistribute) {
+                newArray.push(newItem);
+              }
+            }
+            var header = [];
+            if (newArray.length > 0) {
+              Object.entries(newArray[0]).forEach(([key, value], index) => {
+                header.push(key);
+              });
+            }
+            saveAsExcel(
+              { data: newArray, header: header },
+              "Danh sách sản phẩm theo kho"
+            );
+          }
+        }
+      });
   };
 };
 
@@ -440,7 +874,13 @@ export const uploadAvataProduct = (file) => {
   };
 };
 
-export const editStock = (store_code, branch_id, data, page = 1, params = null) => {
+export const editStock = (
+  store_code,
+  branch_id,
+  data,
+  page = 1,
+  params = null
+) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -464,7 +904,7 @@ export const editStock = (store_code, branch_id, data, page = 1, params = null) 
           },
         });
         productApi
-          .fetchAllProductV2(store_code, branch_id, page , params)
+          .fetchAllProductV2(store_code, branch_id, page, params)
           .then((res) => {
             dispatch({
               type: Types.SHOW_LOADING,
@@ -820,7 +1260,6 @@ export const postProductV2 = (store_code, branch_id, data) => {
 };
 
 export const postMultiProduct = (store_code, data) => {
-
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -834,6 +1273,7 @@ export const postMultiProduct = (store_code, data) => {
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
+        dispatch({ type: Types.IMPORT_FILE_PRODUCTS, data: res.data.data });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -880,10 +1320,15 @@ export const postMultiProduct = (store_code, data) => {
   };
 };
 
-export const updateAgencyPrice = (store_code, data, productId, page,url=null) => {
+export const updateAgencyPrice = (
+  store_code,
+  data,
+  productId,
+  page,
+  url = null
+) => {
   return (dispatch) => {
-    if(data.main_price)
-    {
+    if (data.main_price) {
       const _value_price = data.main_price.toString().replace(/,/g, "");
       if (isNaN(Number(_value_price))) {
         dispatch({
@@ -920,11 +1365,9 @@ export const updateAgencyPrice = (store_code, data, productId, page,url=null) =>
             content: res.data.msg,
           },
         });
-        if(url)
-        history.replace(url)
-        else
+        if (url) history.replace(url);
         // history.push(`/product/index/${store_code}/${page}`);
-        history.goBack();
+        else history.goBack();
       })
       .catch(function (error) {
         var content = "";
@@ -948,7 +1391,64 @@ export const updateAgencyPrice = (store_code, data, productId, page,url=null) =>
   };
 };
 
-export const updateProduct = (store_code, data, productId, page) => {
+export const updateOneFieldProduct = (
+  store_code,
+  name_field,
+  value_field,
+  productId,
+  page
+) => {
+  const data = {
+    one_field: true,
+    name_field,
+    value_field,
+  };
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    productApi
+      .updateProduct(store_code, data, productId, page)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+        history.push(`/product/index/${store_code}/${page}`);
+      })
+      .catch(function (error) {
+        var content = "";
+        if (typeof error.response.data.msg == "undefined")
+          content = "Vui lòng chọn ảnh và nhập đầy đủ các thông tin";
+        else content = error.response.data.msg;
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: content,
+          },
+        });
+      });
+  };
+};
+
+export const updateProduct = (store_code, data, productId, page, params) => {
   return (dispatch) => {
     const _value_price = data.price.toString().replace(/,/g, "");
     const _value_quantity_in_stock = data.quantity_in_stock
@@ -990,8 +1490,7 @@ export const updateProduct = (store_code, data, productId, page) => {
             content: res.data.msg,
           },
         });
-        console.log(page, store_code);
-        history.push(`/product/index/${store_code}/${page}`);
+        history.push(`/product/index/${store_code}?page=${page}${params}`);
         // history.goBack();
       })
       .catch(function (error) {
@@ -1016,7 +1515,15 @@ export const updateProduct = (store_code, data, productId, page) => {
   };
 };
 
-export const updateDistribute = (store_code, data, productId, branchId) => {
+export const updateDistribute = (
+  store_code,
+  data,
+  productId,
+  branchId,
+  form,
+  page,
+  params
+) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -1025,14 +1532,25 @@ export const updateDistribute = (store_code, data, productId, branchId) => {
     productApi
       .updateDistribute(store_code, data, productId, branchId)
       .then((res) => {
-        console.log(res);
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
- 
       })
-      .catch(function (error) {});
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg || error,
+          },
+        });
+      })
+      .finally(() => {
+        dispatch(updateProduct(store_code, form, productId, page, params));
+      });
   };
 };
 
@@ -1043,7 +1561,7 @@ export const removeItemImgDis = (data) => {
   };
 };
 
-export const destroyProduct = (store_code, id) => {
+export const destroyProduct = (store_code, id, branch_id, page, params) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -1057,7 +1575,7 @@ export const destroyProduct = (store_code, id) => {
           loading: "hide",
         });
         productApi
-          .fetchAllData(store_code)
+          .fetchAllProductV2(store_code, branch_id, page, params)
           .then((res) => {
             if (res.data.code !== 401)
               dispatch({
@@ -1199,24 +1717,22 @@ export const fetchProductId = (store_code, id) => {
   };
 };
 export const uploadVideoProduct = (file) => {
-  
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
-    })
+      loading: "show",
+    });
     uploadApi
       .uploadVideo(file)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.UPLOAD_PRODUCT_VIDEO,
           data: res.data.data,
         });
-
       })
       .catch(function (error) {
         dispatch({
@@ -1232,19 +1748,19 @@ export const uploadVideoProduct = (file) => {
   };
 };
 
-export const changePercentCol = (store_code,data) => {
+export const changePercentCol = (store_code, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading : "show"
-    })
+      loading: "show",
+    });
     productApi
-      .changePercentCol(store_code,data)
+      .changePercentCol(store_code, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -1258,8 +1774,8 @@ export const changePercentCol = (store_code,data) => {
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading : "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -1272,4 +1788,3 @@ export const changePercentCol = (store_code,data) => {
       });
   };
 };
-

@@ -10,6 +10,7 @@ class ModalCreate extends Component {
     super(props);
     this.state = {
       title: "",
+      link: "",
       fileUpload: null,
     };
   }
@@ -37,7 +38,7 @@ class ModalCreate extends Component {
   onSave = async (e) => {
     e.preventDefault();
 
-    var { title } = this.state;
+    var { title, link } = this.state;
 
     var { store_code, carousel_app_images, theme } = this.props;
     var file = this.state.fileUpload;
@@ -49,7 +50,7 @@ class ModalCreate extends Component {
 
       this.props.createBanner(
         store_code,
-        { title: title, file: await compressed(file, 0, 0) },
+        { title: title, link_to: link, file: await compressed(file, 0, 0) },
         carousel_app_images,
         theme
       );
@@ -69,7 +70,7 @@ class ModalCreate extends Component {
     }
   };
   render() {
-    var { title } = this.state;
+    var { title, link } = this.state;
     return (
       <div
         class="modal fade"
@@ -125,6 +126,19 @@ class ModalCreate extends Component {
                       data-min-file-count="2"
                     />
                   </div>
+                </div>
+                <div class="form-group">
+                  <label for="product_link">URL trang đích</label>
+                  <input
+                    id="product_link"
+                    type="text"
+                    className="form-control"
+                    placeholder="VD: https://sy.ikiglobal.com/san-pham/Day-dong-ho-cho-Apple-Watch-Nike+-38-40mm-2220"
+                    autoComplete="off"
+                    value={link}
+                    onChange={this.onChange}
+                    name="link"
+                  />
                 </div>
               </div>
               <div class="modal-footer">

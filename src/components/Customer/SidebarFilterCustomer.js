@@ -11,44 +11,30 @@ import moment from "moment";
 import { formatNumberV2 } from "../../ultis/helpers";
 
 const SidebarFilterCustomerStyles = styled.div`
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
   .sidebar__conditions__item {
-    & > div:first-child {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      span:first-child {
-        cursor: pointer;
-        color: #2d3436;
-        font-weight: 600;
+    display: flex;
+    align-items: center;
+    .sidebar__conditions__item__type {
+      width: 370px;
+      margin-right: 20px;
+      select {
+        width: 100%;
+        border: 1px solid transparent;
+        border-bottom-color: #d1d3e2;
+        padding: 0.375rem 0.75rem;
+        height: 38px;
+        outline: none;
       }
-      span:last-child {
-        i {
-          transition: all 0.3s;
-        }
-      }
-    }
-    &:hover .sidebar__conditions__item__btnDelete {
-      visibility: visible;
-      opacity: 1;
     }
     .sidebar__conditions__item__btnDelete {
-      transition: all 0.3s;
-      visibility: hidden;
-      opacity: 0;
+      margin-left: 10px;
       cursor: pointer;
-      &:hover {
-        transform: scale(1.1);
-      }
-    }
-    .sidebar__conditions__item__type {
-      display: flex;
-      align-items: center;
-      column-gap: 10px;
-      .sidebar__conditions__item__btnDelete {
-        svg {
-          width: 16px;
-          height: 16px;
-        }
+      svg {
+        width: 16px;
+        height: 16px;
       }
     }
     .sidebar__conditions__dropdown {
@@ -71,40 +57,6 @@ const SidebarFilterCustomerStyles = styled.div`
         &:hover {
           color: rgb(127, 140, 141);
         }
-      }
-    }
-    .sidebar__conditions__add_dropdown {
-      position: absolute;
-      top: calc(100% + 10px);
-      left: 0;
-      width: max-content;
-      min-width: 154px;
-      padding: 12px 0;
-      border-radius: 6px;
-      border: 1px solid rgb(218, 218, 225);
-      color: #2d3436;
-      background-color: white;
-      .sidebar__conditions__add__dropdown__item {
-        padding: 5px 12px;
-        transition: all 0.3s;
-        &:hover {
-          background-color: rgb(218, 218, 225);
-        }
-      }
-      &::before {
-        content: "";
-        position: absolute;
-        z-index: 20;
-        top: -7px;
-        left: 10%;
-        width: 16px;
-        background-color: white;
-        transform: rotate(45deg);
-        height: 16px;
-        border-radius: 2px;
-        border: 1px solid transparent;
-        border-left-color: rgb(218, 218, 225);
-        border-top-color: rgb(218, 218, 225);
       }
     }
     span:last-child {
@@ -147,29 +99,20 @@ class SidebarFilterCustomer extends Component {
           value_compare: moment().format("YYYY-MM-DD"),
         },
       ],
-      idsOptionFilterSelected: [
-        Types.TYPE_COMPARE_TOTAL_FINAL_COMPLETED,
-        Types.TYPE_COMPARE_DATE_REG,
-      ],
+
       showDropdownOptions: false,
     };
   }
 
   componentDidMount = () => {
     window.addEventListener("click", this.handleClickOutsideDropdown);
-    const idsOption = JSON.parse(localStorage.getItem("optionsFilter"))
-      ? JSON.parse(localStorage.getItem("optionsFilter")).reduce(
-          (prevOption, currentOption) => {
-            return [...prevOption, currentOption.type_compare];
-          },
-          []
-        )
-      : this.state.idsOptionFilterSelected;
+
+    const newOptionsFilter = JSON.parse(localStorage.getItem("optionsFilter"))
+      ? JSON.parse(localStorage.getItem("optionsFilter"))
+      : this.state.optionsFilter;
+
     this.setState({
-      optionsFilter: JSON.parse(localStorage.getItem("optionsFilter"))
-        ? JSON.parse(localStorage.getItem("optionsFilter"))
-        : this.state.optionsFilter,
-      idsOptionFilterSelected: idsOption,
+      optionsFilter: newOptionsFilter,
     });
   };
   componentWillUnmount = () => {
@@ -190,79 +133,7 @@ class SidebarFilterCustomer extends Component {
     const name = e.target.name;
     const value = e.target.value;
 
-    //Handle change condition input,select
-    const newOptionsFilter = [];
-    this.state.optionsFilter.forEach((option, index) => {
-      if (index === indexCondition) {
-        newOptionsFilter.push({
-          ...option,
-          [name]:
-            name === "value_compare" &&
-            this.state.optionsFilter[indexCondition].type_compare <
-              Types.TYPE_COMPARE_MONTH_BIRTH
-              ? formatNumberV2(value)
-              : name === "value_compare" &&
-                Number(
-                  this.state.optionsFilter[indexCondition].type_compare
-                ) === Types.TYPE_COMPARE_AGE
-              ? Math.floor(Math.min(Math.max(Number(value), 1), 99))
-              : value,
-        });
-      } else {
-        newOptionsFilter.push(option);
-      }
-    });
-    this.setState({
-      optionsFilter: newOptionsFilter,
-    });
-  };
-  setIdOptionFilterSelected = (idOption) => {
-    this.setState({
-      idOptionFilterSelected: idOption,
-    });
-  };
-  findTitleOptionById = (idTypeCompare) => {
-    const optionIsFound = options.filter(
-      (option) => option.id === idTypeCompare
-    );
-    return optionIsFound[0].title;
-  };
-  handleShowOptionFilterById = (idOption) => {
-    const { idsOptionFilterSelected } = this.state;
-    this.setState({
-      idsOptionFilterSelected: idsOptionFilterSelected.includes(idOption)
-        ? idsOptionFilterSelected.filter((id) => id !== idOption)
-        : [...idsOptionFilterSelected, idOption],
-    });
-  };
-  handleShowTypeCondition = () => {
-    const newOptions = [];
-    options.forEach((option) => {
-      var checkedOption = false;
-      this.state.optionsFilter.forEach((optionFiter) => {
-        if (option.id === Number(optionFiter.type_compare)) {
-          checkedOption = true;
-          return;
-        }
-        return;
-      });
-
-      if (!checkedOption) {
-        newOptions.push(option);
-      }
-    });
-    return newOptions.map((option) => (
-      <div
-        key={option.id}
-        className="sidebar__conditions__add__dropdown__item"
-        onClick={() => this.handleAddOptionConditionById(option.id)}
-      >
-        {option.title}
-      </div>
-    ));
-  };
-  handleAddOptionConditionById = (idOption) => {
-    const type_compare = idOption;
+    const type_compare = name;
     const comparison_expression =
       type_compare === Types.TYPE_COMPARE_AGE ||
       type_compare === Types.TYPE_COMPARE_SEX ||
@@ -284,22 +155,37 @@ class SidebarFilterCustomer extends Component {
         : type_compare === Types.TYPE_COMPARE_DATE_REG
         ? moment().format("YYYY-MM-DD")
         : 0;
-    const newOption = {
-      type_compare,
-      comparison_expression,
-      value_compare,
-    };
+    //Handle change condition input,select
+    const newOptionsFilter = [];
+    this.state.optionsFilter.forEach((option, index) => {
+      if (index === indexCondition) {
+        newOptionsFilter.push({
+          ...option,
+          comparison_expression,
+          value_compare,
+          [name]:
+            name === "value_compare" &&
+            this.state.optionsFilter[indexCondition].type_compare <
+              Types.TYPE_COMPARE_MONTH_BIRTH
+              ? formatNumberV2(value)
+              : name === "value_compare" &&
+                Number(
+                  this.state.optionsFilter[indexCondition].type_compare
+                ) === Types.TYPE_COMPARE_AGE
+              ? Math.floor(Math.min(Math.max(Number(value), 1), 99))
+              : value,
+        });
+      } else {
+        newOptionsFilter.push(option);
+      }
+    });
     this.setState({
-      optionsFilter: [...this.state.optionsFilter, newOption],
-      idsOptionFilterSelected: [
-        ...this.state.idsOptionFilterSelected,
-        idOption,
-      ],
+      optionsFilter: newOptionsFilter,
     });
   };
-  handleDeleteOptionConditionById = (idOption) => {
+  handleDeleteOptionConditionById = (indexOption) => {
     const newOptionCondition = this.state.optionsFilter.filter(
-      (option) => option.type_compare !== idOption
+      (option, index) => index !== indexOption
     );
     this.setState({
       optionsFilter: newOptionCondition,
@@ -324,98 +210,81 @@ class SidebarFilterCustomer extends Component {
     localStorage.setItem("optionsFilter", JSON.stringify(optionsFilter));
     setShowFilterSearch(false);
   };
+  handleAddFilterSearch = () => {
+    const newOptionFilter = {
+      type_compare: Types.TYPE_COMPARE_TOTAL_FINAL_COMPLETED,
+      comparison_expression: expressions[0].value,
+      value_compare: 0,
+    };
+    this.setState({
+      optionsFilter: [...this.state.optionsFilter, newOptionFilter],
+    });
+  };
   render() {
     return (
       <>
         <SidebarFilter
-          showFilterSearch={this.props.showFilterSearch}
-          setShowFilterSearch={this.props.setShowFilterSearch}
+          showSidebar={this.props.showFilterSearch}
+          setShowSidebar={this.props.setShowFilterSearch}
+          widthSideBar="auto"
+          title="Bộ lọc"
         >
           <SidebarFilterCustomerStyles className="sidebar__conditions">
             {this.state.optionsFilter.length > 0 &&
               this.state.optionsFilter.map((option, index) => (
-                <div
-                  className="sidebar__conditions__item"
-                  key={option.type_compare}
-                >
-                  <div>
-                    <div className="sidebar__conditions__item__type">
-                      <span
-                        onClick={() =>
-                          this.handleShowOptionFilterById(option.type_compare)
-                        }
-                      >
-                        {this.findTitleOptionById(option.type_compare)}
-                      </span>
-                      <span
-                        className="sidebar__conditions__item__btnDelete"
-                        onClick={() =>
-                          this.handleDeleteOptionConditionById(
-                            option.type_compare
-                          )
-                        }
-                      >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth="1.5"
-                          stroke="currentColor"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                          />
-                        </svg>
-                      </span>
-                    </div>
-                    <span>
-                      <i
-                        className="fa fa-angle-right"
-                        style={{
-                          transform:
-                            this.state.idsOptionFilterSelected.includes(
-                              option.type_compare
-                            )
-                              ? "rotate(90deg)"
-                              : "rotate(0deg)",
-                        }}
-                      ></i>
-                    </span>
-                  </div>
-                  <div
-                    className="sidebar__conditions__dropdown"
-                    style={{
-                      maxHeight: this.state.idsOptionFilterSelected.includes(
-                        option.type_compare
-                      )
-                        ? "200px"
-                        : "0",
-                      overflow: this.state.idsOptionFilterSelected.includes(
-                        option.type_compare
-                      )
-                        ? "visible"
-                        : "hidden",
-                    }}
-                  >
-                    <ConditionFilterCustomer
-                      indexOption={index}
-                      types={this.props.types}
-                      optionsFilter={this.state.optionsFilter}
-                      province={this.props.province}
-                      handleChangeInputFilterSearch={
-                        this.handleChangeInputFilterSearch
+                <div className="sidebar__conditions__item" key={index}>
+                  <div className="sidebar__conditions__item__type">
+                    <select
+                      className="form-condition-select"
+                      name="type_compare"
+                      value={option.type_compare}
+                      onChange={(e) =>
+                        this.handleChangeInputFilterSearch(e, index)
                       }
-                    ></ConditionFilterCustomer>
+                    >
+                      {options.map((opt) => (
+                        <option
+                          key={opt.id}
+                          value={opt.id}
+                          className="sidebar__conditions__add__dropdown__item"
+                        >
+                          {opt.title}
+                        </option>
+                      ))}
+                    </select>
                   </div>
+                  <ConditionFilterCustomer
+                    indexOption={index}
+                    types={this.props.types}
+                    optionsFilter={this.state.optionsFilter}
+                    province={this.props.province}
+                    handleChangeInputFilterSearch={
+                      this.handleChangeInputFilterSearch
+                    }
+                  ></ConditionFilterCustomer>
+                  <span
+                    className="sidebar__conditions__item__btnDelete"
+                    onClick={() => this.handleDeleteOptionConditionById(index)}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="1.5"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                      />
+                    </svg>
+                  </span>
                 </div>
               ))}
             <div className="sidebar__conditions__add">
               <div
-                onClick={() =>
-                  this.setShowDropdownOptions(!this.state.showDropdownOptions)
-                }
+                onClick={this.handleAddFilterSearch}
                 style={{
                   display:
                     this.state.optionsFilter.length < options.length
@@ -427,14 +296,6 @@ class SidebarFilterCustomer extends Component {
                   <i className="fas fa-plus"></i>
                 </span>
                 <span>Thêm điều kiện</span>
-              </div>
-              <div
-                className="sidebar__conditions__add_dropdown"
-                style={{
-                  display: this.state.showDropdownOptions ? "block" : "none",
-                }}
-              >
-                {this.handleShowTypeCondition()}
               </div>
             </div>
             <div className="sidebar__conditions__btn">

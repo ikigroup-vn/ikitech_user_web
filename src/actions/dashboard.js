@@ -139,7 +139,7 @@ export const deleteBranchStore = (store_code, id) => {
       });
   };
 };
-export const deleteSupplier = (store_code, id) => {
+export const deleteSupplier = (store_code, id, page, params) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -153,7 +153,7 @@ export const deleteSupplier = (store_code, id) => {
           loading: "hide",
         });
         storeApi
-          .fetchAllSupplier(store_code)
+          .fetchAllSupplier(store_code, page, params)
           .then((res) => {
             if (res.data.code !== 401)
               dispatch({

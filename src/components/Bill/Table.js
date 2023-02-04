@@ -1,6 +1,11 @@
 import React, { Component, Fragment } from "react";
 import { Link } from "react-router-dom";
-import { filter_arr, format, getQueryParams, randomString } from "../../ultis/helpers";
+import {
+  filter_arr,
+  format,
+  getQueryParams,
+  randomString,
+} from "../../ultis/helpers";
 import { connect } from "react-redux";
 import Pagination from "../../components/Bill/Pagination";
 import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
@@ -14,7 +19,7 @@ import * as Types from "../../constants/ActionType";
 import * as billApi from "../../data/remote/bill";
 import "./style.css";
 import history from "../../history";
-
+import { insertParam } from "../../ultis/helpers";
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -47,7 +52,14 @@ class Table extends Component {
     var { value } = e.target;
     this.setState({ statusOrder: value });
     var { statusPayment, statusOrder, orderFrom } = this.state;
-    var { store_code, time_from, time_to, numPage, searchValue } = this.props;
+    var {
+      store_code,
+      time_from,
+      time_to,
+      numPage,
+      searchValue,
+      collaborator_by_customer_id,
+    } = this.props;
     const branch_id = getBranchId();
     var params = this.props.getParams(
       time_from,
@@ -56,8 +68,13 @@ class Table extends Component {
       value,
       statusPayment,
       numPage,
-      orderFrom
+      orderFrom,
+      collaborator_by_customer_id
     );
+    insertParam({
+      order_status_code: value,
+      page: 1,
+    });
     this.props.onchangeStatusOrder(value);
 
     this.props.fetchAllBill(store_code, 1, branch_id, params);
@@ -66,7 +83,14 @@ class Table extends Component {
     var { value } = e.target;
     this.setState({ statusPayment: value });
     var { statusPayment, statusOrder, orderFrom } = this.state;
-    var { store_code, time_from, time_to, numPage, searchValue } = this.props;
+    var {
+      store_code,
+      time_from,
+      time_to,
+      numPage,
+      searchValue,
+      collaborator_by_customer_id,
+    } = this.props;
     const branch_id = getBranchId();
 
     var params = this.props.getParams(
@@ -76,8 +100,13 @@ class Table extends Component {
       statusOrder,
       value,
       numPage,
-      orderFrom
+      orderFrom,
+      collaborator_by_customer_id
     );
+    insertParam({
+      payment_status_code: value,
+      page: 1,
+    });
     this.props.onchangeStatusPayment(value);
     this.props.fetchAllBill(store_code, 1, branch_id, params);
   };
@@ -86,7 +115,14 @@ class Table extends Component {
     var { value } = e.target;
     this.setState({ orderFrom: value });
     var { statusPayment, statusOrder, orderFrom } = this.state;
-    var { store_code, time_from, time_to, numPage, searchValue } = this.props;
+    var {
+      store_code,
+      time_from,
+      time_to,
+      numPage,
+      searchValue,
+      collaborator_by_customer_id,
+    } = this.props;
     const branch_id = getBranchId();
 
     var params = this.props.getParams(
@@ -96,8 +132,13 @@ class Table extends Component {
       statusOrder,
       statusPayment,
       numPage,
-      value
+      value,
+      collaborator_by_customer_id
     );
+    insertParam({
+      order_from_list: value,
+      page: 1,
+    });
     this.props.onchangeOrderFrom(value);
     this.props.fetchAllBill(store_code, 1, branch_id, params);
   };
@@ -296,14 +337,14 @@ class Table extends Component {
           data.order_from == OrderFrom.ORDER_FROM_APP
             ? "App"
             : data.order_from == OrderFrom.ORDER_FROM_POS_DELIVERY
-              ? "POS giao vận"
-              : data.order_from == OrderFrom.ORDER_FROM_POS_IN_STORE
-                ? "POS tại quầy"
-                : data.order_from == OrderFrom.ORDER_FROM_POS_SHIPPER
-                  ? "POS vận chuyển"
-                  : data.order_from == OrderFrom.ORDER_FROM_WEB
-                    ? "Web"
-                    : "Pos tại quầy";
+            ? "POS giao vận"
+            : data.order_from == OrderFrom.ORDER_FROM_POS_IN_STORE
+            ? "POS tại quầy"
+            : data.order_from == OrderFrom.ORDER_FROM_POS_SHIPPER
+            ? "POS vận chuyển"
+            : data.order_from == OrderFrom.ORDER_FROM_WEB
+            ? "Web"
+            : "Pos tại quầy";
 
         var item = this.checkLoadingSyncShip(data.order_code);
         var itemLoaded = this.checkLoaded(data.order_code);
@@ -311,7 +352,9 @@ class Table extends Component {
         return (
           <tr
             className="hover-product"
-            onClick={(e) => this.onClickItemOrder(e, store_code, data.order_code)}
+            onClick={(e) =>
+              this.onClickItemOrder(e, store_code, data.order_code)
+            }
           >
             <td>
               {" "}
@@ -327,17 +370,14 @@ class Table extends Component {
             </td>
             <td>{per_page * (current_page - 1) + (index + 1)}</td>
             <td>{data.order_code}</td>
-
             <td>{data.customer != null ? data.customer.name : null}</td>
             {/* {
               getChannel() == IKITECH &&
               <td className="status_check"><i class={`fas fa-${is_collaborator} ${is_collaborator + "-status"} `}></i></td>
             } */}
-
             <td>{format(data.total_final)}</td>
             {getChannel() == IKITECH && <td>{order_from}</td>}
             <td>{data.created_at}</td>
-
             <td>
               {item && this.useLoading == true ? (
                 <div style={{ display: "flex", "justify-content": "center" }}>
@@ -353,9 +393,9 @@ class Table extends Component {
                   className={_payment_status_code}
                 >
                   {itemLoaded &&
-                    itemLoaded.status === "SUCCESS" &&
-                    itemLoaded.payment_status_name !== null &&
-                    typeof itemLoaded.payment_status_name !== "undefined"
+                  itemLoaded.status === "SUCCESS" &&
+                  itemLoaded.payment_status_name !== null &&
+                  typeof itemLoaded.payment_status_name !== "undefined"
                     ? itemLoaded.payment_status_name
                     : data.payment_status_name}
                 </span>
@@ -377,19 +417,13 @@ class Table extends Component {
                     className={_order_status_name}
                   >
                     {itemLoaded &&
-                      itemLoaded.status === "SUCCESS" &&
-                      itemLoaded.order_status_name !== null &&
-                      typeof itemLoaded.order_status_name !== "undefined"
+                    itemLoaded.status === "SUCCESS" &&
+                    itemLoaded.order_status_name !== null &&
+                    typeof itemLoaded.order_status_name !== "undefined"
                       ? itemLoaded.order_status_name
                       : data.order_status_name}
                   </span>
                 )}
-              </td>
-            )}
-
-            {getChannel() == IKITECH && (
-              <td className="">
-
               </td>
             )}
           </tr>
@@ -431,6 +465,7 @@ class Table extends Component {
   };
 
   optionsOrderFrom = (orderFrom) => {
+    console.log("orderrrr: ", orderFrom);
     return (
       <select
         value={orderFrom || ""}
@@ -595,7 +630,7 @@ class Table extends Component {
         : false;
     var multiPrint = selected.length > 0 ? "show" : "hide";
     return (
-      <React.Fragment>
+      <>
         <button
           // onClick={(e) => this.handleMultiDelCallBack(e, selected)}
           // data-toggle="modal"
@@ -608,7 +643,8 @@ class Table extends Component {
             this.handleSyncShipment();
           }}
         >
-          <i class="fa fa-sync"></i> Đồng bộ {listBill.length} trạng thái giao hàng
+          <i class="fa fa-sync"></i> Đồng bộ {listBill.length} trạng thái giao
+          hàng
         </button>
         <div class="table-responsive">
           <ReactToPrint
@@ -635,12 +671,12 @@ class Table extends Component {
               currentBranch != null &&
               stores.length > 0 && (
                 <ListComponentToPrint
+                  currentBranch={currentBranch}
                   badges={badges}
                   bills={selected}
                   store_code={store_code}
                   stores={stores}
                   ref={(el) => (this.componentRef = el)}
-                  currentBranch={this.props.currentBranch}
                 />
               )}
           </div>
@@ -669,7 +705,7 @@ class Table extends Component {
                 } */}
                 <th>Tổng tiền</th>
                 {getChannel() == IKITECH && (
-                  <th>{this.optionsOrderFrom(orderFrom)}</th>
+                  <th>{this.optionsOrderFrom(this.props.orderFrom)}</th>
                 )}
                 <th>Thời gian tạo đơn</th>
 
@@ -685,14 +721,7 @@ class Table extends Component {
             <tbody>{this.showData(listBill, per_page, current_page)}</tbody>
           </table>
         </div>
-        {/* <Pagination
-          limit={numPage}
-          status_payment={statusPayment}
-          store_code={store_code}
-          bills={bills}
-          status_order={statusOrder}
-        /> */}
-      </React.Fragment>
+      </>
     );
   }
 }

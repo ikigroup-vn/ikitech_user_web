@@ -5,8 +5,9 @@ import { shallowEqual } from "../../ultis/shallowEqual";
 import Stars from "../Partials/Stars";
 import moment from "moment";
 import { connect } from "react-redux";
-import * as helper from "../../ultis/helpers"
+import * as helper from "../../ultis/helpers";
 import * as reviewAction from "../../actions/review";
+import history from "../../history";
 
 class ListReview extends Component {
   constructor(props) {
@@ -18,7 +19,7 @@ class ListReview extends Component {
       valueSearchStatus: "",
       filter_by_stars: null,
       filter_by_status: null,
-    }
+    };
   }
 
   passDeleteFunc = (e, id) => {
@@ -27,40 +28,62 @@ class ListReview extends Component {
   };
 
   changeStatus = (id, status) => {
-    var { store_code } = this.props;
-    this.props.changeStatus(store_code, id, { status: status });
+    const { store_code, filter_by, filter_by_value, page } = this.props;
+
+    const params = `&filter_by=${filter_by}&filter_by_value=${filter_by_value}`;
+    this.props.changeStatus(
+      store_code,
+      id,
+      { status: status },
+      page,
+      filter_by !== undefined &&
+        filter_by_value !== undefined &&
+        filter_by !== null &&
+        filter_by_value !== null
+        ? params
+        : null
+    );
   };
 
   componentDidMount() {
-    helper.loadExpandTable()
-
+    helper.loadExpandTable();
   }
-
-
-
 
   shouldComponentUpdate(nextProps, nextState) {
     if (nextState.valueSearchStar != this.state.valueSearchStar) {
-      this.setState({ isSearchStar: true })
+      this.setState({ isSearchStar: true });
     }
-    if ((this.props.filter_by != nextProps.filter_by) || (this.props.filter_by_value != nextProps.filter_by_value)) {
-      var { filter_by, filter_by_value } = nextProps
+    if (
+      this.props.filter_by != nextProps.filter_by ||
+      this.props.filter_by_value != nextProps.filter_by_value
+    ) {
+      var { filter_by, filter_by_value } = nextProps;
+
       if (filter_by == "status") {
-        this.setState({ filter_by_status: filter_by_value, filter_by_stars: "" })
+        this.setState({
+          filter_by_status: filter_by_value,
+          filter_by_stars: "",
+        });
       }
       if (filter_by == "stars") {
-        this.setState({ filter_by_stars: filter_by_value, filter_by_status: "" })
-
+        this.setState({
+          filter_by_stars: filter_by_value,
+          filter_by_status: "",
+        });
+      }
+      if (filter_by === null) {
+        this.setState({
+          filter_by_stars: -1,
+          filter_by_status: "",
+        });
       }
     }
 
-
-    return true
+    return true;
   }
 
-
   showListImg = (imgs) => {
-    var result = <span   >Không có hình ảnh nào</span>;
+    var result = <span>Không có hình ảnh nào</span>;
     if (typeof imgs == "undefined") {
       return result;
     }
@@ -89,9 +112,8 @@ class ListReview extends Component {
       return result;
     }
     if (reviews.length > 0) {
-      var { censorship } = this.props
+      var { censorship } = this.props;
       result = reviews.map((data, index) => {
-
         var image_product = "";
         var image_review = "";
         try {
@@ -118,41 +140,23 @@ class ListReview extends Component {
           data.status == 0
             ? "Đang chờ"
             : data.status == 1
-              ? "Đã duyệt"
-              : "Đã hủy";
+            ? "Đã duyệt"
+            : "Đã hủy";
         var _status =
           data.status == 0
             ? "secondary"
             : data.status == 1
-              ? "success"
-              : "danger";
+            ? "success"
+            : "danger";
         var disable_Confirm =
           data.status == 0 || data.status == -1 ? "show" : "hide";
-        var disable_Delete =
-          data.status == -1 ? "show" : "hide";
+        var disable_Delete = data.status == -1 ? "show" : "hide";
         var disable_Cancel =
           data.status == 0 || data.status == 1 ? "show" : "hide";
-        var { isSearchStar, isSearchStatus, valueSearchStar, valueSearchStatus } = this.state
-        console.log(isSearchStar, isSearchStatus, valueSearchStar, valueSearchStatus)
-        // var searchStar = ""
-        // var searchStatus = ""
-        // if(isSearchStar)
-        // {
-        //   if(valueSearchStar == "")
-        //   searchStar = "show"
-        //   else
-        //   searchStar = Number(valueSearchStar) == data.stars ? "show" : "hide"
-        // }
-        // if(isSearchStatus)
-        // {
-        //   if(valueSearchStatus == "")
-        //   searchStatus = "show"
-        //   else
-        //   searchStatus = Number(valueSearchStatus) == data.status ? "show" : "hide"
-        // }
+
         return (
           <React.Fragment>
-            <tr class={`sub-container hover-product `} >
+            <tr class={`sub-container hover-product `}>
               <td>
                 <button
                   type="button"
@@ -173,17 +177,16 @@ class ListReview extends Component {
                   alt="Image"
                 />
               </td>
-              <td style={{
-                display: "flex",
-                "justify-content": "center"
-              }}>
+              <td
+                style={{
+                  display: "flex",
+                  "justify-content": "center",
+                }}
+              >
                 <Stars num={data.stars} />
               </td>
               <td>
-                <span
-                  style={{ fontSize: "14px" }}
-                  class={`${_status}`}
-                >
+                <span style={{ fontSize: "14px" }} class={`${_status}`}>
                   {status}
                 </span>
               </td>
@@ -193,31 +196,34 @@ class ListReview extends Component {
                   onClick={(e) => this.passDeleteFunc(e, data.id)}
                   data-toggle="modal"
                   data-target="#removeModal"
-                  class={`btn btn-danger btn-sm ${disable_Delete} ${censorship == true ? "show" : "hide"}`}
+                  class={`btn btn-danger btn-sm ${disable_Delete} ${
+                    censorship == true ? "show" : "hide"
+                  }`}
                 >
                   <i class="fa fa-trash"></i> Xóa
                 </button>
                 <button
                   style={{ marginLeft: "10px" }}
-
                   type="submit"
-                  class={`btn btn-info  btn-sm ${disable_Confirm} ${censorship == true ? "show" : "hide"}`}
+                  class={`btn btn-info  btn-sm ${disable_Confirm} ${
+                    censorship == true ? "show" : "hide"
+                  }`}
                   onClick={() => {
                     this.changeStatus(data.id, 1);
                   }}
                 >
-                  <i class="fas fa-check"></i>                 Duyệt
-
+                  <i class="fas fa-check"></i> Duyệt
                 </button>
                 <button
                   style={{ marginLeft: "10px" }}
                   onClick={() => {
                     this.changeStatus(data.id, -1);
                   }}
-                  class={`btn btn-warning  btn-sm ${disable_Cancel} ${censorship == true ? "show" : "hide"} `}
+                  class={`btn btn-warning  btn-sm ${disable_Cancel} ${
+                    censorship == true ? "show" : "hide"
+                  } `}
                 >
                   <i class="fas fa-times"></i>Hủy
-
                 </button>
               </td>
             </tr>
@@ -244,43 +250,21 @@ class ListReview extends Component {
                         <span id="user_tel">{data.customer.phone_number}</span>
                       </p>
                     </div>
-                    {/* <div class="box-footer">
-                      <button
-                        style={{ marginRight: "10px" }}
-                        type="submit"
-                        class={`btn btn-info btn-icon-split btn-sm ${disable_Confirm} ${censorship == true ? "show" : "hide"}`}
-                        onClick={() => {
-                          this.changeStatus(data.id, 1);
-                        }}
-                      >
-                        <span class="icon text-white-50">
-                          <i class="fas fa-save"></i>
-                        </span>
-                        <span class="text">Xác nhận</span>
-                      </button>
-                      <a
-                        onClick={() => {
-                          this.changeStatus(data.id, -1);
-                        }}
-                        class={`btn btn-warning btn-icon-split  btn-sm ${disable_Cancel} ${censorship == true ? "show" : "hide"} `}
-                      >
-                        <span class="icon text-white-50">
-                          <i class="fas fa-times"></i>
-                        </span>
-                        <span class="text">Hủy</span>
-                      </a>
-                    </div> */}
                   </div>
                   <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
                     <div class="info_user">
-
                       <p class="sale_user_label" id="sale_user_name">
                         Nội dung: <span id="user_name"> {data.content} </span>
                       </p>
                       <p class="sale_user_label" id="sale_user_name">
                         Hình ảnh:
                       </p>
-                      <div class="" style={{ display: "flex", flexWrap: "wrap" }}>{this.showListImg(image_review)}</div>
+                      <div
+                        class=""
+                        style={{ display: "flex", flexWrap: "wrap" }}
+                      >
+                        {this.showListImg(image_review)}
+                      </div>
                       <p class="sale_user_label" id="sale_user_name">
                         Thời gian: {time}
                       </p>
@@ -289,7 +273,6 @@ class ListReview extends Component {
                 </div>
               </td>
             </tr>
-
           </React.Fragment>
         );
       });
@@ -300,31 +283,24 @@ class ListReview extends Component {
   };
 
   searchStars = (e) => {
-    var { getParams, store_code } = this.props
-    var value = e.target.value
-    var params = getParams("stars", value)
-    this.props.fetchAllReview(store_code, 1, params);
+    var { store_code, passFilter } = this.props;
 
-    this.setState({ filter_by_stars: value, filter_by_status: "" })
+    var value = e.target.value;
 
-  }
-  searchStatus = (e) => {
-    var { getParams, store_code } = this.props
-    var value = e.target.value
-    var params = getParams("status", value)
-    this.props.fetchAllReview(store_code, 1, params);
-    this.setState({ filter_by_status: value, filter_by_stars: "" })
+    history.push(
+      `/review/${store_code}${value === "-1" ? "" : `?stars=${value}`}`
+    );
+    passFilter(value === "-1" ? null : "stars", value === "-1" ? null : value);
+  };
 
-  }
   componentDidUpdate(prevProps, prevState) {
-
-    helper.loadExpandTable()
+    helper.loadExpandTable();
   }
 
   render() {
     var { reviews } = this.props;
     var reviews = typeof reviews.data == "undefined" ? [] : reviews.data;
-    var { filter_by_stars, filter_by_status } = this.state
+    var { filter_by_stars, filter_by_status } = this.state;
     return (
       <table class="table table-border">
         <thead>
@@ -333,14 +309,23 @@ class ListReview extends Component {
             <th>Họ tên</th>
             <th>Tên sản phẩm</th>
             <th>Ảnh sản phẩm</th>
-            <th style={{
-              display: "flex",
-              "justify-content": "center"
-            }}>
-              <select value={filter_by_stars} style={{ maxWidth: "150px" }} name="" id="input" className="form-control" onChange={this.searchStars}>
+            <th
+              style={{
+                display: "flex",
+                "justify-content": "center",
+              }}
+            >
+              <select
+                value={filter_by_stars}
+                style={{ maxWidth: "150px" }}
+                name=""
+                id="input"
+                className="form-control"
+                onChange={this.searchStars}
+              >
                 <option disabled>-- Sao đánh giá --</option>
 
-                <option value="">Tất cả sao</option>
+                <option value="-1">Tất cả sao</option>
                 <option value="5">5 sao</option>
                 <option value="4">4 sao</option>
                 <option value="3">3 sao</option>
@@ -348,15 +333,7 @@ class ListReview extends Component {
                 <option value="1">1 sao</option>
               </select>
             </th>
-            <th>
-              Trạng thái
-              {/* <select value = {filter_by_status} style={{ height: "27px" }} name="" id="input" onChange = {this.searchStatus}>
-                <option value="">Tất cả trạng thái</option>
-                <option value="1">Đã duyệt</option>
-                <option value="0">Chờ xác nhận</option>
-                <option value="-1">Đã hủy</option>{" "}
-              </select> */}
-            </th>
+            <th>Trạng thái</th>
 
             <th style={{ paddingLeft: "25px" }}>Hành động</th>
           </tr>
@@ -369,9 +346,9 @@ class ListReview extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    changeStatus: (store_code, id, data) => {
-      var page = helper.getQueryParams("page")
-      dispatch(reviewAction.changeStatus(store_code, id, data, page));
+    changeStatus: (store_code, id, data, page, params) => {
+      // var page = helper.getQueryParams("page");
+      dispatch(reviewAction.changeStatus(store_code, id, data, page, params));
     },
     fetchAllReview: (store_code, page, params) => {
       dispatch(reviewAction.fetchAllReview(store_code, page, params));

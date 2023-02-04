@@ -1,110 +1,123 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
-import Alert from '../../components/Partials/Alert'
-import Footer from '../../components/Partials/Footer'
-import Sidebar from '../../components/Partials/Sidebar'
-import Topbar from '../../components/Partials/Topbar'
-import ShowLoading from '../../components/Partials/ShowLoading'
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import Alert from "../../components/Partials/Alert";
+import Footer from "../../components/Partials/Footer";
+import Sidebar from "../../components/Partials/Sidebar";
+import Topbar from "../../components/Partials/Topbar";
+import ShowLoading from "../../components/Partials/ShowLoading";
 
 import * as Types from "../../constants/ActionType";
 import * as reportAction from "../../actions/report";
-import * as Env from "../../ultis/default"
-import { format } from '../../ultis/helpers'
-import { MomentInput } from 'react-moment-input'
+import * as Env from "../../ultis/default";
+import { format } from "../../ultis/helpers";
+import { MomentInput } from "react-moment-input";
 import moment from "moment";
-import General from './General'
-import Pagination from './Pagination'
-import { getBranchId } from '../../ultis/branchUtils'
-import { formatNoD } from "../../ultis/helpers"
+import General from "./General";
+import Pagination from "./Pagination";
+import { getBranchId } from "../../ultis/branchUtils";
+import { formatNoD } from "../../ultis/helpers";
 import ShowData from "./ShowData";
-
 
 class ReportInventory extends Component {
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       txtStart: "",
-    }
+    };
   }
   componentDidMount() {
-    const { store_code } = this.props.match.params
-    const branch_id = getBranchId()
-    const params = `branch_id=${branch_id}`
-    this.props.fetchAllReportInventory(store_code, branch_id, 1, params)
-    this.props.fetchImportExportStock(store_code, branch_id, 1, params)
+    const { store_code } = this.props.match.params;
+    const branch_id = getBranchId();
+    const params = `branch_id=${branch_id}`;
+    this.props.fetchAllReportInventory(store_code, branch_id, 1, params);
+    this.props.fetchImportExportStock(store_code, branch_id, 1, params);
 
     try {
-      document.getElementsByClassName('r-input')[0].placeholder = 'Chọn ngày';
-    } catch (error) {
-
-    }
+      document.getElementsByClassName("r-input")[0].placeholder = "Chọn ngày";
+    } catch (error) {}
   }
   handeOnload = (store_code) => {
-    var branch_id = this.props.currentBranch.id
-    const params = `branch_id=${branch_id}`
-    this.props.fetchAllReportInventory(store_code, branch_id, 1, params)
+    var branch_id = this.props.currentBranch.id;
+    const params = `branch_id=${branch_id}`;
+    this.props.fetchAllReportInventory(store_code, branch_id, 1, params);
     try {
-      document.getElementsByClassName('r-input')[0].placeholder = 'Chọn ngày';
-    } catch (error) {
-
-    }
-  }
+      document.getElementsByClassName("r-input")[0].placeholder = "Chọn ngày";
+    } catch (error) {}
+  };
   shouldComponentUpdate(nextProps, nextState) {
     if (this.state.txtStart !== nextState.txtStart) {
-      const branch_id = getBranchId()
-      const params = `date=${nextState.txtStart}&branch_id=${branch_id}`
-      const { store_code } = this.props.match.params
-      this.props.fetchAllReportInventory(store_code, branch_id, 1, params)
-
+      const branch_id = getBranchId();
+      const params = `date=${nextState.txtStart}&branch_id=${branch_id}`;
+      const { store_code } = this.props.match.params;
+      this.props.fetchAllReportInventory(store_code, branch_id, 1, params);
     }
-    return true
+    return true;
   }
 
   onChangeStart = (e) => {
-    var time = moment(e, "DD-MM-YYYY").format("YYYY-MM-DD")
-    console.log("time", time)
+    var time = moment(e, "DD-MM-YYYY").format("YYYY-MM-DD");
+    console.log("time", time);
     this.setState({
       txtStart: time,
     });
   };
   showDistribute = (listDistribute) => {
-    var result = []
+    var result = [];
     if (typeof listDistribute == "undefined" || listDistribute.length === 0) {
-      return result
+      return result;
     }
     if (listDistribute[0].element_distributes) {
       listDistribute[0].element_distributes.map((element, _index) => {
         result.push(
-          <tr class="explode" style={{ backgroundColor: "#f8f9fc" }} >
+          <tr class="explode" style={{ backgroundColor: "#f8f9fc" }}>
             <td colSpan={5}>
-              <div className='show-distribute'>
-                <div className='row' style={{ padding: "10px" }}>
-                  <div className='col-3' style={{ display: "flex" }}>
+              <div className="show-distribute">
+                <div className="row" style={{ padding: "10px" }}>
+                  <div className="col-3" style={{ display: "flex" }}>
                     <label style={{ fontWeight: "bold" }}>Phân loại: </label>
-                    <div className='name-distribute' style={{ marginLeft: "20px" }}>{element.name}</div>
+                    <div
+                      className="name-distribute"
+                      style={{ marginLeft: "20px" }}
+                    >
+                      {element.name}
+                    </div>
                   </div>
-                  <div className='col-3' style={{ display: "flex" }}>
+                  <div className="col-3" style={{ display: "flex" }}>
                     <label style={{ fontWeight: "bold" }}>Giá vốn: </label>
-                    <div className='price-distribute' style={{ marginLeft: "20px" }}>{format(Number(element.cost_of_capital))}</div>
+                    <div
+                      className="price-distribute"
+                      style={{ marginLeft: "20px" }}
+                    >
+                      {format(Number(element.cost_of_capital))}
+                    </div>
                   </div>
-                  <div className='col-3' style={{ display: "flex" }}>
+                  <div className="col-3" style={{ display: "flex" }}>
                     <label style={{ fontWeight: "bold" }}>Tồn kho: </label>
-                    <div className='quantity-distribute' style={{ marginLeft: "20px" }}>{element.stock}</div>
+                    <div
+                      className="quantity-distribute"
+                      style={{ marginLeft: "20px" }}
+                    >
+                      {element.stock}
+                    </div>
                   </div>
-                  <div className='col-3' style={{ display: "flex" }}>
+                  <div className="col-3" style={{ display: "flex" }}>
                     <label style={{ fontWeight: "bold" }}>Giá Nhập: </label>
-                    <div className='quantity-distribute' style={{ marginLeft: "20px" }}>{format(Number(element.import_price))}</div>
+                    <div
+                      className="quantity-distribute"
+                      style={{ marginLeft: "20px" }}
+                    >
+                      {format(Number(element.import_price))}
+                    </div>
                   </div>
                 </div>
               </div>
             </td>
           </tr>
-
-        )
-      })
+        );
+      });
     }
-    return result
-  }
+    return result;
+  };
 
   showData = (products, per_page, current_page) => {
     var result = null;
@@ -119,37 +132,41 @@ class ReportInventory extends Component {
           data.quantity_in_stock_with_distribute == 0
             ? -2
             : data.quantity_in_stock_with_distribute == -1
-              ? -1
-              : data.quantity_in_stock_with_distribute;
+            ? -1
+            : data.quantity_in_stock_with_distribute;
 
         if (status_stock == null) {
           status_stock = -1;
         }
 
-
         var status =
           data.status == 0
             ? "success"
             : data.status == -1
-              ? "secondary"
-              : data.status == 2
-                ? "danger"
-                : null;
+            ? "secondary"
+            : data.status == 2
+            ? "danger"
+            : null;
         var discount =
           typeof data.product_discount == "undefined" ||
-            data.product_discount == null
+          data.product_discount == null
             ? 0
             : data.product_discount.discount_price;
 
-
-        var product_discount = data.product_discount
+        var product_discount = data.product_discount;
 
         return (
           <ShowData
-            per_page={per_page} current_page={current_page}
+            per_page={per_page}
+            current_page={current_page}
             product_discount={product_discount}
-            status={status} status_name={status_name} status_stock={status_stock}
-            data={data} index={index} store_code={store_code} discount={discount}
+            status={status}
+            status_name={status_name}
+            status_stock={status_stock}
+            data={data}
+            index={index}
+            store_code={store_code}
+            discount={discount}
           />
         );
       });
@@ -158,7 +175,6 @@ class ReportInventory extends Component {
     }
     return result;
   };
-
 
   // showData = (listReportInven) => {
   //   var result = null
@@ -185,45 +201,59 @@ class ReportInventory extends Component {
   // }
 
   render() {
-    var { store_code } = this.props.match.params
-    const { reportInventory, reportImportExport } = this.props
-    const { total_stock, total_value_stock } = reportInventory
+    var { store_code } = this.props.match.params;
+    const { reportInventory, reportImportExport } = this.props;
+    const { total_stock, total_value_stock } = reportInventory;
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
         <div className="col-10 col-10-wrapper">
-
           <div id="content-wrapper" className="d-flex flex-column">
             <div id="content">
               <Topbar store_code={store_code} handeOnload={this.handeOnload} />
 
               <div className="container-fluid">
-                <Alert
-                  type={Types.ALERT_UID_STATUS}
-                  alert={this.props.alert}
+                <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
+                <General
+                  reportImportExport={reportImportExport}
+                  reportInventory={reportInventory}
+                  store_code={store_code}
                 />
-                <General reportImportExport={reportImportExport} reportInventory={reportInventory} store_code={store_code} />
-                <div className='card'>
-                  <div className='card-header py-3' style={{ display: "flex", justifyContent: "space-between" }} >
-                    <div className='stock-title text-primary'>
+                <div className="card">
+                  <div
+                    className="card-header py-3"
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <div className="stock-title text-primary">
                       <h4>Báo cáo tồn kho</h4>
                     </div>
 
-                    <div className = "label-value"> 
+                    <div className="label-value">
                       <p className="sale_user_label bold">
                         Giá trị tồn kho:{" "}
-                        <span id="total_selected">{formatNoD(total_value_stock)}</span>
+                        <span id="total_selected">
+                          {formatNoD(total_value_stock?.toFixed(3))}
+                        </span>
                       </p>
                       <p className="sale_user_label bold">
                         Số lượng tồn kho:{" "}
-                        <span id="total_selected">{formatNoD(total_stock)}</span>
+                        <span id="total_selected">
+                          {formatNoD(total_stock)}
+                        </span>
                       </p>
-
                     </div>
 
-
-                    <div class="form-group" style={{ display: "flex", alignItems: "center", marginRight: "100px" }}>
-                      <label for="product_name" style={{ marginRight: "20px" }}>Thời gian</label>
+                    <div
+                      class="form-group"
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        marginRight: "100px",
+                      }}
+                    >
+                      <label for="product_name" style={{ marginRight: "20px" }}>
+                        Thời gian
+                      </label>
                       <MomentInput
                         placeholder="Chọn thời gian"
                         format="DD-MM-YYYY"
@@ -231,20 +261,26 @@ class ReportInventory extends Component {
                         enableInputClick={true}
                         monthSelect={true}
                         readOnly={true}
-                        translations={
-                          { DATE: "Ngày", TIME: "Giờ", SAVE: "Đóng", HOURS: "Giờ", MINUTES: "Phút" }
-                        }
-                        onSave={() => { }}
+                        translations={{
+                          DATE: "Ngày",
+                          TIME: "Giờ",
+                          SAVE: "Đóng",
+                          HOURS: "Giờ",
+                          MINUTES: "Phút",
+                        }}
+                        onSave={() => {}}
                         onChange={this.onChangeStart}
                       />
                     </div>
-
                   </div>
-                  <div className='card-body'>
-
+                  <div className="card-body">
                     <div class="table-responsive">
-
-                      <table class="table  " id="dataTable" width="100%" cellspacing="0">
+                      <table
+                        class="table  "
+                        id="dataTable"
+                        width="100%"
+                        cellspacing="0"
+                      >
                         <thead>
                           <tr>
                             <th>STT</th>
@@ -254,50 +290,64 @@ class ReportInventory extends Component {
 
                             <th>Số lượng tồn kho</th>
                             <th>Giá trị tồn</th>
-
                           </tr>
                         </thead>
 
                         <tbody>
-                          {typeof reportInventory.data != "undefined" ?
-                            this.showData(reportInventory.data, reportInventory.per_page, reportInventory.current_page)
-                            : <ShowLoading></ShowLoading>
-                          }
+                          {typeof reportInventory.data != "undefined" ? (
+                            this.showData(
+                              reportInventory.data,
+                              reportInventory.per_page,
+                              reportInventory.current_page
+                            )
+                          ) : (
+                            <ShowLoading></ShowLoading>
+                          )}
                         </tbody>
                       </table>
                     </div>
 
-                    <Pagination store_code={store_code} reportInventory={reportInventory} />
+                    <Pagination
+                      store_code={store_code}
+                      reportInventory={reportInventory}
+                    />
                   </div>
                 </div>
               </div>
-
             </div>
 
             <Footer />
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 const mapStateToProps = (state) => {
   return {
     reportInventory: state.reportReducers.reportInventory,
     reportImportExport: state.reportReducers.reportImportExport,
-    currentBranch: state.branchReducers.branch.currentBranch
-  }
-}
+    currentBranch: state.branchReducers.branch.currentBranch,
+  };
+};
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
     fetchAllReportInventory: (store_code, branch_id, page, params) => {
-      dispatch(reportAction.fetchAllReportInventory(store_code, branch_id, page, params))
+      dispatch(
+        reportAction.fetchAllReportInventory(
+          store_code,
+          branch_id,
+          page,
+          params
+        )
+      );
     },
     fetchImportExportStock: (store_code, branch_id, page, params) => {
-      dispatch(reportAction.fetchImportExportStock(store_code, branch_id, page, params))
-    }
-
-  }
-}
-export default connect(mapStateToProps, mapDispatchToProps)(ReportInventory)
+      dispatch(
+        reportAction.fetchImportExportStock(store_code, branch_id, page, params)
+      );
+    },
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ReportInventory);

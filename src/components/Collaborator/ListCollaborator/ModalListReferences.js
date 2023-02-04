@@ -7,27 +7,25 @@ import Pagination from "./ModalListReferences/Pagination";
 class ModalListReferences extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-
-    };
+    this.state = {};
   }
 
-
-  componentDidMount() {
-
-  }
+  componentDidMount() {}
 
   componentWillReceiveProps(nextProps) {
-    var { store_code } = this.props
+    var { store_code } = this.props;
     if (this.props.referral_phone_number != nextProps.referral_phone_number) {
-      this.props.fetchAllCustomer(store_code, 1, null, nextProps.referral_phone_number)
+      this.props.fetchAllCustomer(
+        store_code,
+        1,
+        null,
+        nextProps.referral_phone_number
+      );
     }
-
   }
 
   render() {
-
-    var { store_code, customers, referral_phone_number } = this.props
+    var { store_code, customers, referral_phone_number } = this.props;
     return (
       <div
         class="modal fade"
@@ -39,24 +37,36 @@ class ModalListReferences extends Component {
       >
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
-            <div class="modal-header" >
+            <div class="modal-header">
               <h4 class="modal-title">Danh sách giới thiệu</h4>
 
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
             </div>
 
-            {
-             customers == null || customers.data == null || customers.data.length == 0 ? <center> <p><i>( Chưa giới thiệu khách hàng nào )</i></p> </center> : ""
-            }
-
+            {customers == null ||
+            customers.data == null ||
+            customers.data.length == 0 ? (
+              <center>
+                {" "}
+                <p>
+                  <i>( Chưa giới thiệu khách hàng nào )</i>
+                </p>{" "}
+              </center>
+            ) : (
+              ""
+            )}
 
             <Table customers={customers} />
 
             <div class="modal-footer">
               <div class="group-pagination_flex col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-
                 <Pagination
                   store_code={store_code}
                   customers={customers}
@@ -81,13 +91,21 @@ const mapStateToProps = (state) => {
   };
 };
 
-
 const mapDispatchToProps = (dispatch, props) => {
   return {
     fetchAllCustomer: (store_code, page, params, referral_phone_number) => {
-      dispatch(customerAction.fetchAllCustomer(store_code, page, params,referral_phone_number));
+      dispatch(
+        customerAction.fetchAllCustomer(
+          store_code,
+          page,
+          params,
+          referral_phone_number
+        )
+      );
     },
-
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(ModalListReferences);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ModalListReferences);

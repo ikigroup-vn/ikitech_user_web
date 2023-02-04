@@ -130,7 +130,9 @@ class Form extends Component {
       status,
       time_of_day,
       time_run:
-        time_run != "" && time_run != null
+        time_run != "" && time_run != null && typeof time_run == "string"
+          ? time_run
+          : time_run != "" && time_run != null && typeof time_run == "object"
           ? moment(time_run, "DD-MM-YYYY HH:mm:ss").format(
               "YYYY-MM-DD HH:mm:ss"
             )

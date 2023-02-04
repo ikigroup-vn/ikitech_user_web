@@ -85,8 +85,7 @@ class PanelBottom extends Component {
     this.onChangeNum = debounce(this.handleChangeNum, 0);
     this.onSearchCustomer = debounce(this.handleSearchCustomer, 500);
     this.changeNewShipment = debounce(this.props.calculateShipment, 2000);
-    this.loadFirst = true
-
+    this.loadFirst = true;
   }
 
   componentDidMount() {
@@ -233,8 +232,7 @@ class PanelBottom extends Component {
   };
 
   componentWillUpdate(nextProps, nextState) {
-    if(this.props.openShipment === false)
-    {
+    if (this.props.openShipment === false) {
       return;
     }
     this.props.onNewChange(nextState);
@@ -264,7 +262,10 @@ class PanelBottom extends Component {
       });
     }
 
-    if (!shallowEqual(nextProps.oneCart, this.props.oneCart)) {
+    if (
+      !shallowEqual(nextProps.oneCart, this.props.oneCart) &&
+      nextProps.oneCart !== undefined
+    ) {
       console.log(nextProps.oneCart);
 
       if (nextProps.oneCart.province != null) {
@@ -300,18 +301,23 @@ class PanelBottom extends Component {
       // if()
       var type = {};
       var txtPhoneNumber = {};
-      if (nextProps.oneCart.id !== this.props.oneCart.id) {
+      if (
+        nextProps.oneCart?.id !== this.props.oneCart?.id &&
+        nextProps.oneCart !== undefined
+      ) {
         console.log("cart khac");
-        this.loadFirst = true
+        this.loadFirst = true;
         type = {
-          type_ship:   oneCart.total_shipping_fee > 0 ? 2 : 0,
-          
+          type_ship: oneCart.total_shipping_fee > 0 ? 2 : 0,
+
           fee: nextProps.total_shipping_fee,
           // txtPhoneNumber: oneCart.customer_phone ?? "",
         };
       }
-      if((oneCart.id &&  this.loadFirst == true) || this.props.openShipment == false )
-      {
+      if (
+        (oneCart.id && this.loadFirst == true) ||
+        this.props.openShipment == false
+      ) {
         this.setState({
           ...this.state,
           cartId: oneCart.id,
@@ -324,12 +330,12 @@ class PanelBottom extends Component {
           txtSex: oneCart.customer_sex ?? "",
           txtAddressDetail: oneCart.address_detail ?? "",
           selectedDate: selectedDate,
-  
+
           isDisabledButton:
             oneCart == null || oneCart.customer == null
               ? false
               : oneCart.customer.is_passersby,
-  
+
           districtName: oneCart.district_name,
           wardsName: oneCart.wards_name,
           provinceName: oneCart.province_name,
@@ -337,17 +343,17 @@ class PanelBottom extends Component {
             label: oneCart.province_name,
             value: oneCart.province,
           },
-  
+
           valueDistrict: {
             label: oneCart.district_name,
             value: oneCart.district,
           },
-  
+
           valueWards: {
             label: oneCart.wards_name,
             value: oneCart.wards,
           },
-  
+
           ...type,
           select_customer: oneCart.customer
             ? {
@@ -358,9 +364,8 @@ class PanelBottom extends Component {
             : null,
         });
 
-        this.loadFirst = false
+        this.loadFirst = false;
       }
-
 
       // this.onSelectChangeProvinceById(customer.province)
       // this.onSelectChangeDistrictById(customer.district)
@@ -717,7 +722,7 @@ class PanelBottom extends Component {
     };
 
     this.setState({ select_customer: selectValue, ...customer });
-    this.loadFirst = true
+    this.loadFirst = true;
   };
   onChangeSelect4Addr = (selectValue) => {
     if (selectValue?.address_pickup) {
@@ -736,11 +741,10 @@ class PanelBottom extends Component {
           is_default_pickup: true,
           is_default_return: false,
         },
-        this.props.store_code ,
+        this.props.store_code,
         this
       );
-      this.loadFirst = true
-
+      this.loadFirst = true;
     }
 
     // this.setState({ select_storeAddress: selectValue, ...store_address });
@@ -796,11 +800,7 @@ class PanelBottom extends Component {
     };
   };
   itemAddress = (i) => {
-    return (
-      <div>
-        {i}
-      </div>
-    );
+    return <div>{i}</div>;
   };
   formatOptionLabel = ({ value, label, address }) => {
     return this.itemAddress(label);
@@ -924,7 +924,6 @@ class PanelBottom extends Component {
         }
       : null;
 
- 
     return (
       <div
         style={{
@@ -933,7 +932,10 @@ class PanelBottom extends Component {
       >
         <div class="" style={{ marginTop: "8px" }}>
           <div>
-            <div className="select-async" style={{ marginBottom: "8px" }}>
+            <div
+              className="select-async"
+              style={{ marginBottom: "8px", fontSize: "13px" }}
+            >
               <AsyncPaginate
                 placeholder="Tìm khách hàng"
                 value={select_customer}
@@ -1120,6 +1122,10 @@ class PanelBottom extends Component {
                 id="customerName"
                 placeholder="Tên khách"
                 autocomplete="new-password"
+                style={{
+                  fontSize: "13px",
+                  height: `calc(2.25rem + 2px)`,
+                }}
               />
             </div>
           </div>
@@ -1145,6 +1151,7 @@ class PanelBottom extends Component {
                   <select
                     style={{
                       background: isDisabledButton ? "#eaecf4" : "white",
+                      fontSize: "13px",
                     }}
                     onClick={() => {
                       this.toggleOpenProvince();
@@ -1210,6 +1217,7 @@ class PanelBottom extends Component {
                     class="form-control select-has-search-box customerInfo select2-hidden-accessible"
                     style={{
                       background: isDisabledButton ? "#eaecf4" : "white",
+                      fontSize: "13px",
                     }}
                     onClick={() => {
                       this.toggleOpenDistrict();
@@ -1275,6 +1283,7 @@ class PanelBottom extends Component {
                   <select
                     style={{
                       background: isDisabledButton ? "#eaecf4" : "white",
+                      fontSize: "13px",
                     }}
                     onClick={() => {
                       this.toggleOpenWards();
@@ -1328,7 +1337,7 @@ class PanelBottom extends Component {
               </div>
               <textarea
                 rows="3"
-                style={{ height: "70px" }}
+                style={{ height: "70px", fontSize: "13px" }}
                 {...handleKeyPress}
                 disabled={isDisabledButton}
                 value={txtAddressDetail || ""}
@@ -1350,13 +1359,16 @@ class PanelBottom extends Component {
               class="form-control"
               name="type_ship"
               value={this.state.type_ship}
+              style={{
+                fontSize: "13px",
+              }}
             >
               <option value="0">Miễn phí giao hàng</option>
               <option value="1">Phí dự kiến của đối tác vận chuyển</option>
 
               <option value="2">
                 Khác
-                {(total_shipping_fee && total_shipping_fee > 0)
+                {total_shipping_fee && total_shipping_fee > 0
                   ? `(${formatNoD(total_shipping_fee)})`
                   : null}
               </option>
@@ -1839,8 +1851,8 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(shipmentAction.fetchAllShipment(store_code));
     },
 
-    updateStoreA: (storeAId, form, store_code , $this) => {
-      dispatch(StoreAction.updateStoreAPos(storeAId, form, store_code , $this));
+    updateStoreA: (storeAId, form, store_code, $this) => {
+      dispatch(StoreAction.updateStoreAPos(storeAId, form, store_code, $this));
     },
   };
 };

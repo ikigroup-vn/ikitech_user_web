@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import getChannel from "../../ultis/channel"
+import getChannel from "../../ultis/channel";
 import * as customerAction from "../../actions/customer";
-import { setQueryParamInUrl } from "../../ultis/helpers";
+import history from "../../history";
+
 class Pagination extends Component {
   constructor(props) {
     super(props);
@@ -12,12 +13,15 @@ class Pagination extends Component {
   }
 
   passPagination = (page) => {
-    console.log("page in customer", page);
-    setQueryParamInUrl("pag", page)
-    this.props.fetchAllCustomer(this.props.store_code, page);
-    this.props.getPaginate(page)
+    const { searchValue, store_code } = this.props;
+    history.push(`/customer/${store_code}?page=${page}&search=${searchValue}`);
+    const params = `&search=${searchValue}`;
+    this.props.fetchAllCustomer(store_code, page, params);
+    this.props.getPaginate(page);
   };
-
+  handlePaginationReferralPhone = (page) => {
+    this.props.setPageReferralPhone(page);
+  };
   showData = (links) => {
     var result = null;
     var url = null;
@@ -42,12 +46,27 @@ class Pagination extends Component {
         } else {
           return (
             <li class={`page-item ${active} `}>
-              <a
-                onClick={() => this.passPagination(data.url.split("?page=")[1])}
-                class="page-link"
-              >
-                {label}
-              </a>
+              {this.props.setPageReferralPhone === undefined ? (
+                <a
+                  onClick={() =>
+                    this.passPagination(data.url.split("?page=")[1])
+                  }
+                  class="page-link"
+                >
+                  {label}
+                </a>
+              ) : (
+                <a
+                  onClick={() =>
+                    this.handlePaginationReferralPhone(
+                      data.url.split("?page=")[1]
+                    )
+                  }
+                  class="page-link"
+                >
+                  {label}
+                </a>
+              )}
             </li>
           );
         }
@@ -60,7 +79,10 @@ class Pagination extends Component {
 
   render() {
     return (
-      <nav aria-label="Page navigation" className={`float-pagination ${getChannel()}`}>
+      <nav
+        aria-label="Page navigation"
+        className={`float-pagination ${getChannel()}`}
+      >
         <ul class="pagination  tab-pagination pg-blue">
           {this.showData(this.props.customers.links)}
         </ul>
@@ -71,8 +93,8 @@ class Pagination extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllCustomer: (store_code, page) => {
-      dispatch(customerAction.fetchAllCustomer(store_code, page));
+    fetchAllCustomer: (store_code, page, params) => {
+      dispatch(customerAction.fetchAllCustomer(store_code, page, params));
     },
   };
 };

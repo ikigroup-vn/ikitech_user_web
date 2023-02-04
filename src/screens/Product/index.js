@@ -25,6 +25,9 @@ import getChannel, { IKITECH, IKIPOS } from "../../ultis/channel";
 import { getQueryParams } from "../../ultis/helpers";
 import ModalCol from "../../components/Product/ModalCollaration";
 import ModalConfirm from "../../components/Product/ComfirmCol";
+import history from "../../history";
+import ModalChooseTypeImport from "../../components/Product/ImportProductInWeb/ModalChooseTypeImport";
+import { getBranchId } from "../../ultis/branchUtils";
 
 class Product extends Component {
   constructor(props) {
@@ -41,14 +44,23 @@ class Product extends Component {
         data: [],
         store_code: "",
       },
-      searchValue: "",
+      searchValue: getQueryParams("search") || "",
+      page: getQueryParams("page") || 1,
+      numPage: getQueryParams("limit") || 20,
       importData: [],
-      allow_skip_same_name: false,
-      page: 1,
-      numPage: 20,
+      allow_skip_same_name: true,
       percent_col: 0,
+      openModalTypeImport: false,
     };
   }
+
+  setAllowSkipSameName = (isAllowed) => {
+    this.setState({ allow_skip_same_name: isAllowed });
+  };
+
+  setOpenModalTypeImport = (isOpenedModal) => {
+    this.setState({ openModalTypeImport: isOpenedModal });
+  };
 
   onChangeNumPage = (e) => {
     var { store_code } = this.props.match.params;
@@ -56,44 +68,37 @@ class Product extends Component {
     var numPage = e.target.value;
     this.setState({
       numPage,
+      page: 1,
     });
-    var params = `&search=${searchValue}&limit=${numPage}`;
-
-    this.props.fetchAllProduct(store_code, 1, params);
+    var params = `${
+      searchValue ? `&search=${searchValue}` : ""
+    }&limit=${numPage}`;
+    history.push(`/product/index/${store_code}?page=1${params}`);
+    this.props.fetchAllProductV2(store_code, getBranchId(), 1, params);
   };
   onChangeSearch = (e) => {
     this.setState({ searchValue: e.target.value });
   };
   componentDidMount() {
-    var { page } = this.props.match.params;
+    this.handleFetchAllProduct();
+  }
+  handleFetchAllProduct = (pageParams) => {
+    const { store_code } = this.props.match.params;
+    const { searchValue, page, numPage } = this.state;
     const branch_id = localStorage.getItem("branch_id");
     var is_near_out_of_stock = getQueryParams("is_near_out_of_stock");
-    var params = null;
+    var params = `&search=${searchValue}&limit=${numPage}`;
     if (is_near_out_of_stock) {
       params = params + `&is_near_out_of_stock=true`;
     }
-    if (
-      typeof page != "undefined" &&
-      page != null &&
-      page != "" &&
-      !isNaN(Number(page))
-    ) {
-      this.props.fetchAllProductV2(
-        this.props.match.params.store_code,
-        branch_id,
-        page,
-        params
-      );
-    } else {
-      this.props.fetchAllProductV2(
-        this.props.match.params.store_code,
-        branch_id,
-        1,
-        params
-      );
-    }
-  }
 
+    this.props.fetchAllProductV2(
+      store_code,
+      branch_id,
+      pageParams || page,
+      params
+    );
+  };
   componentDidUpdate() {
     if (
       this.state.isLoading != true &&
@@ -137,17 +142,21 @@ class Product extends Component {
   searchData = (e) => {
     e.preventDefault();
     var { store_code } = this.props.match.params;
-    var { searchValue } = this.state;
+    var { searchValue, numPage } = this.state;
     const branch_id = localStorage.getItem("branch_id");
-    var params = `&search=${searchValue}`;
-    this.setState({ numPage: 20 });
+    var params = `${
+      searchValue ? `&search=${searchValue}` : ""
+    }&limit=${numPage}`;
+    this.setState({ page: 1 });
+    history.push(`/product/index/${store_code}?page=1${params}`);
     this.props.fetchAllProductV2(store_code, branch_id, 1, params);
   };
   fetchAllData = () => {
     this.props.fetchAllProduct(this.props.match.params.store_code);
   };
   showDialogImportExcel = () => {
-    $("#file-excel-import").trigger("click");
+    // $("#file-excel-import").trigger("click");
+    this.setOpenModalTypeImport(true);
   };
 
   onSaveChangePercent = () => {
@@ -162,7 +171,7 @@ class Product extends Component {
     var f = evt.target.files[0];
     const reader = new FileReader();
     window.$("#importModal").modal("show");
-    this.setState({ allow_skip_same_name: randomString(10) });
+    // this.setState({ allow_skip_same_name: randomString(10) });
     var _this = this;
     reader.onload = function (evt) {
       const bstr = evt.target.result;
@@ -189,7 +198,7 @@ class Product extends Component {
 
   render() {
     if (this.props.auth) {
-      var { products, allProductList } = this.props;
+      var { products, allProductList, setAllowSkipSameName } = this.props;
       var { store_code } = this.props.match.params;
       var { searchValue, importData, allow_skip_same_name, page, numPage } =
         this.state;
@@ -202,6 +211,7 @@ class Product extends Component {
         isShow,
         ecommerce,
         barcode_print,
+        openModalTypeImport,
       } = this.state;
 
       return (
@@ -211,13 +221,21 @@ class Product extends Component {
             importData={importData}
             allow_skip_same_name={allow_skip_same_name}
           />
-          <ModalConfirm percent_col ={this.state.percent_col} onSaveChangePercent={this.onSaveChangePercent} />
-
-          <ModalCol handleChangePerCol={this.handleChangePerCol}></ModalCol>
+          <ModalConfirm
+            percent_col={this.state.percent_col}
+            onSaveChangePercent={this.onSaveChangePercent}
+          />
+          <ModalChooseTypeImport
+            store_code={store_code}
+            openModal={openModalTypeImport}
+            allow_skip_same_name={allow_skip_same_name}
+            setOpenModal={this.setOpenModalTypeImport}
+            setAllowSkipSameName={this.setAllowSkipSameName}
+          />
+          <ModalCol handleChangePerCol={this.handleChangePerCol}></ModalCol>{" "}
           <Tiki store_code={store_code} />
           <Shopee store_code={store_code} />
           <Sendo store_code={store_code} />
-
           <Sidebar store_code={store_code} />
           <div className="col-10 col-10-wrapper">
             <div id="content-wrapper" className="d-flex flex-column">
@@ -348,7 +366,7 @@ class Product extends Component {
                         <a
                           style={{ marginRight: "10px" }}
                           onClick={this.fetchAllListProduct}
-                          class={`btn btn-danger btn-icon-split btn-sm  ${
+                          class={`btn btn-success btn-icon-split btn-sm  ${
                             _export == true ? "show" : "hide"
                           }`}
                         >
@@ -392,13 +410,14 @@ class Product extends Component {
 
                     <div class="card shadow ">
                       <div className="card-header">
-                        <div    style={{
-                                display : "flex",
-                                justifyContent: "end",
-                                marginRight : "15px"
-                            }}> 
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "end",
+                            marginRight: "15px",
+                          }}
+                        >
                           <Link
-                         
                             to={`/product/create/${store_code}`}
                             class={`btn btn-info btn-icon-split btn-sm ${
                               insert == true ? "show" : "hide"
@@ -483,6 +502,7 @@ class Product extends Component {
                               passNumPage={this.passNumPage}
                               store_code={store_code}
                               products={products}
+                              pageProduct={true}
                             />
                           </div>
                         </div>
@@ -494,8 +514,11 @@ class Product extends Component {
                           _delete={_delete}
                           update={update}
                           page={page}
+                          limit={numPage}
+                          searchValue={searchValue}
                           handleDelCallBack={this.handleDelCallBack}
                           handleMultiDelCallBack={this.handleMultiDelCallBack}
+                          handleFetchAllProduct={this.handleFetchAllProduct}
                           store_code={store_code}
                           products={products}
                         />
@@ -505,6 +528,7 @@ class Product extends Component {
                           passNumPage={this.passNumPage}
                           store_code={store_code}
                           products={products}
+                          pageProduct={true}
                         />
                       </div>
                     </div>
@@ -516,7 +540,12 @@ class Product extends Component {
 
               <Footer />
             </div>
-            <ModalDelete modal={this.state.modal} />
+            <ModalDelete
+              modal={this.state.modal}
+              page={page}
+              limit={numPage}
+              searchValue={searchValue}
+            />
             <ModalMultiDelete multi={this.state.multi} />
           </div>
         </div>

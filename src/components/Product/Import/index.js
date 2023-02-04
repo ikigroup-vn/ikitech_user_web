@@ -4,107 +4,104 @@ import * as Types from "../../../constants/ActionType";
 import * as productAction from "../../../actions/product";
 
 class Modal extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
       type: {},
-      allow_skip_same_name: false
+      allow_skip_same_name: false,
     };
   }
 
   onChangeType = (e, index) => {
-    var value = e.target.value
-    var type = { ...this.state.type }
-    type["type" + index] = value
+    var value = e.target.value;
+    var type = { ...this.state.type };
+    type["type" + index] = value;
     this.setState({
-      type: type
-    })
-  }
-
+      type: type,
+    });
+  };
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.allow_skip_same_name != this.props.allow_skip_same_name) {
-      this.setState({ allow_skip_same_name: false })
+      this.setState({ allow_skip_same_name: false });
     }
   }
-
 
   showListUrl = (images) => {
     var result = null;
     if (typeof images == "undefined") {
       return result;
     }
-    var listImg = images.split(",")
+    var listImg = images.split(",");
     if (listImg.length > 0) {
-
-      result = listImg.map((image, index) => {
-        return (
-
-            <img src={image} class="img-responsive" alt="Image" style={{
-              width: "120px",
-              objectFit: "cover",
-              height: "100px",
-              margin: "7px"
-              
-            }} />
-
-        )
-
-      });
+      return (
+        <img
+          src={listImg[0]}
+          class="img-responsive"
+          alt="Image"
+          style={{
+            width: "120px",
+            objectFit: "cover",
+            height: "100px",
+            margin: "7px",
+          }}
+        />
+      );
     } else {
       return result;
     }
     return result;
-  }
+  };
 
   showItemObject = (item) => {
     {
-      var object = []
-      var data = ""
+      var object = [];
+      var data = "";
       Object.entries(item).forEach(([key, value], index) => {
         if (typeof value == "string" && value != null && value != "") {
           if (value.includes("https://") || value.includes("http://")) {
             object.push(
               <td>
-          <div style = {{display : "flex" , flexDirection : "column" , maxHeight : "300px", overflow : "auto"}}>
-
-                {this.showListUrl(value)}
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    maxHeight: "140px",
+                    overflow: "auto",
+                  }}
+                >
+                  {this.showListUrl(value)}
                 </div>
               </td>
-
             );
-          }
-          else {
-            var name = ""
-            if(key != null)
-            {
-              if(key.includes("tên") || key.includes("Tên"))
-              {
-                name = "class-name-product"
+          } else {
+            var name = "";
+            if (key != null) {
+              if (key.includes("tên") || key.includes("Tên")) {
+                name = "class-name-product";
               }
             }
             object.push(
-              <td className = {name} >
-                <div style = {{maxHeight : "300px", overflow : "auto" , maxWidth:"250px"}}>
-                {value}
+              <td className={name}>
+                <div
+                  style={{
+                    maxHeight: "140px",
+                    overflow: "auto",
+                    maxWidth: "250px",
+                  }}
+                >
+                  {value}
                 </div>
-                </td>
-
+              </td>
             );
           }
+        } else {
+          object.push(<td>{value}</td>);
         }
-        else {
-          object.push(
-            <td>{value}</td>
-
-          );
-        }
-
-      })
-      return object
+      });
+      return object;
     }
-  }
+  };
 
   showHeaderData = (data) => {
     var result = [];
@@ -112,13 +109,18 @@ class Modal extends Component {
       return result;
     }
     if (data.length > 0) {
-
       Object.entries(data[0]).forEach(([key, value], index) => {
-
         result.push(
           <th>
-
-            <select name="" id="input" class="form-control" required="required" onChange={(e) => { this.onChangeType(e, index) }}>
+            <select
+              name=""
+              id="input"
+              class="form-control"
+              required="required"
+              onChange={(e) => {
+                this.onChangeType(e, index);
+              }}
+            >
               <option value=""></option>
               <option value="name">Tên sản phẩm</option>
               <option value="sku">SKU</option>
@@ -129,21 +131,15 @@ class Modal extends Component {
 
               <option value="description">Mô tả</option>
               <option value="images">Hình ảnh</option>
-
-
-
-
             </select>
-
           </th>
-
         );
-      })
+      });
     } else {
       return result;
     }
     return result;
-  }
+  };
 
   showData = (data) => {
     var result = null;
@@ -151,15 +147,13 @@ class Modal extends Component {
       return result;
     }
     if (data.length > 0) {
-
       result = data.map((item, index) => {
         return (
           <tr>
             <td>{index + 1}</td>
             {this.showItemObject(item)}
           </tr>
-        )
-
+        );
       });
     } else {
       return result;
@@ -172,91 +166,84 @@ class Modal extends Component {
       var count = 0;
       for (let [_key, _value] of Object.entries(type)) {
         if (value == _value) {
-          count = count + 1
+          count = count + 1;
         }
       }
       if (count == 2) {
-        return false
+        return false;
       }
     }
 
-    return true
-
-  }
+    return true;
+  };
 
   onSave = () => {
-    var { importData } = this.props
-    var { type } = this.state
-    var newArray = []
+    var { importData } = this.props;
+    var { type } = this.state;
+    var newArray = [];
 
     if (importData.length > 0) {
       if (Object.keys(type).length > 0) {
         if (this.checkExsit(type) == true) {
           for (const item of importData) {
-            var newItem = {}
+            var newItem = {};
             Object.entries(item).forEach(([key, value], index) => {
-              if (type["type" + index] !== "" && typeof type["type" + index] !== "undefined") {
-                console.log(type["type" + index])
+              if (
+                type["type" + index] !== "" &&
+                typeof type["type" + index] !== "undefined"
+              ) {
+                console.log(type["type" + index]);
                 if (typeof value == "string" && value != null && value != "") {
                   if (value.includes("https://") || value.includes("http://")) {
-                    var listImg = value.split(",")
-                    newItem[type["type" + index]] = listImg
-                  }
-                  else {
-
-                    if(type["type" + index] == "category_name")
-                    {
-                      var listCategories = value.split(",")
-                      newItem[type["type" + index]] = listCategories[0]
-
+                    var listImg = value.split(",");
+                    newItem[type["type" + index]] = listImg;
+                  } else {
+                    if (type["type" + index] == "category_name") {
+                      var listCategories = value.split(",");
+                      newItem[type["type" + index]] = listCategories[0];
                     }
-                    if(type["type" + index] == "quantity_in_stock")
-                    {
-                      var quantity_in_stock = ""
-                      if(value != null && value != "" && typeof value != "undefined")
-                      {
-                         quantity_in_stock = value.toString().toUpperCase() == "HẾT HÀNG" ? 0 :  value.toString().toUpperCase() == "VÔ HẠN" ? -1 : value
-                         console.log(quantity_in_stock , value)
+                    if (type["type" + index] == "quantity_in_stock") {
+                      var quantity_in_stock = "";
+                      if (
+                        value != null &&
+                        value != "" &&
+                        typeof value != "undefined"
+                      ) {
+                        quantity_in_stock =
+                          value.toString().toUpperCase() == "HẾT HÀNG"
+                            ? 0
+                            : value.toString().toUpperCase() == "VÔ HẠN"
+                            ? -1
+                            : value;
+                        console.log(quantity_in_stock, value);
+                      } else {
+                        quantity_in_stock = 0;
                       }
-                      else
-                      {
-                        quantity_in_stock = 0
-                      }
-                      newItem[type["type" + index]] =quantity_in_stock
-
-                    }
-                    else
-                    {
-                    newItem[type["type" + index]] = value
+                      newItem[type["type" + index]] = quantity_in_stock;
+                    } else {
+                      newItem[type["type" + index]] = value;
                     }
                   }
-                }
-                else {
-                  newItem[type["type" + index]] = value
-
-
+                } else {
+                  newItem[type["type" + index]] = value;
                 }
               }
-
-            })
-            newItem.index_image_avatar = 0
-            newItem.status = 0
-            newItem.list_distribute = []
-            newItem.categories = []
-            newArray.push(newItem)
-         
+            });
+            newItem.index_image_avatar = 0;
+            newItem.status = 0;
+            newItem.list_distribute = [];
+            newItem.categories = [];
+            newArray.push(newItem);
           }
-       
-          window.$("#importModal").modal("hide")
-        
-          this.props.postMultiProduct(this.props.store_code , {
-            allow_skip_same_name: this.state.allow_skip_same_name,
-            list: newArray
-          })
-        }
-        else {
-          this.props.showError({
 
+          window.$("#importModal").modal("hide");
+
+          this.props.postMultiProduct(this.props.store_code, {
+            allow_skip_same_name: this.props.allow_skip_same_name,
+            list: newArray,
+          });
+        } else {
+          this.props.showError({
             type: Types.ALERT_UID_STATUS,
             alert: {
               type: "danger",
@@ -264,14 +251,11 @@ class Modal extends Component {
               disable: "show",
               content: "Không được chọn trường dữ liệu giống nhau",
             },
-          }
-          )
-          return
+          });
+          return;
         }
-      }
-      else {
+      } else {
         this.props.showError({
-
           type: Types.ALERT_UID_STATUS,
           alert: {
             type: "danger",
@@ -279,21 +263,19 @@ class Modal extends Component {
             disable: "show",
             content: "Chọn ít nhất 1 trường dữ liệu",
           },
-        }
-        )
+        });
       }
     }
-
-  }
+  };
 
   onChange = (e) => {
-    var checked = e.target.checked
-    this.setState({ allow_skip_same_name: checked })
-  }
+    var checked = e.target.checked;
+    this.setState({ allow_skip_same_name: checked });
+  };
 
   render() {
-    var { importData } = this.props
-    var { allow_skip_same_name } = this.state
+    var { importData } = this.props;
+    var { allow_skip_same_name } = this.state;
 
     return (
       <div
@@ -303,29 +285,28 @@ class Modal extends Component {
         id="importModal"
         data-keyboard="false"
         data-backdrop="static"
+        style={{
+          height: "100%",
+          overflow: "visible",
+        }}
       >
         <div class="modal-dialog modal-xl" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{ background: "white" }} >
-
+            <div class="modal-header" style={{ background: "white" }}>
               <div class="form-group">
-                <div class="form-check" style = {{paddingLeft : "0px"}}>
-                  <label class="form-check-label" for="gridCheck">
-                    
-                  <i class="fas fa-arrow-alt-circle-right"></i>                    
-                    &nbsp;Cho phép bỏ qua các sản phẩm trùng tên
-                  </label>
-                  <input class="form-check-input" type="checkbox" id="gridCheck" style={{ marginLeft: "10px" }}
-                    onChange={this.onChange}
-                    name="allow_skip_same_name"
-                    checked={allow_skip_same_name} />
-
+                <div class="form-check" style={{ paddingLeft: "0px" }}>
+                  Vui lòng chọn dữ liệu từ các trường sản phẩm
                 </div>
-
               </div>
 
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-
+              <button
+                type="button"
+                class="close"
+                data-dismiss="modal"
+                aria-hidden="true"
+              >
+                &times;
+              </button>
             </div>
 
             <form
@@ -339,19 +320,25 @@ class Modal extends Component {
                 <input type="hidden" name="remove_id_store" />
                 <div class="alert-remove"></div>
 
-                <table class="table table-responsive table-border" style={{ fontSize: "13px" }}>
+                <table
+                  class="table table-responsive table-border"
+                  style={{ fontSize: "13px" }}
+                >
                   <thead>
                     <tr>
                       <th>STT</th>
                       {this.showHeaderData(importData)}
                     </tr>
-
                   </thead>
-                  <tbody>
+                  <tbody
+                    style={{
+                      display: "inline-block",
+                      height: "65vh",
+                    }}
+                  >
                     {this.showData(importData)}
                   </tbody>
                 </table>
-
               </div>
               <div class="modal-footer">
                 <button
@@ -361,11 +348,12 @@ class Modal extends Component {
                 >
                   Đóng
                 </button>
-                <button type="button"
+                <button
+                  type="button"
                   onClick={this.onSave}
-                  class="btn btn-info">
+                  class="btn btn-info"
+                >
                   Thực hiện Import
-
                 </button>
               </div>
             </form>
@@ -379,10 +367,10 @@ class Modal extends Component {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     showError: (error) => {
-      dispatch(error)
+      dispatch(error);
     },
     postMultiProduct: (store_code, data) => {
-      dispatch(productAction.postMultiProduct(store_code, data))
+      dispatch(productAction.postMultiProduct(store_code, data));
     },
   };
 };

@@ -5,6 +5,9 @@ import { shallowEqual } from "../../ultis/shallowEqual";
 import moment from "moment";
 import Datetime from "react-datetime";
 import themeData from "../../ultis/theme_data";
+import Validator from "../../ultis/validator";
+import { isEmail, isEmpty } from "../../ultis/helpers";
+import * as Types from "../../constants/ActionType";
 
 class ModalEdit extends Component {
   constructor(props) {
@@ -16,9 +19,28 @@ class ModalEdit extends Component {
       txtPhone_branch: "",
       txtEmail_branch: "",
       txtSex: "",
-      idCustomer: "",
       txtDateOfBirth: "",
+      errors: {},
+      error_email: { status: false, text: "" },
+      idCustomer: "",
     };
+    const rules = [
+      {
+        field: "txtName_branch",
+        method: "isEmpty",
+        validWhen: false,
+        message: "Tên không được để trống.",
+      },
+
+      {
+        field: "txtPhone_branch",
+        method: "isLength",
+        args: [{ min: 10, max: 12 }],
+        validWhen: true,
+        message: "Số điện thoại không hợp lệ.",
+      },
+    ];
+    this.validator = new Validator(rules);
   }
   onChange = (e) => {
     var target = e.target;
@@ -84,31 +106,71 @@ class ModalEdit extends Component {
     }
   }
   handleOnClick = () => {
-    var {
-      txtAddress_detail,
-      txtSex,
-      txtName_branch,
-      txtPhone_branch,
-      txtEmail_branch,
-      idCustomer,
-      txtDateOfBirth,
-    } = this.state;
-    const { store_code, modal } = this.props;
-    const Formdata = {
-      ...modal,
-      name: txtName_branch,
-      phone_number: txtPhone_branch,
-      email: txtEmail_branch,
-      address: txtAddress_detail,
-      date_of_birth: moment(txtDateOfBirth, "DD-MM-YYYY").format(
+    const errors = this.validator.validate(this.state);
+    var { txtEmail_branch } = this.state;
+    if (
+      isEmpty(this.state.txtDateOfBirth) &&
+      moment(this.state.txtDateOfBirth, "DD-MM-YYYY").format(
         "YYYY-MM-DD HH:mm:ss"
-      ),
-      sex: txtSex,
-    };
-    console.log("Formdata", Formdata);
-    this.props.editCustomer(store_code, idCustomer, Formdata, function () {
-      window.$(".modal").modal("hide");
+      ) == "Invalid date"
+    ) {
+      this.props.showErrors({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi ",
+          disable: "show",
+          content: "Ngày sinh không đúng định dạng (DD-MM-YYYY)",
+        },
+      });
+      return;
+    }
+    this.setState({
+      errors: errors,
     });
+    var error = false;
+
+    if (!isEmail(txtEmail_branch) && isEmpty(txtEmail_branch)) {
+      error = true;
+      this.setState({
+        error_email: { text: "Email không đúng định dạng", status: true },
+      });
+    } else {
+      this.setState({ error_email: { text: "", status: false } });
+    }
+
+    if (
+      Object.keys(errors).length === 0 &&
+      (!isEmpty(this.state.txtEmail_branch) ||
+        (isEmail(this.state.txtEmail_branch) &&
+          isEmpty(this.state.txtEmail_branch)))
+    ) {
+      console.log("zoo");
+      var {
+        txtAddress_detail,
+        txtSex,
+        txtName_branch,
+        txtPhone_branch,
+        txtEmail_branch,
+        idCustomer,
+        txtDateOfBirth,
+      } = this.state;
+      const { store_code, modal } = this.props;
+      const Formdata = {
+        ...modal,
+        name: txtName_branch,
+        phone_number: txtPhone_branch,
+        email: txtEmail_branch,
+        address: txtAddress_detail,
+        date_of_birth: moment(txtDateOfBirth, "DD-MM-YYYY").format(
+          "YYYY-MM-DD HH:mm:ss"
+        ),
+        sex: txtSex,
+      };
+      this.props.editCustomer(store_code, idCustomer, Formdata, function () {
+        window.$(".modal").modal("hide");
+      });
+    }
   };
   showProvince = (places) => {
     var result = null;
@@ -163,6 +225,8 @@ class ModalEdit extends Component {
       txtEmail_branch,
       txtSex,
       txtDateOfBirth,
+      errors,
+      error_email,
     } = this.state;
 
     var isMale = txtSex == "1" ? true : false;
@@ -212,6 +276,14 @@ class ModalEdit extends Component {
                             onChange={this.onChange}
                             name="txtName_branch"
                           />
+                          {errors.txtName_branch && (
+                            <div
+                              className="validation"
+                              style={{ display: "block" }}
+                            >
+                              {errors.txtName_branch}
+                            </div>
+                          )}
                         </div>
                         <div class="form-group">
                           <label for="product_name">Số điện thoại</label>
@@ -225,6 +297,14 @@ class ModalEdit extends Component {
                             onChange={this.onChange}
                             name="txtPhone_branch"
                           />
+                          {errors.txtPhone_branch && (
+                            <div
+                              className="validation"
+                              style={{ display: "block" }}
+                            >
+                              {errors.txtPhone_branch}
+                            </div>
+                          )}
                         </div>
                         <div class="form-group">
                           <label for="product_name">Email</label>
@@ -238,6 +318,14 @@ class ModalEdit extends Component {
                             onChange={this.onChange}
                             name="txtEmail_branch"
                           />
+                          {error_email.status && (
+                            <div
+                              className="validation"
+                              style={{ display: "block" }}
+                            >
+                              {error_email.text}
+                            </div>
+                          )}
                         </div>
 
                         <div className="form-group">
@@ -343,6 +431,9 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(
         customerAction.editCustomerSale(store_code, id, form, funcModal)
       );
+    },
+    showErrors: (alert) => {
+      dispatch(alert);
     },
   };
 };

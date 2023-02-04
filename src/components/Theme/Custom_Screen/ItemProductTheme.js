@@ -38,7 +38,7 @@ class Custom_Screen extends Component {
   };
 
   render() {
-    var { product_home_type, v } = this.props;
+    var { product_home_type, v, indexProduct } = this.props;
 
     var isVip =
       typeof this.props.badges.config_user_vip == "undefined" ||
@@ -50,7 +50,6 @@ class Custom_Screen extends Component {
       this.props.badges.config_user_vip != null
         ? this.props.badges.config_user_vip.list_id_theme_vip
         : [];
-
     return (
       <div
         class={`form-group col-xs-12 col-lg-12 col-md-12 col-sm-12 ${
@@ -86,7 +85,9 @@ class Custom_Screen extends Component {
           <div class="col-12 col-product">
             <img src={v.product} />
 
-            <span>Product {v.index}</span>
+            <span>
+              Product {indexProduct + 1} #{v.index}
+            </span>
           </div>
         </div>
       </div>

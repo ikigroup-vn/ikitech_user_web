@@ -411,8 +411,20 @@ class Form extends Component {
     var { store_code } = this.props;
     e.preventDefault();
     var type = getQueryParams("type");
+    var page = getQueryParams("page");
+    var search = getQueryParams("search");
     if (type) {
-      history.replace(`/voucher/${store_code}?type=${type}`);
+      if (Number(type) === 1) {
+        history.replace(
+          `/voucher/${store_code}?type=${type}${page ? `&page=${page}` : ""}`
+        );
+      } else {
+        history.replace(
+          `/voucher/${store_code}?type=${type}${
+            search ? `&search=${search}` : ""
+          }`
+        );
+      }
     } else {
       history.goBack();
     }

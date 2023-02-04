@@ -46,6 +46,26 @@ import NotAccess from "../../components/Partials/NotAccess";
 import Loading from "../../components/Partials/Loading";
 
 import * as OrderFrom from "../../ultis/order_from";
+import styled from "styled-components";
+
+const PosModalStyles = styled.div`
+  .loading-spin {
+    width: 40px;
+    height: 40px;
+    border: 2px solid white;
+    border-top-color: transparent;
+    border-radius: 100rem;
+    animation: spin 1.3s linear infinite;
+  }
+  @keyframes spin {
+    0% {
+      transform: rotate(0);
+    }
+    0% {
+      transform: rotate(360deg);
+    }
+  }
+`;
 
 class PostOrder extends Component {
   constructor(props) {
@@ -124,7 +144,6 @@ class PostOrder extends Component {
     this.changeNewState = debounce(this.handleNewState, 300);
     this.loadFirst = true;
     this.loadFirstNote = true;
-
   }
 
   handleNewState = (newState) => {
@@ -139,7 +158,10 @@ class PostOrder extends Component {
     var total_shipping_fee = {};
     var customer_note = {};
 
-    if ((this.props.oneCart.id == newState.cartId) || (this.props.oneCart.id == newState.idCart)) {
+    if (
+      this.props.oneCart.id == newState.cartId ||
+      this.props.oneCart.id == newState.idCart
+    ) {
       if (typeof newState.select_customer != "undefined") {
         customer = { customer_id: newState?.select_customer?.value ?? null };
       } else {
@@ -187,17 +209,16 @@ class PostOrder extends Component {
 
       if (typeof newState.customerNote != "undefined") {
         customer_note = {
-            customer_note:
-            newState.customerNote,
+          customer_note: newState.customerNote,
         };
       } else {
         customer_note = {};
       }
-      console.log(newState.customerNote , customer_name );
+      console.log(newState.customerNote, customer_name);
 
       this.setState({
         modalUpdateCart: {
-          cartId: newState.cartId  ?? newState.idCart,
+          cartId: newState.cartId ?? newState.idCart,
           ...customer_name,
           ...customer_phone,
           customer_email: newState.txtEmail,
@@ -212,7 +233,7 @@ class PostOrder extends Component {
           partner_shipper_id: newState.partner_id,
           ...customer,
           discount: newState.discount,
-          ...customer_note
+          ...customer_note,
         },
       });
     }
@@ -224,17 +245,16 @@ class PostOrder extends Component {
   //     })
   // }
 
-
   handleChange = (e) => {
     const val = e.target.value;
 
     this.setState({
       customerNote: val,
     });
-      this.changeNewState({
-        ...this.state,
-        customerNote: val,
-      });
+    this.changeNewState({
+      ...this.state,
+      customerNote: val,
+    });
     // this.setState({ value: val }, () => {
     //   // this.changeSearch(val);
     //   this.changeNewState({
@@ -361,11 +381,16 @@ class PostOrder extends Component {
 
   componentDidMount() {
     const branch_id = getBranchId();
+    const { order_code, store_code } = this.props.match.params;
 
     this.props.fetchAllPertion(this.props.match.params.store_code);
     this.props.fetchAllVoucher(this.props.match.params.store_code);
     this.props.fetchAllBadge(this.props.match.params.store_code, branch_id);
     this.props.fetchAllCategoryP(this.props.match.params.store_code);
+
+    if (order_code != null && order_code != "") {
+      this.props.createCartEditOrder(store_code, order_code);
+    }
   }
 
   refreshProductList = () => {
@@ -591,23 +616,33 @@ class PostOrder extends Component {
       data,
       this
     );
-    // this.setState({
-    //     priceCustomer: 0,
-    //     listPosItem: [],
-    //     modalUpdateCart: {
-    //         name: "",
-    //         phone_number: "",
-    //         debt: 0,
-    //         id: 0,
-    //     },
-    // });
   };
 
   componentWillReceiveProps(nextProps) {
     if (
       !shallowEqual(nextProps.oneCart, this.props.oneCart) &&
-      this.props.loadingHandleChangeQuantity == false &&
-      typeof nextProps.oneCart != "undefined"
+      nextProps.oneCart !== undefined
+    ) {
+      this.setState({
+        oneCart: nextProps.oneCart,
+        // idCart: nextProps.oneCart.id,
+      });
+    }
+
+    if (
+      typeof nextProps.oneCart != "undefined" &&
+      typeof nextProps.oneCart.info_cart != "undefined" &&
+      (!shallowEqual(nextProps.oneCart, this.props.oneCart) ||
+        // && this.props.loadingHandleChangeQuantity == false
+        !shallowEqual(
+          this.props.loadingHandleChangePriceItem,
+          nextProps.loadingHandleChangePriceItem
+        ) ||
+        (!shallowEqual(
+          this.props.loadingHandleUseVoucher,
+          nextProps.loadingHandleUseVoucher
+        ) &&
+          nextProps.loadingHandleUseVoucher != null))
     ) {
       var discount = {};
       if (nextProps.oneCart?.id != this.props.oneCart?.id) {
@@ -616,19 +651,18 @@ class PostOrder extends Component {
           priceCustomer: nextProps.oneCart.info_cart.total_final,
         });
       }
-      var customerNote = {}
-      if(this.loadFirstNote == true)
-      {
+      var customerNote = {};
+      if (this.loadFirstNote == true) {
         customerNote = {
-            customerNote: nextProps.oneCart.customer_note ?? ""
-        }
-        this.loadFirstNote = false
+          customerNote: nextProps.oneCart.customer_note ?? "",
+        };
+        this.loadFirstNote = false;
       }
 
       this.setState({
         code_voucher: nextProps.oneCart.code_voucher,
         oneCart: nextProps.oneCart,
-        totalFinal: nextProps.oneCart.info_cart.total_final,
+        totalFinal: nextProps.oneCart?.info_cart?.total_final ?? 0,
         totalAfterDiscount: nextProps.oneCart.info_cart.total_after_discount,
         selectPrice: -1,
 
@@ -682,13 +716,30 @@ class PostOrder extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     window.$("link[rel=stylesheet]").prop("disabled", false);
+    const { order_code } = this.props.match.params;
+    if (
+      !shallowEqual(nextProps.fromEditOrder, this.props.fromEditOrder) &&
+      order_code &&
+      Object.entries(nextProps.orderAfterPayment).length > 0
+    ) {
+      const link = `/order/detail/${this.props.match.params.store_code}/${nextProps.orderAfterPayment.order_code}`;
+      if (nextProps.fromEditOrder) {
+        history.push(link);
+      }
+    }
+    if (
+      nextProps.oneCart &&
+      !shallowEqual(nextProps.oneCart, this.props.oneCart) &&
+      order_code
+    ) {
+      this.setState({ idCart: nextProps.oneCart.id });
+    }
     if (
       (!shallowEqual(nextState.listPosItem, this.state.listPosItem) &&
         nextState.listPosItem.product_id != null) ||
       (nextState.listPosItem.product_id != null &&
         this.state.isScan != nextState.isScan)
     ) {
-      console.log(nextState.listPosItem);
       const formData = {
         product_id: nextState.listPosItem.product_id,
         quantity: nextState.listPosItem.stock ?? 1,
@@ -702,6 +753,7 @@ class PostOrder extends Component {
       this.props.addProductInCart(store_code, branch_id, id, formData);
     }
     if (!shallowEqual(nextState.priceCustomer, this.state.priceCustomer)) {
+      console.log("priceCustomer: ", nextState.priceCustomer);
       this.setState({
         exchange:
           removeSignNumber(nextState.priceCustomer) -
@@ -742,7 +794,6 @@ class PostOrder extends Component {
         exchange: 0,
         totalFinal: 0,
       });
-
       this.refreshProductList();
     }
 
@@ -911,7 +962,6 @@ class PostOrder extends Component {
   };
 
   onNewChange = (state) => {
-    console.log("vo state", state, this.state);
     this.changeNewState({
       ...this.state,
       ...state,
@@ -930,9 +980,7 @@ class PostOrder extends Component {
   };
 
   render() {
-    console.log(this.state.modalUpdateCart);
-
-    var { store_code } = this.props.match.params;
+    var { store_code, order_code } = this.props.match.params;
     var { listPertion, products, listVoucher, badges } = this.props;
     var { allow_semi_negative } = badges;
     var {
@@ -948,6 +996,7 @@ class PostOrder extends Component {
       idCart,
     } = this.state;
     const length = oneCart.info_cart?.line_items.length;
+    console.log("hiiiiiiiiiiiiiii: ", oneCart);
     const ship_discount_amount = oneCart.info_cart?.ship_discount_amount;
     console.log(oneCart.info_cart);
     var handleKeyPress = {
@@ -962,7 +1011,6 @@ class PostOrder extends Component {
         this._recordInput("onKeyUp", event);
       },
     };
-    console.log(store_code);
     var colListPos =
       this.state.openShipment == true && getChannel() == IKITECH
         ? { width: "calc(100% - 732px)" }
@@ -983,13 +1031,12 @@ class PostOrder extends Component {
           }
         : null;
     var total_shipping_fee = oneCart?.total_shipping_fee;
-    console.log("hehe", total_shipping_fee);
     return (
       <React.Fragment>
         {typeof isShow == "undefined" ? (
           <div></div>
         ) : isShow == true ? (
-          <div className="pos-modal">
+          <PosModalStyles className="pos-modal">
             <KeyboardEventHandler
               handleKeys={["f9", "f4", "f3", "f6", "f8"]}
               onKeyEvent={(key, e) => this.handleKeyboard(key, e)}
@@ -1003,22 +1050,11 @@ class PostOrder extends Component {
               handleCallbackTab={this.handleCallbackTab}
               handleCallbackProduct={this.handleCallbackProduct}
               handleCallbackPushProduct={this.handleCallbackPushProduct}
+              order_code={order_code}
             />
             <div className="overview-cart">
               <div className="row-post">
                 <div className="col-list-pos" style={colListPos}>
-                  {/* {oneCart?.info_cart?.line_items.length > 0 &&
-                                    <div className='wap-list' style={{
-                                        marginTop:8
-                                    }}>
-                                        <div style={{ marginLeft: "10px" }}>STT</div>
-                                        <div style={{ width: "150%" }}>Tên sản phẩm</div>
-                                        <div>Số lượng</div>
-                                        <div style={{ width: "11%" }}>Đơn giá</div>
-                                        <div style={{ width: "13%" }}>Thành tiền</div>
-                                    </div>
-                                } */}
-
                   <div className="panel-container-vertical">
                     <div
                       className="panel-top"
@@ -1076,9 +1112,13 @@ class PostOrder extends Component {
                               ></img>
                               <div
                                 className="title-list-pos "
-                                style={{ color: "black" }}
+                                style={{
+                                  color: "black",
+                                  marginTop: "10px",
+                                  fontSize: "16px",
+                                }}
                               >
-                                Đơn hàng của bạn chưa có sản phẩm nào
+                                Đơn hàng của bạn chưa có sản phẩm nào!
                               </div>
                             </div>
                           </div>
@@ -1133,9 +1173,7 @@ class PostOrder extends Component {
                   className="row-payman"
                   style={{
                     ...rowPayman,
-                    // "flex-flow": "column",
-                    // position: "relative",
-                    // "z-index": "-1"
+                    fontSize: "13px",
                   }}
                 >
                   {/* {this.state.openShipment && getChannel() == IKITECH && ( */}
@@ -1180,7 +1218,7 @@ class PostOrder extends Component {
                           className="price-info"
                           style={{
                             margin: "10px 0px",
-                            fontSize: "17px",
+                            fontSize: "13px",
                             marginLeft: "5px",
                           }}
                         >
@@ -1203,7 +1241,7 @@ class PostOrder extends Component {
                               marginRight: "13px",
                             }}
                           >
-                            {this.props.oneCart.customer?.name ? (
+                            {this.props.oneCart?.customer?.name ? (
                               <>
                                 <div
                                   className="title-price"
@@ -1461,7 +1499,7 @@ class PostOrder extends Component {
                               style={{
                                 textAlign: "end",
                                 color: "red",
-                                fontSize: "22px",
+                                fontSize: "20px",
                               }}
                             >
                               {formatNoD(totalFinal)}
@@ -1486,6 +1524,9 @@ class PostOrder extends Component {
                                   id="import_prices"
                                   {...handleKeyPress}
                                   class="col-6 text-input-pos"
+                                  style={{
+                                    fontSize: "24px",
+                                  }}
                                   value={formatNoD(
                                     removeSignNumber(this.state.priceCustomer)
                                   )}
@@ -1574,6 +1615,7 @@ class PostOrder extends Component {
                                 border: 0,
                                 borderRadius: 0,
                                 borderBottom: "2px solid gray",
+                                fontSize: "13px",
                               }}
                               value={this.state.customerNote}
                               onChange={this.handleChange}
@@ -1723,22 +1765,81 @@ class PostOrder extends Component {
                           marginTop: "15px",
                         }}
                       >
-                        <button
-                          className="btn btn-pay"
-                          style={{
-                            width: "100%",
-                            padding: "25px",
-                            textAlign: "center",
-                            borderRadius: "5px",
-                            cursor: "pointer",
-                          }}
-                          onClick={this.handlePayment}
-                        >
-                          {this.state.openShipment == true ||
-                          (total_shipping_fee > 0 && getChannel() == IKITECH)
-                            ? "Lên đơn (F9)"
-                            : "Thanh toán (F9)"}
-                        </button>
+                        {this.props.match.params.order_code ? (
+                          <>
+                            {this.props.loadingOrder ? (
+                              <button
+                                className="btn btn-pay-update"
+                                style={{
+                                  width: "100%",
+                                  padding: "0 25px",
+                                  height: "95.5px",
+                                  textAlign: "center",
+                                  borderRadius: "5px",
+                                  cursor: "pointer",
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <span className="loading-spin"></span>
+                              </button>
+                            ) : (
+                              <button
+                                className="btn btn-pay-update"
+                                style={{
+                                  width: "100%",
+                                  padding: "25px",
+                                  textAlign: "center",
+                                  borderRadius: "5px",
+                                  cursor: "pointer",
+                                }}
+                                onClick={this.handlePayment}
+                              >
+                                Cập nhập
+                              </button>
+                            )}
+                          </>
+                        ) : (
+                          <>
+                            {this.props.loadingOrder ? (
+                              <button
+                                className="btn btn-pay"
+                                style={{
+                                  width: "100%",
+                                  padding: "0 25px",
+                                  height: "95.5px",
+                                  textAlign: "center",
+                                  borderRadius: "5px",
+                                  cursor: "pointer",
+                                  display: "flex",
+                                  justifyContent: "center",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <span className="loading-spin"></span>
+                              </button>
+                            ) : (
+                              <button
+                                className="btn btn-pay"
+                                style={{
+                                  width: "100%",
+                                  padding: "25px",
+                                  textAlign: "center",
+                                  borderRadius: "5px",
+                                  cursor: "pointer",
+                                }}
+                                onClick={this.handlePayment}
+                              >
+                                {this.state.openShipment == true ||
+                                (total_shipping_fee > 0 &&
+                                  getChannel() == IKITECH)
+                                  ? "Lên đơn (F9)"
+                                  : "Thanh toán (F9)"}
+                              </button>
+                            )}
+                          </>
+                        )}
                       </div>
                     </div>
                   </div>
@@ -1762,7 +1863,7 @@ class PostOrder extends Component {
               />
             </div>
             <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
-          </div>
+          </PosModalStyles>
         ) : (
           <NotAccess />
         )}
@@ -1775,20 +1876,20 @@ const mapStateToProps = (state) => {
   return {
     products: state.productReducers.product.allProduct,
     oneCart: state.posReducers.pos_reducer.oneCart,
-
+    fromEditOrder: state.posReducers.pos_reducer.fromEditOrder,
     orderAfterPayment: state.posReducers.pos_reducer.orderAfterPayment,
     loadingOrder: state.posReducers.pos_reducer.loadingOrder,
     allowAutoPrint: state.posReducers.pos_reducer.allowAutoPrint,
-
     loadingHandleChangeQuantity:
       state.posReducers.pos_reducer.loadingHandleChangeQuantity,
+    loadingHandleChangePriceItem:
+      state.posReducers.pos_reducer.loadingHandleChangePriceItem,
     listPertion: state.orderReducers.order_product.listPertion,
     listVoucher: state.orderReducers.order_product.listVoucher,
     inforCustomer: state.posReducers.pos_reducer.inforCustomer,
     badges: state.badgeReducers.allBadge,
     customers: state.customerReducers.customer.allCustomer,
     permission: state.authReducers.permission.data,
-    products: state.productReducers.product.allProduct,
   };
 };
 
@@ -1849,6 +1950,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchAllBadge: (store_code, branch_id) => {
       dispatch(notificationAction.fetchAllBadge(store_code, branch_id));
+    },
+    createCartEditOrder: (store_code, order_code) => {
+      dispatch(posAction.createCartEditOrder(store_code, order_code));
     },
     showLoading: (data) => {
       dispatch(data);

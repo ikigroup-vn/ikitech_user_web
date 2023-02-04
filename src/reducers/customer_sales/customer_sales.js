@@ -5,7 +5,7 @@ var initialState = {
   customerID: {},
   type: [],
   isFromPosAndSave: false,
-  customerCreated: {}
+  customerCreated: {},
 };
 
 export const customer_sales = (state = initialState, action) => {
@@ -21,7 +21,22 @@ export const customer_sales = (state = initialState, action) => {
       newState.isFromPosAndSave = action.isFromPosAndSave;
       newState.customerCreated = action.data;
       return newState;
-
+    case Types.CREATE_ACCOUNT_FOR_CUSTOMER_SALE:
+      const { list_ids } = action.data;
+      const copyState = JSON.parse(JSON.stringify(newState));
+      const newAllCustomers = [];
+      copyState.allCustomer.data.forEach((element) => {
+        if (list_ids.includes(element.id)) {
+          const newCustomer = { ...element };
+          newCustomer.has_customer = true;
+          newAllCustomers.push(newCustomer);
+          return;
+        }
+        newAllCustomers.push(element);
+      });
+      copyState.allCustomer.data = newAllCustomers;
+      newState.allCustomer = copyState.allCustomer;
+      return newState;
 
     default:
       return newState;

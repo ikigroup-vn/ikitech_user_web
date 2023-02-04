@@ -315,7 +315,6 @@ class ModalCreate extends Component {
             <strong>Chưa nhập đủ thông tin địa chỉ</strong>
           </div>
         )}
-
         <div class="modal" id="modalCreateCustomer">
           <div class="modal-dialog">
             <div class="modal-content">

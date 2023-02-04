@@ -34,7 +34,7 @@ class Topbar extends Component {
       isShowScanner: false,
       numOfScanner: 1,
       startAsync: false,
-      isChangeValue : ""
+      isChangeValue: "",
     };
 
     this.refSearchProduct = React.createRef();
@@ -43,28 +43,14 @@ class Topbar extends Component {
     this.search = "";
   }
   componentDidMount() {
-    const { store_code } = this.props;
+    const { store_code, order_code } = this.props;
     const branch_id = localStorage.getItem("branch_id");
-    this.props.listPosOrder(store_code, branch_id);
     this.props.fetchBranchStore(this.props.store_code);
     this.props.fetchUserId();
-
-    // this.props.fetchAllProductV2(  store_code,
-    //   branch_id,
-    //   1,
-    //   "&limit=5")
+    if (order_code !== undefined) return;
+    this.props.listPosOrder(store_code, branch_id);
   }
-  // componentWillUpdate(nextProps, nextState) {
-  //     console.log("thay doi" , nextState)
-  //     this.props.onNewChange(nextState)
-  // }
-
-
   componentWillReceiveProps(nextProps) {
-    // if(this.props.openShipment != nextProps.openShipment){
-    //     console.log("da vao" ,nextProps.openShipment )
-    //     this.setState({order_from : nextProps.openShipment? 3 : 2})
-    // }
     var { startAsync } = this.state;
     var { products } = nextProps;
     if (
@@ -120,9 +106,11 @@ class Topbar extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
+    const { order_code } = this.props;
     if (
       !shallowEqual(nextState.selectValue, this.state.selectValue) ||
-      this.state.isScan !== nextState.isScan || nextState.isChangeValue !== this.state.isChangeValue
+      this.state.isScan !== nextState.isScan ||
+      nextState.isChangeValue !== this.state.isChangeValue
     ) {
       var { selectValue } = nextState;
       if (selectValue != null && selectValue.product != null) {
@@ -145,16 +133,19 @@ class Topbar extends Component {
           compareIsScan == true ? numOfScanner : 1,
           compareIsScan == true ? numOfScanner : 1,
           data,
-          nextState.isChangeValue !== this.state.isChangeValue && shallowEqual(nextState.selectValue, this.state.selectValue)
+          nextState.isChangeValue !== this.state.isChangeValue &&
+            shallowEqual(nextState.selectValue, this.state.selectValue)
         );
       }
     }
+
     if (!shallowEqual(nextState.branchId, this.state.branchId)) {
       const { store_code } = this.props;
       const branch_id = localStorage.getItem("branch_id");
-      this.props.listPosOrder(store_code, branch_id);
       this.props.fetchBranchStore(this.props.store_code);
       this.props.fetchUserId();
+      if (order_code) return;
+      this.props.listPosOrder(store_code, branch_id);
     }
     return true;
   }
@@ -265,23 +256,23 @@ class Topbar extends Component {
         label: `${i.name}`,
         product: i,
       };
-    })
-
-
+    });
 
     if (this.refSearchProduct != null) {
-
-      if (listShowChoose.length == 1 && !isNaN(this.search) && this.search.length > 8) {
+      if (
+        listShowChoose.length == 1 &&
+        !isNaN(this.search) &&
+        this.search.length > 8
+      ) {
         this.setState({ selectValue: listShowChoose[0] });
-        //  isNaN('123')  
+        //  isNaN('123')
         this.sleep(100).then(() => {
           if (this.refSearchProduct != null) {
-
-            this.refSearchProduct.setValue("")
+            this.refSearchProduct.setValue("");
           }
         });
 
-        this.afterEnter = false
+        this.afterEnter = false;
         return {
           options: listShowChoose,
 
@@ -292,7 +283,6 @@ class Topbar extends Component {
         };
       }
     }
-
 
     return {
       options: listShowChoose,
@@ -321,23 +311,23 @@ class Topbar extends Component {
   ) => {
     if (distributes.length > 0) {
       window.$("#modalDetail").modal("show");
-      
+
       this.setState({ isToggle: true });
-      if(isChangeValue == false)
-      this.props.handleCallbackProduct({
-        inventoryProduct: inventory,
-        idProduct: id,
-        nameProduct: name,
-        imageProduct: image,
-        priceProduct: price,
-        distributeProduct: distributes,
-        minPriceProduct: minPrice,
-        maxPriceProduct: maxPrice,
-        discountProduct: priceDiscount,
-        quantityProduct: quayntity,
-        quantityProductWithDistribute: quantityDistribute,
-        product: product,
-      });
+      if (isChangeValue == false)
+        this.props.handleCallbackProduct({
+          inventoryProduct: inventory,
+          idProduct: id,
+          nameProduct: name,
+          imageProduct: image,
+          priceProduct: price,
+          distributeProduct: distributes,
+          minPriceProduct: minPrice,
+          maxPriceProduct: maxPrice,
+          discountProduct: priceDiscount,
+          quantityProduct: quayntity,
+          quantityProductWithDistribute: quantityDistribute,
+          product: product,
+        });
     } else {
       this.setState({ isToggle: false });
       this.props.handleCallbackPushProduct({
@@ -355,8 +345,6 @@ class Topbar extends Component {
     }
   };
   _recordInput = (name, event) => {
-
-
     if (event.keyCode == 13) {
       this.setState({ isScan: randomString(10) });
     }
@@ -367,15 +355,13 @@ class Topbar extends Component {
   }
 
   onChangeProduct = (selectValue) => {
-
-    this.setState({ selectValue , isChangeValue : randomString(10) });
+    this.setState({ selectValue, isChangeValue: randomString(10) });
     // , isChangeValue : randomString(10)
     this.sleep(100).then(() => {
       if (this.refSearchProduct != null) {
         this.refSearchProduct.focus();
       }
     });
-
 
     // if (selectValue != null && selectValue.product != null) {
     //     var data = selectValue?.product
@@ -395,9 +381,6 @@ class Topbar extends Component {
   };
 
   handleKeyboard = (key, event) => {
-
-
-
     if (key == "ctrl+v" || key == "meta+v") {
       this.isCtrl = true;
       event.preventDefault();
@@ -408,11 +391,10 @@ class Topbar extends Component {
     }
 
     if (key == "enter") {
-      this.afterEnter = true
+      this.afterEnter = true;
     }
 
-    console.log(key, this.isCtrl, this.afterEnter)
-
+    console.log(key, this.isCtrl, this.afterEnter);
 
     switch (key) {
       case "f3":
@@ -441,7 +423,7 @@ class Topbar extends Component {
     const customStyles = {
       menu: (styles) => ({
         ...styles,
-        width: "600px",
+        width: "520px",
       }),
       option: (provided, state) => ({
         ...provided,
@@ -451,11 +433,11 @@ class Topbar extends Component {
         color: "black",
       }),
     };
-console.log("listt" , listPos);
+    console.log("listt", listPos);
     return (
       <div className="controller-top">
         <KeyboardEventHandler
-          handleKeys={["f3", "ctrl+v", "meta+v", 'enter']}
+          handleKeys={["f3", "ctrl+v", "meta+v", "enter"]}
           onKeyEvent={(key, e) => {
             this.handleKeyboard(key, e);
           }}
@@ -466,9 +448,29 @@ console.log("listt" , listPos);
             style={{
               alignItems: "center",
               width: "100%",
+              fontSize: "13px",
             }}
           >
             <div className="group-controller-first">
+              {this.props.order_code ? (
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginRight: "20px",
+                    fontSize: "18px",
+                    color: "white",
+                  }}
+                >
+                  <i
+                    className="fa fa-chevron-left"
+                    style={{
+                      cursor: "pointer",
+                    }}
+                    onClick={() => history.goBack()}
+                  ></i>
+                </div>
+              ) : null}
               <div className="first-list-top-cart">
                 <li class="nav-item" style={{ flex: 1 }}>
                   <div>
@@ -549,7 +551,7 @@ console.log("listt" , listPos);
               </div>
               <div className="cart-list-banner">
                 <li class="nav-item">
-                  {(listPos !== null && listPos.length > 0) ? (
+                  {listPos !== null && listPos.length > 0 ? (
                     <ul class="navbar-nav" style={{ alignItems: "center" }}>
                       <li
                         onClick={() => this.handleChooseTab1(listPos[0].id)}
@@ -563,7 +565,9 @@ console.log("listt" , listPos);
                           className="tab-item"
                           style={{ marginRight: "5px" }}
                         >
-                          {listPos[0].name}
+                          {listPos[0]?.name
+                            ? listPos[0].name
+                            : "Hóa đơn mặc định"}
                         </div>
                         {listPos.length > 1 && (
                           <i
@@ -611,13 +615,29 @@ console.log("listt" , listPos);
             <div className="end-list-top-cart">
               <li
                 className="nav-item add-cart"
-                style={{ marginRight: "30px" }}
+                style={{
+                  marginRight: "30px",
+                  display: this.props.order_code ? "none" : "block",
+                }}
                 onClick={() => this.handleCreateTab()}
               >
                 <div>
                   <i class="fas fa-plus"></i>
                 </div>
               </li>
+              {this.props.order_code ? (
+                <li
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginRight: "20px",
+                    fontSize: "18px",
+                    color: "white",
+                  }}
+                >
+                  Hóa đơn: {this.props.order_code}
+                </li>
+              ) : null}
 
               <div style={{ margin: "auto 0px" }}>
                 <ul
@@ -630,8 +650,9 @@ console.log("listt" , listPos);
                 >
                   <li
                     title="Giao hàng"
-                    className={`nav-item add-cart ${getChannel() == IKITECH ? "" : "invisible"
-                      }`}
+                    className={`nav-item add-cart ${
+                      getChannel() == IKITECH ? "" : "invisible"
+                    }`}
                     onClick={() => this.props.handleOpenShipment(true)}
                   >
                     <i class="fas fa-shipping-fast"></i>
@@ -707,7 +728,11 @@ console.log("listt" , listPos);
                   <li className="nav-item" style={{ margin: "0 0px" }}>
                     <button
                       className="btn"
-                      style={{ color: "white", border: "1px solid" }}
+                      style={{
+                        color: "white",
+                        border: "1px solid",
+                        fontSize: "13px",
+                      }}
                       data-toggle="modal"
                       data-target="#modalKeyboard"
                     >

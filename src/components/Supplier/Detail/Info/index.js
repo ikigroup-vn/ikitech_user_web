@@ -93,14 +93,21 @@ class Supplier extends Component {
 
   goBack = () => {
     var { store_code } = this.props;
-    var pag = getQueryParams("pag");
+    var page = getQueryParams("page");
+    var search = getQueryParams("search");
     var redirect_report = getQueryParams("redirect_report");
 
     if (redirect_report) history.replace(`/supplier_debt/${store_code}}`);
-    else if (pag) {
-      history.replace(`/supplier/${store_code}/?pag=${getQueryParams("pag")}`);
+    else if (page) {
+      history.replace(
+        `/supplier/${store_code}?page=${page}${
+          search ? `&search=${search}` : ""
+        }`
+      );
     } else {
-      history.replace(`/supplier/${store_code}`);
+      history.replace(
+        `/supplier/${store_code}${search ? `?search=${search}` : ""}`
+      );
     }
   };
   onChangeProvince = (e) => {

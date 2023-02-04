@@ -166,7 +166,18 @@ import PrintOrderScreen from "./screens/Bill/PrintOrderScreen";
 import PrintBarcode from "./screens/PrintBarcode";
 import CustomerSale from "./screens/CustomerSale";
 import GroupCustomer from "./screens/GroupCustomer";
+import InvoiceTemplate from "./screens/InvoiceTemplate";
+import Manual from "./screens/Manual";
+import HistoryOperation from "./screens/HistoryOperation";
+import SpinWheel from "./screens/Gamification/SpinWheel";
+import ActionsGameSpinWheel from "./screens/Gamification/SpinWheel/ActionsGameSpinWheel";
 const routes = [
+  {
+    path: "/invoice_template/index/:store_code",
+    exact: true,
+
+    main: ({ match }) => <InvoiceTemplate match={match} />,
+  },
   {
     path: "/decentralization/index/:store_code",
     exact: true,
@@ -509,6 +520,36 @@ const routes = [
 
     main: ({ match }) => <GroupCustomer match={match} />,
   },
+  {
+    path: "/history_operation/:store_code",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <HistoryOperation match={match} history={history} />
+    ),
+  },
+  {
+    path: "/game_spin_wheels/:store_code",
+    exact: true,
+
+    main: ({ match, history }) => <SpinWheel match={match} history={history} />,
+  },
+  {
+    path: "/game_spin_wheels/:store_code/create",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <ActionsGameSpinWheel match={match} history={history} />
+    ),
+  },
+  {
+    path: "/game_spin_wheels/:store_code/update/:idGameSpinWheel",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <ActionsGameSpinWheel match={match} history={history} />
+    ),
+  },
 
   {
     path: "/customer_sales/:store_code",
@@ -549,7 +590,7 @@ const routes = [
     ),
   },
   {
-    path: "/product/index/:store_code/:page?",
+    path: "/product/index/:store_code",
     exact: true,
 
     main: ({ match }) => <Product match={match} />,
@@ -587,7 +628,7 @@ const routes = [
   },
 
   {
-    path: "/product/edit/:store_code/:productId/:page?",
+    path: "/product/edit/:store_code/:productId",
     exact: true,
 
     main: ({ match, history }) => (
@@ -630,6 +671,12 @@ const routes = [
   },
   {
     path: "/pos/:store_code",
+    exact: true,
+
+    main: ({ match, history }) => <PostOrder match={match} history={history} />,
+  },
+  {
+    path: "/pos/:store_code/:order_code",
     exact: true,
 
     main: ({ match, history }) => <PostOrder match={match} history={history} />,
@@ -1079,6 +1126,12 @@ const routes = [
     main: ({ match, history }) => (
       <ScheduleEdit match={match} history={history} />
     ),
+  },
+  {
+    path: "/manual/:store_code",
+    exact: true,
+
+    main: ({ match }) => <Manual match={match} />,
   },
 
   {

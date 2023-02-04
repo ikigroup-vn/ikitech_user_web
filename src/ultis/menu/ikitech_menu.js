@@ -247,6 +247,29 @@ export const ikitech_menu = [
         ],
       },
       {
+        name: "Đối tác bán hàng",
+        setOpenKey: ["/collaborator", "/agency"],
+        icon: "fa fa-user",
+        open: "setting2",
+        children: [
+          {
+            name: "Cộng tác viên",
+            class: "collaborator_list",
+            display: "hide",
+            exact: true,
+            to: "/collaborator",
+          },
+          {
+            name: "Đại lý",
+            class: "agency_list",
+            display: "hide",
+            icon: "fa fa-bell",
+            exact: true,
+            to: "/agency",
+          },
+        ],
+      },
+      {
         name: "Onsale",
         setOpenKey: ["/customer_sales"],
         icon: "fas fa-user",
@@ -296,29 +319,6 @@ export const ikitech_menu = [
             params: "?status=3",
 
             to: "/customer_sales",
-          },
-        ],
-      },
-      {
-        name: "Đối tác bán hàng",
-        setOpenKey: ["/collaborator", "/agency"],
-        icon: "fa fa-user",
-        open: "setting2",
-        children: [
-          {
-            name: "Cộng tác viên",
-            class: "collaborator_list",
-            display: "hide",
-            exact: true,
-            to: "/collaborator",
-          },
-          {
-            name: "Đại lý",
-            class: "agency_list",
-            display: "hide",
-            icon: "fa fa-bell",
-            exact: true,
-            to: "/agency",
           },
         ],
       },
@@ -443,7 +443,6 @@ export const ikitech_menu = [
         name: "Chương trình khuyến mại",
         icon: "fas fa-money-bill-alt",
         setOpenKey: ["/discount", "/voucher", "/combo", "/bonus_product"],
-
         open: "promotion",
         children: [
           {
@@ -482,8 +481,29 @@ export const ikitech_menu = [
       },
 
       {
+        name: "Gamification",
+        icon: "fas fa-dice-d20",
+        setOpenKey: ["/game_spin_wheels", "/game_predict_outcome"],
+        open: "gamification",
+        children: [
+          {
+            name: "Game quay thưởng",
+            class: "gamification",
+            display: "show",
+            exact: true,
+            to: "/game_spin_wheels",
+          },
+          {
+            name: "Game dự đoán kết quả",
+            class: "gamification",
+            display: "show",
+            exact: true,
+            to: "/game_predict_outcome",
+          },
+        ],
+      },
+      {
         name: "Cài đặt",
-
         icon: "fas fa-cogs",
         setOpenKey: [
           "/theme",
@@ -517,6 +537,13 @@ export const ikitech_menu = [
             to: "/staff/index",
           },
 
+          {
+            name: "Chọn mẫu in",
+            class: "config_setting",
+            display: "hide",
+            exact: true,
+            to: "/invoice_template/index",
+          },
           {
             name: "Cài đặt phân quyền",
             class: "decentralization_list",
@@ -599,14 +626,22 @@ export const ikitech_menu = [
             exact: true,
             to: "/notifications/schedule",
           },
-          // {
-          //   name: "Cài đặt Popup",
-          //   class: "popup_list",
-          //   display: "hide",
-          //   icon: "fa fa-bell",
-          //   exact: true,
-          //   to: "/popup",
-          // },
+          {
+            name: "Lịch sử thao tác",
+            class: "notification_schedule_list",
+            display: "hide",
+            icon: "fa fa-bell",
+            exact: true,
+            to: "/history_operation",
+          },
+          {
+            name: "Hỗ trợ & hướng dẫn",
+            class: "notification_schedule_list",
+            display: "hide",
+            icon: "fa fa-bell",
+            exact: true,
+            to: "/manual",
+          },
         ],
       },
     ],
