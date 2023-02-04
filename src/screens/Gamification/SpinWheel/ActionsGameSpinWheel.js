@@ -8,6 +8,8 @@ import Loading from "../../Loading";
 import NotAccess from "../../../components/Partials/NotAccess";
 import ActionsGameSpinWheelContent from "./ActionsGameSpinWheelContent";
 import Footer from "../../../components/Partials/Footer";
+import * as AgencyAction from "../../../actions/agency";
+import * as groupCustomerAction from "../../../actions/group_customer";
 const ActionsGameSpinWheelStyles = styled.div``;
 
 class ActionsGameSpinWheel extends Component {
@@ -16,6 +18,10 @@ class ActionsGameSpinWheel extends Component {
     this.state = {};
   }
   componentDidMount() {
+    const { fetchAllAgencyType, fetchGroupCustomer } = this.props;
+    const { store_code } = this.props.match.params;
+    fetchAllAgencyType(store_code);
+    fetchGroupCustomer(store_code);
     if (this.state.isLoading !== true) {
       var isShow = true;
       this.setState({ isShow, isLoading: true });
@@ -81,7 +87,14 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch, props) => {
-  return {};
+  return {
+    fetchAllAgencyType: (store_code) => {
+      dispatch(AgencyAction.fetchAllAgencyType(store_code));
+    },
+    fetchGroupCustomer: (store_code) => {
+      dispatch(groupCustomerAction.fetchGroupCustomer(store_code));
+    },
+  };
 };
 
 export default connect(

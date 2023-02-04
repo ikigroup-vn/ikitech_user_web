@@ -78,6 +78,7 @@ class SpinWheel extends Component {
     const { isShow, openModalDeleteGameSpinWheel, idGameSpinWheel } =
       this.state;
     const { auth, listGameSpinWheels } = this.props;
+    console.log("🚀 ~ file: index.js:81 ~ SpinWheel ~ render ~ auth", auth);
     const { store_code } = this.props.match.params;
     if (auth) {
       return (

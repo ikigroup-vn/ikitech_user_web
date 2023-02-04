@@ -3,8 +3,6 @@ import React, { Component } from "react";
 import MomentInput from "react-moment-input";
 import { connect } from "react-redux";
 import styled from "styled-components";
-import * as AgencyAction from "../../../actions/agency";
-import * as groupCustomerAction from "../../../actions/group_customer";
 import Upload from "../../../components/Upload";
 import * as Types from "../../../constants/ActionType";
 import { formatNumberV2 } from "../../../ultis/helpers";
@@ -46,26 +44,7 @@ const ActionsGameSpinWheelContentStyles = styled.div`
     column-gap: 30px;
   }
   .gameSpinWheel__imageContent {
-    .gameSpinWheel__imageSelect {
-      label {
-        & > div {
-          width: 120px;
-          height: 120px;
-          border: 1px dashed;
-          border-radius: 5px;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          color: #a1a09e;
-          cursor: pointer;
-          svg {
-            width: 28px;
-            height: 28px;
-          }
-        }
-      }
-    }
+    padding-top: 20px;
   }
 `;
 
@@ -80,12 +59,17 @@ class ActionsGameSpinWheelContent extends Component {
       txtNumberLimit: "",
       txtStart: "",
       txtEnd: "",
+      images: [],
       displayError: "hide",
       group_customer: 0,
       agency_type_id: null,
       group_type_id: null,
     };
   }
+
+  setImages = (images) => {
+    this.setState({ images });
+  };
   onChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
@@ -143,7 +127,7 @@ class ActionsGameSpinWheelContent extends Component {
   };
 
   render() {
-    const { store_code, types, groupCustomer } = this.props;
+    const { types, groupCustomer } = this.props;
     const {
       txtName,
       txtTurnInDay,
@@ -155,7 +139,7 @@ class ActionsGameSpinWheelContent extends Component {
       group_type_id,
       displayError,
     } = this.state;
-
+    console.log("images:: ", this.state.images);
     return (
       <ActionsGameSpinWheelContentStyles className="gameSpinWheel__content">
         <div className="gameSpinWheel__form">
@@ -342,9 +326,9 @@ class ActionsGameSpinWheelContent extends Component {
             </div>
           </div>
           <div className="gameSpinWheel__image form-group">
-            <label for="txtName">Hình ảnh</label>
+            <label for="txtName">Hình ảnh (Tối đa 13 ảnh)</label>
             <div className="gameSpinWheel__imageContent">
-              <Upload />
+              <Upload multiple setFiles={this.setImages} />
             </div>
           </div>
         </div>
@@ -364,12 +348,6 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     showError: (error) => {
       dispatch(error);
-    },
-    fetchAllAgencyType: (store_code) => {
-      dispatch(AgencyAction.fetchAllAgencyType(store_code));
-    },
-    fetchGroupCustomer: (store_code) => {
-      dispatch(groupCustomerAction.fetchGroupCustomer(store_code));
     },
   };
 };
