@@ -470,8 +470,14 @@ class Customer extends Component {
         newCustomer["is_agency"] = item["Vai trò"] === "Đại lý";
         newCustomer["is_collaborator"] = item["Vai trò"] === "Cộng tác viên";
         if (item["Cấp đại lý"]) {
-          newCustomer["agency_type"] = item["Cấp đại lý"];
+          newCustomer["agency_type_name"] = item["Cấp đại lý"];
         }
+        newCustomer["sale_type"] =
+          item["Vai trò"] === "Đại lý"
+            ? 2
+            : item["Vai trò"] === "Cộng tác viên"
+            ? 1
+            : 0;
         newListCustomers.push(newCustomer);
       }
 

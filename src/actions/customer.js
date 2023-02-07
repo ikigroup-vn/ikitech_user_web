@@ -134,7 +134,8 @@ export const exportAllListCustomer = (store_code, params) => {
                   newItem["Vai trò"] = value;
                 }
                 if (key == "agency_type") {
-                  newItem["Cấp đại lý"] = value ? value.name : "";
+                  newItem["Cấp đại lý"] =
+                    value && item.is_agency ? value.name : "";
                 }
               });
 
