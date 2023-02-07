@@ -19,3 +19,32 @@ export const updateGameSpinWheels = (store_code, id, form) => {
 export const deleteGameSpinWheels = (store_code, id) => {
   return callApi(`/store/${store_code}/spin_wheels/${id}`, "delete", null);
 };
+
+export const fetchListGiftGameSpinWheels = (store_code, idGame) => {
+  return callApi(
+    `/store/${store_code}/spin_wheels/${idGame}/gift_spin_wheels`,
+    "get",
+    null
+  );
+};
+export const addGiftGameSpinWheels = (store_code, idGame, data) => {
+  return callApi(
+    `/store/${store_code}/spin_wheels/${idGame}/gift_spin_wheels`,
+    "post",
+    data
+  );
+};
+export const updateGiftGameSpinWheels = (store_code, idGame, idGift, data) => {
+  return callApi(
+    `/store/${store_code}/spin_wheels/${idGame}/gift_spin_wheels/${idGift}`,
+    "put",
+    data
+  );
+};
+export const deleteGiftGameSpinWheels = (store_code, idGame) => {
+  return callApi(
+    `/store/${store_code}/spin_wheels/${idGame}/gift_spin_wheels`,
+    "delete",
+    null
+  );
+};

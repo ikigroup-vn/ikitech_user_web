@@ -14,6 +14,7 @@
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.19.2",
+    "caniuse-lite": "^1.0.30001450",
     "chart.js": "2.9.4",
     "ckeditor4-react": "^1.4.2",
     "datatables.net-dt": "^1.1.0",

@@ -6,7 +6,7 @@ import Sidebar from "../../../components/Partials/Sidebar";
 import Topbar from "../../../components/Partials/Topbar";
 import Loading from "../../Loading";
 import NotAccess from "../../../components/Partials/NotAccess";
-import ActionsGameSpinWheelContent from "./ActionsGameSpinWheelContent";
+import ActionsGameSpinWheelContent from "./child/ActionsGameSpinWheelContent";
 import Footer from "../../../components/Partials/Footer";
 import * as AgencyAction from "../../../actions/agency";
 import * as groupCustomerAction from "../../../actions/group_customer";
@@ -27,9 +27,10 @@ class ActionsGameSpinWheel extends Component {
       this.setState({ isShow, isLoading: true });
     }
   }
+
   render() {
     const { auth } = this.props;
-    const { store_code } = this.props.match.params;
+    const { store_code, id } = this.props.match.params;
     const { isShow } = this.state;
     if (auth) {
       return (
@@ -42,27 +43,10 @@ class ActionsGameSpinWheel extends Component {
                 {typeof isShow == "undefined" ? (
                   <div style={{ height: "500px" }}></div>
                 ) : isShow == true ? (
-                  <div class="container-fluid">
-                    <div
-                      style={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <h4 className="h4 title_content mb-0 text-gray-800">
-                        Thêm trò chơi quay thưởng
-                      </h4>
-                    </div>
-                    <br></br>
-                    <div class="card mb-4">
-                      <div class="card-header title_content">
-                        Nhập thông tin trò chơi
-                      </div>
-                      <div class="card-body" style={{ padding: "0.8rem" }}>
-                        <ActionsGameSpinWheelContent store_code={store_code} />
-                      </div>
-                    </div>
-                  </div>
+                  <ActionsGameSpinWheelContent
+                    store_code={store_code}
+                    idGameSpinWheel={id}
+                  />
                 ) : (
                   <NotAccess></NotAccess>
                 )}

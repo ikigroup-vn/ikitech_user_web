@@ -2,6 +2,7 @@ import { PureComponent } from "react";
 import styled from "styled-components";
 import { getDDMMYYYHis } from "../../../ultis/date";
 import * as Types from "../../../constants/ActionType";
+import history from "../../../history";
 
 const TableStyles = styled.tr`
   img {
@@ -26,10 +27,10 @@ class Table extends PureComponent {
     setOpenModalDeleteGameSpinWheel(true);
     setIdGameSpinWheel(id);
   };
-  handleShowModalUpdateGroupCustomer = (e, id) => {
+  handleUpdateGameSpinWheels = (e, id) => {
     if (e.target.closest(".btn-delete") === null) {
-      this.props.setOpenModalDeleteGameSpinWheel();
-      this.props.setIdGameSpinWheel(id);
+      const { store_code } = this.props;
+      history.push(`/game_spin_wheels/${store_code}/update/${id}`);
     }
   };
 
@@ -39,7 +40,7 @@ class Table extends PureComponent {
         <TableStyles
           className="hover-product"
           key={game.id}
-          onClick={(e) => this.handleShowModalUpdateGroupCustomer(e, game.id)}
+          onClick={(e) => this.handleUpdateGameSpinWheels(e, game.id)}
         >
           <td>
             {(listGameSpinWheels.current_page - 1) *
@@ -79,9 +80,7 @@ class Table extends PureComponent {
               <button
                 className="btn btn-warning btn-sm"
                 style={{ marginLeft: "10px", color: "white" }}
-                onClick={(e) =>
-                  this.handleShowModalUpdateGroupCustomer(e, game.id)
-                }
+                onClick={(e) => this.handleUpdateGameSpinWheels(e, game.id)}
               >
                 <i className="fa fa-edit"></i>Sửa
               </button>
