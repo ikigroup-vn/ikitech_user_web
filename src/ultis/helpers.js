@@ -229,47 +229,43 @@ function updateQueryStringParameter(uri, key, value) {
 }
 
 export const insertParam = (params2) => {
-
   // kvp looks like ['key1=value1', 'key2=value2', ...]
-  var kvp = document.location.search.substr(1).split('&');
+  var kvp = document.location.search.substr(1).split("&");
 
   let i = 0;
 
-
   kvp = kvp.filter(function (item) {
-    var has = false
+    var has = false;
     for (var [key, value] of Object.entries(params2)) {
       if (item.includes(key)) {
-        has = true
+        has = true;
       }
     }
-    return !has
-  })
+    return !has;
+  });
 
   for (; i < kvp.length; i++) {
-    if (kvp[i].startsWith(key + '=')) {
-      let pair = kvp[i].split('=');
+    if (kvp[i].startsWith(key + "=")) {
+      let pair = kvp[i].split("=");
       pair[1] = value;
-      kvp[i] = pair.join('=');
+      kvp[i] = pair.join("=");
       break;
     }
   }
 
-
   for (var [key, value] of Object.entries(params2)) {
     if (i >= kvp.length) {
-      kvp[kvp.length] = [key, value].join('=');
+      kvp[kvp.length] = [key, value].join("=");
     }
     i++;
   }
 
   // can return this or...
-  let params = "?"+kvp.join('&');
+  let params = "?" + kvp.join("&");
 
   // reload page with new params
   window.history.replaceState(null, null, params);
-
-}
+};
 
 export const setQueryParamInUrl = (key, value) => {
   var url = window.location.pathname + window.location.hash;
@@ -398,10 +394,10 @@ export const removeVietnameseTones = (str) => {
     return (str = false
       ? null
       : str
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .replace(/\s/g, "")
-        .trim());
+          .normalize("NFD")
+          .replace(/[\u0300-\u036f]/g, "")
+          .replace(/\s/g, "")
+          .trim());
   } catch (error) {
     return str;
   }

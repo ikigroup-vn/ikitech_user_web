@@ -1,0 +1,557 @@
+import moment from "moment";
+import React, { Component } from "react";
+import MomentInput from "react-moment-input";
+import { connect, shallowEqual } from "react-redux";
+import styled from "styled-components";
+import Upload from "../../../../components/Upload";
+import * as Types from "../../../../constants/ActionType";
+import { formatNumberV2 } from "../../../../ultis/helpers";
+import * as gamificationAction from "../../../../actions/gamification";
+import ActionsGiftGameSpinWheel from "./ActionsGiftGameSpinWheel";
+const groups = [
+  {
+    id: 0,
+    name: "group_customer",
+    type: "radio",
+    label: "Tất cả",
+    value: Types.GROUP_CUSTOMER_ALL,
+  },
+  {
+    id: 1,
+    name: "group_customer",
+    type: "radio",
+    label: "Đại lý",
+    value: Types.GROUP_CUSTOMER_AGENCY,
+  },
+  {
+    id: 2,
+    name: "group_customer",
+    type: "radio",
+    label: "Cộng tác viên",
+    value: Types.GROUP_CUSTOMER_CTV,
+  },
+  {
+    id: 3,
+    name: "group_customer",
+    type: "radio",
+    label: "Nhóm khách hàng",
+    value: Types.GROUP_CUSTOMER_BY_CONDITION,
+  },
+];
+
+const ActionsGameSpinWheelContentStyles = styled.div`
+  .gameSpinWheel__main {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 30px;
+  }
+  .gameSpinWheel__imageContent {
+    padding-top: 20px;
+  }
+`;
+
+class ActionsGameSpinWheelContent extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      txtName: "",
+      txtTurnInDay: "",
+      txtMaxAmountCoin: "",
+      txtMaxGift: "",
+      txtNumberLimit: "",
+      txtStart: "",
+      txtEnd: "",
+      images: [],
+      isShake: false,
+      displayError: "hide",
+      group_customer: 0,
+      agency_type_id: null,
+      group_type_id: null,
+    };
+  }
+  componentDidMount() {
+    const { idGameSpinWheel, store_code, fetchGameSpinWheelsById } = this.props;
+    if (idGameSpinWheel) {
+      fetchGameSpinWheelsById(store_code, idGameSpinWheel);
+    }
+  }
+
+  setImages = (images) => {
+    this.setState({ images });
+  };
+  onChange = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    if (
+      name === "txtTurnInDay" ||
+      name === "txtMaxAmountCoin" ||
+      name === "txtMaxGift" ||
+      name === "txtNumberLimit"
+    ) {
+      const valueNumber = formatNumberV2(value);
+      this.setState({ [name]: valueNumber });
+    } else {
+      if (name === "group_customer") {
+        if (value == "2") {
+          this.setState({ group_type_id: null });
+        } else if (value == "4") {
+          this.setState({ agency_type_id: null });
+        } else {
+          this.setState({ group_type_id: null, agency_type_id: null });
+        }
+      }
+      if (name === "isShake") {
+        this.setState({
+          [name]: value === true || value === "true" ? true : false,
+        });
+        return;
+      }
+      this.setState({ [name]: value });
+    }
+  };
+  onChangeStart = (e) => {
+    var time = moment(e, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm");
+    var { txtEnd } = this.state;
+    if (e != "" && txtEnd != "") {
+      if (
+        !moment(e, "DD-MM-YYYY HH:mm").isBefore(
+          moment(txtEnd, "DD-MM-YYYY HH:mm")
+        )
+      ) {
+        this.setState({ displayError: "show" });
+      } else {
+        console.log("hidddeee");
+        this.setState({ displayError: "hide" });
+      }
+    }
+    this.setState({
+      txtStart: time,
+    });
+  };
+
+  onChangeEnd = (e) => {
+    var time = moment(e, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm");
+    var { txtStart } = this.state;
+
+    if (txtStart != "" && e != "") {
+      if (
+        !moment(txtStart, "DD-MM-YYYY HH:mm").isBefore(
+          moment(e, "DD-MM-YYYY HH:mm")
+        )
+      ) {
+        this.setState({ displayError: "show" });
+      } else {
+        this.setState({ displayError: "hide" });
+      }
+    }
+    this.setState({
+      txtEnd: time,
+    });
+  };
+  createGameSpinWheel = () => {
+    const {
+      txtName,
+      txtTurnInDay,
+      txtMaxAmountCoin,
+      txtMaxGift,
+      txtNumberLimit,
+      txtStart,
+      txtEnd,
+      agency_type_id,
+      group_type_id,
+      group_customer,
+      isShake,
+      images,
+    } = this.state;
+
+    const { addGameSpinWheels, store_code } = this.props;
+
+    const gameSpinWheel = {
+      name: txtName,
+      turn_in_day: txtTurnInDay?.toString().replace(/\./g, ""),
+      max_amount_coin_per_player: txtMaxAmountCoin
+        ?.toString()
+        .replace(/\./g, ""),
+      max_amount_gift_per_player: txtMaxGift?.toString().replace(/\./g, ""),
+      number_limit_people: txtNumberLimit?.toString().replace(/\./g, ""),
+      agency_id: agency_type_id ? Number(agency_type_id) : agency_type_id,
+      group_customer_id: group_type_id ? Number(group_type_id) : group_type_id,
+      apply_for: group_customer ? Number(group_customer) : group_customer,
+      is_shake: isShake,
+      images: images,
+      time_start: txtStart
+        ? `${txtStart.split(" ")[0].split("-")[2]}-${
+            txtStart.split(" ")[0].split("-")[1]
+          }-${txtStart.split(" ")[0].split("-")[0]} ${txtStart.split(" ")[1]}`
+        : "",
+      time_end: txtEnd
+        ? `${txtEnd.split(" ")[0].split("-")[2]}-${
+            txtEnd.split(" ")[0].split("-")[1]
+          }-${txtEnd.split(" ")[0].split("-")[0]} ${txtEnd.split(" ")[1]}`
+        : "",
+    };
+
+    addGameSpinWheels(store_code, gameSpinWheel);
+  };
+
+  goBack = () => {};
+
+  render() {
+    const {
+      types,
+      groupCustomer,
+      gameSpinWheels,
+      store_code,
+      idGameSpinWheel,
+    } = this.props;
+    const {
+      txtName,
+      txtTurnInDay,
+      txtMaxAmountCoin,
+      txtMaxGift,
+      txtNumberLimit,
+      group_customer,
+      agency_type_id,
+      group_type_id,
+      displayError,
+      isShake,
+    } = this.state;
+    return (
+      <div class="container-fluid">
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <h4 className="h4 title_content mb-0 text-gray-800">
+            {idGameSpinWheel ? "Cập nhập " : "Thêm "} trò chơi quay thưởng
+          </h4>
+        </div>
+        <br></br>
+        <div class="card mb-4">
+          <div class="card-header title_content">Nhập thông tin trò chơi</div>
+          <div class="card-body" style={{ padding: "0.8rem" }}>
+            <ActionsGameSpinWheelContentStyles className="gameSpinWheel__content">
+              <div className="gameSpinWheel__form">
+                <div className="gameSpinWheel__main">
+                  <div className="form-group gameSpinWheel__item">
+                    <label for="txtName">Tên vòng quay</label>
+                    <input
+                      type="text"
+                      className="form-control input-sm"
+                      id="txtName"
+                      name="txtName"
+                      placeholder="Nhập tên vòng quay"
+                      autoComplete="off"
+                      value={txtName}
+                      onChange={this.onChange}
+                    />
+                  </div>
+                  <div className="form-group gameSpinWheel__item">
+                    <label for="txtTurnInDay">
+                      Số lượt quay được thưởng trong ngày
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control input-sm"
+                      id="txtTurnInDay"
+                      name="txtTurnInDay"
+                      placeholder="Nhập số lượt quay được thưởng trong ngày..."
+                      autoComplete="off"
+                      value={txtTurnInDay}
+                      onChange={this.onChange}
+                    />
+                  </div>
+                  <div className="form-group gameSpinWheel__item">
+                    <div
+                      className="row"
+                      style={{ marginBottom: "0px!important" }}
+                    >
+                      <div className="form-group gameSpinWheel__item col-6">
+                        <label for="product_name">Ngày bắt đầu</label>
+                        <MomentInput
+                          min={moment()}
+                          format="DD-MM-YYYY HH:mm"
+                          options={true}
+                          enableInputClick={true}
+                          monthSelect={true}
+                          readOnly={true}
+                          translations={{
+                            DATE: "Ngày",
+                            TIME: "Giờ",
+                            SAVE: "Đóng",
+                            HOURS: "Giờ",
+                            MINUTES: "Phút",
+                          }}
+                          onSave={() => {}}
+                          onChange={this.onChangeStart}
+                        />
+                      </div>
+                      <div className="form-group gameSpinWheel__item col-6">
+                        <label for="product_name">Ngày kết thúc</label>
+                        <MomentInput
+                          min={moment()}
+                          format="DD-MM-YYYY HH:mm"
+                          options={true}
+                          enableInputClick={true}
+                          monthSelect={true}
+                          readOnly={true}
+                          translations={{
+                            DATE: "Ngày",
+                            TIME: "Giờ",
+                            SAVE: "Đóng",
+                            HOURS: "Giờ",
+                            MINUTES: "Phút",
+                          }}
+                          onSave={() => {}}
+                          onChange={this.onChangeEnd}
+                        />
+                      </div>
+                    </div>
+                    <div
+                      className={`alert alert-danger ${displayError}`}
+                      role="alert"
+                      style={{
+                        marginTop: "10px",
+                      }}
+                    >
+                      Thời gian kết thúc phải sau thời gian bắt đầu
+                    </div>
+                  </div>
+                  <div className="form-group gameSpinWheel__item">
+                    <label for="txtMaxAmountCoin">Số xu tối đa</label>
+                    <input
+                      type="text"
+                      className="form-control input-sm"
+                      id="txtMaxAmountCoin"
+                      name="txtMaxAmountCoin"
+                      placeholder="Nhập số xu tối đa..."
+                      autoComplete="off"
+                      value={txtMaxAmountCoin}
+                      onChange={this.onChange}
+                    />
+                  </div>
+                  <div className="form-group gameSpinWheel__item">
+                    <label for="txtMaxGift">Số phần thưởng tối đa</label>
+                    <input
+                      type="text"
+                      className="form-control input-sm"
+                      id="txtMaxGift"
+                      name="txtMaxGift"
+                      placeholder="Nhập số lượng phần thưởng tối đa..."
+                      autoComplete="off"
+                      value={txtMaxGift}
+                      onChange={this.onChange}
+                    />
+                  </div>
+                  <div className="form-group gameSpinWheel__item">
+                    <label for="txtNumberLimit">
+                      Giới hạn số người tham gia
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control input-sm"
+                      id="txtNumberLimit"
+                      name="txtNumberLimit"
+                      placeholder="Nhập giới hạn số người tham gia..."
+                      autoComplete="off"
+                      value={txtNumberLimit}
+                      onChange={this.onChange}
+                    />
+                  </div>
+                  <div className="form-group discount-for">
+                    <label htmlFor="group_customer">Áp dụng cho</label>
+                    <div
+                      style={{
+                        display: "flex",
+                        columnGap: "10px",
+                      }}
+                      className="radio discount-for"
+                      onChange={this.onChange}
+                    >
+                      {groups.map((group) => (
+                        <label key={group.id}>
+                          <input
+                            type={group.type}
+                            name={group.name}
+                            checked={
+                              group_customer == group.value ? true : false
+                            }
+                            className={group.name}
+                            value={group.value}
+                          />
+                          <span
+                            style={{
+                              marginLeft: "5px",
+                            }}
+                          >
+                            {group.label}
+                          </span>
+                        </label>
+                      ))}
+                    </div>
+                    {group_customer == Types.GROUP_CUSTOMER_AGENCY && (
+                      <select
+                        onChange={this.onChange}
+                        value={agency_type_id}
+                        name="agency_type_id"
+                        class="form-control"
+                      >
+                        <option value={-1}>--- Chọn cấp đại lý ---</option>
+                        <option value={0}>Tất cả</option>
+                        {types.map((v) => {
+                          return (
+                            <option value={v.id} key={v.id}>
+                              {v.name}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    )}
+                    {group_customer == Types.GROUP_CUSTOMER_BY_CONDITION && (
+                      <select
+                        onChange={this.onChange}
+                        value={group_type_id}
+                        name="group_type_id"
+                        class="form-control"
+                      >
+                        <option value={-1}>--- Chọn nhóm khách hàng ---</option>
+                        {groupCustomer.length > 0 &&
+                          groupCustomer.map((group) => {
+                            return (
+                              <option value={group.id} key={group.id}>
+                                {group.name}
+                              </option>
+                            );
+                          })}
+                      </select>
+                    )}
+                  </div>
+                  <div className="form-group type__game">
+                    <label htmlFor="group_customer">Loại trò chơi</label>
+                    <div
+                      style={{
+                        display: "flex",
+                        columnGap: "10px",
+                      }}
+                      className="radio"
+                      onChange={this.onChange}
+                    >
+                      <label>
+                        <input
+                          type="radio"
+                          name="isShake"
+                          checked={isShake === false}
+                          className="isShake"
+                          value={false}
+                        />
+                        <span
+                          style={{
+                            marginLeft: "5px",
+                          }}
+                        >
+                          Quay
+                        </span>
+                      </label>
+                      <label>
+                        <input
+                          type="radio"
+                          name="isShake"
+                          checked={isShake === true}
+                          className="isShake"
+                          value={true}
+                        />
+                        <span
+                          style={{
+                            marginLeft: "5px",
+                          }}
+                        >
+                          Lắc
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div className="gameSpinWheel__image form-group">
+                  <label for="txtName">Hình ảnh (Tối đa 13 ảnh)</label>
+                  <div className="gameSpinWheel__imageContent">
+                    <Upload multiple setFiles={this.setImages} />
+                  </div>
+                </div>
+              </div>
+            </ActionsGameSpinWheelContentStyles>
+          </div>
+        </div>
+        <div className="card mb-4">
+          <div className="card-body" style={{ padding: "0.8rem" }}>
+            <div className="row">
+              <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                {idGameSpinWheel ? (
+                  <button
+                    className="btn btn-primary btn-sm"
+                    onClick={this.createGameSpinWheel}
+                  >
+                    <i className="fa fa-plus"></i> Cập nhập
+                  </button>
+                ) : (
+                  <button
+                    className="btn btn-primary btn-sm"
+                    onClick={this.createGameSpinWheel}
+                  >
+                    <i className="fa fa-plus"></i> Tạo
+                  </button>
+                )}
+                <button
+                  style={{ marginLeft: "10px" }}
+                  onClick={this.goBack}
+                  className={`btn btn-warning btn-sm color-white `}
+                >
+                  <i className="fa fa-arrow-left"></i> Trở về
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <ActionsGiftGameSpinWheel
+          gameSpinWheels={gameSpinWheels}
+          store_code={store_code}
+          idGameSpinWheel={idGameSpinWheel}
+        />
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = (state) => {
+  return {
+    types: state.agencyReducers.agency.allAgencyType,
+    groupCustomer: state.groupCustomerReducers.group_customer.groupCustomer,
+    gameSpinWheels: state.gamificationReducers.spin_wheel.gameSpinWheels,
+  };
+};
+
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    showError: (error) => {
+      dispatch(error);
+    },
+    addGameSpinWheels: (store_code, form) => {
+      dispatch(gamificationAction.addGameSpinWheels(store_code, form));
+    },
+    fetchListGiftGameSpinWheels: (store_code, idGame) => {
+      dispatch(
+        gamificationAction.fetchListGiftGameSpinWheels(store_code, idGame)
+      );
+    },
+    fetchGameSpinWheelsById: (store_code, idGame) => {
+      dispatch(gamificationAction.fetchGameSpinWheelsById(store_code, idGame));
+    },
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ActionsGameSpinWheelContent);
