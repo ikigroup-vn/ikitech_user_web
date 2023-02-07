@@ -3,15 +3,19 @@ import styled from "styled-components";
 import ModalCustom from "../../components/ModalCustom/ModalCustom";
 import $ from "jquery";
 const ModalChooseImportStyles = styled.div`
-  margin-top: 30px;
+  margin-top: 20px;
   .modalImport__content {
     .modalImport__btn {
       display: flex;
       justify-content: center;
       column-gap: 10px;
     }
+    .modalImport__password {
+      text-align: center;
+      color: #858796;
+    }
     .modalImport__override {
-      margin-bottom: 15px;
+      margin-bottom: 5px;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -66,6 +70,9 @@ class ModalUpdatePasswordImport extends Component {
                 thống
               </label>
             </div>
+            <p className="modalImport__password">
+              Mật khẩu thay đổi mặc định: 123456
+            </p>
             <div className="modalImport__btn">
               <button
                 className="btn btn-outline-success"
