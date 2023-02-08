@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { getDDMMYYYHis } from "../../../ultis/date";
 import * as Types from "../../../constants/ActionType";
 import history from "../../../history";
+import { getQueryParams } from "../../../ultis/helpers";
 
 const TableStyles = styled.tr`
   img {
@@ -30,7 +31,8 @@ class Table extends PureComponent {
   handleUpdateGameSpinWheels = (e, id) => {
     if (e.target.closest(".btn-delete") === null) {
       const { store_code } = this.props;
-      history.push(`/game_spin_wheels/${store_code}/update/${id}`);
+      const page = getQueryParams("page") || 1;
+      history.push(`/game_spin_wheels/${store_code}/update/${id}?page=${page}`);
     }
   };
 

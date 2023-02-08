@@ -41,9 +41,9 @@ export const updateGiftGameSpinWheels = (store_code, idGame, idGift, data) => {
     data
   );
 };
-export const deleteGiftGameSpinWheels = (store_code, idGame) => {
+export const deleteGiftGameSpinWheels = (store_code, idGame, idGift) => {
   return callApi(
-    `/store/${store_code}/spin_wheels/${idGame}/gift_spin_wheels`,
+    `/store/${store_code}/spin_wheels/${idGame}/gift_spin_wheels/${idGift}`,
     "delete",
     null
   );

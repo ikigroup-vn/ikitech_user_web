@@ -5,9 +5,10 @@ import { connect, shallowEqual } from "react-redux";
 import styled from "styled-components";
 import Upload from "../../../../components/Upload";
 import * as Types from "../../../../constants/ActionType";
-import { formatNumberV2 } from "../../../../ultis/helpers";
+import { formatNumberV2, getQueryParams } from "../../../../ultis/helpers";
 import * as gamificationAction from "../../../../actions/gamification";
 import ActionsGiftGameSpinWheel from "./ActionsGiftGameSpinWheel";
+import history from "../../../../history";
 const groups = [
   {
     id: 0,
@@ -67,6 +68,7 @@ class ActionsGameSpinWheelContent extends Component {
       group_customer: 0,
       agency_type_id: null,
       group_type_id: null,
+      isLoading: false,
     };
   }
   componentDidMount() {
@@ -74,6 +76,42 @@ class ActionsGameSpinWheelContent extends Component {
     if (idGameSpinWheel) {
       fetchGameSpinWheelsById(store_code, idGameSpinWheel);
     }
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    const { gameSpinWheels } = this.props;
+    if (!shallowEqual(gameSpinWheels, nextProps.gameSpinWheels)) {
+      console.log(
+        "ActionsGameSpinWheelContent ~ shouldComponentUpdate ~ nextProps.gameSpinWheels",
+        nextProps.gameSpinWheels
+      );
+      const startTime =
+        nextProps.gameSpinWheels.time_start == null ||
+        nextProps.gameSpinWheels.time_start == ""
+          ? ""
+          : moment(nextProps.gameSpinWheels.time_start).format(
+              "DD-MM-YYYY HH:mm"
+            );
+      const endTime =
+        nextProps.gameSpinWheels.time_end == null ||
+        nextProps.gameSpinWheels.time_end == ""
+          ? ""
+          : moment(nextProps.gameSpinWheels.time_end).format(
+              "DD-MM-YYYY HH:mm"
+            );
+      this.setState({
+        txtName: nextProps.gameSpinWheels.name,
+        txtTurnInDay: nextProps.gameSpinWheels.turn_in_day,
+        txtMaxAmountCoin: nextProps.gameSpinWheels.max_amount_coin_per_player,
+        txtMaxGift: nextProps.gameSpinWheels.max_amount_gift_per_player,
+        txtNumberLimit: nextProps.gameSpinWheels.number_limit_people,
+        txtStart: startTime,
+        txtEnd: endTime,
+        is_shake: nextProps.gameSpinWheels.is_shake,
+        isLoading: true,
+      });
+    }
+
+    return true;
   }
 
   setImages = (images) => {
@@ -194,8 +232,61 @@ class ActionsGameSpinWheelContent extends Component {
 
     addGameSpinWheels(store_code, gameSpinWheel);
   };
+  updateGameSpinWheel = () => {
+    const {
+      txtName,
+      txtTurnInDay,
+      txtMaxAmountCoin,
+      txtMaxGift,
+      txtNumberLimit,
+      txtStart,
+      txtEnd,
+      agency_type_id,
+      group_type_id,
+      group_customer,
+      isShake,
+      images,
+    } = this.state;
 
-  goBack = () => {};
+    const { updateGameSpinWheels, store_code, idGameSpinWheel } = this.props;
+
+    const gameSpinWheel = {
+      name: txtName,
+      turn_in_day: Number(txtTurnInDay?.toString().replace(/\./g, "")),
+      max_amount_coin_per_player: Number(
+        txtMaxAmountCoin?.toString().replace(/\./g, "")
+      ),
+      max_amount_gift_per_player: Number(
+        txtMaxGift?.toString().replace(/\./g, "")
+      ),
+      number_limit_people: Number(
+        txtNumberLimit?.toString().replace(/\./g, "")
+      ),
+      agency_type_id: agency_type_id ? Number(agency_type_id) : agency_type_id,
+      group_customer_id: group_type_id ? Number(group_type_id) : group_type_id,
+      apply_for: group_customer ? Number(group_customer) : group_customer,
+      is_shake: isShake,
+      images: images,
+      time_start: txtStart
+        ? `${txtStart.split(" ")[0].split("-")[2]}-${
+            txtStart.split(" ")[0].split("-")[1]
+          }-${txtStart.split(" ")[0].split("-")[0]} ${txtStart.split(" ")[1]}`
+        : "",
+      time_end: txtEnd
+        ? `${txtEnd.split(" ")[0].split("-")[2]}-${
+            txtEnd.split(" ")[0].split("-")[1]
+          }-${txtEnd.split(" ")[0].split("-")[0]} ${txtEnd.split(" ")[1]}`
+        : "",
+    };
+    const page = getQueryParams("page") || 1;
+    updateGameSpinWheels(store_code, idGameSpinWheel, gameSpinWheel, page);
+  };
+
+  goBack = () => {
+    const { store_code } = this.props;
+    const page = getQueryParams("page") || 1;
+    history.push(`/game_spin_wheels/${store_code}?page=${page}`);
+  };
 
   render() {
     const {
@@ -205,8 +296,11 @@ class ActionsGameSpinWheelContent extends Component {
       store_code,
       idGameSpinWheel,
     } = this.props;
+
     const {
       txtName,
+      txtStart,
+      txtEnd,
       txtTurnInDay,
       txtMaxAmountCoin,
       txtMaxGift,
@@ -216,7 +310,9 @@ class ActionsGameSpinWheelContent extends Component {
       group_type_id,
       displayError,
       isShake,
+      isLoading,
     } = this.state;
+
     return (
       <div class="container-fluid">
         <div
@@ -271,43 +367,57 @@ class ActionsGameSpinWheelContent extends Component {
                     >
                       <div className="form-group gameSpinWheel__item col-6">
                         <label for="product_name">Ngày bắt đầu</label>
-                        <MomentInput
-                          min={moment()}
-                          format="DD-MM-YYYY HH:mm"
-                          options={true}
-                          enableInputClick={true}
-                          monthSelect={true}
-                          readOnly={true}
-                          translations={{
-                            DATE: "Ngày",
-                            TIME: "Giờ",
-                            SAVE: "Đóng",
-                            HOURS: "Giờ",
-                            MINUTES: "Phút",
-                          }}
-                          onSave={() => {}}
-                          onChange={this.onChangeStart}
-                        />
+                        {isLoading == true ? (
+                          <MomentInput
+                            min={moment()}
+                            value={
+                              txtStart == "" || txtStart == null
+                                ? ""
+                                : moment(txtStart, "DD-MM-YYYY HH:mm")
+                            }
+                            format="DD-MM-YYYY HH:mm"
+                            options={true}
+                            enableInputClick={true}
+                            monthSelect={true}
+                            readOnly={true}
+                            translations={{
+                              DATE: "Ngày",
+                              TIME: "Giờ",
+                              SAVE: "Đóng",
+                              HOURS: "Giờ",
+                              MINUTES: "Phút",
+                            }}
+                            onSave={() => {}}
+                            onChange={this.onChangeStart}
+                          />
+                        ) : null}
                       </div>
                       <div className="form-group gameSpinWheel__item col-6">
                         <label for="product_name">Ngày kết thúc</label>
-                        <MomentInput
-                          min={moment()}
-                          format="DD-MM-YYYY HH:mm"
-                          options={true}
-                          enableInputClick={true}
-                          monthSelect={true}
-                          readOnly={true}
-                          translations={{
-                            DATE: "Ngày",
-                            TIME: "Giờ",
-                            SAVE: "Đóng",
-                            HOURS: "Giờ",
-                            MINUTES: "Phút",
-                          }}
-                          onSave={() => {}}
-                          onChange={this.onChangeEnd}
-                        />
+                        {isLoading == true ? (
+                          <MomentInput
+                            min={moment()}
+                            value={
+                              txtEnd == "" || txtEnd == null
+                                ? ""
+                                : moment(txtEnd, "DD-MM-YYYY HH:mm")
+                            }
+                            format="DD-MM-YYYY HH:mm"
+                            options={true}
+                            enableInputClick={true}
+                            monthSelect={true}
+                            readOnly={true}
+                            translations={{
+                              DATE: "Ngày",
+                              TIME: "Giờ",
+                              SAVE: "Đóng",
+                              HOURS: "Giờ",
+                              MINUTES: "Phút",
+                            }}
+                            onSave={() => {}}
+                            onChange={this.onChangeEnd}
+                          />
+                        ) : null}
                       </div>
                     </div>
                     <div
@@ -491,9 +601,9 @@ class ActionsGameSpinWheelContent extends Component {
                 {idGameSpinWheel ? (
                   <button
                     className="btn btn-primary btn-sm"
-                    onClick={this.createGameSpinWheel}
+                    onClick={this.updateGameSpinWheel}
                   >
-                    <i className="fa fa-plus"></i> Cập nhập
+                    <i className="fa fa-edit"></i> Cập nhập
                   </button>
                 ) : (
                   <button
@@ -539,6 +649,11 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     addGameSpinWheels: (store_code, form) => {
       dispatch(gamificationAction.addGameSpinWheels(store_code, form));
+    },
+    updateGameSpinWheels: (store_code, idGame, form, page) => {
+      dispatch(
+        gamificationAction.updateGameSpinWheels(store_code, idGame, form, page)
+      );
     },
     fetchListGiftGameSpinWheels: (store_code, idGame) => {
       dispatch(
