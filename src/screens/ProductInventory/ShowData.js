@@ -283,7 +283,7 @@ class ShowData extends Component {
           <td>{data.barcode}</td>
           <td>
             <div>
-              <Link to={`/product/edit/${store_code}/${data.id}/${page}`}>
+              <Link to={`/product/edit/${store_code}/${data.id}?page=${page}`}>
                 {data.name}
               </Link>
             </div>

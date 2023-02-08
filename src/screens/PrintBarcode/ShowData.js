@@ -10,49 +10,41 @@ class ShowData extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentQuantity: 1
+      currentQuantity: 1,
     };
   }
 
   addQuantity = (productId) => {
-
-
     var newQuantity = parseInt(this.state.currentQuantity + 1);
 
     this.props.onChangeQuantity(productId, newQuantity);
     this.setState({
-      currentQuantity: newQuantity
-    })
-  }
+      currentQuantity: newQuantity,
+    });
+  };
   subQuantity = (productId) => {
-
     var newQuantity = parseInt(this.state.currentQuantity - 1);
     this.props.onChangeQuantity(productId, newQuantity);
 
     this.setState({
-      currentQuantity: newQuantity
-    })
-
-  }
+      currentQuantity: newQuantity,
+    });
+  };
   handleOnChange = (e) => {
-    const {
-      data,
-    } = this.props;
+    const { data } = this.props;
 
     if (e.target.value == "") {
       e.target.value = 0;
     }
 
-    var newQuantity = parseInt(e.target.value) ?? 1
+    var newQuantity = parseInt(e.target.value) ?? 1;
     this.props.onChangeQuantity(data.id, newQuantity);
     this.setState({
-      currentQuantity: newQuantity
-    })
-  }
+      currentQuantity: newQuantity,
+    });
+  };
 
-  componentWillReceiveProps(nextProps) {
-
-  }
+  componentWillReceiveProps(nextProps) {}
 
   render() {
     const {
@@ -62,11 +54,11 @@ class ShowData extends Component {
       data,
       store_code,
       page,
-      distributes
+      distributes,
     } = this.props;
     const listDistribute =
       data.inventory?.distributes !== null &&
-        data.inventory?.distributes.length > 0
+      data.inventory?.distributes.length > 0
         ? data.inventory?.distributes[0]
         : [];
 
@@ -76,20 +68,17 @@ class ShowData extends Component {
       discount_percent = product_discount.value;
     }
 
-    console.log(listDistribute,distributes)
+    console.log(listDistribute, distributes);
 
     return (
       <tr className="hover-product">
-
-        <td>{listDistribute.id  ? "" : data.barcode}</td>
+        <td>{listDistribute.id ? "" : data.barcode}</td>
 
         <td>
-          <Link to={`/product/edit/${store_code}/${data.id}/${page}`}>
+          <Link to={`/product/edit/${store_code}/${data.id}?page=${page}`}>
             {data.name}
           </Link>
         </td>
-
-
 
         <td>
           <div>
@@ -101,12 +90,15 @@ class ShowData extends Component {
                     : min_price - min_price * discount_percent * 0.01
                 )
               )
-            ) : distributes && distributes.length == 0 ? format(
-              Number(
-                discount_percent == null
-                  ? min_price
-                  : min_price - min_price * discount_percent * 0.01
-              )) : (
+            ) : distributes && distributes.length == 0 ? (
+              format(
+                Number(
+                  discount_percent == null
+                    ? min_price
+                    : min_price - min_price * discount_percent * 0.01
+                )
+              )
+            ) : (
               <div>
                 {format(
                   Number(
@@ -155,24 +147,47 @@ class ShowData extends Component {
         </td>
 
         <td>
-          <div className='quantity' style={{ paddingLeft: "0" }}>
-            <div className="" style={{ float: "left", border: "1px solid #9c9898ba", borderRadius: "2px" }}>
-              <button disabled={this.state.currentQuantity == 1} className='btn-sub' onClick={() => this.subQuantity(data.id)} style={{ width: "20px", border: "none" }}>-</button>
-              <input className='input-quantity' onChange={this.handleOnChange} style={{
-                width: "60px", textAlign: "center",
-                fontWeight: "400"
-              }} value={this.state.currentQuantity ?? 0}></input>
-              <button className='btn-add' onClick={() => this.addQuantity(data.id)} style={{ width: "20px", border: "none" }}>+</button>
+          <div className="quantity" style={{ paddingLeft: "0" }}>
+            <div
+              className=""
+              style={{
+                float: "left",
+                border: "1px solid #9c9898ba",
+                borderRadius: "2px",
+              }}
+            >
+              <button
+                disabled={this.state.currentQuantity == 1}
+                className="btn-sub"
+                onClick={() => this.subQuantity(data.id)}
+                style={{ width: "20px", border: "none" }}
+              >
+                -
+              </button>
+              <input
+                className="input-quantity"
+                onChange={this.handleOnChange}
+                style={{
+                  width: "60px",
+                  textAlign: "center",
+                  fontWeight: "400",
+                }}
+                value={this.state.currentQuantity ?? 0}
+              ></input>
+              <button
+                className="btn-add"
+                onClick={() => this.addQuantity(data.id)}
+                style={{ width: "20px", border: "none" }}
+              >
+                +
+              </button>
             </div>
           </div>
         </td>
 
         <td>
-
           <button
-            onClick={(e) =>
-              this.props.removeProduct(data.id)
-            }
+            onClick={(e) => this.props.removeProduct(data.id)}
             data-toggle="modal"
             data-target="#removeModal"
             class={`btn btn-danger btn-sm show"
@@ -181,7 +196,6 @@ class ShowData extends Component {
             <i class="fa fa-trash"></i> Xóa
           </button>
         </td>
-
       </tr>
     );
   }

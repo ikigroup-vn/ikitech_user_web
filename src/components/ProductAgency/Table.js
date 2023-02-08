@@ -112,9 +112,7 @@ class Table extends Component {
             <td>{data.sku}</td>
 
             <td>
-              <Link
-                to={`/product/edit/${store_code}/${data.id}/${page}?page=${page}?`}
-              >
+              <Link to={`/product/edit/${store_code}/${data.id}?page=${page}`}>
                 {data.name}
               </Link>
             </td>
