@@ -455,11 +455,7 @@ class Bill extends Component {
       statusTime,
       time_to,
     } = this.state;
-    try {
-      from = moment(date, "DD-MM-YYYY").format("YYYY-MM-DD");
-    } catch (error) {
-      from = null;
-    }
+    from = date ? moment(date, "DD-MM-YYYY").format("YYYY-MM-DD") : "";
     var params_agency =
       this.state.agency_by_customer_id != null
         ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
@@ -479,7 +475,7 @@ class Bill extends Component {
 
     const branch_id = getBranchId();
     insertParam({
-      from: date != null ? from : "",
+      from: date ? from : "",
     });
 
     this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
@@ -498,12 +494,8 @@ class Bill extends Component {
       statusTime,
       time_from,
     } = this.state;
-    var to = "";
-    try {
-      to = moment(date, "DD-MM-YYYY").format("YYYY-MM-DD");
-    } catch (error) {
-      to = null;
-    }
+    to = date ? moment(date, "DD-MM-YYYY").format("YYYY-MM-DD") : "";
+
     var params_agency =
       this.state.agency_by_customer_id != null
         ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
@@ -523,7 +515,7 @@ class Bill extends Component {
 
     const branch_id = getBranchId();
     insertParam({
-      to: date != null ? to : "",
+      to: date ? to : "",
     });
 
     this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
