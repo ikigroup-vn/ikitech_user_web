@@ -17,6 +17,10 @@ import "react-datetime/css/react-datetime.css";
 import { Provider } from "react-redux";
 import appReducers from "./reducers/index";
 
+import "flatpickr/dist/themes/material_orange.css";
+const flatpickr = require("flatpickr").default;
+const VN = require("flatpickr/dist/l10n/vn").default.vn;
+flatpickr.localize(VN);
 export const store = createStore(appReducers, applyMiddleware(thunk));
 
 if (process.env.NODE_ENV === "production") {

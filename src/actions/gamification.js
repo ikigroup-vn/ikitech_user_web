@@ -70,10 +70,10 @@ export const addGameSpinWheels = (store_code, form) => {
             type: Types.ADD_GAME_SPIN_WHEELS,
             data: res.data.data,
           });
+          history.push(`/game_spin_wheels/${store_code}`);
         }
       })
       .catch(function (error) {
-        console.log("return ~ error", error.response);
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -212,6 +212,37 @@ export const addGiftGameSpinWheels = (store_code, idGame, data) => {
           dispatch({
             type: Types.ADD_GIFT_GAME_SPIN_WHEELS,
             data: res.data.data,
+          });
+        }
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+export const saveGiftGameSpinWheel = (store_code, idGame, data) => {
+  return (dispatch) => {
+    dispatch({ type: Types.SHOW_LOADING, loading: "show" });
+    gamificationApi
+      .addGiftGameSpinWheels(store_code, idGame, data)
+      .then((res) => {
+        dispatch({ type: Types.SHOW_LOADING, loading: "hidden" });
+        if (res.data.code === 200) {
+          dispatch({
+            type: Types.SAVE_GIFT_GAME_SPIN_WHEELS,
+            data: res.data.data,
+          });
+          dispatch({
+            type: Types.SAVE_GIFT_GAME_SPIN_WHEELS_MESSAGE,
+            data: true,
           });
         }
       })
