@@ -980,6 +980,55 @@ export const uploadListImgProduct = function (files) {
     }
   };
 };
+export const uploadListImgProductV2 = function (files) {
+  return async (dispatch) => {
+    var images = [];
+    for (let i = 0; i < files.length; i++) {
+      const fd = new FormData();
+
+      fd.append(`image`, await compressed(files[i]));
+      try {
+        var res = await uploadApi.upload(fd);
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "hide",
+            content: error?.response?.data?.msg,
+          },
+        });
+      }
+      if (res.data.code == 400) {
+        console.log(res.data);
+        {
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "danger",
+              title: "Lỗi",
+              disable: "show",
+              content: res.data.msg,
+            },
+          });
+        }
+      } else {
+        images.push(res.data.data);
+        console.log(images);
+      }
+      if (i == files.length - 1) {
+        dispatch({
+          type: Types.UPLOAD_ALL_PRODUCT_IMG_V2,
+          data: images,
+        });
+      }
+    }
+  };
+};
 
 // export const uploadListImgProduct = function (
 //   file,

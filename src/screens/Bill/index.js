@@ -3,7 +3,7 @@ import Sidebar from "../../components/Partials/Sidebar";
 import Topbar from "../../components/Partials/Topbar";
 import Footer from "../../components/Partials/Footer";
 import Table from "../../components/Bill/Table";
-import { Redirect, Link } from "react-router-dom";
+import { Redirect } from "react-router-dom";
 import { connect } from "react-redux";
 import Loading from "../Loading";
 import * as billAction from "../../actions/bill";
@@ -12,12 +12,42 @@ import Pagination from "../../components/Bill/Pagination";
 import NotAccess from "../../components/Partials/NotAccess";
 import queryString from "query-string";
 import * as customerAction from "../../actions/customer";
-import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
 import moment from "moment";
 import * as helper from "../../ultis/helpers";
 import { getBranchId } from "../../ultis/branchUtils";
 import history from "../../history";
 import { getQueryParams, insertParam } from "../../ultis/helpers";
+import styled from "styled-components";
+import Flatpickr from "react-flatpickr";
+
+const BillStyles = styled.div`
+  .total-item-custom {
+    .total-sale_user_name {
+      display: flex;
+      align-items: center;
+      select {
+        color: #6e707e;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+      .input-date {
+        height: 100%;
+        .date_from {
+          border-radius: 0 !important;
+        }
+        .date_to {
+          border-top-left-radius: 0 !important;
+          border-bottom-left-radius: 0 !important;
+          border-left-width: 0 !important;
+        }
+        .form-control:focus {
+          border-color: #d1d3e2 !important;
+          box-shadow: none !important;
+        }
+      }
+    }
+  }
+`;
 
 class Bill extends Component {
   constructor(props) {
@@ -42,6 +72,8 @@ class Bill extends Component {
       time_to: "",
       loadingShipment: "",
       paginate: 1,
+      statusTime: "",
+      date: new Date(),
     };
   }
   closeChatBox = (status) => {
@@ -65,6 +97,7 @@ class Bill extends Component {
       time_from,
       time_to,
       collaborator_by_customer_id,
+      statusTime,
     } = this.state;
     var numPage = e.target.value;
     this.setState({
@@ -86,7 +119,8 @@ class Bill extends Component {
         statusPayment,
         numPage,
         orderFrom,
-        collaborator_by_customer_id
+        collaborator_by_customer_id,
+        statusTime
       );
     insertParam({
       limit: numPage,
@@ -115,6 +149,7 @@ class Bill extends Component {
     var search = getQueryParams("search");
     var from = getQueryParams("from");
     var to = getQueryParams("to");
+    var statusTime = getQueryParams("type_query_time");
     var statusOrder = getQueryParams("order_status_code");
     var statusPayment = getQueryParams("payment_status_code");
     var { collaborator_by_customer_id, numPage } = this.state;
@@ -147,10 +182,20 @@ class Bill extends Component {
         : status_code != "PAID"
         ? `&field_by=order_status_code&field_by_value=${status_code}`
         : `&field_by=payment_status_code&field_by_value=${status_code}`;
-    if (from && to) {
-      // from = moment(from, "DD-MM-YYYY").format("YYYY-MM-DD");
-      // to = moment(to, "DD-MM-YYYY").format("YYYY-MM-DD");
-      this.setState({ time_from: from, time_to: to });
+    if (from) {
+      this.setState({
+        time_from: from,
+      });
+    }
+    if (to) {
+      this.setState({
+        time_to: to,
+      });
+    }
+    if (statusTime) {
+      this.setState({
+        statusTime: statusTime,
+      });
     }
     if (search) {
       this.setState({
@@ -187,10 +232,10 @@ class Bill extends Component {
         statusPayment,
         limit || numPage,
         orderFrom,
-        collaborator_by_customer_id
+        collaborator_by_customer_id,
+        statusTime
       );
 
-    console.log(params);
     var status_order = status == "PAID" ? null : status;
     var status_payment = status == "PAID" ? status : null;
     if (status_order != null) this.setState({ statusOrder: status_order });
@@ -240,6 +285,7 @@ class Bill extends Component {
       statusPayment,
       orderFrom,
       collaborator_by_customer_id,
+      statusTime,
     } = this.state;
     var params = "";
     params = this.getParams(
@@ -250,7 +296,8 @@ class Bill extends Component {
       statusPayment,
       numPage,
       orderFrom,
-      collaborator_by_customer_id
+      collaborator_by_customer_id,
+      statusTime
     );
     history.push(`/order/${store_code}?page=1${params ? `${params}` : ""}`);
 
@@ -316,7 +363,8 @@ class Bill extends Component {
     statusPayment,
     numPage,
     orderFrom,
-    collaborator_by_customer_id
+    collaborator_by_customer_id,
+    statusTime
   ) => {
     var params = ``;
     if (to != "" && to != null) {
@@ -324,6 +372,9 @@ class Bill extends Component {
     }
     if (from != "" && from != null) {
       params = params + `&time_from=${from}`;
+    }
+    if (statusTime != null && statusTime != "") {
+      params = params + `&type_query_time=${statusTime}`;
     }
     if (searchValue != "" && searchValue != null) {
       params = params + `&search=${searchValue}`;
@@ -362,6 +413,7 @@ class Bill extends Component {
       numPage,
       orderFrom,
       collaborator_by_customer_id,
+      statusTime,
     } = this.state;
 
     var params = this.getParams(
@@ -372,7 +424,8 @@ class Bill extends Component {
       statusPayment,
       numPage,
       orderFrom,
-      collaborator_by_customer_id
+      collaborator_by_customer_id,
+      statusTime
     );
 
     const branch_id = getBranchId();
@@ -389,8 +442,7 @@ class Bill extends Component {
     );
   };
 
-  onchangeDateFromTo = (e) => {
-    console.log("xxxxxx");
+  onchangeDateFrom = (date) => {
     var from = "";
     var { store_code } = this.props.match.params;
     var {
@@ -400,14 +452,13 @@ class Bill extends Component {
       numPage,
       orderFrom,
       collaborator_by_customer_id,
+      statusTime,
+      time_to,
     } = this.state;
-    var to = "";
     try {
-      from = moment(e.value[0], "DD-MM-YYYY").format("YYYY-MM-DD");
-      to = moment(e.value[1], "DD-MM-YYYY").format("YYYY-MM-DD");
+      from = moment(date, "DD-MM-YYYY").format("YYYY-MM-DD");
     } catch (error) {
       from = null;
-      to = null;
     }
     var params_agency =
       this.state.agency_by_customer_id != null
@@ -416,41 +467,105 @@ class Bill extends Component {
 
     var params = this.getParams(
       from,
+      time_to,
+      searchValue,
+      statusOrder,
+      statusPayment,
+      numPage,
+      orderFrom,
+      collaborator_by_customer_id,
+      statusTime
+    );
+
+    const branch_id = getBranchId();
+    insertParam({
+      from: date != null ? from : "",
+    });
+
+    this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
+    this.setState({ time_from: from });
+  };
+  onchangeDateTo = (date) => {
+    var to = "";
+    var { store_code } = this.props.match.params;
+    var {
+      searchValue,
+      statusOrder,
+      statusPayment,
+      numPage,
+      orderFrom,
+      collaborator_by_customer_id,
+      statusTime,
+      time_from,
+    } = this.state;
+    var to = "";
+    try {
+      to = moment(date, "DD-MM-YYYY").format("YYYY-MM-DD");
+    } catch (error) {
+      to = null;
+    }
+    var params_agency =
+      this.state.agency_by_customer_id != null
+        ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
+        : null;
+
+    var params = this.getParams(
+      time_from,
       to,
       searchValue,
       statusOrder,
       statusPayment,
       numPage,
       orderFrom,
-      collaborator_by_customer_id
+      collaborator_by_customer_id,
+      statusTime
     );
 
     const branch_id = getBranchId();
-    console.log("abcxyz: ", from, to, params);
-
-    if (
-      e != null &&
-      e.value != null &&
-      e.value[0] != null &&
-      e.value[1] != null
-    ) {
-      // var from2 = moment(e.value[0], "YYYY-MM-DD").format("DD-MM-YYYY");
-      // var to2 = moment(e.value[1], "YYYY-MM-DD").format("DD-MM-YYYY");
-
-      insertParam({
-        from: from,
-        to: to,
-        page: 1,
-      });
-    } else {
-      insertParam({
-        from: "",
-        to: "",
-      });
-    }
+    insertParam({
+      to: date != null ? to : "",
+    });
 
     this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
-    this.setState({ time_from: from, time_to: to });
+    this.setState({ time_to: to });
+  };
+
+  onChangeStatusTime = (e) => {
+    const statusTimeValue = e.target.value;
+    var {
+      time_from,
+      time_to,
+      searchValue,
+      statusOrder,
+      statusPayment,
+      numPage,
+      orderFrom,
+      collaborator_by_customer_id,
+    } = this.state;
+    var { store_code } = this.props.match.params;
+
+    var params = this.getParams(
+      time_from,
+      time_to,
+      searchValue,
+      statusOrder,
+      statusPayment,
+      numPage,
+      orderFrom,
+      collaborator_by_customer_id,
+      statusTimeValue
+    );
+    this.setState({
+      statusTime: statusTimeValue,
+    });
+
+    insertParam({ type_query_time: statusTimeValue });
+    var params_agency =
+      this.state.agency_by_customer_id != null
+        ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
+        : null;
+    const branch_id = localStorage.getItem("branch_id");
+    this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
   };
 
   render() {
@@ -474,13 +589,13 @@ class Bill extends Component {
       orderFrom,
       runAsync,
       collaborator_by_customer_id,
+      statusTime,
     } = this.state;
-    console.log(time_from, time_to);
     var listBill = typeof bills.data == "undefined" ? [] : bills.data;
 
     if (this.props.auth) {
       return (
-        <div id="wrapper">
+        <BillStyles id="wrapper">
           <Sidebar store_code={store_code} />
           <div className="col-10 col-10-wrapper">
             <div id="content-wrapper" className="d-flex flex-column">
@@ -524,7 +639,7 @@ class Bill extends Component {
                       <div className="card-header py-3">
                         <div
                           class="row"
-                          // style={{ "justify-content": "space-between" }}
+                          style={{ "justify-content": "space-between" }}
                         >
                           <form onSubmit={this.searchData}>
                             <div
@@ -547,39 +662,6 @@ class Bill extends Component {
                               </div>
                             </div>
                           </form>
-                        </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                          }}
-                        >
-                          <p class="total-item" id="sale_user_name">
-                            <span className="num-total_item">
-                              {bills.total}&nbsp;
-                            </span>
-                            <span className="text-total_item" id="user_name">
-                              hóa đơn
-                            </span>{" "}
-                            &nbsp;&nbsp;
-                            <DateRangePickerComponent
-                              value={[
-                                new Date(moment(time_from, "YYYY-MM-DD")),
-                                new Date(moment(time_to, "YYYY-MM-DD")),
-                              ]}
-                              id="daterangepicker"
-                              placeholder="Khoảng thời gian..."
-                              format="dd/MM/yyyy"
-                              onChange={this.onchangeDateFromTo}
-                            />
-                            {/* <DateRangePickerComponent
-                                id="daterangepicker"
-                                placeholder="Khoảng thời gian..."
-                                format="dd/MM/yyyy"
-                                onChange={this.onchangeDateFromTo}
-                              /> */}
-                          </p>
-
                           <div>
                             <button
                               style={{ margin: "auto 0px", marginRight: 15 }}
@@ -614,6 +696,118 @@ class Bill extends Component {
                             </button>
                           </div>
                         </div>
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-between",
+                          }}
+                        >
+                          <p
+                            class="total-item total-item-custom"
+                            id="sale_user_name"
+                          >
+                            <div className="total-sale_user_name input-group">
+                              <select
+                                value={statusTime}
+                                name=""
+                                id="input"
+                                class="form-control"
+                                required="required"
+                                onChange={this.onChangeStatusTime}
+                              >
+                                <option value="time_order">
+                                  Thời gian tạo đơn
+                                </option>
+                                <option value="last_time_change_order_status">
+                                  Thời gian trạng thái cuối
+                                </option>
+                              </select>
+                              <div className="input-group-append input-date">
+                                <Flatpickr
+                                  data-enable-time
+                                  value={
+                                    new Date(moment(time_from, "YYYY-MM-DD"))
+                                  }
+                                  className="date_from"
+                                  placeholder="Chọn ngày bắt đầu..."
+                                  options={{
+                                    altInput: true,
+                                    dateFormat: "YYYY-MM-DD",
+                                    altFormat: "DD-MM-YYYY",
+                                    allowInput: true,
+                                    enableTime: false,
+                                    maxDate: time_to,
+                                    parseDate: (datestr, format) => {
+                                      return moment(
+                                        datestr,
+                                        format,
+                                        true
+                                      ).toDate();
+                                    },
+                                    formatDate: (date, format, locale) => {
+                                      // locale can also be used
+                                      return moment(date).format(format);
+                                    },
+                                  }}
+                                  onChange={([date]) =>
+                                    this.onchangeDateFrom(date)
+                                  }
+                                />
+                                <Flatpickr
+                                  data-enable-time
+                                  value={
+                                    new Date(moment(time_to, "YYYY-MM-DD"))
+                                  }
+                                  className="date_to"
+                                  placeholder="Chọn ngày kết thúc..."
+                                  options={{
+                                    altInput: true,
+                                    dateFormat: "YYYY-MM-DD",
+                                    altFormat: "DD-MM-YYYY",
+                                    allowInput: true,
+                                    enableTime: false,
+                                    minDate: time_from,
+                                    parseDate: (datestr, format) => {
+                                      return moment(
+                                        datestr,
+                                        format,
+                                        true
+                                      ).toDate();
+                                    },
+                                    formatDate: (date, format, locale) => {
+                                      // locale can also be used
+                                      return moment(date).format(format);
+                                    },
+                                  }}
+                                  onChange={([date]) =>
+                                    this.onchangeDateTo(date)
+                                  }
+                                />
+                              </div>
+                            </div>
+                          </p>
+                        </div>
+                        <div
+                          className="bill-total"
+                          style={{
+                            marginTop: "15px",
+                            paddingLeft: "20px",
+                          }}
+                        >
+                          <span
+                            className="text-total_item"
+                            id="user_name"
+                            style={{
+                              display: "inline-block",
+                              marginRight: "5px",
+                            }}
+                          >
+                            Hóa đơn:
+                          </span>
+                          <span className="num-total_item">
+                            {bills.total} đơn
+                          </span>
+                        </div>
                       </div>
 
                       <div className="card-body">
@@ -624,6 +818,7 @@ class Bill extends Component {
                           getParams={this.getParams}
                           time_from={time_from}
                           time_to={time_to}
+                          statusTime={statusTime}
                           orderFrom={orderFrom}
                           searchValue={searchValue}
                           chat_allow={chat_allow}
@@ -701,7 +896,7 @@ class Bill extends Component {
               showChatBox={showChatBox}
             ></Chat>
           </div>
-        </div>
+        </BillStyles>
       );
     } else if (this.props.auth === false) {
       return <Redirect to="/login" />;

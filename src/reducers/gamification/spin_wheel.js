@@ -5,6 +5,8 @@ var initialState = {
   gameSpinWheels: {},
   deletedSuccessfully: false,
   listGiftGameSpinWheels: {},
+  giftGameSpinWheels: {},
+  saveSuccessfully: false,
   deletedGiftSuccessfully: false,
 };
 
@@ -28,6 +30,26 @@ export const spin_wheel = (state = initialState, action) => {
       return newState;
     case Types.LIST_GIFT_GAME_SPIN_WHEELS:
       newState.listGiftGameSpinWheels = action.data;
+      return newState;
+    case Types.SAVE_GIFT_GAME_SPIN_WHEELS:
+      const newStateSpinWheel = JSON.parse(JSON.stringify(newState));
+      const newListGiftGameSpinWheels =
+        newStateSpinWheel.listGiftGameSpinWheels;
+      newListGiftGameSpinWheels.data = [
+        ...newStateSpinWheel.listGiftGameSpinWheels.data,
+        action.data,
+      ];
+
+      newState.listGiftGameSpinWheels = newListGiftGameSpinWheels;
+      return newState;
+    case Types.SAVE_GIFT_GAME_SPIN_WHEELS_MESSAGE:
+      newState.saveSuccessfully = action.data;
+      return newState;
+    case Types.ADD_GIFT_GAME_SPIN_WHEELS:
+      newState.giftGameSpinWheels = action.data;
+      return newState;
+    case Types.UPDATE_GIFT_GAME_SPIN_WHEELS:
+      newState.giftGameSpinWheels = action.data;
       return newState;
     case Types.DELETE_GIFT_GAME_SPIN_WHEELS:
       newState.deletedGiftSuccessfully = action.data;
