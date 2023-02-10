@@ -4,11 +4,11 @@ import { AsyncPaginate } from "react-select-async-paginate";
 import styled from "styled-components";
 import * as gamificationAction from "../../../../actions/gamification";
 import * as productAction from "../../../../actions/product";
-import CardProduct from "../../../../components/Pos_Order/CardProduct";
 import * as Types from "../../../../constants/ActionType";
 import { getBranchId } from "../../../../ultis/branchUtils";
 import { formatNumberV2, randomString } from "../../../../ultis/helpers";
 import * as productApi from "../../../../data/remote/product";
+import ModalDeleteGift from "../../../../components/Gamification/SpinWheel/ModalDeleteGift";
 
 const ActionsGiftGameSpinWheelStyles = styled.div`
   .gifts {
@@ -97,17 +97,33 @@ const ActionsGiftGameSpinWheelStyles = styled.div`
       column-gap: 5px;
     }
   }
+  .btn-disabled {
+    background-color: #c6c6c3;
+    border-color: #c6c6c3;
+  }
 `;
 
+const newGiftDefault = {
+  name: "",
+  image_url: "",
+  amount_gift: null,
+  percent_received: "",
+  type_gift: "",
+  text: "",
+  amount_coin: "",
+  value_gift: null,
+};
 class ActionsGiftGameSpinWheel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      idGameSelected: null,
       listGift: [],
+      listGiftAdd: [],
       isScan: randomString(10),
       selectValue: [],
       isChangeValue: "",
+      idGiftGameSelected: null,
+      openModalDelete: false,
     };
     this.refSearchProduct = React.createRef();
 
@@ -122,8 +138,10 @@ class ActionsGiftGameSpinWheel extends Component {
       store_code,
       listGiftGameSpinWheels,
       listImgProduct,
+      deletedGiftSuccessfully,
+      deletedGiftSuccessfullyReturn,
     } = this.props;
-    const { idGameSelected, listGift, selectValue } = this.state;
+    const { idGiftGameSelected, listGift } = this.state;
     if (!shallowEqual(gameSpinWheels, nextProps.gameSpinWheels)) {
       fetchListGiftGameSpinWheels(store_code, nextProps.gameSpinWheels.id);
     }
@@ -160,7 +178,7 @@ class ActionsGiftGameSpinWheel extends Component {
     if (!shallowEqual(listImgProduct, nextProps.listImgProduct)) {
       const newListGift = listGift.reduce((prevData, currentData) => {
         const newData =
-          idGameSelected === currentData.id
+          idGiftGameSelected === currentData.id
             ? {
                 ...currentData,
                 image_url: nextProps.listImgProduct[0],
@@ -172,6 +190,18 @@ class ActionsGiftGameSpinWheel extends Component {
 
       this.setListGift(newListGift);
     }
+    if (
+      !shallowEqual(
+        deletedGiftSuccessfully,
+        nextProps.deletedGiftSuccessfully
+      ) &&
+      nextProps.deletedGiftSuccessfully
+    ) {
+      this.setIdGiftGameSelected(null);
+      this.setOpenModalDelete(false);
+      deletedGiftSuccessfullyReturn();
+      fetchListGiftGameSpinWheels(store_code, gameSpinWheels.id);
+    }
     return true;
   }
   componentDidMount() {
@@ -181,6 +211,12 @@ class ActionsGiftGameSpinWheel extends Component {
       fetchListGiftGameSpinWheels(store_code, idGameSpinWheel);
     }
   }
+  setIdGiftGameSelected = (idGift) => {
+    this.setState({ idGiftGameSelected: idGift });
+  };
+  setOpenModalDelete = (open) => {
+    this.setState({ openModalDelete: open });
+  };
   setListGift = (listGift) => {
     this.setState({ listGift });
   };
@@ -190,7 +226,7 @@ class ActionsGiftGameSpinWheel extends Component {
     const { uploadListImgProduct } = this.props;
     if (file) {
       const updatedList = [file];
-      this.setState({ idGameSelected: id });
+      this.setState({ idGiftGameSelected: id });
       uploadListImgProduct(updatedList);
     }
   };
@@ -264,7 +300,7 @@ class ActionsGiftGameSpinWheel extends Component {
     this.setListGift(newListGift);
     this.setState({
       selectValue: newDataSearch,
-      idGameSelected: idGame,
+      idGiftGameSelected: idGame,
       isChangeValue: randomString(10),
     });
     this.sleep(100).then(() => {
@@ -357,10 +393,51 @@ class ActionsGiftGameSpinWheel extends Component {
     };
   };
 
+  updateGiftGameSpinWheel = (gift) => {
+    const { updateGiftGameSpinWheels, store_code, idGameSpinWheel } =
+      this.props;
+    const newGift = {
+      name: gift.name,
+      image_url: gift.image_url,
+      type_gift: gift.type_gift,
+      percent_received: gift.percent_received,
+      value_gift: gift.value_gift,
+      text: gift.text,
+      amount_gift: gift.amount_gift
+        ? gift.amount_gift.toString().replace(/\./g, "")
+        : null,
+      amount_coin: gift.amount_coin
+        ? gift.amount_coin.toString().replace(/\./g, "")
+        : 0,
+    };
+    updateGiftGameSpinWheels(store_code, idGameSpinWheel, gift.id, newGift);
+  };
+  handleShowModalDelete = (gift) => {
+    this.setState({
+      openModalDelete: true,
+      idGiftGameSelected: gift.id,
+    });
+  };
+  handleAddGift = () => {
+    const { listGiftAdd } = this.state;
+    this.setState({ listGiftAdd: [...listGiftAdd, newGiftDefault] });
+  };
+
   render() {
-    const { gameSpinWheels, listGiftGameSpinWheels } = this.props;
-    const { listGift, selectValue } = this.state;
-    console.log("ActionsGiftGameSpinWheel ~ render ~ listGift", listGift);
+    const {
+      gameSpinWheels,
+      listGiftGameSpinWheels,
+      idGameSpinWheel,
+      store_code,
+    } = this.props;
+    const {
+      listGift,
+      listGiftAdd,
+      selectValue,
+      openModalDelete,
+      idGiftGameSelected,
+    } = this.state;
+    console.log("ActionsGiftGameSpinWheel ~ render ~ listGiftAdd", listGiftAdd);
 
     const formatOptionLabel = ({ value, label, product }) => {
       return <span>{label}</span>;
@@ -569,22 +646,245 @@ class ActionsGiftGameSpinWheel extends Component {
                         )}
                       </div>
                       <div className="gameSpinWheel__actions">
-                        <div className="gameSpinWheel__actions__item btn btn-warning">
+                        <button
+                          className={`gameSpinWheel__actions__item btn ${
+                            gift.name ? "btn-warning" : "btn-disabled"
+                          }`}
+                          disabled={gift.name ? false : true}
+                          onClick={() => this.updateGiftGameSpinWheel(gift)}
+                        >
                           <span>
                             <i className="fa fa-edit"></i>
                           </span>
                           <span>Cập nhập</span>
-                        </div>
-                        <div className="gameSpinWheel__actions__item btn btn-danger">
+                        </button>
+                        <button
+                          className="gameSpinWheel__actions__item btn btn-danger"
+                          onClick={() => this.handleShowModalDelete(gift)}
+                        >
                           <span>
                             <i className="fa fa-trash"></i>
                           </span>
                           <span>Xóa</span>
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                {listGiftAdd.length > 0 &&
+                  listGiftAdd.map((gift, index) => (
+                    <div key={gift.id} className="gift__item">
+                      <div className="gift__image gameSpinWheel__image">
+                        <img
+                          src={
+                            gift.image_url
+                              ? gift.image_url
+                              : "/images/no_img.png"
+                          }
+                          alt="image_gift"
+                        />
+                        <div className="gift__background">
+                          <label>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              hidden
+                              onChange={(e) =>
+                                this.handleUploadImage(e, gift.id)
+                              }
+                            />
+                          </label>
                         </div>
+                      </div>
+                      <div className="gameSpinWheel__input gameSpinWheel__name">
+                        <input
+                          type="text"
+                          placeholder="Nhập tên phần thưởng"
+                          value={listGift[index].name}
+                          name="name"
+                          onChange={(e) => this.onChange(e, listGift[index].id)}
+                          className="form-control"
+                        />
+                      </div>
+                      <div className="gameSpinWheel__input gameSpinWheel__amount">
+                        <input
+                          type="text"
+                          placeholder="Nhập số lượng phần thưởng"
+                          value={listGift[index].amount_gift}
+                          name="amount_gift"
+                          onChange={(e) => this.onChange(e, listGift[index].id)}
+                          className="form-control"
+                        />
+                      </div>
+                      <div className="gameSpinWheel__input gameSpinWheel__percent">
+                        <input
+                          type="number"
+                          placeholder="Nhập phần trăm trúng thưởng"
+                          min={0}
+                          max={100}
+                          value={listGift[index].percent_received}
+                          name="percent_received"
+                          onChange={(e) => this.onChange(e, listGift[index].id)}
+                          className="form-control"
+                        />
+                      </div>
+                      <div className="gameSpinWheel__input gameSpinWheel__type">
+                        <select
+                          className="form-control"
+                          value={listGift[index].type_gift}
+                          name="type_gift"
+                          onChange={(e) =>
+                            this.onChange(e, listGift[index].id, index)
+                          }
+                        >
+                          <option value={-1}>---Chọn loại thưởng---</option>
+                          <option value={Types.GIFT_IS_COIN}>Tặng xu</option>
+                          <option value={Types.GIFT_IS_ITEM}>
+                            Tặng sản phẩm
+                          </option>
+                          <option value={Types.GIFT_IS_TEXT}>Tặng mã</option>
+                          <option value={Types.GIFT_IS_LUCKY_AFTER}>
+                            Chúc bạn may mắn
+                          </option>
+                          <option value={Types.GIFT_IS_LOST_TURN}>
+                            Mất lượt
+                          </option>
+                        </select>
+                      </div>
+                      <div className="gameSpinWheel__input gameSpinWheel__gift">
+                        {Number(gift.type_gift) === Types.GIFT_IS_COIN ? (
+                          <div>
+                            <input
+                              type="text"
+                              placeholder="Nhập số xu"
+                              value={listGift[index].amount_coin || ""}
+                              className="form-control"
+                              name="amount_coin"
+                              onChange={(e) => this.onChange(e, gift.id, index)}
+                            />
+                          </div>
+                        ) : Number(gift.type_gift) === Types.GIFT_IS_ITEM ? (
+                          <div>
+                            <AsyncPaginate
+                              onKeyUp={(event) => {
+                                this._recordInput("onKeyUp", event);
+                              }}
+                              onKeyDown={(event) => {
+                                this._recordInput("onKeyUp", event);
+                              }}
+                              autoFocus
+                              selectRef={(ref) => {
+                                this.refSearchProduct = ref;
+                              }}
+                              noOptionsMessage={() =>
+                                "Không tìm thấy sản phẩm nào"
+                              }
+                              loadingMessage={() => "Đang tìm..."} //minor type-O here
+                              placeholder="Tìm kiếm sản phẩm"
+                              value={
+                                selectValue && selectValue.length > 0
+                                  ? selectValue[index]
+                                  : null
+                              }
+                              loadOptions={this.loadProducts}
+                              formatOptionLabel={formatOptionLabel}
+                              id="recipientReferences1"
+                              onChange={(e) =>
+                                this.onChangeProduct(e, gift.id, index)
+                              }
+                              additional={{
+                                page: 1,
+                              }}
+                              styles={customStyles}
+                              debounceTimeout={500}
+                              isClearable
+                              isSearchable
+                            />
+                          </div>
+                        ) : gift.type_gift === Types.GIFT_IS_TEXT ? (
+                          <div>
+                            <input
+                              type="text"
+                              placeholder="Nhập mã thẻ"
+                              className="form-control"
+                              value={listGift[index].text || ""}
+                              name="text"
+                              onChange={(e) => this.onChange(e, gift.id, index)}
+                            />
+                          </div>
+                        ) : gift.type_gift === Types.GIFT_IS_LUCKY_AFTER ? (
+                          <div>
+                            <input
+                              type="text"
+                              placeholder="Chúc bạn may mắn"
+                              className="form-control"
+                              value=""
+                              disabled
+                            />
+                          </div>
+                        ) : gift.type_gift === Types.GIFT_IS_LOST_TURN ? (
+                          <div>
+                            <input
+                              type="text"
+                              placeholder="Mất lượt"
+                              className="form-control"
+                              value=""
+                              disabled
+                            />
+                          </div>
+                        ) : (
+                          <div>
+                            <input
+                              type="text"
+                              placeholder="Chưa chọn loại thưởng"
+                              className="form-control"
+                              value=""
+                              disabled
+                            />
+                          </div>
+                        )}
+                      </div>
+                      <div className="gameSpinWheel__actions">
+                        <button
+                          className={`gameSpinWheel__actions__item btn ${
+                            gift.name ? "btn-warning" : "btn-disabled"
+                          }`}
+                          disabled={gift.name ? false : true}
+                          onClick={() => this.updateGiftGameSpinWheel(gift)}
+                        >
+                          <span>
+                            <i className="fa fa-edit"></i>
+                          </span>
+                          <span>Cập nhập</span>
+                        </button>
+                        <button
+                          className="gameSpinWheel__actions__item btn btn-danger"
+                          onClick={() => this.handleShowModalDelete(gift)}
+                        >
+                          <span>
+                            <i className="fa fa-trash"></i>
+                          </span>
+                          <span>Xóa</span>
+                        </button>
                       </div>
                     </div>
                   ))}
               </div>
+              <div style={{ marginTop: "10px" }}>
+                <button
+                  className="btn btn-outline-primary"
+                  onClick={this.handleAddGift}
+                >
+                  <i className="fa fa-plus"></i> Thêm
+                </button>
+              </div>
+              <ModalDeleteGift
+                store_code={store_code}
+                setIdGift={this.setIdGiftGameSelected}
+                idGift={idGiftGameSelected}
+                setOpen={this.setOpenModalDelete}
+                open={openModalDelete}
+                idGame={idGameSpinWheel}
+              />
             </div>
           </div>
         )}
@@ -598,6 +898,8 @@ const mapStateToProps = (state) => {
     listGiftGameSpinWheels:
       state.gamificationReducers.spin_wheel.listGiftGameSpinWheels,
     listImgProduct: state.UploadReducers.productImg.listImgProduct,
+    deletedGiftSuccessfully:
+      state.gamificationReducers.spin_wheel.deletedGiftSuccessfully,
   };
 };
 
@@ -613,6 +915,19 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(
         gamificationAction.fetchListGiftGameSpinWheels(store_code, idGame)
       );
+    },
+    updateGiftGameSpinWheels: (store_code, idGame, idGift, data) => {
+      dispatch(
+        gamificationAction.updateGiftGameSpinWheels(
+          store_code,
+          idGame,
+          idGift,
+          data
+        )
+      );
+    },
+    deletedGiftSuccessfullyReturn: () => {
+      dispatch({ type: Types.DELETE_GAME_SPIN_WHEELS, data: false });
     },
   };
 };

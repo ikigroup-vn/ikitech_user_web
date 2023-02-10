@@ -1,5 +1,6 @@
 import * as Types from "../constants/ActionType";
 import * as gamificationApi from "../data/remote/gamification";
+import history from "../history";
 
 export const fetchListGameSpinWheels = (store_code, params) => {
   return (dispatch) => {
@@ -86,6 +87,56 @@ export const addGameSpinWheels = (store_code, form) => {
   };
 };
 
+export const updateGameSpinWheels = (store_code, idGame, form, page) => {
+  return (dispatch) => {
+    dispatch({ type: Types.SHOW_LOADING, loading: "show" });
+    gamificationApi
+      .updateGameSpinWheels(store_code, idGame, form)
+      .then((res) => {
+        dispatch({ type: Types.SHOW_LOADING, loading: "hidden" });
+        if (res.data.code === 200) {
+          dispatch({
+            type: Types.UPDATE_GAME_SPIN_WHEELS,
+            data: res.data.data,
+          });
+          gamificationApi
+            .fetchListGameSpinWheels(store_code, `page=${page}`)
+            .then((res) => {
+              if (res.data.code === 200) {
+                dispatch({
+                  type: Types.LIST_GAME_SPIN_WHEELS,
+                  data: res.data.data,
+                });
+                history.push(`/game_spin_wheels/${store_code}?page=${page}`);
+              }
+            })
+            .catch(function (error) {
+              dispatch({
+                type: Types.ALERT_UID_STATUS,
+                alert: {
+                  type: "danger",
+                  title: "Lỗi",
+                  disable: "show",
+                  content: error?.response?.data?.msg,
+                },
+              });
+            });
+        }
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+
 export const deleteGameSpinWheels = (store_code, id) => {
   return (dispatch) => {
     dispatch({ type: Types.SHOW_LOADING, loading: "show" });
@@ -97,6 +148,15 @@ export const deleteGameSpinWheels = (store_code, id) => {
           dispatch({
             type: Types.DELETE_GAME_SPIN_WHEELS,
             data: res.data.success,
+          });
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "success",
+              title: "Thành công ",
+              disable: "show",
+              content: res.data.msg,
+            },
           });
         }
       })
@@ -180,6 +240,15 @@ export const updateGiftGameSpinWheels = (store_code, idGame, idGift, data) => {
             type: Types.UPDATE_GIFT_GAME_SPIN_WHEELS,
             data: res.data.data,
           });
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "success",
+              title: "Thành công ",
+              disable: "show",
+              content: res.data.msg,
+            },
+          });
         }
       })
       .catch(function (error) {
@@ -196,17 +265,26 @@ export const updateGiftGameSpinWheels = (store_code, idGame, idGift, data) => {
   };
 };
 
-export const deleteGiftGameSpinWheels = (store_code, idGame) => {
+export const deleteGiftGameSpinWheels = (store_code, idGame, idGift) => {
   return (dispatch) => {
     dispatch({ type: Types.SHOW_LOADING, loading: "show" });
     gamificationApi
-      .deleteGiftGameSpinWheels(store_code, idGame)
+      .deleteGiftGameSpinWheels(store_code, idGame, idGift)
       .then((res) => {
         dispatch({ type: Types.SHOW_LOADING, loading: "hidden" });
         if (res.data.code === 200) {
           dispatch({
             type: Types.DELETE_GIFT_GAME_SPIN_WHEELS,
             data: res.data.data,
+          });
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "success",
+              title: "Thành công ",
+              disable: "show",
+              content: res.data.msg,
+            },
           });
         }
       })

@@ -5,6 +5,7 @@ var initialState = {
   gameSpinWheels: {},
   deletedSuccessfully: false,
   listGiftGameSpinWheels: {},
+  deletedGiftSuccessfully: false,
 };
 
 export const spin_wheel = (state = initialState, action) => {
@@ -19,11 +20,17 @@ export const spin_wheel = (state = initialState, action) => {
     case Types.ADD_GAME_SPIN_WHEELS:
       newState.gameSpinWheels = action.data;
       return newState;
+    case Types.UPDATE_GAME_SPIN_WHEELS:
+      newState.gameSpinWheels = action.data;
+      return newState;
     case Types.DELETE_GAME_SPIN_WHEELS:
       newState.deletedSuccessfully = action.data;
       return newState;
     case Types.LIST_GIFT_GAME_SPIN_WHEELS:
       newState.listGiftGameSpinWheels = action.data;
+      return newState;
+    case Types.DELETE_GIFT_GAME_SPIN_WHEELS:
+      newState.deletedGiftSuccessfully = action.data;
       return newState;
     default:
       return newState;
