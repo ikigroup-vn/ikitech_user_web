@@ -251,23 +251,72 @@ class MoreListGiftGameSpinWheel extends Component {
 
   //Add Gift Game
   saveGiftGame = (gift, index) => {
-    const { saveGiftGameSpinWheel, store_code, idGameSpinWheel } = this.props;
-    const newGift = {
-      name: gift.name,
-      image_url: gift.image_url,
-      type_gift: gift.type_gift,
-      percent_received: gift.percent_received,
-      value_gift: gift.value_gift,
-      text: gift.text,
-      amount_gift: gift.amount_gift
-        ? gift.amount_gift.toString().replace(/\./g, "")
-        : null,
-      amount_coin: gift.amount_coin
-        ? gift.amount_coin.toString().replace(/\./g, "")
-        : 0,
-    };
-    this.setState({ indexSelectedAdd: index });
-    saveGiftGameSpinWheel(store_code, idGameSpinWheel, newGift);
+    const { saveGiftGameSpinWheel, store_code, idGameSpinWheel, showError } =
+      this.props;
+
+    const isErrorNameGifts = gift.name !== "";
+    const isErrorAmountGifts =
+      gift.amount_gift !== "" && gift.amount_gift !== null;
+    const isErrorPercentGifts = gift.percent_received !== "";
+    const isErrorTypeGifts = gift.type_gift != -1;
+    if (isErrorNameGifts === false) {
+      showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng nhập đầy đủ tên phần thưởng",
+        },
+      });
+    } else if (isErrorAmountGifts === false) {
+      showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng nhập đầy đủ số lượng phần thưởng",
+        },
+      });
+    } else if (isErrorPercentGifts === false) {
+      showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng nhập đầy đủ phần trăm phần thưởng",
+        },
+      });
+    } else if (isErrorTypeGifts === false) {
+      showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng nhập đầy đủ loại phần thưởng",
+        },
+      });
+    } else {
+      const newGift = {
+        name: gift.name,
+        image_url: gift.image_url,
+        type_gift: gift.type_gift,
+        percent_received: gift.percent_received,
+        value_gift: gift.value_gift,
+        text: gift.text,
+        amount_gift: gift.amount_gift
+          ? gift.amount_gift.toString().replace(/\./g, "")
+          : null,
+        amount_coin: gift.amount_coin
+          ? gift.amount_coin.toString().replace(/\./g, "")
+          : 0,
+      };
+      this.setState({ indexSelectedAdd: index });
+      saveGiftGameSpinWheel(store_code, idGameSpinWheel, newGift);
+    }
   };
 
   //Delete Gift Game

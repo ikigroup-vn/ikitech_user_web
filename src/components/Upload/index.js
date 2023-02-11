@@ -117,12 +117,14 @@ class Upload extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const { fileList } = this.state;
-    const { listImgProduct, setFiles } = this.props;
+    const { listImgProduct, setFiles, itemImages } = this.props;
     if (!shallowEqual(listImgProduct, nextProps.listImgProduct)) {
       this.setFileList(nextProps.listImgProduct);
+      setFiles([...fileList, nextProps.listImgProduct]);
     }
-    if (!shallowEqual(fileList, nextState.fileList)) {
-      setFiles(nextState.fileList);
+    if (!shallowEqual(itemImages, nextProps.itemImages)) {
+      setFiles(nextProps.itemImages);
+      this.setState({ fileList: nextProps.itemImages });
     }
 
     return true;
@@ -159,8 +161,10 @@ class Upload extends Component {
 
   removeFile = (indexFile) => {
     const { fileList } = this.state;
+    const { setFiles } = this.props;
     const newFileList = fileList.filter((file, index) => index !== indexFile);
     this.setState({ fileList: newFileList });
+    setFiles(newFileList);
   };
 
   render() {
@@ -249,6 +253,7 @@ class Upload extends Component {
             <input
               type="file"
               multiple={multiple ? true : false}
+              accept="image/*"
               value=""
               onChange={this.onFileDrop}
             />
