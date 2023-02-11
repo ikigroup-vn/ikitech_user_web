@@ -1473,7 +1473,7 @@ export const updateOneFieldProduct = (
             content: res.data.msg,
           },
         });
-        history.push(`/product/index/${store_code}/${page}`);
+        history.push(`/product/index/${store_code}?page=${page}`);
       })
       .catch(function (error) {
         var content = "";

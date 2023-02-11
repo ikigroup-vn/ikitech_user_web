@@ -1,6 +1,11 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { format, formatNumber, contactOrNumber } from "../../ultis/helpers";
+import {
+  format,
+  formatNumber,
+  contactOrNumber,
+  getQueryParams,
+} from "../../ultis/helpers";
 import * as inventoryAction from "../../actions/inventory";
 import { connect } from "react-redux";
 import getChannel, { IKITECH } from "../../ultis/channel";
@@ -200,13 +205,9 @@ class ShowData extends Component {
     return result;
   };
   handleChangeStatusProduct = () => {
-    const {
-      store_code,
-      updateOneFieldProduct,
-      data,
-      page,
-      handleFetchAllProduct,
-    } = this.props;
+    const { store_code, updateOneFieldProduct, data, handleFetchAllProduct } =
+      this.props;
+    const page = getQueryParams("page") || 1;
     updateOneFieldProduct(
       store_code,
       "status",

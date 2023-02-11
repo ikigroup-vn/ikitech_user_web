@@ -368,10 +368,12 @@ class Bill extends Component {
   ) => {
     var params = ``;
     if (to != "" && to != null) {
-      params = params + `&time_to=${to}`;
+      const toYYYYMMDD = to?.split("-").reverse().join("-");
+      params = params + `&time_to=${toYYYYMMDD}`;
     }
     if (from != "" && from != null) {
-      params = params + `&time_from=${from}`;
+      const fromYYYYMMDD = from?.split("-").reverse().join("-");
+      params = params + `&time_from=${fromYYYYMMDD}`;
     }
     if (statusTime != null && statusTime != "") {
       params = params + `&type_query_time=${statusTime}`;
@@ -455,7 +457,7 @@ class Bill extends Component {
       statusTime,
       time_to,
     } = this.state;
-    from = date ? moment(date, "DD-MM-YYYY").format("YYYY-MM-DD") : "";
+    from = date ? moment(date, "DD-MM-YYYY").format("DD-MM-YYYY") : "";
     var params_agency =
       this.state.agency_by_customer_id != null
         ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
@@ -494,7 +496,7 @@ class Bill extends Component {
       statusTime,
       time_from,
     } = this.state;
-    to = date ? moment(date, "DD-MM-YYYY").format("YYYY-MM-DD") : "";
+    to = date ? moment(date, "DD-MM-YYYY").format("DD-MM-YYYY") : "";
 
     var params_agency =
       this.state.agency_by_customer_id != null
@@ -718,13 +720,13 @@ class Bill extends Component {
                                 <Flatpickr
                                   data-enable-time
                                   value={
-                                    new Date(moment(time_from, "YYYY-MM-DD"))
+                                    new Date(moment(time_from, "DD-MM-YYYY"))
                                   }
                                   className="date_from"
                                   placeholder="Chọn ngày bắt đầu..."
                                   options={{
                                     altInput: true,
-                                    dateFormat: "YYYY-MM-DD",
+                                    dateFormat: "DD-MM-YYYY",
                                     altFormat: "DD-MM-YYYY",
                                     allowInput: true,
                                     enableTime: false,
@@ -748,13 +750,13 @@ class Bill extends Component {
                                 <Flatpickr
                                   data-enable-time
                                   value={
-                                    new Date(moment(time_to, "YYYY-MM-DD"))
+                                    new Date(moment(time_to, "DD-MM-YYYY"))
                                   }
                                   className="date_to"
                                   placeholder="Chọn ngày kết thúc..."
                                   options={{
                                     altInput: true,
-                                    dateFormat: "YYYY-MM-DD",
+                                    dateFormat: "DD-MM-YYYY",
                                     altFormat: "DD-MM-YYYY",
                                     allowInput: true,
                                     enableTime: false,

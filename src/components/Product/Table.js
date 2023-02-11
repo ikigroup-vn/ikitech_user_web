@@ -279,10 +279,11 @@ class Table extends Component {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateOneFieldProduct: (store_code, product, productId, page) => {
+    updateOneFieldProduct: (store_code, status, product, productId, page) => {
       dispatch(
         productAction.updateOneFieldProduct(
           store_code,
+          status,
           product,
           productId,
           page

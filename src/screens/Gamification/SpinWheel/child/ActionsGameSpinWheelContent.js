@@ -101,9 +101,16 @@ class ActionsGameSpinWheelContent extends Component {
         txtMaxAmountCoin: nextProps.gameSpinWheels.max_amount_coin_per_player,
         txtMaxGift: nextProps.gameSpinWheels.max_amount_gift_per_player,
         txtNumberLimit: nextProps.gameSpinWheels.number_limit_people,
+        group_customer: nextProps.gameSpinWheels.apply_for,
+        agency_type_id: nextProps.gameSpinWheels.agency_type_id
+          ? Number(nextProps.gameSpinWheels.agency_type_id)
+          : nextProps.gameSpinWheels.agency_type_id,
+        group_type_id: nextProps.gameSpinWheels.group_customer_id
+          ? Number(nextProps.gameSpinWheels.group_customer_id)
+          : nextProps.gameSpinWheels.group_customer_id,
         txtStart: startTime,
         txtEnd: endTime,
-        is_shake: nextProps.gameSpinWheels.is_shake,
+        isShake: nextProps.gameSpinWheels.is_shake,
         isLoading: true,
       });
     }
@@ -161,11 +168,9 @@ class ActionsGameSpinWheelContent extends Component {
       ) {
         this.setState({ displayError: "show" });
       } else {
-        console.log("hidddeee");
         this.setState({ displayError: "hide" });
       }
     }
-    console.log("ActionsGameSpxinWheelContent ~ time", time);
     this.setState({
       txtStart: time,
     });
@@ -210,6 +215,16 @@ class ActionsGameSpinWheelContent extends Component {
 
     const isErrorNameGifts =
       listGift.length > 0 && listGift.every((gift) => gift.name !== "");
+    const isErrorAmountGifts =
+      listGift.length > 0 &&
+      listGift.every(
+        (gift) => gift.amount_gift !== "" && gift.amount_gift !== null
+      );
+    const isErrorPercentGifts =
+      listGift.length > 0 &&
+      listGift.every((gift) => gift.percent_received !== "");
+    const isErrorTypeGifts =
+      listGift.length > 0 && listGift.every((gift) => gift.type_gift != -1);
     const turnInDay = txtTurnInDay?.toString().replace(/\./g, "")
       ? Number(txtTurnInDay?.toString().replace(/\./g, ""))
       : txtTurnInDay?.toString().replace(/\./g, "");
@@ -300,6 +315,36 @@ class ActionsGameSpinWheelContent extends Component {
           content: "Vui lòng nhập đầy đủ tên phần thưởng",
         },
       });
+    } else if (isErrorAmountGifts === false) {
+      showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng nhập đầy đủ số lượng phần thưởng",
+        },
+      });
+    } else if (isErrorPercentGifts === false) {
+      showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng nhập đầy đủ phần trăm phần thưởng",
+        },
+      });
+    } else if (isErrorTypeGifts === false) {
+      showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng nhập đầy đủ loại phần thưởng",
+        },
+      });
     } else {
       const gameSpinWheel = {
         name: txtName,
@@ -348,38 +393,110 @@ class ActionsGameSpinWheelContent extends Component {
       images,
     } = this.state;
 
-    const { updateGameSpinWheels, store_code, idGameSpinWheel } = this.props;
+    const { updateGameSpinWheels, store_code, idGameSpinWheel, showError } =
+      this.props;
 
-    const gameSpinWheel = {
-      name: txtName,
-      turn_in_day: Number(txtTurnInDay?.toString().replace(/\./g, "")),
-      max_amount_coin_per_player: Number(
-        txtMaxAmountCoin?.toString().replace(/\./g, "")
-      ),
-      max_amount_gift_per_player: Number(
-        txtMaxGift?.toString().replace(/\./g, "")
-      ),
-      number_limit_people: Number(
-        txtNumberLimit?.toString().replace(/\./g, "")
-      ),
-      agency_type_id: agency_type_id ? Number(agency_type_id) : agency_type_id,
-      group_customer_id: group_type_id ? Number(group_type_id) : group_type_id,
-      apply_for: group_customer ? Number(group_customer) : group_customer,
-      is_shake: isShake,
-      images: images,
-      time_start: txtStart
-        ? `${txtStart.split(" ")[0].split("-")[2]}-${
-            txtStart.split(" ")[0].split("-")[1]
-          }-${txtStart.split(" ")[0].split("-")[0]} ${txtStart.split(" ")[1]}`
-        : "",
-      time_end: txtEnd
-        ? `${txtEnd.split(" ")[0].split("-")[2]}-${
-            txtEnd.split(" ")[0].split("-")[1]
-          }-${txtEnd.split(" ")[0].split("-")[0]} ${txtEnd.split(" ")[1]}`
-        : "",
-    };
-    const page = getQueryParams("page") || 1;
-    updateGameSpinWheels(store_code, idGameSpinWheel, gameSpinWheel, page);
+    const turnInDay = txtTurnInDay?.toString().replace(/\./g, "")
+      ? Number(txtTurnInDay?.toString().replace(/\./g, ""))
+      : txtTurnInDay?.toString().replace(/\./g, "");
+    const numberLimitPeople = txtNumberLimit?.toString().replace(/\./g, "")
+      ? Number(txtNumberLimit?.toString().replace(/\./g, ""))
+      : txtNumberLimit?.toString().replace(/\./g, "");
+    const maxAmountGiftPerPlayer = txtMaxGift?.toString().replace(/\./g, "")
+      ? Number(txtMaxGift?.toString().replace(/\./g, ""))
+      : txtMaxGift?.toString().replace(/\./g, "");
+    const maxAmountCoinPerPlayer = txtMaxAmountCoin
+      ?.toString()
+      .replace(/\./g, "")
+      ? Number(txtMaxAmountCoin?.toString().replace(/\./g, ""))
+      : txtMaxAmountCoin?.toString().replace(/\./g, "");
+
+    if (txtName === "" || txtName === null) {
+      showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng nhập tên trò chơi",
+        },
+      });
+    } else if (turnInDay === "" || turnInDay === null) {
+      showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng nhập số lần quay thưởng trong một ngày",
+        },
+      });
+    } else if (numberLimitPeople === "" || numberLimitPeople === null) {
+      showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng nhập giới hạn người tham gia",
+        },
+      });
+    } else if (
+      maxAmountGiftPerPlayer === "" ||
+      maxAmountGiftPerPlayer === null
+    ) {
+      showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng nhập số phần thưởng tối đa",
+        },
+      });
+    } else if (
+      maxAmountCoinPerPlayer === "" ||
+      maxAmountCoinPerPlayer === null
+    ) {
+      showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng nhập số xu tối đa",
+        },
+      });
+    } else {
+      const gameSpinWheel = {
+        name: txtName,
+        turn_in_day: turnInDay,
+        max_amount_coin_per_player: maxAmountCoinPerPlayer,
+        max_amount_gift_per_player: maxAmountGiftPerPlayer,
+        number_limit_people: numberLimitPeople,
+        agency_type_id: agency_type_id
+          ? Number(agency_type_id)
+          : agency_type_id,
+        group_customer_id: group_type_id
+          ? Number(group_type_id)
+          : group_type_id,
+        apply_for: group_customer ? Number(group_customer) : group_customer,
+        is_shake: isShake,
+        images: images,
+        time_start: txtStart
+          ? `${txtStart.split(" ")[0].split("-")[2]}-${
+              txtStart.split(" ")[0].split("-")[1]
+            }-${txtStart.split(" ")[0].split("-")[0]} ${txtStart.split(" ")[1]}`
+          : "",
+        time_end: txtEnd
+          ? `${txtEnd.split(" ")[0].split("-")[2]}-${
+              txtEnd.split(" ")[0].split("-")[1]
+            }-${txtEnd.split(" ")[0].split("-")[0]} ${txtEnd.split(" ")[1]}`
+          : "",
+      };
+      const page = getQueryParams("page") || 1;
+      updateGameSpinWheels(store_code, idGameSpinWheel, gameSpinWheel, page);
+    }
   };
 
   goBack = () => {
@@ -410,6 +527,7 @@ class ActionsGameSpinWheelContent extends Component {
       group_type_id,
       displayError,
       isShake,
+      images,
       isLoading,
     } = this.state;
 
@@ -735,7 +853,12 @@ class ActionsGameSpinWheelContent extends Component {
                 <div className="gameSpinWheel__image form-group">
                   <label for="txtName">Hình ảnh (Tối đa 13 ảnh)</label>
                   <div className="gameSpinWheel__imageContent">
-                    <Upload multiple setFiles={this.setImages} />
+                    <Upload
+                      multiple
+                      setFiles={this.setImages}
+                      files={images}
+                      itemImages={gameSpinWheels.images}
+                    />
                   </div>
                 </div>
               </div>
