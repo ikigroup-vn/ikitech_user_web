@@ -28,12 +28,25 @@ class Pagination extends Component {
       time_to,
       time_from,
       orderFrom,
+      collaborator_by_customer_id,
+      statusTime,
+      getParams,
     } = this.props;
     const branch_id = getBranchId();
     var params = "";
     if (hasPhone) params = `&branch_id=${branch_id}&phone_number=${phone}`;
     else
-      params = `&order_status_code=${status_order}&payment_status_code=${status_payment}&limit=${limit}&branch_id=${branch_id}&order_from_list=${orderFrom}&search=${searchValue}`;
+      params = getParams(
+        time_from,
+        time_to,
+        searchValue,
+        status_order,
+        status_payment,
+        limit,
+        orderFrom,
+        collaborator_by_customer_id,
+        statusTime
+      );
     if (time_to != "" && time_to != null) {
       params = params + `&time_to=${time_to}`;
     }

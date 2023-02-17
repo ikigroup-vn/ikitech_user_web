@@ -2,7 +2,7 @@ import * as Types from "../../constants/ActionType";
 
 var initialState = {
   allStaff: [],
-  staffID: {  },
+  staffID: {},
   type: [],
 };
 
@@ -15,7 +15,9 @@ export const staff = (state = initialState, action) => {
     case Types.FETCH_ID_STAFF:
       newState.staffID = action.data;
       return newState;
-   
+    case Types.UPDATE_STAFF_TO_SALE:
+      return newState;
+
     default:
       return newState;
   }

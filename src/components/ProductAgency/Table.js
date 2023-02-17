@@ -15,6 +15,7 @@ class Table extends Component {
     super(props);
     this.state = {
       selected: [],
+      arrayCheckBox: [],
     };
   }
 
@@ -77,6 +78,32 @@ class Table extends Component {
       `/product-agency/edit-price/${store_code}/${data.id}/${agency_type_id}?page=${page}&limit=${numPage}&search=${searchValue}&price=${price}`
     );
   };
+  onchangeCheckBox = (e) => {
+    var value = e.target.value;
+    var checked = e.target.checked;
+    console.log(checked);
+    var arrayCheckBox = [...this.props.arrayCheckBox];
+    if (checked == true) {
+      arrayCheckBox.push(value);
+      this.props.setArrayCheckBox(arrayCheckBox);
+    } else {
+      arrayCheckBox.forEach((element, index) => {
+        console.log(element);
+        if (element == value) {
+          arrayCheckBox.splice(index, 1);
+        }
+      });
+      this.props.setArrayCheckBox(arrayCheckBox);
+    }
+  };
+  checkExsit = (id) => {
+    for (const item of this.props.arrayCheckBox) {
+      if (item == id) {
+        return true;
+      }
+    }
+    return false;
+  };
   showData = (products, per_page, current_page) => {
     var result = null;
     var { store_code, page, agency_type_id } = this.props;
@@ -96,7 +123,7 @@ class Table extends Component {
         var max_price = data.max_price;
         var product_discount = data.product_discount;
         var distributes = data.distributes;
-
+        var checked = this.checkExsit(data.id);
         var a_min_price = null;
         var a_max_price = null;
         var a_distributes = null;
@@ -107,6 +134,18 @@ class Table extends Component {
         }
         return (
           <tr className="hover-product">
+            <td>
+              <div class="checkbox">
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={checked}
+                    onChange={this.onchangeCheckBox}
+                    value={data.id}
+                  />
+                </label>
+              </div>
+            </td>
             <td>{per_page * (current_page - 1) + (index + 1)}</td>
 
             <td>{data.sku}</td>
@@ -116,6 +155,7 @@ class Table extends Component {
                 {data.name}
               </Link>
             </td>
+            <td>{data.agency_price.percent_agency}%</td>
             <td>
               {product_discount == null && (
                 <div className={`price-${data.id}`}>
@@ -317,25 +357,25 @@ class Table extends Component {
   onChangeSelectAll = (e) => {
     var checked = e.target.checked;
     var { products } = this.props;
-    var _selected = [...this.state.selected];
+    var _selected = [...this.props.arrayCheckBox];
 
     var listProduct = filter_arr(products.data);
 
     if (listProduct.length > 0) {
       if (checked == false) {
-        this.setState({ selected: [] });
+        this.props.setArrayCheckBox([]);
       } else {
         _selected = [];
         listProduct.forEach((product) => {
           _selected.push(product.id);
         });
-        this.setState({ selected: _selected });
+        this.props.setArrayCheckBox(_selected);
       }
     }
   };
   render() {
     var { products, store_code } = this.props;
-    var { selected } = this.state;
+    var { selected, arrayCheckBox } = this.state;
     var per_page = products.per_page;
     var current_page = products.current_page;
 
@@ -344,12 +384,17 @@ class Table extends Component {
       selected.length > 0 && selected.length == listProduct.length
         ? true
         : false;
+    var _array =
+      this.props.arrayCheckBox.length > 0 &&
+      this.props.arrayCheckBox.length == listProduct.length
+        ? true
+        : false;
     var multiDelete = selected.length > 0 ? "show" : "hide";
     var { _delete, update, insert } = this.props;
     console.log(products);
     return (
       <div>
-        <button
+        {/* <button
           onClick={(e) => this.handleMultiDelCallBack(e, selected)}
           data-toggle="modal"
           data-target="#removeMultiModal"
@@ -357,7 +402,7 @@ class Table extends Component {
           class={`btn btn-danger btn-sm ${multiDelete}`}
         >
           <i class="fa fa-trash"></i> Xóa {selected.length} sản phẩm
-        </button>
+        </button> */}
         <table
           class="table table-border "
           id="dataTable"
@@ -366,10 +411,19 @@ class Table extends Component {
         >
           <thead>
             <tr>
+              <th>
+                <input
+                  type="checkbox"
+                  checked={_array}
+                  onChange={this.onChangeSelectAll}
+                />
+              </th>
               <th>STT</th>
               <th>Mã SKU</th>
 
               <th>Tên sản phẩm</th>
+
+              <th>Hoa hồng</th>
 
               <th>Giá bán lẻ</th>
 

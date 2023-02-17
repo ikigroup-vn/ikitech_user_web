@@ -50,10 +50,8 @@ class ModalCreate extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{ background: "white" }}>
-              <h4 class="modal-title" style={{ color: "black" }}>
-                Thêm bật thang
-              </h4>
+            <div class="modal-header">
+              <h4 class="modal-title">Thêm bật thang</h4>
 
               <button
                 type="button"
@@ -103,7 +101,7 @@ class ModalCreate extends Component {
                 >
                   Đóng
                 </button>
-                <button type="submit" class="btn btn-info">
+                <button type="submit" class="btn btn-warning">
                   Tạo
                 </button>
               </div>

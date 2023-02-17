@@ -15,6 +15,7 @@ import BadgeTable from "../../components/Dashboard/BadgeTable";
 import * as dashboardAction from "../../actions/dashboard";
 import * as collaboratorAction from "../../actions/collaborator";
 import * as helper from "../../ultis/helpers";
+import Statistical from "../../components/Sale/Statistical";
 
 class Dashboard extends Component {
   constructor(props) {
@@ -107,7 +108,11 @@ class Dashboard extends Component {
                   store_code={store_code}
                   handeOnload={this.handeOnload}
                 />
-
+                {badges.is_sale && badges.is_staff ? (
+                  <div className="container-fluid">
+                    <Statistical store_code={store_code} />
+                  </div>
+                ) : null}
                 <div className="container-fluid">
                   <div className="d-sm-flex  align-items-center justify-content-between mb-4">
                     <h4 className="h4 title_content mb-0 text-gray-800">

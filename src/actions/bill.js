@@ -307,7 +307,6 @@ export const fetchAllBill = (
         type: Types.SHOW_LOADING_LAZY,
         loading: "show",
       });
-
       billApi
         .fetchAllBill(store_code, page, branch_id, params, params_agency)
         .then((res) => {

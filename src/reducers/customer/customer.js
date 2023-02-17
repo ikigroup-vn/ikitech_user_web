@@ -8,6 +8,8 @@ var initialState = {
   isFromPosAndSave: false,
   customerCreated: {},
   pointHistory: [],
+  addedPointSuccessfully: false,
+  updatedRoleSuccessfully: false,
 };
 
 export const customer = (state = initialState, action) => {
@@ -30,30 +32,10 @@ export const customer = (state = initialState, action) => {
       newState.pointHistory = action.data;
       return newState;
     case Types.UPDATE_ROLE_CUSTOMER_FOR_INTERFACE:
-      const copyState = JSON.parse(JSON.stringify(newState));
-      const newAllCustomers = [];
-      copyState.allCustomer.data.forEach((element) => {
-        if (element.id === action.data.id) {
-          newAllCustomers.push(action.data);
-          return;
-        }
-        newAllCustomers.push(element);
-      });
-      copyState.allCustomer.data = newAllCustomers;
-      newState.allCustomer = copyState.allCustomer;
+      newState.updatedRoleSuccessfully = action.data;
       return newState;
     case Types.ADD_SUB_POINT_CUSTOMER:
-      const cloneState = JSON.parse(JSON.stringify(newState));
-      const newAllCustomersChangePoint = [];
-      cloneState.allCustomer.data.forEach((customer) => {
-        if (customer.id === action.data.id) {
-          newAllCustomersChangePoint.push(action.data);
-          return;
-        }
-        newAllCustomersChangePoint.push(customer);
-      });
-      cloneState.allCustomer.data = newAllCustomersChangePoint;
-      newState.allCustomer = cloneState.allCustomer;
+      newState.addedPointSuccessfully = action.data;
       return newState;
     default:
       return newState;

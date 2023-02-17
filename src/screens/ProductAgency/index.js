@@ -8,13 +8,17 @@ import * as Types from "../../constants/ActionType";
 import Alert from "../../components/Partials/Alert";
 import Pagination from "../../components/ProductAgency/Pagination";
 import NotAccess from "../../components/Partials/NotAccess";
-import { connect } from "react-redux";
+import { connect, shallowEqual } from "react-redux";
 import Loading from "../Loading";
 import * as productAction from "../../actions/product";
 import * as agencyAction from "../../actions/agency";
 import { getQueryParams } from "../../ultis/helpers";
 
 import history from "../../history";
+import ModalUpdatePercentDiscount from "./ModalUpdatePercentDiscount";
+import ModalUpdatePercentDiscountAll from "./ModalUpdatePercentDiscountAll";
+import ModalUpdateCommission from "./ModalUpdateCommission";
+import ModalUpdateCommissionAll from "./ModalUpdateCommissionAll";
 
 class Product extends Component {
   constructor(props) {
@@ -36,6 +40,7 @@ class Product extends Component {
       searchValue: new URL(document.location).searchParams.get("search") || "",
       page: new URL(document.location).searchParams.get("page") || 1,
       numPage: new URL(document.location).searchParams.get("limit") || 20,
+      arrayCheckBox: [],
     };
   }
 
@@ -59,6 +64,12 @@ class Product extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     var { store_code, agency_type_id } = this.props.match.params;
     var { searchValue, numPage } = this.state;
+    const {
+      updatedPercentDiscountSuccessfully,
+      updatedCommissionSuccessfully,
+      resetPercentDiscountSuccessfully,
+      resetCommissionSuccessfully,
+    } = this.props;
     if (this.state.page != nextState.page || numPage != nextState.numPage) {
       var params = `&search=${searchValue}&limit=${nextState.numPage}&agency_type_id=${agency_type_id}`;
       this.props.fetchAllProduct(
@@ -68,8 +79,50 @@ class Product extends Component {
         agency_type_id
       );
     }
+    if (
+      !shallowEqual(
+        updatedPercentDiscountSuccessfully,
+        nextProps.updatedPercentDiscountSuccessfully
+      ) &&
+      nextProps.updatedPercentDiscountSuccessfully
+    ) {
+      window.$(".modal").modal("hide");
+      resetPercentDiscountSuccessfully();
+      const paramsPercentDiscount = `&search=${searchValue}&limit=${numPage}&agency_type_id=${agency_type_id}`;
+      this.props.fetchAllProduct(
+        store_code,
+        nextState.page,
+        paramsPercentDiscount,
+        agency_type_id
+      );
+      this.setArrayCheckBox([]);
+    }
+    if (
+      !shallowEqual(
+        updatedCommissionSuccessfully,
+        nextProps.updatedCommissionSuccessfully
+      ) &&
+      nextProps.updatedCommissionSuccessfully
+    ) {
+      window.$(".modal").modal("hide");
+      resetCommissionSuccessfully();
+      const paramsCommission = `&search=${searchValue}&limit=${numPage}&agency_type_id=${agency_type_id}`;
+      this.props.fetchAllProduct(
+        store_code,
+        nextState.page,
+        paramsCommission,
+        agency_type_id
+      );
+      this.setArrayCheckBox([]);
+    }
+
     return true;
   }
+  setArrayCheckBox = (arrayCheckBox) => {
+    this.setState({
+      arrayCheckBox,
+    });
+  };
   componentDidMount() {
     var { store_code, agency_type_id } = this.props.match.params;
     var { searchValue, numPage } = this.state;
@@ -173,7 +226,7 @@ class Product extends Component {
     if (this.props.auth) {
       var { products } = this.props;
       var { store_code, agency_type_id } = this.props.match.params;
-      var { searchValue, page, numPage } = this.state;
+      var { searchValue, page, numPage, arrayCheckBox } = this.state;
       var { insert, update, _delete, isShow } = this.state;
 
       return (
@@ -247,48 +300,55 @@ class Product extends Component {
                             </p>
                           </form>
                           <div style={{ display: "flex" }}>
-                            <div style={{ display: "flex" }}>
-                              <span
-                                style={{
-                                  margin: "20px 10px auto auto",
-                                }}
-                              >
-                                Hiển thị
-                              </span>
-                              <select
-                                style={{
-                                  margin: "auto",
-                                  marginTop: "10px",
-                                  marginRight: "20px",
-                                  width: "70px",
-                                }}
-                                onChange={this.onChangeNumPage}
-                                value={numPage}
-                                name="numPage"
-                                class="form-control"
-                              >
-                                <option value="10">10</option>
-                                <option value="20" selected>
-                                  20
-                                </option>
-                                <option value="50">50</option>
-                              </select>
+                            {arrayCheckBox.length > 0 && (
+                              <>
+                                <div
+                                  className="btn btn-success"
+                                  style={{
+                                    margin: "10px 20px auto auto",
+                                  }}
+                                  data-toggle="modal"
+                                  data-target="#updateCommission"
+                                >
+                                  Sủa hoa hồng được chọn
+                                </div>
+                                <div
+                                  className="btn btn-primary"
+                                  style={{
+                                    margin: "10px 20px auto auto",
+                                  }}
+                                  data-toggle="modal"
+                                  data-target="#updatePercentDiscount"
+                                >
+                                  Sửa chiết khấu được chọn
+                                </div>
+                              </>
+                            )}
+                            <div
+                              className="btn btn-success"
+                              style={{
+                                margin: "10px 20px auto auto",
+                              }}
+                              data-toggle="modal"
+                              data-target="#updateCommissionAll"
+                            >
+                              Sủa hoa hồng cho tất cả
                             </div>
-
-                            <Pagination
-                              limit={numPage}
-                              searchValue={searchValue}
-                              passNumPage={this.passNumPage}
-                              store_code={store_code}
-                              products={products}
-                              agency_type_id={agency_type_id}
-                            />
+                            <div
+                              className="btn btn-primary"
+                              style={{
+                                margin: "10px 20px auto auto",
+                              }}
+                              data-toggle="modal"
+                              data-target="#updatePercentDiscountAll"
+                            >
+                              Sửa chiết khấu cho tất cả
+                            </div>
                           </div>
                         </div>
                       </div>
 
                       <div class="card-body">
-                        {console.log("priceeee: ", page)}
                         <Table
                           agency_type_id={agency_type_id}
                           insert={insert}
@@ -301,15 +361,51 @@ class Product extends Component {
                           handleMultiDelCallBack={this.handleMultiDelCallBack}
                           store_code={store_code}
                           products={products}
+                          setArrayCheckBox={this.setArrayCheckBox}
+                          arrayCheckBox={arrayCheckBox}
                         />
-                        <Pagination
-                          limit={numPage}
-                          searchValue={searchValue}
-                          passNumPage={this.passNumPage}
-                          store_code={store_code}
-                          products={products}
-                          agency_type_id={agency_type_id}
-                        />
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "flex-end",
+                          }}
+                        >
+                          <div style={{ display: "flex" }}>
+                            <span
+                              style={{
+                                margin: "20px 10px auto auto",
+                              }}
+                            >
+                              Hiển thị
+                            </span>
+                            <select
+                              style={{
+                                margin: "auto",
+                                marginTop: "10px",
+                                marginRight: "20px",
+                                width: "70px",
+                              }}
+                              onChange={this.onChangeNumPage}
+                              value={numPage}
+                              name="numPage"
+                              class="form-control"
+                            >
+                              <option value="10">10</option>
+                              <option value="20" selected>
+                                20
+                              </option>
+                              <option value="50">50</option>
+                            </select>
+                          </div>
+                          <Pagination
+                            limit={numPage}
+                            searchValue={searchValue}
+                            passNumPage={this.passNumPage}
+                            store_code={store_code}
+                            products={products}
+                            agency_type_id={agency_type_id}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -319,6 +415,25 @@ class Product extends Component {
               </div>
 
               <Footer />
+
+              <ModalUpdateCommission
+                store_code={store_code}
+                agency_type_id={agency_type_id}
+                arrayCheckBox={arrayCheckBox}
+              />
+              <ModalUpdateCommissionAll
+                store_code={store_code}
+                agency_type_id={agency_type_id}
+              />
+              <ModalUpdatePercentDiscount
+                store_code={store_code}
+                agency_type_id={agency_type_id}
+                arrayCheckBox={arrayCheckBox}
+              />
+              <ModalUpdatePercentDiscountAll
+                store_code={store_code}
+                agency_type_id={agency_type_id}
+              />
             </div>
           </div>
         </div>
@@ -339,6 +454,10 @@ const mapStateToProps = (state) => {
     allProductList: state.productReducers.product.allProductList,
     permission: state.authReducers.permission.data,
     types: state.agencyReducers.agency.allAgencyType,
+    updatedPercentDiscountSuccessfully:
+      state.agencyReducers.agency.updatedPercentDiscountSuccessfully,
+    updatedCommissionSuccessfully:
+      state.agencyReducers.agency.updatedCommissionSuccessfully,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -353,6 +472,18 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchAllAgencyType: (store_code) => {
       dispatch(agencyAction.fetchAllAgencyType(store_code));
+    },
+    resetPercentDiscountSuccessfully: () => {
+      dispatch({
+        type: Types.UPDATE_PERCENT_DISCOUNT_AGENCY,
+        data: false,
+      });
+    },
+    resetCommissionSuccessfully: () => {
+      dispatch({
+        type: Types.UPDATE_COMMISSION_AGENCY,
+        data: false,
+      });
     },
   };
 };

@@ -5,7 +5,7 @@ import Footer from "../../components/Partials/Footer";
 import Pagination from "../../components/Customer/Pagination";
 import Table from "../../components/Customer/Table";
 import { Redirect, Link } from "react-router-dom";
-import { connect } from "react-redux";
+import { connect, shallowEqual } from "react-redux";
 import Loading from "../Loading";
 import * as customerAction from "../../actions/customer";
 import Chat from "../../components/Chat";
@@ -32,6 +32,7 @@ import SidebarShowCustomersByReferralPhone from "../../components/Customer/Sideb
 import moment from "moment";
 import ModalUpdatePasswordImport from "./ModalUpdatePasswordImport";
 import history from "../../history";
+import * as saleAction from "../../actions/sale";
 
 const CustomerStyles = styled.div`
   .filter-search-customer {
@@ -203,11 +204,23 @@ class Customer extends Component {
     this.setState({
       paginate: 1,
     });
-    history.push(`/customer/${store_code}?page=1&search=${searchValue}`);
-    const params = `&search=${searchValue}&json_list_filter=${jsonListFilter}`;
-    this.fetchAllCustomer(store_code, 1, params);
+    if (this.isSale()) {
+      history.push(`/customer/${store_code}/sale?page=1&search=${searchValue}`);
+      const params = `&search=${searchValue}&json_list_filter=${jsonListFilter}`;
+      this.fetchListCustomerOfSale(store_code, 1, params);
+    } else {
+      history.push(`/customer/${store_code}?page=1&search=${searchValue}`);
+      const params = `&search=${searchValue}&json_list_filter=${jsonListFilter}`;
+      this.fetchAllCustomer(store_code, 1, params);
+    }
   };
 
+  fetchListCustomerOfSale = (store_code, page, params) => {
+    this.setState({
+      currentParams: params,
+    });
+    this.props.fetchListCustomerOfSale(store_code, page, params);
+  };
   fetchAllCustomer = (store_code, page, params) => {
     this.setState({
       currentParams: params,
@@ -221,15 +234,41 @@ class Customer extends Component {
     ) {
       var permissions = nextProps.permission;
       var chat_allow = permissions.chat_allow;
-
-      var isShow = permissions.customer_list;
+      var isShow = permissions.customer_list || this.isSale();
       this.setState({ isLoading: true, isShow, chat_allow });
     }
   }
+  shouldComponentUpdate(nextProps, nextState) {
+    const {
+      addedCustomerOfSaleSuccessfully,
+      resetAddedCustomerOfSaleSuccessfully,
+    } = this.props;
+    const { store_code } = this.props.match.params;
+    if (
+      !shallowEqual(
+        addedCustomerOfSaleSuccessfully,
+        nextProps.addedCustomerOfSaleSuccessfully
+      ) &&
+      nextProps.addedCustomerOfSaleSuccessfully
+    ) {
+      this.fetchListCustomerOfSale(store_code, 1, "");
+      resetAddedCustomerOfSaleSuccessfully();
+    }
+    return true;
+  }
+  isSale = () => {
+    const pathName = window.location.pathname.split("/");
+    const isCheckedSale = pathName[1] === "customer" && pathName[3] === "sale";
+    return isCheckedSale;
+  };
 
   exportAllListOrder = () => {
     var { store_code } = this.props.match.params;
-    this.props.exportAllListCustomer(store_code, this.state.currentParams);
+    this.props.exportAllListCustomer(
+      store_code,
+      this.state.currentParams,
+      this.isSale()
+    );
   };
 
   componentDidMount() {
@@ -241,7 +280,15 @@ class Customer extends Component {
       paginate: page,
       searchValue: search,
     });
-    this.fetchAllCustomer(this.props.match.params.store_code, page, params);
+    if (this.isSale()) {
+      this.fetchListCustomerOfSale(
+        this.props.match.params.store_code,
+        page,
+        params
+      );
+    } else {
+      this.fetchAllCustomer(this.props.match.params.store_code, page, params);
+    }
     this.props.fetchPlaceProvince();
     this.props.fetchAllAgencyType(this.props.match.params.store_code);
   }
@@ -381,7 +428,11 @@ class Customer extends Component {
     var params = `&search=${searchValue}&json_list_filter=${JSON.stringify(
       newOptionConditionFormat
     )}`;
-    this.fetchAllCustomer(store_code, 1, params);
+    if (this.isSale()) {
+      this.fetchListCustomerOfSale(store_code, 1, params);
+    } else {
+      this.fetchAllCustomer(store_code, 1, params);
+    }
     localStorage.setItem("optionsFilter", JSON.stringify(newOptionCondition));
   };
   setShowCustomersByReferralPhone = (isShowed) => {
@@ -495,20 +546,7 @@ class Customer extends Component {
     reader.readAsBinaryString(f);
   };
   render() {
-    var { customer, chat, customers } = this.props;
-    var customerImg =
-      typeof customer.avatar_image == "undefined" ||
-      customer.avatar_image == null
-        ? Env.IMG_NOT_FOUND
-        : customer.avatar_image;
-    var customerId =
-      typeof customer.id == "undefined" || customer.id == null
-        ? null
-        : customer.id;
-    var customerName =
-      typeof customer.name == "undefined" || customer.name == null
-        ? "Trống"
-        : customer.name;
+    var { customer, customers, customersSale } = this.props;
 
     var { store_code } = this.props.match.params;
     var {
@@ -538,8 +576,9 @@ class Customer extends Component {
             wards={wards}
             district={district}
             province={province}
-            customers={customers}
+            customers={this.isSale() ? customersSale : customers}
             setSearchValue={this.setSearchValue}
+            isSale={this.isSale}
           />
           <ModalEdit
             openModalEdit={openModalEdit}
@@ -585,25 +624,30 @@ class Customer extends Component {
                             Export Excel
                           </span>
                         </button>
-                        <button
-                          style={{ marginRight: "10px" }}
-                          onClick={this.showDialogImportExcel}
-                          class={`btn btn-primary btn-icon-split btn-sm `}
-                        >
-                          <span class="icon text-white-50">
-                            <i class="fas fa-file-import"></i>
-                          </span>
-                          <span style={{ color: "white" }} class="text">
-                            Import Excel
-                          </span>
-                        </button>
-                        <input
-                          id="file-excel-import-customer"
-                          type="file"
-                          name="name"
-                          hidden
-                          onChange={this.onChangeExcel}
-                        />
+                        {!this.isSale() && (
+                          <>
+                            <button
+                              style={{ marginRight: "10px" }}
+                              onClick={this.showDialogImportExcel}
+                              class={`btn btn-primary btn-icon-split btn-sm `}
+                            >
+                              <span class="icon text-white-50">
+                                <i class="fas fa-file-import"></i>
+                              </span>
+                              <span style={{ color: "white" }} class="text">
+                                Import Excel
+                              </span>
+                            </button>
+                            <input
+                              id="file-excel-import-customer"
+                              type="file"
+                              name="name"
+                              hidden
+                              onChange={this.onChangeExcel}
+                            />
+                          </>
+                        )}
+
                         <a
                           data-toggle="modal"
                           data-target="#modalCreateCustomer"
@@ -707,6 +751,7 @@ class Customer extends Component {
                           handleSetInfor={this.handleSetInfor}
                           paginate={paginate}
                           searchValue={searchValue}
+                          currentParams={this.state.currentParams}
                           chat_allow={chat_allow}
                           showChatBox={showChatBox}
                           handleShowChatBox={this.handleShowChatBox}
@@ -717,13 +762,17 @@ class Customer extends Component {
                           setShowCustomersByReferralPhone={
                             this.setShowCustomersByReferralPhone
                           }
+                          isSale={this.isSale}
+                          fetchAllCustomer={this.fetchAllCustomer}
+                          fetchListCustomerOfSale={this.fetchListCustomerOfSale}
                         />
 
                         <Pagination
                           getPaginate={this.getPaginate}
                           store_code={store_code}
                           searchValue={searchValue}
-                          customers={customers}
+                          isSale={this.isSale}
+                          customers={this.isSale() ? customersSale : customers}
                         />
                       </div>
                     </div>
@@ -736,16 +785,6 @@ class Customer extends Component {
               <Footer />
             </div>
             {/* <Chat customerImg = {customerImg} customerId = {customerId} chat = {chat} store_code = {store_code}/> */}
-
-            <Chat
-              customerName={customerName}
-              customerImg={customerImg}
-              customerId={customerId}
-              chat={chat}
-              store_code={store_code}
-              closeChatBox={this.closeChatBox}
-              showChatBox={showChatBox}
-            ></Chat>
           </div>
           <SidebarShowCustomersByReferralPhone
             showCustomersByReferralPhone={showCustomersByReferralPhone}
@@ -801,6 +840,8 @@ class Customer extends Component {
             searchValue={searchValue}
             store_code={store_code}
             fetchAllCustomer={this.fetchAllCustomer}
+            fetchListCustomerOfSale={this.fetchListCustomerOfSale}
+            isSale={this.isSale}
           ></SidebarFilterCustomer>
         </CustomerStyles>
       );
@@ -825,6 +866,9 @@ const mapStateToProps = (state) => {
     province: state.placeReducers.province,
     district: state.placeReducers.district,
     types: state.agencyReducers.agency.allAgencyType,
+    customersSale: state.saleReducers.sale.allCustomerOfSale,
+    addedCustomerOfSaleSuccessfully:
+      state.saleReducers.sale.addedCustomerOfSaleSuccessfully,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -832,8 +876,10 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchAllCustomer: (id, page, params) => {
       dispatch(customerAction.fetchAllCustomer(id, page, params));
     },
-    exportAllListCustomer: (store_code, params) => {
-      dispatch(customerAction.exportAllListCustomer(store_code, params));
+    exportAllListCustomer: (store_code, params, isSale) => {
+      dispatch(
+        customerAction.exportAllListCustomer(store_code, params, isSale)
+      );
     },
     importAllListCustomer: (store_code, data) => {
       dispatch(customerAction.importAllListCustomer(store_code, data));
@@ -867,6 +913,17 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     showError: (error) => {
       dispatch(error);
+    },
+    fetchListCustomerOfSale: (store_code, page, queryString) => {
+      dispatch(
+        saleAction.fetchListCustomerOfSale(store_code, page, queryString)
+      );
+    },
+    resetAddedCustomerOfSaleSuccessfully: () => {
+      dispatch({
+        type: Types.ADD_CUSTOMER_OF_SALE,
+        data: false,
+      });
     },
   };
 };

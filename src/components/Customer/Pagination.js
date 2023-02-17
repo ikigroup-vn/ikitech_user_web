@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import getChannel from "../../ultis/channel";
 import * as customerAction from "../../actions/customer";
+import * as saleAction from "../../actions/sale";
 import history from "../../history";
 
 class Pagination extends Component {
@@ -13,10 +14,25 @@ class Pagination extends Component {
   }
 
   passPagination = (page) => {
-    const { searchValue, store_code } = this.props;
-    history.push(`/customer/${store_code}?page=${page}&search=${searchValue}`);
+    const {
+      searchValue,
+      store_code,
+      isSale,
+      fetchAllCustomer,
+      fetchListCustomerOfSale,
+    } = this.props;
     const params = `&search=${searchValue}`;
-    this.props.fetchAllCustomer(store_code, page, params);
+    if (isSale()) {
+      history.push(
+        `/customer/${store_code}/sale?page=${page}&search=${searchValue}`
+      );
+      fetchListCustomerOfSale(store_code, page, params);
+    } else {
+      history.push(
+        `/customer/${store_code}?page=${page}&search=${searchValue}`
+      );
+      fetchAllCustomer(store_code, page, params);
+    }
     this.props.getPaginate(page);
   };
   handlePaginationReferralPhone = (page) => {
@@ -95,6 +111,11 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     fetchAllCustomer: (store_code, page, params) => {
       dispatch(customerAction.fetchAllCustomer(store_code, page, params));
+    },
+    fetchListCustomerOfSale: (store_code, page, queryString) => {
+      dispatch(
+        saleAction.fetchListCustomerOfSale(store_code, page, queryString)
+      );
     },
   };
 };

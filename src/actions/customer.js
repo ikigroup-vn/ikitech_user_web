@@ -1,6 +1,7 @@
 import * as Types from "../constants/ActionType";
 import history from "../history";
 import * as customerApi from "../data/remote/customer";
+import * as saleApi from "../data/remote/sale";
 import * as chatApi from "../data/remote/chat";
 import XlsxPopulate from "xlsx-populate";
 import { saveAs } from "file-saver";
@@ -33,12 +34,131 @@ export const fetchAllCustomer = (
   };
 };
 
-export const exportAllListCustomer = (store_code, params) => {
+export const exportAllListCustomer = (store_code, params, isSale) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
     });
+    if (isSale) {
+      const queryString = params + "&is_export=true";
+      saleApi
+        .fetchListCustomerOfSale(store_code, 1, queryString)
+        .then((res) => {
+          dispatch({
+            type: Types.SHOW_LOADING_LAZY,
+            loading: "hide",
+          });
+          if (res.data.code == 200) {
+            if (res.data.data.data.length > 0) {
+              var newArray = [];
+
+              for (const item of res.data.data.data) {
+                var newItem = {};
+                var arangeKeyItem = {
+                  name: item.name ?? "",
+                  phone_number: item.phone_number ?? "",
+                  address_detail: item.address_detail ?? "",
+                  wards_name: item.wards_name ?? "",
+                  district_name: item.district_name ?? "",
+                  province_name: item.province_name ?? "",
+                  sex:
+                    item.sex == 1
+                      ? "Nữ"
+                      : item.sex == 2
+                      ? "Nam"
+                      : "Không xác định",
+                  date_of_birth:
+                    item.date_of_birth == null
+                      ? ""
+                      : formatDDMMYYYY(item.date_of_birth),
+                  points: item.points ?? "",
+                  official: item.official,
+                  created_at: item.created_at,
+                  updated_at: item.updated_at,
+                  debt: item.debt,
+                  total_final_all_status: item.total_final_all_status,
+                  total_final_without_refund: item.total_final_without_refund,
+                  role: item.is_agency
+                    ? "Đại lý"
+                    : item.is_collaborator
+                    ? "Cộng tác viên"
+                    : "Khách hàng",
+                  agency_type: item.agency_type,
+                };
+                Object.entries(arangeKeyItem).forEach(([key, value], index) => {
+                  if (key == "name") {
+                    newItem["Tên khách hàng"] = value;
+                  }
+                  if (key == "phone_number") {
+                    newItem["Số điện thoại"] = value;
+                  }
+                  if (key == "wards_name") {
+                    newItem["Phường/Xã"] = value;
+                  }
+                  if (key == "district_name") {
+                    newItem["Quận/Huyện"] = value;
+                  }
+                  if (key == "province_name") {
+                    newItem["Tỉnh/TP"] = value;
+                  }
+                  if (key == "address_detail") {
+                    newItem["Địa chỉ chi tiết"] = value;
+                  }
+                  if (key == "sex") {
+                    newItem["Giới tính"] = value;
+                  }
+                  if (key == "date_of_birth") {
+                    newItem["Ngày sinh"] = value;
+                  }
+                  if (key == "points") {
+                    newItem["Xu hiện tại"] = value;
+                  }
+                  if (key == "official") {
+                    newItem["Chính thức"] = value;
+                  }
+                  if (key == "created_at") {
+                    newItem["Ngày tạo"] = value;
+                  }
+                  if (key == "updated_at") {
+                    newItem["Ngày cập nhật"] = value;
+                  }
+                  if (key == "debt") {
+                    newItem["Nợ hiện tại"] = value;
+                  }
+                  if (key == "total_final_all_status") {
+                    newItem["Tổng bán"] = value;
+                  }
+                  if (key == "total_final_without_refund") {
+                    newItem["Tổng bán trừ trả hàng và hủy"] = value;
+                  }
+                  if (key == "role") {
+                    newItem["Vai trò"] = value;
+                  }
+                  if (key == "agency_type") {
+                    newItem["Cấp đại lý"] =
+                      value && item.is_agency ? value.name : "";
+                  }
+                });
+
+                newArray.push(newItem);
+              }
+              var header = [];
+              if (newArray.length > 0) {
+                Object.entries(newArray[0]).forEach(([key, value], index) => {
+                  header.push(key);
+                });
+              }
+              console.log(header);
+              saveAsExcel(
+                { data: newArray, header: header },
+                "DANH SÁCH KHÁCH HÀNG CỦA SALE.xlsx"
+              );
+            }
+          }
+        });
+    } else {
+    }
     customerApi
       .fetchAllCustomer(store_code, 1, params, "", true)
       .then((res) => {
@@ -205,7 +325,7 @@ function getSheetData(data, header) {
   return sheetData;
 }
 
-async function saveAsExcel(value) {
+async function saveAsExcel(value, nameFile = "DANH SACH KHACH HANG.xlsx") {
   var data = value.data;
   var data_header = value.header;
   XlsxPopulate.fromBlankAsync().then(async (workbook) => {
@@ -224,7 +344,7 @@ async function saveAsExcel(value) {
     range.style("border", true);
 
     return workbook.outputAsync().then((res) => {
-      saveAs(res, "DANH SACH KHACH HANG.xlsx");
+      saveAs(res, nameFile);
     });
   });
 }
@@ -467,7 +587,7 @@ export const changeTypeRoleCustomer = (store_code, id, data) => {
       .then((res) => {
         dispatch({
           type: Types.UPDATE_ROLE_CUSTOMER_FOR_INTERFACE,
-          data: res.data.data,
+          data: res.data.success,
         });
         dispatch({
           type: Types.SHOW_LOADING,
@@ -484,6 +604,7 @@ export const changeTypeRoleCustomer = (store_code, id, data) => {
         });
       })
       .catch(function (error) {
+        console.log("return ~ error", error);
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",
@@ -517,7 +638,7 @@ export const changePointForCustomer = (store_code, id, data) => {
         if (res.data.code === 200) {
           dispatch({
             type: Types.ADD_SUB_POINT_CUSTOMER,
-            data: res.data.data,
+            data: res.data.success,
           });
         }
       })
