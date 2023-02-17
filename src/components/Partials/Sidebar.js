@@ -214,10 +214,7 @@ class Sidebar extends Component {
                 <li
                   className={`nav-item   ${active} ${displayWithTabItem}  ${
                     _class[link.class] == true ||
-                    (link.class == "isVip" &&
-                      this.props.badges.config_user_vip != null &&
-                      typeof this.props.badges.config_user_vip !=
-                        "undefined") ||
+                    (link.class == "isVip" && this.props.user?.is_vip) ||
                     typeof link.class == "undefined" ||
                     link.class == null ||
                     displayWithTabItem == "show"
@@ -281,10 +278,11 @@ class Sidebar extends Component {
     if (link?.length > 0) {
       for (const item of link) {
         if (item.isVip == true) {
-          return this.props.badges.config_user_vip == null ||
-            typeof this.props.badges.config_user_vip == "undefined"
-            ? true
-            : false;
+          // return this.props.badges.config_user_vip == null ||
+          //   typeof this.props.badges.config_user_vip == "undefined"
+          //   ? true
+          //   : false;
+          return this.props.user.is_vip ? false : true;
         }
         if (typeof item.class == "undefined" || item.class == null) {
           return false;
@@ -402,6 +400,7 @@ const mapStateToProps = (state) => {
     isLoadPermission: state.authReducers.permission.isLoadPermission,
     badges: state.badgeReducers.allBadge,
     customers: state.customerSaleReducers.customer_sales.allCustomer,
+    user: state.userReducers.user.userID,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {

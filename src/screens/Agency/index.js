@@ -21,6 +21,8 @@ import Type from "../../components/Agency/Type";
 
 import NotAccess from "../../components/Partials/NotAccess";
 import BonusProgram from "../../components/Agency/BonusProgram";
+import HistoryPayment from "../../components/Agency/HistoryPayment";
+import TopComission from "../../components/Agency/TopComiss";
 
 class agency extends Component {
   constructor(props) {
@@ -33,13 +35,13 @@ class agency extends Component {
       modalupdate: {},
       tabId: 0,
     };
-    this.defaultIndex = this.props.match.params.action == "request_payment" ? 2 : 0
+    this.defaultIndex =
+      this.props.match.params.action == "request_payment" ? 2 : 0;
   }
 
   handleDelCallBack = (modal) => {
     this.setState({ modalremove: modal });
   };
-
 
   handleEditCallBack = (modal) => {
     this.setState({ modalupdate: modal });
@@ -52,164 +54,306 @@ class agency extends Component {
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.isLoading != true && typeof this.props.permission.product_list != "undefined") {
-      var permissions = this.props.permission
-      var payment_request_list = permissions.agency_payment_request_list
-      var config = permissions.agency_config
-      var payment_request_history = permissions.agency_payment_request_history
-      var agency_list = permissions.agency_list
-      var payment_request_solve = permissions.agency_payment_request_solve
+    if (
+      this.state.isLoading != true &&
+      typeof this.props.permission.product_list != "undefined"
+    ) {
+      var permissions = this.props.permission;
+      var payment_request_list = permissions.agency_payment_request_list;
+      var config = permissions.agency_config;
+      var payment_request_history = permissions.agency_payment_request_history;
+      var agency_list = permissions.agency_list;
+      var payment_request_solve = permissions.agency_payment_request_solve;
 
-      var isShow = payment_request_list == false && config == false && payment_request_history == false && agency_list == false ? false : true
+      var isShow =
+        payment_request_list == false &&
+        config == false &&
+        payment_request_history == false &&
+        agency_list == false
+          ? false
+          : true;
 
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
-      var tabIndex = urlParams.get('tab-index');
+      var tabIndex = urlParams.get("tab-index");
       if (!tabIndex) {
         tabIndex = 0;
       }
       this.defaultIndex = tabIndex;
 
       this.setState({
-        isLoading: true, 
-        agency_list: true, 
-        payment_request_list: true, 
-        config: true, 
-        payment_request_history: true, 
-        payment_request_solve: true, 
+        isLoading: true,
+        agency_list: true,
+        payment_request_list: true,
+        config: true,
+        payment_request_history: true,
+        payment_request_solve: true,
         isShow: true,
-        bonus_program:true
-      })
+        bonus_program: true,
+      });
     }
-
   }
   render() {
     var { store_code, id } = this.props.match.params;
-    var { tabId, 
-      tabDefault, 
-      agency_list, 
-      payment_request_list, 
-      config, 
-      payment_request_history, 
-      payment_request_solve, 
+    var {
+      tabId,
+      tabDefault,
+      agency_list,
+      payment_request_list,
+      config,
+      payment_request_history,
+      payment_request_solve,
       bonus_program,
-      isShow } = this.state;
+      isShow,
+    } = this.state;
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
         <div className="col-10 col-10-wrapper">
-
           <div id="content-wrapper" className="d-flex flex-column">
             <div id="content">
               <Topbar store_code={store_code} />
-              {typeof isShow == "undefined" ? <div style={{ height: "500px" }}></div> :
-                isShow == true ?
+              {typeof isShow == "undefined" ? (
+                <div style={{ height: "500px" }}></div>
+              ) : isShow == true ? (
+                <div className="container-fluid">
+                  <Alert
+                    type={Types.ALERT_UID_STATUS}
+                    alert={this.props.alert}
+                  />
+                  <div
+                    style={{ display: "flex", justifyContent: "space-between" }}
+                  >
+                    <h4 className="h4 title_content mb-0 text-gray-800">
+                      Đại lý
+                    </h4>{" "}
+                  </div>
+                  <br></br>
 
-                  <div className="container-fluid">
-                    <Alert
-                      type={Types.ALERT_UID_STATUS}
-                      alert={this.props.alert}
-                    />
-                    <div style={{ display: "flex", justifyContent: "space-between" }}>
-                      <h4 className="h4 title_content mb-0 text-gray-800">
-                        Đại lý
-                      </h4>{" "}
-                    </div>
-                    <br></br>
-
-                    <div className="card shadow mb-4">
-                      <div className="card-body">
-                        <Tabs
-                          defaultIndex={this.defaultIndex}
-                          onSelect={(index) => this.fetchDataOnTap(index)}
-                        >
-                          <TabList>
-                            {/* {
-                              config == true ? <Tab>
+                  <div className="card shadow mb-4">
+                    <div className="card-body">
+                      <Tabs
+                        defaultIndex={this.defaultIndex}
+                        onSelect={(index) => this.fetchDataOnTap(index)}
+                      >
+                        <TabList>
+                          {/* {config == true ? (
+                            <Tab>
+                              <Link to={"?tab-index=0"}>
                                 <i class="fa fa-cog"></i>
                                 <span>Cấu hình hoa hồng</span>
-                              </Tab> : null
-                            } */}
-                            {
-                              config == true ? <Tab>
+                              </Link>
+                            </Tab>
+                          ) : null} */}
+                          {config == true ? (
+                            <Tab>
+                              <Link
+                                to={"?tab-index=0"}
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  columnGap: "5px",
+                                }}
+                              >
                                 <i class="fa fa-cogs"></i>
                                 <span>Cấu hình đại lý</span>
-                              </Tab> : null
-                            }
-                            {
-                              agency_list == true ? <Tab>
+                              </Link>
+                            </Tab>
+                          ) : null}
+                          {agency_list == true ? (
+                            <Tab>
+                              <Link
+                                to={"?tab-index=1"}
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  columnGap: "5px",
+                                }}
+                              >
                                 <i class="fa fa-users"></i>
                                 <span>Danh sách đại lý</span>
-                              </Tab> : null
-                            }
+                              </Link>
+                            </Tab>
+                          ) : null}
 
-                            {
-                              payment_request_list == true ? <Tab>
+                          {payment_request_list == true ? (
+                            <Tab>
+                              <Link
+                                to={"?tab-index=2"}
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  columnGap: "5px",
+                                }}
+                              >
                                 <i class="fa fa-chart-bar"></i>
-                                <span> Top doanh số</span>
-                              </Tab> : null
-                            }
+                                <span> Top nhập hàng</span>
+                              </Link>
+                            </Tab>
+                          ) : null}
 
-                            {   
-                              bonus_program == true ? <Tab>
+                          {bonus_program == true ? (
+                            <Tab>
+                              <Link
+                                to={"?tab-index=3"}
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  columnGap: "5px",
+                                }}
+                              >
                                 <i class="fa fa-gift"></i>
                                 <span>Chương trình thưởng đại lý</span>
-                              </Tab> : null
-                            }
-                            {/* {
-                              payment_request_history == true ? <Tab>
+                              </Link>
+                            </Tab>
+                          ) : null}
+                          {payment_request_list == true ? (
+                            <Tab>
+                              <Link
+                                to={"?tab-index=4"}
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  columnGap: "5px",
+                                }}
+                              >
+                                {" "}
+                                <i class="fa fa-chart-bar"></i>
+                                <span> Top hoa hồng</span>
+                              </Link>
+                            </Tab>
+                          ) : null}
+                          {payment_request_list == true ? (
+                            <Tab>
+                              <Link
+                                to={"?tab-index=5"}
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  columnGap: "5px",
+                                }}
+                              >
+                                {" "}
                                 <i class="fa fa-money"></i>
-                                <span> Lịch sử yêu cầu thanh toàn</span>
-                              </Tab> : null
-                            } */}
+                                <span> Danh sách yêu cầu thanh toán</span>
+                              </Link>
+                            </Tab>
+                          ) : null}
+                          {payment_request_history == true ? (
+                            <Tab>
+                              <Link
+                                to={"?tab-index=6"}
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  columnGap: "5px",
+                                }}
+                              >
+                                {" "}
+                                <i class="fa fa-history"></i>
+                                <span> Lịch sử thanh toán</span>
+                              </Link>
+                            </Tab>
+                          ) : null}
+                        </TabList>
 
-
-
-                          </TabList>
-
-                          {/* {config == true ? <TabPanel>
+                        {/* {config == true ? (
+                          <TabPanel>
                             <Config
                               tabId={tabId}
                               store_code={store_code}
                               handleEditCallBack={this.handleEditCallBack}
                               handleDelCallBack={this.handleDelCallBack}
                             />
-                          </TabPanel> : null} */}
-                          {agency_list == true ? <TabPanel>
-                            <Type tabId={tabId} store_code={store_code} />
-                          </TabPanel> : null}
-                          {agency_list == true ? <TabPanel>
+                          </TabPanel>
+                        ) : null} */}
+                        {agency_list == true ? (
+                          <TabPanel>
+                            <Type tabId={tabId} store_code={store_code}>
+                              <Config
+                                tabId={tabId}
+                                store_code={store_code}
+                                handleEditCallBack={this.handleEditCallBack}
+                                handleDelCallBack={this.handleDelCallBack}
+                              />
+                            </Type>
+                          </TabPanel>
+                        ) : null}
+                        {agency_list == true ? (
+                          <TabPanel>
                             <ListAgency tabId={tabId} store_code={store_code} />
-                          </TabPanel> : null}
-                          {payment_request_list == true ? <TabPanel>
-                            <TopReport paramId={id} tabId={tabId} store_code={store_code} payment_request_solve={payment_request_solve} />
-                          </TabPanel> : null}
-                          {bonus_program == true ? <TabPanel>
-                            <BonusProgram paramId={id} tabId={tabId} store_code={store_code} payment_request_solve={payment_request_solve} />
-                          </TabPanel> : null}
-                          {/* {payment_request_history == true ? <TabPanel>
-                            <HistoryPayment tabId={tabId} store_code={store_code} />
-                          </TabPanel> : null} */}
-
-
-
-
-                        </Tabs>
-                      </div>
+                          </TabPanel>
+                        ) : null}
+                        {payment_request_list == true ? (
+                          <TabPanel>
+                            <TopReport
+                              paramId={id}
+                              tabId={tabId}
+                              store_code={store_code}
+                              payment_request_solve={payment_request_solve}
+                            />
+                          </TabPanel>
+                        ) : null}
+                        {bonus_program == true ? (
+                          <TabPanel>
+                            <BonusProgram
+                              paramId={id}
+                              tabId={tabId}
+                              store_code={store_code}
+                              payment_request_solve={payment_request_solve}
+                            />
+                          </TabPanel>
+                        ) : null}
+                        {payment_request_list == true ? (
+                          <TabPanel>
+                            <TopComission
+                              paramId={id}
+                              tabId={tabId}
+                              store_code={store_code}
+                              payment_request_solve={payment_request_solve}
+                            />
+                          </TabPanel>
+                        ) : null}
+                        {payment_request_list == true ? (
+                          <TabPanel>
+                            <RequestPayment
+                              paramId={id}
+                              tabId={tabId}
+                              store_code={store_code}
+                              payment_request_solve={payment_request_solve}
+                            />
+                          </TabPanel>
+                        ) : null}
+                        {payment_request_history == true ? (
+                          <TabPanel>
+                            <HistoryPayment
+                              tabId={tabId}
+                              store_code={store_code}
+                            />
+                          </TabPanel>
+                        ) : null}
+                      </Tabs>
                     </div>
                   </div>
-                  : <NotAccess />}
-
+                </div>
+              ) : (
+                <NotAccess />
+              )}
             </div>
             <ModalCreate store_code={store_code} />
-            <ModalRemove modal={this.state.modalremove} store_code={store_code} />
-            <ModalUpdate modal={this.state.modalupdate} store_code={store_code} />
+            <ModalRemove
+              modal={this.state.modalremove}
+              store_code={store_code}
+            />
+            <ModalUpdate
+              modal={this.state.modalupdate}
+              store_code={store_code}
+            />
 
             <Footer />
           </div>
         </div>
       </div>
-
     );
   }
 }
@@ -219,7 +363,6 @@ const mapStateToProps = (state) => {
     auth: state.authReducers.login.authentication,
     alert: state.agencyReducers.alert.alert_uid_config,
     permission: state.authReducers.permission.data,
-
   };
 };
 const mapDispatchToProps = (dispatch, props) => {

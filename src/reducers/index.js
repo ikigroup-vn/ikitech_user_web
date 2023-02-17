@@ -52,6 +52,7 @@ import { requestRemoteReducers } from "./request_remote/index";
 import { mobileCheckinReducers } from "./mobile_checkin/index";
 import { bonusProductReducers } from "./bonus_product/index";
 import { trainReducers } from "./train/index";
+import { saleReducers } from "./sale";
 
 const appReducers = combineReducers({
   authReducers,
@@ -107,6 +108,7 @@ const appReducers = combineReducers({
   bonusProductReducers,
   trainReducers,
   gamificationReducers,
+  saleReducers,
 });
 
 export default appReducers;

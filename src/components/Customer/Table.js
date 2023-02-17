@@ -2,16 +2,18 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
 import history from "../../history";
-import { filter_arr, format, getQueryParams } from "../../ultis/helpers";
-import Pagination from "../../components/RevenueExpenditures/Pagination";
-import { formatDDMMYYYY, getDDMMYYYHis } from "../../ultis/date";
+import { getDDMMYYYHis } from "../../ultis/date";
 import styled from "styled-components";
 import ModalChangeRoleCustomer from "./ModalChangeRoleCustomer";
 import { connect, shallowEqual } from "react-redux";
-import * as customerAction from "../../actions/customer";
+import * as saleAction from "../../actions/sale";
+import * as staffAction from "../../actions/staff";
 import * as agencyAction from "../../actions/agency";
 import * as helper from "../../ultis/helpers";
 import ModalChangePoint from "./ModalChangePoint";
+import Select from "react-select";
+import { getBranchId } from "../../ultis/branchUtils";
+import * as Types from "../../constants/ActionType";
 
 const typeRoleCustomer = [
   {
@@ -125,6 +127,15 @@ const TableStyles = styled.div`
       }
     }
   }
+  .input__check,
+  .input__checkAll {
+    margin-bottom: 0;
+  }
+  .name_customer_hover {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 `;
 class Table extends Component {
   constructor(props) {
@@ -138,25 +149,85 @@ class Table extends Component {
       nameCustomer: "",
       customerSelectedPoint: {},
       isSub: true,
+      listItemSelected: [],
+      currentStaff: null,
     };
   }
 
   componentDidMount() {
-    const { fetchAllAgencyType, store_code } = this.props;
+    const { fetchAllAgencyType, fetchAllStaff, store_code } = this.props;
+    var params = `branch_id=${getBranchId()}`;
+
+    fetchAllStaff(store_code, null, params, null);
     fetchAllAgencyType(store_code);
     helper.loadExpandTable();
   }
   shouldComponentUpdate(nextProps, nextState) {
-    const { customers } = this.props;
-    const { customers: customersNext } = nextProps;
+    const {
+      customers,
+      customersSale,
+      addCustomerToSaleSuccessfully,
+      addedPointSuccessfully,
+      updatedRoleSuccessfully,
+      resetCustomerToSaleMessage,
+      resetAddPointMessage,
+      resetUpdateRoleMessage,
+      fetchListCustomerOfSale,
+      fetchAllCustomer,
+      isSale,
+      currentParams,
+      paginate,
+      store_code,
+    } = this.props;
+    const { customers: customersNext, customersSale: customersSaleNext } =
+      nextProps;
 
-    if (!shallowEqual(customers, customersNext)) {
+    if (
+      !shallowEqual(customers, customersNext) ||
+      !shallowEqual(customersSale, customersSaleNext)
+    ) {
+      this.setState({ listItemSelected: [], currentStaff: null });
+    }
+    if (
+      !shallowEqual(
+        addCustomerToSaleSuccessfully,
+        nextProps.addCustomerToSaleSuccessfully
+      ) &&
+      nextProps.addCustomerToSaleSuccessfully
+    ) {
+      this.setState({ listItemSelected: [], currentStaff: null });
+      resetCustomerToSaleMessage();
+    }
+    if (
+      !shallowEqual(addedPointSuccessfully, nextProps.addedPointSuccessfully) &&
+      nextProps.addedPointSuccessfully
+    ) {
+      if (isSale()) {
+        fetchListCustomerOfSale(store_code, paginate, currentParams);
+      } else {
+        fetchAllCustomer(store_code, paginate, currentParams);
+      }
+      this.setCustomerSelectedPoint({});
+      resetAddPointMessage();
+    }
+    if (
+      !shallowEqual(
+        updatedRoleSuccessfully,
+        nextProps.updatedRoleSuccessfully
+      ) &&
+      nextProps.updatedRoleSuccessfully
+    ) {
+      if (isSale()) {
+        fetchListCustomerOfSale(store_code, paginate, currentParams);
+      } else {
+        fetchAllCustomer(store_code, paginate, currentParams);
+      }
       this.setOpenShowModalChangeRole(false);
       this.setCustomerSelected(null);
       this.setTypeSaleCustomer(null);
       this.setTypeAgency(null);
       this.setShowListAgencies(false);
-      this.setCustomerSelectedPoint({});
+      resetUpdateRoleMessage();
     }
     return true;
   }
@@ -165,7 +236,11 @@ class Table extends Component {
       helper.loadExpandTable();
     }
   }
-
+  setCurrentStaff = (staff) => {
+    this.setState({
+      currentStaff: staff,
+    });
+  };
   showChatBox = (customerId, status) => {
     this.props.handleShowChatBox(customerId, status);
   };
@@ -173,17 +248,24 @@ class Table extends Component {
     this.props.handleSetInfor(item);
   };
   changePage = (store_code, customerId, e) => {
-    const { searchValue } = this.props;
+    const { searchValue, isSale } = this.props;
     if (
       e.target.className !== "total_referral" &&
       !e.target.closest(".select-role") &&
-      !e.target.closest(".exploder")
+      !e.target.closest(".exploder") &&
+      !e.target.closest(".input__check")
     ) {
       var { paginate } = this.props;
       if (e.target.name == "action") return;
-      history.push(
-        `/customer/detail/${store_code}/${customerId}?page=${paginate}&search=${searchValue}`
-      );
+      if (isSale()) {
+        history.push(
+          `/sale/customer/detail/${store_code}/${customerId}?page=${paginate}&search=${searchValue}`
+        );
+      } else {
+        history.push(
+          `/customer/detail/${store_code}/${customerId}?page=${paginate}&search=${searchValue}`
+        );
+      }
     }
   };
   handleShowCustomersByReferralPhone = (customerInfo) => {
@@ -253,19 +335,78 @@ class Table extends Component {
       isSub,
     });
   };
+  onChangeSelected = (e, idCustomer) => {
+    const name = e.target.name;
+    const { listItemSelected } = this.state;
+    const { customers, customersSale, isSale } = this.props;
+    var data = isSale() ? customersSale.data : customers.data;
+    if (name === "input__checkAll") {
+      if (listItemSelected.length === data.length) {
+        this.setState({ listItemSelected: [] });
+      } else {
+        const listId = data.reduce((prevData, nextData) => {
+          return [...prevData, nextData.id];
+        }, []);
+        this.setState({ listItemSelected: listId });
+      }
+    } else {
+      if (listItemSelected.includes(idCustomer)) {
+        const newListItemSelected = listItemSelected.filter(
+          (item) => item !== idCustomer
+        );
+        this.setState({ listItemSelected: newListItemSelected });
+      } else {
+        this.setState({ listItemSelected: [...listItemSelected, idCustomer] });
+      }
+    }
+  };
+
+  handleAddCustomerToSale = () => {
+    const { listItemSelected, currentStaff } = this.state;
+    const { store_code, addCustomerToSale } = this.props;
+    const data = {
+      list_customer_id: listItemSelected,
+      staff_id: currentStaff.value,
+    };
+
+    addCustomerToSale(store_code, data);
+  };
+
+  handleChangeStaffSelect = (staffs) => {
+    const options = staffs.reduce((prevData, currentData) => {
+      return [
+        ...prevData,
+        {
+          value: currentData.id,
+          label: currentData.name,
+        },
+      ];
+    }, []);
+    return [...options];
+  };
+  handleChangeStaff = (event) => {
+    this.setCurrentStaff(event);
+  };
 
   showData = (customer) => {
     var { store_code, paginate, types } = this.props;
-    const { customerSelected } = this.state;
+    const { customerSelected, listItemSelected } = this.state;
     var result = null;
     if (customer.length > 0) {
       result = customer.map((data, index) => {
         return (
           <>
-            <tr
-              className="hover-product"
-              onClick={(e) => this.changePage(store_code, data.id, e)}
-            >
+            <tr className="hover-product">
+              <td>
+                <input
+                  type="checkbox"
+                  name="input__check"
+                  className="input__check"
+                  value={listItemSelected.includes(data.id)}
+                  checked={listItemSelected.includes(data.id)}
+                  onChange={(e) => this.onChangeSelected(e, data.id)}
+                />
+              </td>
               <td className="btn-exploder">
                 <button
                   type="button"
@@ -276,9 +417,16 @@ class Table extends Component {
                 </button>
               </td>{" "}
               <td>
-                {(this.props.customers.current_page - 1) * 20 + index + 1}
+                {this.props.isSale()
+                  ? (this.props.customersSale.current_page - 1) * 20 + index + 1
+                  : (this.props.customers.current_page - 1) * 20 + index + 1}
               </td>
-              <td>{data.name}</td>
+              <td
+                onClick={(e) => this.changePage(store_code, data.id, e)}
+                className="primary name_customer_hover"
+              >
+                {data.name}
+              </td>
               <td>{data.phone_number}</td>
               {/* <td>{data.email == null ? "Chưa cập nhật" : data.email}</td> */}
               <td>
@@ -302,9 +450,6 @@ class Table extends Component {
                       data.total_final_without_refund
                     )
                   : 0}
-              </td>
-              <td>
-                {data.debt ? new Intl.NumberFormat().format(data.debt) : 0}
               </td>
               {getChannel() == IKITECH && (
                 <td
@@ -474,6 +619,16 @@ class Table extends Component {
                       </div>
                     </div>
                   </div>
+                  <div className="explode__item">
+                    <span>Số nợ hiện tại:</span>
+                    {data.debt ? new Intl.NumberFormat().format(data.debt) : 0}
+                  </div>
+                  {data.sale_staff ? (
+                    <div className="explode__item">
+                      <span>Nhân viên sale:</span>
+                      {`${data.sale_staff.name} - ${data.sale_staff.phone_number}`}
+                    </div>
+                  ) : null}
                 </div>
               </td>
             </tr>
@@ -487,22 +642,64 @@ class Table extends Component {
   };
 
   render() {
-    var customers =
-      typeof this.props.customers.data == "undefined"
-        ? []
-        : this.props.customers.data;
-
-    var { store_code } = this.props;
+    var { store_code, staff, isSale } = this.props;
+    var customers;
+    if (isSale()) {
+      customers =
+        typeof this.props.customersSale.data == "undefined"
+          ? []
+          : this.props.customersSale.data;
+    } else {
+      customers =
+        typeof this.props.customers.data == "undefined"
+          ? []
+          : this.props.customers.data;
+    }
     const {
       openModalChangeRole,
       customerSelected,
       typeSaleCustomer,
       typeAgency,
       customerSelectedPoint,
+      listItemSelected,
+      currentStaff,
     } = this.state;
 
     return (
       <TableStyles class="table-responsive">
+        {listItemSelected.length > 0 && (
+          <div
+            style={{
+              display: "flex",
+              columnGap: "10px",
+            }}
+          >
+            <div
+              style={{
+                width: "200px",
+              }}
+            >
+              <Select
+                options={this.handleChangeStaffSelect(staff)}
+                placeholder="Nhân viên"
+                className="select-staff"
+                onChange={this.handleChangeStaff}
+                value={currentStaff}
+                noOptionsMessage={() => "Không tìm thấy kết quả"}
+              ></Select>
+            </div>
+            <button
+              className={`btn  mb-2 ${
+                !currentStaff ? "btn-secondary disabled" : "btn-success "
+              }`}
+              onClick={this.handleAddCustomerToSale}
+              disabled={!currentStaff}
+            >
+              Phân công Sale ({listItemSelected.length})
+            </button>
+          </div>
+        )}
+
         <table
           class="table table-border "
           id="dataTable"
@@ -511,6 +708,18 @@ class Table extends Component {
         >
           <thead>
             <tr>
+              <th>
+                <input
+                  type="checkbox"
+                  name="input__checkAll"
+                  className="input__checkAll"
+                  checked={
+                    customers.length > 0 &&
+                    listItemSelected.length === customers.length
+                  }
+                  onChange={this.onChangeSelected}
+                ></input>
+              </th>
               <th></th>
               <th>STT</th>
               <th>Họ tên</th>
@@ -522,7 +731,6 @@ class Table extends Component {
               <th>Giới thiệu</th>
               <th>Xu</th>
               <th>Tổng mua</th>
-              <th>Số nợ hiện tại</th>
 
               {getChannel() == IKITECH && <th>Vai trò</th>}
 
@@ -559,8 +767,16 @@ class Table extends Component {
 
 const mapStateToProps = (state) => {
   return {
+    staff: state.staffReducers.staff.allStaff,
     customers: state.customerReducers.customer.allCustomer,
+    addedPointSuccessfully:
+      state.customerReducers.customer.addedPointSuccessfully,
+    updatedRoleSuccessfully:
+      state.customerReducers.customer.updatedRoleSuccessfully,
     types: state.agencyReducers.agency.allAgencyType,
+    addCustomerToSaleSuccessfully:
+      state.saleReducers.sale.addCustomerToSaleSuccessfully,
+    customersSale: state.saleReducers.sale.allCustomerOfSale,
   };
 };
 
@@ -568,6 +784,21 @@ const mapDispatchToProps = (dispatch) => {
   return {
     fetchAllAgencyType: (store_code) => {
       dispatch(agencyAction.fetchAllAgencyType(store_code));
+    },
+    addCustomerToSale: (store_code, data) => {
+      dispatch(saleAction.addCustomerToSale(store_code, data));
+    },
+    fetchAllStaff: (id, page, params, branch_id) => {
+      dispatch(staffAction.fetchAllStaff(id, page, params, branch_id));
+    },
+    resetCustomerToSaleMessage: () => {
+      dispatch({ type: Types.ADD_CUSTOMER_TO_SALE, data: false });
+    },
+    resetAddPointMessage: () => {
+      dispatch({ type: Types.ADD_SUB_POINT_CUSTOMER, data: false });
+    },
+    resetUpdateRoleMessage: () => {
+      dispatch({ type: Types.UPDATE_ROLE_CUSTOMER_FOR_INTERFACE, data: false });
     },
   };
 };

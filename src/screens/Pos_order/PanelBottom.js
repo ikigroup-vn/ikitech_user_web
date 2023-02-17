@@ -673,7 +673,6 @@ class PanelBottom extends Component {
               disabled={isDisabledButton}
               autocomplete="new-password"
             />
-
             <div class="input-group mb-2">
               <div class="input-group-prepend">
                 <span class="input-group-text px-2" title="Họ tên">
@@ -697,7 +696,6 @@ class PanelBottom extends Component {
                 }}
               />
             </div>
-
             <div class="input-group mb-2">
               <div class="input-group-prepend">
                 <span class="input-group-text px-2" title="Email">

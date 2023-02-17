@@ -171,6 +171,8 @@ import Manual from "./screens/Manual";
 import HistoryOperation from "./screens/HistoryOperation";
 import SpinWheel from "./screens/Gamification/SpinWheel";
 import ActionsGameSpinWheel from "./screens/Gamification/SpinWheel/ActionsGameSpinWheel";
+import Sale from "./screens/Sale";
+import Statistical from "./screens/Statistical";
 const routes = [
   {
     path: "/invoice_template/index/:store_code",
@@ -366,6 +368,12 @@ const routes = [
 
     main: ({ match }) => <Collaborator match={match} />,
   },
+  {
+    path: "/sale/:store_code?",
+    exact: true,
+
+    main: ({ match }) => <Sale match={match} />,
+  },
 
   {
     path: "/agency/:store_code/report/:agency_by_customer_id?",
@@ -466,6 +474,12 @@ const routes = [
     main: ({ match }) => <Dashboard match={match} />,
   },
   {
+    path: "/statistical/:store_code?",
+    exact: true,
+
+    main: ({ match }) => <Statistical match={match} />,
+  },
+  {
     path: "/dashboard/:store_code/:branch_id",
     exact: true,
 
@@ -473,6 +487,12 @@ const routes = [
   },
   {
     path: "/order/:store_code/:status_code?",
+    exact: true,
+
+    main: ({ match }) => <Bill match={match} />,
+  },
+  {
+    path: "/sale/:store_code/order",
     exact: true,
 
     main: ({ match }) => <Bill match={match} />,
@@ -510,6 +530,12 @@ const routes = [
 
   {
     path: "/customer/:store_code",
+    exact: true,
+
+    main: ({ match }) => <Customer match={match} />,
+  },
+  {
+    path: "/customer/:store_code/sale",
     exact: true,
 
     main: ({ match }) => <Customer match={match} />,
@@ -568,6 +594,14 @@ const routes = [
 
   {
     path: "/customer/detail/:store_code/:customerId",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <CustomerDetailPos match={match} history={history} />
+    ),
+  },
+  {
+    path: "/sale/customer/detail/:store_code/:customerId",
     exact: true,
 
     main: ({ match, history }) => (

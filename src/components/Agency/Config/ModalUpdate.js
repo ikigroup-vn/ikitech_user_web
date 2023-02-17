@@ -68,9 +68,7 @@ class ModalUpdate extends Component {
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title" style={{ color: "black" }}>
-                Chỉnh sửa bật thang
-              </h4>
+              <h4 class="modal-title">Chỉnh sửa bật thang</h4>
 
               <button
                 type="button"
@@ -124,7 +122,7 @@ class ModalUpdate extends Component {
                 >
                   Đóng
                 </button>
-                <button type="submit" class="btn btn-info">
+                <button type="submit" class="btn btn-warning">
                   Lưu
                 </button>
               </div>

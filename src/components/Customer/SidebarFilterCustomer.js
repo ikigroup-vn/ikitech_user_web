@@ -193,7 +193,14 @@ class SidebarFilterCustomer extends Component {
   };
   handleApplySearchFilter = () => {
     const { optionsFilter } = this.state;
-    const { setShowFilterSearch, searchValue, store_code } = this.props;
+    const {
+      setShowFilterSearch,
+      searchValue,
+      store_code,
+      isSale,
+      fetchListCustomerOfSale,
+      fetchAllCustomer,
+    } = this.props;
 
     const newOptionFilter = [];
     optionsFilter.forEach((option) => {
@@ -206,7 +213,11 @@ class SidebarFilterCustomer extends Component {
     var params = `&search=${searchValue}&json_list_filter=${JSON.stringify(
       newOptionFilter
     )}`;
-    this.props.fetchAllCustomer(store_code, 1, params);
+    if (isSale()) {
+      fetchListCustomerOfSale(store_code, 1, params);
+    } else {
+      fetchAllCustomer(store_code, 1, params);
+    }
     localStorage.setItem("optionsFilter", JSON.stringify(optionsFilter));
     setShowFilterSearch(false);
   };

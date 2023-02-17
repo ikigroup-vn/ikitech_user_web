@@ -61,7 +61,7 @@ class Table extends Component {
 
     }
     changeStatusRequest = (status) => {
-        var name = status == 1 ? "Hủy yêu cầu thanh toán cho CTV" : "Thanh toán cho CTV"
+        var name = status == 1 ? "Hủy yêu cầu thanh toán" : "Thanh toán cho CTV"
         var { arrayCheckBox } = this.state
         this.props.handleChangeStatus(name, { status: status, list_id: arrayCheckBox })
     }
@@ -425,7 +425,7 @@ class Table extends Component {
                         style={{ marginLeft: "10px" }}
                         class={`btn btn-danger btn-sm ${disable_item} ${payment_request_solve == true ? "show" : "hide"}`}
                     >
-                        <i class="fa fa-money"></i> Hủy yêu cầu thanh toán cho CTV
+                        <i class="fa fa-money"></i> Hủy yêu cầu thanh toán
                     </button>
 
                     <button

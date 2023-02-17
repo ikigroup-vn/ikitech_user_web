@@ -14,9 +14,6 @@ import Info from "../../../components/Customer/Detail/Info";
 import CustomerDebt from "../../../components/Customer/Detail/CustomerDebt";
 import PointHistory from "../../../components/Customer/Detail/PointHistory";
 
-
-
-
 import * as themeAction from "../../../actions/theme";
 import * as helper from "../../../ultis/helpers";
 class DetailPos extends Component {
@@ -37,14 +34,19 @@ class DetailPos extends Component {
     ) {
       var permissions = nextProps.permission;
 
-      var isShow = permissions.customer_list;
+      var isShow = permissions.customer_list || this.isSale();
       this.setState({ isLoading: true, isShow });
     }
   }
+  isSale = () => {
+    const pathName = window.location.pathname.split("/");
+    const isCheckedSale = pathName[1] === "sale";
+    return isCheckedSale;
+  };
 
   render() {
-    var { store_code , customerId } = this.props.match.params;
-    var {isShow} = this.state
+    var { store_code, customerId } = this.props.match.params;
+    var { isShow } = this.state;
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
@@ -53,8 +55,8 @@ class DetailPos extends Component {
             <div id="content">
               <Topbar store_code={store_code} />
               {typeof isShow == "undefined" ? (
-                  <div style={{ height: "500px" }}></div>
-                ) : isShow == true ? (
+                <div style={{ height: "500px" }}></div>
+              ) : isShow == true ? (
                 <div className="container-fluid">
                   <Alert
                     type={Types.ALERT_UID_STATUS}
@@ -71,71 +73,58 @@ class DetailPos extends Component {
 
                   <div className="card shadow mb-4 tab-pos">
                     <div className="card-body">
-                      <Tabs
-                        defaultIndex={0}
-                      >
+                      <Tabs defaultIndex={0}>
                         <TabList>
-                            <Tab>
-                              <i class="fa fa-user"></i>
-                              <span style={{ fontSize: "0.8rem" }}>
-                                Thông tin KH
-                              </span>
-                            </Tab>
-                            <Tab>
-                              <i class="fa fa-credit-card"></i>
-                              <span style={{ fontSize: "0.8rem" }}>
-                               Công nợ
-                              </span>
-                            </Tab>
-                            <Tab>
-                              <i class="fa fa-history"></i>
-                              <span style={{ fontSize: "0.8rem" }}>
-                                Lịch sử mua hàng
-                              </span>
-                            </Tab>
-                            <Tab>
-                              <i class="fa fa-history"></i>
-                              <span style={{ fontSize: "0.8rem" }}>
-                                Lịch sử xu mua hàng
-                              </span>
-                            </Tab>
-                    
-                    
+                          <Tab>
+                            <i class="fa fa-user"></i>
+                            <span style={{ fontSize: "0.8rem" }}>
+                              Thông tin KH
+                            </span>
+                          </Tab>
+                          <Tab>
+                            <i class="fa fa-credit-card"></i>
+                            <span style={{ fontSize: "0.8rem" }}>Công nợ</span>
+                          </Tab>
+                          <Tab>
+                            <i class="fa fa-history"></i>
+                            <span style={{ fontSize: "0.8rem" }}>
+                              Lịch sử mua hàng
+                            </span>
+                          </Tab>
+                          <Tab>
+                            <i class="fa fa-history"></i>
+                            <span style={{ fontSize: "0.8rem" }}>
+                              Lịch sử xu mua hàng
+                            </span>
+                          </Tab>
                         </TabList>
 
-                          <TabPanel>
-                            <Info
-                            customerId = {customerId}
-                              store_code={store_code}
-                            />
-                          </TabPanel>
-                          <TabPanel>
-                         
-                              <CustomerDebt
-                              store_code={store_code}
-                            />
-                          </TabPanel>
-                          <TabPanel>
-                          <OrderHistory
-                              store_code={store_code}
-                            />
-                          </TabPanel>
+                        <TabPanel>
+                          <Info
+                            customerId={customerId}
+                            store_code={store_code}
+                          />
+                        </TabPanel>
+                        <TabPanel>
+                          <CustomerDebt store_code={store_code} />
+                        </TabPanel>
+                        <TabPanel>
+                          <OrderHistory store_code={store_code} />
+                        </TabPanel>
 
-                          <TabPanel>
-                            <PointHistory
-                            customerId = {customerId}
-                              store_code={store_code}
-                            />
-                          </TabPanel>
-                  
-                     
+                        <TabPanel>
+                          <PointHistory
+                            customerId={customerId}
+                            store_code={store_code}
+                          />
+                        </TabPanel>
                       </Tabs>
                     </div>
                   </div>
                 </div>
-             ) : (
-              <NotAccess />
-            )}
+              ) : (
+                <NotAccess />
+              )}
             </div>
 
             <Footer />
@@ -151,7 +140,7 @@ const mapStateToProps = (state) => {
     auth: state.authReducers.login.authentication,
     theme: state.themeReducers.theme,
     permission: state.authReducers.permission.data,
-
+    user: state.userReducers.user.userID,
     alert: state.themeReducers.alert_uid,
   };
 };

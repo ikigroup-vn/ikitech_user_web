@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import * as dashboardAction from "../../actions/customer";
+import * as customerAction from "../../actions/customer";
+import * as saleAction from "../../actions/sale";
 import * as placeAction from "../../actions/place";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import Validator from "../../ultis/validator";
@@ -216,11 +217,11 @@ class ModalCreate extends Component {
         txtWards,
         txtName_branch,
         txtPhone_branch,
-        txtEmail_branch,
         txtDateOfBirth,
         txtSex,
       } = this.state;
-      const { store_code, setSearchValue } = this.props;
+      const { store_code, setSearchValue, addCustomerOfSale, isSale } =
+        this.props;
       const Formdata = {
         name: txtName_branch,
         phone_number: txtPhone_branch,
@@ -234,11 +235,17 @@ class ModalCreate extends Component {
         ),
         sex: txtSex,
       };
-
-      this.props.createCustomer(store_code, Formdata, function () {
-        setSearchValue("");
-        window.$(".modal").modal("hide");
-      });
+      if (isSale()) {
+        addCustomerOfSale(store_code, Formdata, function () {
+          setSearchValue("");
+          window.$(".modal").modal("hide");
+        });
+      } else {
+        this.props.createCustomer(store_code, Formdata, function () {
+          setSearchValue("");
+          window.$(".modal").modal("hide");
+        });
+      }
     }
 
     // this.setState({
@@ -553,7 +560,10 @@ class ModalCreate extends Component {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     createCustomer: (id, form, funcModal) => {
-      dispatch(dashboardAction.createCustomer(id, form, funcModal));
+      dispatch(customerAction.createCustomer(id, form, funcModal));
+    },
+    addCustomerOfSale: (store_code, data, funcModal) => {
+      dispatch(saleAction.addCustomerOfSale(store_code, data, funcModal));
     },
     fetchPlaceDistrict: (id) => {
       dispatch(placeAction.fetchPlaceDistrict(id));

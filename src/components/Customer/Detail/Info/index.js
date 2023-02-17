@@ -110,9 +110,13 @@ class Customer extends Component {
     var redirect_report = getQueryParams("redirect_report");
     if (redirect_report) history.replace(`/customer_debt/${store_code}`);
     else if (page || search) {
-      history.replace(`/customer/${store_code}?page=${page}&search=${search}`);
+      history.replace(
+        `/customer/${store_code}${
+          this.isSale() ? "/sale" : ""
+        }?page=${page}&search=${search}`
+      );
     } else {
-      history.replace(`/customer/${store_code}`);
+      history.replace(`/customer/${store_code}${this.isSale() ? "/sale" : ""}`);
     }
   };
   onChangeProvince = (e) => {
@@ -188,10 +192,15 @@ class Customer extends Component {
     ) {
       var permissions = nextProps.permission;
 
-      var isShow = permissions.customer_list;
+      var isShow = permissions.customer_list || this.isSale();
       this.setState({ isLoading: true, isShow });
     }
   }
+  isSale = () => {
+    const pathName = window.location.pathname.split("/");
+    const isCheckedSale = pathName[1] === "sale";
+    return isCheckedSale;
+  };
   handleOnClick = (e) => {
     e.preventDefault();
     if (

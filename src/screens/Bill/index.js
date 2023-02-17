@@ -4,7 +4,7 @@ import Topbar from "../../components/Partials/Topbar";
 import Footer from "../../components/Partials/Footer";
 import Table from "../../components/Bill/Table";
 import { Redirect } from "react-router-dom";
-import { connect } from "react-redux";
+import { connect, shallowEqual } from "react-redux";
 import Loading from "../Loading";
 import * as billAction from "../../actions/bill";
 import Chat from "../../components/Chat";
@@ -142,6 +142,121 @@ class Bill extends Component {
       history.replace(`/collaborator/${store_code}?tab-index=1${params}`);
     }
   };
+  shouldComponentUpdate(nextProps, nextState) {
+    const { user } = this.props;
+    if (!shallowEqual(user, nextProps.user)) {
+      var { store_code, status_code } = this.props.match.params;
+      var orderFrom = getQueryParams("order_from_list");
+      var limit = getQueryParams("limit");
+      var search = getQueryParams("search");
+      var from = getQueryParams("from");
+      var to = getQueryParams("to");
+      var statusTime = getQueryParams("type_query_time");
+      var statusOrder = getQueryParams("order_status_code");
+      var statusPayment = getQueryParams("payment_status_code");
+      var { collaborator_by_customer_id, numPage } = this.state;
+
+      if (
+        this.props.customer.id !== this.state.agency_by_customer_id &&
+        this.state.agency_by_customer_id != null
+      ) {
+        this.props.fetchCustomerId(
+          store_code,
+          this.state.agency_by_customer_id
+        );
+      }
+
+      if (
+        this.props.customer.id !== this.state.collaborator_by_customer_id &&
+        this.state.collaborator_by_customer_id != null
+      ) {
+        this.props.fetchCustomerId(
+          store_code,
+          this.state.collaborator_by_customer_id
+        );
+      }
+
+      var params_agency =
+        this.state.agency_by_customer_id != null
+          ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
+          : null;
+      // var status = status_code;
+      // var params =
+      //   typeof status_code == "undefined"
+      //     ? ""
+      //     : status_code != "PAID"
+      //     ? `&field_by=order_status_code&field_by_value=${status_code}`
+      //     : `&field_by=payment_status_code&field_by_value=${status_code}`;
+      if (from) {
+        this.setState({
+          time_from: from,
+        });
+      }
+      if (to) {
+        this.setState({
+          time_to: to,
+        });
+      }
+      if (statusTime) {
+        this.setState({
+          statusTime: statusTime,
+        });
+      }
+      if (search) {
+        this.setState({
+          searchValue: search,
+        });
+      }
+      if (limit) {
+        this.setState({
+          numPage: limit,
+        });
+      }
+      if (orderFrom) {
+        this.setState({
+          orderFrom: orderFrom,
+        });
+      }
+      if (statusOrder) {
+        this.setState({
+          statusOrder: statusOrder,
+        });
+      }
+      if (statusPayment) {
+        this.setState({
+          statusPayment: statusPayment,
+        });
+      }
+      var params = "";
+      params =
+        params +
+        this.getParams(
+          from,
+          to,
+          search,
+          statusOrder,
+          statusPayment,
+          limit || numPage,
+          orderFrom,
+          collaborator_by_customer_id,
+          statusTime,
+          nextProps.user
+        );
+      const branch_id = getBranchId();
+
+      var page = getQueryParams("page") ?? 1;
+      this.props.fetchAllBill(
+        store_code,
+        page,
+        branch_id,
+        params,
+        params_agency
+      );
+      this.setState({ loadingShipment: helper.randomString(10) });
+    }
+    return true;
+  }
+
   componentDidMount() {
     var { store_code, status_code } = this.props.match.params;
     var orderFrom = getQueryParams("order_from_list");
@@ -175,13 +290,13 @@ class Bill extends Component {
       this.state.agency_by_customer_id != null
         ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
         : null;
-    var status = status_code;
-    var params =
-      typeof status_code == "undefined"
-        ? ""
-        : status_code != "PAID"
-        ? `&field_by=order_status_code&field_by_value=${status_code}`
-        : `&field_by=payment_status_code&field_by_value=${status_code}`;
+    // var status = status_code;
+    // var params =
+    //   typeof status_code == "undefined"
+    //     ? ""
+    //     : status_code != "PAID"
+    //     ? `&field_by=order_status_code&field_by_value=${status_code}`
+    //     : `&field_by=payment_status_code&field_by_value=${status_code}`;
     if (from) {
       this.setState({
         time_from: from,
@@ -222,6 +337,7 @@ class Bill extends Component {
         statusPayment: statusPayment,
       });
     }
+    var params = "";
     params =
       params +
       this.getParams(
@@ -236,20 +352,25 @@ class Bill extends Component {
         statusTime
       );
 
-    var status_order = status == "PAID" ? null : status;
-    var status_payment = status == "PAID" ? status : null;
-    if (status_order != null) this.setState({ statusOrder: status_order });
-    if (statusOrder) this.setState({ statusOrder: statusOrder });
-    if (statusPayment) this.setState({ statusPayment: statusPayment });
+    // var status_order = status == "PAID" ? null : status;
+    // var status_payment = status == "PAID" ? status : null;
+    // if (status_order != null) this.setState({ statusOrder: status_order });
+    // if (statusOrder) this.setState({ statusOrder: statusOrder });
+    // if (statusPayment) this.setState({ statusPayment: statusPayment });
 
-    if (status_payment != null)
-      this.setState({ statusPayment: status_payment });
+    // if (status_payment != null)
+    //   this.setState({ statusPayment: status_payment });
     const branch_id = getBranchId();
 
     var page = getQueryParams("page") ?? 1;
     this.props.fetchAllBill(store_code, page, branch_id, params, params_agency);
     this.setState({ loadingShipment: helper.randomString(10) });
   }
+  isSale = () => {
+    const pathName = window.location.pathname.split("/");
+    const isCheckedSale = pathName[1] === "sale";
+    return isCheckedSale;
+  };
   handleShowChatBox = (customerId, customerImg, customerName, status) => {
     var { store_code } = this.props.match.params;
 
@@ -299,8 +420,10 @@ class Bill extends Component {
       collaborator_by_customer_id,
       statusTime
     );
-    history.push(`/order/${store_code}?page=1${params ? `${params}` : ""}`);
-
+    // history.push(`/order/${store_code}?page=1${params ? `${params}` : ""}`);
+    insertParam({
+      search: searchValue,
+    });
     // this.setState({ statusPayment: "", statusOrder: "", numPage: 20 });
     var params_agency =
       this.state.agency_by_customer_id != null
@@ -364,7 +487,8 @@ class Bill extends Component {
     numPage,
     orderFrom,
     collaborator_by_customer_id,
-    statusTime
+    statusTime,
+    user
   ) => {
     var params = ``;
     if (to != "" && to != null) {
@@ -399,6 +523,9 @@ class Bill extends Component {
     ) {
       params =
         params + `&collaborator_by_customer_id=${collaborator_by_customer_id}`;
+    }
+    if (this.isSale()) {
+      params += `&sale_staff_id=${user?.id || this.props.user.id}`;
     }
     return params;
   };
@@ -865,8 +992,13 @@ class Bill extends Component {
                             limit={numPage}
                             status_payment={statusPayment}
                             store_code={store_code}
+                            getParams={this.getParams}
                             bills={bills}
                             status_order={statusOrder}
+                            collaborator_by_customer_id={
+                              collaborator_by_customer_id
+                            }
+                            statusTime={statusTime}
                             setPaginate={this.setPaginate}
                           />
                         </div>
@@ -907,6 +1039,7 @@ const mapStateToProps = (state) => {
     chat: state.chatReducers.chat.chatID,
     permission: state.authReducers.permission.data,
     customer: state.customerReducers.customer.customerID,
+    user: state.userReducers.user.userID,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {

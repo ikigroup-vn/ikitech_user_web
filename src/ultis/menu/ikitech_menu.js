@@ -248,7 +248,7 @@ export const ikitech_menu = [
       },
       {
         name: "Đối tác bán hàng",
-        setOpenKey: ["/collaborator", "/agency"],
+        setOpenKey: ["/collaborator", "/agency", "/sale"],
         icon: "fa fa-user",
         open: "setting2",
         children: [
@@ -266,6 +266,14 @@ export const ikitech_menu = [
             icon: "fa fa-bell",
             exact: true,
             to: "/agency",
+          },
+          {
+            name: "Sale",
+            class: "agency_list",
+            display: "hide",
+            icon: "fa fa-bell",
+            exact: true,
+            to: "/sale",
           },
         ],
       },
@@ -646,7 +654,6 @@ export const ikitech_menu = [
       },
     ],
   },
-
   {
     title: "Cài đặt riêng",
     link: [

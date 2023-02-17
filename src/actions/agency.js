@@ -1146,3 +1146,193 @@ export const updateConfig = (store_code, data) => {
       });
   };
 };
+
+export const historiesBalance = (store_code, id, queryString) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    agencyApi
+      .historiesBalance(store_code, id, queryString)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        if (res.data.code === 200) {
+          dispatch({
+            type: Types.FETCH_HISTORIES_BALANCE_AGENCY,
+            data: res.data.data,
+          });
+        }
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+export const changePriceBalance = (store_code, id, data) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    agencyApi
+      .changePriceBalance(store_code, id, data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        if (res.data.code === 200) {
+          dispatch({
+            type: Types.CHANGE_PRICE_BALANCE_AGENCY,
+            data: res.data.data,
+          });
+        }
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+export const fetchAllTopCommission = (store_code, page = 1, params) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING_LAZY,
+      loading: "show",
+    });
+    agencyApi.fetchAllTopCommission(store_code, page, params).then((res) => {
+      console.log(res);
+      dispatch({
+        type: Types.SHOW_LOADING_LAZY,
+        loading: "hide",
+      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_ALL_AGENCY_TOP_COMMISSION,
+          data: res.data.data,
+        });
+    });
+  };
+};
+export const updateAgencyPercentDiscount = (
+  store_code,
+  id,
+  data,
+  funcModal
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    agencyApi
+      .updateAgencyPercentDiscount(store_code, id, data)
+      .then((res) => {
+        funcModal();
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.UPDATE_PERCENT_DISCOUNT_AGENCY,
+          data: res.data.data,
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+export const updateAgencyCommission = (store_code, id, data, funcModal) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    agencyApi
+      .updateAgencyCommission(store_code, id, data)
+      .then((res) => {
+        funcModal();
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.UPDATE_COMMISSION_AGENCY,
+          data: res.data.data,
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};

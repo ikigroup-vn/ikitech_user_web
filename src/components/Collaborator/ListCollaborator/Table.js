@@ -42,6 +42,33 @@ const ListCollaboratorStyles = styled.div`
       }
     }
   }
+  .status-product {
+    width: 42px;
+    height: 24px;
+    border-radius: 100rem;
+    background-color: #ecf0f1;
+    border: 1px solid #dfe6e9;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s;
+    padding: 0 2px;
+    margin-bottom: 0;
+    cursor: pointer;
+    & > div {
+      width: 18px;
+      height: 18px;
+      border-radius: 100rem;
+      background-color: #7f8c8d;
+      transition: all 0.3s;
+    }
+    &:has(input:checked) {
+      background-color: #2ecc71;
+    }
+    input:checked + div {
+      transform: translateX(100%);
+      background-color: white;
+    }
+  }
 `;
 class Table extends Component {
   constructor(props) {
@@ -108,7 +135,7 @@ class Table extends Component {
   }
 
   onChangeStatus = (e, id) => {
-    var checked = !this["checked" + id].checked;
+    var checked = this["checked" + id].checked;
     var status = checked == true ? 1 : 0;
     this.props.updateCollaborator(this.props.store_code, id, {
       status: status,
@@ -216,33 +243,20 @@ class Table extends Component {
               </td> */}
               <td>{data.customer.referral_phone_number || null}</td>
               <td>
-                <div
-                  className="on-off"
-                  onClick={(e) => {
-                    this.onChangeStatus(e, data.id);
-                  }}
-                >
+                <label className="status-product on-off">
                   <input
                     ref={(ref) => (this["checked" + data.id] = ref)}
                     type="checkbox"
+                    hidden
                     class="checkbox"
                     name={`${randomString(10)}`}
                     checked={data.status == 1 ? true : false}
+                    onChange={(e) => {
+                      this.onChangeStatus(e, data.id);
+                    }}
                   />
-
-                  <label for="checkbox" class="switch">
-                    <span class="switch__circle">
-                      <span
-                        style={{
-                          backgroundColor: data.status == 1 ? "white" : "gray",
-                        }}
-                        class="switch__circle-inner"
-                      ></span>
-                    </span>
-                    <span class="switch__left"></span>
-                    <span class="switch__right"></span>
-                  </label>
-                </div>
+                  <div></div>
+                </label>
               </td>
               <td className="btn-voucher">
                 <Link

@@ -3,12 +3,11 @@ import * as agencyAction from "../../../actions/agency";
 import { connect } from "react-redux";
 
 class ModalRemove extends Component {
-    
   onSave = (e) => {
     e.preventDefault();
-    window.$('.modal').modal('hide');
-    var {store_code , modal} = this.props
-    this.props.destroyStep(store_code,modal.id);
+    window.$(".modal").modal("hide");
+    var { store_code, modal } = this.props;
+    this.props.destroyStep(store_code, modal.id);
   };
 
   render() {
@@ -24,7 +23,8 @@ class ModalRemove extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{ background: "white" }}>
+            <div class="modal-header">
+              <h4 class="modal-title">Thông báo</h4>
               <button
                 type="button"
                 class="close"
@@ -54,9 +54,8 @@ class ModalRemove extends Component {
                 >
                   Đóng
                 </button>
-                <button type="submit" class="btn btn-info">
+                <button type="submit" class="btn btn-warning">
                   Xóa
-                  
                 </button>
               </div>
             </form>
@@ -69,8 +68,8 @@ class ModalRemove extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    destroyStep: (store_code,id) => {
-      dispatch(agencyAction.destroyStep(store_code,id));
+    destroyStep: (store_code, id) => {
+      dispatch(agencyAction.destroyStep(store_code, id));
     },
   };
 };
