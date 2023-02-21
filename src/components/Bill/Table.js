@@ -78,8 +78,11 @@ class Table extends Component {
       page: 1,
     });
     this.props.onchangeStatusOrder(value);
-
-    this.props.fetchAllBill(store_code, 1, branch_id, params);
+    var params_agency =
+      this.props.agency_by_customer_id != null
+        ? `&agency_by_customer_id=${this.props.agency_by_customer_id}`
+        : null;
+    this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
   };
   onchangeStatusPayment = (e) => {
     var { value } = e.target;
@@ -112,7 +115,11 @@ class Table extends Component {
       page: 1,
     });
     this.props.onchangeStatusPayment(value);
-    this.props.fetchAllBill(store_code, 1, branch_id, params);
+    var params_agency =
+      this.props.agency_by_customer_id != null
+        ? `&agency_by_customer_id=${this.props.agency_by_customer_id}`
+        : null;
+    this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
   };
 
   onchangeOrderFrom = (e) => {
@@ -146,7 +153,11 @@ class Table extends Component {
       page: 1,
     });
     this.props.onchangeOrderFrom(value);
-    this.props.fetchAllBill(store_code, 1, branch_id, params);
+    var params_agency =
+      this.props.agency_by_customer_id != null
+        ? `&agency_by_customer_id=${this.props.agency_by_customer_id}`
+        : null;
+    this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -742,8 +753,10 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllBill: (id, page, branch_id, params) => {
-      dispatch(billAction.fetchAllBill(id, page, branch_id, params));
+    fetchAllBill: (id, page, branch_id, params, param_agency) => {
+      dispatch(
+        billAction.fetchAllBill(id, page, branch_id, params, param_agency)
+      );
     },
     syncShipment: (store_code, order_code, data, syncArr) => {
       dispatch(billAction.syncShipment(store_code, order_code, data, syncArr));

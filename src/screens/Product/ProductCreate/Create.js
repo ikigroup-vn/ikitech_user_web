@@ -45,6 +45,10 @@ class ProductCreate extends Component {
         .toString()
         .replace(/,/g, "")
         .replace(/\./g, "");
+      formdata.weight = data.txtWeight
+        .toString()
+        .replace(/,/g, "")
+        .replace(/\./g, "");
       formdata.barcode = removeVietnameseTones(data.txtBarcode);
       formdata.status = data.txtStatus;
       formdata.quantity_in_stock = data.txtQuantityInStock

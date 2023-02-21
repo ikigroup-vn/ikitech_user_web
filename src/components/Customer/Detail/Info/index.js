@@ -112,11 +112,13 @@ class Customer extends Component {
     else if (page || search) {
       history.replace(
         `/customer/${store_code}${
-          this.isSale() ? "/sale" : ""
+          this.isSale() ? "/customerSale" : ""
         }?page=${page}&search=${search}`
       );
     } else {
-      history.replace(`/customer/${store_code}${this.isSale() ? "/sale" : ""}`);
+      history.replace(
+        `/customer/${store_code}${this.isSale() ? "/customerSale" : ""}`
+      );
     }
   };
   onChangeProvince = (e) => {
@@ -198,7 +200,7 @@ class Customer extends Component {
   }
   isSale = () => {
     const pathName = window.location.pathname.split("/");
-    const isCheckedSale = pathName[1] === "sale";
+    const isCheckedSale = pathName[2] === "customerSale";
     return isCheckedSale;
   };
   handleOnClick = (e) => {

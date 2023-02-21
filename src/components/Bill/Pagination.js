@@ -47,15 +47,13 @@ class Pagination extends Component {
         collaborator_by_customer_id,
         statusTime
       );
-    if (time_to != "" && time_to != null) {
-      params = params + `&time_to=${time_to}`;
-    }
-    if (time_from != "" && time_from != null) {
-      params = params + `&time_from=${time_from}`;
-    }
 
     insertParam({ page: page });
-    this.props.fetchAllBill(store_code, page, branch_id, params);
+    var params_agency =
+      this.props.agency_by_customer_id != null
+        ? `&agency_by_customer_id=${this.props.agency_by_customer_id}`
+        : null;
+    this.props.fetchAllBill(store_code, page, branch_id, params, params_agency);
   };
 
   showData = (links) => {
@@ -114,8 +112,10 @@ class Pagination extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllBill: (id, page, branch_id, params) => {
-      dispatch(billAction.fetchAllBill(id, page, branch_id, params));
+    fetchAllBill: (id, page, branch_id, params, param_agency) => {
+      dispatch(
+        billAction.fetchAllBill(id, page, branch_id, params, param_agency)
+      );
     },
   };
 };

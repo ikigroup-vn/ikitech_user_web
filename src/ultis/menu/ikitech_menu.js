@@ -269,7 +269,7 @@ export const ikitech_menu = [
           },
           {
             name: "Sale",
-            class: "agency_list",
+            class: "sale_list",
             display: "hide",
             icon: "fa fa-bell",
             exact: true,
@@ -488,28 +488,28 @@ export const ikitech_menu = [
         ],
       },
 
-      {
-        name: "Gamification",
-        icon: "fas fa-dice-d20",
-        setOpenKey: ["/game_spin_wheels", "/game_predict_outcome"],
-        open: "gamification",
-        children: [
-          {
-            name: "Game quay thưởng",
-            class: "gamification",
-            display: "show",
-            exact: true,
-            to: "/game_spin_wheels",
-          },
-          {
-            name: "Game dự đoán kết quả",
-            class: "gamification",
-            display: "show",
-            exact: true,
-            to: "/game_predict_outcome",
-          },
-        ],
-      },
+      // {
+      //   name: "Gamification",
+      //   icon: "fas fa-dice-d20",
+      //   setOpenKey: ["/game_spin_wheels", "/game_predict_outcome"],
+      //   open: "gamification",
+      //   children: [
+      //     {
+      //       name: "Game quay thưởng",
+      //       class: "gamification",
+      //       display: "show",
+      //       exact: true,
+      //       to: "/game_spin_wheels",
+      //     },
+      //     {
+      //       name: "Game dự đoán kết quả",
+      //       class: "gamification",
+      //       display: "show",
+      //       exact: true,
+      //       to: "/game_predict_outcome",
+      //     },
+      //   ],
+      // },
       {
         name: "Cài đặt",
         icon: "fas fa-cogs",

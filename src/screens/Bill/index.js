@@ -710,6 +710,7 @@ class Bill extends Component {
       orderFrom,
       runAsync,
       collaborator_by_customer_id,
+      agency_by_customer_id,
       statusTime,
     } = this.state;
     var listBill = typeof bills.data == "undefined" ? [] : bills.data;
@@ -951,6 +952,7 @@ class Bill extends Component {
                           collaborator_by_customer_id={
                             collaborator_by_customer_id
                           }
+                          agency_by_customer_id={agency_by_customer_id}
                           handleShowChatBox={this.handleShowChatBox}
                           store_code={store_code}
                           bills={bills}
@@ -998,6 +1000,7 @@ class Bill extends Component {
                             collaborator_by_customer_id={
                               collaborator_by_customer_id
                             }
+                            agency_by_customer_id={agency_by_customer_id}
                             statusTime={statusTime}
                             setPaginate={this.setPaginate}
                           />

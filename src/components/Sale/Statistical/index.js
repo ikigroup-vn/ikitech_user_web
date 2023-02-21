@@ -21,10 +21,7 @@ class Statistical extends Component {
     return (
       <StatisticalStyles className="statistical__sale">
         <div className="mb-4">
-          Xin chào,{" "}
-          <span className="h4 statistical__sale__name text-info">
-            {user.name}
-          </span>
+          <h4 class="h4 title_content mb-0 text-gray-800">Doanh số của tôi</h4>
         </div>
         <div className="statistical__content">
           <div class="row">
@@ -81,7 +78,7 @@ class Statistical extends Component {
                       <div>
                         <Link
                           class=" font-weight-bold text-warning text-uppercase mb-1"
-                          to={`/customer/${store_code}/sale`}
+                          to={`/customer/${store_code}/customerSale`}
                         >
                           Khách hàng
                         </Link>

@@ -259,7 +259,7 @@ class Table extends Component {
       if (e.target.name == "action") return;
       if (isSale()) {
         history.push(
-          `/sale/customer/detail/${store_code}/${customerId}?page=${paginate}&search=${searchValue}`
+          `/customer/customerSale/detail/${store_code}/${customerId}?page=${paginate}&search=${searchValue}`
         );
       } else {
         history.push(
@@ -373,7 +373,8 @@ class Table extends Component {
   };
 
   handleChangeStaffSelect = (staffs) => {
-    const options = staffs.reduce((prevData, currentData) => {
+    const newStaffs = staffs.filter((staff) => staff.is_sale === true);
+    const options = newStaffs.reduce((prevData, currentData) => {
       return [
         ...prevData,
         {

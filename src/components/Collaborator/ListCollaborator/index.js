@@ -40,9 +40,9 @@ class ListCollaborator extends Component {
     });
   };
   exportListCollaborator = () => {
-    var { searchValue } = this.state;
+    var { searchValue, page } = this.state;
     var params = this.getParams(searchValue);
-    this.props.exportListCollaborator(this.props.store_code, 1, params);
+    this.props.exportListCollaborator(this.props.store_code, page, params);
   };
   getParams = (searchValue) => {
     var params = ``;

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
+import { connect, shallowEqual } from "react-redux";
 import styled from "styled-components";
 import { format } from "../../../ultis/helpers";
 import SidebarFilter from "../../Partials/SidebarFilter";
@@ -16,7 +16,24 @@ const SidebarShowStatisticalStyles = styled.div`
 class SidebarShowStatisticalSale extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      indexReward: -1,
+    };
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const { statisticalUser } = this.props;
+    if (!shallowEqual(statisticalUser, nextProps.statisticalUser)) {
+      var newIndex = -1;
+      nextProps?.statisticalUser?.steps_bonus.forEach((step, index) => {
+        if (step.limit <= nextProps?.statisticalUser?.total_final_in_quarter) {
+          newIndex = index;
+        }
+      });
+
+      this.setState({ indexReward: newIndex });
+    }
+    return true;
   }
 
   handleCloseShowSidebar = () => {
@@ -26,10 +43,8 @@ class SidebarShowStatisticalSale extends Component {
   };
   render() {
     const { saleInfoStatistical, showSidebar, statisticalUser } = this.props;
-    console.log(
-      "SidebarShowStatisticalSale ~ render ~ statisticalUser",
-      statisticalUser
-    );
+
+    const { indexReward } = this.state;
     return (
       <SidebarFilter
         title={`Thống kê sale của nhân viên ${saleInfoStatistical?.name}`}
@@ -53,37 +68,18 @@ class SidebarShowStatisticalSale extends Component {
                         <div className="row no-gutters align-items-center">
                           <div className="col mr-2">
                             <div>
-                              <div className=" font-weight-bold text-success text-uppercase mb-1">
+                              <div className=" font-weight-bold text-primary text-uppercase mb-1">
                                 Tổng doanh thu
                               </div>
                             </div>
-                            <div className="h5 mb-0 font-weight-bold text-gray-800">
-                              {format(statisticalUser.total_final)}
-                            </div>
-                          </div>
-                          <div className="col-auto">
-                            <i className="fas fa-money-bill text-gray-300 fa-2x"></i>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="mb-4 ">
-                    <div className="card border-left-danger shadow h-100 py-2">
-                      <div className="card-body set-padding">
-                        <div className="row no-gutters align-items-center">
-                          <div className="col mr-2">
-                            <div>
-                              <div className=" font-weight-bold text-danger text-uppercase mb-1">
-                                Tổng đơn
+                            <div className="d-sm-flex  align-items-center justify-content-between">
+                              <div className="h5 mb-0 font-weight-bold text-gray-800">
+                                {format(statisticalUser.total_final)}
+                              </div>
+                              <div className="font-weight-bold text-gray-800 h5">
+                                {statisticalUser.total_order} đơn
                               </div>
                             </div>
-                            <div className="h5 mb-0 font-weight-bold text-gray-800">
-                              {statisticalUser.total_order}
-                            </div>
-                          </div>
-                          <div className="col-auto">
-                            <i className="fas fa-file-invoice fa-2x text-gray-300"></i>
                           </div>
                         </div>
                       </div>
@@ -165,6 +161,32 @@ class SidebarShowStatisticalSale extends Component {
                           <div className="col mr-2">
                             <div>
                               <div className=" font-weight-bold text-primary text-uppercase mb-1">
+                                Quý
+                              </div>
+                            </div>
+                            <div className="d-sm-flex  align-items-center justify-content-between">
+                              <div className="h5 mb-0 font-weight-bold text-gray-800">
+                                {format(statisticalUser.total_final_in_quarter)}
+                              </div>
+                              <div className="font-weight-bold text-gray-800 h5">
+                                {
+                                  statisticalUser.count_in_qtotal_final_in_quarter
+                                }{" "}
+                                đơn
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="mb-4 ">
+                    <div className="card border-left-primary shadow h-100 py-2">
+                      <div className="card-body set-padding">
+                        <div className="row no-gutters align-items-center">
+                          <div className="col mr-2">
+                            <div>
+                              <div className=" font-weight-bold text-primary text-uppercase mb-1">
                                 Năm
                               </div>
                             </div>
@@ -212,7 +234,7 @@ class SidebarShowStatisticalSale extends Component {
 
                 {statisticalUser?.steps_bonus?.length > 0 && (
                   <div>
-                    {statisticalUser.steps_bonus.map((step) => (
+                    {statisticalUser.steps_bonus.map((step, index) => (
                       <div className="mb-4" key={step.id}>
                         <div className="card  shadow h-100 py-2">
                           <div className="card-body set-padding">
@@ -226,7 +248,11 @@ class SidebarShowStatisticalSale extends Component {
                                   }}
                                 >
                                   <img
-                                    src="../images/hand.png"
+                                    src={`../images/${
+                                      index <= indexReward
+                                        ? "checked.svg"
+                                        : "hand.png"
+                                    }`}
                                     alt="hand"
                                     style={{
                                       width: "30px",

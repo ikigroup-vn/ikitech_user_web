@@ -118,7 +118,7 @@ class Config extends Component {
                 }}
                 data-toggle="modal"
                 data-target="#updateModal"
-                class="btn btn-warning btn-sm"
+                class="btn btn-outline-warning btn-sm"
               >
                 <i class="fa fa-edit"></i> Sửa
               </button>
@@ -130,7 +130,7 @@ class Config extends Component {
                 data-toggle="modal"
                 data-target="#removeModal"
                 style={{ marginLeft: "10px" }}
-                class={`btn btn-danger btn-sm `}
+                class={`btn btn-outline-danger btn-sm `}
               >
                 <i class="fa fa-trash"></i> Xóa
               </button>
