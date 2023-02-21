@@ -270,7 +270,7 @@ class Table extends Component {
                 <Link
                   style={{ margin: "2px 0" }}
                   to={`/order/${this.props.store_code}?agency_by_customer_id=${data.customer_id}&tab-index=1&page=${this.props.page}&search=${this.props.searchValue}`}
-                  class="btn btn-danger btn-sm"
+                  class="btn btn-outline-danger btn-sm"
                 >
                   <i class="fa fa-history"></i> Lịch sử đơn hàng
                 </Link>
@@ -278,7 +278,7 @@ class Table extends Component {
                 <Link
                   style={{ margin: "2px 0" }}
                   to={`/agency/${this.props.store_code}/report/${data.customer_id}?tab-index=1`}
-                  class="btn btn-info btn-sm"
+                  class="btn btn-outline-info btn-sm"
                 >
                   <i class="fa fa-bar-chart"></i> Báo cáo
                 </Link>

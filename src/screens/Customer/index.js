@@ -205,7 +205,9 @@ class Customer extends Component {
       paginate: 1,
     });
     if (this.isSale()) {
-      history.push(`/customer/${store_code}/sale?page=1&search=${searchValue}`);
+      history.push(
+        `/customer/${store_code}/customerSale?page=1&search=${searchValue}`
+      );
       const params = `&search=${searchValue}&json_list_filter=${jsonListFilter}`;
       this.fetchListCustomerOfSale(store_code, 1, params);
     } else {
@@ -258,7 +260,8 @@ class Customer extends Component {
   }
   isSale = () => {
     const pathName = window.location.pathname.split("/");
-    const isCheckedSale = pathName[1] === "customer" && pathName[3] === "sale";
+    const isCheckedSale =
+      pathName[1] === "customer" && pathName[3] === "customerSale";
     return isCheckedSale;
   };
 

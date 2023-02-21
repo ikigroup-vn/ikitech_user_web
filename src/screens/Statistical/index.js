@@ -3,7 +3,7 @@ import Sidebar from "../../components/Partials/Sidebar";
 import Topbar from "../../components/Partials/Topbar";
 import Footer from "../../components/Partials/Footer";
 import { Redirect } from "react-router-dom";
-import { connect } from "react-redux";
+import { connect, shallowEqual } from "react-redux";
 import Loading from "../Loading";
 import * as saleAction from "../../actions/sale";
 import { format } from "../../ultis/helpers";
@@ -11,7 +11,7 @@ class Statistical extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      type: 0,
+      indexReward: -1,
     };
   }
 
@@ -20,14 +20,25 @@ class Statistical extends Component {
     const { fetchStatisticalSale } = this.props;
     fetchStatisticalSale(store_code);
   }
-  onChangeType = (e) => {
-    const value = e.target.value;
-    this.setState({ type: value });
-  };
+  shouldComponentUpdate(nextProps, nextState) {
+    const { statistical } = this.props;
+
+    if (!shallowEqual(statistical, nextProps.statistical)) {
+      var newIndex = -1;
+      nextProps?.statistical?.steps_bonus.forEach((step, index) => {
+        if (step.limit <= nextProps?.statistical?.total_final_in_quarter) {
+          newIndex = index;
+        }
+      });
+
+      this.setState({ indexReward: newIndex });
+    }
+    return true;
+  }
 
   render() {
     const { store_code } = this.props.match.params;
-    const { type } = this.state;
+    const { indexReward } = this.state;
     const { badges, statistical } = this.props;
 
     if (this.props.auth) {
@@ -52,42 +63,23 @@ class Statistical extends Component {
                         </div>
                         <div className="row">
                           <div className="col-xl-6 col-md-12 mb-4 ">
-                            <div className="card border-left-success shadow h-100 py-2">
+                            <div className="card border-left-primary shadow h-100 py-2">
                               <div className="card-body set-padding">
                                 <div className="row no-gutters align-items-center">
                                   <div className="col mr-2">
                                     <div>
-                                      <div className=" font-weight-bold text-success text-uppercase mb-1">
+                                      <div className=" font-weight-bold text-primary text-uppercase mb-1">
                                         Tổng doanh thu
                                       </div>
                                     </div>
-                                    <div className="h5 mb-0 font-weight-bold text-gray-800">
-                                      {format(statistical.total_final)}
-                                    </div>
-                                  </div>
-                                  <div className="col-auto">
-                                    <i className="fas fa-money-bill text-gray-300 fa-2x"></i>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="col-xl-6 col-md-12 mb-4 ">
-                            <div className="card border-left-danger shadow h-100 py-2">
-                              <div className="card-body set-padding">
-                                <div className="row no-gutters align-items-center">
-                                  <div className="col mr-2">
-                                    <div>
-                                      <div className=" font-weight-bold text-danger text-uppercase mb-1">
-                                        Tổng đơn
+                                    <div className="d-sm-flex  align-items-center justify-content-between">
+                                      <div className="h5 mb-0 font-weight-bold text-gray-800">
+                                        {format(statistical.total_final)}
+                                      </div>
+                                      <div className="font-weight-bold text-gray-800 h5">
+                                        {statistical.total_order} đơn
                                       </div>
                                     </div>
-                                    <div className="h5 mb-0 font-weight-bold text-gray-800">
-                                      {statistical.total_order}
-                                    </div>
-                                  </div>
-                                  <div className="col-auto">
-                                    <i className="fas fa-file-invoice fa-2x text-gray-300"></i>
                                   </div>
                                 </div>
                               </div>
@@ -173,6 +165,31 @@ class Statistical extends Component {
                                   <div className="col mr-2">
                                     <div>
                                       <div className=" font-weight-bold text-primary text-uppercase mb-1">
+                                        Quý
+                                      </div>
+                                    </div>
+                                    <div className="d-sm-flex  align-items-center justify-content-between">
+                                      <div className="h5 mb-0 font-weight-bold text-gray-800">
+                                        {format(
+                                          statistical.total_final_in_quarter
+                                        )}
+                                      </div>
+                                      <div className="font-weight-bold text-gray-800 h5">
+                                        {statistical.count_in_quarter} đơn
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="col-xl-6 col-md-12 mb-4 ">
+                            <div className="card border-left-primary shadow h-100 py-2">
+                              <div className="card-body set-padding">
+                                <div className="row no-gutters align-items-center">
+                                  <div className="col mr-2">
+                                    <div>
+                                      <div className=" font-weight-bold text-primary text-uppercase mb-1">
                                         Năm
                                       </div>
                                     </div>
@@ -217,7 +234,7 @@ class Statistical extends Component {
 
                         {statistical.steps_bonus.length > 0 && (
                           <div>
-                            {statistical.steps_bonus.map((step) => (
+                            {statistical.steps_bonus.map((step, index) => (
                               <div className="mb-4" key={step.id}>
                                 <div className="card  shadow h-100 py-2">
                                   <div className="card-body set-padding">
@@ -231,7 +248,11 @@ class Statistical extends Component {
                                           }}
                                         >
                                           <img
-                                            src="../images/hand.png"
+                                            src={`../images/${
+                                              index <= indexReward
+                                                ? "checked.svg"
+                                                : "hand.png"
+                                            }`}
                                             alt="hand"
                                             style={{
                                               width: "30px",

@@ -55,6 +55,10 @@ class ProductEdit extends Component {
         .toString()
         .replace(/,/g, "")
         .replace(/\./g, "");
+      formdata.weight = data.txtWeight
+        .toString()
+        .replace(/,/g, "")
+        .replace(/\./g, "");
       formdata.import_price = data.txtImportPrice
         .toString()
         .replace(/,/g, "")

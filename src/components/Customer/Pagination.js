@@ -24,7 +24,7 @@ class Pagination extends Component {
     const params = `&search=${searchValue}`;
     if (isSale()) {
       history.push(
-        `/customer/${store_code}/sale?page=${page}&search=${searchValue}`
+        `/customer/${store_code}/customerSale?page=${page}&search=${searchValue}`
       );
       fetchListCustomerOfSale(store_code, page, params);
     } else {

@@ -79,18 +79,35 @@ class ListSale extends Component {
 
   onChangeSearch = (e) => {
     const { staff } = this.props;
+    const { role } = this.state;
     const value = e.target.value;
 
     let newStaffSearchClone = JSON.parse(JSON.stringify(staff));
+    let newStaffSearchSaleClone = staff.filter(
+      (staff) => staff.is_sale === true
+    );
+
     let newStaffSearch;
-    if (value === "") {
-      newStaffSearch = staff;
+    if (role === "sale") {
+      if (value === "") {
+        newStaffSearch = newStaffSearchSaleClone;
+      } else {
+        newStaffSearch = newStaffSearchSaleClone.filter((staff) =>
+          removeAscent(staff.name.trim().toLowerCase()).includes(
+            removeAscent(value.trim().toLowerCase())
+          )
+        );
+      }
     } else {
-      newStaffSearch = newStaffSearchClone.filter((staff) =>
-        removeAscent(staff.name.trim().toLowerCase()).includes(
-          removeAscent(value.trim().toLowerCase())
-        )
-      );
+      if (value === "") {
+        newStaffSearch = staff;
+      } else {
+        newStaffSearch = newStaffSearchClone.filter((staff) =>
+          removeAscent(staff.name.trim().toLowerCase()).includes(
+            removeAscent(value.trim().toLowerCase())
+          )
+        );
+      }
     }
 
     this.setState({ searchValue: e.target.value, staffSearch: newStaffSearch });

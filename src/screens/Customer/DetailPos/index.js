@@ -40,7 +40,7 @@ class DetailPos extends Component {
   }
   isSale = () => {
     const pathName = window.location.pathname.split("/");
-    const isCheckedSale = pathName[1] === "sale";
+    const isCheckedSale = pathName[2] === "customerSale";
     return isCheckedSale;
   };
 

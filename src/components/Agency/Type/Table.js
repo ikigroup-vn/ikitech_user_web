@@ -46,11 +46,20 @@ class Table extends Component {
               <td>{index + 1}</td>
               <td>{data.name}</td>
               <td>
+                <Link
+                  to={`/product-agency/index/${store_code}/${data.id}?tab-index=0`}
+                  style={{ marginRight: "10px" }}
+                  data-toggle="modal"
+                  data-target="#updateType"
+                  class={`btn btn-success btn-sm `}
+                >
+                  <i class="fa fa-edit"></i> Cấu hình sản phẩm
+                </Link>
                 <button
                   onClick={() => this.handleUpdate(data.id, data.name)}
                   data-toggle="modal"
                   data-target="#updateType"
-                  class={`btn btn-warning btn-sm `}
+                  class={`btn btn-outline-warning btn-sm `}
                 >
                   <i class="fa fa-edit"></i> Sửa
                 </button>
@@ -60,19 +69,10 @@ class Table extends Component {
                   style={{ marginLeft: "10px" }}
                   data-toggle="modal"
                   data-target="#removeType"
-                  class={`btn btn-danger btn-sm`}
+                  class={`btn btn-outline-danger btn-sm`}
                 >
                   <i class="fa fa-trash"></i> Xóa
                 </button>
-                <Link
-                  to={`/product-agency/index/${store_code}/${data.id}?tab-index=0`}
-                  style={{ marginLeft: "10px" }}
-                  data-toggle="modal"
-                  data-target="#updateType"
-                  class={`btn btn-success btn-sm `}
-                >
-                  <i class="fa fa-edit"></i> Cấu hình sản phẩm
-                </Link>
               </td>
             </tr>
           </React.Fragment>

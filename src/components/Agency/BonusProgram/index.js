@@ -297,9 +297,9 @@ class BonusProgram extends Component {
             <td style={{ display: "flex" }}>
               <Link
                 to={`/agency_bonus_steps/${this.props.store_code}/update/${data.id}?tab-index=3`}
-                class="btn btn-warning btn-sm"
+                class="btn btn-outline-warning btn-sm"
               >
-                <span class="icon text-white-50">
+                <span class="icon">
                   <i class="fas fa-edit"></i>
                 </span>
                 <span class="text">Sửa</span>
@@ -313,7 +313,7 @@ class BonusProgram extends Component {
                 data-toggle="modal"
                 data-target="#removeFormStepBonus"
                 style={{ marginLeft: "10px" }}
-                class={`btn btn-danger btn-sm `}
+                class={`btn btn-outline-danger btn-sm `}
               >
                 <i class="fa fa-trash"></i> Xóa
               </button>

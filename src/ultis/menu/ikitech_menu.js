@@ -269,7 +269,7 @@ export const ikitech_menu = [
           },
           {
             name: "Sale",
-            class: "agency_list",
+            class: "sale_list",
             display: "hide",
             icon: "fa fa-bell",
             exact: true,

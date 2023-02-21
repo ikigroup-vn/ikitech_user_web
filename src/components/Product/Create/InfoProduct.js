@@ -18,7 +18,7 @@ class InfoProduct extends Component {
       txtName: "",
       // txtBarcode: Math.random().toString().slice(2, 11),
       txtBarcode: "",
-
+      txtWeight: "",
       txtPrice: "",
       txtImportPrice: "",
       sku: Math.random().toString().slice(2, 11),
@@ -110,7 +110,8 @@ class InfoProduct extends Component {
       name == "txtImportPrice" ||
       name == "txtPercentC" ||
       name == "txtQuantityInStock" ||
-      name == "point_for_agency"
+      name == "point_for_agency" ||
+      name == "txtWeight"
     ) {
       if (!isNaN(Number(_value))) {
         value = formatNoD(_value);
@@ -339,6 +340,7 @@ class InfoProduct extends Component {
       txtName,
       txtStatus,
       txtCategory,
+      txtWeight,
       txtBarcode,
       txtPrice,
       txtQuantityInStock,
@@ -516,50 +518,83 @@ class InfoProduct extends Component {
           </div>
         )}
 
+        <div className="form-group">
+          <div className="row">
+            <div className="col-6">
+              {" "}
+              {getChannel() == IKITECH && (
+                <div class="form-group">
+                  <label for="product_name">Phần trăm hoa hồng CTV</label>
+                  <i
+                    style={{
+                      display: "block",
+                      marginBottom: "5px",
+                    }}
+                  >
+                    Bỏ trống khi sản phẩm không có hoa hồng
+                  </i>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="txtEmail"
+                    placeholder="Nhập %"
+                    autoComplete="off"
+                    value={txtPercentC}
+                    onChange={this.onChange}
+                    name="txtPercentC"
+                  />
+                </div>
+              )}
+            </div>
+            <div className="col-6">
+              {" "}
+              <div class="form-group">
+                <label for="product_name">Xu cho đại lý</label>
+                <i
+                  style={{
+                    display: "block",
+                    marginBottom: "5px",
+                  }}
+                >
+                  Bỏ trống khi không xét xu cho đại lý
+                </i>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="txtCostOfCapital"
+                  placeholder="Nhập xu"
+                  autoComplete="off"
+                  value={point_for_agency}
+                  onChange={this.onChange}
+                  name="point_for_agency"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
         {getChannel() == IKITECH && (
           <div class="form-group">
-            <label for="product_name">Phần trăm hoa hồng CTV</label>
+            <label for="product_weight">Cân nặng (gram)</label>
             <i
               style={{
                 display: "block",
                 marginBottom: "5px",
               }}
             >
-              Bỏ trống khi sản phẩm không có hoa hồng
+              Bỏ trống mặc định khi lên đơn sẽ lấy cân nặng 100 gram
             </i>
             <input
               type="text"
               class="form-control"
-              id="txtEmail"
-              placeholder="Nhập %"
+              id="product_weight"
+              placeholder="Nhập gram"
               autoComplete="off"
-              value={txtPercentC}
+              value={txtWeight}
               onChange={this.onChange}
-              name="txtPercentC"
+              name="txtWeight"
             />
           </div>
         )}
-        <div class="form-group">
-          <label for="product_name">Xu cho đại lý</label>
-          <i
-            style={{
-              display: "block",
-              marginBottom: "5px",
-            }}
-          >
-            Bỏ trống khi không xét xu cho đại lý
-          </i>
-          <input
-            type="text"
-            class="form-control"
-            id="txtCostOfCapital"
-            placeholder="Nhập xu"
-            autoComplete="off"
-            value={point_for_agency}
-            onChange={this.onChange}
-            name="point_for_agency"
-          />
-        </div>
         {getChannel() == IKITECH && (
           <div class="form-group">
             <label for="product_name">Trạng thái</label>

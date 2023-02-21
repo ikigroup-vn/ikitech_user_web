@@ -31,8 +31,18 @@ class Table extends Component {
           data.agency.back_card == null
             ? Env.IMG_NOT_FOUND
             : data.agency.back_card;
-        var status = data.status == 0 ? "Đã hủy" : "Đã thanh toán";
-        var _status = data.status == 0 ? "danger" : "success";
+        var status =
+          data.status == 0
+            ? "Chờ xử lý"
+            : data.status == 1
+            ? "Hoãn lại"
+            : "Đã thanh toán";
+        var _status =
+          data.status == 0
+            ? "warning"
+            : data.status == 1
+            ? "danger"
+            : "success";
         var address_default = "";
 
         if (

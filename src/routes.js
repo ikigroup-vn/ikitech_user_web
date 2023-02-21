@@ -535,7 +535,7 @@ const routes = [
     main: ({ match }) => <Customer match={match} />,
   },
   {
-    path: "/customer/:store_code/sale",
+    path: "/customer/:store_code/customerSale",
     exact: true,
 
     main: ({ match }) => <Customer match={match} />,
@@ -601,7 +601,7 @@ const routes = [
     ),
   },
   {
-    path: "/sale/customer/detail/:store_code/:customerId",
+    path: "/customer/customerSale/detail/:store_code/:customerId",
     exact: true,
 
     main: ({ match, history }) => (
