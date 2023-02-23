@@ -112,7 +112,8 @@ class Config extends Component {
     this.props.handleEditCallBack({ id: id, limit: limit, bonus: bonus });
     e.preventDefault();
   };
-  componentWillReceiveProps(nextProps) {
+
+  shouldComponentUpdate(nextProps, nextState) {
     const { steps, config, tabId } = this.props;
     if (!shallowEqual(config, nextProps.config) || nextProps.tabId != tabId) {
       this.setState({
@@ -125,6 +126,8 @@ class Config extends Component {
         steps: nextProps.steps,
       });
     }
+
+    return true;
   }
 
   showAllStep = (configs) => {
@@ -292,7 +295,6 @@ const mapStateToProps = (state) => {
   return {
     steps: state.saleReducers.sale.allStep,
     config: state.saleReducers.sale.config,
-    addedSuccessfully: state.saleReducers.sale.addedSuccessfully,
   };
 };
 
