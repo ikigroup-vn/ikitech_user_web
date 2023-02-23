@@ -135,11 +135,18 @@ class Table extends Component {
   }
 
   onChangeStatus = (e, id) => {
+    const { page, getParams, numPage, searchValue } = this.props;
     var checked = this["checked" + id].checked;
     var status = checked == true ? 1 : 0;
-    this.props.updateCollaborator(this.props.store_code, id, {
-      status: status,
-    });
+    this.props.updateCollaborator(
+      this.props.store_code,
+      id,
+      {
+        status: status,
+      },
+      page,
+      getParams(searchValue, numPage)
+    );
   };
   showModalImg = (url) => {
     this.setState({ modalImg: url });
@@ -204,7 +211,10 @@ class Table extends Component {
                 </button>
               </td>{" "}
               <td>
-                {(this.props.collaborators.current_page - 1) * 20 + index + 1}
+                {(this.props.collaborators.current_page - 1) *
+                  Number(this.props.collaborators.per_page) +
+                  index +
+                  1}
               </td>{" "}
               <td style={{ textAlign: "center" }}>
                 <img
@@ -262,7 +272,7 @@ class Table extends Component {
                 <Link
                   style={{ margin: "2px 0" }}
                   to={`/order/${this.props.store_code}?collaborator_by_customer_id=${data.customer_id}&tab-index=1&page=${this.props.page}&search=${this.props.searchValue}`}
-                  class="btn btn-danger btn-sm"
+                  class="btn btn-outline-danger btn-sm"
                 >
                   <i class="fa fa-history"></i> Lịch sử đơn hàng
                 </Link>
@@ -270,7 +280,7 @@ class Table extends Component {
                 <Link
                   style={{ margin: "2px 0" }}
                   to={`/collaborator/${this.props.store_code}/report/${data.customer.id}`}
-                  class="btn btn-info btn-sm"
+                  class="btn btn-outline-info btn-sm"
                 >
                   <i class="fa fa-bar-chart"></i> Báo cáo
                 </Link>
@@ -426,7 +436,7 @@ class Table extends Component {
                 >
                   <button
                     onClick={() => this.showChatBox(data.customer.id, "show")}
-                    class="btn btn-success btn-sm"
+                    class="btn btn-outline-success btn-sm"
                     style={{
                       width: "fit-content",
                     }}
@@ -435,15 +445,15 @@ class Table extends Component {
                   </button>
                   <a
                     href={`tel:${data.customer.phone_number}`}
-                    class="btn btn-primary btn-sm"
+                    class="btn btn-outline-primary btn-sm"
                     style={{
                       width: "fit-content",
                     }}
                   >
                     <i class="fa fa-phone"></i> Gọi ngay
                   </a>
-                  <a
-                    class="btn btn-info btn-sm"
+                  <button
+                    class="btn btn-outline-info btn-sm"
                     style={{
                       width: "fit-content",
                     }}
@@ -451,14 +461,9 @@ class Table extends Component {
                       this.handleShowSidebarListReferences(data.customer)
                     }
                   >
-                    <span class="icon text-white">
-                      <i class="fa fa-users"></i>
-                    </span>
-                    <span style={{ color: "white" }} class={`text `}>
-                      {" "}
-                      Danh sách giới thiệu ({data.customer.total_referrals})
-                    </span>
-                  </a>
+                    <i class="fa fa-users"></i>
+                    Danh sách giới thiệu ({data.customer.total_referrals})
+                  </button>
                 </div>
               </td>
             </tr>
@@ -556,8 +561,16 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    updateCollaborator: (store_code, id, data) => {
-      dispatch(collaboratorAction.updateCollaborator(store_code, id, data));
+    updateCollaborator: (store_code, id, data, page, params) => {
+      dispatch(
+        collaboratorAction.updateCollaborator(
+          store_code,
+          id,
+          data,
+          page,
+          params
+        )
+      );
     },
   };
 };

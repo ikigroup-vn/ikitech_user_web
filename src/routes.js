@@ -492,7 +492,7 @@ const routes = [
     main: ({ match }) => <Bill match={match} />,
   },
   {
-    path: "/sale/:store_code/order",
+    path: "/cusSale/:store_code/order",
     exact: true,
 
     main: ({ match }) => <Bill match={match} />,

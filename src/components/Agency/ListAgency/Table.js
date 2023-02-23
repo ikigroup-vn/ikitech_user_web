@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import * as Env from "../../../ultis/default";
 import * as helper from "../../../ultis/helpers";
 import { shallowEqual } from "../../../ultis/shallowEqual";
-import { format, randomString } from "../../../ultis/helpers";
+import { format, randomString, insertParam } from "../../../ultis/helpers";
 import { connect } from "react-redux";
 import * as agencyAction from "../../../actions/agency";
 import styled from "styled-components";
@@ -108,19 +108,33 @@ class Table extends Component {
   };
 
   onChangeStatus = (e, id) => {
+    const { page, getParams, numPage, searchValue, typeAgency } = this.props;
     var checked = this["checked" + id].checked;
     var status = checked == true ? 1 : 0;
-    this.props.updateAgency(this.props.store_code, id, {
-      status: status,
-    });
+    this.props.updateAgency(
+      this.props.store_code,
+      id,
+      {
+        status: status,
+      },
+      page,
+      getParams(searchValue, typeAgency, numPage)
+    );
   };
 
   changeAgencyType = (e, id) => {
+    const { page, getParams, numPage, searchValue, typeAgency } = this.props;
     var value = e.target.value;
     if (value == 0) return;
-    this.props.updateAgency(this.props.store_code, id, {
-      agency_type_id: value,
-    });
+    this.props.updateAgency(
+      this.props.store_code,
+      id,
+      {
+        agency_type_id: value,
+      },
+      page,
+      getParams(searchValue, typeAgency, numPage)
+    );
   };
 
   showData = (agencys) => {
@@ -195,7 +209,12 @@ class Table extends Component {
                   <span className="fa fa-plus"></span>
                 </button>
               </td>
-              <td>{(this.props.agencys.current_page - 1) * 20 + index + 1}</td>{" "}
+              <td>
+                {(this.props.agencys.current_page - 1) *
+                  Number(this.props.agencys.per_page) +
+                  index +
+                  1}
+              </td>{" "}
               <td style={{ textAlign: "center" }}>
                 <img
                   src={avatar}
@@ -285,7 +304,7 @@ class Table extends Component {
               </td>
             </tr>
             <tr class="explode hide">
-              <td colSpan={9}>
+              <td colSpan={8}>
                 <div class="row">
                   <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                     <div class="info_user">
@@ -365,7 +384,7 @@ class Table extends Component {
                 >
                   <button
                     onClick={() => this.showChatBox(data.customer.id, "show")}
-                    class="btn btn-success btn-sm"
+                    class="btn btn-outline-success btn-sm"
                     style={{
                       width: "fit-content",
                     }}
@@ -374,7 +393,7 @@ class Table extends Component {
                   </button>
                   <a
                     href={`tel:${data.customer.phone_number}`}
-                    class="btn btn-primary btn-sm"
+                    class="btn btn-outline-primary btn-sm"
                     style={{
                       width: "fit-content",
                     }}
@@ -405,6 +424,8 @@ class Table extends Component {
   onChangeType = (e) => {
     var { value } = e.target;
     this.setState({ txtType: value });
+    const { setTypeAgency } = this.props;
+    setTypeAgency(value);
     this.props.passType(value);
   };
   render() {
@@ -414,6 +435,7 @@ class Table extends Component {
         : this.props.agencys.data;
     var { txtType, agencySelected, agencySelectedForChangeBalance, isSub } =
       this.state;
+    const { typeAgency } = this.props;
     return (
       <TableStyles class="" style={{ overflow: "auto" }}>
         <table class="table table-border">
@@ -429,7 +451,7 @@ class Table extends Component {
               <th>
                 <select
                   name="txtType"
-                  value={txtType}
+                  value={typeAgency}
                   id="input"
                   className="form-control"
                   onChange={this.onChangeType}
@@ -478,8 +500,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    updateAgency: (store_code, id, data) => {
-      dispatch(agencyAction.updateAgency(store_code, id, data));
+    updateAgency: (store_code, id, data, page, params) => {
+      dispatch(agencyAction.updateAgency(store_code, id, data, page, params));
     },
     fetchAllAgency: (store_code, page, params) => {
       dispatch(agencyAction.fetchAllAgency(store_code, page, params));

@@ -12,13 +12,13 @@ class Pagination extends Component {
   }
 
   passPagination = (page) => {
-    var { searchValue, getParams, setPage } = this.props;
+    var { searchValue, numPage, getParams, setPage } = this.props;
     insertParam({ page: page });
     setPage(page);
     this.props.fetchAllCollaborator(
       this.props.store_code,
       page,
-      getParams(searchValue)
+      getParams(searchValue, numPage)
     );
   };
 

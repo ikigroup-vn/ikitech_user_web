@@ -12,13 +12,21 @@ class Pagination extends Component {
   }
 
   passPagination = (page) => {
-    var { searchValue, getParams, setPage } = this.props;
+    var {
+      searchValue,
+      numPage,
+      getParams,
+      setPage,
+      store_code,
+      fetchAllAgency,
+      typeAgency,
+    } = this.props;
     insertParam({ page: page });
     setPage(page);
-    this.props.fetchAllAgency(
-      this.props.store_code,
+    fetchAllAgency(
+      store_code,
       page,
-      getParams(searchValue)
+      getParams(searchValue, typeAgency, numPage)
     );
   };
 

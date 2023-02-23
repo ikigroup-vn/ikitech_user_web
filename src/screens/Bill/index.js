@@ -368,7 +368,7 @@ class Bill extends Component {
   }
   isSale = () => {
     const pathName = window.location.pathname.split("/");
-    const isCheckedSale = pathName[1] === "sale";
+    const isCheckedSale = pathName[1] === "cusSale";
     return isCheckedSale;
   };
   handleShowChatBox = (customerId, customerImg, customerName, status) => {
@@ -471,7 +471,7 @@ class Bill extends Component {
       typeof nextProps.permission.product_list != "undefined"
     ) {
       var permissions = nextProps.permission;
-      var isShow = permissions.order_list;
+      var isShow = permissions.order_list || this.isSale();
       var chat_allow = permissions.chat_allow;
 
       this.setState({ isLoading: true, chat_allow, isShow });

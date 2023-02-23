@@ -15,6 +15,8 @@ class ListAgency extends Component {
       showChatBox: "hide",
       page: getQueryParams("page") || 1,
       searchValue: getQueryParams("search") || "",
+      numPage: getQueryParams("limit") || 20,
+      typeAgency: getQueryParams("agency_type_id") || "",
     };
   }
 
@@ -30,24 +32,28 @@ class ListAgency extends Component {
   };
 
   componentDidMount() {
-    const { page, searchValue } = this.state;
-    const params = this.getParams(searchValue);
+    const { page, searchValue, numPage, typeAgency } = this.state;
+    const params = this.getParams(searchValue, typeAgency, numPage);
     this.props.fetchAllAgency(this.props.store_code, page, params);
     this.props.fetchAllAgencyType(this.props.store_code);
   }
+  setTypeAgency = (type) => {
+    this.setState({ typeAgency: type });
+  };
   closeChatBox = (status) => {
     this.setState({
       showChatBox: status,
     });
   };
   passType = (data) => {
-    var { searchValue } = this.state;
-    this.setState({ type: data });
-    var params = this.getParams(searchValue, data);
+    var { searchValue, numPage } = this.state;
+    this.setState({ typeAgency: data, page: 1 });
+    insertParam({ page: 1, agency_type_id: data });
+    var params = this.getParams(searchValue, data, numPage);
     this.props.fetchAllAgency(this.props.store_code, 1, params);
   };
 
-  getParams = (searchValue, type) => {
+  getParams = (searchValue, type, limit = 20) => {
     var params = ``;
 
     if (searchValue != "" && searchValue != null) {
@@ -56,6 +62,8 @@ class ListAgency extends Component {
     if (type != "" && type != null) {
       params = params + `&agency_type_id=${type}`;
     }
+    params += `&limit=${limit}`;
+
     return params;
   };
   setPage = (page) => {
@@ -63,8 +71,8 @@ class ListAgency extends Component {
   };
   searchData = (e) => {
     e.preventDefault();
-    var { searchValue } = this.state;
-    var params = this.getParams(searchValue);
+    var { searchValue, numPage, typeAgency } = this.state;
+    var params = this.getParams(searchValue, typeAgency, numPage);
     this.setPage(1);
     insertParam({ search: searchValue });
     const page = getQueryParams("page");
@@ -74,17 +82,28 @@ class ListAgency extends Component {
     this.props.fetchAllAgency(this.props.store_code, 1, params);
   };
   exportListAgency = () => {
-    var { searchValue } = this.state;
-    var params = this.getParams(searchValue);
-    this.props.exportListAgency(this.props.store_code, 1, params);
+    var { searchValue, numPage, page, typeAgency } = this.state;
+    var params = this.getParams(searchValue, typeAgency, numPage);
+    this.props.exportListAgency(this.props.store_code, page, params);
+  };
+  onChangeNumPage = (e) => {
+    const { store_code, fetchAllAgency } = this.props;
+    var { searchValue, typeAgency } = this.state;
+    const numPage = e.target.value;
+    this.setState({
+      numPage,
+      page: 1,
+    });
+    var params = this.getParams(searchValue, typeAgency, numPage);
+    insertParam({ page: 1, limit: numPage });
+    fetchAllAgency(store_code, 1, params);
   };
   onChangeSearch = (e) => {
     this.setState({ searchValue: e.target.value });
   };
 
   render() {
-    var { customer, chat, agencys, store_code, tabId, store_code, types } =
-      this.props;
+    var { customer, chat, agencys, store_code, tabId, types } = this.props;
 
     var customerImg =
       typeof customer.avatar_image == "undefined" ||
@@ -100,7 +119,7 @@ class ListAgency extends Component {
         ? "Trống"
         : customer.name;
 
-    var { showChatBox, searchValue, page } = this.state;
+    var { showChatBox, searchValue, page, numPage, typeAgency } = this.state;
     console.log(this.props.state);
     return (
       <div id="">
@@ -143,6 +162,9 @@ class ListAgency extends Component {
             passType={this.passType}
             page={page}
             searchValue={searchValue}
+            numPage={numPage}
+            typeAgency={typeAgency}
+            setTypeAgency={this.setTypeAgency}
             getParams={this.getParams}
             types={types}
             tabId={tabId}
@@ -151,14 +173,45 @@ class ListAgency extends Component {
             store_code={store_code}
             agencys={agencys}
           />
-
-          <Pagination
-            searchValue={searchValue}
-            getParams={this.getParams}
-            store_code={store_code}
-            agencys={agencys}
-            setPage={this.setPage}
-          />
+          <div style={{ display: "flex", justifyContent: "end" }}>
+            <div style={{ display: "flex" }}>
+              <span
+                style={{
+                  margin: "20px 10px auto auto",
+                }}
+              >
+                Hiển thị
+              </span>
+              <select
+                style={{
+                  margin: "auto",
+                  marginTop: "10px",
+                  marginRight: "20px",
+                  width: "80px",
+                }}
+                onChange={this.onChangeNumPage}
+                value={numPage}
+                name="numPage"
+                class="form-control"
+              >
+                <option value="20" selected>
+                  20
+                </option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="200">200</option>
+              </select>
+            </div>
+            <Pagination
+              numPage={numPage}
+              searchValue={searchValue}
+              getParams={this.getParams}
+              store_code={store_code}
+              agencys={agencys}
+              setPage={this.setPage}
+              typeAgency={typeAgency}
+            />
+          </div>
         </div>
 
         <Chat

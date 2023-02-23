@@ -55,7 +55,7 @@ class Statistical extends Component {
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                       <div class=" font-weight-bold text-primary text-uppercase mb-1">
-                        <Link to={`/sale/${store_code}/order`}>
+                        <Link to={`/cusSale/${store_code}/order`}>
                           Đơn hàng hôm nay
                         </Link>
                       </div>
