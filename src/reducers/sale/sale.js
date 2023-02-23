@@ -33,9 +33,6 @@ export const sale = (state = initialState, action) => {
     case Types.REMOVE_SALE_STEP:
       newState.removedSuccessfully = action.data;
       return newState;
-    case Types.UPDATE_SALE_CONFIG:
-      newState.config = action.data;
-      return newState;
     case Types.ADD_CUSTOMER_TO_SALE:
       newState.addCustomerToSaleSuccessfully = action.data;
       return newState;

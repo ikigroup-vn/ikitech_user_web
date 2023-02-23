@@ -232,10 +232,6 @@ export const updateConfig = (store_code, data) => {
         });
         if (res.data.code === 200) {
           dispatch({
-            type: Types.UPDATE_SALE_CONFIG,
-            data: res.data.data,
-          });
-          dispatch({
             type: Types.ALERT_UID_STATUS,
             alert: {
               type: "success",

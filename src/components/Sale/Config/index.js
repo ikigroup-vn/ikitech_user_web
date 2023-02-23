@@ -112,19 +112,30 @@ class Config extends Component {
     this.props.handleEditCallBack({ id: id, limit: limit, bonus: bonus });
     e.preventDefault();
   };
-  componentWillReceiveProps(nextProps) {
+
+  shouldComponentUpdate(nextProps, nextState) {
     const { steps, config, tabId } = this.props;
     if (!shallowEqual(config, nextProps.config) || nextProps.tabId != tabId) {
+      console.log(
+        "Config ~ shouldComponentUpdate ~ nextProps.config:",
+        nextProps.config
+      );
       this.setState({
         allow_sale: nextProps.config.allow_sale,
         type_bonus_period: nextProps.config.type_bonus_period,
       });
     }
     if (!shallowEqual(steps, nextProps.steps) || nextProps.tabId != tabId) {
+      console.log(
+        "Config ~ shouldComponentUpdate ~  nextProps.steps:",
+        nextProps.steps
+      );
       this.setState({
         steps: nextProps.steps,
       });
     }
+
+    return true;
   }
 
   showAllStep = (configs) => {
@@ -292,7 +303,6 @@ const mapStateToProps = (state) => {
   return {
     steps: state.saleReducers.sale.allStep,
     config: state.saleReducers.sale.config,
-    addedSuccessfully: state.saleReducers.sale.addedSuccessfully,
   };
 };
 
