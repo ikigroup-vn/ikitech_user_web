@@ -116,20 +116,12 @@ class Config extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     const { steps, config, tabId } = this.props;
     if (!shallowEqual(config, nextProps.config) || nextProps.tabId != tabId) {
-      console.log(
-        "Config ~ shouldComponentUpdate ~ nextProps.config:",
-        nextProps.config
-      );
       this.setState({
         allow_sale: nextProps.config.allow_sale,
         type_bonus_period: nextProps.config.type_bonus_period,
       });
     }
     if (!shallowEqual(steps, nextProps.steps) || nextProps.tabId != tabId) {
-      console.log(
-        "Config ~ shouldComponentUpdate ~  nextProps.steps:",
-        nextProps.steps
-      );
       this.setState({
         steps: nextProps.steps,
       });
