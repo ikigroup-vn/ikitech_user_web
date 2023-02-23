@@ -15,6 +15,7 @@ class ListCollaborator extends Component {
       showChatBox: "hide",
       page: getQueryParams("page") || 1,
       searchValue: getQueryParams("search") || "",
+      numPage: getQueryParams("limit") || 20,
     };
   }
 
@@ -30,8 +31,8 @@ class ListCollaborator extends Component {
   };
 
   componentDidMount() {
-    const { page, searchValue } = this.state;
-    const params = this.getParams(searchValue);
+    const { page, searchValue, numPage } = this.state;
+    const params = this.getParams(searchValue, numPage);
     this.props.fetchAllCollaborator(this.props.store_code, page, params);
   }
   closeChatBox = (status) => {
@@ -40,16 +41,17 @@ class ListCollaborator extends Component {
     });
   };
   exportListCollaborator = () => {
-    var { searchValue, page } = this.state;
-    var params = this.getParams(searchValue);
+    var { searchValue, page, numPage } = this.state;
+    var params = this.getParams(searchValue, numPage);
     this.props.exportListCollaborator(this.props.store_code, page, params);
   };
-  getParams = (searchValue) => {
+  getParams = (searchValue, limit = 20) => {
     var params = ``;
 
     if (searchValue != "" && searchValue != null) {
       params = params + `&search=${searchValue}`;
     }
+    params += `&limit=${limit}`;
 
     return params;
   };
@@ -58,8 +60,8 @@ class ListCollaborator extends Component {
   };
   searchData = (e) => {
     e.preventDefault();
-    var { searchValue } = this.state;
-    var params = this.getParams(searchValue);
+    var { searchValue, numPage } = this.state;
+    var params = this.getParams(searchValue, numPage);
     this.setPage(1);
     insertParam({ search: searchValue });
     const page = getQueryParams("page");
@@ -67,6 +69,18 @@ class ListCollaborator extends Component {
       insertParam({ page: 1 });
     }
     this.props.fetchAllCollaborator(this.props.store_code, 1, params);
+  };
+  onChangeNumPage = (e) => {
+    const { store_code, fetchAllCollaborator } = this.props;
+    var { searchValue } = this.state;
+    const numPage = e.target.value;
+    this.setState({
+      numPage,
+      page: 1,
+    });
+    var params = this.getParams(searchValue, numPage);
+    insertParam({ page: 1, limit: numPage });
+    fetchAllCollaborator(store_code, 1, params);
   };
 
   onChangeSearch = (e) => {
@@ -91,7 +105,7 @@ class ListCollaborator extends Component {
         ? "Trống"
         : customer.name;
 
-    var { showChatBox, searchValue, page } = this.state;
+    var { showChatBox, searchValue, page, numPage } = this.state;
     console.log(this.props.state);
     return (
       <div id="">
@@ -135,17 +149,49 @@ class ListCollaborator extends Component {
             handleShowChatBox={this.handleShowChatBox}
             store_code={store_code}
             collaborators={collaborators}
+            getParams={this.getParams}
             page={page}
             searchValue={searchValue}
+            numPage={numPage}
           />
-
-          <Pagination
-            searchValue={searchValue}
-            getParams={this.getParams}
-            store_code={store_code}
-            collaborators={collaborators}
-            setPage={this.setPage}
-          />
+          <div style={{ display: "flex", justifyContent: "end" }}>
+            <div style={{ display: "flex" }}>
+              <span
+                style={{
+                  margin: "20px 10px auto auto",
+                }}
+              >
+                Hiển thị
+              </span>
+              <select
+                style={{
+                  margin: "auto",
+                  marginTop: "10px",
+                  marginRight: "20px",
+                  width: "80px",
+                }}
+                onChange={this.onChangeNumPage}
+                value={numPage}
+                name="numPage"
+                class="form-control"
+              >
+                <option value="20" selected>
+                  20
+                </option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                <option value="200">200</option>
+              </select>
+            </div>
+            <Pagination
+              searchValue={searchValue}
+              numPage={numPage}
+              getParams={this.getParams}
+              store_code={store_code}
+              collaborators={collaborators}
+              setPage={this.setPage}
+            />
+          </div>
         </div>
 
         <Chat

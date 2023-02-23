@@ -25,8 +25,18 @@ class SidebarShowStatisticalSale extends Component {
     const { statisticalUser } = this.props;
     if (!shallowEqual(statisticalUser, nextProps.statisticalUser)) {
       var newIndex = -1;
+      const totalCompare =
+        nextProps?.statisticalUser?.sale_config?.type_bonus_period == 0
+          ? nextProps?.statisticalUser?.total_final_in_month
+          : nextProps?.statisticalUser?.sale_config?.type_bonus_period == 1
+          ? nextProps?.statisticalUser?.total_final_in_week
+          : nextProps?.statisticalUser?.sale_config?.type_bonus_period == 2
+          ? nextProps?.statisticalUser?.total_final_in_quarter
+          : nextProps?.statisticalUser?.sale_config?.type_bonus_period == 3
+          ? nextProps?.statisticalUser?.total_final_in_year
+          : "";
       nextProps?.statisticalUser?.steps_bonus.forEach((step, index) => {
-        if (step.limit <= nextProps?.statisticalUser?.total_final_in_quarter) {
+        if (step.limit <= totalCompare) {
           newIndex = index;
         }
       });
@@ -228,7 +238,16 @@ class SidebarShowStatisticalSale extends Component {
                       fontSize: "1.25rem",
                     }}
                   >
-                    Thưởng theo mức doanh thu theo quý
+                    Thưởng theo mức doanh thu theo{" "}
+                    {statisticalUser?.sale_config?.type_bonus_period == 0
+                      ? "tháng"
+                      : statisticalUser?.sale_config?.type_bonus_period == 1
+                      ? "tuần"
+                      : statisticalUser?.sale_config?.type_bonus_period == 2
+                      ? "quý"
+                      : statisticalUser?.sale_config?.type_bonus_period == 3
+                      ? "năm"
+                      : ""}
                   </span>
                 </div>
 

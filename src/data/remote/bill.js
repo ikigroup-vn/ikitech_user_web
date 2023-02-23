@@ -107,3 +107,11 @@ export const syncShipment = (store_code, order_code, data) => {
 export const deleteOrder = (store_code, order_code) => {
   return callApi(`/store/${store_code}/orders/${order_code}`, "delete", null);
 };
+
+export const updateShippingPackage = (store_code, order_code, data) => {
+  return callApi(
+    `/store/${store_code}/orders/update_package/${order_code}`,
+    "put",
+    data
+  );
+};

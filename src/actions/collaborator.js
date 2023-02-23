@@ -298,7 +298,7 @@ export const fetchAllTopReport = (store_code, page = 1, params) => {
   };
 };
 
-export const updateCollaborator = (store_code, id, data) => {
+export const updateCollaborator = (store_code, id, data, page, params) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -320,18 +320,19 @@ export const updateCollaborator = (store_code, id, data) => {
             content: res.data.msg,
           },
         });
-        collaboratorApi.fetchAllCollaborator(store_code, 1).then((res) => {
-          console.log(res);
-          dispatch({
-            type: Types.SHOW_LOADING_LAZY,
-            loading: "hide",
-          });
-          if (res.data.code !== 401)
+        collaboratorApi
+          .fetchAllCollaborator(store_code, page, params)
+          .then((res) => {
             dispatch({
-              type: Types.FETCH_ALL_COLLABORATOR,
-              data: res.data.data,
+              type: Types.SHOW_LOADING_LAZY,
+              loading: "hide",
             });
-        });
+            if (res.data.code !== 401)
+              dispatch({
+                type: Types.FETCH_ALL_COLLABORATOR,
+                data: res.data.data,
+              });
+          });
       })
       .catch(function (error) {
         dispatch({

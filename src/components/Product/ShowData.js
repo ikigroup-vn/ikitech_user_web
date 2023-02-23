@@ -374,6 +374,9 @@ class ShowData extends Component {
             <label
               className="status-product"
               onClick={this.handleChangeStatusProduct}
+              style={{
+                marginBottom: "0",
+              }}
             >
               <input type="checkbox" hidden checked={data.status === 0} />
               <div></div>
@@ -384,34 +387,56 @@ class ShowData extends Component {
         {getChannel() == IKITECH && <td>{data.view}</td>}
         {getChannel() == IKITECH && <td>{data.likes}</td>}
 
-        <td className="btn-voucher">
-          <Link
-            to={`/product/edit/${store_code}/${data.id}?page=${page}${
-              searchValue ? `&search=${searchValue}` : ""
-            }&limit=${limit}`}
-            class={`btn btn-warning btn-sm ${update == true ? "show" : "hide"}`}
-          >
-            <i class="fa fa-edit"></i> Sửa
-          </Link>
-          <Link
-            to={`/product/create/${store_code}/${data.id}`}
-            class={`btn btn-primary btn-sm ${insert == true ? "show" : "hide"}`}
+        <td
+          style={{
+            maxWidth: "200px",
+          }}
+        >
+          <div
             style={{
-              marginLeft: "5px",
+              display: "flex",
+              columnGap: "5px",
+              rowGap: "5px",
             }}
           >
-            <i class="fa fa-copy"></i> Sao chép
-          </Link>
-          <button
-            onClick={(e) =>
-              this.props.passDataModal(e, store_code, data.id, data.name)
-            }
-            data-toggle="modal"
-            data-target="#removeModal"
-            class={`btn btn-danger btn-sm ${_delete == true ? "show" : "hide"}`}
-          >
-            <i class="fa fa-trash"></i> Xóa
-          </button>
+            <Link
+              to={`/product/edit/${store_code}/${data.id}?page=${page}${
+                searchValue ? `&search=${searchValue}` : ""
+              }&limit=${limit}`}
+              class={`btn btn-outline-warning btn-sm ${
+                update == true ? "show" : "hide"
+              }`}
+            >
+              <i class="fa fa-edit"></i> Sửa
+            </Link>
+            <Link
+              to={`/product/create/${store_code}/${data.id}`}
+              class={`btn btn-outline-primary btn-sm ${
+                insert == true ? "show" : "hide"
+              }`}
+            >
+              <i class="fa fa-copy"></i>
+            </Link>
+            <button
+              onClick={(e) =>
+                this.props.passDataModal(e, store_code, data.id, data.name)
+              }
+              data-toggle="modal"
+              data-target="#removeModal"
+              class={`btn btn-outline-danger btn-sm ${
+                _delete == true ? "show" : "hide"
+              }`}
+            >
+              <i
+                class="fa fa-trash"
+                style={{
+                  marginBottom: "0",
+                  marginRight: "0",
+                  marginTop: "0",
+                }}
+              ></i>
+            </button>
+          </div>
         </td>
       </tr>
     );

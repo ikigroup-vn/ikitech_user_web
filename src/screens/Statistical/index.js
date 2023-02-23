@@ -25,8 +25,18 @@ class Statistical extends Component {
 
     if (!shallowEqual(statistical, nextProps.statistical)) {
       var newIndex = -1;
+      const totalCompare =
+        nextProps?.statistical?.sale_config?.type_bonus_period == 0
+          ? nextProps?.statistical?.total_final_in_month
+          : nextProps?.statistical?.sale_config?.type_bonus_period == 1
+          ? nextProps?.statistical?.total_final_in_week
+          : nextProps?.statistical?.sale_config?.type_bonus_period == 2
+          ? nextProps?.statistical?.total_final_in_quarter
+          : nextProps?.statistical?.sale_config?.type_bonus_period == 3
+          ? nextProps?.statistical?.total_final_in_year
+          : "";
       nextProps?.statistical?.steps_bonus.forEach((step, index) => {
-        if (step.limit <= nextProps?.statistical?.total_final_in_quarter) {
+        if (step.limit <= totalCompare) {
           newIndex = index;
         }
       });
@@ -228,7 +238,16 @@ class Statistical extends Component {
                             }}
                           />
                           <span className="font-weight-bold text-uppercase">
-                            Thưởng theo mức doanh thu theo quý
+                            Thưởng theo mức doanh thu theo{" "}
+                            {statistical?.sale_config?.type_bonus_period == 0
+                              ? "tháng"
+                              : statistical?.sale_config?.type_bonus_period == 1
+                              ? "tuần"
+                              : statistical?.sale_config?.type_bonus_period == 2
+                              ? "quý"
+                              : statistical?.sale_config?.type_bonus_period == 3
+                              ? "năm"
+                              : ""}
                           </span>
                         </div>
 

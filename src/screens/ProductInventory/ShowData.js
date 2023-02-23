@@ -180,9 +180,18 @@ class ShowData extends Component {
                     height="63px"
                   ></img>
                 </td>
-                <td className="item" style={{ display: "flex" }}>
-                  <label style={{ color: "#ff8100" }}>&nbsp;Phân loại: </label>
-                  <div className="name-distribute">{element.name}</div>
+                <td className="item">
+                  <div
+                    style={{
+                      display: "flex",
+                      columnGap: "3px",
+                    }}
+                  >
+                    <label style={{ color: "#ff8100", marginBottom: "0" }}>
+                      &nbsp;Phân loại:
+                    </label>
+                    <div className="name-distribute">{element.name}</div>
+                  </div>
                 </td>
                 <td></td>
                 <td></td>

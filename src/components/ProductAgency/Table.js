@@ -155,7 +155,7 @@ class Table extends Component {
                 {data.name}
               </Link>
             </td>
-            <td>{data.agency_price.percent_agency}%</td>
+            <td>{data?.agency_price?.percent_agency}%</td>
             <td>
               {product_discount == null && (
                 <div className={`price-${data.id}`}>

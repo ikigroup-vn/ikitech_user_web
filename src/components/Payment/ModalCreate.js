@@ -1,8 +1,40 @@
 import React, { Component } from "react";
 import * as CategoryPAction from "../../actions/category_product";
-import { connect } from "react-redux";
+import { connect, shallowEqual } from "react-redux";
 import * as helper from "../../ultis/helpers";
+import styled from "styled-components";
+import themeData from "../../ultis/theme_data";
+import * as productAction from "../../actions/product";
 
+const DivImageStyles = styled.div`
+  position: relative;
+  width: 90px;
+  height: 90px;
+  display: flex;
+  align-items: center;
+  border-radius: 6px;
+  overflow: hidden;
+  img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 0;
+  }
+  .gift__background {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 10;
+    cursor: pointer;
+    label {
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+  }
+`;
 class ModalCreate extends Component {
   constructor(props) {
     super(props);
@@ -11,7 +43,16 @@ class ModalCreate extends Component {
       account_number: "",
       bank: "",
       branch: "",
+      qr_code_image_url: "",
     };
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    const { listImgProductV2 } = this.props;
+    if (!shallowEqual(listImgProductV2, nextProps.listImgProductV2)) {
+      this.setState({ qr_code_image_url: nextProps.listImgProductV2[0] });
+    }
+    return true;
   }
 
   onChange = (e) => {
@@ -24,6 +65,15 @@ class ModalCreate extends Component {
     });
   };
 
+  handleUploadImage = (e) => {
+    const file = e.target.files[0];
+    const { uploadListImgProductV2 } = this.props;
+    if (file) {
+      const updatedList = [file];
+      uploadListImgProductV2(updatedList);
+    }
+  };
+
   onSave = (e) => {
     e.preventDefault();
     window.$(".modal").modal("hide");
@@ -34,6 +84,7 @@ class ModalCreate extends Component {
       account_number: payment.account_number,
       bank: payment.bank,
       branch: payment.branch,
+      qr_code_image_url: payment.qr_code_image_url,
     });
 
     this.setState({
@@ -41,10 +92,12 @@ class ModalCreate extends Component {
       account_number: "",
       bank: "",
       branch: "",
+      qr_code_image_url: "",
     });
   };
   render() {
-    var { account_name, account_number, bank, branch } = this.state;
+    var { account_name, account_number, bank, branch, qr_code_image_url } =
+      this.state;
     return (
       <div
         class="modal fade"
@@ -128,6 +181,34 @@ class ModalCreate extends Component {
                     name="branch"
                   />
                 </div>
+                <div class="form-group">
+                  <label for="product_name">Hình ảnh chuyển khoản QRCode</label>
+                  <DivImageStyles
+                    className="gift__image"
+                    style={{
+                      border: `1px solid ${themeData().backgroundColor}`,
+                    }}
+                  >
+                    <img
+                      src={
+                        qr_code_image_url
+                          ? qr_code_image_url
+                          : "/images/no_img.png"
+                      }
+                      alt="image_gift"
+                    />
+                    <div className="gift__background">
+                      <label>
+                        <input
+                          type="file"
+                          accept="image/*"
+                          hidden
+                          onChange={this.handleUploadImage}
+                        />
+                      </label>
+                    </div>
+                  </DivImageStyles>
+                </div>
               </div>
               <div class="modal-footer">
                 <button
@@ -148,12 +229,20 @@ class ModalCreate extends Component {
     );
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    listImgProductV2: state.UploadReducers.productImg.listImgProductV2,
+  };
+};
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
     createCategoryP: (id, form) => {
       dispatch(CategoryPAction.createCategoryP(id, form));
     },
+    uploadListImgProductV2: (file) => {
+      dispatch(productAction.uploadListImgProductV2(file));
+    },
   };
 };
-export default connect(null, mapDispatchToProps)(ModalCreate);
+export default connect(mapStateToProps, mapDispatchToProps)(ModalCreate);

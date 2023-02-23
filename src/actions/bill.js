@@ -1097,3 +1097,52 @@ export const deleteOrder = (store_code, order_code) => {
       });
   };
 };
+export const updateShippingPackage = (
+  store_code,
+  order_code,
+  data,
+  funcModal
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    billApi
+      .updateShippingPackage(store_code, order_code, data)
+      .then((res) => {
+        funcModal();
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+        billApi.fetchBillId(store_code, order_code).then((res) => {
+          if (res.data.code !== 401)
+            dispatch({
+              type: Types.FETCH_ID_BILL,
+              data: res.data.data,
+            });
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};

@@ -310,7 +310,7 @@ class Product extends Component {
                                   data-toggle="modal"
                                   data-target="#updateCommission"
                                 >
-                                  Sủa hoa hồng được chọn
+                                  Sửa hoa hồng được chọn
                                 </div>
                                 <div
                                   className="btn btn-primary"
@@ -332,7 +332,7 @@ class Product extends Component {
                               data-toggle="modal"
                               data-target="#updateCommissionAll"
                             >
-                              Sủa hoa hồng cho tất cả
+                              Sửa hoa hồng cho tất cả
                             </div>
                             <div
                               className="btn btn-primary"

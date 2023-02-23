@@ -130,9 +130,9 @@ export const exportTopten = (store_code, page, params, report_type) => {
   };
 };
 
-export const exportListAgency = (store_code, page, params) => {
+export const exportListAgency = (store_code, page = 1, params = "") => {
   return (dispatch) => {
-    agencyApi.fetchAllAgency(store_code, 1).then((res) => {
+    agencyApi.fetchAllAgency(store_code, page, params).then((res) => {
       if (res.data.code !== 401)
         if (res.data.code !== 401)
           if (typeof res.data.data != "undefined") {
@@ -526,7 +526,7 @@ export const updateAllRequestPayment = (store_code) => {
   };
 };
 
-export const updateAgency = (store_code, id, data) => {
+export const updateAgency = (store_code, id, data, page, params) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -548,7 +548,7 @@ export const updateAgency = (store_code, id, data) => {
             content: res.data.msg,
           },
         });
-        agencyApi.fetchAllAgency(store_code, 1).then((res) => {
+        agencyApi.fetchAllAgency(store_code, page, params).then((res) => {
           console.log(res);
           dispatch({
             type: Types.SHOW_LOADING_LAZY,
