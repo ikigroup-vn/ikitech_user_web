@@ -305,6 +305,7 @@ const permission = (channel) => {
       //   header: ["Cài đặt Game"],
       //   body: ["gamification"],
       // },
+
       {
         name: "Cài đặt",
         header: [

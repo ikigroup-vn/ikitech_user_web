@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import * as Types from "../../constants/ActionType";
 import Sidebar from "../../components/Partials/Sidebar";
 import Topbar from "../../components/Partials/Topbar";
 import Footer from "../../components/Partials/Footer";
