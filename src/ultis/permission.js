@@ -300,12 +300,11 @@ const permission = (channel) => {
         header: ["Khách hàng", "Nhân viên", "Nhà cung cấp"],
         body: ["customer_list", "staff_list", "supplier"],
       },
-      // {
-      //   name: "Gamification",
-      //   header: ["Cài đặt Game"],
-      //   body: ["gamification"],
-      // },
-
+      {
+        name: "Gamification",
+        header: ["Cài đặt Game"],
+        body: ["gamification"],
+      },
       {
         name: "Cài đặt",
         header: [

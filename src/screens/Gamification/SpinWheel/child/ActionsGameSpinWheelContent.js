@@ -530,6 +530,7 @@ class ActionsGameSpinWheelContent extends Component {
       images,
       isLoading,
     } = this.state;
+    console.log("ActionsGameSpinWheelContent ~~ images:", images);
 
     return (
       <div class="container-fluid">
