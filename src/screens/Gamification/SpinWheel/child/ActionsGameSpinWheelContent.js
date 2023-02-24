@@ -9,6 +9,7 @@ import { formatNumberV2, getQueryParams } from "../../../../ultis/helpers";
 import * as gamificationAction from "../../../../actions/gamification";
 import EditGiftGameSpinWheel from "./EditGiftGameSpinWheel";
 import history from "../../../../history";
+import themeData from "../../../../ultis/theme_data";
 const groups = [
   {
     id: 0,
@@ -40,6 +41,25 @@ const groups = [
   },
 ];
 
+const backgroundImages = [
+  {
+    url: "../../images/background_spin_wheel.png",
+    value: "assets/image_default/background_spin_wheel.png",
+  },
+  {
+    url: "../../images/background_doapp.png",
+    value: "assets/image_default/background_doapp.png",
+  },
+  {
+    url: "../../images/background_image_game.png",
+    value: "assets/image_default/background_image_game.png",
+  },
+  {
+    url: "../../images/background_game_image2.png",
+    value: "assets/image_default/background_game_image2.png",
+  },
+];
+
 const ActionsGameSpinWheelContentStyles = styled.div`
   .gameSpinWheel__main {
     display: grid;
@@ -48,6 +68,23 @@ const ActionsGameSpinWheelContentStyles = styled.div`
   }
   .gameSpinWheel__imageContent {
     padding-top: 20px;
+  }
+  .bgImage {
+    display: flex;
+    column-gap: 15px;
+    row-gap: 15px;
+    .bgImage__item {
+      width: 140px;
+      height: 130px;
+      border: 2px solid transparent;
+      border-radius: 6px;
+      padding: 5px;
+      img {
+        width: 100%;
+        height: 100%;
+        border-radius: 6px;
+      }
+    }
   }
 `;
 
@@ -62,8 +99,11 @@ class ActionsGameSpinWheelContent extends Component {
       txtNumberLimit: "",
       txtStart: "",
       txtEnd: "",
+      txtDescription: "",
       images: [],
       isShake: false,
+      typeBackgroundImage: Types.TYPE_IMAGE_DEFAULT,
+      backgroundImageUrl: "",
       displayError: "hide",
       group_customer: 0,
       agency_type_id: null,
@@ -522,12 +562,15 @@ class ActionsGameSpinWheelContent extends Component {
       txtMaxAmountCoin,
       txtMaxGift,
       txtNumberLimit,
+      txtDescription,
       group_customer,
       agency_type_id,
       group_type_id,
       displayError,
       isShake,
       images,
+      typeBackgroundImage,
+      backgroundImageUrl,
       isLoading,
     } = this.state;
     console.log("ActionsGameSpinWheelContent ~~ images:", images);
@@ -850,71 +893,128 @@ class ActionsGameSpinWheelContent extends Component {
                       </label>
                     </div>
                   </div>
+                  <div className="form-group type__game__background">
+                    <label
+                      htmlFor="group_customer"
+                      style={{
+                        fontWeight: "750",
+                      }}
+                    >
+                      Hình nền
+                    </label>
+                    <div
+                      style={{
+                        display: "flex",
+                        columnGap: "10px",
+                      }}
+                      onChange={this.onChange}
+                    >
+                      <label
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <input
+                          type="radio"
+                          name="typeBackgroundImage"
+                          checked={
+                            typeBackgroundImage == Types.TYPE_IMAGE_DEFAULT
+                          }
+                          className="typeBackgroundImage"
+                          value={Types.TYPE_IMAGE_DEFAULT}
+                        />
+                        <span
+                          style={{
+                            marginLeft: "5px",
+                          }}
+                        >
+                          Ảnh mặc định
+                        </span>
+                      </label>
+                      <label
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <input
+                          type="radio"
+                          name="typeBackgroundImage"
+                          checked={
+                            typeBackgroundImage == Types.TYPE_IMAGE_SELF_POSTED
+                          }
+                          className="typeBackgroundImage"
+                          value={Types.TYPE_IMAGE_SELF_POSTED}
+                        />
+                        <span
+                          style={{
+                            marginLeft: "5px",
+                          }}
+                        >
+                          Ảnh tự đăng
+                        </span>
+                      </label>
+                    </div>
+                    <div
+                      style={{
+                        marginTop: "10px",
+                      }}
+                    >
+                      {typeBackgroundImage === 0 ? (
+                        <div className="bgImage">
+                          {backgroundImages.map((element, index) => (
+                            <div
+                              key={index}
+                              className="bgImage__item"
+                              style={{
+                                borderColor:
+                                  index === 0
+                                    ? themeData().backgroundColor
+                                    : "transparent",
+                              }}
+                            >
+                              <img src={element.url} alt="bg_spin_wheel" />
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <></>
+                      )}
+                    </div>
+                  </div>
+                  <div className="form-group gameSpinWheel__image ">
+                    <label
+                      for="txtName"
+                      style={{
+                        fontWeight: "750",
+                      }}
+                    >
+                      Hình ảnh mô tả (Tối đa 10 ảnh)
+                    </label>
+                    <div className="gameSpinWheel__imageContent">
+                      <Upload
+                        multiple
+                        setFiles={this.setImages}
+                        files={images}
+                        itemImages={gameSpinWheels.images}
+                      />
+                    </div>
+                  </div>
                 </div>
-                <div className="form-group type__game">
-                  <label htmlFor="group_customer">Hình nền</label>
-                  <div
-                    style={{
-                      display: "flex",
-                      columnGap: "10px",
-                    }}
-                    className="radio"
+                <div className="form-group">
+                  <label for="txtDescription">Mô tả</label>
+                  <textarea
+                    type="text"
+                    className="form-control input-sm"
+                    id="txtDescription"
+                    name="txtDescription"
+                    placeholder="Nhập mô tả trò chơi..."
+                    autoComplete="off"
+                    value={txtDescription}
                     onChange={this.onChange}
-                  >
-                    <label
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                    >
-                      <input
-                        type="radio"
-                        name="isShake"
-                        checked={isShake === false}
-                        className="isShake"
-                        value={false}
-                      />
-                      <span
-                        style={{
-                          marginLeft: "5px",
-                        }}
-                      >
-                        Ảnh mặc định
-                      </span>
-                    </label>
-                    <label
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                    >
-                      <input
-                        type="radio"
-                        name="isShake"
-                        checked={isShake === true}
-                        className="isShake"
-                        value={true}
-                      />
-                      <span
-                        style={{
-                          marginLeft: "5px",
-                        }}
-                      >
-                        Ảnh tự đăng
-                      </span>
-                    </label>
-                  </div>
-                </div>
-                <div className="gameSpinWheel__image form-group">
-                  <label for="txtName">Hình ảnh mô tả (Tối đa 10 ảnh)</label>
-                  <div className="gameSpinWheel__imageContent">
-                    <Upload
-                      multiple
-                      setFiles={this.setImages}
-                      files={images}
-                      itemImages={gameSpinWheels.images}
-                    />
-                  </div>
+                    rows="7"
+                  />
                 </div>
               </div>
             </ActionsGameSpinWheelContentStyles>

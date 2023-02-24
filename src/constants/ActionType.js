@@ -407,12 +407,16 @@ export const PROGRESSING = 0;
 export const CANCELED = 1;
 export const COMPLETED = 2;
 
-// Type Gift
+// Type Gift spin wheel
 export const GIFT_IS_COIN = 0;
 export const GIFT_IS_ITEM = 1;
 export const GIFT_IS_TEXT = 2;
 export const GIFT_IS_LUCKY_AFTER = 3;
 export const GIFT_IS_LOST_TURN = 4;
+
+//Type Background Game spin wheel
+export const TYPE_IMAGE_DEFAULT = 0;
+export const TYPE_IMAGE_SELF_POSTED = 1;
 
 //User Manage Sale
 export const FETCH_ALL_SALE_CONFIG = "FETCH_ALL_SALE_CONFIG";
