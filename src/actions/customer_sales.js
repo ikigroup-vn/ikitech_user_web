@@ -302,7 +302,6 @@ export const createCustomerSale = (
       .createCustomerSale(store_code, id)
       .then((res) => {
         if (res.data.success && funcModal != null) {
-          console.log("da vao r");
           funcModal();
           if (_this && resetModal) resetModal(_this);
         }
