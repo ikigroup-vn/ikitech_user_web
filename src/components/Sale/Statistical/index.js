@@ -1,3 +1,4 @@
+import moment from "moment";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
@@ -55,7 +56,11 @@ class Statistical extends Component {
                   <div class="row no-gutters align-items-center">
                     <div class="col mr-2">
                       <div class=" font-weight-bold text-primary text-uppercase mb-1">
-                        <Link to={`/cusSale/${store_code}/order`}>
+                        <Link
+                          to={`/cusSale/${store_code}/order?from=${moment().format(
+                            "DD-MM-YYYY"
+                          )}&to=${moment().format("DD-MM-YYYY")}`}
+                        >
                           Đơn hàng hôm nay
                         </Link>
                       </div>
