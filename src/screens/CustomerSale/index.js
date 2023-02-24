@@ -285,13 +285,13 @@ class CustomerSale extends Component {
                             Import Excel
                           </span>
                         </a>
-                        {/* <input
+                        <input
                           id="file-excel-import"
                           type="file"
                           name="name"
                           style={{ display: "none" }}
                           onChange={this.onChangeExcel}
-                        /> */}
+                        />
 
                         <a
                           style={{ marginRight: "10px" }}

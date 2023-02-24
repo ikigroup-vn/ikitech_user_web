@@ -278,7 +278,8 @@ export const createMultiCustomerSale = (store_code, data) => {
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error?.response?.data?.msg,
+            content:
+              error?.response?.data?.msg || error?.response?.data?.message,
           },
         });
       });
