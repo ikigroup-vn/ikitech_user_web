@@ -760,7 +760,7 @@ class Customer extends Component {
                           handleShowChatBox={this.handleShowChatBox}
                           store_code={store_code}
                           handleDelCallBack={this.handleDelCallBack}
-                          // customers={customers}
+                          customers={this.isSale() ? customersSale : customers}
                           setCustomerInfo={this.setCustomerInfo}
                           setShowCustomersByReferralPhone={
                             this.setShowCustomersByReferralPhone
@@ -806,6 +806,8 @@ class Customer extends Component {
                 <Table
                   handleSetInfor={this.handleSetInfor}
                   paginate={paginate}
+                  searchValue={searchValue}
+                  currentParams={this.state.currentParams}
                   chat_allow={chat_allow}
                   showChatBox={showChatBox}
                   handleShowChatBox={this.handleShowChatBox}
@@ -816,6 +818,7 @@ class Customer extends Component {
                   setShowCustomersByReferralPhone={
                     this.setShowCustomersByReferralPhone
                   }
+                  isSale={this.isSale}
                 />
                 <div className="totalContent">
                   <div className="totalCustomers">
@@ -861,6 +864,7 @@ const mapStateToProps = (state) => {
     customers: state.customerReducers.customer.allCustomer,
     customersByInferralPhone:
       state.customerReducers.customer.allCustomerByInferralPhone,
+    customersSale: state.saleReducers.sale.allCustomerOfSale,
     auth: state.authReducers.login.authentication,
     customer: state.customerReducers.customer.customerID,
     chat: state.chatReducers.chat.chatID,
@@ -869,7 +873,6 @@ const mapStateToProps = (state) => {
     province: state.placeReducers.province,
     district: state.placeReducers.district,
     types: state.agencyReducers.agency.allAgencyType,
-    customersSale: state.saleReducers.sale.allCustomerOfSale,
     addedCustomerOfSaleSuccessfully:
       state.saleReducers.sale.addedCustomerOfSaleSuccessfully,
   };

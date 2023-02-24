@@ -418,9 +418,7 @@ class Table extends Component {
                 </button>
               </td>{" "}
               <td>
-                {this.props.isSale()
-                  ? (this.props.customersSale.current_page - 1) * 20 + index + 1
-                  : (this.props.customers.current_page - 1) * 20 + index + 1}
+                {(this.props.customers.current_page - 1) * 20 + index + 1}
               </td>
               <td
                 onClick={(e) => this.changePage(store_code, data.id, e)}
@@ -643,19 +641,13 @@ class Table extends Component {
   };
 
   render() {
-    var { store_code, staff, isSale } = this.props;
+    var { store_code, staff } = this.props;
     var customers;
-    if (isSale()) {
-      customers =
-        typeof this.props.customersSale.data == "undefined"
-          ? []
-          : this.props.customersSale.data;
-    } else {
-      customers =
-        typeof this.props.customers.data == "undefined"
-          ? []
-          : this.props.customers.data;
-    }
+    customers =
+      typeof this.props.customers.data == "undefined"
+        ? []
+        : this.props.customers.data;
+
     const {
       openModalChangeRole,
       customerSelected,
@@ -769,7 +761,6 @@ class Table extends Component {
 const mapStateToProps = (state) => {
   return {
     staff: state.staffReducers.staff.allStaff,
-    customers: state.customerReducers.customer.allCustomer,
     addedPointSuccessfully:
       state.customerReducers.customer.addedPointSuccessfully,
     updatedRoleSuccessfully:
@@ -777,7 +768,6 @@ const mapStateToProps = (state) => {
     types: state.agencyReducers.agency.allAgencyType,
     addCustomerToSaleSuccessfully:
       state.saleReducers.sale.addCustomerToSaleSuccessfully,
-    customersSale: state.saleReducers.sale.allCustomerOfSale,
   };
 };
 

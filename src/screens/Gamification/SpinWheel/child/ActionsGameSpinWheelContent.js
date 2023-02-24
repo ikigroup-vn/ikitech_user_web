@@ -79,6 +79,7 @@ const ActionsGameSpinWheelContentStyles = styled.div`
       border: 2px solid transparent;
       border-radius: 6px;
       padding: 5px;
+      cursor: pointer;
       img {
         width: 100%;
         height: 100%;
@@ -103,7 +104,8 @@ class ActionsGameSpinWheelContent extends Component {
       images: [],
       isShake: false,
       typeBackgroundImage: Types.TYPE_IMAGE_DEFAULT,
-      backgroundImageUrl: "",
+      backgroundDefaultImage: backgroundImages[0],
+      backgroundSelfPostedImage: null,
       displayError: "hide",
       group_customer: 0,
       agency_type_id: null,
@@ -169,7 +171,6 @@ class ActionsGameSpinWheelContent extends Component {
   onChange = (e) => {
     const name = e.target.name;
     const value = e.target.value;
-
     if (
       name === "txtTurnInDay" ||
       name === "txtMaxAmountCoin" ||
@@ -545,6 +546,12 @@ class ActionsGameSpinWheelContent extends Component {
     history.push(`/game_spin_wheels/${store_code}?page=${page}`);
   };
 
+  handleSelectedBackground = (element) => {
+    this.setState({
+      backgroundDefaultImage: element,
+    });
+  };
+
   render() {
     const {
       types,
@@ -570,8 +577,8 @@ class ActionsGameSpinWheelContent extends Component {
       isShake,
       images,
       typeBackgroundImage,
-      backgroundImageUrl,
       isLoading,
+      backgroundDefaultImage,
     } = this.state;
     console.log("ActionsGameSpinWheelContent ~~ images:", images);
 
@@ -907,6 +914,7 @@ class ActionsGameSpinWheelContent extends Component {
                         display: "flex",
                         columnGap: "10px",
                       }}
+                      className="radio"
                       onChange={this.onChange}
                     >
                       <label
@@ -961,7 +969,7 @@ class ActionsGameSpinWheelContent extends Component {
                         marginTop: "10px",
                       }}
                     >
-                      {typeBackgroundImage === 0 ? (
+                      {typeBackgroundImage == 0 ? (
                         <div className="bgImage">
                           {backgroundImages.map((element, index) => (
                             <div
@@ -969,10 +977,13 @@ class ActionsGameSpinWheelContent extends Component {
                               className="bgImage__item"
                               style={{
                                 borderColor:
-                                  index === 0
+                                  backgroundDefaultImage.value === element.value
                                     ? themeData().backgroundColor
                                     : "transparent",
                               }}
+                              onClick={() =>
+                                this.handleSelectedBackground(element)
+                              }
                             >
                               <img src={element.url} alt="bg_spin_wheel" />
                             </div>
@@ -994,7 +1005,7 @@ class ActionsGameSpinWheelContent extends Component {
                     </label>
                     <div className="gameSpinWheel__imageContent">
                       <Upload
-                        multiple
+                        // multiple
                         setFiles={this.setImages}
                         files={images}
                         itemImages={gameSpinWheels.images}

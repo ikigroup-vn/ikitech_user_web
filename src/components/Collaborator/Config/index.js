@@ -231,8 +231,8 @@ class Config extends Component {
       payment_16_of_month,
       payment_limit,
       percent_collaborator_t1,
-      percent_commission_for_products,
       bonus_type_for_ctv_t2,
+      percent_commission_for_products,
     } = this.state;
     window.$(".modal").modal("hide");
     this.props.updateConfig(this.props.store_code, {
@@ -260,9 +260,9 @@ class Config extends Component {
       payment_1_of_month,
       allow_payment_request,
       percent_collaborator_t1,
+      bonus_type_for_ctv_t2,
       percent_commission_for_products,
       setting_for_all_products,
-      bonus_type_for_ctv_t2,
     } = this.state;
     return (
       <CollaboratorStyles className="collaborator-config">

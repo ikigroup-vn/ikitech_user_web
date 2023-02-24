@@ -3,7 +3,54 @@ import * as AgencyAction from "../../../actions/agency";
 import { connect } from "react-redux";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import { formatNumber } from "../../../ultis/helpers";
-
+import styled from "styled-components";
+const AgencyStyles = styled.div`
+  .bonusTypeForAgency_note {
+    position: relative;
+    &:hover {
+      .bonusTypeForAgency_noteTooltip {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+    .bonusTypeForAgency_noteIcon {
+      text-decoration: underline;
+      color: #3498db;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+    .bonusTypeForAgency_noteTooltip {
+      position: absolute;
+      left: 50%;
+      bottom: 100%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      font-weight: 400;
+      width: 400px;
+      padding: 10px;
+      border-radius: 10px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.5s;
+    }
+  }
+  .bonusTypeForAgency {
+    display: flex;
+    align-items: center;
+    column-gap: 30px;
+    .bonusTypeBtn {
+      & > div {
+        display: flex;
+        align-items: center;
+        column-gap: 5px;
+        label {
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+`;
 class Config extends Component {
   constructor(props) {
     super(props);
@@ -14,6 +61,9 @@ class Config extends Component {
       payment_1_of_month: false,
       payment_16_of_month: false,
       payment_limit: "",
+      percent_agency_t1: "",
+      bonus_type_for_ctv_t2: 0,
+      allow_rose_referral_customer: false,
     };
   }
 
@@ -32,6 +82,15 @@ class Config extends Component {
       value = value.toString().replace(/\./g, ",");
 
       if (name == "percent_agency_t1") {
+        if (_value < 101) {
+          if (target.value == "") {
+            this.setState({ [name]: "" });
+          } else {
+            this.setState({ [name]: value });
+          }
+        } else {
+          this.setState({ [name]: "100" });
+        }
       } else {
         if (target.value == "") {
           this.setState({ [name]: "" });
@@ -49,7 +108,9 @@ class Config extends Component {
       [name]: checked,
     });
   };
-
+  setBonusTypeForAgencyT2 = (bonusType) => {
+    this.setState({ bonus_type_for_ctv_t2: bonusType });
+  };
   handleDelCallBack = (e, id) => {
     this.props.handleDelCallBack({ title: "Mức", id: id });
     e.preventDefault();
@@ -71,10 +132,18 @@ class Config extends Component {
         allow_payment_request: config.allow_payment_request,
         payment_1_of_month: config.payment_1_of_month,
         payment_16_of_month: config.payment_16_of_month,
+        bonus_type_for_ctv_t2: config.bonus_type_for_ctv_t2,
         payment_limit:
           config.payment_limit == null
             ? null
             : new Intl.NumberFormat().format(config.payment_limit.toString()),
+        percent_agency_t1:
+          config.percent_agency_t1 == null
+            ? null
+            : new Intl.NumberFormat().format(
+                config.percent_agency_t1.toString()
+              ),
+        allow_rose_referral_customer: config.allow_rose_referral_customer,
       });
     }
     if (
@@ -150,6 +219,9 @@ class Config extends Component {
       payment_1_of_month,
       payment_16_of_month,
       payment_limit,
+      percent_agency_t1,
+      bonus_type_for_ctv_t2,
+      allow_rose_referral_customer,
     } = this.state;
     window.$(".modal").modal("hide");
     this.props.updateConfig(this.props.store_code, {
@@ -158,6 +230,12 @@ class Config extends Component {
       payment_16_of_month,
       payment_limit:
         payment_limit == null ? payment_limit : formatNumber(payment_limit),
+      bonus_type_for_ctv_t2: Number(bonus_type_for_ctv_t2),
+      percent_agency_t1:
+        percent_agency_t1 == null
+          ? percent_agency_t1
+          : formatNumber(percent_agency_t1),
+      allow_rose_referral_customer,
     });
   };
   render() {
@@ -167,9 +245,12 @@ class Config extends Component {
       payment_limit,
       payment_1_of_month,
       allow_payment_request,
+      percent_agency_t1,
+      bonus_type_for_ctv_t2,
+      allow_rose_referral_customer,
     } = this.state;
     return (
-      <div className="agency-config">
+      <AgencyStyles className="agency-config">
         <h6
           style={{
             marginTop: "25px",
@@ -217,21 +298,21 @@ class Config extends Component {
             </div>
           </div>
 
-          {/* <div class="form-group">
+          <div class="form-group">
             <div class="form-check">
               <input
                 class="form-check-input"
                 type="checkbox"
                 id="gridCheck"
-                name="payment_1_of_month"
+                name="allow_rose_referral_customer"
                 onChange={this.onChangeSelect}
-                checked={payment_1_of_month}
+                checked={allow_rose_referral_customer}
               />
               <label class="form-check-label" for="gridCheck">
-                Cho phép được hưởng hoa hồng từ khách hàng giới thiệu
+                Cho phép hưởng hoa hồng từ khách hàng giới thiệu
               </label>
             </div>
-          </div> */}
+          </div>
           <div class="form-group">
             <div class="form-check">
               <input
@@ -291,6 +372,68 @@ class Config extends Component {
               style={{ maxWidth: "40%" }}
             />
           </div>
+          <div className="form-group">
+            <label htmlFor="name">
+              Phần trăm hoa hồng cho người giới thiệu Đại lý mua hàng{" "}
+            </label>
+            <div className="bonusTypeForAgency">
+              <input
+                type="text"
+                class="form-control"
+                name="percent_agency_t1"
+                onChange={this.onChange}
+                value={percent_agency_t1}
+                style={{ width: "100px" }}
+              />
+              <div className="bonusTypeBtn">
+                <div>
+                  <input
+                    type="radio"
+                    name="bonus_type_for_ctv_t2"
+                    value={0}
+                    id="bonus_type_for_ctv_t2_option1"
+                    checked={bonus_type_for_ctv_t2 == 0}
+                    onChange={(e) =>
+                      this.setBonusTypeForAgencyT2(e.target.value)
+                    }
+                  />{" "}
+                  <label htmlFor="bonus_type_for_ctv_t2_option1">
+                    Từ tổng đơn hàng
+                  </label>
+                  <span className="bonusTypeForAgency_note">
+                    <span className="bonusTypeForAgency_noteIcon">?</span>
+                    <div className="bonusTypeForAgency_noteTooltip">
+                      Nhận từ phần trăm từ tổng đơn hàng, ví dụ đơn hàng tổng
+                      100.000đ bạn nhập 10% thì Đại lý T2 nhận được 10.000đ
+                    </div>
+                  </span>
+                </div>
+                <div>
+                  <input
+                    type="radio"
+                    name="bonus_type_for_ctv_t2"
+                    value={1}
+                    id="bonus_type_for_ctv_t2_option2"
+                    onChange={(e) =>
+                      this.setBonusTypeForAgencyT2(e.target.value)
+                    }
+                    checked={bonus_type_for_ctv_t2 == 1}
+                  />{" "}
+                  <label htmlFor="bonus_type_for_ctv_t2_option2">
+                    Từ hoa hồng đại lý mua hàng
+                  </label>
+                  <span className="bonusTypeForAgency_note">
+                    <span className="bonusTypeForAgency_noteIcon">?</span>
+                    <div className="bonusTypeForAgency_noteTooltip">
+                      Nhận từ phân trăm từ hoa hồng từ chính Đại lý T1 được
+                      hưởng, ví dụ hóa đơn Đại lý T1 nhận được 100.000đ hoa hồng
+                      bạn nhập ô này 10% thì Đại lý T2 nhận được 10.000đ
+                    </div>
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
 
           <div className="form-group">
             <button type="submit" class={`btn btn-primary btn-sm `}>
@@ -298,7 +441,7 @@ class Config extends Component {
             </button>
           </div>
         </form>
-      </div>
+      </AgencyStyles>
     );
   }
 }
