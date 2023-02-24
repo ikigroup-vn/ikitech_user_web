@@ -7,6 +7,7 @@ import {
   removeSignNumber,
   stringToInit,
   randomString,
+  getQueryParams,
 } from "../../ultis/helpers";
 import * as productAction from "../../actions/product";
 import { connect } from "react-redux";
@@ -382,6 +383,14 @@ class PostOrder extends Component {
   componentDidMount() {
     const branch_id = getBranchId();
     const { order_code, store_code } = this.props.match.params;
+    const paidOrder = getQueryParams("paid");
+    const orderFrom = getQueryParams("from");
+
+    const isCheckedOrder =
+      orderFrom == OrderFrom.ORDER_FROM_APP ||
+      orderFrom == OrderFrom.ORDER_FROM_POS_DELIVERY ||
+      orderFrom == OrderFrom.ORDER_FROM_POS_SHIPPER ||
+      orderFrom == OrderFrom.ORDER_FROM_WEB;
 
     this.props.fetchAllPertion(this.props.match.params.store_code);
     this.props.fetchAllVoucher(this.props.match.params.store_code);
@@ -390,6 +399,14 @@ class PostOrder extends Component {
 
     if (order_code != null && order_code != "") {
       this.props.createCartEditOrder(store_code, order_code);
+    }
+    if (isCheckedOrder) {
+      this.handleOpenShipment();
+    }
+    if (order_code && isCheckedOrder) {
+      this.setState({
+        priceCustomer: formatNoD(paidOrder),
+      });
     }
   }
 
@@ -619,6 +636,7 @@ class PostOrder extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
+    const { order_code } = this.props.match.params;
     if (
       !shallowEqual(nextProps.oneCart, this.props.oneCart) &&
       nextProps.oneCart !== undefined
@@ -645,7 +663,7 @@ class PostOrder extends Component {
           nextProps.loadingHandleUseVoucher != null))
     ) {
       var discount = {};
-      if (nextProps.oneCart?.id != this.props.oneCart?.id) {
+      if (nextProps.oneCart?.id != this.props.oneCart?.id && !order_code) {
         discount = { discount: nextProps.oneCart.discount };
         this.setState({
           priceCustomer: nextProps.oneCart.info_cart.total_final,
@@ -753,7 +771,6 @@ class PostOrder extends Component {
       this.props.addProductInCart(store_code, branch_id, id, formData);
     }
     if (!shallowEqual(nextState.priceCustomer, this.state.priceCustomer)) {
-      console.log("priceCustomer: ", nextState.priceCustomer);
       this.setState({
         exchange:
           removeSignNumber(nextState.priceCustomer) -
@@ -790,14 +807,17 @@ class PostOrder extends Component {
         id
       );
       this.setState({
-        priceCustomer: 0,
+        // priceCustomer: 0,
         exchange: 0,
         totalFinal: 0,
       });
       this.refreshProductList();
     }
 
-    if (!shallowEqual(nextState.totalFinal, this.state.totalFinal)) {
+    if (
+      !shallowEqual(nextState.totalFinal, this.state.totalFinal) &&
+      !order_code
+    ) {
       this.onGetSuggestion(nextState.totalFinal);
       this.setState({ priceCustomer: nextState.totalFinal });
     }

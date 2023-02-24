@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import * as saleAction from "../../../actions/sale";
 import { connect, shallowEqual } from "react-redux";
 import styled from "styled-components";
+import * as Types from "../../../constants/ActionType";
 const ConfigStyles = styled.div`
   .bonusTypeForCTV_note {
     position: relative;
@@ -101,6 +102,12 @@ class Config extends Component {
     var { store_code, fetchAllSteps, fetchStaffConfig } = this.props;
     fetchStaffConfig(store_code);
     fetchAllSteps(store_code);
+  }
+
+  componentWillUnmount() {
+    const { resetAllSteps, resetStaffConfig } = this.props;
+    resetAllSteps();
+    resetStaffConfig();
   }
 
   handleDelCallBack = (e, id) => {
@@ -274,10 +281,10 @@ class Config extends Component {
               required="required"
               onChange={this.onChange}
             >
-              <option value={0}>Theo tháng</option>
-              <option value={1}>Theo tuần</option>
-              <option value={2}>Theo quý</option>
-              <option value={3}>Theo năm</option>
+              <option value="0">Theo tháng</option>
+              <option value="1">Theo tuần</option>
+              <option value="2">Theo quý</option>
+              <option value="3">Theo năm</option>
             </select>
           </div>
           <div className="form-group">
@@ -308,6 +315,12 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     updateConfig: (store_code, data) => {
       dispatch(saleAction.updateConfig(store_code, data));
+    },
+    resetAllSteps: () => {
+      dispatch({ type: Types.FETCH_ALL_SALE_STEP, data: [] });
+    },
+    resetStaffConfig: () => {
+      dispatch({ type: Types.FETCH_ALL_SALE_CONFIG, data: {} });
     },
   };
 };
