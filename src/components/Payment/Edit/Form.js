@@ -95,6 +95,9 @@ class Form extends Component {
   editPayment = (index, data) => {
     this.setState({ editPayment: { index, data } });
   };
+  handleCloseEditPayment = () => {
+    this.setState({ editPayment: {} });
+  };
   showPaymentGuide = (payments) => {
     var result = null;
     if (payments.length > 0) {
@@ -221,7 +224,7 @@ class Form extends Component {
     var { history } = this.props;
     history.goBack();
   };
-  HandleEditPayment = (payment, index) => {
+  HandleEditPayment = (payment, index, funcModal) => {
     console.log(payment, index);
 
     var field = { ...this.state.field };
@@ -245,7 +248,7 @@ class Form extends Component {
     });
     console.log(form);
 
-    this.props.updatePaymentMethod(store_code, paymentId, form);
+    this.props.updatePaymentMethod(store_code, paymentId, form, funcModal);
   };
   deletePayment = (index) => {
     var field = { ...this.state.field };
@@ -273,12 +276,14 @@ class Form extends Component {
   render() {
     var { txtName, txtContent, txtUse, field, defind_field, editPayment } =
       this.state;
+
     return (
       <React.Fragment>
         <ModalCreate addPayment={this.addPayment} />
         <ModalUpdate
           payment={editPayment}
           HandleEditPayment={this.HandleEditPayment}
+          handleCloseEditPayment={this.handleCloseEditPayment}
         />
 
         <form role="form" onSubmit={this.onSave} method="post">
@@ -343,8 +348,15 @@ const mapDispatchToProps = (dispatch, props) => {
     updatePayment: (store_code, paymentId, data) => {
       dispatch(paymentAction.updatePayment(store_code, paymentId, data));
     },
-    updatePaymentMethod: (store_code, paymentId, data) => {
-      dispatch(paymentAction.updatePaymentMethod(store_code, paymentId, data));
+    updatePaymentMethod: (store_code, paymentId, data, funcModal) => {
+      dispatch(
+        paymentAction.updatePaymentMethod(
+          store_code,
+          paymentId,
+          data,
+          funcModal
+        )
+      );
     },
   };
 };

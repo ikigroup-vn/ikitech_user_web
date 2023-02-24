@@ -200,28 +200,26 @@ class InfoShipper extends Component {
                       className="btn btn-outline-warning btn-sm"
                       onClick={this.handleShippingPacket}
                     >
-                      {" "}
                       <i
                         className="fa fa-save"
                         style={{
                           marginTop: "0",
-                          marginRight: "0",
                         }}
                       ></i>
+                      Lưu
                     </button>
                   ) : (
                     <button
                       className="btn btn-outline-warning btn-sm"
                       onClick={() => this.setIsUpdated(true)}
                     >
-                      {" "}
                       <i
                         className="fa fa-edit"
                         style={{
                           marginTop: "0",
-                          marginRight: "0",
                         }}
                       ></i>
+                      Sửa
                     </button>
                   )}
                 </p>

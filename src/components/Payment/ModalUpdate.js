@@ -6,6 +6,7 @@ import { shallowEqual } from "../../ultis/shallowEqual";
 import themeData from "../../ultis/theme_data";
 import styled from "styled-components";
 import * as productAction from "../../actions/product";
+import * as Types from "../../constants/ActionType";
 
 const DivImageStyles = styled.div`
   position: relative;
@@ -51,7 +52,6 @@ class ModalCreate extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (!shallowEqual(nextProps.payment, this.props.payment)) {
-      console.log(nextProps.payment);
       try {
         var payment = JSON.parse(nextProps.payment.data);
         this.setState({
@@ -91,6 +91,10 @@ class ModalCreate extends Component {
       uploadListImgProductV2(updatedList);
     }
   };
+  handleCloseModal = () => {
+    this.props.resetListImage();
+    this.props.handleCloseEditPayment();
+  };
 
   onSave = (e) => {
     e.preventDefault();
@@ -105,7 +109,11 @@ class ModalCreate extends Component {
         branch: payment.branch,
         qr_code_image_url: payment.qr_code_image_url,
       },
-      payment.index
+      payment.index,
+      () => {
+        this.props.resetListImage();
+        this.props.handleCloseEditPayment();
+      }
     );
   };
   render() {
@@ -130,6 +138,7 @@ class ModalCreate extends Component {
                 class="close"
                 data-dismiss="modal"
                 aria-hidden="true"
+                onClick={this.handleCloseModal}
               >
                 &times;
               </button>
@@ -163,7 +172,7 @@ class ModalCreate extends Component {
                     id="txtName"
                     placeholder="Nhập số tài khoản"
                     autoComplete="off"
-                    value={account_number}
+                    value={account_number ? account_number : ""}
                     onChange={this.onChange}
                     name="account_number"
                   />
@@ -176,7 +185,7 @@ class ModalCreate extends Component {
                     id="txtName"
                     placeholder="Nhập ngân hàng"
                     autoComplete="off"
-                    value={bank}
+                    value={bank ? bank : ""}
                     onChange={this.onChange}
                     name="bank"
                   />
@@ -189,7 +198,7 @@ class ModalCreate extends Component {
                     id="txtName"
                     placeholder="Nhập chi nhánh"
                     autoComplete="off"
-                    value={branch}
+                    value={branch ? branch : ""}
                     onChange={this.onChange}
                     name="branch"
                   />
@@ -228,6 +237,7 @@ class ModalCreate extends Component {
                   type="button"
                   class="btn btn-default"
                   data-dismiss="modal"
+                  onClick={this.handleCloseModal}
                 >
                   Đóng
                 </button>
@@ -256,6 +266,12 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     uploadListImgProductV2: (file) => {
       dispatch(productAction.uploadListImgProductV2(file));
+    },
+    resetListImage: () => {
+      dispatch({
+        type: Types.UPLOAD_ALL_PRODUCT_IMG_V2,
+        data: [],
+      });
     },
   };
 };

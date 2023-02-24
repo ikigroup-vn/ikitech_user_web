@@ -577,15 +577,6 @@ const routes = [
     ),
   },
   {
-    path: "/game_spin_wheels/:store_code/update/:idGameSpinWheel",
-    exact: true,
-
-    main: ({ match, history }) => (
-      <ActionsGameSpinWheel match={match} history={history} />
-    ),
-  },
-
-  {
     path: "/customer_sales/:store_code",
     exact: true,
 
