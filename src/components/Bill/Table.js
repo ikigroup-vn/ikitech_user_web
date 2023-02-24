@@ -20,6 +20,16 @@ import * as billApi from "../../data/remote/bill";
 import "./style.css";
 import history from "../../history";
 import { insertParam } from "../../ultis/helpers";
+import styled from "styled-components";
+
+const TableStyles = styled.div`
+  .product_order_code {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
+
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -367,12 +377,7 @@ class Table extends Component {
         var itemLoaded = this.checkLoaded(data.order_code);
         console.log(item, data.order_code, this.syncArr, itemLoaded);
         return (
-          <tr
-            className="hover-product"
-            onClick={(e) =>
-              this.onClickItemOrder(e, store_code, data.order_code)
-            }
-          >
+          <tr className="hover-product">
             <td>
               {" "}
               <input
@@ -386,7 +391,20 @@ class Table extends Component {
               />
             </td>
             <td>{per_page * (current_page - 1) + (index + 1)}</td>
-            <td>{data.order_code}</td>
+            <td
+              onClick={(e) =>
+                this.onClickItemOrder(e, store_code, data.order_code)
+              }
+            >
+              <span
+                style={{
+                  color: "#5e72e4",
+                }}
+                className="product_order_code"
+              >
+                {data.order_code}
+              </span>
+            </td>
             <td>{data.customer != null ? data.customer.name : null}</td>
             {/* {
               getChannel() == IKITECH &&
@@ -647,7 +665,7 @@ class Table extends Component {
         : false;
     var multiPrint = selected.length > 0 ? "show" : "hide";
     return (
-      <>
+      <TableStyles>
         <button
           // onClick={(e) => this.handleMultiDelCallBack(e, selected)}
           // data-toggle="modal"
@@ -738,7 +756,7 @@ class Table extends Component {
             <tbody>{this.showData(listBill, per_page, current_page)}</tbody>
           </table>
         </div>
-      </>
+      </TableStyles>
     );
   }
 }

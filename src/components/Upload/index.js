@@ -173,7 +173,7 @@ class Upload extends Component {
 
     return (
       <DropFileStyles>
-        {fileList.length < 13 && (
+        {fileList.length < 10 && (
           <div
             className="drop-file-input"
             onDragEnter={this.onDragEnter}

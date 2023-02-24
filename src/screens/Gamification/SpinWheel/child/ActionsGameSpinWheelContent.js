@@ -851,8 +851,62 @@ class ActionsGameSpinWheelContent extends Component {
                     </div>
                   </div>
                 </div>
+                <div className="form-group type__game">
+                  <label htmlFor="group_customer">Hình nền</label>
+                  <div
+                    style={{
+                      display: "flex",
+                      columnGap: "10px",
+                    }}
+                    className="radio"
+                    onChange={this.onChange}
+                  >
+                    <label
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <input
+                        type="radio"
+                        name="isShake"
+                        checked={isShake === false}
+                        className="isShake"
+                        value={false}
+                      />
+                      <span
+                        style={{
+                          marginLeft: "5px",
+                        }}
+                      >
+                        Ảnh mặc định
+                      </span>
+                    </label>
+                    <label
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                      }}
+                    >
+                      <input
+                        type="radio"
+                        name="isShake"
+                        checked={isShake === true}
+                        className="isShake"
+                        value={true}
+                      />
+                      <span
+                        style={{
+                          marginLeft: "5px",
+                        }}
+                      >
+                        Ảnh tự đăng
+                      </span>
+                    </label>
+                  </div>
+                </div>
                 <div className="gameSpinWheel__image form-group">
-                  <label for="txtName">Hình ảnh (Tối đa 13 ảnh)</label>
+                  <label for="txtName">Hình ảnh mô tả (Tối đa 10 ảnh)</label>
                   <div className="gameSpinWheel__imageContent">
                     <Upload
                       multiple

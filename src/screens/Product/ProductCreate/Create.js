@@ -436,6 +436,10 @@ class ProductCreate extends Component {
     if (this.state.checkDistribute == false) {
       delete form.list_distribute;
     }
+
+    if (form.weight == "") {
+      form.weight = 100;
+    }
     this.props.postProductV2(store_code, branch_id, form);
   };
 
