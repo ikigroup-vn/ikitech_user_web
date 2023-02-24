@@ -79,7 +79,13 @@ class Detail extends Component {
   handleEditOrder = () => {
     const { order_code } = this.props.bill;
     const { store_code } = this.props.badges;
-    history.push(`/pos/${store_code}/${order_code}`);
+    const paidOrder =
+      Number(this.props.bill.total_final) -
+      Number(this.props.bill.remaining_amount);
+    const orderFrom = this.props.bill.order_from;
+    history.push(
+      `/pos/${store_code}/${order_code}?paid=${paidOrder}&from=${orderFrom}`
+    );
   };
   handleShowModalDelete = () => {
     console.log("zooooo!");

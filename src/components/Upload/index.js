@@ -120,7 +120,7 @@ class Upload extends Component {
     const { listImgProduct, setFiles, itemImages } = this.props;
     if (!shallowEqual(listImgProduct, nextProps.listImgProduct)) {
       this.setFileList(nextProps.listImgProduct);
-      setFiles([...fileList, nextProps.listImgProduct]);
+      setFiles([...fileList, ...nextProps.listImgProduct]);
     }
     if (!shallowEqual(itemImages, nextProps.itemImages)) {
       setFiles(nextProps.itemImages);

@@ -715,7 +715,7 @@ class Table extends Component {
                 </th>
                 <th>STT</th>
                 <th>Mã đơn</th>
-                <th>Tên khách hàng</th>
+                <th>Tên người nhận</th>
 
                 {/* {getChannel() == IKITECH &&
                   <th>Cộng tác viên</th>
