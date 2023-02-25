@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect, shallowEqual } from "react-redux";
 import styled from "styled-components";
 import * as productAction from "../../actions/product";
+import { compressed } from "../../ultis/helpers";
 import themeData from "../../ultis/theme_data";
 
 const DropFileStyles = styled.div`
@@ -112,19 +113,23 @@ class Upload extends Component {
     super(props);
     this.state = {
       fileList: [],
+      file: "",
     };
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     const { fileList } = this.state;
-    const { listImgProduct, setFiles, itemImages } = this.props;
-    if (!shallowEqual(listImgProduct, nextProps.listImgProduct)) {
-      this.setFileList(nextProps.listImgProduct);
-      setFiles([...fileList, ...nextProps.listImgProduct]);
-    }
-    if (!shallowEqual(itemImages, nextProps.itemImages)) {
-      setFiles(nextProps.itemImages);
-      this.setState({ fileList: nextProps.itemImages });
+    const { listImgProduct, setFiles, itemImages, multiple } = this.props;
+    if (multiple) {
+      if (!shallowEqual(listImgProduct, nextProps.listImgProduct)) {
+        this.setFileList(nextProps.listImgProduct);
+        setFiles([...fileList, ...nextProps.listImgProduct]);
+      }
+      if (!shallowEqual(itemImages, nextProps.itemImages)) {
+        setFiles(nextProps.itemImages);
+        this.setState({ fileList: nextProps.itemImages });
+      }
+    } else {
     }
 
     return true;
@@ -149,19 +154,26 @@ class Upload extends Component {
     dropFileInput.classList.remove("dragover");
   };
 
-  onFileDrop = (e) => {
+  onFileDrop = async (e) => {
     const newFiles = e.target.files;
 
-    const { uploadListImgProduct } = this.props;
+    const { uploadListImgProduct, uploadAvataProduct, multiple } = this.props;
     if (newFiles.length > 0) {
       const updatedList = [...newFiles];
-      uploadListImgProduct(updatedList);
+      if (multiple) {
+        uploadListImgProduct(updatedList);
+      } else {
+        const newFile = newFiles[0];
+        const fd = new FormData();
+        fd.append("image", await compressed(newFile));
+        uploadAvataProduct(fd);
+      }
     }
   };
 
   removeFile = (indexFile) => {
     const { fileList } = this.state;
-    const { setFiles } = this.props;
+    const { setFiles, setFile, multiple } = this.props;
     const newFileList = fileList.filter((file, index) => index !== indexFile);
     this.setState({ fileList: newFileList });
     setFiles(newFileList);
@@ -259,8 +271,8 @@ class Upload extends Component {
             />
           </div>
         )}
-
-        {fileList.length > 0 &&
+        {multiple &&
+          fileList.length > 0 &&
           fileList.map((file, index) => (
             <div key={index} className="upload__item">
               <div
@@ -269,7 +281,7 @@ class Upload extends Component {
                 }}
                 className="upload__item__content"
               />
-              {index === 0 && <div className="item__cover">Hình bìa</div>}
+              {/* {index === 0 && <div className="item__cover">Hình bìa</div>} */}
               <span class="item__delete" onClick={() => this.removeFile(index)}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -328,6 +340,9 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     uploadListImgProduct: (file) => {
       dispatch(productAction.uploadListImgProduct(file));
+    },
+    uploadListImgProductV2: (file) => {
+      dispatch(productAction.uploadAvataProduct(file));
     },
     checkNumImg: (alert) => {
       dispatch(alert);
