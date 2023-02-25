@@ -105,7 +105,7 @@ class ActionsGameSpinWheelContent extends Component {
       isShake: false,
       typeBackgroundImage: Types.TYPE_IMAGE_DEFAULT,
       backgroundDefaultImage: backgroundImages[0],
-      backgroundSelfPostedImage: null,
+      backgroundSelfPostedImage: "",
       displayError: "hide",
       group_customer: 0,
       agency_type_id: null,
@@ -137,12 +137,16 @@ class ActionsGameSpinWheelContent extends Component {
           : moment(nextProps.gameSpinWheels.time_end).format(
               "DD-MM-YYYY HH:mm"
             );
+      const newBackgroundDefaultImage = backgroundImages.filter(
+        (item) => item.value === nextProps.gameSpinWheels?.background_image_url
+      );
       this.setState({
         txtName: nextProps.gameSpinWheels.name,
         txtTurnInDay: nextProps.gameSpinWheels.turn_in_day,
         txtMaxAmountCoin: nextProps.gameSpinWheels.max_amount_coin_per_player,
         txtMaxGift: nextProps.gameSpinWheels.max_amount_gift_per_player,
         txtNumberLimit: nextProps.gameSpinWheels.number_limit_people,
+        txtDescription: nextProps.gameSpinWheels.description,
         group_customer: nextProps.gameSpinWheels.apply_for,
         agency_type_id: nextProps.gameSpinWheels.agency_type_id
           ? Number(nextProps.gameSpinWheels.agency_type_id)
@@ -154,6 +158,17 @@ class ActionsGameSpinWheelContent extends Component {
         txtEnd: endTime,
         isShake: nextProps.gameSpinWheels.is_shake,
         isLoading: true,
+        typeBackgroundImage: nextProps.gameSpinWheels.type_background_image,
+        backgroundDefaultImage:
+          nextProps.gameSpinWheels.type_background_image ==
+          Types.TYPE_IMAGE_DEFAULT
+            ? newBackgroundDefaultImage[0]
+            : backgroundImages[0],
+        backgroundSelfPostedImage:
+          nextProps.gameSpinWheels.type_background_image ==
+          Types.TYPE_IMAGE_SELF_POSTED
+            ? nextProps.gameSpinWheels.background_image_url
+            : "",
       });
     }
 
@@ -551,6 +566,11 @@ class ActionsGameSpinWheelContent extends Component {
       backgroundDefaultImage: element,
     });
   };
+  setBackgroundSelfPostedImage = (image) => {
+    this.setState({
+      backgroundSelfPostedImage: image,
+    });
+  };
 
   render() {
     const {
@@ -579,8 +599,8 @@ class ActionsGameSpinWheelContent extends Component {
       typeBackgroundImage,
       isLoading,
       backgroundDefaultImage,
+      backgroundSelfPostedImage,
     } = this.state;
-    console.log("ActionsGameSpinWheelContent ~~ images:", images);
 
     return (
       <div class="container-fluid">
@@ -990,7 +1010,13 @@ class ActionsGameSpinWheelContent extends Component {
                           ))}
                         </div>
                       ) : (
-                        <></>
+                        <div>
+                          <Upload
+                            setFile={this.setBackgroundSelfPostedImage}
+                            file={backgroundSelfPostedImage}
+                            itemImage={gameSpinWheels.background_image_url}
+                          />
+                        </div>
                       )}
                     </div>
                   </div>
@@ -1005,7 +1031,7 @@ class ActionsGameSpinWheelContent extends Component {
                     </label>
                     <div className="gameSpinWheel__imageContent">
                       <Upload
-                        // multiple
+                        multiple
                         setFiles={this.setImages}
                         files={images}
                         itemImages={gameSpinWheels.images}

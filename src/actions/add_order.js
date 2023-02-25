@@ -1,22 +1,21 @@
-import * as Types from "../constants/ActionType"
-import * as orderApi from "../data/remote/order_product"
+import * as Types from "../constants/ActionType";
+import * as orderApi from "../data/remote/order_product";
 export const createOrder = (store_code, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     orderApi
       .createOrder(store_code, data)
       .then((res) => {
-        console.log("res", res)
+        console.log("res", res);
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         orderApi.fetchAllData(store_code).then((res) => {
           if (res.data.code === 200)
-
             dispatch({
               type: Types.FETCH_ALL_ORDER_PRODUCT,
               data: res.data.data,
@@ -46,8 +45,8 @@ export const createOrder = (store_code, data) => {
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -64,19 +63,18 @@ export const createOrderBill = (store_code, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     orderApi
       .createOrderBill(store_code, data)
       .then((res) => {
-        console.log("res", res)
+        console.log("res", res);
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         orderApi.fetchAllData(store_code).then((res) => {
           if (res.data.code === 200)
-
             dispatch({
               type: Types.FETCH_ALL_ORDER_PRODUCT,
               data: res.data.data,
@@ -106,8 +104,8 @@ export const createOrderBill = (store_code, data) => {
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -125,13 +123,12 @@ export const fetchSearchPersion = (store_code, params) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
-    })
+    });
     orderApi.fetchSearchPersion(store_code, params).then((res) => {
-      console.log(res)
       dispatch({
         type: Types.SHOW_LOADING,
-        loading: "hide"
-      })
+        loading: "hide",
+      });
       if (res.data.code !== 401)
         dispatch({
           type: Types.FETCH_SEARCH_PERSION,
@@ -146,13 +143,13 @@ export const fetchAllCombo = (store_code) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
-    })
+    });
     orderApi.fetchAllCombo(store_code).then((res) => {
-      console.log(res)
+      console.log(res);
       dispatch({
         type: Types.SHOW_LOADING,
-        loading: "hide"
-      })
+        loading: "hide",
+      });
       if (res.data.code !== 401)
         dispatch({
           type: Types.FETCH_ALL_COMBO_PRODUCT,
@@ -167,13 +164,13 @@ export const findAddress = (store_code, id) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
-    })
+    });
     orderApi.findAddress(store_code, id).then((res) => {
-      console.log(res)
+      console.log(res);
       dispatch({
         type: Types.SHOW_LOADING,
-        loading: "hide"
-      })
+        loading: "hide",
+      });
       if (res.data.code !== 401)
         dispatch({
           type: Types.FETCH_INFO_PERSION,
@@ -187,43 +184,45 @@ export const fetchAllOrder = (store_code, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
-    orderApi.fetchAllData(store_code, data).then((res) => {
-      dispatch({
-        type: Types.SHOW_LOADING,
-        loading: "hide"
-      })
-      if (res.data.code !== 401)
-        dispatch({
-          type: Types.FETCH_ALL_ORDER_PRODUCT,
-          data: res.data.data,
-        });
-      // dispatch({
-      //   type: Types.ALERT_UID_STATUS,
-      //   alert: {
-      //     type: "success",
-      //     title: "Thành công 1",
-      //     disable: "show",
-      //     content: "loi",
-      //   },
-      // });
-
-    }).catch(function (error) {
-      dispatch({
-        type: Types.SHOW_LOADING,
-        loading: "hide"
-      })
-      dispatch({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "danger",
-          title: "Lỗi",
-          disable: "show",
-          content: error?.response?.data?.msg,
-        },
-      });
+      loading: "show",
     });
+    orderApi
+      .fetchAllData(store_code, data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        if (res.data.code !== 401)
+          dispatch({
+            type: Types.FETCH_ALL_ORDER_PRODUCT,
+            data: res.data.data,
+          });
+        // dispatch({
+        //   type: Types.ALERT_UID_STATUS,
+        //   alert: {
+        //     type: "success",
+        //     title: "Thành công 1",
+        //     disable: "show",
+        //     content: "loi",
+        //   },
+        // });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
   };
 };
 
@@ -231,13 +230,13 @@ export const fetchAllPertion = (store_code) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     orderApi.fetchAllPertion(store_code).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
-        loading: "hide"
-      })
+        loading: "hide",
+      });
       if (res.data.code !== 401)
         dispatch({
           type: Types.FETCH_ALL_PERTION_INFO,
@@ -248,24 +247,22 @@ export const fetchAllPertion = (store_code) => {
 };
 
 export const destroyOneProduct = (store_code, data) => {
-
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     orderApi
       .deleteProduct(store_code, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         orderApi
           .fetchAllData(store_code)
           .then((res) => {
             if (res.data.code !== 401)
-
               dispatch({
                 type: Types.FETCH_ALL_ORDER_PRODUCT,
                 data: res.data.data,
@@ -283,8 +280,8 @@ export const destroyOneProduct = (store_code, data) => {
           .catch(function (error) {
             dispatch({
               type: Types.SHOW_LOADING,
-              loading: "hide"
-            })
+              loading: "hide",
+            });
             dispatch({
               type: Types.ALERT_UID_STATUS,
               alert: {
@@ -311,19 +308,18 @@ export const destroyOneProduct = (store_code, data) => {
 };
 
 export const updateQuantityLineItem = (store_code, data) => {
-
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     orderApi
       .updateQuantityLineItem(store_code, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
 
         dispatch({
           type: Types.FETCH_ALL_ORDER_PRODUCT,
@@ -338,8 +334,6 @@ export const updateQuantityLineItem = (store_code, data) => {
             content: res.data.msg,
           },
         });
-
-
       })
       .catch(function (error) {
         dispatch({
@@ -355,19 +349,18 @@ export const updateQuantityLineItem = (store_code, data) => {
   };
 };
 export const subQuantityProduct = (store_code, data) => {
-
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     orderApi
       .subQuantityProduct(store_code, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         dispatch({
           type: Types.FETCH_ALL_ORDER_PRODUCT,
           data: res.data.data,
@@ -428,20 +421,19 @@ export const subQuantityProduct = (store_code, data) => {
 //   };
 // };
 export const fetchAllVoucher = (store_code) => {
-
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
-      loading: "show"
-    })
+      loading: "show",
+    });
     orderApi
       .fetchAllVoucher(store_code)
       .then((res) => {
-        console.log("aaaaaa")
+        console.log("aaaaaa");
         dispatch({
           type: Types.SHOW_LOADING,
-          loading: "hide"
-        })
+          loading: "hide",
+        });
         orderApi
           .fetchAllVoucher(store_code)
           .then((res) => {
@@ -463,8 +455,8 @@ export const fetchAllVoucher = (store_code) => {
           .catch(function (error) {
             dispatch({
               type: Types.SHOW_LOADING,
-              loading: "hide"
-            })
+              loading: "hide",
+            });
             dispatch({
               type: Types.ALERT_UID_STATUS,
               alert: {
@@ -477,7 +469,6 @@ export const fetchAllVoucher = (store_code) => {
           });
       })
       .catch(function (error) {
-
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -491,7 +482,6 @@ export const fetchAllVoucher = (store_code) => {
   };
 };
 export const showAlertMaxQuantity = () => {
-
   return (dispatch) => {
     dispatch({
       type: Types.ALERT_UID_STATUS,
@@ -502,11 +492,9 @@ export const showAlertMaxQuantity = () => {
         content: "Quá số lượng sản phẩm trong kho",
       },
     });
-
   };
 };
 export const showAlertErrVoucher = () => {
-
   return (dispatch) => {
     dispatch({
       type: Types.ALERT_UID_STATUS,
@@ -517,6 +505,5 @@ export const showAlertErrVoucher = () => {
         content: "Chưa đủ điều kiện dùng voucher",
       },
     });
-
   };
 };
