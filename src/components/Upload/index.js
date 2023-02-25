@@ -46,6 +46,11 @@ const DropFileStyles = styled.div`
     align-items: center;
     width: 100%;
     height: 100%;
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 6px;
+    }
     p {
       text-align: center;
       color: #8c8c8c;
@@ -119,7 +124,15 @@ class Upload extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const { fileList } = this.state;
-    const { listImgProduct, setFiles, itemImages, multiple } = this.props;
+    const {
+      listImgProduct,
+      setFiles,
+      itemImages,
+      multiple,
+      setFile,
+      product_img,
+      itemImage,
+    } = this.props;
     if (multiple) {
       if (!shallowEqual(listImgProduct, nextProps.listImgProduct)) {
         this.setFileList(nextProps.listImgProduct);
@@ -130,6 +143,14 @@ class Upload extends Component {
         this.setState({ fileList: nextProps.itemImages });
       }
     } else {
+      if (!shallowEqual(product_img, nextProps.product_img)) {
+        this.setFile(nextProps.product_img);
+        setFile(nextProps.product_img);
+      }
+      if (!shallowEqual(itemImage, nextProps.itemImage)) {
+        setFile(nextProps.itemImage);
+        this.setState({ file: nextProps.itemImage });
+      }
     }
 
     return true;
@@ -137,6 +158,9 @@ class Upload extends Component {
 
   setFileList = (fileList) => {
     this.setState({ fileList: [...this.state.fileList, ...fileList] });
+  };
+  setFile = (file) => {
+    this.setState({ file });
   };
 
   onDragEnter = () => {
@@ -173,7 +197,7 @@ class Upload extends Component {
 
   removeFile = (indexFile) => {
     const { fileList } = this.state;
-    const { setFiles, setFile, multiple } = this.props;
+    const { setFiles } = this.props;
     const newFileList = fileList.filter((file, index) => index !== indexFile);
     this.setState({ fileList: newFileList });
     setFiles(newFileList);
@@ -181,7 +205,7 @@ class Upload extends Component {
 
   render() {
     const { style, multiple } = this.props;
-    const { fileList } = this.state;
+    const { fileList, file } = this.state;
 
     return (
       <DropFileStyles>
@@ -192,41 +216,22 @@ class Upload extends Component {
             onDragLeave={this.onDragLeave}
             onDrop={this.onDrop}
             style={{
-              borderColor: themeData().backgroundColor,
+              borderColor: !file ? themeData().backgroundColor : "transparent",
               ...style,
             }}
           >
-            <div className="drop-file-input__label">
-              <span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="53"
-                  height="39"
-                  viewBox="0 0 53 39"
-                >
-                  <g
-                    fill="none"
-                    fillRule="evenodd"
-                    stroke="none"
-                    strokeWidth="1"
-                  >
-                    <g
-                      stroke={themeData().backgroundColor}
-                      strokeWidth="2"
-                      transform="translate(-255 -179)"
-                    >
-                      <g transform="translate(132 122)">
-                        <path d="M150.631 87.337c-5.755 0-10.42-4.534-10.42-10.127 0-5.593 4.665-10.127 10.42-10.127s10.42 4.534 10.42 10.127c0 5.593-4.665 10.127-10.42 10.127m10.42-24.755l-2.315-4.501h-16.21l-2.316 4.5h-11.579s-4.631 0-4.631 4.502v22.505c0 4.5 4.631 4.5 4.631 4.5h41.684s4.631 0 4.631-4.5V67.083c0-4.501-4.631-4.501-4.631-4.501h-9.263z"></path>
-                      </g>
-                    </g>
-                  </g>
-                </svg>
+            {file ? (
+              <div className="drop-file-input__label">
+                <img src={file} alt="img" loading="lazy" />
+              </div>
+            ) : (
+              <div className="drop-file-input__label">
                 <span>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
-                    width="100%"
-                    height="100%"
-                    viewBox="0 0 20 21"
+                    width="53"
+                    height="39"
+                    viewBox="0 0 53 39"
                   >
                     <g
                       fill="none"
@@ -235,33 +240,59 @@ class Upload extends Component {
                       strokeWidth="1"
                     >
                       <g
-                        fill={themeData().backgroundColor}
-                        transform="translate(-161 -428)"
+                        stroke={themeData().backgroundColor}
+                        strokeWidth="2"
+                        transform="translate(-255 -179)"
                       >
-                        <g transform="translate(132 398)">
-                          <g transform="translate(16.648 17.048)">
-                            <g transform="rotate(-180 16.142 16.838)">
-                              <rect
-                                width="2.643"
-                                height="19.82"
-                                x="8.588"
-                                y="0"
-                                rx="1.321"
-                              ></rect>
-                              <path
-                                d="M9.91 0c.73 0 1.321.592 1.321 1.321v17.177a1.321 1.321 0 01-2.643 0V1.321C8.588.591 9.18 0 9.91 0z"
-                                transform="rotate(90 9.91 9.91)"
-                              ></path>
-                            </g>
-                          </g>
+                        <g transform="translate(132 122)">
+                          <path d="M150.631 87.337c-5.755 0-10.42-4.534-10.42-10.127 0-5.593 4.665-10.127 10.42-10.127s10.42 4.534 10.42 10.127c0 5.593-4.665 10.127-10.42 10.127m10.42-24.755l-2.315-4.501h-16.21l-2.316 4.5h-11.579s-4.631 0-4.631 4.502v22.505c0 4.5 4.631 4.5 4.631 4.5h41.684s4.631 0 4.631-4.5V67.083c0-4.501-4.631-4.501-4.631-4.501h-9.263z"></path>
                         </g>
                       </g>
                     </g>
                   </svg>
+                  <span>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="100%"
+                      height="100%"
+                      viewBox="0 0 20 21"
+                    >
+                      <g
+                        fill="none"
+                        fillRule="evenodd"
+                        stroke="none"
+                        strokeWidth="1"
+                      >
+                        <g
+                          fill={themeData().backgroundColor}
+                          transform="translate(-161 -428)"
+                        >
+                          <g transform="translate(132 398)">
+                            <g transform="translate(16.648 17.048)">
+                              <g transform="rotate(-180 16.142 16.838)">
+                                <rect
+                                  width="2.643"
+                                  height="19.82"
+                                  x="8.588"
+                                  y="0"
+                                  rx="1.321"
+                                ></rect>
+                                <path
+                                  d="M9.91 0c.73 0 1.321.592 1.321 1.321v17.177a1.321 1.321 0 01-2.643 0V1.321C8.588.591 9.18 0 9.91 0z"
+                                  transform="rotate(90 9.91 9.91)"
+                                ></path>
+                              </g>
+                            </g>
+                          </g>
+                        </g>
+                      </g>
+                    </svg>
+                  </span>
                 </span>
-              </span>
-              <p>Chọn ảnh hoặc kéo và thả</p>
-            </div>
+                <p>Chọn ảnh hoặc kéo và thả</p>
+              </div>
+            )}
+
             <input
               type="file"
               multiple={multiple ? true : false}
@@ -333,6 +364,7 @@ class Upload extends Component {
 const mapStateToProps = (state) => {
   return {
     listImgProduct: state.UploadReducers.productImg.listImgProduct,
+    product_img: state.UploadReducers.productImg.product_img,
   };
 };
 
@@ -341,7 +373,7 @@ const mapDispatchToProps = (dispatch, props) => {
     uploadListImgProduct: (file) => {
       dispatch(productAction.uploadListImgProduct(file));
     },
-    uploadListImgProductV2: (file) => {
+    uploadAvataProduct: (file) => {
       dispatch(productAction.uploadAvataProduct(file));
     },
     checkNumImg: (alert) => {
