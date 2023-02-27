@@ -173,6 +173,8 @@ import SpinWheel from "./screens/Gamification/SpinWheel";
 import ActionsGameSpinWheel from "./screens/Gamification/SpinWheel/ActionsGameSpinWheel";
 import Sale from "./screens/Sale";
 import Statistical from "./screens/Statistical";
+import GuessNumber from "./screens/Gamification/GuessNumber";
+import ActionsGameGuessNumber from "./screens/Gamification/GuessNumber/ActionsGameGuessNumber";
 const routes = [
   {
     path: "/invoice_template/index/:store_code",
@@ -574,6 +576,30 @@ const routes = [
 
     main: ({ match, history }) => (
       <ActionsGameSpinWheel match={match} history={history} />
+    ),
+  },
+  {
+    path: "/game_guess_numbers/:store_code",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <GuessNumber match={match} history={history} />
+    ),
+  },
+  {
+    path: "/game_guess_numbers/:store_code/create",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <ActionsGameGuessNumber match={match} history={history} />
+    ),
+  },
+  {
+    path: "/game_guess_numbers/:store_code/update/:id",
+    exact: true,
+
+    main: ({ match, history }) => (
+      <ActionsGameGuessNumber match={match} history={history} />
     ),
   },
   {

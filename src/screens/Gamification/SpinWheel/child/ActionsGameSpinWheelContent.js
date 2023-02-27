@@ -43,19 +43,19 @@ const groups = [
 
 const backgroundImages = [
   {
-    url: "../../images/background_spin_wheel.png",
+    url: "/images/background_spin_wheel.png",
     value: "assets/image_default/background_spin_wheel.png",
   },
   {
-    url: "../../images/background_doapp.png",
+    url: "/images/background_doapp.png",
     value: "assets/image_default/background_doapp.png",
   },
   {
-    url: "../../images/background_image_game.png",
+    url: "/images/background_image_game.png",
     value: "assets/image_default/background_image_game.png",
   },
   {
-    url: "../../images/background_game_image2.png",
+    url: "/images/background_game_image2.png",
     value: "assets/image_default/background_game_image2.png",
   },
 ];
@@ -119,6 +119,10 @@ class ActionsGameSpinWheelContent extends Component {
     if (idGameSpinWheel) {
       fetchGameSpinWheelsById(store_code, idGameSpinWheel);
     }
+  }
+  componentWillUnmount() {
+    const { resetGameSpinWheels } = this.props;
+    resetGameSpinWheels();
   }
   shouldComponentUpdate(nextProps, nextState) {
     const { gameSpinWheels } = this.props;
@@ -266,6 +270,10 @@ class ActionsGameSpinWheelContent extends Component {
       isShake,
       images,
       listGift,
+      txtDescription,
+      typeBackgroundImage,
+      backgroundDefaultImage,
+      backgroundSelfPostedImage,
     } = this.state;
     const { addGameSpinWheels, store_code, showError } = this.props;
 
@@ -351,6 +359,19 @@ class ActionsGameSpinWheelContent extends Component {
           content: "Vui lòng nhập số xu tối đa",
         },
       });
+    } else if (
+      typeBackgroundImage == Types.TYPE_IMAGE_SELF_POSTED &&
+      !backgroundSelfPostedImage
+    ) {
+      showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng chọn hình nền",
+        },
+      });
     } else if (listGift.length === 0) {
       showError({
         type: Types.ALERT_UID_STATUS,
@@ -428,6 +449,12 @@ class ActionsGameSpinWheelContent extends Component {
             }-${txtEnd.split(" ")[0].split("-")[0]} ${txtEnd.split(" ")[1]}`
           : "",
         list_gift_spin_wheel: listGift,
+        description: txtDescription,
+        type_background_image: typeBackgroundImage,
+        background_image_url:
+          typeBackgroundImage == Types.TYPE_IMAGE_DEFAULT
+            ? backgroundDefaultImage.value
+            : backgroundSelfPostedImage,
       };
 
       addGameSpinWheels(store_code, gameSpinWheel);
@@ -447,6 +474,10 @@ class ActionsGameSpinWheelContent extends Component {
       group_customer,
       isShake,
       images,
+      txtDescription,
+      typeBackgroundImage,
+      backgroundDefaultImage,
+      backgroundSelfPostedImage,
     } = this.state;
 
     const { updateGameSpinWheels, store_code, idGameSpinWheel, showError } =
@@ -495,6 +526,19 @@ class ActionsGameSpinWheelContent extends Component {
           title: "Lỗi",
           disable: "show",
           content: "Vui lòng nhập giới hạn người tham gia",
+        },
+      });
+    } else if (
+      typeBackgroundImage == Types.TYPE_IMAGE_SELF_POSTED &&
+      !backgroundSelfPostedImage
+    ) {
+      showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng chọn hình nền",
         },
       });
     } else if (
@@ -549,6 +593,12 @@ class ActionsGameSpinWheelContent extends Component {
               txtEnd.split(" ")[0].split("-")[1]
             }-${txtEnd.split(" ")[0].split("-")[0]} ${txtEnd.split(" ")[1]}`
           : "",
+        description: txtDescription,
+        type_background_image: typeBackgroundImage,
+        background_image_url:
+          typeBackgroundImage == Types.TYPE_IMAGE_DEFAULT
+            ? backgroundDefaultImage.value
+            : backgroundSelfPostedImage,
       };
       const page = getQueryParams("page") || 1;
       updateGameSpinWheels(store_code, idGameSpinWheel, gameSpinWheel, page);
@@ -1014,7 +1064,7 @@ class ActionsGameSpinWheelContent extends Component {
                           <Upload
                             setFile={this.setBackgroundSelfPostedImage}
                             file={backgroundSelfPostedImage}
-                            itemImage={gameSpinWheels.background_image_url}
+                            image={gameSpinWheels.background_image_url}
                           />
                         </div>
                       )}
@@ -1034,7 +1084,7 @@ class ActionsGameSpinWheelContent extends Component {
                         multiple
                         setFiles={this.setImages}
                         files={images}
-                        itemImages={gameSpinWheels.images}
+                        images={gameSpinWheels.images}
                       />
                     </div>
                   </div>
@@ -1143,6 +1193,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchGameSpinWheelsById: (store_code, idGame) => {
       dispatch(gamificationAction.fetchGameSpinWheelsById(store_code, idGame));
+    },
+    resetGameSpinWheels: () => {
+      dispatch({ type: Types.GAME_SPIN_WHEELS, data: {} });
     },
   };
 };

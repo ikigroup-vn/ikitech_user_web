@@ -396,17 +396,6 @@ export const SAVE_GIFT_GAME_SPIN_WHEELS_MESSAGE =
 export const UPDATE_GIFT_GAME_SPIN_WHEELS = "UPDATE_GIFT_GAME_SPIN_WHEELS";
 export const DELETE_GIFT_GAME_SPIN_WHEELS = "DELETE_GIFT_GAME_SPIN_WHEELS";
 
-//Spin Wheel For
-export const GROUP_CUSTOMER_ALL = 0;
-export const GROUP_CUSTOMER_CTV = 1;
-export const GROUP_CUSTOMER_AGENCY = 2;
-export const GROUP_CUSTOMER_BY_CONDITION = 4;
-
-// Status spin wheel
-export const PROGRESSING = 0;
-export const CANCELED = 1;
-export const COMPLETED = 2;
-
 // Type Gift spin wheel
 export const GIFT_IS_COIN = 0;
 export const GIFT_IS_ITEM = 1;
@@ -417,6 +406,24 @@ export const GIFT_IS_LOST_TURN = 4;
 //Type Background Game spin wheel
 export const TYPE_IMAGE_DEFAULT = 0;
 export const TYPE_IMAGE_SELF_POSTED = 1;
+
+//Game đoán số
+export const LIST_GAME_GUESS_NUMBERS = "LIST_GAME_GUESS_NUMBERS";
+export const GAME_GUESS_NUMBERS = "GAME_GUESS_NUMBERS";
+export const ADD_GAME_GUESS_NUMBERS = "ADD_GAME_GUESS_NUMBERS";
+export const UPDATE_GAME_GUESS_NUMBERS = "UPDATE_GAME_GUESS_NUMBERS";
+export const DELETE_GAME_GUESS_NUMBERS = "DELETE_GAME_GUESS_NUMBERS";
+
+//Spin Wheel For + Guess Numbers For
+export const GROUP_CUSTOMER_ALL = 0;
+export const GROUP_CUSTOMER_CTV = 1;
+export const GROUP_CUSTOMER_AGENCY = 2;
+export const GROUP_CUSTOMER_BY_CONDITION = 4;
+
+// Status spin wheel + guess numbers
+export const PROGRESSING = 0;
+export const CANCELED = 1;
+export const COMPLETED = 2;
 
 //User Manage Sale
 export const FETCH_ALL_SALE_CONFIG = "FETCH_ALL_SALE_CONFIG";

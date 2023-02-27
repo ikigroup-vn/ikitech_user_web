@@ -313,6 +313,7 @@ export const getQueryParams = (name) => {
   return new URLSearchParams(window ? window.location.search : {}).get(name);
 };
 export const formatNumberV2 = (str) => {
+  if (str === undefined || str === null) return "";
   const strFormat = str
     .toString()
     .replace(/[A-Za-z`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/g, "");
@@ -323,8 +324,10 @@ export const formatNumberV2 = (str) => {
       .reduce((prev, next, index) => {
         return (index % 3 ? next : next + ".") + prev;
       });
-  } else {
+  } else if (Number(strFormat) > 0 && Number(strFormat) < 1000) {
     return Number(strFormat);
+  } else {
+    return "";
   }
 };
 

@@ -127,29 +127,30 @@ class Upload extends Component {
     const {
       listImgProduct,
       setFiles,
-      itemImages,
+      images,
       multiple,
       setFile,
       product_img,
-      itemImage,
+      image,
     } = this.props;
     if (multiple) {
       if (!shallowEqual(listImgProduct, nextProps.listImgProduct)) {
         this.setFileList(nextProps.listImgProduct);
         setFiles([...fileList, ...nextProps.listImgProduct]);
       }
-      if (!shallowEqual(itemImages, nextProps.itemImages)) {
-        setFiles(nextProps.itemImages);
-        this.setState({ fileList: nextProps.itemImages });
+
+      if (!shallowEqual(images, nextProps.images)) {
+        setFiles(nextProps.images);
+        this.setState({ fileList: nextProps.images });
       }
     } else {
       if (!shallowEqual(product_img, nextProps.product_img)) {
         this.setFile(nextProps.product_img);
         setFile(nextProps.product_img);
       }
-      if (!shallowEqual(itemImage, nextProps.itemImage)) {
-        setFile(nextProps.itemImage);
-        this.setState({ file: nextProps.itemImage });
+      if (!shallowEqual(image, nextProps.image)) {
+        setFile(nextProps.image);
+        this.setState({ file: nextProps.image });
       }
     }
 
