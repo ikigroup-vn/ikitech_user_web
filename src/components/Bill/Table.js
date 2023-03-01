@@ -21,6 +21,7 @@ import "./style.css";
 import history from "../../history";
 import { insertParam } from "../../ultis/helpers";
 import styled from "styled-components";
+import axios from "axios";
 
 const TableStyles = styled.div`
   .product_order_code {
@@ -43,6 +44,7 @@ class Table extends Component {
     this.syncArr = [];
     this.asyncElm = null;
     this.useLoading = false;
+    this.isChanged = false;
   }
 
   showChatBox = (customerId, customerImg, customerName, status) => {
@@ -216,6 +218,10 @@ class Table extends Component {
       this.asyncElm?.click();
     }
   }
+  componentWillUnmount() {
+    this.isChanged = true;
+  }
+
   countItem = (list) => {
     var result = "";
     var length = 0;
@@ -605,9 +611,10 @@ class Table extends Component {
         };
       });
       this.setState({ reload: randomString(10) });
-
       for (const order_code of bills) {
+        if (this.isChanged == true) return;
         try {
+          await new Promise((r) => setTimeout(r, 2000));
           var res = await billApi.syncShipment(store_code, order_code, {
             allow_update: true,
           });
@@ -630,7 +637,8 @@ class Table extends Component {
           }
           console.log("DA VAO");
         } catch (error) {
-          console.log("error: ", error);
+          await new Promise((r) => setTimeout(r, 2000));
+          console.log("isLoadingg", this.state.isLoading);
           data = this.syncArr?.map((v) => {
             if (v.order_code === order_code) {
               return {

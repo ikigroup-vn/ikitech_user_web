@@ -80,5 +80,6 @@ export default function (endpoint, method, body) {
     method: method,
     url: `${helpers.callUrl()}${endpoint}`,
     data: body,
+    cancelToken: axios.CancelToken.source().token,
   });
 }
