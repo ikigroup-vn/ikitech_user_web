@@ -21,6 +21,7 @@ import "./style.css";
 import history from "../../history";
 import { insertParam } from "../../ultis/helpers";
 import styled from "styled-components";
+import axios from "axios";
 
 const TableStyles = styled.div`
   .product_order_code {
@@ -43,6 +44,7 @@ class Table extends Component {
     this.syncArr = [];
     this.asyncElm = null;
     this.useLoading = false;
+    this.isChanged = false;
   }
 
   showChatBox = (customerId, customerImg, customerName, status) => {
@@ -201,21 +203,22 @@ class Table extends Component {
       });
 
     if (nextProps.runAsync !== this.props.runAsync) {
-      console.log("hehe", this.asyncElm);
       this.useLoading = true;
       this.asyncElm?.click();
     }
-    console.log(nextProps.isLoading, this.props.isLoading);
     if (
       (nextProps.isLoading !== this.props.isLoading ||
         !shallowEqual(nextProps.bills, this.props.bill)) &&
       nextProps.runAsync == this.props.runAsync
     ) {
-      console.log("loading ship");
       this.useLoading = false;
       this.asyncElm?.click();
     }
   }
+  componentWillUnmount() {
+    this.isChanged = true;
+  }
+
   countItem = (list) => {
     var result = "";
     var length = 0;
@@ -357,7 +360,6 @@ class Table extends Component {
         //   }
 
         var countItem = this.countItem(data.line_items_at_time);
-        console.log("useLoading", this.useLoading);
         var is_collaborator =
           data.collaborator_by_customer_id != null ? "check" : "close";
         var order_from =
@@ -375,7 +377,6 @@ class Table extends Component {
 
         var item = this.checkLoadingSyncShip(data.order_code);
         var itemLoaded = this.checkLoaded(data.order_code);
-        console.log(item, data.order_code, this.syncArr, itemLoaded);
         return (
           <tr className="hover-product">
             <td>
@@ -500,7 +501,6 @@ class Table extends Component {
   };
 
   optionsOrderFrom = (orderFrom) => {
-    console.log("orderrrr: ", orderFrom);
     return (
       <select
         value={orderFrom || ""}
@@ -595,7 +595,6 @@ class Table extends Component {
     var listBill = typeof bills.data == "undefined" ? [] : bills.data;
 
     var bills = listBill?.map((v, i) => v.order_code) || [];
-    console.log(bills);
     if (bills.length > 0) {
       this.syncArr = bills?.map((order_code) => {
         return {
@@ -606,14 +605,15 @@ class Table extends Component {
         };
       });
       this.setState({ reload: randomString(10) });
-
-      bills.forEach(async (order_code) => {
+      // await new Promise((r) => setTimeout(r, 2000));
+      for (const order_code of bills) {
+        if (this.isChanged == true) return;
         try {
           var res = await billApi.syncShipment(store_code, order_code, {
             allow_update: true,
           });
-          console.log("data ne", res.data);
           if (res.data.success == true) {
+            // eslint-disable-next-line no-loop-func
             data = this.syncArr?.map((v) => {
               if (v.order_code === order_code) {
                 return {
@@ -629,9 +629,8 @@ class Table extends Component {
               }
             });
           }
-          console.log("DA VAO");
         } catch (error) {
-          console.log(error);
+          // await new Promise((r) => setTimeout(r, 2000));
           data = this.syncArr?.map((v) => {
             if (v.order_code === order_code) {
               return {
@@ -645,10 +644,9 @@ class Table extends Component {
             }
           });
         }
-        console.log(data);
         this.syncArr = [...data];
         this.setState({ reload: randomString(10) });
-      });
+      }
     }
   };
 

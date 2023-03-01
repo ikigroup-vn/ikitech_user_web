@@ -372,7 +372,7 @@ class Config extends Component {
               style={{ maxWidth: "40%" }}
             />
           </div>
-          <div className="form-group">
+          {/* <div className="form-group">
             <label htmlFor="name">
               Phần trăm hoa hồng cho người giới thiệu Đại lý mua hàng{" "}
             </label>
@@ -433,7 +433,7 @@ class Config extends Component {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div className="form-group">
             <button type="submit" class={`btn btn-primary btn-sm `}>

@@ -160,7 +160,7 @@ class ListSale extends Component {
                   value={searchValue}
                   onChange={this.onChangeSearch}
                   class="form-control"
-                  placeholder="Tìm kiếm Sale..."
+                  placeholder="Tìm kiếm..."
                 />
                 <div
                   style={{

@@ -15,6 +15,7 @@ function checkEndPoint(endpoint) {
   return false;
 }
 
+// eslint-disable-next-line import/no-anonymous-default-export
 export default function (endpoint, method, body) {
   if (checkEndPoint(endpoint) == false) {
     axios.interceptors.request.use(
@@ -80,5 +81,6 @@ export default function (endpoint, method, body) {
     method: method,
     url: `${helpers.callUrl()}${endpoint}`,
     data: body,
+    cancelToken: axios.CancelToken.source().token,
   });
 }

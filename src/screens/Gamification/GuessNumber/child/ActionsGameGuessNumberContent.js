@@ -659,17 +659,8 @@ class ActionsGameGuessNumberContent extends Component {
   };
 
   render() {
-    const {
-      types,
-      groupCustomer,
-      gameGuessNumbers,
-      store_code,
-      idGameGuessNumber,
-    } = this.props;
-    console.log(
-      "ActionsGameGuessNumberContent ~ render ~ gameGuessNumbers:",
-      this.state.listResult
-    );
+    const { types, groupCustomer, gameGuessNumbers, idGameGuessNumber } =
+      this.props;
     const {
       txtName,
       txtStart,
@@ -1103,8 +1094,8 @@ class ActionsGameGuessNumberContent extends Component {
                           color: themeData().backgroundColor,
                         }}
                       >
-                        *Có thể bỏ trống, khi có kết quả vào lại chương trình
-                        cập nhập sau để công bố!
+                        *Có thể bỏ trống đáp án đúng, khi có kết quả vào lại
+                        chương trình cập nhập sau để công bố!
                       </div>
                       <div className="mb-4">
                         <div className="gameGuessNumber_answerMain">
@@ -1209,12 +1200,6 @@ class ActionsGameGuessNumberContent extends Component {
             </div>
           </div>
         </div>
-        {/* <EditGiftGameSpinWheel
-          gameGuessNumbers={gameGuessNumbers}
-          store_code={store_code}
-          idGameGuessNumber={idGameGuessNumber}
-          setListGift={this.setListGift}
-        /> */}
       </div>
     );
   }
