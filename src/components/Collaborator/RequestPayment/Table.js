@@ -254,7 +254,7 @@ class Table extends Component {
                         <p class="sale_user_label" id="sale_user_name">
                           Ngày đăng ký CTV:{" "}
                           <span id="user_name">
-                            {moment(data.collaborator.created_a).format(
+                            {moment(data.collaborator.created_at).format(
                               "DD-MM-YYYY"
                             )}{" "}
                           </span>
@@ -406,7 +406,7 @@ class Table extends Component {
                         <p class="sale_user_label" id="sale_user_name">
                           Ngày đăng ký CTV:{" "}
                           <span id="user_name">
-                            {moment(data.collaborator.created_a).format(
+                            {moment(data.collaborator.created_at).format(
                               "DD-MM-YYYY"
                             )}{" "}
                           </span>

@@ -1,48 +1,40 @@
 import React, { Component } from "react";
-import * as helper from "../../../ultis/helpers"
+import * as helper from "../../../ultis/helpers";
 import { connect } from "react-redux";
-import * as productAction from "../../../actions/product"
-import {compressed} from "../../../ultis/helpers"
+import * as productAction from "../../../actions/product";
+import { compressed } from "../../../ultis/helpers";
 class ModalUpload extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fileUpload: null
-
+      fileUpload: null,
     };
   }
 
-
-  onSave = async (e) =>{
-    
+  onSave = async (e) => {
     e.preventDefault();
-    window.$('.modal').modal('hide');
+    window.$(".modal").modal("hide");
 
     var file = this.state.fileUpload;
-    if(typeof file !== "undefined" && file != "" && file != null )
-    {
-      window.$('#file-category').fileinput('clear');
+    if (typeof file !== "undefined" && file != "" && file != null) {
+      window.$("#file-category").fileinput("clear");
       const fd = new FormData();
-      fd.append('video' , file)
-      this.props.uploadVideoProduct(fd)
-      this.setState({fileUpload: null})
-
+      fd.append("video", file);
+      this.props.uploadVideoProduct(fd);
+      this.setState({ fileUpload: null });
     }
-
-
-
-  }
+  };
 
   componentDidMount() {
-    var _this = this
+    var _this = this;
 
-    window.$('#file-category').on('fileloaded', function (event, file) {
-      _this.setState({ fileUpload: file })
+    window.$("#file-category").on("fileloaded", function (event, file) {
+      _this.setState({ fileUpload: file });
     });
-    window.$('#file-category').on('fileremoved', function (event, id, index) {
-      _this.setState({ fileUpload: null })
+    window.$("#file-category").on("fileremoved", function (event, id, index) {
+      _this.setState({ fileUpload: null });
     });
-    helper.loadFileInput("file-category" , "#" , true);
+    helper.loadFileInput("file-category", "#", true);
   }
   render() {
     return (
@@ -109,10 +101,9 @@ class ModalUpload extends Component {
   }
 }
 
-
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    uploadVideoProduct: ( file) => {
+    uploadVideoProduct: (file) => {
       dispatch(productAction.uploadVideoProduct(file));
     },
   };

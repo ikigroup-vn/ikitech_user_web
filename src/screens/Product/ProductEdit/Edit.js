@@ -512,7 +512,6 @@ class ProductEdit extends Component {
     }
   };
   handleDataFromProductVideo = (video) => {
-    console.log(video);
     this.setState((prevState, props) => {
       var formdata = { ...prevState.form };
       formdata.video_url = video;
@@ -568,6 +567,7 @@ class ProductEdit extends Component {
                   <Video
                     store_code={store_code}
                     product={product}
+                    form={this.state.form}
                     handleDataFromProductVideo={this.handleDataFromProductVideo}
                   />
                 </div>

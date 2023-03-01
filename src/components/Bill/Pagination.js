@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
@@ -54,7 +53,6 @@ class Pagination extends Component {
       this.props.agency_by_customer_id != null
         ? `&agency_by_customer_id=${this.props.agency_by_customer_id}`
         : null;
-    // axios.CancelToken.source().cancel();
     this.props.fetchAllBill(store_code, page, branch_id, params, params_agency);
   };
 

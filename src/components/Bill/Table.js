@@ -22,6 +22,7 @@ import history from "../../history";
 import { insertParam } from "../../ultis/helpers";
 import styled from "styled-components";
 import axios from "axios";
+import { fetchNewNumberOrder, getNumberOrder } from "../../ultis/apiCaller";
 
 const TableStyles = styled.div`
   .product_order_code {
@@ -44,7 +45,6 @@ class Table extends Component {
     this.syncArr = [];
     this.asyncElm = null;
     this.useLoading = false;
-    this.isChanged = false;
   }
 
   showChatBox = (customerId, customerImg, customerName, status) => {
@@ -215,9 +215,6 @@ class Table extends Component {
       this.asyncElm?.click();
     }
   }
-  componentWillUnmount() {
-    this.isChanged = true;
-  }
 
   countItem = (list) => {
     var result = "";
@@ -296,7 +293,7 @@ class Table extends Component {
       if (statusOrder) params = params + `&order_status_code=${statusOrder}`;
       if (statusPayment)
         params = params + `&payment_status_code=${statusPayment}`;
-
+      fetchNewNumberOrder();
       history.push(`/order/detail/${store_code}/${order_code}${params}`);
     }
   };
@@ -589,12 +586,18 @@ class Table extends Component {
   };
 
   handleSyncShipment = async () => {
+    await new Promise((r) => setTimeout(r, 1000));
     var data = [];
     var { store_code, bills } = this.props;
-
+    fetchNewNumberOrder();
     var listBill = typeof bills.data == "undefined" ? [] : bills.data;
 
-    var bills = listBill?.map((v, i) => v.order_code) || [];
+    // var bills = listBill?.map((v, i) => v.order_code) || [];
+    var bills = listBill?.map((v, i) => ({
+      order_code: v.order_code,
+      flag_order: getNumberOrder(),
+    }));
+
     if (bills.length > 0) {
       this.syncArr = bills?.map((order_code) => {
         return {
@@ -605,13 +608,15 @@ class Table extends Component {
         };
       });
       this.setState({ reload: randomString(10) });
-      // await new Promise((r) => setTimeout(r, 2000));
-      for (const order_code of bills) {
-        if (this.isChanged == true) return;
+      for (const itemBill of bills) {
+        var order_code = itemBill.order_code;
+
+        if (getNumberOrder() != itemBill.flag_order) return;
         try {
           var res = await billApi.syncShipment(store_code, order_code, {
             allow_update: true,
           });
+
           if (res.data.success == true) {
             // eslint-disable-next-line no-loop-func
             data = this.syncArr?.map((v) => {
@@ -630,7 +635,6 @@ class Table extends Component {
             });
           }
         } catch (error) {
-          // await new Promise((r) => setTimeout(r, 2000));
           data = this.syncArr?.map((v) => {
             if (v.order_code === order_code) {
               return {

@@ -371,7 +371,7 @@ class Table extends Component {
                       <p class="sale_user_label" id="sale_user_name">
                         Ngày đăng ký CTV:{" "}
                         <span id="user_name">
-                          {moment(data.created_a).format("DD-MM-YYYY")}{" "}
+                          {moment(data.created_at).format("DD-MM-YYYY")}{" "}
                         </span>
                       </p>
                       {address_default !== "" && (
