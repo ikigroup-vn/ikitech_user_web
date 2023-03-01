@@ -595,7 +595,6 @@ class Table extends Component {
     var listBill = typeof bills.data == "undefined" ? [] : bills.data;
 
     var bills = listBill?.map((v, i) => v.order_code) || [];
-    console.log(bills);
     if (bills.length > 0) {
       this.syncArr = bills?.map((order_code) => {
         return {
@@ -607,13 +606,13 @@ class Table extends Component {
       });
       this.setState({ reload: randomString(10) });
 
-      bills.forEach(async (order_code) => {
+      for (const order_code of bills) {
         try {
           var res = await billApi.syncShipment(store_code, order_code, {
             allow_update: true,
           });
-          console.log("data ne", res.data);
           if (res.data.success == true) {
+            // eslint-disable-next-line no-loop-func
             data = this.syncArr?.map((v) => {
               if (v.order_code === order_code) {
                 return {
@@ -631,7 +630,7 @@ class Table extends Component {
           }
           console.log("DA VAO");
         } catch (error) {
-          console.log(error);
+          console.log("error: ", error);
           data = this.syncArr?.map((v) => {
             if (v.order_code === order_code) {
               return {
@@ -648,7 +647,7 @@ class Table extends Component {
         console.log(data);
         this.syncArr = [...data];
         this.setState({ reload: randomString(10) });
-      });
+      }
     }
   };
 

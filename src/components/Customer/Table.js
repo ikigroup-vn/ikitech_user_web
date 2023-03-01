@@ -118,7 +118,7 @@ const TableStyles = styled.div`
       align-items: center;
       & > span {
         &:first-child {
-          width: 100px;
+          width: 150px;
           display: inline-block;
         }
       }
@@ -427,11 +427,14 @@ class Table extends Component {
                 {data.name}
               </td>
               <td>{data.phone_number}</td>
-              {/* <td>{data.email == null ? "Chưa cập nhật" : data.email}</td> */}
               <td>
-                {data.province_name == null
-                  ? "Chưa cập nhật"
-                  : data.province_name}
+                {data.sale_staff ? (
+                  <div className="explode__item">
+                    {`${data.sale_staff.name} `}
+                  </div>
+                ) : (
+                  ""
+                )}
               </td>
               <td>{getDDMMYYYHis(data.created_at)}</td>
               <td
@@ -467,7 +470,9 @@ class Table extends Component {
                   {data.is_collaborator === true
                     ? "Cộng tác viên"
                     : data.is_agency === true
-                    ? "Đại lý"
+                    ? `Đại lý${
+                        data.agency_type ? `(${data.agency_type?.name})` : ""
+                      }`
                     : "Khách hàng"}
                   {customerSelected?.id !== data.id ? null : (
                     <div class="select-role-dropdown">
@@ -574,6 +579,10 @@ class Table extends Component {
                     <span>{data.date_of_birth}</span>
                   </div>
                   <div className="explode__item">
+                    <span>SĐT người giới thiệu:</span>
+                    <span>{data.referral_phone_number}</span>
+                  </div>
+                  <div className="explode__item">
                     <span>Ngày đăng ký:</span>
                     <span>{data.created_at}</span>
                   </div>
@@ -622,12 +631,12 @@ class Table extends Component {
                     <span>Số nợ hiện tại:</span>
                     {data.debt ? new Intl.NumberFormat().format(data.debt) : 0}
                   </div>
-                  {data.sale_staff ? (
-                    <div className="explode__item">
-                      <span>Nhân viên sale:</span>
-                      {`${data.sale_staff.name} - ${data.sale_staff.phone_number}`}
-                    </div>
-                  ) : null}
+                  <div className="explode__item">
+                    <span>Tỉnh/Thành phố:</span>
+                    {data.province_name == null
+                      ? "Chưa cập nhật"
+                      : data.province_name}
+                  </div>
                 </div>
               </td>
             </tr>
@@ -719,7 +728,7 @@ class Table extends Component {
 
               <th>Số điện thoại</th>
 
-              <th>Tỉnh / Thành phố</th>
+              <th>Sale</th>
               <th>Ngày đăng ký</th>
               <th>Giới thiệu</th>
               <th>Xu</th>
