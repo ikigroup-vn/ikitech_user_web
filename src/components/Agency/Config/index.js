@@ -372,7 +372,7 @@ class Config extends Component {
               style={{ maxWidth: "40%" }}
             />
           </div>
-          {/* <div className="form-group">
+          <div className="form-group">
             <label htmlFor="name">
               Phần trăm hoa hồng cho người giới thiệu Đại lý mua hàng{" "}
             </label>
@@ -403,8 +403,8 @@ class Config extends Component {
                   <span className="bonusTypeForAgency_note">
                     <span className="bonusTypeForAgency_noteIcon">?</span>
                     <div className="bonusTypeForAgency_noteTooltip">
-                      Nhận từ phần trăm từ tổng đơn hàng, ví dụ đơn hàng tổng
-                      100.000đ bạn nhập 10% thì Đại lý T2 nhận được 10.000đ
+                      Nhận phần trăm từ tổng đơn hàng, ví dụ đơn hàng tổng
+                      100.000đ bạn nhập 10% thì Đại lý T1 nhận được 10.000đ
                     </div>
                   </span>
                 </div>
@@ -425,15 +425,15 @@ class Config extends Component {
                   <span className="bonusTypeForAgency_note">
                     <span className="bonusTypeForAgency_noteIcon">?</span>
                     <div className="bonusTypeForAgency_noteTooltip">
-                      Nhận từ phân trăm từ hoa hồng từ chính Đại lý T1 được
-                      hưởng, ví dụ hóa đơn Đại lý T1 nhận được 100.000đ hoa hồng
-                      bạn nhập ô này 10% thì Đại lý T2 nhận được 10.000đ
+                      Nhận phân trăm hoa hồng từ chính Đại lý T2 được hưởng, ví
+                      dụ hóa đơn Đại lý T2 nhận được 100.000đ hoa hồng bạn nhập
+                      ô này 10% thì Đại lý T1 nhận được 10.000đ
                     </div>
                   </span>
                 </div>
               </div>
             </div>
-          </div> */}
+          </div>
 
           <div className="form-group">
             <button type="submit" class={`btn btn-primary btn-sm `}>

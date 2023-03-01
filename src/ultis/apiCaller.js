@@ -5,7 +5,13 @@ import * as userLocalApi from "../data/local/user";
 import history from "../history";
 import * as helpers from "../ultis/helpers";
 const exceptPrefix = ["/login", "/register", "/otp", "/forgot"];
-
+var flagNumberOrder = 1;
+export const fetchNewNumberOrder = () => {
+  flagNumberOrder = helpers.randomString(10);
+};
+export const getNumberOrder = () => {
+  return flagNumberOrder;
+};
 function checkEndPoint(endpoint) {
   for (const prefix of exceptPrefix) {
     if (endpoint.includes(prefix) == true) {

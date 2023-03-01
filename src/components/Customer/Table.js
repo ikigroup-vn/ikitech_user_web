@@ -195,6 +195,11 @@ class Table extends Component {
       ) &&
       nextProps.addCustomerToSaleSuccessfully
     ) {
+      if (isSale()) {
+        fetchListCustomerOfSale(store_code, paginate, currentParams);
+      } else {
+        fetchAllCustomer(store_code, paginate, currentParams);
+      }
       this.setState({ listItemSelected: [], currentStaff: null });
       resetCustomerToSaleMessage();
     }

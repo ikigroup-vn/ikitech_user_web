@@ -431,9 +431,9 @@ class Config extends Component {
                   <span className="bonusTypeForCTV_note">
                     <span className="bonusTypeForCTV_noteIcon">?</span>
                     <div className="bonusTypeForCTV_noteTooltip">
-                      Nhận phần trăm từ hoa hồng từ chính CTV T2 được hưởng, ví
-                      dụ hóa đơn CTV T2 nhận được 100.000đ hoa hồng bạn nhập ô
-                      này 10% thì CTV T1 nhận được 10.000đ
+                      Nhận phần trăm hoa hồng từ chính CTV T2 được hưởng, ví dụ
+                      hóa đơn CTV T2 nhận được 100.000đ hoa hồng bạn nhập ô này
+                      10% thì CTV T1 nhận được 10.000đ
                     </div>
                   </span>
                 </div>
