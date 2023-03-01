@@ -203,17 +203,14 @@ class Table extends Component {
       });
 
     if (nextProps.runAsync !== this.props.runAsync) {
-      console.log("hehe", this.asyncElm);
       this.useLoading = true;
       this.asyncElm?.click();
     }
-    console.log(nextProps.isLoading, this.props.isLoading);
     if (
       (nextProps.isLoading !== this.props.isLoading ||
         !shallowEqual(nextProps.bills, this.props.bill)) &&
       nextProps.runAsync == this.props.runAsync
     ) {
-      console.log("loading ship");
       this.useLoading = false;
       this.asyncElm?.click();
     }
@@ -363,7 +360,6 @@ class Table extends Component {
         //   }
 
         var countItem = this.countItem(data.line_items_at_time);
-        console.log("useLoading", this.useLoading);
         var is_collaborator =
           data.collaborator_by_customer_id != null ? "check" : "close";
         var order_from =
@@ -381,7 +377,6 @@ class Table extends Component {
 
         var item = this.checkLoadingSyncShip(data.order_code);
         var itemLoaded = this.checkLoaded(data.order_code);
-        console.log(item, data.order_code, this.syncArr, itemLoaded);
         return (
           <tr className="hover-product">
             <td>
@@ -506,7 +501,6 @@ class Table extends Component {
   };
 
   optionsOrderFrom = (orderFrom) => {
-    console.log("orderrrr: ", orderFrom);
     return (
       <select
         value={orderFrom || ""}
@@ -611,10 +605,10 @@ class Table extends Component {
         };
       });
       this.setState({ reload: randomString(10) });
+      // await new Promise((r) => setTimeout(r, 2000));
       for (const order_code of bills) {
         if (this.isChanged == true) return;
         try {
-          await new Promise((r) => setTimeout(r, 2000));
           var res = await billApi.syncShipment(store_code, order_code, {
             allow_update: true,
           });
@@ -635,10 +629,8 @@ class Table extends Component {
               }
             });
           }
-          console.log("DA VAO");
         } catch (error) {
-          await new Promise((r) => setTimeout(r, 2000));
-          console.log("isLoadingg", this.state.isLoading);
+          // await new Promise((r) => setTimeout(r, 2000));
           data = this.syncArr?.map((v) => {
             if (v.order_code === order_code) {
               return {
@@ -652,7 +644,6 @@ class Table extends Component {
             }
           });
         }
-        console.log(data);
         this.syncArr = [...data];
         this.setState({ reload: randomString(10) });
       }

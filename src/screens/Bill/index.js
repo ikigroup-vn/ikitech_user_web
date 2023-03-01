@@ -978,6 +978,7 @@ class Bill extends Component {
                               name="numPage"
                               class="form-control"
                             >
+                              <option value="3">3</option>
                               <option value="10">10</option>
                               <option value="20" selected>
                                 20
