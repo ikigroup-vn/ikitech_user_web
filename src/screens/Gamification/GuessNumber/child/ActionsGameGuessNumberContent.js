@@ -42,7 +42,7 @@ const groups = [
 const resultDefault = [
   {
     is_correct: false,
-    value_gift: "",
+    text_result: "",
   },
 ];
 const ActionsGameGuessNumberContentStyles = styled.div`
@@ -335,7 +335,7 @@ class ActionsGameGuessNumberContent extends Component {
 
     var isErrorListResult = false;
     listResult.forEach((element) => {
-      if (element.value_gift === "") {
+      if (!element.text_result) {
         isErrorListResult = true;
       }
     });
@@ -478,7 +478,7 @@ class ActionsGameGuessNumberContent extends Component {
 
     var isErrorListResult = false;
     listResult.forEach((element) => {
-      if (element.value_gift === "") {
+      if (!element.text_result) {
         isErrorListResult = true;
       }
     });
@@ -1123,14 +1123,31 @@ class ActionsGameGuessNumberContent extends Component {
                                     type="text"
                                     placeholder="Nhập đáp án tại đây"
                                     className="form-control"
-                                    name="value_gift"
-                                    value={result.value_gift}
-                                    checked={result.value_gift}
+                                    name="text_result"
+                                    value={result.text_result}
+                                    checked={result.text_result}
                                     onChange={(e) =>
                                       this.handleChangeResult(e, index)
                                     }
                                   />
                                 </div>
+                                {result.is_correct && (
+                                  <div className="gameGuessNumber__answer">
+                                    <span>Phần quà</span>
+                                    <input
+                                      type="text"
+                                      placeholder="Nhập đáp án tại đây"
+                                      className="form-control"
+                                      name="value_gift"
+                                      value={result.value_gift}
+                                      checked={result.value_gift}
+                                      onChange={(e) =>
+                                        this.handleChangeResult(e, index)
+                                      }
+                                    />
+                                  </div>
+                                )}
+
                                 <div className="gameGuessNumber__answerIcon">
                                   <svg
                                     xmlns="http://www.w3.org/2000/svg"
