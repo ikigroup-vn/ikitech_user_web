@@ -292,17 +292,17 @@ class ActionsGameSpinWheelContent extends Component {
     const turnInDay = txtTurnInDay?.toString().replace(/\./g, "")
       ? Number(txtTurnInDay?.toString().replace(/\./g, ""))
       : txtTurnInDay?.toString().replace(/\./g, "");
-    const numberLimitPeople = txtNumberLimit?.toString().replace(/\./g, "")
-      ? Number(txtNumberLimit?.toString().replace(/\./g, ""))
-      : txtNumberLimit?.toString().replace(/\./g, "");
-    const maxAmountGiftPerPlayer = txtMaxGift?.toString().replace(/\./g, "")
-      ? Number(txtMaxGift?.toString().replace(/\./g, ""))
-      : txtMaxGift?.toString().replace(/\./g, "");
-    const maxAmountCoinPerPlayer = txtMaxAmountCoin
-      ?.toString()
-      .replace(/\./g, "")
-      ? Number(txtMaxAmountCoin?.toString().replace(/\./g, ""))
-      : txtMaxAmountCoin?.toString().replace(/\./g, "");
+    // const numberLimitPeople = txtNumberLimit?.toString().replace(/\./g, "")
+    //   ? Number(txtNumberLimit?.toString().replace(/\./g, ""))
+    //   : txtNumberLimit?.toString().replace(/\./g, "");
+    // const maxAmountGiftPerPlayer = txtMaxGift?.toString().replace(/\./g, "")
+    //   ? Number(txtMaxGift?.toString().replace(/\./g, ""))
+    //   : txtMaxGift?.toString().replace(/\./g, "");
+    // const maxAmountCoinPerPlayer = txtMaxAmountCoin
+    //   ?.toString()
+    //   .replace(/\./g, "")
+    //   ? Number(txtMaxAmountCoin?.toString().replace(/\./g, ""))
+    //   : txtMaxAmountCoin?.toString().replace(/\./g, "");
     if (txtName === "" || txtName === null) {
       showError({
         type: Types.ALERT_UID_STATUS,
@@ -321,42 +321,6 @@ class ActionsGameSpinWheelContent extends Component {
           title: "Lỗi",
           disable: "show",
           content: "Vui lòng nhập số lần quay thưởng trong một ngày",
-        },
-      });
-    } else if (numberLimitPeople === "" || numberLimitPeople === null) {
-      showError({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "danger",
-          title: "Lỗi",
-          disable: "show",
-          content: "Vui lòng nhập giới hạn người tham gia",
-        },
-      });
-    } else if (
-      maxAmountGiftPerPlayer === "" ||
-      maxAmountGiftPerPlayer === null
-    ) {
-      showError({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "danger",
-          title: "Lỗi",
-          disable: "show",
-          content: "Vui lòng nhập số phần thưởng tối đa",
-        },
-      });
-    } else if (
-      maxAmountCoinPerPlayer === "" ||
-      maxAmountCoinPerPlayer === null
-    ) {
-      showError({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "danger",
-          title: "Lỗi",
-          disable: "show",
-          content: "Vui lòng nhập số xu tối đa",
         },
       });
     } else if (
@@ -426,9 +390,9 @@ class ActionsGameSpinWheelContent extends Component {
       const gameSpinWheel = {
         name: txtName,
         turn_in_day: turnInDay,
-        max_amount_coin_per_player: maxAmountCoinPerPlayer,
-        max_amount_gift_per_player: maxAmountGiftPerPlayer,
-        number_limit_people: numberLimitPeople,
+        max_amount_coin_per_player: 0,
+        max_amount_gift_per_player: 0,
+        number_limit_people: 0,
         agency_type_id: agency_type_id
           ? Number(agency_type_id)
           : agency_type_id,
@@ -486,17 +450,17 @@ class ActionsGameSpinWheelContent extends Component {
     const turnInDay = txtTurnInDay?.toString().replace(/\./g, "")
       ? Number(txtTurnInDay?.toString().replace(/\./g, ""))
       : txtTurnInDay?.toString().replace(/\./g, "");
-    const numberLimitPeople = txtNumberLimit?.toString().replace(/\./g, "")
-      ? Number(txtNumberLimit?.toString().replace(/\./g, ""))
-      : txtNumberLimit?.toString().replace(/\./g, "");
-    const maxAmountGiftPerPlayer = txtMaxGift?.toString().replace(/\./g, "")
-      ? Number(txtMaxGift?.toString().replace(/\./g, ""))
-      : txtMaxGift?.toString().replace(/\./g, "");
-    const maxAmountCoinPerPlayer = txtMaxAmountCoin
-      ?.toString()
-      .replace(/\./g, "")
-      ? Number(txtMaxAmountCoin?.toString().replace(/\./g, ""))
-      : txtMaxAmountCoin?.toString().replace(/\./g, "");
+    // const numberLimitPeople = txtNumberLimit?.toString().replace(/\./g, "")
+    //   ? Number(txtNumberLimit?.toString().replace(/\./g, ""))
+    //   : txtNumberLimit?.toString().replace(/\./g, "");
+    // const maxAmountGiftPerPlayer = txtMaxGift?.toString().replace(/\./g, "")
+    //   ? Number(txtMaxGift?.toString().replace(/\./g, ""))
+    //   : txtMaxGift?.toString().replace(/\./g, "");
+    // const maxAmountCoinPerPlayer = txtMaxAmountCoin
+    //   ?.toString()
+    //   .replace(/\./g, "")
+    //   ? Number(txtMaxAmountCoin?.toString().replace(/\./g, ""))
+    //   : txtMaxAmountCoin?.toString().replace(/\./g, "");
 
     if (txtName === "" || txtName === null) {
       showError({
@@ -518,16 +482,6 @@ class ActionsGameSpinWheelContent extends Component {
           content: "Vui lòng nhập số lần quay thưởng trong một ngày",
         },
       });
-    } else if (numberLimitPeople === "" || numberLimitPeople === null) {
-      showError({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "danger",
-          title: "Lỗi",
-          disable: "show",
-          content: "Vui lòng nhập giới hạn người tham gia",
-        },
-      });
     } else if (
       typeBackgroundImage == Types.TYPE_IMAGE_SELF_POSTED &&
       !backgroundSelfPostedImage
@@ -541,39 +495,13 @@ class ActionsGameSpinWheelContent extends Component {
           content: "Vui lòng chọn hình nền",
         },
       });
-    } else if (
-      maxAmountGiftPerPlayer === "" ||
-      maxAmountGiftPerPlayer === null
-    ) {
-      showError({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "danger",
-          title: "Lỗi",
-          disable: "show",
-          content: "Vui lòng nhập số phần thưởng tối đa",
-        },
-      });
-    } else if (
-      maxAmountCoinPerPlayer === "" ||
-      maxAmountCoinPerPlayer === null
-    ) {
-      showError({
-        type: Types.ALERT_UID_STATUS,
-        alert: {
-          type: "danger",
-          title: "Lỗi",
-          disable: "show",
-          content: "Vui lòng nhập số xu tối đa",
-        },
-      });
     } else {
       const gameSpinWheel = {
         name: txtName,
         turn_in_day: turnInDay,
-        max_amount_coin_per_player: maxAmountCoinPerPlayer,
-        max_amount_gift_per_player: maxAmountGiftPerPlayer,
-        number_limit_people: numberLimitPeople,
+        max_amount_coin_per_player: 0,
+        max_amount_gift_per_player: 0,
+        number_limit_people: 0,
         agency_type_id: agency_type_id
           ? Number(agency_type_id)
           : agency_type_id,
@@ -808,7 +736,7 @@ class ActionsGameSpinWheelContent extends Component {
                       Thời gian kết thúc phải sau thời gian bắt đầu
                     </div>
                   </div>
-                  <div className="form-group gameSpinWheel__item">
+                  {/* <div className="form-group gameSpinWheel__item">
                     <label for="txtMaxAmountCoin">Số xu tối đa</label>
                     <input
                       type="text"
@@ -820,8 +748,8 @@ class ActionsGameSpinWheelContent extends Component {
                       value={txtMaxAmountCoin}
                       onChange={this.onChange}
                     />
-                  </div>
-                  <div className="form-group gameSpinWheel__item">
+                  </div> */}
+                  {/* <div className="form-group gameSpinWheel__item">
                     <label for="txtMaxGift">Số phần thưởng tối đa</label>
                     <input
                       type="text"
@@ -833,8 +761,8 @@ class ActionsGameSpinWheelContent extends Component {
                       value={txtMaxGift}
                       onChange={this.onChange}
                     />
-                  </div>
-                  <div className="form-group gameSpinWheel__item">
+                  </div> */}
+                  {/* <div className="form-group gameSpinWheel__item">
                     <label for="txtNumberLimit">
                       Giới hạn số người tham gia
                     </label>
@@ -848,7 +776,7 @@ class ActionsGameSpinWheelContent extends Component {
                       value={txtNumberLimit}
                       onChange={this.onChange}
                     />
-                  </div>
+                  </div> */}
                   <div className="form-group discount-for">
                     <label htmlFor="group_customer">Áp dụng cho</label>
                     <div
@@ -916,60 +844,6 @@ class ActionsGameSpinWheelContent extends Component {
                           })}
                       </select>
                     )}
-                  </div>
-                  <div className="form-group type__game">
-                    <label htmlFor="group_customer">Cách chơi</label>
-                    <div
-                      style={{
-                        display: "flex",
-                        columnGap: "10px",
-                      }}
-                      className="radio"
-                      onChange={this.onChange}
-                    >
-                      <label
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        <input
-                          type="radio"
-                          name="isShake"
-                          checked={isShake === false}
-                          className="isShake"
-                          value={false}
-                        />
-                        <span
-                          style={{
-                            marginLeft: "5px",
-                          }}
-                        >
-                          Quay
-                        </span>
-                      </label>
-                      <label
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        <input
-                          type="radio"
-                          name="isShake"
-                          checked={isShake === true}
-                          className="isShake"
-                          value={true}
-                        />
-                        <span
-                          style={{
-                            marginLeft: "5px",
-                          }}
-                        >
-                          Lắc
-                        </span>
-                      </label>
-                    </div>
                   </div>
                   <div className="form-group type__game__background">
                     <label
@@ -1102,6 +976,60 @@ class ActionsGameSpinWheelContent extends Component {
                       />
                     </div>
                   </div>
+                  <div className="form-group type__game">
+                    <label htmlFor="group_customer">Cách chơi</label>
+                    <div
+                      style={{
+                        display: "flex",
+                        columnGap: "10px",
+                      }}
+                      className="radio"
+                      onChange={this.onChange}
+                    >
+                      <label
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <input
+                          type="radio"
+                          name="isShake"
+                          checked={isShake === false}
+                          className="isShake"
+                          value={false}
+                        />
+                        <span
+                          style={{
+                            marginLeft: "5px",
+                          }}
+                        >
+                          Quay
+                        </span>
+                      </label>
+                      <label
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <input
+                          type="radio"
+                          name="isShake"
+                          checked={isShake === true}
+                          className="isShake"
+                          value={true}
+                        />
+                        <span
+                          style={{
+                            marginLeft: "5px",
+                          }}
+                        >
+                          Lắc
+                        </span>
+                      </label>
+                    </div>
+                  </div>
                 </div>
                 <div className="form-group">
                   <label for="txtDescription">Mô tả</label>
@@ -1114,7 +1042,7 @@ class ActionsGameSpinWheelContent extends Component {
                     autoComplete="off"
                     value={txtDescription}
                     onChange={this.onChange}
-                    rows="7"
+                    rows="3"
                   />
                 </div>
               </div>
