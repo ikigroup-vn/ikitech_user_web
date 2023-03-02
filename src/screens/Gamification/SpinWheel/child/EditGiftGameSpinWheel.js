@@ -150,7 +150,7 @@ class EditGiftGameSpinWheel extends Component {
       !shallowEqual(listGiftGameSpinWheels, nextProps.listGiftGameSpinWheels)
     ) {
       const newListGift = nextProps.listGiftGameSpinWheels?.data.reduce(
-        (prevData, currentData) => {
+        (prevData, currentData, index) => {
           const newData = {
             id: currentData.id,
             name: currentData.name,
@@ -167,6 +167,14 @@ class EditGiftGameSpinWheel extends Component {
               : "";
           } else if (newData.type_gift == 1) {
             newData.value_gift = currentData.value_gift;
+            const newDataSearch = this.state.selectValue;
+            newDataSearch[index] = {
+              value: currentData.value_gift,
+              label: currentData.name,
+            };
+            this.setState({
+              searchValue: newDataSearch,
+            });
           } else if (newData.type_gift == 2) {
             newData.text = currentData.text;
           }
@@ -215,6 +223,7 @@ class EditGiftGameSpinWheel extends Component {
     if (idGameSpinWheel) {
       fetchListGiftGameSpinWheels(store_code, idGameSpinWheel);
     }
+    document.body.scrollIntoView({ behavior: "smooth", block: "start" });
   }
   setIdGiftGameSelected = (idGift) => {
     this.setState({ idGiftGameSelected: idGift });
@@ -297,6 +306,7 @@ class EditGiftGameSpinWheel extends Component {
         ? {
             ...currentData,
             value_gift: newDataSearch[index].value,
+            name: newDataSearch[index].label,
           }
         : currentData;
 
@@ -598,13 +608,13 @@ class EditGiftGameSpinWheel extends Component {
                         <option value={Types.GIFT_IS_ITEM}>
                           Tặng sản phẩm
                         </option>
-                        <option value={Types.GIFT_IS_TEXT}>Tặng mã</option>
                         <option value={Types.GIFT_IS_LUCKY_AFTER}>
                           Chúc bạn may mắn
                         </option>
                         <option value={Types.GIFT_IS_LOST_TURN}>
                           Mất lượt
                         </option>
+                        <option value={Types.GIFT_IS_TEXT}>Tùy chọn</option>
                       </select>
                     </div>
                     <div className="gameSpinWheel__input gameSpinWheel__gift">
@@ -628,7 +638,6 @@ class EditGiftGameSpinWheel extends Component {
                             onKeyDown={(event) => {
                               this._recordInput("onKeyUp", event);
                             }}
-                            autoFocus
                             selectRef={(ref) => {
                               this.refSearchProduct = ref;
                             }}
@@ -661,7 +670,7 @@ class EditGiftGameSpinWheel extends Component {
                         <div>
                           <input
                             type="text"
-                            placeholder="Nhập mã thẻ"
+                            placeholder="Nhập tùy chọn"
                             className="form-control"
                             value={listGift[index].text || ""}
                             name="text"

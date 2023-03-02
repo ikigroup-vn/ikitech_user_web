@@ -75,8 +75,8 @@ class Table extends Component {
               </td>
               <td>{formatNoD(data.orders_count)}</td>
               <td>
-                {typeof data.sum_share_collaborator != "undefined"
-                  ? format(Number(data.sum_share_collaborator))
+                {typeof data.sum_share_agency != "undefined"
+                  ? format(Number(data.sum_share_agency))
                   : 0}
               </td>
               <td>

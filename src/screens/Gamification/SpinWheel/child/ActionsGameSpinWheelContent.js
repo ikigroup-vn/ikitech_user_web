@@ -651,6 +651,7 @@ class ActionsGameSpinWheelContent extends Component {
       backgroundDefaultImage,
       backgroundSelfPostedImage,
     } = this.state;
+    console.log("backgroundSelfPostedImage:::", backgroundSelfPostedImage);
 
     return (
       <div class="container-fluid">
@@ -1039,7 +1040,7 @@ class ActionsGameSpinWheelContent extends Component {
                         marginTop: "10px",
                       }}
                     >
-                      {typeBackgroundImage == 0 ? (
+                      {typeBackgroundImage == Types.TYPE_IMAGE_DEFAULT ? (
                         <div className="bgImage">
                           {backgroundImages.map((element, index) => (
                             <div
@@ -1047,7 +1048,8 @@ class ActionsGameSpinWheelContent extends Component {
                               className="bgImage__item"
                               style={{
                                 borderColor:
-                                  backgroundDefaultImage.value === element.value
+                                  backgroundDefaultImage?.value ===
+                                  element?.value
                                     ? themeData().backgroundColor
                                     : "transparent",
                               }}
@@ -1059,15 +1061,27 @@ class ActionsGameSpinWheelContent extends Component {
                             </div>
                           ))}
                         </div>
-                      ) : (
-                        <div>
-                          <Upload
-                            setFile={this.setBackgroundSelfPostedImage}
-                            file={backgroundSelfPostedImage}
-                            image={gameSpinWheels.background_image_url}
-                          />
-                        </div>
-                      )}
+                      ) : null}
+                      <div
+                        style={{
+                          display:
+                            typeBackgroundImage == Types.TYPE_IMAGE_SELF_POSTED
+                              ? "inline-block"
+                              : "none",
+                        }}
+                      >
+                        <Upload
+                          setFile={this.setBackgroundSelfPostedImage}
+                          file={backgroundSelfPostedImage}
+                          image={gameSpinWheels.background_image_url}
+                          forbiddenLinks={[
+                            "assets/image_default/background_spin_wheel.png",
+                            "assets/image_default/background_doapp.png",
+                            "assets/image_default/background_image_game.png",
+                            "assets/image_default/background_game_image2.png",
+                          ]}
+                        />
+                      </div>
                     </div>
                   </div>
                   <div className="form-group gameSpinWheel__image ">

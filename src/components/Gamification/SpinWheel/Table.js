@@ -5,6 +5,25 @@ import * as Types from "../../../constants/ActionType";
 import history from "../../../history";
 import { getQueryParams } from "../../../ultis/helpers";
 
+const backgroundImages = [
+  {
+    url: "/images/background_spin_wheel.png",
+    value: "assets/image_default/background_spin_wheel.png",
+  },
+  {
+    url: "/images/background_doapp.png",
+    value: "assets/image_default/background_doapp.png",
+  },
+  {
+    url: "/images/background_image_game.png",
+    value: "assets/image_default/background_image_game.png",
+  },
+  {
+    url: "/images/background_game_image2.png",
+    value: "assets/image_default/background_game_image2.png",
+  },
+];
+
 const TableStyles = styled.tr`
   img {
     width: 80px;
@@ -35,6 +54,16 @@ class Table extends PureComponent {
       history.push(`/game_spin_wheels/${store_code}/update/${id}?page=${page}`);
     }
   };
+  handleShowImageDefault = (value) => {
+    if (value) {
+      const newImageDefault = backgroundImages.filter(
+        (image) => image.value === value
+      );
+      console.log("Table ~ newImageDefault:", newImageDefault);
+      return newImageDefault[0]?.url;
+    }
+    return "";
+  };
 
   showData = (listGameSpinWheels) => {
     if (listGameSpinWheels?.data?.length > 0) {
@@ -51,27 +80,42 @@ class Table extends PureComponent {
               1}
           </td>
           <td>
-            {
+            {game.type_background_image == Types.TYPE_IMAGE_DEFAULT ? (
               <img
                 src={
-                  game.images?.length > 0
-                    ? game.images[0]
+                  game?.background_image_url
+                    ? this.handleShowImageDefault(game?.background_image_url)
                     : "../images/notfound.png"
                 }
                 alt="image_game"
               />
-            }
+            ) : (
+              <img
+                src={
+                  game?.background_image_url
+                    ? game?.background_image_url
+                    : "../images/notfound.png"
+                }
+                alt="image_game"
+              />
+            )}
           </td>
           <td>{game.name}</td>
           <td>
             {game.apply_for === Types.GROUP_CUSTOMER_ALL
               ? "Tất cả"
-              : Types.GROUP_CUSTOMER_CTV
+              : game.apply_for === Types.GROUP_CUSTOMER_CTV
               ? "Cộng tác viên"
-              : Types.GROUP_CUSTOMER_AGENCY
-              ? "Đại lý cấp..."
-              : Types.GROUP_CUSTOMER_BY_CONDITION
-              ? "Nhóm..."
+              : game.apply_for === Types.GROUP_CUSTOMER_AGENCY
+              ? `Đại lý${
+                  game.agency_type_id ? `(${game?.agency_type?.name})` : ""
+                }`
+              : game.apply_for === Types.GROUP_CUSTOMER_BY_CONDITION
+              ? `Nhóm khách hàng${
+                  game.group_customer_id
+                    ? `(${game?.group_customer?.name})`
+                    : ""
+                }`
               : ""}
           </td>
           <td>{game.description}</td>
@@ -114,7 +158,7 @@ class Table extends PureComponent {
           <thead>
             <tr>
               <th>STT</th>
-              <th>Ảnh</th>
+              <th>Ảnh nền</th>
               <th>Tên</th>
               <th>Đối tượng</th>
               <th>Miêu tả</th>

@@ -138,7 +138,6 @@ class Upload extends Component {
         this.setFileList(nextProps.listImgProduct);
         setFiles([...fileList, ...nextProps.listImgProduct]);
       }
-
       if (!shallowEqual(images, nextProps.images)) {
         setFiles(nextProps.images);
         this.setState({ fileList: nextProps.images });
@@ -207,7 +206,8 @@ class Upload extends Component {
   render() {
     const { style, multiple } = this.props;
     const { fileList, file } = this.state;
-
+    console.log("Upload ~ render ~ file:", file);
+    const forbiddenLinks = this.props.forbiddenLinks || [];
     return (
       <DropFileStyles>
         {fileList.length < 10 && (
@@ -217,11 +217,14 @@ class Upload extends Component {
             onDragLeave={this.onDragLeave}
             onDrop={this.onDrop}
             style={{
-              borderColor: !file ? themeData().backgroundColor : "transparent",
+              borderColor:
+                file && !forbiddenLinks.includes(file)
+                  ? "transparent"
+                  : themeData().backgroundColor,
               ...style,
             }}
           >
-            {file ? (
+            {file && !forbiddenLinks.includes(file) ? (
               <div className="drop-file-input__label">
                 <img src={file} alt="img" loading="lazy" />
               </div>
