@@ -69,12 +69,18 @@ class Table extends PureComponent {
           <td>
             {game.apply_for === Types.GROUP_CUSTOMER_ALL
               ? "Tất cả"
-              : Types.GROUP_CUSTOMER_CTV
+              : game.apply_for === Types.GROUP_CUSTOMER_CTV
               ? "Cộng tác viên"
-              : Types.GROUP_CUSTOMER_AGENCY
-              ? "Đại lý cấp..."
-              : Types.GROUP_CUSTOMER_BY_CONDITION
-              ? "Nhóm..."
+              : game.apply_for === Types.GROUP_CUSTOMER_AGENCY
+              ? `Đại lý${
+                  game.agency_type_id ? `(${game?.agency_type?.name})` : ""
+                }`
+              : game.apply_for === Types.GROUP_CUSTOMER_BY_CONDITION
+              ? `Nhóm khách hàng${
+                  game.group_customer_id
+                    ? `(${game?.group_customer?.name})`
+                    : ""
+                }`
               : ""}
           </td>
           <td>{game.description}</td>

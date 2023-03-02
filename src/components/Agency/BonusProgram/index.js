@@ -294,7 +294,7 @@ class BonusProgram extends Component {
             <td>{reward_value}</td>
             <td>{limit}</td>
 
-            <td style={{ display: "flex" }}>
+            <td>
               <Link
                 to={`/agency_bonus_steps/${this.props.store_code}/update/${data.id}?tab-index=3`}
                 class="btn btn-outline-warning btn-sm"

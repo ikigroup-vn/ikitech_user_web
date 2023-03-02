@@ -230,12 +230,12 @@ class Config extends Component {
       payment_16_of_month,
       payment_limit:
         payment_limit == null ? payment_limit : formatNumber(payment_limit),
-      bonus_type_for_ctv_t2: Number(bonus_type_for_ctv_t2),
-      percent_agency_t1:
-        percent_agency_t1 == null
-          ? percent_agency_t1
-          : formatNumber(percent_agency_t1),
       allow_rose_referral_customer,
+      // bonus_type_for_ctv_t2: Number(bonus_type_for_ctv_t2),
+      // percent_agency_t1:
+      //   percent_agency_t1 == null
+      //     ? percent_agency_t1
+      //     : formatNumber(percent_agency_t1),
     });
   };
   render() {
@@ -340,7 +340,7 @@ class Config extends Component {
                 checked={payment_1_of_month}
               />
               <label class="form-check-label" for="gridCheck">
-                Cho phép quyết toán 1 ngày 1 tháng
+                Cho phép quyết toán ngày 1 hàng tháng
               </label>
             </div>
           </div>
@@ -372,7 +372,7 @@ class Config extends Component {
               style={{ maxWidth: "40%" }}
             />
           </div>
-          <div className="form-group">
+          {/* <div className="form-group">
             <label htmlFor="name">
               Phần trăm hoa hồng cho người giới thiệu Đại lý mua hàng{" "}
             </label>
@@ -433,7 +433,7 @@ class Config extends Component {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div className="form-group">
             <button type="submit" class={`btn btn-primary btn-sm `}>
