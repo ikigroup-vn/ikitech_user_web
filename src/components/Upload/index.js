@@ -4,6 +4,7 @@ import styled from "styled-components";
 import * as productAction from "../../actions/product";
 import { compressed } from "../../ultis/helpers";
 import themeData from "../../ultis/theme_data";
+import * as Types from "../../constants/ActionType";
 
 const DropFileStyles = styled.div`
   display: flex;
@@ -180,11 +181,30 @@ class Upload extends Component {
 
   onFileDrop = async (e) => {
     const newFiles = e.target.files;
-
-    const { uploadListImgProduct, uploadAvataProduct, multiple } = this.props;
+    const { file, fileList } = this.state;
+    const {
+      uploadListImgProduct,
+      uploadAvataProduct,
+      multiple,
+      limit,
+      showError,
+    } = this.props;
     if (newFiles.length > 0) {
       const updatedList = [...newFiles];
       if (multiple) {
+        const totalFilesAfter = fileList?.length + newFiles?.length;
+        if (totalFilesAfter > limit) {
+          showError({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "danger",
+              title: "Lỗi",
+              disable: "show",
+              content: `Bạn đã chọn vượt quá ${limit} ảnh`,
+            },
+          });
+          return;
+        }
         uploadListImgProduct(updatedList);
       } else {
         const newFile = newFiles[0];
@@ -382,6 +402,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     checkNumImg: (alert) => {
       dispatch(alert);
+    },
+    showError: (error) => {
+      dispatch(error);
     },
   };
 };

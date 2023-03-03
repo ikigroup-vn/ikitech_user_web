@@ -149,6 +149,7 @@ class MoreListGiftGameSpinWheel extends Component {
         ? {
             ...currentData,
             value_gift: newDataSearch[index].value,
+            name: newDataSearch[index].label,
           }
         : currentData;
 
@@ -449,7 +450,6 @@ class MoreListGiftGameSpinWheel extends Component {
                       onKeyDown={(event) => {
                         this._recordInput("onKeyUp", event);
                       }}
-                      autoFocus
                       selectRef={(ref) => {
                         this.refSearchProduct = ref;
                       }}
