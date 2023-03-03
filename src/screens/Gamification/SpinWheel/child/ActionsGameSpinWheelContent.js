@@ -973,6 +973,7 @@ class ActionsGameSpinWheelContent extends Component {
                         setFiles={this.setImages}
                         files={images}
                         images={gameSpinWheels.images}
+                        limit={10}
                       />
                     </div>
                   </div>

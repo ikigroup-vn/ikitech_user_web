@@ -253,6 +253,7 @@ class ActionsGameGuessNumberContent extends Component {
         if (numberTextResult > Number(this.state.rangeNumber)) return;
       }
       if (name === "rangeNumber") {
+        if (Number(value) > 10) return;
         this.setState({ textResult: "" });
       }
       this.setState({ [name]: valueNumber });
