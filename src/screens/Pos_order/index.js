@@ -1298,6 +1298,37 @@ class PostOrder extends Component {
                             )}
                           </div>
 
+                          <div
+                            className="row"
+                            style={{
+                              padding: "3px 0",
+                              justifyContent: "space-between",
+                              marginRight: "13px",
+                            }}
+                          >
+                            {oneCart.info_cart?.points_total_used_edit_order > 0 && oneCart.info_cart
+                                      ?.points_amount_used_edit_order > 0  ? (
+                              <>
+                                <div
+                                  className="title-price"
+                                  style={{
+                                    paddingLeft: 16,
+                                  }}
+                                >{`Xu đã sử dụng khi đặt đơn ${
+                                  oneCart.info_cart?.points_total_used_edit_order
+                                } xu [${format(
+                                  Number(
+                                    oneCart.info_cart
+                                      ?.points_amount_used_edit_order
+                                  )
+                                )}]`}</div>
+                             
+                              </>
+                            ) : (
+                              ""
+                            )}
+                          </div>
+
                           <div className="row item-info">
                             <div className="title-price col-6">Voucher</div>
                             <div className="col-6" style={{ textAlign: "end" }}>
