@@ -1298,37 +1298,6 @@ class PostOrder extends Component {
                             )}
                           </div>
 
-                          <div
-                            className="row"
-                            style={{
-                              padding: "3px 0",
-                              justifyContent: "space-between",
-                              marginRight: "13px",
-                            }}
-                          >
-                            {oneCart.info_cart?.points_total_used_edit_order > 0 && oneCart.info_cart
-                                      ?.points_amount_used_edit_order > 0  ? (
-                              <>
-                                <div
-                                  className="title-price"
-                                  style={{
-                                    paddingLeft: 16,
-                                  }}
-                                >{`Xu đã sử dụng khi đặt đơn ${
-                                  oneCart.info_cart?.points_total_used_edit_order
-                                } xu [${format(
-                                  Number(
-                                    oneCart.info_cart
-                                      ?.points_amount_used_edit_order
-                                  )
-                                )}]`}</div>
-                             
-                              </>
-                            ) : (
-                              ""
-                            )}
-                          </div>
-
                           <div className="row item-info">
                             <div className="title-price col-6">Voucher</div>
                             <div className="col-6" style={{ textAlign: "end" }}>
@@ -1419,10 +1388,32 @@ class PostOrder extends Component {
                               </span>
                             </div>
                           )}
+
+                          {oneCart.info_cart?.points_total_used_edit_order >
+                            0 &&
+                            oneCart.info_cart?.points_amount_used_edit_order >
+                              0 && (
+                              <div className="row item-info">
+                                <div className="item-discount-name col-6">
+                                  Xu đã sử dụng khi đặt [{oneCart.info_cart?.points_total_used_edit_order}xu]
+                                </div>
+                                <span
+                                  className="col-6"
+                                  style={{ textAlign: "end" }}
+                                >
+                                  -
+                                  {formatNoD(
+                                    oneCart.info_cart
+                                      ?.points_amount_used_edit_order
+                                  )}
+                                </span>
+                              </div>
+                            )}
+
                           {oneCart?.info_cart?.bonus_points_amount_used > 0 && (
                             <div className="row item-info">
                               <div className="item-discount-name col-6">
-                                Giảm khi dùng xu
+                                Giảm khi dùng xu [{oneCart?.info_cart?.total_points_used }xu]
                               </div>
                               <span
                                 className="col-6"
