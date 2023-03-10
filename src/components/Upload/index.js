@@ -192,18 +192,20 @@ class Upload extends Component {
     if (newFiles.length > 0) {
       const updatedList = [...newFiles];
       if (multiple) {
-        const totalFilesAfter = fileList?.length + newFiles?.length;
-        if (totalFilesAfter > limit) {
-          showError({
-            type: Types.ALERT_UID_STATUS,
-            alert: {
-              type: "danger",
-              title: "Lỗi",
-              disable: "show",
-              content: `Bạn đã chọn vượt quá ${limit} ảnh`,
-            },
-          });
-          return;
+        if (limit) {
+          const totalFilesAfter = fileList?.length + newFiles?.length;
+          if (totalFilesAfter > limit) {
+            showError({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "danger",
+                title: "Lỗi",
+                disable: "show",
+                content: `Bạn đã chọn vượt quá ${limit} ảnh`,
+              },
+            });
+            return;
+          }
         }
         uploadListImgProduct(updatedList);
       } else {

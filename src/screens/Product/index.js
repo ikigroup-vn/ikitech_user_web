@@ -14,9 +14,10 @@ import ModalMultiDelete from "../../components/Product/Delete/MultiDelete";
 import ImportModal from "../../components/Product/Import/index";
 import NotAccess from "../../components/Partials/NotAccess";
 import Tiki from "../../components/Product/Ecomerce/Tiki";
-import { connect } from "react-redux";
+import { connect, shallowEqual } from "react-redux";
 import Loading from "../Loading";
 import * as productAction from "../../actions/product";
+import * as CategoryPAction from "../../actions/category_product";
 import * as XLSX from "xlsx";
 import { randomString } from "../../ultis/helpers";
 import Shopee from "../../components/Product/Ecomerce/Shopee";
@@ -28,6 +29,15 @@ import ModalConfirm from "../../components/Product/ComfirmCol";
 import history from "../../history";
 import ModalChooseTypeImport from "../../components/Product/ImportProductInWeb/ModalChooseTypeImport";
 import { getBranchId } from "../../ultis/branchUtils";
+import styled from "styled-components";
+
+const ProductStyles = styled.div`
+  .card-header {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+  }
+`;
 
 class Product extends Component {
   constructor(props) {
@@ -47,12 +57,101 @@ class Product extends Component {
       searchValue: getQueryParams("search") || "",
       page: getQueryParams("page") || 1,
       numPage: getQueryParams("limit") || 20,
+      categorySelected: getQueryParams("category_ids")?.split(",") || [],
       importData: [],
       allow_skip_same_name: true,
       percent_col: 0,
       openModalTypeImport: false,
+      listCategory: [],
     };
   }
+  shouldComponentUpdate(nextProps, nextState) {
+    if (
+      !shallowEqual(this.props.category_product, nextProps.category_product)
+    ) {
+      var option = [];
+      var categories = [...nextProps.category_product];
+      if (categories.length > 0) {
+        option = categories.map((category, index) => {
+          return {
+            id: category.id,
+            label: category.name,
+            categories_child: category.category_children,
+          };
+        });
+        const categoryIds = getQueryParams("category_ids")?.split(",") || [];
+        if (categoryIds?.length > 0) {
+          const categorySelected = option.filter((item) =>
+            categoryIds.includes(item?.id?.toString())
+          );
+          this.setState({
+            categorySelected: categorySelected,
+          });
+        }
+        this.setState({
+          listCategory: option,
+        });
+      }
+    }
+
+    return true;
+  }
+
+  getNameSelected() {
+    const { categorySelected } = this.state;
+    var name = "";
+    if (categorySelected.length > 0) {
+      name += categorySelected.reduce(
+        (prevCategory, currentCategory, index) => {
+          return (
+            prevCategory +
+            `${
+              index === categorySelected.length - 1
+                ? currentCategory?.label
+                : `${currentCategory?.label}, `
+            }`
+          );
+        },
+        ""
+      );
+    }
+
+    return name;
+  }
+  handleCheckedCategory = (idCategory) => {
+    const { categorySelected } = this.state;
+    if (categorySelected?.length > 0) {
+      const checked = categorySelected
+        .map((category) => category?.id)
+        .includes(idCategory);
+      return checked;
+    }
+    return false;
+  };
+
+  handleChangeCategory = (category) => {
+    const { categorySelected, numPage } = this.state;
+    const { store_code } = this.props.match.params;
+    var newCategorySelected = [];
+
+    const isExisted = categorySelected.map((c) => c?.id).includes(category?.id);
+    if (isExisted) {
+      newCategorySelected = categorySelected.filter(
+        (c) => c?.id !== category.id
+      );
+    } else {
+      newCategorySelected = [...categorySelected, category];
+    }
+
+    this.setState({
+      categorySelected: newCategorySelected,
+      page: 1,
+      searchValue: "",
+    });
+    const params = this.getParams("", numPage, newCategorySelected);
+    history.push(`/product/index/${store_code}?page=1${params}`);
+    this.props.fetchAllProductV2(store_code, getBranchId(), 1, params);
+  };
 
   setAllowSkipSameName = (isAllowed) => {
     this.setState({ allow_skip_same_name: isAllowed });
@@ -61,18 +160,43 @@ class Product extends Component {
   setOpenModalTypeImport = (isOpenedModal) => {
     this.setState({ openModalTypeImport: isOpenedModal });
   };
+  getParams = (search, limit, categories) => {
+    var params = ``;
+    if (search != "" && search != null) {
+      params = params + `&search=${search}`;
+    }
+    if (limit != "" && limit != null) {
+      params = params + `&limit=${limit}`;
+    }
+    if (categories !== "" && categories !== null && categories?.length > 0) {
+      const newCategorySelected = categories.reduce(
+        (prevCategory, currentCategory, index) => {
+          return (
+            prevCategory +
+            `${
+              index === categories.length - 1
+                ? currentCategory?.id
+                : `${currentCategory?.id},`
+            }`
+          );
+        },
+        "&category_ids="
+      );
+      params += newCategorySelected;
+    }
 
+    return params;
+  };
   onChangeNumPage = (e) => {
     var { store_code } = this.props.match.params;
-    var { searchValue } = this.state;
+    var { searchValue, categorySelected } = this.state;
     var numPage = e.target.value;
     this.setState({
       numPage,
       page: 1,
     });
-    var params = `${
-      searchValue ? `&search=${searchValue}` : ""
-    }&limit=${numPage}`;
+
+    const params = this.getParams(searchValue, numPage, categorySelected);
     history.push(`/product/index/${store_code}?page=1${params}`);
     this.props.fetchAllProductV2(store_code, getBranchId(), 1, params);
   };
@@ -80,7 +204,9 @@ class Product extends Component {
     this.setState({ searchValue: e.target.value });
   };
   componentDidMount() {
+    const { store_code } = this.props.match.params;
     this.handleFetchAllProduct();
+    this.props.fetchAllCategoryP(store_code);
   }
   handleFetchAllProduct = (pageParams) => {
     const { store_code } = this.props.match.params;
@@ -142,12 +268,10 @@ class Product extends Component {
   searchData = (e) => {
     e.preventDefault();
     var { store_code } = this.props.match.params;
-    var { searchValue, numPage } = this.state;
+    var { searchValue, numPage, categorySelected } = this.state;
     const branch_id = localStorage.getItem("branch_id");
-    var params = `${
-      searchValue ? `&search=${searchValue}` : ""
-    }&limit=${numPage}`;
     this.setState({ page: 1 });
+    const params = this.getParams(searchValue, numPage, categorySelected);
     history.push(`/product/index/${store_code}?page=1${params}`);
     this.props.fetchAllProductV2(store_code, branch_id, 1, params);
   };
@@ -212,10 +336,11 @@ class Product extends Component {
         ecommerce,
         barcode_print,
         openModalTypeImport,
+        listCategory,
       } = this.state;
 
       return (
-        <div id="wrapper">
+        <ProductStyles id="wrapper">
           <ImportModal
             store_code={store_code}
             importData={importData}
@@ -410,24 +535,26 @@ class Product extends Component {
 
                     <div class="card shadow ">
                       <div className="card-header">
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "end",
-                            marginRight: "15px",
-                          }}
-                        >
-                          <Link
-                            to={`/product/create/${store_code}`}
-                            class={`btn btn-info btn-icon-split btn-sm ${
-                              insert == true ? "show" : "hide"
-                            }`}
+                        <div>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "end",
+                              marginRight: "15px",
+                            }}
                           >
-                            <span class="icon text-white-50">
-                              <i class="fas fa-plus"></i>
-                            </span>
-                            <span class="text">Thêm sản phẩm</span>
-                          </Link>
+                            <Link
+                              to={`/product/create/${store_code}`}
+                              class={`btn btn-info btn-icon-split ${
+                                insert == true ? "show" : "hide"
+                              }`}
+                            >
+                              <span class="icon text-white-50">
+                                <i class="fas fa-plus"></i>
+                              </span>
+                              <span class="text">Thêm sản phẩm</span>
+                            </Link>
+                          </div>
                         </div>
                         <div
                           class="row"
@@ -467,43 +594,133 @@ class Product extends Component {
                               </span>
                             </p>
                           </form>
-                          <div style={{ display: "flex" }}>
-                            <div style={{ display: "flex" }}>
-                              <span
+                          <div className="categories__content">
+                            <div
+                              id="accordion"
+                              style={{
+                                width: "300px",
+                                position: "relative",
+                              }}
+                            >
+                              <div
+                                className="wrap_category input-group"
+                                style={{ display: "flex" }}
+                                data-toggle="collapse"
+                                data-target="#collapseCategory"
+                                aria-expanded="false"
+                                aria-controls="collapseCategory"
+                              >
+                                <input
+                                  readOnly
+                                  type="text"
+                                  class="form-control"
+                                  placeholder="--Chọn danh mục--"
+                                  style={{
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    paddingRight: "55px",
+                                    position: "relative",
+                                    backgroundColor: "transparent",
+                                  }}
+                                  value={this.getNameSelected()}
+                                ></input>
+                                <button
+                                  class="btn  btn-accordion-collapse collapsed input-group-text"
+                                  id="headingOne"
+                                  style={{
+                                    borderTopLeftRadius: "0",
+                                    borderBottomLeftRadius: "0",
+                                  }}
+                                >
+                                  <i
+                                    className={
+                                      this.state.icon
+                                        ? "fa fa-caret-down"
+                                        : "fa fa-caret-down"
+                                    }
+                                  ></i>
+                                </button>
+                              </div>
+                              <div
+                                id="collapseCategory"
+                                className="collapse"
+                                ariaLabelledby="headingOne"
+                                dataParent="#accordion"
                                 style={{
-                                  margin: "20px 10px auto auto",
+                                  position: "absolute",
+                                  width: "100%",
+                                  left: "0",
+                                  top: "100%",
+                                  zIndex: "10",
+                                  background: "#fff",
+                                  boxShadow: "1px 2px 6px rgba(0,0,0,0.1)",
                                 }}
                               >
-                                Hiển thị
-                              </span>
-                              <select
-                                style={{
-                                  margin: "auto",
-                                  marginTop: "10px",
-                                  marginRight: "20px",
-                                  width: "70px",
-                                }}
-                                onChange={this.onChangeNumPage}
-                                value={numPage}
-                                name="numPage"
-                                class="form-control"
-                              >
-                                <option value="10">10</option>
-                                <option value="20" selected>
-                                  20
-                                </option>
-                                <option value="50">50</option>
-                              </select>
+                                <ul
+                                  style={{
+                                    listStyle: "none",
+                                    margin: "5px 0",
+                                    height: "235px",
+                                    overflowY: "auto",
+                                  }}
+                                  class="list-group"
+                                >
+                                  {listCategory?.length > 0 ? (
+                                    listCategory.map((category, index) => (
+                                      <li
+                                        class=""
+                                        style={{
+                                          cursor: "pointer",
+                                          paddingTop: "5px",
+                                          paddingLeft: "5px",
+                                          display: "flex",
+                                          alignItems: "center",
+                                        }}
+                                      >
+                                        <input
+                                          type="checkbox"
+                                          id={category.label}
+                                          style={{
+                                            marginRight: "10px",
+                                            width: "30px",
+                                            height: "15px",
+                                            flexShrink: "0",
+                                          }}
+                                          checked={this.handleCheckedCategory(
+                                            category.id
+                                          )}
+                                          onChange={() =>
+                                            this.handleChangeCategory(category)
+                                          }
+                                        />
+                                        <label
+                                          htmlFor={category.label}
+                                          style={{
+                                            whiteSpace: "nowrap",
+                                            overflow: "hidden",
+                                            textOverflow: "ellipsis",
+                                            marginBottom: "0",
+                                          }}
+                                          title={category.label}
+                                        >
+                                          {category.label}
+                                        </label>
+                                      </li>
+                                    ))
+                                  ) : (
+                                    <div
+                                      style={{
+                                        marginTop: "20px",
+                                        textAlign: "center",
+                                      }}
+                                    >
+                                      Không có kết quả !
+                                    </div>
+                                  )}
+                                </ul>
+                              </div>
                             </div>
-
-                            <Pagination
-                              limit={numPage}
-                              searchValue={searchValue}
-                              passNumPage={this.passNumPage}
-                              store_code={store_code}
-                              products={products}
-                              pageProduct={true}
-                            />
                           </div>
                         </div>
                       </div>
@@ -522,14 +739,46 @@ class Product extends Component {
                           store_code={store_code}
                           products={products}
                         />
-                        <Pagination
-                          limit={numPage}
-                          searchValue={searchValue}
-                          passNumPage={this.passNumPage}
-                          store_code={store_code}
-                          products={products}
-                          pageProduct={true}
-                        />
+                        <div style={{ display: "flex", justifyContent: "end" }}>
+                          <div style={{ display: "flex" }}>
+                            <span
+                              style={{
+                                margin: "20px 10px auto auto",
+                              }}
+                            >
+                              Hiển thị
+                            </span>
+                            <select
+                              style={{
+                                margin: "auto",
+                                marginTop: "10px",
+                                marginRight: "20px",
+                                width: "70px",
+                              }}
+                              onChange={this.onChangeNumPage}
+                              value={numPage}
+                              name="numPage"
+                              class="form-control"
+                            >
+                              <option value="10">10</option>
+                              <option value="20" selected>
+                                20
+                              </option>
+                              <option value="50">50</option>
+                            </select>
+                          </div>
+
+                          <Pagination
+                            limit={numPage}
+                            searchValue={searchValue}
+                            passNumPage={this.passNumPage}
+                            store_code={store_code}
+                            products={products}
+                            pageProduct={true}
+                            getParams={this.getParams}
+                            categorySelected={this.state.categorySelected}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -548,7 +797,7 @@ class Product extends Component {
             />
             <ModalMultiDelete multi={this.state.multi} />
           </div>
-        </div>
+        </ProductStyles>
       );
     } else if (this.props.auth === false) {
       return <Redirect to="/login" />;
@@ -565,6 +814,7 @@ const mapStateToProps = (state) => {
     alert: state.productReducers.alert.alert_success,
     allProductList: state.productReducers.product.allProductList,
     permission: state.authReducers.permission.data,
+    category_product: state.categoryPReducers.category_product.allCategoryP,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -582,6 +832,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     changePercentCol: (store_code, data) => {
       dispatch(productAction.changePercentCol(store_code, data));
+    },
+    fetchAllCategoryP: (store_code) => {
+      dispatch(CategoryPAction.fetchAllCategoryP(store_code));
     },
   };
 };

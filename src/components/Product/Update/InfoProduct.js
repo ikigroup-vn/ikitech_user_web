@@ -32,6 +32,7 @@ class InfoProduct extends Component {
       txtCostOfCapital: "",
       categorySearch: "",
       point_for_agency: 0,
+      txtPosition: "",
     };
   }
   handleChangeCheckParent(id) {
@@ -284,6 +285,7 @@ class InfoProduct extends Component {
         check_inventory: product.check_inventory,
         txtCostOfCapital: product.main_cost_of_capital,
         txtWeight: _weight,
+        txtPosition: product.shelf_position,
       });
 
       this.props.checkDistribute(checkHasDistribute, product.check_inventory);
@@ -366,6 +368,7 @@ class InfoProduct extends Component {
       categorySearch,
       txtWeight,
       point_for_agency,
+      txtPosition,
     } = this.state;
     console.log(checkHasDistribute);
     var txtQuantityInStock = txtQuantityInStock == -1 ? "" : txtQuantityInStock;
@@ -498,6 +501,22 @@ class InfoProduct extends Component {
               </span>
             )}
           </div>
+          {check_inventory && (
+            <div class="form-group">
+              <label for="product_name">Vị trí kệ hàng</label>
+
+              <input
+                type="text"
+                class="form-control"
+                id="txtPosition"
+                placeholder="Nhập vị trí kệ hàng để sản phẩm"
+                autoComplete="off"
+                value={txtPosition}
+                onChange={this.onChange}
+                name="txtPosition"
+              />
+            </div>
+          )}
         </div>
         <div className="form-group">
           <div className="row">

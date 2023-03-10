@@ -231,11 +231,11 @@ class Config extends Component {
       payment_limit:
         payment_limit == null ? payment_limit : formatNumber(payment_limit),
       allow_rose_referral_customer,
-      // bonus_type_for_ctv_t2: Number(bonus_type_for_ctv_t2),
-      // percent_agency_t1:
-      //   percent_agency_t1 == null
-      //     ? percent_agency_t1
-      //     : formatNumber(percent_agency_t1),
+      bonus_type_for_ctv_t2: Number(bonus_type_for_ctv_t2),
+      percent_agency_t1:
+        percent_agency_t1 == null
+          ? percent_agency_t1
+          : formatNumber(percent_agency_t1),
     });
   };
   render() {
@@ -372,9 +372,9 @@ class Config extends Component {
               style={{ maxWidth: "40%" }}
             />
           </div>
-          {/* <div className="form-group">
+          <div className="form-group">
             <label htmlFor="name">
-              Phần trăm hoa hồng cho người giới thiệu Đại lý mua hàng{" "}
+              Phần trăm hoa hồng cho người giới thiệu CTV mua hàng{" "}
             </label>
             <div className="bonusTypeForAgency">
               <input
@@ -404,7 +404,8 @@ class Config extends Component {
                     <span className="bonusTypeForAgency_noteIcon">?</span>
                     <div className="bonusTypeForAgency_noteTooltip">
                       Nhận phần trăm từ tổng đơn hàng, ví dụ đơn hàng tổng
-                      100.000đ bạn nhập 10% thì Đại lý T1 nhận được 10.000đ
+                      100.000đ bạn nhập 10% thì Đại lý giới thiệu nhận được
+                      10.000đ
                     </div>
                   </span>
                 </div>
@@ -425,15 +426,15 @@ class Config extends Component {
                   <span className="bonusTypeForAgency_note">
                     <span className="bonusTypeForAgency_noteIcon">?</span>
                     <div className="bonusTypeForAgency_noteTooltip">
-                      Nhận phân trăm hoa hồng từ chính Đại lý T2 được hưởng, ví
-                      dụ hóa đơn Đại lý T2 nhận được 100.000đ hoa hồng bạn nhập
-                      ô này 10% thì Đại lý T1 nhận được 10.000đ
+                      Nhận phân trăm hoa hồng từ chính CTV được hưởng, ví dụ hóa
+                      đơn hóa đơn CTV nhận được 100.000đ hoa hồng bạn nhập ô này
+                      10% thì Đại lý nhận được 10.000đ
                     </div>
                   </span>
                 </div>
               </div>
             </div>
-          </div> */}
+          </div>
 
           <div className="form-group">
             <button type="submit" class={`btn btn-primary btn-sm `}>

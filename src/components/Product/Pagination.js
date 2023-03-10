@@ -13,26 +13,33 @@ class Pagination extends Component {
   }
 
   passPaginationProduct = (page) => {
-    var { store_code, limit, searchValue, passNumPage } = this.props;
-    const params = `&limit=${limit}${
-      searchValue ? `&search=${searchValue}` : ""
-    }`;
+    var {
+      store_code,
+      limit,
+      searchValue,
+      passNumPage,
+      categorySelected,
+      getParams,
+    } = this.props;
+    const params = getParams(searchValue, limit, categorySelected);
     passNumPage(page);
     history.push(`/product/index/${store_code}?page=${page}${params}`);
     this.props.fetchAllProductV2(store_code, getBranchId(), page, params);
   };
   passPagination = (page) => {
-    var { store_code, limit, searchValue, bonusParam, listType, params } =
-      this.props;
-    // if (listType == 1) {
-    //   // params = `&limit=${limit}${bonusParam}`
-    // } else {
-    //   params = `&limit=${limit}`
-    // }
-    var param = "";
-    if (params) param = params;
+    var {
+      store_code,
+      limit,
+      search,
+      categorySelected,
+      getParams,
+      passNumPage,
+    } = this.props;
+
+    passNumPage(page);
+    const params = getParams(search, limit, categorySelected);
     const branch_id = localStorage.getItem("branch_id");
-    this.props.fetchAllProductV2(store_code, branch_id, page, param);
+    this.props.fetchAllProductV2(store_code, branch_id, page, params);
     this.props.passNumPage(page);
   };
 

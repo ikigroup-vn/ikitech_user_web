@@ -1,15 +1,26 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
-import Pagination from "../../../Product/Pagination";
+import { connect, shallowEqual } from "react-redux";
+import Pagination from "../../../../components/Product/Pagination";
+import themeData from "../../../../ultis/theme_data";
+import * as productAction from "../../../../actions/product";
+import * as Env from "../../../../ultis/default";
 import {
   format,
   formatNumber,
   contactOrNumber,
 } from "../../../../ultis/helpers";
-import themeData from "../../../../ultis/theme_data";
-import * as productAction from "../../../../actions/product";
-import * as Env from "../../../../ultis/default";
+import styled from "styled-components";
+import { shallowCompare } from "react-shallow-compare";
 
+const ListProductStyles = styled.tr``;
+const SearchDataStyles = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  .categories__content {
+    margin-right: 20px;
+  }
+`;
 class ListProduct extends Component {
   constructor(props) {
     super(props);
@@ -17,26 +28,190 @@ class ListProduct extends Component {
       txtName: "",
       page: 1,
       numPage: 20,
+      searchValue: "",
+      listCategory: [],
+      categorySelected: [],
+      txtCategory: [],
+      listProduct: [],
     };
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (
+      !shallowEqual(this.props.category_product, nextProps.category_product)
+    ) {
+      var option = [];
+      var categories = [...nextProps.category_product];
+      if (categories.length > 0) {
+        option = categories.map((category, index) => {
+          return {
+            id: category.id,
+            label: category.name,
+            categories_child: category.category_children,
+          };
+        });
+        this.setState({
+          listCategory: option,
+        });
+      }
+    }
+
+    return true;
+  }
+
+  handleCloseChecked = () => {
+    const {
+      setListProducts,
+      discountId,
+      defaultListProducts,
+      products,
+      discounts,
+    } = this.props;
+    if (discountId) {
+      setListProducts(defaultListProducts);
+      const newDiscountProduct = [];
+      discounts?.forEach((element) => {
+        if (element.products_combo?.length > 0 && discountId != element?.id) {
+          element.products_combo?.forEach((product) => {
+            newDiscountProduct.push(product?.product);
+          });
+        }
+      });
+      if (
+        defaultListProducts?.product?.length !==
+        products?.data?.length - newDiscountProduct?.length
+      ) {
+        document.querySelector("#inputCheckAll").checked = false;
+      }
+    }
+  };
+
   onChange = (e) => {
     var { value, checked } = e.target;
-    console.log(checked);
+    const { products, discounts, listProducts, discountId } = this.props;
+
+    if (!checked) {
+      document.querySelector("#inputCheckAll").checked = false;
+    } else {
+      var newDiscountProduct = [];
+      discounts?.forEach((element) => {
+        if (discountId) {
+          if (element.products?.length > 0 && discountId != element?.id) {
+            element.products?.forEach((product) => {
+              if (products?.data?.map((p) => p.id).includes(product.id)) {
+                newDiscountProduct.push(product);
+              }
+            });
+          }
+        } else {
+          if (element.products?.length > 0) {
+            element.products?.forEach((product) => {
+              if (products?.data?.map((p) => p.id).includes(product.id)) {
+                newDiscountProduct.push(product);
+              }
+            });
+          }
+        }
+      });
+      if (
+        listProducts?.length ===
+        products?.data?.length - newDiscountProduct?.length - 1
+      ) {
+        document.querySelector("#inputCheckAll").checked = true;
+      }
+    }
     var data = JSON.parse(value);
+    console.log("ListProduct ~ data:", data);
     if (checked == true) this.props.handleAddProduct(data, null, "add");
     else this.props.handleAddProduct(null, data.id, "remove");
   };
+  onChangeAll = (e) => {
+    const { value, checked } = e.target;
+    const {
+      products,
+      discounts,
+      setListProducts,
+      defaultListProducts,
+      discountId,
+    } = this.props;
+    var currentProducts = [];
+    if (checked) {
+      var newDiscountIds = [];
+      if (discountId) {
+        discounts?.forEach((element) => {
+          if (
+            element.products_combo?.length > 0 &&
+            discountId &&
+            discountId != element?.id
+          ) {
+            element.products_combo?.forEach((product) => {
+              newDiscountIds.push(product?.product?.id);
+            });
+          }
+        });
+      } else {
+        discounts?.forEach((element) => {
+          if (element.products_combo?.length > 0) {
+            element.products_combo?.forEach((product) => {
+              newDiscountIds.push(product?.product?.id);
+            });
+          }
+        });
+      }
+      const currentProductsCombo = products?.data?.filter(
+        (product) => newDiscountIds.includes(product.id) == false
+      );
+      currentProducts = currentProductsCombo?.map((product) => ({
+        quantity: 1,
+        product: product,
+      }));
+    } else {
+      var newListProducts = [];
+      if (discountId) {
+        discounts?.forEach((element) => {
+          if (element.products_combo?.length > 0 && discountId == element?.id) {
+            element.products_combo?.forEach((product) => {
+              if (
+                defaultListProducts
+                  .map((d) => d?.product?.id)
+                  ?.includes(product?.product?.id)
+              ) {
+                newListProducts.push({
+                  quality: 1,
+                  product: product?.product,
+                });
+              }
+            });
+          }
+        });
+        currentProducts = newListProducts;
+      } else {
+        currentProducts = [];
+      }
+    }
 
+    setListProducts(currentProducts);
+  };
+  onChangeSearch = (e) => {
+    this.setState({ searchValue: e.target.value });
+  };
   passNumPage = (page) => {
     this.setState({ page: page });
   };
+  searchData = (e) => {
+    e.preventDefault();
+    var { store_code } = this.props;
+    var { searchValue, numPage, categorySelected } = this.state;
+    const branch_id = localStorage.getItem("branch_id");
+    this.setState({ page: 1 });
+    var params = this.getParams(searchValue, numPage, categorySelected);
+    this.props.fetchAllProductV2(store_code, branch_id, 1, params);
+  };
 
   checkExsit = (list, id) => {
-    console.log(list);
     if (list.length > 0) {
       for (const element of list) {
-        if (element.product.id == id) {
+        if (element?.product?.id == id) {
           return true;
         }
       }
@@ -44,27 +219,120 @@ class ListProduct extends Component {
     return false;
   };
 
-  checkDisable = (combos, id) => {
-    console.log(combos);
-    if (combos.length > 0) {
-      for (const element of combos) {
-        if (element?.product.id == id) {
-          return true;
+  checkDisable = (discounts, id) => {
+    if (discounts.length > 0) {
+      for (const element of discounts) {
+        for (const item of element.products_combo) {
+          if (item?.product?.id == id) {
+            return true;
+          }
         }
-        // for (const item of element.products_combo) {
-        //   if (item.product.id == id) {
-        //     return true;
-        //   }
-        // }
       }
     }
     return false;
   };
+
   onSaveProduct = () => {
     this.props.onSaveProduct();
     window.$(".modal").modal("hide");
   };
-  showData = (products, list, combos) => {
+  getNameSelected() {
+    const { categorySelected } = this.state;
+    var name = "";
+    if (categorySelected.length > 0) {
+      name += categorySelected.reduce(
+        (prevCategory, currentCategory, index) => {
+          return (
+            prevCategory +
+            `${
+              index === categorySelected.length - 1
+                ? currentCategory?.label
+                : `${currentCategory?.label}, `
+            }`
+          );
+        },
+        ""
+      );
+    }
+
+    return name;
+  }
+  handleCheckedCategory = (idCategory) => {
+    const { categorySelected } = this.state;
+    if (categorySelected?.length > 0) {
+      const checked = categorySelected
+        .map((category) => category?.id)
+        .includes(idCategory);
+      return checked;
+    }
+    return false;
+  };
+
+  handleChangeCategory = (category) => {
+    const { categorySelected, numPage } = this.state;
+    const { store_code } = this.props;
+    const branch_id = localStorage.getItem("branch_id");
+    var newCategorySelected = [];
+
+    const isExisted = categorySelected.map((c) => c?.id).includes(category?.id);
+    if (isExisted) {
+      newCategorySelected = categorySelected.filter(
+        (c) => c?.id !== category.id
+      );
+    } else {
+      newCategorySelected = [...categorySelected, category];
+    }
+
+    const params = this.getParams("", numPage, newCategorySelected);
+    this.setState({
+      categorySelected: newCategorySelected,
+      page: 1,
+      searchValue: "",
+    });
+    this.props.fetchAllProductV2(store_code, branch_id, 1, params);
+  };
+  onChangeNumPage = (e) => {
+    const { categorySelected, searchValue } = this.state;
+    const { store_code } = this.props;
+    const branch_id = localStorage.getItem("branch_id");
+    var numPage = e.target.value;
+    this.setState({
+      numPage,
+      page: 1,
+    });
+    const params = this.getParams(searchValue, numPage, categorySelected);
+    this.props.fetchAllProductV2(store_code, branch_id, 1, params);
+  };
+  getParams = (search, limit, categories) => {
+    document.querySelector("#inputCheckAll").checked = false;
+    var params = ``;
+    if (search != "" && search != null) {
+      params = params + `&search=${search}`;
+    }
+    if (limit != "" && limit != null) {
+      params = params + `&limit=${limit}`;
+    }
+    if (categories !== "" && categories !== null && categories?.length > 0) {
+      const newCategorySelected = categories.reduce(
+        (prevCategory, currentCategory, index) => {
+          return (
+            prevCategory +
+            `${
+              index === categories.length - 1
+                ? currentCategory?.id
+                : `${currentCategory?.id},`
+            }`
+          );
+        },
+        "&category_ids="
+      );
+      params += newCategorySelected;
+    }
+
+    return params;
+  };
+
+  showData = (products, list, discounts) => {
     var result = null;
     if (typeof products === "undefined") {
       return result;
@@ -88,9 +356,8 @@ class ListProduct extends Component {
             ? "danger"
             : null;
         var checked = this.checkExsit(list, data.id);
-        var disaled = this.checkDisable(list, data.id);
-        // var disaled = this.checkDisable(combos, data.id, list);
-        var background_disable = disaled == true ? "#55b8c3" : "white";
+        var disaled = this.checkDisable(discounts, data.id);
+        var background_disable = disaled == true ? "#ffddd766" : "white";
         const {
           product_discount,
           min_price,
@@ -224,6 +491,12 @@ class ListProduct extends Component {
                 </div>
               )}
             </td>
+
+            {/* <td> <h5>
+              <span class={`badge badge-${status}`}>
+                {status_name}
+              </span>
+            </h5></td> */}
           </tr>
         );
       });
@@ -232,27 +505,10 @@ class ListProduct extends Component {
     }
     return result;
   };
-  onChangeSearch = (e) => {
-    this.setState({ searchValue: e.target.value });
-  };
-  passNumPage = (page) => {
-    this.setState({ page: page });
-  };
-  searchData = (e) => {
-    e.preventDefault();
-    var { store_code } = this.props;
-    var { searchValue } = this.state;
-    const branch_id = localStorage.getItem("branch_id");
-    var params = `&search=${searchValue}`;
-    this.props.fetchAllProductV2(store_code, branch_id, 1, params);
-  };
 
   render() {
-    var { products, store_code, listProducts, combos } = this.props;
-    var { searchValue } = this.state;
-
-    console.log("combos: ", combos);
-    console.log("listProductsss: ", listProducts);
+    var { products, store_code, listProducts, discounts } = this.props;
+    var { searchValue, listCategory, numPage } = this.state;
     return (
       <div
         class="modal fade"
@@ -283,33 +539,172 @@ class ListProduct extends Component {
                 class="close"
                 data-dismiss="modal"
                 aria-hidden="true"
+                onClick={() => this.handleCloseChecked()}
               >
                 &times;
               </button>
             </div>
-            <form style={{ marginTop: "10px" }} onSubmit={this.searchData}>
-              <div class="input-group mb-6" style={{ padding: "0 20px" }}>
-                <input
-                  style={{ maxWidth: "280px", minWidth: "150px" }}
-                  type="search"
-                  name="txtSearch"
-                  value={searchValue}
-                  onChange={this.onChangeSearch}
-                  class="form-control"
-                  placeholder="Tìm kiếm sản phẩm"
-                />
-                <div class="input-group-append">
-                  <button class="btn btn-primary" type="submit">
-                    <i class="fa fa-search"></i>
-                  </button>
+
+            <SearchDataStyles>
+              <form style={{ marginTop: "10px" }} onSubmit={this.searchData}>
+                <div class="input-group mb-6" style={{ padding: "0 20px" }}>
+                  <input
+                    style={{ maxWidth: "280px", minWidth: "150px" }}
+                    type="search"
+                    name="txtSearch"
+                    value={searchValue}
+                    onChange={this.onChangeSearch}
+                    class="form-control"
+                    placeholder="Tìm kiếm sản phẩm"
+                  />
+                  <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit">
+                      <i class="fa fa-search"></i>
+                    </button>
+                  </div>
+                </div>
+              </form>
+              <div className="categories__content">
+                <div
+                  id="accordion"
+                  style={{
+                    width: "300px",
+                    position: "relative",
+                  }}
+                >
+                  <div
+                    className="wrap_category input-group"
+                    style={{ display: "flex" }}
+                    data-toggle="collapse"
+                    data-target="#collapseOne"
+                    aria-expanded="false"
+                    aria-controls="collapseOne"
+                  >
+                    <input
+                      readOnly
+                      type="text"
+                      class="form-control"
+                      placeholder="--Chọn danh mục--"
+                      style={{
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        paddingRight: "55px",
+                        position: "relative",
+                        backgroundColor: "transparent",
+                      }}
+                      value={this.getNameSelected()}
+                    ></input>
+                    <button
+                      class="btn  btn-accordion-collapse collapsed input-group-text"
+                      id="headingOne"
+                      style={{
+                        borderTopLeftRadius: "0",
+                        borderBottomLeftRadius: "0",
+                      }}
+                    >
+                      <i
+                        className={
+                          this.state.icon
+                            ? "fa fa-caret-down"
+                            : "fa fa-caret-down"
+                        }
+                      ></i>
+                    </button>
+                  </div>
+                  <div
+                    id="collapseOne"
+                    className="collapse"
+                    ariaLabelledby="headingOne"
+                    dataParent="#accordion"
+                    style={{
+                      position: "absolute",
+                      width: "100%",
+                      left: "0",
+                      top: "100%",
+                      zIndex: "10",
+                      background: "#fff",
+                    }}
+                  >
+                    <ul
+                      style={{
+                        listStyle: "none",
+                        margin: "5px 0",
+                        height: "235px",
+                        overflowY: "auto",
+                      }}
+                      class="list-group"
+                    >
+                      {listCategory?.length > 0 ? (
+                        listCategory.map((category, index) => (
+                          <li
+                            class=""
+                            style={{
+                              cursor: "pointer",
+                              paddingTop: "5px",
+                              paddingLeft: "5px",
+                              display: "flex",
+                              alignItems: "center",
+                            }}
+                          >
+                            <input
+                              type="checkbox"
+                              id={category.label}
+                              style={{
+                                marginRight: "10px",
+                                width: "30px",
+                                height: "15px",
+                                flexShrink: "0",
+                              }}
+                              checked={this.handleCheckedCategory(category.id)}
+                              onChange={() =>
+                                this.handleChangeCategory(category)
+                              }
+                            />
+                            <label
+                              htmlFor={category.label}
+                              style={{
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                marginBottom: "0",
+                              }}
+                              title={category.label}
+                            >
+                              {category.label}
+                            </label>
+                          </li>
+                        ))
+                      ) : (
+                        <div
+                          style={{
+                            marginTop: "20px",
+                            textAlign: "center",
+                          }}
+                        >
+                          Không có kết quả !
+                        </div>
+                      )}
+                    </ul>
+                  </div>
                 </div>
               </div>
-            </form>
+            </SearchDataStyles>
+
             <div class="table-responsive">
-              <table class="table table-hover table-border">
+              <table
+                class="table  table-hover table-border"
+                style={{ color: "black" }}
+              >
                 <thead>
                   <tr>
-                    <th></th>
+                    <th>
+                      <input
+                        type="checkbox"
+                        id="inputCheckAll"
+                        onChange={this.onChangeAll}
+                      />
+                    </th>
                     <th style={{ width: "13%" }}>Hình ảnh</th>
 
                     <th>Mã SKU</th>
@@ -319,7 +714,7 @@ class ListProduct extends Component {
                 </thead>
 
                 <tbody>
-                  {this.showData(products.data, listProducts, combos)}
+                  {this.showData(products?.data, listProducts, discounts)}
                 </tbody>
               </table>
             </div>
@@ -328,13 +723,44 @@ class ListProduct extends Component {
               class="group-pagination_flex col-xs-12 col-sm-12 col-md-12 col-lg-12"
               style={{ display: "flex", justifyContent: "space-between" }}
             >
-              <Pagination
-                style="float-fix"
-                store_code={store_code}
-                products={products}
-                passNumPage={this.passNumPage}
-                limit={this.state.numPage}
-              />
+              <div
+                style={{
+                  display: "flex",
+                  columnGap: "10px",
+                  alignItems: "center",
+                }}
+              >
+                <div
+                  style={{
+                    flexShrink: "0",
+                    marginBottom: "-6px",
+                  }}
+                >
+                  {products && (
+                    <Pagination
+                      store_code={store_code}
+                      products={products}
+                      passNumPage={this.passNumPage}
+                      limit={this.state.numPage}
+                      search={this.state.searchValue}
+                      categorySelected={this.state.categorySelected}
+                      getParams={this.getParams}
+                    />
+                  )}
+                </div>
+                <select
+                  name="numPage"
+                  value={numPage}
+                  onChange={this.onChangeNumPage}
+                  id="input"
+                  class="form-control"
+                >
+                  <option value="20">20</option>
+                  <option value="50">50</option>
+                  <option value="100">100</option>
+                  <option value="200">200</option>
+                </select>
+              </div>
               <div style={{ marginTop: "10px" }}>
                 <button
                   style={{
@@ -344,6 +770,7 @@ class ListProduct extends Component {
                   type="button"
                   class="btn btn-default"
                   data-dismiss="modal"
+                  onClick={() => this.handleCloseChecked()}
                 >
                   Hủy
                 </button>
@@ -362,7 +789,11 @@ class ListProduct extends Component {
     );
   }
 }
-
+const mapStateToProps = (state) => {
+  return {
+    category_product: state.categoryPReducers.category_product.allCategoryP,
+  };
+};
 const mapDispatchToProps = (dispatch, props) => {
   return {
     fetchAllProductV2: (store_code, branch_id, page, params) => {
@@ -372,4 +803,4 @@ const mapDispatchToProps = (dispatch, props) => {
     },
   };
 };
-export default connect(null, mapDispatchToProps)(ListProduct);
+export default connect(mapStateToProps, mapDispatchToProps)(ListProduct);

@@ -54,6 +54,7 @@ class Form extends Component {
       is_free_ship: true,
       ship_discount_value: null,
       has_discount_ship: false,
+      defaultListProducts: [],
     };
   }
   componentDidMount() {
@@ -160,6 +161,12 @@ class Form extends Component {
       this.setState({ image: nextProps.image });
     }
   }
+  setListProducts = (listProducts) => {
+    this.setState({ listProducts });
+  };
+  setDefaultListProducts = () => {
+    this.setState({ defaultListProducts: this.state.listProducts });
+  };
 
   onChangeDecription = (evt) => {
     const data = evt.editor.getData();
@@ -947,6 +954,7 @@ class Form extends Component {
                 <Table
                   products={saveListProducts}
                   handleAddProduct={this.handleAddProduct}
+                  setDefaultListProducts={this.setDefaultListProducts}
                 ></Table>
               </div>
               {getChannel == IKITECH && (
@@ -991,6 +999,9 @@ class Form extends Component {
           listProducts={listProducts}
           store_code={store_code}
           products={products}
+          discountId={this.props.voucherId}
+          setListProducts={this.setListProducts}
+          defaultListProducts={this.state.defaultListProducts}
         />
       </React.Fragment>
     );

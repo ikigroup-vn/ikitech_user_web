@@ -5,34 +5,29 @@ class Table extends Component {
     super(props);
     this.state = {
       products: [],
-
     };
   }
 
   onChange = (e, id) => {
-    this.props.handleChangeQuantity(id ,e.target.value  ,null, true)
+    this.props.handleChangeQuantity(id, e.target.value, null, true);
   };
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.quantity !== this.props.quantity) {
-      this.setState({ txtQuantity: nextProps.quantity })
+      this.setState({ txtQuantity: nextProps.quantity });
     }
   }
 
-
   removeItem = (id) => {
-    this.props.handleAddProduct(null, id, "remove" , true)
-  }
+    this.props.handleAddProduct(null, id, "remove", true);
+  };
 
   decrement = (id) => {
-    this.props.handleChangeQuantity(id ,null , -1 , true)
-
-  }
+    this.props.handleChangeQuantity(id, null, -1, true);
+  };
   increment = (id) => {
-
-    this.props.handleChangeQuantity(id, null ,1 , true)
-
-  }
+    this.props.handleChangeQuantity(id, null, 1, true);
+  };
   showData = (products) => {
     var result = null;
     if (typeof products === "undefined") {
@@ -47,15 +42,39 @@ class Table extends Component {
             <td>{data.product.sku}</td>
 
             <td>{data.product.name}</td>
-            <td className="quantity" style = {{display:"flex"}}>
-              <span onClick={() => { this.decrement(data.product.id) }} class="input-quantity input-number-decrement">–</span>
-              <input class="input-number" name="txtQuantity" value={data.quantity} type="text" onChange={(e) => this.onChange(e, data.product.id)} />
-              <span onClick={() => this.increment(data.product.id)} class="input-quantity input-number-increment">+</span>
+            <td className="quantity" style={{ display: "flex" }}>
+              <span
+                onClick={() => {
+                  this.decrement(data.product.id);
+                }}
+                class="input-quantity input-number-decrement"
+              >
+                –
+              </span>
+              <input
+                class="input-number"
+                name="txtQuantity"
+                value={data.quantity}
+                type="text"
+                onChange={(e) => this.onChange(e, data.product.id)}
+              />
+              <span
+                onClick={() => this.increment(data.product.id)}
+                class="input-quantity input-number-increment"
+              >
+                +
+              </span>
             </td>
 
             <td>
-              <button type="button" class="btn btn-danger btn-sm" onClick={() => this.removeItem(data.product.id)}>
-
+              <button
+                type="button"
+                class="btn btn-danger btn-sm"
+                onClick={() => {
+                  document.querySelector("#inputCheckAll").checked = false;
+                  this.removeItem(data.product.id);
+                }}
+              >
                 <i class="fa fa-trash"></i>
               </button>
             </td>
@@ -69,22 +88,22 @@ class Table extends Component {
   };
 
   render() {
-    var { products } = this.props;
+    var { products, setDefaultListProducts } = this.props;
     console.log(products);
     return (
       <React.Fragment>
         <div class="form-group">
-        <label for="product_name">   được áp dụng</label>
+          <label for="product_name"> được áp dụng</label>
 
           <button
             type="button"
             class="btn btn-primary-no-background btn-sm"
-
             style={{ marginLeft: "10px" }}
             data-toggle="modal"
             data-target="#showListProduct"
+            onClick={() => setDefaultListProducts()}
           >
-   <i class="fas fa-plus" ></i>
+            <i class="fas fa-plus"></i>
             <span class="text">&nbsp;Chọn sản phẩm</span>
           </button>
         </div>

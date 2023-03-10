@@ -60,6 +60,9 @@ class Form extends Component {
     }
   }
 
+  setListProducts = (listProducts) => {
+    this.setState({ listProducts });
+  };
   onChangeDecription = (evt) => {
     const data = evt.editor.getData();
     this.setState({ txtContent: data });
@@ -520,6 +523,7 @@ class Form extends Component {
           listProducts={listProducts}
           store_code={store_code}
           products={products}
+          setListProducts={this.setListProducts}
         />
       </React.Fragment>
     );
