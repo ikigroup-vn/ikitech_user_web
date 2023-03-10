@@ -39,6 +39,7 @@ class Form extends Component {
       displayError: "hide",
       isLoading: false,
       loadCript: false,
+      defaultListProducts: [],
     };
   }
   componentDidMount() {
@@ -108,7 +109,12 @@ class Form extends Component {
     const data = evt.editor.getData();
     this.setState({ txtContent: data });
   };
-
+  setListProducts = (listProducts) => {
+    this.setState({ listProducts });
+  };
+  setDefaultListProducts = () => {
+    this.setState({ defaultListProducts: this.state.listProducts });
+  };
   onChange = (e) => {
     var target = e.target;
     var name = target.name;
@@ -635,6 +641,7 @@ class Form extends Component {
                   handleChangeQuantity={this.handleChangeQuantity}
                   handleAddProduct={this.handleAddProduct}
                   products={saveListProducts}
+                  setDefaultListProducts={this.setDefaultListProducts}
                 ></Table>
               </div>
               {/* {getChannel() == IKITECH &&
@@ -674,12 +681,15 @@ class Form extends Component {
         <ModalUpload />
         <ModalListProduct
           onSaveProduct={this.onSaveProduct}
-          combo={combo}
-          combos={combos}
+          discount={combo}
+          discounts={combos}
           handleAddProduct={this.handleAddProduct}
           listProducts={listProducts}
           store_code={store_code}
           products={products}
+          setListProducts={this.setListProducts}
+          discountId={this.props.comboId}
+          defaultListProducts={this.state.defaultListProducts}
         />
       </React.Fragment>
     );

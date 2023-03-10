@@ -30,7 +30,10 @@ class Table extends Component {
               <button
                 type="button"
                 class="btn btn-danger btn-sm"
-                onClick={() => this.removeItem(data.id)}
+                onClick={() => {
+                  document.querySelector("#inputCheckAll").checked = false;
+                  this.removeItem(data.id);
+                }}
               >
                 <i class="fa fa-trash"></i>
               </button>

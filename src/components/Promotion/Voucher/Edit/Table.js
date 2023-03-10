@@ -8,11 +8,9 @@ class Table extends Component {
     };
   }
 
-
-
   removeItem = (id) => {
-    this.props.handleAddProduct(null, id, "remove" , true)
-  }
+    this.props.handleAddProduct(null, id, "remove", true);
+  };
 
   showData = (products) => {
     var result = null;
@@ -29,8 +27,14 @@ class Table extends Component {
 
             <td>{data.name}</td>
             <td>
-              <button type = "button" class="btn btn-danger btn-sm" onClick={() => this.removeItem(data.id)}>
-
+              <button
+                type="button"
+                class="btn btn-danger btn-sm"
+                onClick={() => {
+                  this.removeItem(data.id);
+                  document.querySelector("#inputCheckAll").checked = false;
+                }}
+              >
                 <i class="fa fa-trash"></i>
               </button>
             </td>
@@ -44,24 +48,24 @@ class Table extends Component {
   };
 
   render() {
-    var { products } = this.props;
+    var { products, setDefaultListProducts } = this.props;
     console.log(products);
     return (
       <React.Fragment>
         <div class="form-group">
-        <label for="product_name">Sản phẩm được áp dụng</label>
+          <label for="product_name">Sản phẩm được áp dụng</label>
 
-<button
-  type="button"
-  class="btn btn-primary-no-background btn-sm"
-
-  style={{ marginLeft: "10px" }}
-  data-toggle="modal"
-  data-target="#showListProduct"
->
-    <i class="fas fa-plus" ></i>
-  <span class="text">&nbsp;Chọn sản phẩm</span>
-</button>
+          <button
+            type="button"
+            class="btn btn-primary-no-background btn-sm"
+            style={{ marginLeft: "10px" }}
+            data-toggle="modal"
+            data-target="#showListProduct"
+            onClick={() => setDefaultListProducts()}
+          >
+            <i class="fas fa-plus"></i>
+            <span class="text">&nbsp;Chọn sản phẩm</span>
+          </button>
         </div>
         <div class="form-group">
           <label for="product_name">Danh sách sản phẩm : </label>

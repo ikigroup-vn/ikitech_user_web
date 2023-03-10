@@ -40,6 +40,7 @@ class Form extends Component {
       isLoading: false,
       loadCript: false,
       form: {},
+      defaultListProducts: [],
     };
   }
 
@@ -100,6 +101,12 @@ class Form extends Component {
       this.setState({ image: nextProps.image });
     }
   }
+  setListProducts = (listProducts) => {
+    this.setState({ listProducts });
+  };
+  setDefaultListProducts = () => {
+    this.setState({ defaultListProducts: this.state.listProducts });
+  };
 
   onChange = (e) => {
     var target = e.target;
@@ -570,6 +577,7 @@ class Form extends Component {
             <Table
               products={saveListProducts}
               handleAddProduct={this.handleAddProduct}
+              setDefaultListProducts={this.setDefaultListProducts}
             ></Table>
             {/* {
               getChannel() == IKITECH &&
@@ -610,6 +618,9 @@ class Form extends Component {
           listProducts={listProducts}
           store_code={store_code}
           products={products}
+          setListProducts={this.setListProducts}
+          discountId={this.props.discountId}
+          defaultListProducts={this.state.defaultListProducts}
         />
       </React.Fragment>
     );

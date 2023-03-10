@@ -5,7 +5,7 @@ import Alert from "../../../../components/Partials/Alert";
 import { connect } from "react-redux";
 import * as discountAction from "../../../../actions/discount";
 import * as productAction from "../../../../actions/product";
-
+import * as CategoryPAction from "../../../../actions/category_product";
 class Edit extends Component {
   constructor(props) {
     super(props);
@@ -16,6 +16,7 @@ class Edit extends Component {
     this.props.fetchDiscountId(store_code, discountId);
     this.props.fetchAllProduct(store_code);
     this.props.fetchAllDiscount(store_code);
+    this.props.fetchAllCategoryP(store_code);
   }
 
   render() {
@@ -77,6 +78,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchAllDiscount: (store_code) => {
       dispatch(discountAction.fetchAllDiscount(store_code));
+    },
+    fetchAllCategoryP: (store_code) => {
+      dispatch(CategoryPAction.fetchAllCategoryP(store_code));
     },
   };
 };

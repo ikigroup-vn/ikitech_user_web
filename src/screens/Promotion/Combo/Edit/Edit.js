@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
 import Form from "../../../../components/Promotion/Combo/Edit/Form";
-import * as Types from "../../../../constants/ActionType"
+import * as Types from "../../../../constants/ActionType";
 
 import Alert from "../../../../components/Partials/Alert";
 
@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 
 import * as comboAction from "../../../../actions/combo";
 import * as productAction from "../../../../actions/product";
-
+import * as CategoryPAction from "../../../../actions/category_product";
 class Edit extends Component {
   constructor(props) {
     super(props);
@@ -20,7 +20,7 @@ class Edit extends Component {
     this.props.fetchComboId(store_code, comboId);
     this.props.fetchAllProduct(store_code);
     this.props.fetchAllCombo(store_code);
-
+    this.props.fetchAllCategoryP(store_code);
   }
 
   render() {
@@ -28,15 +28,9 @@ class Edit extends Component {
     var { store_code, comboId } = this.props;
 
     return (
-
       <div class="container-fluid">
-        <Alert
-          type={Types.ALERT_UID_STATUS}
-          alert={this.props.alert}
-        />
-        <div
-          style={{ display: "flex", justifyContent: "space-between" }}
-        >
+        <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h4 className="h4 title_content mb-0 text-gray-800">
             Chỉnh sửa chương trình
           </h4>
@@ -59,21 +53,13 @@ class Edit extends Component {
                       combos={combos}
                     />
                   </div>
-
-
                 </div>
               </div>
-
             </section>
           </div>
-
         </div>
-
       </div>
-
-
-    )
-
+    );
   }
 }
 
@@ -84,8 +70,6 @@ const mapStateToProps = (state) => {
     products: state.productReducers.product.allProduct,
     combos: state.comboReducers.combo.allCombo,
     alert: state.comboReducers.alert.alert_uid,
-
-
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -98,6 +82,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchAllCombo: (store_code) => {
       dispatch(comboAction.fetchAllCombo(store_code));
+    },
+    fetchAllCategoryP: (store_code) => {
+      dispatch(CategoryPAction.fetchAllCategoryP(store_code));
     },
   };
 };

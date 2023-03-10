@@ -15,7 +15,7 @@ import { debounce } from "lodash";
 import { updateOrder } from "../../actions/bill";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import * as OrderFrom from "../../ultis/order_from";
-import ModalChangeShipDiscount from "./ModalChangeShipDiscount"
+import ModalChangeShipDiscount from "./ModalChangeShipDiscount";
 class TotalBill extends Component {
   constructor(props) {
     super(props);
@@ -99,13 +99,17 @@ class TotalBill extends Component {
     });
   };
 
-  updateShip = (value) =>{
-        var {store_code , order_code} = this.props
+  updateShip = (value) => {
+    var { store_code, order_code } = this.props;
 
-         this.props.updateShip ({
-            total_shipping_fee : value
-        } , store_code , order_code)
-  }
+    this.props.updateShip(
+      {
+        total_shipping_fee: value,
+      },
+      store_code,
+      order_code
+    );
+  };
   render() {
     var { bill } = this.props;
     var shipper_name = bill.shipper_name;
@@ -127,7 +131,7 @@ class TotalBill extends Component {
       this.props.order_allow_change_status == true ? "show" : "hide";
     var list_items = filter_arr(bill.line_items);
 
-    console.log("get bill" , bill);
+    console.log("get bill", bill);
     return (
       <div className="box box-warning cart_wrapper mb0">
         <Modal
@@ -135,9 +139,10 @@ class TotalBill extends Component {
           order_code={bill.order_code}
           store_code={this.props.store_code}
         ></Modal>
-        <ModalChangeShipDiscount  updateShip = {this.updateShip} total_shipping_fee = {total_shipping_fee}>
-
-        </ModalChangeShipDiscount>
+        <ModalChangeShipDiscount
+          updateShip={this.updateShip}
+          total_shipping_fee={total_shipping_fee}
+        ></ModalChangeShipDiscount>
         <div class="card-header py-3">
           <h6 class="m-0 title_content font-weight-bold text-primary">
             Tổng tiền
@@ -182,10 +187,17 @@ class TotalBill extends Component {
                     )}
                     onChange={this.handChange}
                   ></input> */}
-                  <span 
-                   data-target="#modalShipAmount"
-                   data-toggle="modal"
-                   style={{"border-bottom": "1px solid" , cursor : "pointer"}}><i style={{fontSize : "14px"}} className="fa fa-pencil"></i> {"    "}+&nbsp;{format(total_shipping_fee)} </span>
+                  <span
+                    data-target="#modalShipAmount"
+                    data-toggle="modal"
+                    style={{ "border-bottom": "1px solid", cursor: "pointer" }}
+                  >
+                    <i
+                      style={{ fontSize: "14px" }}
+                      className="fa fa-pencil"
+                    ></i>{" "}
+                    {"    "}+&nbsp;{format(total_shipping_fee)}{" "}
+                  </span>
                 </div>
               </div>
             )}
@@ -243,9 +255,11 @@ class TotalBill extends Component {
           )}
           {ship_discount_amount > 0 && (
             <div id={`item_fee"}`}>
-              <div className="sale_user_label bold bold group-total
+              <div
+                className="sale_user_label bold bold group-total
 
-              ">
+              "
+              >
                 <div> Giảm phí vận chuyển:</div>
 
                 <span>-&nbsp;{format(ship_discount_amount)}</span>
@@ -296,7 +310,7 @@ class TotalBill extends Component {
             </div>
           )}
 
-          {(bill.remaining_amount > 0) && (
+          {bill.remaining_amount > 0 && (
             <React.Fragment>
               {/* <div>
                                 <p className="sale_user_label bold">
@@ -308,11 +322,14 @@ class TotalBill extends Component {
                                 </p>
                             </div> */}
 
-              <div >
+              <div>
                 <p className="sale_user_label bold bold group-total">
-                  <div style={{color : "red"}}>Còn nợ:</div>
+                  <div style={{ color: "red" }}>Còn nợ:</div>
 
-                  <span  style={{color : "red"}} className="cart_payment_method">
+                  <span
+                    style={{ color: "red" }}
+                    className="cart_payment_method"
+                  >
                     {format(bill.remaining_amount)}
                   </span>
                 </p>

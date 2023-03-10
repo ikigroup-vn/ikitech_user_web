@@ -27,6 +27,7 @@ class InfoProduct extends Component {
       txtCostOfCapital: "",
       icon: true,
       txtPercentC: "",
+      txtPosition: "",
       txtStatus: 0,
       listCategory: [],
       category_parent: [],
@@ -352,6 +353,7 @@ class InfoProduct extends Component {
       checkHasDistribute,
       categorySearch,
       point_for_agency,
+      txtPosition,
     } = this.state;
 
     var { badges } = this.props;
@@ -515,6 +517,22 @@ class InfoProduct extends Component {
                 />
               </div>
             </div>
+          </div>
+        )}
+        {check_inventory && (
+          <div class="form-group">
+            <label for="product_name">Vị trí kệ hàng</label>
+
+            <input
+              type="text"
+              class="form-control"
+              id="txtPosition"
+              placeholder="Nhập vị trí kệ hàng để sản phẩm"
+              autoComplete="off"
+              value={txtPosition}
+              onChange={this.onChange}
+              name="txtPosition"
+            />
           </div>
         )}
 

@@ -67,6 +67,12 @@ class Form extends Component {
       this.props.fetchGroupCustomer(this.props.store_code);
     } catch (error) {}
   }
+  setListProducts = (listProducts) => {
+    this.setState({ listProducts });
+  };
+  setListProductsBonus = (listProductsBonus) => {
+    this.setState({ listProductsBonus });
+  };
 
   onSaveProduct = (isBonus, isLadder, fromBonusLadder) => {
     if (isBonus) {

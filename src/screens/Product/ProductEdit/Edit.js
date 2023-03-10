@@ -51,6 +51,7 @@ class ProductEdit extends Component {
     this.setState((prevState, props) => {
       var formdata = { ...prevState.form };
       formdata.name = data.txtName;
+      formdata.shelf_position = data.txtPosition;
       formdata.price = data.txtPrice
         .toString()
         .replace(/,/g, "")

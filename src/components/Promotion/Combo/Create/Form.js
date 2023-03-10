@@ -49,7 +49,9 @@ class Form extends Component {
     this.props.fetchAllAgencyType(this.props.store_code);
     this.props.fetchGroupCustomer(this.props.store_code);
   }
-
+  setListProducts = (listProducts) => {
+    this.setState({ listProducts });
+  };
   onSaveProduct = () => {
     this.setState({ saveListProducts: [...this.state.listProducts] });
   };
@@ -581,11 +583,12 @@ class Form extends Component {
         <ModalUpload />
         <ModalListProduct
           onSaveProduct={this.onSaveProduct}
-          combos={combos}
+          discounts={combos}
           handleAddProduct={this.handleAddProduct}
           listProducts={listProducts}
           store_code={store_code}
           products={products}
+          setListProducts={this.setListProducts}
         />
       </React.Fragment>
     );

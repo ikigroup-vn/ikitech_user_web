@@ -952,6 +952,7 @@ class ActionsGameGuessNumberContent extends Component {
                           setFiles={this.setImages}
                           files={images}
                           images={gameGuessNumbers?.images}
+                          limit={10}
                         />
                       </div>
                     </div>
