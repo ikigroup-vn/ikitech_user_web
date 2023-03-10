@@ -1375,6 +1375,51 @@ class PostOrder extends Component {
                               </span>
                             </div>
                           )}
+
+                          {oneCart.info_cart?.points_total_used_edit_order >
+                            0 &&
+                            oneCart.info_cart?.points_amount_used_edit_order >
+                              0 && (
+                              <div className="row item-info">
+                                <div className="item-discount-name col-6">
+                                  Xu đã sử dụng khi đặt [
+                                  {
+                                    oneCart.info_cart
+                                      ?.points_total_used_edit_order
+                                  }
+                                  xu]
+                                </div>
+                                <span
+                                  className="col-6"
+                                  style={{ textAlign: "end" }}
+                                >
+                                  -
+                                  {formatNoD(
+                                    oneCart.info_cart
+                                      ?.points_amount_used_edit_order
+                                  )}
+                                </span>
+                              </div>
+                            )}
+
+                          {oneCart?.info_cart?.bonus_points_amount_used > 0 && (
+                            <div className="row item-info">
+                              <div className="item-discount-name col-6">
+                                Giảm khi dùng xu [
+                                {oneCart?.info_cart?.total_points_used}xu]
+                              </div>
+                              <span
+                                className="col-6"
+                                style={{ textAlign: "end" }}
+                              >
+                                -
+                                {formatNoD(
+                                  oneCart?.info_cart?.bonus_points_amount_used
+                                )}
+                              </span>
+                            </div>
+                          )}
+
                           {total_shipping_fee > 0 && (
                             <div className="row item-info">
                               <div className="item-discount-name col-6">
@@ -1385,22 +1430,6 @@ class PostOrder extends Component {
                                 style={{ textAlign: "end" }}
                               >
                                 +{formatNoD(total_shipping_fee)}
-                              </span>
-                            </div>
-                          )}
-                          {oneCart?.info_cart?.bonus_points_amount_used > 0 && (
-                            <div className="row item-info">
-                              <div className="item-discount-name col-6">
-                                Giảm khi dùng xu
-                              </div>
-                              <span
-                                className="col-6"
-                                style={{ textAlign: "end" }}
-                              >
-                                -
-                                {formatNoD(
-                                  oneCart?.info_cart?.bonus_points_amount_used
-                                )}
                               </span>
                             </div>
                           )}
