@@ -301,7 +301,6 @@ export const updateBonusAgencyConfig = (store_code, data) => {
       loading: "show",
     });
     agencyApi.updateBonusAgencyConfig(store_code, data).then((res) => {
-      console.log(res);
       dispatch({
         type: Types.SHOW_LOADING_LAZY,
         loading: "hide",
