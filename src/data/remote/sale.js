@@ -50,6 +50,20 @@ export const fetchStatisticalSaleForUser = (store_code, id) => {
     null
   );
 };
+export const fetchAllTopCommission = (store_code, page = 1, params) => {
+  if (params != null) {
+    return callApi(
+      `/store/${store_code}/staff_sale_configs/staff_sale_top?page=${page}${params}`,
+      "get",
+      null
+    );
+  }
+  return callApi(
+    `/store/${store_code}/staff_sale_configs/staff_sale_top?page=${page}`,
+    "get",
+    null
+  );
+};
 
 //Sale Management
 export const fetchStatisticalSale = (store_code) => {

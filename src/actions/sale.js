@@ -1,5 +1,7 @@
+import XlsxPopulate from "xlsx-populate";
 import * as Types from "../constants/ActionType";
 import * as saleApi from "../data/remote/sale";
+import { saveAs } from "file-saver";
 
 export const fetchStaffConfig = (store_code) => {
   return (dispatch) => {
@@ -340,6 +342,147 @@ export const fetchStatisticalSaleForUser = (store_code, id) => {
           },
         });
       });
+  };
+};
+export const fetchAllTopCommission = (store_code, page = 1, params) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING_LAZY,
+      loading: "show",
+    });
+    saleApi.fetchAllTopCommission(store_code, page, params).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING_LAZY,
+        loading: "hide",
+      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_ALL_SALE_TOP_COMMISSION,
+          data: res.data.data,
+        });
+    });
+  };
+};
+function getSheetData(data, header) {
+  var fields = Object.keys(data[0]);
+  var sheetData = data.map(function (row) {
+    return fields.map(function (fieldName) {
+      return row[fieldName] ? row[fieldName] : "";
+    });
+  });
+  sheetData.unshift(header);
+  return sheetData;
+}
+async function saveAsExcel(value, title) {
+  var data = value.data;
+  var data_header = value.header;
+  XlsxPopulate.fromBlankAsync().then(async (workbook) => {
+    const sheet1 = workbook.sheet(0);
+    const sheetData = getSheetData(data, data_header);
+    console.log(sheetData);
+    const totalColumns = sheetData[0].length;
+
+    sheet1.cell("A1").value(sheetData);
+    const range = sheet1.usedRange();
+    const endColumn = String.fromCharCode(64 + totalColumns);
+    sheet1.row(1).style("bold", true);
+    sheet1.range("A1:" + endColumn + "1").style("fill", "F4D03F");
+    range.style("border", true);
+    return workbook.outputAsync().then((res) => {
+      console.log(res);
+      saveAs(res, title);
+    });
+  });
+}
+export const exportTopten = (store_code, page, params, report_type) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING_LAZY,
+      loading: "show",
+    });
+
+    saleApi.fetchAllTopCommission(store_code, page, params).then((res) => {
+      console.log(res);
+
+      if (res.data.code !== 401)
+        if (typeof res.data.data != "undefined") {
+          if (typeof res.data.data.data != "undefined") {
+            if (res.data.data.data.length > 0) {
+              var newArray = [];
+
+              for (const item of res.data.data.data) {
+                var newItem = {};
+                var arangeKeyItem = {};
+                if (report_type === "point") {
+                  arangeKeyItem = {
+                    name: item?.name,
+                    phone_number: item?.phone_number,
+                    // points_count: item.points_count,
+                    sum_point: item.sum_point,
+                  };
+                } else {
+                  arangeKeyItem = {
+                    name: item?.name,
+                    phone_number: item?.phone_number,
+                    total_customers: item?.total_customers,
+                    orders_count: item.orders_count,
+                    sum_total_after_discount: item.sum_total_after_discount,
+                  };
+                }
+                Object.entries(arangeKeyItem).forEach(([key, value], index) => {
+                  if (key == "name") {
+                    newItem["Tên"] = value;
+                  }
+                  if (key == "phone_number") {
+                    newItem["Số điện thoại"] = value;
+                    // newItem["Tên sản phẩm"] = value
+                  }
+                  if (key == "total_customers") {
+                    newItem["Số khách hàng"] = value;
+                    // newItem["Tên sản phẩm"] = value
+                  }
+                  if (report_type === "point") {
+                    // if (key == "points_count") {
+                    //   newItem["Số xu"] = value;
+                    //   // newItem["Tên sản phẩm"] = value
+                    // }
+                    if (key == "sum_point") {
+                      newItem["Tổng số xu"] = value;
+                    }
+                  } else {
+                    if (key == "orders_count") {
+                      newItem["Số đơn hàng"] = value;
+                      // newItem["Tên sản phẩm"] = value
+                    }
+                    if (key == "sum_total_after_discount") {
+                      newItem["Tổng doanh số"] = value;
+                    }
+                  }
+                });
+
+                newArray.push(newItem);
+              }
+              var header = [];
+              if (newArray.length > 0) {
+                Object.entries(newArray[0]).forEach(([key, value], index) => {
+                  header.push(key);
+                });
+              }
+              console.log(header);
+
+              dispatch({
+                type: Types.SHOW_LOADING_LAZY,
+                loading: "hide",
+              });
+
+              saveAsExcel(
+                { data: newArray, header: header },
+                "Danh sách Top Sale"
+              );
+            }
+          }
+        }
+    });
   };
 };
 
