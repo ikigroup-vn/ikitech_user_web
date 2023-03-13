@@ -70,7 +70,7 @@ class Config extends Component {
   componentDidMount() {
     var { store_code } = this.props;
     this.props.fetchAgencyConf(store_code);
-    this.props.fetchAllSteps(store_code);
+    // this.props.fetchAllSteps(store_code);
   }
   onChange = (e) => {
     var target = e.target;
@@ -251,16 +251,16 @@ class Config extends Component {
     } = this.state;
     return (
       <AgencyStyles className="agency-config">
-        <h6
+        {/* <h6
           style={{
             marginTop: "25px",
           }}
           className="font-weight-bold text-primary"
         >
           Cấu hình hoa hồng
-        </h6>
+        </h6> */}
         <form onSubmit={this.onSave} role="form">
-          <div className="form-group">
+          {/* <div className="form-group">
             <label htmlFor="name">Cách tính thưởng đại lý theo doanh số</label>
             <p>
               <i>
@@ -296,7 +296,7 @@ class Config extends Component {
                 <tbody>{this.showAllStep(steps)}</tbody>
               </table>
             </div>
-          </div>
+          </div> */}
 
           <div class="form-group">
             <div class="form-check">

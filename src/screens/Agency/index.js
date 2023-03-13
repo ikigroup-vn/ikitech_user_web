@@ -23,6 +23,9 @@ import NotAccess from "../../components/Partials/NotAccess";
 import BonusProgram from "../../components/Agency/BonusProgram";
 import HistoryPayment from "../../components/Agency/HistoryPayment";
 import TopComission from "../../components/Agency/TopComiss";
+import ModalCreateImport from "../../components/Agency/Config/ModalCreateImport";
+import ModalRemoveImport from "../../components/Agency/Config/ModalRemoveImport";
+import ModalUpdateImport from "../../components/Agency/Config/ModalUpdateImport";
 
 class agency extends Component {
   constructor(props) {
@@ -33,6 +36,11 @@ class agency extends Component {
         id: "",
       },
       modalupdate: {},
+      modalremoveImport: {
+        title: "",
+        id: "",
+      },
+      modalupdateImport: {},
       tabId: 0,
     };
     this.defaultIndex =
@@ -45,6 +53,13 @@ class agency extends Component {
 
   handleEditCallBack = (modal) => {
     this.setState({ modalupdate: modal });
+  };
+  handleDelCallBackImport = (modal) => {
+    this.setState({ modalremoveImport: modal });
+  };
+
+  handleEditCallBackImport = (modal) => {
+    this.setState({ modalupdateImport: modal });
   };
   fetchDataOnTap = (index) => {
     this.setState({ tabId: index });
@@ -301,6 +316,14 @@ class agency extends Component {
                               tabId={tabId}
                               store_code={store_code}
                               payment_request_solve={payment_request_solve}
+                              handleEditCallBack={this.handleEditCallBack}
+                              handleDelCallBack={this.handleDelCallBack}
+                              handleEditCallBackImport={
+                                this.handleEditCallBackImport
+                              }
+                              handleDelCallBackImport={
+                                this.handleDelCallBackImport
+                              }
                             />
                           </TabPanel>
                         ) : null}
@@ -347,6 +370,15 @@ class agency extends Component {
             />
             <ModalUpdate
               modal={this.state.modalupdate}
+              store_code={store_code}
+            />
+            <ModalCreateImport store_code={store_code} />
+            <ModalRemoveImport
+              modal={this.state.modalremoveImport}
+              store_code={store_code}
+            />
+            <ModalUpdateImport
+              modal={this.state.modalupdateImport}
               store_code={store_code}
             />
 

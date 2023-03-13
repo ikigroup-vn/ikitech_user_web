@@ -3,6 +3,7 @@ import * as Types from "../../constants/ActionType";
 var initialState = {
   config: {},
   allStep: [],
+  allStepImport: [],
   allAgency: [],
   allRequestPayment: [],
   allHistoryPayment: [],
@@ -29,6 +30,9 @@ export const agency = (state = initialState, action) => {
       return newState;
     case Types.FETCH_ALL_AGENCY_STEP:
       newState.allStep = action.data;
+      return newState;
+    case Types.FETCH_ALL_AGENCY_STEP_IMPORT:
+      newState.allStepImport = action.data;
       return newState;
     case Types.FETCH_ALL_AGENCY:
       newState.allAgency = action.data;
