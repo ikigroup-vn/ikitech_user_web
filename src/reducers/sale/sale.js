@@ -8,6 +8,7 @@ var initialState = {
   removedSuccessfully: false,
   addCustomerToSaleSuccessfully: false,
   statisticalUser: {},
+  topCommission: {},
 
   statistical: {},
   allCustomerOfSale: {},
@@ -41,6 +42,9 @@ export const sale = (state = initialState, action) => {
       return newState;
     case Types.STATISTICAL_SALE_USER:
       newState.statisticalUser = action.data;
+      return newState;
+    case Types.FETCH_ALL_SALE_TOP_COMMISSION:
+      newState.topCommission = action.data;
       return newState;
     case Types.FETCH_ALL_CUSTOMER_OF_SALE:
       newState.allCustomerOfSale = action.data;

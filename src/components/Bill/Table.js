@@ -382,6 +382,7 @@ class Table extends Component {
                 name="checked"
                 style={{
                   height: "initial",
+                  marginBottom: "0px",
                 }}
                 type="checkbox"
                 checked={checked}

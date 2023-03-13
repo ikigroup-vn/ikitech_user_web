@@ -13,6 +13,7 @@ import "react-tabs/style/react-tabs.css";
 import NotAccess from "../../components/Partials/NotAccess";
 import Config from "../../components/Sale/Config";
 import ListSale from "../../components/Sale/ListSale";
+import TopCommission from "../../components/Sale/TopComiss";
 
 class Sale extends Component {
   constructor(props) {
@@ -124,6 +125,22 @@ class Sale extends Component {
                               </Link>
                             </Tab>
                           ) : null}
+                          {sale_list == true ? (
+                            <Tab>
+                              <Link
+                                to={"?tab-index=2"}
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  columnGap: "5px",
+                                }}
+                              >
+                                {" "}
+                                <i class="fa fa-chart-bar"></i>
+                                <span> Top sale</span>
+                              </Link>
+                            </Tab>
+                          ) : null}
                         </TabList>
 
                         {config == true ? (
@@ -140,6 +157,15 @@ class Sale extends Component {
                         {sale_list == true ? (
                           <TabPanel>
                             <ListSale tabId={tabId} store_code={store_code} />
+                          </TabPanel>
+                        ) : null}
+                        {sale_list == true ? (
+                          <TabPanel>
+                            <TopCommission
+                              paramId={id}
+                              tabId={tabId}
+                              store_code={store_code}
+                            />
                           </TabPanel>
                         ) : null}
                       </Tabs>
