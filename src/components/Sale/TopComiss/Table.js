@@ -68,11 +68,11 @@ class Table extends Component {
             <tr class="sub-container hover-product">
               <td>{index + 1}</td> <td>{data.name}</td>{" "}
               <td>{data.phone_number}</td>
-              <td className="sale__countCustomer">
+              {/* <td className="sale__countCustomer">
                 {typeof data.total_customers != "undefined"
                   ? Number(data.total_customers)
                   : null}
-              </td>
+              </td> */}
               <td>{formatNoD(data.orders_count)}</td>
               <td>
                 {typeof data.sum_total_after_discount != "undefined"
@@ -102,7 +102,7 @@ class Table extends Component {
               <th>STT</th>
               <th>Họ tên</th>
               <th>Số điện thoại</th>
-              <th>Số khách hàng</th>
+              {/* <th>Số khách hàng</th> */}
 
               <th>Số đơn hàng</th>
 
