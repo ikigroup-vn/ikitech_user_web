@@ -716,27 +716,6 @@ export const fetchChatId = (store_code, customerId, pag = 1) => {
   };
 };
 
-export const fetchAllSteps = (store_code) => {
-  return (dispatch) => {
-    dispatch({
-      type: Types.SHOW_LOADING_LAZY,
-      loading: "show",
-    });
-    agencyApi.fetchAllSteps(store_code).then((res) => {
-      console.log(res);
-      dispatch({
-        type: Types.SHOW_LOADING_LAZY,
-        loading: "hide",
-      });
-      if (res.data.code !== 401)
-        dispatch({
-          type: Types.FETCH_ALL_AGENCY_STEP,
-          data: res.data.data,
-        });
-    });
-  };
-};
-
 export const createAgencyType = (store_code, data) => {
   return (dispatch) => {
     dispatch({
@@ -797,6 +776,28 @@ export const createAgencyType = (store_code, data) => {
   };
 };
 
+//Doanh số hoa hồng
+export const fetchAllSteps = (store_code) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING_LAZY,
+      loading: "show",
+    });
+    agencyApi.fetchAllSteps(store_code).then((res) => {
+      console.log(res);
+      dispatch({
+        type: Types.SHOW_LOADING_LAZY,
+        loading: "hide",
+      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_ALL_AGENCY_STEP,
+          data: res.data.data,
+        });
+    });
+  };
+};
+
 export const createStep = (store_code, data) => {
   return (dispatch) => {
     dispatch({
@@ -841,63 +842,6 @@ export const createStep = (store_code, data) => {
             content: error?.response?.data?.msg,
           },
         });
-      })
-      .catch(function (error) {
-        dispatch({
-          type: Types.ALERT_UID_STATUS,
-          alert: {
-            type: "danger",
-            title: "Lỗi",
-            disable: "show",
-            content: error?.response?.data?.msg,
-          },
-        });
-      });
-  };
-};
-
-export const destroyType = (store_code, id) => {
-  return (dispatch) => {
-    dispatch({
-      type: Types.SHOW_LOADING,
-      loading: "show",
-    });
-    agencyApi
-      .destroyType(store_code, id)
-      .then((res) => {
-        dispatch({
-          type: Types.SHOW_LOADING,
-          loading: "hide",
-        });
-        agencyApi
-          .fetchAllAgencyType(store_code)
-          .then((res) => {
-            if (res.data.code !== 401)
-              dispatch({
-                type: Types.FETCH_ALL_AGENCY_TYPE,
-                data: res.data.data,
-              });
-            dispatch({
-              type: Types.ALERT_UID_STATUS,
-              alert: {
-                type: "success",
-                title: "Thành công ",
-                disable: "show",
-                content: res.data.msg,
-              },
-            });
-          })
-          .catch(function (error) {
-            dispatch({
-              type: Types.ALERT_UID_STATUS,
-              alert: {
-                type: "danger",
-                title: "Lỗi",
-                disable: "show",
-                content: error?.response?.data?.msg,
-              },
-            });
-          });
       })
       .catch(function (error) {
         dispatch({
@@ -970,23 +914,23 @@ export const destroyStep = (store_code, id) => {
   };
 };
 
-export const updateAgencyType = (store_code, id, data) => {
+export const updateStep = (store_code, id, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
     });
     agencyApi
-      .updateAgencyType(store_code, id, data)
+      .updateStep(store_code, id, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
-        agencyApi.fetchAllAgencyType(store_code).then((res) => {
+        agencyApi.fetchAllSteps(store_code).then((res) => {
           if (res.data.code !== 401)
             dispatch({
-              type: Types.FETCH_ALL_AGENCY_TYPE,
+              type: Types.FETCH_ALL_AGENCY_STEP,
               data: res.data.data,
             });
           dispatch({
@@ -1028,23 +972,278 @@ export const updateAgencyType = (store_code, id, data) => {
       });
   };
 };
-export const updateStep = (store_code, id, data) => {
+
+//Doanh số nhập hàng
+export const fetchAllStepsImport = (store_code) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING_LAZY,
+      loading: "show",
+    });
+    agencyApi.fetchAllStepsImport(store_code).then((res) => {
+      console.log(res);
+      dispatch({
+        type: Types.SHOW_LOADING_LAZY,
+        loading: "hide",
+      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_ALL_AGENCY_STEP_IMPORT,
+          data: res.data.data,
+        });
+    });
+  };
+};
+
+export const createStepImport = (store_code, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
     });
     agencyApi
-      .updateStep(store_code, id, data)
+      .createStepImport(store_code, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
-        agencyApi.fetchAllSteps(store_code).then((res) => {
+        agencyApi.fetchAllStepsImport(store_code).then((res) => {
           if (res.data.code !== 401)
             dispatch({
-              type: Types.FETCH_ALL_AGENCY_STEP,
+              type: Types.FETCH_ALL_AGENCY_STEP_IMPORT,
+              data: res.data.data,
+            });
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "success",
+              title: "Thành công ",
+              disable: "show",
+              content: res.data.msg,
+            },
+          });
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+
+export const destroyStepImport = (store_code, id) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    agencyApi
+      .destroyStepImport(store_code, id)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        agencyApi
+          .fetchAllStepsImport(store_code)
+          .then((res) => {
+            if (res.data.code !== 401)
+              dispatch({
+                type: Types.FETCH_ALL_AGENCY_STEP_IMPORT,
+                data: res.data.data,
+              });
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "success",
+                title: "Thành công ",
+                disable: "show",
+                content: res.data.msg,
+              },
+            });
+          })
+          .catch(function (error) {
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "danger",
+                title: "Lỗi",
+                disable: "show",
+                content: error?.response?.data?.msg,
+              },
+            });
+          });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+
+export const updateStepImport = (store_code, id, data) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    agencyApi
+      .updateStepImport(store_code, id, data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        agencyApi.fetchAllStepsImport(store_code).then((res) => {
+          if (res.data.code !== 401)
+            dispatch({
+              type: Types.FETCH_ALL_AGENCY_STEP_IMPORT,
+              data: res.data.data,
+            });
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "success",
+              title: "Thành công ",
+              disable: "show",
+              content: res.data.msg,
+            },
+          });
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+
+export const destroyType = (store_code, id) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    agencyApi
+      .destroyType(store_code, id)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        agencyApi
+          .fetchAllAgencyType(store_code)
+          .then((res) => {
+            if (res.data.code !== 401)
+              dispatch({
+                type: Types.FETCH_ALL_AGENCY_TYPE,
+                data: res.data.data,
+              });
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "success",
+                title: "Thành công ",
+                disable: "show",
+                content: res.data.msg,
+              },
+            });
+          })
+          .catch(function (error) {
+            dispatch({
+              type: Types.ALERT_UID_STATUS,
+              alert: {
+                type: "danger",
+                title: "Lỗi",
+                disable: "show",
+                content: error?.response?.data?.msg,
+              },
+            });
+          });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+
+export const updateAgencyType = (store_code, id, data) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    agencyApi
+      .updateAgencyType(store_code, id, data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        agencyApi.fetchAllAgencyType(store_code).then((res) => {
+          if (res.data.code !== 401)
+            dispatch({
+              type: Types.FETCH_ALL_AGENCY_TYPE,
               data: res.data.data,
             });
           dispatch({

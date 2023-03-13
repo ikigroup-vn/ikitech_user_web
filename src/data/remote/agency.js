@@ -3,6 +3,7 @@ import callApi from "../../ultis/apiCaller";
 export const fetchAgencyConf = (store_code) => {
   return callApi(`/store/${store_code}/agency_configs`, "get", null);
 };
+//Doanh số hoa hồng
 export const fetchAllSteps = (store_code) => {
   return callApi(
     `/store/${store_code}/agency_configs/bonus_steps`,
@@ -29,6 +30,37 @@ export const destroyStep = (store_code, id) => {
 export const updateStep = (store_code, id, data) => {
   return callApi(
     `/store/${store_code}/agency_configs/bonus_steps/${id}`,
+    "put",
+    data
+  );
+};
+//Doanh số nhập hàng
+export const fetchAllStepsImport = (store_code) => {
+  return callApi(
+    `/store/${store_code}/agency_configs/import_bonus_steps`,
+    "get",
+    null
+  );
+};
+export const createStepImport = (store_code, data) => {
+  return callApi(
+    `/store/${store_code}/agency_configs/import_bonus_steps`,
+    "post",
+    data
+  );
+};
+
+export const destroyStepImport = (store_code, id) => {
+  return callApi(
+    `/store/${store_code}/agency_configs/import_bonus_steps/${id}`,
+    "delete",
+    null
+  );
+};
+
+export const updateStepImport = (store_code, id, data) => {
+  return callApi(
+    `/store/${store_code}/agency_configs/import_bonus_steps/${id}`,
     "put",
     data
   );
