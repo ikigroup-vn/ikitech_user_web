@@ -69,6 +69,13 @@ export const updateStepImport = (store_code, id, data) => {
 export const updateConfig = (store_code, data) => {
   return callApi(`/store/${store_code}/agency_configs`, "post", data);
 };
+export const updateConfigImport = (store_code, data) => {
+  return callApi(
+    `/store/${store_code}/config_type_bonus_period_import`,
+    "put",
+    data
+  );
+};
 
 export const fetchAllAgency = (store_code, page, params) => {
   if (params)

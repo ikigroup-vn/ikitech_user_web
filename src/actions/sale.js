@@ -363,6 +363,25 @@ export const fetchAllTopCommission = (store_code, page = 1, params) => {
     });
   };
 };
+export const fetchListIdsFromSale = (store_code, params) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING_LAZY,
+      loading: "show",
+    });
+    saleApi.fetchListIdsFromSale(store_code, params).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING_LAZY,
+        loading: "hide",
+      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_LIST_IDS_CUSTOMER_FROM_SALE,
+          data: res.data.data,
+        });
+    });
+  };
+};
 function getSheetData(data, header) {
   var fields = Object.keys(data[0]);
   var sheetData = data.map(function (row) {

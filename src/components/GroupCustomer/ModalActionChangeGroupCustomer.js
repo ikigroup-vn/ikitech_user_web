@@ -500,7 +500,7 @@ class ModalActionChangeGroupCustomer extends Component {
               }}
             >
               <h4 style={{ color: "white", margin: "10px" }}>
-                {idGroupCustomer ? "Cập nhập" : "Tạo nhóm"} khách hàng
+                {idGroupCustomer ? "Cập nhật" : "Tạo nhóm"} khách hàng
               </h4>
               <button
                 type="button"
@@ -660,7 +660,7 @@ class ModalActionChangeGroupCustomer extends Component {
                   onClick={this.handleUpdateGroupCustomer}
                   className="btn btn-info"
                 >
-                  Cập nhập
+                  Cập nhật
                 </button>
               )}
             </div>

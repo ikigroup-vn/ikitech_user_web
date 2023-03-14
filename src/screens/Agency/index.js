@@ -61,6 +61,12 @@ class agency extends Component {
   handleEditCallBackImport = (modal) => {
     this.setState({ modalupdateImport: modal });
   };
+  setModalUpdateImport = (modal) => {
+    this.setState({ modalupdateImport: modal });
+  };
+  setModalUpdate = (modal) => {
+    this.setState({ modalupdate: modal });
+  };
   fetchDataOnTap = (index) => {
     this.setState({ tabId: index });
     // var urlParams = new URLSearchParams(window.location.search);
@@ -370,6 +376,7 @@ class agency extends Component {
             />
             <ModalUpdate
               modal={this.state.modalupdate}
+              setModalUpdate={this.setModalUpdate}
               store_code={store_code}
             />
             <ModalCreateImport store_code={store_code} />
@@ -379,6 +386,7 @@ class agency extends Component {
             />
             <ModalUpdateImport
               modal={this.state.modalupdateImport}
+              setModalUpdateImport={this.setModalUpdateImport}
               store_code={store_code}
             />
 

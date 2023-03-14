@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect, shallowEqual } from "react-redux";
 import * as saleAction from "../../../actions/sale";
 import * as staffAction from "../../../actions/staff";
+import * as placeAction from "../../../actions/place";
 import Chat from "../../Chat";
 import * as Env from "../../../ultis/default";
 import Table from "./Table";
@@ -13,6 +14,7 @@ import SDateRangePicker from "../../DatePicker/DateRangePicker";
 import * as Types from "../../../constants/ActionType";
 import Select from "react-select";
 import { getBranchId } from "../../../ultis/branchUtils";
+import SidebarShowCustomerOfSale from "./SidebarShowCustomerOfSale";
 
 const typeCustomers = [
   {
@@ -43,11 +45,15 @@ class TopCommission extends Component {
       searchValue: [],
       page: 1,
       listSale: [],
+      province: [],
+      listProvince: [],
+      saleInfo: {},
+      showCustomerOfSale: false,
     };
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    const { staff } = this.props;
+    const { staff, province } = this.props;
     if (!shallowEqual(staff, nextProps.staff)) {
       const newListSale = nextProps.staff.filter(
         (staff) => staff.is_sale === true
@@ -56,11 +62,18 @@ class TopCommission extends Component {
         listSale: newListSale,
       });
     }
+    if (!shallowEqual(province, nextProps.province)) {
+      this.setState({
+        listProvince: nextProps.province,
+      });
+    }
+
     return true;
   }
   componentDidMount() {
     const { store_code, fetchAllStaff } = this.props;
 
+    this.props.fetchPlaceProvince();
     fetchAllStaff(store_code, null, `branch_id=${getBranchId()}`, null);
     var date = helper.getDateForChartMonth();
     var params = `&date_from=${date.from}&date_to=${date.to}`;
@@ -86,6 +99,16 @@ class TopCommission extends Component {
     }
     return [];
   };
+  setShowCustomerOfSale = (isShowed) => {
+    this.setState({
+      showCustomerOfSale: isShowed,
+    });
+  };
+  setSaleInfo = (saleInfo) => {
+    this.setState({
+      saleInfo,
+    });
+  };
   setPage = (page) => {
     this.setPage({ page });
   };
@@ -97,7 +120,7 @@ class TopCommission extends Component {
   onchangeDateFromTo = (e) => {
     var from = "";
     var to = "";
-    const { customer_type, searchValue } = this.state;
+    const { customer_type, searchValue, province } = this.state;
     try {
       from = moment(e.value[0], "DD-MM-YYYY").format("YYYY-MM-DD");
       to = moment(e.value[1], "DD-MM-YYYY").format("YYYY-MM-DD");
@@ -106,7 +129,13 @@ class TopCommission extends Component {
       to = null;
     }
 
-    const params = this.getParams(from, to, searchValue, customer_type);
+    const params = this.getParams(
+      from,
+      to,
+      searchValue,
+      customer_type,
+      province
+    );
     this.props.fetchAllTopCommission(this.props.store_code, 1, params);
     this.setState({
       date_from: from,
@@ -125,13 +154,14 @@ class TopCommission extends Component {
     //     from = null
     //     to = null
     // }
-    const { customer_type, searchValue } = this.state;
+    const { customer_type, searchValue, province } = this.state;
 
     const params = this.getParams(
       date.from,
       date.to,
       searchValue,
-      customer_type
+      customer_type,
+      province
     );
     this.props.fetchAllTopCommission(this.props.store_code, 1, params);
     this.setState({
@@ -142,12 +172,33 @@ class TopCommission extends Component {
   };
 
   handleChangeSearch = (sale) => {
-    const { customer_type, date_from, date_to } = this.state;
+    const { customer_type, date_from, date_to, province } = this.state;
     const { store_code, fetchAllTopCommission } = this.props;
-    const params = this.getParams(date_from, date_to, sale, customer_type);
+    const params = this.getParams(
+      date_from,
+      date_to,
+      sale,
+      customer_type,
+      province
+    );
 
     fetchAllTopCommission(store_code, 1, params);
     this.setState({ searchValue: [...sale], page: 1 });
+  };
+
+  handleChangeProvince = (province) => {
+    const { customer_type, date_from, date_to, searchValue } = this.state;
+    const { store_code, fetchAllTopCommission } = this.props;
+    const params = this.getParams(
+      date_from,
+      date_to,
+      searchValue,
+      customer_type,
+      province
+    );
+
+    fetchAllTopCommission(store_code, 1, params);
+    this.setState({ province: province, page: 1 });
   };
 
   onSelectTypeCustomer = (e) => {
@@ -159,7 +210,7 @@ class TopCommission extends Component {
     fetchAllTopCommission(store_code, 1, params);
     this.setState({ customer_type: value, page: 1 });
   };
-  getParams = (from, to, sale, customerType) => {
+  getParams = (from, to, sale, customerType, province) => {
     var params = "";
     if (from && to) {
       params += `&date_from=${from}&date_to=${to}`;
@@ -180,12 +231,35 @@ class TopCommission extends Component {
     if (customerType != "" && customerType != null) {
       params += `&customer_type=${customerType}`;
     }
+    if (province?.length > 0) {
+      const province_ids = province?.reduce(
+        (prevProvince, currentProvince, index) => {
+          return (
+            prevProvince +
+            `${
+              index === province?.length - 1
+                ? currentProvince.value
+                : `${currentProvince.value},`
+            }`
+          );
+        },
+        ""
+      );
+      params += `&province_ids=${province_ids}`;
+    }
     return params;
   };
   exportTopten = () => {
-    var { date_from, date_to } = this.state;
-    var params = `&date_from=${date_from}&date_to=${date_to}`;
-    this.props.exportTopten(this.props.store_code, 1, params);
+    var { date_from, date_to, searchValue, province, page, customer_type } =
+      this.state;
+    const params = this.getParams(
+      date_from,
+      date_to,
+      searchValue,
+      customer_type,
+      province
+    );
+    this.props.exportTopten(this.props.store_code, page, params);
   };
   render() {
     var {
@@ -220,11 +294,34 @@ class TopCommission extends Component {
       customer_type,
       searchValue,
       listSale,
+      province,
+      listProvince,
+      showCustomerOfSale,
+      saleInfo,
     } = this.state;
     console.log(this.props.topReport);
     return (
       <div id="wrapper">
         <div className="" style={{ width: "100%" }}>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
+          >
+            <button
+              style={{ margin: "auto 0px" }}
+              onClick={this.exportTopten}
+              class={`btn btn-danger btn-icon-split btn-sm `}
+            >
+              <span class="icon text-white-50">
+                <i class="fas fa-file-export"></i>
+              </span>
+              <span style={{ color: "white" }} class="text">
+                Export Excel
+              </span>
+            </button>
+          </div>
           <div
             style={{
               display: "flex",
@@ -257,6 +354,20 @@ class TopCommission extends Component {
                   noOptionsMessage={() => "Không tìm thấy kết quả"}
                 ></Select>
               </div>
+              <div
+                style={{
+                  width: "350px",
+                }}
+              >
+                <Select
+                  options={this.convertOptions(listProvince)}
+                  placeholder={"Chọn tỉnh thành"}
+                  value={province}
+                  onChange={this.handleChangeProvince}
+                  isMulti={true}
+                  noOptionsMessage={() => "Không tìm thấy kết quả"}
+                ></Select>
+              </div>
               <select
                 value={customer_type}
                 onChange={this.onSelectTypeCustomer}
@@ -271,21 +382,11 @@ class TopCommission extends Component {
                   </option>
                 ))}
               </select>
-              <SDateRangePicker onChangeDate={this.onChangeDateFromComponent} />
+              <SDateRangePicker
+                row={true}
+                onChangeDate={this.onChangeDateFromComponent}
+              />
             </div>
-
-            <button
-              style={{ margin: "auto 0px" }}
-              onClick={this.exportTopten}
-              class={`btn btn-danger btn-icon-split btn-sm `}
-            >
-              <span class="icon text-white-50">
-                <i class="fas fa-file-export"></i>
-              </span>
-              <span style={{ color: "white" }} class="text">
-                Export Excel
-              </span>
-            </button>
           </div>
 
           <Table
@@ -295,6 +396,8 @@ class TopCommission extends Component {
             handleShowChatBox={this.handleShowChatBox}
             store_code={store_code}
             topReport={topReport}
+            setSaleInfo={this.setSaleInfo}
+            setShowCustomerOfSale={this.setShowCustomerOfSale}
           />
 
           <Pagination
@@ -306,10 +409,24 @@ class TopCommission extends Component {
             to={date_to}
             searchValue={searchValue}
             customer_type={customer_type}
+            province={province}
             setPage={this.setPage}
           />
         </div>
-
+        <SidebarShowCustomerOfSale
+          store_code={store_code}
+          showSidebar={showCustomerOfSale}
+          setShowSidebar={this.setShowCustomerOfSale}
+          saleInfo={saleInfo}
+          setSaleInfo={this.setSaleInfo}
+          params={this.getParams(
+            date_from,
+            date_to,
+            null,
+            customer_type,
+            province
+          )}
+        ></SidebarShowCustomerOfSale>
         <Chat
           customerName={customerName}
           customerImg={customerImg}
@@ -332,6 +449,7 @@ const mapStateToProps = (state) => {
     chat: state.chatReducers.chat.chatID,
     customer: state.customerReducers.customer.customerID,
     types: state.agencyReducers.agency.allAgencyType,
+    province: state.placeReducers.province,
     state,
   };
 };
@@ -345,6 +463,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     exportTopten: (store_code, page, params) => {
       dispatch(saleAction.exportTopten(store_code, page, params));
+    },
+    fetchPlaceProvince: () => {
+      dispatch(placeAction.fetchPlaceProvince());
     },
   };
 };

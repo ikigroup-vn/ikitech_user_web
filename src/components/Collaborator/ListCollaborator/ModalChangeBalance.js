@@ -199,7 +199,7 @@ class ModalChangeBalance extends Component {
                   }}
                 >
                   <button type="submit" className="btn btn-outline-primary">
-                    Cập nhập
+                    Cập nhật
                   </button>
                   <button
                     type="button"

@@ -192,6 +192,66 @@ export const exportListAgency = (store_code, page = 1, params = "") => {
     });
   };
 };
+export const exportListRequest = (store_code) => {
+  return (dispatch) => {
+    agencyApi.fetchAllRequestPayment(store_code).then((res) => {
+      console.log("agencyApi.fetchAllRequestPayment ~ res:", res.data);
+      if (res.data.code !== 401)
+        if (res.data.code !== 401)
+          if (typeof res.data.data != "undefined") {
+            if (res.data.data.length > 0) {
+              var newArray = [];
+              var index = 0;
+              for (const item of res.data.data) {
+                var newItem = {};
+                var arangeKeyItem = {
+                  name: item?.agency?.customer?.name,
+                  phone_number: item?.agency?.customer?.phone_number,
+                  from:
+                    item.from == 0
+                      ? "Khách hàng yêu cầu"
+                      : item.from == 1
+                      ? "Từ admin"
+                      : "Tất cả",
+                  money: Number(item.money),
+                  date: item.created_at,
+                };
+                Object.entries(arangeKeyItem).forEach(([key, value], index) => {
+                  if (key == "name") {
+                    newItem["Họ tên"] = value;
+                  }
+                  if (key == "phone_number") {
+                    newItem["Số điện thoại"] = value;
+                  }
+                  if (key == "from") {
+                    newItem["Nguồn yêu cầu"] = value;
+                  }
+                  if (key == "money") {
+                    newItem["Số tiền"] = value;
+                  }
+                  if (key == "date") {
+                    newItem["Ngày yêu cầu"] = value;
+                  }
+                });
+
+                newArray.push(newItem);
+              }
+              var header = [];
+              if (newArray.length > 0) {
+                Object.entries(newArray[0]).forEach(([key, value], index) => {
+                  header.push(key);
+                });
+              }
+              console.log(header);
+              saveAsExcel(
+                { data: newArray, header: header },
+                "Danh sách Quyết toán đại lý"
+              );
+            }
+          }
+    });
+  };
+};
 export const fetchAgencyConf = (store_code) => {
   return (dispatch) => {
     dispatch({
@@ -1330,6 +1390,48 @@ export const updateConfig = (store_code, data) => {
       .catch(function (error) {
         dispatch({
           type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+export const updateConfigImport = (store_code, data) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING_LAZY,
+      loading: "show",
+    });
+    agencyApi
+      .updateConfigImport(store_code, data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING_LAZY,
+          loading: "hide",
+        });
+        if (res.data.code === 200) {
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "success",
+              title: "Thành công ",
+              disable: "show",
+              content: res.data.msg,
+            },
+          });
+        }
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING_LAZY,
           loading: "hide",
         });
         dispatch({

@@ -75,6 +75,7 @@ class ModalUpdateImport extends Component {
                 class="close"
                 data-dismiss="modal"
                 aria-hidden="true"
+                onClick={() => this.props.setModalUpdateImport({})}
               >
                 &times;
               </button>
@@ -119,6 +120,7 @@ class ModalUpdateImport extends Component {
                   type="button"
                   class="btn btn-default"
                   data-dismiss="modal"
+                  onClick={() => this.props.setModalUpdateImport({})}
                 >
                   Đóng
                 </button>

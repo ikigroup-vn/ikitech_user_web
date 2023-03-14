@@ -691,7 +691,7 @@ class ActionsGameGuessNumberContent extends Component {
           }}
         >
           <h4 className="h4 title_content mb-0 text-gray-800">
-            {idGameGuessNumber ? "Cập nhập " : "Thêm "} trò chơi đoán số
+            {idGameGuessNumber ? "Cập nhật " : "Thêm "} trò chơi đoán số
           </h4>
         </div>
         <br></br>
@@ -1082,7 +1082,7 @@ class ActionsGameGuessNumberContent extends Component {
                             }}
                           >
                             *Có thể bỏ trống, khi có kết quả vào lại chương
-                            trình cập nhập sau để công bố!
+                            trình cập nhật sau để công bố!
                           </div>
                         </div>
                       )}
@@ -1097,7 +1097,7 @@ class ActionsGameGuessNumberContent extends Component {
                         }}
                       >
                         *Có thể bỏ trống đáp án đúng, khi có kết quả vào lại
-                        chương trình cập nhập sau để công bố!
+                        chương trình cập nhật sau để công bố!
                       </div>
                       <div className="mb-4">
                         <div className="gameGuessNumber_answerMain">
@@ -1197,7 +1197,7 @@ class ActionsGameGuessNumberContent extends Component {
                     className="btn btn-primary btn-sm"
                     onClick={this.updateGameGuessNumber}
                   >
-                    <i className="fa fa-plus"></i> Cập nhập
+                    <i className="fa fa-plus"></i> Cập nhật
                   </button>
                 ) : (
                   <button
