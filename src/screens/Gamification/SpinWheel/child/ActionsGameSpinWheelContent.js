@@ -590,7 +590,7 @@ class ActionsGameSpinWheelContent extends Component {
           }}
         >
           <h4 className="h4 title_content mb-0 text-gray-800">
-            {idGameSpinWheel ? "Cập nhập " : "Thêm "} trò chơi quay thưởng
+            {idGameSpinWheel ? "Cập nhật " : "Thêm "} trò chơi quay thưởng
           </h4>
         </div>
         <br></br>
@@ -1059,7 +1059,7 @@ class ActionsGameSpinWheelContent extends Component {
                     className="btn btn-primary btn-sm"
                     onClick={this.updateGameSpinWheel}
                   >
-                    <i className="fa fa-edit"></i> Cập nhập
+                    <i className="fa fa-edit"></i> Cập nhật
                   </button>
                   <button
                     style={{ marginLeft: "10px" }}

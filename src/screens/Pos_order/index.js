@@ -1845,7 +1845,7 @@ class PostOrder extends Component {
                                 }}
                                 onClick={this.handlePayment}
                               >
-                                Cập nhập
+                                Cập nhật
                               </button>
                             )}
                           </>

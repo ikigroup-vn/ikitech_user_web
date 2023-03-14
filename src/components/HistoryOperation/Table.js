@@ -91,7 +91,7 @@ class Table extends PureComponent {
           Thao tác
         </option>
         <option value={Types.OPERATION_ACTION_ADD}>Thêm</option>
-        <option value={Types.OPERATION_ACTION_UPDATE}>Cập nhập</option>
+        <option value={Types.OPERATION_ACTION_UPDATE}>Cập nhật</option>
         <option value={Types.OPERATION_ACTION_DELETE}>Xóa</option>
         <option value={Types.OPERATION_ACTION_CANCEL}>Hủy</option>
       </select>
@@ -104,7 +104,7 @@ class Table extends PureComponent {
         name = "Thêm";
         break;
       case Types.OPERATION_ACTION_UPDATE:
-        name = "Cập nhập";
+        name = "Cập nhật";
         break;
       case Types.OPERATION_ACTION_DELETE:
         name = "Xóa";

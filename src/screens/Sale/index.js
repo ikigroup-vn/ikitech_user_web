@@ -25,6 +25,7 @@ class Sale extends Component {
       },
       modalupdate: {},
       tabId: 0,
+      type_bonus_period_import: 0,
     };
     this.defaultIndex =
       this.props.match.params.action == "request_payment" ? 2 : 0;

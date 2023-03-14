@@ -91,7 +91,7 @@ class ModalChangeRoleCustomer extends PureComponent {
                   Đóng
                 </button>
                 <button type="submit" class="btn btn-warning">
-                  Cập nhập
+                  Cập nhật
                 </button>
               </div>
             </form>

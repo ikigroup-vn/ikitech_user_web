@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import getChannel from "../../../ultis/channel";
 
-import * as agencyAction from "../../../actions/agency";
 class Pagination extends Component {
   constructor(props) {
     super(props);
@@ -12,20 +10,10 @@ class Pagination extends Component {
   }
 
   passPagination = (page) => {
-    const {
-      store_code,
-      fetchAllTopCommission,
-      getParams,
-      from,
-      to,
-      searchValue,
-      customer_type,
-      setPage,
-      province,
-    } = this.props;
+    const { setPage, fetchAllCustomer, store_code, saleInfo } = this.props;
     setPage(page);
-    const params = getParams(from, to, searchValue, customer_type, province);
-    fetchAllTopCommission(store_code, page, params);
+    const params = `&sale_staff_id=${saleInfo.id}`;
+    fetchAllCustomer(store_code, page, params);
   };
 
   showData = (links) => {
@@ -75,18 +63,11 @@ class Pagination extends Component {
         className={`float-pagination ${getChannel()}`}
       >
         <ul class="pagination  tab-pagination pg-blue">
-          {this.showData(this.props.topReport.links)}
+          {this.showData(this.props.customers.links)}
         </ul>
       </nav>
     );
   }
 }
 
-const mapDispatchToProps = (dispatch, props) => {
-  return {
-    fetchAllAgency: (store_code, page) => {
-      dispatch(agencyAction.fetchAllAgency(store_code, page));
-    },
-  };
-};
-export default connect(null, mapDispatchToProps)(Pagination);
+export default Pagination;

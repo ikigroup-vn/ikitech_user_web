@@ -3,7 +3,9 @@ import { Link } from "react-router-dom";
 import * as Env from "../../../ultis/default";
 import * as helper from "../../../ultis/helpers";
 import { shallowEqual } from "../../../ultis/shallowEqual";
+import * as agencyAction from "../../../actions/agency";
 import { format, getQueryParams, removeAscent } from "../../../ultis/helpers";
+import { connect } from "react-redux";
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -453,6 +455,11 @@ class Table extends Component {
   onChangeSearch = (e) => {
     this.setState({ searchValue: e.target.value });
   };
+  exportListRequest = () => {
+    const { store_code } = this.props;
+
+    this.props.exportListRequest(store_code);
+  };
 
   render() {
     var { arrayCheckBox, from, searchValue } = this.state;
@@ -499,15 +506,30 @@ class Table extends Component {
               </div>
             </form>
 
-            <button
-              class={`btn btn-success btn-sm ${
-                payment_request_solve == true ? "show" : "hide"
-              }`}
-              data-toggle="modal"
-              data-target="#updateModalAllRequest"
+            <div
+              style={{
+                display: "flex",
+                gap: "10px",
+              }}
             >
-              <i class="fa fa-list"></i> Quyết toán cho toàn bộ đại lý
-            </button>
+              {" "}
+              <button
+                class={`btn btn-success btn-sm ${
+                  payment_request_solve == true ? "show" : "hide"
+                }`}
+                data-toggle="modal"
+                data-target="#updateModalAllRequest"
+              >
+                <i class="fa fa-list"></i> Quyết toán cho toàn bộ đại lý
+              </button>
+              <button
+                onClick={this.exportListRequest}
+                class={`btn btn-danger btn-sm`}
+              >
+                <i class="fas fa-file-export"></i>
+                Export Excel
+              </button>
+            </div>
           </div>
           <div className={`group-btn ${disable_group}`}>
             <button
@@ -577,5 +599,14 @@ class Table extends Component {
     );
   }
 }
-
-export default Table;
+const mapStateToProps = (state) => {
+  return {};
+};
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    exportListRequest: (store_code) => {
+      dispatch(agencyAction.exportListRequest(store_code));
+    },
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Table);

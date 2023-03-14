@@ -102,6 +102,9 @@ const EditGiftGameSpinWheelStyles = styled.div`
     background-color: #c6c6c3;
     border-color: #c6c6c3;
   }
+  .editGiftGame {
+    overflow-x: auto;
+  }
 `;
 
 const newGiftDefault = {
@@ -528,7 +531,7 @@ class EditGiftGameSpinWheel extends Component {
 
     return (
       <EditGiftGameSpinWheelStyles>
-        <div className="card mb-4">
+        <div className="card mb-4 editGiftGame">
           <div class="card-header title_content">Danh sách phần thưởng</div>
           <div className="card-body" style={{ padding: "0.8rem" }}>
             <div className="gift__item__title">
@@ -720,7 +723,7 @@ class EditGiftGameSpinWheel extends Component {
                         <span>
                           <i className="fa fa-edit"></i>
                         </span>
-                        <span>Cập nhập</span>
+                        <span>Cập nhật</span>
                       </button>
                       <button
                         className="gameSpinWheel__actions__item btn btn-danger"

@@ -75,6 +75,7 @@ class ModalUpdate extends Component {
                 class="close"
                 data-dismiss="modal"
                 aria-hidden="true"
+                onClick={() => this.props.setModalUpdate({})}
               >
                 &times;
               </button>
@@ -119,6 +120,7 @@ class ModalUpdate extends Component {
                   type="button"
                   class="btn btn-default"
                   data-dismiss="modal"
+                  onClick={() => this.props.setModalUpdate({})}
                 >
                   Đóng
                 </button>

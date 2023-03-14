@@ -9,12 +9,12 @@ import * as agencyAction from "../../../actions/agency";
 import styled from "styled-components";
 
 const TableStyles = styled.div`
-  /* .sale__countCustomer {
+  .sale__countCustomer {
     color: #36a1e9;
     &:hover {
       color: #2980b9;
     }
-  } */
+  }
 `;
 
 class Table extends Component {
@@ -57,7 +57,11 @@ class Table extends Component {
       agency_type_id: value,
     });
   };
-
+  handleShowSidebar = (data) => {
+    const { setSaleInfo, setShowCustomerOfSale } = this.props;
+    setSaleInfo(data);
+    setShowCustomerOfSale(true);
+  };
   showData = (topReport) => {
     var { store_code } = this.props;
     var result = null;
@@ -68,11 +72,14 @@ class Table extends Component {
             <tr class="sub-container hover-product">
               <td>{index + 1}</td> <td>{data.name}</td>{" "}
               <td>{data.phone_number}</td>
-              {/* <td className="sale__countCustomer">
-                {typeof data.total_customers != "undefined"
-                  ? Number(data.total_customers)
+              <td
+                className="sale__countCustomer"
+                onClick={() => this.handleShowSidebar(data)}
+              >
+                {typeof data.total_customer_in_filer != "undefined"
+                  ? Number(data.total_customer_in_filer)
                   : null}
-              </td> */}
+              </td>
               <td>{formatNoD(data.orders_count)}</td>
               <td>
                 {typeof data.sum_total_after_discount != "undefined"
@@ -102,7 +109,7 @@ class Table extends Component {
               <th>STT</th>
               <th>Họ tên</th>
               <th>Số điện thoại</th>
-              {/* <th>Số khách hàng</th> */}
+              <th>Số khách hàng</th>
 
               <th>Số đơn hàng</th>
 

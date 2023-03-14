@@ -721,13 +721,18 @@ class ListProduct extends Component {
 
             <div
               class="group-pagination_flex col-xs-12 col-sm-12 col-md-12 col-lg-12"
-              style={{ display: "flex", justifyContent: "space-between" }}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                flexWrap: "wrap",
+              }}
             >
               <div
                 style={{
                   display: "flex",
                   columnGap: "10px",
                   alignItems: "center",
+                  flexWrap: "wrap",
                 }}
               >
                 <div
@@ -754,6 +759,9 @@ class ListProduct extends Component {
                   onChange={this.onChangeNumPage}
                   id="input"
                   class="form-control"
+                  style={{
+                    width: "80px",
+                  }}
                 >
                   <option value="20">20</option>
                   <option value="50">50</option>
@@ -761,7 +769,15 @@ class ListProduct extends Component {
                   <option value="200">200</option>
                 </select>
               </div>
-              <div style={{ marginTop: "10px" }}>
+              <div
+                style={{
+                  marginTop: "10px",
+                  marginBottom: "1rem",
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  width: "100%",
+                }}
+              >
                 <button
                   style={{
                     border: "1px solid",

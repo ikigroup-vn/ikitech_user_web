@@ -54,12 +54,14 @@ class BonusProgram extends Component {
       },
       steps: [],
       stepsImport: [],
+      type_bonus_period_import: 0,
     };
   }
 
   componentDidMount() {
     this.props.getBonusAgencyConfig(this.props.store_code);
     this.props.fetchAllSteps(this.props.store_code);
+    this.props.fetchAgencyConf(this.props.store_code);
     this.props.fetchAllStepsImport(this.props.store_code);
   }
   componentWillReceiveProps(nextProps) {
@@ -71,6 +73,12 @@ class BonusProgram extends Component {
     if (!shallowEqual(nextProps.stepsImport, this.props.stepsImport)) {
       this.setState({
         stepsImport: nextProps.stepsImport,
+      });
+    }
+    if (!shallowEqual(nextProps.config, this.props.config)) {
+      var config = nextProps.config;
+      this.setState({
+        type_bonus_period_import: config.type_bonus_period_import,
       });
     }
   }
@@ -135,7 +143,22 @@ class BonusProgram extends Component {
     this.props.handleEditCallBackImport({ id: id, limit: limit, bonus: bonus });
     e.preventDefault();
   };
-
+  onChangeBonusPeriod = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    this.setState({
+      [name]: value,
+    });
+  };
+  onSave = (e) => {
+    e.preventDefault();
+    const { updateConfigImport, store_code } = this.props;
+    const { type_bonus_period_import } = this.state;
+    const data = {
+      type_bonus_period_import: type_bonus_period_import,
+    };
+    updateConfigImport(store_code, data);
+  };
   onChangeDatePrime = (e) => {
     try {
       var from = moment(e.value[0], "DD-MM-YYYY").format("DD-MM-YYYY");
@@ -287,7 +310,7 @@ class BonusProgram extends Component {
     return result;
   };
   showDataImportBonus = () => {
-    const { stepsImport } = this.state;
+    const { stepsImport, type_bonus_period_import } = this.state;
     return (
       <div
         style={{
@@ -332,6 +355,44 @@ class BonusProgram extends Component {
               <tbody>{this.showAllStepImport(stepsImport)}</tbody>
             </table>
           </div>
+          <form onSubmit={this.onSave}>
+            <div
+              className="config__item"
+              style={{
+                display: "flex",
+                gap: "6px",
+                alignItems: "center",
+                marginTop: "15px",
+              }}
+            >
+              <div>Kỳ thưởng</div>
+              <select
+                value={type_bonus_period_import}
+                name="type_bonus_period_import"
+                id="input"
+                class="form-control"
+                required="required"
+                onChange={this.onChangeBonusPeriod}
+                style={{
+                  width: "150px",
+                }}
+              >
+                <option value="0">Theo tháng</option>
+                <option value="1">Theo tuần</option>
+                <option value="2">Theo quý</option>
+                <option value="3">Theo năm</option>
+              </select>
+            </div>
+            <button
+              type="submit"
+              className="btn btn-primary btn-sm "
+              style={{
+                marginTop: "20px",
+              }}
+            >
+              <i className="fa fa-save"></i> Lưu
+            </button>
+          </form>
         </div>
       </div>
     );
@@ -421,45 +482,45 @@ class BonusProgram extends Component {
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
               <a
                 class="nav-item nav-link active"
-                id="nav-home-tab"
+                id="nav-order-tab"
                 data-toggle="tab"
-                href="#nav-home"
+                href="#nav-order"
                 role="tab"
-                aria-controls="nav-home"
+                aria-controls="nav-order"
                 aria-selected="true"
               >
                 Thưởng khi lên đơn
               </a>
               <a
                 class="nav-item nav-link"
-                id="nav-profile-tab"
+                id="nav-commission-tab"
                 data-toggle="tab"
-                href="#nav-profile"
+                href="#nav-commission"
                 role="tab"
-                aria-controls="nav-profile"
+                aria-controls="nav-commission"
                 aria-selected="false"
               >
-                Thưởng doanh số nhập hàng
+                Thưởng doanh số hoa hồng
               </a>
               <a
                 class="nav-item nav-link"
-                id="nav-contact-tab"
+                id="nav-import-tab"
                 data-toggle="tab"
-                href="#nav-contact"
+                href="#nav-import"
                 role="tab"
-                aria-controls="nav-contact"
+                aria-controls="nav-import"
                 aria-selected="false"
               >
-                Thưởng doanh só hoa hồng
+                Thưởng doanh số nhập hàng
               </a>
             </div>
           </nav>
           <div class="tab-content" id="nav-tabContent">
             <div
               class="tab-pane fade show active"
-              id="nav-home"
+              id="nav-order"
               role="tabpanel"
-              aria-labelledby="nav-home-tab"
+              aria-labelledby="nav-order-tab"
             >
               <div className="card-body">
                 <div
@@ -543,19 +604,19 @@ class BonusProgram extends Component {
             </div>
             <div
               class="tab-pane fade"
-              id="nav-profile"
+              id="nav-commission"
               role="tabpanel"
-              aria-labelledby="nav-profile-tab"
+              aria-labelledby="nav-commission-tab"
             >
-              {this.showDataImportBonus()}
+              {this.showDataCommissionBonus()}
             </div>
             <div
               class="tab-pane fade"
-              id="nav-contact"
+              id="nav-import"
               role="tabpanel"
-              aria-labelledby="nav-contact-tab"
+              aria-labelledby="nav-import-tab"
             >
-              {this.showDataCommissionBonus()}
+              {this.showDataImportBonus()}
             </div>
           </div>
         </div>
@@ -646,6 +707,7 @@ const mapStateToProps = (state) => {
     bonusAgencyConfig: state.agencyReducers.agency.bonusAgencyConfig,
     steps: state.agencyReducers.agency.allStep,
     stepsImport: state.agencyReducers.agency.allStepImport,
+    config: state.agencyReducers.agency.config,
     state,
   };
 };
@@ -656,6 +718,12 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     updateBonusAgencyConfig: (store_code, form) => {
       dispatch(agencyAction.updateBonusAgencyConfig(store_code, form));
+    },
+    fetchAgencyConf: (store_code) => {
+      dispatch(agencyAction.fetchAgencyConf(store_code));
+    },
+    updateConfigImport: (store_code, form) => {
+      dispatch(agencyAction.updateConfigImport(store_code, form));
     },
     deleteBonusSteps: (store_code, id) => {
       dispatch(agencyAction.deleteBonusSteps(store_code, id));
