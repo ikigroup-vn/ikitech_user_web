@@ -78,8 +78,6 @@ class BonusProgram extends Component {
   }
   shouldComponentUpdate(nextProps, nextState) {
     if (!shallowEqual(nextProps.config, this.props.config)) {
-      console.log("BonusProgram  ~ this.props.config:", this.props.config);
-      console.log("BonusProgram  ~ nextProps.config:", nextProps.config);
       this.setState({
         type_bonus_period_import: nextProps.config?.type_bonus_period_import,
       });
@@ -117,7 +115,7 @@ class BonusProgram extends Component {
     });
   }
 
-  handleDelCallBack = (e, data) => {
+  handleDelBonusCallBack = (e, data) => {
     this.setState({
       modal: {
         threshold: data.threshold,
@@ -686,7 +684,7 @@ class BonusProgram extends Component {
               <button
                 type="button"
                 onClick={(e) => {
-                  this.handleDelCallBack(e, data);
+                  this.handleDelBonusCallBack(e, data);
                 }}
                 data-toggle="modal"
                 data-target="#removeFormStepBonus"
