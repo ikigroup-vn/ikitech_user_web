@@ -202,10 +202,16 @@ class TopCommission extends Component {
   };
 
   onSelectTypeCustomer = (e) => {
-    const { date_from, date_to, searchValue } = this.state;
+    const { date_from, date_to, searchValue, province } = this.state;
     const { store_code, fetchAllTopCommission } = this.props;
     const value = e.target.value;
-    const params = this.getParams(date_from, date_to, searchValue, value);
+    const params = this.getParams(
+      date_from,
+      date_to,
+      searchValue,
+      value,
+      province
+    );
 
     fetchAllTopCommission(store_code, 1, params);
     this.setState({ customer_type: value, page: 1 });
