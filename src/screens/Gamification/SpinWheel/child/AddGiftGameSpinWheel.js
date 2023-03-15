@@ -422,11 +422,11 @@ class MoreListGiftGameSpinWheel extends Component {
                   <option value={-1}>---Chọn loại thưởng---</option>
                   <option value={Types.GIFT_IS_COIN}>Tặng xu</option>
                   <option value={Types.GIFT_IS_ITEM}>Tặng sản phẩm</option>
-                  <option value={Types.GIFT_IS_TEXT}>Tặng mã</option>
                   <option value={Types.GIFT_IS_LUCKY_AFTER}>
                     Chúc bạn may mắn
                   </option>
                   <option value={Types.GIFT_IS_LOST_TURN}>Mất lượt</option>
+                  <option value={Types.GIFT_IS_TEXT}>Tùy chọn</option>
                 </select>
               </div>
               <div className="gameSpinWheel__input gameSpinWheel__gift">
@@ -478,7 +478,7 @@ class MoreListGiftGameSpinWheel extends Component {
                   <div>
                     <input
                       type="text"
-                      placeholder="Nhập mã thẻ"
+                      placeholder="Nhập tùy chọn"
                       className="form-control"
                       value={gift.text || ""}
                       name="text"

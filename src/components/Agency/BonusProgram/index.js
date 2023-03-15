@@ -75,12 +75,16 @@ class BonusProgram extends Component {
         stepsImport: nextProps.stepsImport,
       });
     }
+  }
+  shouldComponentUpdate(nextProps, nextState) {
     if (!shallowEqual(nextProps.config, this.props.config)) {
-      var config = nextProps.config;
+      console.log("BonusProgram  ~ this.props.config:", this.props.config);
+      console.log("BonusProgram  ~ nextProps.config:", nextProps.config);
       this.setState({
-        type_bonus_period_import: config.type_bonus_period_import,
+        type_bonus_period_import: nextProps.config?.type_bonus_period_import,
       });
     }
+    return true;
   }
 
   onChangeStatus() {
