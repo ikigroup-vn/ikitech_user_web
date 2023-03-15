@@ -42,11 +42,17 @@ class agency extends Component {
       },
       modalupdateImport: {},
       tabId: 0,
+      isAutoSetLevelAgency: false,
     };
     this.defaultIndex =
       this.props.match.params.action == "request_payment" ? 2 : 0;
   }
 
+  setIsAutoSetLevelAgency = (isAuto) => {
+    this.setState({
+      isAutoSetLevelAgency: isAuto,
+    });
+  };
   handleDelCallBack = (modal) => {
     this.setState({ modalremove: modal });
   };
@@ -126,6 +132,7 @@ class agency extends Component {
       payment_request_solve,
       bonus_program,
       isShow,
+      isAutoSetLevelAgency,
     } = this.state;
     return (
       <div id="wrapper">
@@ -290,12 +297,19 @@ class agency extends Component {
                         ) : null} */}
                         {agency_list == true ? (
                           <TabPanel>
-                            <Type tabId={tabId} store_code={store_code}>
+                            <Type
+                              tabId={tabId}
+                              store_code={store_code}
+                              isAutoSetLevelAgency={isAutoSetLevelAgency}
+                            >
                               <Config
                                 tabId={tabId}
                                 store_code={store_code}
                                 handleEditCallBack={this.handleEditCallBack}
                                 handleDelCallBack={this.handleDelCallBack}
+                                setIsAutoSetLevelAgency={
+                                  this.setIsAutoSetLevelAgency
+                                }
                               />
                             </Type>
                           </TabPanel>

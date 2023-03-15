@@ -15,13 +15,16 @@ class ListAgency extends Component {
   }
 
   render() {
-    var { types, store_code, children } = this.props;
+    var { types, store_code, children, isAutoSetLevelAgency } = this.props;
     console.log(types);
     return (
       <div id="wrapper ">
         <div class="row">
-          <div className="col-7">
-            <CreateModal store_code={store_code} />
+          <div className="col-11">
+            <CreateModal
+              store_code={store_code}
+              isAutoSetLevelAgency={isAutoSetLevelAgency}
+            />
 
             <div className="card-body">
               <a
@@ -37,7 +40,11 @@ class ListAgency extends Component {
                   Thêm cấp
                 </span>
               </a>
-              <Table types={types} store_code={store_code} />
+              <Table
+                types={types}
+                store_code={store_code}
+                isAutoSetLevelAgency={isAutoSetLevelAgency}
+              />
               {children}
             </div>
           </div>

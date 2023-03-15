@@ -443,9 +443,10 @@ export const exportTopten = (store_code, page, params, report_type) => {
                   arangeKeyItem = {
                     name: item?.name,
                     phone_number: item?.phone_number,
-                    total_customers: item?.total_customers,
+                    total_customer_in_filer: item?.total_customer_in_filer,
                     orders_count: item.orders_count,
-                    sum_total_after_discount: item.sum_total_after_discount,
+                    sum_total_after_discount_no_use_bonus:
+                      item.sum_total_after_discount_no_use_bonus,
                   };
                 }
                 Object.entries(arangeKeyItem).forEach(([key, value], index) => {
@@ -456,7 +457,7 @@ export const exportTopten = (store_code, page, params, report_type) => {
                     newItem["Số điện thoại"] = value;
                     // newItem["Tên sản phẩm"] = value
                   }
-                  if (key == "total_customers") {
+                  if (key == "total_customer_in_filer") {
                     newItem["Số khách hàng"] = value;
                     // newItem["Tên sản phẩm"] = value
                   }
@@ -473,7 +474,7 @@ export const exportTopten = (store_code, page, params, report_type) => {
                       newItem["Số đơn hàng"] = value;
                       // newItem["Tên sản phẩm"] = value
                     }
-                    if (key == "sum_total_after_discount") {
+                    if (key == "sum_total_after_discount_no_use_bonus") {
                       newItem["Tổng doanh số"] = value;
                     }
                   }

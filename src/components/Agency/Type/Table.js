@@ -7,6 +7,7 @@ import ModalRemove from "./ModalRemove";
 import ModalUpdate from "./ModalUpdate";
 
 import ModalUpdateCommission from "./Commission/ModalUpdateCommission";
+import { formatNumberV2 } from "../../../ultis/helpers";
 
 class Table extends Component {
   constructor(props) {
@@ -36,7 +37,7 @@ class Table extends Component {
   };
 
   showData = (types) => {
-    var { store_code } = this.props;
+    var { store_code, isAutoSetLevelAgency } = this.props;
     var result = null;
     if (types.length > 0) {
       result = types.map((data, index) => {
@@ -45,6 +46,21 @@ class Table extends Component {
             <tr className="hover-product">
               <td>{index + 1}</td>
               <td>{data.name}</td>
+              {isAutoSetLevelAgency && (
+                <>
+                  <td>
+                    {data.auto_set_value_import
+                      ? `${formatNumberV2(data.auto_set_value_import)} ₫`
+                      : "0 ₫"}
+                  </td>
+                  <td>
+                    {data.auto_set_value_import
+                      ? `${formatNumberV2(data.auto_set_value_share)} ₫`
+                      : "0 ₫"}
+                  </td>
+                </>
+              )}
+
               <td>
                 <Link
                   to={`/product-agency/index/${store_code}/${data.id}?tab-index=0`}
@@ -88,6 +104,7 @@ class Table extends Component {
     var types = typeof this.props.types == "undefined" ? [] : this.props.types;
 
     var { modal, modalUpdate, modalUpdateCommission } = this.state;
+    const { isAutoSetLevelAgency } = this.props;
     return (
       <div class="table-responsive">
         <ModalRemove modal={modal} store_code={this.props.store_code} />
@@ -100,9 +117,14 @@ class Table extends Component {
         <table class="table table-border">
           <thead>
             <tr>
-              <th>STT</th>
+              <th>Cấp bậc</th>
               <th>Tên cấp đại lý</th>
-
+              {isAutoSetLevelAgency && (
+                <>
+                  <th>Doanh số nhập hàng</th>
+                  <th>Doanh số hoa hồng</th>
+                </>
+              )}
               <th>Hành động</th>
             </tr>
           </thead>

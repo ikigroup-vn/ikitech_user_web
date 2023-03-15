@@ -51,6 +51,33 @@ const AgencyStyles = styled.div`
       }
     }
   }
+  .status-product {
+    width: 42px;
+    height: 24px;
+    border-radius: 100rem;
+    background-color: #ecf0f1;
+    border: 1px solid #dfe6e9;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s;
+    padding: 0 2px;
+    margin-bottom: 0;
+    cursor: pointer;
+    & > div {
+      width: 18px;
+      height: 18px;
+      border-radius: 100rem;
+      background-color: #7f8c8d;
+      transition: all 0.3s;
+    }
+    &:has(input:checked) {
+      background-color: #2ecc71;
+    }
+    input:checked + div {
+      transform: translateX(100%);
+      background-color: white;
+    }
+  }
 `;
 class Config extends Component {
   constructor(props) {
@@ -65,6 +92,8 @@ class Config extends Component {
       percent_agency_t1: "",
       bonus_type_for_ctv_t2: 0,
       allow_rose_referral_customer: false,
+      auto_set_level_agency: false,
+      auto_set_type_period: 0,
     };
   }
 
@@ -150,6 +179,8 @@ class Config extends Component {
                 config.percent_agency_t1.toString()
               ),
         allow_rose_referral_customer: config.allow_rose_referral_customer,
+        auto_set_level_agency: config.auto_set_level_agency,
+        auto_set_type_period: config.auto_set_type_period,
       });
     }
     if (
@@ -161,6 +192,17 @@ class Config extends Component {
         steps: nextProps.steps,
       });
     }
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    if (
+      !shallowEqual(
+        this.state.auto_set_level_agency,
+        nextState.auto_set_level_agency
+      )
+    ) {
+      this.props.setIsAutoSetLevelAgency(nextState.auto_set_level_agency);
+    }
+    return true;
   }
 
   showAllStep = (configs) => {
@@ -228,6 +270,8 @@ class Config extends Component {
       percent_agency_t1,
       bonus_type_for_ctv_t2,
       allow_rose_referral_customer,
+      auto_set_level_agency,
+      auto_set_type_period,
     } = this.state;
     window.$(".modal").modal("hide");
     this.props.updateConfig(this.props.store_code, {
@@ -242,6 +286,8 @@ class Config extends Component {
         percent_agency_t1 == null
           ? percent_agency_t1
           : formatNumber(percent_agency_t1),
+      auto_set_level_agency: auto_set_level_agency,
+      auto_set_type_period: auto_set_type_period,
     });
   };
   render() {
@@ -254,6 +300,8 @@ class Config extends Component {
       percent_agency_t1,
       bonus_type_for_ctv_t2,
       allow_rose_referral_customer,
+      auto_set_level_agency,
+      auto_set_type_period,
     } = this.state;
     return (
       <AgencyStyles className="agency-config">
@@ -266,76 +314,118 @@ class Config extends Component {
           Cấu hình hoa hồng
         </h6> */}
         <form onSubmit={this.onSave} role="form">
-          {/* <div className="form-group">
-            <label htmlFor="name">Cách tính thưởng đại lý theo doanh số</label>
-            <p>
-              <i>
-                ( Là phần thưởng dành cho đại lý khi chinh phục được các mức
-                doanh số )
-              </i>
-            </p>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2,1fr)",
+              columnGap: "30px",
+            }}
+          >
+            <div className="form-group">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="gridCheck"
+                  name="allow_rose_referral_customer"
+                  onChange={this.onChangeSelect}
+                  checked={allow_rose_referral_customer}
+                />
+                <label class="form-check-label" for="gridCheck">
+                  Cho phép hưởng hoa hồng từ khách hàng giới thiệu
+                </label>
+              </div>
+            </div>
+            <div
+              className="form-group"
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  columnGap: "10px",
+                  alignItems: "center",
+                }}
+              >
+                <span>Tự động cài đặt cấp đại lý</span>
+                <label
+                  className="status-product"
+                  onClick={this.handleChangeStatusProduct}
+                >
+                  <input
+                    type="checkbox"
+                    hidden
+                    name="auto_set_level_agency"
+                    value={auto_set_level_agency}
+                    checked={auto_set_level_agency}
+                    onChange={this.onChangeSelect}
+                  />
+                  <div></div>
+                </label>
+              </div>
+            </div>
           </div>
-
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(2,1fr)",
+              columnGap: "30px",
+            }}
+          >
+            <div className="form-group">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  name="allow_payment_request"
+                  onChange={this.onChangeSelect}
+                  id="gridCheck"
+                  checked={allow_payment_request}
+                />
+                <label class="form-check-label" for="gridCheck">
+                  Cho phép gửi yêu cầu thanh toán
+                </label>
+              </div>
+            </div>
+            {auto_set_level_agency == true && (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    columnGap: "10px",
+                    alignItems: "center",
+                  }}
+                >
+                  <span>Kỳ thưởng cài đặt cấp đại lý</span>
+                  <select
+                    value={auto_set_type_period}
+                    name="auto_set_type_period"
+                    id="input"
+                    class="form-control"
+                    required="required"
+                    onChange={this.onChange}
+                    style={{
+                      width: "150px",
+                    }}
+                  >
+                    <option value="0">Theo tháng</option>
+                    <option value="1">Theo tuần</option>
+                    <option value="2">Theo quý</option>
+                    <option value="3">Theo năm</option>
+                  </select>
+                </div>
+              </div>
+            )}
+          </div>
           <div className="form-group">
-            <label htmlFor="name">Thông tin cấu hình</label>
-
-            <div class="table-responsive">
-              <table class="table table-border table-hover">
-                <thead className="thead-quantity">
-                  <tr>
-                    <th>STT</th>
-                    <th>Mức</th>
-                    <th>Thưởng</th>
-                    <th>
-                      <button
-                        type="button"
-                        style={{ marginLeft: "10px", float: "right" }}
-                        data-toggle="modal"
-                        data-target="#createModal"
-                        class="btn btn-primary btn-sm"
-                      >
-                        <i class="fa fa-plus"></i> Thêm
-                      </button>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>{this.showAllStep(steps)}</tbody>
-              </table>
-            </div>
-          </div> */}
-
-          <div class="form-group">
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                id="gridCheck"
-                name="allow_rose_referral_customer"
-                onChange={this.onChangeSelect}
-                checked={allow_rose_referral_customer}
-              />
-              <label class="form-check-label" for="gridCheck">
-                Cho phép hưởng hoa hồng từ khách hàng giới thiệu
-              </label>
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                name="allow_payment_request"
-                onChange={this.onChangeSelect}
-                id="gridCheck"
-                checked={allow_payment_request}
-              />
-              <label class="form-check-label" for="gridCheck">
-                Cho phép gửi yêu cầu thanh toán
-              </label>
-            </div>
-          </div>
-
-          <div class="form-group">
             <div class="form-check">
               <input
                 class="form-check-input"
@@ -350,7 +440,7 @@ class Config extends Component {
               </label>
             </div>
           </div>
-          <div class="form-group">
+          <div className="form-group">
             <div class="form-check">
               <input
                 class="form-check-input"
@@ -365,7 +455,6 @@ class Config extends Component {
               </label>
             </div>
           </div>
-
           <div className="form-group">
             <label htmlFor="name">Số tiền hoa hồng đủ để quyết toán</label>
 
@@ -441,7 +530,6 @@ class Config extends Component {
               </div>
             </div>
           </div>
-
           <div className="form-group">
             <button type="submit" class={`btn btn-primary btn-sm `}>
               <i class="fa fa-save"></i> Lưu
