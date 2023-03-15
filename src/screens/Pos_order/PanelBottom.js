@@ -437,8 +437,12 @@ class PanelBottom extends Component {
   };
 
   handleSearchCustomer = (va) => {
-    var { store_code } = this.props;
+    var { store_code, badges, user } = this.props;
+
     var params = `&search=${va}`;
+    if (badges.is_sale && badges.is_staff) {
+      params += `&sale_staff_id=${user?.id}`;
+    }
     this.props.fetchAllCustomer(store_code, 1, params);
   };
 
@@ -1676,6 +1680,8 @@ class PanelBottom extends Component {
 const mapStateToProps = (state) => {
   return {
     customers: state.customerReducers.customer.allCustomer,
+    badges: state.badgeReducers.allBadge,
+    user: state.userReducers.user.userID,
     wards: state.placeReducers.wards,
     province: state.placeReducers.province,
     district: state.placeReducers.district,

@@ -30,6 +30,7 @@ class SidebarShowCustomerOfSale extends Component {
       store_code,
       fetchListIdsFromSale,
       params,
+      paramsTime,
       listIdsCustomerFromSale,
     } = this.props;
     if (!shallowEqual(saleInfo, nextProps.saleInfo)) {
@@ -41,7 +42,7 @@ class SidebarShowCustomerOfSale extends Component {
     ) {
       if (nextProps.listIdsCustomerFromSale?.length > 0) {
         const paramsCustomer =
-          params +
+          paramsTime +
           nextProps.listIdsCustomerFromSale?.reduce(
             (prevListIds, currentListIds, index) => {
               return (

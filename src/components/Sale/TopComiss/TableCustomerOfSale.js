@@ -32,11 +32,11 @@ class TableCustomerOfSale extends Component {
             </td>
             <td>
               {" "}
-              {data.total_final_without_refund
-                ? new Intl.NumberFormat().format(
-                    data.total_final_without_refund
-                  )
-                : 0}
+              {data.total_after_discount_no_use_bonus_with_date
+                ? `${new Intl.NumberFormat().format(
+                    data.total_after_discount_no_use_bonus_with_date
+                  )}`
+                : "0 ₫"}
             </td>
             <td
               className={`${

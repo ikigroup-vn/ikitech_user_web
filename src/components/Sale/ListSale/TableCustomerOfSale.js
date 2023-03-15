@@ -30,6 +30,34 @@ class TableCustomerOfSale extends Component {
             <td>
               {data.points ? new Intl.NumberFormat().format(data.points) : 0}
             </td>
+            <td>
+              {" "}
+              {data.total_final_without_refund
+                ? `${new Intl.NumberFormat().format(
+                    data.total_final_without_refund
+                  )} đ`
+                : "0 đ"}
+            </td>
+            <td
+              className={`${
+                data.is_collaborator === true
+                  ? "warning"
+                  : data.is_agency === true
+                  ? "danger"
+                  : "primary"
+              } select-role`}
+              style={{
+                position: "relative",
+              }}
+            >
+              {data.is_collaborator === true
+                ? "Cộng tác viên"
+                : data.is_agency === true
+                ? `Đại lý${
+                    data.agency_type ? `(${data.agency_type?.name})` : ""
+                  }`
+                : "Khách hàng"}
+            </td>
           </tr>
         );
       });
@@ -53,6 +81,8 @@ class TableCustomerOfSale extends Component {
               <th>Tỉnh thành</th>
               <th>Ngày đăng ký</th>
               <th>Số xu</th>
+              <th>Doanh số</th>
+              <th>Vai trò</th>
             </tr>
           </thead>
 

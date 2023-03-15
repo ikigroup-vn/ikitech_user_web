@@ -426,6 +426,7 @@ class TopCommission extends Component {
             customer_type,
             province
           )}
+          paramsTime={this.getParams(date_from, date_to)}
         ></SidebarShowCustomerOfSale>
         <Chat
           customerName={customerName}
