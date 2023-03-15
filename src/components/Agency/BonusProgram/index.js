@@ -75,12 +75,14 @@ class BonusProgram extends Component {
         stepsImport: nextProps.stepsImport,
       });
     }
+  }
+  shouldComponentUpdate(nextProps, nextState) {
     if (!shallowEqual(nextProps.config, this.props.config)) {
-      var config = nextProps.config;
       this.setState({
-        type_bonus_period_import: config.type_bonus_period_import,
+        type_bonus_period_import: nextProps.config?.type_bonus_period_import,
       });
     }
+    return true;
   }
 
   onChangeStatus() {
@@ -113,7 +115,7 @@ class BonusProgram extends Component {
     });
   }
 
-  handleDelCallBack = (e, data) => {
+  handleDelBonusCallBack = (e, data) => {
     this.setState({
       modal: {
         threshold: data.threshold,
@@ -682,7 +684,7 @@ class BonusProgram extends Component {
               <button
                 type="button"
                 onClick={(e) => {
-                  this.handleDelCallBack(e, data);
+                  this.handleDelBonusCallBack(e, data);
                 }}
                 data-toggle="modal"
                 data-target="#removeFormStepBonus"

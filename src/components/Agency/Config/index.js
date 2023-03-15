@@ -3,6 +3,7 @@ import * as AgencyAction from "../../../actions/agency";
 import { connect } from "react-redux";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import { formatNumber } from "../../../ultis/helpers";
+import * as Types from "../../../constants/ActionType";
 import styled from "styled-components";
 const AgencyStyles = styled.div`
   .bonusTypeForAgency_note {
@@ -71,6 +72,11 @@ class Config extends Component {
     var { store_code } = this.props;
     this.props.fetchAgencyConf(store_code);
     // this.props.fetchAllSteps(store_code);
+  }
+  componentWillUnmount() {
+    const { resetFetchAgencyConfig } = this.props;
+
+    resetFetchAgencyConfig();
   }
   onChange = (e) => {
     var target = e.target;
@@ -421,7 +427,7 @@ class Config extends Component {
                     checked={bonus_type_for_ctv_t2 == 1}
                   />{" "}
                   <label htmlFor="bonus_type_for_ctv_t2_option2">
-                    Từ hoa hồng đại lý mua hàng
+                    Từ hoa hồng CTV mua hàng
                   </label>
                   <span className="bonusTypeForAgency_note">
                     <span className="bonusTypeForAgency_noteIcon">?</span>
@@ -464,6 +470,12 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchAllSteps: (store_code) => {
       dispatch(AgencyAction.fetchAllSteps(store_code));
+    },
+    resetFetchAgencyConfig: () => {
+      dispatch({
+        type: Types.FETCH_ALL_AGENCY_CONFIG,
+        data: {},
+      });
     },
   };
 };
