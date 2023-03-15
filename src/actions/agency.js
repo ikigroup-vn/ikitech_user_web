@@ -192,17 +192,21 @@ export const exportListAgency = (store_code, page = 1, params = "") => {
     });
   };
 };
-export const exportListRequest = (store_code) => {
+export const exportListRequest = (store_code, from) => {
   return (dispatch) => {
     agencyApi.fetchAllRequestPayment(store_code).then((res) => {
-      console.log("agencyApi.fetchAllRequestPayment ~ res:", res.data);
       if (res.data.code !== 401)
         if (res.data.code !== 401)
           if (typeof res.data.data != "undefined") {
             if (res.data.data.length > 0) {
               var newArray = [];
               var index = 0;
-              for (const item of res.data.data) {
+              const resFrom =
+                from == ""
+                  ? res.data.data
+                  : res.data?.data.filter((item) => item.from == from);
+              if (resFrom.length > 0) return;
+              for (const item of resFrom) {
                 var newItem = {};
                 var arangeKeyItem = {
                   name: item?.agency?.customer?.name,
