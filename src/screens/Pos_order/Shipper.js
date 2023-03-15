@@ -272,7 +272,7 @@ class PanelBottom extends Component {
         this.props.fetchPlaceDistrict(nextProps.oneCart.province);
       }
       if (nextProps.oneCart.district != null) {
-        this.props.fetchPlaceDistrict_Wards(nextProps.oneCart.district);
+        this.props.fetchPlaceWards(nextProps.oneCart.district);
       }
 
       const customer = nextProps.oneCart?.customer;

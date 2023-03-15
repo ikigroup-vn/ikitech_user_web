@@ -82,9 +82,12 @@ class Table extends Component {
               </td>
               <td>{formatNoD(data.orders_count)}</td>
               <td>
-                {typeof data.sum_total_after_discount != "undefined"
-                  ? format(Number(data.sum_total_after_discount))
-                  : 0}
+                {typeof data.sum_total_after_discount_no_use_bonus !=
+                "undefined"
+                  ? `${format(
+                      Number(data.sum_total_after_discount_no_use_bonus)
+                    )}`
+                  : "0 ₫"}
               </td>
             </tr>
           </React.Fragment>
@@ -113,7 +116,19 @@ class Table extends Component {
 
               <th>Số đơn hàng</th>
 
-              <th>Tổng doanh số</th>
+              <th>
+                Tổng doanh số(
+                {typeof this.props.topReport
+                  .sum_total_after_discount_no_use_bonus != "undefined"
+                  ? `${format(
+                      Number(
+                        this.props.topReport
+                          .sum_total_after_discount_no_use_bonus
+                      )
+                    )}`
+                  : "0 ₫"}
+                )
+              </th>
             </tr>
           </thead>
 
