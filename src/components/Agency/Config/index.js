@@ -350,7 +350,7 @@ class Config extends Component {
                   alignItems: "center",
                 }}
               >
-                <span>Tự động cài đặt cấp đại lý</span>
+                <span>Tự động cập nhật cấp đại lý theo doanh số và hoa hồng</span>
                 <label
                   className="status-product"
                   onClick={this.handleChangeStatusProduct}
@@ -404,7 +404,7 @@ class Config extends Component {
                     alignItems: "center",
                   }}
                 >
-                  <span>Kỳ thưởng cài đặt cấp đại lý</span>
+                  <span>Kỳ đặt lại</span>
                   <select
                     value={auto_set_type_period}
                     name="auto_set_type_period"
