@@ -87,7 +87,9 @@ class Table extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     if (!shallowEqual(this.props.agencys, nextProps.agencys)) {
       this.setAgencySelectedForChangeBalance({});
+      this.props.setListItemSelected([]);
     }
+
     return true;
   }
   setAgencySelected = (agency) => {
@@ -137,8 +139,34 @@ class Table extends Component {
     );
   };
 
+  onChangeSelected = (e, idAgency) => {
+    const name = e.target.name;
+    const { agencys, listItemSelected, setListItemSelected } = this.props;
+    var data = agencys.data;
+    if (name === "input__checkAll") {
+      if (listItemSelected.length === data.length) {
+        setListItemSelected([]);
+      } else {
+        const listId = data.reduce((prevData, nextData) => {
+          return [...prevData, nextData.id];
+        }, []);
+        setListItemSelected(listId);
+      }
+    } else {
+      if (listItemSelected.includes(idAgency)) {
+        const newListItemSelected = listItemSelected.filter(
+          (item) => item !== idAgency
+        );
+        setListItemSelected(newListItemSelected);
+      } else {
+        setListItemSelected([...listItemSelected, idAgency]);
+      }
+    }
+  };
+
   showData = (agencys) => {
-    var { store_code } = this.props;
+    var { store_code, listItemSelected } = this.props;
+
     const permissionChangeBalance =
       this.props?.permission?.agency_add_sub_balance || false;
     var result = null;
@@ -200,6 +228,16 @@ class Table extends Component {
         return (
           <React.Fragment>
             <tr class="sub-container hover-product">
+              <td>
+                <input
+                  type="checkbox"
+                  name="input__check"
+                  className="input__check"
+                  value={listItemSelected.includes(data.id)}
+                  checked={listItemSelected.includes(data.id)}
+                  onChange={(e) => this.onChangeSelected(e, data.id)}
+                />
+              </td>
               <td>
                 <button
                   type="button"
@@ -435,12 +473,25 @@ class Table extends Component {
         : this.props.agencys.data;
     var { txtType, agencySelected, agencySelectedForChangeBalance, isSub } =
       this.state;
-    const { typeAgency } = this.props;
+    const { typeAgency, listItemSelected } = this.props;
+
     return (
       <TableStyles class="" style={{ overflow: "auto" }}>
         <table class="table table-border">
           <thead>
             <tr>
+              <th>
+                <input
+                  type="checkbox"
+                  name="input__checkAll"
+                  className="input__checkAll"
+                  checked={
+                    agencys.length > 0 &&
+                    listItemSelected.length === agencys.length
+                  }
+                  onChange={this.onChangeSelected}
+                ></input>
+              </th>
               <th></th>
               <th>STT</th>
               <th style={{ textAlign: "center" }}>Ảnh</th>

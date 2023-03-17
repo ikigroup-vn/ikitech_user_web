@@ -3,6 +3,9 @@ import callApi from "../../ultis/apiCaller";
 export const fetchAgencyConf = (store_code) => {
   return callApi(`/store/${store_code}/agency_configs`, "get", null);
 };
+export const sortAgencyType = (store_code, data) => {
+  return callApi(`/store/${store_code}/sort_agency_type`, "post", data);
+};
 //Doanh số hoa hồng
 export const fetchAllSteps = (store_code) => {
   return callApi(
@@ -225,5 +228,23 @@ export const updateAgencyCommission = (store_code, id, data) => {
     `/store/${store_code}/agency_type/${id}/edit_percent_agency`,
     "post",
     data
+  );
+};
+
+//Auto set tầng đại lý
+export const autoSetLevelAgencyType = (store_code, data) => {
+  return callApi(
+    `/store/${store_code}/auto_set_level_agency_type`,
+    "post",
+    data
+  );
+};
+export const getHistoryChangeLevelAgency = (store_code, params) => {
+  return callApi(
+    `/store/${store_code}/get_history_change_level_agency${
+      params ? `?${params}` : ""
+    }`,
+    "get",
+    null
   );
 };

@@ -70,7 +70,7 @@ class ModalHistoryBalance extends Component {
     const dataHistoriesBalance = allHistoriesBalance.data || [];
     return (
       <ModalHistoryBalanceStyles
-        className="modal "
+        className="modal"
         style={{
           display: "block",
         }}
@@ -79,7 +79,7 @@ class ModalHistoryBalance extends Component {
           className="modal-dialog"
           role="document"
           style={{
-            maxWidth: "850px",
+            maxWidth: "870px",
           }}
         >
           <div className="modal-content">

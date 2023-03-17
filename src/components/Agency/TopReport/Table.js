@@ -48,7 +48,7 @@ class Table extends Component {
   };
 
   showData = (topReport) => {
-    var { store_code , report_type } = this.props;
+    var { store_code, report_type } = this.props;
     var result = null;
     if (topReport.length > 0) {
       result = topReport.map((data, index) => {
@@ -69,19 +69,22 @@ class Table extends Component {
               <td>{index + 1}</td> <td>{data.customer?.name}</td>{" "}
               <td>{data.customer?.phone_number}</td>
               <td>{data.agency_type?.name}</td>{" "}
-              {report_type == "order" && <td>{formatNoD(data.orders_count)}</td>}
-
-              {report_type == "point" ?  <td>
-                {typeof data.sum_point != "undefined"
-                  ? formatNoD(Number(data.sum_point))
-                  : null}
-              </td> : <td>
-                {typeof data.sum_total_final != "undefined"
-                  ? format(Number(data.sum_total_final))
-                  : null}
-              </td>}
-
-             
+              {report_type == "order" && (
+                <td>{formatNoD(data.orders_count)}</td>
+              )}
+              {report_type == "point" ? (
+                <td>
+                  {typeof data.sum_point != "undefined"
+                    ? formatNoD(Number(data.sum_point))
+                    : null}
+                </td>
+              ) : (
+                <td>
+                  {typeof data.total_after_discount_no_bonus != "undefined"
+                    ? format(Number(data.total_after_discount_no_bonus))
+                    : null}
+                </td>
+              )}
             </tr>
           </React.Fragment>
         );
@@ -109,11 +112,11 @@ class Table extends Component {
               <th>Số điện thoại</th>
 
               <th>Cấp đại lý</th>
-              {report_type == "order" &&  <th>Số đơn hàng</th>}
+              {report_type == "order" && <th>Số đơn hàng</th>}
               {report_type == "point" ? (
                 <th>Tổng số xu</th>
               ) : (
-                <th>Tổng doanh thu</th>
+                <th>Tổng doanh số</th>
               )}
             </tr>
           </thead>

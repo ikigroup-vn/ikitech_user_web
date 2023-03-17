@@ -3,12 +3,15 @@ import * as agencyAction from "../../../actions/agency";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import { connect } from "react-redux";
 import themeData from "../../../ultis/theme_data";
+import { formatNumberV2 } from "../../../ultis/helpers";
 
 class ModalUpdate extends Component {
   constructor(props) {
     super(props);
     this.state = {
       txtName: "",
+      auto_set_value_import: 0,
+      auto_set_value_share: 0,
       id: "",
     };
   }
@@ -17,7 +20,12 @@ class ModalUpdate extends Component {
     var target = e.target;
     var name = target.name;
     var value = target.value;
-    this.setState({ [name]: value });
+    this.setState({
+      [name]:
+        name === "auto_set_value_import" || name === "auto_set_value_share"
+          ? formatNumberV2(value)
+          : value,
+    });
   };
   componentWillReceiveProps(nextProps) {
     if (!shallowEqual(nextProps.modal, this.props.modal)) {
@@ -25,6 +33,12 @@ class ModalUpdate extends Component {
       this.setState({
         txtName: type.name,
         id: type.id,
+        auto_set_value_import: type.auto_set_value_import
+          ? formatNumberV2(type.auto_set_value_import)
+          : 0,
+        auto_set_value_share: type.auto_set_value_share
+          ? formatNumberV2(type.auto_set_value_share)
+          : 0,
       });
     }
   }
@@ -32,16 +46,21 @@ class ModalUpdate extends Component {
   onSave = (e) => {
     e.preventDefault();
     window.$(".modal").modal("hide");
-    var { txtName, id } = this.state;
-    this.props.updateAgencyType(this.props.store_code, id, {
+    const { txtName, id, auto_set_value_import, auto_set_value_share } =
+      this.state;
+    const data = {
       name: txtName,
-    });
-    this.setState({
-      txtName: "",
-    });
+      auto_set_value_import: auto_set_value_import
+        ?.toString()
+        .replace(/\./g, ""),
+      auto_set_value_share: auto_set_value_share?.toString().replace(/\./g, ""),
+    };
+    this.props.updateAgencyType(this.props.store_code, id, data);
   };
   render() {
-    var { txtName } = this.state;
+    var { txtName, auto_set_value_import, auto_set_value_share } = this.state;
+    const { isAutoSetLevelAgency, setModalUpdate } = this.props;
+
     return (
       <div
         class="modal fade"
@@ -64,6 +83,7 @@ class ModalUpdate extends Component {
                 class="close"
                 data-dismiss="modal"
                 aria-hidden="true"
+                onClick={() => setModalUpdate({})}
               >
                 &times;
               </button>
@@ -83,12 +103,47 @@ class ModalUpdate extends Component {
                     name="txtName"
                   />
                 </div>
+                {isAutoSetLevelAgency && (
+                  <>
+                    <div class="form-group">
+                      <label for="auto_set_value_import">
+                        Doanh số nhập hàng
+                      </label>
+                      <input
+                        required
+                        type="text"
+                        class="form-control"
+                        placeholder="Nhập doanh số nhập hàng..."
+                        autoComplete="off"
+                        value={auto_set_value_import}
+                        onChange={this.onChange}
+                        name="auto_set_value_import"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="auto_set_value_share">
+                        Doanh số hoa hồng
+                      </label>
+                      <input
+                        required
+                        type="text"
+                        class="form-control"
+                        placeholder="Nhập doanh số hoa hồng..."
+                        autoComplete="off"
+                        value={auto_set_value_share}
+                        onChange={this.onChange}
+                        name="auto_set_value_share"
+                      />
+                    </div>
+                  </>
+                )}
               </div>
               <div class="modal-footer">
                 <button
                   type="button"
                   class="btn btn-default"
                   data-dismiss="modal"
+                  onClick={() => setModalUpdate({})}
                 >
                   Đóng
                 </button>
