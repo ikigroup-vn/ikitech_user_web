@@ -159,14 +159,16 @@ class EditGiftGameSpinWheel extends Component {
             name: currentData.name,
             image_url: currentData.image_url,
             amount_gift: currentData.amount_gift
-              ? formatNumberV2(currentData.amount_gift.toString())
+              ? formatNumberV2(currentData.amount_gift?.toString())
               : "",
-            percent_received: currentData.percent_received,
+            percent_received: currentData.percent_received
+              ? formatNumberV2(currentData.percent_received?.toString())
+              : 0,
             type_gift: currentData.type_gift,
           };
           if (newData.type_gift == 0) {
             newData.amount_coin = currentData.amount_coin
-              ? formatNumberV2(currentData.amount_coin.toString())
+              ? formatNumberV2(currentData.amount_coin?.toString())
               : "";
           } else if (newData.type_gift == 1) {
             newData.value_gift = currentData.value_gift;
@@ -258,10 +260,10 @@ class EditGiftGameSpinWheel extends Component {
             ? {
                 ...currentData,
                 [name]:
-                  name === "amount_gift" || name === "amount_coin"
+                  name === "amount_gift" ||
+                  name === "amount_coin" ||
+                  name === "percent_received"
                     ? formatNumberV2(value)
-                    : name === "percent_received"
-                    ? Math.max(Math.min(100, Number(value)), 0)
                     : value,
               }
             : currentData;
@@ -466,14 +468,16 @@ class EditGiftGameSpinWheel extends Component {
         name: gift.name,
         image_url: gift.image_url,
         type_gift: gift.type_gift,
-        percent_received: gift.percent_received,
         value_gift: gift.value_gift,
         text: gift.text,
+        percent_received: gift.percent_received
+          ? gift.percent_received?.toString().replace(/\./g, "")
+          : 0,
         amount_gift: gift.amount_gift
-          ? gift.amount_gift.toString().replace(/\./g, "")
+          ? gift.amount_gift?.toString().replace(/\./g, "")
           : null,
         amount_coin: gift.amount_coin
-          ? gift.amount_coin.toString().replace(/\./g, "")
+          ? gift.amount_coin?.toString().replace(/\./g, "")
           : 0,
       };
       updateGiftGameSpinWheels(store_code, idGameSpinWheel, gift.id, newGift);
@@ -537,10 +541,10 @@ class EditGiftGameSpinWheel extends Component {
             <div className="gift__item__title">
               <div className="gameSpinWheel__image">Hình ảnh</div>
               <div className="gameSpinWheel__name">Tên phần thưởng</div>
-              <div className="gameSpinWheel__amount">Số lượng</div>
-              <div className="gameSpinWheel__percent">Trúng thưởng(%)</div>
               <div className="gameSpinWheel__type">Loại thưởng</div>
               <div className="gameSpinWheel__gift">Quà thưởng</div>
+              <div className="gameSpinWheel__amount">Số lượng</div>
+              <div className="gameSpinWheel__percent">Tỉ lệ trúng</div>
               <div className="gameSpinWheel__actions">Hành động</div>
             </div>
             <div className="gifts">
@@ -571,28 +575,6 @@ class EditGiftGameSpinWheel extends Component {
                         placeholder="Tên phần thưởng"
                         value={listGift[index].name}
                         name="name"
-                        onChange={(e) => this.onChange(e, listGift[index].id)}
-                        className="form-control"
-                      />
-                    </div>
-                    <div className="gameSpinWheel__input gameSpinWheel__amount">
-                      <input
-                        type="text"
-                        placeholder="Nhập số lượng phần thưởng"
-                        value={listGift[index].amount_gift}
-                        name="amount_gift"
-                        onChange={(e) => this.onChange(e, listGift[index].id)}
-                        className="form-control"
-                      />
-                    </div>
-                    <div className="gameSpinWheel__input gameSpinWheel__percent">
-                      <input
-                        type="number"
-                        placeholder="Phần trăm"
-                        min={0}
-                        max={100}
-                        value={listGift[index].percent_received}
-                        name="percent_received"
                         onChange={(e) => this.onChange(e, listGift[index].id)}
                         className="form-control"
                       />
@@ -711,6 +693,26 @@ class EditGiftGameSpinWheel extends Component {
                           />
                         </div>
                       )}
+                    </div>
+                    <div className="gameSpinWheel__input gameSpinWheel__amount">
+                      <input
+                        type="text"
+                        placeholder="Nhập số lượng phần thưởng"
+                        value={listGift[index].amount_gift}
+                        name="amount_gift"
+                        onChange={(e) => this.onChange(e, listGift[index].id)}
+                        className="form-control"
+                      />
+                    </div>
+                    <div className="gameSpinWheel__input gameSpinWheel__percent">
+                      <input
+                        type="text"
+                        placeholder="Tỉ lệ trúng"
+                        value={listGift[index].percent_received}
+                        name="percent_received"
+                        onChange={(e) => this.onChange(e, listGift[index].id)}
+                        className="form-control"
+                      />
                     </div>
                     <div className="gameSpinWheel__actions">
                       <button

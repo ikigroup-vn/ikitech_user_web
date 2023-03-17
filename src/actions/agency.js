@@ -205,7 +205,7 @@ export const exportListRequest = (store_code, from) => {
                 from == ""
                   ? res.data.data
                   : res.data?.data.filter((item) => item.from == from);
-              if (resFrom.length > 0) return;
+              if (resFrom.length == 0) return;
               for (const item of resFrom) {
                 var newItem = {};
                 var arangeKeyItem = {
@@ -283,6 +283,25 @@ export const fetchAllAgencyType = (store_code) => {
       loading: "show",
     });
     agencyApi.fetchAllAgencyType(store_code).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING_LAZY,
+        loading: "hide",
+      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_ALL_AGENCY_TYPE,
+          data: res.data.data,
+        });
+    });
+  };
+};
+export const sortAgencyType = (store_code, data) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING_LAZY,
+      loading: "show",
+    });
+    agencyApi.sortAgencyType(store_code, data).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING_LAZY,
         loading: "hide",
@@ -1621,6 +1640,84 @@ export const updateAgencyCommission = (store_code, id, data, funcModal) => {
             disable: "show",
             content: res.data.msg,
           },
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+
+//Auto set tầng đại lý
+export const autoSetLevelAgencyType = (store_code, data, funcModal) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    agencyApi
+      .autoSetLevelAgencyType(store_code, data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+        funcModal();
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+export const getHistoryChangeLevelAgency = (store_code, params) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    agencyApi
+      .getHistoryChangeLevelAgency(store_code, params)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.HISTORY_CHANGE_LEVEL_AGENCY,
+          data: res.data.data,
         });
       })
       .catch(function (error) {

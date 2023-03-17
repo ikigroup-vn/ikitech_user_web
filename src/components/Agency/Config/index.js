@@ -5,6 +5,7 @@ import { shallowEqual } from "../../../ultis/shallowEqual";
 import { formatNumber } from "../../../ultis/helpers";
 import * as Types from "../../../constants/ActionType";
 import styled from "styled-components";
+import ModalHistoryChangeLevelAgency from "./ModalHistoryChangeLevelAgency";
 const AgencyStyles = styled.div`
   .bonusTypeForAgency_note {
     position: relative;
@@ -94,6 +95,7 @@ class Config extends Component {
       allow_rose_referral_customer: false,
       auto_set_level_agency: false,
       auto_set_type_period: 0,
+      showModalHistoryChangeLevel: false,
     };
   }
 
@@ -204,6 +206,11 @@ class Config extends Component {
     }
     return true;
   }
+  setShowModalHistoryChangeLevel = (isShowed) => {
+    this.setState({
+      showModalHistoryChangeLevel: isShowed,
+    });
+  };
 
   showAllStep = (configs) => {
     var result = null;
@@ -302,6 +309,7 @@ class Config extends Component {
       allow_rose_referral_customer,
       auto_set_level_agency,
       auto_set_type_period,
+      showModalHistoryChangeLevel,
     } = this.state;
     return (
       <AgencyStyles className="agency-config">
@@ -313,29 +321,16 @@ class Config extends Component {
         >
           Cấu hình hoa hồng
         </h6> */}
-        <form onSubmit={this.onSave} role="form">
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(2,1fr)",
-              columnGap: "30px",
-            }}
-          >
-            <div className="form-group">
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  id="gridCheck"
-                  name="allow_rose_referral_customer"
-                  onChange={this.onChangeSelect}
-                  checked={allow_rose_referral_customer}
-                />
-                <label class="form-check-label" for="gridCheck">
-                  Cho phép hưởng hoa hồng từ khách hàng giới thiệu
-                </label>
-              </div>
-            </div>
+        <form
+          onSubmit={this.onSave}
+          role="form"
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            flexDirection: "row-reverse",
+          }}
+        >
+          <div>
             <div
               className="form-group"
               style={{
@@ -350,7 +345,9 @@ class Config extends Component {
                   alignItems: "center",
                 }}
               >
-                <span>Tự động cập nhật cấp đại lý theo doanh số và hoa hồng</span>
+                <span>
+                  Tự động cập nhật cấp đại lý theo doanh số và hoa hồng
+                </span>
                 <label
                   className="status-product"
                   onClick={this.handleChangeStatusProduct}
@@ -364,29 +361,6 @@ class Config extends Component {
                     onChange={this.onChangeSelect}
                   />
                   <div></div>
-                </label>
-              </div>
-            </div>
-          </div>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(2,1fr)",
-              columnGap: "30px",
-            }}
-          >
-            <div className="form-group">
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  name="allow_payment_request"
-                  onChange={this.onChangeSelect}
-                  id="gridCheck"
-                  checked={allow_payment_request}
-                />
-                <label class="form-check-label" for="gridCheck">
-                  Cho phép gửi yêu cầu thanh toán
                 </label>
               </div>
             </div>
@@ -424,118 +398,173 @@ class Config extends Component {
                 </div>
               </div>
             )}
+            {auto_set_level_agency == true && (
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                  marginTop: "10px",
+                }}
+              >
+                <div
+                  className="btn btn-outline-primary"
+                  onClick={() => this.setShowModalHistoryChangeLevel(true)}
+                >
+                  Lịch sử thay đổi cấp đại lý
+                </div>
+              </div>
+            )}
           </div>
-          <div className="form-group">
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                id="gridCheck"
-                name="payment_1_of_month"
-                onChange={this.onChangeSelect}
-                checked={payment_1_of_month}
-              />
-              <label class="form-check-label" for="gridCheck">
-                Cho phép quyết toán ngày 1 hàng tháng
-              </label>
+          <div>
+            <div className="form-group">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="gridCheck"
+                  name="allow_rose_referral_customer"
+                  onChange={this.onChangeSelect}
+                  checked={allow_rose_referral_customer}
+                />
+                <label class="form-check-label" for="gridCheck">
+                  Cho phép hưởng hoa hồng từ khách hàng giới thiệu
+                </label>
+              </div>
             </div>
-          </div>
-          <div className="form-group">
-            <div class="form-check">
-              <input
-                class="form-check-input"
-                type="checkbox"
-                id="gridCheck"
-                name="payment_16_of_month"
-                onChange={this.onChangeSelect}
-                checked={payment_16_of_month}
-              />
-              <label class="form-check-label" for="gridCheck">
-                Cho phép quyết toán ngày 16 hàng tháng
-              </label>
+            <div className="form-group">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  name="allow_payment_request"
+                  onChange={this.onChangeSelect}
+                  id="gridCheck"
+                  checked={allow_payment_request}
+                />
+                <label class="form-check-label" for="gridCheck">
+                  Cho phép gửi yêu cầu thanh toán
+                </label>
+              </div>
             </div>
-          </div>
-          <div className="form-group">
-            <label htmlFor="name">Số tiền hoa hồng đủ để quyết toán</label>
+            <div className="form-group">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="gridCheck"
+                  name="payment_1_of_month"
+                  onChange={this.onChangeSelect}
+                  checked={payment_1_of_month}
+                />
+                <label class="form-check-label" for="gridCheck">
+                  Cho phép quyết toán ngày 1 hàng tháng
+                </label>
+              </div>
+            </div>
+            <div className="form-group">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="gridCheck"
+                  name="payment_16_of_month"
+                  onChange={this.onChangeSelect}
+                  checked={payment_16_of_month}
+                />
+                <label class="form-check-label" for="gridCheck">
+                  Cho phép quyết toán ngày 16 hàng tháng
+                </label>
+              </div>
+            </div>
+            <div className="form-group">
+              <label htmlFor="name">Số tiền hoa hồng đủ để quyết toán</label>
 
-            <input
-              type="text"
-              class="form-control"
-              name="payment_limit"
-              onChange={this.onChange}
-              value={payment_limit}
-              style={{ maxWidth: "40%" }}
-            />
-          </div>
-          <div className="form-group">
-            <label htmlFor="name">
-              Phần trăm hoa hồng cho người giới thiệu CTV mua hàng{" "}
-            </label>
-            <div className="bonusTypeForAgency">
               <input
                 type="text"
                 class="form-control"
-                name="percent_agency_t1"
+                name="payment_limit"
                 onChange={this.onChange}
-                value={percent_agency_t1}
-                style={{ width: "100px" }}
+                value={payment_limit}
+                style={{ maxWidth: "40%" }}
               />
-              <div className="bonusTypeBtn">
-                <div>
-                  <input
-                    type="radio"
-                    name="bonus_type_for_ctv_t2"
-                    value={0}
-                    id="bonus_type_for_ctv_t2_option1"
-                    checked={bonus_type_for_ctv_t2 == 0}
-                    onChange={(e) =>
-                      this.setBonusTypeForAgencyT2(e.target.value)
-                    }
-                  />{" "}
-                  <label htmlFor="bonus_type_for_ctv_t2_option1">
-                    Từ tổng đơn hàng
-                  </label>
-                  <span className="bonusTypeForAgency_note">
-                    <span className="bonusTypeForAgency_noteIcon">?</span>
-                    <div className="bonusTypeForAgency_noteTooltip">
-                      Nhận phần trăm từ tổng đơn hàng, ví dụ đơn hàng tổng
-                      100.000đ bạn nhập 10% thì Đại lý giới thiệu nhận được
-                      10.000đ
-                    </div>
-                  </span>
-                </div>
-                <div>
-                  <input
-                    type="radio"
-                    name="bonus_type_for_ctv_t2"
-                    value={1}
-                    id="bonus_type_for_ctv_t2_option2"
-                    onChange={(e) =>
-                      this.setBonusTypeForAgencyT2(e.target.value)
-                    }
-                    checked={bonus_type_for_ctv_t2 == 1}
-                  />{" "}
-                  <label htmlFor="bonus_type_for_ctv_t2_option2">
-                    Từ hoa hồng CTV mua hàng
-                  </label>
-                  <span className="bonusTypeForAgency_note">
-                    <span className="bonusTypeForAgency_noteIcon">?</span>
-                    <div className="bonusTypeForAgency_noteTooltip">
-                      Nhận phân trăm hoa hồng từ chính CTV được hưởng, ví dụ hóa
-                      đơn hóa đơn CTV nhận được 100.000đ hoa hồng bạn nhập ô này
-                      10% thì Đại lý nhận được 10.000đ
-                    </div>
-                  </span>
+            </div>
+            <div className="form-group">
+              <label htmlFor="name">
+                Phần trăm hoa hồng cho người giới thiệu CTV mua hàng{" "}
+              </label>
+              <div className="bonusTypeForAgency">
+                <input
+                  type="text"
+                  class="form-control"
+                  name="percent_agency_t1"
+                  onChange={this.onChange}
+                  value={percent_agency_t1}
+                  style={{ width: "100px" }}
+                />
+                <div className="bonusTypeBtn">
+                  <div>
+                    <input
+                      type="radio"
+                      name="bonus_type_for_ctv_t2"
+                      value={0}
+                      id="bonus_type_for_ctv_t2_option1"
+                      checked={bonus_type_for_ctv_t2 == 0}
+                      onChange={(e) =>
+                        this.setBonusTypeForAgencyT2(e.target.value)
+                      }
+                    />{" "}
+                    <label htmlFor="bonus_type_for_ctv_t2_option1">
+                      Từ tổng đơn hàng
+                    </label>
+                    <span className="bonusTypeForAgency_note">
+                      <span className="bonusTypeForAgency_noteIcon">?</span>
+                      <div className="bonusTypeForAgency_noteTooltip">
+                        Nhận phần trăm từ tổng đơn hàng, ví dụ đơn hàng tổng
+                        100.000đ bạn nhập 10% thì Đại lý giới thiệu nhận được
+                        10.000đ
+                      </div>
+                    </span>
+                  </div>
+                  <div>
+                    <input
+                      type="radio"
+                      name="bonus_type_for_ctv_t2"
+                      value={1}
+                      id="bonus_type_for_ctv_t2_option2"
+                      onChange={(e) =>
+                        this.setBonusTypeForAgencyT2(e.target.value)
+                      }
+                      checked={bonus_type_for_ctv_t2 == 1}
+                    />{" "}
+                    <label htmlFor="bonus_type_for_ctv_t2_option2">
+                      Từ hoa hồng CTV mua hàng
+                    </label>
+                    <span className="bonusTypeForAgency_note">
+                      <span className="bonusTypeForAgency_noteIcon">?</span>
+                      <div className="bonusTypeForAgency_noteTooltip">
+                        Nhận phân trăm hoa hồng từ chính CTV được hưởng, ví dụ
+                        hóa đơn hóa đơn CTV nhận được 100.000đ hoa hồng bạn nhập
+                        ô này 10% thì Đại lý nhận được 10.000đ
+                      </div>
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="form-group">
-            <button type="submit" class={`btn btn-primary btn-sm `}>
-              <i class="fa fa-save"></i> Lưu
-            </button>
+            <div className="form-group">
+              <button type="submit" class={`btn btn-primary btn-sm `}>
+                <i class="fa fa-save"></i> Lưu
+              </button>
+            </div>
           </div>
         </form>
+        {showModalHistoryChangeLevel ? (
+          <ModalHistoryChangeLevelAgency
+            store_code={this.props.store_code}
+            showModalHistoryChangeLevel={showModalHistoryChangeLevel}
+            setShowModalHistoryChangeLevel={this.setShowModalHistoryChangeLevel}
+          />
+        ) : null}
       </AgencyStyles>
     );
   }

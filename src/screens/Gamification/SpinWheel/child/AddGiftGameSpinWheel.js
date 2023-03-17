@@ -70,9 +70,11 @@ class MoreListGiftGameSpinWheel extends Component {
           name: nextData.name,
           image_url: nextData.image_url,
           type_gift: nextData.type_gift,
-          percent_received: nextData.percent_received,
           value_gift: nextData.value_gift,
           text: nextData.text,
+          percent_received: nextData.percent_received
+            ? nextData.percent_received.toString().replace(/\./g, "")
+            : null,
           amount_gift: nextData.amount_gift
             ? nextData.amount_gift.toString().replace(/\./g, "")
             : null,
@@ -101,10 +103,10 @@ class MoreListGiftGameSpinWheel extends Component {
             ? {
                 ...currentData,
                 [name]:
-                  name === "amount_gift" || name === "amount_coin"
+                  name === "amount_gift" ||
+                  name === "amount_coin" ||
+                  name === "percent_received"
                     ? formatNumberV2(value)
-                    : name === "percent_received"
-                    ? Math.max(Math.min(100, Number(value)), 0)
                     : value,
               }
             : currentData;
@@ -390,28 +392,6 @@ class MoreListGiftGameSpinWheel extends Component {
                   className="form-control"
                 />
               </div>
-              <div className="gameSpinWheel__input gameSpinWheel__amount">
-                <input
-                  type="text"
-                  placeholder="Số lượng"
-                  value={gift.amount_gift}
-                  name="amount_gift"
-                  onChange={(e) => this.onChangeAdd(e, index)}
-                  className="form-control"
-                />
-              </div>
-              <div className="gameSpinWheel__input gameSpinWheel__percent">
-                <input
-                  type="number"
-                  placeholder="Phần trăm"
-                  min={0}
-                  max={100}
-                  value={gift.percent_received}
-                  name="percent_received"
-                  onChange={(e) => this.onChangeAdd(e, index)}
-                  className="form-control"
-                />
-              </div>
               <div className="gameSpinWheel__input gameSpinWheel__type">
                 <select
                   className="form-control"
@@ -516,6 +496,26 @@ class MoreListGiftGameSpinWheel extends Component {
                     />
                   </div>
                 )}
+              </div>
+              <div className="gameSpinWheel__input gameSpinWheel__amount">
+                <input
+                  type="text"
+                  placeholder="Số lượng"
+                  value={gift.amount_gift}
+                  name="amount_gift"
+                  onChange={(e) => this.onChangeAdd(e, index)}
+                  className="form-control"
+                />
+              </div>
+              <div className="gameSpinWheel__input gameSpinWheel__percent">
+                <input
+                  type="text"
+                  placeholder="Tỉ lệ trúng"
+                  value={gift.percent_received}
+                  name="percent_received"
+                  onChange={(e) => this.onChangeAdd(e, index)}
+                  className="form-control"
+                />
               </div>
               <div className="gameSpinWheel__actions">
                 {idGameSpinWheel && (

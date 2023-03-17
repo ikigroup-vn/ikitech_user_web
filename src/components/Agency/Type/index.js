@@ -27,19 +27,34 @@ class ListAgency extends Component {
             />
 
             <div className="card-body">
-              <a
-                style={{ float: "right" }}
-                data-toggle="modal"
-                data-target="#createType"
-                class={`btn btn-info btn-icon-split btn-sm`}
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
               >
-                <span class="icon text-white-50">
-                  <i class="fas fa-plus"></i>
-                </span>
-                <span style={{ color: "white" }} class={`text `}>
-                  Thêm cấp
-                </span>
-              </a>
+                <div
+                  style={{
+                    fontWeight: "600",
+                  }}
+                >
+                  Cấp bậc càng lớn thì cấp đại lý càng cao
+                </div>
+                <a
+                  style={{ float: "right" }}
+                  data-toggle="modal"
+                  data-target="#createType"
+                  class={`btn btn-info btn-icon-split btn-sm`}
+                >
+                  <span class="icon text-white-50">
+                    <i class="fas fa-plus"></i>
+                  </span>
+                  <span style={{ color: "white" }} class={`text `}>
+                    Thêm cấp
+                  </span>
+                </a>
+              </div>
               <Table
                 types={types}
                 store_code={store_code}

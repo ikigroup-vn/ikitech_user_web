@@ -14,6 +14,7 @@ var initialState = {
   allHistoriesBalance: [],
   updatedPercentDiscountSuccessfully: false,
   updatedCommissionSuccessfully: false,
+  historyChangeLevelAgency: {},
 };
 
 export const agency = (state = initialState, action) => {
@@ -57,6 +58,9 @@ export const agency = (state = initialState, action) => {
       return newState;
     case Types.UPDATE_COMMISSION_AGENCY:
       newState.updatedCommissionSuccessfully = action.data;
+      return newState;
+    case Types.HISTORY_CHANGE_LEVEL_AGENCY:
+      newState.historyChangeLevelAgency = action.data;
       return newState;
     case Types.CHANGE_PRICE_BALANCE_AGENCY:
       const cloneState = JSON.parse(JSON.stringify(newState));

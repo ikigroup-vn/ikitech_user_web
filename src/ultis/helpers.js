@@ -324,7 +324,7 @@ export const formatNumberV2 = (str) => {
       .reduce((prev, next, index) => {
         return (index % 3 ? next : next + ".") + prev;
       });
-  } else if (Number(strFormat) > 0 && Number(strFormat) < 1000) {
+  } else if (Number(strFormat) >= 0 && Number(strFormat) < 1000) {
     return Number(strFormat);
   } else {
     return "";
