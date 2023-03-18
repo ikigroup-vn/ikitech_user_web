@@ -4,6 +4,7 @@ import * as chatApi from "../data/remote/chat";
 import history from "../history";
 import { saveAs } from "file-saver";
 import XlsxPopulate from "xlsx-populate";
+import { removeAscent } from "../ultis/helpers";
 
 function getSheetData(data, header) {
   var fields = Object.keys(data[0]);
@@ -192,7 +193,7 @@ export const exportListAgency = (store_code, page = 1, params = "") => {
     });
   };
 };
-export const exportListRequest = (store_code, from) => {
+export const exportListRequest = (store_code, searchValue, from) => {
   return (dispatch) => {
     agencyApi.fetchAllRequestPayment(store_code).then((res) => {
       if (res.data.code !== 401)
@@ -201,11 +202,41 @@ export const exportListRequest = (store_code, from) => {
             if (res.data.data.length > 0) {
               var newArray = [];
               var index = 0;
+
+              var newArr = [];
+              if (res.data.data?.length > 0) {
+                for (const item of res.data.data) {
+                  const itemSearch =
+                    item.agency?.customer?.name
+                      ?.toString()
+                      ?.trim()
+                      .toLowerCase() || "";
+                  const itemAccountNumber = item.agency?.account_number
+                    ?.toString()
+                    ?.trim()
+                    .toLowerCase();
+                  const valueSearch = searchValue
+                    ?.toString()
+                    ?.trim()
+                    .toLowerCase();
+                  if (
+                    removeAscent(itemSearch)?.includes(
+                      removeAscent(valueSearch)
+                    ) ||
+                    removeAscent(itemAccountNumber)?.includes(
+                      removeAscent(valueSearch)
+                    )
+                  ) {
+                    newArr.push(item);
+                  }
+                }
+              }
               const resFrom =
                 from == ""
-                  ? res.data.data
-                  : res.data?.data.filter((item) => item.from == from);
+                  ? newArr
+                  : newArr.filter((item) => item.from == from);
               if (resFrom.length == 0) return;
+
               for (const item of resFrom) {
                 var newItem = {};
                 var arangeKeyItem = {
