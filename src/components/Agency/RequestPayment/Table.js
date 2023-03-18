@@ -457,8 +457,8 @@ class Table extends Component {
   };
   exportListRequest = () => {
     const { store_code } = this.props;
-    const { from } = this.state;
-    this.props.exportListRequest(store_code, from);
+    const { from, searchValue } = this.state;
+    this.props.exportListRequest(store_code, searchValue, from);
   };
 
   render() {
@@ -604,8 +604,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    exportListRequest: (store_code, from) => {
-      dispatch(agencyAction.exportListRequest(store_code, from));
+    exportListRequest: (store_code, searchValue, from) => {
+      dispatch(agencyAction.exportListRequest(store_code, searchValue, from));
     },
   };
 };

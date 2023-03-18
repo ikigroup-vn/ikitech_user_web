@@ -287,7 +287,9 @@ class Table extends Component {
                   style={{ width: "100%" }}
                   name="agency_type_id"
                   id="input"
-                  value={data.agency_type_id}
+                  value={
+                    data.agency_type_id === null ? "0" : data.agency_type_id
+                  }
                   required="required"
                   onChange={(e) => this.changeAgencyType(e, data.id)}
                   className="form-control"
