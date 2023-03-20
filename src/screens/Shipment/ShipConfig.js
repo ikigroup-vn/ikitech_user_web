@@ -17,8 +17,10 @@ class Setting extends Component {
     this.state = {
       is_calculate_ship: true,
       use_fee_from_partnership: false,
+      use_fee_from_default: false,
       fee_urban: 0,
       fee_suburban: 0,
+      fee_default_description: "",
       urban_list_id_province: [],
       provices: [],
       proviceOptions: [],
@@ -33,10 +35,14 @@ class Setting extends Component {
   onChange = (e) => {
     var { name } = e.target;
     var { value } = e.target;
-    const _value = formatNumber(value);
+    if (name === "fee_default_description") {
+      this.setState({ fee_default_description: value });
+    } else {
+      const _value = formatNumber(value);
 
-    if (!isNaN(Number(_value))) {
-      this.setState({ [name]: _value });
+      if (!isNaN(Number(_value))) {
+        this.setState({ [name]: _value });
+      }
     }
   };
   onChangeChecked = (e) => {
@@ -49,9 +55,11 @@ class Setting extends Component {
     var {
       is_calculate_ship,
       use_fee_from_partnership,
+      use_fee_from_default,
       fee_urban,
       fee_suburban,
       provices,
+      fee_default_description,
       proviceOptions,
     } = this.state;
     var urban_list_id_province = [];
@@ -67,6 +75,8 @@ class Setting extends Component {
       fee_urban,
       fee_suburban,
       urban_list_id_province,
+      fee_default_description,
+      use_fee_from_default,
     };
     this.props.updateShipConfig(store_code, formData);
   };
@@ -78,7 +88,12 @@ class Setting extends Component {
       this.setState({
         is_calculate_ship: shipConfig.is_calculate_ship,
         use_fee_from_partnership: shipConfig.use_fee_from_partnership,
+        use_fee_from_default: shipConfig.use_fee_from_default,
         fee_urban: shipConfig.fee_urban,
+        fee_default_description:
+          shipConfig.fee_default_description === null
+            ? ""
+            : shipConfig.fee_default_description,
         fee_suburban: shipConfig.fee_suburban,
         proviceOptions: shipConfig.urban_list_id_province?.map(
           (data, index) => {
@@ -126,6 +141,8 @@ class Setting extends Component {
       fee_suburban,
       provices,
       proviceOptions,
+      fee_default_description,
+      use_fee_from_default,
     } = this.state;
     // var {isShow} = this.state
     var isShow = true;
@@ -165,7 +182,7 @@ class Setting extends Component {
                 padding: "8px 0px",
               }}
             >
-              <div>Sử dụng phí vận chuyển từ đơn vị vận chuyển</div>
+              <div>Sử dụng phí ship từ đơn vị vận chuyển</div>
               <form action="/action_page.php">
                 <div class="custom-control custom-switch">
                   <input
@@ -181,7 +198,33 @@ class Setting extends Component {
               </form>
             </div>
           )}
-          {use_fee_from_partnership === false && is_calculate_ship && (
+          {is_calculate_ship && (
+            <div
+              className="wrap-setting"
+              style={{
+                maxWidth: "430px",
+                display: "flex",
+                justifyContent: "space-between",
+                padding: "8px 0px",
+              }}
+            >
+              <div>Sử dụng phí ship mặc định</div>
+              <form>
+                <div class="custom-control custom-switch">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="switch4"
+                    name="use_fee_from_default"
+                    checked={use_fee_from_default}
+                    onChange={this.onChangeChecked}
+                  />
+                  <label class="custom-control-label" for="switch4"></label>
+                </div>
+              </form>
+            </div>
+          )}
+          {is_calculate_ship && use_fee_from_default && (
             <React.Fragment>
               <div class="form-group">
                 <label for="product_name">
@@ -222,6 +265,21 @@ class Setting extends Component {
                   value={formatNoDWithEmpty(fee_suburban)}
                   name="fee_suburban"
                   placeholder="Nhập phí..."
+                  autoComplete="off"
+                  onChange={this.onChange}
+                />
+              </div>
+              <div class="form-group">
+                <label for="fee_default_description">
+                  Mô tả cho khách hàng
+                </label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="fee_default_description"
+                  value={fee_default_description}
+                  name="fee_default_description"
+                  placeholder="Nhập mô tả..."
                   autoComplete="off"
                   onChange={this.onChange}
                 />

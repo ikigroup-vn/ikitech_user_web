@@ -567,7 +567,8 @@ export const sendOrderToDelivery = (
   store_code,
   billId,
   order_code,
-  order_status_code
+  order_status_code,
+  bill
 ) => {
   return (dispatch) => {
     dispatch({
@@ -592,52 +593,110 @@ export const sendOrderToDelivery = (
             content: res.data.msg,
           },
         });
-        billApi
-          .updateStatusOrder(store_code, {
-            order_code: order_code,
-            order_status_code: order_status_code,
-          })
-          .then((res) => {
-            billApi.fetchBillId(store_code, order_code).then((res) => {
-              if (res.data.code !== 401)
-                dispatch({
-                  type: Types.FETCH_ID_BILL,
-                  data: res.data.data,
-                });
-            });
-            if (
-              billId == undefined ||
-              billId == null ||
-              billId == "undefined" ||
-              billId == 0
-            ) {
-              return;
-            } else {
-              billApi.fetchBillHistory(store_code, billId).then((res) => {
+        if (bill.order_status_code === "SHIPPING") {
+          billApi.fetchBillId(store_code, order_code).then((res) => {
+            if (res.data.code !== 401)
+              dispatch({
+                type: Types.FETCH_ID_BILL,
+                data: res.data.data,
+              });
+          });
+        } else {
+          billApi
+            .updateStatusOrder(store_code, {
+              order_code: order_code,
+              order_status_code: order_status_code,
+            })
+            .then((res) => {
+              billApi.fetchBillId(store_code, order_code).then((res) => {
                 if (res.data.code !== 401)
                   dispatch({
-                    type: Types.FETCH_BILL_HISTORY,
+                    type: Types.FETCH_ID_BILL,
                     data: res.data.data,
                   });
               });
-            }
-          })
-          .catch(function (error) {
-            dispatch({
-              type: Types.ALERT_UID_STATUS,
-              alert: {
-                type: "danger",
-                title: "Lỗi",
-                disable: "show",
-                content: error?.response?.data?.msg,
-              },
+              if (
+                billId == undefined ||
+                billId == null ||
+                billId == "undefined" ||
+                billId == 0
+              ) {
+                return;
+              } else {
+                billApi.fetchBillHistory(store_code, billId).then((res) => {
+                  if (res.data.code !== 401)
+                    dispatch({
+                      type: Types.FETCH_BILL_HISTORY,
+                      data: res.data.data,
+                    });
+                });
+              }
+            })
+            .catch(function (error) {
+              dispatch({
+                type: Types.ALERT_UID_STATUS,
+                alert: {
+                  type: "danger",
+                  title: "Lỗi",
+                  disable: "show",
+                  content: error?.response?.data?.msg,
+                },
+              });
             });
-          });
 
-        billApi.getHistoryDeliveryStatus(store_code, data).then((res) => {
-          if (res.data.code === 200)
+          billApi.getHistoryDeliveryStatus(store_code, data).then((res) => {
+            if (res.data.code === 200)
+              dispatch({
+                type: Types.FETCH_DELIVERY_HISTORY,
+                data: res.data.data,
+              });
+          });
+        }
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+export const cancelConnectToDelivery = (
+  store_code,
+  billId,
+  order_code,
+  order_status_code
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    billApi
+      .cancelConnectToDelivery(store_code, order_code)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+        billApi.fetchBillId(store_code, order_code).then((res) => {
+          if (res.data.code !== 401)
             dispatch({
-              type: Types.FETCH_DELIVERY_HISTORY,
+              type: Types.FETCH_ID_BILL,
               data: res.data.data,
             });
         });
