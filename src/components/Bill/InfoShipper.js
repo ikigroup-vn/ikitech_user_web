@@ -6,6 +6,7 @@ import ChooseShipper from "./ChooseShipper";
 import moment from "moment";
 import styled from "styled-components";
 import { formatNumber } from "../../ultis/helpers";
+import ModalCancelDelivery from "./ModalCancelDelivery";
 
 const InfoShipperStyles = styled.div`
   .shipping__packet {
@@ -48,6 +49,13 @@ class InfoShipper extends Component {
         width: "",
       },
       isUpdated: false,
+      status: [
+        "WAITING_FOR_PROGRESSING",
+        "PACKING",
+        "SHIPPING",
+        "DELIVERY_ERROR",
+        "CUSTOMER_RETURNING",
+      ],
     };
   }
 
@@ -114,7 +122,18 @@ class InfoShipper extends Component {
       store_code,
       bill.id,
       order_code,
-      "SHIPPING"
+      "SHIPPING",
+      bill
+    );
+  };
+  cancelConnectToDelivery = () => {
+    var { bill, order_code, store_code } = this.props;
+
+    this.props.cancelConnectToDelivery(
+      store_code,
+      bill.id,
+      order_code,
+      "WAITING_FOR_PROGRESSING"
     );
   };
 
@@ -143,6 +162,15 @@ class InfoShipper extends Component {
       store_code,
       order_code
     );
+  };
+  handleShowCancelButton = () => {
+    const { bill } = this.props;
+    console.log("InfoShipper ~ bill:", bill?.order_status_code);
+    const { status } = this.state;
+    if (status.includes(bill?.order_status_code)) {
+      return true;
+    }
+    return false;
   };
 
   render() {
@@ -375,7 +403,6 @@ class InfoShipper extends Component {
                 </p>
                 <div id="total_before">{shipper_name}</div>
               </div>
-
               {historyDeliveryStatus.map((history) => (
                 <div id="item_fee">
                   <div className="sale_user_label bold">
@@ -389,9 +416,29 @@ class InfoShipper extends Component {
                   </div>
                 </div>
               ))}
+
+              {this.handleShowCancelButton() ? (
+                <div style={{ textAlign: "center" }}>
+                  <div class="m-3">
+                    <button
+                      type="button"
+                      className="btn btn-danger  btn-sm"
+                      style={{ marginRight: "10px" }}
+                      data-toggle="modal"
+                      data-target="#cancelDelivery"
+                    >
+                      <i className="fas fa-shipping-fast"></i>
+                      &nbsp;Hủy kết nối vận chuyển
+                    </button>
+                  </div>
+                </div>
+              ) : null}
             </div>
           </div>
         )}
+        <ModalCancelDelivery
+          cancelConnectToDelivery={this.cancelConnectToDelivery}
+        ></ModalCancelDelivery>
       </InfoShipperStyles>
     );
   }
@@ -410,11 +457,28 @@ const mapDispatchToProps = (dispatch, props) => {
       store_code,
       billId,
       order_code,
-      order_status_code
+      order_status_code,
+      bill
     ) => {
       dispatch(
         billAction.sendOrderToDelivery(
           data,
+          store_code,
+          billId,
+          order_code,
+          order_status_code,
+          bill
+        )
+      );
+    },
+    cancelConnectToDelivery: (
+      store_code,
+      billId,
+      order_code,
+      order_status_code
+    ) => {
+      dispatch(
+        billAction.cancelConnectToDelivery(
           store_code,
           billId,
           order_code,

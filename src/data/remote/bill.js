@@ -57,6 +57,13 @@ export const updateStatusPayment = (store_code, data) => {
 export const sendOrderToDelivery = (store_code, data) => {
   return callApi(`/store/${store_code}/shipper/send_order`, "post", data);
 };
+export const cancelConnectToDelivery = (store_code, order_code) => {
+  return callApi(
+    `/store/${store_code}/shipper/cancel_order_ship_code/${order_code}`,
+    "post",
+    null
+  );
+};
 
 export const getHistoryDeliveryStatus = (store_code, data) => {
   return callApi(

@@ -68,7 +68,7 @@ class ModalUpdate extends Component {
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
-              <h4 class="modal-title">Chỉnh sửa bật thang</h4>
+              <h4 class="modal-title">Chỉnh sửa bậc thang</h4>
 
               <button
                 type="button"
