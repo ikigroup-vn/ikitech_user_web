@@ -161,43 +161,36 @@ class Table extends Component {
           typeof data.agency.customer != "undefined"
         ) {
           if (
-            typeof data.agency.customer.default_address === "object" &&
-            data.agency.customer.default_address !== null
+            typeof data.agency.customer === "object" &&
+            data.agency.customer !== null
           ) {
             if (
-              data.agency.customer.default_address.address_detail !== null &&
-              data.agency.customer.default_address.address_detail !== ""
+              data.agency.customer.address_detail !== null &&
+              data.agency.customer.address_detail !== ""
             ) {
               address_default =
-                address_default +
-                data.agency.customer.default_address.address_detail +
-                ", ";
+                address_default + data.agency.customer.address_detail + ", ";
             }
             if (
-              data.agency.customer.default_address.wards_name !== null &&
-              data.agency.customer.default_address.wards_name !== ""
+              data.agency.customer.wards_name !== null &&
+              data.agency.customer.wards_name !== ""
             ) {
               address_default =
-                address_default +
-                data.agency.customer.default_address.wards_name +
-                ", ";
+                address_default + data.agency.customer.wards_name + ", ";
             }
             if (
-              data.agency.customer.default_address.district_name !== null &&
-              data.agency.customer.default_address.district_name !== ""
+              data.agency.customer.district_name !== null &&
+              data.agency.customer.district_name !== ""
             ) {
               address_default =
-                address_default +
-                data.agency.customer.default_address.district_name +
-                ", ";
+                address_default + data.agency.customer.district_name + ", ";
             }
             if (
-              data.agency.customer.default_address.province_name !== null &&
-              data.agency.customer.default_address.province_name !== ""
+              data.agency.customer.province_name !== null &&
+              data.agency.customer.province_name !== ""
             ) {
               address_default =
-                address_default +
-                data.agency.customer.default_address.province_name;
+                address_default + data.agency.customer.province_name;
             }
           }
         }
