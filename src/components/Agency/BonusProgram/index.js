@@ -215,13 +215,11 @@ class BonusProgram extends Component {
         }}
       >
         <div className="form-group">
-          <label htmlFor="name">
-            Cách tính thưởng đại lý theo doanh số hoa hồng
-          </label>
+          <label htmlFor="name">Cách tính thưởng đại lý theo hoa hồng</label>
           <p>
             <i>
-              ( Là phần thưởng dành cho đại lý khi chinh phục được các mức doanh
-              số hoa hồng )
+              ( Là phần thưởng dành cho đại lý khi chinh phục được các mức hoa
+              hồng )
             </i>
           </p>
         </div>
@@ -502,7 +500,7 @@ class BonusProgram extends Component {
                 aria-controls="nav-commission"
                 aria-selected="false"
               >
-                Thưởng doanh số hoa hồng
+                Thưởng hoa hồng
               </a>
               <a
                 class="nav-item nav-link"

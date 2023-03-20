@@ -237,6 +237,27 @@ export const exportListRequest = (store_code, searchValue, from) => {
                   : newArr.filter((item) => item.from == from);
               if (resFrom.length == 0) return;
 
+              const handleAddress = (
+                address_detail,
+                wards_name,
+                district_name,
+                province_name
+              ) => {
+                let addressDefault = "";
+                if (address_detail) {
+                  addressDefault += address_detail ? `${address_detail}, ` : "";
+                }
+                if (wards_name) {
+                  addressDefault += wards_name ? `${wards_name}, ` : "";
+                }
+                if (district_name) {
+                  addressDefault += district_name ? `${district_name}, ` : "";
+                }
+                if (province_name) {
+                  addressDefault += province_name ? `${province_name}` : "";
+                }
+                return addressDefault;
+              };
               for (const item of resFrom) {
                 var newItem = {};
                 var arangeKeyItem = {
@@ -250,6 +271,26 @@ export const exportListRequest = (store_code, searchValue, from) => {
                       : "Tất cả",
                   money: Number(item.money),
                   date: item.created_at,
+                  account_name:
+                    item?.agency?.account_name === null
+                      ? ""
+                      : item?.agency?.account_name,
+                  account_number:
+                    item?.agency?.account_number === null
+                      ? ""
+                      : item?.agency?.account_number,
+                  bank: item?.agency?.bank === null ? "" : item?.agency?.bank,
+                  cmnd: item?.agency?.cmnd === null ? "" : item?.agency?.cmnd,
+                  issued_by:
+                    item?.agency?.issued_by === null
+                      ? ""
+                      : item?.agency?.issued_by,
+                  address_default: handleAddress(
+                    item?.agency?.customer?.address_detail,
+                    item?.agency?.customer?.wards_name,
+                    item?.agency?.customer?.district_name,
+                    item?.agency?.customer?.province_name
+                  ),
                 };
                 Object.entries(arangeKeyItem).forEach(([key, value], index) => {
                   if (key == "name") {
@@ -266,6 +307,24 @@ export const exportListRequest = (store_code, searchValue, from) => {
                   }
                   if (key == "date") {
                     newItem["Ngày yêu cầu"] = value;
+                  }
+                  if (key == "account_name") {
+                    newItem["Tên chủ tài khoản"] = value;
+                  }
+                  if (key == "account_number") {
+                    newItem["Số tài khoản"] = value;
+                  }
+                  if (key == "bank") {
+                    newItem["Tên ngân hàng"] = value;
+                  }
+                  if (key == "cmnd") {
+                    newItem["CMND/CCCD"] = value;
+                  }
+                  if (key == "issued_by") {
+                    newItem["Nơi đăng kí"] = value;
+                  }
+                  if (key == "address_default") {
+                    newItem["Địa chỉ"] = value;
                   }
                 });
 
