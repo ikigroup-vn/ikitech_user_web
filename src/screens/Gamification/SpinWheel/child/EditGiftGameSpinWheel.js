@@ -253,6 +253,12 @@ class EditGiftGameSpinWheel extends Component {
     const { listGift, selectValue } = this.state;
     const name = e.target.name;
     const value = e.target.value;
+    if (name === "percent_received") {
+      const _valuePercentReceived = formatNumberV2(value)
+        ?.toString()
+        ?.replace(/\./g, "");
+      if (Number(_valuePercentReceived) > 10000) return;
+    }
     if (name !== "type_gift") {
       const newListGift = listGift.reduce((prevData, currentData) => {
         const newData =
