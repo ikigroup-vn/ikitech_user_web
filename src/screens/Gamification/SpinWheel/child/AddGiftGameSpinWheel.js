@@ -96,6 +96,12 @@ class MoreListGiftGameSpinWheel extends Component {
     const { selectValue } = this.state;
     const name = e.target.name;
     const value = e.target.value;
+    if (name === "percent_received") {
+      const _valuePercentReceived = formatNumberV2(value)
+        ?.toString()
+        ?.replace(/\./g, "");
+      if (Number(_valuePercentReceived) > 10000) return;
+    }
     if (name !== "type_gift") {
       const newListGift = listGiftAdd.reduce((prevData, currentData, index) => {
         const newData =

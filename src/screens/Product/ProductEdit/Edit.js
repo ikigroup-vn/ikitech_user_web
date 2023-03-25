@@ -18,6 +18,7 @@ import Distribute from "../../../components/Product/Update/Distribute";
 import StoreImage from "../../../components/Product/Update/StoreImage";
 import * as productAction from "../../../actions/product";
 import * as CategoryPAction from "../../../actions/category_product";
+import * as AttributeAction from "../../../actions/attribute_search";
 import * as Types from "../../../constants/ActionType";
 import Alert from "../../../components/Partials/Alert";
 import SeoOption from "../../../components/Product/Update/SeoOption";
@@ -31,6 +32,7 @@ class ProductEdit extends Component {
       total: "",
       disableDistribute: false,
       disableInventory: false,
+      attributeSearch: [],
     };
   }
 
@@ -44,6 +46,7 @@ class ProductEdit extends Component {
     this.props.fetchProductId(store_code, productId);
     this.props.fetchAllAttributeP(store_code);
     this.props.fetchAllCategoryP(store_code);
+    this.props.fetchAllAttributeSearch(store_code);
     this.props.fetchAllBlog(store_code, 1);
   }
 
@@ -91,7 +94,10 @@ class ProductEdit extends Component {
       }
       formdata.categories = categories;
       formdata.category_children_ids = category_children_ids;
-      return { form: formdata };
+      return {
+        form: formdata,
+        attributeSearch: data.attribute_search_children_ids,
+      };
     });
   };
 
@@ -472,7 +478,12 @@ class ProductEdit extends Component {
       currentBranch?.id,
       form,
       pageNum,
-      params
+      params,
+      () => {
+        this.props.setUpAttributeSearch(store_code, productId, {
+          list_attribute_search_childs: this.state.attributeSearch,
+        });
+      }
     );
   };
   goBack = (e) => {
@@ -521,9 +532,10 @@ class ProductEdit extends Component {
   };
 
   render() {
-    var { store_code } = this.props;
+    var { store_code, productId } = this.props;
     var {
       category_product,
+      attribute_search,
       attributeP,
       auth,
       product,
@@ -556,6 +568,8 @@ class ProductEdit extends Component {
                     product={product}
                     handleDataFromInfo={this.handleDataFromInfo}
                     category_product={category_product}
+                    attribute_search={attribute_search}
+                    productId={productId}
                   />
                 </div>
               </div>
@@ -731,6 +745,8 @@ const mapStateToProps = (state) => {
   return {
     attributeP: state.attributePReducers.attribute_product.allAttrbute,
     category_product: state.categoryPReducers.category_product.allCategoryP,
+    attribute_search:
+      state.attributeSearchReducers.attribute_search.allAttribute,
     product: state.productReducers.product.productId,
     alert: state.productReducers.alert.alert_uid,
     blogs: state.blogReducers.blog.allBlog,
@@ -744,6 +760,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchAllCategoryP: (store_code) => {
       dispatch(CategoryPAction.fetchAllCategoryP(store_code));
+    },
+    fetchAllAttributeSearch: (store_code, params) => {
+      dispatch(AttributeAction.fetchAllAttributeSearch(store_code, params));
     },
     postProduct: (store_code, product) => {
       dispatch(productAction.postProduct(store_code, product));
@@ -763,7 +782,8 @@ const mapDispatchToProps = (dispatch, props) => {
       branchId,
       data,
       page,
-      params
+      params,
+      funcModal
     ) => {
       dispatch(
         productAction.updateDistribute(
@@ -773,12 +793,16 @@ const mapDispatchToProps = (dispatch, props) => {
           branchId,
           data,
           page,
-          params
+          params,
+          funcModal
         )
       );
     },
     fetchAllBlog: (id, page) => {
       dispatch(blogAction.fetchAllBlog(id, page));
+    },
+    setUpAttributeSearch: (store_code, id, form) => {
+      dispatch(AttributeAction.setUpAttributeSearch(store_code, id, form));
     },
     showError: (error) => {
       dispatch(error);

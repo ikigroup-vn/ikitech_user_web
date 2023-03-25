@@ -53,6 +53,7 @@ import { mobileCheckinReducers } from "./mobile_checkin/index";
 import { bonusProductReducers } from "./bonus_product/index";
 import { trainReducers } from "./train/index";
 import { saleReducers } from "./sale";
+import { attributeSearchReducers } from "./attribute_search";
 
 const appReducers = combineReducers({
   authReducers,
@@ -109,6 +110,7 @@ const appReducers = combineReducers({
   trainReducers,
   gamificationReducers,
   saleReducers,
+  attributeSearchReducers,
 });
 
 export default appReducers;

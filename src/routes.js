@@ -175,6 +175,7 @@ import Sale from "./screens/Sale";
 import Statistical from "./screens/Statistical";
 import GuessNumber from "./screens/Gamification/GuessNumber";
 import ActionsGameGuessNumber from "./screens/Gamification/GuessNumber/ActionsGameGuessNumber";
+import AttributeSearch from "./screens/AttributeSearch";
 const routes = [
   {
     path: "/invoice_template/index/:store_code",
@@ -709,6 +710,12 @@ const routes = [
     exact: true,
 
     main: ({ match }) => <Category_P match={match} />,
+  },
+  {
+    path: "/product/attribute_searches/:store_code",
+    exact: true,
+
+    main: ({ match }) => <AttributeSearch match={match} />,
   },
   {
     path: "/profile/:store_code",

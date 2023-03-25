@@ -1,43 +1,43 @@
 import * as Types from "../constants/ActionType";
-import * as categoryPApi from "../data/remote/category_product";
+import * as attributeApi from "../data/remote/attribute_search";
 
-export const fetchAllCategoryP = (store_code, params = null) => {
+export const fetchAllAttributeSearch = (store_code, params = null) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
     });
-    categoryPApi.fetchAllData(store_code, params).then((res) => {
+    attributeApi.fetchAllData(store_code, params).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
         loading: "hide",
       });
       if (res.data.code !== 401)
         dispatch({
-          type: Types.FETCH_ALL_CATEGORY_PRODUCT,
+          type: Types.FETCH_ALL_ATTRIBUTE_SEARCH,
           data: res.data.data,
         });
     });
   };
 };
 
-export const createCategoryP = (store_code, data) => {
+export const createAttributeSearch = (store_code, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
     });
-    categoryPApi
-      .createCategoryP(store_code, data)
+    attributeApi
+      .createAttributeSearch(store_code, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
-        categoryPApi.fetchAllData(store_code).then((res) => {
+        attributeApi.fetchAllData(store_code).then((res) => {
           if (res.data.code === 200)
             dispatch({
-              type: Types.FETCH_ALL_CATEGORY_PRODUCT,
+              type: Types.FETCH_ALL_ATTRIBUTE_SEARCH,
               data: res.data.data,
             });
           dispatch({
@@ -80,14 +80,14 @@ export const createCategoryP = (store_code, data) => {
   };
 };
 
-export const sortCategory = (store_code, data) => {
+export const sortAttributeSearch = (store_code, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
     });
-    categoryPApi
-      .sortCategory(store_code, data)
+    attributeApi
+      .sortAttributeSearch(store_code, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
@@ -136,23 +136,23 @@ export const sortCategory = (store_code, data) => {
   };
 };
 
-export const updateCategoryP = (store_code, id, data) => {
+export const updateAttributeSearch = (store_code, id, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
     });
-    categoryPApi
-      .updateCategoryP(store_code, id, data)
+    attributeApi
+      .updateAttributeSearch(store_code, id, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
-        categoryPApi.fetchAllData(store_code).then((res) => {
+        attributeApi.fetchAllData(store_code).then((res) => {
           if (res.data.code !== 401) {
             dispatch({
-              type: Types.FETCH_ALL_CATEGORY_PRODUCT,
+              type: Types.FETCH_ALL_ATTRIBUTE_SEARCH,
               data: res.data.data,
             });
             dispatch({
@@ -199,23 +199,23 @@ export const updateCategoryP = (store_code, id, data) => {
       });
   };
 };
-export const createCategoryChild = (store_code, id, data) => {
+export const createAttributeSearchChild = (store_code, id, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
     });
-    categoryPApi
-      .createCategoryChild(store_code, id, data)
+    attributeApi
+      .createAttributeSearchChild(store_code, id, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
-        categoryPApi.fetchAllData(store_code).then((res) => {
+        attributeApi.fetchAllData(store_code).then((res) => {
           if (res.data.code === 200)
             dispatch({
-              type: Types.FETCH_ALL_CATEGORY_PRODUCT,
+              type: Types.FETCH_ALL_ATTRIBUTE_SEARCH,
               data: res.data.data,
             });
           dispatch({
@@ -258,23 +258,23 @@ export const createCategoryChild = (store_code, id, data) => {
   };
 };
 
-export const updateCategoryChild = (store_code, id, idChild, data) => {
+export const updateAttributeSearchChild = (store_code, id, idChild, data) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
     });
-    categoryPApi
-      .updateCategoryChild(store_code, id, idChild, data)
+    attributeApi
+      .updateAttributeSearchChild(store_code, id, idChild, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
-        categoryPApi.fetchAllData(store_code).then((res) => {
+        attributeApi.fetchAllData(store_code).then((res) => {
           if (res.data.code !== 401) {
             dispatch({
-              type: Types.FETCH_ALL_CATEGORY_PRODUCT,
+              type: Types.FETCH_ALL_ATTRIBUTE_SEARCH,
               data: res.data.data,
             });
             dispatch({
@@ -322,25 +322,25 @@ export const updateCategoryChild = (store_code, id, idChild, data) => {
   };
 };
 
-export const destroyCategoryChild = (store_code, id, idChild) => {
+export const destroyAttributeSearchChild = (store_code, id, idChild) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
     });
-    categoryPApi
-      .destroyCategoryChild(store_code, id, idChild)
+    attributeApi
+      .destroyAttributeSearchChild(store_code, id, idChild)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
-        categoryPApi
+        attributeApi
           .fetchAllData(store_code)
           .then((res) => {
             if (res.data.code !== 401)
               dispatch({
-                type: Types.FETCH_ALL_CATEGORY_PRODUCT,
+                type: Types.FETCH_ALL_ATTRIBUTE_SEARCH,
                 data: res.data.data,
               });
             dispatch({
@@ -382,25 +382,25 @@ export const destroyCategoryChild = (store_code, id, idChild) => {
       });
   };
 };
-export const destroyCategoryP = (store_code, id) => {
+export const destroyAttributeSearch = (store_code, id) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
     });
-    categoryPApi
-      .destroyCategoryP(store_code, id)
+    attributeApi
+      .destroyAttributeSearch(store_code, id)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
-        categoryPApi
+        attributeApi
           .fetchAllData(store_code)
           .then((res) => {
             if (res.data.code !== 401)
               dispatch({
-                type: Types.FETCH_ALL_CATEGORY_PRODUCT,
+                type: Types.FETCH_ALL_ATTRIBUTE_SEARCH,
                 data: res.data.data,
               });
             dispatch({
@@ -442,23 +442,36 @@ export const destroyCategoryP = (store_code, id) => {
       });
   };
 };
-
-export const fetchDataId = (store_code, id) => {
+export const getAttributeSearch = (store_code, id) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
     });
-    categoryPApi.fetchDataId(store_code, id).then((res) => {
+    attributeApi.getAttributeSearch(store_code, id).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
         loading: "hide",
       });
       if (res.data.code !== 401)
         dispatch({
-          type: Types.FETCH_ID_CATEGORY_PRODUCT,
+          type: Types.FETCH_ALL_ATTRIBUTE_SEARCH_PRODUCT,
           data: res.data.data,
         });
+    });
+  };
+};
+export const setUpAttributeSearch = (store_code, id, form) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    attributeApi.setUpAttributeSearch(store_code, id, form).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide",
+      });
     });
   };
 };

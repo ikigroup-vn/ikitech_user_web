@@ -44,6 +44,13 @@ export const ikitech_menu = [
             to: "/product/category",
           },
           {
+            class: "product_category_list",
+            display: "hide",
+            name: "Thuộc tính tìm kiếm",
+            exact: true,
+            to: "/product/attribute_searches",
+          },
+          {
             class: "product_list",
             display: "hide",
             name: "Sản phẩm",
