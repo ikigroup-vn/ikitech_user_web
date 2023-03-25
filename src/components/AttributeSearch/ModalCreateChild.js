@@ -75,25 +75,13 @@ class ModalCreateChild extends Component {
       });
       return;
     }
-
-    var file = this.state.fileUpload;
-    if (typeof file !== "undefined" && file != "" && file != null) {
-      const fd = new FormData();
-      fd.append("image", await compressed(file));
-      fd.append("name", this.state.txtName);
-      var { store_code, modal } = this.props;
-      this.props.createAttributeSearchChild(store_code, modal.id, fd);
-      this.setState({ fileUpload: null });
-    } else {
-      window.$("#file-attribute-search-child").fileinput("clear");
-      const fd = new FormData();
-      fd.append("name", this.state.txtName);
-      this.props.createAttributeSearchChild(
-        this.props.store_code,
-        this.props.modal.id,
-        fd
-      );
-    }
+    const fd = new FormData();
+    fd.append("name", this.state.txtName);
+    this.props.createAttributeSearchChild(
+      this.props.store_code,
+      this.props.modal.id,
+      fd
+    );
   };
   render() {
     var { txtName } = this.state;
@@ -144,18 +132,6 @@ class ModalCreateChild extends Component {
                     onChange={this.onChange}
                     name="txtName"
                   />
-                </div>
-                <div class="form-group">
-                  <label for="product_name">Hình ảnh</label>
-                  <div className="file-loading">
-                    <input
-                      id="file-attribute-search-child"
-                      type="file"
-                      className="file"
-                      data-overwrite-initial="false"
-                      data-min-file-count="2"
-                    />
-                  </div>
                 </div>
               </div>
               <div class="modal-footer">

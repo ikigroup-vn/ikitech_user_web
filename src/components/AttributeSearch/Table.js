@@ -89,27 +89,13 @@ class Table extends Component {
     var { update, _delete } = this.props;
     if (categories.length > 0) {
       result = categories.map((data, index) => {
-        var image_url =
-          data.image_url == null || data.image_url == ""
-            ? Env.IMG_NOT_FOUND
-            : data.image_url;
-
         return (
           <SortableItem key={data.id}>
             <div class="resp-table-row" style={{ width: "100%" }}>
               <div class="table-body-cell">{index + 1}</div>
-              <div class="table-body-cell" style={{ width: "15%" }}>
-                <img
-                  src={image_url}
-                  className="img-responsive"
-                  alt="Image"
-                  width="100px"
-                  height="100px"
-                />
-              </div>
               <div
                 class="table-body-cell table-custom"
-                style={{ width: "35%" }}
+                style={{ width: "50%" }}
               >
                 <div
                   className="wrap-conten"
@@ -164,10 +150,6 @@ class Table extends Component {
 
               <div class="table-body-cell" style={{ position: "relative" }}>
                 {data.product_attribute_search_children.map((data1, index) => {
-                  var image_url_child =
-                    data1.image_url == null || data1.image_url == ""
-                      ? Env.IMG_NOT_FOUND
-                      : data1.image_url;
                   return (
                     <>
                       <div
@@ -184,18 +166,10 @@ class Table extends Component {
                           className="wrap-img-child"
                           style={{ display: "flex", alignItems: "center" }}
                         >
-                          <img
-                            src={image_url_child}
-                            className="img-responsive"
-                            alt="Image"
-                            width="30px"
-                            height="30px"
-                            style={{ marginRight: "10px" }}
-                          />
                           <div
                             className="name-category"
                             style={{
-                              width: "50%",
+                              width: "100%",
                               overflow: "hidden",
                               textOverflow: "ellipsis",
                             }}
@@ -279,9 +253,6 @@ class Table extends Component {
         <div className="resp-table-body">
           <div style={{ fontWeight: "500" }} class="table-body-cell">
             STT
-          </div>
-          <div style={{ fontWeight: "500" }} class="table-body-cell">
-            Hình ảnh
           </div>
           <div style={{ fontWeight: "500" }} class="table-body-cell">
             Tên thuộc tính

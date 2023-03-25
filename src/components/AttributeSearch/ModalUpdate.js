@@ -77,23 +77,11 @@ class ModalUpdate extends Component {
     var file = this.state.fileUpload;
     const fd = new FormData();
 
-    if (typeof file !== "undefined" && file != "" && file != null) {
-      // window.$('#file-attribute-search-update').fileinput('clear');
-      fd.append("image", await compressed(file));
+    fd.append("name", this.state.txtName);
 
-      fd.append("name", this.state.txtName);
+    fd.append("is_show_home", true);
 
-      fd.append("is_show_home", this.state.isShowHome);
-
-      this.props.updateAttributeSearch(this.props.store_code, category.id, fd);
-      this.setState({ fileUpload: "" });
-    } else {
-      fd.append("name", this.state.txtName);
-
-      fd.append("is_show_home", this.state.isShowHome);
-
-      this.props.updateAttributeSearch(this.props.store_code, category.id, fd);
-    }
+    this.props.updateAttributeSearch(this.props.store_code, category.id, fd);
   };
   componentDidMount() {
     var _this = this;
@@ -114,9 +102,7 @@ class ModalUpdate extends Component {
   render() {
     var { txtName, image, isShowHome } = this.state;
     var image = image == null || image == "" ? Env.IMG_NOT_FOUND : image;
-    console.log("render");
-    console.log("isShowHome", isShowHome);
-    console.log("this.props.modal", this.props.modal);
+
     return (
       <div
         class="modal fade"
@@ -126,7 +112,7 @@ class ModalUpdate extends Component {
         data-keyboard="false"
         data-backdrop="static"
       >
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div
               class="modal-header"
@@ -163,46 +149,6 @@ class ModalUpdate extends Component {
                     onChange={this.onChange}
                     name="txtName"
                   />
-                  <div
-                    class="form-check"
-                    style={{ marginTop: "10px", padding: "0" }}
-                  >
-                    <label class="form-check-label">
-                      <input
-                        type="checkbox"
-                        name="even"
-                        onChange={() =>
-                          this.setState({ isShowHome: !isShowHome })
-                        }
-                        checked={isShowHome}
-                      />{" "}
-                      Hiển thị thuộc tính tìm kiếm
-                    </label>
-                  </div>
-                </div>
-                <div className="" style={{ display: "flex" }}>
-                  <div class="form-group">
-                    <label for="product_name">Hình ảnh</label>
-                    <div className="file-loading">
-                      <input
-                        id="file-attribute-search-update"
-                        type="file"
-                        className="file"
-                        data-overwrite-initial="false"
-                      />
-                    </div>
-                  </div>
-                  <div
-                    class="form-group"
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      marginLeft: "20px",
-                    }}
-                  >
-                    <label>Ảnh: &nbsp; </label>
-                    <img src={`${image}`} width="150" height="150" />
-                  </div>
                 </div>
               </div>
               <div class="modal-footer">

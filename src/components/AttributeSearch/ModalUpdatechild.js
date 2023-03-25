@@ -78,30 +78,14 @@ class ModalUpdateChild extends Component {
     var file = this.state.fileUpload;
     const fd = new FormData();
 
-    if (typeof file !== "undefined" && file != "" && file != null) {
-      console.log("dsa");
-      // window.$('#file-attribute-search-update').fileinput('clear');
-      fd.append("image", await compressed(file));
+    fd.append("name", this.state.txtName);
 
-      fd.append("name", this.state.txtName);
-
-      this.props.updateAttributeSearchChild(
-        this.props.store_code,
-        category.id,
-        category.idChild,
-        fd
-      );
-      this.setState({ fileUpload: "" });
-    } else {
-      fd.append("name", this.state.txtName);
-
-      this.props.updateAttributeSearchChild(
-        this.props.store_code,
-        category.id,
-        category.idChild,
-        fd
-      );
-    }
+    this.props.updateAttributeSearchChild(
+      this.props.store_code,
+      category.id,
+      category.idChild,
+      fd
+    );
   };
   componentDidMount() {
     var _this = this;
@@ -132,7 +116,7 @@ class ModalUpdateChild extends Component {
         data-keyboard="false"
         data-backdrop="static"
       >
-        <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div
               class="modal-header"
@@ -169,30 +153,6 @@ class ModalUpdateChild extends Component {
                     onChange={this.onChange}
                     name="txtName"
                   />
-                </div>
-                <div style={{ display: "flex" }}>
-                  <div class="form-group">
-                    <label for="product_name">Hình ảnh</label>
-                    <div className="file-loading">
-                      <input
-                        id="file-attribute-search-update-child"
-                        type="file"
-                        className="file"
-                        data-overwrite-initial="false"
-                      />
-                    </div>
-                  </div>
-                  <div
-                    class="form-group"
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      marginLeft: "20px",
-                    }}
-                  >
-                    <label>Ảnh: &nbsp; </label>
-                    <img src={`${image}`} width="150" height="150" />
-                  </div>
                 </div>
               </div>
               <div class="modal-footer">
