@@ -3,6 +3,7 @@ import Select from "react-select";
 import * as helper from "../../../ultis/helpers";
 import { connect } from "react-redux";
 import * as CategoryPAction from "../../../actions/category_product";
+import * as AttributeAction from "../../../actions/attribute_search";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import { formatNumber, formatNoD } from "../../../ultis/helpers";
 import getChannel, { IKITECH } from "../../../ultis/channel";
@@ -19,6 +20,9 @@ class InfoProduct extends Component {
       category_children_ids: [],
       txtCategory: [],
       listCategory: [],
+      listAttributeSearch: [],
+      attribute_search_parent: [],
+      attribute_search_children_ids: [],
       txtQuantityInStock: "",
       txtPercentC: "",
       disabledPrice: false,
@@ -202,6 +206,10 @@ class InfoProduct extends Component {
     }
     this.props.handleDataFromInfo(this.state);
   };
+  componentDidMount() {
+    const { getAttributeSearch, productId, store_code } = this.props;
+    getAttributeSearch(store_code, productId);
+  }
   componentWillReceiveProps(nextProps) {
     if (
       nextProps.total != this.props.total &&
@@ -231,6 +239,32 @@ class InfoProduct extends Component {
         });
         this.setState({ listCategory: option });
       }
+    }
+    if (
+      !shallowEqual(nextProps.attribute_search, this.props.attribute_search)
+    ) {
+      let option = [];
+      var attribute_search = [...nextProps.attribute_search];
+      if (attribute_search.length > 0) {
+        option = attribute_search.map((attribute, index) => {
+          return {
+            id: attribute.id,
+            label: attribute.name,
+            attribute_search_child: attribute.product_attribute_search_children,
+          };
+        });
+        this.setState({ listAttributeSearch: option });
+      }
+    }
+    if (
+      !shallowEqual(
+        nextProps.allAttributeProduct,
+        this.props.allAttributeProduct
+      )
+    ) {
+      this.setState({
+        attribute_search_children_ids: nextProps.allAttributeProduct,
+      });
     }
     if (!shallowEqual(nextProps.product, this.props.product)) {
       var { product } = { ...nextProps };
@@ -307,6 +341,128 @@ class InfoProduct extends Component {
     }
     return true;
   }
+  //Xử lý ds thuộc tính tìm kiếm
+
+  handleChangeCheckParentAttribute(id) {
+    return this.state.attribute_search_parent.indexOf(id) > -1;
+  }
+  handleChangeCheckChildAttribute(id) {
+    return this.state.attribute_search_children_ids.indexOf(id) > -1;
+  }
+  getNameSelectedAttribute() {
+    var nam = "";
+    var attributes = this.state.listAttributeSearch;
+
+    if (this.state.attribute_search_parent !== null) {
+      attributes.forEach((attribute) => {
+        if (
+          this.state.attribute_search_parent
+            .map((e) => e.id)
+            .indexOf(attribute.id) > -1
+        ) {
+          nam = nam + attribute.label + ", ";
+        }
+      });
+
+      if (this.state.attribute_search_children_ids !== null) {
+        attributes.forEach((attribute) => {
+          attribute.attribute_search_child.forEach((attributeChild) => {
+            if (
+              this.state.attribute_search_children_ids
+                .map((e) => e.id)
+                .indexOf(attributeChild.id) > -1
+            ) {
+              nam = nam + attributeChild.name + ", ";
+            }
+          });
+        });
+      }
+    }
+    if (nam.length > 0) {
+      nam = nam.substring(0, nam.length - 2);
+    }
+    return nam;
+  }
+
+  handleChangeParentAttribute = (attribute) => {
+    var indexHas = this.state.attribute_search_parent
+      .map((e) => e.id)
+      .indexOf(attribute.id);
+    if (indexHas !== -1) {
+      var newList = this.state.attribute_search_parent;
+      newList.splice(indexHas, 1);
+      this.setState({ attribute_search_parent: newList });
+      this.state.listAttributeSearch.forEach((attribute2) => {
+        if (attribute2.id === attribute.id) {
+          attribute2.attribute_search_child.forEach((attributeChild1) => {
+            const indexChild = this.state.attribute_search_children_ids
+              .map((e) => e.id)
+              .indexOf(attributeChild1.id);
+            if (indexChild !== -1) {
+              const newChild = this.state.attribute_search_children_ids.splice(
+                indexChild,
+                1
+              );
+              console.log("newChild", newChild);
+            }
+          });
+        }
+      });
+    } else {
+      this.setState({
+        attribute_search_parent: [
+          ...this.state.attribute_search_parent,
+          attribute,
+        ],
+      });
+    }
+    this.props.handleDataFromInfo(this.state);
+  };
+
+  handleChangeChildAttribute = (attributeChild) => {
+    var attributeParentOb;
+    this.state.listAttributeSearch.forEach((attribute) => {
+      if (attribute.attribute_search_parent != null) {
+        attribute.attribute_search_parent.forEach((attributechild2) => {
+          if (attributechild2.id === attributeChild.id) {
+            attributeParentOb = attribute;
+          }
+        });
+      }
+    });
+    if (attributeParentOb != null) {
+      var indexHas = this.state.attribute_search_parent
+        .map((e) => e.id)
+        .indexOf(attributeParentOb.id);
+      if (indexHas !== -1) {
+      } else {
+        this.setState({
+          attribute_search_parent: [
+            ...this.state.attribute_search_parent,
+            attributeParentOb,
+          ],
+        });
+      }
+    }
+
+    /////
+    var indexHasChild = this.state.attribute_search_children_ids.indexOf(
+      attributeChild.id
+    );
+    if (indexHasChild !== -1) {
+      var newListChild = this.state.attribute_search_children_ids;
+      newListChild.splice(indexHasChild, 1);
+      this.setState({ attribute_search_children_ids: newListChild });
+    } else {
+      this.setState({
+        attribute_search_children_ids: [
+          ...this.state.attribute_search_children_ids,
+          attributeChild.id,
+        ],
+      });
+    }
+    this.props.handleDataFromInfo(this.state);
+  };
 
   onChangePrice = (e) => {
     var { checked } = e.target;
@@ -350,6 +506,7 @@ class InfoProduct extends Component {
   render() {
     var {
       listCategory,
+      listAttributeSearch,
       txtName,
       txtStatus,
       txtPrice,
@@ -726,16 +883,160 @@ class InfoProduct extends Component {
             </div>
           </div>
         </div>
+        <div class="form-group">
+          <label for="product_name">Thuộc tính tìm kiếm</label>
+          <div className="Choose-category-product">
+            <div id="accordionAttribute">
+              <div
+                className="wrap_category"
+                style={{ display: "flex" }}
+                onClick={this.onChangeIcon}
+                data-toggle="collapse"
+                data-target="#collapseOneAttribute"
+                aria-expanded="false"
+                aria-controls="collapseOneAttribute"
+              >
+                <input
+                  disabled
+                  type="text"
+                  class="form-control"
+                  placeholder="--Chọn thuộc tính--"
+                  style={{
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    paddingRight: "55px",
+                    position: "relative",
+                  }}
+                  value={this.getNameSelectedAttribute()}
+                ></input>
+                <button
+                  class="btn btn-link btn-collapse btn-accordion-collapse collapsed"
+                  id="headingOneAttribute"
+                  style={{
+                    position: "absolute",
+                    right: "27px",
+                  }}
+                >
+                  <i
+                    class={
+                      this.state.icon ? "fa fa-caret-down" : "fa fa-caret-down"
+                    }
+                    // style={{ fontSize: "0.2px", color: "#abacb4" }}
+                  ></i>
+                </button>
+              </div>
+              <div
+                id="collapseOneAttribute"
+                class="collapse"
+                aria-labelledby="headingOneAttribute"
+                data-parent="#accordionAttribute"
+              >
+                <ul
+                  style={{
+                    listStyle: "none",
+                    margin: "5px 0",
+                    display: "flex",
+                    flexDirection: "column",
+                    rowGap: "10px",
+                  }}
+                  class="list-group"
+                >
+                  {listAttributeSearch?.length > 0 ? (
+                    listAttributeSearch.map((attribute, index) => (
+                      <li
+                        class=""
+                        style={{
+                          cursor: "pointer",
+                          paddingTop: "5px",
+                          paddingLeft: "5px",
+                        }}
+                      >
+                        {/* <input
+                          type="checkbox"
+                          style={{
+                            marginRight: "10px",
+                            width: "30px",
+                            height: "15px",
+                          }}
+                          checked={this.handleChangeCheckParentAttribute(
+                            attribute.id
+                          )}
+                          onChange={() =>
+                            this.handleChangeParentAttribute(attribute)
+                          }
+                        /> */}
+                        <span
+                          style={{
+                            fontWeight: "600",
+                          }}
+                        >
+                          {attribute.label}
+                        </span>
+                        <ul
+                          style={{
+                            listStyle: "none",
+                            margin: "5px 15px 0 15px",
+                          }}
+                        >
+                          {(attribute?.attribute_search_child ?? []).map(
+                            (attributeChild, index) => (
+                              <li
+                                style={{
+                                  cursor: "pointer",
+                                  display: "flex",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <input
+                                  type="checkbox"
+                                  style={{
+                                    marginRight: "10px",
+                                    width: "30px",
+                                    height: "15px",
+                                  }}
+                                  checked={this.handleChangeCheckChildAttribute(
+                                    attributeChild.id
+                                  )}
+                                  onChange={() =>
+                                    this.handleChangeChildAttribute(
+                                      attributeChild
+                                    )
+                                  }
+                                />
+                                {attributeChild.name}
+                              </li>
+                            )
+                          )}
+                        </ul>
+                      </li>
+                    ))
+                  ) : (
+                    <div>Không có kết quả</div>
+                  )}
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     );
   }
 }
-
+const mapStateToProps = (state) => {
+  return {
+    allAttributeProduct:
+      state.attributeSearchReducers.attribute_search.allAttributeProduct,
+  };
+};
 const mapDispatchToProps = (dispatch, props) => {
   return {
     fetchAllCategoryP: (store_code, params) => {
       dispatch(CategoryPAction.fetchAllCategoryP(store_code, params));
     },
+    getAttributeSearch: (store_code, id) => {
+      dispatch(AttributeAction.getAttributeSearch(store_code, id));
+    },
   };
 };
-export default connect(null, mapDispatchToProps)(InfoProduct);
+export default connect(mapStateToProps, mapDispatchToProps)(InfoProduct);

@@ -1243,7 +1243,7 @@ export const postProduct = (store_code, data) => {
   };
 };
 
-export const postProductV2 = (store_code, branch_id, data) => {
+export const postProductV2 = (store_code, branch_id, data, funcModal) => {
   return (dispatch) => {
     const _value_price = data.price.toString().replace(/,/g, "");
     const _value_quantity_in_stock = data.quantity_in_stock
@@ -1271,6 +1271,7 @@ export const postProductV2 = (store_code, branch_id, data) => {
     productApi
       .createProductV2(store_code, branch_id, data)
       .then((res) => {
+        funcModal(res.data.data?.id);
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",
@@ -1497,7 +1498,14 @@ export const updateOneFieldProduct = (
   };
 };
 
-export const updateProduct = (store_code, data, productId, page, params) => {
+export const updateProduct = (
+  store_code,
+  data,
+  productId,
+  page,
+  params,
+  funcModal
+) => {
   return (dispatch) => {
     const _value_price = data.price.toString().replace(/,/g, "");
     const _value_quantity_in_stock = data.quantity_in_stock
@@ -1526,6 +1534,7 @@ export const updateProduct = (store_code, data, productId, page, params) => {
       .updateProduct(store_code, data, productId)
       .then((res) => {
         console.log(res);
+        funcModal();
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",
@@ -1571,7 +1580,8 @@ export const updateDistribute = (
   branchId,
   form,
   page,
-  params
+  params,
+  funcModal
 ) => {
   return (dispatch) => {
     dispatch({
@@ -1598,7 +1608,9 @@ export const updateDistribute = (
         });
       })
       .finally(() => {
-        dispatch(updateProduct(store_code, form, productId, page, params));
+        dispatch(
+          updateProduct(store_code, form, productId, page, params, funcModal)
+        );
       });
   };
 };

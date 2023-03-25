@@ -11,6 +11,7 @@ import Video from "../../../components/Product/Create/Video";
 
 import * as productAction from "../../../actions/product";
 import * as CategoryPAction from "../../../actions/category_product";
+import * as AttributeAction from "../../../actions/attribute_search";
 import * as Types from "../../../constants/ActionType";
 import * as blogAction from "../../../actions/blog";
 
@@ -27,12 +28,14 @@ class ProductCreate extends Component {
       isError: false,
       disableDistribute: false,
       disableInventory: false,
+      attributeSearch: [],
     };
   }
 
   componentDidMount() {
     this.props.fetchAllAttributeP(this.props.store_code);
     this.props.fetchAllCategoryP(this.props.store_code);
+    this.props.fetchAllAttributeSearch(this.props.store_code);
     this.props.fetchAllBlog(this.props.store_code, 1);
   }
 
@@ -72,6 +75,15 @@ class ProductCreate extends Component {
         .toString()
         .replace(/,/g, "")
         .replace(/\./g, "");
+      var attribute_search_children_ids = [];
+      if (data?.attribute_search_children_ids?.length > 0) {
+        attribute_search_children_ids = data.attribute_search_children_ids.map(
+          (attributeSearchParent, index) => {
+            return attributeSearchParent.id;
+          }
+        );
+      }
+
       var categories = [];
       var category_children_ids = [];
       if (data.category_parent.length > 0) {
@@ -88,7 +100,24 @@ class ProductCreate extends Component {
       }
       formdata.categories = categories;
       formdata.category_children_ids = category_children_ids;
-      return { form: formdata };
+
+      var categories = [];
+      var category_children_ids = [];
+      if (data.category_parent.length > 0) {
+        categories = data.category_parent.map((categoryParent, index) => {
+          return categoryParent.id;
+        });
+      }
+      if (data.category_children_ids.length > 0) {
+        category_children_ids = data.category_children_ids.map(
+          (categoryChild, index) => {
+            return categoryChild.id;
+          }
+        );
+      }
+      formdata.categories = categories;
+      formdata.category_children_ids = category_children_ids;
+      return { form: formdata, attributeSearch: attribute_search_children_ids };
     });
   };
 
@@ -440,7 +469,11 @@ class ProductCreate extends Component {
     if (form.weight == "") {
       form.weight = 100;
     }
-    this.props.postProductV2(store_code, branch_id, form);
+    this.props.postProductV2(store_code, branch_id, form, (id) => {
+      this.props.setUpAttributeSearch(store_code, id, {
+        list_attribute_search_childs: this.state.attributeSearch,
+      });
+    });
   };
 
   handleDataFromAttribute = (data) => {
@@ -537,8 +570,15 @@ class ProductCreate extends Component {
   };
   render() {
     var { store_code } = this.props;
-    var { category_product, attributeP, auth, isShowAttr, isCreate, isRemove } =
-      this.props;
+    var {
+      category_product,
+      attributeP,
+      auth,
+      isShowAttr,
+      isCreate,
+      isRemove,
+      attribute_search,
+    } = this.props;
     var { total, disableInventory, disableDistribute } = this.state;
     return (
       <div class="container-fluid">
@@ -560,6 +600,7 @@ class ProductCreate extends Component {
                     total={total}
                     handleDataFromInfo={this.handleDataFromInfo}
                     category_product={category_product}
+                    attribute_search={attribute_search}
                   />
                 </div>
               </div>
@@ -728,6 +769,8 @@ const mapStateToProps = (state) => {
     auth: state.authReducers.login.authentication,
     attributeP: state.attributePReducers.attribute_product.allAttrbute,
     category_product: state.categoryPReducers.category_product.allCategoryP,
+    attribute_search:
+      state.attributeSearchReducers.attribute_search.allAttribute,
     alert: state.productReducers.alert.alert_uid,
     badges: state.badgeReducers.allBadge,
 
@@ -744,11 +787,19 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchAllCategoryP: (store_code) => {
       dispatch(CategoryPAction.fetchAllCategoryP(store_code));
     },
+    fetchAllAttributeSearch: (store_code, params) => {
+      dispatch(AttributeAction.fetchAllAttributeSearch(store_code, params));
+    },
+    setUpAttributeSearch: (store_code, id, form) => {
+      dispatch(AttributeAction.setUpAttributeSearch(store_code, id, form));
+    },
     postProduct: (store_code, product) => {
       dispatch(productAction.postProduct(store_code, product));
     },
-    postProductV2: (store_code, branch_id, form) => {
-      dispatch(productAction.postProductV2(store_code, branch_id, form));
+    postProductV2: (store_code, branch_id, form, funcModal) => {
+      dispatch(
+        productAction.postProductV2(store_code, branch_id, form, funcModal)
+      );
     },
     fetchAllBlog: (id, page) => {
       dispatch(blogAction.fetchAllBlog(id, page));

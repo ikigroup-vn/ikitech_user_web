@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import { Link } from "react-router-dom";
 import * as Env from "../../ultis/default";
-import * as CategoryPAction from "../../actions/category_product";
+import * as attributeSearch from "../../actions/attribute_search";
 import SortableList, { SortableItem } from "react-easy-sort";
 import arrayMove from "array-move";
 class Table extends Component {
@@ -25,25 +25,29 @@ class Table extends Component {
   };
 
   componentDidMount() {
-    this.setState({ listArr: this.props.category_product });
+    this.setState({ listArr: this.props.attribute_search });
   }
 
   componentWillReceiveProps(nextProps) {
     if (
-      !shallowEqual(this.props.category_product, nextProps.category_product)
+      !shallowEqual(this.props.attribute_search, nextProps.attribute_search)
     ) {
-      this.setState({ listArr: nextProps.category_product });
+      this.setState({ listArr: nextProps.attribute_search });
     }
   }
 
   passDeleteFunc = (e, id, name) => {
-    this.props.handleDelCallBack({ title: "danh mục", id: id, name: name });
+    this.props.handleDelCallBack({
+      title: "thuộc tính",
+      id: id,
+      name: name,
+    });
     e.preventDefault();
   };
   deleteChild = (e, id, idChild, name) => {
     console.log("infor", name);
     this.props.handleDeleteChild({
-      title: "danh mục con",
+      title: "thuộc tính con",
       id: id,
       idChild: idChild,
       name: name,
@@ -71,7 +75,7 @@ class Table extends Component {
       listId.push(element.id);
       listPosition.push(index + 1);
     });
-    this.props.sortCategory(this.props.store_code, {
+    this.props.sortAttributeSearch(this.props.store_code, {
       ids: listId,
       positions: listPosition,
     });
@@ -159,7 +163,7 @@ class Table extends Component {
               </div>
 
               <div class="table-body-cell" style={{ position: "relative" }}>
-                {data.category_children.map((data1, index) => {
+                {data.product_attribute_search_children.map((data1, index) => {
                   var image_url_child =
                     data1.image_url == null || data1.image_url == ""
                       ? Env.IMG_NOT_FOUND
@@ -280,10 +284,10 @@ class Table extends Component {
             Hình ảnh
           </div>
           <div style={{ fontWeight: "500" }} class="table-body-cell">
-            Tên danh mục
+            Tên thuộc tính
           </div>
           <div style={{ fontWeight: "500" }} class="table-body-cell">
-            Danh mục con
+            Thuộc tính con
           </div>
         </div>
         <SortableList
@@ -300,8 +304,8 @@ class Table extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    sortCategory: (store_code, data) => {
-      dispatch(CategoryPAction.sortCategory(store_code, data));
+    sortAttributeSearch: (store_code, data) => {
+      dispatch(attributeSearch.sortAttributeSearch(store_code, data));
     },
   };
 };
