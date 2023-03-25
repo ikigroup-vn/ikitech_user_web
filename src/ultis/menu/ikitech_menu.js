@@ -37,6 +37,13 @@ export const ikitech_menu = [
         open: "product",
         children: [
           {
+            class: "product_list",
+            display: "hide",
+            name: "Sản phẩm",
+            exact: true,
+            to: "/product/index",
+          },
+          {
             class: "product_category_list",
             display: "hide",
             name: "Danh mục sản phẩm",
@@ -49,13 +56,6 @@ export const ikitech_menu = [
             name: "Thuộc tính tìm kiếm",
             exact: true,
             to: "/product/attribute_searches",
-          },
-          {
-            class: "product_list",
-            display: "hide",
-            name: "Sản phẩm",
-            exact: true,
-            to: "/product/index",
           },
 
           // {

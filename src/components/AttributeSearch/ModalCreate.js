@@ -79,22 +79,10 @@ class ModalCreate extends Component {
       return;
     }
 
-    var file = this.state.fileUpload;
-    if (typeof file !== "undefined" && file != "" && file != null) {
-      // window.$('#file-attribute-search').fileinput('clear');
-      const fd = new FormData();
-      fd.append("image", await compressed(file));
-      fd.append("name", this.state.txtName);
-      fd.append("is_show_home", this.state.isShowHome);
-      this.props.createAttributeSearch(this.props.store_code, fd);
-      this.setState({ fileUpload: null });
-    } else {
-      window.$("#file-attribute-search").fileinput("clear");
-      const fd = new FormData();
-      fd.append("name", this.state.txtName);
-      fd.append("is_show_home", this.state.isShowHome);
-      this.props.createAttributeSearch(this.props.store_code, fd);
-    }
+    const fd = new FormData();
+    fd.append("name", this.state.txtName);
+    fd.append("is_show_home", true);
+    this.props.createAttributeSearch(this.props.store_code, fd);
   };
   render() {
     console.log("render");
@@ -148,36 +136,6 @@ class ModalCreate extends Component {
                     onChange={this.onChange}
                     name="txtName"
                   />
-                  <div
-                    class="form-check"
-                    style={{ marginTop: "10px", padding: "0" }}
-                  >
-                    <label class="form-check-label">
-                      <input
-                        type="checkbox"
-                        name="even"
-                        onChange={() =>
-                          this.setState({ isShowHome: !isShowHome })
-                        }
-                        checked={isShowHome}
-                      />{" "}
-                      Hiển thị thuộc tính tìm kiếm
-                    </label>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label for="product_name" style={{ margin: 0 }}>
-                    Hình ảnh
-                  </label>
-                  <div className="file-loading">
-                    <input
-                      id="file-attribute-search"
-                      type="file"
-                      className="file"
-                      data-overwrite-initial="false"
-                      data-min-file-count="2"
-                    />
-                  </div>
                 </div>
               </div>
               <div class="modal-footer">

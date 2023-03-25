@@ -368,9 +368,9 @@ class InfoProduct extends Component {
         attributes.forEach((attribute) => {
           attribute.attribute_search_child.forEach((attributeChild) => {
             if (
-              this.state.attribute_search_children_ids
-                .map((e) => e.id)
-                .indexOf(attributeChild.id) > -1
+              this.state.attribute_search_children_ids.indexOf(
+                attributeChild.id
+              ) > -1
             ) {
               nam = nam + attributeChild.name + ", ";
             }
