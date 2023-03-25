@@ -7,6 +7,7 @@ import * as AttributeAction from "../../../actions/attribute_search";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import { formatNumber, formatNoD } from "../../../ultis/helpers";
 import getChannel, { IKITECH } from "../../../ultis/channel";
+import * as Types from "../../../constants/ActionType";
 class InfoProduct extends Component {
   constructor(props) {
     super(props);
@@ -340,6 +341,9 @@ class InfoProduct extends Component {
       this.props.handleDataFromInfo(nextState);
     }
     return true;
+  }
+  componentWillUnmount() {
+    this.props.resetAttributeSearch();
   }
   //Xử lý ds thuộc tính tìm kiếm
 
@@ -1036,6 +1040,12 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     getAttributeSearch: (store_code, id) => {
       dispatch(AttributeAction.getAttributeSearch(store_code, id));
+    },
+    resetAttributeSearch: () => {
+      dispatch({
+        type: Types.FETCH_ALL_ATTRIBUTE_SEARCH_PRODUCT,
+        data: {},
+      });
     },
   };
 };
