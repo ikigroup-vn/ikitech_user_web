@@ -135,6 +135,27 @@ const ActionsGameGuessNumberContentStyles = styled.div`
       }
     }
   }
+  .winner__image {
+    width: 100px;
+    height: 100px;
+    margin-bottom: 20px;
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 100rem;
+    }
+  }
+  .winner__info {
+    display: flex;
+    span {
+      &:first-child {
+        width: 150px;
+      }
+      &:last-child {
+        color: rgb(193, 32, 38);
+      }
+    }
+  }
 `;
 
 class ActionsGameGuessNumberContent extends Component {
@@ -159,6 +180,7 @@ class ActionsGameGuessNumberContent extends Component {
       valueGift: "",
       isGuessNumber: true,
       listResult: [],
+      is_show_all_prizer: false,
     };
   }
   componentDidMount() {
@@ -205,6 +227,7 @@ class ActionsGameGuessNumberContent extends Component {
         isShake: nextProps.gameGuessNumbers.is_shake,
         isLoading: true,
         isShowed: nextProps.gameGuessNumbers.is_show_game,
+        is_show_all_prizer: nextProps.gameGuessNumbers.is_show_all_prizer,
         isGuessNumber: nextProps.gameGuessNumbers.is_guess_number,
         rangeNumber: nextProps.gameGuessNumbers.is_guess_number
           ? nextProps.gameGuessNumbers.range_number
@@ -257,7 +280,7 @@ class ActionsGameGuessNumberContent extends Component {
         this.setState({ textResult: "" });
       }
       this.setState({ [name]: valueNumber });
-    } else if (name === "isShowed") {
+    } else if (name === "isShowed" || name === "is_show_all_prizer") {
       const checked = e.target.checked;
       this.setState({ [name]: checked ? true : false });
     } else if (name === "isGuessNumber") {
@@ -330,6 +353,7 @@ class ActionsGameGuessNumberContent extends Component {
       valueGift,
       isGuessNumber,
       listResult,
+      is_show_all_prizer,
     } = this.state;
 
     const { addGameGuessNumbers, store_code, showError } = this.props;
@@ -443,6 +467,7 @@ class ActionsGameGuessNumberContent extends Component {
           : "",
         description: txtDescription,
         is_show_game: isShowed,
+        is_show_all_prizer: is_show_all_prizer,
         is_guess_number: isGuessNumber,
         range_number: isGuessNumber ? rangeNumber : null,
         text_result: isGuessNumber
@@ -472,6 +497,7 @@ class ActionsGameGuessNumberContent extends Component {
       valueGift,
       isGuessNumber,
       listResult,
+      is_show_all_prizer,
     } = this.state;
 
     const { store_code, showError, updateGameGuessNumbers, idGameGuessNumber } =
@@ -586,6 +612,7 @@ class ActionsGameGuessNumberContent extends Component {
           : "",
         description: txtDescription,
         is_show_game: isShowed,
+        is_show_all_prizer: is_show_all_prizer,
         is_guess_number: isGuessNumber,
         range_number: isGuessNumber ? rangeNumber : null,
         text_result: isGuessNumber
@@ -658,6 +685,17 @@ class ActionsGameGuessNumberContent extends Component {
       listResult: newListResult,
     });
   };
+  handleShowInformationWinner = () => {
+    const { gameGuessNumbers } = this.props;
+    const isCheckedFinalResultAnnounced =
+      gameGuessNumbers.final_result_announced ? true : false;
+    const timeEnd = moment(gameGuessNumbers.time_end).diff(moment());
+    const isCheckedTimeEnd = timeEnd > 0 ? false : true;
+
+    return isCheckedFinalResultAnnounced === true && isCheckedTimeEnd === true
+      ? true
+      : false;
+  };
 
   render() {
     const { types, groupCustomer, gameGuessNumbers, idGameGuessNumber } =
@@ -680,6 +718,7 @@ class ActionsGameGuessNumberContent extends Component {
       textResult,
       valueGift,
       listResult,
+      is_show_all_prizer,
     } = this.state;
 
     return (
@@ -852,19 +891,38 @@ class ActionsGameGuessNumberContent extends Component {
                       <div></div>
                     </label>
                   </div>
-                  <div className="form-group">
-                    <label for="txtDescription">Mô tả</label>
-                    <textarea
-                      type="text"
-                      className="form-control input-sm"
-                      id="txtDescription"
-                      name="txtDescription"
-                      placeholder="Nhập mô tả trò chơi..."
-                      autoComplete="off"
-                      value={txtDescription}
-                      onChange={this.onChange}
-                      rows="9"
-                    />
+                  <div>
+                    <div className="form-group">
+                      <label for="is_show_all_prizer">
+                        Hiển thị danh sách người đoán đúng
+                      </label>
+                      <label className="status-product on-off">
+                        <input
+                          type="checkbox"
+                          hidden
+                          class="checkbox"
+                          name="is_show_all_prizer"
+                          value={is_show_all_prizer}
+                          checked={is_show_all_prizer}
+                          onChange={this.onChange}
+                        />
+                        <div></div>
+                      </label>
+                    </div>
+                    <div className="form-group">
+                      <label for="txtDescription">Mô tả</label>
+                      <textarea
+                        type="text"
+                        className="form-control input-sm"
+                        id="txtDescription"
+                        name="txtDescription"
+                        placeholder="Nhập mô tả trò chơi..."
+                        autoComplete="off"
+                        value={txtDescription}
+                        onChange={this.onChange}
+                        rows="9"
+                      />
+                    </div>
                   </div>
                   <div className="gameGuessNumber__item">
                     <div className="form-group discount-for">
@@ -1183,6 +1241,111 @@ class ActionsGameGuessNumberContent extends Component {
                     </div>
                   )}
                 </>
+                {this.handleShowInformationWinner() && (
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "repeat(2,1fr)",
+                      columnGap: "20px",
+                    }}
+                  >
+                    <div className="form-group">
+                      <label for="txtDescription">
+                        Thông tin người trúng thưởng
+                      </label>
+                      <div>
+                        {gameGuessNumbers.final_result_announced?.customer_win
+                          ?.length === 0 ? (
+                          <div
+                            style={{
+                              color: "rgb(193, 32, 38)",
+                            }}
+                          >
+                            Không có người nào trúng thưởng !
+                          </div>
+                        ) : (
+                          <>
+                            <div className="winner__image">
+                              {gameGuessNumbers.final_result_announced
+                                ?.customer_win[0]?.avatar_image ? (
+                                <img
+                                  src={
+                                    gameGuessNumbers.final_result_announced
+                                      ?.customer_win[0]?.avatar_image
+                                  }
+                                  alt={
+                                    gameGuessNumbers.final_result_announced
+                                      ?.customer_win[0]?.name
+                                  }
+                                />
+                              ) : (
+                                <img src="../../../images/people.png" alt="" />
+                              )}
+                            </div>
+                            <div className="winner__info">
+                              <span>Tên người trúng giải: </span>
+                              <span>
+                                {
+                                  gameGuessNumbers.final_result_announced
+                                    ?.customer_win[0]?.name
+                                }
+                              </span>
+                            </div>
+                            <div className="winner__info">
+                              <span>Số điện thoại: </span>
+                              <span>
+                                {" "}
+                                {
+                                  gameGuessNumbers.final_result_announced
+                                    ?.customer_win[0]?.phone_number
+                                }
+                              </span>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    </div>
+                    {gameGuessNumbers.final_result_announced?.customer_win
+                      ?.length > 0 && (
+                      <div className="form-group">
+                        <label for="txtDescription">
+                          Danh sách người dự đoán kết quả đúng
+                        </label>
+                        <div>
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th scope="col">STT</th>
+                                <th scope="col">Tên</th>
+                                <th scope="col">Số điện thoại</th>
+                                <th scope="col">Thời gian dự đoán</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              {gameGuessNumbers.final_result_announced?.customer_win.map(
+                                (customer, index) => (
+                                  <tr
+                                    style={{
+                                      background:
+                                        index === 0
+                                          ? "#ff00004a"
+                                          : "transparent",
+                                    }}
+                                  >
+                                    <td>{index + 1}</td>
+                                    <td>{customer.name}</td>
+                                    <td>{customer.phone_number}</td>
+                                    <td>{customer.created_at}</td>
+                                  </tr>
+                                )
+                              )}
+                            </tbody>
+                          </table>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </ActionsGameGuessNumberContentStyles>
           </div>
