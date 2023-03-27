@@ -734,654 +734,671 @@ class ActionsGameGuessNumberContent extends Component {
           </h4>
         </div>
         <br></br>
-        <div class="card mb-4">
-          <div class="card-header title_content">Nhập thông tin trò chơi</div>
-          <div class="card-body" style={{ padding: "0.8rem" }}>
-            <ActionsGameGuessNumberContentStyles className="gameSpinWheel__content">
-              <div className="gameSpinWheel__form">
-                <div className="gameGuessNumber__main">
-                  <div className="form-group gameGuessNumber__item">
-                    <label for="txtName">Tên trò chơi</label>
-                    <input
-                      type="text"
-                      className="form-control input-sm"
-                      id="txtName"
-                      name="txtName"
-                      placeholder="Nhập tên trò chơi"
-                      autoComplete="off"
-                      value={txtName}
-                      onChange={this.onChange}
-                    />
-                  </div>
-                  <div className="form-group gameGuessNumber__item">
-                    <label for="txtTurnInDay">
-                      Số lượt chơi được thưởng trong ngày
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control input-sm"
-                      id="txtTurnInDay"
-                      name="txtTurnInDay"
-                      placeholder="Nhập số lượt chơi được thưởng trong ngày..."
-                      autoComplete="off"
-                      value={txtTurnInDay}
-                      onChange={this.onChange}
-                    />
-                  </div>
-                  <div className="form-group gameGuessNumber__item">
-                    <div
-                      className="row"
-                      style={{ marginBottom: "0px!important" }}
-                    >
-                      <div className="form-group gameGuessNumber__item col-6">
-                        <label for="product_name">Ngày bắt đầu</label>
-                        {isLoading == true && idGameGuessNumber ? (
-                          <MomentInput
-                            min={moment()}
-                            value={
-                              txtStart == "" || txtStart == null
-                                ? undefined
-                                : moment(txtStart, "DD-MM-YYYY HH:mm")
-                            }
-                            format="DD-MM-YYYY HH:mm"
-                            options={true}
-                            enableInputClick={true}
-                            monthSelect={true}
-                            readOnly={true}
-                            translations={{
-                              DATE: "Ngày",
-                              TIME: "Giờ",
-                              SAVE: "Đóng",
-                              HOURS: "Giờ",
-                              MINUTES: "Phút",
-                            }}
-                            onSave={() => {}}
-                            onChange={this.onChangeStart}
-                          />
-                        ) : null}
-                        {idGameGuessNumber ? null : (
-                          <MomentInput
-                            min={moment()}
-                            format="DD-MM-YYYY HH:mm"
-                            options={true}
-                            enableInputClick={true}
-                            monthSelect={true}
-                            readOnly={true}
-                            translations={{
-                              DATE: "Ngày",
-                              TIME: "Giờ",
-                              SAVE: "Đóng",
-                              HOURS: "Giờ",
-                              MINUTES: "Phút",
-                            }}
-                            onSave={() => {}}
-                            onChange={this.onChangeStart}
-                          />
-                        )}
-                      </div>
-                      <div className="form-group gameGuessNumber__item col-6">
-                        <label for="product_name">Ngày kết thúc</label>
-                        {isLoading == true && idGameGuessNumber ? (
-                          <MomentInput
-                            min={moment()}
-                            value={
-                              txtEnd == "" || txtEnd == null
-                                ? ""
-                                : moment(txtEnd, "DD-MM-YYYY HH:mm")
-                            }
-                            format="DD-MM-YYYY HH:mm"
-                            options={true}
-                            enableInputClick={true}
-                            monthSelect={true}
-                            readOnly={true}
-                            translations={{
-                              DATE: "Ngày",
-                              TIME: "Giờ",
-                              SAVE: "Đóng",
-                              HOURS: "Giờ",
-                              MINUTES: "Phút",
-                            }}
-                            onSave={() => {}}
-                            onChange={this.onChangeEnd}
-                          />
-                        ) : null}
-                        {idGameGuessNumber ? null : (
-                          <MomentInput
-                            min={moment()}
-                            format="DD-MM-YYYY HH:mm"
-                            options={true}
-                            enableInputClick={true}
-                            monthSelect={true}
-                            readOnly={true}
-                            translations={{
-                              DATE: "Ngày",
-                              TIME: "Giờ",
-                              SAVE: "Đóng",
-                              HOURS: "Giờ",
-                              MINUTES: "Phút",
-                            }}
-                            onSave={() => {}}
-                            onChange={this.onChangeEnd}
-                          />
-                        )}
-                      </div>
-                    </div>
-                    <div
-                      className={`alert alert-danger ${displayError}`}
-                      role="alert"
-                      style={{
-                        marginTop: "10px",
-                      }}
-                    >
-                      Thời gian kết thúc phải sau thời gian bắt đầu
-                    </div>
-                  </div>
-                  <div className="form-group gameGuessNumber__item">
-                    <label for="txtMaxAmountCoin">Trạng thái hoạt động</label>
-                    <label className="status-product on-off">
+        <ActionsGameGuessNumberContentStyles>
+          <div class="card mb-4">
+            <div class="card-header title_content">Nhập thông tin trò chơi</div>
+            <div class="card-body" style={{ padding: "0.8rem" }}>
+              <div className="gameSpinWheel__content">
+                <div className="gameSpinWheel__form">
+                  <div className="gameGuessNumber__main">
+                    <div className="form-group gameGuessNumber__item">
+                      <label for="txtName">Tên trò chơi</label>
                       <input
-                        type="checkbox"
-                        hidden
-                        class="checkbox"
-                        name="isShowed"
-                        value={isShowed}
-                        checked={isShowed}
+                        type="text"
+                        className="form-control input-sm"
+                        id="txtName"
+                        name="txtName"
+                        placeholder="Nhập tên trò chơi"
+                        autoComplete="off"
+                        value={txtName}
                         onChange={this.onChange}
                       />
-                      <div></div>
-                    </label>
-                  </div>
-                  <div>
-                    <div className="form-group">
-                      <label for="is_show_all_prizer">
-                        Hiển thị danh sách người đoán đúng
+                    </div>
+                    <div className="form-group gameGuessNumber__item">
+                      <label for="txtTurnInDay">
+                        Số lượt chơi được thưởng trong ngày
                       </label>
+                      <input
+                        type="text"
+                        className="form-control input-sm"
+                        id="txtTurnInDay"
+                        name="txtTurnInDay"
+                        placeholder="Nhập số lượt chơi được thưởng trong ngày..."
+                        autoComplete="off"
+                        value={txtTurnInDay}
+                        onChange={this.onChange}
+                      />
+                    </div>
+                    <div className="form-group gameGuessNumber__item">
+                      <div
+                        className="row"
+                        style={{ marginBottom: "0px!important" }}
+                      >
+                        <div className="form-group gameGuessNumber__item col-6">
+                          <label for="product_name">Ngày bắt đầu</label>
+                          {isLoading == true && idGameGuessNumber ? (
+                            <MomentInput
+                              min={moment()}
+                              value={
+                                txtStart == "" || txtStart == null
+                                  ? undefined
+                                  : moment(txtStart, "DD-MM-YYYY HH:mm")
+                              }
+                              format="DD-MM-YYYY HH:mm"
+                              options={true}
+                              enableInputClick={true}
+                              monthSelect={true}
+                              readOnly={true}
+                              translations={{
+                                DATE: "Ngày",
+                                TIME: "Giờ",
+                                SAVE: "Đóng",
+                                HOURS: "Giờ",
+                                MINUTES: "Phút",
+                              }}
+                              onSave={() => {}}
+                              onChange={this.onChangeStart}
+                            />
+                          ) : null}
+                          {idGameGuessNumber ? null : (
+                            <MomentInput
+                              min={moment()}
+                              format="DD-MM-YYYY HH:mm"
+                              options={true}
+                              enableInputClick={true}
+                              monthSelect={true}
+                              readOnly={true}
+                              translations={{
+                                DATE: "Ngày",
+                                TIME: "Giờ",
+                                SAVE: "Đóng",
+                                HOURS: "Giờ",
+                                MINUTES: "Phút",
+                              }}
+                              onSave={() => {}}
+                              onChange={this.onChangeStart}
+                            />
+                          )}
+                        </div>
+                        <div className="form-group gameGuessNumber__item col-6">
+                          <label for="product_name">Ngày kết thúc</label>
+                          {isLoading == true && idGameGuessNumber ? (
+                            <MomentInput
+                              min={moment()}
+                              value={
+                                txtEnd == "" || txtEnd == null
+                                  ? ""
+                                  : moment(txtEnd, "DD-MM-YYYY HH:mm")
+                              }
+                              format="DD-MM-YYYY HH:mm"
+                              options={true}
+                              enableInputClick={true}
+                              monthSelect={true}
+                              readOnly={true}
+                              translations={{
+                                DATE: "Ngày",
+                                TIME: "Giờ",
+                                SAVE: "Đóng",
+                                HOURS: "Giờ",
+                                MINUTES: "Phút",
+                              }}
+                              onSave={() => {}}
+                              onChange={this.onChangeEnd}
+                            />
+                          ) : null}
+                          {idGameGuessNumber ? null : (
+                            <MomentInput
+                              min={moment()}
+                              format="DD-MM-YYYY HH:mm"
+                              options={true}
+                              enableInputClick={true}
+                              monthSelect={true}
+                              readOnly={true}
+                              translations={{
+                                DATE: "Ngày",
+                                TIME: "Giờ",
+                                SAVE: "Đóng",
+                                HOURS: "Giờ",
+                                MINUTES: "Phút",
+                              }}
+                              onSave={() => {}}
+                              onChange={this.onChangeEnd}
+                            />
+                          )}
+                        </div>
+                      </div>
+                      <div
+                        className={`alert alert-danger ${displayError}`}
+                        role="alert"
+                        style={{
+                          marginTop: "10px",
+                        }}
+                      >
+                        Thời gian kết thúc phải sau thời gian bắt đầu
+                      </div>
+                    </div>
+                    <div className="form-group gameGuessNumber__item">
+                      <label for="txtMaxAmountCoin">Trạng thái hoạt động</label>
                       <label className="status-product on-off">
                         <input
                           type="checkbox"
                           hidden
                           class="checkbox"
-                          name="is_show_all_prizer"
-                          value={is_show_all_prizer}
-                          checked={is_show_all_prizer}
+                          name="isShowed"
+                          value={isShowed}
+                          checked={isShowed}
                           onChange={this.onChange}
                         />
                         <div></div>
                       </label>
                     </div>
-                    <div className="form-group">
-                      <label for="txtDescription">Mô tả</label>
-                      <textarea
-                        type="text"
-                        className="form-control input-sm"
-                        id="txtDescription"
-                        name="txtDescription"
-                        placeholder="Nhập mô tả trò chơi..."
-                        autoComplete="off"
-                        value={txtDescription}
-                        onChange={this.onChange}
-                        rows="9"
-                      />
-                    </div>
-                  </div>
-                  <div className="gameGuessNumber__item">
-                    <div className="form-group discount-for">
-                      <label htmlFor="group_customer">Áp dụng cho</label>
-                      <div
-                        style={{
-                          display: "flex",
-                          columnGap: "10px",
-                        }}
-                        className="radio discount-for"
-                        onChange={this.onChange}
-                      >
-                        {groups.map((group) => (
-                          <label key={group.id}>
-                            <input
-                              type={group.type}
-                              name={group.name}
-                              checked={
-                                group_customer == group.value ? true : false
-                              }
-                              className={group.name}
-                              value={group.value}
-                            />
-                            <span
-                              style={{
-                                marginLeft: "5px",
-                              }}
-                            >
-                              {group.label}
-                            </span>
-                          </label>
-                        ))}
+                    <div>
+                      <div className="form-group">
+                        <label for="is_show_all_prizer">
+                          Hiển thị danh sách người đoán đúng
+                        </label>
+                        <label className="status-product on-off">
+                          <input
+                            type="checkbox"
+                            hidden
+                            class="checkbox"
+                            name="is_show_all_prizer"
+                            value={is_show_all_prizer}
+                            checked={is_show_all_prizer}
+                            onChange={this.onChange}
+                          />
+                          <div></div>
+                        </label>
                       </div>
-                      {group_customer == Types.GROUP_CUSTOMER_AGENCY && (
-                        <select
+                      <div className="form-group">
+                        <label for="txtDescription">Mô tả</label>
+                        <textarea
+                          type="text"
+                          className="form-control input-sm"
+                          id="txtDescription"
+                          name="txtDescription"
+                          placeholder="Nhập mô tả trò chơi..."
+                          autoComplete="off"
+                          value={txtDescription}
                           onChange={this.onChange}
-                          value={agency_type_id}
-                          name="agency_type_id"
-                          class="form-control"
-                        >
-                          <option value={-1}>--- Chọn cấp đại lý ---</option>
-                          <option value={0}>Tất cả</option>
-                          {types.map((v) => {
-                            return (
-                              <option value={v.id} key={v.id}>
-                                {v.name}
-                              </option>
-                            );
-                          })}
-                        </select>
-                      )}
-                      {group_customer == Types.GROUP_CUSTOMER_BY_CONDITION && (
-                        <select
+                          rows="9"
+                        />
+                      </div>
+                    </div>
+                    <div className="gameGuessNumber__item">
+                      <div className="form-group discount-for">
+                        <label htmlFor="group_customer">Áp dụng cho</label>
+                        <div
+                          style={{
+                            display: "flex",
+                            columnGap: "10px",
+                          }}
+                          className="radio discount-for"
                           onChange={this.onChange}
-                          value={group_type_id}
-                          name="group_type_id"
-                          class="form-control"
                         >
-                          <option value={-1}>
-                            --- Chọn nhóm khách hàng ---
-                          </option>
-                          {groupCustomer.length > 0 &&
-                            groupCustomer.map((group) => {
+                          {groups.map((group) => (
+                            <label key={group.id}>
+                              <input
+                                type={group.type}
+                                name={group.name}
+                                checked={
+                                  group_customer == group.value ? true : false
+                                }
+                                className={group.name}
+                                value={group.value}
+                              />
+                              <span
+                                style={{
+                                  marginLeft: "5px",
+                                }}
+                              >
+                                {group.label}
+                              </span>
+                            </label>
+                          ))}
+                        </div>
+                        {group_customer == Types.GROUP_CUSTOMER_AGENCY && (
+                          <select
+                            onChange={this.onChange}
+                            value={agency_type_id}
+                            name="agency_type_id"
+                            class="form-control"
+                          >
+                            <option value={-1}>--- Chọn cấp đại lý ---</option>
+                            <option value={0}>Tất cả</option>
+                            {types.map((v) => {
                               return (
-                                <option value={group.id} key={group.id}>
-                                  {group.name}
+                                <option value={v.id} key={v.id}>
+                                  {v.name}
                                 </option>
                               );
                             })}
-                        </select>
-                      )}
-                    </div>
-                    <div className="form-group gameGuessNumber__image ">
-                      <label
-                        for="txtName"
-                        style={{
-                          fontWeight: "750",
-                        }}
-                      >
-                        Hình ảnh mô tả (Tối đa 10 ảnh)
-                      </label>
-                      <div className="gameGuessNumber__imageContent">
-                        <Upload
-                          multiple
-                          setFiles={this.setImages}
-                          files={images}
-                          images={gameGuessNumbers?.images}
-                          limit={10}
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className="form-group type__game">
-                  <label htmlFor="group_customer">Loại kết quả</label>
-                  <div
-                    style={{
-                      display: "flex",
-                      columnGap: "10px",
-                    }}
-                    className="radio"
-                    onChange={this.onChange}
-                  >
-                    <label
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                    >
-                      <input
-                        type="radio"
-                        name="isGuessNumber"
-                        checked={isGuessNumber == true}
-                        className="isGuessNumber"
-                        value={true}
-                      />
-                      <span
-                        style={{
-                          marginLeft: "5px",
-                        }}
-                      >
-                        Theo dãy số
-                      </span>
-                    </label>
-                    <label
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                      }}
-                    >
-                      <input
-                        type="radio"
-                        name="isGuessNumber"
-                        checked={isGuessNumber == false}
-                        className="isGuessNumber"
-                        value={false}
-                      />
-                      <span
-                        style={{
-                          marginLeft: "5px",
-                        }}
-                      >
-                        Nhập danh sách đáp án
-                      </span>
-                    </label>
-                  </div>
-                </div>
-                <>
-                  {isGuessNumber ? (
-                    <div className="gameGuessNumber__isGuessNumber">
-                      <div>
-                        <div className="gameGuessNumber__item form-group">
-                          <label for="rangeNumber">Số lượng chữ số</label>
-                          <input
-                            type="text"
-                            className="form-control input-sm"
-                            id="rangeNumber"
-                            name="rangeNumber"
-                            placeholder="Nhập số lượng chữ số của đáp án..."
-                            autoComplete="off"
-                            value={rangeNumber}
+                          </select>
+                        )}
+                        {group_customer ==
+                          Types.GROUP_CUSTOMER_BY_CONDITION && (
+                          <select
                             onChange={this.onChange}
-                          />
-                        </div>
-                        {Number(rangeNumber) > 0 && (
-                          <div
-                            className="gameGuessNumber__item form-group"
-                            style={{
-                              color: themeData().backgroundColor,
-                            }}
+                            value={group_type_id}
+                            name="group_type_id"
+                            class="form-control"
                           >
-                            *Khách hàng cần nhập số từ{" "}
-                            {Number(rangeNumber) > 0 &&
-                              Array(Number(rangeNumber))
-                                .fill("0")
-                                .join("")}{" "}
-                            đến{" "}
-                            {Number(rangeNumber) > 0 &&
-                              Array(Number(rangeNumber)).fill("9").join("")}
-                          </div>
+                            <option value={-1}>
+                              --- Chọn nhóm khách hàng ---
+                            </option>
+                            {groupCustomer.length > 0 &&
+                              groupCustomer.map((group) => {
+                                return (
+                                  <option value={group.id} key={group.id}>
+                                    {group.name}
+                                  </option>
+                                );
+                              })}
+                          </select>
                         )}
                       </div>
-                      <div className="gameGuessNumber__item form-group">
-                        <label for="valueGift">Phần thưởng</label>
-                        <input
-                          type="text"
-                          className="form-control input-sm"
-                          id="valueGift"
-                          name="valueGift"
-                          placeholder="Nhập phần thưởng..."
-                          autoComplete="off"
-                          value={valueGift}
-                          onChange={this.onChange}
-                        />
+                      <div className="form-group gameGuessNumber__image ">
+                        <label
+                          for="txtName"
+                          style={{
+                            fontWeight: "750",
+                          }}
+                        >
+                          Hình ảnh mô tả (Tối đa 10 ảnh)
+                        </label>
+                        <div className="gameGuessNumber__imageContent">
+                          <Upload
+                            multiple
+                            setFiles={this.setImages}
+                            files={images}
+                            images={gameGuessNumbers?.images}
+                            limit={10}
+                          />
+                        </div>
                       </div>
-                      {rangeNumber !== "" && (
+                    </div>
+                  </div>
+                  <div className="form-group type__game">
+                    <label htmlFor="group_customer">Loại kết quả</label>
+                    <div
+                      style={{
+                        display: "flex",
+                        columnGap: "10px",
+                      }}
+                      className="radio"
+                      onChange={this.onChange}
+                    >
+                      <label
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <input
+                          type="radio"
+                          name="isGuessNumber"
+                          checked={isGuessNumber == true}
+                          className="isGuessNumber"
+                          value={true}
+                        />
+                        <span
+                          style={{
+                            marginLeft: "5px",
+                          }}
+                        >
+                          Theo dãy số
+                        </span>
+                      </label>
+                      <label
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                        }}
+                      >
+                        <input
+                          type="radio"
+                          name="isGuessNumber"
+                          checked={isGuessNumber == false}
+                          className="isGuessNumber"
+                          value={false}
+                        />
+                        <span
+                          style={{
+                            marginLeft: "5px",
+                          }}
+                        >
+                          Nhập danh sách đáp án
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                  <>
+                    {isGuessNumber ? (
+                      <div className="gameGuessNumber__isGuessNumber">
                         <div>
                           <div className="gameGuessNumber__item form-group">
-                            <label for="textResult">Kết quả</label>
+                            <label for="rangeNumber">Số lượng chữ số</label>
                             <input
                               type="text"
                               className="form-control input-sm"
-                              id="textResult"
-                              name="textResult"
-                              placeholder={`Nhập đáp án có ${rangeNumber} chữ số...`}
+                              id="rangeNumber"
+                              name="rangeNumber"
+                              placeholder="Nhập số lượng chữ số của đáp án..."
                               autoComplete="off"
-                              value={textResult}
+                              value={rangeNumber}
                               onChange={this.onChange}
                             />
                           </div>
-                          <div
-                            className="gameGuessNumber__item form-group"
-                            style={{
-                              color: themeData().backgroundColor,
-                            }}
-                          >
-                            *Có thể bỏ trống, khi có kết quả vào lại chương
-                            trình cập nhật sau để công bố!
-                          </div>
+                          {Number(rangeNumber) > 0 && (
+                            <div
+                              className="gameGuessNumber__item form-group"
+                              style={{
+                                color: themeData().backgroundColor,
+                              }}
+                            >
+                              *Khách hàng cần nhập số từ{" "}
+                              {Number(rangeNumber) > 0 &&
+                                Array(Number(rangeNumber))
+                                  .fill("0")
+                                  .join("")}{" "}
+                              đến{" "}
+                              {Number(rangeNumber) > 0 &&
+                                Array(Number(rangeNumber)).fill("9").join("")}
+                            </div>
+                          )}
                         </div>
-                      )}
-                    </div>
-                  ) : (
-                    <div className="form-group">
-                      <label for="txtDescription">Danh sách đáp án</label>
-                      <div
-                        className="gameGuessNumber__item form-group"
-                        style={{
-                          color: themeData().backgroundColor,
-                        }}
-                      >
-                        *Có thể bỏ trống đáp án đúng, khi có kết quả vào lại
-                        chương trình cập nhật sau để công bố!
+                        <div className="gameGuessNumber__item form-group">
+                          <label for="valueGift">Phần thưởng</label>
+                          <input
+                            type="text"
+                            className="form-control input-sm"
+                            id="valueGift"
+                            name="valueGift"
+                            placeholder="Nhập phần thưởng..."
+                            autoComplete="off"
+                            value={valueGift}
+                            onChange={this.onChange}
+                          />
+                        </div>
+                        {rangeNumber !== "" && (
+                          <div>
+                            <div className="gameGuessNumber__item form-group">
+                              <label for="textResult">Kết quả</label>
+                              <input
+                                type="text"
+                                className="form-control input-sm"
+                                id="textResult"
+                                name="textResult"
+                                placeholder={`Nhập đáp án có ${rangeNumber} chữ số...`}
+                                autoComplete="off"
+                                value={textResult}
+                                onChange={this.onChange}
+                              />
+                            </div>
+                            <div
+                              className="gameGuessNumber__item form-group"
+                              style={{
+                                color: themeData().backgroundColor,
+                              }}
+                            >
+                              *Có thể bỏ trống, khi có kết quả vào lại chương
+                              trình cập nhật sau để công bố!
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      <div className="mb-4">
-                        <div className="gameGuessNumber_answerMain">
-                          {listResult.length > 0 &&
-                            listResult.map((result, index) => (
-                              <div
-                                className="gameGuessNumber__answerItem"
-                                key={index}
-                              >
-                                <div className="gameGuessNumber__answerRight">
-                                  <span>Đáp án đúng</span>
-                                  <input
-                                    type="checkbox"
-                                    name="is_correct"
-                                    value={result.is_correct}
-                                    checked={result.is_correct}
-                                    onChange={(e) =>
-                                      this.handleChangeResult(e, index)
-                                    }
-                                  />
-                                </div>
-                                <div className="gameGuessNumber__answer">
-                                  <span>Đáp án</span>
-                                  <input
-                                    type="text"
-                                    placeholder="Nhập đáp án tại đây"
-                                    className="form-control"
-                                    name="text_result"
-                                    value={result.text_result}
-                                    checked={result.text_result}
-                                    onChange={(e) =>
-                                      this.handleChangeResult(e, index)
-                                    }
-                                  />
-                                </div>
-                                {result.is_correct && (
-                                  <div className="gameGuessNumber__answer">
-                                    <span>Phần quà</span>
+                    ) : (
+                      <div className="form-group">
+                        <label for="txtDescription">Danh sách đáp án</label>
+                        <div
+                          className="gameGuessNumber__item form-group"
+                          style={{
+                            color: themeData().backgroundColor,
+                          }}
+                        >
+                          *Có thể bỏ trống đáp án đúng, khi có kết quả vào lại
+                          chương trình cập nhật sau để công bố!
+                        </div>
+                        <div className="mb-4">
+                          <div className="gameGuessNumber_answerMain">
+                            {listResult.length > 0 &&
+                              listResult.map((result, index) => (
+                                <div
+                                  className="gameGuessNumber__answerItem"
+                                  key={index}
+                                >
+                                  <div className="gameGuessNumber__answerRight">
+                                    <span>Đáp án đúng</span>
                                     <input
-                                      type="text"
-                                      placeholder="Nhập đáp án tại đây"
-                                      className="form-control"
-                                      name="value_gift"
-                                      value={result.value_gift}
-                                      checked={result.value_gift}
+                                      type="checkbox"
+                                      name="is_correct"
+                                      value={result.is_correct}
+                                      checked={result.is_correct}
                                       onChange={(e) =>
                                         this.handleChangeResult(e, index)
                                       }
                                     />
                                   </div>
-                                )}
+                                  <div className="gameGuessNumber__answer">
+                                    <span>Đáp án</span>
+                                    <input
+                                      type="text"
+                                      placeholder="Nhập đáp án tại đây"
+                                      className="form-control"
+                                      name="text_result"
+                                      value={result.text_result}
+                                      checked={result.text_result}
+                                      onChange={(e) =>
+                                        this.handleChangeResult(e, index)
+                                      }
+                                    />
+                                  </div>
+                                  {result.is_correct && (
+                                    <div className="gameGuessNumber__answer">
+                                      <span>Phần quà</span>
+                                      <input
+                                        type="text"
+                                        placeholder="Nhập đáp án tại đây"
+                                        className="form-control"
+                                        name="value_gift"
+                                        value={result.value_gift}
+                                        checked={result.value_gift}
+                                        onChange={(e) =>
+                                          this.handleChangeResult(e, index)
+                                        }
+                                      />
+                                    </div>
+                                  )}
 
-                                <div className="gameGuessNumber__answerIcon">
-                                  <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth="1.5"
-                                    stroke="currentColor"
-                                    onClick={() =>
-                                      this.handleDeleteResult(index)
-                                    }
-                                  >
-                                    <path
-                                      strokeLinecap="round"
-                                      strokeLinejoin="round"
-                                      d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
-                                    ></path>
-                                  </svg>
+                                  <div className="gameGuessNumber__answerIcon">
+                                    <svg
+                                      xmlns="http://www.w3.org/2000/svg"
+                                      fill="none"
+                                      viewBox="0 0 24 24"
+                                      strokeWidth="1.5"
+                                      stroke="currentColor"
+                                      onClick={() =>
+                                        this.handleDeleteResult(index)
+                                      }
+                                    >
+                                      <path
+                                        strokeLinecap="round"
+                                        strokeLinejoin="round"
+                                        d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0"
+                                      ></path>
+                                    </svg>
+                                  </div>
                                 </div>
-                              </div>
-                            ))}
-                          <div style={{ marginTop: "10px" }}>
-                            <button
-                              className="btn btn-outline-primary btn-sm"
-                              onClick={this.handleAddAnswer}
-                            >
-                              <i className="fa fa-plus"></i> Thêm
-                            </button>
+                              ))}
+                            <div style={{ marginTop: "10px" }}>
+                              <button
+                                className="btn btn-outline-primary btn-sm"
+                                onClick={this.handleAddAnswer}
+                              >
+                                <i className="fa fa-plus"></i> Thêm
+                              </button>
+                            </div>
                           </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </>
-                {this.handleShowInformationWinner() && (
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "repeat(2,1fr)",
-                      columnGap: "20px",
-                    }}
-                  >
-                    <div className="form-group">
-                      <label for="txtDescription">
-                        Thông tin người trúng thưởng
-                      </label>
-                      <div>
-                        {gameGuessNumbers.final_result_announced?.customer_win
-                          ?.length === 0 ? (
-                          <div
-                            style={{
-                              color: "rgb(193, 32, 38)",
-                            }}
-                          >
-                            Không có người nào trúng thưởng !
-                          </div>
-                        ) : (
-                          <>
-                            <div className="winner__image">
-                              {gameGuessNumbers.final_result_announced
-                                ?.customer_win[0]?.avatar_image ? (
-                                <img
-                                  src={
-                                    gameGuessNumbers.final_result_announced
-                                      ?.customer_win[0]?.avatar_image
-                                  }
-                                  alt={
-                                    gameGuessNumbers.final_result_announced
-                                      ?.customer_win[0]?.name
-                                  }
-                                />
-                              ) : (
-                                <img src="../../../images/people.png" alt="" />
-                              )}
-                            </div>
-                            <div className="winner__info">
-                              <span>Tên người trúng giải: </span>
-                              <span>
-                                {
-                                  gameGuessNumbers.final_result_announced
-                                    ?.customer_win[0]?.name
-                                }
-                              </span>
-                            </div>
-                            <div className="winner__info">
-                              <span>Số điện thoại: </span>
-                              <span>
-                                {" "}
-                                {
-                                  gameGuessNumbers.final_result_announced
-                                    ?.customer_win[0]?.phone_number
-                                }
-                              </span>
-                            </div>
-                          </>
-                        )}
-                      </div>
-                    </div>
-                    {gameGuessNumbers.final_result_announced?.customer_win
-                      ?.length > 0 && (
-                      <div className="form-group">
-                        <label for="txtDescription">
-                          Danh sách người dự đoán kết quả đúng
-                        </label>
-                        <div>
-                          <table class="table">
-                            <thead>
-                              <tr>
-                                <th scope="col">STT</th>
-                                <th scope="col">Tên</th>
-                                <th scope="col">Số điện thoại</th>
-                                <th scope="col">Thời gian dự đoán</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {gameGuessNumbers.final_result_announced?.customer_win.map(
-                                (customer, index) => (
-                                  <tr
-                                    style={{
-                                      background:
-                                        index === 0
-                                          ? "#ff00004a"
-                                          : "transparent",
-                                    }}
-                                  >
-                                    <td>{index + 1}</td>
-                                    <td>{customer.name}</td>
-                                    <td>{customer.phone_number}</td>
-                                    <td>{customer.created_at}</td>
-                                  </tr>
-                                )
-                              )}
-                            </tbody>
-                          </table>
                         </div>
                       </div>
                     )}
-                  </div>
-                )}
-              </div>
-            </ActionsGameGuessNumberContentStyles>
-          </div>
-        </div>
-
-        <div className="card mb-4">
-          <div className="card-body" style={{ padding: "0.8rem" }}>
-            <div className="row">
-              <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                {idGameGuessNumber ? (
-                  <button
-                    className="btn btn-primary btn-sm"
-                    onClick={this.updateGameGuessNumber}
-                  >
-                    <i className="fa fa-plus"></i> Cập nhật
-                  </button>
-                ) : (
-                  <button
-                    className="btn btn-primary btn-sm"
-                    onClick={this.createGameGuessNumber}
-                  >
-                    <i className="fa fa-plus"></i> Tạo
-                  </button>
-                )}
-
-                <button
-                  style={{ marginLeft: "10px" }}
-                  onClick={this.goBack}
-                  className={`btn btn-warning btn-sm color-white `}
-                >
-                  <i className="fa fa-arrow-left"></i> Trở về
-                </button>
+                  </>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+          {this.handleShowInformationWinner() && (
+            <div className="card mb-4">
+              <div className="card-body" style={{ padding: "0.8rem" }}>
+                <div className="row">
+                  <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div
+                      style={{
+                        display: "grid",
+                        gridTemplateColumns: "repeat(2,1fr)",
+                        columnGap: "20px",
+                      }}
+                    >
+                      <div className="form-group">
+                        <label for="txtDescription">
+                          Thông tin người trúng thưởng
+                        </label>
+                        <div>
+                          {gameGuessNumbers.final_result_announced?.customer_win
+                            ?.length === 0 ? (
+                            <div
+                              style={{
+                                color: "rgb(193, 32, 38)",
+                              }}
+                            >
+                              Không có người nào trúng thưởng !
+                            </div>
+                          ) : (
+                            <>
+                              <div className="winner__image">
+                                {gameGuessNumbers.final_result_announced
+                                  ?.customer_win[0]?.avatar_image ? (
+                                  <img
+                                    src={
+                                      gameGuessNumbers.final_result_announced
+                                        ?.customer_win[0]?.avatar_image
+                                    }
+                                    alt={
+                                      gameGuessNumbers.final_result_announced
+                                        ?.customer_win[0]?.name
+                                    }
+                                  />
+                                ) : (
+                                  <img
+                                    src="../../../images/people.png"
+                                    alt=""
+                                  />
+                                )}
+                              </div>
+                              <div className="winner__info">
+                                <span>Tên người trúng giải: </span>
+                                <span>
+                                  {
+                                    gameGuessNumbers.final_result_announced
+                                      ?.customer_win[0]?.name
+                                  }
+                                </span>
+                              </div>
+                              <div className="winner__info">
+                                <span>Số điện thoại: </span>
+                                <span>
+                                  {" "}
+                                  {
+                                    gameGuessNumbers.final_result_announced
+                                      ?.customer_win[0]?.phone_number
+                                  }
+                                </span>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                      {gameGuessNumbers.final_result_announced?.customer_win
+                        ?.length > 0 && (
+                        <div className="form-group">
+                          <label for="txtDescription">
+                            Danh sách người dự đoán kết quả đúng
+                          </label>
+                          <div>
+                            <table class="table">
+                              <thead>
+                                <tr>
+                                  <th scope="col">STT</th>
+                                  <th scope="col">Tên</th>
+                                  <th scope="col">Số điện thoại</th>
+                                  <th scope="col">Thời gian dự đoán</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {gameGuessNumbers.final_result_announced?.customer_win.map(
+                                  (customer, index) => (
+                                    <tr
+                                      style={{
+                                        background:
+                                          index === 0
+                                            ? "#ff00004a"
+                                            : "transparent",
+                                      }}
+                                    >
+                                      <td>{index + 1}</td>
+                                      <td>{customer.name}</td>
+                                      <td>{customer.phone_number}</td>
+                                      <td>{customer.created_at}</td>
+                                    </tr>
+                                  )
+                                )}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+          <div className="card mb-4">
+            <div className="card-body" style={{ padding: "0.8rem" }}>
+              <div className="row">
+                <div className="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  {this.handleShowInformationWinner() === false ? (
+                    <>
+                      {idGameGuessNumber ? (
+                        <button
+                          className="btn btn-primary btn-sm"
+                          onClick={this.updateGameGuessNumber}
+                        >
+                          <i className="fa fa-plus"></i> Cập nhật
+                        </button>
+                      ) : (
+                        <button
+                          className="btn btn-primary btn-sm"
+                          onClick={this.createGameGuessNumber}
+                        >
+                          <i className="fa fa-plus"></i> Tạo
+                        </button>
+                      )}
+                    </>
+                  ) : null}
+
+                  <button
+                    style={{ marginLeft: "10px" }}
+                    onClick={this.goBack}
+                    className={`btn btn-warning btn-sm color-white `}
+                  >
+                    <i className="fa fa-arrow-left"></i> Trở về
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ActionsGameGuessNumberContentStyles>
       </div>
     );
   }
