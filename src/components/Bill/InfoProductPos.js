@@ -499,16 +499,16 @@ class InfoProductPos extends Component {
                               class={`cart_payment_method ${
                                 showTagDelPrice != 0 ||
                                 product.before_price ==
-                                  product.after_discount ||
+                                  product.item_price ||
                                 product.before_discount_price ==
-                                  product.after_discount
+                                  product.item_price
                                   ? "show"
                                   : "hide"
                               }`}
                             >
                               {format(
                                 product.before_price ||
-                                  product.before_discount_price
+                                  product.item_price
                               )}
                             </span>
                             <del
