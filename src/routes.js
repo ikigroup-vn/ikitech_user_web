@@ -176,6 +176,7 @@ import Statistical from "./screens/Statistical";
 import GuessNumber from "./screens/Gamification/GuessNumber";
 import ActionsGameGuessNumber from "./screens/Gamification/GuessNumber/ActionsGameGuessNumber";
 import AttributeSearch from "./screens/AttributeSearch";
+import Ecommerce from "./screens/Ecommerce";
 const routes = [
   {
     path: "/invoice_template/index/:store_code",
@@ -449,6 +450,12 @@ const routes = [
     main: ({ match }) => <Agency match={match} />,
   },
   {
+    path: "/ecommerce/manage/:store_code",
+    exact: true,
+
+    main: ({ match }) => <Ecommerce match={match} />,
+  },
+  {
     path: "/agency_bonus_steps/:store_code/create",
     exact: true,
 
@@ -651,6 +658,30 @@ const routes = [
   },
   {
     path: "/product/index/:store_code",
+    exact: true,
+
+    main: ({ match }) => <Product match={match} />,
+  },
+  {
+    path: "/product/ecommerce/shopee/:store_code",
+    exact: true,
+
+    main: ({ match }) => <Product match={match} />,
+  },
+  {
+    path: "/product/ecommerce/tiktok/:store_code",
+    exact: true,
+
+    main: ({ match }) => <Product match={match} />,
+  },
+  {
+    path: "/product/ecommerce/lazada/:store_code",
+    exact: true,
+
+    main: ({ match }) => <Product match={match} />,
+  },
+  {
+    path: "/product/ecommerce/tiki/:store_code",
     exact: true,
 
     main: ({ match }) => <Product match={match} />,
