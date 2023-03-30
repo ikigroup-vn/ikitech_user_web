@@ -190,6 +190,7 @@ class Form extends Component {
         phone: this.state.txtPhone,
         is_default_pickup: is_default_pickup,
         is_default_return: is_default_return,
+        branch_id: this.props.currentBranch.id,
       },
       store_code
     );
@@ -377,6 +378,12 @@ class Form extends Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    currentBranch: state.branchReducers.branch.currentBranch,
+  };
+};
+
 const mapDispatchToProps = (dispatch, props) => {
   return {
     updateStoreA: (storeAId, form, store_code) => {
@@ -396,4 +403,4 @@ const mapDispatchToProps = (dispatch, props) => {
     },
   };
 };
-export default connect(null, mapDispatchToProps)(Form);
+export default connect(mapStateToProps, mapDispatchToProps)(Form);

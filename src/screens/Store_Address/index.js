@@ -13,7 +13,8 @@ import { Redirect, Link } from "react-router-dom";
 import { connect } from "react-redux";
 import Loading from "../Loading";
 import * as StoreAAction from "../../actions/store_address";
-import config from "../../ultis/datatable"
+import config from "../../ultis/datatable";
+import { shallowEqual } from "../../ultis/shallowEqual";
 
 class StoreAddress extends Component {
   constructor(props) {
@@ -31,51 +32,73 @@ class StoreAddress extends Component {
   };
 
   componentDidMount() {
-    this.props.fetchAllStoreA(this.props.match.params.store_code);
+    if(this.props.currentBranch != null && this.props.currentBranch.id != null) {
+      this.props.fetchAllStoreA(
+        this.props.match.params.store_code,
+       this. props.currentBranch.id
+      );
+    }
   }
+
   componentWillReceiveProps(nextProps) {
-
-
     $("#dataTable").DataTable().destroy();
   }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (!shallowEqual(nextProps.currentBranch, this.props.currentBranch)) {
+      this.props.fetchAllStoreA(
+        this.props.match.params.store_code,
+        nextProps.currentBranch.id
+      );
+    }
+    return true;
+  }
+
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.isLoading != true && typeof this.props.permission.product_list != "undefined") {
-      var permissions = this.props.permission
+    if (
+      this.state.isLoading != true &&
+      typeof this.props.permission.product_list != "undefined"
+    ) {
+      var permissions = this.props.permission;
       // var update = permissions.delivery_pick_address_update
-      var isShow = permissions.delivery_pick_address_list
+      var isShow = permissions.delivery_pick_address_list;
 
-      this.setState({ isLoading: true, update:true,isShow })
-
+      this.setState({ isLoading: true, update: true, isShow });
     }
     $("#dataTable").DataTable(config());
   }
   render() {
-    var { store_code } = this.props.match.params
-    var { update ,isShow } = this.state
+    var { store_code } = this.props.match.params;
+    var { update, isShow } = this.state;
 
-    if (this.props.auth) {
-      return (
-        <div id="wrapper">
-          <Sidebar store_code={store_code} />
-          <div className="col-10 col-10-wrapper">
-
-            <div id="content-wrapper" className="d-flex flex-column">
-              <div id="content">
-                <Topbar store_code={store_code} />
-                {typeof isShow == "undefined" ? <div></div> : isShow == true ?
-
+    return (
+      <div id="wrapper">
+        <Sidebar store_code={store_code} />
+        <div className="col-10 col-10-wrapper">
+          <div id="content-wrapper" className="d-flex flex-column">
+            <div id="content">
+              <Topbar store_code={store_code} />
+              {typeof isShow == "undefined" ? (
+                <div></div>
+              ) : isShow == true ? (
                 <div className="container-fluid">
                   <Alert
                     type={Types.ALERT_UID_STATUS}
                     alert={this.props.alert}
                   />
                   <div
-                    style={{ display: "flex", justifyContent: "space-between" }}
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
                   >
                     <h4 className="h4 title_content mb-0 text-gray-800">
                       Địa chỉ giao vận
                     </h4>{" "}
-                    <Link to={`/store_address/create/${store_code}`} class="btn btn-info btn-icon-split btn-sm">
+                    <Link
+                      to={`/store_address/create/${store_code}`}
+                      class="btn btn-info btn-icon-split btn-sm"
+                    >
                       <span class="icon text-white-50">
                         <i class="fas fa-plus"></i>
                       </span>
@@ -87,30 +110,33 @@ class StoreAddress extends Component {
                   <div className="card shadow mb-4">
                     <div className="card-header py-3">
                       <h6 className="m-0 title_content font-weight-bold text-primary">
-                        Danh sách địa chỉ giao vận
+                        Danh sách địa chỉ giao vận{" "}
+                        {this.props.currentBranch == null
+                          ? ""
+                          : "(" + this.props.currentBranch.name + ")"}
                       </h6>
                     </div>
                     <div className="card-body">
-                      <Table update={update} store_code={store_code} handleDelCallBack={this.handleDelCallBack} data={this.props.store_address} />
+                      <Table
+                        update={update}
+                        store_code={store_code}
+                        handleDelCallBack={this.handleDelCallBack}
+                        data={this.props.store_address}
+                      />
                     </div>
                   </div>
                 </div>
-                                                                                                        : <NotAccess/>}
-
-              </div>
-
-              <Footer />
+              ) : (
+                <NotAccess />
+              )}
             </div>
-            <ModalDelete store_code={store_code} modal={this.state.modal} />
-          </div>
-        </div>
 
-      );
-    } else if (this.props.auth === false) {
-      return <Redirect to="/login" />;
-    } else {
-      return <Loading />;
-    }
+            <Footer />
+          </div>
+          <ModalDelete store_code={store_code} modal={this.state.modal} />
+        </div>
+      </div>
+    );
   }
 }
 
@@ -120,13 +146,13 @@ const mapStateToProps = (state) => {
     auth: state.authReducers.login.authentication,
     alert: state.storeAReducers.alert.alert_success,
     permission: state.authReducers.permission.data,
-
+    currentBranch: state.branchReducers.branch.currentBranch,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllStoreA: (id) => {
-      dispatch(StoreAAction.fetchAllStoreA(id));
+    fetchAllStoreA: (store_code, branch_id) => {
+      dispatch(StoreAAction.fetchAllStoreA(store_code, branch_id));
     },
   };
 };

@@ -17,7 +17,8 @@ class StoreAEdit extends Component {
 
   componentDidMount() {
     var { store_code } = this.props.match.params;
-    this.props.fetchAllStoreA(store_code);
+
+    this.props.fetchAllStoreA(this.props.match.params.store_code,this.props.currentBranch.id);
     this.props.fetchPlaceWards();
     this.props.fetchPlaceDistrict();
     this.props.fetchPlaceProvince();
@@ -85,12 +86,14 @@ const mapStateToProps = (state) => {
     wards: state.placeReducers.wards,
     province: state.placeReducers.province,
     district: state.placeReducers.district,
+    currentBranch: state.branchReducers.branch.currentBranch,
   };
 };
+
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllStoreA: (id) => {
-      dispatch(StoreAAction.fetchAllStoreA(id));
+    fetchAllStoreA: (id, branch_id) => {
+      dispatch(StoreAAction.fetchAllStoreA(id, branch_id));
     },
     fetchPlaceDistrict: () => {
       dispatch(placeAction.fetchPlaceDistrict());
