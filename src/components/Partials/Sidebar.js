@@ -68,71 +68,180 @@ class Sidebar extends Component {
       } = this.props.customers;
 
       result = link.map((link, index) => {
-        return (
-          <Route
-            key={index}
-            index={index}
-            path={link.to}
-            exact={link.exact}
-            children={({ match }) => {
-              const location = window.location.pathname;
-              const newLocation = this.setActiveLocation(location);
-              // const isActive = newLocation.includes(link.to + "/");
-              var isActive = false;
-              var name = link.name;
-
-              if (link.params) {
-                isActive =
-                  newLocation.includes(link.to + "/" + this.props.store_code) &&
-                  link.params == `?status=${this.props.currentParams}`;
-                var param = link.params.replace("?status=", "");
-                if (param == "") {
-                  name =
-                    name +
-                    ` (${
-                      total_status_0 +
-                      total_status_1 +
-                      total_status_2 +
-                      total_status_3
-                    })`;
-                }
-                if (param == "0") {
-                  name = name + ` (${total_status_0})`;
-                }
-                if (param == "1") {
-                  name = name + ` (${total_status_1})`;
-                }
-                if (param == "2") {
-                  name = name + ` (${total_status_2})`;
-                }
-                if (param == "3") {
-                  name = name + ` (${total_status_3})`;
-                }
-              } else {
-                isActive = newLocation.includes(link.to + "/");
-              }
-              var active = isActive ? "active-col" : "";
-
-              // var _class = this.props.permission
-              return (
-                <Link
-                  className={`collapse-item  ${active} ${
-                    _class[link.class] == true ||
-                    typeof link.class == "undefined" ||
-                    link.class == null
-                      ? "show"
-                      : "hide"
-                  }`}
-                  to={
-                    link.to + "/" + this.props.store_code + (link.params || "")
-                  }
+        if (link.children) {
+          return (
+            <>
+              <div
+                key={index}
+                className={`collapse-item   ${
+                  _class[link.class] == true ||
+                  typeof link.class == "undefined" ||
+                  link.class == null
+                    ? "show"
+                    : "hide"
+                }`}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                }}
+              >
+                <span>{link.name}</span>
+                <span
+                  style={{
+                    fontSize: "16px",
+                  }}
                 >
-                  {name}
-                </Link>
-              );
-            }}
-          />
-        );
+                  <i class="fa fa-angle-down"></i>
+                </span>
+              </div>
+              {link.children?.map((itemChild, index) => (
+                <Route
+                  key={index}
+                  index={index}
+                  path={itemChild.to}
+                  exact={itemChild.exact}
+                  children={({ match }) => {
+                    const location = window.location.pathname;
+                    const newLocation = this.setActiveLocation(location);
+                    // const isActive = newLocation.includes(link.to + "/");
+                    var isActive = false;
+                    var name = itemChild.name;
+
+                    if (itemChild.params) {
+                      isActive =
+                        newLocation.includes(
+                          itemChild.to + "/" + this.props.store_code
+                        ) &&
+                        itemChild.params ==
+                          `?status=${this.props.currentParams}`;
+                      var param = itemChild.params.replace("?status=", "");
+                      if (param == "") {
+                        name =
+                          name +
+                          ` (${
+                            total_status_0 +
+                            total_status_1 +
+                            total_status_2 +
+                            total_status_3
+                          })`;
+                      }
+                      if (param == "0") {
+                        name = name + ` (${total_status_0})`;
+                      }
+                      if (param == "1") {
+                        name = name + ` (${total_status_1})`;
+                      }
+                      if (param == "2") {
+                        name = name + ` (${total_status_2})`;
+                      }
+                      if (param == "3") {
+                        name = name + ` (${total_status_3})`;
+                      }
+                    } else {
+                      isActive = newLocation.includes(itemChild.to + "/");
+                    }
+                    var active = isActive ? "active-col" : "";
+
+                    // var _class = this.props.permission
+                    return (
+                      <Link
+                        className={`collapse-item  ${active} ${
+                          _class[itemChild.class] == true ||
+                          typeof itemChild.class == "undefined" ||
+                          itemChild.class == null
+                            ? "show"
+                            : "hide"
+                        }`}
+                        to={
+                          itemChild.to +
+                          "/" +
+                          this.props.store_code +
+                          (itemChild.params || "")
+                        }
+                        style={{
+                          paddingLeft: "1.6rem",
+                        }}
+                      >
+                        {name}
+                      </Link>
+                    );
+                  }}
+                />
+              ))}
+            </>
+          );
+        } else {
+          return (
+            <Route
+              key={index}
+              index={index}
+              path={link.to}
+              exact={link.exact}
+              children={({ match }) => {
+                const location = window.location.pathname;
+                const newLocation = this.setActiveLocation(location);
+                // const isActive = newLocation.includes(link.to + "/");
+                var isActive = false;
+                var name = link.name;
+
+                if (link.params) {
+                  isActive =
+                    newLocation.includes(
+                      link.to + "/" + this.props.store_code
+                    ) && link.params == `?status=${this.props.currentParams}`;
+                  var param = link.params.replace("?status=", "");
+                  if (param == "") {
+                    name =
+                      name +
+                      ` (${
+                        total_status_0 +
+                        total_status_1 +
+                        total_status_2 +
+                        total_status_3
+                      })`;
+                  }
+                  if (param == "0") {
+                    name = name + ` (${total_status_0})`;
+                  }
+                  if (param == "1") {
+                    name = name + ` (${total_status_1})`;
+                  }
+                  if (param == "2") {
+                    name = name + ` (${total_status_2})`;
+                  }
+                  if (param == "3") {
+                    name = name + ` (${total_status_3})`;
+                  }
+                } else {
+                  isActive = newLocation.includes(link.to + "/");
+                }
+                var active = isActive ? "active-col" : "";
+
+                // var _class = this.props.permission
+                return (
+                  <Link
+                    className={`collapse-item  ${active} ${
+                      _class[link.class] == true ||
+                      typeof link.class == "undefined" ||
+                      link.class == null
+                        ? "show"
+                        : "hide"
+                    }`}
+                    to={
+                      link.to +
+                      "/" +
+                      this.props.store_code +
+                      (link.params || "")
+                    }
+                  >
+                    {name}
+                  </Link>
+                );
+              }}
+            />
+          );
+        }
       });
     }
     return result;

@@ -60,6 +60,7 @@
     "react-select-async-paginate": "^0.6.1",
     "react-shallow-compare": "^1.0.3",
     "react-slick": "^0.28.1",
+    "react-spinners": "^0.13.8",
     "react-tabs": "^3.2.2",
     "react-tiny-popover": "^7.0.1",
     "react-to-print": "^2.14.1",

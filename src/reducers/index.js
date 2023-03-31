@@ -54,6 +54,7 @@ import { bonusProductReducers } from "./bonus_product/index";
 import { trainReducers } from "./train/index";
 import { saleReducers } from "./sale";
 import { attributeSearchReducers } from "./attribute_search";
+import { ecommerceReducers } from "./ecommerce";
 
 const appReducers = combineReducers({
   authReducers,
@@ -111,6 +112,7 @@ const appReducers = combineReducers({
   gamificationReducers,
   saleReducers,
   attributeSearchReducers,
+  ecommerceReducers,
 });
 
 export default appReducers;
