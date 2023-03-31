@@ -2,6 +2,7 @@ import moment from "moment";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import styled from "styled-components";
+import ModalUpdateConnectEcommerce from "./ModalUpdateConnectEcommerce";
 
 const TableStyles = styled.div`
   .time_end_token {
@@ -27,19 +28,78 @@ const TableStyles = styled.div`
       transition: all 0.5s;
     }
   }
+  .dropdown__product {
+    position: relative;
+    .dropdown__product__menu {
+      position: absolute;
+      top: calc(100% + 2px);
+      right: 0;
+      z-index: 100;
+      padding: 0.5rem 0;
+      background-color: #fff;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      border-radius: 0.1875rem;
+      box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+      .dropdown__product__item {
+        padding: 0.5rem 1rem;
+        white-space: nowrap;
+        &:hover {
+          background-color: #f5f5f5;
+        }
+      }
+    }
+  }
 `;
 class Table extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loadFrist: false,
-      agencySelected: {},
-      agencySelectedForChangeBalance: {},
+      ecommerceSelected: null,
     };
   }
 
+  componentDidMount() {
+    window.addEventListener("click", this.handleClickOutside);
+  }
+  componentWillUnmount() {
+    window.removeEventListener("click", this.handleClickOutside);
+  }
+
+  setEcommerceSelected = (ecommerceSelected) => {
+    this.setState({ ecommerceSelected: ecommerceSelected });
+  };
+
+  handleClickOutside = (e) => {
+    const isDropdownToggle = e.target.closest(".dropdown__product__toggle");
+    if (!isDropdownToggle) {
+      this.setState({
+        ecommerceSelected: null,
+      });
+    }
+  };
+
+  handleShowActions = (data) => {
+    this.setState({
+      ecommerceSelected: data,
+    });
+  };
+
+  handleOpenModal = () => {
+    window.removeEventListener("click", this.handleClickOutside);
+  };
+  handleCloseModal = () => {
+    const { fetchListConnectEcommerce } = this.props;
+    this.setState({
+      ecommerceSelected: null,
+    });
+    fetchListConnectEcommerce();
+    window.addEventListener("click", this.handleClickOutside);
+  };
+
   showData = (listConnect) => {
     var result = null;
+    const { ecommerceSelected } = this.state;
+    console.log("Table ~ ecommerceSelected:", ecommerceSelected);
     if (listConnect.length > 0) {
       result = listConnect.map((data, index) => {
         return (
@@ -226,6 +286,47 @@ class Table extends Component {
               </td>
               <td></td>
               <td></td>
+              <td
+                style={{
+                  textAlign: "center",
+                }}
+              >
+                <span class="dropdown__product">
+                  <span
+                    className="dropdown__product__toggle"
+                    style={{
+                      cursor: "pointer",
+                    }}
+                    onClick={() => this.handleShowActions(data)}
+                  >
+                    <i className="fas fa-pen"></i>
+                  </span>
+                  <div
+                    class="dropdown__product__menu"
+                    style={{
+                      display:
+                        ecommerceSelected?.id == data.id ? "block" : "none",
+                    }}
+                  >
+                    <div
+                      className="dropdown__product__item"
+                      type="button"
+                      data-toggle="modal"
+                      data-target="#modalUpdateConnectEcommerce"
+                      onClick={this.handleOpenModal}
+                    >
+                      <span
+                        style={{
+                          marginRight: "10px",
+                        }}
+                      >
+                        <i className="fa fa-edit"></i>
+                      </span>
+                      <span>Sửa cấu hình</span>
+                    </div>
+                  </div>
+                </span>
+              </td>
             </tr>
           </React.Fragment>
         );
@@ -239,6 +340,8 @@ class Table extends Component {
     var listConnectEcommerce = this.props.listConnectEcommerce
       ? this.props.listConnectEcommerce
       : [];
+    const { store_code, fetchListConnectEcommerce } = this.props;
+    const { ecommerceSelected } = this.state;
 
     return (
       <TableStyles class="" style={{ overflow: "auto", minHeight: "200px" }}>
@@ -329,11 +432,17 @@ class Table extends Component {
                   />
                 </svg>
               </th>
+              <th>Thao tác</th>
             </tr>
           </thead>
 
           <tbody>{this.showData(listConnectEcommerce)}</tbody>
         </table>
+        <ModalUpdateConnectEcommerce
+          store_code={store_code}
+          onClose={this.handleCloseModal}
+          ecommerceSelected={ecommerceSelected}
+        ></ModalUpdateConnectEcommerce>
       </TableStyles>
     );
   }

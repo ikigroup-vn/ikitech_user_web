@@ -15,3 +15,31 @@ export const connectEcommerce = (platform, store_code) => {
     null
   );
 };
+
+export const updateConnectEcommerce = (store_code, shop_id, data) => {
+  return callApi(
+    `/store/${store_code}/ecommerce/connect/list/${shop_id}`,
+    "put",
+    data
+  );
+};
+
+export const fetchListProductEcommerce = (store_code, params) => {
+  return callApi(
+    `/store/${store_code}/ecommerce/db/products${params ? `?${params}` : ""}`,
+    "get",
+    null
+  );
+};
+
+export const syncProductEcommerce = (store_code, data) => {
+  return callApi(`/store/${store_code}/ecommerce/products/sync`, "post", data);
+};
+
+export const updatePriceProductEcommerce = (store_code, data, id) => {
+  return callApi(
+    `/store/${store_code}/ecommerce/db/products/${id}`,
+    "put",
+    data
+  );
+};

@@ -177,6 +177,8 @@ import GuessNumber from "./screens/Gamification/GuessNumber";
 import ActionsGameGuessNumber from "./screens/Gamification/GuessNumber/ActionsGameGuessNumber";
 import AttributeSearch from "./screens/AttributeSearch";
 import Ecommerce from "./screens/Ecommerce";
+import ProductTiki from "./screens/Ecommerce/product/tiki";
+
 const routes = [
   {
     path: "/invoice_template/index/:store_code",
@@ -684,7 +686,7 @@ const routes = [
     path: "/product/ecommerce/tiki/:store_code",
     exact: true,
 
-    main: ({ match }) => <Product match={match} />,
+    main: ({ match }) => <ProductTiki match={match} />,
   },
 
   {

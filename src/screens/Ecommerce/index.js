@@ -95,12 +95,15 @@ class Ecommerce extends Component {
 
   render() {
     var { store_code } = this.props.match.params;
-    var { listConnectEcommerce } = this.props;
+    var { listConnectEcommerce, fetchListConnectEcommerce } = this.props;
     var { isShow, platform_name } = this.state;
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
-        <ModalChooseEcommerce store_code={store_code}></ModalChooseEcommerce>
+        <ModalChooseEcommerce
+          store_code={store_code}
+          handleFetchListConnectEcommerce={this.handleFetchListConnectEcommerce}
+        ></ModalChooseEcommerce>
         <div className="col-10 col-10-wrapper">
           <div id="content-wrapper" className="d-flex flex-column">
             <div id="content">
@@ -159,10 +162,24 @@ class Ecommerce extends Component {
                         Thêm kết nối
                       </button>
                     </div>
-                    <div className="card-body">
+                    <div
+                      className="card-body"
+                      style={{
+                        overflow: "auto",
+                      }}
+                    >
                       <Table
                         store_code={store_code}
                         listConnectEcommerce={listConnectEcommerce}
+                        fetchListConnectEcommerce={() => {
+                          this.handleFetchListConnectEcommerce(
+                            `${
+                              platform_name
+                                ? `platform_name=${platform_name}`
+                                : ""
+                            }`
+                          );
+                        }}
                       />
                       <div style={{ display: "flex", justifyContent: "end" }}>
                         {/* <Pagination

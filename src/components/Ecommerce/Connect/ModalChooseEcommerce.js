@@ -150,49 +150,26 @@ class ModalChooseEcommerce extends Component {
     this.state = {};
   }
 
-  onChange = (e) => {
-    var target = e.target;
-    var name = target.name;
-    var value = target.value;
-
-    const _value = formatNumber(value);
-    if (!isNaN(Number(_value))) {
-      value = new Intl.NumberFormat().format(_value);
-      this.setState({ [name]: value });
-    }
-  };
-  onSave = (e) => {
-    e.preventDefault();
-    window.$(".modal").modal("hide");
-    var { txtBonus, txtLimit } = this.state;
-    this.props.createStep(this.props.store_code, {
-      bonus: txtBonus == null ? txtBonus : formatNumber(txtBonus),
-      limit: txtLimit == null ? txtLimit : formatNumber(txtLimit),
-    });
-    this.setState({
-      txtLimit: "",
-      txtBonus: "",
-    });
-  };
   handleAddConnect = async (platform) => {
-    const { connectEcommerce, store_code } = this.props;
+    const { handleFetchListConnectEcommerce, store_code } = this.props;
     const platform_name = platform?.toLowerCase();
     const url = `${callUrl()}/store/ecommerce/connect/${platform_name}?store_code=${store_code}`;
     var intervalID, childWindow;
-    var tokenInfo = JSON.parse(localStorage.getItem(JSON.stringify("token")));
+
+    var left = window.screen.width / 2 - 400;
+    var top = window.screen.height / 2 - 500;
 
     childWindow = window.open(
       url,
       `Kết nối với gian ${platform}`,
-      "toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no, width=800, height=1000, top=100, left=100"
+      `toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no, width=800, height=1000, top=${top}, left=${left}`
     );
 
     function checkWindow() {
       if (childWindow && childWindow.closed) {
         window.clearInterval(intervalID);
-        if (tokenInfo)
-          window.location.href = `/eccommerce/manage/store_code=${store_code}`;
-        else window.location.href = "/";
+        window.$(".modal").modal("hide");
+        handleFetchListConnectEcommerce("");
       }
     }
     intervalID = window.setInterval(checkWindow, 500);
