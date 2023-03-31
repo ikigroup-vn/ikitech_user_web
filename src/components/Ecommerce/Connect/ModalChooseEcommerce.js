@@ -156,13 +156,13 @@ class ModalChooseEcommerce extends Component {
     const url = `${callUrl()}/store/ecommerce/connect/${platform_name}?store_code=${store_code}`;
     var intervalID, childWindow;
 
-    var left = window.screen.width / 2 - 400;
-    var top = window.screen.height / 2 - 500;
+    var left = window.screen.width / 2;
+    var top = window.screen.height / 2;
 
     childWindow = window.open(
       url,
       `Kết nối với gian ${platform}`,
-      `toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no, width=800, height=1000, top=${top}, left=${left}`
+      `toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no,fullscreen=yes, top=${top}, left=${left}`
     );
 
     function checkWindow() {

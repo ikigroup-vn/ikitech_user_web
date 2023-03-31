@@ -95,7 +95,7 @@ class Ecommerce extends Component {
 
   render() {
     var { store_code } = this.props.match.params;
-    var { listConnectEcommerce, fetchListConnectEcommerce } = this.props;
+    var { listConnectEcommerce } = this.props;
     var { isShow, platform_name } = this.state;
     return (
       <div id="wrapper">
