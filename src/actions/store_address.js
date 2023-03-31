@@ -4,13 +4,13 @@ import * as storeAApi from "../data/remote/store_address";
 import * as notificationApi from "../data/remote/notification";
 import * as badgeApi from "../data/remote/badge"
 import { getBranchId } from "../ultis/branchUtils";
-export const fetchAllStoreA = (id) => {
+export const fetchAllStoreA = (store_code, branch_id) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show"
     })
-    storeAApi.fetchAllData(id).then((res) => {
+    storeAApi.fetchAllData(store_code, branch_id).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
         loading: "hide"
@@ -161,7 +161,7 @@ export const createStoreA = (store_code, data, _this , funcModal) => {
 };
 
 
-export const destroyStoreA = (store_code, id) => {
+export const destroyStoreA = (store_code, id, branch_id) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -174,7 +174,7 @@ export const destroyStoreA = (store_code, id) => {
           type: Types.SHOW_LOADING,
           loading: "hide"
         })
-        storeAApi.fetchAllData(store_code)
+        storeAApi.fetchAllData(store_code, branch_id)
           .then((res) => {
             if (res.data.code !== 401)
 

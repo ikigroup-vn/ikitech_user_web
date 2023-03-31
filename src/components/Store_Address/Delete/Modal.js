@@ -4,13 +4,16 @@ import * as storeAAction from "../../../actions/store_address";
 import themeData from "../../../ultis/theme_data";
 
 class Modal extends Component {
-    
   onSave = (e) => {
     e.preventDefault();
-    window.$('.modal').modal('hide');
+    window.$(".modal").modal("hide");
     var storeA_id = this.props.modal.id;
-    var {store_code} = this.props
-    this.props.destroyStoreA(store_code,storeA_id );
+    var { store_code } = this.props;
+    this.props.destroyStoreA(
+      store_code,
+      storeA_id,
+      this.props.currentBranch.id
+    );
   };
 
   render() {
@@ -26,8 +29,12 @@ class Modal extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-          <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
-              <h4 style={{ color: "white" }}>Thông báo</h4>              <button
+            <div
+              class="modal-header"
+              style={{ backgroundColor: themeData().backgroundColor }}
+            >
+              <h4 style={{ color: "white" }}>Thông báo</h4>{" "}
+              <button
                 type="button"
                 class="close"
                 data-dismiss="modal"
@@ -58,7 +65,6 @@ class Modal extends Component {
                 </button>
                 <button type="submit" class="btn btn-warning">
                   Xóa
-                  
                 </button>
               </div>
             </form>
@@ -69,11 +75,17 @@ class Modal extends Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    currentBranch: state.branchReducers.branch.currentBranch,
+  };
+};
+
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    destroyStoreA: (store_code,storeA_id) => {
-      dispatch(storeAAction.destroyStoreA(store_code,storeA_id));
+    destroyStoreA: (store_code, storeA_id, branch_id) => {
+      dispatch(storeAAction.destroyStoreA(store_code, storeA_id, branch_id));
     },
   };
 };
-export default connect(null, mapDispatchToProps)(Modal);
+export default connect(mapStateToProps, mapDispatchToProps)(Modal);
