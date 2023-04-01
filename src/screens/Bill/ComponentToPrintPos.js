@@ -127,14 +127,18 @@ export default class ComponentToPrint extends Component {
           <td style={{ textAlign: "start" }}>Giảm giá, Voucher, Combo</td>
           <td></td>
 
-          <td style={{ textAlign: "end" }} colSpan="3">
+          {(
+              (bill.product_discount_amount || 0) +
+              (bill.voucher_discount_amount || 0) +
+              (bill.combo_discount_amount || 0)
+            ) > 0 &&   <td style={{ textAlign: "end" }} colSpan="3">
             -{" "}
             {format(
               (bill.product_discount_amount || 0) +
-                (bill.voucher_discount_amount || 0) +
-                (bill.combo_discount_amount || 0)
+              (bill.voucher_discount_amount || 0) +
+              (bill.combo_discount_amount || 0)
             )}
-          </td>
+          </td> }
         </tr>
         
       </React.Fragment>
