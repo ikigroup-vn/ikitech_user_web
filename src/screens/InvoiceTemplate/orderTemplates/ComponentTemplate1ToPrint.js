@@ -105,8 +105,8 @@ export default class ComponentTemplate1ToPrint extends Component {
             {element.is_bonus == true ? "(Thưởng)" : ""}</td>
           <td>{element.quantity}</td>
           <td style={{ textAlign: "end" }}>
-            {element.is_bonus == true ? format(0) : format(
-              (element.before_price || element.before_discount_price) *
+          {element.is_bonus == true ? format(0) : format(
+              (element.item_price) *
               element.quantity
             )}
           </td>
