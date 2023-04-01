@@ -178,6 +178,7 @@ import ActionsGameGuessNumber from "./screens/Gamification/GuessNumber/ActionsGa
 import AttributeSearch from "./screens/AttributeSearch";
 import Ecommerce from "./screens/Ecommerce";
 import ProductTiki from "./screens/Ecommerce/product/tiki";
+import OrderTiki from "./screens/Ecommerce/order/tiki";
 
 const routes = [
   {
@@ -665,28 +666,52 @@ const routes = [
     main: ({ match }) => <Product match={match} />,
   },
   {
-    path: "/product/ecommerce/shopee/:store_code",
+    path: "/ecommerce/productEcommerce/shopee/:store_code",
     exact: true,
 
     main: ({ match }) => <Product match={match} />,
   },
   {
-    path: "/product/ecommerce/tiktok/:store_code",
+    path: "/ecommerce/productEcommerce/tiktok/:store_code",
     exact: true,
 
     main: ({ match }) => <Product match={match} />,
   },
   {
-    path: "/product/ecommerce/lazada/:store_code",
+    path: "/ecommerce/productEcommerce/lazada/:store_code",
     exact: true,
 
     main: ({ match }) => <Product match={match} />,
   },
   {
-    path: "/product/ecommerce/tiki/:store_code",
+    path: "/ecommerce/productEcommerce/tiki/:store_code",
     exact: true,
 
     main: ({ match }) => <ProductTiki match={match} />,
+  },
+  {
+    path: "/ecommerce/orderEcommerce/shopee/:store_code",
+    exact: true,
+
+    main: ({ match }) => <OrderTiki match={match} />,
+  },
+  {
+    path: "/ecommerce/orderEcommerce/tiktok/:store_code",
+    exact: true,
+
+    main: ({ match }) => <OrderTiki match={match} />,
+  },
+  {
+    path: "/ecommerce/orderEcommerce/lazada/:store_code",
+    exact: true,
+
+    main: ({ match }) => <OrderTiki match={match} />,
+  },
+  {
+    path: "/ecommerce/orderEcommerce/tiki/:store_code",
+    exact: true,
+
+    main: ({ match }) => <OrderTiki match={match} />,
   },
 
   {

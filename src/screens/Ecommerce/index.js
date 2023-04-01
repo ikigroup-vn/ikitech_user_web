@@ -102,7 +102,11 @@ class Ecommerce extends Component {
         <Sidebar store_code={store_code} />
         <ModalChooseEcommerce
           store_code={store_code}
-          handleFetchListConnectEcommerce={this.handleFetchListConnectEcommerce}
+          handleFetchListConnectEcommerce={() =>
+            this.handleFetchListConnectEcommerce(
+              platform_name ? `platform_name=${platform_name}` : ""
+            )
+          }
         ></ModalChooseEcommerce>
         <div className="col-10 col-10-wrapper">
           <div id="content-wrapper" className="d-flex flex-column">
@@ -129,11 +133,66 @@ class Ecommerce extends Component {
                     <div
                       class="row"
                       style={{
-                        justifyContent: "flex-end",
-                        marginRight: "20px",
+                        marginTop: "10px",
+                        marginLeft: "20px",
                         columnGap: "20px",
                       }}
                     >
+                      {platform_name === "TIKI" ? (
+                        <button
+                          style={{ margin: "auto 0px" }}
+                          className={`btn btn-primary`}
+                          onClick={() => {
+                            document.getElementById("connect-TIKI").click();
+                          }}
+                        >
+                          <i className="fa fa-plus"></i>
+                          Thêm kết nối
+                        </button>
+                      ) : platform_name === "LAZADA" ? (
+                        <button
+                          style={{ margin: "auto 0px" }}
+                          className={`btn btn-primary`}
+                          onClick={() => {
+                            document.getElementById("connect-LAZADA").click();
+                          }}
+                        >
+                          <i className="fa fa-plus"></i>
+                          Thêm kết nối
+                        </button>
+                      ) : platform_name === "TIKTOK" ? (
+                        <button
+                          style={{ margin: "auto 0px" }}
+                          className={`btn btn-primary`}
+                          onClick={() => {
+                            document.getElementById("connect-TIKTOK").click();
+                          }}
+                        >
+                          <i className="fa fa-plus"></i>
+                          Thêm kết nối
+                        </button>
+                      ) : platform_name === "SHOPEE" ? (
+                        <button
+                          style={{ margin: "auto 0px" }}
+                          className={`btn btn-primary`}
+                          onClick={() => {
+                            document.getElementById("connect-SHOPEE").click();
+                          }}
+                        >
+                          <i className="fa fa-plus"></i>
+                          Thêm kết nối
+                        </button>
+                      ) : (
+                        <button
+                          style={{ margin: "auto 0px" }}
+                          className={`btn btn-primary`}
+                          data-toggle="modal"
+                          data-target="#modalChooseEcommerce"
+                        >
+                          <i className="fa fa-plus"></i>
+                          Thêm kết nối
+                        </button>
+                      )}
                       <select
                         style={{
                           width: "200px",
@@ -152,15 +211,6 @@ class Ecommerce extends Component {
                           </option>
                         ))}
                       </select>
-                      <button
-                        style={{ margin: "auto 0px" }}
-                        class={`btn btn-primary`}
-                        data-toggle="modal"
-                        data-target="#modalChooseEcommerce"
-                      >
-                        <i className="fa fa-plus"></i>
-                        Thêm kết nối
-                      </button>
                     </div>
                     <div
                       className="card-body"

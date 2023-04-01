@@ -306,6 +306,21 @@ const permission = (channel) => {
         body: ["gamification"],
       },
       {
+        name: "Sàn thương mại điện tử",
+        header: [
+          "Danh sách kết nối",
+          "Danh sách sản phẩm",
+          "Danh sách đơn hàng",
+          "Quản lý tồn kho",
+        ],
+        body: [
+          "ecommerce_connect",
+          "ecommerce_products",
+          "ecommerce_orders",
+          "ecommerce_inventory",
+        ],
+      },
+      {
         name: "Cài đặt",
         header: [
           "Cài đặt máy in",
@@ -398,7 +413,21 @@ const permission = (channel) => {
         header: ["Khách hàng", "Nhân viên", "Nhà cung cấp"],
         body: ["customer_list", "staff_list", "supplier"],
       },
-
+      {
+        name: "Sàn thương mại điện tử",
+        header: [
+          "Danh sách kết nối",
+          "Danh sách sản phẩm",
+          "Danh sách đơn hàng",
+          "Quản lý tồn kho",
+        ],
+        body: [
+          "ecommerce_connect",
+          "ecommerce_products",
+          "ecommerce_orders",
+          "ecommerce_inventory",
+        ],
+      },
       {
         name: "Cài đặt",
         header: [
@@ -544,6 +573,10 @@ export const initialPermission = () => {
     staff_delegating: false,
     onsale: false,
     train: false,
+    ecommerce_products: false,
+    ecommerce_connect: false,
+    ecommerce_orders: false,
+    ecommerce_inventory: false,
   };
   return { ...state };
 };

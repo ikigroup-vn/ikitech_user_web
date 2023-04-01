@@ -43,3 +43,14 @@ export const updatePriceProductEcommerce = (store_code, data, id) => {
     data
   );
 };
+
+export const fetchListOrderEcommerce = (store_code, params) => {
+  return callApi(
+    `/store/${store_code}/ecommerce/db/orders${params ? `?${params}` : ""}`,
+    "get",
+    null
+  );
+};
+export const syncOrderEcommerce = (store_code, data) => {
+  return callApi(`/store/${store_code}/ecommerce/orders/sync`, "post", data);
+};
