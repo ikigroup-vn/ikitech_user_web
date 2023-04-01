@@ -106,6 +106,16 @@ class Table extends Component {
     });
   };
 
+  handleAddress = (addressDetail, wards, district, province) => {
+    return `${
+      addressDetail && (wards || district || province)
+        ? `${addressDetail}, `
+        : ""
+    }${wards && (district || province) ? `${wards}, ` : ""}${
+      district && province ? `${district}, ` : ""
+    }${province ? province : ""}`;
+  };
+
   showData = (products, per_page, current_page) => {
     var result = null;
     const { productSelected } = this.state;
@@ -117,27 +127,42 @@ class Table extends Component {
         return (
           <tr key={data.id}>
             <td>{per_page * (current_page - 1) + (index + 1)}</td>
+            <td>{data.order_code}</td>
             <td>
-              {" "}
-              <img
-                src={
-                  data.images.length > 0 ? data.images[0] : Env.IMG_NOT_FOUND
-                }
-                className="img-responsive"
-                alt="Image"
-                style={{
-                  width: "100%",
-                  height: "59px",
-                  background: "#0000000d",
-                }}
-              />
+              <div>
+                <div>{data.customer_name}</div>
+                <div>
+                  {this.handleAddress(
+                    data.customer_address_detail,
+                    data.customer_wards_name,
+                    data.customer_district_name,
+                    data.customer_province_name
+                  )}
+                </div>
+                <div
+                  style={{
+                    fontWeight: "600",
+                  }}
+                >
+                  {data.shop_name ? data.shop_name : ""}
+                </div>
+              </div>
             </td>
-            <td>{data.sku}</td>
-            <td style={{ minWidth: "20%" }}>{data.name}</td>
-            <td style={{ width: "20%" }}>
-              {data.price ? `${formatNumberV2(data.price)} đ` : "0 đ"}
+            <td>
+              {data.total_final
+                ? `${formatNumberV2(data.total_final)} đ`
+                : "0 đ"}
             </td>
-            <td style={{ width: "15%" }}>{data.quantity_in_stock}</td>
+            <td>
+              <div>
+                {data.total_shipping_fee
+                  ? `${formatNumberV2(data.total_shipping_fee)}`
+                  : "0 đ"}
+              </div>
+              <div>{data.package_weight ? `${data.package_weight}g ` : ""}</div>
+            </td>
+            <td>{data.payment_status}</td>
+            <td>{data.order_status}</td>
             <td
               style={{
                 textAlign: "center",
@@ -202,11 +227,12 @@ class Table extends Component {
           <thead>
             <tr>
               <th>STT</th>
-              <th style={{ width: "8%" }}>Hình ảnh</th>
-              <th>Mã sku</th>
-              <th>Tên sản phẩm</th>
-              <th style={{ width: "20%" }}>Giá bán lẻ</th>
-              <th>Tồn kho</th>
+              <th>Mã đơn</th>
+              <th>Khách hàng</th>
+              <th style={{ width: "20%" }}>Tổng tiền</th>
+              <th>Vận chuyển</th>
+              <th>Trạng thái thanh toán</th>
+              <th>Trạng thái đơn hàng</th>
               <th style={{ width: "100px" }}>Thao tác</th>
             </tr>
           </thead>

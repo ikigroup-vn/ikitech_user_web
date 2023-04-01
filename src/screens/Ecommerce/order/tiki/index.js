@@ -3,20 +3,21 @@ import Sidebar from "../../../../components/Partials/Sidebar";
 import Topbar from "../../../../components/Partials/Topbar";
 import Footer from "../../../../components/Partials/Footer";
 import { Link, Redirect } from "react-router-dom";
-import Table from "../../../../components/Ecommerce/Product/Tiki/Table";
+import Table from "../../../../components/Ecommerce/Order/Tiki/Table";
 import * as Types from "../../../../constants/ActionType";
 import Alert from "../../../../components/Partials/Alert";
 import NotAccess from "../../../../components/Partials/NotAccess";
 import { connect, shallowEqual } from "react-redux";
 import Loading from "../../../Loading";
 import * as ecommerceAction from "../../../../actions/ecommerce";
-
+import Select from "react-select";
 import { getQueryParams } from "../../../../ultis/helpers";
 import styled from "styled-components";
 import history from "../../../../history";
-import ModalSyncProduct from "../../../../components/Ecommerce/Product/Tiki/ModalSyncProduct";
+import FilterOrder from "../../../../components/Ecommerce/Order/Tiki/FilterOrder";
+// import ModalSyncProduct from "../../../../components/Ecommerce/Product/Tiki/ModalSyncProduct";
 
-const ProductTikiStyles = styled.div`
+const OrderTikiStyles = styled.div`
   .card-header {
     display: flex;
     flex-direction: row-reverse;
@@ -24,7 +25,7 @@ const ProductTikiStyles = styled.div`
   }
 `;
 
-class ProductTiki extends Component {
+class OrderTiki extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -32,19 +33,35 @@ class ProductTiki extends Component {
       page: getQueryParams("page") || 1,
       numPage: getQueryParams("limit") || 20,
       listStore: [],
-      shop_ids: getQueryParams("shop_ids") || "",
+      listStoreSelected: [],
+      listStatusSelected: [],
     };
   }
 
   componentDidMount() {
     const { store_code } = this.props.match.params;
-    this.props.fetchListConnectEcommerce(store_code);
+    this.props.fetchListConnectEcommerce(store_code, "", (res) => {
+      if (res?.length > 0) {
+        const listShopsTiki = res.filter((res) => res.platform === "TIKI");
+        const listShops = listShopsTiki.map((shop) => ({
+          value: shop.shop_id,
+          label: shop.shop_name,
+        }));
+        this.setState({
+          listStoreSelected: listShops,
+        });
+        const params = this.getParams(listShops);
+        this.props.fetchListOrderEcommerce(store_code, params);
+      }
+    });
   }
+
   shouldComponentUpdate(nextProps) {
     const { listConnectEcommerce } = this.props;
     if (!shallowEqual(listConnectEcommerce, nextProps.listConnectEcommerce)) {
       const newListConnectEcommerce = nextProps.listConnectEcommerce.filter(
-        (ecommerce) => ecommerce.platform === "TIKI"
+        (ecommerce) =>
+          ecommerce.platform === this.isCheckedEcommerce()?.toUpperCase()
       );
       const newListStore = newListConnectEcommerce.reduce(
         (prevEcommerce, currentEcommerce) => {
@@ -81,38 +98,67 @@ class ProductTiki extends Component {
       });
     }
   }
-  onChangeStore = (e) => {
-    const value = e.target.value;
-    const name = e.target.name;
-    const { fetchListProductEcommerce } = this.props;
-    var { store_code } = this.props.match.params;
+  onChangeStore = (listStoreSelected) => {
+    const { fetchListOrderEcommerce } = this.props;
+    const { store_code } = this.props.match.params;
     this.setState({
-      [name]: value,
+      listStoreSelected: listStoreSelected,
     });
 
-    const params = this.getParams(value);
-    fetchListProductEcommerce(store_code, params);
+    // const params = this.getParams(listStoreSelected);
+    // fetchListOrderEcommerce(store_code, params);
   };
 
-  getParams = (store_id) => {
+  getParams = (listStore) => {
     var params = "";
-    if (store_id !== "" || store_id !== null) {
-      params += `shop_ids=${store_id}`;
+    if (listStore?.length > 0) {
+      params += listStore.reduce((prevList, currentList, index) => {
+        return (
+          prevList +
+          `${
+            index === listStore.length - 1
+              ? currentList?.value
+              : `${currentList?.value},`
+          }`
+        );
+      }, "shop_ids=");
     }
 
     return params;
   };
+  isCheckedEcommerce = () => {
+    const pathName = window.location.pathname;
+    const tiki = "tiki";
+    const lazada = "lazada";
+    const tiktok = "tiktok";
+    const shopee = "shopee";
+    return pathName?.includes(tiki)
+      ? tiki
+      : pathName?.includes(lazada)
+      ? lazada
+      : pathName?.includes(tiktok)
+      ? tiktok
+      : pathName?.includes(shopee)
+      ? shopee
+      : "";
+  };
 
   render() {
     if (this.props.auth) {
-      var { listProducts, fetchListProductEcommerce } = this.props;
+      var { listOrders, fetchListOrderEcommerce } = this.props;
       var { store_code } = this.props.match.params;
-      var { isShow, numPage, listStore, shop_ids } = this.state;
+      var {
+        isShow,
+        numPage,
+        listStore,
+        listStoreSelected,
+        listStatusSelected,
+      } = this.state;
 
       return (
-        <ProductTikiStyles id="wrapper">
+        <OrderTikiStyles id="wrapper">
           <Sidebar store_code={store_code} listStore={listStore} />
-          <ModalSyncProduct store_code={store_code} listStore={listStore} />
+          {/* <ModalSyncProduct store_code={store_code} listStore={listStore} /> */}
           <div className="col-10 col-10-wrapper">
             <div id="content-wrapper" className="d-flex flex-column">
               <div id="content">
@@ -128,7 +174,16 @@ class ProductTiki extends Component {
                       }}
                     >
                       <h4 className="h4 title_content mb-0 text-gray-800">
-                        Sản phẩm
+                        Đơn hàng{" "}
+                        {this.isCheckedEcommerce() === "tiki"
+                          ? "Tiki"
+                          : this.isCheckedEcommerce() === "lazada"
+                          ? "Lazada"
+                          : this.isCheckedEcommerce() === "tiktok"
+                          ? "Tiktok"
+                          : this.isCheckedEcommerce() === "shopee"
+                          ? "Shopee"
+                          : ""}
                       </h4>
                     </div>
                     <br></br>
@@ -139,47 +194,13 @@ class ProductTiki extends Component {
                     />
 
                     <div class="card shadow ">
-                      <div className="card-header">
-                        <div
-                          class="row"
-                          style={{
-                            width: "100%",
-                            justifyContent: "space-between",
-                            marginRight: "15px",
-                            marginLeft: "15px",
-                          }}
-                        >
-                          <select
-                            style={{
-                              marginRight: "20px",
-                              width: "auto",
-                            }}
-                            onChange={this.onChangeStore}
-                            value={shop_ids}
-                            name="shop_ids"
-                            class="form-control"
-                          >
-                            <option value="" disabled>
-                              Chọn cửa hàng
-                            </option>
-                            {listStore.length > 0 &&
-                              listStore.map((store) => (
-                                <option value={store.value} key={store.value}>
-                                  {store.label}
-                                </option>
-                              ))}
-                          </select>
-                          <div>
-                            <button
-                              className="btn btn-success"
-                              data-toggle="modal"
-                              data-target="#modalSyncProduct"
-                            >
-                              <i className="fa fa-download"></i> Đồng bộ
-                            </button>
-                          </div>
-                        </div>
-                      </div>
+                      <FilterOrder
+                        isCheckedEcommerce={this.isCheckedEcommerce}
+                        listStore={listStore}
+                        listStoreSelected={listStoreSelected}
+                        listStatusSelected={listStatusSelected}
+                        onChangeStore={this.onChangeStore}
+                      ></FilterOrder>
 
                       <div
                         class="card-body"
@@ -189,12 +210,12 @@ class ProductTiki extends Component {
                       >
                         <Table
                           store_code={store_code}
-                          products={listProducts}
-                          shop_ids={shop_ids}
-                          fetchListProductEcommerce={() =>
-                            fetchListProductEcommerce(
+                          products={listOrders}
+                          listStoreSelected={listStoreSelected}
+                          fetchListOrderEcommerce={() =>
+                            fetchListOrderEcommerce(
                               store_code,
-                              this.getParams(shop_ids)
+                              this.getParams(listStoreSelected)
                             )
                           }
                         />
@@ -249,7 +270,7 @@ class ProductTiki extends Component {
               <Footer />
             </div>
           </div>
-        </ProductTikiStyles>
+        </OrderTikiStyles>
       );
     } else if (this.props.auth === false) {
       return <Redirect to="/login" />;
@@ -264,18 +285,20 @@ const mapStateToProps = (state) => {
     auth: state.authReducers.login.authentication,
     alert: state.productReducers.alert.alert_success,
     permission: state.authReducers.permission.data,
-    listProducts: state.ecommerceReducers.product.listProducts,
+    listOrders: state.ecommerceReducers.order.listOrders,
     listConnectEcommerce: state.ecommerceReducers.connect.listConnectEcommerce,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchListConnectEcommerce: (store_code, params) => {
-      dispatch(ecommerceAction.fetchListConnectEcommerce(store_code, params));
+    fetchListConnectEcommerce: (store_code, params, funcModal) => {
+      dispatch(
+        ecommerceAction.fetchListConnectEcommerce(store_code, params, funcModal)
+      );
     },
-    fetchListProductEcommerce: (store_code, params) => {
-      dispatch(ecommerceAction.fetchListProductEcommerce(store_code, params));
+    fetchListOrderEcommerce: (store_code, params) => {
+      dispatch(ecommerceAction.fetchListOrderEcommerce(store_code, params));
     },
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(ProductTiki);
+export default connect(mapStateToProps, mapDispatchToProps)(OrderTiki);

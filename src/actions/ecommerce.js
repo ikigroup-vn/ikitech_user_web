@@ -2,7 +2,7 @@ import * as Types from "../constants/ActionType";
 import * as ecommerceApi from "../data/remote/ecommerce";
 
 //Danh sách kết nối sàn
-export const fetchListConnectEcommerce = (store_code, params) => {
+export const fetchListConnectEcommerce = (store_code, params, funcModal) => {
   return (dispatch) => {
     dispatch({ type: Types.SHOW_LOADING, loading: "show" });
     ecommerceApi
@@ -10,6 +10,9 @@ export const fetchListConnectEcommerce = (store_code, params) => {
       .then((res) => {
         dispatch({ type: Types.SHOW_LOADING, loading: "hidden" });
         if (res.data.code === 200) {
+          if (funcModal) {
+            funcModal(res.data.data);
+          }
           dispatch({
             type: Types.LIST_CONNECT_ECOMMERCE,
             data: res.data.data,
@@ -159,6 +162,66 @@ export const updatePriceProductEcommerce = (
         funcModal();
       })
       .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+
+//Danh sách đơn hàng theo store
+export const fetchListOrderEcommerce = (store_code, params) => {
+  return (dispatch) => {
+    dispatch({ type: Types.SHOW_LOADING, loading: "show" });
+    ecommerceApi
+      .fetchListOrderEcommerce(store_code, params)
+      .then((res) => {
+        dispatch({ type: Types.SHOW_LOADING, loading: "hidden" });
+        if (res.data.code === 200) {
+          dispatch({
+            type: Types.LIST_ORDERS_ECOMMERCE,
+            data: res.data.data,
+          });
+        }
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+
+// Đồng bộ đơn hàng
+export const syncOrderEcommerce = (store_code, data, funcModal) => {
+  return (dispatch) => {
+    dispatch({ type: Types.SHOW_LOADING_SPINNERS, loading: true });
+    ecommerceApi
+      .syncOrderEcommerce(store_code, data)
+      .then((res) => {
+        dispatch({ type: Types.SHOW_LOADING_SPINNERS, loading: false });
+        if (res.data.code === 200) {
+          dispatch({
+            type: Types.SYNC_ORDERS_FROM_STORES,
+            data: res.data.data,
+          });
+          funcModal(res.data.data);
+        }
+      })
+      .catch(function (error) {
+        dispatch({ type: Types.SHOW_LOADING_SPINNERS, loading: false });
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {

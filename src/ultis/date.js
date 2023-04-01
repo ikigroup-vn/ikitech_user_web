@@ -7,8 +7,10 @@ export const getDDMMYYYNow = () => {
   return moment().format("DD-MM-YYYY");
 };
 
-export const getDDMMYYYHis = (date) => {
-  return moment(date).format("HH:mm:ss DD-MM-YYYY");
+export const getDDMMYYYHis = (date, format = "HH:mm:ss DD/MM/YYYY") => {
+  return moment(date)?.toString() == "Invalid date"
+    ? ""
+    : moment(date).format(format);
 };
 
 export const getDDMMYYY = (date) => {

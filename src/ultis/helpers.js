@@ -312,6 +312,7 @@ export const formatNumber = (value) => {
 export const getQueryParams = (name) => {
   return new URLSearchParams(window ? window.location.search : {}).get(name);
 };
+
 export const formatNumberV2 = (str) => {
   if (str === undefined || str === null) return "";
   const strFormat = str

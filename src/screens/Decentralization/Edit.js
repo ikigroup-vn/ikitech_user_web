@@ -14,80 +14,87 @@ import Alert from "../../components/Partials/Alert";
 class DecentralizationEdit extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-
-    }
+    this.state = {};
   }
 
   componentDidMount() {
-    var {store_code , id } = this.props.match.params;
+    var { store_code, id } = this.props.match.params;
     // this.props.fetchDecentralizationId(store_code,id);
     this.props.fetchAllDecentralization(store_code);
-
   }
   componentWillReceiveProps(nextProps) {
-    if (this.state.isLoading != true && typeof nextProps.permission.product_list != "undefined") {
-      var permissions = nextProps.permission
+    if (
+      this.state.isLoading != true &&
+      typeof nextProps.permission.product_list != "undefined"
+    ) {
+      var permissions = nextProps.permission;
 
-      var isShow = permissions.decentralization_list
-      this.setState({ isLoading: true, isShow })
+      var isShow = permissions.decentralization_list;
+      this.setState({ isLoading: true, isShow });
     }
   }
 
-
   render() {
     var { id, store_code } = this.props.match.params;
-    var { decentralization, history } = this.props
-    var { isShow } = this.state
+    var { decentralization, history } = this.props;
+    var { isShow } = this.state;
     if (this.props.auth) {
       return (
         <div id="wrapper">
           <Sidebar store_code={store_code} />
-<div className="col-10 col-10-wrapper">
+          <div className="col-10 col-10-wrapper">
+            <div id="content-wrapper" className="d-flex flex-column">
+              <div id="content">
+                <Topbar store_code={store_code} />
+                {typeof isShow == "undefined" ? (
+                  <div></div>
+                ) : isShow == true ? (
+                  <div class="container-fluid">
+                    <Alert
+                      type={Types.ALERT_UID_STATUS}
+                      alert={this.props.alert}
+                    />
+                    <div
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <h4 className="h4 title_content mb-0 text-gray-800">
+                        Sửa phân quyền
+                      </h4>
+                    </div>
+                    <br></br>
+                    <div class="card shadow mb-4">
+                      <div class="card-body">
+                        <section class="content">
+                          <div class="row">
+                            <div class="col-md-12 col-xs-12">
+                              <div id="messages"></div>
 
-          <div id="content-wrapper" className="d-flex flex-column">
-            <div id="content">
-              <Topbar store_code= {store_code} />
-              {typeof isShow == "undefined" ? <div></div> : isShow == true ?
-
-              <div class="container-fluid">
-              <Alert
-                  type={Types.ALERT_UID_STATUS}
-                  alert={this.props.alert}
-                />
-                <div
-                  style={{ display: "flex", justifyContent: "space-between" }}
-                >
-                  <h4 className="h4 title_content mb-0 text-gray-800">
-                   Sửa phân quyền
-                  </h4>
-                </div>
-                <br></br>
-                <div class="card shadow mb-4">
-                  <div class="card-body">
-                    <section class="content">
-                      <div class="row">
-                        <div class="col-md-12 col-xs-12">
-                          <div id="messages"></div>
-
-                          <div class="box">
-                            <Form history={history} data={decentralization} id = {id}  store_code={store_code} />
+                              <div class="box">
+                                <Form
+                                  history={history}
+                                  data={decentralization}
+                                  id={id}
+                                  store_code={store_code}
+                                />
+                              </div>
+                            </div>
                           </div>
-                        </div>
+                        </section>
                       </div>
-                    </section>
+                    </div>
                   </div>
-                </div>
+                ) : (
+                  <NotAccess />
+                )}
               </div>
-              : <NotAccess />}
 
+              <Footer />
             </div>
-
-            <Footer />
           </div>
         </div>
-        </div>
-
       );
     } else if (this.props.auth === false) {
       return <Redirect to="/login" />;
@@ -99,11 +106,10 @@ class DecentralizationEdit extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    decentralization: state.decentralizationReducers.decentralization.allDecentralization,
+    decentralization:
+      state.decentralizationReducers.decentralization.allDecentralization,
     auth: state.authReducers.login.authentication,
     permission: state.authReducers.permission.data,
-
-
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -113,4 +119,7 @@ const mapDispatchToProps = (dispatch, props) => {
     },
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(DecentralizationEdit);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(DecentralizationEdit);

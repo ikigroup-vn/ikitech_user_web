@@ -156,20 +156,17 @@ class ModalChooseEcommerce extends Component {
     const url = `${callUrl()}/store/ecommerce/connect/${platform_name}?store_code=${store_code}`;
     var intervalID, childWindow;
 
-    var left = window.screen.width / 2;
-    var top = window.screen.height / 2;
-
     childWindow = window.open(
       url,
       `Kết nối với gian ${platform}`,
-      `toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no,fullscreen=yes, top=${top}, left=${left}`
+      `toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=yes, resizable=no, copyhistory=no,fullscreen=yes`
     );
 
     function checkWindow() {
       if (childWindow && childWindow.closed) {
         window.clearInterval(intervalID);
         window.$(".modal").modal("hide");
-        handleFetchListConnectEcommerce("");
+        handleFetchListConnectEcommerce();
       }
     }
     intervalID = window.setInterval(checkWindow, 500);
@@ -262,6 +259,7 @@ class ModalChooseEcommerce extends Component {
                         justifyContent: "center",
                         width: "160px",
                       }}
+                      id={`connect-${ecommerce.value}`}
                       onClick={() => this.handleAddConnect(ecommerce.name)}
                     >
                       Tạo kết nối
