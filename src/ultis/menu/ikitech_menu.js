@@ -69,6 +69,7 @@ export const ikitech_menu = [
       },
       {
         name: "Sàn TMĐT",
+        class: "ecommerce_list",
         setOpenKey: [
           "/ecommerce/manage",
           "/ecommerce/productEcommerce/shopee",

@@ -573,6 +573,7 @@ export const initialPermission = () => {
     staff_delegating: false,
     onsale: false,
     train: false,
+    ecommerce_list: false,
     ecommerce_products: false,
     ecommerce_connect: false,
     ecommerce_orders: false,

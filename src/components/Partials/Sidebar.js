@@ -420,9 +420,7 @@ class Sidebar extends Component {
         <div className={`sidebar-heading ${disableHeading}`} key={index}>
           {title}
         </div>
-
         {this.MenuLink_2(link)}
-
         <hr class={`sidebar-divider ${disableHeading}`} />
       </React.Fragment>
     );
