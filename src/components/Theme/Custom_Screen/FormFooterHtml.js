@@ -18,25 +18,19 @@ class FormFooterHtml extends Component {
     };
   }
 
-
-  componentDidMount()
-  {
+  componentDidMount() {
     this.setState({
       txtContent: this.props.html_footer,
     });
   }
 
-
-    componentWillReceiveProps(nextProps) {
-      if (this.props.html_footer != nextProps.html_footer)
-         {
-
-        this.setState({
-          txtContent: nextProps.html_footer,
-        });
-      }
+  componentWillReceiveProps(nextProps) {
+    if (this.props.html_footer != nextProps.html_footer) {
+      this.setState({
+        txtContent: nextProps.html_footer,
+      });
     }
-
+  }
 
   handleEditorChange = (editorState) => {
     this.setState(
@@ -61,6 +55,19 @@ class FormFooterHtml extends Component {
     this.props.updateTheme(store_code, form);
   };
 
+  handleChange = (event) => {
+
+    this.setState(
+      {
+        txtContent: event.target.value,
+      },
+      () => {
+        sessionStorage.setItem("editor", event.target.value);
+      }
+    );
+
+  };
+
   render() {
     var { txtContent } = this.state;
 
@@ -69,7 +76,20 @@ class FormFooterHtml extends Component {
         <form role="form" method="post">
           <div class="box-body">
             <div class="form-group">
-              <SunEditor
+              <textarea
+                id="w3review"
+                name="w3review"
+                rows="10"
+                style={{
+                  width:"100%",
+                  border: "none",
+                  outline: "none",
+                }}
+                value={txtContent}
+                onChange={this.handleChange}
+              ></textarea>
+
+              {/* <SunEditor
                 onImageUploadBefore={handleImageUploadBefore}
                 setContents={txtContent}
                 showToolbar={true}
@@ -117,18 +137,17 @@ class FormFooterHtml extends Component {
                     ],
                   ],
                 }}
-              />
+              /> */}
             </div>
           </div>
           <div class="box-footer">
-          <button
-                        type="button"
-
-                  class="btn btn-primary btn-sm"
-                  onClick={this.onSave}
-                  >
-                  <i class="fa fa-save"></i> Lưu
-                </button>
+            <button
+              type="button"
+              class="btn btn-primary btn-sm"
+              onClick={this.onSave}
+            >
+              <i class="fa fa-save"></i> Lưu
+            </button>
             {/* <button
               type="submit"
               class="btn btn-info btn-icon-split btn-sm"
