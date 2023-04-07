@@ -98,7 +98,7 @@ class FilterOrder extends Component {
               <Select
                 closeMenuOnSelect={false}
                 options={listStatus}
-                placeholder={"Trạng thái đón hàng"}
+                placeholder={"Trạng thái đơn hàng"}
                 value={listStatusSelected}
                 onChange={onChangeStatus}
                 isMulti={true}

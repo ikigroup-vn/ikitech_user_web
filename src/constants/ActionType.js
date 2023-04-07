@@ -479,3 +479,7 @@ export const TYPE_PRINT_ECOMMERCE_A4_A5 = 1;
 export const TYPE_PRINT_ECOMMERCE_TWO_VOLUME_A4 = 2;
 export const TYPE_PRINT_ECOMMERCE_K80 = 3;
 export const TYPE_PRINT_ECOMMERCE_LABEL = 4;
+
+//Type Share Collaborator
+export const TYPE_SHARE_COLLABORATOR_PERCENT = 0;
+export const TYPE_SHARE_COLLABORATOR_NUMBER = 1;
