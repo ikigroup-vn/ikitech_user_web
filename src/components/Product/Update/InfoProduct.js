@@ -26,6 +26,8 @@ class InfoProduct extends Component {
       attribute_search_children_ids: [],
       txtQuantityInStock: "",
       txtPercentC: "",
+      type_share_collaborator_number: Types.TYPE_SHARE_COLLABORATOR_PERCENT,
+      money_amount_collaborator: "",
       disabledPrice: false,
       icon: true,
       checkHasDistribute: false,
@@ -99,7 +101,8 @@ class InfoProduct extends Component {
       name == "txtPercentC" ||
       name == "txtQuantityInStock" ||
       name == "point_for_agency" ||
-      name == "txtWeight"
+      name == "txtWeight" ||
+      name == "money_amount_collaborator"
     ) {
       if (!isNaN(Number(_value))) {
         value = formatNoD(_value);
@@ -287,6 +290,10 @@ class InfoProduct extends Component {
       var _import_price = formatNoD(import_price);
       const weight = formatNumber(product.weight ?? 0);
       var _weight = formatNoD(weight);
+      const money_amount_collaborator = formatNumber(
+        product.money_amount_collaborator ?? 0
+      );
+      var _money_amount_collaborator = formatNoD(money_amount_collaborator);
 
       const quantity_stock =
         product.quantity_in_stock < 0
@@ -308,6 +315,8 @@ class InfoProduct extends Component {
         txtImportPrice: _import_price,
         disabledPrice: _price == 0 ? true : false,
         txtPercentC: product.percent_collaborator,
+        money_amount_collaborator: _money_amount_collaborator,
+        type_share_collaborator_number: product.type_share_collaborator_number,
         // txtBarcode: isCopy ? Math.random().toString().slice(2, 11) :  product.barcode || Math.random().toString().slice(2, 11),
         txtBarcode: product.barcode,
 
@@ -507,6 +516,14 @@ class InfoProduct extends Component {
     // });
     // this.setState({ listCategory: option });
   };
+  handleChangeTypeShareCollab = (type) => {
+    this.setState({
+      type_share_collaborator_number:
+        type === "%"
+          ? Types.TYPE_SHARE_COLLABORATOR_PERCENT
+          : Types.TYPE_SHARE_COLLABORATOR_NUMBER,
+    });
+  };
   render() {
     var {
       listCategory,
@@ -519,6 +536,8 @@ class InfoProduct extends Component {
       txtCategory,
       txtQuantityInStock,
       txtPercentC,
+      type_share_collaborator_number,
+      money_amount_collaborator,
       disabledPrice,
       sku,
       txtBarcode,
@@ -685,7 +704,7 @@ class InfoProduct extends Component {
               {" "}
               {getChannel() == IKITECH && (
                 <div class="form-group">
-                  <label for="product_name">Phần trăm hoa hồng CTV</label>
+                  <label for="product_name">Hoa hồng CTV</label>
                   <i
                     style={{
                       display: "block",
@@ -694,16 +713,80 @@ class InfoProduct extends Component {
                   >
                     Bỏ trống khi sản phẩm không có hoa hồng
                   </i>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="txtEmail"
-                    placeholder="Nhập %"
-                    autoComplete="off"
-                    value={txtPercentC}
-                    onChange={this.onChange}
-                    name="txtPercentC"
-                  />
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="txtEmail"
+                      placeholder={`Nhập ${
+                        type_share_collaborator_number ==
+                        Types.TYPE_SHARE_COLLABORATOR_PERCENT
+                          ? "%"
+                          : "VND"
+                      }`}
+                      autoComplete="off"
+                      value={
+                        type_share_collaborator_number ==
+                        Types.TYPE_SHARE_COLLABORATOR_PERCENT
+                          ? txtPercentC
+                          : money_amount_collaborator
+                      }
+                      onChange={this.onChange}
+                      name={
+                        type_share_collaborator_number ==
+                        Types.TYPE_SHARE_COLLABORATOR_PERCENT
+                          ? "txtPercentC"
+                          : "money_amount_collaborator"
+                      }
+                    />
+                    <div
+                      class="input-group-append"
+                      onClick={() => this.handleChangeTypeShareCollab("%")}
+                    >
+                      <span
+                        class="input-group-text"
+                        style={{
+                          backgroundColor:
+                            type_share_collaborator_number ==
+                            Types.TYPE_SHARE_COLLABORATOR_PERCENT
+                              ? "#f3ab0063"
+                              : "#eaecf4",
+                          width: "61px",
+                          justifyContent: "center",
+                          cursor:
+                            type_share_collaborator_number ==
+                            Types.TYPE_SHARE_COLLABORATOR_PERCENT
+                              ? "initial"
+                              : "pointer",
+                        }}
+                      >
+                        %
+                      </span>
+                    </div>
+                    <div
+                      class="input-group-append"
+                      onClick={() => this.handleChangeTypeShareCollab("VNG")}
+                    >
+                      <span
+                        class="input-group-text"
+                        style={{
+                          backgroundColor:
+                            type_share_collaborator_number ==
+                            Types.TYPE_SHARE_COLLABORATOR_NUMBER
+                              ? "#f3ab0063"
+                              : "#eaecf4",
+                          width: "61px",
+                          cursor:
+                            type_share_collaborator_number ==
+                            Types.TYPE_SHARE_COLLABORATOR_NUMBER
+                              ? "initial"
+                              : "pointer",
+                        }}
+                      >
+                        VND
+                      </span>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>

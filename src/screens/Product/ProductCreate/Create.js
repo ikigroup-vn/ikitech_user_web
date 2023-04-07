@@ -48,6 +48,12 @@ class ProductCreate extends Component {
         .toString()
         .replace(/,/g, "")
         .replace(/\./g, "");
+      formdata.money_amount_collaborator = data.money_amount_collaborator
+        ?.toString()
+        .replace(/,/g, "")
+        .replace(/\./g, "");
+      formdata.type_share_collaborator_number =
+        data.type_share_collaborator_number;
       formdata.weight = data.txtWeight
         .toString()
         .replace(/,/g, "")

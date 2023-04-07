@@ -12,6 +12,7 @@ import {
   formatNoD,
 } from "../../../ultis/helpers";
 import getChannel, { IKITECH } from "../../../ultis/channel";
+import * as Types from "../../../constants/ActionType";
 class InfoProduct extends Component {
   constructor(props) {
     super(props);
@@ -28,6 +29,8 @@ class InfoProduct extends Component {
       txtCostOfCapital: "",
       icon: true,
       txtPercentC: "",
+      type_share_collaborator_number: Types.TYPE_SHARE_COLLABORATOR_PERCENT,
+      money_amount_collaborator: "",
       txtPosition: "",
       txtStatus: 0,
       listCategory: [],
@@ -145,7 +148,8 @@ class InfoProduct extends Component {
       name == "txtPercentC" ||
       name == "txtQuantityInStock" ||
       name == "point_for_agency" ||
-      name == "txtWeight"
+      name == "txtWeight" ||
+      name == "money_amount_collaborator"
     ) {
       if (!isNaN(Number(_value))) {
         value = formatNoD(_value);
@@ -490,6 +494,14 @@ class InfoProduct extends Component {
     // });
     // this.setState({ listCategory: option });
   };
+  handleChangeTypeShareCollab = (type) => {
+    this.setState({
+      type_share_collaborator_number:
+        type === "%"
+          ? Types.TYPE_SHARE_COLLABORATOR_PERCENT
+          : Types.TYPE_SHARE_COLLABORATOR_NUMBER,
+    });
+  };
   render() {
     const { inputValue, menuIsOpen } = this.state;
     var {
@@ -507,6 +519,8 @@ class InfoProduct extends Component {
       txtPrice,
       txtQuantityInStock,
       txtPercentC,
+      type_share_collaborator_number,
+      money_amount_collaborator,
       disabledPrice,
       sku,
       check_inventory,
@@ -702,7 +716,7 @@ class InfoProduct extends Component {
               {" "}
               {getChannel() == IKITECH && (
                 <div class="form-group">
-                  <label for="product_name">Phần trăm hoa hồng CTV</label>
+                  <label for="product_name">Hoa hồng CTV</label>
                   <i
                     style={{
                       display: "block",
@@ -711,16 +725,80 @@ class InfoProduct extends Component {
                   >
                     Bỏ trống khi sản phẩm không có hoa hồng
                   </i>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="txtEmail"
-                    placeholder="Nhập %"
-                    autoComplete="off"
-                    value={txtPercentC}
-                    onChange={this.onChange}
-                    name="txtPercentC"
-                  />
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="txtEmail"
+                      placeholder={`Nhập ${
+                        type_share_collaborator_number ==
+                        Types.TYPE_SHARE_COLLABORATOR_PERCENT
+                          ? "%"
+                          : "VND"
+                      }`}
+                      autoComplete="off"
+                      value={
+                        type_share_collaborator_number ==
+                        Types.TYPE_SHARE_COLLABORATOR_PERCENT
+                          ? txtPercentC
+                          : money_amount_collaborator
+                      }
+                      onChange={this.onChange}
+                      name={
+                        type_share_collaborator_number ==
+                        Types.TYPE_SHARE_COLLABORATOR_PERCENT
+                          ? "txtPercentC"
+                          : "money_amount_collaborator"
+                      }
+                    />
+                    <div
+                      class="input-group-append"
+                      onClick={() => this.handleChangeTypeShareCollab("%")}
+                    >
+                      <span
+                        class="input-group-text"
+                        style={{
+                          backgroundColor:
+                            type_share_collaborator_number ==
+                            Types.TYPE_SHARE_COLLABORATOR_PERCENT
+                              ? "#f3ab0063"
+                              : "#eaecf4",
+                          width: "61px",
+                          justifyContent: "center",
+                          cursor:
+                            type_share_collaborator_number ==
+                            Types.TYPE_SHARE_COLLABORATOR_PERCENT
+                              ? "initial"
+                              : "pointer",
+                        }}
+                      >
+                        %
+                      </span>
+                    </div>
+                    <div
+                      class="input-group-append"
+                      onClick={() => this.handleChangeTypeShareCollab("VNG")}
+                    >
+                      <span
+                        class="input-group-text"
+                        style={{
+                          backgroundColor:
+                            type_share_collaborator_number ==
+                            Types.TYPE_SHARE_COLLABORATOR_NUMBER
+                              ? "#f3ab0063"
+                              : "#eaecf4",
+                          width: "61px",
+                          cursor:
+                            type_share_collaborator_number ==
+                            Types.TYPE_SHARE_COLLABORATOR_NUMBER
+                              ? "initial"
+                              : "pointer",
+                        }}
+                      >
+                        VND
+                      </span>
+                    </div>
+                  </div>
                 </div>
               )}
             </div>
