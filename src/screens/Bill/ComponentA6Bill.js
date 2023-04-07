@@ -97,27 +97,6 @@ export default class ComponentA6Bill extends Component {
         });
 
 
-
-        // arr.push(
-        //     <React.Fragment>
-        //         <tr>
-        //             <td></td>
-
-        //             <td></td>
-
-        //             <td style={{ textAlign: "end" }} colSpan="3" >+ {format(bill.total_shipping_fee || 0)}</td>
-        //         </tr>
-        //         <tr>
-        //             <td></td>
-
-        //             <td style={{ textAlign: "start" }}>Giảm giá, Voucher, Combo</td>
-        //             <td></td>
-
-        //             <td style={{ textAlign: "end" }} colSpan="3">- {format((bill.product_discount_amount || 0) + (bill.voucher_discount_amount || 0) + (bill.combo_discount_amount || 0))}</td>
-        //         </tr>
-
-        //     </React.Fragment>
-        // )
         return arr;
     };
 
