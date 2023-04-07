@@ -532,7 +532,6 @@ class Bill extends Component {
 
   exportAllListOrder = () => {
     var { store_code } = this.props.match.params;
-
     var {
       time_from,
       time_to,
@@ -556,7 +555,6 @@ class Bill extends Component {
       collaborator_by_customer_id,
       statusTime
     );
-
     const branch_id = getBranchId();
     var params_agency =
       this.state.agency_by_customer_id != null

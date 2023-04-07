@@ -1,9 +1,12 @@
 import React, { Component } from "react";
-import * as ecommerceAction from "../../../../actions/ecommerce";
+import * as ecommerceAction from "../../../actions/ecommerce";
 import { connect } from "react-redux";
 import Select from "react-select";
 import { SyncLoader } from "react-spinners";
 import styled from "styled-components";
+import Flatpickr from "react-flatpickr";
+import moment from "moment";
+import { getQueryParams } from "../../../ultis/helpers";
 
 const SyncLoaderStyles = styled.div`
   @keyframes react-spinners-SyncLoader-sync {
@@ -40,7 +43,7 @@ const SyncLoaderTotalStyles = styled.div`
   }
 `;
 
-class ModalSyncProduct extends Component {
+class ModalSyncOrder extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -52,6 +55,11 @@ class ModalSyncProduct extends Component {
         total_in_page: 0,
       },
       completeSync: false,
+      created_from_date:
+        getQueryParams("created_from_date") || this.handleShowDateBeforeAWeek(),
+      created_to_date:
+        getQueryParams("created_to_date") ||
+        moment(new Date(), "DD-MM-YYYY").format("DD-MM-YYYY"),
     };
   }
 
@@ -60,7 +68,7 @@ class ModalSyncProduct extends Component {
       listStoreSelected: listStore,
     });
   };
-  handleSyncProduct = () => {
+  handleSyncOrder = () => {
     const { page } = this.state;
     this.syncProduct(page);
     this.setState({
@@ -68,17 +76,27 @@ class ModalSyncProduct extends Component {
     });
   };
   syncProduct = (page) => {
-    const { listStoreSelected } = this.state;
-    const { syncProductEcommerce, store_code } = this.props;
+    const { listStoreSelected, created_from_date, created_to_date } =
+      this.state;
+
+    const fromTime = created_from_date
+      ? created_from_date?.split("-").reverse().join("-")
+      : "";
+    const toTime = created_to_date
+      ? created_to_date?.split("-").reverse().join("-")
+      : "";
+    const { syncOrderEcommerce, store_code } = this.props;
     const data = {
       page: page,
       shop_ids:
         listStoreSelected?.length > 0
           ? listStoreSelected.map((store) => store.value)
           : [],
+      created_from_date: fromTime,
+      created_to_date: toTime,
     };
 
-    syncProductEcommerce(store_code, data, (totalSync) => {
+    syncOrderEcommerce(store_code, data, (totalSync) => {
       const { listTotal } = this.state;
 
       const newListTotal = {
@@ -116,16 +134,42 @@ class ModalSyncProduct extends Component {
       },
     });
   };
+  onchangeDateFrom = (date) => {
+    var from = "";
+    from = date ? moment(date, "DD-MM-YYYY").format("DD-MM-YYYY") : "";
+
+    this.setState({ created_from_date: from });
+  };
+  onchangeDateTo = (date) => {
+    var to = "";
+    to = date ? moment(date, "DD-MM-YYYY").format("DD-MM-YYYY") : "";
+
+    this.setState({ created_to_date: to });
+  };
+  handleShowDateBeforeAWeek = () => {
+    const now = new Date();
+
+    return moment(
+      new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7),
+      "DD-MM-YYYY"
+    ).format("DD-MM-YYYY");
+  };
 
   render() {
     const { listStore, isLoadingSpinner } = this.props;
-    const { listStoreSelected, listTotal, completeSync } = this.state;
+    const {
+      listStoreSelected,
+      listTotal,
+      completeSync,
+      created_from_date,
+      created_to_date,
+    } = this.state;
     return (
       <div
         class="modal fade"
         tabindex="-1"
         role="dialog"
-        id="modalSyncProduct"
+        id="modalSyncOrder"
         data-keyboard="false"
         data-backdrop="static"
       >
@@ -149,7 +193,7 @@ class ModalSyncProduct extends Component {
                   color: "#414141",
                 }}
               >
-                Đồng bộ sản phẩm
+                Đồng bộ đơn hàng
               </h4>
               <button
                 type="button"
@@ -181,6 +225,59 @@ class ModalSyncProduct extends Component {
                   noOptionsMessage={() => "Không tìm thấy kết quả"}
                 ></Select>
                 <div>
+                  <div
+                    style={{
+                      display: "flex",
+                      columnGap: "20px",
+                    }}
+                  >
+                    <Flatpickr
+                      data-enable-time
+                      value={new Date(moment(created_from_date, "DD-MM-YYYY"))}
+                      className="created_from_date"
+                      placeholder="Chọn ngày bắt đầu..."
+                      options={{
+                        altInput: true,
+                        dateFormat: "DD-MM-YYYY",
+                        altFormat: "DD-MM-YYYY",
+                        allowInput: true,
+                        enableTime: false,
+                        maxDate: created_to_date,
+                        parseDate: (datestr, format) => {
+                          return moment(datestr, format, true).toDate();
+                        },
+                        formatDate: (date, format, locale) => {
+                          // locale can also be used
+                          return moment(date).format(format);
+                        },
+                      }}
+                      onChange={([date]) => this.onchangeDateFrom(date)}
+                    />
+                    <Flatpickr
+                      data-enable-time
+                      value={new Date(moment(created_to_date, "DD-MM-YYYY"))}
+                      className="created_to_date"
+                      placeholder="Chọn ngày kết thúc..."
+                      options={{
+                        altInput: true,
+                        dateFormat: "DD-MM-YYYY",
+                        altFormat: "DD-MM-YYYY",
+                        allowInput: true,
+                        enableTime: false,
+                        minDate: created_from_date,
+                        parseDate: (datestr, format) => {
+                          return moment(datestr, format, true).toDate();
+                        },
+                        formatDate: (date, format, locale) => {
+                          // locale can also be used
+                          return moment(date).format(format);
+                        },
+                      }}
+                      onChange={([date]) => this.onchangeDateTo(date)}
+                    />
+                  </div>
+                </div>
+                <div>
                   <div className="card card-product-condition-sync">
                     <div className="card-header">
                       <div
@@ -198,25 +295,56 @@ class ModalSyncProduct extends Component {
                           }}
                         >
                           <b>
-                            Lấy sản phẩm từ Tiki về và tạo luôn sản phẩm trên hệ
-                            thống
+                            Lấy đơn hàng từ{" "}
+                            {this.props.isCheckedEcommerce() === "tiki"
+                              ? "Tiki"
+                              : this.props.isCheckedEcommerce() === "lazada"
+                              ? "Lazada"
+                              : this.props.isCheckedEcommerce() === "tiktok"
+                              ? "Tiktok"
+                              : this.props.isCheckedEcommerce() === "shopee"
+                              ? "Shopee"
+                              : ""}{" "}
+                            về và cập nhập dữ liệu đơn hàng trên hệ thống
                           </b>
                         </div>
                         <div
                           className="header-elements pt-0 text-right"
-                          onClick={this.handleSyncProduct}
+                          onClick={this.handleSyncOrder}
                         >
-                          <div className="btn btn-success pull-right nextstep">
+                          <button
+                            className="btn btn-success pull-right nextstep"
+                            disabled={listStoreSelected?.length === 0}
+                          >
                             <i className="fa fa-download"></i> Tải về
-                          </div>
+                          </button>
                         </div>
                       </div>
                     </div>
                     <div className="mt-4">
                       <p>
-                        - Dành cho trường hợp shop đã có sản phẩm trên Tiki,
-                        chưa có sản phẩm trên hệ thống, hoặc đã có sản phẩm trên
-                        cả Tiki và hệ thống.
+                        - Dành cho trường hợp shop đã có đơn hàng trên{" "}
+                        {this.props.isCheckedEcommerce() === "tiki"
+                          ? "Tiki"
+                          : this.props.isCheckedEcommerce() === "lazada"
+                          ? "Lazada"
+                          : this.props.isCheckedEcommerce() === "tiktok"
+                          ? "Tiktok"
+                          : this.props.isCheckedEcommerce() === "shopee"
+                          ? "Shopee"
+                          : ""}
+                        , chưa có đơn hàng trên hệ thống, hoặc đã có đơn hàng
+                        trên cả{" "}
+                        {this.props.isCheckedEcommerce() === "tiki"
+                          ? "Tiki"
+                          : this.props.isCheckedEcommerce() === "lazada"
+                          ? "Lazada"
+                          : this.props.isCheckedEcommerce() === "tiktok"
+                          ? "Tiktok"
+                          : this.props.isCheckedEcommerce() === "shopee"
+                          ? "Shopee"
+                          : ""}{" "}
+                        và hệ thống.
                       </p>
                     </div>
                     <div
@@ -241,7 +369,7 @@ class ModalSyncProduct extends Component {
                       <SyncLoaderTotalStyles className="syncLoader__main">
                         <div className="syncLoader__item">
                           <span>{listTotal.total_in_page}</span>
-                          <span>SL sản phẩm sẽ tải</span>
+                          <span>SL đơn hàng sẽ tải</span>
                         </div>
                         <div className="syncLoader__item">
                           <span
@@ -251,7 +379,7 @@ class ModalSyncProduct extends Component {
                           >
                             {listTotal.sync_created}
                           </span>
-                          <span>SL sản phẩm đã lấy từ sàn</span>
+                          <span>SL đơn hàng đã lấy từ sàn</span>
                         </div>
                         <div className="syncLoader__item">
                           <span
@@ -261,7 +389,7 @@ class ModalSyncProduct extends Component {
                           >
                             {listTotal.sync_updated}
                           </span>
-                          <span>SL sản phẩm đã thêm</span>
+                          <span>SL đơn hàng đã thêm</span>
                         </div>
                       </SyncLoaderTotalStyles>
                       {completeSync ? (
@@ -272,7 +400,7 @@ class ModalSyncProduct extends Component {
                             marginTop: "30px",
                           }}
                         >
-                          Đã đồng bộ hoàn tất sản phẩm vào hệ thống.
+                          Đã đồng bộ hoàn tất đơn hàng vào hệ thống.
                         </div>
                       ) : null}
                     </div>
@@ -289,18 +417,16 @@ class ModalSyncProduct extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    totalSync: state.ecommerceReducers.product.totalSync,
-    isLoadingSpinner: state.ecommerceReducers.product.isLoadingSpinner,
+    totalSync: state.ecommerceReducers.order.totalSync,
+    isLoadingSpinner: state.ecommerceReducers.order.isLoadingSpinner,
   };
 };
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    syncProductEcommerce: (store_code, data, funcModal) => {
-      dispatch(
-        ecommerceAction.syncProductEcommerce(store_code, data, funcModal)
-      );
+    syncOrderEcommerce: (store_code, data, funcModal) => {
+      dispatch(ecommerceAction.syncOrderEcommerce(store_code, data, funcModal));
     },
   };
 };
-export default connect(mapStateToProps, mapDispatchToProps)(ModalSyncProduct);
+export default connect(mapStateToProps, mapDispatchToProps)(ModalSyncOrder);

@@ -23,6 +23,13 @@ export const updateConnectEcommerce = (store_code, shop_id, data) => {
     data
   );
 };
+export const disconnectEcommerce = (store_code, shop_id) => {
+  return callApi(
+    `/store/${store_code}/ecommerce/connect/list/${shop_id}`,
+    "delete",
+    null
+  );
+};
 
 export const fetchListProductEcommerce = (store_code, params) => {
   return callApi(

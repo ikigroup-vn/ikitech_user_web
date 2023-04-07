@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import * as ecommerceAction from "../../../../actions/ecommerce";
+import * as ecommerceAction from "../../../actions/ecommerce";
 import { connect } from "react-redux";
 import Select from "react-select";
 import { SyncLoader } from "react-spinners";
@@ -52,20 +52,29 @@ class ModalSyncProduct extends Component {
         total_in_page: 0,
       },
       completeSync: false,
+      error: "",
     };
   }
 
   handleChangeStore = (listStore) => {
     this.setState({
       listStoreSelected: listStore,
+      error: "",
     });
   };
   handleSyncProduct = () => {
-    const { page } = this.state;
-    this.syncProduct(page);
+    const { page, listStoreSelected } = this.state;
     this.setState({
       completeSync: false,
     });
+    if (listStoreSelected?.length === 0) {
+      this.setState({
+        error: "Chọn cửa hàng để tải về đồng bộ sản phẩm",
+      });
+
+      return;
+    }
+    this.syncProduct(page);
   };
   syncProduct = (page) => {
     const { listStoreSelected } = this.state;
@@ -119,7 +128,7 @@ class ModalSyncProduct extends Component {
 
   render() {
     const { listStore, isLoadingSpinner } = this.props;
-    const { listStoreSelected, listTotal, completeSync } = this.state;
+    const { listStoreSelected, listTotal, completeSync, error } = this.state;
     return (
       <div
         class="modal fade"
@@ -198,25 +207,56 @@ class ModalSyncProduct extends Component {
                           }}
                         >
                           <b>
-                            Lấy sản phẩm từ Tiki về và tạo luôn sản phẩm trên hệ
-                            thống
+                            Lấy sản phẩm từ{" "}
+                            {this.props.isCheckedEcommerce() === "tiki"
+                              ? "Tiki"
+                              : this.props.isCheckedEcommerce() === "lazada"
+                              ? "Lazada"
+                              : this.props.isCheckedEcommerce() === "tiktok"
+                              ? "Tiktok"
+                              : this.props.isCheckedEcommerce() === "shopee"
+                              ? "Shopee"
+                              : ""}{" "}
+                            về và tạo luôn sản phẩm trên hệ thống
                           </b>
                         </div>
                         <div
                           className="header-elements pt-0 text-right"
                           onClick={this.handleSyncProduct}
                         >
-                          <div className="btn btn-success pull-right nextstep">
+                          <button
+                            className="btn btn-success pull-right nextstep"
+                            disabled={listStoreSelected?.length === 0}
+                          >
                             <i className="fa fa-download"></i> Tải về
-                          </div>
+                          </button>
                         </div>
                       </div>
                     </div>
                     <div className="mt-4">
                       <p>
-                        - Dành cho trường hợp shop đã có sản phẩm trên Tiki,
-                        chưa có sản phẩm trên hệ thống, hoặc đã có sản phẩm trên
-                        cả Tiki và hệ thống.
+                        - Dành cho trường hợp shop đã có sản phẩm trên{" "}
+                        {this.props.isCheckedEcommerce() === "tiki"
+                          ? "Tiki"
+                          : this.props.isCheckedEcommerce() === "lazada"
+                          ? "Lazada"
+                          : this.props.isCheckedEcommerce() === "tiktok"
+                          ? "Tiktok"
+                          : this.props.isCheckedEcommerce() === "shopee"
+                          ? "Shopee"
+                          : ""}{" "}
+                        , chưa có sản phẩm trên hệ thống, hoặc đã có sản phẩm
+                        trên cả{" "}
+                        {this.props.isCheckedEcommerce() === "tiki"
+                          ? "Tiki"
+                          : this.props.isCheckedEcommerce() === "lazada"
+                          ? "Lazada"
+                          : this.props.isCheckedEcommerce() === "tiktok"
+                          ? "Tiktok"
+                          : this.props.isCheckedEcommerce() === "shopee"
+                          ? "Shopee"
+                          : ""}{" "}
+                        và hệ thống.
                       </p>
                     </div>
                     <div
@@ -273,6 +313,17 @@ class ModalSyncProduct extends Component {
                           }}
                         >
                           Đã đồng bộ hoàn tất sản phẩm vào hệ thống.
+                        </div>
+                      ) : null}
+                      {error ? (
+                        <div
+                          class="alert alert-danger"
+                          role="alert"
+                          style={{
+                            marginTop: "30px",
+                          }}
+                        >
+                          {error}
                         </div>
                       ) : null}
                     </div>

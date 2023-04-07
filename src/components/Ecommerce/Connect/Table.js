@@ -4,6 +4,8 @@ import { connect } from "react-redux";
 import styled from "styled-components";
 import { getDDMMYYYHis } from "../../../ultis/date";
 import ModalUpdateConnectEcommerce from "./ModalUpdateConnectEcommerce";
+import { ecommerces } from "../../../ultis/ecommerce";
+import ModalDisConnectEcommerce from "./ModalDisConnectEcommerce";
 
 const TableStyles = styled.div`
   .time_end_token {
@@ -88,13 +90,25 @@ class Table extends Component {
   handleOpenModal = () => {
     window.removeEventListener("click", this.handleClickOutside);
   };
-  handleCloseModal = () => {
+  handleCloseModal = (fetchList = true) => {
     const { fetchListConnectEcommerce } = this.props;
     this.setState({
       ecommerceSelected: null,
     });
-    fetchListConnectEcommerce();
+    if (fetchList) {
+      fetchListConnectEcommerce();
+    }
     window.addEventListener("click", this.handleClickOutside);
+  };
+
+  handleDisplayEcommerce = (platform) => {
+    const ecommerseFilter = ecommerces.filter(
+      (ecommerse) => ecommerse.value == platform
+    );
+    if (ecommerseFilter.length > 0) {
+      return ecommerseFilter[0].svg;
+    }
+    return "";
   };
 
   showData = (listConnect) => {
@@ -107,7 +121,7 @@ class Table extends Component {
           <React.Fragment>
             <tr class="sub-container hover-product">
               <td>
-                <span
+                <div
                   style={{
                     backgroundColor:
                       data.platform?.toLowerCase() === "tiki"
@@ -120,11 +134,13 @@ class Table extends Component {
                         ? "#000"
                         : "",
                     color: "#fff",
-                    padding: "3px 5px",
+                    padding: "5px 10px",
+                    borderRadius: "8px",
+                    display: "inline-block",
                   }}
                 >
-                  {data.platform}
-                </span>
+                  {this.handleDisplayEcommerce(data.platform)}
+                </div>
               </td>
               <td>
                 <div>
@@ -320,6 +336,41 @@ class Table extends Component {
                       </span>
                       <span>Sửa cấu hình</span>
                     </div>
+                    <div
+                      className="dropdown__product__item"
+                      type="button"
+                      data-toggle="modal"
+                      data-target="#modalDisConnectEcommerce"
+                      onClick={this.handleOpenModal}
+                    >
+                      <span
+                        style={{
+                          marginRight: "10px",
+                        }}
+                      >
+                        <svg
+                          style={{
+                            width: "16px",
+                            height: "16px",
+                          }}
+                          fill="currentColor"
+                          viewBox="0 0 1024 1024"
+                          xmlns="http://www.w3.org/2000/svg"
+                        >
+                          <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                          <g
+                            id="SVGRepo_tracerCarrier"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                          ></g>
+                          <g id="SVGRepo_iconCarrier">
+                            {" "}
+                            <path d="M832.6 191.4c-84.6-84.6-221.5-84.6-306 0l-96.9 96.9 51 51 96.9-96.9c53.8-53.8 144.6-59.5 204 0 59.5 59.5 53.8 150.2 0 204l-96.9 96.9 51.1 51.1 96.9-96.9c84.4-84.6 84.4-221.5-.1-306.1zM446.5 781.6c-53.8 53.8-144.6 59.5-204 0-59.5-59.5-53.8-150.2 0-204l96.9-96.9-51.1-51.1-96.9 96.9c-84.6 84.6-84.6 221.5 0 306s221.5 84.6 306 0l96.9-96.9-51-51-96.8 97zM260.3 209.4a8.03 8.03 0 0 0-11.3 0L209.4 249a8.03 8.03 0 0 0 0 11.3l554.4 554.4c3.1 3.1 8.2 3.1 11.3 0l39.6-39.6c3.1-3.1 3.1-8.2 0-11.3L260.3 209.4z"></path>{" "}
+                          </g>
+                        </svg>
+                      </span>
+                      <span>Gỡ cấu hình</span>
+                    </div>
                   </div>
                 </span>
               </td>
@@ -342,7 +393,11 @@ class Table extends Component {
     return (
       <TableStyles
         class=""
-        style={{ overflow: "auto", minHeight: "200px", paddingBottom: "50px" }}
+        style={{
+          overflow: "visible",
+          minHeight: "200px",
+          paddingBottom: "50px",
+        }}
       >
         <table className="table table-border">
           <thead>
@@ -426,6 +481,11 @@ class Table extends Component {
           onClose={this.handleCloseModal}
           ecommerceSelected={ecommerceSelected}
         ></ModalUpdateConnectEcommerce>
+        <ModalDisConnectEcommerce
+          store_code={store_code}
+          onClose={this.handleCloseModal}
+          ecommerceSelected={ecommerceSelected}
+        ></ModalDisConnectEcommerce>
       </TableStyles>
     );
   }

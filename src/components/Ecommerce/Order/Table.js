@@ -1,10 +1,10 @@
 import React, { Component } from "react";
-import * as Env from "../../../../ultis/default";
 import styled from "styled-components";
-import { connect } from "react-redux";
-import { formatNumberV2 } from "../../../../ultis/helpers";
+import { connect, shallowEqual } from "react-redux";
+import { filter_arr, formatNumberV2 } from "../../../ultis/helpers";
 import ModalCustom from "./ModalCustom";
-import * as ecommerceAction from "../../../../actions/ecommerce";
+import * as ecommerceAction from "../../../actions/ecommerce";
+import { ecommerceStatus } from "../../../ultis/ecommerce";
 
 const TableProductStyles = styled.div`
   .dropdown__product {
@@ -37,6 +37,7 @@ class Table extends Component {
       productSelected: null,
       error: "",
       price: "",
+      selected: [],
     };
   }
 
@@ -45,6 +46,14 @@ class Table extends Component {
   }
   componentWillUnmount() {
     window.removeEventListener("click", this.handleClickOutside);
+  }
+  shouldComponentUpdate(nextProps, nextState) {
+    const { selected } = this.state;
+    const { setListOrderSelected } = this.props;
+    if (!shallowEqual(selected, nextState.selected)) {
+      setListOrderSelected(nextState.selected);
+    }
+    return true;
   }
 
   handleClickOutside = (e) => {
@@ -116,6 +125,53 @@ class Table extends Component {
     }${province ? province : ""}`;
   };
 
+  checkSelected = (id) => {
+    var selected = [...this.state.selected];
+    if (selected.length > 0) {
+      for (const item of selected) {
+        if (item.id == id) {
+          return true;
+        }
+      }
+      return false;
+    } else {
+      return false;
+    }
+  };
+  onChangeSelected = (e, data) => {
+    var { checked } = e.target;
+    var selected = [...this.state.selected];
+    if (checked == true) {
+      selected.push(data);
+    } else {
+      for (const [index, item] of selected.entries()) {
+        if (item.id == data.id) {
+          selected.splice(index, 1);
+        }
+      }
+    }
+    this.setState({ selected });
+  };
+  onChangeSelectAll = (e) => {
+    var checked = e.target.checked;
+    var { products } = this.props;
+    var _selected = [...this.state.selected];
+
+    var listBills = filter_arr(products.data);
+
+    if (listBills.length > 0) {
+      if (checked == false) {
+        this.setState({ selected: [] });
+      } else {
+        _selected = [];
+        listBills.forEach((bill) => {
+          _selected.push(bill);
+        });
+        this.setState({ selected: _selected });
+      }
+    }
+  };
+
   showData = (products, per_page, current_page) => {
     var result = null;
     const { productSelected } = this.state;
@@ -124,8 +180,21 @@ class Table extends Component {
     }
     if (products.length > 0) {
       result = products.map((data, index) => {
+        var checked = this.checkSelected(data.id);
         return (
           <tr key={data.id}>
+            <td>
+              <input
+                name="checked"
+                style={{
+                  height: "initial",
+                  marginBottom: "0px",
+                }}
+                type="checkbox"
+                checked={checked}
+                onChange={(e) => this.onChangeSelected(e, data)}
+              />
+            </td>
             <td>{per_page * (current_page - 1) + (index + 1)}</td>
             <td>{data.order_code}</td>
             <td>
@@ -162,7 +231,26 @@ class Table extends Component {
               <div>{data.package_weight ? `${data.package_weight}g ` : ""}</div>
             </td>
             <td>{data.payment_status}</td>
-            <td>{data.order_status}</td>
+            <td
+              style={{
+                color: this.props.handleShowStatus(
+                  data.order_status,
+                  data.from_platform
+                )?.color
+                  ? this.props.handleShowStatus(
+                      data.order_status,
+                      data.from_platform
+                    )?.color
+                  : "initial",
+              }}
+            >
+              {
+                this.props.handleShowStatus(
+                  data.order_status,
+                  data.from_platform
+                )?.name
+              }
+            </td>
             <td
               style={{
                 textAlign: "center",
@@ -178,7 +266,7 @@ class Table extends Component {
                 >
                   <i className="fa fa-bars"></i>
                 </span>
-                <div
+                {/* <div
                   class="dropdown__product__menu"
                   style={{
                     display: productSelected?.id == data.id ? "block" : "none",
@@ -200,7 +288,7 @@ class Table extends Component {
                     </span>
                     <span>Sửa giá</span>
                   </div>
-                </div>
+                </div> */}
               </span>
             </td>
           </tr>
@@ -214,8 +302,11 @@ class Table extends Component {
 
   render() {
     const { products } = this.props;
-    const { productSelected, price, error } = this.state;
-
+    const { productSelected, price, error, selected } = this.state;
+    var _selected =
+      selected.length > 0 && selected.length == products.data?.length
+        ? true
+        : false;
     return (
       <TableProductStyles>
         <table
@@ -226,6 +317,14 @@ class Table extends Component {
         >
           <thead>
             <tr>
+              <th>
+                {" "}
+                <input
+                  type="checkbox"
+                  checked={_selected}
+                  onChange={this.onChangeSelectAll}
+                />
+              </th>
               <th>STT</th>
               <th>Mã đơn</th>
               <th>Khách hàng</th>

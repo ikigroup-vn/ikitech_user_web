@@ -123,6 +123,7 @@ class Detail extends Component {
     } = this.state;
     if (bill) arrBills.push(bill);
     if (this.props.auth) {
+      console.log("componentRef::: ", this.componentRef);
       return (
         <div id="wrapper">
           <Sidebar store_code={store_code} />

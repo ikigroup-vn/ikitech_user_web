@@ -124,7 +124,7 @@ class Ecommerce extends Component {
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
                     <h4 className="h4 title_content mb-0 text-gray-800">
-                      Đồng bộ sàn TMĐT
+                      Kết nối sàn TMĐT
                     </h4>{" "}
                   </div>
                   <br></br>

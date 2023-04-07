@@ -82,33 +82,35 @@ export default class ComponentTemplate1ToPrint extends Component {
       return null;
     }
     bill.line_items_at_time.forEach((element, index) => {
-
-      var valueDistribute = ""
-      if (element.distributes_selected != null && element.distributes_selected.length > 0) {
-        var dis = element.distributes_selected[0]
+      var valueDistribute = "";
+      if (
+        element.distributes_selected != null &&
+        element.distributes_selected.length > 0
+      ) {
+        var dis = element.distributes_selected[0];
         if (dis.value != null) {
-          valueDistribute = " - "+ dis.value
+          valueDistribute = " - " + dis.value;
 
           if (dis.sub_element_distributes != null) {
-            valueDistribute = valueDistribute +" " + dis.sub_element_distributes
+            valueDistribute =
+              valueDistribute + " " + dis.sub_element_distributes;
           }
-
         }
-
       }
 
       arr.push(
         <tr>
           <td>{index + 1}</td>
-          <td style={{ textAlign: "start" }}>{element.name}
+          <td style={{ textAlign: "start" }}>
+            {element.name}
             {valueDistribute}
-            {element.is_bonus == true ? "(Thưởng)" : ""}</td>
+            {element.is_bonus == true ? "(Thưởng)" : ""}
+          </td>
           <td>{element.quantity}</td>
           <td style={{ textAlign: "end" }}>
-          {element.is_bonus == true ? format(0) : format(
-              (element.item_price) *
-              element.quantity
-            )}
+            {element.is_bonus == true
+              ? format(0)
+              : format(element.item_price * element.quantity)}
           </td>
         </tr>
       );
@@ -137,8 +139,8 @@ export default class ComponentTemplate1ToPrint extends Component {
             -{" "}
             {format(
               (bill.product_discount_amount || 0) +
-              (bill.voucher_discount_amount || 0) +
-              (bill.combo_discount_amount || 0)
+                (bill.voucher_discount_amount || 0) +
+                (bill.combo_discount_amount || 0)
             )}
           </td>
         </tr>
@@ -153,9 +155,7 @@ export default class ComponentTemplate1ToPrint extends Component {
           <td></td>
 
           <td style={{ textAlign: "end" }} colSpan="3">
-            {format(
-              (bill.total_final || 0)
-            )}
+            {format(bill.total_final || 0)}
           </td>
         </tr>
       </React.Fragment>
@@ -169,7 +169,7 @@ export default class ComponentTemplate1ToPrint extends Component {
           <td></td>
 
           <td style={{ textAlign: "end" }} colSpan="3">
-            {(bill.points_awarded_to_customer || 0)}
+            {bill.points_awarded_to_customer || 0}
           </td>
         </tr>
       </React.Fragment>
@@ -197,8 +197,6 @@ export default class ComponentTemplate1ToPrint extends Component {
     var state = this.state;
     var { bill, badges, store, currentBranch } = this.props;
 
-
-
     var total_product =
       Array.isArray(bill.line_items_at_time) == true
         ? bill.line_items_at_time.length
@@ -207,8 +205,8 @@ export default class ComponentTemplate1ToPrint extends Component {
       typeof badges.address_pickup == "undefined"
         ? null
         : badges.address_pickup == null
-          ? null
-          : badges.address_pickup.address_detail +
+        ? null
+        : badges.address_pickup.address_detail +
           ", " +
           badges.address_pickup.wards_name +
           ", " +
@@ -216,75 +214,100 @@ export default class ComponentTemplate1ToPrint extends Component {
           ", " +
           badges.address_pickup.province_name;
 
-
     return (
       <div style={{ margin: "30px", fontSize: "26px" }}>
-
         <div className="row">
-
           <div className="col-4">
-            <div style={{
-              margin: 20
-            }}>
-
+            <div
+              style={{
+                margin: 20,
+              }}
+            >
               <img
                 style={{
-                  width: "100%"
+                  width: "100%",
                 }}
-                src={store.logo_url} alt="Logo" />
-
+                src={store.logo_url}
+                alt="Logo"
+              />
             </div>
-
           </div>
 
-
-          <div className="col-8" >
-
-            <div style={{
-              lineHeight: "0px",
-
-            }}>
-
+          <div className="col-8">
+            <div
+              style={{
+                lineHeight: "0px",
+              }}
+            >
               <p class="" id="sale_user_name">
-                <span style={{
-                  fontWeight: "bold",
-                  textTransform: "uppercase",
-                  fontSize: 30,
-                  margin: 0,
-                  padding: 0
-                }}>
+                <span
+                  style={{
+                    fontWeight: "bold",
+                    textTransform: "uppercase",
+                    fontSize: 30,
+                    margin: 0,
+                    padding: 0,
+                  }}
+                >
                   {" "}
                   {store.name ?? bill.store_name}
                 </span>
               </p>
-              <p class="" id="info" style={{
-                margin: 0,
-                padding: 0
-              }}>
-                <span><b>Địa chỉ:</b> </span>
+              <p
+                class=""
+                id="info"
+                style={{
+                  margin: 0,
+                  padding: 0,
+                }}
+              >
+                <span>
+                  <b>Địa chỉ:</b>{" "}
+                </span>
                 {store.address}
               </p>
 
-              <p class="" id="info" style={{
-                margin: 0,
-                padding: 0
-              }}>
-                <span><b>SĐT/Zalo:</b> {store.user?.phone_number ?? bill.user_phone}  <b> - Mã số thuế:</b> {currentBranch.txt_code ?? ""}</span>
+              <p
+                class=""
+                id="info"
+                style={{
+                  margin: 0,
+                  padding: 0,
+                }}
+              >
+                <span>
+                  <b>SĐT/Zalo:</b> {store.user?.phone_number ?? bill.user_phone}{" "}
+                  <b> - Mã số thuế:</b> {currentBranch.txt_code ?? ""}
+                </span>
               </p>
-              <p class="" id="info" style={{
-                margin: 0,
-                padding: 0
-              }}>
-                <span><b>Website:</b></span> {badges.domain_customer ?? ""}
+              <p
+                class=""
+                id="info"
+                style={{
+                  margin: 0,
+                  padding: 0,
+                }}
+              >
+                <span>
+                  <b>Website:</b>
+                </span>{" "}
+                {badges.domain_customer ?? ""}
               </p>
 
-              <p class="" id="info" style={{
-                margin: 0,
-                padding: 0
-              }}>
-                <span><b>STK:</b></span> {currentBranch.account_number ?? ""} {currentBranch.bank ?? ""} {currentBranch.account_name ?? ""}
+              <p
+                class=""
+                id="info"
+                style={{
+                  margin: 0,
+                  padding: 0,
+                }}
+              >
+                <span>
+                  <b>STK:</b>
+                </span>{" "}
+                {currentBranch.account_number ?? ""} {currentBranch.bank ?? ""}{" "}
+                {currentBranch.account_name ?? ""}
               </p>
-
             </div>
 
             <p
@@ -295,49 +318,64 @@ export default class ComponentTemplate1ToPrint extends Component {
 
                 margin: 0,
                 padding: 0,
-                marginTop: 8
-
+                marginTop: 8,
               }}
             >
               HÓA ĐƠN BÁN HÀNG
             </p>
             <p
               style={{
-                fontSize: "23px", textAlign: "left", margin: 0,
-                padding: 0
+                fontSize: "23px",
+                textAlign: "left",
+                margin: 0,
+                padding: 0,
               }}
-              className="order_code">Mã: {bill.order_code ?? bill.order_code}</p>
-            <div style={{
-              fontSize: "23px", textAlign: "left", margin: 0,
-              padding: 0
-            }}>
+              className="order_code"
+            >
+              Mã: {bill.order_code ?? bill.order_code}
+            </p>
+            <div
+              style={{
+                fontSize: "23px",
+                textAlign: "left",
+                margin: 0,
+                padding: 0,
+              }}
+            >
               Ngày: {getDDMMYYYHis(bill.created_at)}
             </div>
-
           </div>
         </div>
 
-
-
-        <div className="parent" style={{
-          border: "none",
-          fontSize: "20px"
-        }}>
-
+        <div
+          className="parent"
+          style={{
+            border: "none",
+            fontSize: "20px",
+          }}
+        >
           <div className="row">
-            <div class="col-12-print" style={{
-              fontSize: "20px"
-            }}>
-
+            <div
+              class="col-12-print"
+              style={{
+                fontSize: "20px",
+              }}
+            >
               <div class="">
-
                 <p class="" id="sale_user_name">
                   <span style={{ fontWeight: "500", fontSize: "20px" }}>
-                    <b> Tên khách hàng: </b>{state?.customer_name ?? bill.customer_name ?? bill?.customer?.name ?? ""}
+                    <b> Tên khách hàng: </b>
+                    {state?.customer_name ??
+                      bill.customer_name ??
+                      bill?.customer?.name ??
+                      ""}
                   </span>
                 </p>
                 <p class="" id="info" style={{ fontSize: "20px" }}>
-                  <span><b>Địa chỉ: </b></span> {getDetailAdress(
+                  <span>
+                    <b>Địa chỉ: </b>
+                  </span>{" "}
+                  {getDetailAdress(
                     bill.customer_address?.address_detail,
                     bill.customer_address?.wards_name,
                     bill.customer_address?.district_name,
@@ -345,13 +383,21 @@ export default class ComponentTemplate1ToPrint extends Component {
                   )}
                 </p>
                 <p class="" id="info" style={{ fontSize: "20px" }}>
-                  <span><b>Số điện thoại:  </b></span> {state?.customer_phone ?? bill.customer_phone ?? bill?.customer?.phone_number ?? ""}
+                  <span>
+                    <b>Số điện thoại: </b>
+                  </span>{" "}
+                  {state?.customer_phone ??
+                    bill.customer_phone ??
+                    bill?.customer?.phone_number ??
+                    ""}
                 </p>
                 <p class="" id="info" style={{ fontSize: "20px" }}>
-                  <span><b>Điểm/Xu:  </b></span> {bill?.customer?.point ?? "0"}
+                  <span>
+                    <b>Điểm/Xu: </b>
+                  </span>{" "}
+                  {bill?.customer?.point ?? "0"}
                 </p>
               </div>
-
 
               <table class="table table-hover">
                 <thead>
@@ -365,12 +411,15 @@ export default class ComponentTemplate1ToPrint extends Component {
                 <tbody>{this.showListProduct()}</tbody>
               </table>
 
-              <p class="" id="info" style={{
-                marginTop: 10
-              }}>
-                <span>Ghi chú:  </span> {bill?.customer_note ?? ""}
+              <p
+                class=""
+                id="info"
+                style={{
+                  marginTop: 10,
+                }}
+              >
+                <span>Ghi chú: </span> {bill?.customer_note ?? ""}
               </p>
-
             </div>
           </div>
 
@@ -391,10 +440,7 @@ export default class ComponentTemplate1ToPrint extends Component {
               </div>
             </div>
           )}
-          <div
-            className="row"
-
-          >
+          <div className="row">
             <div class="col-6-not-border" style={{ position: "relative" }}>
               <p
                 style={{
@@ -407,17 +453,13 @@ export default class ComponentTemplate1ToPrint extends Component {
               </p>
 
               <div>
-
-
                 <div
                   style={{
                     fontSize: "20px",
                     position: "absolute",
                     bottom: "5px",
                   }}
-                >
-
-                </div>
+                ></div>
               </div>
             </div>
             <div class="col-6-not-border" style={{ position: "relative" }}>
@@ -432,24 +474,17 @@ export default class ComponentTemplate1ToPrint extends Component {
               </p>
 
               <div>
-
-
                 <div
                   style={{
                     fontSize: "20px",
                     position: "absolute",
                     bottom: "5px",
                   }}
-                >
-
-                </div>
+                ></div>
               </div>
             </div>
           </div>
-
-
         </div>
-
       </div>
     );
   }

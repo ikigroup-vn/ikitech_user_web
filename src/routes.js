@@ -177,8 +177,8 @@ import GuessNumber from "./screens/Gamification/GuessNumber";
 import ActionsGameGuessNumber from "./screens/Gamification/GuessNumber/ActionsGameGuessNumber";
 import AttributeSearch from "./screens/AttributeSearch";
 import Ecommerce from "./screens/Ecommerce";
-import ProductTiki from "./screens/Ecommerce/product/tiki";
-import OrderTiki from "./screens/Ecommerce/order/tiki";
+import ProductEcommerce from "./screens/Ecommerce/product";
+import OrderEcommerce from "./screens/Ecommerce/order";
 
 const routes = [
   {
@@ -666,52 +666,52 @@ const routes = [
     main: ({ match }) => <Product match={match} />,
   },
   {
-    path: "/ecommerce/productEcommerce/shopee/:store_code",
+    path: "/ecommerce/ecommerce_products/shopee/:store_code",
     exact: true,
 
-    main: ({ match }) => <Product match={match} />,
+    main: ({ match }) => <ProductEcommerce match={match} />,
   },
   {
-    path: "/ecommerce/productEcommerce/tiktok/:store_code",
+    path: "/ecommerce/ecommerce_products/tiktok/:store_code",
     exact: true,
 
-    main: ({ match }) => <Product match={match} />,
+    main: ({ match }) => <ProductEcommerce match={match} />,
   },
   {
-    path: "/ecommerce/productEcommerce/lazada/:store_code",
+    path: "/ecommerce/ecommerce_products/lazada/:store_code",
     exact: true,
 
-    main: ({ match }) => <Product match={match} />,
+    main: ({ match }) => <ProductEcommerce match={match} />,
   },
   {
-    path: "/ecommerce/productEcommerce/tiki/:store_code",
+    path: "/ecommerce/ecommerce_products/tiki/:store_code",
     exact: true,
 
-    main: ({ match }) => <ProductTiki match={match} />,
+    main: ({ match }) => <ProductEcommerce match={match} />,
   },
   {
-    path: "/ecommerce/orderEcommerce/shopee/:store_code",
+    path: "/ecommerce/ecommerce_orders/shopee/:store_code",
     exact: true,
 
-    main: ({ match }) => <OrderTiki match={match} />,
+    main: ({ match }) => <OrderEcommerce match={match} />,
   },
   {
-    path: "/ecommerce/orderEcommerce/tiktok/:store_code",
+    path: "/ecommerce/ecommerce_orders/tiktok/:store_code",
     exact: true,
 
-    main: ({ match }) => <OrderTiki match={match} />,
+    main: ({ match }) => <OrderEcommerce match={match} />,
   },
   {
-    path: "/ecommerce/orderEcommerce/lazada/:store_code",
+    path: "/ecommerce/ecommerce_orders/lazada/:store_code",
     exact: true,
 
-    main: ({ match }) => <OrderTiki match={match} />,
+    main: ({ match }) => <OrderEcommerce match={match} />,
   },
   {
-    path: "/ecommerce/orderEcommerce/tiki/:store_code",
+    path: "/ecommerce/ecommerce_orders/tiki/:store_code",
     exact: true,
 
-    main: ({ match }) => <OrderTiki match={match} />,
+    main: ({ match }) => <OrderEcommerce match={match} />,
   },
 
   {
