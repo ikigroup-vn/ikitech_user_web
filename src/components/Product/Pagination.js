@@ -34,10 +34,12 @@ class Pagination extends Component {
       categorySelected,
       getParams,
       passNumPage,
+      is_near_out_of_stock,
+      listType
     } = this.props;
-
     passNumPage(page);
-    const params = getParams(search, limit, categorySelected);
+    
+    const params = getParams(listType, is_near_out_of_stock, search, limit);
     const branch_id = localStorage.getItem("branch_id");
     this.props.fetchAllProductV2(store_code, branch_id, page, params);
     this.props.passNumPage(page);

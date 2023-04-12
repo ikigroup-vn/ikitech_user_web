@@ -145,7 +145,7 @@ class ProductInventory extends Component {
     }
   }
 
-  getParams = (listType = 1, is_near_out_of_stock) => {
+  getParams = (listType = 1, is_near_out_of_stock, search, limit) => {
     var params = "";
     if (listType == 1) {
       params = params + `&check_inventory=true`;
@@ -156,6 +156,13 @@ class ProductInventory extends Component {
     if (is_near_out_of_stock) {
       params = params + `&is_near_out_of_stock=${is_near_out_of_stock}`;
     }
+    if (search !== "" || search !== undefined || search !== null) {
+      params = params + `&search=${search}`;
+    }
+    if (limit !== "" || limit !== undefined || limit !== null) {
+      params = params + `&limit=${limit}`;
+    }
+
     return params;
   };
 
@@ -169,7 +176,9 @@ class ProductInventory extends Component {
         // var params = `&check_inventory=true`;
         var params = this.getParams(
           nextState.listType,
-          this.state.is_near_out_of_stock
+          this.state.is_near_out_of_stock,
+          this.state.searchValue,
+          this.state.numPage
         );
 
         this.props.fetchAllProductV2(store_code, branch_id, 1, params);
@@ -178,14 +187,21 @@ class ProductInventory extends Component {
         const branch_id = getBranchId();
         var params = this.getParams(
           nextState.listType,
-          this.state.is_near_out_of_stock
+          this.state.is_near_out_of_stock,
+          this.state.searchValue,
+          this.state.numPage
         );
         this.props.fetchAllProductV2(store_code, branch_id, 1, params);
       } else {
         // this.setState({listProduct:this.props.products.data})
         const { store_code } = this.props.match.params;
         const branch_id = getBranchId();
-        var params = this.getParams(null, this.state.is_near_out_of_stock);
+        var params = this.getParams(
+          null,
+          this.state.is_near_out_of_stock,
+          this.state.searchValue,
+          this.state.numPage
+        );
         this.props.fetchAllProductV2(store_code, branch_id, 1, params);
       }
     }
@@ -276,10 +292,12 @@ class ProductInventory extends Component {
 
       const bonusParam = "&check_inventory=true";
 
-      var params = `&search=${searchValue ?? ""}&limit=${numPage}`;
-      params =
-        params +
-        this.getParams(this.state.listType, this.state.is_near_out_of_stock);
+      var params = this.getParams(
+        this.state.listType,
+        this.state.is_near_out_of_stock,
+        this.state.searchValue,
+        this.state.numPage
+      );
 
       return (
         <div id="wrapper">
@@ -449,10 +467,12 @@ class ProductInventory extends Component {
                         />
                         <Pagination
                           params={params}
+                          getParams={this.getParams}
                           listType={listType}
                           bonusParam={bonusParam}
                           limit={numPage}
-                          searchValue={searchValue}
+                          is_near_out_of_stock={is_near_out_of_stock}
+                          search={searchValue}
                           passNumPage={this.passNumPage}
                           store_code={store_code}
                           products={products}
