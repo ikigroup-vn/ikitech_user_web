@@ -79,7 +79,7 @@
     "xlsx-populate": "^1.21.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "react-scripts --openssl-legacy-provider start",
     "build": "GENERATE_SOURCEMAP=false react-scripts build",
     "buildWindow": "set \"GENERATE_SOURCEMAP=false\" && react-scripts build",
     "test": "react-scripts test",
