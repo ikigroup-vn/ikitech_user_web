@@ -1,6 +1,7 @@
 export const ikitech_menu = [
   {
     title: "Menu",
+    hasLinkShowWhenManyBranch: true,
     link: [
       {
         name: "Tổng quan",
@@ -8,7 +9,7 @@ export const ikitech_menu = [
 
         to: "/dashboard",
         icon: "fa fa-eye",
-
+        isShowWhenManyBranch: true,
         exact: true,
       },
 
@@ -23,7 +24,7 @@ export const ikitech_menu = [
       {
         name: "Đơn hàng",
         class: "order_list",
-
+        isShowWhenManyBranch: true,
         icon: "fa-file-invoice",
         exact: true,
         to: "/order",
@@ -32,7 +33,7 @@ export const ikitech_menu = [
       {
         name: "Sản phẩm",
         setOpenKey: ["/product/"],
-
+        isShowWhenManyBranch: true,
         icon: "fas fa-th-large",
         open: "product",
         children: [
@@ -40,6 +41,7 @@ export const ikitech_menu = [
             class: "product_list",
             display: "hide",
             name: "Sản phẩm",
+            isShowWhenManyBranch: true,
             exact: true,
             to: "/product/index",
           },
@@ -47,6 +49,7 @@ export const ikitech_menu = [
             class: "product_category_list",
             display: "hide",
             name: "Danh mục sản phẩm",
+            isShowWhenManyBranch: true,
             exact: true,
             to: "/product/category",
           },
@@ -54,6 +57,7 @@ export const ikitech_menu = [
             class: "product_category_list",
             display: "hide",
             name: "Thuộc tính tìm kiếm",
+            isShowWhenManyBranch: true,
             exact: true,
             to: "/product/attribute_searches",
           },
@@ -176,7 +180,7 @@ export const ikitech_menu = [
           "/transfer_stocks/index",
           "/supplier",
         ],
-
+        isShowWhenManyBranch: true,
         icon: "fas fa-store",
         open: "inventory",
         children: [
@@ -186,6 +190,7 @@ export const ikitech_menu = [
             name: "Tồn kho",
             exact: true,
             to: "/product_inventory/index",
+            isShowWhenManyBranch: true,
           },
           {
             class: "inventory_tally_sheet",
@@ -253,7 +258,7 @@ export const ikitech_menu = [
       {
         name: "Báo cáo",
         setOpenKey: ["/report", "/report_"],
-
+        isShowWhenManyBranch: true,
         icon: "fas fa-chart-bar",
         open: "report",
         children: [
@@ -261,6 +266,7 @@ export const ikitech_menu = [
             class: "report_overview",
             display: "hide",
             name: "Báo cáo chung",
+            isShowWhenManyBranch: true,
             exact: true,
             to: "/report",
           },
@@ -268,6 +274,7 @@ export const ikitech_menu = [
             class: "report_inventory",
             display: "hide",
             name: "Báo cáo kho ",
+            isShowWhenManyBranch: true,
             exact: true,
             to: "/report_inventory",
           },
@@ -275,6 +282,7 @@ export const ikitech_menu = [
             class: "report_finance",
             display: "hide",
             name: "Báo cáo tài chính",
+            isShowWhenManyBranch: true,
             exact: true,
             to: "/report_finance",
           },
@@ -761,6 +769,7 @@ export const ikitech_menu = [
   },
   {
     title: "Cài đặt riêng",
+    hasLinkShowWhenManyBranch: false,
     link: [
       {
         class: "isVip",

@@ -14,7 +14,7 @@ import { MomentInput } from "react-moment-input";
 import moment from "moment";
 import General from "./General";
 import Pagination from "./Pagination";
-import { getBranchId } from "../../ultis/branchUtils";
+import { getBranchId, getBranchIds } from "../../ultis/branchUtils";
 import { formatNoD } from "../../ultis/helpers";
 import ShowData from "./ShowData";
 
@@ -28,18 +28,37 @@ class ReportInventory extends Component {
   componentDidMount() {
     const { store_code } = this.props.match.params;
     const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
     const params = `branch_id=${branch_id}`;
-    this.props.fetchAllReportInventory(store_code, branch_id, 1, params);
-    this.props.fetchImportExportStock(store_code, branch_id, 1, params);
+    this.props.fetchAllReportInventory(
+      store_code,
+      branchIds,
+      1,
+      branch_ids ? "" : params
+    );
+    this.props.fetchImportExportStock(
+      store_code,
+      branchIds,
+      1,
+      branch_ids ? "" : params
+    );
 
     try {
       document.getElementsByClassName("r-input")[0].placeholder = "Chọn ngày";
     } catch (error) {}
   }
   handeOnload = (store_code) => {
-    var branch_id = this.props.currentBranch.id;
+    const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
     const params = `branch_id=${branch_id}`;
-    this.props.fetchAllReportInventory(store_code, branch_id, 1, params);
+    this.props.fetchAllReportInventory(
+      store_code,
+      branchIds,
+      1,
+      branch_ids ? "" : params
+    );
     try {
       document.getElementsByClassName("r-input")[0].placeholder = "Chọn ngày";
     } catch (error) {}
@@ -47,9 +66,14 @@ class ReportInventory extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     if (this.state.txtStart !== nextState.txtStart) {
       const branch_id = getBranchId();
-      const params = `date=${nextState.txtStart}&branch_id=${branch_id}`;
+      const branch_ids = getBranchIds();
+      const branchIds = branch_ids ? branch_ids : branch_id;
+
+      const params = `date=${nextState.txtStart}${
+        branch_ids ? "" : `&branch_id=${branch_id}`
+      }`;
       const { store_code } = this.props.match.params;
-      this.props.fetchAllReportInventory(store_code, branch_id, 1, params);
+      this.props.fetchAllReportInventory(store_code, branchIds, 1, params);
     }
     return true;
   }

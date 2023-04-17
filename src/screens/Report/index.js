@@ -23,6 +23,7 @@ import Alert from "../../components/Partials/Alert";
 import * as Types from "../../constants/ActionType";
 import NotAccess from "../../components/Partials/NotAccess";
 import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
+import { getBranchId, getBranchIds } from "../../ultis/branchUtils";
 class Report extends Component {
   constructor(props) {
     super(props);
@@ -32,16 +33,19 @@ class Report extends Component {
   componentDidMount() {
     var { store_code } = this.props.match.params;
     var date = helper.getDateForChartDay();
-    const branch_id = localStorage.getItem("branch_id");
+    const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
+
     this.props.fetchDataId(store_code);
     this.props.fetchTopTenProduct(
       store_code,
-      branch_id,
+      branchIds,
       `?date_from=${date.from}&date_to=${date.to}`
     );
     this.props.fetchOverview(
       store_code,
-      branch_id,
+      branchIds,
       `?date_from=${date.from}&date_to=${date.to}`
     );
     this.props.fetchAllCollaborator(store_code);

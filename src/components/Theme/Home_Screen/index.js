@@ -48,6 +48,7 @@ class Home_Screen extends Component {
     //8         6  => [7, 7, 4, 3, 1],
     //9         7  => [8, 8, 7, 4, 2],
     //10         8 => [9, 4, 5, 5, 5],
+    //11        11  => [12, 11, 11, 9, 7]
 
     this.initTheme = [
       {
@@ -194,6 +195,21 @@ class Home_Screen extends Component {
         description:
           "Giao diện được thiết kế phù hợp với bán các mặt hàng đồ ăn, hoa quả",
         carrers: "Đồ ăn, hoa quả",
+      },
+      {
+        isVip: true,
+        index: 11,
+        themeTop: "../images/Dodientu_giadung_top_11.jpg",
+        theme: "../images/Dodientu_giadung_11.png",
+        arr_index_component: [12, 11, 11, 9, 7],
+        demo_link: "https://shophoaquademo.myiki.vn/",
+        name: "Điện tử, gia dụng",
+        banner_type: "Banner trải dài",
+        banner_height: "702",
+        banner_width: "355",
+        description:
+          "Giao diện được thiết kế phù hợp với bán các mặt hàng đồ điện tử, gia dụng",
+        carrers: "Điện tử, gia dụng",
       },
     ];
   }

@@ -11,7 +11,7 @@ import Pagination from "../../components/Bill/Pagination";
 import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
 import * as billAction from "../../actions/bill";
 import { shallowEqual } from "../../ultis/shallowEqual";
-import { getBranchId } from "../../ultis/branchUtils";
+import { getBranchId, getBranchIds } from "../../ultis/branchUtils";
 import * as OrderFrom from "../../ultis/order_from";
 import ListComponentToPrint from "../../screens/Bill/ListComponentPrint";
 import ReactToPrint from "react-to-print";
@@ -74,6 +74,8 @@ class Table extends Component {
       statusTime,
     } = this.props;
     const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
     var params = this.props.getParams(
       time_from,
       time_to,
@@ -94,7 +96,7 @@ class Table extends Component {
       this.props.agency_by_customer_id != null
         ? `&agency_by_customer_id=${this.props.agency_by_customer_id}`
         : null;
-    this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
+    this.props.fetchAllBill(store_code, 1, branchIds, params, params_agency);
   };
   onchangeStatusPayment = (e) => {
     var { value } = e.target;
@@ -110,6 +112,8 @@ class Table extends Component {
       statusTime,
     } = this.props;
     const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
 
     var params = this.props.getParams(
       time_from,
@@ -131,7 +135,7 @@ class Table extends Component {
       this.props.agency_by_customer_id != null
         ? `&agency_by_customer_id=${this.props.agency_by_customer_id}`
         : null;
-    this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
+    this.props.fetchAllBill(store_code, 1, branchIds, params, params_agency);
   };
 
   onchangeOrderFrom = (e) => {
@@ -148,7 +152,8 @@ class Table extends Component {
       statusTime,
     } = this.props;
     const branch_id = getBranchId();
-
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
     var params = this.props.getParams(
       time_from,
       time_to,
@@ -169,7 +174,7 @@ class Table extends Component {
       this.props.agency_by_customer_id != null
         ? `&agency_by_customer_id=${this.props.agency_by_customer_id}`
         : null;
-    this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
+    this.props.fetchAllBill(store_code, 1, branchIds, params, params_agency);
   };
 
   shouldComponentUpdate(nextProps, nextState) {

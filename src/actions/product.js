@@ -6,6 +6,7 @@ import * as uploadApi from "../data/remote/upload";
 import { compressed, formatStringCharactor } from "../ultis/helpers";
 import { saveAs } from "file-saver";
 import XlsxPopulate from "xlsx-populate";
+import { getBranchId, getBranchIds } from "../ultis/branchUtils";
 
 export const fetchAllProduct = (
   store_code,
@@ -1622,7 +1623,10 @@ export const removeItemImgDis = (data) => {
   };
 };
 
-export const destroyProduct = (store_code, id, branch_id, page, params) => {
+export const destroyProduct = (store_code, id, brandId, page, params) => {
+  const branch_id = getBranchId();
+  const branch_ids = getBranchIds();
+  const branchIds = branch_ids ? branch_ids : branch_id;
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -1636,7 +1640,7 @@ export const destroyProduct = (store_code, id, branch_id, page, params) => {
           loading: "hide",
         });
         productApi
-          .fetchAllProductV2(store_code, branch_id, page, params)
+          .fetchAllProductV2(store_code, branchIds, page, params)
           .then((res) => {
             if (res.data.code !== 401)
               dispatch({

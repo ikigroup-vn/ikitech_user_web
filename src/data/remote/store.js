@@ -5,35 +5,68 @@ export const fetchAllData = () => {
 };
 export const fetchAllReportInventory = (
   store_code,
-  branch_id,
+  branch_ids,
   page,
   params
 ) => {
-  return params
-    ? callApi(
-        `/store/${store_code}/report/stock/${branch_id}/product_last_inventory?page=${page}&${params}`,
-        "get",
-        null
-      )
-    : callApi(
-        `/store/${store_code}/report/stock/${branch_id}/product_last_inventory?page=${page}`,
-        "get",
-        null
-      );
+  if (branch_ids?.toString()?.includes(",")) {
+    return params
+      ? callApi(
+          `/store/${store_code}/report/stock/product_last_inventory?branch_ids=${branch_ids}&page=${page}&${params}`,
+          "get",
+          null
+        )
+      : callApi(
+          `/store/${store_code}/report/stock/product_last_inventory?branch_ids=${branch_ids}&page=${page}`,
+          "get",
+          null
+        );
+  } else {
+    return params
+      ? callApi(
+          `/store/${store_code}/report/stock/${branch_ids}/product_last_inventory?page=${page}&${params}`,
+          "get",
+          null
+        )
+      : callApi(
+          `/store/${store_code}/report/stock/${branch_ids}/product_last_inventory?page=${page}`,
+          "get",
+          null
+        );
+  }
 };
 
-export const fetchImportExportStock = (store_code, branch_id, page, params) => {
-  return params
-    ? callApi(
-        `/store/${store_code}/report/stock/${branch_id}/product_import_export_stock?page=${page}&${params}`,
-        "get",
-        null
-      )
-    : callApi(
-        `/store/${store_code}/report/stock/${branch_id}/product_import_export_stock?page=${page}`,
-        "get",
-        null
-      );
+export const fetchImportExportStock = (
+  store_code,
+  branch_ids,
+  page,
+  params
+) => {
+  if (branch_ids?.toString()?.includes(",")) {
+    return params
+      ? callApi(
+          `/store/${store_code}/report/stock/product_import_export_stock?branch_ids=${branch_ids}&page=${page}&${params}`,
+          "get",
+          null
+        )
+      : callApi(
+          `/store/${store_code}/report/stock/product_import_export_stock?branch_ids=${branch_ids}&page=${page}`,
+          "get",
+          null
+        );
+  } else {
+    return params
+      ? callApi(
+          `/store/${store_code}/report/stock/${branch_ids}/product_import_export_stock?page=${page}&${params}`,
+          "get",
+          null
+        )
+      : callApi(
+          `/store/${store_code}/report/stock/${branch_ids}/product_import_export_stock?page=${page}`,
+          "get",
+          null
+        );
+  }
 };
 
 export const fetchAllInventoryHistory = (
@@ -54,46 +87,97 @@ export const fetchAllInventoryHistory = (
         null
       );
 };
-export const fetchAllCustomerDebt = (store_code, branch_id, page, params) => {
-  return params
-    ? callApi(
-        `/store/${store_code}/report/finance/${branch_id}/customer_debt?page=${page}&${params}`,
-        "get",
-        null
-      )
-    : callApi(
-        `/store/${store_code}/report/finance/${branch_id}/customer_debt?page=${page}`,
-        "get",
-        null
-      );
+export const fetchAllCustomerDebt = (store_code, branch_ids, page, params) => {
+  if (branch_ids?.toString()?.includes(",")) {
+    return params
+      ? callApi(
+          `/store/${store_code}/report/finance/customer_debt?branch_ids=${branch_ids}&page=${page}&${params}`,
+          "get",
+          null
+        )
+      : callApi(
+          `/store/${store_code}/report/finance/customer_debt?branch_ids=${branch_ids}&page=${page}`,
+          "get",
+          null
+        );
+  } else {
+    return params
+      ? callApi(
+          `/store/${store_code}/report/finance/${branch_ids}/customer_debt?page=${page}&${params}`,
+          "get",
+          null
+        )
+      : callApi(
+          `/store/${store_code}/report/finance/${branch_ids}/customer_debt?page=${page}`,
+          "get",
+          null
+        );
+  }
 };
-export const fetchReportProfit = (store_code, branch_id, params) => {
-  return callApi(
-    `/store/${store_code}/report/finance/${branch_id}/profit_and_loss?${params}`,
-    "get",
-    null
-  );
+export const fetchReportProfit = (store_code, branch_ids, params) => {
+  if (branch_ids?.toString()?.includes(",")) {
+    return callApi(
+      `/store/${store_code}/report/finance/profit_and_loss?${params}&branch_ids=${branch_ids}`,
+      "get",
+      null
+    );
+  } else {
+    return callApi(
+      `/store/${store_code}/report/finance/${branch_ids}/profit_and_loss?${params}`,
+      "get",
+      null
+    );
+  }
 };
-export const fetchReportProfitCompare = (store_code, branch_id, params) => {
-  return callApi(
-    `/store/${store_code}/report/finance/${branch_id}/profit_and_loss?${params}`,
-    "get",
-    null
-  );
+export const fetchReportProfitCompare = (store_code, branch_ids, params) => {
+  if (branch_ids?.toString()?.includes(",")) {
+    return callApi(
+      `/store/${store_code}/report/finance/profit_and_loss?${params}&branch_ids=${branch_ids}`,
+      "get",
+      null
+    );
+  } else {
+    return callApi(
+      `/store/${store_code}/report/finance/${branch_ids}/profit_and_loss?${params}`,
+      "get",
+      null
+    );
+  }
 };
-export const fetchAllSupplierDebt = (store_code, branch_id, page, params) => {
-  return callApi(
-    `/store/${store_code}/report/finance/${branch_id}/supplier_debt?page=${page}&${params}`,
-    "get",
-    null
-  );
+export const fetchAllSupplierDebt = (store_code, branch_ids, page, params) => {
+  if (branch_ids?.toString()?.includes(",")) {
+    return callApi(
+      `/store/${store_code}/report/finance/supplier_debt?branch_ids=${branch_ids}&page=${page}&${params}`,
+      "get",
+      null
+    );
+  } else {
+    return callApi(
+      `/store/${store_code}/report/finance/${branch_ids}/supplier_debt?page=${page}&${params}`,
+      "get",
+      null
+    );
+  }
 };
-export const fetchReportExpenditure = (store_code, branch_id, page, params) => {
-  return callApi(
-    `/store/${store_code}/report/finance/${branch_id}/revenue_expenditure?page=${page}&${params}`,
-    "get",
-    null
-  );
+export const fetchReportExpenditure = (
+  store_code,
+  branch_ids,
+  page,
+  params
+) => {
+  if (branch_ids?.toString()?.includes(",")) {
+    return callApi(
+      `/store/${store_code}/report/finance/revenue_expenditure?branch_ids=${branch_ids}&page=${page}&${params}`,
+      "get",
+      null
+    );
+  } else {
+    return callApi(
+      `/store/${store_code}/report/finance/${branch_ids}/revenue_expenditure?page=${page}&${params}`,
+      "get",
+      null
+    );
+  }
 };
 
 export const fetchDataId = (id) => {

@@ -14,7 +14,7 @@ import queryString from "query-string";
 import * as customerAction from "../../actions/customer";
 import moment from "moment";
 import * as helper from "../../ultis/helpers";
-import { getBranchId } from "../../ultis/branchUtils";
+import { getBranchId, getBranchIds } from "../../ultis/branchUtils";
 import history from "../../history";
 import { getQueryParams, insertParam } from "../../ultis/helpers";
 import styled from "styled-components";
@@ -127,8 +127,10 @@ class Bill extends Component {
       page: 1,
     });
     // var params = `&search=${searchValue}&order_status_code=${statusOrder}&payment_status_code=${statusPayment}&limit=${numPage}`
-    const branch_id = localStorage.getItem("branch_id");
-    this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
+    const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
+    this.props.fetchAllBill(store_code, 1, branchIds, params, params_agency);
   };
   goBack = () => {
     var { store_code } = this.props.match.params;
@@ -243,12 +245,14 @@ class Bill extends Component {
           nextProps.user
         );
       const branch_id = getBranchId();
+      const branch_ids = getBranchIds();
+      const branchIds = branch_ids ? branch_ids : branch_id;
 
       var page = getQueryParams("page") ?? 1;
       this.props.fetchAllBill(
         store_code,
         page,
-        branch_id,
+        branchIds,
         params,
         params_agency
       );
@@ -361,9 +365,11 @@ class Bill extends Component {
     // if (status_payment != null)
     //   this.setState({ statusPayment: status_payment });
     const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
 
     var page = getQueryParams("page") ?? 1;
-    this.props.fetchAllBill(store_code, page, branch_id, params, params_agency);
+    this.props.fetchAllBill(store_code, page, branchIds, params, params_agency);
     this.setState({ loadingShipment: helper.randomString(10) });
   }
   isSale = () => {
@@ -429,8 +435,10 @@ class Bill extends Component {
       this.state.agency_by_customer_id != null
         ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
         : null;
-    const branch_id = localStorage.getItem("branch_id");
-    this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
+    const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
+    this.props.fetchAllBill(store_code, 1, branchIds, params, params_agency);
   };
 
   fetchAllData = () => {
@@ -439,8 +447,10 @@ class Bill extends Component {
       this.state.agency_by_customer_id != null
         ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
         : null;
-    const branch_id = localStorage.getItem("branch_id");
-    this.props.fetchAllBill(store_code, 1, branch_id, null, params_agency);
+    const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
+    this.props.fetchAllBill(store_code, 1, branchIds, null, params_agency);
   };
 
   getParamDate = () => {
@@ -556,6 +566,8 @@ class Bill extends Component {
       statusTime
     );
     const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
     var params_agency =
       this.state.agency_by_customer_id != null
         ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
@@ -563,7 +575,7 @@ class Bill extends Component {
     this.props.exportAllListOrder(
       store_code,
       1,
-      branch_id,
+      branchIds,
       params,
       params_agency
     );
@@ -601,11 +613,13 @@ class Bill extends Component {
     );
 
     const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
     insertParam({
       from: date ? from : "",
     });
 
-    this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
+    this.props.fetchAllBill(store_code, 1, branchIds, params, params_agency);
     this.setState({ time_from: from });
   };
   onchangeDateTo = (date) => {
@@ -641,11 +655,13 @@ class Bill extends Component {
     );
 
     const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
     insertParam({
       to: date ? to : "",
     });
 
-    this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
+    this.props.fetchAllBill(store_code, 1, branchIds, params, params_agency);
     this.setState({ time_to: to });
   };
 
@@ -683,8 +699,10 @@ class Bill extends Component {
       this.state.agency_by_customer_id != null
         ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
         : null;
-    const branch_id = localStorage.getItem("branch_id");
-    this.props.fetchAllBill(store_code, 1, branch_id, params, params_agency);
+    const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
+    this.props.fetchAllBill(store_code, 1, branchIds, params, params_agency);
   };
 
   render() {

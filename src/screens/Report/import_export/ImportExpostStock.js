@@ -15,7 +15,7 @@ import moment from "moment";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import General from "../General";
 import Pagination from "./Pagination";
-import { getBranchId } from "../../../ultis/branchUtils";
+import { getBranchId, getBranchIds } from "../../../ultis/branchUtils";
 import { formatNoD } from "../../../ultis/helpers";
 import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
 import { getQueryParams } from "../../../ultis/helpers";
@@ -35,10 +35,13 @@ class ImportExportStock extends Component {
   componentWillMount() {
     const { store_code } = this.props.match.params;
     const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
 
     var from = getQueryParams("from");
     var to = getQueryParams("to");
-    var params = `branch_id=${branch_id}`;
+
+    var params = `${branch_ids ? "" : `branch_id=${branch_id}`}`;
 
     if (from && to) {
       params =
@@ -61,7 +64,7 @@ class ImportExportStock extends Component {
         time_to: moment().format("YYYY-MM-DD"),
       });
     }
-    this.props.fetchImportExportStock(store_code, branch_id, 1, params);
+    this.props.fetchImportExportStock(store_code, branchIds, 1, params);
 
     try {
       document.getElementsByClassName("r-input")[0].placeholder = "Chọn ngày";
@@ -81,9 +84,13 @@ class ImportExportStock extends Component {
 
   handleFindItem = () => {
     const branch_id = getBranchId();
-    const params = `date_from=${this.state.txtStart}&date_to=${this.state.txtEnd}&branch_id=${branch_id}`;
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
+    const params = `date_from=${this.state.txtStart}&date_to=${
+      this.state.txtEnd
+    }${branch_ids ? "" : `&branch_id=${branch_id}`}`;
     const { store_code } = this.props.match.params;
-    this.props.fetchImportExportStock(store_code, branch_id, 1, params);
+    this.props.fetchImportExportStock(store_code, branchIds, 1, params);
   };
 
   onChangeStart = (e) => {
@@ -110,13 +117,15 @@ class ImportExportStock extends Component {
     }
 
     const branch_id = getBranchId();
-    var params = `branch_id=${branch_id}`;
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
+    var params = `${branch_ids ? "" : `branch_id=${branch_id}`}`;
 
     if ((from, to)) {
       params = `&date_from=${from}&date_to=${to}`;
     }
     const { store_code } = this.props.match.params;
-    this.props.fetchImportExportStock(store_code, branch_id, 1, params);
+    this.props.fetchImportExportStock(store_code, branchIds, 1, params);
     this.setState({ time_from: from, time_to: to });
   };
 

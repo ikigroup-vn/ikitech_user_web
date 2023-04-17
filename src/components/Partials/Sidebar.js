@@ -6,6 +6,13 @@ import { shallowEqual } from "../../ultis/shallowEqual";
 import * as Types from "../../constants/ActionType";
 import themeData from "../../ultis/theme_data";
 import * as customerAction from "../../actions/customer_sales";
+import { handleReloadBranch } from "../../ultis/helpers";
+import { getBranchIds } from "../../ultis/branchUtils";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
+import styled from "styled-components";
+
+const SidebarStyles = styled.div``;
 
 class Sidebar extends Component {
   constructor(props) {
@@ -45,6 +52,57 @@ class Sidebar extends Component {
       }
     }
   }
+
+  submit = () => {
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <div
+            className="custom-ui"
+            style={{
+              width: "400px",
+              padding: "30px",
+              textAlign: "left",
+              background: "#fff",
+              borderRadius: "10px",
+              boxShadow: "0 20px 75px rgba(0, 0, 0, 0.13)",
+              color: "#666",
+            }}
+          >
+            <h3>Lưu ý</h3>
+            <p>Chức năng này chỉ sử dụng khi chọn duy nhất 1 chi nhánh !</p>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                columnGap: "20px",
+              }}
+            >
+              <button
+                onClick={() => {
+                  onClose();
+                }}
+                className="btn btn-primary"
+              >
+                Đồng ý
+              </button>
+            </div>
+          </div>
+        );
+      },
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => alert("Click Yes"),
+        },
+        {
+          label: "No",
+          onClick: () => alert("Click No"),
+        },
+      ],
+    });
+  };
+
   setActiveLocation = (location) => {
     return location.includes("/create")
       ? location.replace("/create", "")
@@ -172,6 +230,12 @@ class Sidebar extends Component {
             </>
           );
         } else {
+          const branch_ids = getBranchIds() ? true : false;
+          const isPermission =
+            branch_ids === false ||
+            (branch_ids === true && link.isShowWhenManyBranch === true)
+              ? true
+              : false;
           return (
             <Route
               key={index}
@@ -220,23 +284,40 @@ class Sidebar extends Component {
 
                 // var _class = this.props.permission
                 return (
-                  <Link
-                    className={`collapse-item  ${active} ${
-                      _class[link.class] == true ||
-                      typeof link.class == "undefined" ||
-                      link.class == null
-                        ? "show"
-                        : "hide"
-                    }`}
-                    to={
-                      link.to +
-                      "/" +
-                      this.props.store_code +
-                      (link.params || "")
-                    }
-                  >
-                    {name}
-                  </Link>
+                  <>
+                    {isPermission ? (
+                      <Link
+                        className={`collapse-item  ${active} ${
+                          _class[link.class] == true ||
+                          typeof link.class == "undefined" ||
+                          link.class == null
+                            ? "show"
+                            : "hide"
+                        }`}
+                        to={
+                          link.to +
+                          "/" +
+                          this.props.store_code +
+                          (link.params || "")
+                        }
+                      >
+                        {name}
+                      </Link>
+                    ) : (
+                      <a
+                        className={`collapse-item  ${active} ${
+                          _class[link.class] == true ||
+                          typeof link.class == "undefined" ||
+                          link.class == null
+                            ? "show"
+                            : "hide"
+                        }`}
+                        onClick={this.submit}
+                      >
+                        {name}
+                      </a>
+                    )}
+                  </>
                 );
               }}
             />
@@ -261,6 +342,13 @@ class Sidebar extends Component {
       var _class = this.props.permission;
 
       result = link.map((link, index) => {
+        const branch_ids = getBranchIds() ? true : false;
+        const isPermission =
+          branch_ids === false ||
+          (branch_ids === true && link.isShowWhenManyBranch === true)
+            ? true
+            : false;
+
         if (typeof link.children !== "undefined") {
           const location = window.location.pathname;
           const newLocation = this.setActiveLocation(location);
@@ -275,6 +363,9 @@ class Sidebar extends Component {
               <li
                 className={`nav-item ${active} ${disableHeading} `}
                 key={index}
+                style={{
+                  display: isPermission ? "block" : "none",
+                }}
               >
                 <a
                   className={`nav-link collapsed ${link.open}-collapse`}
@@ -330,6 +421,9 @@ class Sidebar extends Component {
                       ? "show"
                       : "hide"
                   }`}
+                  style={{
+                    display: isPermission ? "block" : "none",
+                  }}
                 >
                   <Link
                     className="nav-link"
@@ -415,13 +509,28 @@ class Sidebar extends Component {
   MenuLink_1 = (title, link, index) => {
     var disableHeading =
       this.checkDisplayTitle(link) == false ? "show" : "hide";
+    const branch_ids = getBranchIds() ? true : false;
     return (
       <React.Fragment>
-        <div className={`sidebar-heading ${disableHeading}`} key={index}>
+        <div
+          className={`sidebar-heading ${disableHeading}`}
+          key={index}
+          style={{
+            display: link.hasLinkShowWhenManyBranch === true ? "block" : "none",
+          }}
+        >
           {title}
         </div>
         {this.MenuLink_2(link)}
-        <hr class={`sidebar-divider ${disableHeading}`} />
+        <hr
+          class={`sidebar-divider ${disableHeading}`}
+          style={{
+            display:
+              link.hasLinkShowWhenManyBranch === true || branch_ids === false
+                ? "block"
+                : "none",
+          }}
+        />
       </React.Fragment>
     );
   };
@@ -445,7 +554,7 @@ class Sidebar extends Component {
   render() {
     var { badges, stores, permission } = this.props;
     return (
-      <div className="col-2 col-2-nav">
+      <SidebarStyles className="col-2 col-2-nav">
         <ul
           className="navbar-nav navbar-main sidebar sidebar-dark accordion"
           style={{
@@ -495,7 +604,7 @@ class Sidebar extends Component {
             ></button>
           </div>
         </ul>
-      </div>
+      </SidebarStyles>
     );
   }
 }

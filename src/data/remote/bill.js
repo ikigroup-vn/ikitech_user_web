@@ -3,14 +3,22 @@ import callApi from "../../ultis/apiCaller";
 export const fetchAllBill = (
   store_code,
   page = 1,
-  branch_id,
+  branch_ids,
   params,
   params_agency,
   is_export = false
 ) => {
   var stringURL = `/store/${store_code}/orders?page=${page}&is_export=${is_export}`;
 
-  if (branch_id) stringURL = stringURL + `&branch_id=${branch_id}`;
+  if (branch_ids) {
+    stringURL =
+      stringURL +
+      `${
+        branch_ids?.toString()?.includes(",")
+          ? `&branch_id_list=${branch_ids}`
+          : `&branch_id=${branch_ids}`
+      }`;
+  }
   if (params && params != null) stringURL = stringURL + params;
   if (params_agency && params_agency != null)
     stringURL = stringURL + params_agency;

@@ -5,12 +5,16 @@ import * as helper from "../../ultis/helpers";
 import ModalPostDate from "./ModalPostDates";
 import { connect } from "react-redux";
 import * as reportAction from "../../actions/report";
+import { getBranchId, getBranchIds } from "../../ultis/branchUtils";
 
 class ChartFinance extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      chartDataPrime: { labels: [], datasets: [{backgroundColor : ["blue" , "red"]}] },
+      chartDataPrime: {
+        labels: [],
+        datasets: [{ backgroundColor: ["blue", "red"] }],
+      },
       datePrime: "",
       dateCompare: "",
       typeDate: "",
@@ -33,19 +37,31 @@ class ChartFinance extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     if (this.state.datePrime !== nextState.datePrime) {
-      const branch_id = localStorage.getItem("branch_id");
-      console.log(nextState.datePrime.from  , nextState.datePrime.to )
-      var datePrime_from = moment(nextState.datePrime.from).format("YYYY-MM-DD") 
-      var datePrime_to = moment(nextState.datePrime.to).format("YYYY-MM-DD") 
-      var dateCompare_from = moment(nextState.dateCompare.from).format("YYYY-MM-DD") 
-      var dateCompare_to = moment(nextState.dateCompare.to).format("YYYY-MM-DD") 
+      const branch_id = getBranchId();
+      const branch_ids = getBranchIds();
+      const branchIds = branch_ids ? branch_ids : branch_id;
+      console.log(nextState.datePrime.from, nextState.datePrime.to);
+      var datePrime_from = moment(nextState.datePrime.from).format(
+        "YYYY-MM-DD"
+      );
+      var datePrime_to = moment(nextState.datePrime.to).format("YYYY-MM-DD");
+      var dateCompare_from = moment(nextState.dateCompare.from).format(
+        "YYYY-MM-DD"
+      );
+      var dateCompare_to = moment(nextState.dateCompare.to).format(
+        "YYYY-MM-DD"
+      );
 
-      const params1 = `date_from=${datePrime_from}&date_to=${datePrime_to}&branch_id=${branch_id}`;
-      const params2 = `date_from=${dateCompare_from}&date_to=${dateCompare_to}&branch_id=${branch_id}`;
+      const params1 = `date_from=${datePrime_from}&date_to=${datePrime_to}${
+        branch_ids ? "" : `&branch_id=${branch_id}`
+      }`;
+      const params2 = `date_from=${dateCompare_from}&date_to=${dateCompare_to}${
+        branch_ids ? "" : `&branch_id=${branch_id}`
+      }`;
       const { store_code } = this.props;
 
-      this.props.fetchReportProfit(store_code, branch_id, params1);
-      this.props.fetchReportProfitCompare(store_code, branch_id, params2);
+      this.props.fetchReportProfit(store_code, branchIds, params1);
+      this.props.fetchReportProfitCompare(store_code, branchIds, params2);
     }
     return true;
   }
@@ -56,9 +72,9 @@ class ChartFinance extends Component {
     ) {
       var chartDataState_prime = { ...this.state.chartDataPrime };
       const { datePrime, dateCompare } = this.state;
-      console.log(datePrime, dateCompare)
-      const showDateChoose = datePrime.from + " - " + datePrime.to
-      const showDateCopare = dateCompare.from + " - "  + dateCompare.to
+      console.log(datePrime, dateCompare);
+      const showDateChoose = datePrime.from + " - " + datePrime.to;
+      const showDateCopare = dateCompare.from + " - " + dateCompare.to;
       const showDataCopare = nextProps.reportProfit.profit;
       const showDataChoose = nextProps.compareProfit.profit;
       chartDataState_prime.labels = [showDateCopare, showDateChoose];
@@ -66,7 +82,6 @@ class ChartFinance extends Component {
       chartDataState_prime.datasets[0].data = [showDataChoose, showDataCopare];
       // chartDataState_prime.datasets[0].backgroundColor = "blue";
       // chartDataState_prime.datasets[0].label = "Lợi nhuận";
-
 
       this.setState({ chartDataPrime: chartDataState_prime });
       this.props.handleCallbackProfit(nextProps.reportProfit.profit);
@@ -262,7 +277,6 @@ class ChartFinance extends Component {
             },
             legend: {
               display: false,
-          
             },
           }}
         />

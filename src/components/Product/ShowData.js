@@ -33,7 +33,6 @@ class ShowData extends Component {
     });
   };
   historyInventorys = (subElement, element, nameDistribute) => {
-    const branch_id = localStorage.getItem("branch_id");
     const { store_code } = this.props;
     const formData = {
       product_id: this.props.data.id,
@@ -41,10 +40,9 @@ class ShowData extends Component {
       element_distribute_name: element,
       sub_element_distribute_name: subElement.name,
     };
-    this.props.historyInventorys(store_code, branch_id, formData);
+    this.props.historyInventorys(store_code, formData);
   };
   historyInventory = (element, nameDistribute) => {
-    const branch_id = localStorage.getItem("branch_id");
     const { store_code } = this.props;
     const formData = {
       product_id: this.props.data.id,
@@ -52,7 +50,7 @@ class ShowData extends Component {
       element_distribute_name: element.name,
       sub_element_distribute_name: "",
     };
-    this.props.historyInventorys(store_code, branch_id, formData);
+    this.props.historyInventorys(store_code, formData);
   };
 
   showDistribute = (listDistribute) => {
@@ -450,8 +448,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    historyInventorys: (store_code, branch_id, data) => {
-      dispatch(inventoryAction.historyInventorys(store_code, branch_id, data));
+    historyInventorys: (store_code, data) => {
+      dispatch(inventoryAction.historyInventorys(store_code, data));
     },
   };
 };

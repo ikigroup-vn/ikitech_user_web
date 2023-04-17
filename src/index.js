@@ -28,7 +28,6 @@ if (process.env.NODE_ENV === "production") {
   console.error = () => {};
   console.debug = () => {};
 }
-
 ReactDOM.render(
   <Provider store={store}>
     <App />

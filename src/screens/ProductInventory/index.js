@@ -19,7 +19,7 @@ import * as XLSX from "xlsx";
 import { randomString } from "../../ultis/helpers";
 import Table from "./Table";
 import { shallowEqual } from "../../ultis/shallowEqual";
-import { getBranchId } from "../../ultis/branchUtils";
+import { getBranchId, getBranchIds } from "../../ultis/branchUtils";
 import { getQueryParams } from "../../ultis/helpers";
 import * as dashboardAction from "../../actions/dashboard";
 
@@ -61,10 +61,12 @@ class ProductInventory extends Component {
     if (listType == 1) params = params + `&check_inventory=true`;
 
     const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
     console.log(params);
     this.props.fetchAllProductV2(
       this.props.match.params.store_code,
-      branch_id,
+      branchIds,
       1,
       params
     );
@@ -85,6 +87,8 @@ class ProductInventory extends Component {
   componentDidMount() {
     var { page } = this.props.match.params;
     const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
     var is_near_out_of_stock = getQueryParams("is_near_out_of_stock");
     var status = getQueryParams("status");
     this.setState({ is_near_out_of_stock });
@@ -103,14 +107,14 @@ class ProductInventory extends Component {
     ) {
       this.props.fetchAllProductV2(
         this.props.match.params.store_code,
-        branch_id,
+        branchIds,
         page,
         params
       );
     } else {
       this.props.fetchAllProductV2(
         this.props.match.params.store_code,
-        branch_id,
+        branchIds,
         params
       );
     }
@@ -173,6 +177,8 @@ class ProductInventory extends Component {
         // this.setState({listProduct:listData}
         const { store_code } = this.props.match.params;
         const branch_id = getBranchId();
+        const branch_ids = getBranchIds();
+        const branchIds = branch_ids ? branch_ids : branch_id;
         // var params = `&check_inventory=true`;
         var params = this.getParams(
           nextState.listType,
@@ -181,28 +187,32 @@ class ProductInventory extends Component {
           this.state.numPage
         );
 
-        this.props.fetchAllProductV2(store_code, branch_id, 1, params);
+        this.props.fetchAllProductV2(store_code, branchIds, 1, params);
       } else if (nextState.listType == 2) {
         const { store_code } = this.props.match.params;
         const branch_id = getBranchId();
+        const branch_ids = getBranchIds();
+        const branchIds = branch_ids ? branch_ids : branch_id;
         var params = this.getParams(
           nextState.listType,
           this.state.is_near_out_of_stock,
           this.state.searchValue,
           this.state.numPage
         );
-        this.props.fetchAllProductV2(store_code, branch_id, 1, params);
+        this.props.fetchAllProductV2(store_code, branchIds, 1, params);
       } else {
         // this.setState({listProduct:this.props.products.data})
         const { store_code } = this.props.match.params;
         const branch_id = getBranchId();
+        const branch_ids = getBranchIds();
+        const branchIds = branch_ids ? branch_ids : branch_id;
         var params = this.getParams(
           null,
           this.state.is_near_out_of_stock,
           this.state.searchValue,
           this.state.numPage
         );
-        this.props.fetchAllProductV2(store_code, branch_id, 1, params);
+        this.props.fetchAllProductV2(store_code, branchIds, 1, params);
       }
     }
     return true;
@@ -233,15 +243,19 @@ class ProductInventory extends Component {
     var { store_code } = this.props.match.params;
     var { searchValue } = this.state;
     const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
     var params = `&search=${searchValue ?? ""}`;
     console.log("params", params);
     this.setState({ numPage: 20 });
-    this.props.fetchAllProductV2(store_code, branch_id, 1, params);
+    this.props.fetchAllProductV2(store_code, branchIds, 1, params);
   };
   fetchAllData = () => {
     var { store_code } = this.props.match.params;
     const branch_id = getBranchId();
-    this.props.fetchAllProductV2(store_code, branch_id, 1);
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
+    this.props.fetchAllProductV2(store_code, branchIds, 1);
   };
   showDialogImportExcel = () => {
     $("#file-excel-import").trigger("click");
@@ -270,7 +284,9 @@ class ProductInventory extends Component {
   fetchProductInventory = () => {
     var { store_code } = this.props.match.params;
     const branch_id = getBranchId();
-    this.props.fetchProductInventory(store_code, branch_id, `&is_get_all=true`);
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
+    this.props.fetchProductInventory(store_code, branchIds, `&is_get_all=true`);
   };
 
   passNumPage = (page) => {
@@ -283,12 +299,15 @@ class ProductInventory extends Component {
   render() {
     if (this.props.auth) {
       var { products, badges, store } = this.props;
+
       var { listProduct, is_near_out_of_stock, listType } = this.state;
       var { store_code } = this.props.match.params;
       var { searchValue, importData, allow_skip_same_name, page, numPage } =
         this.state;
       var { insert, update, _delete, isShow } = this.state;
       const branch_id = getBranchId();
+      const branch_ids = getBranchIds();
+      const branchIds = branch_ids ? branch_ids : branch_id;
 
       const bonusParam = "&check_inventory=true";
 
@@ -321,7 +340,7 @@ class ProductInventory extends Component {
                       store={store}
                       paramNearStock={this.paramNearStock}
                       store_code={store_code}
-                      branch_id={branch_id}
+                      branch_id={branchIds}
                       badges={badges}
                       products={this.props.products}
                     />

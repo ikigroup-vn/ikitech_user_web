@@ -39,6 +39,10 @@ export const headerImg = [
     index: 11,
     header: "../images/header/Header_10.png",
   },
+  {
+    index: 12,
+    header: "../images/header/Header_11.png",
+  },
 ];
 export const bannerImg = [
   {
@@ -95,6 +99,12 @@ export const bannerImg = [
     width: "1481",
     height: "677 ",
   },
+  {
+    index: 11,
+    banner: "../images/banner/Banner_10.png",
+    width: "702",
+    height: "355",
+  },
 ];
 export const productImg = [
   {
@@ -130,6 +140,10 @@ export const productImg = [
     index: 10,
     product: "../images/product/Product_8.png",
   },
+  {
+    index: 11,
+    product: "../images/product/Product_9.png",
+  },
 ];
 export const blogImg = [
   {
@@ -156,6 +170,10 @@ export const blogImg = [
     index: 1,
     blog: "../images/blog/Tintuc_6.png",
   },
+  {
+    index: 9,
+    blog: "../images/blog/Tintuc_7.png",
+  },
 ];
 export const footerImg = [
   {
@@ -173,5 +191,9 @@ export const footerImg = [
   {
     index: 6,
     footer: "../images/footer/Footer_4.png",
+  },
+  {
+    index: 7,
+    footer: "../images/footer/Footer_5.png",
   },
 ];

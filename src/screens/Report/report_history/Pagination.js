@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as reportAction from "../../../actions/report";
-import { getBranchId } from "../../../ultis/branchUtils";
+import { getBranchId, getBranchIds } from "../../../ultis/branchUtils";
 import { insertParam } from "../../../ultis/helpers";
 class Pagination extends Component {
   constructor(props) {
@@ -14,7 +14,9 @@ class Pagination extends Component {
   passPagination = (page) => {
     var { time_from, time_to, setPaginate } = this.props;
     const branch_id = getBranchId();
-    var params = `branch_id=${branch_id}`;
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
+    var params = `${branch_ids ? "" : `branch_id=${branch_id}`}`;
 
     if (time_to != "" && time_to != null) {
       params = params + `&date_to=${time_to}`;
@@ -28,7 +30,7 @@ class Pagination extends Component {
     setPaginate(page);
     this.props.fetchAllInventoryHistory(
       this.props.store_code,
-      branch_id,
+      branchIds,
       page,
       params
     );
