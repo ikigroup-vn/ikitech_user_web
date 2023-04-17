@@ -12,8 +12,8 @@ import DetailOrder from "./DetailOrder";
 import { connect } from "react-redux";
 import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
 import ModalPostDate from "./ModalPostDate";
-import { getBranchId } from "../../ultis/branchUtils";
-import getChannel , {IKIPOS , IKITECH} from "../../ultis/channel"
+import { getBranchId, getBranchIds } from "../../ultis/branchUtils";
+import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
 
 class Chart extends Component {
   constructor() {
@@ -35,7 +35,6 @@ class Chart extends Component {
       actionChart: "total_final",
       typeSelect: "Hôm nay",
     };
-    
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -348,7 +347,7 @@ class Chart extends Component {
         ? _textLegendCompare_from
         : _textLegendCompare_from + " đến " + _textLegendCompare_to;
 
-      console.log(overview)
+    console.log(overview);
 
     return (
       <div className="chart">
@@ -451,39 +450,58 @@ class Chart extends Component {
         <br></br>
         <div class="row">
           <div
-            class={`col-xs-${getChannel() == IKITECH  ? "4" : "6"}  col-sm-12 col-md-12 col-lg-${getChannel() == IKITECH  ? "4" : "6"} `}
+            class={`col-xs-${
+              getChannel() == IKITECH ? "4" : "6"
+            }  col-sm-12 col-md-12 col-lg-${
+              getChannel() == IKITECH ? "4" : "6"
+            } `}
             style={{ borderRight: "1px solid #c0bfbf" }}
           >
-              {getChannel() == IKITECH ?  <DetailPayment
-              overview={overview}
-              badges={badges}
-              store_code={store_code}
-            /> :  <DetailPaymentPos
-            overview={overview}
-            badges={badges}
-            store_code={store_code}
-          />}
-                              
-           
+            {getChannel() == IKITECH ? (
+              <DetailPayment
+                overview={overview}
+                badges={badges}
+                store_code={store_code}
+              />
+            ) : (
+              <DetailPaymentPos
+                overview={overview}
+                badges={badges}
+                store_code={store_code}
+              />
+            )}
           </div>
-          <div class={`col-xs-${getChannel() == IKITECH  ? "8" : "6"}  col-sm-12 col-md-12 col-lg-${getChannel() == IKITECH  ? "8" : "6"}`}>
-          {getChannel() == IKITECH ?   <DetailOrder
-              overview={overview}
-              badges={badges}
-              store_code={store_code}
-            /> :   <DetailOrderPos
-            overview={overview}
-            badges={badges}
-            store_code={store_code}
-          />}
-           
+          <div
+            class={`col-xs-${
+              getChannel() == IKITECH ? "8" : "6"
+            }  col-sm-12 col-md-12 col-lg-${
+              getChannel() == IKITECH ? "8" : "6"
+            }`}
+          >
+            {getChannel() == IKITECH ? (
+              <DetailOrder
+                overview={overview}
+                badges={badges}
+                store_code={store_code}
+              />
+            ) : (
+              <DetailOrderPos
+                overview={overview}
+                badges={badges}
+                store_code={store_code}
+              />
+            )}
           </div>
         </div>
         <br></br>
 
         <div class="row">
           <div
-            class={`${getChannel() == IKITECH ? "col-xl-4 col-lg-4" : "col-xl-6 col-lg-6"}`}
+            class={`${
+              getChannel() == IKITECH
+                ? "col-xl-4 col-lg-4"
+                : "col-xl-6 col-lg-6"
+            }`}
             onClick={() => {
               this.actionChart("total_final");
             }}
@@ -509,7 +527,11 @@ class Chart extends Component {
             </div>
           </div>
           <div
-            class={`${getChannel() == IKITECH ? "col-xl-4 col-lg-4" : "col-xl-6 col-lg-6"}`}
+            class={`${
+              getChannel() == IKITECH
+                ? "col-xl-4 col-lg-4"
+                : "col-xl-6 col-lg-6"
+            }`}
             onClick={() => {
               this.actionChart("total_order_count");
             }}
@@ -534,35 +556,34 @@ class Chart extends Component {
               </div>
             </div>
           </div>
-            {
-              getChannel() == IKITECH &&     <div
-            class="col-xl-4 col-lg-4"
-            onClick={() => {
-              this.actionChart("total_collaborator_reg_count");
-            }}
-          >
-            <div class="card card-stats mb-4 mb-xl-0">
-              <div class="card-body">
-                <div class="row">
-                  <div class="col">
-                    <h5 class="card-title card-size text-uppercase text-muted mb-0">
-                      Số CTV tăng
-                    </h5>
-                    <span class="h2  card-h2 font-weight-bold mb-0">
-                      {total_collaborator_reg_count}
-                    </span>
-                  </div>
-                  <div class="col-auto">
-                    <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
-                      <i class="fas fa-users"></i>
+          {getChannel() == IKITECH && (
+            <div
+              class="col-xl-4 col-lg-4"
+              onClick={() => {
+                this.actionChart("total_collaborator_reg_count");
+              }}
+            >
+              <div class="card card-stats mb-4 mb-xl-0">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <h5 class="card-title card-size text-uppercase text-muted mb-0">
+                        Số CTV tăng
+                      </h5>
+                      <span class="h2  card-h2 font-weight-bold mb-0">
+                        {total_collaborator_reg_count}
+                      </span>
+                    </div>
+                    <div class="col-auto">
+                      <div class="icon icon-shape bg-yellow text-white rounded-circle shadow">
+                        <i class="fas fa-users"></i>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-            }
-      
+          )}
         </div>
 
         <br></br>
@@ -660,10 +681,12 @@ class Chart extends Component {
 }
 
 const mapDispatchToProps = (dispatch, props) => {
-  var branch_id = getBranchId()
+  const branch_id = getBranchId();
+  const branch_ids = getBranchIds();
+  const branchIds = branch_ids ? branch_ids : branch_id;
   return {
     fetchOverview: (store_code, params) => {
-      dispatch(reportAction.fetchOverview(store_code,branch_id, params));
+      dispatch(reportAction.fetchOverview(store_code, branch_id, params));
     },
   };
 };

@@ -7,6 +7,7 @@ import { shallowEqual } from "../../ultis/shallowEqual";
 import EditStock from "./EditStock";
 import ShowData from "./ShowData";
 import * as productAction from "../../actions/product";
+import { getBranchId, getBranchIds } from "../../ultis/branchUtils";
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -81,11 +82,13 @@ class Table extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     if (!shallowEqual(nextState.formData, this.state.formData)) {
       const data = nextState.formData;
-      const branch_id = localStorage.getItem("branch_id");
+      const branch_id = getBranchId();
+      const branch_ids = getBranchIds();
+      const branchIds = branch_ids ? branch_ids : branch_id;
       const { store_code, listType } = this.props;
       // var params = this.props.getParams(listType)
 
-      this.props.editStock(store_code, branch_id, data, 1, this.props.params);
+      this.props.editStock(store_code, branchIds, data, 1, this.props.params);
     }
     return true;
   }

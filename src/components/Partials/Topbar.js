@@ -17,6 +17,8 @@ import {
   setBranchName,
   setStoreCode,
   getStoreCode,
+  setBranchIds,
+  getBranchIds,
 } from "../../ultis/branchUtils";
 import { Redirect } from "react-router-dom";
 import * as notificationAction from "../../actions/notification";
@@ -26,12 +28,13 @@ class Topbar extends Component {
     this.state = {
       isLoadNotification: "",
       txtBranch: "",
+      listBranchSelected: [],
     };
   }
 
   componentDidMount() {
     this.props.fetchBranchStore(this.props.store_code);
-    const branch_id = getBranchId();
+
     if (
       getStoreCode() == "" ||
       getStoreCode() == null ||
@@ -42,7 +45,7 @@ class Topbar extends Component {
       // return;
     }
 
-    this.props.fetchAllBadge(this.props.store_code, branch_id);
+    this.props.fetchAllBadge(this.props.store_code);
 
     if (!this.props.isExistUser) this.props.fetchUserId();
     if (!this.props.isExsitStore) {
@@ -56,35 +59,44 @@ class Topbar extends Component {
   componentWillReceiveProps(nextProps) {
     if (!shallowEqual(nextProps.branchStore, this.props.branchStore)) {
       const branch_id = getBranchId();
+      const branch_ids = getBranchIds();
       const branch_name = getBranchName();
 
       if (nextProps.branchStore != null && nextProps.branchStore.length > 0) {
-        if (branch_id != null) {
-          const selectedBranch = nextProps.branchStore.find(
-            (branch) => branch.id == branch_id
+        if (branch_ids) {
+          this.setState({ txtBranch: branch_ids });
+          setBranchName("Tất cả chi nhánh");
+          setBranchIds(
+            branch_ids === null || branch_ids === undefined ? "" : branch_ids
           );
+        } else {
+          if (branch_id != null) {
+            const selectedBranch = nextProps.branchStore.find(
+              (branch) => branch.id == branch_id
+            );
 
-          if (selectedBranch == null) {
+            if (selectedBranch == null) {
+              const value = nextProps.branchStore[0]?.id;
+              const name = nextProps.branchStore[0]?.name;
+
+              this.setState({ txtBranch: value });
+              this.props.changeBranch(nextProps.branchStore[0]);
+              setBranchId(value);
+              setBranchName(name);
+            } else {
+              setBranchName(selectedBranch.name);
+              this.props.changeBranch(selectedBranch);
+            }
+          } else {
             const value = nextProps.branchStore[0]?.id;
             const name = nextProps.branchStore[0]?.name;
 
-            this.setState({ txtBranch: value });
             this.props.changeBranch(nextProps.branchStore[0]);
             setBranchId(value);
-
             setBranchName(name);
-          } else {
-            this.props.changeBranch(selectedBranch);
+
+            this.setState({ txtBranch: value });
           }
-        } else {
-          const value = nextProps.branchStore[0]?.id;
-          const name = nextProps.branchStore[0]?.name;
-
-          this.props.changeBranch(nextProps.branchStore[0]);
-          setBranchId(value);
-          setBranchName(name);
-
-          this.setState({ txtBranch: value });
         }
       }
     }
@@ -100,23 +112,41 @@ class Topbar extends Component {
   }
 
   logout = () => {
+    setBranchIds("");
     userLocalApi.removeToken();
     history.push("/login");
   };
 
+  getListBranchIds = () => {
+    var { branchStore } = this.props;
+    if (branchStore.length > 0) {
+      const branchIds = branchStore.map((branch) => branch.id).join(",");
+      return branchIds;
+    }
+    return "";
+  };
+
   onChange = (e) => {
     var value = e.target.value;
-    setBranchId(value);
+    if (value === "all") {
+      const branchIds = this.getListBranchIds();
+      setBranchIds(branchIds);
+    } else {
+      setBranchId(value);
+      setBranchIds("");
+      var branchStore =
+        typeof this.props.branchStore == "undefined"
+          ? []
+          : this.props.branchStore;
+
+      const selectedBranch = branchStore.find((branch) => branch.id == value);
+      this.props.changeBranch(selectedBranch);
+    }
     this.setState({ txtBranch: value });
-    var branchStore =
-      typeof this.props.branchStore == "undefined"
-        ? []
-        : this.props.branchStore;
 
-    const selectedBranch = branchStore.find((branch) => branch.id == value);
-    this.props.changeBranch(selectedBranch);
-
-    window.location.href = "/";
+    const pathName = window.location.pathname;
+    const isListBranches = value === "all";
+    helper.handleReloadBranch(isListBranches, pathName);
   };
   showData = (stores) => {
     var result = null;
@@ -179,10 +209,52 @@ class Topbar extends Component {
       );
   };
 
-  // componentDidUpdate()
-  // {
-  //   window.$(".active-branch-default").after("CN mặc định");
-  // }
+  getNameSelected() {
+    const { listBranchSelected } = this.state;
+    var name = "";
+    if (listBranchSelected.length > 0) {
+      name += listBranchSelected.reduce((prevBranch, currentBranch, index) => {
+        return (
+          prevBranch +
+          `${
+            index === listBranchSelected.length - 1
+              ? currentBranch?.name
+              : `${currentBranch?.name}, `
+          }`
+        );
+      }, "");
+    }
+
+    return name;
+  }
+  handleCheckedBranch = (idBranch) => {
+    const { listBranchSelected } = this.state;
+    if (listBranchSelected?.length > 0) {
+      const checked = listBranchSelected
+        .map((branch) => branch?.id)
+        .includes(idBranch);
+      return checked;
+    }
+    return false;
+  };
+
+  handleChangeBranch = (branch) => {
+    const { listBranchSelected } = this.state;
+    var newListBranchSelected = [];
+
+    const isExisted = listBranchSelected.map((c) => c?.id).includes(branch?.id);
+    if (isExisted) {
+      newListBranchSelected = listBranchSelected.filter(
+        (c) => c?.id !== branch.id
+      );
+    } else {
+      newListBranchSelected = [...listBranchSelected, branch];
+    }
+
+    this.setState({
+      listBranchSelected: newListBranchSelected,
+    });
+  };
 
   render() {
     var chooseStore = this.props.isHome ? "hide" : "show";
@@ -196,22 +268,16 @@ class Topbar extends Component {
         : user.name;
     var image =
       typeof user.avatar_image == "undefined" ||
-        user.avatar_image == "" ||
-        user.avatar_image == null
+      user.avatar_image == "" ||
+      user.avatar_image == null
         ? Env.IMG_NOT_AVATAR
         : user.avatar_image;
     var disable = typeof this.props.isHome == "undefined" ? "show" : "hide";
+    const branchIds = getBranchIds();
     return (
       <React.Fragment>
         <div>
-          <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
-            {/* <button
-              id="sidebarToggleTop"
-              className="btn btn-link d-md-none rounded-circle mr-3"
-            >
-              <i className="fa fa-bars"></i>
-            </button> */}
-
+          <nav className="navbar navbar-expand navbar-light bg-white topbar static-top ">
             <div
               style={{ margin: "auto" }}
               className={`nav-item dropdown no-arrow mx-1 ${chooseStore}`}
@@ -226,9 +292,144 @@ class Topbar extends Component {
                 <option value="" disabled>
                   -- Chọn chi nhánh --
                 </option>
+                {!badges.is_staff && (
+                  <option
+                    value="all"
+                    style={{
+                      color: "rgb(231, 74, 59)",
+                    }}
+                  >
+                    Tất cả chi nhánh
+                  </option>
+                )}
+
                 {this.showData(branchStore)}
               </select>
             </div>
+            {/* <div className="categories__content">
+              <div
+                id="accordion"
+                style={{
+                  width: "300px",
+                  position: "relative",
+                }}
+              >
+                <div
+                  className="wrap_category input-group"
+                  style={{ display: "flex" }}
+                  data-toggle="collapse"
+                  data-target="#collapseBranches"
+                  aria-expanded="false"
+                  aria-controls="collapseBranches"
+                >
+                  <input
+                    readOnly
+                    type="text"
+                    class="form-control"
+                    placeholder="--Chọn chi nhánh--"
+                    style={{
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      paddingRight: "55px",
+                      position: "relative",
+                      backgroundColor: "transparent",
+                    }}
+                    value={this.getNameSelected()}
+                  ></input>
+                  <button
+                    class="btn  btn-accordion-collapse collapsed input-group-text"
+                    id="headingOne"
+                    style={{
+                      borderTopLeftRadius: "0",
+                      borderBottomLeftRadius: "0",
+                    }}
+                  >
+                    <i
+                      className={
+                        this.state.icon
+                          ? "fa fa-caret-down"
+                          : "fa fa-caret-down"
+                      }
+                    ></i>
+                  </button>
+                </div>
+                <div
+                  id="collapseBranches"
+                  className="collapse"
+                  ariaLabelledby="headingOne"
+                  dataParent="#accordion"
+                  style={{
+                    position: "absolute",
+                    width: "100%",
+                    left: "0",
+                    top: "100%",
+                    zIndex: "10",
+                    background: "#fff",
+                    boxShadow: "1px 2px 6px rgba(0,0,0,0.1)",
+                  }}
+                >
+                  <ul
+                    style={{
+                      listStyle: "none",
+                      margin: "5px 0",
+                      height: "235px",
+                      overflowY: "auto",
+                    }}
+                    class="list-group"
+                  >
+                    {branchStore?.length > 0 ? (
+                      branchStore.map((branch, index) => (
+                        <li
+                          class=""
+                          style={{
+                            cursor: "pointer",
+                            paddingTop: "5px",
+                            paddingLeft: "5px",
+                            display: "flex",
+                            alignItems: "center",
+                          }}
+                        >
+                          <input
+                            type="checkbox"
+                            id={branch.id}
+                            style={{
+                              marginRight: "10px",
+                              width: "30px",
+                              height: "15px",
+                              flexShrink: "0",
+                            }}
+                            checked={this.handleCheckedBranch(branch.id)}
+                            onChange={() => this.handleChangeBranch(branch)}
+                          />
+                          <label
+                            htmlFor={branch.name}
+                            style={{
+                              whiteSpace: "nowrap",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              marginBottom: "0",
+                            }}
+                            title={branch.name}
+                          >
+                            {branch.name}
+                          </label>
+                        </li>
+                      ))
+                    ) : (
+                      <div
+                        style={{
+                          marginTop: "20px",
+                          textAlign: "center",
+                        }}
+                      >
+                        Không có kết quả !
+                      </div>
+                    )}
+                  </ul>
+                </div>
+              </div>
+            </div> */}
 
             <ul className="navbar-nav ml-auto">
               <li className="nav-item dropdown no-arrow d-sm-none">
@@ -259,15 +460,14 @@ class Topbar extends Component {
                 {typeof isShow == "undefined" ? (
                   <div></div>
                 ) : isShow == true ? (
-
-                  <div style={{
-                    display: "flex",
-                    alignItems: "flex-end",
-                    alignContent: "center",
-                  }}>
-
-                    {badges != null && badges.domain_customer != null &&
-
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "flex-end",
+                      alignContent: "center",
+                    }}
+                  >
+                    {badges != null && badges.domain_customer != null && (
                       <div>
                         <i
                           class="fas fa-globe"
@@ -278,13 +478,23 @@ class Topbar extends Component {
                             color: "rgb(12 124 236)",
                           }}
                         ></i>
-
                         Web mua hàng:
-
-                        <a style={{ marginRight: 15, marginLeft: 5 }} href={ "https://"+badges.domain_customer.replace("https://", "").replace("http://", "")} target="_blank">{badges.domain_customer.replace("https://", "").replace("http://", "")}</a>
-
+                        <a
+                          style={{ marginRight: 15, marginLeft: 5 }}
+                          href={
+                            "https://" +
+                            badges.domain_customer
+                              .replace("https://", "")
+                              .replace("http://", "")
+                          }
+                          target="_blank"
+                        >
+                          {badges.domain_customer
+                            .replace("https://", "")
+                            .replace("http://", "")}
+                        </a>
                       </div>
-                    }
+                    )}
 
                     <Link className="show-store" to={`/home`}>
                       <i
@@ -316,7 +526,6 @@ class Topbar extends Component {
               </li>
 
               <div className="topbar-divider d-none d-sm-block"></div>
-
 
               <li className="nav-item dropdown no-arrow">
                 <a
@@ -369,8 +578,27 @@ class Topbar extends Component {
               )}
             </ul>
           </nav>
-        </div >
-      </React.Fragment >
+          {branchIds ? (
+            <div
+              className="mb-4 shadow"
+              style={{
+                paddingLeft: "20px",
+                backgroundColor: "#fff",
+                color: "#e74a3b",
+                paddingBottom: "10px",
+              }}
+            >
+              Bạn đang quản lý tất cả chi nhánh, một vài chức năng sẽ bị ẩn đi
+            </div>
+          ) : (
+            <div
+              style={{
+                marginBottom: "10px",
+              }}
+            ></div>
+          )}
+        </div>
+      </React.Fragment>
     );
   }
 }
@@ -400,8 +628,8 @@ const mapDispatchToProps = (dispatch, props) => {
     changeBranch: (branchData) => {
       dispatch(branchAction.changeBranch(branchData));
     },
-    fetchAllBadge: (store_code, branch_id) => {
-      dispatch(notificationAction.fetchAllBadge(store_code, branch_id));
+    fetchAllBadge: (store_code) => {
+      dispatch(notificationAction.fetchAllBadge(store_code));
     },
   };
 };

@@ -6,7 +6,8 @@ import { connect } from "react-redux";
 import HistoryStock from "./HistoryStock";
 import * as Env from "../../ultis/default";
 import themeData from "../../ultis/theme_data";
-import { getBranchId } from "../../ultis/branchUtils";
+import { getBranchId, getBranchIds } from "../../ultis/branchUtils";
+import { confirmAlert } from "react-confirm-alert";
 class ShowData extends Component {
   constructor(props) {
     super(props);
@@ -15,6 +16,61 @@ class ShowData extends Component {
       formData: {},
     };
   }
+
+  submit = () => {
+    confirmAlert({
+      customUI: ({ onClose }) => {
+        return (
+          <div
+            className="custom-ui"
+            style={{
+              width: "400px",
+              padding: "30px",
+              textAlign: "left",
+              background: "#fff",
+              borderRadius: "10px",
+              boxShadow: "0 20px 75px rgba(0, 0, 0, 0.13)",
+              color: "#666",
+            }}
+          >
+            <h3>Lưu ý</h3>
+            <p>Chức năng này chỉ sử dụng khi chọn duy nhất 1 chi nhánh !</p>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-end",
+                columnGap: "20px",
+              }}
+            >
+              <button
+                onClick={() => {
+                  onClose();
+                }}
+                className="btn btn-primary"
+              >
+                Đồng ý
+              </button>
+            </div>
+          </div>
+        );
+      },
+      buttons: [
+        {
+          label: "Yes",
+          onClick: () => alert("Click Yes"),
+        },
+        {
+          label: "No",
+          onClick: () => alert("Click No"),
+        },
+      ],
+    });
+  };
+
+  isBranches = () => {
+    const isBranches = getBranchIds() ? true : false;
+    return isBranches;
+  };
 
   handleEditStockElement = (element, distribute) => {
     this.props.handleCallBackElement({
@@ -39,8 +95,8 @@ class ShowData extends Component {
     // data.inventory.main_stock = typeof data.inventory.main_stock !== "undefined"  ? Math.floor(data.inventory.main_stock) : 0
     this.props.handleCallBackProduct({ data, time: Date() });
   };
+
   historyInventorys = (subElement, element, nameDistribute) => {
-    const branch_id = getBranchId();
     const { store_code } = this.props;
     const formData = {
       product_id: this.props.data.id,
@@ -48,11 +104,10 @@ class ShowData extends Component {
       element_distribute_name: element,
       sub_element_distribute_name: subElement.name,
     };
-    this.props.historyInventorys(store_code, branch_id, formData);
+    this.props.historyInventorys(store_code, formData);
     this.props.passFormData(formData);
   };
   historyInventory = (element, nameDistribute) => {
-    const branch_id = getBranchId();
     const { store_code } = this.props;
     const formData = {
       product_id: this.props.data.id,
@@ -60,11 +115,10 @@ class ShowData extends Component {
       element_distribute_name: element.name,
       sub_element_distribute_name: "",
     };
-    this.props.historyInventorys(store_code, branch_id, formData);
+    this.props.historyInventorys(store_code, formData);
     this.props.passFormData(formData);
   };
   historyInventoryss = () => {
-    const branch_id = getBranchId();
     const { store_code } = this.props;
     const formData = {
       product_id: this.props.data.id,
@@ -72,7 +126,7 @@ class ShowData extends Component {
       element_distribute_name: "",
       sub_element_distribute_name: "",
     };
-    this.props.historyInventorys(store_code, branch_id, formData);
+    this.props.historyInventorys(store_code, formData);
     this.props.passFormData(formData);
   };
 
@@ -125,38 +179,57 @@ class ShowData extends Component {
                     <td className="item">{stock}</td>
                     {data.check_inventory === true ? (
                       <td className="item">
-                        <a
-                          className="btn btn-warning btn-sm show"
-                          data-toggle="modal"
-                          style={{ paddingLeft: "10px", color: "white" }}
-                          data-target="#myModal"
-                          onClick={() =>
-                            this.handleEditSubElement(
-                              listDistribute.element_distributes[_index]
-                                .sub_element_distributes[index],
-                              element.name,
-                              listDistribute.name
-                            )
-                          }
+                        <div
+                          style={{
+                            display: "flex",
+                            gap: "10px",
+                            flexWrap: "wrap",
+                          }}
                         >
-                          <i className="fa fa-edit"></i> Sửa kho
-                        </a>
-                        <a
-                          className="btn btn-primary btn-sm show"
-                          data-toggle="modal"
-                          style={{ marginLeft: "10px", color: "white" }}
-                          data-target="#historyStock"
-                          onClick={() =>
-                            this.historyInventorys(
-                              listDistribute.element_distributes[_index]
-                                .sub_element_distributes[index],
-                              element.name,
-                              listDistribute.name
-                            )
-                          }
-                        >
-                          <i className="fa fa-history"></i> Lịch sử kho
-                        </a>
+                          {this.isBranches() === true ? (
+                            <a
+                              className="btn btn-warning btn-sm show"
+                              style={{ paddingLeft: "10px", color: "white" }}
+                              onClick={() => this.submit()}
+                            >
+                              <i className="fa fa-edit"></i> Sửa kho
+                            </a>
+                          ) : (
+                            <a
+                              className="btn btn-warning btn-sm show"
+                              data-toggle="modal"
+                              style={{ paddingLeft: "10px", color: "white" }}
+                              data-target="#myModal"
+                              onClick={() =>
+                                this.handleEditSubElement(
+                                  listDistribute.element_distributes[_index]
+                                    .sub_element_distributes[index],
+                                  element.name,
+                                  listDistribute.name
+                                )
+                              }
+                            >
+                              <i className="fa fa-edit"></i> Sửa kho
+                            </a>
+                          )}
+
+                          <a
+                            className="btn btn-primary btn-sm show"
+                            data-toggle="modal"
+                            style={{ color: "white" }}
+                            data-target="#historyStock"
+                            onClick={() =>
+                              this.historyInventorys(
+                                listDistribute.element_distributes[_index]
+                                  .sub_element_distributes[index],
+                                element.name,
+                                listDistribute.name
+                              )
+                            }
+                          >
+                            <i className="fa fa-history"></i> Lịch sử kho
+                          </a>
+                        </div>
                       </td>
                     ) : (
                       <td className="item"></td>
@@ -185,6 +258,7 @@ class ShowData extends Component {
                     style={{
                       display: "flex",
                       columnGap: "3px",
+                      flexWrap: "wrap",
                     }}
                   >
                     <label style={{ color: "#ff8100", marginBottom: "0" }}>
@@ -205,31 +279,50 @@ class ShowData extends Component {
                 </td>
                 {data.check_inventory === true ? (
                   <td className="item">
-                    <a
-                      className="btn btn-warning btn-sm show"
-                      data-toggle="modal"
-                      data-target="#myModal"
-                      style={{ color: "white" }}
-                      onClick={() =>
-                        this.handleEditStockElement(
-                          element,
-                          listDistribute.name
-                        )
-                      }
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "10px",
+                        flexWrap: "wrap",
+                      }}
                     >
-                      <i className="fa fa-edit"></i> Sửa kho
-                    </a>
-                    <a
-                      className="btn btn-primary btn-sm show"
-                      data-toggle="modal"
-                      style={{ marginLeft: "10px", color: "white" }}
-                      data-target="#historyStock"
-                      onClick={() =>
-                        this.historyInventory(element, listDistribute.name)
-                      }
-                    >
-                      <i className="fa fa-history"></i> Lịch sử kho
-                    </a>
+                      {this.isBranches() === true ? (
+                        <a
+                          className="btn btn-warning btn-sm show"
+                          style={{ color: "white" }}
+                          onClick={() => this.submit()}
+                        >
+                          <i className="fa fa-edit"></i> Sửa kho
+                        </a>
+                      ) : (
+                        <a
+                          className="btn btn-warning btn-sm show"
+                          data-toggle="modal"
+                          data-target="#myModal"
+                          style={{ color: "white" }}
+                          onClick={() =>
+                            this.handleEditStockElement(
+                              element,
+                              listDistribute.name
+                            )
+                          }
+                        >
+                          <i className="fa fa-edit"></i> Sửa kho
+                        </a>
+                      )}
+
+                      <a
+                        className="btn btn-primary btn-sm show"
+                        data-toggle="modal"
+                        style={{ color: "white" }}
+                        data-target="#historyStock"
+                        onClick={() =>
+                          this.historyInventory(element, listDistribute.name)
+                        }
+                      >
+                        <i className="fa fa-history"></i> Lịch sử kho
+                      </a>
+                    </div>
                   </td>
                 ) : (
                   <td className="item"></td>
@@ -310,24 +403,43 @@ class ShowData extends Component {
               <td>{data.inventory.main_stock}</td>
               {data.check_inventory === true ? (
                 <td>
-                  <a
-                    className="btn btn-warning btn-sm show"
-                    style={{ color: "white" }}
-                    data-toggle="modal"
-                    data-target="#myModal"
-                    onClick={() => this.handleEditStockProduct(data)}
+                  <div
+                    style={{
+                      display: "flex",
+                      gap: "10px",
+                      flexWrap: "wrap",
+                    }}
                   >
-                    <i className="fa fa-edit"></i> Sửa kho
-                  </a>
-                  <a
-                    className="btn btn-primary btn-sm show"
-                    data-toggle="modal"
-                    style={{ marginLeft: "10px", color: "white" }}
-                    data-target="#historyStock"
-                    onClick={() => this.historyInventoryss()}
-                  >
-                    <i className="fa fa-history"></i> Lịch sử kho
-                  </a>
+                    {this.isBranches() ? (
+                      <a
+                        className="btn btn-warning btn-sm show"
+                        style={{ color: "white" }}
+                        onClick={() => this.submit()}
+                      >
+                        <i className="fa fa-edit"></i> Sửa kho
+                      </a>
+                    ) : (
+                      <a
+                        className="btn btn-warning btn-sm show"
+                        style={{ color: "white" }}
+                        data-toggle="modal"
+                        data-target="#myModal"
+                        onClick={() => this.handleEditStockProduct(data)}
+                      >
+                        <i className="fa fa-edit"></i> Sửa kho
+                      </a>
+                    )}
+
+                    <a
+                      className="btn btn-primary btn-sm show"
+                      data-toggle="modal"
+                      style={{ color: "white" }}
+                      data-target="#historyStock"
+                      onClick={() => this.historyInventoryss()}
+                    >
+                      <i className="fa fa-history"></i> Lịch sử kho
+                    </a>
+                  </div>
                 </td>
               ) : (
                 <td
@@ -366,8 +478,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    historyInventorys: (store_code, branch_id, data) => {
-      dispatch(inventoryAction.historyInventorys(store_code, branch_id, data));
+    historyInventorys: (store_code, data) => {
+      dispatch(inventoryAction.historyInventorys(store_code, data));
     },
   };
 };

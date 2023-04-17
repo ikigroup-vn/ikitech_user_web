@@ -7,21 +7,20 @@ class Modal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      percent_collaborator : null
+      percent_collaborator: null,
     };
   }
   onSave = (e) => {
     e.preventDefault();
     window.$(".modal").modal("hide");
-    this.props.onSaveChangePercent()
+    this.props.onSaveChangePercent();
     // var { id, store_code } = this.props.modal;
     // this.props.destroyProduct(store_code, id);
-    
   };
 
   render() {
     var { modal } = this.props;
-    var {percent_commission_for_products} = this.state
+    var { percent_commission_for_products } = this.state;
     return (
       <div
         class="modal fade"
@@ -57,10 +56,11 @@ class Modal extends Component {
               >
                 <div class="modal-body">
                   <div class="form-group">
-                      <label class="form-check-label" for="gridCheck">
-                      Bạn chắc chắn muốn cài đặt {this.props.percent_col}% hoa đồng cho tất cả sản phẩm không? Tất cả sản phẩm bạn cài đặt trước đó sẽ bị sửa!
-                      </label>
-            
+                    <label class="form-check-label" for="gridCheck">
+                      Bạn chắc chắn muốn cài đặt {this.props.percent_col}% hoa
+                      đồng cho tất cả sản phẩm không? Tất cả sản phẩm bạn cài
+                      đặt trước đó sẽ bị sửa!
+                    </label>
                   </div>
                 </div>
                 <div class="modal-footer">

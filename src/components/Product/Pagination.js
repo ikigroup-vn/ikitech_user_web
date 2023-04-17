@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import history from "../../history";
 import * as productAction from "../../actions/product";
 import getChannel from "../../ultis/channel";
-import { getBranchId } from "../../ultis/branchUtils";
+import { getBranchId, getBranchIds } from "../../ultis/branchUtils";
 class Pagination extends Component {
   constructor(props) {
     super(props);
@@ -24,7 +24,10 @@ class Pagination extends Component {
     const params = getParams(searchValue, limit, categorySelected);
     passNumPage(page);
     history.push(`/product/index/${store_code}?page=${page}${params}`);
-    this.props.fetchAllProductV2(store_code, getBranchId(), page, params);
+    const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
+    this.props.fetchAllProductV2(store_code, branchIds, page, params);
   };
   passPagination = (page) => {
     var {
@@ -35,13 +38,15 @@ class Pagination extends Component {
       getParams,
       passNumPage,
       is_near_out_of_stock,
-      listType
+      listType,
     } = this.props;
     passNumPage(page);
-    
+
     const params = getParams(listType, is_near_out_of_stock, search, limit);
-    const branch_id = localStorage.getItem("branch_id");
-    this.props.fetchAllProductV2(store_code, branch_id, page, params);
+    const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
+    this.props.fetchAllProductV2(store_code, branchIds, page, params);
     this.props.passNumPage(page);
   };
 

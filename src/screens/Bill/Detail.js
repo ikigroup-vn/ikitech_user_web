@@ -21,6 +21,7 @@ import * as posAction from "../../actions/post_order";
 
 import history from "../../history";
 import ModalDeleteOrder from "../../components/Bill/ModalDeleteOrder";
+import { getBranchId, getBranchIds } from "../../ultis/branchUtils";
 class Detail extends Component {
   constructor(props) {
     super(props);
@@ -45,11 +46,14 @@ class Detail extends Component {
 
       if (nextProps.bill.customer != null) {
         this.props.fetchChatId(store_code, customerId);
-        const branch_id = localStorage.getItem("branch_id");
+        const branch_id = getBranchId();
+        const branch_ids = getBranchIds();
+        const branchIds = branch_ids ? branch_ids : branch_id;
+
         this.props.fetchAllBill(
           store_code,
           1,
-          branch_id,
+          branchIds,
           null,
           `&phone_number=${nextProps.bill.phone_number}`
         );

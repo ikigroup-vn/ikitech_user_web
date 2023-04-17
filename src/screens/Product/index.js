@@ -28,7 +28,7 @@ import ModalCol from "../../components/Product/ModalCollaration";
 import ModalConfirm from "../../components/Product/ComfirmCol";
 import history from "../../history";
 import ModalChooseTypeImport from "../../components/Product/ImportProductInWeb/ModalChooseTypeImport";
-import { getBranchId } from "../../ultis/branchUtils";
+import { getBranchId, getBranchIds } from "../../ultis/branchUtils";
 import styled from "styled-components";
 
 const ProductStyles = styled.div`
@@ -133,7 +133,9 @@ class Product extends Component {
     const { categorySelected, numPage } = this.state;
     const { store_code } = this.props.match.params;
     var newCategorySelected = [];
-
+    const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
     const isExisted = categorySelected.map((c) => c?.id).includes(category?.id);
     if (isExisted) {
       newCategorySelected = categorySelected.filter(
@@ -150,7 +152,7 @@ class Product extends Component {
     });
     const params = this.getParams("", numPage, newCategorySelected);
     history.push(`/product/index/${store_code}?page=1${params}`);
-    this.props.fetchAllProductV2(store_code, getBranchId(), 1, params);
+    this.props.fetchAllProductV2(store_code, branchIds, 1, params);
   };
 
   setAllowSkipSameName = (isAllowed) => {
@@ -195,10 +197,12 @@ class Product extends Component {
       numPage,
       page: 1,
     });
-
+    const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
     const params = this.getParams(searchValue, numPage, categorySelected);
     history.push(`/product/index/${store_code}?page=1${params}`);
-    this.props.fetchAllProductV2(store_code, getBranchId(), 1, params);
+    this.props.fetchAllProductV2(store_code, branchIds, 1, params);
   };
   onChangeSearch = (e) => {
     this.setState({ searchValue: e.target.value });
@@ -211,7 +215,9 @@ class Product extends Component {
   handleFetchAllProduct = (pageParams) => {
     const { store_code } = this.props.match.params;
     const { searchValue, page, numPage } = this.state;
-    const branch_id = localStorage.getItem("branch_id");
+    const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
     var is_near_out_of_stock = getQueryParams("is_near_out_of_stock");
     var params = `&search=${searchValue}&limit=${numPage}`;
     if (is_near_out_of_stock) {
@@ -220,7 +226,7 @@ class Product extends Component {
 
     this.props.fetchAllProductV2(
       store_code,
-      branch_id,
+      branchIds,
       pageParams || page,
       params
     );
@@ -269,11 +275,13 @@ class Product extends Component {
     e.preventDefault();
     var { store_code } = this.props.match.params;
     var { searchValue, numPage, categorySelected } = this.state;
-    const branch_id = localStorage.getItem("branch_id");
+    const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
     this.setState({ page: 1 });
     const params = this.getParams(searchValue, numPage, categorySelected);
     history.push(`/product/index/${store_code}?page=1${params}`);
-    this.props.fetchAllProductV2(store_code, branch_id, 1, params);
+    this.props.fetchAllProductV2(store_code, branchIds, 1, params);
   };
   fetchAllData = () => {
     this.props.fetchAllProduct(this.props.match.params.store_code);

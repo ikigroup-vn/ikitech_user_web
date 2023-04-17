@@ -4,6 +4,7 @@ import Resizer from "react-image-file-resizer";
 import getChannel, { IKITECH, IKIPOS } from "./channel";
 import history from "../history";
 import { includes } from "lodash";
+import { ikitech_menu } from "./menu/ikitech_menu";
 export const randomString = (length) => {
   var result = "";
   var characters =
@@ -404,5 +405,41 @@ export const removeVietnameseTones = (str) => {
           .trim());
   } catch (error) {
     return str;
+  }
+};
+
+export const handleReloadBranch = (listBranches, pathName, returnBolean) => {
+  const url_branches = [];
+  ikitech_menu.forEach((menuParent) => {
+    menuParent.link.forEach((item) => {
+      if (item.isShowWhenManyBranch) {
+        if (item.children?.length > 0) {
+          item.children.forEach((child) => {
+            if (child.isShowWhenManyBranch) {
+              url_branches.push(child.to);
+            }
+          });
+        } else {
+          url_branches.push(item.to);
+        }
+      }
+    });
+  });
+
+  const urlNavigate = pathName ? pathName : "";
+  if (returnBolean) {
+    const isPermission = listBranches
+      ? url_branches.some((branch) => urlNavigate.includes(branch) === true)
+      : true;
+    return isPermission;
+  } else {
+    const isReloadHome = listBranches
+      ? !url_branches.some((branch) => urlNavigate.includes(branch) === true)
+      : false;
+    if (isReloadHome) {
+      window.location.href = "/";
+    } else {
+      window.location.reload();
+    }
   }
 };

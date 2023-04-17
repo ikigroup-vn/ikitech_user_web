@@ -1,6 +1,7 @@
 import * as Type from "../constants/ActionType";
 import * as inventory from "../data/remote/inventory";
 import history from "../history";
+import { getBranchId, getBranchIds } from "../ultis/branchUtils";
 
 export const fetchAllInventory = (store_code, branch_id, page, params) => {
   return (dispatch) => {
@@ -25,15 +26,17 @@ export const fetchAllInventory = (store_code, branch_id, page, params) => {
       });
   };
 };
-export const historyInventorys = (store_code, branch_id, data, page) => {
-  console.log("store_code", branch_id);
+export const historyInventorys = (store_code, data, page = 1) => {
+  const branch_id = getBranchId();
+  const branch_ids = getBranchIds();
+  const branchIds = branch_ids ? branch_ids : branch_id;
   return (dispatch) => {
     dispatch({
       type: Type.SHOW_LOADING,
       loading: "show",
     });
     inventory
-      .historyInventorys(store_code, branch_id, data, page)
+      .historyInventorys(store_code, branchIds, data, page)
       .then((res) => {
         dispatch({
           type: Type.SHOW_LOADING,

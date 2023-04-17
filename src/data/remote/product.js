@@ -29,44 +29,79 @@ export const fetchAllData = (store_code, page, params, agency_type_id) => {
 };
 export const fetchAllProductV2 = (
   store_code,
-  branch_id,
+  branch_ids,
   page,
   params,
   agency_type_id
 ) => {
   if (agency_type_id) {
+    if (branch_ids?.toString()?.includes(",")) {
+      return params
+        ? callApi(
+            `/store_v2/${store_code}/products?branch_ids=${branch_ids}&page=${
+              page ?? ""
+            }${params ?? ""}&agency_type_id=${agency_type_id ?? ""}`,
+            "get",
+            null
+          )
+        : callApi(
+            `/store_v2/${store_code}/products?branch_ids=${branch_ids}&page=${
+              page ?? ""
+            }&agency_type_id=${agency_type_id ?? ""}`,
+            "get",
+            null
+          );
+    } else {
+      return params
+        ? callApi(
+            `/store_v2/${store_code}/${branch_ids}/products?page=${page ?? ""}${
+              params ?? ""
+            }&agency_type_id=${agency_type_id ?? ""}`,
+            "get",
+            null
+          )
+        : callApi(
+            `/store_v2/${store_code}/${branch_ids}/products?page=${
+              page ?? ""
+            }&agency_type_id=${agency_type_id ?? ""}`,
+            "get",
+            null
+          );
+    }
+  }
+  if (branch_ids?.toString()?.includes(",")) {
     return params
       ? callApi(
-          `/store_v2/${store_code}/${branch_id}/products?page=${page ?? ""}${
+          `/store/${store_code}/products?branch_ids=${branch_ids}&page=${
+            page ?? ""
+          }${params ?? ""}&agency_type_id=${agency_type_id ?? ""}`,
+          "get",
+          null
+        )
+      : callApi(
+          `/store/${store_code}/products?branch_ids=${branch_ids}&page=${
+            page ?? ""
+          }&agency_type_id=${agency_type_id ?? ""}`,
+          "get",
+          null
+        );
+  } else {
+    return params
+      ? callApi(
+          `/store_v2/${store_code}/${branch_ids}/products?page=${page ?? ""}${
             params ?? ""
           }&agency_type_id=${agency_type_id ?? ""}`,
           "get",
           null
         )
       : callApi(
-          `/store_v2/${store_code}/${branch_id}/products?page=${
+          `/store_v2/${store_code}/${branch_ids}/products?page=${
             page ?? ""
           }&agency_type_id=${agency_type_id ?? ""}`,
           "get",
           null
         );
   }
-
-  return params
-    ? callApi(
-        `/store_v2/${store_code}/${branch_id}/products?page=${page ?? ""}${
-          params ?? ""
-        }&agency_type_id=${agency_type_id ?? ""}`,
-        "get",
-        null
-      )
-    : callApi(
-        `/store_v2/${store_code}/${branch_id}/products?page=${
-          page ?? ""
-        }&agency_type_id=${agency_type_id ?? ""}`,
-        "get",
-        null
-      );
 };
 
 export const fetchProductId = (store_code, id) => {

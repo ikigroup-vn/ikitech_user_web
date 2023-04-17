@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import * as billAction from "../../actions/bill";
-import { getBranchId } from "../../ultis/branchUtils";
+import { getBranchId, getBranchIds } from "../../ultis/branchUtils";
 import getChannel from "../../ultis/channel";
 import { insertParam } from "../../ultis/helpers";
 
@@ -33,8 +33,10 @@ class Pagination extends Component {
       getParams,
     } = this.props;
     const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
     var params = "";
-    if (hasPhone) params = `&branch_id=${branch_id}&phone_number=${phone}`;
+    if (hasPhone) params = `&phone_number=${phone}`;
     else
       params = getParams(
         time_from,
@@ -53,7 +55,7 @@ class Pagination extends Component {
       this.props.agency_by_customer_id != null
         ? `&agency_by_customer_id=${this.props.agency_by_customer_id}`
         : null;
-    this.props.fetchAllBill(store_code, page, branch_id, params, params_agency);
+    this.props.fetchAllBill(store_code, page, branchIds, params, params_agency);
   };
 
   showData = (links) => {

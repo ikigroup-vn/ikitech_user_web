@@ -1,11 +1,9 @@
-import moment from 'moment';
-import React, { Component } from 'react'
+import moment from "moment";
+import React, { Component } from "react";
 class HistoryStock extends Component {
   constructor(props) {
-    super(props)
-    this.state = {
-
-    }
+    super(props);
+    this.state = {};
   }
   showData = (listHistory) => {
     var result = null;
@@ -14,15 +12,23 @@ class HistoryStock extends Component {
     }
     if (listHistory.length > 0) {
       result = listHistory.map((data, index) => {
-        const date = moment(data.created_at,"YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD")
+        const date = moment(data.created_at, "YYYY-MM-DD HH:mm:ss").format(
+          "YYYY-MM-DD"
+        );
         return (
           <tr>
             <td> {index + 1}</td>
             <td>{data.stock}</td>
             <td>
-              <div style={{display:"flex",alignItems:"center"}}>
-                <div style={{marginRight:"10px", width:'50%'}}>{data.change}</div>
-                {data.change>0?<i class='fas fa-arrow-circle-up'></i>:<i class='fas fa-arrow-circle-down'></i>}
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <div style={{ marginRight: "10px", width: "50%" }}>
+                  {data.change}
+                </div>
+                {data.change > 0 ? (
+                  <i class="fas fa-arrow-circle-up"></i>
+                ) : (
+                  <i class="fas fa-arrow-circle-down"></i>
+                )}
               </div>
             </td>
             <td>{data.type_name}</td>
@@ -36,14 +42,28 @@ class HistoryStock extends Component {
     return result;
   };
   render() {
-    const { historyInventory } = this.props
+    const { historyInventory } = this.props;
     return (
       <div class="modal" id="historyStock">
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
-            <button type="button" style={{ textAlign: "end",marginRight:"10px",fontSize:"28px" }} class="close" data-dismiss="modal">&times;</button>
-            <div class="title" style={{ padding: "0 1rem", fontWeight: 'bold' }}>
-              <div className='title-history'>Lịch sử kho</div>
+            <button
+              type="button"
+              style={{
+                textAlign: "end",
+                marginRight: "10px",
+                fontSize: "28px",
+              }}
+              class="close"
+              data-dismiss="modal"
+            >
+              &times;
+            </button>
+            <div
+              class="title"
+              style={{ padding: "0 1rem", fontWeight: "bold" }}
+            >
+              <div className="title-history">Lịch sử kho</div>
             </div>
             <div class="modal-body">
               <table
@@ -71,10 +91,8 @@ class HistoryStock extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
 
-
-export default HistoryStock
-
+export default HistoryStock;

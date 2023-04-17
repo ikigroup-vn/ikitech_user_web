@@ -11,7 +11,7 @@ import moment from "moment";
 import { Link } from "react-router-dom";
 import General from "../General";
 import Pagination from "./Pagination";
-import { getBranchId } from "../../../ultis/branchUtils";
+import { getBranchId, getBranchIds } from "../../../ultis/branchUtils";
 import { formatNoD } from "../../../ultis/helpers";
 import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
 import history from "../../../history";
@@ -34,8 +34,10 @@ class InventoryHistory extends Component {
     var from = getQueryParams("from");
     var to = getQueryParams("to");
     const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
 
-    var params = `branch_id=${branch_id}`;
+    var params = `${branch_ids ? "" : `branch_id=${branch_id}`}`;
 
     if (from && to) {
       params =
@@ -59,14 +61,13 @@ class InventoryHistory extends Component {
         time_to: moment().format("YYYY-MM-DD"),
       });
     }
-    console.log(from, to, branch_id);
     this.props.fetchAllInventoryHistory(
       store_code,
-      branch_id,
+      branchIds,
       paginate,
       params
     );
-    this.props.fetchImportExportStock(store_code, branch_id, paginate, params);
+    this.props.fetchImportExportStock(store_code, branchIds, paginate, params);
 
     try {
       document.getElementsByClassName("r-input")[0].placeholder = "Chọn ngày";
@@ -81,9 +82,13 @@ class InventoryHistory extends Component {
   };
   handleFindItem = () => {
     const branch_id = getBranchId();
-    const params = `date_from=${this.state.txtStart}&date_to=${this.state.txtEnd}&branch_id=${branch_id}`;
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
+    const params = `date_from=${this.state.txtStart}&date_to=${
+      this.state.txtEnd
+    }${branch_ids ? "" : `&branch_id=${branch_id}`}`;
     const { store_code } = this.props.match.params;
-    this.props.fetchAllInventoryHistory(store_code, branch_id, 1, params);
+    this.props.fetchAllInventoryHistory(store_code, branchIds, 1, params);
   };
 
   onChangeStart = (e) => {
@@ -111,7 +116,9 @@ class InventoryHistory extends Component {
     }
 
     const branch_id = getBranchId();
-    var params = `branch_id=${branch_id}`;
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
+    var params = `${branch_ids ? "" : `branch_id=${branch_id}`}`;
     const { store_code } = this.props.match.params;
     if ((from, to)) {
       params = params + `&date_from=${from}&date_to=${to}`;
@@ -121,7 +128,7 @@ class InventoryHistory extends Component {
         from && to ? `?from=${from}&to=${to}` : ""
       }`
     );
-    this.props.fetchAllInventoryHistory(store_code, branch_id, 1, params);
+    this.props.fetchAllInventoryHistory(store_code, branchIds, 1, params);
     this.setState({ time_from: from, time_to: to });
   };
 
