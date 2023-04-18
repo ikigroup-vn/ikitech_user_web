@@ -291,7 +291,11 @@ export const updateBanner = function (store_code, data, banner, form) {
       img = res.data.data;
     }
     var _banner = [...banner];
-    _banner[data.id] = { image_url: img, title: data.title };
+    _banner[data.id] = {
+      image_url: img,
+      title: data.title,
+      link_to: data.link_to,
+    };
     var _form = { ...form };
     _form.carousel_app_images = _banner;
     loadBanner(dispatch, store_code, _form);

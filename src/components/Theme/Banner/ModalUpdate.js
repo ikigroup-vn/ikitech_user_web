@@ -157,7 +157,7 @@ class ModalUpdate extends Component {
                     id="product_link"
                     type="text"
                     className="form-control"
-                    placeholder="VD: https://sy.ikiglobal.com/san-pham/Day-dong-ho-cho-Apple-Watch-Nike+-38-40mm-2220"
+                    placeholder="VD: https://ikiglobal.com/san-pham/Day-dong-ho-cho-Apple-Watch-Nike+-38-40mm-2220"
                     autoComplete="off"
                     value={link}
                     onChange={this.onChange}
