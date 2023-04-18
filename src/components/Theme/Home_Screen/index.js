@@ -203,13 +203,13 @@ class Home_Screen extends Component {
         theme: "../images/Dodientu_giadung_11.png",
         arr_index_component: [12, 11, 11, 9, 7],
         demo_link: "https://shophoaquademo.myiki.vn/",
-        name: "Điện tử, gia dụng",
+        name: "Điện tử VIP 1",
         banner_type: "Banner trải dài",
         banner_height: "702",
         banner_width: "355",
         description:
           "Giao diện được thiết kế phù hợp với bán các mặt hàng đồ điện tử, gia dụng",
-        carrers: "Điện tử, gia dụng",
+        carrers: "Điện tử",
       },
     ];
   }
