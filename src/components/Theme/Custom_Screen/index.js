@@ -10,6 +10,10 @@ import ItemNewsTheme from "./ItemNewsTheme.js";
 import ItemFooterTheme from "./ItemFooterTheme.js";
 import FormFooterHtml from "./FormFooterHtml";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import SortableList, { SortableItem } from "react-easy-sort";
+import { formatNumberV2 } from "../../../ultis/helpers";
+import { Link } from "react-router-dom";
+
 import {
   headerImg,
   bannerImg,
@@ -63,6 +67,7 @@ class Custom_Screen extends Component {
       html_footer: null,
       use_footer_html: false,
       tabId: 0,
+      menuList: [],
     };
   }
 
@@ -253,6 +258,83 @@ class Custom_Screen extends Component {
     updateTheme(store_code, form);
   };
 
+  showDataMenus = (types) => {
+    var { store_code } = this.props;
+    var result = null;
+    if (types.length > 0) {
+      result = types.map((data, index) => {
+        return (
+          <SortableItem key={data.id}>
+            <tr className="hover-product">
+              <td>
+                <span>
+                  <svg
+                    width="16px"
+                    height="16px"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M18 10.75H5.99998C5.85218 10.751 5.70747 10.7077 5.58449 10.6257C5.46151 10.5437 5.3659 10.4268 5.30998 10.29C5.25231 10.1528 5.23673 10.0016 5.26523 9.85561C5.29372 9.70959 5.36499 9.57535 5.46998 9.46995L11.47 3.46995C11.6106 3.3295 11.8012 3.25061 12 3.25061C12.1987 3.25061 12.3894 3.3295 12.53 3.46995L18.53 9.46995C18.635 9.57535 18.7062 9.70959 18.7347 9.85561C18.7632 10.0016 18.7476 10.1528 18.69 10.29C18.6341 10.4268 18.5384 10.5437 18.4155 10.6257C18.2925 10.7077 18.1478 10.751 18 10.75ZM7.80998 9.24995H16.19L12 5.05995L7.80998 9.24995Z"
+                      fill="#a6a4a4"
+                    />
+                    <path
+                      d="M12 20.7499C11.9014 20.7504 11.8038 20.7311 11.7128 20.6934C11.6218 20.6556 11.5392 20.6 11.47 20.5299L5.46998 14.5299C5.36499 14.4245 5.29372 14.2903 5.26523 14.1442C5.23673 13.9982 5.25231 13.847 5.30998 13.7099C5.3659 13.5731 5.46151 13.4561 5.58449 13.3742C5.70747 13.2922 5.85218 13.2489 5.99998 13.2499H18C18.1478 13.2489 18.2925 13.2922 18.4155 13.3742C18.5384 13.4561 18.6341 13.5731 18.69 13.7099C18.7476 13.847 18.7632 13.9982 18.7347 14.1442C18.7062 14.2903 18.635 14.4245 18.53 14.5299L12.53 20.5299C12.4607 20.6 12.3782 20.6556 12.2872 20.6934C12.1962 20.7311 12.0985 20.7504 12 20.7499ZM7.80998 14.7499L12 18.9399L16.19 14.7499H7.80998Z"
+                      fill="#a6a4a4"
+                    />
+                  </svg>
+                </span>
+                <span>{index + 1}</span>
+              </td>
+              <td>{data.name}</td>
+
+              <td>
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "10px",
+                    alignItems: "center",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <Link
+                    to={`/product-agency/index/${store_code}/${data.id}?tab-index=0`}
+                    data-toggle="modal"
+                    data-target="#updateType"
+                    class={`btn btn-success btn-sm `}
+                  >
+                    <i class="fa fa-edit"></i> Cấu hình sản phẩm
+                  </Link>
+                  <button
+                    onClick={() => {}}
+                    data-toggle="modal"
+                    data-target="#updateType"
+                    class={`btn btn-outline-warning btn-sm `}
+                  >
+                    <i class="fa fa-edit"></i> Sửa
+                  </button>
+
+                  <button
+                    onClick={() => {}}
+                    data-toggle="modal"
+                    data-target="#removeType"
+                    class={`btn btn-outline-danger btn-sm`}
+                  >
+                    <i class="fa fa-trash"></i> Xóa
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </SortableItem>
+        );
+      });
+    } else {
+      return result;
+    }
+    return result;
+  };
+
   render() {
     const setting = {
       dots: true,
@@ -287,8 +369,17 @@ class Custom_Screen extends Component {
       use_footer_html,
       html_footer,
       tabId,
+      is_use_custom_menu,
     } = this.state;
     var { badges, store_code, theme } = this.props;
+
+    var listMenu = [];
+    if (this.state.json_custom_menu != null) {
+      const li = JSON.parse(this.state.json_custom_menu);
+      if (Array.isArray(li)) {
+        listMenu = li;
+      }
+    }
     return (
       <OverviewStyles className="overview " style={{ marginLeft: "25px" }}>
         <div className="row justify-content-between  align-items-center">
@@ -534,6 +625,56 @@ class Custom_Screen extends Component {
               <form role="form">
                 <div class="box-body">
                   <TabPanel>
+                    <div class=" ml-3" style={{ height: "30px" }}>
+                      <input
+                        type="checkbox"
+                        style={{ transform: "scale(1.5)" }}
+                        checked={is_use_custom_menu}
+                        onChange={(e) => {
+                          let checkbox = e.target;
+                          var form = { ...this.props.theme };
+
+                          if (checkbox.checked) {
+                            this.setState({
+                              is_use_custom_menu: true,
+                            });
+
+                            form.is_use_custom_menu = true;
+                            this.props.updateTheme(store_code, form);
+                          } else {
+                            this.setState({
+                              is_use_custom_menu: false,
+                            });
+                            form.is_use_custom_menu = false;
+                            this.props.updateTheme(store_code, form);
+                          }
+                        }}
+                      />
+                      <label style={{ marginLeft: "7px" }} for="defaultCheck1">
+                        Sử dụng Menu tùy chỉnh
+                      </label>
+                    </div>
+
+                    <div class="card mb-4">
+                      <table class="table table-border">
+                        <thead>
+                          <tr>
+                            <th>Tên menu</th>
+                            <th>Link tới</th>
+                            <th>Hành động</th>
+                          </tr>
+                        </thead>
+
+                        <SortableList
+                          onSortEnd={this.onSortEnd}
+                          className="resp-table-body"
+                          draggedItemClassName="dragged"
+                        >
+                          {this.showDataMenus(listMenu)}
+                        </SortableList>
+                      </table>
+                    </div>
+
                     <Slider
                       {...setting}
                       ref={(sliderHeader) => (this.sliderHeader = sliderHeader)}
