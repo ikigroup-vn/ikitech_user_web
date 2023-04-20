@@ -1,12 +1,20 @@
 import React, { Component } from "react";
 import { connect, shallowEqual } from "react-redux";
+import styled from "styled-components";
 import SidebarFilter from "../../Partials/SidebarFilter";
 import * as customerAction from "../../../actions/customer";
 import * as saleAction from "../../../actions/sale";
 import TableCustomerOfSale from "./TableCustomerOfSale";
 import Pagination from "./PaginationCustomerOfSale";
-import styled from "styled-components";
 
+const SidebarShowCustomerOfSaleStyles = styled.div`
+  .totalContent {
+    margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+`;
 
 class SidebarShowCustomerOfSale extends Component {
   constructor(props) {
@@ -65,19 +73,7 @@ class SidebarShowCustomerOfSale extends Component {
     const { saleInfo, showSidebar, store_code, customers, fetchAllCustomer } =
       this.props;
     const { page } = this.state;
-
-
-const SidebarShowCustomerOfSaleStyles = styled.div`
-.totalContent {
-  margin-top: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-`;
-
     return (
-
       <SidebarFilter
         title={`Những khách hàng của ${saleInfo?.name}`}
         widthSideBar="70%"

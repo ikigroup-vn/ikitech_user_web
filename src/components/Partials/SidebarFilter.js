@@ -1,15 +1,7 @@
 import { Component } from "react";
 import styled from "styled-components";
 
-class SidebarFilter extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {};
-  }
-  render() {
-    const { title, widthSideBar } = this.props;
-
-    const SidebarFilterStyles = styled.div`
+const SidebarFilterStyles = styled.div`
   position: fixed;
   top: 0;
   right: 0;
@@ -41,12 +33,26 @@ class SidebarFilter extends Component {
   &::-webkit-scrollbar {
     width: 0px !important;
   }
-  transform: ${!this.props.showSidebar ? "translateX(100%)" : "translateX(0)"},
-width: ${widthSideBar !== undefined ? widthSideBar : "500px"},
 `;
 
+class SidebarFilter extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {};
+  }
+  render() {
+    const { title, widthSideBar } = this.props;
+
     return (
-      <SidebarFilterStyles className="sidebar-filter">
+      <SidebarFilterStyles
+        className="sidebar-filter"
+        style={{
+          transform: !this.props.showSidebar
+            ? "translateX(100%)"
+            : "translateX(0)",
+          width: widthSideBar !== undefined ? widthSideBar : "500px",
+        }}
+      >
         <div className="sidebar-filter__content">
           <div className="sidebar-filter__content__header">
             <h4>{title}</h4>
