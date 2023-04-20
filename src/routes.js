@@ -483,7 +483,6 @@ const routes = [
   {
     path: "/dashboard/:store_code?",
     exact: true,
-
     main: ({ match }) => <Dashboard match={match} />,
   },
   {

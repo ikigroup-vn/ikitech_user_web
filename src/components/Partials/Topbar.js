@@ -274,6 +274,7 @@ class Topbar extends Component {
         : user.avatar_image;
     var disable = typeof this.props.isHome == "undefined" ? "show" : "hide";
     const branchIds = getBranchIds();
+
     return (
       <React.Fragment>
         <div>
@@ -292,7 +293,7 @@ class Topbar extends Component {
                 <option value="" disabled>
                   -- Chọn chi nhánh --
                 </option>
-                {!badges.is_staff && (
+                {!badges.is_staff && branchStore?.length > 1 && (
                   <option
                     value="all"
                     style={{

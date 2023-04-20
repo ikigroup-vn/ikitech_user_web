@@ -145,7 +145,7 @@ export const fetchAllCombo = (store_code) => {
       loading: "show",
     });
     orderApi.fetchAllCombo(store_code).then((res) => {
-      console.log(res);
+      
       dispatch({
         type: Types.SHOW_LOADING,
         loading: "hide",
