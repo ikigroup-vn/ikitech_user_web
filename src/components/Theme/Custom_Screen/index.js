@@ -307,9 +307,7 @@ class Custom_Screen extends Component {
                     <i class="fa fa-edit"></i> Cấu hình sản phẩm
                   </Link>
                   <button
-                    onClick={() =>
-                     
-                    }
+                    onClick={() => {}}
                     data-toggle="modal"
                     data-target="#updateType"
                     class={`btn btn-outline-warning btn-sm `}
@@ -318,9 +316,7 @@ class Custom_Screen extends Component {
                   </button>
 
                   <button
-                    onClick={() => {
-                        
-                    }}
+                    onClick={() => {}}
                     data-toggle="modal"
                     data-target="#removeType"
                     class={`btn btn-outline-danger btn-sm`}
