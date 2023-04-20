@@ -625,7 +625,7 @@ class Custom_Screen extends Component {
               <form role="form">
                 <div class="box-body">
                   <TabPanel>
-                    <div class=" ml-3" style={{ height: "30px" }}>
+                    {/* <div class=" ml-3" style={{ height: "30px" }}>
                       <input
                         type="checkbox"
                         style={{ transform: "scale(1.5)" }}
@@ -653,9 +653,9 @@ class Custom_Screen extends Component {
                       <label style={{ marginLeft: "7px" }} for="defaultCheck1">
                         Sử dụng Menu tùy chỉnh
                       </label>
-                    </div>
+                    </div> */}
 
-                    <div class="card mb-4">
+                    {/* <div class="card mb-4">
                       <table class="table table-border">
                         <thead>
                           <tr>
@@ -673,7 +673,7 @@ class Custom_Screen extends Component {
                           {this.showDataMenus(listMenu)}
                         </SortableList>
                       </table>
-                    </div>
+                    </div> */}
 
                     <Slider
                       {...setting}
