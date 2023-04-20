@@ -8,12 +8,10 @@ import TableCustomerOfSale from "./TableCustomerOfSale";
 import Pagination from "./PaginationCustomerOfSale";
 
 const SidebarShowCustomerOfSaleStyles = styled.div`
-  .totalContent {
     margin-top: 20px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-  }
 `;
 
 class SidebarShowCustomerOfSale extends Component {
