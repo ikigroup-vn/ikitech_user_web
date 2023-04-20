@@ -70,7 +70,7 @@
     "shallow-equal": "^1.2.1",
     "slick-carousel": "^1.8.1",
     "socket.io-client": "^2.0.4",
-    "styled-components": "^5.3.7",
+    "styled-components": "^5.3.5",
     "suneditor": "^2.44.10",
     "suneditor-react": "^3.5.0",
     "validator": "^13.9.0",
