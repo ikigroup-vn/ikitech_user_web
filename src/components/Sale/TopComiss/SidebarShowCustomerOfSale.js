@@ -7,12 +7,12 @@ import * as saleAction from "../../../actions/sale";
 import TableCustomerOfSale from "./TableCustomerOfSale";
 import Pagination from "./PaginationCustomerOfSale";
 
-const SidebarShowCustomerOfSaleStyles = styled.div`
-    margin-top: 20px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-`;
+const SidebarShowCustomerOfSaleStyles = styled.div({
+    marginTop: "20px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+});
 
 class SidebarShowCustomerOfSale extends Component {
   constructor(props) {
