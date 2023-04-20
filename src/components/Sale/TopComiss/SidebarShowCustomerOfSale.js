@@ -7,13 +7,6 @@ import * as saleAction from "../../../actions/sale";
 import TableCustomerOfSale from "./TableCustomerOfSale";
 import Pagination from "./PaginationCustomerOfSale";
 
-const SidebarShowCustomerOfSaleStyles = styled.div({
-    marginTop: "20px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "space-between",
-});
-
 class SidebarShowCustomerOfSale extends Component {
   constructor(props) {
     super(props);
@@ -78,7 +71,14 @@ class SidebarShowCustomerOfSale extends Component {
         showSidebar={showSidebar}
         setShowSidebar={this.handleShowSidebar}
       >
-        <SidebarShowCustomerOfSaleStyles>
+        <div
+          style={{
+            marginTop: "20px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
           {customers?.data?.length > 0 ? (
             <div className="card-body">
               <TableCustomerOfSale
@@ -115,7 +115,7 @@ class SidebarShowCustomerOfSale extends Component {
               Không tìm thấy khách hàng !
             </div>
           )}
-        </SidebarShowCustomerOfSaleStyles>
+        </div>
       </SidebarFilter>
     );
   }
