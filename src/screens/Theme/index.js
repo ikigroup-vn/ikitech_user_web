@@ -29,7 +29,7 @@ class Theme extends Component {
   }
   componentDidMount() {
     var { store_code } = this.props.match.params;
-    console.log(store_code);
+
 
     this.props.fetchTheme(store_code);
   }

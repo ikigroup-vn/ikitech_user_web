@@ -17,6 +17,7 @@ class List extends Component {
       };
 
     showItem = (item) => {
+
         var result = null
 
         if (item.header.length > 0) {
@@ -26,7 +27,7 @@ class List extends Component {
                     <div class="form-group">
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" id={`gridCheck-${item.body[index]}`} checked = {this.props.state[item.body[index]]} onChange = {(e) => this.onChange(e,item.body[index])} />
-                            <label class="form-check-label" for={`gridCheck-${item.body[index]}`}>
+                            <label class="form-check-label" name={item.body[index]} for={`gridCheck-${item.body[index]}`}>
                                 {_item}
                             </label>
                         </div>
