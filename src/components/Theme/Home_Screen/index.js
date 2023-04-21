@@ -331,26 +331,34 @@ class Home_Screen extends Component {
         />
       );
     }
-
+    // || (v.isVip == true && (this.props.badges?.config_user_vip?.list_id_theme_vip?? []).contains(v.index))
     return (
       <HomeScreenStyles className="overview">
         <form role="form">
           <div class="box-body">
             <div class="theme__list">
-              {this.initTheme.map((v, i) => (
-                <ItemTheme
-                  key={i}
-                  badges={badges}
-                  chooseTheme={this.chooseTheme}
-                  home_page_type={home_page_type}
-                  v={v}
-                  goBack={() => {
-                    this.onChangeCustom();
-                  }}
-                  setShowModalDetailsTheme={this.setShowModalDetailsTheme}
-                  setInfoDetailsTheme={this.setInfoDetailsTheme}
-                />
-              ))}
+              {this.initTheme.map((v, i) =>{
+          
+              if(v.isVip != true ) {
+                return <ItemTheme
+                key={i}
+                badges={badges}
+                chooseTheme={this.chooseTheme}
+                home_page_type={home_page_type}
+                v={v}
+                goBack={() => {
+                  this.onChangeCustom();
+                }}
+                setShowModalDetailsTheme={this.setShowModalDetailsTheme}
+                setInfoDetailsTheme={this.setInfoDetailsTheme}
+              /> 
+  
+              }
+
+              return <div></div>
+
+             
+              })}
             </div>
             {Object.entries(this.state.infoDetailsTheme).length > 0 &&
               this.state.showDetailsTheme && (
