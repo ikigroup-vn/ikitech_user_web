@@ -45,17 +45,18 @@ class ContentDetail extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     if (nextState.txtContent !== this.state.txtContent || nextState.txtContentC !== this.state.txtContentC) {
-      console.log("đã vào", nextState)
       this.props.handleDataFromContent({ txtContent: nextState.txtContent, txtContentC: nextState.txtContentC })
     }
     if (nextProps.product.description !== this.props.product.description
       || nextProps.product.content_for_collaborator !== this.props.product.content_for_collaborator
       || nextState.isLoaded == true) {
+
       this.setState({
         txtContent: nextProps.product.description,
-        txtContentC: nextProps.product.content_for_collaborator,
+        txtContentC: nextProps.product.content_for_collaborator ?? " ",
         isLoaded: false
       })
+
     }
     return true
   }

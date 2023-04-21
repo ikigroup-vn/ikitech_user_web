@@ -11,9 +11,8 @@ import ItemFooterTheme from "./ItemFooterTheme.js";
 import FormFooterHtml from "./FormFooterHtml";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import SortableList, { SortableItem } from "react-easy-sort";
-import { formatNumberV2 } from "../../../ultis/helpers";
-import { Link } from "react-router-dom";
 
+import arrayMove from "array-move";
 import {
   headerImg,
   bannerImg,
@@ -68,6 +67,8 @@ class Custom_Screen extends Component {
       use_footer_html: false,
       tabId: 0,
       menuList: [],
+      lastMenuList: [],
+      hasChange: false,
     };
   }
 
@@ -89,9 +90,23 @@ class Custom_Screen extends Component {
 
   componentDidMount() {
     var theme = this.props.theme;
-    console.log(theme);
+
     if (theme == null || theme == "" || typeof theme.store_id == "undefined") {
     } else {
+      var menuList = JSON.parse(theme.json_custom_menu);
+      var newList = [];
+      if (Array.isArray(menuList)) {
+        menuList.forEach(function (value, index) {
+          if (value.name != null) {
+            newList.push({
+              index: index,
+              name: value.name,
+              link_to: value.link_to,
+            });
+          }
+        });
+      }
+
       this.setState({
         store_id: theme.store_id,
         header_type: theme.header_type,
@@ -100,8 +115,11 @@ class Custom_Screen extends Component {
         post_home_type: theme.post_home_type,
         footer_type: theme.footer_type,
         use_footer_html: theme.is_use_footer_html,
-
         html_footer: theme.html_footer,
+        is_use_custom_menu:theme.is_use_custom_menu,
+        menuList: newList ?? [],
+        lastMenuList: newList ?? [],
+        hasChange: false,
       });
     }
   }
@@ -122,6 +140,7 @@ class Custom_Screen extends Component {
         footer_type: theme.footer_type,
         use_footer_html: theme.is_use_footer_html,
         html_footer: theme.html_footer,
+        is_use_custom_menu:theme.is_use_custom_menu,
       });
 
       setTimeout(
@@ -195,6 +214,17 @@ class Custom_Screen extends Component {
 
     this.props.updateTheme(store_code, form);
   };
+  saveMenu = (theme) => {
+    var { store_code } = this.props;
+    var form = { ...this.props.theme };
+    form.json_custom_menu = JSON.stringify(this.state.menuList);
+
+    this.setState({
+      lastMenuList: this.state.menuList ?? [],
+      hasChange: false,
+    });
+    this.props.updateTheme(store_code, form);
+  };
   chooseProduct = (theme) => {
     var { store_code } = this.props;
     var form = { ...this.props.theme };
@@ -258,7 +288,42 @@ class Custom_Screen extends Component {
     updateTheme(store_code, form);
   };
 
+  onSortEnd = (oldIndex, newIndex) => {
+    var menuList = arrayMove(this.state.menuList, oldIndex, newIndex);
+    var listId = [];
+    var listPosition = [];
+    menuList.forEach((element, index) => {
+      listId.push(element.id);
+      listPosition.push(index + 1);
+    });
+
+    this.setState({
+      menuList: menuList,
+      hasChange: true,
+    });
+  };
+
+  onRemoveItemMenu = (index) => {
+    var newList = this.state.menuList;
+    newList.splice(index, 1);
+    this.setState({
+      menuList: newList,
+      hasChange: true,
+    });
+  };
+
+  onChangeNameMenu = (index, va) => {
+    var newList = this.state.menuList;
+    newList[index].name = va;
+    this.setState({
+      menuList: newList,
+      hasChange: true,
+    });
+  };
+
   showDataMenus = (types) => {
+    console.log(this.state.menuList, this.state.lastMenuList);
+
     var { store_code } = this.props;
     var result = null;
     if (types.length > 0) {
@@ -287,8 +352,38 @@ class Custom_Screen extends Component {
                 </span>
                 <span>{index + 1}</span>
               </td>
-              <td>{data.name}</td>
-
+              <td>
+                <input
+                  required
+                  type="text"
+                  class="form-control"
+                  id="threshold"
+                  placeholder="Nhập tên menu..."
+                  autoComplete="off"
+                  value={data.name}
+                  onChange={(v) => {
+                    this.onChangeNameMenu(index, v.target.value);
+                  }}
+                  name="threshold"
+                />
+              </td>
+              <td>
+                <input
+                  required
+                  type="text"
+                  class="form-control"
+                  placeholder="Nhập đường dẫn VD: /san-pham"
+                  value={data.link_to}
+                  onChange={(v) => {
+                    var newList = this.state.menuList;
+                    newList[index].link_to = v.target.value;
+                    this.setState({
+                      menuList: newList,
+                      hasChange: true,
+                    });
+                  }}
+                />
+              </td>
               <td>
                 <div
                   style={{
@@ -298,14 +393,6 @@ class Custom_Screen extends Component {
                     flexWrap: "wrap",
                   }}
                 >
-                  <Link
-                    to={`/product-agency/index/${store_code}/${data.id}?tab-index=0`}
-                    data-toggle="modal"
-                    data-target="#updateType"
-                    class={`btn btn-success btn-sm `}
-                  >
-                    <i class="fa fa-edit"></i> Cấu hình sản phẩm
-                  </Link>
                   <button
                     onClick={() => {}}
                     data-toggle="modal"
@@ -316,7 +403,9 @@ class Custom_Screen extends Component {
                   </button>
 
                   <button
-                    onClick={() => {}}
+                    onClick={() => {
+                      this.onRemoveItemMenu(index);
+                    }}
                     data-toggle="modal"
                     data-target="#removeType"
                     class={`btn btn-outline-danger btn-sm`}
@@ -370,16 +459,12 @@ class Custom_Screen extends Component {
       html_footer,
       tabId,
       is_use_custom_menu,
+      menuList,
+      lastMenuList,
     } = this.state;
     var { badges, store_code, theme } = this.props;
 
-    var listMenu = [];
-    if (this.state.json_custom_menu != null) {
-      const li = JSON.parse(this.state.json_custom_menu);
-      if (Array.isArray(li)) {
-        listMenu = li;
-      }
-    }
+    console.log(lastMenuList, menuList);
     return (
       <OverviewStyles className="overview " style={{ marginLeft: "25px" }}>
         <div className="row justify-content-between  align-items-center">
@@ -625,7 +710,7 @@ class Custom_Screen extends Component {
               <form role="form">
                 <div class="box-body">
                   <TabPanel>
-                    {/* <div class=" ml-3" style={{ height: "30px" }}>
+                    <div class=" ml-3" style={{ height: "30px" }}>
                       <input
                         type="checkbox"
                         style={{ transform: "scale(1.5)" }}
@@ -653,27 +738,72 @@ class Custom_Screen extends Component {
                       <label style={{ marginLeft: "7px" }} for="defaultCheck1">
                         Sử dụng Menu tùy chỉnh
                       </label>
-                    </div> */}
+                    </div>
+                    {is_use_custom_menu && (
+                      <div class="card mb-4">
+                        <table class="table table-border">
+                          <thead>
+                            <tr>
+                              <th>STT</th>
+                              <th style={{ width: 150 }}>Tên</th>
+                              <th>Link tới</th>
+                              <th style={{ width: 200 }}>Hành động</th>
+                            </tr>
+                          </thead>
 
-                    {/* <div class="card mb-4">
-                      <table class="table table-border">
-                        <thead>
-                          <tr>
-                            <th>Tên menu</th>
-                            <th>Link tới</th>
-                            <th>Hành động</th>
-                          </tr>
-                        </thead>
+                          <SortableList
+                            onSortEnd={this.onSortEnd}
+                            className="resp-table-body"
+                            draggedItemClassName="dragged"
+                          >
+                            {this.showDataMenus(menuList)}
+                          </SortableList>
+                        </table>
 
-                        <SortableList
-                          onSortEnd={this.onSortEnd}
-                          className="resp-table-body"
-                          draggedItemClassName="dragged"
-                        >
-                          {this.showDataMenus(listMenu)}
-                        </SortableList>
-                      </table>
-                    </div> */}
+                        <div>
+                          <button
+                            style={{
+                              marginRight: "10px",
+                              marginBottom: 25,
+                              marginTop: 10,
+                            }}
+                            type="button"
+                            onClick={() => {
+                              var newList = menuList;
+                              newList.push({
+                                name: "Tên menu",
+                                link_to: "",
+                              });
+                              this.setState({
+                                menuList: newList,
+                                hasChange: true,
+                              });
+                            }}
+                            class="btn btn-primary  btn-sm"
+                          >
+                            <i class="fas fa-plus"></i>
+                          </button>
+
+                          <button
+                            style={{
+                              marginRight: "10px",
+                              marginBottom: 25,
+                              marginTop: 10,
+                            }}
+                            disabled={this.state.hasChange ? false : true}
+                            type="button"
+                            onClick={this.saveMenu}
+                            class={
+                              this.state.hasChange
+                                ? "btn btn-success btn-sm"
+                                : "btn btn-secondary btn-sm"
+                            }
+                          >
+                            <i class="fas fa-save"></i> Lưu
+                          </button>
+                        </div>
+                      </div>
+                    )}
 
                     <Slider
                       {...setting}

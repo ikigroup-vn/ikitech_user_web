@@ -53,7 +53,7 @@ class ContentDetail extends Component {
       || nextState.isLoaded == true) {
       this.setState({
         txtContent: nextProps.product.description,
-        txtContentC: nextProps.product.content_for_collaborator,
+        txtContentC: nextProps.product.content_for_collaborator ?? " ",
         isLoaded: false
       })
     }
