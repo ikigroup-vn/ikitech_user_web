@@ -10,9 +10,7 @@ import { handleReloadBranch } from "../../ultis/helpers";
 import { getBranchIds } from "../../ultis/branchUtils";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
-import styled from "styled-components";
 
-const SidebarStyles = styled.div``;
 
 class Sidebar extends Component {
   constructor(props) {
@@ -554,7 +552,7 @@ class Sidebar extends Component {
   render() {
     var { badges, stores, permission } = this.props;
     return (
-      <SidebarStyles className="col-2 col-2-nav">
+      <div className="col-2 col-2-nav">
         <ul
           className="navbar-nav navbar-main sidebar sidebar-dark accordion"
           style={{
@@ -604,7 +602,7 @@ class Sidebar extends Component {
             ></button>
           </div>
         </ul>
-      </SidebarStyles>
+      </div>
     );
   }
 }
