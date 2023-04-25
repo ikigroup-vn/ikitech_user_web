@@ -254,6 +254,289 @@ export const exportAllListOrder = (
       });
   };
 };
+async function saveAsExcelMisa(value) {
+  var data = value.data;
+  var data_header = value.header;
+  XlsxPopulate.fromBlankAsync().then(async (workbook) => {
+    const sheet1 = workbook.sheet(0);
+    const sheetData = getSheetData(data, data_header);
+
+    sheet1.cell("A1").value(sheetData);
+    const range = sheet1.usedRange();
+    // const endColumn = String.fromCharCode(64 + totalColumns);
+
+    sheet1.row(1).style("bold", true);
+
+    sheet1.range("A1:U1").style("fill", "ccccff");
+    sheet1.range("V1:AN1").style("fill", "ffff00");
+    range.style("border", true);
+
+    // sheet1.range("AA1:AI1").style("fill", "F4D03F");
+    // range.style("border", true);
+
+    return workbook.outputAsync().then((res) => {
+      saveAs(res, "Ban_hang_VNĐ MẪU NHẬP MISA.xlsx");
+    });
+  });
+}
+export const exportAllListOrderMisa = (
+  store_code,
+  page = 1,
+  branch_id,
+  params = null,
+  params_agency = null
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    billApi
+      .fetchAllBill(store_code, page, branch_id, params, params_agency, true)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        const handleAddress = (
+          address_detail,
+          wards_name,
+          district_name,
+          province_name
+        ) => {
+          let addressDefault = "";
+          if (address_detail) {
+            addressDefault += address_detail ? `${address_detail}, ` : "";
+          }
+          if (wards_name) {
+            addressDefault += wards_name ? `${wards_name}, ` : "";
+          }
+          if (district_name) {
+            addressDefault += district_name ? `${district_name}, ` : "";
+          }
+          if (province_name) {
+            addressDefault += province_name ? `${province_name}` : "";
+          }
+          return addressDefault;
+        };
+        if (res.data.code !== 401) {
+          if (typeof res.data.data != "undefined") {
+            if (typeof res.data.data.data != "undefined") {
+              if (res.data.data.data.length > 0) {
+                var newArray = [];
+
+                console.log("dataMisa::: ", res.data.data.data);
+                for (const item of res.data.data.data) {
+                  if(item?.line_items_at_time?.length > 0){
+                    for(const product of item.line_items_at_time){
+                      var newItem = {};
+                      var arangeKeyItem = {
+                        number: "",
+                        sale_from: "",
+                        payment_status:
+                          item.payment_status == 2
+                            ? item.payment_method_id == 0
+                              ? 1
+                              : 2
+                            : 0,
+                        checkExportInventory: 0,
+                        exportTariffArea: 0,
+                        invoiceAttached: 0,
+                        billed: 0,
+                        accountDate: "",
+                        voucherDate: "",
+                        voucherNumber: "",
+                        voteIssued: "",
+                        reasonExport: "",
+                        invoiceNumber: "",
+                        invoiceDate: "",
+                        customerCode: "",
+                        customerName: item.customer_name,
+                        address: handleAddress(
+                          item.customer?.customer_address_detail,
+                          item.customer?.customer_wards_name,
+                          item.customer?.customer_district_name,
+                          item.customer?.customer_province_name
+                        ),
+                        taxCode: "",
+                        paraphrasing: "",
+                        submitAccount: "",
+                        saleStaff: "",
+                        sku: "",
+                        productName: product.name,
+                        promotionallGoods: "",
+                        cashExpensesDebitsAccount: "",
+                        accountRevenue: "",
+                        unit: "",
+                        quantity: product.quantity,
+                        unitPriceAfterTax: "",
+                        unitPrice: product.after_discount,
+                        intoMoney: item.total_after_discount,
+                        discountRate: "",
+                        discountMoney: "",
+                        discountAccount: "",
+                        warehouse: item.branch?.name ?? "",
+                        costAccount: "",
+                        warehouseAccount: "",
+                        unitPriceCapital: "",
+                        funds: "",
+                        goodsKeepSell: "",
+    
+                        
+                      };
+                      Object.entries(arangeKeyItem).forEach(
+                        ([key, value], index) => {
+                          if (key == "number") {
+                            newItem["Hiển thị trên số"] = value;
+                          }
+                          if (key == "sale_from") {
+                            newItem["Hình thức bán hàng"] = value;
+                          }
+                          if (key == "payment_status") {
+                            newItem["Phương thức thanh toán"] = value;
+                          }
+                          if (key == "checkExportInventory") {
+                            newItem["Kiêm phiếu xuất kho"] = value;
+                          }
+                          if (key == "exportTariffArea") {
+                            newItem["XK vào khu phi thuế quan và các TH được coi như XK"] = value;
+                          }
+                          if (key == "invoiceAttached") {
+                            newItem["Lập kèm hóa đơn"] = value;
+                          }
+                          if (key == "billed") {
+                            newItem["Đã lập hóa đơn"] = value;
+                          }
+                          if (key == "accountDate") {
+                            newItem["Ngày hạch toán (*)"] = value;
+                          }
+                          if (key == "voucherDate") {
+                            newItem["Ngày chứng từ (*)"] = value;
+                          }
+    
+                          if (key == "voucherNumber") {
+                            newItem["Số chứng từ (*)"] = value;
+                          }
+                          if (key == "voteIssued") {
+                            newItem["Số phiếu xuất"] = value;
+                          }
+                          if (key == "reasonExport") {
+                            newItem["Lý do xuất"] = value;
+                          }
+                          if (key == "invoiceNumber") {
+                            newItem["Số hóa đơn"] = value;
+                          }
+                          if (key == "invoiceDate") {
+                            newItem["Ngày hóa đơn"] = value;
+                          }
+                          if (key == "customerCode") {
+                            newItem["Mã khách hàng"] = value;
+                          }
+                          if (key == "customerName") {
+                            newItem["Tên khách hàng"] = value;
+                          }
+                          if (key == "address") {
+                            newItem["Địa chỉ"] = value;
+                          }
+                          if (key == "taxCode") {
+                            newItem["Mã số thuế"] = value;
+                          }
+                          if (key == "paraphrasing") {
+                            newItem["Diễn giải"] = value;
+                          }
+                          if (key == "submitAccount") {
+                            newItem["Nộp vào TK"] = value;
+                          }
+                          if (key == "saleStaff") {
+                            newItem["NV bán hàng"] = value;
+                          }
+                          if (key == "sku") {
+                            newItem["Mã hàng (*)"] = value;
+                          }
+                          if (key == "productName") {
+                            newItem["Tên hàng"] = value;
+                          }
+    
+                          if (key == "promotionallGoods") {
+                            newItem["Hàng khuyến mại"] = value;
+                          }
+                          if (key == "cashExpensesDebitsAccount") {
+                            newItem["TK Tiền/Chi phí/Nợ (*)"] = value;
+                          }
+                          if (key == "accountRevenue") {
+                            newItem["TK Doanh thu/Có (*)"] = value;
+                          }
+                          if (key == "unit") {
+                            newItem["ĐVT"] = value;
+                          }
+                          if (key == "quantity") {
+                            newItem["Số lượng"] = value;
+                          }
+                          if (key == "unitPriceAfterTax") {
+                            newItem["Đơn giá sau thuế"] = value;
+                          }
+                          if (key == "unitPrice") {
+                            newItem["Đơn giá"] = value;
+                          }
+                          if (key == "intoMoney") {
+                            newItem["Thành tiền"] = value;
+                          }
+    
+                          if (key == "discountRate") {
+                            newItem["Tỷ lệ CK (%)"] = value;
+                          }
+    
+                          if (key == "discountMoney") {
+                            newItem["Tiền chiết khấu"] = value;
+                          }
+    
+                          if (key == "discountAccount") {
+                            newItem["TK chiết khấu"] = value;
+                          }
+    
+                          if (key == "warehouse") {
+                            newItem["Kho"] = value;
+                          }
+                          if (key == "costAccount") {
+                            newItem["TK giá vốn"] = value;
+                          }
+    
+                          if (key == "warehouseAccount") {
+                            newItem["TK Kho"] = value;
+                          }
+    
+                          if (key == "unitPriceCapital") {
+                            newItem["Đơn giá vốn"] = value ?? "";
+                          }
+    
+                          if (key == "funds") {
+                            newItem["Tiền vốn"] = value;
+                          }
+    
+                          if (key == "goodsKeepSell") {
+                            newItem["Hàng hóa giữ hộ/bán hộ"] = value;
+                          }
+                        }
+                      );
+    
+                      newArray.push(newItem);
+                    }
+                  }
+                }
+                var header = [];
+                if (newArray.length > 0) {
+                  Object.entries(newArray[0]).forEach(([key, value], index) => {
+                    header.push(key);
+                  });
+                }
+                saveAsExcelMisa({ data: newArray, header: header });
+              }
+            }
+          }
+        }
+      });
+  };
+};
 
 function getSheetData(data, header) {
   var fields = Object.keys(data[0]);

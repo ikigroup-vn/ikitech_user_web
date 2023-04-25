@@ -581,6 +581,47 @@ class Bill extends Component {
     );
   };
 
+  exportAllListOrderMisa = () => {
+    var { store_code } = this.props.match.params;
+    var {
+      time_from,
+      time_to,
+      searchValue,
+      statusOrder,
+      statusPayment,
+      numPage,
+      orderFrom,
+      collaborator_by_customer_id,
+      statusTime,
+    } = this.state;
+
+    var params = this.getParams(
+      time_from,
+      time_to,
+      searchValue,
+      statusOrder,
+      statusPayment,
+      numPage,
+      orderFrom,
+      collaborator_by_customer_id,
+      statusTime
+    );
+    const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
+    var params_agency =
+      this.state.agency_by_customer_id != null
+        ? `&agency_by_customer_id=${this.state.agency_by_customer_id}`
+        : null;
+    this.props.exportAllListOrderMisa(
+      store_code,
+      1,
+      branchIds,
+      params,
+      params_agency
+    );
+  };
+
   onchangeDateFrom = (date) => {
     var from = "";
     var { store_code } = this.props.match.params;
@@ -803,6 +844,19 @@ class Bill extends Component {
                           <div>
                             <button
                               style={{ margin: "auto 0px", marginRight: 15 }}
+                              onClick={this.exportAllListOrderMisa}
+                              class={`btn btn-info btn-icon-split btn-sm `}
+                            >
+                              <span class="icon text-white-50">
+                                <i class="fas fa-file-export"></i>
+                              </span>
+                              <span style={{ color: "white" }} class="text">
+                                Export Excel Misa
+                              </span>
+                            </button>
+
+                            <button
+                              style={{ margin: "auto 0px", marginRight: 15 }}
                               onClick={this.exportAllListOrder}
                               class={`btn btn-success btn-icon-split btn-sm `}
                             >
@@ -810,7 +864,7 @@ class Bill extends Component {
                                 <i class="fas fa-file-export"></i>
                               </span>
                               <span style={{ color: "white" }} class="text">
-                                Export Excel
+                                Export Excel Ikitech
                               </span>
                             </button>
 
@@ -1078,6 +1132,17 @@ const mapDispatchToProps = (dispatch, props) => {
     exportAllListOrder: (id, page, branch_id, params, params_agency) => {
       dispatch(
         billAction.exportAllListOrder(
+          id,
+          page,
+          branch_id,
+          params,
+          params_agency
+        )
+      );
+    },
+    exportAllListOrderMisa: (id, page, branch_id, params, params_agency) => {
+      dispatch(
+        billAction.exportAllListOrderMisa(
           id,
           page,
           branch_id,
