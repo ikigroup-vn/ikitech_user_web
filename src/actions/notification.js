@@ -58,13 +58,13 @@ export const fetchAllBadge = (store_code) => {
   const branch_ids = getBranchIds();
   const branchIds = branch_ids ? branch_ids : branch_id;
   return (dispatch) => {
-    if (!store_code) {
-      dispatch({
-        type: "",
-          data: {},
-      });
-      return;
-    };
+    // if (!store_code) {
+    //   dispatch({
+    //     type: "",
+    //       data: {},
+    //   });
+    //   return;
+    // };
     // dispatch({
     //   type: Types.SHOW_LOADING,
     //   loading : "show"
