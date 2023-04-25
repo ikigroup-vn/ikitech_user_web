@@ -296,7 +296,7 @@ class Form extends Component {
                 setContents={txtContent}
                 showToolbar={true}
                 onChange={this.handleEditorChange}
-                setDefaultStyle="height: auto"
+                setDefaultStyle="height: auto;font-family: Arial;font-size: 14px;"
                 setOptions={{
                   requestHeaders: {
                     "X-Sample": "sample",
