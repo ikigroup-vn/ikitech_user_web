@@ -67,6 +67,7 @@ class Config extends Component {
       setting_for_all_products: false,
       percent_commission_for_products: "",
       bonus_type_for_ctv_t2: 0,
+      type_rose:0
     };
   }
 
@@ -77,6 +78,9 @@ class Config extends Component {
   }
   setBonusTypeForCTVT2 = (bonusType) => {
     this.setState({ bonus_type_for_ctv_t2: bonusType });
+  };
+  setTypeRose = (type_rose) => {
+    this.setState({ type_rose: type_rose });
   };
   onChange = (e) => {
     var target = e.target;
@@ -140,6 +144,7 @@ class Config extends Component {
         payment_1_of_month: config.payment_1_of_month,
         payment_16_of_month: config.payment_16_of_month,
         bonus_type_for_ctv_t2: config.bonus_type_for_ctv_t2,
+        type_rose:config.type_rose,
         payment_limit:
           config.payment_limit == null
             ? null
@@ -232,6 +237,7 @@ class Config extends Component {
       payment_limit,
       percent_collaborator_t1,
       bonus_type_for_ctv_t2,
+      type_rose,
       percent_commission_for_products,
     } = this.state;
     window.$(".modal").modal("hide");
@@ -240,6 +246,7 @@ class Config extends Component {
       allow_payment_request,
       payment_1_of_month,
       payment_16_of_month,
+      type_rose,
       payment_limit:
         payment_limit == null ? payment_limit : formatNumber(payment_limit),
       percent_collaborator_t1:
@@ -261,6 +268,7 @@ class Config extends Component {
       allow_payment_request,
       percent_collaborator_t1,
       bonus_type_for_ctv_t2,
+      type_rose,
       percent_commission_for_products,
       setting_for_all_products,
     } = this.state;
@@ -279,6 +287,37 @@ class Config extends Component {
             </p>
           </div>
 
+          <div className="bonusTypeBtn">
+                <div>
+                  <input
+                    type="radio"
+                    name="type_rose_op1"
+                    value={0}
+                    id="type_rose_op1"
+                    checked={type_rose == 0}
+                    onChange={(e) => this.setTypeRose(e.target.value)}
+                  />{" "}
+                  <label htmlFor="type_rose_op1">
+                  Thưởng theo doanh số
+                  </label>
+                 
+                </div>
+                <div>
+                  <input
+                    type="radio"
+                    name="type_rose_op2"
+                    value={1}
+                    id="type_rose_op2"
+                    onChange={(e) => this.setTypeRose(e.target.value)}
+                    checked={type_rose == 1}
+                  />{" "}
+                  <label htmlFor="type_rose_op2">
+                   Thưởng theo hoa hồng
+                  </label>
+                 
+                </div>
+              </div>
+
           <div className="form-group">
             <label htmlFor="name">Thông tin cấu hình</label>
 
@@ -287,7 +326,7 @@ class Config extends Component {
                 <thead className="thead-quantity">
                   <tr>
                     <th>STT</th>
-                    <th>Mức doanh số</th>
+                    <th>{type_rose == 0 ? "Mức doanh số" : "Mức hoa hồng"}</th>
                     <th>Thưởng</th>
                     <th>
                       <button
