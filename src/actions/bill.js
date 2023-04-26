@@ -353,10 +353,10 @@ export const exportAllListOrderMisa = (
                         customerCode: "",
                         customerName: item.customer_name,
                         address: handleAddress(
-                          item.customer?.customer_address_detail,
-                          item.customer?.customer_wards_name,
-                          item.customer?.customer_district_name,
-                          item.customer?.customer_province_name
+                          item.customer_address_detail,
+                          item.customer_wards_name,
+                          item.customer_district_name,
+                          item.customer_province_name
                         ),
                         taxCode: "",
                         paraphrasing: "",
