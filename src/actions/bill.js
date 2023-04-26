@@ -371,7 +371,7 @@ export const exportAllListOrderMisa = (
                         quantity: product.quantity,
                         unitPriceAfterTax: "",
                         unitPrice: product.after_discount,
-                        intoMoney: item.total_after_discount,
+                        intoMoney: product.after_discount ? Number(product.after_discount) * 3 : "",
                         discountRate: "",
                         discountMoney: "",
                         discountAccount: "",
