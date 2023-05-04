@@ -67,6 +67,7 @@ class Home_Screen extends Component {
         carrers: "Thời trang, trang điểm",
       },
       {
+        isVip: false,
         index: 4,
         themeTop: "../images/Mypham_top_4.jpg",
         theme: "../images/Mypham_4.png",
@@ -96,6 +97,7 @@ class Home_Screen extends Component {
         carrers: "Đồ ăn, hoa quả",
       },
       {
+        isVip: false,
         index: 1,
         themeTop: "../images/Dienthoailaptop_top_1.jpg",
         theme: "../images/Dienthoailaptop_1.png",
@@ -110,6 +112,7 @@ class Home_Screen extends Component {
         carrers: "Đồ điện tử, gia dụng",
       },
       {
+        isVip: false,
         index: 2,
         themeTop: "../images/Mevabe_top_2.jpg",
         theme: "../images/Mevabe_2.png",
@@ -123,6 +126,7 @@ class Home_Screen extends Component {
           "Giao diện được thiết kế phù hợp trẻ trung, tươi mới phù hợp với bán các sản phẩm cho bé",
       },
       {
+        isVip: false,
         index: 3,
         themeTop: "../images/Noithat_top_3.jpg",
         theme: "../images/Noithat_3.png",
@@ -331,33 +335,38 @@ class Home_Screen extends Component {
         />
       );
     }
-    // || (v.isVip == true && (this.props.badges?.config_user_vip?.list_id_theme_vip?? []).contains(v.index))
+
     return (
       <HomeScreenStyles className="overview">
         <form role="form">
           <div class="box-body">
             <div class="theme__list">
-              {this.initTheme.map((v, i) =>{
-          
-              if(v.isVip != true ) {
-                return <ItemTheme
-                key={i}
-                badges={badges}
-                chooseTheme={this.chooseTheme}
-                home_page_type={home_page_type}
-                v={v}
-                goBack={() => {
-                  this.onChangeCustom();
-                }}
-                setShowModalDetailsTheme={this.setShowModalDetailsTheme}
-                setInfoDetailsTheme={this.setInfoDetailsTheme}
-              /> 
-  
-              }
+              {this.initTheme.map((v, i) => {
+                if (
+                  v.isVip == false ||
+                  (v.isVip == true &&
+                    (
+                      this.props.badges?.config_user_vip?.list_id_theme_vip ??
+                      []
+                    ).includes(v.index))
+                ) {
+                  return (
+                    <ItemTheme
+                      key={i}
+                      badges={badges}
+                      chooseTheme={this.chooseTheme}
+                      home_page_type={home_page_type}
+                      v={v}
+                      goBack={() => {
+                        this.onChangeCustom();
+                      }}
+                      setShowModalDetailsTheme={this.setShowModalDetailsTheme}
+                      setInfoDetailsTheme={this.setInfoDetailsTheme}
+                    />
+                  );
+                }
 
-              return <div></div>
-
-             
+                return <div></div>;
               })}
             </div>
             {Object.entries(this.state.infoDetailsTheme).length > 0 &&

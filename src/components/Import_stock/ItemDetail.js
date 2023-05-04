@@ -201,7 +201,7 @@ class ItemDetail extends Component {
                                 </label>
                             </div>
                         )}
-                        <img src={listItem.product.images.length > 0 ? listItem.product.images[0].image_url : Env.IMG_NOT_FOUND} alt='' width="40px" height="63px" style={{ width: "16%" }}></img>
+                        <img src={listItem.product.images.length > 0 ? listItem.product.images[0].image_url : Env.IMG_NOT_FOUND} alt='' width="60px" height="60px" style={{ width: "16%" }}></img>
                         <div className='wrap-name' style={{ marginLeft: "10px", width: "77%" }} >
                             <div style={{ display: "flex" }}>
                                 <div className='price-order' style={{ color: "gray", marginRight: "5px" }}>Tên:</div>

@@ -8,6 +8,7 @@ import {
   formatNumber,
   contactOrNumber,
 } from "../../ultis/helpers";
+import * as Env from "../../ultis/default";
 
 import { shallowEqual } from "../../ultis/shallowEqual";
 class Table extends Component {
@@ -147,6 +148,19 @@ class Table extends Component {
               </div>
             </td>
             <td>{per_page * (current_page - 1) + (index + 1)}</td>
+
+            <td className="item">
+              <img
+                src={
+                  data.images.length > 0
+                    ? data.images[0].image_url
+                    : Env.IMG_NOT_FOUND
+                }
+                alt=""
+                width="60px"
+                height="60px"
+              ></img>
+            </td>
 
             <td>{data.sku}</td>
 
@@ -341,7 +355,9 @@ class Table extends Component {
               }}
             >
               <button
-                class={`btn btn-warning btn-sm ${update == true ? "" : "hide"}`}
+                class={`btn btn-outline-warning btn-sm ${
+                  update == true ? "" : "hide"
+                }`}
               >
                 <i class="fa fa-edit"></i> Chỉnh sửa giá
               </button>
@@ -419,6 +435,9 @@ class Table extends Component {
                 />
               </th>
               <th>STT</th>
+
+              <th>Hình ảnh</th>
+
               <th>Mã SKU</th>
 
               <th>Tên sản phẩm</th>

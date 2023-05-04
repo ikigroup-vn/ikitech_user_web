@@ -100,8 +100,8 @@ class ShowData extends Component {
                             : Env.IMG_NOT_FOUND
                         }
                         alt=""
-                        width="40px"
-                        height="63px"
+                        width="60px"
+                        height="60px"
                       ></img>
                     </td>
                     <td className="item" style={{ display: "flex" }}>
@@ -131,8 +131,8 @@ class ShowData extends Component {
                         : Env.IMG_NOT_FOUND
                     }
                     alt=""
-                    width="40px"
-                    height="63px"
+                    width="60px"
+                    height="60px"
                   ></img>
                 </td>
                 <td className="item" style={{ display: "flex" }}>
@@ -191,8 +191,8 @@ class ShowData extends Component {
                   : Env.IMG_NOT_FOUND
               }
               alt=""
-              width="40px"
-              height="63px"
+              width="60px"
+              height="60px"
             ></img>
           </td>
           <td>

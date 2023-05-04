@@ -89,7 +89,7 @@ class ListProduct extends Component {
                             <tr className='wrap-item hover-product' >
                                 <td></td>
                                 <td className='item' >
-                                    <img src={element.image_url != null ? element.image_url : Env.IMG_NOT_FOUND} alt='' width="40px" height="63px"  ></img>
+                                    <img src={element.image_url != null ? element.image_url : Env.IMG_NOT_FOUND} alt='' width="60px" height="60px"  ></img>
                                 </td>
                                 <td className='item' style = {{display : "flex"}}>
                                     <label style = {{color:"#ff8100"}}>&nbsp;Phân loại: </label>
@@ -124,7 +124,7 @@ class ListProduct extends Component {
                             <td></td>
 
                             <td className='item' >
-                                <img src={element.image_url != null ? element.image_url : Env.IMG_NOT_FOUND} alt='' width="40px" height="63px" ></img>
+                                <img src={element.image_url != null ? element.image_url : Env.IMG_NOT_FOUND} alt='' width="60px" height="60px" ></img>
                             </td>
                             <td className='item'  style = {{display : "flex"}}>
                                 <label style={{ color: "#ff8100" }}>&nbsp;Phân loại: </label>
@@ -215,7 +215,7 @@ class ListProduct extends Component {
               }
               className="img-responsive"
               alt="Image"
-              style={{ width: "100%", height: "59px", background: "#0000000d" }}
+              style={{ width: "100%", height: "59px", width:"59px", background: "#0000000d" }}
             />
           </td>
             <td>{data.sku}</td>

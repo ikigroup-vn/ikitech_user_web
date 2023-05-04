@@ -409,6 +409,7 @@ class ListProduct extends Component {
                 style={{
                   width: "100%",
                   height: "59px",
+                  width:"59px",
                   background: "#0000000d",
                 }}
               />

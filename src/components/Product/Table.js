@@ -252,7 +252,7 @@ class Table extends Component {
                 />
               </th>
               <th>STT</th>
-              <th style={{ width: "8%" }}>Hình ảnh</th>
+              <th style={{ width: 95 }}>Hình ảnh</th>
               <th>Mã SKU</th>
 
               <th>Tên sản phẩm</th>

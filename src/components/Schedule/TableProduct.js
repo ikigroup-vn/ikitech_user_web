@@ -83,7 +83,7 @@ class ListProduct extends Component {
                 }
                 className="img-responsive"
                 alt="Image"
-                style={{ width: "100%", height: "59px", background: "#0000000d" }}
+                style={{ width: "100%", height: "59px",width:"59px", background: "#0000000d" }}
               />
             </td>
             <td>{data.sku}</td>
