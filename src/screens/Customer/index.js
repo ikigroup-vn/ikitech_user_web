@@ -8,8 +8,8 @@ import { Redirect, Link } from "react-router-dom";
 import { connect, shallowEqual } from "react-redux";
 import Loading from "../Loading";
 import * as customerAction from "../../actions/customer";
-import Chat from "../../components/Chat";
-import * as Env from "../../ultis/default";
+import { confirmAlert } from "react-confirm-alert";
+import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 import NotAccess from "../../components/Partials/NotAccess";
 import {
   formatNumberV2,
@@ -537,6 +537,55 @@ class Customer extends Component {
 
       const { store_code } = this.props.match.params;
       const { importAllListCustomer } = this.props;
+
+      if (newListCustomers.length > 800) {
+       this. setOpenModalImport(false)
+        confirmAlert({
+          customUI: ({ onClose }) => {
+            return (
+              <div
+                className="custom-ui"
+                style={{
+                  width: "400px",
+                  padding: "30px",
+                  textAlign: "left",
+                  background: "#fff",
+                  borderRadius: "10px",
+                  boxShadow: "0 20px 75px rgba(0, 0, 0, 0.13)",
+                  color: "#666",
+                }}
+              >
+                <h3>Lưu ý</h3>
+                <p>Chỉ cho phép tối đa 250 khách hàng mỗi lần import, vui lòng tách nhiều file Excel để thực hiện !</p>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    columnGap: "20px",
+                  }}
+                >
+                  <button
+                    onClick={() => {
+                      onClose();
+                    }}
+                    className="btn btn-primary"
+                  >
+                    Đồng ý
+                  </button>
+                </div>
+              </div>
+            );
+          },
+          buttons: [
+            {
+              label: "Đồng ý",
+              onClick: () => alert("Click Yes"),
+            },
+          ],
+        });
+
+        return;
+      }
 
       const dataImport = {
         is_update_password: isUpdatedPasswordImport,
