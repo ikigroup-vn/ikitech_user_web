@@ -115,7 +115,7 @@ class Table extends Component {
           <SortableItem key={data.id}>
             <div
               class="resp-table-row"
-              style={{ width: "100%", cursor: "auto" }}
+              style={{ width: "100%", cursor: "auto", background:index%2 == 0 ?"#F6F7F7C2" : null }}
             >
               <div class="table-body-cell" style={{ width: "65px" }}>
                 <SortableKnob>
@@ -226,7 +226,7 @@ class Table extends Component {
                         style={{
                           display: "flex",
                           padding: "3px",
-                          borderBottom: "1px solid rgb(255 233 233)",
+                          borderBottom: "1px solid rgb(246 233 233)",
                           justifyContent: "space-between",
                           marginBottom: "5px",
                         }}
