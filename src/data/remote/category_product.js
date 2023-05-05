@@ -30,6 +30,10 @@ export const sortCategory = (store_code, data) => {
   return callApi(`/store/${store_code}/category/sort`, "post", data);
 };
 
+export const sortCategoryChildren = (store_code, data) => {
+  return callApi(`/store/${store_code}/category_children_sort`, "post", data);
+};
+
 export const destroyCategoryChild = (store_code, id, idChild) => {
   return callApi(
     `/store/${store_code}/categories/${id}/category_children/${idChild}`,

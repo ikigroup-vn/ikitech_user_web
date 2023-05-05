@@ -82,10 +82,16 @@ class Store extends Component {
       typeof this.props.permission.product_list != "undefined"
     ) {
       var permissions = this.props.permission;
-    
+
       var isShow = permissions.product_category_list;
 
-      this.setState({ isLoading: true, insert : true, update : true, _delete : true, isShow });
+      this.setState({
+        isLoading: true,
+        insert: true,
+        update: true,
+        _delete: true,
+        isShow,
+      });
     }
     // $("#dataTable").DataTable(config());
 
@@ -116,7 +122,7 @@ class Store extends Component {
                       }}
                     >
                       <h4 className="h4 title_content mb-0 text-gray-800">
-                        Danh sách danh mục
+                        Danh mục sản phẩm
                       </h4>
                       <a
                         data-toggle="modal"

@@ -8,7 +8,7 @@ import ModalUpdate from "./ModalUpdate";
 
 import ModalUpdateCommission from "./Commission/ModalUpdateCommission";
 import { formatNumberV2 } from "../../../ultis/helpers";
-import SortableList, { SortableItem } from "react-easy-sort";
+import SortableList, { SortableItem,SortableKnob } from "react-easy-sort";
 import arrayMove from "array-move";
 class Table extends Component {
   constructor(props) {
@@ -87,6 +87,7 @@ class Table extends Component {
           <SortableItem key={data.id}>
             <tr className="hover-product">
               <td>
+              <SortableKnob>
                 <span>
                   <svg
                     width="16px"
@@ -104,7 +105,9 @@ class Table extends Component {
                       fill="#a6a4a4"
                     />
                   </svg>
+
                 </span>
+                </SortableKnob>
                 <span>{index + 1}</span>
               </td>
               <td>{data.name}</td>
