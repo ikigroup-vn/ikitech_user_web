@@ -25,15 +25,14 @@ class ProductEdit extends Component {
       form: {},
       total: "",
       disableDistribute: false,
-      disableInventory: false
+      disableInventory: false,
     };
-
   }
 
   checkDistribute = (status, _status) => {
     console.log(status, _status);
-    this.setState({ disableDistribute: status, disableInventory: _status })
-  }
+    this.setState({ disableDistribute: status, disableInventory: _status });
+  };
 
   componentDidMount() {
     var { store_code, productId } = this.props;
@@ -41,24 +40,31 @@ class ProductEdit extends Component {
     this.props.fetchAllAttributeP(store_code);
     this.props.fetchAllCategoryP(store_code);
     this.props.fetchAllBlog(store_code, 1);
-
   }
 
   handleDataFromInfo = (data) => {
-
     this.setState((prevState, props) => {
       var formdata = { ...prevState.form };
       formdata.name = data.txtName;
-      formdata.price = data.txtPrice.toString().replace(/,/g, '').replace(/\./g, '');
-      formdata.import_price = data.txtImportPrice.toString().replace(/,/g, '').replace(/\./g, '');
+      formdata.price = data.txtPrice
+        .toString()
+        .replace(/,/g, "")
+        .replace(/\./g, "");
+      formdata.import_price = data.txtImportPrice
+        .toString()
+        .replace(/,/g, "")
+        .replace(/\./g, "");
       formdata.barcode = data.txtBarcode;
       formdata.status = data.txtStatus;
       formdata.point_for_agency = data.point_for_agency;
 
-      formdata.quantity_in_stock = data.txtQuantityInStock.toString().replace(/,/g, '').replace(/\./g, '');
+      formdata.quantity_in_stock = data.txtQuantityInStock
+        .toString()
+        .replace(/,/g, "")
+        .replace(/\./g, "");
       formdata.percent_collaborator = data.txtPercentC;
-      formdata.sku = data.sku
-      formdata.check_inventory = data.check_inventory
+      formdata.sku = data.sku;
+      formdata.check_inventory = data.check_inventory;
 
       var categories = [];
       var category_children_ids = [];
@@ -68,9 +74,11 @@ class ProductEdit extends Component {
         });
       }
       if (data.category_children_ids.length > 0) {
-        category_children_ids = data.category_children_ids.map((categoryChild, index) => {
-          return categoryChild.id;
-        });
+        category_children_ids = data.category_children_ids.map(
+          (categoryChild, index) => {
+            return categoryChild.id;
+          }
+        );
       }
       formdata.categories = categories;
       formdata.category_children_ids = category_children_ids;
@@ -83,50 +91,38 @@ class ProductEdit extends Component {
       var formdata = { ...prevState.form };
       formdata.images = data.listImgProduct;
       return { form: formdata };
-
     });
-
-
   };
-
 
   handleDataFromAvatarImg = (data) => {
     this.setState((prevState, props) => {
       var formdata = { ...prevState.form };
-      formdata.index_image_avatar = data.avatar_product
+      formdata.index_image_avatar = data.avatar_product;
       return { form: formdata };
-
     });
-
-
   };
-
 
   handleDataFromDiscount = (data) => {
     this.setState((prevState, props) => {
       var formdata = { ...prevState.form };
-      formdata.list_promotion = data
+      formdata.list_promotion = data;
       return { form: formdata };
-
     });
-
-
   };
 
   handleDataFromContent = (data) => {
     this.setState((prevState, props) => {
       var formdata = { ...prevState.form };
-      formdata.content_for_collaborator = data.txtContentC
-      formdata.description = data.txtContent
-      formdata.seo_title = data.txtSeoTitle
-      formdata.seo_description = data.txtSeoDescription
+      formdata.content_for_collaborator = data.txtContentC;
+      formdata.description = data.txtContent;
+      formdata.seo_title = data.txtSeoTitle;
+      formdata.seo_description = data.txtSeoDescription;
 
-      return { form: formdata }
+      return { form: formdata };
     });
   };
 
   handleDataFromAttribute = (data) => {
-
     this.setState((prevState, props) => {
       var formdata = { ...prevState.form };
       var listAttribute = [];
@@ -157,11 +153,7 @@ class ProductEdit extends Component {
       var formdata = { ...prevState.form };
       formdata.list_distribute = data;
       return { form: formdata };
-
     });
-
-
-
   };
 
   postProduct = () => {
@@ -169,10 +161,6 @@ class ProductEdit extends Component {
     const branch_id = localStorage.getItem("branch_id");
     var form = { ...this.state.form };
     form.index_image_avatar = 0;
-
-
-
-
 
     if (typeof form.list_distribute != "undefined") {
       if (typeof form.list_distribute[0] != "undefined") {
@@ -185,16 +173,16 @@ class ProductEdit extends Component {
                   const price =
                     element.price != null
                       ? element.price
-                        .toString()
-                        .replace(/,/g, "")
-                        .replace(/\./g, "")
+                          .toString()
+                          .replace(/,/g, "")
+                          .replace(/\./g, "")
                       : 0;
                   const import_price =
                     element.import_price != null
                       ? element.import_price
-                        .toString()
-                        .replace(/,/g, "")
-                        .replace(/\./g, "")
+                          .toString()
+                          .replace(/,/g, "")
+                          .replace(/\./g, "")
                       : 0;
                   const barcode =
                     element.barcode != null
@@ -203,16 +191,16 @@ class ProductEdit extends Component {
                   const quantity_in_stock =
                     element.quantity_in_stock != null
                       ? element.quantity_in_stock
-                        .toString()
-                        .replace(/,/g, "")
-                        .replace(/\./g, "")
+                          .toString()
+                          .replace(/,/g, "")
+                          .replace(/\./g, "")
                       : 0;
                   const cost_of_capital =
                     element.cost_of_capital != null
                       ? element.cost_of_capital
-                        .toString()
-                        .replace(/,/g, "")
-                        .replace(/\./g, "")
+                          .toString()
+                          .replace(/,/g, "")
+                          .replace(/\./g, "")
                       : 0;
                   form.list_distribute[0].element_distributes[index].price =
                     price;
@@ -242,23 +230,23 @@ class ProductEdit extends Component {
                             const price =
                               _element.price != null
                                 ? _element.price
-                                  .toString()
-                                  .replace(/,/g, "")
-                                  .replace(/\./g, "")
+                                    .toString()
+                                    .replace(/,/g, "")
+                                    .replace(/\./g, "")
                                 : 0;
                             const import_price =
                               _element.import_price != null
                                 ? _element.import_price
-                                  .toString()
-                                  .replace(/,/g, "")
-                                  .replace(/\./g, "")
+                                    .toString()
+                                    .replace(/,/g, "")
+                                    .replace(/\./g, "")
                                 : 0;
                             const cost_of_capital =
                               _element.cost_of_capital != null
                                 ? _element.cost_of_capital
-                                  .toString()
-                                  .replace(/,/g, "")
-                                  .replace(/\./g, "")
+                                    .toString()
+                                    .replace(/,/g, "")
+                                    .replace(/\./g, "")
                                 : 0;
                             const barcode =
                               _element.barcode != null
@@ -267,9 +255,9 @@ class ProductEdit extends Component {
                             const quantity_in_stock =
                               _element.quantity_in_stock != null
                                 ? _element.quantity_in_stock
-                                  .toString()
-                                  .replace(/,/g, "")
-                                  .replace(/\./g, "")
+                                    .toString()
+                                    .replace(/,/g, "")
+                                    .replace(/\./g, "")
                                 : 0;
 
                             form.list_distribute[0].element_distributes[
@@ -422,94 +410,93 @@ class ProductEdit extends Component {
     //   return;
     // }
     var is_error = false;
-    if (typeof form.list_distribute != "undefined") {
-      if (typeof form.list_distribute[0] != "undefined") {
-        if (typeof form.list_distribute[0].element_distributes != "undefined") {
-          if (form.list_distribute[0].element_distributes.length > 0) {
-            form.list_distribute[0].element_distributes.forEach(
-              (element, index) => {
-                if (typeof element?.sub_element_distributes != "undefined") {
-                  if (element?.sub_element_distributes.length > 0) {
-                    element?.sub_element_distributes.forEach(
-                      (_element, _index) => {
-                        const price = _element.price
-                          .toString()
-                          .replace(/,/g, "")
-                          .replace(/\./g, "");
-                        const import_price = _element.import_price
-                          .toString()
-                          .replace(/,/g, "")
-                          .replace(/\./g, "");
-                        console.log(
-                          price,
-                          import_price,
-                          Number(import_price),
-                          typeof Number(import_price),
-                          Number(import_price) == 0
-                        );
-                        if (
-                          // price == null ||
-                          Number(price) == 0
-                          // !isEmpty(price)
-                        ) {
-                          is_error = true;
-                          this.props.showError({
-                            type: Types.ALERT_UID_STATUS,
-                            alert: {
-                              type: "danger",
-                              title: "Lỗi",
-                              disable: "show",
-                              content: "Vui lòng nhập giá bán lẻ cho phân loại",
-                            },
-                          });
-                          this.setState({
-                            isError: true,
-                          });
-                        }
+    // if (typeof form.list_distribute != "undefined") {
+    //   if (typeof form.list_distribute[0] != "undefined") {
+    //     if (typeof form.list_distribute[0].element_distributes != "undefined") {
+    //       if (form.list_distribute[0].element_distributes.length > 0) {
+    //         form.list_distribute[0].element_distributes.forEach(
+    //           (element, index) => {
+    //             if (typeof element?.sub_element_distributes != "undefined") {
+    //               if (element?.sub_element_distributes.length > 0) {
+    //                 element?.sub_element_distributes.forEach(
+    //                   (_element, _index) => {
+    //                     const price = _element.price
+    //                       .toString()
+    //                       .replace(/,/g, "")
+    //                       .replace(/\./g, "");
+    //                     const import_price = _element.import_price
+    //                       .toString()
+    //                       .replace(/,/g, "")
+    //                       .replace(/\./g, "");
+    //                     console.log(
+    //                       price,
+    //                       import_price,
+    //                       Number(import_price),
+    //                       typeof Number(import_price),
+    //                       Number(import_price) == 0
+    //                     );
+    //                     if (
+    //                       // price == null ||
+    //                       Number(price) == 0
+    //                       // !isEmpty(price)
+    //                     ) {
+    //                       is_error = true;
+    //                       this.props.showError({
+    //                         type: Types.ALERT_UID_STATUS,
+    //                         alert: {
+    //                           type: "danger",
+    //                           title: "Lỗi",
+    //                           disable: "show",
+    //                           content: "Vui lòng nhập giá bán lẻ cho phân loại",
+    //                         },
+    //                       });
+    //                       this.setState({
+    //                         isError: true,
+    //                       });
+    //                     }
 
-                        if (
-                          // import_price == null ||
-                          Number(import_price) == 0
-                          // !isEmpty(import_price)
-                        ) {
-                          is_error = true;
-                          this.props.showError({
-                            type: Types.ALERT_UID_STATUS,
-                            alert: {
-                              type: "danger",
-                              title: "Lỗi",
-                              disable: "show",
-                              content: "Vui lòng nhập giá nhập cho phân loại",
-                            },
-                          });
-                          this.setState({
-                            isError: true,
-                          });
-                        } else {
-                          is_error = false;
-                          this.setState({
-                            isError: false,
-                          });
-                        }
-                      }
-                    );
-                  }
-                }
-              }
-            );
-          }
-        }
-      }
-    }
+    //                     if (
+    //                       // import_price == null ||
+    //                       Number(import_price) == 0
+    //                       // !isEmpty(import_price)
+    //                     ) {
+    //                       is_error = true;
+    //                       this.props.showError({
+    //                         type: Types.ALERT_UID_STATUS,
+    //                         alert: {
+    //                           type: "danger",
+    //                           title: "Lỗi",
+    //                           disable: "show",
+    //                           content: "Vui lòng nhập giá nhập cho phân loại",
+    //                         },
+    //                       });
+    //                       this.setState({
+    //                         isError: true,
+    //                       });
+    //                     } else {
+    //                       is_error = false;
+    //                       this.setState({
+    //                         isError: false,
+    //                       });
+    //                     }
+    //                   }
+    //                 );
+    //               }
+    //             }
+    //           }
+    //         );
+    //       }
+    //     }
+    //   }
+    // }
     if (this.state.isError || is_error) {
       return;
     }
     if (this.state.checkDistribute == false) {
-      delete form.list_distribute
+      delete form.list_distribute;
     }
 
-
-    console.log(form)
+    console.log(form);
     this.props.postProductV2(store_code, branch_id, form);
   };
   goBack = (e) => {
@@ -518,8 +505,8 @@ class ProductEdit extends Component {
     history.goBack();
   };
   onChangeQuantityStock = (total) => {
-    this.setState({ total: total })
-  }
+    this.setState({ total: total });
+  };
 
   handleDataFromProductVideo = (video) => {
     console.log(video);
@@ -532,35 +519,35 @@ class ProductEdit extends Component {
 
   render() {
     var { store_code } = this.props;
-    var { category_product, attributeP, auth, product, isShowAttr, isCreate, isRemove } = this.props;
+    var {
+      category_product,
+      attributeP,
+      auth,
+      product,
+      isShowAttr,
+      isCreate,
+      isRemove,
+    } = this.props;
     var { total, disableInventory, disableDistribute } = this.state;
     return (
-
-
       <div class="container-fluid">
-        <Alert
-          type={Types.ALERT_UID_STATUS}
-          alert={this.props.alert}
-        />
-        <div
-          style={{ display: "flex", justifyContent: "space-between" }}
-        >
+        <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
           <h4 className="h4 title_content mb-0 text-gray-800">
-            <h4 className="h4 title_content mb-0 text-gray-800">Thêm sản phẩm</h4>
-
+            <h4 className="h4 title_content mb-0 text-gray-800">
+              Thêm sản phẩm
+            </h4>
           </h4>
         </div>
         <br></br>
         <div class="card mb-4">
-          <div class="card-header title_content">
-            Nhập thông tin sản phẩm
-          </div>
+          <div class="card-header title_content">Nhập thông tin sản phẩm</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
               <div class="col-lg-6">
                 <div>
                   <InfoProduct
-                    isCopy  = {true}
+                    isCopy={true}
                     checkDistribute={this.checkDistribute}
                     total={total}
                     product={product}
@@ -574,56 +561,57 @@ class ProductEdit extends Component {
                 class="col-lg-6"
                 style={{ borderLeft: "0.5px solid #e6dfdf" }}
               >
-                   <div>
+                <div>
                   <Video
-                                    store_code = {store_code}
-                                    product={product}
-
-                                    handleDataFromProductVideo={this.handleDataFromProductVideo}
+                    store_code={store_code}
+                    product={product}
+                    handleDataFromProductVideo={this.handleDataFromProductVideo}
                   />
                 </div>
                 <div>
                   <StoreImage
-
                     handleDataFromAvatarImg={this.handleDataFromAvatarImg}
-
                     product={product}
-                    handleDataFromProductImg={
-                      this.handleDataFromProductImg
-                    }
+                    handleDataFromProductImg={this.handleDataFromProductImg}
                   />
                 </div>
               </div>
             </div>
           </div>
         </div>
-        {getChannel() == IKITECH &&   
+        {getChannel() == IKITECH && (
           <div class="card mb-4">
-          <div class="card-body" style={{ padding: "0.8rem" }}>
-            <div class="row">
-              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <button
-                  class="btn btn-primary btn-sm"
-                  onClick={this.postProduct}
-                >
-                  <i class="fa fa-plus"></i> Tạo
-                </button>
-                <a
-                  style={{ marginLeft: "10px" }}
-                  onClick={this.goBack} class={`btn btn-warning btn-sm color-white `}
-                >
-                  <i class="fa fa-arrow-left"></i> Trở về
-                </a>
-          
+            <div class="card-body" style={{ padding: "0.8rem" }}>
+              <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  <button
+                    class="btn btn-primary btn-sm"
+                    onClick={this.postProduct}
+                  >
+                    <i class="fa fa-plus"></i> Tạo
+                  </button>
+                  <a
+                    style={{ marginLeft: "10px" }}
+                    onClick={this.goBack}
+                    class={`btn btn-warning btn-sm color-white `}
+                  >
+                    <i class="fa fa-arrow-left"></i> Trở về
+                  </a>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-  }
-        <div class={`card mb-4 ${typeof isShowAttr == "undefined" || isShowAttr == false || getChannel() == IKIPOS ? "hide" : ""}`}>
-          <div class="card-header title_content">
-            Thuộc tính sản phẩm
-          </div>
+        )}
+        <div
+          class={`card mb-4 ${
+            typeof isShowAttr == "undefined" ||
+            isShowAttr == false ||
+            getChannel() == IKIPOS
+              ? "hide"
+              : ""
+          }`}
+        >
+          <div class="card-header title_content">Thuộc tính sản phẩm</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
               <div class="col-lg-12">
@@ -633,9 +621,7 @@ class ProductEdit extends Component {
                       isCreate={isCreate}
                       isRemove={isRemove}
                       product={product}
-                      handleDataFromAttribute={
-                        this.handleDataFromAttribute
-                      }
+                      handleDataFromAttribute={this.handleDataFromAttribute}
                       store_code={store_code}
                       attributeP={attributeP}
                     />
@@ -646,10 +632,12 @@ class ProductEdit extends Component {
           </div>
         </div>
 
-        <div class={`card mb-4 ${this.state.disableDistribute == true ? "" : "hide"}`}>
-          <div class="card-header title_content">
-            Phân loại sản phẩm
-          </div>
+        <div
+          class={`card mb-4 ${
+            this.state.disableDistribute == true ? "" : "hide"
+          }`}
+        >
+          <div class="card-header title_content">Phân loại sản phẩm</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
               <div class="col-lg-12">
@@ -660,9 +648,7 @@ class ProductEdit extends Component {
                       disableInventory={disableInventory}
                       onChangeQuantityStock={this.onChangeQuantityStock}
                       product={product}
-                      handleDataFromDistribute={
-                        this.handleDataFromDistribute
-                      }
+                      handleDataFromDistribute={this.handleDataFromDistribute}
                     />
                   </div>
                 </div>
@@ -670,23 +656,23 @@ class ProductEdit extends Component {
             </div>
           </div>
         </div>
-        {getChannel() == IKITECH && <div class="card mb-4">
-          <div class="card-header title_content">Nội dung chi tiết</div>
-          <div class="card-body" style={{ padding: "0.8rem" }}>
-            <div class="row">
-              <ContentDetail
-                                    store_code={store_code}
-
-                product={product}
-                handleDataFromContent={this.handleDataFromContent}
-              />
+        {getChannel() == IKITECH && (
+          <div class="card mb-4">
+            <div class="card-header title_content">Nội dung chi tiết</div>
+            <div class="card-body" style={{ padding: "0.8rem" }}>
+              <div class="row">
+                <ContentDetail
+                  store_code={store_code}
+                  product={product}
+                  handleDataFromContent={this.handleDataFromContent}
+                />
+              </div>
             </div>
           </div>
-        </div>}
+        )}
 
-
-        {
-          getChannel() == IKITECH && <div class="card mb-4">
+        {getChannel() == IKITECH && (
+          <div class="card mb-4">
             <div class="card-header title_content">Tối ưu SEO</div>
             <div class="card-body" style={{ padding: "0.8rem" }}>
               <div class="row">
@@ -697,7 +683,7 @@ class ProductEdit extends Component {
               </div>
             </div>
           </div>
-        }
+        )}
         {/* <div class="card mb-4">
           <div class="card-header title_content">Thông tin khuyến mại</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>
@@ -723,20 +709,17 @@ class ProductEdit extends Component {
                 <a
                   className="color-white"
                   style={{ marginLeft: "10px" }}
-                  onClick={this.goBack} class={`btn btn-warning btn-sm color-white `}
+                  onClick={this.goBack}
+                  class={`btn btn-warning btn-sm color-white `}
                 >
                   <i class="fa fa-arrow-left"></i> Trở về
                 </a>
-
               </div>
             </div>
           </div>
         </div>
       </div>
-
-
     );
-
   }
 }
 
@@ -747,7 +730,7 @@ const mapStateToProps = (state) => {
     product: state.productReducers.product.productId,
     alert: state.productReducers.alert.alert_uid,
     blogs: state.blogReducers.blog.allBlog,
-    currentBranch: state.branchReducers.branch.currentBranch
+    currentBranch: state.branchReducers.branch.currentBranch,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -768,10 +751,14 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(productAction.fetchProductId(store_code, productId));
     },
     updateProduct: (store_code, product, productId, page) => {
-      dispatch(productAction.updateProduct(store_code, product, productId, page));
+      dispatch(
+        productAction.updateProduct(store_code, product, productId, page)
+      );
     },
     updateDistribute: (store_code, product, productId, branchId) => {
-      dispatch(productAction.updateDistribute(store_code, product, productId, branchId));
+      dispatch(
+        productAction.updateDistribute(store_code, product, productId, branchId)
+      );
     },
     fetchAllBlog: (id, page) => {
       dispatch(blogAction.fetchAllBlog(id, page));
