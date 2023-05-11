@@ -1272,7 +1272,9 @@ export const postProductV2 = (store_code, branch_id, data, funcModal) => {
     productApi
       .createProductV2(store_code, branch_id, data)
       .then((res) => {
-        funcModal(res.data.data?.id);
+        if (funcModal) {
+          funcModal(res.data.data?.id);
+        }
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",
