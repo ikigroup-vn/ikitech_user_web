@@ -13,6 +13,7 @@ import moment from "moment";
 import XlsxPopulate from "xlsx-populate";
 import { saveAs } from "file-saver";
 import * as OrderFrom from "../ultis/order_from";
+import handleBillMisa from "../data/handle_data/handle_bill_misa";
 
 export const exportAllListOrder = (
   store_code,
@@ -267,8 +268,8 @@ async function saveAsExcelMisa(value) {
 
     sheet1.row(1).style("bold", true);
 
-    sheet1.range("A1:U1").style("fill", "ccccff");
-    sheet1.range("V1:AN1").style("fill", "ffff00");
+    sheet1.range("A1:AI1").style("fill", "ccccff");
+
     range.style("border", true);
 
     // sheet1.range("AA1:AI1").style("fill", "F4D03F");
@@ -327,201 +328,58 @@ export const exportAllListOrderMisa = (
 
                 console.log("dataMisa::: ", res.data.data.data);
                 for (const item of res.data.data.data) {
-                  if(item?.line_items_at_time?.length > 0){
-                    for(const product of item.line_items_at_time){
-                      var newItem = {};
-                      var arangeKeyItem = {
-                        number: "",
-                        sale_from: "",
-                        payment_status:
-                          item.payment_status == 2
-                            ? item.payment_method_id == 0
-                              ? 1
-                              : 2
-                            : 0,
-                        checkExportInventory: 0,
-                        exportTariffArea: 0,
-                        invoiceAttached: 0,
-                        billed: 0,
-                        accountDate: "",
-                        voucherDate: "",
-                        voucherNumber: "",
-                        voteIssued: "",
-                        reasonExport: "",
-                        invoiceNumber: "",
-                        invoiceDate: "",
-                        customerCode: "",
-                        customerName: item.customer_name,
-                        address: handleAddress(
-                          item.customer_address_detail,
-                          item.customer_wards_name,
-                          item.customer_district_name,
-                          item.customer_province_name
-                        ),
-                        taxCode: "",
-                        paraphrasing: "",
-                        submitAccount: "",
-                        saleStaff: "",
-                        sku: "",
-                        productName: product.name,
-                        promotionallGoods: "",
-                        cashExpensesDebitsAccount: "",
-                        accountRevenue: "",
-                        unit: "",
-                        quantity: product.quantity,
-                        unitPriceAfterTax: "",
-                        unitPrice: product.after_discount,
-                        intoMoney: product.after_discount ? Number(product.after_discount) * 3 : "",
-                        discountRate: "",
-                        discountMoney: "",
-                        discountAccount: "",
-                        warehouse: item.branch?.name ?? "",
-                        costAccount: "",
-                        warehouseAccount: "",
-                        unitPriceCapital: "",
-                        funds: "",
-                        goodsKeepSell: "",
-    
-                        
-                      };
-                      Object.entries(arangeKeyItem).forEach(
-                        ([key, value], index) => {
-                          if (key == "number") {
-                            newItem["Hiển thị trên số"] = value;
-                          }
-                          if (key == "sale_from") {
-                            newItem["Hình thức bán hàng"] = value;
-                          }
-                          if (key == "payment_status") {
-                            newItem["Phương thức thanh toán"] = value;
-                          }
-                          if (key == "checkExportInventory") {
-                            newItem["Kiêm phiếu xuất kho"] = value;
-                          }
-                          if (key == "exportTariffArea") {
-                            newItem["XK vào khu phi thuế quan và các TH được coi như XK"] = value;
-                          }
-                          if (key == "invoiceAttached") {
-                            newItem["Lập kèm hóa đơn"] = value;
-                          }
-                          if (key == "billed") {
-                            newItem["Đã lập hóa đơn"] = value;
-                          }
-                          if (key == "accountDate") {
-                            newItem["Ngày hạch toán (*)"] = value;
-                          }
-                          if (key == "voucherDate") {
-                            newItem["Ngày chứng từ (*)"] = value;
-                          }
-    
-                          if (key == "voucherNumber") {
-                            newItem["Số chứng từ (*)"] = value;
-                          }
-                          if (key == "voteIssued") {
-                            newItem["Số phiếu xuất"] = value;
-                          }
-                          if (key == "reasonExport") {
-                            newItem["Lý do xuất"] = value;
-                          }
-                          if (key == "invoiceNumber") {
-                            newItem["Số hóa đơn"] = value;
-                          }
-                          if (key == "invoiceDate") {
-                            newItem["Ngày hóa đơn"] = value;
-                          }
-                          if (key == "customerCode") {
-                            newItem["Mã khách hàng"] = value;
-                          }
-                          if (key == "customerName") {
-                            newItem["Tên khách hàng"] = value;
-                          }
-                          if (key == "address") {
-                            newItem["Địa chỉ"] = value;
-                          }
-                          if (key == "taxCode") {
-                            newItem["Mã số thuế"] = value;
-                          }
-                          if (key == "paraphrasing") {
-                            newItem["Diễn giải"] = value;
-                          }
-                          if (key == "submitAccount") {
-                            newItem["Nộp vào TK"] = value;
-                          }
-                          if (key == "saleStaff") {
-                            newItem["NV bán hàng"] = value;
-                          }
-                          if (key == "sku") {
-                            newItem["Mã hàng (*)"] = value;
-                          }
-                          if (key == "productName") {
-                            newItem["Tên hàng"] = value;
-                          }
-    
-                          if (key == "promotionallGoods") {
-                            newItem["Hàng khuyến mại"] = value;
-                          }
-                          if (key == "cashExpensesDebitsAccount") {
-                            newItem["TK Tiền/Chi phí/Nợ (*)"] = value;
-                          }
-                          if (key == "accountRevenue") {
-                            newItem["TK Doanh thu/Có (*)"] = value;
-                          }
-                          if (key == "unit") {
-                            newItem["ĐVT"] = value;
-                          }
-                          if (key == "quantity") {
-                            newItem["Số lượng"] = value;
-                          }
-                          if (key == "unitPriceAfterTax") {
-                            newItem["Đơn giá sau thuế"] = value;
-                          }
-                          if (key == "unitPrice") {
-                            newItem["Đơn giá"] = value;
-                          }
-                          if (key == "intoMoney") {
-                            newItem["Thành tiền"] = value;
-                          }
-    
-                          if (key == "discountRate") {
-                            newItem["Tỷ lệ CK (%)"] = value;
-                          }
-    
-                          if (key == "discountMoney") {
-                            newItem["Tiền chiết khấu"] = value;
-                          }
-    
-                          if (key == "discountAccount") {
-                            newItem["TK chiết khấu"] = value;
-                          }
-    
-                          if (key == "warehouse") {
-                            newItem["Kho"] = value;
-                          }
-                          if (key == "costAccount") {
-                            newItem["TK giá vốn"] = value;
-                          }
-    
-                          if (key == "warehouseAccount") {
-                            newItem["TK Kho"] = value;
-                          }
-    
-                          if (key == "unitPriceCapital") {
-                            newItem["Đơn giá vốn"] = value ?? "";
-                          }
-    
-                          if (key == "funds") {
-                            newItem["Tiền vốn"] = value;
-                          }
-    
-                          if (key == "goodsKeepSell") {
-                            newItem["Hàng hóa giữ hộ/bán hộ"] = value;
-                          }
-                        }
-                      );
-    
-                      newArray.push(newItem);
-                    }
-                  }
+                  var newItem = {};
+                  var arangeKeyItem = {
+                    voucherNumber: "",
+                    accountDate: "",
+                    voucherDate: item.created_at,
+                    staffName: "",
+                    invoiceNumber: item.order_code,
+                    customerCode: item.customer_id,
+                    customerName: item.customer_name,
+                    address: handleAddress(
+                      item.customer_address_detail,
+                      item.customer_wards_name,
+                      item.customer_district_name,
+                      item.customer_province_name
+                    ),
+                    taxCode: "",
+                    phone_number: item.phone_number,
+                    mobile_phone: "",
+                    paraphrasing: item.customer_note,
+                    customerName2: item.customer_name,
+                    total_before_discount: item.total_before_discount,
+                    discountMoney: item.discount,
+                    gtgt: "",
+                    invoiced: "Chưa lập",
+                    shipped: "Đã xuất hàng",
+                    typeOfDocument: "",
+                    staffId: "",
+                    businessUnit: "",
+                    orderer_customer_province: item.customer_province_name,
+                    orderer_customer_district: item.customer_district_name,
+                    orderer_customer_wards: item.customer_wards_name,
+
+                    extend1: "",
+                    extend2: "",
+                    extend3: "",
+                    extend4: "",
+                    extend5: "",
+                    extend6: "",
+                    extend7: "",
+                    extend8: "",
+                    extend9: "",
+                    extend10: "",
+
+                    person_make: "",
+                    created_at: item.created_at,
+                    person_edit: "",
+                    updated_at: item.updated_at,
+
+                    voucherNumber2: "",
+                  };
+                  newItem = handleBillMisa(newItem, arangeKeyItem);
+                  newArray.push(newItem);
                 }
                 var header = [];
                 if (newArray.length > 0) {
