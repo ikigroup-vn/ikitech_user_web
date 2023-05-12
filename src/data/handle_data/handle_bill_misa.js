@@ -28,7 +28,7 @@ export default function handleBillMisa(newItem, arangeKeyItem) {
       newItem["Ngày chứng từ (*)"] = value;
     }
     if (key == "shipped") {
-      newItem["Đã ship hàng"] = value;
+      newItem["Đã xuất hàng"] = value;
     }
     if (key == "voucherNumber2") {
       newItem["Số chứng từ (Sổ TC)"] = value;

@@ -264,16 +264,9 @@ async function saveAsExcelMisa(value) {
 
     sheet1.cell("A1").value(sheetData);
     const range = sheet1.usedRange();
-    // const endColumn = String.fromCharCode(64 + totalColumns);
-
     sheet1.row(1).style("bold", true);
-
-    sheet1.range("A1:AI1").style("fill", "ccccff");
-
+    sheet1.range("A1:AO1").style("fill", "ccccff");
     range.style("border", true);
-
-    // sheet1.range("AA1:AI1").style("fill", "F4D03F");
-    // range.style("border", true);
 
     return workbook.outputAsync().then((res) => {
       saveAs(res, "Ban_hang_VNĐ MẪU NHẬP MISA.xlsx");
@@ -350,11 +343,11 @@ export const exportAllListOrderMisa = (
                     paraphrasing: item.customer_note,
                     customerName2: item.customer_name,
                     total_before_discount: item.total_before_discount,
-                    total_final: item.total_final,
                     discountMoney: item.discount,
                     gtgt: "",
-                    checkInvoice: "TRUE",
+                    total_final: item.total_final,
                     invoiced: "Chưa lập",
+                    checkInvoice: "TRUE",
                     shipped: "Đã xuất",
                     typeOfDocument: "",
                     staffId: "",
@@ -373,8 +366,9 @@ export const exportAllListOrderMisa = (
                     extend8: "",
                     extend9: "",
                     extend10: "",
-                    time_make: "",
                     person_make: "",
+                    time_make: item.created_at,
+
                     created_at: item.created_at,
                     person_edit: "",
                     updated_at: item.updated_at,

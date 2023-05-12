@@ -84,13 +84,15 @@ export default class ComponentToPrint extends Component {
       arr.push(
         <tr>
           <td>{index + 1}</td>
-          <td style={{ textAlign: "start" }}>{element.name} {element.is_bonus == true ? "(Thưởng)" : ""}</td>
+          <td style={{ textAlign: "start" }}>
+            {element.name} {element.is_bonus == true ? "(Thưởng)" : ""}
+          </td>
+          <td>{format(element.item_price)}</td>
           <td>{element.quantity}</td>
           <td style={{ textAlign: "end" }}>
-          {element.is_bonus == true ? format(0) : format(
-              (element.item_price) *
-              element.quantity
-            )}
+            {element.is_bonus == true
+              ? format(0)
+              : format(element.item_price * element.quantity)}
           </td>
         </tr>
       );
@@ -115,18 +117,19 @@ export default class ComponentToPrint extends Component {
           <td style={{ textAlign: "start" }}>Giảm giá, Voucher, Combo</td>
           <td></td>
 
-          {(
-              (bill.product_discount_amount || 0) +
-              (bill.voucher_discount_amount || 0) +
-              (bill.combo_discount_amount || 0)
-            ) > 0 &&   <td style={{ textAlign: "end" }} colSpan="3">
-            -{" "}
-            {format(
-              (bill.product_discount_amount || 0) +
-              (bill.voucher_discount_amount || 0) +
-              (bill.combo_discount_amount || 0)
-            )}
-          </td> }
+          {(bill.product_discount_amount || 0) +
+            (bill.voucher_discount_amount || 0) +
+            (bill.combo_discount_amount || 0) >
+            0 && (
+            <td style={{ textAlign: "end" }} colSpan="3">
+              -{" "}
+              {format(
+                (bill.product_discount_amount || 0) +
+                  (bill.voucher_discount_amount || 0) +
+                  (bill.combo_discount_amount || 0)
+              )}
+            </td>
+          )}
         </tr>
       </React.Fragment>
     );
@@ -160,8 +163,8 @@ export default class ComponentToPrint extends Component {
       typeof badges.address_pickup == "undefined"
         ? null
         : badges.address_pickup == null
-          ? null
-          : badges.address_pickup.address_detail +
+        ? null
+        : badges.address_pickup.address_detail +
           ", " +
           badges.address_pickup.wards_name +
           ", " +
@@ -170,7 +173,9 @@ export default class ComponentToPrint extends Component {
           badges.address_pickup.province_name;
     return (
       <div className="parent" style={{ margin: "30px" }}>
-        <p className="order_code">Mã đơn hàng : {state.order_code ?? bill.order_code}</p>
+        <p className="order_code">
+          Mã đơn hàng : {state.order_code ?? bill.order_code}
+        </p>
 
         <div className="row">
           <div className="col-6">
@@ -191,7 +196,8 @@ export default class ComponentToPrint extends Component {
                 {store_address}
               </p>
               <p class="" id="info">
-                <span>Số điện thoại:</span> {state.user_phone ?? bill.user_phone}
+                <span>Số điện thoại:</span>{" "}
+                {state.user_phone ?? bill.user_phone}
               </p>
             </div>
           </div>
@@ -201,19 +207,28 @@ export default class ComponentToPrint extends Component {
 
               <p class="" id="sale_user_name">
                 <span style={{ fontWeight: "500" }}>
-                  Tên: {state?.customer_name ?? bill.customer_name ?? bill?.customer?.name ?? ""}
+                  Tên:{" "}
+                  {state?.customer_name ??
+                    bill.customer_name ??
+                    bill?.customer?.name ??
+                    ""}
                 </span>
               </p>
               <p class="" id="info">
-                <span>Địa chỉ: </span> { getDetailAdress(
-              bill.customer_address?.address_detail,
-              bill.customer_address?.wards_name,
-              bill.customer_address?.district_name,
-              bill.customer_address?.province_name
-            )}
+                <span>Địa chỉ: </span>{" "}
+                {getDetailAdress(
+                  bill.customer_address?.address_detail,
+                  bill.customer_address?.wards_name,
+                  bill.customer_address?.district_name,
+                  bill.customer_address?.province_name
+                )}
               </p>
               <p class="" id="info">
-                <span>Số điện thoại: </span> {state?.customer_phone ?? bill.customer_phone ?? bill?.customer?.phone_number ?? ""}
+                <span>Số điện thoại: </span>{" "}
+                {state?.customer_phone ??
+                  bill.customer_phone ??
+                  bill?.customer?.phone_number ??
+                  ""}
               </p>
             </div>
           </div>
@@ -247,7 +262,8 @@ export default class ComponentToPrint extends Component {
                 <tr>
                   <th>STT</th>
                   <th>Tên sản phẩm</th>
-                  <th>Số lượng</th>
+                  <th>Đ.Giá</th>
+                  <th>SL</th>
                   <th>Thành tiền</th>
                 </tr>
               </thead>
