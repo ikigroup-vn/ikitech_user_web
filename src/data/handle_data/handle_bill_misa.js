@@ -36,12 +36,33 @@ export default function handleBillMisa(newItem, arangeKeyItem) {
     if (key == "voucherNumber") {
       newItem["Số chứng từ"] = value;
     }
-
     if (key == "person_make") {
       newItem["Người tạo"] = value;
     }
+    if (key == "time_make") {
+      newItem["Ngày tạo"] = value;
+    }
+    if (key == "taxCode") {
+      newItem["Mã số thuế"] = value;
+    }
+    if (key == "total_before_discount") {
+      newItem["Tổng tiền hàng"] = value;
+    }
+    if (key == "checkInvoice") {
+      newItem["Kiểm phiếu xuất"] = value;
+    }
+    
+    if (key == "total_final") {
+      newItem["Tổng tiền thanh toán"] = value;
+    }
     if (key == "person_edit") {
       newItem["Người sửa"] = value;
+    }
+    if (key == "mobile_phone") {
+      newItem["ĐT di động"] = value;
+    }
+    if (key == "phone_number") {
+      newItem["Điện thoại"] = value;
     }
 
     if (key == "orderer_customer_wards") {

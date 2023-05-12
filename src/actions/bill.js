@@ -332,10 +332,10 @@ export const exportAllListOrderMisa = (
                   var arangeKeyItem = {
                     voucherNumber: "",
                     accountDate: "",
-                    voucherDate: item.created_at,
+                    voucherDate: "",
                     staffName: "",
                     invoiceNumber: item.order_code,
-                    customerCode: item.customer_id,
+                    customerCode: "",
                     customerName: item.customer_name,
                     address: handleAddress(
                       item.customer_address_detail,
@@ -343,16 +343,19 @@ export const exportAllListOrderMisa = (
                       item.customer_district_name,
                       item.customer_province_name
                     ),
+
                     taxCode: "",
                     phone_number: item.phone_number,
                     mobile_phone: "",
                     paraphrasing: item.customer_note,
                     customerName2: item.customer_name,
                     total_before_discount: item.total_before_discount,
+                    total_final: item.total_final,
                     discountMoney: item.discount,
                     gtgt: "",
+                    checkInvoice: "TRUE",
                     invoiced: "Chưa lập",
-                    shipped: "Đã xuất hàng",
+                    shipped: "Đã xuất",
                     typeOfDocument: "",
                     staffId: "",
                     businessUnit: "",
@@ -370,7 +373,7 @@ export const exportAllListOrderMisa = (
                     extend8: "",
                     extend9: "",
                     extend10: "",
-
+                    time_make: "",
                     person_make: "",
                     created_at: item.created_at,
                     person_edit: "",
