@@ -30,6 +30,7 @@ export default class ListComponentToPrint extends Component {
       return (
         <ComponentTemplate2ToPrint
           currentBranch={currentBranch}
+          heightPage={3 + (bill.line_items_at_time.length*0.4)}
           badges={badges}
           bill={bill}
           store={store}

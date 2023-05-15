@@ -241,15 +241,18 @@ export default class ComponentTemplate2ToPrint extends Component {
     var store_address = "";
 
     const pageStyle = `
-    @media print {
-      @page { size: 2.5in 4in }
+   
+    @page {
+      size: 2.5in ${this.props.heightPage}in;
     }
   `;
 
     return (
-      <div style={{
-        marginRight:"70%"
-      }}>
+      <div
+        style={{
+          marginRight: "70%",
+        }}
+      >
         <style>{pageStyle}</style>
         <div
           style={{
@@ -282,7 +285,7 @@ export default class ComponentTemplate2ToPrint extends Component {
                     textAlign: "center",
                   }}
                 >
-                  <h6 style={{  fontSize: "10px",fontWeight: "normal" }}>
+                  <h6 style={{ fontSize: "10px", fontWeight: "normal" }}>
                     {" "}
                     {this.getAddress()}{" "}
                     {currentBranch != null &&
@@ -566,11 +569,12 @@ export default class ComponentTemplate2ToPrint extends Component {
                 padding: "8px 0 5px",
                 textAlign: "center",
                 borderTop: "1px solid #444",
+                fontSize:"10px"
               }}
             >
-              <h4 style={{ textTransform: "uppercase" }}>
+              <h6 style={{ textTransform: "uppercase" }}>
                 Cám ơn quý khách đã mua hàng!
-              </h4>
+              </h6>
             </div>
           </div>
         </div>
