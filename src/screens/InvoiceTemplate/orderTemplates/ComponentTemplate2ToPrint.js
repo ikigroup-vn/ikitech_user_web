@@ -268,7 +268,6 @@ export default class ComponentTemplate2ToPrint extends Component {
                 </h6>
               </div>
             )}
-
             <div
               style={{
                 lineHeight: "1",
