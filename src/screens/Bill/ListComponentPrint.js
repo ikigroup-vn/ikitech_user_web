@@ -3,6 +3,7 @@ import ComponentToPrint from "./ComponentToPrint";
 import ComponentTemplate0ToPrint from "../InvoiceTemplate/orderTemplates/ComponentTemplate0ToPrint";
 import ComponentTemplate1ToPrint from "../InvoiceTemplate/orderTemplates/ComponentTemplate1ToPrint";
 import { getInvoiceTemplate } from "../../data/local/print";
+import ComponentTemplate2ToPrint from '../InvoiceTemplate/orderTemplates/ComponentTemplate2ToPrint';
 
 export default class ListComponentToPrint extends Component {
   constructor(props) {
@@ -16,6 +17,18 @@ export default class ListComponentToPrint extends Component {
     if (typeInvoice == 1) {
       return (
         <ComponentTemplate1ToPrint
+          currentBranch={currentBranch}
+          badges={badges}
+          bill={bill}
+          store={store}
+          ref={(el) => (this.componentRef = el)}
+        />
+      );
+    }
+
+    if (typeInvoice == 2) {
+      return (
+        <ComponentTemplate2ToPrint
           currentBranch={currentBranch}
           badges={badges}
           bill={bill}
