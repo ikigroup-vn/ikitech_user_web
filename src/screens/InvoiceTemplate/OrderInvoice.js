@@ -119,7 +119,7 @@ class OrderInvoice extends Component {
       {
         index: 2,
         name: "Mẫu 2 (phiếu nhỏ)",
-        image: "/images/invoice_templates/1.png",
+        image: "/images/invoice_templates/2.png",
         componentPrint: (
           <ComponentTemplate2ToPrint
             currentBranch={this.props.currentBranch}

@@ -239,13 +239,18 @@ export default class ComponentTemplate2ToPrint extends Component {
         ? bill.line_items_at_time.length
         : 0;
     var store_address = "";
-    console.log(bill);
+
+    const pageStyle = `
+    @media print {
+      @page { size: 2.5in 4in }
+    }
+  `;
+
     return (
-      <div
-        style={{
-          display: "block",
-        }}
-      >
+      <div style={{
+        marginRight:"70%"
+      }}>
+        <style>{pageStyle}</style>
         <div
           style={{
             margin: "0 auto",
@@ -257,10 +262,10 @@ export default class ComponentTemplate2ToPrint extends Component {
           <div style={{ padding: "5px 2px", width: "100%" }}>
             {badges.store_name?.length > 0 && (
               <div style={{ padding: "0px 0", textAlign: "center" }}>
-                <h4 style={{ textTransform: "uppercase" }}>
+                <h6 style={{ textTransform: "uppercase" }}>
                   {" "}
                   {(badges.store_name ?? "").toUpperCase()}{" "}
-                </h4>
+                </h6>
               </div>
             )}
 
@@ -278,13 +283,13 @@ export default class ComponentTemplate2ToPrint extends Component {
                     textAlign: "center",
                   }}
                 >
-                  <h4 style={{ fontWeight: "normal" }}>
+                  <h6 style={{  fontSize: "10px",fontWeight: "normal" }}>
                     {" "}
                     {this.getAddress()}{" "}
                     {currentBranch != null &&
                       currentBranch.phone.length > 0 &&
                       "-" + currentBranch.phone}
-                  </h4>
+                  </h6>
                 </div>
               )}
 
@@ -297,14 +302,14 @@ export default class ComponentTemplate2ToPrint extends Component {
                   textTransform: "uppercase",
                 }}
               >
-                <h4
+                <h6
                   style={{
                     fontWeight: "normal",
                     padding: "0px 0 0",
                   }}
                 >
                   Hóa đơn bán hàng ({bill.order_code})
-                </h4>
+                </h6>
               </div>
             </div>
             <br />
