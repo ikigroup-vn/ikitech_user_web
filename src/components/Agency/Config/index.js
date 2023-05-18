@@ -543,7 +543,7 @@ class Config extends Component {
                       <span className="bonusTypeForAgency_noteIcon">?</span>
                       <div className="bonusTypeForAgency_noteTooltip">
                         Nhận phân trăm hoa hồng từ chính CTV được hưởng, ví dụ
-                        hóa đơn hóa đơn CTV nhận được 100.000đ hoa hồng bạn nhập
+                        hóa đơn CTV nhận được 100.000đ hoa hồng bạn nhập
                         ô này 10% thì Đại lý nhận được 10.000đ
                       </div>
                     </span>
