@@ -8,8 +8,8 @@ const posTheme = {
   logoTab: "/images/logo/ikipos_logo_tab.png",
   //   logo: "/images/logo/ikipos_logo.png",
   //   logoLogin: "/images/logo/ikipos_login.jpg",
-  logo: "/images/logo/ikitech_logo_tet_2023.png",
-  logoLogin: "/images/logo/ikitech_login_tet_2023.jpg",
+  logo: "/images/logo/ikitech_logo.png",
+  logoLogin: "/images/logo/ikitech_login.jpg",
   favicon: "/images/logo/ikipos_logo_tab.png",
 };
 
@@ -21,8 +21,8 @@ const ikitechTheme = {
   logoTab: "/images/logo/ikitech_logo_tab.png",
   // logo: "/images/logo/ikitech_logo.jpg",
   // logoLogin: "/images/logo/ikitech_login.jpg",
-  logo: "/images/logo/ikitech_logo_tet_2023.png",
-  logoLogin: "/images/logo/ikitech_login_tet_2023.jpg",
+  logo: "/images/logo/ikitech_logo.png",
+  logoLogin: "/images/logo/ikitech_login.jpg",
   favicon: "/images/logo/ikitech_favicon.png",
 };
 
