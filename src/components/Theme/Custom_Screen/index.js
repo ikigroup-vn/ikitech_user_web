@@ -10,7 +10,7 @@ import ItemNewsTheme from "./ItemNewsTheme.js";
 import ItemFooterTheme from "./ItemFooterTheme.js";
 import FormFooterHtml from "./FormFooterHtml";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import SortableList, { SortableItem } from "react-easy-sort";
+import SortableList, { SortableItem, SortableKnob } from "react-easy-sort";
 
 import arrayMove from "array-move";
 import {
@@ -28,6 +28,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import ModalDefaultReset from "../Home_Screen/ModalDefaultReset";
 import styled from "styled-components";
+import alertYesOrNo from "../../../ultis/alert";
 
 const OverviewStyles = styled.div`
   .price__display {
@@ -331,7 +332,9 @@ class Custom_Screen extends Component {
         return (
           <SortableItem key={data.id}>
             <tr className="hover-product">
+            <SortableKnob>
               <td>
+             
                 <span>
                   <svg
                     width="16px"
@@ -351,7 +354,9 @@ class Custom_Screen extends Component {
                   </svg>
                 </span>
                 <span>{index + 1}</span>
+             
               </td>
+              </SortableKnob>
               <td>
                 <input
                   required
@@ -393,25 +398,27 @@ class Custom_Screen extends Component {
                     flexWrap: "wrap",
                   }}
                 >
-                  <button
+                  {/* <button
                     onClick={() => {}}
                     data-toggle="modal"
                     data-target="#updateType"
                     class={`btn btn-outline-warning btn-sm `}
                   >
                     <i class="fa fa-edit"></i> Sửa
-                  </button>
+                  </button> */}
 
-                  <button
+                  <div
                     onClick={() => {
-                      this.onRemoveItemMenu(index);
+                      alertYesOrNo("Bạn muốn xóa menu này?", () => {
+                        this.onRemoveItemMenu(index);
+                      })
                     }}
                     data-toggle="modal"
                     data-target="#removeType"
                     class={`btn btn-outline-danger btn-sm`}
                   >
                     <i class="fa fa-trash"></i> Xóa
-                  </button>
+                  </div>
                 </div>
               </td>
             </tr>
