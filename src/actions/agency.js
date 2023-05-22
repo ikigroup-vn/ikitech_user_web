@@ -52,8 +52,6 @@ export const exportTopten = (store_code, page, params, report_type) => {
     });
 
     agencyApi.fetchAllTopReport(store_code, page, params).then((res) => {
-      console.log(res);
-
       if (res.data.code !== 401)
         if (typeof res.data.data != "undefined") {
           if (typeof res.data.data.data != "undefined") {
@@ -74,8 +72,10 @@ export const exportTopten = (store_code, page, params, report_type) => {
                   arangeKeyItem = {
                     name: item.customer?.name,
                     phone_number: item.customer?.phone_number,
+                    balance: item.balance,
                     orders_count: item.orders_count,
-                    sum_total_final: item.sum_total_final,
+                    sum_share_agency: item.sum_share_agency,
+                    sum_total_after_discount: item.sum_total_after_discount,
                   };
                 }
                 Object.entries(arangeKeyItem).forEach(([key, value], index) => {
@@ -95,12 +95,18 @@ export const exportTopten = (store_code, page, params, report_type) => {
                       newItem["Tổng số xu"] = value;
                     }
                   } else {
+                    if (key == "balance") {
+                      newItem["Số dư hiện tại"] = value;
+                    }
                     if (key == "orders_count") {
                       newItem["Số đơn hàng"] = value;
                       // newItem["Tên sản phẩm"] = value
                     }
-                    if (key == "sum_total_final") {
-                      newItem["Tổng doanh thu"] = value;
+                    if (key == "sum_share_agency") {
+                      newItem["Tổng hoa hồng"] = value;
+                    }
+                    if (key == "sum_total_after_discount") {
+                      newItem["Tổng doanh số"] = value;
                     }
                   }
                 });
