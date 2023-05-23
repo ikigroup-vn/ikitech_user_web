@@ -212,7 +212,7 @@ class TotalBill extends Component {
           )}
           {product_discount_amount > 0 && (
             <div
-              id={`item_fee ${product_discount_amount > 0 ? "show" : "hide"}`}
+              id={`item_fee ${product_discount_amount != 0 ? "show" : "hide"}`}
             >
               <div className="sale_user_label bold group-total">
                 <div> Giảm giá sản phẩm: </div>{" "}
