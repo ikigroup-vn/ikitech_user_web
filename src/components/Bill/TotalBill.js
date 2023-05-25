@@ -51,7 +51,7 @@ class TotalBill extends Component {
                         </div>
                     </div>
                     }
-                    {product_discount_amount > 0 && <div id={`item_fee ${product_discount_amount > 0 ? "show" : "hide"}`}>
+                    {product_discount_amount > 0 && <div id={`item_fee ${product_discount_amount != 0 ? "show" : "hide"}`}>
                         <div className="sale_user_label bold">
                            <div> Giảm giá sản phẩm </div>:  <span>- {format(product_discount_amount)}</span>
                         </div>

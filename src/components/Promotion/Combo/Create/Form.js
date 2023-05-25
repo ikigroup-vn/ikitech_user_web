@@ -435,6 +435,19 @@ class Form extends Component {
                       />
                       {"  "} Cộng tác viên
                     </label>
+
+                    <label>
+                      <input
+                        type="radio"
+                        name="group_customer"
+                        checked={group_customer == 5 ? true : false}
+                        className="group_customer"
+                        id="ship"
+                        value="5"
+                      />
+                      {"  "} Khách lẻ
+                    </label>
+
                     <label>
                       <input
                         type="radio"

@@ -30,38 +30,7 @@ class InvoiceTemplate extends Component {
     this.setState({ tabId: index, change: helper.randomString(10) });
   };
 
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (
-  //     this.state.isLoading != true &&
-  //     typeof this.props.permission.product_list != "undefined"
-  //   ) {
-  //     var permissions = this.props.permission;
 
-  //     var web_theme_overview = permissions.web_theme_overview;
-  //     var web_theme_contact = permissions.web_theme_contact;
-  //     var web_theme_help = permissions.web_theme_help;
-  //     var web_theme_footer = permissions.web_theme_footer;
-  //     var web_theme_banner = permissions.web_theme_banner;
-  //     var isShow =
-  //       web_theme_overview == false &&
-  //         web_theme_contact == false &&
-  //         web_theme_help == false &&
-  //         web_theme_footer == false &&
-  //         web_theme_banner == false
-  //         ? false
-  //         : true;
-
-  //     this.setState({
-  //       isLoading: true,
-  //       web_theme_overview,
-  //       web_theme_contact,
-  //       web_theme_help,
-  //       web_theme_footer,
-  //       web_theme_banner,
-  //       isShow,
-  //     });
-  //   }
-  // }
   render() {
     var { store_code } = this.props.match.params;
     var {

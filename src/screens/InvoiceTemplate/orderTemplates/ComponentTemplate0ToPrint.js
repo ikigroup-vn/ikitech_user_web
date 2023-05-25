@@ -86,6 +86,7 @@ export default class ComponentTemplate0ToPrint extends Component {
         <tr>
           <td>{index + 1}</td>
           <td style={{ textAlign: "start" }}>{element.name} {element.is_bonus == true ? "(Thưởng)" : ""}</td>
+          <td>{format(element.item_price)}</td>
           <td>{element.quantity}</td>
           <td style={{ textAlign: "end" }}>
           {element.is_bonus == true ? format(0) : format(
@@ -116,18 +117,19 @@ export default class ComponentTemplate0ToPrint extends Component {
           <td style={{ textAlign: "start" }}>Giảm giá, Voucher, Combo</td>
           <td></td>
 
+          <td></td>
         {(
               (bill.product_discount_amount || 0) +
               (bill.voucher_discount_amount || 0) +
               (bill.combo_discount_amount || 0)
-            ) > 0 &&   <td style={{ textAlign: "end" }} colSpan="3">
+            ) > 0 ?   <td style={{ textAlign: "end" }} colSpan="3">
             -{" "}
             {format(
               (bill.product_discount_amount || 0) +
               (bill.voucher_discount_amount || 0) +
               (bill.combo_discount_amount || 0)
             )}
-          </td> }
+          </td> : <td></td>}
         </tr>
       </React.Fragment>
     );
@@ -248,6 +250,7 @@ export default class ComponentTemplate0ToPrint extends Component {
                 <tr>
                   <th>STT</th>
                   <th>Tên sản phẩm</th>
+                  <th>Đ.Giá</th>
                   <th>Số lượng</th>
                   <th>Thành tiền</th>
                 </tr>

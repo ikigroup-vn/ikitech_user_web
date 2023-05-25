@@ -1325,7 +1325,7 @@ class PostOrder extends Component {
                             </div>
                           </div>
 
-                          {oneCart?.info_cart?.product_discount_amount > 0 && (
+                          {oneCart?.info_cart?.product_discount_amount != 0 && (
                             <div className="row item-info">
                               <div className="item-discount-name col-6">
                                 Giảm giá sản phẩm

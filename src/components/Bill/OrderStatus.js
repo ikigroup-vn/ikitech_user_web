@@ -21,7 +21,10 @@ class OrderStatus extends Component {
           name: "Đang giao hàng",
           code: "SHIPPING",
         },
-
+        {
+          name: "Đã nhận hàng",
+          code: "RECEIVED_PRODUCT",
+        },
         {
           name: "Đã hoàn thành",
           code: "COMPLETED",
@@ -162,7 +165,7 @@ class OrderStatus extends Component {
 
     return (
       <nav class="left-nav hidden-xs hidden-sm hidden-md">
-        <ul class="nolist" style={{ minHeight: "250px" }}>
+        <ul class="nolist" style={{ minHeight: "300px" }}>
           <li
             style={{ background: "#EAEFF3", border: "2px solid #e3e5e6" }}
             class=""
@@ -177,7 +180,7 @@ class OrderStatus extends Component {
           </li>
           <li
             style={{
-              maxHeight: "340px",
+              maxHeight: "400px",
               overflow: "auto",
               background: disable,
             }}

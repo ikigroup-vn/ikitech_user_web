@@ -728,7 +728,7 @@ class Form extends Component {
                     />
                     {/* <input class="form-check-input" name="is_set_order_max_point" type="checkbox" id="gridCheck" /> */}
                     <label class="form-check-label" for="gridCheckLadder">
-                      Thưởng theo bật thang{" "}
+                      Thưởng theo bậc thang{" "}
                     </label>
                   </div>
                 </div>
@@ -848,6 +848,17 @@ class Form extends Component {
                         value="1"
                       />
                       {"  "} Cộng tác viên
+                    </label>
+                    <label>
+                      <input
+                        type="radio"
+                        name="group_customer"
+                        checked={group_customer == 5 ? true : false}
+                        className="group_customer"
+                        id="ship"
+                        value="5"
+                      />
+                      {"  "} Khách lẻ
                     </label>
                     <label>
                       <input

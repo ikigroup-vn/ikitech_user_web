@@ -82,7 +82,7 @@ class ModalCreateBonus extends Component {
           <div class="modal-content">
             <div class="modal-header" style={{ background: "white" }}>
               <h4 class="modal-title" style={{ color: "black" }}>
-                Thêm bật thang thưởng
+                Thêm bậc thang thưởng
               </h4>
 
               <button

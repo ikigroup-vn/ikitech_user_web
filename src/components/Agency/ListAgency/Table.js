@@ -9,6 +9,8 @@ import * as agencyAction from "../../../actions/agency";
 import styled from "styled-components";
 import ModalHistoryBalance from "./ModalHistoryBalance";
 import ModalChangeBalance from "./ModalChangeBalance";
+import ModalListReferences from "../../Collaborator/ListCollaborator/ModalListReferences";
+import SidebarListReferences from "../../Collaborator/ListCollaborator/SidebarListReferences";
 
 const TableStyles = styled.div`
   .exploder {
@@ -84,6 +86,16 @@ class Table extends Component {
       helper.loadExpandTable();
     }
   }
+  handleShowSidebarListReferences = (cusInfo) => {
+    this.setState({ customerInfo: cusInfo });
+    this.setShowSidebarListReferences(true);
+  };
+  setShowSidebarListReferences = (showSidebarListReferences) => {
+    this.setState({ showSidebarListReferences });
+  };
+  setCustomerInfo = (cusInfo) => {
+    this.setState({ customerInfo: cusInfo });
+  };
   shouldComponentUpdate(nextProps, nextState) {
     if (!shallowEqual(this.props.agencys, nextProps.agencys)) {
       this.setAgencySelectedForChangeBalance({});
@@ -227,6 +239,7 @@ class Table extends Component {
         console.log("check", data.agency_type_id == null);
         return (
           <React.Fragment>
+            
             <tr class="sub-container hover-product">
               <td>
                 <input
@@ -440,6 +453,18 @@ class Table extends Component {
                   >
                     <i class="fa fa-phone"></i> Gọi ngay
                   </a>
+                  <button
+                    class="btn btn-outline-info btn-sm"
+                    style={{
+                      width: "fit-content",
+                    }}
+                    onClick={() =>
+                      this.handleShowSidebarListReferences(data.customer)
+                    }
+                  >
+                    <i class="fa fa-users"></i>
+                    Danh sách giới thiệu ({data.customer.total_referrals})
+                  </button>
                 </div>
               </td>
             </tr>
@@ -524,6 +549,19 @@ class Table extends Component {
 
           <tbody>{this.showData(agencys)}</tbody>
         </table>
+
+        <ModalListReferences
+          store_code={this.props.store_code}
+          referral_phone_number={this.state.referral_phone_number}
+        />
+        <SidebarListReferences
+          store_code={this.props.store_code}
+          customerInfo={this.state.customerInfo ?? {}}
+          setCustomerInfo={this.setCustomerInfo}
+          showSidebarListReferences={this.state.showSidebarListReferences}
+          setShowSidebarListReferences={this.setShowSidebarListReferences}
+        ></SidebarListReferences>
+
         {Object.entries(agencySelected).length > 0 ? (
           <ModalHistoryBalance
             store_code={this.props.store_code}
