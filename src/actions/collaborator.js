@@ -125,8 +125,14 @@ export const exportTopten = (store_code, page, params) => {
                 var arangeKeyItem = {
                   name: item.customer?.name,
                   phone_number: item.customer?.phone_number,
-                  orders_count: item.orders_count,
-                  sum_total_final: item.sum_total_final,
+                  balance: item.balance ? item.balance : "0",
+                  orders_count: item.orders_count ? item.orders_count : "0",
+                  sum_share_collaborator: item.sum_share_collaborator
+                    ? item.sum_share_collaborator
+                    : "0",
+                  sum_total_before_discount: item.sum_total_before_discount
+                    ? item.sum_total_before_discount
+                    : "0",
                 };
                 Object.entries(arangeKeyItem).forEach(([key, value], index) => {
                   if (key == "name") {
