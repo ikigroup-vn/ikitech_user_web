@@ -130,8 +130,8 @@ export const exportTopten = (store_code, page, params) => {
                   sum_share_collaborator: item.sum_share_collaborator
                     ? item.sum_share_collaborator
                     : "0",
-                  sum_total_before_discount: item.sum_total_before_discount
-                    ? item.sum_total_before_discount
+                  sum_total_after_discount: item.sum_total_after_discount
+                    ? item.sum_total_after_discount
                     : "0",
                 };
                 Object.entries(arangeKeyItem).forEach(([key, value], index) => {
@@ -152,7 +152,7 @@ export const exportTopten = (store_code, page, params) => {
                   if (key == "sum_share_collaborator") {
                     newItem["Tổng hoa hồng"] = value;
                   }
-                  if (key == "sum_total_before_discount") {
+                  if (key == "sum_total_after_discount") {
                     newItem["Tổng doanh số"] = value;
                   }
                 });
