@@ -59,9 +59,9 @@ export const exportListCollaborator = (store_code, page, params) => {
                     index = index + 1;
                     var newItem = {};
                     var arangeKeyItem = {
-                      order: index,
                       name: item.customer?.name,
                       phone_number: item.customer?.phone_number,
+                      balance: item.balance ? item.balance : 0,
                       referral_phone_number:
                         item.customer.referral_phone_number,
                       status:
@@ -69,19 +69,17 @@ export const exportListCollaborator = (store_code, page, params) => {
                     };
                     Object.entries(arangeKeyItem).forEach(
                       ([key, value], index) => {
-                        if (key == "order") {
-                          newItem["STT"] = value;
-                        }
                         if (key == "name") {
                           newItem["Tên"] = value;
                         }
                         if (key == "phone_number") {
                           newItem["Số điện thoại"] = value;
-                          // newItem["Tên sản phẩm"] = value
+                        }
+                        if (key == "balance") {
+                          newItem["Số dư"] = value;
                         }
                         if (key == "referral_phone_number") {
                           newItem["Mã giới thiệu"] = value;
-                          // newItem["Tên sản phẩm"] = value
                         }
                         if (key == "status") {
                           newItem["Trạng thái"] = value;

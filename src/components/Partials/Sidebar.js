@@ -11,7 +11,6 @@ import { getBranchIds } from "../../ultis/branchUtils";
 import { confirmAlert } from "react-confirm-alert";
 import "react-confirm-alert/src/react-confirm-alert.css"; // Import css
 
-
 class Sidebar extends Component {
   constructor(props) {
     super(props);
