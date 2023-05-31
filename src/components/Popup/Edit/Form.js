@@ -30,16 +30,17 @@ class Form extends Component {
     };
   }
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps.popup, this.props.popup)
+    console.log(nextProps.popup, this.props.popup);
 
     if (!shallowEqual(nextProps.popup, this.props.popup)) {
       var link_url = "";
+
       nextProps.popup.forEach((item) => {
-        console.log(item)
         if (item.id == Number(nextProps.popupId)) {
           if (item.type_action == "LINK") {
             link_url = item.value_action;
           }
+
           this.setState({
             show_once: item.show_once,
             type_action: item.type_action,
@@ -60,7 +61,7 @@ class Form extends Component {
       !shallowEqual(nextProps._blog, this.props._blog)
     ) {
       var { type_action } = this.state;
-      console.log(type_action , "heeeeeeeeeeeeeeeee")
+      console.log(type_action, "heeeeeeeeeeeeeeeee");
 
       if (type_action != "") {
         switch (type_action) {
@@ -97,7 +98,6 @@ class Form extends Component {
     this.props.initialUpload();
   }
 
-
   onChange = (e) => {
     var target = e.target;
     var name = target.name;
@@ -110,7 +110,7 @@ class Form extends Component {
 
   onSave = (e) => {
     e.preventDefault();
-    var { store_code , popupId } = this.props;
+    var { store_code, popupId } = this.props;
     var {
       show_once,
       type_action,
@@ -130,14 +130,18 @@ class Form extends Component {
     else if (type_action == "CATEGORY_POST") value_action = categoryBlog.id;
     else {
     }
-    
-    this.props.updatePopup(popupId, {
-      name: name,
-      link_image: image,
-      show_once: show_once,
-      type_action: type_action,
-      value_action: value_action,
-    } , store_code);
+
+    this.props.updatePopup(
+      popupId,
+      {
+        name: name,
+        link_image: image,
+        show_once: show_once,
+        type_action: type_action,
+        value_action: value_action,
+      },
+      store_code
+    );
   };
 
   fetchAllProduct = () => {
@@ -188,7 +192,9 @@ class Form extends Component {
       categoryBlog,
       image,
       link_url,
+      show_once,
     } = this.state;
+
     var disable_link = type_action == "LINK" ? "show" : "hide";
     var disable_post = type_action == "POST" ? "show" : "hide";
     var disable_category_post =
@@ -232,10 +238,14 @@ class Form extends Component {
             </div>
             <div class="form-group">
               <div class="kv-avatar">
-              <div style={{
-                  "font-size": "13.5px",
-                  "margin-bottom": "5px"
-                }}>Kích thước ảnh: 480 x 480</div>
+                <div
+                  style={{
+                    "font-size": "13.5px",
+                    "margin-bottom": "5px",
+                  }}
+                >
+                  Kích thước ảnh: 480 x 480
+                </div>
                 <div>
                   <button
                     type="button"
@@ -253,7 +263,7 @@ class Form extends Component {
               <label for="product_name">Chọn loại chuyển hướng</label>
 
               <select
-              value = {type_action}
+                value={type_action}
                 name="type_action"
                 id="input"
                 class="form-control"
@@ -279,138 +289,116 @@ class Form extends Component {
               />
             </div>
 
-            <div  className="support-theme">
-            <div class={`form-group ${disable_product}`}>
-              <label>Chọn Sản phẩm</label>
+            <div className="support-theme">
+              <div class={`form-group ${disable_product}`}>
+                <label>Chọn Sản phẩm</label>
 
-              <div class="right-inner-addon input-container">
-                <i class="fa fa-caret-down"></i>
-                <input
-                readOnly
-                  data-toggle="modal"
-                  data-target="#showListProduct"
-                  onClick={this.fetchAllProduct}
-                  style={{ background: "white" }}
-                  type="text"
-                  name="product_name"
-                  placeholder="Chọn sản phẩm..."
-                  class="form-control"
-                  value={product.name}
-                />
-              </div>
+                <div class="right-inner-addon input-container">
+                  <i class="fa fa-caret-down"></i>
+                  <input
+                    readOnly
+                    data-toggle="modal"
+                    data-target="#showListProduct"
+                    onClick={this.fetchAllProduct}
+                    style={{ background: "white" }}
+                    type="text"
+                    name="product_name"
+                    placeholder="Chọn sản phẩm..."
+                    class="form-control"
+                    value={product.name}
+                  />
+                </div>
 
-
-
-          
-    
-              <br></br>
-              <div class={`media ${showProduct}`} id="product_preview">
-                <img
-                  width="100px"
-                  height="120px"
-                  src={product.img}
-                  alt=""
-                />
-                <div class="media-body" style={{ marginLeft: "10px" }}>
-                  {/* <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{product.name} </h5> */}
-                  <p>{format(Number(product.price))}</p>
+                <br></br>
+                <div class={`media ${showProduct}`} id="product_preview">
+                  <img width="100px" height="120px" src={product.img} alt="" />
+                  <div class="media-body" style={{ marginLeft: "10px" }}>
+                    {/* <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{product.name} </h5> */}
+                    <p>{format(Number(product.price))}</p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class={`form-group ${disable_category_product}`}>
-              <label>Chọn Danh mục sản phẩm</label>
-              <div class="right-inner-addon input-container">
-                <i class="fa fa-caret-down"></i>
-                <input
-                readOnly
-                  onClick={this.fetchAllCProduct}
-                  value={category.name}
-                  data-toggle="modal"
-                  data-target="#showListCProduct"
-                  type="text"
-                  name="product_name"
-                  class="form-control"
-                  placeholder="Chọn danh mục..."
-                />
-              </div>
+              <div class={`form-group ${disable_category_product}`}>
+                <label>Chọn Danh mục sản phẩm</label>
+                <div class="right-inner-addon input-container">
+                  <i class="fa fa-caret-down"></i>
+                  <input
+                    readOnly
+                    onClick={this.fetchAllCProduct}
+                    value={category.name}
+                    data-toggle="modal"
+                    data-target="#showListCProduct"
+                    type="text"
+                    name="product_name"
+                    class="form-control"
+                    placeholder="Chọn danh mục..."
+                  />
+                </div>
 
-       
-              <br></br>
-              <div class={`media ${showCProduct}`} id="product_preview">
-                <img
-                  width="100px"
-                  height="120px"
-                  src={category.img}
-                  alt=""
-                />
-                {/* <div class="media-body" style={{ marginLeft: "10px" }}>
+                <br></br>
+                <div class={`media ${showCProduct}`} id="product_preview">
+                  <img width="100px" height="120px" src={category.img} alt="" />
+                  {/* <div class="media-body" style={{ marginLeft: "10px" }}>
                   <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{category.name} </h5>
                 </div> */}
+                </div>
               </div>
-            </div>
-            <div class={`form-group ${disable_post}`}>
-              <label>Chọn Bài viết</label>
-              <div class="right-inner-addon input-container">
-                <i class="fa fa-caret-down"></i>
-                <input
-                  onClick={this.fetchAllBlog}
-                  value={blog.name}
-                  readOnly
-                  data-toggle="modal"
-                  data-target="#showListBlog"
-                  type="text"
-                  name="product_name"
-                  class="form-control"
-                  placeholder="Chọn bài viết..."
-                />
-              </div>
-            
-              <br></br>
-              <div class={`media ${showBlog}`} id="product_preview">
-                <img
-                  width="100px"
-                  height="120px"
-                  src={blog.img}
-                  alt=""
-                />
-                {/* <div class="media-body" style={{ marginLeft: "10px" }}>
+              <div class={`form-group ${disable_post}`}>
+                <label>Chọn Bài viết</label>
+                <div class="right-inner-addon input-container">
+                  <i class="fa fa-caret-down"></i>
+                  <input
+                    onClick={this.fetchAllBlog}
+                    value={blog.name}
+                    readOnly
+                    data-toggle="modal"
+                    data-target="#showListBlog"
+                    type="text"
+                    name="product_name"
+                    class="form-control"
+                    placeholder="Chọn bài viết..."
+                  />
+                </div>
+
+                <br></br>
+                <div class={`media ${showBlog}`} id="product_preview">
+                  <img width="100px" height="120px" src={blog.img} alt="" />
+                  {/* <div class="media-body" style={{ marginLeft: "10px" }}>
                   <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{blog.name} </h5>
                 </div> */}
+                </div>
               </div>
-            </div>
 
+              <div class={`form-group ${disable_category_post}`}>
+                <label>Chọn danh mục bài viết</label>
+                <div class="right-inner-addon input-container">
+                  <i class="fa fa-caret-down"></i>
+                  <input
+                    onClick={this.fetchAllBlog}
+                    value={blog.name}
+                    readOnly
+                    data-toggle="modal"
+                    data-target="#showListCBlog"
+                    type="text"
+                    name="product_name"
+                    class="form-control"
+                    placeholder="Chọn danh mục..."
+                  />
+                </div>
 
-            <div class={`form-group ${disable_category_post}`}>
-              <label>Chọn danh mục bài viết</label>
-              <div class="right-inner-addon input-container">
-                <i class="fa fa-caret-down"></i>
-                <input
-                  onClick={this.fetchAllBlog}
-                  value={blog.name}
-                  readOnly
-                  data-toggle="modal"
-                  data-target="#showListCBlog"
-                  type="text"
-                  name="product_name"
-                  class="form-control"
-                  placeholder="Chọn danh mục..."
-                />
-              </div>
-          
-           
-              <br></br>
-              <div class={`media ${showCblog}`} id="product_preview">
-                <img
-                  width="100px"
-                  height="120px"
-                  src={categoryBlog.img}
-                  alt=""
-                />
-                {/* <div class="media-body" style={{ marginLeft: "10px" }}>
+                <br></br>
+                <div class={`media ${showCblog}`} id="product_preview">
+                  <img
+                    width="100px"
+                    height="120px"
+                    src={categoryBlog.img}
+                    alt=""
+                  />
+                  {/* <div class="media-body" style={{ marginLeft: "10px" }}>
                   <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{categoryBlog.name} </h5>
                 </div> */}
+                </div>
               </div>
-            </div>
             </div>
 
             <div class="form-group">
@@ -419,6 +407,8 @@ class Form extends Component {
                   class="form-check-input"
                   type="checkbox"
                   id="gridCheck"
+                  value={show_once}
+                  checked={show_once}
                   onChange={this.onChangeCheck}
                 />
                 <label class="form-check-label" for="gridCheck">
@@ -428,19 +418,17 @@ class Form extends Component {
             </div>
           </div>
           <div class="box-footer">
-          <button type = "submit" class="btn btn-info   btn-sm">
-                  <i class="fas fa-save"></i>  Lưu
-
-                </button>
-                <button
-                type = "button"
-                  style={{ marginLeft: "10px" }}
-                  onClick={this.goBack}
-                  class="btn btn-warning   btn-sm"
-                >
-                  <i class="fas fa-arrow-left"></i> Trở về
-
-                </button>
+            <button type="submit" class="btn btn-info   btn-sm">
+              <i class="fas fa-save"></i> Lưu
+            </button>
+            <button
+              type="button"
+              style={{ marginLeft: "10px" }}
+              onClick={this.goBack}
+              class="btn btn-warning   btn-sm"
+            >
+              <i class="fas fa-arrow-left"></i> Trở về
+            </button>
           </div>
         </form>
       </React.Fragment>
@@ -464,10 +452,10 @@ const mapDispatchToProps = (dispatch, props) => {
     initialUpload: (fd) => {
       dispatch(popupAction.initialUpload(fd));
     },
-    updatePopup: (store_code, data , popupId) => {
+    updatePopup: (store_code, data, popupId) => {
       dispatch(popupAction.updatePopup(store_code, data, popupId));
     },
-    
+
     fetchAllCategoryB: (id) => {
       dispatch(categoryBAction.fetchAllCategoryB(id));
     },
