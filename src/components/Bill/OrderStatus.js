@@ -105,11 +105,29 @@ class OrderStatus extends Component {
         return true;
       }
     } else if (curentStatus == "SHIPPING") {
-      if (status == "PACKING") {
+      if (status == "WAITING_FOR_PROGRESSING" || status == "PACKING") {
         return true;
+      } else {
+        return false;
       }
     } else if (curentStatus == "COMPLETED") {
       if (status !== "COMPLETED") {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (curentStatus == "RECEIVED_PRODUCT") {
+      if (
+        status == "WAITING_FOR_PROGRESSING" ||
+        status == "PACKING" ||
+        status == "SHIPPING"
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    } else if (curentStatus == "PACKING") {
+      if (status == "WAITING_FOR_PROGRESSING") {
         return true;
       } else {
         return false;
@@ -120,6 +138,7 @@ class OrderStatus extends Component {
   };
   showOrderStatus = (status) => {
     var orderStatus = this.state.status;
+
     var result = null;
     if (orderStatus.length > 0) {
       var disable = this.props.order_allow_change_status == true ? "modal" : "";
