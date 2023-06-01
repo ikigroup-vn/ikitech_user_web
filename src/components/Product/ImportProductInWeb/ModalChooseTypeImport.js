@@ -248,13 +248,13 @@ class ModalChooseTypeImport extends Component {
               image_url: imagesProductDistributeTemp
                 ? imagesProductDistributeTemp[0]
                 : "",
-              element_sub_distributes: [],
+              sub_element_distributes: [],
             });
             nameElementDistribute = nameProductDistributeTemp;
           }
           if (nameProductSubDistributeTemp) {
             newDistributes[0]["element_distributes"][positionDistributeProduct][
-              "element_sub_distributes"
+              "sub_element_distributes"
             ].push({
               name: nameProductSubDistributeTemp,
               price: !product[17] ? 0 : Number(product[17]),
