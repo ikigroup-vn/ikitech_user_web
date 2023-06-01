@@ -159,17 +159,25 @@ class TotalBill extends Component {
               </span>
             </p>
           </div>
-          {total_shipping_fee >= 0 &&
-            getChannel() == IKITECH &&
+          {total_shipping_fee >= 0 && getChannel() == IKITECH && (
             // bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE &&
             // bill.order_from !== null &&
             // bill.order_status_code !== "COMPLETED" &&
             // bill.order_status_code !== "CUSTOMER_HAS_RETURNS" &&
-             (
-              <div id="item_fee">
-                <div className="sale_user_label bold bold group-total">
-                  <div>Phí giao hàng:</div>
-                
+            <div id="item_fee">
+              <div className="sale_user_label bold bold group-total">
+                <div>Phí giao hàng:</div>
+
+                {bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE &&
+                bill.order_from !== null &&
+                bill.order_status_code !== "COMPLETED" &&
+                bill.order_status_code !== "CUSTOMER_HAS_RETURNS" ? (
+                  <span
+                    style={{ "border-bottom": "1px solid", cursor: "pointer" }}
+                  >
+                    {"    "}+&nbsp;{format(total_shipping_fee)}{" "}
+                  </span>
+                ) : (
                   <span
                     data-target="#modalShipAmount"
                     data-toggle="modal"
@@ -178,12 +186,13 @@ class TotalBill extends Component {
                     <i
                       style={{ fontSize: "14px" }}
                       className="fa fa-pencil"
-                    ></i>{" "}
+                    ></i>
                     {"    "}+&nbsp;{format(total_shipping_fee)}{" "}
                   </span>
-                </div>
+                )}
               </div>
-            )}
+            </div>
+          )}
           {balance_collaborator_used > 0 && (
             <div id="item_fee">
               <div className="sale_user_label bold bold group-total">
