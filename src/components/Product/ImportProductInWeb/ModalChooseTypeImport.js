@@ -216,7 +216,7 @@ class ModalChooseTypeImport extends Component {
                 }, []);
           const dataDistribute = {
             name: product[14],
-            sub_distributes_name: !product[15] ? "" : product[15],
+            sub_element_distribute_name: !product[15] ? "" : product[15],
             element_distributes: [],
           };
           newDistributes.push(dataDistribute);
