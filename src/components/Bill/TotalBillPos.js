@@ -161,32 +161,15 @@ class TotalBill extends Component {
           </div>
           {total_shipping_fee >= 0 &&
             getChannel() == IKITECH &&
-            bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE &&
-            bill.order_from !== null &&
-            bill.order_status_code !== "COMPLETED" &&
-            bill.order_status_code !== "CUSTOMER_HAS_RETURNS" && (
+            // bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE &&
+            // bill.order_from !== null &&
+            // bill.order_status_code !== "COMPLETED" &&
+            // bill.order_status_code !== "CUSTOMER_HAS_RETURNS" &&
+             (
               <div id="item_fee">
                 <div className="sale_user_label bold bold group-total">
                   <div>Phí giao hàng:</div>
-                  {/* <input
-                    // style={{
-                    //     width: "85px",
-                    //     "text-align": "end",
-                    //     "border-bottom": "1px solid",
-                    // }}
-                    // type="text"
-                    // name="import_price"
-                    // onChange={this.onChange}
-                    // id="import_prices"
-                    // defaultValue={total_shipping_fee}
-                    // value={formatNoD(this.state.total_shipping_fee)}
-                    {...handleKeyPress}
-                    class="col-6 text-input-pos"
-                    value={formatNoD(
-                      removeSignNumber(this.state.priceCustomer)
-                    )}
-                    onChange={this.handChange}
-                  ></input> */}
+                
                   <span
                     data-target="#modalShipAmount"
                     data-toggle="modal"
