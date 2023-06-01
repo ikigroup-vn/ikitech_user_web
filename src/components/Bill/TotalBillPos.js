@@ -168,10 +168,10 @@ class TotalBill extends Component {
               <div className="sale_user_label bold bold group-total">
                 <div>Phí giao hàng:</div>
 
-                {bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE &&
+                { !(bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE &&
                 bill.order_from !== null &&
                 bill.order_status_code !== "COMPLETED" &&
-                bill.order_status_code !== "CUSTOMER_HAS_RETURNS" ? (
+                bill.order_status_code !== "CUSTOMER_HAS_RETURNS") ? (
                   <span
                     style={{ "border-bottom": "1px solid", cursor: "pointer" }}
                   >
