@@ -402,11 +402,15 @@ class Customer extends Component {
         ? province[0]?.name
         : type === Types.TYPE_COMPARE_CTV
         ? "Tất cả"
+        : type === Types.TYPE_COMPARE_CUSTOMER_NORMAL
+        ? "Tất cả"
         : type === Types.TYPE_COMPARE_AGENCY
         ? typeAgencySelected[0].name
         : value;
     return valueConvert;
   };
+
+
   handleDeleteOptionFilterById = (idOptionType) => {
     var { store_code } = this.props.match.params;
     var { searchValue } = this.state;

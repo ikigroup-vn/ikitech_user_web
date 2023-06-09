@@ -36,6 +36,11 @@ export const options = [
     id: Types.TYPE_COMPARE_DATE_REG,
     title: "Ngày đăng ký",
   },
+  
+  {
+    id: Types.TYPE_COMPARE_CUSTOMER_NORMAL,
+    title: "Khách hàng lẻ (không phải CTV, đại lý)",
+  },
   {
     id: Types.TYPE_COMPARE_CTV,
     title: "Cộng tác viên",
