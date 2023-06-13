@@ -54,6 +54,7 @@ class ModalUpdate extends Component {
       limit: txtLimit == null ? txtLimit : formatNumber(txtLimit),
     });
   };
+  
 
   render() {
     var { txtBonus, txtLimit } = this.state;

@@ -119,9 +119,25 @@ export const updateProduct = (store_code, data, id) => {
   return callApi(`/store/${store_code}/products/${id}`, "put", data);
 };
 
+export const updatePriceOneProduct = (store_code, id, data) => {
+  return callApi(`/store/${store_code}/products/${id}/price`, "put", data);
+};
+
+export const updateNameOneProduct = (store_code, id, data) => {
+  return callApi(`/store/${store_code}/products/${id}/name`, "put", data);
+};
+
 export const updateDistribute = (store_code, data, productId, branchId) => {
   return callApi(
     `/store_v2/${store_code}/${branchId}/products/${productId}/distribute`,
+    "put",
+    data
+  );
+};
+
+export const updateDistributeWithoutBranch = (store_code, data, productId) => {
+  return callApi(
+    `/store/${store_code}/products/${productId}/distribute`,
     "put",
     data
   );

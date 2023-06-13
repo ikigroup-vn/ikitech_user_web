@@ -19,7 +19,7 @@ class ProductEdit extends Component {
     super(props);
     this.state = {
       form: {},
-      total: ""
+      total: "",
     };
   }
 
@@ -32,14 +32,20 @@ class ProductEdit extends Component {
 
   handleDataFromInfo = (data) => {
     this.setState((prevState, props) => {
-      console.log("data in edit", data)
+      console.log("data in edit", data);
       var formdata = { ...prevState.form };
       formdata.name = data.txtName;
-      formdata.price = data.txtPrice.toString().replace(/,/g, '').replace(/\./g, '');
+      formdata.price = data.txtPrice
+        .toString()
+        .replace(/,/g, "")
+        .replace(/\./g, "");
       formdata.barcode = data.txtBarcode;
       formdata.status = data.txtStatus;
-      formdata.quantity_in_stock = data.txtQuantityInStock.toString().replace(/,/g, '').replace(/\./g, '');
-      formdata.percent_collaborator = data.txtPercentC
+      formdata.quantity_in_stock = data.txtQuantityInStock
+        .toString()
+        .replace(/,/g, "")
+        .replace(/\./g, "");
+      formdata.percent_collaborator = data.txtPercentC;
       var categories = [];
       if (data.txtCategory.length > 0) {
         categories = data.txtCategory.map((category, index) => {
@@ -52,33 +58,26 @@ class ProductEdit extends Component {
   };
 
   handleDataFromProductImg = (data) => {
-    console.log(data)
+    console.log(data);
     this.setState((prevState, props) => {
       var formdata = { ...prevState.form };
       formdata.images = data.listImgProduct;
       return { form: formdata };
-
     });
-
-
   };
-
 
   handleDataFromAvatarImg = (data) => {
     this.setState((prevState, props) => {
       var formdata = { ...prevState.form };
-      formdata.index_image_avatar = data.avatar_product
+      formdata.index_image_avatar = data.avatar_product;
       return { form: formdata };
-
     });
-
-
   };
 
   handleDataFromContent = (data) => {
     this.setState((prevState, props) => {
       var formdata = { ...prevState.form };
-      formdata.content_for_collaborator = data.txtContentC
+      formdata.content_for_collaborator = data.txtContentC;
       formdata.description = data.txtContent;
       return { form: formdata };
     });
@@ -114,78 +113,129 @@ class ProductEdit extends Component {
     this.setState((prevState, props) => {
       var formdata = { ...prevState.form };
       formdata.list_distribute = data;
+
       return { form: formdata };
-
     });
-
-
-
   };
 
   postProduct = () => {
     var { store_code, productId } = this.props.match.params;
     var form = { ...this.state.form };
-    console.log(form)
-    form.index_image_avatar = 0
+    console.log(form);
+    form.index_image_avatar = 0;
     if (typeof form.list_distribute != "undefined") {
       if (typeof form.list_distribute[0] != "undefined") {
-
-
         if (typeof form.list_distribute[0].element_distributes != "undefined") {
           if (form.list_distribute[0].element_distributes.length > 0) {
-            form.list_distribute[0].element_distributes.forEach((element, index) => {
-              try {
-                console.log(element)
-                const price = element.price != null ? element.price.toString().replace(/,/g, '').replace(/\./g, '') : 0;
-                const barcode = element.barcode != null ? element.barcode : 0;
-                const quantity_in_stock = element.quantity_in_stock != null && element.quantity_in_stock != "" ? element.quantity_in_stock.toString().replace(/,/g, '').replace(/\./g, '') : null;
-                form.list_distribute[0].element_distributes[index].price = price
-                form.list_distribute[0].element_distributes[index].quantity_in_stock = quantity_in_stock
-                console.log(price, form.list_distribute[0].element_distributes[index].price)
+            form.list_distribute[0].element_distributes.forEach(
+              (element, index) => {
+                try {
+                  console.log(element);
+                  const price =
+                    element.price != null
+                      ? element.price
+                          .toString()
+                          .replace(/,/g, "")
+                          .replace(/\./g, "")
+                      : 0;
+                  const barcode = element.barcode != null ? element.barcode : 0;
+                  const quantity_in_stock =
+                    element.quantity_in_stock != null &&
+                    element.quantity_in_stock != ""
+                      ? element.quantity_in_stock
+                          .toString()
+                          .replace(/,/g, "")
+                          .replace(/\./g, "")
+                      : null;
+                  form.list_distribute[0].element_distributes[index].price =
+                    price;
+                  form.list_distribute[0].element_distributes[
+                    index
+                  ].quantity_in_stock = quantity_in_stock;
+                  console.log(
+                    price,
+                    form.list_distribute[0].element_distributes[index].price
+                  );
 
-                console.log(form)
-                if (typeof element.sub_element_distributes != "undefined") {
-                  if (element.sub_element_distributes.length > 0) {
+                  console.log(form);
+                  if (typeof element.sub_element_distributes != "undefined") {
+                    if (element.sub_element_distributes.length > 0) {
+                      element.sub_element_distributes.forEach(
+                        (_element, _index) => {
+                          try {
+                            const price =
+                              _element.price != null
+                                ? _element.price
+                                    .toString()
+                                    .replace(/,/g, "")
+                                    .replace(/\./g, "")
+                                : 0;
+                            const barcode =
+                              _element.barcode != null
+                                ? _element.barcode.toString()
+                                : 0;
+                            const quantity_in_stock =
+                              _element.quantity_in_stock != null &&
+                              _element.quantity_in_stock != ""
+                                ? _element.quantity_in_stock
+                                    .toString()
+                                    .replace(/,/g, "")
+                                    .replace(/\./g, "")
+                                : null;
 
-                    element.sub_element_distributes.forEach((_element, _index) => {
-                      try {
-                        const price = _element.price != null ? _element.price.toString().replace(/,/g, '').replace(/\./g, '') : 0;
-                        const barcode = _element.barcode != null ? _element.barcode.toString() : 0;
-                        const quantity_in_stock = _element.quantity_in_stock != null && _element.quantity_in_stock != "" ? _element.quantity_in_stock.toString().replace(/,/g, '').replace(/\./g, '') : null;
-
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].price = price
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].quantity_in_stock = quantity_in_stock
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].barcode = barcode
-
-
-                      } catch (error) {
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].price = 0
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].quantity_in_stock = null
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].barcode = ""
-                      }
-                    });
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[_index].price = price;
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[
+                              _index
+                            ].quantity_in_stock = quantity_in_stock;
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[_index].barcode = barcode;
+                          } catch (error) {
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[_index].price = 0;
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[
+                              _index
+                            ].quantity_in_stock = null;
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[_index].barcode = "";
+                          }
+                        }
+                      );
+                    }
                   }
-
+                } catch (error) {
+                  console.log(error);
+                  form.list_distribute[0].element_distributes[index].price = 0;
+                  form.list_distribute[0].element_distributes[
+                    index
+                  ].quantity_in_stock = null;
+                  form.list_distribute[0].element_distributes[index].barcode =
+                    "";
                 }
-
-              } catch (error) {
-                console.log(error)
-                form.list_distribute[0].element_distributes[index].price = 0
-                form.list_distribute[0].element_distributes[index].quantity_in_stock = null
-                form.list_distribute[0].element_distributes[index].barcode = ""
               }
-            });
+            );
           }
         }
       }
     }
-    var total = this.state.total.toString().replace(/,/g, '').replace(/\./g, '');
+    var total = this.state.total
+      .toString()
+      .replace(/,/g, "")
+      .replace(/\./g, "");
     if (typeof form.list_distribute != "undefined") {
-      form.quantity_in_stock = form.list_distribute.length > 0 ? total : form.quantity_in_stock
-
+      form.quantity_in_stock =
+        form.list_distribute.length > 0 ? total : form.quantity_in_stock;
     }
-    console.log(form)
-    var { page } = this.props.match.params
+    console.log(form);
+    var { page } = this.props.match.params;
     this.props.updateProduct(store_code, form, productId, page);
   };
   goBack = (e) => {
@@ -194,20 +244,19 @@ class ProductEdit extends Component {
     history.goBack();
   };
   onChangeQuantityStock = (total) => {
-    this.setState({ total: total })
-  }
+    this.setState({ total: total });
+  };
 
   render() {
     var { store_code } = this.props.match.params;
     var { category_product, attributeP, auth, product } = this.props;
-    var { total } = this.state
+    var { total } = this.state;
     console.log(total);
     if (auth) {
       return (
         <div id="wrapper">
           <Sidebar store_code={store_code} />
           <div className="col-10 col-10-wrapper">
-
             <div id="content-wrapper" className="d-flex flex-column">
               <div id="content">
                 <Topbar store_code={store_code} />
@@ -248,9 +297,9 @@ class ProductEdit extends Component {
                         >
                           <div>
                             <StoreImage
-
-                              handleDataFromAvatarImg={this.handleDataFromAvatarImg}
-
+                              handleDataFromAvatarImg={
+                                this.handleDataFromAvatarImg
+                              }
                               product={product}
                               handleDataFromProductImg={
                                 this.handleDataFromProductImg
@@ -295,7 +344,10 @@ class ProductEdit extends Component {
                       <div class="row">
                         <div class="col-lg-12">
                           <div>
-                            <div class="card-body" style={{ padding: "0.8rem" }}>
+                            <div
+                              class="card-body"
+                              style={{ padding: "0.8rem" }}
+                            >
                               <Attribute
                                 product={product}
                                 handleDataFromAttribute={
@@ -319,9 +371,14 @@ class ProductEdit extends Component {
                       <div class="row">
                         <div class="col-lg-12">
                           <div>
-                            <div class="card-body" style={{ padding: "0.8rem" }}>
+                            <div
+                              class="card-body"
+                              style={{ padding: "0.8rem" }}
+                            >
                               <Distribute
-                                onChangeQuantityStock={this.onChangeQuantityStock}
+                                onChangeQuantityStock={
+                                  this.onChangeQuantityStock
+                                }
                                 product={product}
                                 handleDataFromDistribute={
                                   this.handleDataFromDistribute
@@ -334,7 +391,9 @@ class ProductEdit extends Component {
                     </div>
                   </div>
                   <div class="card mb-4">
-                    <div class="card-header title_content">Nội dung chi tiết</div>
+                    <div class="card-header title_content">
+                      Nội dung chi tiết
+                    </div>
                     <div class="card-body" style={{ padding: "0.8rem" }}>
                       <div class="row">
                         <ContentDetail
@@ -377,7 +436,6 @@ class ProductEdit extends Component {
             </div>
           </div>
         </div>
-
       );
     } else if (this.props.auth === false) {
       return <Redirect to="/login" />;
@@ -394,7 +452,6 @@ const mapStateToProps = (state) => {
     category_product: state.categoryPReducers.category_product.allCategoryP,
     product: state.productReducers.product.productId,
     alert: state.productReducers.alert.alert_uid,
-
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -412,9 +469,10 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(productAction.fetchProductId(store_code, productId));
     },
     updateProduct: (store_code, product, productId, page) => {
-      dispatch(productAction.updateProduct(store_code, product, productId, page));
+      dispatch(
+        productAction.updateProduct(store_code, product, productId, page)
+      );
     },
-
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ProductEdit);

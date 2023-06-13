@@ -1444,6 +1444,100 @@ export const updateAgencyPrice = (
   };
 };
 
+export const updatePriceOneProduct = (
+  store_code,
+  productId,
+  price,
+) => {
+  const data = {
+    price: price,
+  };
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    productApi
+      .updatePriceOneProduct(store_code,productId, data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.SUCCESS_EDIT_ITEM_PRODUCT_IN_LIST,
+          data: res.data.data,
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+          },
+        });
+      });
+  };
+};
+
+export const updateNameOneProduct = (
+  store_code,
+  productId,
+  name,
+) => {
+  const data = {
+    name: name,
+  };
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    productApi
+      .updateNameOneProduct(store_code,productId, data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.SUCCESS_EDIT_ITEM_PRODUCT_IN_LIST,
+          data: res.data.data,
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+          },
+        });
+      });
+  };
+};
+
 export const updateOneFieldProduct = (
   store_code,
   name_field,
@@ -1617,6 +1711,58 @@ export const updateDistribute = (
       });
   };
 };
+
+export const updateDistributeWithoutBranch = (
+  store_code,
+  data,
+  productId,
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    productApi
+      .updateDistributeWithoutBranch(store_code, data, productId)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+        
+        dispatch({
+          type: Types.SUCCESS_EDIT_ITEM_PRODUCT_IN_LIST,
+          data: res.data.product,
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg || error,
+          },
+        });
+      })
+      .finally(() => {
+      
+      });
+  };
+};
+
+
 
 export const removeItemImgDis = (data) => {
   return {
