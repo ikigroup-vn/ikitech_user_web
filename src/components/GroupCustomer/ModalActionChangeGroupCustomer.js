@@ -500,7 +500,7 @@ class ModalActionChangeGroupCustomer extends Component {
               }}
             >
               <h4 style={{ color: "white", margin: "10px" }}>
-                {idGroupCustomer ? "Cập nhật" : "Tạo nhóm"} khách hàng
+                {idGroupCustomer ? "Cập nhật" : "Tạo "} điều kiện cho nhóm khách hàng
               </h4>
               <button
                 type="button"

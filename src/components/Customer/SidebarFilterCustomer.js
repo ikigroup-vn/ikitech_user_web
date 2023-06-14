@@ -138,6 +138,7 @@ class SidebarFilterCustomer extends Component {
       type_compare === Types.TYPE_COMPARE_AGE ||
       type_compare === Types.TYPE_COMPARE_SEX ||
       type_compare === Types.TYPE_COMPARE_PROVINCE ||
+      type_compare === Types.TYPE_COMPARE_CUSTOMER_NORMAL ||
       type_compare === Types.TYPE_COMPARE_CTV ||
       type_compare === Types.TYPE_COMPARE_AGENCY
         ? expressions[2].value

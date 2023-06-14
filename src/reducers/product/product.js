@@ -17,6 +17,20 @@ export const product = (state = initialState, action) => {
     case Types.FETCH_ALL_PRODUCT:
       newState.allProduct = action.data;
       return newState;
+
+    case Types.SUCCESS_EDIT_ITEM_PRODUCT_IN_LIST:
+      var dataNew =  {
+        ...state.allProduct
+      };
+      dataNew.data = newState.allProduct.data.map((ele) => {
+        if (ele.id == action.data.id) {
+          return action.data;
+        } else {
+          return ele;
+        }
+      });
+      newState.allProduct = dataNew;
+      return newState;
     case Types.FETCH_ID_PRODUCT:
       newState.productId = action.data;
       return newState;

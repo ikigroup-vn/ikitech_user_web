@@ -81,6 +81,8 @@ class ConditionFilterCustomer extends Component {
               Number(optionsFilter[indexOption].type_compare) ===
                 Types.TYPE_COMPARE_CTV ||
               Number(optionsFilter[indexOption].type_compare) ===
+                Types.TYPE_COMPARE_CUSTOMER_NORMAL ||
+              Number(optionsFilter[indexOption].type_compare) ===
                 Types.TYPE_COMPARE_AGENCY
             }
             style={{
@@ -91,6 +93,8 @@ class ConditionFilterCustomer extends Component {
                   Types.TYPE_COMPARE_PROVINCE ||
                 Number(optionsFilter[indexOption].type_compare) ===
                   Types.TYPE_COMPARE_CTV ||
+                Number(optionsFilter[indexOption].type_compare) ===
+                  Types.TYPE_COMPARE_CUSTOMER_NORMAL ||
                 Number(optionsFilter[indexOption].type_compare) ===
                   Types.TYPE_COMPARE_AGENCY
                   ? "0.6"
@@ -205,7 +209,9 @@ class ConditionFilterCustomer extends Component {
               />
             </div>
           ) : Number(optionsFilter[indexOption].type_compare) ===
-            Types.TYPE_COMPARE_CTV ? (
+              Types.TYPE_COMPARE_CTV ||
+            Number(optionsFilter[indexOption].type_compare) ===
+              Types.TYPE_COMPARE_CUSTOMER_NORMAL ? (
             <div>
               <input
                 type="text"

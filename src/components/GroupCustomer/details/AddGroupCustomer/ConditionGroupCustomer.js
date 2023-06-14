@@ -132,6 +132,9 @@ class ConditionGroupCustomer extends PureComponent {
               ) === Types.TYPE_COMPARE_CTV ||
               Number(
                 this.props.conditionItems[index].typeCompareGroupCustomer
+              ) === Types.TYPE_COMPARE_CUSTOMER_NORMAL ||
+              Number(
+                this.props.conditionItems[index].typeCompareGroupCustomer
               ) === Types.TYPE_COMPARE_AGENCY
             }
             style={{
@@ -145,6 +148,9 @@ class ConditionGroupCustomer extends PureComponent {
                 Number(
                   this.props.conditionItems[index].typeCompareGroupCustomer
                 ) === Types.TYPE_COMPARE_CTV ||
+                Number(
+                  this.props.conditionItems[index].typeCompareGroupCustomer
+                ) === Types.TYPE_COMPARE_CUSTOMER_NORMAL ||
                 Number(
                   this.props.conditionItems[index].typeCompareGroupCustomer
                 ) === Types.TYPE_COMPARE_AGENCY
@@ -259,9 +265,11 @@ class ConditionGroupCustomer extends PureComponent {
                 name="valueCompareGroupCustomer"
               />
             </div>
-          ) : Number(
-              this.props.conditionItems[index].typeCompareGroupCustomer
-            ) === Types.TYPE_COMPARE_CTV ? (
+          ) : (Number(
+            this.props.conditionItems[index].typeCompareGroupCustomer
+          ) === Types.TYPE_COMPARE_CTV  || Number(
+            this.props.conditionItems[index].typeCompareGroupCustomer
+          ) === Types.TYPE_COMPARE_GROUP_CUSTOMER ) ? (
             <div>
               <input
                 type="text"

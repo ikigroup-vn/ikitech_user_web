@@ -232,11 +232,6 @@ class ShowData extends Component {
       page,
       searchValue,
       limit,
-      status,
-      status_name,
-      status_stock,
-      discount,
-      historyInventory,
       distributes,
     } = this.props;
     const listDistribute =
@@ -273,7 +268,12 @@ class ShowData extends Component {
             }
             className="img-responsive"
             alt="Image"
-            style={{ width: "100%", height: "59px",width:"59px", background: "#0000000d" }}
+            style={{
+              width: "100%",
+              height: "59px",
+              width: "59px",
+              background: "#0000000d",
+            }}
           />
         </td>
         <td>{data.sku}</td>
@@ -284,23 +284,41 @@ class ShowData extends Component {
               searchValue ? `&search=${searchValue}` : ""
             }&limit=${limit}`}
           >
-            {data.name}
+            {data.name}  
           </Link>
+            {"  "}
+          <span
+            style={{
+              color: "rgb(127, 140, 141)",
+            }}
+          >
+            <i
+              onClick={(e) => {
+                this.props.handleShowUpdateName(data);
+              }}
+              data-toggle="modal"
+              data-target="#updateModalNewNameProduct"
+              class="fa fa-edit"
+            ></i>
+          </span>
         </td>
 
         <td>
           {product_discount == null && (
-            <div className="eea">
+            <span className="eea">
               {min_price === max_price ? (
-                contactOrNumber(
-                  format(
-                    Number(
-                      discount_percent == null
-                        ? min_price
-                        : min_price - min_price * discount_percent * 0.01
+                <span>
+                  {" "}
+                  {contactOrNumber(
+                    format(
+                      Number(
+                        discount_percent == null
+                          ? min_price
+                          : min_price - min_price * discount_percent * 0.01
+                      )
                     )
-                  )
-                )
+                  )}{" "}
+                </span>
               ) : distributes && distributes.length == 0 ? (
                 contactOrNumber(
                   format(
@@ -312,7 +330,7 @@ class ShowData extends Component {
                   )
                 )
               ) : (
-                <div className="ae">
+                <span className="ae">
                   {format(
                     Number(
                       discount_percent == null
@@ -328,9 +346,9 @@ class ShowData extends Component {
                         : max_price - max_price * discount_percent * 0.01
                     )
                   )}
-                </div>
+                </span>
               )}
-            </div>
+            </span>
           )}
 
           {product_discount && (
@@ -338,19 +356,14 @@ class ShowData extends Component {
               className="a"
               style={{
                 float: "left",
+                paddingRight:20
               }}
             >
               {min_price === max_price ? (
                 contactOrNumber(format(Number(min_price)))
               ) : (
                 <div className="row e">
-                  <div
-                    style={
-                      {
-                        // textDecoration: "line-through",
-                      }
-                    }
-                  >
+                  <div style={{}}>
                     {format(Number(min_price))}
                     {" - "}
                     {format(Number(max_price))}
@@ -360,15 +373,29 @@ class ShowData extends Component {
                 </div>
               )}
             </div>
+            
           )}
+
+          {"  "}
+          <span
+            style={{
+              color: "rgb(127, 140, 141)",
+            }}
+          >
+            <i
+              onClick={(e) => {
+                this.props.handleShowUpdatePrice(data);
+              }}
+              data-toggle="modal"
+              data-target="#updateModalNewPrice"
+              class="fa fa-edit"
+            ></i>
+          </span>
         </td>
 
         {getChannel() == IKITECH && (
           <td>
             {" "}
-            {/* <h5>
-              <span class={`badge badge-${status}`}>{status_name}</span>
-            </h5> */}
             <label
               className="status-product"
               onClick={this.handleChangeStatusProduct}

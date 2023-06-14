@@ -8,6 +8,8 @@ import AlertInfor from "./Modal/AlertInfor";
 import ShowData from "./ShowData";
 import * as productAction from "../../actions/product";
 import { connect } from "react-redux";
+import UpdatePriceModal from "./Modal/UpdatePriceModal";
+import UpdateNameModal from "./Modal/UpdateNameModal";
 
 const TableProductStyles = styled.div`
   .status-product {
@@ -54,6 +56,8 @@ class Table extends Component {
         NameDistribute: "",
       },
       formData: "",
+      currentProductEditPrice: {},
+      currentProductEditName: {},
     };
   }
 
@@ -116,6 +120,17 @@ class Table extends Component {
     });
     e.preventDefault();
   };
+  handleShowUpdatePrice = (product) => {
+    this.setState({
+      currentProductEditPrice: product,
+    });
+  };
+  handleShowUpdateName = (product) => {
+    this.setState({
+      currentProductEditName: product,
+    });
+  };
+
   showData = (products, per_page, current_page) => {
     var result = null;
     var {
@@ -193,6 +208,10 @@ class Table extends Component {
             handleCallBackElement={this.handleCallBackElement}
             handleCallBackSubElement={this.handleCallBackSubElement}
             handleFetchAllProduct={this.props.handleFetchAllProduct}
+            handleShowUpdatePrice={this.handleShowUpdatePrice}
+            updatePriceOneProduct={this.props.updatePriceOneProduct}
+            handleShowUpdateName={this.handleShowUpdateName}
+            updateNameOneProduct={this.props.updateNameOneProduct}
           />
         );
       });
@@ -233,9 +252,20 @@ class Table extends Component {
         : false;
     var multiDelete = selected.length > 0 ? "show" : "hide";
     var { _delete, update, insert } = this.props;
-    console.log(products);
+
     return (
       <TableProductStyles>
+        <UpdatePriceModal
+          store_code={this.props.store_code}
+          modal={this.state.currentProductEditPrice}
+          updatePriceOneProduct={this.props.updatePriceOneProduct}
+        />
+        <UpdateNameModal
+          store_code={this.props.store_code}
+          modal={this.state.currentProductEditName}
+          updateNameOneProduct={this.props.updateNameOneProduct}
+        />
+
         <button
           onClick={(e) => this.handleMultiDelCallBack(e, selected)}
           data-toggle="modal"
@@ -298,6 +328,14 @@ const mapDispatchToProps = (dispatch) => {
           page
         )
       );
+    },
+    updatePriceOneProduct: (store_code, productId, price) => {
+      dispatch(
+        productAction.updatePriceOneProduct(store_code, productId, price)
+      );
+    },
+    updateNameOneProduct: (store_code, productId, name) => {
+      dispatch(productAction.updateNameOneProduct(store_code, productId, name));
     },
   };
 };
