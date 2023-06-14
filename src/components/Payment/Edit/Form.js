@@ -276,7 +276,7 @@ class Form extends Component {
   render() {
     var { txtName, txtContent, txtUse, field, defind_field, editPayment } =
       this.state;
-
+    console.log("paymentId:: ", this.props.paymentId);
     return (
       <React.Fragment>
         <ModalCreate addPayment={this.addPayment} />
@@ -314,11 +314,15 @@ class Form extends Component {
               </select>
             </div>
             {this.showField(field, defind_field)}
-
-            <div class="form-group">
-              <label for="product_name">Nội dung</label>
-              <CKEditor data={txtContent} onChange={this.onChangeDecription} />
-            </div>
+            {this.props.paymentId == 0 ? null : (
+              <div class="form-group">
+                <label for="product_name">Nội dung</label>
+                <CKEditor
+                  data={txtContent}
+                  onChange={this.onChangeDecription}
+                />
+              </div>
+            )}
           </div>
           <div class="box-footer">
             <button type="submit" class="btn btn-info   btn-sm">
