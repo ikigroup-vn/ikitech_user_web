@@ -16,6 +16,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import Config from "../../components/Collaborator/Config";
 import ListCollaborator from "../../components/Collaborator/ListCollaborator";
+import ListCollaboratorRegisterRequest from "../../components/Collaborator/CollaboratorRegisterRequest";
 import HistoryPayment from "../../components/Collaborator/HistoryPayment";
 import RequestPayment from "../../components/Collaborator/RequestPayment";
 import NotAccess from "../../components/Partials/NotAccess";
@@ -105,7 +106,7 @@ class collaborator extends Component {
                           <TabList>
                             {
                               config == true ? <Tab>
-                                 <Link to ={"?tab-index=0"}>  <i class="fa fa-cog"></i>
+                                 <Link to ={"?tab-index=0"}>  <i class="fa fa-cog"></i>{"  "}
                                 <span>Cấu hình hoa hồng</span></Link>
                                
                                
@@ -113,28 +114,35 @@ class collaborator extends Component {
                             }
                             {
                               collaborator_list == true ? <Tab>
-                                <Link to ={"?tab-index=1"}> <i class="fa fa-users"></i>
+                                <Link to ={"?tab-index=1"}> <i class="fa fa-users"></i>{"  "}
                                 <span>Danh sách cộng tác viên</span></Link>
+                               
+                              </Tab> : null
+                            }
+                             {
+                              collaborator_list == true ? <Tab>
+                                <Link to ={"?tab-index=2"}> <i class="fa fa-sign-language"></i> {"  "}
+                                <span>Yêu cầu làm cộng tác viên</span></Link>
                                
                               </Tab> : null
                             }
                             {
                               collaborator_list == true ? <Tab>
-                                 <Link to ={"?tab-index=2"}>    <i class="fa fa-chart-bar"></i>
+                                 <Link to ={"?tab-index=3"}>    <i class="fa fa-chart-bar"></i>{"  "}
                                 <span> Top doanh số</span></Link>
                              
                               </Tab> : null
                             }
                             {
                               payment_request_list == true ? <Tab>
-                                  <Link to ={"?tab-index=3"}>     <i class="fas fa-list"></i>
+                                  <Link to ={"?tab-index=4"}>     <i class="fas fa-list"></i>{"  "}
                                 <span> Danh sách yêu cầu thanh toán</span></Link>
                                
                               </Tab> : null
                             }
                             {
                               payment_request_history == true ? <Tab>
-                                  <Link to ={"?tab-index=4"}>       <i class="fa fa-history"></i>
+                                  <Link to ={"?tab-index=5"}>       <i class="fa fa-history"></i>{"  "}
                                 <span> Lịch sử thanh toán</span></Link>
                              
                               </Tab> : null
@@ -155,7 +163,13 @@ class collaborator extends Component {
 
                           {collaborator_list == true ? <TabPanel>
                             <ListCollaborator tabId={tabId} store_code={store_code} />
+                            
                           </TabPanel> : null}
+
+                          {collaborator_list == true ? <TabPanel>
+                            <ListCollaboratorRegisterRequest tabId={tabId} store_code={store_code} />
+                          </TabPanel> : null}
+
                           {collaborator_list == true ? <TabPanel>
                             <TopReport paramId={id} tabId={tabId} store_code={store_code} payment_request_solve={payment_request_solve} />
                           </TabPanel> : null}

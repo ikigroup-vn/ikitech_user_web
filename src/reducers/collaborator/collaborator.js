@@ -8,6 +8,7 @@ var initialState = {
   allHistoryPayment: [],
   topReport: [],
   allHistoriesBalance: [],
+  allCollaboratorRegisterRequest: [],
 };
 
 export const collaborator = (state = initialState, action) => {
@@ -21,6 +22,28 @@ export const collaborator = (state = initialState, action) => {
       return newState;
     case Types.FETCH_ALL_COLLABORATOR:
       newState.allCollaborator = action.data;
+      return newState;
+    case Types.SUCCESS_EDIT_REQUEST_STATUS_COLLABORATOR:
+      var newModelState = { ...newState };
+      var newData = newModelState.allCollaboratorRegisterRequest;
+      var newStatus = action.status;
+      var id = action.id;
+      var newList = newData.data;
+      newList = newList.map((itemEle) => {
+        if (itemEle.id == id) {
+          var newI = itemEle;
+          newI.status = newStatus;
+          return newI;
+        } else {
+          return itemEle;
+        }
+      });
+      newModelState.allCollaboratorRegisterRequest = { ...newData };
+
+      return newModelState;
+
+    case Types.FETCH_ALL_COLLABORATOR_REGISTER_REQUEST:
+      newState.allCollaboratorRegisterRequest = action.data;
       return newState;
     case Types.FETCH_HISTORIES_BALANCE_COLLABORATOR:
       newState.allHistoriesBalance = action.data;

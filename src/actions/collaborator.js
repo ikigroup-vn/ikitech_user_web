@@ -479,6 +479,64 @@ export const fetchAllCollaborator = (store_code, page = 1, params = null) => {
   };
 };
 
+export const handleCollaboratorRegisterRequest = (store_code, id, status) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING_LAZY,
+      loading: "show",
+    });
+    collaboratorApi
+      .handleCollaboratorRegisterRequest(store_code, id, status)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING_LAZY,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.SUCCESS_EDIT_REQUEST_STATUS_COLLABORATOR,
+          status:status,
+          id:id
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+      });
+  };
+};
+
+export const fetchAllCollaboratorRegisterRequests = (
+  store_code,
+  page = 1,
+  params = null
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING_LAZY,
+      loading: "show",
+    });
+    collaboratorApi
+      .fetchAllCollaboratorRegisterRequests(store_code, page, params)
+      .then((res) => {
+        console.log(res);
+        dispatch({
+          type: Types.SHOW_LOADING_LAZY,
+          loading: "hide",
+        });
+        if (res.data.code !== 401)
+          dispatch({
+            type: Types.FETCH_ALL_COLLABORATOR_REGISTER_REQUEST,
+            data: res.data.data,
+          });
+      });
+  };
+};
+
 export const fetchChatId = (store_code, customerId, pag = 1) => {
   return (dispatch) => {
     chatApi
