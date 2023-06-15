@@ -252,7 +252,7 @@ class Table extends Component {
                   )}
               </td> */}
               <td>{data.customer.referral_phone_number || null}</td>
-              <td>
+              {/* <td>
                 <label className="status-product on-off">
                   <input
                     ref={(ref) => (this["checked" + data.id] = ref)}
@@ -267,7 +267,7 @@ class Table extends Component {
                   />
                   <div></div>
                 </label>
-              </td>
+              </td> */}
               <td className="btn-voucher">
                 <Link
                   style={{ margin: "2px 0" }}
@@ -510,7 +510,7 @@ class Table extends Component {
               {/* <th>Điểm</th> */}
               <th>Mã giới thiệu</th>
 
-              <th>Trạng thái hoạt động</th>
+              {/* <th>Trạng thái hoạt động</th> */}
 
               <th>Hành động</th>
             </tr>
