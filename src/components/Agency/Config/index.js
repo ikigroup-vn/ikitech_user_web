@@ -537,13 +537,13 @@ class Config extends Component {
                       checked={bonus_type_for_ctv_t2 == 1}
                     />{" "}
                     <label htmlFor="bonus_type_for_ctv_t2_option2">
-                      Từ hoa hồng CTV mua hàng
+                      Từ tổng hoa hồng Sản phẩm theo cấp đại lý
                     </label>
                     <span className="bonusTypeForAgency_note">
                       <span className="bonusTypeForAgency_noteIcon">?</span>
                       <div className="bonusTypeForAgency_noteTooltip">
-                        Nhận phân trăm hoa hồng từ chính CTV được hưởng, ví dụ
-                        hóa đơn CTV nhận được 100.000đ hoa hồng bạn nhập
+                        Nhận phần trăm hoa hồng từ chính Đại lý được hưởng(phần tiền này sẽ được tính tọa dựa trên số % hoa hồng của đại lý từng sản phẩm cộng lại theo cấu hình cấp đại lý), ví dụ
+                        hóa đơn Đại lý nhận được 100.000đ hoa hồng bạn nhập
                         ô này 10% thì Đại lý nhận được 10.000đ
                       </div>
                     </span>
