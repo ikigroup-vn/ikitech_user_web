@@ -1444,11 +1444,7 @@ export const updateAgencyPrice = (
   };
 };
 
-export const updatePriceOneProduct = (
-  store_code,
-  productId,
-  price,
-) => {
+export const updatePriceOneProduct = (store_code, productId, price) => {
   const data = {
     price: price,
   };
@@ -1458,7 +1454,7 @@ export const updatePriceOneProduct = (
       loading: "show",
     });
     productApi
-      .updatePriceOneProduct(store_code,productId, data)
+      .updatePriceOneProduct(store_code, productId, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
@@ -1491,11 +1487,7 @@ export const updatePriceOneProduct = (
   };
 };
 
-export const updateNameOneProduct = (
-  store_code,
-  productId,
-  name,
-) => {
+export const updateNameOneProduct = (store_code, productId, name) => {
   const data = {
     name: name,
   };
@@ -1505,7 +1497,7 @@ export const updateNameOneProduct = (
       loading: "show",
     });
     productApi
-      .updateNameOneProduct(store_code,productId, data)
+      .updateNameOneProduct(store_code, productId, data)
       .then((res) => {
         dispatch({
           type: Types.SHOW_LOADING,
@@ -1712,11 +1704,7 @@ export const updateDistribute = (
   };
 };
 
-export const updateDistributeWithoutBranch = (
-  store_code,
-  data,
-  productId,
-) => {
+export const updateDistributeWithoutBranch = (store_code, data, productId) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -1739,7 +1727,7 @@ export const updateDistributeWithoutBranch = (
             content: res.data.msg,
           },
         });
-        
+
         dispatch({
           type: Types.SUCCESS_EDIT_ITEM_PRODUCT_IN_LIST,
           data: res.data.product,
@@ -1756,13 +1744,9 @@ export const updateDistributeWithoutBranch = (
           },
         });
       })
-      .finally(() => {
-      
-      });
+      .finally(() => {});
   };
 };
-
-
 
 export const removeItemImgDis = (data) => {
   return {
@@ -1961,7 +1945,7 @@ export const uploadVideoProduct = (file) => {
   };
 };
 
-export const changePercentCol = (store_code, data) => {
+export const changePercentCol = (store_code, data, onSuccess = () => {}) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -1983,6 +1967,7 @@ export const changePercentCol = (store_code, data) => {
             content: res.data.msg,
           },
         });
+        if (onSuccess) onSuccess();
       })
       .catch(function (error) {
         dispatch({

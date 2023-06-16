@@ -11,6 +11,7 @@ import NotAccess from "../../components/Partials/NotAccess";
 import { connect, shallowEqual } from "react-redux";
 import Loading from "../Loading";
 import * as productAction from "../../actions/product";
+import * as CategoryPAction from "../../actions/category_product";
 import * as agencyAction from "../../actions/agency";
 import { getQueryParams } from "../../ultis/helpers";
 
@@ -19,6 +20,7 @@ import ModalUpdatePercentDiscount from "./ModalUpdatePercentDiscount";
 import ModalUpdatePercentDiscountAll from "./ModalUpdatePercentDiscountAll";
 import ModalUpdateCommission from "./ModalUpdateCommission";
 import ModalUpdateCommissionAll from "./ModalUpdateCommissionAll";
+import { getBranchId, getBranchIds } from "../../ultis/branchUtils";
 
 class Product extends Component {
   constructor(props) {
@@ -40,21 +42,29 @@ class Product extends Component {
       searchValue: new URL(document.location).searchParams.get("search") || "",
       page: new URL(document.location).searchParams.get("page") || 1,
       numPage: new URL(document.location).searchParams.get("limit") || 20,
+      categorySelected: getQueryParams("category_ids")?.split(",") || [],
+      categoryChildSelected:
+        getQueryParams("category_children_ids")?.split(",") || [],
       arrayCheckBox: [],
     };
   }
 
   onChangeNumPage = (e) => {
     var { store_code, agency_type_id } = this.props.match.params;
-    var { searchValue } = this.state;
+    var { searchValue, categorySelected, categoryChildSelected } = this.state;
     var numPage = e.target.value;
     this.setState({
       numPage,
       page: 1,
     });
-    var params = `&search=${searchValue}&limit=${numPage}&agency_type_id=${agency_type_id}`;
+    var params = this.getParams(
+      searchValue,
+      numPage,
+      categorySelected,
+      categoryChildSelected
+    );
     history.push(
-      `/product-agency/index/${store_code}/${agency_type_id}?page=1&search=${searchValue}&limit=${numPage}`
+      `/product-agency/index/${store_code}/${agency_type_id}?page=1${params}`
     );
     this.props.fetchAllProduct(store_code, 1, params, agency_type_id);
   };
@@ -63,7 +73,8 @@ class Product extends Component {
   };
   shouldComponentUpdate(nextProps, nextState) {
     var { store_code, agency_type_id } = this.props.match.params;
-    var { searchValue, numPage } = this.state;
+    var { searchValue, numPage, categorySelected, categoryChildSelected } =
+      this.state;
     const {
       updatedPercentDiscountSuccessfully,
       updatedCommissionSuccessfully,
@@ -71,7 +82,12 @@ class Product extends Component {
       resetCommissionSuccessfully,
     } = this.props;
     if (this.state.page != nextState.page || numPage != nextState.numPage) {
-      var params = `&search=${searchValue}&limit=${nextState.numPage}&agency_type_id=${agency_type_id}`;
+      var params = this.getParams(
+        searchValue,
+        nextState.numPage,
+        categorySelected,
+        categoryChildSelected
+      );
       this.props.fetchAllProduct(
         store_code,
         nextState.page,
@@ -88,7 +104,12 @@ class Product extends Component {
     ) {
       window.$(".modal").modal("hide");
       resetPercentDiscountSuccessfully();
-      const paramsPercentDiscount = `&search=${searchValue}&limit=${numPage}&agency_type_id=${agency_type_id}`;
+      const paramsPercentDiscount = this.getParams(
+        searchValue,
+        numPage,
+        categorySelected,
+        categoryChildSelected
+      );
       this.props.fetchAllProduct(
         store_code,
         nextState.page,
@@ -106,7 +127,12 @@ class Product extends Component {
     ) {
       window.$(".modal").modal("hide");
       resetCommissionSuccessfully();
-      const paramsCommission = `&search=${searchValue}&limit=${numPage}&agency_type_id=${agency_type_id}`;
+      const paramsCommission = this.getParams(
+        searchValue,
+        numPage,
+        categorySelected,
+        categoryChildSelected
+      );
       this.props.fetchAllProduct(
         store_code,
         nextState.page,
@@ -114,6 +140,77 @@ class Product extends Component {
         agency_type_id
       );
       this.setArrayCheckBox([]);
+    }
+    if (
+      !shallowEqual(this.props.category_product, nextProps.category_product)
+    ) {
+      var option = [];
+      var categories = [...nextProps.category_product];
+      if (categories.length > 0) {
+        option = categories.map((category, index) => {
+          return {
+            id: category.id,
+            label: category.name,
+            categories_child: category.category_children?.map(
+              (categoryChild) => ({
+                id: categoryChild.id,
+                label: categoryChild.name,
+              })
+            ),
+          };
+        });
+        const categoryIds = getQueryParams("category_ids")?.split(",") || [];
+        const categoryChildIds =
+          getQueryParams("category_children_ids")?.split(",") || [];
+        var categorySelected = [];
+        if (categoryIds?.length > 0) {
+          categorySelected = option.filter((item) =>
+            categoryIds.includes(item?.id?.toString())
+          );
+          this.setState({
+            categorySelected: categorySelected,
+          });
+        }
+        const newCategoryChildSelected = [];
+        if (categoryChildIds?.length > 0) {
+          option.forEach((category) => {
+            if (category.categories_child?.length > 0) {
+              category.categories_child.forEach((item) => {
+                if (categoryChildIds.includes(item?.id?.toString())) {
+                  newCategoryChildSelected.push(item);
+                }
+              });
+            }
+          });
+          this.setState({
+            categoryChildSelected: newCategoryChildSelected,
+          });
+        }
+
+        this.setState({
+          listCategory: option,
+        });
+
+        const { store_code } = this.props.match.params;
+
+        var is_near_out_of_stock = getQueryParams("is_near_out_of_stock");
+        var paramsFilter = this.getParams(
+          this.state.searchValue,
+          this.state.numPage,
+          categorySelected,
+          newCategoryChildSelected
+        );
+        if (is_near_out_of_stock) {
+          paramsFilter = paramsFilter + `&is_near_out_of_stock=true`;
+        }
+
+        this.props.fetchAllProduct(
+          store_code,
+          this.state.page,
+          paramsFilter,
+          agency_type_id
+        );
+      }
     }
 
     return true;
@@ -128,16 +225,7 @@ class Product extends Component {
     var { searchValue, numPage } = this.state;
     var page = getQueryParams("page");
     var params = `&limit=${numPage}&search=${searchValue}`;
-    console.log(page);
-    // if(this.props.types.length > 0)
-    // {
-
-    // }
-    // else
-    // {
-    //   this.props.fetchAllAgencyType(store_code);
-
-    // }
+    this.props.fetchAllCategoryP(store_code);
     if (
       typeof page != "undefined" &&
       page != null &&
@@ -181,8 +269,14 @@ class Product extends Component {
   searchData = (e) => {
     e.preventDefault();
     var { store_code, agency_type_id } = this.props.match.params;
-    var { searchValue, numPage } = this.state;
-    var params = `&limit=${numPage}&search=${searchValue}`;
+    var { searchValue, numPage, categorySelected, categoryChildSelected } =
+      this.state;
+    var params = this.getParams(
+      searchValue,
+      numPage,
+      categorySelected,
+      categoryChildSelected
+    );
     history.push(
       `/product-agency/index/${store_code}/${agency_type_id}?page=1${params}`
     );
@@ -222,12 +316,178 @@ class Product extends Component {
     history.replace(`/agency/${store_code}?tab-index=0`);
   };
 
+  getNameSelected() {
+    const { categorySelected, categoryChildSelected } = this.state;
+    var name = "";
+    if (categorySelected.length > 0 || categoryChildSelected.length > 0) {
+      const newCategoryCombine = [
+        ...categorySelected,
+        ...categoryChildSelected,
+      ];
+      name += newCategoryCombine.reduce(
+        (prevCategory, currentCategory, index) => {
+          return (
+            prevCategory +
+            `${
+              index === newCategoryCombine.length - 1
+                ? currentCategory?.label
+                : `${currentCategory?.label}, `
+            }`
+          );
+        },
+        ""
+      );
+    }
+
+    return name;
+  }
+  handleCheckedCategory = (idCategory) => {
+    const { categorySelected } = this.state;
+    if (categorySelected?.length > 0) {
+      const checked = categorySelected
+        .map((category) => category?.id)
+        .includes(idCategory);
+      return checked;
+    }
+    return false;
+  };
+
+  handleChangeCategory = (category) => {
+    const { categorySelected, numPage, categoryChildSelected } = this.state;
+    const { store_code, agency_type_id } = this.props.match.params;
+    var newCategorySelected = [];
+    const isExisted = categorySelected.map((c) => c?.id).includes(category?.id);
+    if (isExisted) {
+      newCategorySelected = categorySelected.filter(
+        (c) => c?.id !== category.id
+      );
+    } else {
+      newCategorySelected = [...categorySelected, category];
+    }
+
+    this.setState({
+      categorySelected: newCategorySelected,
+      page: 1,
+      searchValue: "",
+    });
+    const params = this.getParams(
+      "",
+      numPage,
+      newCategorySelected,
+      categoryChildSelected
+    );
+    history.push(
+      `/product-agency/index/${store_code}/${agency_type_id}?page=1${params}`
+    );
+    this.props.fetchAllProduct(store_code, 1, params, agency_type_id);
+  };
+
+  handleCheckedCategoryChild = (idCategory) => {
+    const { categoryChildSelected } = this.state;
+    if (categoryChildSelected?.length > 0) {
+      const checked = categoryChildSelected
+        .map((category) => category?.id)
+        .includes(idCategory);
+      return checked;
+    }
+    return false;
+  };
+
+  handleChangeCategoryChild = (category) => {
+    const { categoryChildSelected, numPage, categorySelected } = this.state;
+    const { store_code, agency_type_id } = this.props.match.params;
+    var newCategoryChildSelected = [];
+    const isExisted = categoryChildSelected
+      .map((c) => c?.id)
+      .includes(category?.id);
+    if (isExisted) {
+      newCategoryChildSelected = categoryChildSelected.filter(
+        (c) => c?.id !== category.id
+      );
+    } else {
+      newCategoryChildSelected = [...categoryChildSelected, category];
+    }
+
+    this.setState({
+      categoryChildSelected: newCategoryChildSelected,
+      page: 1,
+      searchValue: "",
+    });
+    const params = this.getParams(
+      "",
+      numPage,
+      categorySelected,
+      newCategoryChildSelected
+    );
+    history.push(
+      `/product-agency/index/${store_code}/${agency_type_id}?page=1${params}`
+    );
+    this.props.fetchAllProduct(store_code, 1, params, agency_type_id);
+  };
+  getParams = (search, limit, categories, categories_child) => {
+    var params = ``;
+    if (search != "" && search != null) {
+      params = params + `&search=${search}`;
+    }
+    if (limit != "" && limit != null) {
+      params = params + `&limit=${limit}`;
+    }
+    if (categories !== "" && categories !== null && categories?.length > 0) {
+      const newCategorySelected = categories.reduce(
+        (prevCategory, currentCategory, index) => {
+          return (
+            prevCategory +
+            `${
+              index === categories.length - 1
+                ? currentCategory?.id
+                : `${currentCategory?.id},`
+            }`
+          );
+        },
+        "&category_ids="
+      );
+
+      params += newCategorySelected;
+    }
+    if (
+      categories_child !== "" &&
+      categories_child !== null &&
+      categories_child?.length > 0
+    ) {
+      const newCategoryChildSelected = categories_child.reduce(
+        (prevCategory, currentCategory, index) => {
+          return (
+            prevCategory +
+            `${
+              index === categories_child.length - 1
+                ? currentCategory?.id
+                : `${currentCategory?.id},`
+            }`
+          );
+        },
+        "&category_children_ids="
+      );
+
+      params += newCategoryChildSelected;
+    }
+
+    return params;
+  };
+
   render() {
     if (this.props.auth) {
       var { products } = this.props;
       var { store_code, agency_type_id } = this.props.match.params;
       var { searchValue, page, numPage, arrayCheckBox } = this.state;
-      var { insert, update, _delete, isShow } = this.state;
+      var {
+        insert,
+        update,
+        _delete,
+        isShow,
+        listCategory,
+        categorySelected,
+        categoryChildSelected,
+      } = this.state;
 
       return (
         <div id="wrapper">
@@ -266,28 +526,231 @@ class Product extends Component {
 
                     <div class="card shadow ">
                       <div className="card-header">
-                        <div
-                          class="row"
-                          style={{ "justify-content": "space-between" }}
-                        >
-                          <form onSubmit={this.searchData}>
+                        <div class="flex" style={{ flexDirection: "column" }}>
+                          <div>
                             <div
-                              class="input-group mb-6"
-                              style={{ padding: "0 20px" }}
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                columnGap: "20px",
+                              }}
                             >
-                              <input
-                                style={{ maxWidth: "400px", minWidth: "300px" }}
-                                type="search"
-                                name="txtSearch"
-                                value={searchValue}
-                                onChange={this.onChangeSearch}
-                                class="form-control"
-                                placeholder="Tìm kiếm sản phẩm..."
-                              />
-                              <div class="input-group-append">
-                                <button class="btn btn-primary" type="submit">
-                                  <i class="fa fa-search"></i>
-                                </button>
+                              <form onSubmit={this.searchData}>
+                                <div
+                                  class="input-group mb-6"
+                                  style={{ padding: "0 20px" }}
+                                >
+                                  <input
+                                    style={{
+                                      maxWidth: "400px",
+                                      minWidth: "300px",
+                                    }}
+                                    type="search"
+                                    name="txtSearch"
+                                    value={searchValue}
+                                    onChange={this.onChangeSearch}
+                                    class="form-control"
+                                    placeholder="Tìm kiếm sản phẩm..."
+                                  />
+                                  <div class="input-group-append">
+                                    <button
+                                      class="btn btn-primary"
+                                      type="submit"
+                                    >
+                                      <i class="fa fa-search"></i>
+                                    </button>
+                                  </div>
+                                </div>
+                              </form>
+                              <div className="categories__content">
+                                <div
+                                  id="accordion"
+                                  style={{
+                                    width: "300px",
+                                    position: "relative",
+                                  }}
+                                >
+                                  <div
+                                    className="wrap_category input-group"
+                                    style={{ display: "flex" }}
+                                    data-toggle="collapse"
+                                    data-target="#collapseCategory"
+                                    aria-expanded="false"
+                                    aria-controls="collapseCategory"
+                                  >
+                                    <input
+                                      readOnly
+                                      type="text"
+                                      class="form-control"
+                                      placeholder="--Chọn danh mục--"
+                                      style={{
+                                        whiteSpace: "nowrap",
+                                        overflow: "hidden",
+                                        textOverflow: "ellipsis",
+                                        paddingRight: "55px",
+                                        position: "relative",
+                                        backgroundColor: "transparent",
+                                      }}
+                                      value={this.getNameSelected()}
+                                    ></input>
+                                    <button
+                                      class="btn  btn-accordion-collapse collapsed input-group-text"
+                                      id="headingOne"
+                                      style={{
+                                        borderTopLeftRadius: "0",
+                                        borderBottomLeftRadius: "0",
+                                      }}
+                                    >
+                                      <i
+                                        className={
+                                          this.state.icon
+                                            ? "fa fa-caret-down"
+                                            : "fa fa-caret-down"
+                                        }
+                                      ></i>
+                                    </button>
+                                  </div>
+                                  <div
+                                    id="collapseCategory"
+                                    className="collapse"
+                                    ariaLabelledby="headingOne"
+                                    dataParent="#accordion"
+                                    style={{
+                                      position: "absolute",
+                                      width: "100%",
+                                      left: "0",
+                                      top: "100%",
+                                      zIndex: "10",
+                                      background: "#fff",
+                                      boxShadow: "1px 2px 6px rgba(0,0,0,0.1)",
+                                    }}
+                                  >
+                                    <ul
+                                      style={{
+                                        listStyle: "none",
+                                        margin: "5px 0",
+                                        height: "235px",
+                                        overflowY: "auto",
+                                      }}
+                                      class="list-group"
+                                    >
+                                      {listCategory?.length > 0 ? (
+                                        listCategory.map((category, index) => (
+                                          <li class="">
+                                            <div
+                                              style={{
+                                                cursor: "pointer",
+                                                paddingTop: "5px",
+                                                paddingLeft: "5px",
+                                                display: "flex",
+                                                alignItems: "center",
+                                              }}
+                                            >
+                                              <input
+                                                type="checkbox"
+                                                id={category.label}
+                                                style={{
+                                                  marginRight: "10px",
+                                                  width: "30px",
+                                                  height: "15px",
+                                                  flexShrink: "0",
+                                                }}
+                                                checked={this.handleCheckedCategory(
+                                                  category.id
+                                                )}
+                                                onChange={() =>
+                                                  this.handleChangeCategory(
+                                                    category
+                                                  )
+                                                }
+                                              />
+                                              <label
+                                                htmlFor={category.label}
+                                                style={{
+                                                  whiteSpace: "nowrap",
+                                                  overflow: "hidden",
+                                                  textOverflow: "ellipsis",
+                                                  marginBottom: "0",
+                                                }}
+                                                title={category.label}
+                                              >
+                                                {category.label}
+                                              </label>
+                                            </div>
+                                            {category.categories_child?.length >
+                                              0 && (
+                                              <ul
+                                                className="list-group-child"
+                                                style={{
+                                                  marginLeft: "20px",
+                                                }}
+                                              >
+                                                {category.categories_child.map(
+                                                  (categoryChild) => (
+                                                    <div
+                                                      style={{
+                                                        cursor: "pointer",
+                                                        paddingTop: "5px",
+                                                        paddingLeft: "5px",
+                                                        display: "flex",
+                                                        alignItems: "center",
+                                                      }}
+                                                    >
+                                                      <input
+                                                        type="checkbox"
+                                                        id={categoryChild.label}
+                                                        style={{
+                                                          marginRight: "10px",
+                                                          width: "30px",
+                                                          height: "15px",
+                                                          flexShrink: "0",
+                                                        }}
+                                                        checked={this.handleCheckedCategoryChild(
+                                                          categoryChild.id
+                                                        )}
+                                                        onChange={() =>
+                                                          this.handleChangeCategoryChild(
+                                                            categoryChild
+                                                          )
+                                                        }
+                                                      />
+                                                      <label
+                                                        htmlFor={
+                                                          categoryChild.label
+                                                        }
+                                                        style={{
+                                                          whiteSpace: "nowrap",
+                                                          overflow: "hidden",
+                                                          textOverflow:
+                                                            "ellipsis",
+                                                          marginBottom: "0",
+                                                        }}
+                                                        title={
+                                                          categoryChild.label
+                                                        }
+                                                      >
+                                                        {categoryChild.label}
+                                                      </label>
+                                                    </div>
+                                                  )
+                                                )}
+                                              </ul>
+                                            )}
+                                          </li>
+                                        ))
+                                      ) : (
+                                        <div
+                                          style={{
+                                            marginTop: "20px",
+                                            textAlign: "center",
+                                          }}
+                                        >
+                                          Không có kết quả !
+                                        </div>
+                                      )}
+                                    </ul>
+                                  </div>
+                                </div>
                               </div>
                             </div>
                             <p class="total-item" id="sale_user_name">
@@ -298,15 +761,19 @@ class Product extends Component {
                                 sản phẩm
                               </span>
                             </p>
-                          </form>
-                          <div style={{ display: "flex" }}>
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              marginLeft: "20px",
+                              marginTop: "10px",
+                              columnGap: "20px",
+                            }}
+                          >
                             {arrayCheckBox.length > 0 && (
                               <>
                                 <div
                                   className="btn btn-success"
-                                  style={{
-                                    margin: "10px 20px auto auto",
-                                  }}
                                   data-toggle="modal"
                                   data-target="#updateCommission"
                                 >
@@ -314,9 +781,6 @@ class Product extends Component {
                                 </div>
                                 <div
                                   className="btn btn-primary"
-                                  style={{
-                                    margin: "10px 20px auto auto",
-                                  }}
                                   data-toggle="modal"
                                   data-target="#updatePercentDiscount"
                                 >
@@ -326,9 +790,6 @@ class Product extends Component {
                             )}
                             <div
                               className="btn btn-success"
-                              style={{
-                                margin: "10px 20px auto auto",
-                              }}
                               data-toggle="modal"
                               data-target="#updateCommissionAll"
                             >
@@ -336,9 +797,6 @@ class Product extends Component {
                             </div>
                             <div
                               className="btn btn-primary"
-                              style={{
-                                margin: "10px 20px auto auto",
-                              }}
                               data-toggle="modal"
                               data-target="#updatePercentDiscountAll"
                             >
@@ -400,6 +858,9 @@ class Product extends Component {
                           <Pagination
                             limit={numPage}
                             searchValue={searchValue}
+                            categorySelected={categorySelected}
+                            categoryChildSelected={categoryChildSelected}
+                            getParams={this.getParams}
                             passNumPage={this.passNumPage}
                             store_code={store_code}
                             products={products}
@@ -458,6 +919,7 @@ const mapStateToProps = (state) => {
       state.agencyReducers.agency.updatedPercentDiscountSuccessfully,
     updatedCommissionSuccessfully:
       state.agencyReducers.agency.updatedCommissionSuccessfully,
+    category_product: state.categoryPReducers.category_product.allCategoryP,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -469,6 +931,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchAllListProduct: (store_code, searchValue) => {
       dispatch(productAction.fetchAllListProduct(store_code, searchValue));
+    },
+    fetchAllCategoryP: (store_code) => {
+      dispatch(CategoryPAction.fetchAllCategoryP(store_code));
     },
     fetchAllAgencyType: (store_code) => {
       dispatch(agencyAction.fetchAllAgencyType(store_code));

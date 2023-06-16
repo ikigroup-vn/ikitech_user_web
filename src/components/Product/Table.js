@@ -10,6 +10,7 @@ import * as productAction from "../../actions/product";
 import { connect } from "react-redux";
 import UpdatePriceModal from "./Modal/UpdatePriceModal";
 import UpdateNameModal from "./Modal/UpdateNameModal";
+import ModalUpdateCommission from "./ModalUpdateCommission";
 
 const TableProductStyles = styled.div`
   .status-product {
@@ -239,9 +240,16 @@ class Table extends Component {
       }
     }
   };
+  resetSelected = () => {
+    this.setState({ selected: [] });
+  };
   render() {
     var { products, store_code } = this.props;
     var { selected, modalSub, modalElement, formData } = this.state;
+    console.log(
+      "🚀 ~ file: Table.js:245 ~ Table ~ render ~ selected:",
+      selected
+    );
     var per_page = products.per_page;
     var current_page = products.current_page;
 
@@ -265,16 +273,37 @@ class Table extends Component {
           modal={this.state.currentProductEditName}
           updateNameOneProduct={this.props.updateNameOneProduct}
         />
+        <ModalUpdateCommission
+          store_code={store_code}
+          resetSelected={this.resetSelected}
+          arrayCheckBox={selected}
+        />
 
-        <button
-          onClick={(e) => this.handleMultiDelCallBack(e, selected)}
-          data-toggle="modal"
-          data-target="#removeMultiModal"
-          style={{ marginLeft: "10px" }}
-          class={`btn btn-danger btn-sm ${multiDelete}`}
+        <div
+          style={{
+            display: "flex",
+            columnGap: "20px",
+          }}
         >
-          <i class="fa fa-trash"></i> Xóa {selected.length} sản phẩm
-        </button>
+          <button
+            onClick={(e) => this.handleMultiDelCallBack(e, selected)}
+            data-toggle="modal"
+            data-target="#removeMultiModal"
+            style={{ marginLeft: "10px" }}
+            class={`btn btn-danger btn-sm ${multiDelete}`}
+          >
+            <i class="fa fa-trash"></i> Xóa {selected.length} sản phẩm
+          </button>
+          {selected.length > 0 ? (
+            <div
+              className="btn btn-sm btn-success"
+              data-toggle="modal"
+              data-target="#updateCommissionProduct"
+            >
+              Sửa hoa hồng được chọn ({selected.length})
+            </div>
+          ) : null}
+        </div>
         <table
           class="table table-border "
           id="dataTable"
