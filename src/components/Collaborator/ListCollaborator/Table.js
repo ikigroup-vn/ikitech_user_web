@@ -507,10 +507,7 @@ class Table extends Component {
               <th>Số điện thoại</th>
               <th>Số dư</th>
 
-              {/* <th>Điểm</th> */}
               <th>Mã giới thiệu</th>
-
-              {/* <th>Trạng thái hoạt động</th> */}
 
               <th>Hành động</th>
             </tr>

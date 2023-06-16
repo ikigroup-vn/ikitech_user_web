@@ -9,6 +9,7 @@ import * as collaboratorAction from "../../../actions/collaborator";
 import ModalImg from "../ModalImg";
 import moment from "moment";
 import styled from "styled-components";
+import { getDDMMYYYHis } from "../../../ultis/date";
 
 const ListCollaboratorStyles = styled.div`
   .exploder {
@@ -222,6 +223,8 @@ class Table extends Component {
                   1}
               </td>{" "}
               <td>{data.customer.name}</td>
+              <td>{data.account_name}</td>
+              
               <td>{data.customer.phone_number}</td>
               <td>
                 {data2.status == 0 ? (
@@ -236,6 +239,7 @@ class Table extends Component {
                   ""
                 )}
               </td>
+              
               <td className="btn-voucher">
                 {data2.status == 0 || data2.status == 3 ? (
                   <div>
@@ -264,7 +268,12 @@ class Table extends Component {
                   ""
                 )}
               </td>
+        
+              <td>{getDDMMYYYHis(data2.created_at)}</td>
             </tr>
+
+       
+
             <tr class="explode hide">
               <td colSpan={8}>
                 <div class="row">
@@ -379,12 +388,14 @@ class Table extends Component {
             <tr>
               <th></th>
               <th>STT</th>
-              <th>Họ tên</th>
+              <th>Tên profile</th>
+              <th>Tên tài khoản</th>
               <th>Số điện thoại</th>
 
               <th>Trạng thái</th>
 
               <th>Hành động</th>
+              <th>Thời gian yêu cầu</th>
             </tr>
           </thead>
 
