@@ -53,6 +53,33 @@ export const fetchAllCollaborator = (store_code, page = 1, params) => {
     );
 };
 
+export const fetchAllCollaboratorRegisterRequests = (
+  store_code,
+  page = 1,
+  params
+) => {
+  if (params)
+    return callApi(
+      `/store/${store_code}/collaborator_register_requests?page=${page}${params}`,
+      "get",
+      null
+    );
+  else
+    return callApi(
+      `/store/${store_code}/collaborator_register_requests?page=${page}`,
+      "get",
+      null
+    );
+};
+
+export const handleCollaboratorRegisterRequest = (store_code, id, status) => {
+  return callApi(
+    `/store/${store_code}/collaborator_register_requests/${id}/status`,
+    "put",
+    { status }
+  );
+};
+
 export const fetchAllRequestPayment = (store_code, params) => {
   if (params)
     return callApi(

@@ -6,13 +6,10 @@ import { shallowEqual } from "../../../ultis/shallowEqual";
 import { format, randomString } from "../../../ultis/helpers";
 import { connect } from "react-redux";
 import * as collaboratorAction from "../../../actions/collaborator";
-import ModalListReferences from "./ModalListReferences";
 import ModalImg from "../ModalImg";
 import moment from "moment";
-import SidebarListReferences from "./SidebarListReferences";
 import styled from "styled-components";
-import ModalHistoryBalance from "./ModalHistoryBalance";
-import ModalChangeBalance from "./ModalChangeBalance";
+import { getDDMMYYYHis } from "../../../ultis/date";
 
 const ListCollaboratorStyles = styled.div`
   .exploder {
@@ -127,6 +124,14 @@ class Table extends Component {
     }
   }
 
+  handleCollaboratorRegisterRequest = (id, status) => {
+    this.props.handleCollaboratorRegisterRequest(
+      this.props.store_code,
+      id,
+      status
+    );
+  };
+
   shouldComponentUpdate(nextProps, nextState) {
     if (!shallowEqual(this.props.collaborators, nextProps.collaborators)) {
       this.setCollaboratorSelectedForChangeBalance({});
@@ -152,13 +157,14 @@ class Table extends Component {
     this.setState({ modalImg: url });
   };
 
-  showData = (collaborators) => {
+  showData = (collaboratorRegisterRequests) => {
     var { store_code } = this.props;
     const permissionChangeBalance =
       this.props?.permission?.collaborator_add_sub_balance || false;
     var result = null;
-    if (collaborators.length > 0) {
-      result = collaborators.map((data, index) => {
+    if (collaboratorRegisterRequests.length > 0) {
+      result = collaboratorRegisterRequests.map((data2, index) => {
+        var data = data2.collaborator;
         var avatar =
           data.customer.avatar_image == null
             ? Env.IMG_NOT_FOUND
@@ -216,77 +222,58 @@ class Table extends Component {
                   index +
                   1}
               </td>{" "}
-              <td style={{ textAlign: "center" }}>
-                <img
-                  src={avatar}
-                  class="img-responsive"
-                  width="70px"
-                  height="70px"
-                  alt="Image"
-                />
-              </td>
               <td>{data.customer.name}</td>
+              <td>{data.account_name}</td>
+              
               <td>{data.customer.phone_number}</td>
               <td>
-                <div
-                  className="collaborators_balance"
-                  onClick={() => this.setCollaboratorSelected(data)}
-                >
-                  <span>
-                    {data.balance < 0
-                      ? "-" + format(Number(data.balance))
-                      : format(Number(data.balance))}
-                  </span>
-                  <span>
-                    <i className="fa fa-history"></i>
-                  </span>
-                </div>
+                {data2.status == 0 ? (
+                  <span style={{ color: "#e2950f" }}>Chờ duyệt</span>
+                ) : data2.status == 1 ? (
+                  <span style={{ color: "#E6430C" }}>Đã hủy</span>
+                ) : data2.status == 3 ? (
+                  <span style={{ color: "#E6430C" }}>Yêu cầu duyệt lại</span>
+                ) : data2.status == 2 ? (
+                  <span style={{ color: "#1A9F10" }}>Đã duyệt</span>
+                ) : (
+                  ""
+                )}
               </td>
-              {/* 
-              <td>
-                {" "}
-                {data.customer.points == null
-                  ? null
-                  : new Intl.NumberFormat().format(
-                    data.customer.points.toString()
-                  )}
-              </td> */}
-              <td>{data.customer.referral_phone_number || null}</td>
-              {/* <td>
-                <label className="status-product on-off">
-                  <input
-                    ref={(ref) => (this["checked" + data.id] = ref)}
-                    type="checkbox"
-                    hidden
-                    class="checkbox"
-                    name={`${randomString(10)}`}
-                    checked={data.status == 1 ? true : false}
-                    onChange={(e) => {
-                      this.onChangeStatus(e, data.id);
-                    }}
-                  />
-                  <div></div>
-                </label>
-              </td> */}
+              
               <td className="btn-voucher">
-                <Link
-                  style={{ margin: "2px 0" }}
-                  to={`/order/${this.props.store_code}?collaborator_by_customer_id=${data.customer_id}&tab-index=1&page=${this.props.page}&search=${this.props.searchValue}`}
-                  class="btn btn-outline-danger btn-sm"
-                >
-                  <i class="fa fa-history"></i> Lịch sử đơn hàng
-                </Link>
-                &nbsp;
-                <Link
-                  style={{ margin: "2px 0" }}
-                  to={`/collaborator/${this.props.store_code}/report/${data.customer.id}`}
-                  class="btn btn-outline-info btn-sm"
-                >
-                  <i class="fa fa-bar-chart"></i> Báo cáo
-                </Link>
-                &nbsp;
+                {data2.status == 0 || data2.status == 3 ? (
+                  <div>
+                    <button
+                      style={{ margin: "2px 0" }}
+                      onClick={() => {
+                        this.handleCollaboratorRegisterRequest(data2.id, 1);
+                      }}
+                      class="btn btn-outline-danger btn-sm"
+                    >
+                      <i class="fa fa-remove"></i> Hủy
+                    </button>
+                    &nbsp;
+                    <button
+                      style={{ margin: "2px 0" }}
+                      onClick={() => {
+                        this.handleCollaboratorRegisterRequest(data2.id, 2);
+                      }}
+                      class="btn btn-outline-info btn-sm"
+                    >
+                      <i class="fa fa-check"></i> Duyệt
+                    </button>
+                    &nbsp;
+                  </div>
+                ) : (
+                  ""
+                )}
               </td>
+        
+              <td>{getDDMMYYYHis(data2.created_at)}</td>
             </tr>
+
+       
+
             <tr class="explode hide">
               <td colSpan={8}>
                 <div class="row">
@@ -302,60 +289,7 @@ class Table extends Component {
                         Tên chủ tài khoản:{" "}
                         <span id="user_tel">{data.account_name}</span>
                       </p>
-                      {/* <p class="sale_user_label">
-                        Gmail:{" "}
-                        <span id="user_tel">             {data.customer.email == null ? "Trống" : data.customer.email}
-                        </span>
-                      </p> */}
-                      <p
-                        class="sale_user_label"
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                        }}
-                      >
-                        Số dư:{" "}
-                        <span
-                          id="user_tel"
-                          style={{
-                            color: "#2980b9",
-                            marginLeft: "2px",
-                          }}
-                        >
-                          {format(Number(data.balance))}
-                        </span>
-                        {permissionChangeBalance ? (
-                          <div
-                            style={{
-                              marginLeft: "15px",
-                              display: "flex",
-                              alignItems: "center",
-                              columnGap: "5px",
-                            }}
-                          >
-                            <button
-                              type="button"
-                              style={{ width: "25px" }}
-                              className=" btn-outline-success btn-exploder"
-                              onClick={() =>
-                                this.handleOpenModalChangeBalance(data, false)
-                              }
-                            >
-                              <span className="fa fa-plus"></span>
-                            </button>
-                            <button
-                              type="button"
-                              style={{ width: "25px" }}
-                              className=" btn-outline-danger btn-exploder"
-                              onClick={() =>
-                                this.handleOpenModalChangeBalance(data, true)
-                              }
-                            >
-                              <span className="fa fa-minus"></span>
-                            </button>
-                          </div>
-                        ) : null}
-                      </p>
+
                       <p class="sale_user_label">
                         Tên CMND:{" "}
                         <span id="user_tel">{data.first_and_last_name}</span>
@@ -426,46 +360,6 @@ class Table extends Component {
                   </div>
                 </div>
               </td>
-              <td>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    rowGap: "5px",
-                  }}
-                >
-                  <button
-                    onClick={() => this.showChatBox(data.customer.id, "show")}
-                    class="btn btn-outline-success btn-sm"
-                    style={{
-                      width: "fit-content",
-                    }}
-                  >
-                    <i class="fa fa-comment-alt"></i> Chat
-                  </button>
-                  <a
-                    href={`tel:${data.customer.phone_number}`}
-                    class="btn btn-outline-primary btn-sm"
-                    style={{
-                      width: "fit-content",
-                    }}
-                  >
-                    <i class="fa fa-phone"></i> Gọi ngay
-                  </a>
-                  <button
-                    class="btn btn-outline-info btn-sm"
-                    style={{
-                      width: "fit-content",
-                    }}
-                    onClick={() =>
-                      this.handleShowSidebarListReferences(data.customer)
-                    }
-                  >
-                    <i class="fa fa-users"></i>
-                    Danh sách giới thiệu ({data.customer.total_referrals})
-                  </button>
-                </div>
-              </td>
             </tr>
           </React.Fragment>
         );
@@ -475,13 +369,7 @@ class Table extends Component {
     }
     return result;
   };
-  setShowSidebarListReferences = (showSidebarListReferences) => {
-    this.setState({ showSidebarListReferences });
-  };
-  handleShowSidebarListReferences = (cusInfo) => {
-    this.setState({ customerInfo: cusInfo });
-    this.setShowSidebarListReferences(true);
-  };
+
   setCustomerInfo = (cusInfo) => {
     this.setState({ customerInfo: cusInfo });
   };
@@ -500,51 +388,19 @@ class Table extends Component {
             <tr>
               <th></th>
               <th>STT</th>
-
-              <th style={{ textAlign: "center" }}>Ảnh</th>
-
-              <th>Họ tên</th>
+              <th>Tên profile</th>
+              <th>Tên tài khoản</th>
               <th>Số điện thoại</th>
-              <th>Số dư</th>
 
-              <th>Mã giới thiệu</th>
+              <th>Trạng thái</th>
 
               <th>Hành động</th>
+              <th>Thời gian yêu cầu</th>
             </tr>
           </thead>
 
           <tbody>{this.showData(collaborators)}</tbody>
         </table>
-        <ModalListReferences
-          store_code={this.props.store_code}
-          referral_phone_number={this.state.referral_phone_number}
-        />
-        <SidebarListReferences
-          store_code={this.props.store_code}
-          customerInfo={this.state.customerInfo}
-          setCustomerInfo={this.setCustomerInfo}
-          showSidebarListReferences={this.state.showSidebarListReferences}
-          setShowSidebarListReferences={this.setShowSidebarListReferences}
-        ></SidebarListReferences>
-        {Object.entries(collaboratorSelected).length > 0 ? (
-          <ModalHistoryBalance
-            store_code={this.props.store_code}
-            collaboratorSelected={collaboratorSelected}
-            setCollaboratorSelected={this.setCollaboratorSelected}
-          />
-        ) : null}
-        {Object.entries(collaboratorSelectedForChangeBalance).length > 0 ? (
-          <ModalChangeBalance
-            store_code={this.props.store_code}
-            isSub={this.state.isSub}
-            collaboratorSelectedForChangeBalance={
-              collaboratorSelectedForChangeBalance
-            }
-            setCollaboratorSelectedForChangeBalance={
-              this.setCollaboratorSelectedForChangeBalance
-            }
-          />
-        ) : null}
       </ListCollaboratorStyles>
     );
   }
@@ -566,6 +422,15 @@ const mapDispatchToProps = (dispatch, props) => {
           data,
           page,
           params
+        )
+      );
+    },
+    handleCollaboratorRegisterRequest: (store_code, id, status) => {
+      dispatch(
+        collaboratorAction.handleCollaboratorRegisterRequest(
+          store_code,
+          id,
+          status
         )
       );
     },

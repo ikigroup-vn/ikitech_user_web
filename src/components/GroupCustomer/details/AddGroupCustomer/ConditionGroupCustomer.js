@@ -269,7 +269,7 @@ class ConditionGroupCustomer extends PureComponent {
             this.props.conditionItems[index].typeCompareGroupCustomer
           ) === Types.TYPE_COMPARE_CTV  || Number(
             this.props.conditionItems[index].typeCompareGroupCustomer
-          ) === Types.TYPE_COMPARE_GROUP_CUSTOMER ) ? (
+          ) === Types.TYPE_COMPARE_CUSTOMER_NORMAL ) ? (
             <div>
               <input
                 type="text"

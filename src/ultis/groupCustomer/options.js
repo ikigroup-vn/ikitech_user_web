@@ -39,7 +39,7 @@ export const options = [
   
   {
     id: Types.TYPE_COMPARE_CUSTOMER_NORMAL,
-    title: "Khách hàng lẻ (không phải CTV, đại lý)",
+    title: "Khách hàng (không phải CTV, đại lý)",
   },
   {
     id: Types.TYPE_COMPARE_CTV,
