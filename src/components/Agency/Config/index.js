@@ -537,7 +537,7 @@ class Config extends Component {
                       checked={bonus_type_for_ctv_t2 == 1}
                     />{" "}
                     <label htmlFor="bonus_type_for_ctv_t2_option2">
-                      Từ tổng hoa hồng Sản phẩm theo cấp đại lý
+                      Từ tổng hoa hồng sản phẩm theo cấp đại lý đã thiết định
                     </label>
                     <span className="bonusTypeForAgency_note">
                       <span className="bonusTypeForAgency_noteIcon">?</span>
