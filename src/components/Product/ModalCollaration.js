@@ -12,25 +12,24 @@ class Modal extends Component {
   }
   onSave = (e) => {
     e.preventDefault();
-    var { percent_collaborator } = this.state
-    if ((percent_collaborator > 100) || (percent_collaborator < 1)) return;
+    var { percent_collaborator } = this.state;
+    if (percent_collaborator > 100 || percent_collaborator < 1) return;
 
     this.props.handleChangePerCol(percent_collaborator);
     window.$(".modal").modal("hide");
     window.$("#comfirmColModal").modal("show");
-
   };
 
-  onChange = (e) =>{
-    var {value}  = e.target
-    if ((value > 100) || (value < 1)) return;
+  onChange = (e) => {
+    var { value } = e.target;
+    if (value > 100 || value < 1) return;
 
     this.setState({ percent_collaborator: value });
-  }
+  };
 
   render() {
     var { modal } = this.props;
-    var { percent_collaborator  } = this.state;
+    var { percent_collaborator } = this.state;
     return (
       <div
         class="modal fade"

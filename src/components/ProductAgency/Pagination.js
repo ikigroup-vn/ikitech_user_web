@@ -13,12 +13,25 @@ class Pagination extends Component {
   }
 
   passPagination = (page) => {
-    var { store_code, limit, searchValue, agency_type_id } = this.props;
-    var params = `page=${page}&limit=${limit}&search=${searchValue}`;
+    var {
+      store_code,
+      limit,
+      searchValue,
+      agency_type_id,
+      categorySelected,
+      categoryChildSelected,
+      getParams,
+    } = this.props;
+    var params = getParams(
+      searchValue,
+      limit,
+      categorySelected,
+      categoryChildSelected
+    );
     // this.props.fetchAllProduct(store_code , page,params, agency_type_id)
     this.props.passNumPage(page);
     history.push(
-      `/product-agency/index/${store_code}/${agency_type_id}?${params}`
+      `/product-agency/index/${store_code}/${agency_type_id}?page=${page}${params}`
     );
   };
 

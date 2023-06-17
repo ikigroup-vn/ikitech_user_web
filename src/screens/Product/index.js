@@ -507,7 +507,6 @@ class Product extends Component {
         categorySelected,
         categoryChildSelected,
       } = this.state;
-      console.log("🚀 ~ file ~ Product ~ render ~ listCategory:", listCategory);
 
       return (
         <ProductStyles id="wrapper">
@@ -527,7 +526,7 @@ class Product extends Component {
             setOpenModal={this.setOpenModalTypeImport}
             setAllowSkipSameName={this.setAllowSkipSameName}
           />
-          <ModalCol handleChangePerCol={this.handleChangePerCol}></ModalCol>{" "}
+          <ModalCol handleChangePerCol={this.handleChangePerCol}></ModalCol>
           <Tiki store_code={store_code} />
           <Shopee store_code={store_code} />
           <Sendo store_code={store_code} />
