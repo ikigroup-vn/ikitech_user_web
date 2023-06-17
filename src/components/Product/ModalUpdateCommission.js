@@ -8,13 +8,15 @@ class ModalUpdateCommission extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      percent_collaborator: 0,
+      percent_collaborator: null,
     };
   }
   onChange = (e) => {
     var name = e.target.name;
-    var value = Number(e.target.value);
-    this.setState({ [name]: value > 100 ? 100 : value });
+    var value = e.target.value;
+    this.setState({
+      [name]: value,
+    });
   };
   setPercenCollaborator = (percent) => {
     this.setState({ percent_collaborator: percent });
@@ -70,9 +72,6 @@ class ModalUpdateCommission extends Component {
                 <label for="product_name">% hoa hồng</label>
                 <input
                   required
-                  type="number"
-                  min={0}
-                  max={100}
                   class="form-control"
                   placeholder="Nhập %... VD: 50"
                   autoComplete="off"
@@ -94,6 +93,7 @@ class ModalUpdateCommission extends Component {
                 type="button"
                 class="btn btn-warning"
                 onClick={this.onSave}
+                disabled={percent_collaborator === ""}
               >
                 Lưu
               </button>
