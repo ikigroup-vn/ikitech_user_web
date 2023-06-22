@@ -63,6 +63,7 @@ class ConditionFilterCustomer extends Component {
   }
   render() {
     const { types, indexOption, province, optionsFilter } = this.props;
+
     return (
       <ConditionFilterCustomerStyles className="sidebar__conditions__dropdown__content">
         <div className="sidebar__conditions__dropdown__expression">
