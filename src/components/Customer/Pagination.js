@@ -21,15 +21,16 @@ class Pagination extends Component {
       fetchAllCustomer,
       fetchListCustomerOfSale,
     } = this.props;
-    const params = `&search=${searchValue}`;
+    const jsonListFilter = localStorage.getItem("optionsFilter");
+    var params = `&search=${searchValue}&json_list_filter=${jsonListFilter}`;
     if (isSale()) {
       history.push(
-        `/customer/${store_code}/customerSale?page=${page}&search=${searchValue}`
+        `/customer/${store_code}/customerSale?page=${page}&search=${searchValue}&json_list_filter=${jsonListFilter}`
       );
       fetchListCustomerOfSale(store_code, page, params);
     } else {
       history.push(
-        `/customer/${store_code}?page=${page}&search=${searchValue}`
+        `/customer/${store_code}?page=${page}&search=${searchValue}&json_list_filter=${jsonListFilter}`
       );
       fetchAllCustomer(store_code, page, params);
     }

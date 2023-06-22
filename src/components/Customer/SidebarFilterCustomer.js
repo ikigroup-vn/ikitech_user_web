@@ -133,7 +133,7 @@ class SidebarFilterCustomer extends Component {
     const name = e.target.name;
     const value = e.target.value;
 
-    const type_compare = name;
+    const type_compare = Number(value);
     const comparison_expression =
       type_compare === Types.TYPE_COMPARE_AGE ||
       type_compare === Types.TYPE_COMPARE_SEX ||
