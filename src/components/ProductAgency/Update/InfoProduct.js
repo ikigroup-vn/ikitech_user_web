@@ -15,7 +15,8 @@ class InfoProduct extends Component {
       txtPrice: "",
 
       disabledPrice: false,
-      price: getQueryParams("price") || null,
+      price: getQueryParams("price") || "",
+      importPrice: getQueryParams("importPrice") || "",
     };
   }
 
@@ -41,6 +42,7 @@ class InfoProduct extends Component {
   componentDidMount() {
     if (typeof this.props.product.main_price != "undefined") {
       var { product } = { ...this.props };
+      console.log("🚀 ~ InfoProduct ~ product:", product);
       // const price = formatNumber(product.main_price);
 
       var _price = parseFloat(product.main_price);
@@ -134,7 +136,13 @@ class InfoProduct extends Component {
             </div>
           )}
           {product.distributes?.length <= 0 && (
-            <React.Fragment>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                columnGap: "15px",
+              }}
+            >
               <div className="form-group">
                 <label htmlFor="name">Giá đại lý</label>
                 <div class="form-group" style={{ display: "flex" }}>
@@ -173,16 +181,24 @@ class InfoProduct extends Component {
                     autoComplete="off"
                     value={formatNoD(this.state.price) ?? 0}
                   />
-                  {/* <div class="form-check" style={{ margin: "auto 0" }}>
-              <label class="form-check-label" for="gridCheck">
-                Liên hệ
-              </label>
-              <input style={{ marginLeft: "10px" }} class="form-check-input" checked={disabledPrice} type="checkbox" onChange={this.onChangePrice} />
-
-            </div> */}
                 </div>
               </div>
-            </React.Fragment>
+              <div className="form-group">
+                <label htmlFor="name">Giá nhập</label>
+                <div class="form-group" style={{ display: "flex" }}>
+                  <input
+                    disabled
+                    style={{ maxWidth: "420px" }}
+                    type="text"
+                    class="form-control"
+                    id="txtEmail"
+                    placeholder="Nhập giá"
+                    autoComplete="off"
+                    value={formatNoD(this.state.importPrice) ?? 0}
+                  />
+                </div>
+              </div>
+            </div>
           )}
         </div>
       </div>

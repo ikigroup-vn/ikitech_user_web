@@ -303,6 +303,7 @@ export const ikitech_menu = [
         open: "revenue_expenditure",
         children: [
           {
+            // class: "report_finance",
             class: "revenue_expenditure",
             display: "hide",
             name: "Thu chi",
@@ -312,6 +313,7 @@ export const ikitech_menu = [
 
           {
             name: "Bảng công",
+            // class: "timekeeping",
             class: "revenue_expenditure",
 
             display: "hide",

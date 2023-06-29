@@ -158,9 +158,6 @@ class ProductEdit extends Component {
             )}
 
             <div class="" style={{ padding: "0 14px" }}>
-              {/* <div class="card-header title_content">
-            Phân loại sản phẩm
-          </div> */}
               <div>
                 <div class="row">
                   <div class="col-lg-12">
