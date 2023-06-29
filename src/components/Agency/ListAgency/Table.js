@@ -239,7 +239,6 @@ class Table extends Component {
         console.log("check", data.agency_type_id == null);
         return (
           <React.Fragment>
-            
             <tr class="sub-container hover-product">
               <td>
                 <input
