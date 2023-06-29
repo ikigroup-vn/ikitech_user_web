@@ -42,7 +42,6 @@ class InfoProduct extends Component {
   componentDidMount() {
     if (typeof this.props.product.main_price != "undefined") {
       var { product } = { ...this.props };
-      console.log("🚀 ~ InfoProduct ~ product:", product);
       // const price = formatNumber(product.main_price);
 
       var _price = parseFloat(product.main_price);
