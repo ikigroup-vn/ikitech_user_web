@@ -62,7 +62,8 @@ const OverviewStyles = styled.div`
     width: 40px;
     img {
       width: 40px;
-      height: 40px;
+      height: 40px; 
+      
     }
     .background__hover {
       position: absolute;
