@@ -11,6 +11,7 @@ import ItemFooterTheme from "./ItemFooterTheme.js";
 import FormFooterHtml from "./FormFooterHtml";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import SortableList, { SortableItem, SortableKnob } from "react-easy-sort";
+import * as uploadApi from "../../../data/remote/upload";
 
 import arrayMove from "array-move";
 import {
@@ -29,6 +30,8 @@ import "slick-carousel/slick/slick-theme.css";
 import ModalDefaultReset from "../Home_Screen/ModalDefaultReset";
 import styled from "styled-components";
 import alertYesOrNo from "../../../ultis/alert";
+import { compressed } from "../../../ultis/helpers";
+import themeData from "../../../ultis/theme_data";
 
 const OverviewStyles = styled.div`
   .price__display {
@@ -50,6 +53,76 @@ const OverviewStyles = styled.div`
         }
         input {
           cursor: pointer;
+        }
+      }
+    }
+  }
+  .gift__image {
+    position: relative; 
+    width: 40px;
+    img {
+      width: 40px;
+      height: 40px;
+    }
+    .background__hover {
+      position: absolute;
+      background-color: rgba(0,0,0,0.3);
+      width: 40px;
+      height: 40px;
+      top: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+    }
+    :hover .background__hover {
+      display: flex
+    }
+    .gift__background {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 10;
+      cursor: pointer;
+      label {
+        width: 100%;
+        height: 100%;
+        cursor: pointer;
+      }
+    }
+  }
+  .drop-file-input__label {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: start;
+    width: 100%;
+    height: 100%;
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 6px;
+    }
+    p {
+      text-align: center;
+      color: #8c8c8c;
+      padding: 10px;
+      font-size: 12px;
+      margin-bottom: 0;
+    }
+    span {
+      position: relative;
+      svg {
+        width: 28px;
+        height: 28px;
+      }
+      & > span {
+        position: absolute;
+        margin-left: 2px;
+        svg {
+          width: 8px;
+          height: 8px;
         }
       }
     }
@@ -133,7 +206,6 @@ class Custom_Screen extends Component {
       nextProps.tabId != this.props.tabId
     ) {
       var theme = nextProps.theme;
-      console.log(theme);
       this.setState({
         store_id: theme.store_id,
         header_type: theme.header_type,
@@ -324,9 +396,107 @@ class Custom_Screen extends Component {
     });
   };
 
-  showDataMenus = (types) => {
-    console.log(this.state.menuList, this.state.lastMenuList);
+  handleUploadImage = async (e, id) => {
+    const file = e.target.files;
+    if (file.length > 0) {
+      const newFile = file[0];
+      const fd = new FormData();
+      fd.append("image", await compressed(newFile));
+      uploadApi
+        .upload(fd)
+        .then((res) => {
+          var newList = this.state.menuList;
+          newList[id].image = res.data.data;
+          this.setState({
+            menuList: newList,
+            hasChange: true,
+          });
+        })
+        .catch(function (error) {
+          console.log("error: ", error);
+        });
+    }
+  };
 
+  iconUpload = () => {
+    return (
+      <div className="drop-file-input__label">
+        <span>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="53"
+            height="39"
+            viewBox="0 0 53 39"
+          >
+            <g fill="none" fillRule="evenodd" stroke="none" strokeWidth="1">
+              <g
+                stroke={themeData().backgroundColor}
+                strokeWidth="2"
+                transform="translate(-255 -179)"
+              >
+                <g transform="translate(132 122)">
+                  <path d="M150.631 87.337c-5.755 0-10.42-4.534-10.42-10.127 0-5.593 4.665-10.127 10.42-10.127s10.42 4.534 10.42 10.127c0 5.593-4.665 10.127-10.42 10.127m10.42-24.755l-2.315-4.501h-16.21l-2.316 4.5h-11.579s-4.631 0-4.631 4.502v22.505c0 4.5 4.631 4.5 4.631 4.5h41.684s4.631 0 4.631-4.5V67.083c0-4.501-4.631-4.501-4.631-4.501h-9.263z"></path>
+                </g>
+              </g>
+            </g>
+          </svg>
+          <span>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="100%"
+              height="100%"
+              viewBox="0 0 20 21"
+            >
+              <g fill="none" fillRule="evenodd" stroke="none" strokeWidth="1">
+                <g
+                  fill={themeData().backgroundColor}
+                  transform="translate(-161 -428)"
+                >
+                  <g transform="translate(132 398)">
+                    <g transform="translate(16.648 17.048)">
+                      <g transform="rotate(-180 16.142 16.838)">
+                        <rect
+                          width="2.643"
+                          height="19.82"
+                          x="8.588"
+                          y="0"
+                          rx="1.321"
+                        ></rect>
+                        <path
+                          d="M9.91 0c.73 0 1.321.592 1.321 1.321v17.177a1.321 1.321 0 01-2.643 0V1.321C8.588.591 9.18 0 9.91 0z"
+                          transform="rotate(90 9.91 9.91)"
+                        ></path>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </g>
+            </svg>
+          </span>
+        </span>
+      </div>
+    );
+  };
+
+  iconEdit = () => {
+    return (
+      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g clip-path="url(#clip0_1_5)">
+          <path d="M8.25 3H3C2.60218 3 2.22064 3.15803 1.93934 3.43934C1.65803 3.72065 1.5 4.10218 1.5 4.5V15C1.5 15.3978 1.65803 15.7793 1.93934 16.0606C2.22064 16.342 2.60218 16.5 3 16.5H13.5C13.8978 16.5 14.2793 16.342 14.5606 16.0606C14.842 15.7793 15 15.3978 15 15V9.75" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path d="M13.875 1.87498C14.1733 1.57662 14.578 1.40899 15 1.40899C15.422 1.40899 15.8267 1.57662 16.125 1.87498C16.4233 2.17336 16.591 2.57803 16.591 2.99998C16.591 3.42194 16.4233 3.82662 16.125 4.12498L9 11.25L6 12L6.75 9L13.875 1.87498Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+        </g>
+        <defs>
+          <clipPath id="clip0_1_5">
+            <rect width="18" height="18" fill="white" />
+          </clipPath>
+        </defs>
+      </svg>
+
+
+    );
+  }
+
+  showDataMenus = (types) => {
     var { store_code } = this.props;
     var result = null;
     if (types.length > 0) {
@@ -357,6 +527,31 @@ class Custom_Screen extends Component {
                   <span>{index + 1}</span>
                 </td>
               </SortableKnob>
+              <td>
+                <div className="gift__image">
+                  {this.state.menuList[index].image ? 
+                    <div style={{position: 'relative'}}>
+                      <img
+                      src={this.state.menuList[index].image}
+                      alt="image_gift"
+                    />
+                      <div className="background__hover">
+                        {this.iconEdit()}
+                      </div>
+                    </div> : 
+                  this.iconUpload()}
+                  <div className="gift__background">
+                    <label>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        hidden
+                        onChange={(e) => this.handleUploadImage(e, index)}
+                      />
+                    </label>
+                  </div>
+                </div>
+              </td>
               <td>
                 <input
                   required
@@ -752,6 +947,7 @@ class Custom_Screen extends Component {
                           <thead>
                             <tr>
                               <th>STT</th>
+                              <th>Ảnh</th>
                               <th style={{ width: 150 }}>Tên</th>
                               <th>Link tới</th>
                               <th style={{ width: 200 }}>Hành động</th>
