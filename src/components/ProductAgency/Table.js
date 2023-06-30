@@ -74,9 +74,17 @@ class Table extends Component {
 
   changePage = (data) => {
     var { store_code, page, agency_type_id, numPage, searchValue } = this.props;
-    var price = window.$(`.price-${data.id} > input`).val();
+    var price =
+      data.distributes?.length > 0
+        ? ""
+        : window.$(`.price-${data.id} > input`).val();
+    var importPrice = data.distributes?.length > 0 ? "" : data.import_price;
     history.push(
-      `/product-agency/edit-price/${store_code}/${data.id}/${agency_type_id}?page=${page}&limit=${numPage}&search=${searchValue}&price=${price}`
+      `/product-agency/edit-price/${store_code}/${
+        data.id
+      }/${agency_type_id}?page=${page}&limit=${numPage}&search=${searchValue}${
+        price !== "" ? `&price=${price}` : ""
+      }${importPrice !== "" ? `&importPrice=${importPrice}` : ""}`
     );
   };
   onchangeCheckBox = (e) => {

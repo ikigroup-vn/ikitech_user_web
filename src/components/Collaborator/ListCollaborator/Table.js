@@ -232,11 +232,7 @@ class Table extends Component {
                   className="collaborators_balance"
                   onClick={() => this.setCollaboratorSelected(data)}
                 >
-                  <span>
-                    {data.balance < 0
-                      ? "-" + format(Number(data.balance))
-                      : format(Number(data.balance))}
-                  </span>
+                  <span>{format(Number(data.balance))}</span>
                   <span>
                     <i className="fa fa-history"></i>
                   </span>
