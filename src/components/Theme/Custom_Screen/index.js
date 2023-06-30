@@ -63,21 +63,31 @@ const OverviewStyles = styled.div`
     img {
       width: 40px;
       height: 40px; 
-      
+
     }
-    .background__hover {
+    .has_image {
+      z-index: 100;
+      .background__hover {
+        position: absolute;
+        background-color: rgba(0,0,0,0.3);
+        width: 40px;
+        height: 40px;
+        top: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+      }
+      :hover .background__hover {
+        display: flex
+      }
+    }
+    .icon-close {
       position: absolute;
-      background-color: rgba(0,0,0,0.3);
-      width: 40px;
-      height: 40px;
-      top: 0;
-      display: none;
-      align-items: center;
-      justify-content: center;
+      top: -7px;
+      right: -12px;
+      z-index: 101;
     }
-    :hover .background__hover {
-      display: flex
-    }
+    
     .gift__background {
       position: absolute;
       width: 100%;
@@ -419,6 +429,15 @@ class Custom_Screen extends Component {
     }
   };
 
+  handleRemoveImage = (id) => {
+    var newList = this.state.menuList;
+    newList[id].image = "";
+    this.setState({
+      menuList: newList,
+      hasChange: true,
+    })
+  }
+
   iconUpload = () => {
     return (
       <div className="drop-file-input__label">
@@ -497,6 +516,15 @@ class Custom_Screen extends Component {
     );
   }
 
+  iconClose = () => {
+    return (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="8" cy="8" r="8" fill="#D9D9D9" />
+        <path d="M11.1441 10.4809C11.2322 10.5689 11.2817 10.6884 11.2817 10.8129C11.2817 10.9374 11.2322 11.0569 11.1441 11.1449C11.0561 11.233 10.9366 11.2825 10.8121 11.2825C10.6876 11.2825 10.5681 11.233 10.4801 11.1449L7.99998 8.66407L5.51912 11.1441C5.43106 11.2322 5.31163 11.2817 5.18709 11.2817C5.06256 11.2817 4.94312 11.2322 4.85506 11.1441C4.767 11.0561 4.71753 10.9367 4.71753 10.8121C4.71753 10.6876 4.767 10.5681 4.85506 10.4801L7.33592 8.00001L4.85584 5.51915C4.76778 5.43109 4.71831 5.31165 4.71831 5.18712C4.71831 5.06258 4.76778 4.94315 4.85584 4.85509C4.9439 4.76703 5.06334 4.71755 5.18787 4.71755C5.31241 4.71755 5.43184 4.76703 5.5199 4.85509L7.99998 7.33595L10.4808 4.85469C10.5689 4.76663 10.6883 4.71716 10.8129 4.71716C10.9374 4.71716 11.0568 4.76663 11.1449 4.85469C11.233 4.94276 11.2824 5.06219 11.2824 5.18673C11.2824 5.31126 11.233 5.4307 11.1449 5.51876L8.66405 8.00001L11.1441 10.4809Z" fill="#697A8D" />
+      </svg>
+    )
+  }
+
   showDataMenus = (types) => {
     var { store_code } = this.props;
     var result = null;
@@ -530,17 +558,19 @@ class Custom_Screen extends Component {
               </SortableKnob>
               <td>
                 <div className="gift__image">
+                
                   {this.state.menuList[index].image ? 
-                    <div style={{position: 'relative'}}>
+                    <div className="has_image" style={{position: 'relative'}}>
                       <img
                       src={this.state.menuList[index].image}
                       alt="image_gift"
-                    />
+                    />  
                       <div className="background__hover">
                         {this.iconEdit()}
                       </div>
                     </div> : 
                   this.iconUpload()}
+                  {this.state.menuList[index].image && <div className="icon-close" onClick={() => this.handleRemoveImage(index)}>{this.iconClose()}</div>}
                   <div className="gift__background">
                     <label>
                       <input
@@ -948,7 +978,7 @@ class Custom_Screen extends Component {
                           <thead>
                             <tr>
                               <th>STT</th>
-                              <th>Ảnh</th>
+                              <th>Icon</th>
                               <th style={{ width: 150 }}>Tên</th>
                               <th>Link tới</th>
                               <th style={{ width: 200 }}>Hành động</th>
