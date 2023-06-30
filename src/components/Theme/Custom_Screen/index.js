@@ -187,6 +187,7 @@ class Custom_Screen extends Component {
               index: index,
               name: value.name,
               link_to: value.link_to,
+              image: value.image
             });
           }
         });
@@ -558,19 +559,6 @@ class Custom_Screen extends Component {
               </SortableKnob>
               <td>
                 <div className="gift__image">
-                
-                  {this.state.menuList[index].image ? 
-                    <div className="has_image" style={{position: 'relative'}}>
-                      <img
-                      src={this.state.menuList[index].image}
-                      alt="image_gift"
-                    />  
-                      <div className="background__hover">
-                        {this.iconEdit()}
-                      </div>
-                    </div> : 
-                  this.iconUpload()}
-                  {this.state.menuList[index].image && <div className="icon-close" onClick={() => this.handleRemoveImage(index)}>{this.iconClose()}</div>}
                   <div className="gift__background">
                     <label>
                       <input
@@ -581,6 +569,28 @@ class Custom_Screen extends Component {
                       />
                     </label>
                   </div>
+                  {this.state.menuList[index].image ? 
+                    <div className="has_image" style={{position: 'relative'}}>
+                      <img
+                      src={this.state.menuList[index].image}
+                      alt="image_gift"
+                    />  
+                      <div className="background__hover">
+                        {this.iconEdit()}
+                        <div className="gift__background">
+                          <label>
+                            <input
+                              type="file"
+                              accept="image/*"
+                              hidden
+                              onChange={(e) => this.handleUploadImage(e, index)}
+                            />
+                          </label>
+                        </div>
+                      </div>
+                    </div> : 
+                  this.iconUpload()}
+                  {this.state.menuList[index].image && <div className="icon-close" onClick={() => this.handleRemoveImage(index)}>{this.iconClose()}</div>}
                 </div>
               </td>
               <td>
