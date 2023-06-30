@@ -948,7 +948,7 @@ class Custom_Screen extends Component {
                           <thead>
                             <tr>
                               <th>STT</th>
-                              <th>Ảnh</th>
+                              <th>Icon</th>
                               <th style={{ width: 150 }}>Tên</th>
                               <th>Link tới</th>
                               <th style={{ width: 200 }}>Hành động</th>
