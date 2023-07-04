@@ -123,6 +123,16 @@ class Upload extends Component {
     };
   }
 
+  componentDidMount() {
+    const {
+      images,
+      isShowDefault,
+    } = this.props;
+    if(isShowDefault) {
+        this.setFileList(images)
+    }
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     const { fileList } = this.state;
     const {
@@ -228,11 +238,10 @@ class Upload extends Component {
   render() {
     const { style, multiple } = this.props;
     const { fileList, file } = this.state;
-    console.log("Upload ~ render ~ file:", file);
     const forbiddenLinks = this.props.forbiddenLinks || [];
     return (
       <DropFileStyles>
-        {fileList.length < 10 && (
+        {fileList && fileList.length < 10 && (
           <div
             className="drop-file-input"
             onDragEnter={this.onDragEnter}
