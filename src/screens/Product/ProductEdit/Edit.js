@@ -79,10 +79,13 @@ class ProductEdit extends Component {
         .toString()
         .replace(/,/g, "")
         .replace(/\./g, "");
+      formdata.point_for_agency = data.point_for_agency
+        ?.toString()
+        .replace(/,/g, "")
+        .replace(/\./g, "");
       formdata.percent_collaborator = data.txtPercentC;
       formdata.sku = data.sku;
       formdata.check_inventory = data.check_inventory;
-      formdata.point_for_agency = data.point_for_agency;
 
       var categories = [];
       var category_children_ids = [];
@@ -192,6 +195,10 @@ class ProductEdit extends Component {
       price: Number(this.state.form?.price),
       quantity_in_stock: Number(this.state.form?.quantity_in_stock),
     };
+    form.point_for_agency = form.point_for_agency
+      ?.toString()
+      .replace(/,/g, "")
+      .replace(/\./g, "");
     form.index_image_avatar = 0;
     if (typeof form.list_distribute != "undefined") {
       if (typeof form.list_distribute[0] != "undefined") {

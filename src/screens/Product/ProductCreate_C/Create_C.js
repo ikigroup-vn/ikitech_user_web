@@ -56,7 +56,10 @@ class ProductEdit extends Component {
         .replace(/\./g, "");
       formdata.barcode = data.txtBarcode;
       formdata.status = data.txtStatus;
-      formdata.point_for_agency = data.point_for_agency;
+      formdata.point_for_agency = data.point_for_agency
+        ?.toString()
+        .replace(/,/g, "")
+        .replace(/\./g, "");
 
       formdata.quantity_in_stock = data.txtQuantityInStock
         .toString()
@@ -161,7 +164,10 @@ class ProductEdit extends Component {
     const branch_id = localStorage.getItem("branch_id");
     var form = { ...this.state.form };
     form.index_image_avatar = 0;
-
+    form.point_for_agency = form.point_for_agency
+      ?.toString()
+      .replace(/,/g, "")
+      .replace(/\./g, "");
     if (typeof form.list_distribute != "undefined") {
       if (typeof form.list_distribute[0] != "undefined") {
         if (typeof form.list_distribute[0].element_distributes != "undefined") {
