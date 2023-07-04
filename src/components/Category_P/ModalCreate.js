@@ -7,7 +7,9 @@ import { shallowEqual } from "../../ultis/shallowEqual";
 import { isEmpty } from "../../ultis/helpers";
 import * as Types from "../../constants/ActionType";
 import themeData from "../../ultis/theme_data";
+import * as uploadApi from "../../data/remote/upload";
 import "./style.css";
+import Upload from "../Upload";
 class ModalCreate extends Component {
   constructor(props) {
     super(props);
@@ -15,11 +17,13 @@ class ModalCreate extends Component {
       txtName: "",
       fileUpload: null,
       isShowHome: false,
+      bannerImages: [],
+      bannerLinks: ["", ""],
+      mainImage: ""
     };
   }
 
   componentDidMount() {
-    console.log("componentDidMount");
     var _this = this;
 
     window.$("#file-category-product").on("fileloaded", function (event, file) {
@@ -43,7 +47,6 @@ class ModalCreate extends Component {
     });
   };
   componentWillReceiveProps(nextProps) {
-    console.log("componentWillReceiveProps in create");
     if (
       !shallowEqual(nextProps.category_product, this.props.category_product)
     ) {
@@ -60,12 +63,13 @@ class ModalCreate extends Component {
       txtName: "",
       fileUpload: null,
       isShowHome: false,
+      bannerImages: [],
+      bannerLinks: ["", ""],
     });
     window.$("#file-category-product").fileinput("clear");
   };
   onSave = async (e) => {
     e.preventDefault();
-    // window.$('.modal').modal('hide');
 
     if (this.state.txtName == null || !isEmpty(this.state.txtName)) {
       this.props.showError({
@@ -79,26 +83,94 @@ class ModalCreate extends Component {
       });
       return;
     }
+    const BannerAds = this.state.bannerImages.length ? this.state.bannerImages.map((item, index) => (
+      {
+        "image": item,
+        "link": this.state.bannerLinks[index] || ""
+      }
+    )) : []
+    const params = {
+      name: this.state.txtName,
+      is_show_home: this.state.isShowHome,
+      banner_ads: BannerAds,
+      image_url: this.state.mainImage
+    }
+    this.props.createCategoryP(this.props.store_code, { ...params });
+    this.setState({ fileUpload: null });
+  };
 
-    var file = this.state.fileUpload;
-    if (typeof file !== "undefined" && file != "" && file != null) {
-      // window.$('#file-category-product').fileinput('clear');
+  handleUploadImage = async (e) => {
+    const file = e.target.files;
+    if (file.length > 0) {
+      const newFile = file[0];
       const fd = new FormData();
-      fd.append("image", await compressed(file));
-      fd.append("name", this.state.txtName);
-      fd.append("is_show_home", this.state.isShowHome);
-      this.props.createCategoryP(this.props.store_code, fd);
-      this.setState({ fileUpload: null });
-    } else {
-      window.$("#file-category-product").fileinput("clear");
-      const fd = new FormData();
-      fd.append("name", this.state.txtName);
-      fd.append("is_show_home", this.state.isShowHome);
-      this.props.createCategoryP(this.props.store_code, fd);
+      fd.append("image", await compressed(newFile));
+      uploadApi
+        .upload(fd)
+        .then((res) => {
+          this.setState({
+            mainImage: res.data.data,
+          });
+        })
+        .catch(function (error) {
+          console.log("error: ", error);
+        });
     }
   };
+
+  handleRemoveImage = () => {
+    this.setState({
+      mainImage: "",
+    })
+  }
+
+  setBannerImages = (images) => {
+    this.setState({ bannerImages: images });
+  };
+
+  onChangeLink = (e, index) => {
+    var newBannerLinks = this.state.bannerLinks
+    newBannerLinks[index] = e.target.value
+    this.setState({bannerLinks: newBannerLinks})
+  }
+
+  renderBannerImages = () => {
+    const { bannerImages } = this.state
+    return (
+      <div className="group-banner-image">
+        <Upload
+          isShowDefault={true}
+          multiple
+          setFiles={this.setBannerImages}
+          files={bannerImages}
+          images={bannerImages}
+          limit={2} />
+        <div style={{marginLeft: '162px', display: 'flex', gap: '16px'}}>
+        {
+          bannerImages && bannerImages.length ? bannerImages.map((item, index) => {
+            return (
+              <div style={{width: '290px', marginTop: '12px'}}>
+                <label>Link ảnh {index + 1}:</label>
+                <input
+                type="text"
+                class="form-control"
+                id="txtName"
+                placeholder={`Đường dẫn ảnh ${index + 1}`}
+                autoComplete="off"
+                onChange={(e) => this.onChangeLink(e, index)}
+                name="txtName"
+                style={{width: '290px'}}
+              />
+              </div>
+            )
+          }) : null
+        }
+        </div>
+      </div>
+    )
+  }
+
   render() {
-    console.log("render");
     var { txtName, isShowHome } = this.state;
     return (
       <div
@@ -109,7 +181,7 @@ class ModalCreate extends Component {
         data-keyboard="false"
         data-backdrop="static"
       >
-        <div class="modal-dialog" role="document">
+        <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
             <div
               class="modal-header"
@@ -177,9 +249,16 @@ class ModalCreate extends Component {
                       className="file"
                       data-overwrite-initial="false"
                       data-min-file-count="2"
+                      onChange={this.handleUploadImage}
                     />
                   </div>
                 </div>
+                {isShowHome && <div>
+                  <p style={{fontWeight: '600'}}>Thêm ảnh banner(Giới hạn 2 ảnh):</p>
+                  <div>
+                    {this.renderBannerImages()}
+                  </div>
+                </div>}
               </div>
               <div class="modal-footer">
                 <button

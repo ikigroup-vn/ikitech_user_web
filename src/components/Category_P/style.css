@@ -26,3 +26,13 @@
 .card-body123 .resp-table-row:hover{
     background-color: #f2f2f2 !important;
 }
+
+.group-banner-image .upload__item {
+    width: 290px!important;
+}
+
+.group-banner-image .upload__item .upload__item__content{
+    background-size: cover!important;
+    background-position: center center!important;
+    background-repeat: no-repeat!important;
+}
