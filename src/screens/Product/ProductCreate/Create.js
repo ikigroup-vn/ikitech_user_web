@@ -64,9 +64,12 @@ class ProductCreate extends Component {
         .toString()
         .replace(/,/g, "")
         .replace(/\./g, "");
+      formdata.point_for_agency = data.point_for_agency
+        ?.toString()
+        .replace(/,/g, "")
+        .replace(/\./g, "");
       formdata.percent_collaborator = data.txtPercentC;
       formdata.sku = data.sku;
-      formdata.point_for_agency = data.point_for_agency;
 
       formdata.check_inventory = data.check_inventory;
       formdata.main_cost_of_capital = data.txtCostOfCapital
@@ -137,8 +140,10 @@ class ProductCreate extends Component {
     const branch_id = localStorage.getItem("branch_id");
     var form = { ...this.state.form };
     form.index_image_avatar = 0;
-    console.log(form.list_distribute);
-
+    form.point_for_agency = form.point_for_agency
+      ?.toString()
+      .replace(/,/g, "")
+      .replace(/\./g, "");
     if (typeof form.list_distribute != "undefined") {
       if (typeof form.list_distribute[0] != "undefined") {
         if (typeof form.list_distribute[0].element_distributes != "undefined") {

@@ -294,7 +294,8 @@ class InfoProduct extends Component {
         product.money_amount_collaborator ?? 0
       );
       var _money_amount_collaborator = formatNoD(money_amount_collaborator);
-
+      const point_for_agency = formatNumber(product.point_for_agency ?? 0);
+      var _point_for_agency = formatNoD(point_for_agency);
       const quantity_stock =
         product.quantity_in_stock < 0
           ? ""
@@ -310,7 +311,7 @@ class InfoProduct extends Component {
       this.setState({
         txtName: product.name,
         txtPrice: _price,
-        point_for_agency: product.point_for_agency,
+        point_for_agency: _point_for_agency,
 
         txtImportPrice: _import_price,
         disabledPrice: _price == 0 ? true : false,
