@@ -58,18 +58,17 @@ const OverviewStyles = styled.div`
     }
   }
   .gift__image {
-    position: relative; 
+    position: relative;
     width: 40px;
     img {
       width: 40px;
-      height: 40px; 
-
+      height: 40px;
     }
     .has_image {
       z-index: 100;
       .background__hover {
         position: absolute;
-        background-color: rgba(0,0,0,0.3);
+        background-color: rgba(0, 0, 0, 0.3);
         width: 40px;
         height: 40px;
         top: 0;
@@ -78,7 +77,7 @@ const OverviewStyles = styled.div`
         justify-content: center;
       }
       :hover .background__hover {
-        display: flex
+        display: flex;
       }
     }
     .icon-close {
@@ -87,7 +86,7 @@ const OverviewStyles = styled.div`
       right: -12px;
       z-index: 101;
     }
-    
+
     .gift__background {
       position: absolute;
       width: 100%;
@@ -187,7 +186,7 @@ class Custom_Screen extends Component {
               index: index,
               name: value.name,
               link_to: value.link_to,
-              image: value.image
+              image: value.image,
             });
           }
         });
@@ -368,9 +367,11 @@ class Custom_Screen extends Component {
   };
   onChangePriceShow = (e) => {
     const { store_code, updateTheme, theme } = this.props;
+    const name = e.target.name;
+    const checked = e.target.checked;
     const form = {
       ...theme,
-      option_total_show_type: e.target.value,
+      [name]: checked,
     };
     updateTheme(store_code, form);
   };
@@ -436,8 +437,8 @@ class Custom_Screen extends Component {
     this.setState({
       menuList: newList,
       hasChange: true,
-    })
-  }
+    });
+  };
 
   iconUpload = () => {
     return (
@@ -501,10 +502,28 @@ class Custom_Screen extends Component {
 
   iconEdit = () => {
     return (
-      <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg
+        width="18"
+        height="18"
+        viewBox="0 0 18 18"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <g clip-path="url(#clip0_1_5)">
-          <path d="M8.25 3H3C2.60218 3 2.22064 3.15803 1.93934 3.43934C1.65803 3.72065 1.5 4.10218 1.5 4.5V15C1.5 15.3978 1.65803 15.7793 1.93934 16.0606C2.22064 16.342 2.60218 16.5 3 16.5H13.5C13.8978 16.5 14.2793 16.342 14.5606 16.0606C14.842 15.7793 15 15.3978 15 15V9.75" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-          <path d="M13.875 1.87498C14.1733 1.57662 14.578 1.40899 15 1.40899C15.422 1.40899 15.8267 1.57662 16.125 1.87498C16.4233 2.17336 16.591 2.57803 16.591 2.99998C16.591 3.42194 16.4233 3.82662 16.125 4.12498L9 11.25L6 12L6.75 9L13.875 1.87498Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          <path
+            d="M8.25 3H3C2.60218 3 2.22064 3.15803 1.93934 3.43934C1.65803 3.72065 1.5 4.10218 1.5 4.5V15C1.5 15.3978 1.65803 15.7793 1.93934 16.0606C2.22064 16.342 2.60218 16.5 3 16.5H13.5C13.8978 16.5 14.2793 16.342 14.5606 16.0606C14.842 15.7793 15 15.3978 15 15V9.75"
+            stroke="white"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
+          <path
+            d="M13.875 1.87498C14.1733 1.57662 14.578 1.40899 15 1.40899C15.422 1.40899 15.8267 1.57662 16.125 1.87498C16.4233 2.17336 16.591 2.57803 16.591 2.99998C16.591 3.42194 16.4233 3.82662 16.125 4.12498L9 11.25L6 12L6.75 9L13.875 1.87498Z"
+            stroke="white"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          />
         </g>
         <defs>
           <clipPath id="clip0_1_5">
@@ -512,19 +531,26 @@ class Custom_Screen extends Component {
           </clipPath>
         </defs>
       </svg>
-
-
     );
-  }
+  };
 
   iconClose = () => {
     return (
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <svg
+        width="16"
+        height="16"
+        viewBox="0 0 16 16"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <circle cx="8" cy="8" r="8" fill="#D9D9D9" />
-        <path d="M11.1441 10.4809C11.2322 10.5689 11.2817 10.6884 11.2817 10.8129C11.2817 10.9374 11.2322 11.0569 11.1441 11.1449C11.0561 11.233 10.9366 11.2825 10.8121 11.2825C10.6876 11.2825 10.5681 11.233 10.4801 11.1449L7.99998 8.66407L5.51912 11.1441C5.43106 11.2322 5.31163 11.2817 5.18709 11.2817C5.06256 11.2817 4.94312 11.2322 4.85506 11.1441C4.767 11.0561 4.71753 10.9367 4.71753 10.8121C4.71753 10.6876 4.767 10.5681 4.85506 10.4801L7.33592 8.00001L4.85584 5.51915C4.76778 5.43109 4.71831 5.31165 4.71831 5.18712C4.71831 5.06258 4.76778 4.94315 4.85584 4.85509C4.9439 4.76703 5.06334 4.71755 5.18787 4.71755C5.31241 4.71755 5.43184 4.76703 5.5199 4.85509L7.99998 7.33595L10.4808 4.85469C10.5689 4.76663 10.6883 4.71716 10.8129 4.71716C10.9374 4.71716 11.0568 4.76663 11.1449 4.85469C11.233 4.94276 11.2824 5.06219 11.2824 5.18673C11.2824 5.31126 11.233 5.4307 11.1449 5.51876L8.66405 8.00001L11.1441 10.4809Z" fill="#697A8D" />
+        <path
+          d="M11.1441 10.4809C11.2322 10.5689 11.2817 10.6884 11.2817 10.8129C11.2817 10.9374 11.2322 11.0569 11.1441 11.1449C11.0561 11.233 10.9366 11.2825 10.8121 11.2825C10.6876 11.2825 10.5681 11.233 10.4801 11.1449L7.99998 8.66407L5.51912 11.1441C5.43106 11.2322 5.31163 11.2817 5.18709 11.2817C5.06256 11.2817 4.94312 11.2322 4.85506 11.1441C4.767 11.0561 4.71753 10.9367 4.71753 10.8121C4.71753 10.6876 4.767 10.5681 4.85506 10.4801L7.33592 8.00001L4.85584 5.51915C4.76778 5.43109 4.71831 5.31165 4.71831 5.18712C4.71831 5.06258 4.76778 4.94315 4.85584 4.85509C4.9439 4.76703 5.06334 4.71755 5.18787 4.71755C5.31241 4.71755 5.43184 4.76703 5.5199 4.85509L7.99998 7.33595L10.4808 4.85469C10.5689 4.76663 10.6883 4.71716 10.8129 4.71716C10.9374 4.71716 11.0568 4.76663 11.1449 4.85469C11.233 4.94276 11.2824 5.06219 11.2824 5.18673C11.2824 5.31126 11.233 5.4307 11.1449 5.51876L8.66405 8.00001L11.1441 10.4809Z"
+          fill="#697A8D"
+        />
       </svg>
-    )
-  }
+    );
+  };
 
   showDataMenus = (types) => {
     var { store_code } = this.props;
@@ -569,12 +595,12 @@ class Custom_Screen extends Component {
                       />
                     </label>
                   </div>
-                  {this.state.menuList[index].image ? 
-                    <div className="has_image" style={{position: 'relative'}}>
+                  {this.state.menuList[index].image ? (
+                    <div className="has_image" style={{ position: "relative" }}>
                       <img
-                      src={this.state.menuList[index].image}
-                      alt="image_gift"
-                    />  
+                        src={this.state.menuList[index].image}
+                        alt="image_gift"
+                      />
                       <div className="background__hover">
                         {this.iconEdit()}
                         <div className="gift__background">
@@ -588,9 +614,18 @@ class Custom_Screen extends Component {
                           </label>
                         </div>
                       </div>
-                    </div> : 
-                  this.iconUpload()}
-                  {this.state.menuList[index].image && <div className="icon-close" onClick={() => this.handleRemoveImage(index)}>{this.iconClose()}</div>}
+                    </div>
+                  ) : (
+                    this.iconUpload()
+                  )}
+                  {this.state.menuList[index].image && (
+                    <div
+                      className="icon-close"
+                      onClick={() => this.handleRemoveImage(index)}
+                    >
+                      {this.iconClose()}
+                    </div>
+                  )}
                 </div>
               </td>
               <td>
@@ -1160,41 +1195,53 @@ class Custom_Screen extends Component {
                       <div className="price__display__content">
                         <div className="price__display__item">
                           <input
-                            type="radio"
-                            name="price__show"
-                            id="price__viewed"
-                            value={0}
-                            checked={theme.option_total_show_type === 0}
+                            style={{ transform: "scale(1.5)" }}
+                            type="checkbox"
+                            name="is_show_product_sold"
+                            id="is_show_product_sold"
+                            value={theme.is_show_product_sold}
+                            checked={theme.is_show_product_sold}
                             onChange={this.onChangePriceShow}
                           />
-                          <label htmlFor="price__viewed">
-                            Chỉ hiển thị đã xem
-                          </label>
-                        </div>
-                        <div className="price__display__item">
-                          <input
-                            type="radio"
-                            name="price__show"
-                            id="price__buyed"
-                            value={1}
-                            checked={theme.option_total_show_type === 1}
-                            onChange={this.onChangePriceShow}
-                          />
-                          <label htmlFor="price__buyed">
+                          <label
+                            htmlFor="is_show_product_sold"
+                            style={{ marginLeft: "7px" }}
+                          >
                             Chỉ hiển thị đã bán
                           </label>
                         </div>
                         <div className="price__display__item">
                           <input
-                            type="radio"
-                            name="price__show"
-                            id="price__all"
-                            value={2}
-                            checked={theme.option_total_show_type === 2}
+                            style={{ transform: "scale(1.5)" }}
+                            type="checkbox"
+                            name="is_show_product_view"
+                            id="price__viewed"
+                            value={theme.is_show_product_view}
+                            checked={theme.is_show_product_view}
                             onChange={this.onChangePriceShow}
                           />
-                          <label htmlFor="price__all">
-                            Hiển thị đã xem và đã bán
+                          <label
+                            htmlFor="is_show_product_view"
+                            style={{ marginLeft: "7px" }}
+                          >
+                            Chỉ hiển thị đã xem
+                          </label>
+                        </div>
+                        <div className="price__display__item">
+                          <input
+                            style={{ transform: "scale(1.5)" }}
+                            type="checkbox"
+                            name="is_show_product_count_stars"
+                            id="price__all"
+                            value={theme.is_show_product_count_stars}
+                            checked={theme.is_show_product_count_stars}
+                            onChange={this.onChangePriceShow}
+                          />
+                          <label
+                            htmlFor="is_show_product_count_stars"
+                            style={{ marginLeft: "7px" }}
+                          >
+                            Hiển thị số lượng đánh giá sao
                           </label>
                         </div>
                       </div>
