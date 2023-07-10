@@ -67,7 +67,7 @@ class Config extends Component {
       setting_for_all_products: false,
       percent_commission_for_products: "",
       bonus_type_for_ctv_t2: 0,
-      type_rose:0
+      type_rose: 0,
     };
   }
 
@@ -87,29 +87,26 @@ class Config extends Component {
     var name = target.name;
     var value = target.value;
     const _value = formatNumber(value);
-    if (!isNaN(Number(_value))) {
-      value = formatNoD(_value);
-      value = value.toString().replace(/\./g, ",");
-
-      if (
-        name == "percent_collaborator_t1" ||
-        name == "percent_commission_for_products"
-      ) {
-        if (_value < 101) {
-          if (target.value == "") {
-            this.setState({ [name]: "" });
-          } else {
-            this.setState({ [name]: value });
-          }
-        } else {
-          this.setState({ [name]: "100" });
-        }
-      } else {
-        if (target.value == "") {
+    if (
+      name == "percent_collaborator_t1" ||
+      name == "percent_commission_for_products"
+    ) {
+      if (value <= 100) {
+        if (value == "") {
           this.setState({ [name]: "" });
         } else {
           this.setState({ [name]: value });
         }
+      } else {
+        this.setState({ [name]: 100 });
+      }
+    } else if (!isNaN(Number(_value))) {
+      value = formatNoD(_value);
+      value = value.toString().replace(/\./g, ",");
+      if (target.value == "") {
+        this.setState({ [name]: "" });
+      } else {
+        this.setState({ [name]: value });
       }
     }
   };
@@ -144,7 +141,7 @@ class Config extends Component {
         payment_1_of_month: config.payment_1_of_month,
         payment_16_of_month: config.payment_16_of_month,
         bonus_type_for_ctv_t2: config.bonus_type_for_ctv_t2,
-        type_rose:config.type_rose,
+        type_rose: config.type_rose,
         payment_limit:
           config.payment_limit == null
             ? null
@@ -152,9 +149,7 @@ class Config extends Component {
         percent_collaborator_t1:
           config.percent_collaborator_t1 == null
             ? null
-            : new Intl.NumberFormat().format(
-                config.percent_collaborator_t1.toString()
-              ),
+            : config.percent_collaborator_t1,
         setting_for_all_products: config.setting_for_all_products,
         percent_commission_for_products: config.percent_commission_for_products,
         allow_rose_referral_customer: config.allow_rose_referral_customer,
@@ -249,10 +244,7 @@ class Config extends Component {
       type_rose,
       payment_limit:
         payment_limit == null ? payment_limit : formatNumber(payment_limit),
-      percent_collaborator_t1:
-        percent_collaborator_t1 == null
-          ? percent_collaborator_t1
-          : formatNumber(percent_collaborator_t1),
+      percent_collaborator_t1,
       allow_rose_referral_customer,
       // setting_for_all_products,
       // percent_commission_for_products : percent_commission_for_products ? formatNumber(percent_commission_for_products) : null
@@ -288,35 +280,29 @@ class Config extends Component {
           </div>
 
           <div className="bonusTypeBtn">
-                <div>
-                  <input
-                    type="radio"
-                    name="type_rose_op1"
-                    value={0}
-                    id="type_rose_op1"
-                    checked={type_rose == 0}
-                    onChange={(e) => this.setTypeRose(e.target.value)}
-                  />{" "}
-                  <label htmlFor="type_rose_op1">
-                  Thưởng theo doanh số
-                  </label>
-                 
-                </div>
-                <div>
-                  <input
-                    type="radio"
-                    name="type_rose_op2"
-                    value={1}
-                    id="type_rose_op2"
-                    onChange={(e) => this.setTypeRose(e.target.value)}
-                    checked={type_rose == 1}
-                  />{" "}
-                  <label htmlFor="type_rose_op2">
-                   Thưởng theo hoa hồng
-                  </label>
-                 
-                </div>
-              </div>
+            <div>
+              <input
+                type="radio"
+                name="type_rose_op1"
+                value={0}
+                id="type_rose_op1"
+                checked={type_rose == 0}
+                onChange={(e) => this.setTypeRose(e.target.value)}
+              />{" "}
+              <label htmlFor="type_rose_op1">Thưởng theo doanh số</label>
+            </div>
+            <div>
+              <input
+                type="radio"
+                name="type_rose_op2"
+                value={1}
+                id="type_rose_op2"
+                onChange={(e) => this.setTypeRose(e.target.value)}
+                checked={type_rose == 1}
+              />{" "}
+              <label htmlFor="type_rose_op2">Thưởng theo hoa hồng</label>
+            </div>
+          </div>
 
           <div className="form-group">
             <label htmlFor="name">Thông tin cấu hình</label>
