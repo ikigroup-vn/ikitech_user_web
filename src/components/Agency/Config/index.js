@@ -114,26 +114,24 @@ class Config extends Component {
     var name = target.name;
     var value = target.value;
     const _value = formatNumber(value);
-    if (!isNaN(Number(_value))) {
-      value = new Intl.NumberFormat().format(_value);
-      value = value.toString().replace(/\./g, ",");
-
-      if (name == "percent_agency_t1") {
-        if (_value < 101) {
-          if (target.value == "") {
-            this.setState({ [name]: "" });
-          } else {
-            this.setState({ [name]: value });
-          }
-        } else {
-          this.setState({ [name]: "100" });
-        }
-      } else {
-        if (target.value == "") {
+    if (name == "percent_agency_t1") {
+      if (value <= 100) {
+        if (value == "") {
           this.setState({ [name]: "" });
         } else {
           this.setState({ [name]: value });
         }
+      } else {
+        this.setState({ [name]: 100 });
+      }
+    } else if (!isNaN(Number(_value))) {
+      value = new Intl.NumberFormat().format(_value);
+      value = value.toString().replace(/\./g, ",");
+
+      if (target.value == "") {
+        this.setState({ [name]: "" });
+      } else {
+        this.setState({ [name]: value });
       }
     }
   };
@@ -175,11 +173,7 @@ class Config extends Component {
             ? null
             : new Intl.NumberFormat().format(config.payment_limit.toString()),
         percent_agency_t1:
-          config.percent_agency_t1 == null
-            ? null
-            : new Intl.NumberFormat().format(
-                config.percent_agency_t1.toString()
-              ),
+          config.percent_agency_t1 == null ? null : config.percent_agency_t1,
         allow_rose_referral_customer: config.allow_rose_referral_customer,
         auto_set_level_agency: config.auto_set_level_agency,
         auto_set_type_period: config.auto_set_type_period,
@@ -289,10 +283,7 @@ class Config extends Component {
         payment_limit == null ? payment_limit : formatNumber(payment_limit),
       allow_rose_referral_customer,
       bonus_type_for_ctv_t2: Number(bonus_type_for_ctv_t2),
-      percent_agency_t1:
-        percent_agency_t1 == null
-          ? percent_agency_t1
-          : formatNumber(percent_agency_t1),
+      percent_agency_t1,
       auto_set_level_agency: auto_set_level_agency,
       auto_set_type_period: auto_set_type_period,
     });
@@ -542,9 +533,11 @@ class Config extends Component {
                     <span className="bonusTypeForAgency_note">
                       <span className="bonusTypeForAgency_noteIcon">?</span>
                       <div className="bonusTypeForAgency_noteTooltip">
-                        Nhận phần trăm hoa hồng từ chính Đại lý được hưởng(phần tiền này sẽ được tính tọa dựa trên số % hoa hồng của đại lý từng sản phẩm cộng lại theo cấu hình cấp đại lý), ví dụ
-                        hóa đơn Đại lý nhận được 100.000đ hoa hồng bạn nhập
-                        ô này 10% thì Đại lý nhận được 10.000đ
+                        Nhận phần trăm hoa hồng từ chính Đại lý được hưởng(phần
+                        tiền này sẽ được tính tọa dựa trên số % hoa hồng của đại
+                        lý từng sản phẩm cộng lại theo cấu hình cấp đại lý), ví
+                        dụ hóa đơn Đại lý nhận được 100.000đ hoa hồng bạn nhập ô
+                        này 10% thì Đại lý nhận được 10.000đ
                       </div>
                     </span>
                   </div>
