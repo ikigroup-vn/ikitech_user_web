@@ -215,6 +215,32 @@ export const fetchAllTopCommission = (store_code, page = 1, params) => {
     null
   );
 };
+export const fetchAllAgencyRegisterRequests = (
+  store_code,
+  page = 1,
+  params
+) => {
+  if (params)
+    return callApi(
+      `/store/${store_code}/agency_register_requests?page=${page}${params}`,
+      "get",
+      null
+    );
+  else
+    return callApi(
+      `/store/${store_code}/agency_register_requests?page=${page}`,
+      "get",
+      null
+    );
+};
+
+export const handleAgencyRegisterRequest = (store_code, id, status) => {
+  return callApi(
+    `/store/${store_code}/agency_register_requests/${id}/status`,
+    "put",
+    { status }
+  );
+};
 
 export const updateAgencyPercentDiscount = (store_code, id, data) => {
   return callApi(

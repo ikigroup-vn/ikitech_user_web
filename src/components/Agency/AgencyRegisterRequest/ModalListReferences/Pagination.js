@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import * as collaboratorAction from "../../../actions/collaborator";
-import { insertParam } from "../../../ultis/helpers";
+import * as customerAction from "../../../../actions/customer";
 class Pagination extends Component {
   constructor(props) {
     super(props);
@@ -12,15 +11,7 @@ class Pagination extends Component {
   }
 
   passPagination = (page) => {
-    var { searchValue, numPage, getParams, setPage, statusRequest } =
-      this.props;
-    insertParam({ page: page });
-    setPage(page);
-    this.props.fetchAllCollaboratorRegisterRequests(
-      this.props.store_code,
-      page,
-      getParams(searchValue, numPage, statusRequest)
-    );
+    this.props.setPage(page);
   };
 
   showData = (links) => {
@@ -67,7 +58,7 @@ class Pagination extends Component {
     return (
       <nav aria-label="Page navigation" className="float-pagination">
         <ul class="pagination  tab-pagination pg-blue">
-          {this.showData(this.props.collaborators.links)}
+          {this.showData(this.props.customers.links)}
         </ul>
       </nav>
     );
@@ -76,13 +67,9 @@ class Pagination extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllCollaboratorRegisterRequests: (store_code, page, params) => {
+    fetchAllCustomer: (store_code, page, referral_phone_number) => {
       dispatch(
-        collaboratorAction.fetchAllCollaboratorRegisterRequests(
-          store_code,
-          page,
-          params
-        )
+        customerAction.fetchAllCustomer(store_code, page, referral_phone_number)
       );
     },
   };

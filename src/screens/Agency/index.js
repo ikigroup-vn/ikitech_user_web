@@ -15,6 +15,7 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import Config from "../../components/Agency/Config";
 import ListAgency from "../../components/Agency/ListAgency";
+import ListAgencyRegisterRequest from "../../components/Agency/AgencyRegisterRequest";
 import TopReport from "../../components/Agency/TopReport";
 import RequestPayment from "../../components/Agency/RequestPayment";
 import Type from "../../components/Agency/Type";
@@ -203,11 +204,26 @@ class agency extends Component {
                               </Link>
                             </Tab>
                           ) : null}
+                          {agency_list == true ? (
+                            <Tab>
+                              <Link
+                                to={"?tab-index=2"}
+                                style={{
+                                  display: "flex",
+                                  alignItems: "center",
+                                  columnGap: "5px",
+                                }}
+                              >
+                                <i className="fa fa-sign-language"></i> {"  "}
+                                <span>Yêu cầu làm đại lý</span>
+                              </Link>
+                            </Tab>
+                          ) : null}
 
                           {payment_request_list == true ? (
                             <Tab>
                               <Link
-                                to={"?tab-index=2"}
+                                to={"?tab-index=3"}
                                 style={{
                                   display: "flex",
                                   alignItems: "center",
@@ -223,7 +239,7 @@ class agency extends Component {
                           {bonus_program == true ? (
                             <Tab>
                               <Link
-                                to={"?tab-index=3"}
+                                to={"?tab-index=4"}
                                 style={{
                                   display: "flex",
                                   alignItems: "center",
@@ -238,7 +254,7 @@ class agency extends Component {
                           {payment_request_list == true ? (
                             <Tab>
                               <Link
-                                to={"?tab-index=4"}
+                                to={"?tab-index=5"}
                                 style={{
                                   display: "flex",
                                   alignItems: "center",
@@ -254,7 +270,7 @@ class agency extends Component {
                           {payment_request_list == true ? (
                             <Tab>
                               <Link
-                                to={"?tab-index=5"}
+                                to={"?tab-index=6"}
                                 style={{
                                   display: "flex",
                                   alignItems: "center",
@@ -270,7 +286,7 @@ class agency extends Component {
                           {payment_request_history == true ? (
                             <Tab>
                               <Link
-                                to={"?tab-index=6"}
+                                to={"?tab-index=7"}
                                 style={{
                                   display: "flex",
                                   alignItems: "center",
@@ -317,6 +333,14 @@ class agency extends Component {
                         {agency_list == true ? (
                           <TabPanel>
                             <ListAgency tabId={tabId} store_code={store_code} />
+                          </TabPanel>
+                        ) : null}
+                        {agency_list == true ? (
+                          <TabPanel>
+                            <ListAgencyRegisterRequest
+                              tabId={tabId}
+                              store_code={store_code}
+                            />
                           </TabPanel>
                         ) : null}
                         {payment_request_list == true ? (

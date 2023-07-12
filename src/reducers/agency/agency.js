@@ -15,6 +15,7 @@ var initialState = {
   updatedPercentDiscountSuccessfully: false,
   updatedCommissionSuccessfully: false,
   historyChangeLevelAgency: {},
+  allAgencyRegisterRequest: [],
 };
 
 export const agency = (state = initialState, action) => {
@@ -37,6 +38,27 @@ export const agency = (state = initialState, action) => {
       return newState;
     case Types.FETCH_ALL_AGENCY:
       newState.allAgency = action.data;
+      return newState;
+    case Types.SUCCESS_EDIT_REQUEST_STATUS_AGENCY:
+      var newModelState = { ...newState };
+      var newData = newModelState.allAgencyRegisterRequest;
+      var newStatus = action.status;
+      var id = action.id;
+      var newList = newData.data;
+      newList = newList.map((itemEle) => {
+        if (itemEle.id == id) {
+          var newI = itemEle;
+          newI.status = newStatus;
+          return newI;
+        } else {
+          return itemEle;
+        }
+      });
+      newModelState.allAgencyRegisterRequest = { ...newData };
+
+      return newModelState;
+    case Types.FETCH_ALL_AGENCY_REGISTER_REQUEST:
+      newState.allAgencyRegisterRequest = action.data;
       return newState;
     case Types.FETCH_ALL_AGENCY_REQUEST_PAYMENT:
       newState.allRequestPayment = action.data;

@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import * as collaboratorAction from "../../../actions/collaborator";
+import * as agencyAction from "../../../actions/agency";
 import { insertParam } from "../../../ultis/helpers";
 class Pagination extends Component {
   constructor(props) {
@@ -16,7 +16,7 @@ class Pagination extends Component {
       this.props;
     insertParam({ page: page });
     setPage(page);
-    this.props.fetchAllCollaboratorRegisterRequests(
+    this.props.fetchAllAgencyRegisterRequests(
       this.props.store_code,
       page,
       getParams(searchValue, numPage, statusRequest)
@@ -67,7 +67,7 @@ class Pagination extends Component {
     return (
       <nav aria-label="Page navigation" className="float-pagination">
         <ul class="pagination  tab-pagination pg-blue">
-          {this.showData(this.props.collaborators.links)}
+          {this.showData(this.props.agencies.links)}
         </ul>
       </nav>
     );
@@ -76,13 +76,9 @@ class Pagination extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllCollaboratorRegisterRequests: (store_code, page, params) => {
+    fetchAllAgencyRegisterRequests: (store_code, page, params) => {
       dispatch(
-        collaboratorAction.fetchAllCollaboratorRegisterRequests(
-          store_code,
-          page,
-          params
-        )
+        agencyAction.fetchAllAgencyRegisterRequests(store_code, page, params)
       );
     },
   };
