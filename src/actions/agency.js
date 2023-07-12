@@ -878,6 +878,64 @@ export const fetchAllAgency = (store_code, page = 1, params = null) => {
   };
 };
 
+export const handleAgencyRegisterRequest = (store_code, id, status) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING_LAZY,
+      loading: "show",
+    });
+    agencyApi
+      .handleAgencyRegisterRequest(store_code, id, status)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING_LAZY,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.SUCCESS_EDIT_REQUEST_STATUS_AGENCY,
+          status: status,
+          id: id,
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+      });
+  };
+};
+
+export const fetchAllAgencyRegisterRequests = (
+  store_code,
+  page = 1,
+  params = null
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING_LAZY,
+      loading: "show",
+    });
+    agencyApi
+      .fetchAllAgencyRegisterRequests(store_code, page, params)
+      .then((res) => {
+        console.log(res);
+        dispatch({
+          type: Types.SHOW_LOADING_LAZY,
+          loading: "hide",
+        });
+        if (res.data.code !== 401)
+          dispatch({
+            type: Types.FETCH_ALL_AGENCY_REGISTER_REQUEST,
+            data: res.data.data,
+          });
+      });
+  };
+};
+
 export const fetchChatId = (store_code, customerId, pag = 1) => {
   return (dispatch) => {
     chatApi

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import * as collaboratorAction from "../../../actions/collaborator";
+import * as agencyAction from "../../../actions/agency";
 import Chat from "../../Chat";
 import * as Env from "../../../ultis/default";
 import Table from "./Table";
@@ -8,7 +8,7 @@ import * as customerAction from "../../../actions/customer";
 import Pagination from "./Pagination";
 import { getQueryParams, insertParam } from "../../../ultis/helpers";
 
-class ListCollaboratorRegisterRequest extends Component {
+class ListAgencyRegisterRequest extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -23,7 +23,7 @@ class ListCollaboratorRegisterRequest extends Component {
   componentDidMount() {
     const { page, searchValue, numPage, statusRequest } = this.state;
     const params = this.getParams(searchValue, numPage, statusRequest);
-    this.props.fetchAllCollaboratorRegisterRequests(
+    this.props.fetchAllAgencyRegisterRequests(
       this.props.store_code,
       page,
       params
@@ -63,7 +63,7 @@ class ListCollaboratorRegisterRequest extends Component {
     if (page) {
       insertParam({ page: 1 });
     }
-    this.props.fetchAllCollaboratorRegisterRequests(
+    this.props.fetchAllAgencyRegisterRequests(
       this.props.store_code,
       1,
       params,
@@ -71,7 +71,7 @@ class ListCollaboratorRegisterRequest extends Component {
     );
   };
   onChangeNumPage = (e) => {
-    const { store_code, fetchAllCollaboratorRegisterRequests } = this.props;
+    const { store_code, fetchAllAgencyRegisterRequests } = this.props;
     var { searchValue, statusRequest } = this.state;
     const numPage = e.target.value;
     this.setState({
@@ -80,7 +80,7 @@ class ListCollaboratorRegisterRequest extends Component {
     });
     var params = this.getParams(searchValue, numPage, statusRequest);
     insertParam({ page: 1, limit: numPage });
-    fetchAllCollaboratorRegisterRequests(store_code, 1, params);
+    fetchAllAgencyRegisterRequests(store_code, 1, params);
   };
 
   onChangeSearch = (e) => {
@@ -93,7 +93,7 @@ class ListCollaboratorRegisterRequest extends Component {
     var { searchValue, numPage } = this.state;
     var params = this.getParams(searchValue, numPage, e.target.value);
 
-    this.props.fetchAllCollaboratorRegisterRequests(
+    this.props.fetchAllAgencyRegisterRequests(
       this.props.store_code,
       1,
       params,
@@ -101,7 +101,7 @@ class ListCollaboratorRegisterRequest extends Component {
     );
   };
   render() {
-    var { customer, chat, collaborators, store_code, tabId, store_code } =
+    var { customer, chat, agencies, store_code, tabId, store_code } =
       this.props;
 
     var customerImg =
@@ -154,7 +154,7 @@ class ListCollaboratorRegisterRequest extends Component {
             showChatBox={showChatBox}
             handleShowChatBox={this.handleShowChatBox}
             store_code={store_code}
-            collaborators={collaborators}
+            agencies={agencies}
             getParams={this.getParams}
             page={page}
             searchValue={searchValue}
@@ -195,7 +195,7 @@ class ListCollaboratorRegisterRequest extends Component {
               numPage={numPage}
               getParams={this.getParams}
               store_code={store_code}
-              collaborators={collaborators}
+              agencies={agencies}
               setPage={this.setPage}
             />
           </div>
@@ -217,8 +217,7 @@ class ListCollaboratorRegisterRequest extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    collaborators:
-      state.collaboratorReducers.collaborator.allCollaboratorRegisterRequest,
+    agencies: state.agencyReducers.agency.allAgencyRegisterRequest,
     auth: state.authReducers.login.authentication,
     customer: state.customerReducers.customer.customerID,
     state,
@@ -226,13 +225,9 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchAllCollaboratorRegisterRequests: (store_code, page, params) => {
+    fetchAllAgencyRegisterRequests: (store_code, page, params) => {
       dispatch(
-        collaboratorAction.fetchAllCollaboratorRegisterRequests(
-          store_code,
-          page,
-          params
-        )
+        agencyAction.fetchAllAgencyRegisterRequests(store_code, page, params)
       );
     },
     fetchCustomerId: (store_code, customerId) => {
@@ -243,4 +238,4 @@ const mapDispatchToProps = (dispatch, props) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(ListCollaboratorRegisterRequest);
+)(ListAgencyRegisterRequest);
