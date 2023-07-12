@@ -234,7 +234,7 @@ class Table extends Component {
                   ""
                 )}
               </td>
-              <td className="btn-voucher">
+              <td>
                 {data2.status == 0 || data2.status == 3 ? (
                   <div>
                     <button
@@ -299,12 +299,12 @@ class Table extends Component {
                           {moment(data.created_at).format("DD-MM-YYYY")}{" "}
                         </span>
                       </p>
-                      {address_default !== "" && (
+                      {/* {address_default !== "" && (
                         <p class="sale_user_label" id="sale_user_name">
                           Địa chỉ:{" "}
                           <span id="user_name"> {address_default} </span>
                         </p>
-                      )}
+                      )} */}
                     </div>
                   </div>
                   <div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
