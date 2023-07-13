@@ -19,6 +19,37 @@ import history from "../../../../history";
 import { getQueryParams } from "../../../../ultis/helpers";
 import * as AgencyAction from "../../../../actions/agency";
 import * as groupCustomerAction from "../../../../actions/group_customer";
+import styled from "styled-components";
+
+const FormStyles = styled.form`
+  .status-product {
+    width: 42px;
+    height: 24px;
+    border-radius: 100rem;
+    background-color: #ecf0f1;
+    border: 1px solid #dfe6e9;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s;
+    padding: 0 2px;
+    margin-bottom: 0;
+    cursor: pointer;
+    & > div {
+      width: 18px;
+      height: 18px;
+      border-radius: 100rem;
+      background-color: #7f8c8d;
+      transition: all 0.3s;
+    }
+    &:has(input:checked) {
+      background-color: #2ecc71;
+    }
+    input:checked + div {
+      transform: translateX(100%);
+      background-color: white;
+    }
+  }
+`;
 
 class Form extends Component {
   constructor(props) {
@@ -55,6 +86,7 @@ class Form extends Component {
       ship_discount_value: null,
       has_discount_ship: false,
       defaultListProducts: [],
+      is_public: false,
     };
   }
   componentDidMount() {
@@ -155,6 +187,7 @@ class Form extends Component {
             : true,
         ship_discount_value: voucher.ship_discount_value,
         has_discount_ship: voucher.discount_for !== null ? true : false,
+        is_public: voucher.is_public ? true : false,
       });
     }
     if (this.props.image !== nextProps.image) {
@@ -177,9 +210,12 @@ class Form extends Component {
     var target = e.target;
     var name = target.name;
     var value = target.value;
+    var checked = target.checked;
 
     const _value = formatNumber(value);
-    if (
+    if (name === "is_public") {
+      this.setState({ [name]: checked });
+    } else if (
       name == "txtValueLimitTotal" ||
       name == "txtAmount" ||
       name == "txtValueDiscount" ||
@@ -345,6 +381,7 @@ class Form extends Component {
       set_limit_value_discount: true,
       set_limit_total: true,
       set_limit_amount: true,
+      is_public: state.is_public,
     };
 
     if (limit == "hide") form.set_limit_value_discount = false;
@@ -534,6 +571,7 @@ class Form extends Component {
       group_customer,
       agency_type_id,
       group_type_id,
+      is_public,
     } = this.state;
 
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
@@ -547,7 +585,7 @@ class Form extends Component {
     console.log(checkLimit);
     return (
       <React.Fragment>
-        <form
+        <FormStyles
           role="form"
           onSubmit={(e) => canOnsave == true && this.onSave(e)}
           method="post"
@@ -692,6 +730,21 @@ class Form extends Component {
                   </select>
 
                 </div> */}
+                <div className="form-group status">
+                  <label for="txtMaxAmountCoin">Hiển thị giao diện</label>
+                  <label className="status-product on-off">
+                    <input
+                      type="checkbox"
+                      hidden
+                      class="checkbox"
+                      name="is_public"
+                      value={is_public}
+                      checked={is_public}
+                      onChange={this.onChange}
+                    />
+                    <div></div>
+                  </label>
+                </div>
                 <div className="form-group discount-for">
                   <label htmlFor="group_customer">Áp dụng cho</label>
                   <div
@@ -747,7 +800,7 @@ class Form extends Component {
                       />
                       {"  "} Khách lẻ
                     </label>
-                    
+
                     <label>
                       <input
                         type="radio"
@@ -1000,7 +1053,7 @@ class Form extends Component {
               </div>
             </div>
           </div>
-        </form>
+        </FormStyles>
 
         <ConfimUpdateUsed onOk={this.onOkUpdate} />
         <ModalUpload />
