@@ -195,6 +195,7 @@ class ProductEdit extends Component {
       price: Number(this.state.form?.price),
       quantity_in_stock: Number(this.state.form?.quantity_in_stock),
     };
+
     form.point_for_agency = form.point_for_agency
       ?.toString()
       .replace(/,/g, "")
@@ -479,6 +480,13 @@ class ProductEdit extends Component {
       list_distribute.length > 0
         ? list_distribute[0].element_distributes
         : distributeData.element_distributes;
+    const formData = { ...form };
+    if (form.description && form.description?.includes("<iframe")) {
+      const sunEditorContent = document.querySelector(".sun-editor-editable");
+      if (sunEditorContent) {
+        formData.description = sunEditorContent?.innerHTML;
+      }
+    }
 
     const pageNum = getQueryParams("page") || 1;
     const limit = getQueryParams("limit") || 20;
@@ -489,7 +497,7 @@ class ProductEdit extends Component {
       distributeData,
       productId,
       currentBranch?.id,
-      form,
+      formData,
       pageNum,
       params,
       () => {

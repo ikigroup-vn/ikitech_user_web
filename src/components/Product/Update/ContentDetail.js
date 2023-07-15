@@ -17,10 +17,11 @@ import {
   table as tablePlugin,
   link as linkPlugin,
   video,
-  audio
+  audio,
+  align,
 } from "suneditor/src/plugins";
 import imageGallery from "./../../imageGallery";
-import {getApiImageStore} from "../../../constants/Config"
+import { getApiImageStore } from "../../../constants/Config";
 import * as userLocalApi from "../../../data/local/user";
 class ContentDetail extends Component {
   constructor(props) {
@@ -28,15 +29,13 @@ class ContentDetail extends Component {
     this.state = {
       txtContent: "",
       isLoaded: true,
-      txtContentC: ""
+      txtContentC: "",
     };
-
   }
-
 
   onChange = (e) => {
-    this.setState({ txtContentC: e.target.value })
-  }
+    this.setState({ txtContentC: e.target.value });
+  };
   handleEditorChange = (editorState) => {
     this.setState({
       txtContent: editorState,
@@ -44,42 +43,50 @@ class ContentDetail extends Component {
   };
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (nextState.txtContent !== this.state.txtContent || nextState.txtContentC !== this.state.txtContentC) {
-      console.log("đã vào", nextState)
-      this.props.handleDataFromContent({ txtContent: nextState.txtContent, txtContentC: nextState.txtContentC })
+    if (
+      nextState.txtContent !== this.state.txtContent ||
+      nextState.txtContentC !== this.state.txtContentC
+    ) {
+      console.log("đã vào", nextState);
+      this.props.handleDataFromContent({
+        txtContent: nextState.txtContent,
+        txtContentC: nextState.txtContentC,
+      });
     }
-    if (nextProps.product.description !== this.props.product.description
-      || nextProps.product.content_for_collaborator !== this.props.product.content_for_collaborator
-      || nextState.isLoaded == true) {
+    if (
+      nextProps.product.description !== this.props.product.description ||
+      nextProps.product.content_for_collaborator !==
+        this.props.product.content_for_collaborator ||
+      nextState.isLoaded == true
+    ) {
       this.setState({
         txtContent: nextProps.product.description,
+        txtContentUpdate: nextProps.product.description,
         txtContentC: nextProps.product.content_for_collaborator ?? " ",
-        isLoaded: false
-      })
+        isLoaded: false,
+      });
     }
-    return true
+    return true;
   }
 
-
-
   render() {
-    var { txtContent, txtContentC } = this.state;
-    var {store_code} = this.props
+    var { txtContent, txtContentC, txtContentUpdate } = this.state;
+
+    var { store_code } = this.props;
     return (
       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
         <div class="form-group">
-        <label for="product_name">&nbsp;&nbsp;Mô tả sản phẩm</label>
+          <label for="product_name">&nbsp;&nbsp;Mô tả sản phẩm</label>
           <SunEditor
             onImageUploadBefore={handleImageUploadBefore}
-            setContents={txtContent}
+            setContents={txtContentUpdate}
             showToolbar={true}
             onChange={this.handleEditorChange}
             setDefaultStyle="height: auto"
-                  setOptions={{
+            setOptions={{
               requestHeaders: {
                 "X-Sample": "sample",
-                "token" : userLocalApi.getToken()
-
+                token: userLocalApi.getToken(),
               },
               imageGalleryLoadURL: getApiImageStore(store_code),
               plugins: [
@@ -97,7 +104,9 @@ class ContentDetail extends Component {
                 tablePlugin,
                 linkPlugin,
                 video,
-                audio],
+                audio,
+                align,
+              ],
 
               buttonList: [
                 [
@@ -127,28 +136,28 @@ class ContentDetail extends Component {
                   "fullScreen",
                   "preview",
                   "codeView",
-                  "removeFormat"
+                  "removeFormat",
                 ],
               ],
             }}
-
           />
-
         </div>
 
-       {
-         getChannel() == IKITECH &&
+        {getChannel() == IKITECH && (
+          <div class="form-group">
+            <label for="product_name">Nội dung cho cộng tác viên</label>
 
-         <div class="form-group">
-         <label for="product_name">Nội dung cho cộng tác viên</label>
-
-         <textarea value={txtContentC}
-           onChange={this.onChange}
-           name="txtContentC" id="input" class="form-control" rows="7" required="required"></textarea>
-
-
-       </div>
-       }
+            <textarea
+              value={txtContentC}
+              onChange={this.onChange}
+              name="txtContentC"
+              id="input"
+              class="form-control"
+              rows="7"
+              required="required"
+            ></textarea>
+          </div>
+        )}
       </div>
     );
   }

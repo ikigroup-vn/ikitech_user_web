@@ -57,6 +57,7 @@ class ContentDetail extends Component {
 
   render() {
     var { txtContent, txtContentC } = this.state;
+
     var { store_code } = this.props;
 
     return (

@@ -75,7 +75,7 @@ class Form extends Component {
       group_customer: 0,
       agency_type_id: null,
       group_type_id: null,
-      is_public: false,
+      is_public: true,
     };
   }
   componentDidMount() {
@@ -558,7 +558,9 @@ class Form extends Component {
                   Thời gian kết thúc phải sau thời gian bắt đầu
                 </div>
                 <div className="form-group status">
-                  <label for="txtMaxAmountCoin">Hiển thị giao diện</label>
+                  <label for="txtMaxAmountCoin">
+                    Hiển thị cho khách hàng chọn
+                  </label>
                   <label className="status-product on-off">
                     <input
                       type="checkbox"

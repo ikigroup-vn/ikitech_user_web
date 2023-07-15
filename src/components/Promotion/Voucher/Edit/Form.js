@@ -86,7 +86,7 @@ class Form extends Component {
       ship_discount_value: null,
       has_discount_ship: false,
       defaultListProducts: [],
-      is_public: false,
+      is_public: true,
     };
   }
   componentDidMount() {
@@ -731,7 +731,9 @@ class Form extends Component {
 
                 </div> */}
                 <div className="form-group status">
-                  <label for="txtMaxAmountCoin">Hiển thị giao diện</label>
+                  <label for="txtMaxAmountCoin">
+                    Hiển thị cho khách hàng chọn
+                  </label>
                   <label className="status-product on-off">
                     <input
                       type="checkbox"

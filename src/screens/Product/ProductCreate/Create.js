@@ -139,6 +139,7 @@ class ProductCreate extends Component {
     var { store_code } = this.props;
     const branch_id = localStorage.getItem("branch_id");
     var form = { ...this.state.form };
+
     form.index_image_avatar = 0;
     form.point_for_agency = form.point_for_agency
       ?.toString()
@@ -480,7 +481,16 @@ class ProductCreate extends Component {
     if (form.weight == "") {
       form.weight = 100;
     }
-    this.props.postProductV2(store_code, branch_id, form, (id) => {
+
+    const formData = { ...form };
+    if (form.description && form.description?.includes("<iframe")) {
+      const sunEditorContent = document.querySelector(".sun-editor-editable");
+      if (sunEditorContent) {
+        formData.description = sunEditorContent?.innerHTML;
+      }
+    }
+
+    this.props.postProductV2(store_code, branch_id, formData, (id) => {
       this.props.setUpAttributeSearch(store_code, id, {
         list_attribute_search_childs: this.state.attributeSearch,
       });
