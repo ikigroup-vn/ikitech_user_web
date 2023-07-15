@@ -502,8 +502,14 @@ class ProductEdit extends Component {
       delete form.list_distribute;
     }
 
-    console.log(form);
-    this.props.postProductV2(store_code, branch_id, form);
+    const formData = { ...form };
+    if (form.description && form.description?.includes("<iframe")) {
+      const sunEditorContent = document.querySelector(".sun-editor-editable");
+      if (sunEditorContent) {
+        formData.description = sunEditorContent?.innerHTML;
+      }
+    }
+    this.props.postProductV2(store_code, branch_id, formData);
   };
   goBack = (e) => {
     e.preventDefault();
