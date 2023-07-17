@@ -12,8 +12,16 @@ class ModalUpdateCommissionAll extends Component {
   }
   onChange = (e) => {
     var name = e.target.name;
-    var value = formatNumber(e.target.value);
-    this.setState({ [name]: value });
+    var value = e.target.value;
+    if (value <= 100) {
+      if (value == "") {
+        this.setState({ [name]: "" });
+      } else {
+        this.setState({ [name]: value });
+      }
+    } else {
+      this.setState({ [name]: 100 });
+    }
   };
   setPercentAgency = (percent) => {
     this.setState({ percent_agency: percent });
