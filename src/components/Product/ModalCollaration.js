@@ -7,24 +7,36 @@ class Modal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      percent_collaborator: null,
+      percent_collaborator: "",
     };
   }
   onSave = (e) => {
     e.preventDefault();
     var { percent_collaborator } = this.state;
-    if (percent_collaborator > 100 || percent_collaborator < 1) return;
-
-    this.props.handleChangePerCol(percent_collaborator);
-    window.$(".modal").modal("hide");
-    window.$("#comfirmColModal").modal("show");
+    const percent_collaborator_number = Number(percent_collaborator);
+    console.log("🚀 ~ percent_collaborator:", percent_collaborator_number);
+    if (
+      percent_collaborator_number <= 100 &&
+      percent_collaborator_number >= 0 &&
+      percent_collaborator !== ""
+    ) {
+      this.props.handleChangePerCol(percent_collaborator_number);
+      window.$(".modal").modal("hide");
+      window.$("#comfirmColModal").modal("show");
+    }
   };
 
   onChange = (e) => {
-    var { value } = e.target;
-    if (value > 100 || value < 1) return;
-
-    this.setState({ percent_collaborator: value });
+    var { value, name } = e.target;
+    if (value <= 100) {
+      if (value == "") {
+        this.setState({ [name]: "" });
+      } else {
+        this.setState({ [name]: value });
+      }
+    } else {
+      this.setState({ [name]: 100 });
+    }
   };
 
   render() {
@@ -70,11 +82,11 @@ class Modal extends Component {
                         Nhập giá trị hoa hồng
                       </label>
                       <input
+                        type="text"
                         value={percent_collaborator}
-                        type="number"
                         placeholder="Thiết định % hoa hồng chung cho tất cả các sản phẩm"
                         class="form-control"
-                        name="percent_commission_for_products"
+                        name="percent_collaborator"
                         onChange={this.onChange}
                       ></input>
                     </div>

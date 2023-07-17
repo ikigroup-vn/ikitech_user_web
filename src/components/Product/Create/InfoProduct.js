@@ -140,12 +140,20 @@ class InfoProduct extends Component {
     var value_text = e.target.value;
     var value = value_text;
     const _value = formatNumber(value);
-
-    if (
+    if (name == "txtPercentC") {
+      if (value <= 100) {
+        if (value == "") {
+          this.setState({ [name]: "" });
+        } else {
+          this.setState({ [name]: value });
+        }
+      } else {
+        this.setState({ [name]: 100 });
+      }
+    } else if (
       name == "txtPrice" ||
       name == "txtCostOfCapital" ||
       name == "txtImportPrice" ||
-      name == "txtPercentC" ||
       name == "txtQuantityInStock" ||
       name == "point_for_agency" ||
       name == "txtWeight" ||
@@ -154,27 +162,14 @@ class InfoProduct extends Component {
       if (!isNaN(Number(_value))) {
         value = formatNoD(_value);
         // value = value.toString().replace(/\./g, ",");
-        console.log(name);
-        if (name === "txtPercentC") {
-          if (value.length < 3) {
-            if (value == "") {
-              this.setState({ [name]: "" });
-            } else {
-              this.setState({ [name]: value });
-            }
-          }
+
+        if (value.length > 18) {
           return;
         }
-        if (name !== "txtPercentC") {
-          console.log(value.length);
-          if (value.length > 18) {
-            return;
-          }
-          if (value == "") {
-            this.setState({ [name]: "" });
-          } else {
-            this.setState({ [name]: value });
-          }
+        if (value == "") {
+          this.setState({ [name]: "" });
+        } else {
+          this.setState({ [name]: value });
         }
       }
     } else {
@@ -716,7 +711,7 @@ class InfoProduct extends Component {
               {" "}
               {getChannel() == IKITECH && (
                 <div class="form-group">
-                  <label for="product_name">Hoa hồng CTV</label>
+                  <label for="product_percent_ctv">Hoa hồng CTV</label>
                   <i
                     style={{
                       display: "block",
@@ -729,7 +724,7 @@ class InfoProduct extends Component {
                     <input
                       type="text"
                       class="form-control"
-                      id="txtEmail"
+                      id="product_percent_ctv"
                       placeholder={`Nhập ${
                         type_share_collaborator_number ==
                         Types.TYPE_SHARE_COLLABORATOR_PERCENT
