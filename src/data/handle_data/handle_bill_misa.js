@@ -1,5 +1,5 @@
-export default function handleBillMisa(newItem, arangeKeyItem) {
-  Object.entries(arangeKeyItem).forEach(([key, value], index) => {
+export default function handleBillMisa(newItem, arangeKeyItem, product) {
+  Object.entries(arangeKeyItem).forEach(([key, value]) => {
     if (key == "number") {
       newItem["Hiển thị trên số"] = value;
     }
@@ -51,7 +51,6 @@ export default function handleBillMisa(newItem, arangeKeyItem) {
     if (key == "checkInvoice") {
       newItem["Kiểm phiếu xuất"] = value;
     }
-    
     if (key == "total_final") {
       newItem["Tổng tiền thanh toán"] = value;
     }
@@ -64,7 +63,6 @@ export default function handleBillMisa(newItem, arangeKeyItem) {
     if (key == "phone_number") {
       newItem["Điện thoại"] = value;
     }
-
     if (key == "orderer_customer_wards") {
       newItem["Phường/Xã"] = value;
     }
@@ -74,7 +72,6 @@ export default function handleBillMisa(newItem, arangeKeyItem) {
     if (key == "orderer_customer_province") {
       newItem["Tỉnh/TP"] = value;
     }
-
     if (key == "order_from") {
       newItem["Đặt hàng từ"] = value;
     }
@@ -108,15 +105,11 @@ export default function handleBillMisa(newItem, arangeKeyItem) {
     if (key == "extend10") {
       newItem["Trường mở rộng 10"] = value;
     }
-
     if (key == "voteIssued") {
       newItem["Số phiếu xuất"] = value;
     }
     if (key == "reasonExport") {
       newItem["Lý do xuất"] = value;
-    }
-    if (key == "invoiceNumber") {
-      newItem["Số hóa đơn"] = value;
     }
     if (key == "invoiceDate") {
       newItem["Ngày hóa đơn"] = value;
@@ -157,13 +150,6 @@ export default function handleBillMisa(newItem, arangeKeyItem) {
     if (key == "saleStaff") {
       newItem["NV bán hàng"] = value;
     }
-    if (key == "sku") {
-      newItem["Mã hàng (*)"] = value;
-    }
-    if (key == "productName") {
-      newItem["Tên hàng"] = value;
-    }
-
     if (key == "promotionallGoods") {
       newItem["Hàng khuyến mại"] = value;
     }
@@ -176,31 +162,15 @@ export default function handleBillMisa(newItem, arangeKeyItem) {
     if (key == "unit") {
       newItem["ĐVT"] = value;
     }
-    if (key == "quantity") {
-      newItem["Số lượng"] = value;
-    }
-    if (key == "unitPriceAfterTax") {
-      newItem["Đơn giá sau thuế"] = value;
-    }
-    if (key == "unitPrice") {
-      newItem["Đơn giá"] = value;
-    }
-    if (key == "intoMoney") {
-      newItem["Thành tiền"] = value;
-    }
-
     if (key == "discountRate") {
       newItem["Tỷ lệ CK (%)"] = value;
     }
-
     if (key == "discountMoney") {
       newItem["Tiền chiết khấu"] = value;
     }
-
     if (key == "discountAccount") {
       newItem["TK chiết khấu"] = value;
     }
-
     if (key == "warehouse") {
       newItem["Kho"] = value;
     }
@@ -210,31 +180,49 @@ export default function handleBillMisa(newItem, arangeKeyItem) {
     if (key == "costAccount") {
       newItem["TK giá vốn"] = value;
     }
-
     if (key == "warehouseAccount") {
       newItem["TK Kho"] = value;
     }
-
     if (key == "unitPriceCapital") {
       newItem["Đơn giá vốn"] = value ?? "";
     }
-
     if (key == "funds") {
       newItem["Tiền vốn"] = value;
     }
-
     if (key == "gtgt") {
       newItem["Tiền thuế GTGT"] = value;
     }
-
     if (key == "updated_at") {
       newItem["Ngày sửa"] = value;
     }
-
     if (key == "goodsKeepSell") {
       newItem["Hàng hóa giữ hộ/bán hộ"] = value;
     }
+    if (key == "invoiceNumber") {
+      newItem["Số hóa đơn"] = value;
+    }
+    if (key == "sku") {
+      newItem["Mã hàng (*)"] = value;
+    }
+    if (key == "quantity") {
+      newItem["Số lượng"] = value;
+    }
+    if (key == "unitPrice") {
+      newItem["Đơn giá"] = value;
+    }
+    if (key == "unitPriceAfterTax") {
+      newItem["Đơn giá sau thuế"] = value;
+    }
+    if (key == "intoMoney") {
+      newItem["Thành tiền"] = value;
+    }
   });
-
+  if (product) {
+    newItem["Tên hàng"] = product.name;
+    newItem["Số lượng"] = product.quantity;
+    newItem["Đơn giá"] = product.item_price;
+    newItem["Thành tiền"] =
+      Number(product.quantity) * Number(product.item_price);
+  }
   return newItem;
 }

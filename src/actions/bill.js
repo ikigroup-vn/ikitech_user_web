@@ -265,7 +265,8 @@ async function saveAsExcelMisa(value) {
     sheet1.cell("A1").value(sheetData);
     const range = sheet1.usedRange();
     sheet1.row(1).style("bold", true);
-    sheet1.range("A1:AO1").style("fill", "ccccff");
+    sheet1.range("A1:AN1").style("fill", "ccccff");
+    sheet1.range("AO1:AS1").style("fill", "ccffff");
     range.style("border", true);
 
     return workbook.outputAsync().then((res) => {
@@ -292,6 +293,7 @@ export const exportAllListOrderMisa = (
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
+
         const handleAddress = (
           address_detail,
           wards_name,
@@ -319,68 +321,72 @@ export const exportAllListOrderMisa = (
               if (res.data.data.data.length > 0) {
                 var newArray = [];
 
-                console.log("dataMisa::: ", res.data.data.data);
                 for (const item of res.data.data.data) {
-                  var newItem = {};
-                  var arangeKeyItem = {
-                    voucherNumber: "",
-                    accountDate: "",
-                    voucherDate: "",
-                    staffName: "",
-                    invoiceNumber: item.order_code,
-                    customerCode: "",
-                    customerName: item.customer_name,
-                    address: handleAddress(
-                      item.customer_address_detail,
-                      item.customer_wards_name,
-                      item.customer_district_name,
-                      item.customer_province_name
-                    ),
+                  if (item.line_items_at_time?.length > 0) {
+                    for (var product of item.line_items_at_time) {
+                      var newItem = {};
+                      var arangeKeyItem = {
+                        voucherNumber: "",
+                        accountDate: "",
+                        voucherDate: "",
+                        staffName: "",
+                        customerCode: "",
+                        customerName: item.customer_name,
+                        address: handleAddress(
+                          item.customer_address_detail,
+                          item.customer_wards_name,
+                          item.customer_district_name,
+                          item.customer_province_name
+                        ),
 
-                    taxCode: "",
-                    phone_number: item.phone_number,
-                    mobile_phone: "",
-                    paraphrasing: item.customer_note,
-                    customerName2: item.customer_name,
-                    total_before_discount: item.total_before_discount,
-                    discountMoney: item.discount,
-                    gtgt: "",
-                    total_final: item.total_final,
-                    invoiced: "Chưa lập",
-                    checkInvoice: "TRUE",
-                    shipped: "Đã xuất",
-                    typeOfDocument: "",
-                    staffId: "",
-                    businessUnit: "",
-                    orderer_customer_province: item.customer_province_name,
-                    orderer_customer_district: item.customer_district_name,
-                    orderer_customer_wards: item.customer_wards_name,
+                        taxCode: "",
+                        phone_number: item.phone_number,
+                        mobile_phone: "",
+                        paraphrasing: item.customer_note,
+                        customerName2: item.customer_name,
+                        total_before_discount: item.total_before_discount,
+                        discountMoney: item.discount,
+                        gtgt: "",
+                        total_final: item.total_final,
+                        invoiced: "Chưa lập",
+                        checkInvoice: "TRUE",
+                        shipped: "Đã xuất",
+                        typeOfDocument: "",
+                        staffId: "",
+                        businessUnit: "",
+                        orderer_customer_province: item.customer_province_name,
+                        orderer_customer_district: item.customer_district_name,
+                        orderer_customer_wards: item.customer_wards_name,
 
-                    extend1: "",
-                    extend2: "",
-                    extend3: "",
-                    extend4: "",
-                    extend5: "",
-                    extend6: "",
-                    extend7: "",
-                    extend8: "",
-                    extend9: "",
-                    extend10: "",
-                    person_make: "",
-                    time_make: item.created_at,
+                        extend1: "",
+                        extend2: "",
+                        extend3: "",
+                        extend4: "",
+                        extend5: "",
+                        extend6: "",
+                        extend7: "",
+                        extend8: "",
+                        extend9: "",
+                        extend10: "",
+                        person_make: "",
+                        time_make: item.created_at,
 
-                    created_at: item.created_at,
-                    person_edit: "",
-                    updated_at: item.updated_at,
+                        created_at: item.created_at,
+                        person_edit: "",
+                        updated_at: item.updated_at,
+                        voucherNumber2: "",
+                        invoiceNumber: item.order_code,
+                        line_items_at_time: item.line_items_at_time,
+                      };
 
-                    voucherNumber2: "",
-                  };
-                  newItem = handleBillMisa(newItem, arangeKeyItem);
-                  newArray.push(newItem);
+                      newItem = handleBillMisa(newItem, arangeKeyItem, product);
+                      newArray.push(newItem);
+                    }
+                  }
                 }
                 var header = [];
                 if (newArray.length > 0) {
-                  Object.entries(newArray[0]).forEach(([key, value], index) => {
+                  Object.entries(newArray[0]).forEach(([key, value]) => {
                     header.push(key);
                   });
                 }
