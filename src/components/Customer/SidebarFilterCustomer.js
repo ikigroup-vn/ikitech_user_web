@@ -219,7 +219,7 @@ class SidebarFilterCustomer extends Component {
     } else {
       fetchAllCustomer(store_code, 1, params);
     }
-    localStorage.setItem("optionsFilter", JSON.stringify(optionsFilter));
+    localStorage.setItem("optionsFilter", JSON.stringify(newOptionFilter));
     setShowFilterSearch(false);
   };
   handleAddFilterSearch = () => {
