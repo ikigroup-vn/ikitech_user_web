@@ -87,7 +87,7 @@ class ListReview extends Component {
     if (typeof imgs == "undefined") {
       return result;
     }
-    if (imgs.length > 0) {
+    if (imgs?.length > 0) {
       result = imgs.map((data, index) => {
         return (
           <div>
@@ -115,7 +115,7 @@ class ListReview extends Component {
       var { censorship } = this.props;
       result = reviews.map((data, index) => {
         var image_product = "";
-        var image_review = "";
+        var image_review = [];
         try {
           image_product =
             data.product.images.length > 0
@@ -125,7 +125,9 @@ class ListReview extends Component {
           image_product = Env.IMG_NOT_FOUND;
         }
         try {
-          image_review = JSON.parse(data.images);
+          if (data.images) {
+            image_review = JSON.parse(data.images);
+          }
         } catch (error) {
           image_review = [];
         }
