@@ -180,7 +180,7 @@ class PanelBottom extends Component {
       this.setState({ txtWards: data.id, isLoaded: true });
       this.onSelectChangeDistrictById(data.id);
 
-      this.props.fetchPlaceWards(data.id);
+      // this.props.fetchPlaceWards(data.id);
 
       this.toggleOpenWards();
     }
@@ -247,21 +247,17 @@ class PanelBottom extends Component {
       !shallowEqual(nextProps.oneCart, this.props.oneCart) &&
       nextProps.oneCart !== undefined
     ) {
-      console.log(nextProps.oneCart);
+      console.log("nextProps.oneCart:: ", nextProps.oneCart);
 
       if (nextProps.oneCart?.province != null) {
         this.props.fetchPlaceDistrict(nextProps.oneCart.province);
       }
       if (nextProps.oneCart?.district != null) {
-        this.props.fetchPlaceDistrict_Wards(nextProps.oneCart.district);
+        this.props.fetchPlaceWards(nextProps.oneCart.district);
       }
 
       const customer = nextProps.oneCart?.customer;
       const oneCart = nextProps.oneCart;
-      console.log(
-        "🚀 ~ file: PanelBottom.js:251 ~ componentWillReceiveProps ~ oneCart111111111",
-        oneCart
-      );
 
       this.setState({
         ...this.state,
