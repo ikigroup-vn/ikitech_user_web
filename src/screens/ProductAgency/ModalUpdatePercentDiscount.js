@@ -14,8 +14,16 @@ class ModalUpdatePercentDiscount extends Component {
 
   onChange = (e) => {
     var name = e.target.name;
-    var value = formatNumber(e.target.value);
-    this.setState({ [name]: value });
+    var value = e.target.value;
+    if (value <= 100) {
+      if (value == "") {
+        this.setState({ [name]: "" });
+      } else {
+        this.setState({ [name]: value });
+      }
+    } else {
+      this.setState({ [name]: 100 });
+    }
   };
   setCommissionPercent = (percent) => {
     this.setState({ commission_percent: percent });
@@ -32,7 +40,7 @@ class ModalUpdatePercentDiscount extends Component {
       store_code,
       agency_type_id,
       {
-        commission_percent: commission_percent ? commission_percent : 0,
+        commission_percent: commission_percent ? Number(commission_percent) : 0,
         product_ids: arrayCheckBox,
       },
       () => {
