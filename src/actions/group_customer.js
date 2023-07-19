@@ -11,6 +11,37 @@ export const fetchGroupCustomer = (store_code) => {
         if (res.data.code !== 401) {
           dispatch({
             type: Types.FETCH_ALL_GROUP_CUSTOMER,
+            data: res.data.data.data,
+          });
+        }
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.message,
+          },
+        });
+      });
+  };
+};
+export const fetchListCustomerByGroup = (
+  store_code,
+  idGroupCustomer,
+  params
+) => {
+  return (dispatch) => {
+    dispatch({ type: Types.SHOW_LOADING, loading: "show" });
+    groupCustomerApi
+      .fetchListCustomerByGroup(store_code, idGroupCustomer, params)
+      .then((res) => {
+        dispatch({ type: Types.SHOW_LOADING, loading: "hidden" });
+        if (res.data.code !== 401) {
+          dispatch({
+            type: Types.FETCH_ALL_CUSTOMER,
             data: res.data.data,
           });
         }

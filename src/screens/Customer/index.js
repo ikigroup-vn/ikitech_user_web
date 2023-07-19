@@ -410,7 +410,6 @@ class Customer extends Component {
     return valueConvert;
   };
 
-
   handleDeleteOptionFilterById = (idOptionType) => {
     var { store_code } = this.props.match.params;
     var { searchValue } = this.state;
@@ -543,7 +542,7 @@ class Customer extends Component {
       const { importAllListCustomer } = this.props;
 
       if (newListCustomers.length > 800) {
-       this. setOpenModalImport(false)
+        this.setOpenModalImport(false);
         confirmAlert({
           customUI: ({ onClose }) => {
             return (
@@ -560,7 +559,10 @@ class Customer extends Component {
                 }}
               >
                 <h3>Lưu ý</h3>
-                <p>Chỉ cho phép tối đa 250 khách hàng mỗi lần import, vui lòng tách nhiều file Excel để thực hiện !</p>
+                <p>
+                  Chỉ cho phép tối đa 250 khách hàng mỗi lần import, vui lòng
+                  tách nhiều file Excel để thực hiện !
+                </p>
                 <div
                   style={{
                     display: "flex",

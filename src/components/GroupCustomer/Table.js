@@ -1,4 +1,13 @@
 import { PureComponent } from "react";
+import styled from "styled-components";
+
+const TableStyles = styled.div`
+  .countCustomers {
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+`;
 
 class Table extends PureComponent {
   constructor(props) {
@@ -16,16 +25,24 @@ class Table extends PureComponent {
     }
   };
 
+  handleShowSidebar = (data) => {
+    const { setGroupInfo, setShowCustomerByGroup } = this.props;
+    setGroupInfo(data);
+    setShowCustomerByGroup(true);
+  };
+
   showData = (groupCustomer) => {
     if (groupCustomer.length > 0) {
       return groupCustomer.map((group, index) => (
-        <tr
-          className="hover-product"
-          key={group.id}
-          onClick={(e) => this.handleShowModalUpdateGroupCustomer(e, group.id)}
-        >
+        <tr className="hover-product" key={group.id}>
           <td>{index + 1}</td>
           <td>{group.name}</td>
+          <td
+            className="primary countCustomers"
+            onClick={() => this.handleShowSidebar(group)}
+          >
+            {group.count_customers}
+          </td>
           <td>{group.note}</td>
           <td>
             <div>
@@ -61,7 +78,7 @@ class Table extends PureComponent {
         ? []
         : this.props.groupCustomer;
     return (
-      <div class="table-responsive">
+      <TableStyles class="table-responsive">
         <table
           className="table table-border "
           id="dataTable"
@@ -72,6 +89,7 @@ class Table extends PureComponent {
             <tr>
               <th>STT</th>
               <th>Tên nhóm</th>
+              <th>Số lượng khách hàng</th>
               <th>Ghi chú</th>
               <th>Hành động</th>
 
@@ -80,7 +98,7 @@ class Table extends PureComponent {
           </thead>
           <tbody>{this.showData(groupCustomer)}</tbody>
         </table>
-      </div>
+      </TableStyles>
     );
   }
 }
