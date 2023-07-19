@@ -11,6 +11,7 @@ import Table from "../../components/GroupCustomer/Table";
 import * as placeAction from "../../actions/place";
 import ModalDeleteGroupCustomer from "../../components/GroupCustomer/ModalDeleteGroupCustomer";
 import ModalActionChangeGroupCustomer from "../../components/GroupCustomer/ModalActionChangeGroupCustomer";
+import SidebarShowCustomerByGroup from "../../components/GroupCustomer/SidebarShowCustomerByGroup";
 
 class GroupCustomer extends PureComponent {
   constructor(props) {
@@ -19,8 +20,20 @@ class GroupCustomer extends PureComponent {
       openModalActionChangeGroupCustomer: false,
       openModalDeleteGroupCustomer: false,
       idGroupCustomer: null,
+      showCustomerByGroup: false,
+      groupInfo: {},
     };
   }
+  setGroupInfo = (groupInfo) => {
+    this.setState({
+      groupInfo,
+    });
+  };
+  setShowCustomerByGroup = (isShowed) => {
+    this.setState({
+      showCustomerByGroup: isShowed,
+    });
+  };
   setOpenModalActionChangeGroupCustomer = () => {
     this.setState({
       openModalActionChangeGroupCustomer:
@@ -54,7 +67,7 @@ class GroupCustomer extends PureComponent {
   render() {
     const { groupCustomer, province } = this.props;
     const { store_code } = this.props.match.params;
-    const { isShow } = this.state;
+    const { isShow, showCustomerByGroup, groupInfo } = this.state;
     if (this.props.auth) {
       return (
         <div id="wrapper">
@@ -111,6 +124,8 @@ class GroupCustomer extends PureComponent {
                               this.setOpenModalActionChangeGroupCustomer
                             }
                             setIdGroupCustomer={this.setIdGroupCustomer}
+                            setGroupInfo={this.setGroupInfo}
+                            setShowCustomerByGroup={this.setShowCustomerByGroup}
                           />
                         ) : (
                           <div
@@ -130,6 +145,13 @@ class GroupCustomer extends PureComponent {
                   <NotAccess />
                 )}
               </div>
+              <SidebarShowCustomerByGroup
+                store_code={store_code}
+                showSidebar={showCustomerByGroup}
+                setShowSidebar={this.setShowCustomerByGroup}
+                groupInfo={groupInfo}
+                setGroupInfo={this.setGroupInfo}
+              ></SidebarShowCustomerByGroup>
               {this.state.openModalActionChangeGroupCustomer && (
                 <ModalActionChangeGroupCustomer
                   openModalActionChangeGroupCustomer={

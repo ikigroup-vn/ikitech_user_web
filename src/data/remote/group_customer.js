@@ -4,6 +4,20 @@ export const fetchGroupCustomer = (store_code) => {
   return callApi(`/store/${store_code}/group_customers`, "get", null);
 };
 
+export const fetchListCustomerByGroup = (
+  store_code,
+  idGroupCustomer,
+  params
+) => {
+  return callApi(
+    `/store/${store_code}/group_customers/${idGroupCustomer}/customers${
+      params ? `?${params}` : ""
+    }`,
+    "get",
+    null
+  );
+};
+
 export const fetchGroupCustomerById = (store_code, idGroupCustomer) => {
   return callApi(
     `/store/${store_code}/group_customers/${idGroupCustomer}`,
