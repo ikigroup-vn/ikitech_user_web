@@ -102,7 +102,7 @@ export const createGroupCustomer = (store_code, data) => {
               if (res.data.code !== 401) {
                 dispatch({
                   type: Types.FETCH_ALL_GROUP_CUSTOMER,
-                  data: res.data.data,
+                  data: res.data.data.data,
                 });
               }
               dispatch({
@@ -111,7 +111,7 @@ export const createGroupCustomer = (store_code, data) => {
                   type: "success",
                   title: "Thành công ",
                   disable: "show",
-                  content: res.data.msg,
+                  content: res.data?.data.msg,
                 },
               });
             })
@@ -160,7 +160,7 @@ export const updateGroupCustomer = (store_code, idGroupCustomer, data) => {
               if (res.data.code !== 401) {
                 dispatch({
                   type: Types.FETCH_ALL_GROUP_CUSTOMER,
-                  data: res.data.data,
+                  data: res.data.data.data,
                 });
               }
               dispatch({
@@ -169,7 +169,7 @@ export const updateGroupCustomer = (store_code, idGroupCustomer, data) => {
                   type: "success",
                   title: "Thành công ",
                   disable: "show",
-                  content: res.data.msg,
+                  content: res.data?.data.msg,
                 },
               });
             })
@@ -218,7 +218,7 @@ export const deleteGroupCustomer = (store_code, idGroupCustomer) => {
               if (res.data.code !== 401) {
                 dispatch({
                   type: Types.FETCH_ALL_GROUP_CUSTOMER,
-                  data: res.data.data,
+                  data: res.data.data.data,
                 });
               }
               dispatch({

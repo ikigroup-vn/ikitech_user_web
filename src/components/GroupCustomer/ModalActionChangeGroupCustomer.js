@@ -274,7 +274,8 @@ class ModalActionChangeGroupCustomer extends Component {
       } else if (
         name === "typeCompareGroupCustomer" &&
         (Number(value) === Types.TYPE_COMPARE_CTV ||
-          Number(value) === Types.TYPE_COMPARE_AGENCY)
+          Number(value) === Types.TYPE_COMPARE_AGENCY ||
+          Number(value) === Types.TYPE_COMPARE_CUSTOMER_NORMAL)
       ) {
         const newConditionItems = [];
         this.state.conditionItems.forEach((conditionItem, index) => {
@@ -284,7 +285,10 @@ class ModalActionChangeGroupCustomer extends Component {
               [name]: value,
               comparisonExpressionGroupCustomer: expressions[2].value,
               valueCompareGroupCustomer:
-                Number(value) === Types.TYPE_COMPARE_CTV ? 0 : -1,
+                Number(value) === Types.TYPE_COMPARE_CTV ||
+                Number(value) === Types.TYPE_COMPARE_CUSTOMER_NORMAL
+                  ? 0
+                  : -1,
             });
           } else {
             newConditionItems.push(conditionItem);
@@ -500,7 +504,8 @@ class ModalActionChangeGroupCustomer extends Component {
               }}
             >
               <h4 style={{ color: "white", margin: "10px" }}>
-                {idGroupCustomer ? "Cập nhật" : "Tạo "} điều kiện cho nhóm khách hàng
+                {idGroupCustomer ? "Cập nhật" : "Tạo "} điều kiện cho nhóm khách
+                hàng
               </h4>
               <button
                 type="button"
