@@ -55,6 +55,8 @@ import { trainReducers } from "./train/index";
 import { saleReducers } from "./sale";
 import { attributeSearchReducers } from "./attribute_search";
 import { ecommerceReducers } from "./ecommerce";
+import { configSmsReducers } from "./config_sms";
+import { otpUnitReducers } from "./otp_unit";
 
 const appReducers = combineReducers({
   authReducers,
@@ -113,6 +115,8 @@ const appReducers = combineReducers({
   saleReducers,
   attributeSearchReducers,
   ecommerceReducers,
+  configSmsReducers,
+  otpUnitReducers,
 });
 
 export default appReducers;

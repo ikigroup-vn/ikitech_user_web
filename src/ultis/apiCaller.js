@@ -14,7 +14,11 @@ export const getNumberOrder = () => {
 };
 function checkEndPoint(endpoint) {
   for (const prefix of exceptPrefix) {
-    if (endpoint.includes(prefix) == true) {
+    if (
+      endpoint.includes(prefix) == true &&
+      endpoint.includes("/otp_units") == false &&
+      endpoint.includes("/otp_configs") == false
+    ) {
       return true;
     }
   }
