@@ -179,6 +179,7 @@ import AttributeSearch from "./screens/AttributeSearch";
 import Ecommerce from "./screens/Ecommerce";
 import ProductEcommerce from "./screens/Ecommerce/product";
 import OrderEcommerce from "./screens/Ecommerce/order";
+import ConfigSms from "./screens/ConfigSms";
 
 const routes = [
   {
@@ -1168,6 +1169,12 @@ const routes = [
     main: ({ match }) => <Shipment match={match} />,
   },
   ////////////
+  {
+    path: "/config_sms/:store_code",
+    exact: true,
+
+    main: ({ match }) => <ConfigSms match={match} />,
+  },
   {
     path: "/payment/:store_code",
     exact: true,

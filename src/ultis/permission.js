@@ -326,6 +326,7 @@ const permission = (channel) => {
           "Cài đặt máy in",
           "Cài đặt xu KH",
           "Cài đặt chung",
+          "Cài đặt SMS",
           "In mã vạch",
           "Chấm công",
           "Phân quyền",
@@ -334,6 +335,7 @@ const permission = (channel) => {
           "setting_print",
           "customer_config_point",
           "config_setting",
+          "config_sms",
           "barcode_print",
           "timekeeping",
           "decentralization_list",
@@ -576,6 +578,7 @@ export const initialPermission = () => {
     ecommerce_connect: false,
     ecommerce_orders: false,
     ecommerce_inventory: false,
+    config_sms: false,
   };
   return { ...state };
 };

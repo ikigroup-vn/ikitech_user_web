@@ -633,6 +633,7 @@ export const ikitech_menu = [
           "/branch/index",
           "/staff/index",
           "/decentralization/index",
+          "/config_sms",
         ],
 
         open: "setting",
@@ -689,6 +690,13 @@ export const ikitech_menu = [
             display: "hide",
             exact: true,
             to: "/setting/index",
+          },
+          {
+            name: "Cài đặt SMS",
+            class: "config_sms",
+            display: "hide",
+            exact: true,
+            to: "/config_sms",
           },
         ],
       },
