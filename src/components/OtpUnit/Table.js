@@ -79,7 +79,7 @@ class Table extends Component {
             <td>
               <img
                 src={data.image_url ? data.image_url : "/images/no_img.png"}
-                style={{ width: "80px", height: "80px", objectFit: "cover" }}
+                style={{ width: "80px" }}
               />
             </td>
             <td style={{ maxWidth: "260px" }}>
@@ -154,14 +154,14 @@ class Table extends Component {
                   >
                     <i class="fa fa-edit"></i>Sửa
                   </button>
-                  <button
+                  {/* <button
                     onClick={(e) => this.passDeleteFunc(e, data)}
                     data-toggle="modal"
                     data-target="#deleteOtpUnitModal"
                     class={`btn btn-danger btn-sm`}
                   >
                     <i class="fa fa-trash"></i>Xóa
-                  </button>
+                  </button> */}
                 </div>
               )}
             </td>

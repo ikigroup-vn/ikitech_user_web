@@ -17,6 +17,11 @@ class Form extends Component {
     }
   }
 
+  handleRemoveVideo = () => {
+    this.setState({ video: null });
+    this.props.handleDataFromProductVideo(null);
+  };
+
   render() {
     var { video } = this.state;
 
@@ -64,7 +69,7 @@ class Form extends Component {
                     right: "0",
                     transform: "translate(50%,-50%)",
                   }}
-                  onClick={() => this.setState({ video: null })}
+                  onClick={this.handleRemoveVideo}
                 >
                   <i className="fas cursor fa-times-circle"></i>
                 </div>

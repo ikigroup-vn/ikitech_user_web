@@ -110,14 +110,14 @@ class ConfigSms extends Component {
                         <h6 class="m-0 title_content font-weight-bold text-primary">
                           Danh sách cài đặt sms
                         </h6>
-                        <button
+                        {/* <button
                           type="button"
                           data-toggle="modal"
                           data-target="#createOtpUnitModal"
                           class="btn btn-primary btn-sm"
                         >
                           <i class="fa fa-plus"></i> Thêm
-                        </button>
+                        </button> */}
                       </div>
                       <div class="card-body" style={{ padding: "2px" }}>
                         <Table

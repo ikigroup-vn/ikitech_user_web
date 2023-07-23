@@ -545,7 +545,6 @@ class ProductCreate extends Component {
   };
 
   handleDataFromProductVideo = (video) => {
-    console.log(video);
     this.setState((prevState, props) => {
       var formdata = { ...prevState.form };
       formdata.video_url = video;
