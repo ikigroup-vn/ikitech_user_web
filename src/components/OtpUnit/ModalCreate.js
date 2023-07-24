@@ -84,7 +84,7 @@ class ModalCreate extends Component {
               id="updateForm"
             >
               <div class="modal-body">
-                <div className="form-group">
+                {/* <div className="form-group">
                   <label
                     for="txtName"
                     style={{
@@ -100,7 +100,7 @@ class ModalCreate extends Component {
                       image={image_url}
                     />
                   </div>
-                </div>
+                </div> */}
                 <div class="form-group">
                   <label for="product_name">Đơn vị gửi </label>
                   <input
