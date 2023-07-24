@@ -28,6 +28,8 @@ class Notification extends Component {
         CUSTOMER_PAID: `/order/detail/${this.props.store_code}`,
         NEW_ORDER: `/order/detail/${this.props.store_code}`,
         REFUND_ORDER: `/order/detail/${this.props.store_code}`,
+        GET_AGENCY: `/agency/${this.props.store_code}?tab-index=2`,
+        GET_CTV: `/collaborator/${this.props.store_code}?tab-index=2`,
       },
     };
     this.socket = null;
@@ -78,6 +80,11 @@ class Notification extends Component {
   };
   onchangeRouter = (back, value, to, type) => {
     const location = window.location.pathname;
+
+    if (type == "GET_CTV" || type == "GET_AGENCY") {
+      history.push(to);
+      return;
+    }
     if (
       type == "GOOD_NIGHT_USER" ||
       type == "COUNT_ORDER_END_DAY" ||
