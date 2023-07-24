@@ -22,7 +22,7 @@ export const fetchSmsConfig = (store_code) => {
   };
 };
 
-export const updateSmsConfig = (store_code, data, id) => {
+export const updateSmsConfig = (store_code, data, id, onSuccess) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -31,6 +31,9 @@ export const updateSmsConfig = (store_code, data, id) => {
     configSms
       .updateSmsConfig(store_code, data, id)
       .then((res) => {
+        if (onSuccess) {
+          onSuccess();
+        }
         configSms.fetchSmsConfig(store_code).then((res) => {
           dispatch({
             type: Types.SHOW_LOADING,

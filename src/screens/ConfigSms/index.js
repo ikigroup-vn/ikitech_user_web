@@ -7,7 +7,7 @@ import ModalUpdate from "../../components/OtpUnit/ModalUpdate";
 import ModalCreate from "../../components/OtpUnit/ModalCreate";
 import ModalDelete from "../../components/OtpUnit/ModalDelete";
 
-import { connect } from "react-redux";
+import { connect, shallowEqual } from "react-redux";
 import { Redirect } from "react-router-dom";
 import * as otpUnitAction from "../../actions/otp_unit";
 import * as configSmsAction from "../../actions/config_sms";
@@ -30,6 +30,7 @@ class ConfigSms extends Component {
         token: "",
         id: "",
       },
+      is_use: true,
     };
   }
 
@@ -45,9 +46,17 @@ class ConfigSms extends Component {
     var { store_code } = this.props.match.params;
 
     this.props.fetchAllOtpUnit(store_code);
+    this.props.fetchSmsConfig(store_code);
   }
   componentWillReceiveProps(nextProps) {
-    // $("#dataTable").DataTable().destroy();
+    if (!shallowEqual(nextProps.smsConfig, this.props.smsConfig)) {
+      var { smsConfig } = nextProps;
+
+      this.setState({
+        is_use: smsConfig.is_use,
+        is_use_from_default: smsConfig.is_use_from_default,
+      });
+    }
   }
   componentDidUpdate(prevProps, prevState) {
     if (
@@ -62,10 +71,25 @@ class ConfigSms extends Component {
     }
     // $("#dataTable").DataTable(config());
   }
+
+  onHandleUpdate = (e) => {
+    var { name } = e.target;
+    const { smsConfig } = this.props;
+    var { store_code } = this.props.match.params;
+
+    var { is_use } = this.state;
+
+    const formData = {
+      is_use: !is_use,
+    };
+    this.props.updateSmsConfig(store_code, formData, smsConfig.id, () => {
+      this.setState({ is_use: !is_use });
+    });
+  };
   render() {
     var { store_code } = this.props.match.params;
     var { alert, allOtpUnit } = this.props;
-    var { update, isShow } = this.state;
+    var { update, isShow, is_use } = this.state;
 
     if (this.props.auth) {
       return (
@@ -80,7 +104,7 @@ class ConfigSms extends Component {
                 ) : isShow == true ? (
                   <div class="container-fluid">
                     <Alert type={Types.ALERT_UID_STATUS} alert={alert} />
-                    <div
+                    {/* <div
                       style={{
                         display: "flex",
                         justifyContent: "space-between",
@@ -98,18 +122,51 @@ class ConfigSms extends Component {
                         </h6>
                       </div>
                       <SmsConfig store_code={store_code}></SmsConfig>
-                    </div>
+                    </div> */}
                     <div class="card shadow mb-4">
                       <div
                         class="card-header py-3"
                         style={{
                           display: "flex",
-                          justifyContent: "space-between",
+                          flexDirection: "column",
+                          rowGap: "5px",
                         }}
                       >
                         <h6 class="m-0 title_content font-weight-bold text-primary">
                           Danh sách cài đặt sms
                         </h6>
+                        <div
+                          className="wrap-setting"
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            columnGap: "5px",
+                          }}
+                        >
+                          <div
+                            style={{
+                              fontSize: "14px",
+                              color: "black",
+                            }}
+                          >
+                            Bắt buộc xác nhận bằng mã OTP
+                          </div>
+
+                          <div class="custom-control custom-switch">
+                            <input
+                              type="checkbox"
+                              class="custom-control-input"
+                              id="switch2"
+                              name="is_use"
+                              checked={is_use}
+                              onChange={this.onHandleUpdate}
+                            />
+                            <label
+                              class="custom-control-label"
+                              for="switch2"
+                            ></label>
+                          </div>
+                        </div>
                         {/* <button
                           type="button"
                           data-toggle="modal"
@@ -161,6 +218,7 @@ const mapStateToProps = (state) => {
   return {
     auth: state.authReducers.login.authentication,
     allOtpUnit: state.otpUnitReducers.otp_unit.allOtpUnit,
+    smsConfig: state.configSmsReducers.configSms.smsConfig,
     alert: state.otpUnitReducers.alert.alert_success,
     permission: state.authReducers.permission.data,
   };
@@ -169,6 +227,14 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     fetchAllOtpUnit: (store_code) => {
       dispatch(otpUnitAction.fetchAllOtpUnit(store_code));
+    },
+    fetchSmsConfig: (store_code) => {
+      dispatch(configSmsAction.fetchSmsConfig(store_code));
+    },
+    updateSmsConfig: (store_code, data, id, onSuccess) => {
+      dispatch(
+        configSmsAction.updateSmsConfig(store_code, data, id, onSuccess)
+      );
     },
   };
 };
