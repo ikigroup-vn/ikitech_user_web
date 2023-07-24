@@ -3,6 +3,7 @@ import * as otpUnitActions from "../../actions/otp_unit";
 import { connect } from "react-redux";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import Upload from "../Upload";
+import * as Types from "../../constants/ActionType";
 
 class ModalUpdate extends Component {
   constructor(props) {
@@ -46,6 +47,18 @@ class ModalUpdate extends Component {
     e.preventDefault();
 
     var otpUnit = this.state;
+    if (!otpUnit.content?.includes("{") || !otpUnit.content?.includes("{")) {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "{otp} là bắt buộc trong nội dung",
+        },
+      });
+      return;
+    }
     this.props.updateOtpUnit(
       this.props.store_code,
       otpUnit.id,
@@ -93,7 +106,7 @@ class ModalUpdate extends Component {
               id="updateForm"
             >
               <div class="modal-body">
-                <div className="form-group">
+                {/* <div className="form-group">
                   <label
                     for="txtName"
                     style={{
@@ -109,7 +122,7 @@ class ModalUpdate extends Component {
                       image={image_url}
                     />
                   </div>
-                </div>
+                </div> */}
                 <div class="form-group">
                   <label for="product_name">Đơn vị gửi </label>
                   <input
@@ -137,12 +150,14 @@ class ModalUpdate extends Component {
                   />
                 </div>
                 <div class="form-group">
-                  <label for="product_name">Nội dung </label>
+                  <label for="product_name">
+                    Nội dung ( {`{otp}`} là bắt buộc trong nội dung )
+                  </label>
                   <input
                     type="text"
                     class="form-control"
                     id="content"
-                    placeholder="VD: Mã xác nhận của bạn là"
+                    placeholder="VD: Mã xác nhận của bạn là {otp}"
                     autoComplete="off"
                     value={content}
                     onChange={this.onChange}
@@ -174,6 +189,9 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     updateOtpUnit: (store_code, id, data, onSuccess) => {
       dispatch(otpUnitActions.updateOtpUnit(store_code, id, data, onSuccess));
+    },
+    showError: (error) => {
+      dispatch(error);
     },
   };
 };

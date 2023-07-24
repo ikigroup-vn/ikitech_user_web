@@ -43,6 +43,13 @@ class Table extends Component {
       is_use: false,
     });
   };
+  handleShowToken = (token) => {
+    const tokenLength = token.length;
+    if (tokenLength > 6) {
+      return `${token.slice(0, token.length - 7)}*******`;
+    }
+    return token;
+  };
   onChangeStatus = (e, data) => {
     const { store_code, smsConfig, updateStatusOtpUnit, updateSmsConfig } =
       this.props;
@@ -75,21 +82,15 @@ class Table extends Component {
         }
         return (
           <tr>
-            <td style={{ width: "150px" }}>{data.sender}</td>
             <td>
               <img
                 src={data.image_url ? data.image_url : "/images/no_img.png"}
                 style={{ width: "80px" }}
               />
             </td>
+            <td style={{ width: "150px" }}>{data.sender}</td>
             <td style={{ maxWidth: "260px" }}>
-              {data.token
-                ? `${
-                    data.token?.length > 100
-                      ? `${data.token?.slice(0, 80)}...`
-                      : data.token
-                  }`
-                : ""}
+              {data.token ? this.handleShowToken(data.token) : ""}
             </td>
             <td>
               {data.content
@@ -181,8 +182,8 @@ class Table extends Component {
         <table class="table " id="dataTable" width="100%" cellspacing="0">
           <thead>
             <tr>
+              <th></th>
               <th>Đơn vị gửi</th>
-              <th>Hình ảnh</th>
               <th>Mã Token </th>
               <th>Nội dung</th>
               <th style={{ textAlign: "center" }}>Trạng thái hoạt động </th>
