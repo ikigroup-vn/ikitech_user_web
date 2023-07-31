@@ -316,7 +316,7 @@ class Table extends Component {
                   })}
                 </select>
               </td>
-              <td>
+              {/* <td>
                 <label className="status-product on-off">
                   <input
                     ref={(ref) => (this["checked" + data.id] = ref)}
@@ -331,7 +331,7 @@ class Table extends Component {
                   />
                   <div></div>
                 </label>
-              </td>
+              </td> */}
               <td
                 style={{
                   display: "flex",
@@ -540,7 +540,7 @@ class Table extends Component {
                 </select>
               </th>
 
-              <th>Trạng thái hoạt động</th>
+              {/* <th>Trạng thái hoạt động</th> */}
 
               <th>Hành động</th>
             </tr>
