@@ -83,6 +83,8 @@ class ListProduct extends Component {
             : null;
         var checked = this.checkExsit(list, data.id);
         var disaled = this.checkDisable(discounts, data.id, list);
+      
+        disaled = false
         var background_disable = disaled == true ? "#55b8c3" : "white";
         const {
           product_discount,
