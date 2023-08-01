@@ -87,19 +87,19 @@ class agency extends Component {
       typeof this.props.permission.product_list != "undefined"
     ) {
       var permissions = this.props.permission;
-      var payment_request_list = permissions.agency_payment_request_list;
-      var config = permissions.agency_config;
-      var payment_request_history = permissions.agency_payment_request_history;
       var agency_list = permissions.agency_list;
-      var payment_request_solve = permissions.agency_payment_request_solve;
+      var agency_config = permissions.agency_config;
+      var agency_register = permissions.agency_register;
+      var agency_top_import = permissions.agency_top_import;
+      var agency_bonus_program = permissions.agency_bonus_program;
+      var agency_top_commission = permissions.agency_top_commission;
+      var agency_payment_request_list = permissions.agency_payment_request_list;
+      var agency_payment_request_history =
+        permissions.agency_payment_request_history;
+      var agency_add_sub_balance = permissions.agency_add_sub_balance;
+      var isShow = permissions.collaborator_list;
 
-      var isShow =
-        payment_request_list == false &&
-        config == false &&
-        payment_request_history == false &&
-        agency_list == false
-          ? false
-          : true;
+      var isShow = permissions.agency_list;
 
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
@@ -111,13 +111,16 @@ class agency extends Component {
 
       this.setState({
         isLoading: true,
-        agency_list: true,
-        payment_request_list: true,
-        config: true,
-        payment_request_history: true,
-        payment_request_solve: true,
-        isShow: true,
-        bonus_program: true,
+        isShow,
+        agency_list,
+        agency_config,
+        agency_register,
+        agency_top_import,
+        agency_bonus_program,
+        agency_top_commission,
+        agency_payment_request_list,
+        agency_payment_request_history,
+        agency_add_sub_balance,
       });
     }
   }
@@ -127,11 +130,14 @@ class agency extends Component {
       tabId,
       tabDefault,
       agency_list,
-      payment_request_list,
-      config,
-      payment_request_history,
-      payment_request_solve,
-      bonus_program,
+      agency_config,
+      agency_register,
+      agency_top_import,
+      agency_bonus_program,
+      agency_top_commission,
+      agency_payment_request_list,
+      agency_payment_request_history,
+      agency_add_sub_balance,
       isShow,
       isAutoSetLevelAgency,
     } = this.state;
@@ -174,7 +180,7 @@ class agency extends Component {
                               </Link>
                             </Tab>
                           ) : null} */}
-                          {config == true ? (
+                          {agency_config == true ? (
                             <Tab>
                               <Link
                                 to={"?tab-index=0"}
@@ -204,7 +210,7 @@ class agency extends Component {
                               </Link>
                             </Tab>
                           ) : null}
-                          {agency_list == true ? (
+                          {agency_register == true ? (
                             <Tab>
                               <Link
                                 to={"?tab-index=2"}
@@ -220,7 +226,7 @@ class agency extends Component {
                             </Tab>
                           ) : null}
 
-                          {payment_request_list == true ? (
+                          {agency_top_import == true ? (
                             <Tab>
                               <Link
                                 to={"?tab-index=3"}
@@ -236,7 +242,7 @@ class agency extends Component {
                             </Tab>
                           ) : null}
 
-                          {bonus_program == true ? (
+                          {agency_bonus_program == true ? (
                             <Tab>
                               <Link
                                 to={"?tab-index=4"}
@@ -251,7 +257,7 @@ class agency extends Component {
                               </Link>
                             </Tab>
                           ) : null}
-                          {payment_request_list == true ? (
+                          {agency_top_commission == true ? (
                             <Tab>
                               <Link
                                 to={"?tab-index=5"}
@@ -267,7 +273,7 @@ class agency extends Component {
                               </Link>
                             </Tab>
                           ) : null}
-                          {payment_request_list == true ? (
+                          {agency_payment_request_list == true ? (
                             <Tab>
                               <Link
                                 to={"?tab-index=6"}
@@ -283,7 +289,7 @@ class agency extends Component {
                               </Link>
                             </Tab>
                           ) : null}
-                          {payment_request_history == true ? (
+                          {agency_payment_request_history == true ? (
                             <Tab>
                               <Link
                                 to={"?tab-index=7"}
@@ -301,17 +307,7 @@ class agency extends Component {
                           ) : null}
                         </TabList>
 
-                        {/* {config == true ? (
-                          <TabPanel>
-                            <Config
-                              tabId={tabId}
-                              store_code={store_code}
-                              handleEditCallBack={this.handleEditCallBack}
-                              handleDelCallBack={this.handleDelCallBack}
-                            />
-                          </TabPanel>
-                        ) : null} */}
-                        {agency_list == true ? (
+                        {agency_config == true ? (
                           <TabPanel>
                             <Type
                               tabId={tabId}
@@ -332,10 +328,14 @@ class agency extends Component {
                         ) : null}
                         {agency_list == true ? (
                           <TabPanel>
-                            <ListAgency tabId={tabId} store_code={store_code} />
+                            <ListAgency
+                              tabId={tabId}
+                              store_code={store_code}
+                              agency_add_sub_balance={agency_add_sub_balance}
+                            />
                           </TabPanel>
                         ) : null}
-                        {agency_list == true ? (
+                        {agency_register == true ? (
                           <TabPanel>
                             <ListAgencyRegisterRequest
                               tabId={tabId}
@@ -343,23 +343,23 @@ class agency extends Component {
                             />
                           </TabPanel>
                         ) : null}
-                        {payment_request_list == true ? (
+                        {agency_top_import == true ? (
                           <TabPanel>
                             <TopReport
                               paramId={id}
                               tabId={tabId}
                               store_code={store_code}
-                              payment_request_solve={payment_request_solve}
+                              payment_request_solve={agency_top_import}
                             />
                           </TabPanel>
                         ) : null}
-                        {bonus_program == true ? (
+                        {agency_bonus_program == true ? (
                           <TabPanel>
                             <BonusProgram
                               paramId={id}
                               tabId={tabId}
                               store_code={store_code}
-                              payment_request_solve={payment_request_solve}
+                              payment_request_solve={agency_bonus_program}
                               handleEditCallBack={this.handleEditCallBack}
                               handleDelCallBack={this.handleDelCallBack}
                               handleEditCallBackImport={
@@ -371,27 +371,29 @@ class agency extends Component {
                             />
                           </TabPanel>
                         ) : null}
-                        {payment_request_list == true ? (
+                        {agency_top_commission == true ? (
                           <TabPanel>
                             <TopComission
                               paramId={id}
                               tabId={tabId}
                               store_code={store_code}
-                              payment_request_solve={payment_request_solve}
+                              payment_request_solve={agency_top_commission}
                             />
                           </TabPanel>
                         ) : null}
-                        {payment_request_list == true ? (
+                        {agency_payment_request_list == true ? (
                           <TabPanel>
                             <RequestPayment
                               paramId={id}
                               tabId={tabId}
                               store_code={store_code}
-                              payment_request_solve={payment_request_solve}
+                              payment_request_solve={
+                                agency_payment_request_list
+                              }
                             />
                           </TabPanel>
                         ) : null}
-                        {payment_request_history == true ? (
+                        {agency_payment_request_history == true ? (
                           <TabPanel>
                             <HistoryPayment
                               tabId={tabId}

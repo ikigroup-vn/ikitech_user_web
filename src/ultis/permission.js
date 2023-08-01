@@ -1,446 +1,528 @@
 import getChannel, { IKITECH, IKIPOS } from "./channel";
 const permission = (channel) => {
-  // if (getChannel() == IKITECH) {
-  //     return [
-  //         {
-  //             name: "Quản lý chung",
-  //             header: [
-  //                 "Xem thông báo đến cửa hàng",
-  //                 "Xem DS Chat",
-  //                 "Cho phép chat",
-  //                 "Xem báo cáo",
-  //                 "Xem đơn hàng",
-  //                 "Thay đổi trạng thái đơn hàng"
-  //             ]
-  //             , body: ["notification_to_stote", "chat_list", "chat_allow", "report_view", "order_list", "order_allow_change_status"]
-  //         },
-  //         {
-  //             name: "Quản lý phân quyền",
-  //             header: [
-  //                 "Xem danh sách",
-  //                 "Cập nhật",
-  //                 "Thêm mới",
-  //                 "Xóa"]
-  //             , body: ["decentralization_list", "decentralization_update", "decentralization_add", "decentralization_remove"]
-  //         },
-  //         {
-  //             name: " Quản lý nhân viên ",
-  //             header: [
-  //                 "Xem danh sách",
-  //                 "Cập nhật",
-  //                 "Thêm mới",
-  //                 "Xóa",
-  //                 // "Uỷ quyền"
-
-  //             ]
-  //             , body: ["staff_list", "staff_update", "staff_add", "staff_remove"]
-  //         },
-  //         {
-  //             name: " Quản lý khách hàng ",
-  //             header: [
-  //                 "Xem DS khách hàng",
-  //                 "Cấu hình điểm thưởng",
-  //                 "Danh sách đánh giá",
-  //                 "Kiểm duyệt đánh giá"]
-  //             , body: ["customer_list", "customer_config_point", "customer_review_list", "customer_review_censorship"]
-  //         },
-  //         {
-  //             name: "Chỉnh sửa Web",
-  //             header: [
-  //                 "Truy cập chỉnh sửa",
-  //                 "Tổng quan Web",
-  //                 "Liên hệ Web",
-  //                 "Hỗ trợ Web",
-  //                 "Chân trang web",
-  //                 "Banner Web",
-  //                 "Chỉnh sửa App",
-  //                 "Chỉnh sửa cấu hình",
-  //                 "Nút liên hệ",
-  //                 "Màn hình trang chủ",
-  //                 "Thành phần chính",
-  //                 "Màn hình danh mục sản phẩm",
-  //                 "Màn hình sản phẩm",
-  //                 "Màn hình liên hệ",
-
-  //             ]
-  //             , body: ["web_theme_edit",
-  //                 "web_theme_overview",
-  //                 "web_theme_contact", "web_theme_help", "web_theme_footer", "web_theme_banner", "app_theme_edit",
-  //                 "app_theme_main_config",
-  //                 "app_theme_button_contact",
-  //                 "app_theme_home_screen", "app_theme_main_component",
-  //                 "app_theme_category_product", "app_theme_product_screen", "app_theme_contact_screen"]
-  //         },
-
-  //         {
-  //             name: "  Quản lý sản phẩm",
-  //             header: [
-  //                 "Xem danh sách sản phẩm",
-  //                 "Cập nhật sản phẩm",
-  //                 "Thêm mới sản phẩm",
-  //                 "Xóa sản phẩm",
-
-  //                 "Xem danh sách thuộc tính sản phẩm",
-  //                 "Thêm mới thuộc tính sản phẩm",
-  //                 "Xóa thuộc tính sản phẩm",
-
-  //                 "Import Excel",
-  //                 "Export Export",
-  //                 "Lấy sản phẩm từ sàn TMĐT",
-
-  //                 "Xem danh sách danh mục sản phẩm",
-  //                 "Cập nhật danh mục sản phẩm",
-  //                 "Thêm mới sản phẩm",
-  //                 "Xóa danh mục sản phẩm",
-  //             ]
-  //             , body: ["product_list", "product_update", "product_add",
-  //                 "product_remove_hide", "product_attribute_list",
-
-  //                 "product_attribute_add",
-  //                 "product_attribute_remove",
-  //                 "product_import_from_exel",
-  //                 "product_export_to_exel", "product_ecommerce", "product_category_list", "product_category_update",
-  //                 "product_category_add", "product_category_remove"]
-  //         },
-  //         {
-  //             name: "CT Giảm giá ",
-  //             header: [
-  //                 "Xem danh sách giảm giá SP ",
-  //                 "Cập nhật chương trình giảm giá SP",
-  //                 "Thêm mới chương trình giảm giá SP",
-  //                 "Kết thúc chường trình giảm giá SP",
-  //                 "Xem danh sách Voucher SP ",
-  //                 "Cập nhật chương trình Voucher SP",
-  //                 "Thêm mới chương trình Voucher SP",
-  //                 "Kết thúc chường trình Voucher SP",
-  //                 "Xem danh sách Combo SP ",
-  //                 "Cập nhật chương trình Combo SP",
-  //                 "Thêm mới chương trình Combo SP",
-  //                 "Kết thúc chường trình Combo SP",
-
-  //             ]
-  //             , body: ["promotion_discount_list", "promotion_discount_update", "promotion_discount_add", "promotion_discount_end",
-  //                 "promotion_voucher_list", "promotion_voucher_update", "promotion_voucher_add", "promotion_voucher_end", "promotion_combo_list", "promotion_combo_update", "promotion_combo_add", "promotion_combo_end"]
-  //         },
-
-  //         {
-  //             name: "Quản lý bài viết",
-  //             header: [
-  //                 "Xem danh sách bái viết",
-  //                 "Cập nhật bài viết",
-  //                 "Thêm mới bài viết",
-  //                 "Xóa bài viết",
-  //                 "Xem danh sách danh mục bài viết",
-  //                 "Cập nhật danh mục bài viết",
-  //                 "Thêm mới danh mục bài viết",
-  //                 "Xóa danh mục danh mục",
-
-  //             ]
-  //             , body: ["post_list", "post_update", "post_add", "post_remove_hide", "post_category_list", "post_category_update", "post_category_add", "post_category_remove"]
-  //         },
-
-  //         {
-  //             name: "Quản lý giao hàng và địa chỉ",
-  //             header: [
-  //                 "Danh sách địa chỉ lấy hàng",
-  //                 "Chỉnh sửa địa chỉ",
-  //                 "Chỉnh sửa bên cung cấp giao vận",
-
-  //             ]
-  //             , body: ["delivery_pick_address_list", "delivery_pick_address_update", "delivery_provider_update"]
-  //         },
-  //         {
-  //             name: "Quản lý thanh toán",
-  //             header: [
-  //                 "Xem danh sách",
-  //                 "Bật tắt nhà thanh toán",
-
-  //             ]
-  //             , body: ["payment_list", "payment_on_off"]
-  //         },
-  //         {
-  //             name: "Quản lý thông báo",
-  //             header: [
-  //                 "Danh sách",
-  //                 "Cập nhật lịch/Tiếp tục/Tạm dừng",
-  //                 "Thêm lịch",
-  //                 "Xóa lịch",
-  //                 "Danh sách Popup",
-  //                 "Cập nhật Popup",
-  //                 "Thêm Popup",
-  //                 "Xóa Popup",
-  //             ]
-  //             , body: ["notification_schedule_list", "notification_schedule_update",
-  //                 "notification_schedule_add", "notification_schedule_remove_pause",
-  //                 "popup_list", "popup_update", "popup_add", "popup_remove"]
-  //         },
-  //         {
-  //             name: " Quản lý CTV ",
-  //             header: [
-  //                 "Cấu hình",
-  //                 "Xem DS",
-  //                 "Xem DS yêu cầu thanh toán",
-  //                 "Cho phép hủy hoặc thanh toán",
-  //                 "Xem lịch sử yêu cầu thanh toán",
-  //             ]
-  //             , body: ["collaborator_config", "collaborator_list", "collaborator_payment_request_list", "collaborator_payment_request_solve", "collaborator_payment_request_history"]
-  //         },
-
-  //     ]
-  // }
   if (getChannel() == IKITECH) {
     return [
       {
-        name: "Quản lý chung",
-        header: [
-          "Thông tin cửa hàng",
-          "Khóa học",
-          "Chương trình KM",
-          "Thông báo tới cửa hàng",
-          "Chi nhánh",
-          "Kế toán",
-          "Chat",
-        ],
-        body: [
-          "store_info",
-          "train",
-          "promotion",
-          "notification_to_stote",
-          "branch_list",
-          "revenue_expenditure",
-          "chat_list",
-        ],
-      },
-      // {
-      //     name: "Quản lý đơn hàng",
-      //     header: [
-
-      //         "Tạo đơn hàng",
-      //         "Xem hóa đơn"
-      //     ]
-      //     , body: ["create_order_pos", "order_list"]
-      // },
-      {
-        name: "Quản lý kho & đơn hàng",
-        header: [
-          "Nhập hàng",
-          "Kiểm kho",
-          "Chuyển kho",
-          "Kho hàng",
-          "Tạo đơn hàng",
-          "Xem hóa đơn",
-        ],
-        body: [
-          "inventory_import",
-          "inventory_tally_sheet",
-          "transfer_stock",
-          "inventory_list",
-          "create_order_pos",
-          "order_list",
-        ],
-      },
-      {
-        name: "Quản lý sản phẩm & Bài viết",
-        header: ["Danh sách sản phẩm", "Danh mục sản phẩm", "Tin tức bài viết"],
-        body: ["product_list", "product_category_list", "post_list"],
-      },
-      // {
-      //     name: "Quản lý thu chi",
-      //     header: [
-
-      //         "Tạo khoản thu",
-      //         "Tạo khoản chi"
-      //     ]
-      //     , body: ["add_revenue", "add_expenditure"]
-      // },
-      {
-        name: "Báo cáo & Thu chi",
-        header: [
-          "Báo cáo bán hàng",
-          "Báo cáo kho",
-          "Báo cáo tài chính",
-          "Tạo khoản thu",
-          "Tạo khoản chi",
-        ],
-        body: [
-          "report_overview",
-          "report_inventory",
-          "report_finance",
-          "add_revenue",
-          "add_expenditure",
+        name: "Hệ thống",
+        components: [
+          {
+            name: "Thông tin hệ thống",
+            decentralizationName: "store_info",
+            componentChilds: [
+              {
+                name: "Thông tin cửa hàng",
+                decentralizationName: "store_info",
+              },
+              {
+                name: "Thông báo tới cửa hàng",
+                decentralizationName: "notification_to_stote",
+              },
+              {
+                name: "Tin tức bài viết",
+                decentralizationName: "post_list",
+              },
+              {
+                name: "Đào tạo",
+                decentralizationName: "train",
+              },
+              {
+                name: "Chấm công",
+                decentralizationName: "timekeeping",
+              },
+            ],
+          },
+          {
+            name: "Chương trình khuyến mãi",
+            decentralizationName: "promotion",
+            componentChilds: [
+              {
+                name: "Giảm giá sản phẩm",
+                decentralizationName: "promotion_discount_list",
+              },
+              {
+                name: "Voucher giảm giá",
+                decentralizationName: "promotion_voucher_list",
+              },
+              {
+                name: "Combo giảm giá",
+                decentralizationName: "promotion_combo_list",
+              },
+              {
+                name: "Thưởng sản phẩm",
+                decentralizationName: "promotion_bonus_product_list",
+              },
+            ],
+          },
+          {
+            name: "Kế toán",
+            decentralizationName: "revenue_expenditure",
+            componentChilds: [
+              {
+                name: "Thu chi",
+                decentralizationName: "revenue_expenditure",
+                componentChilds: [],
+              },
+              {
+                name: "Bảng công",
+                decentralizationName: "accountant_time_sheet",
+                componentChilds: [],
+              },
+            ],
+          },
         ],
       },
       {
-        name: "Đối tác bán hàng & Onsale",
-        header: [
-          "Cộng tác viên",
-          "Đại lý",
-          "Sale",
-          "Truy cập onsale",
-          "Danh sách onsale",
-          "Phân công nhân viên",
-          "Xóa onsale",
-          "Thay đổi số dư cộng tác viên",
-          "Thay đổi số dư đại lý",
-        ],
-        body: [
-          "collaborator_list",
-          "agency_list",
-          "sale_list",
-          "onsale",
-          "onsale_assignment",
-          "onsale_edit",
-          "onsale_remove",
-          "collaborator_add_sub_balance",
-          "agency_add_sub_balance",
-        ],
-      },
-      {
-        name: "Quản lý nhân viên & khách hàng",
-        header: ["Khách hàng", "Nhân viên", "Nhà cung cấp"],
-        body: ["customer_list", "staff_list", "supplier"],
-      },
-      {
-        name: "Gamification",
-        header: ["Cài đặt Game"],
-        body: ["gamification"],
-      },
-      {
-        name: "Sàn thương mại điện tử",
-        header: [
-          "Danh sách kết nối",
-          "Danh sách sản phẩm",
-          "Danh sách đơn hàng",
-          "Quản lý tồn kho",
-        ],
-        body: [
-          "ecommerce_connect",
-          "ecommerce_products",
-          "ecommerce_orders",
-          "ecommerce_inventory",
-        ],
-      },
-      {
-        name: "Cài đặt",
-        header: [
-          "Cài đặt máy in",
-          "Cài đặt xu KH",
-          "Cài đặt chung",
-          "Cài đặt SMS",
-          "In mã vạch",
-          "Chấm công",
-          "Phân quyền",
-        ],
-        body: [
-          "setting_print",
-          "customer_config_point",
-          "config_setting",
-          "config_sms",
-          "barcode_print",
-          "timekeeping",
-          "decentralization_list",
-        ],
-      },
-      {
-        name: "Khác",
-        header: [
-          "Vận chuyển",
-          "Thanh toán",
-          "Lên lịch thông báo",
-          "Đánh giá khách hàng",
-          "Giao diện khách hàng",
-        ],
-        body: [
-          "delivery_pick_address_list",
-          "payment_list",
-          "notification_schedule_list",
-          "customer_review_list",
-          "web_theme_edit",
-        ],
-      },
-    ];
-  }
-  if (getChannel() == IKIPOS) {
-    return [
-      {
-        name: "Quản lý chung",
-        header: [
-          "Thông tin cửa hàng",
-          "Phân quyền",
-          "Chương trình KM",
-          "Thông báo tới khách hàng",
-          "Chi nhánh",
-          "Chấm công",
-          "Kế toán",
-        ],
-        body: [
-          "store_info",
-          "decentralization_list",
-          "promotion",
-          "notification_to_stote",
-          "branch_list",
-          "timekeeping",
-          "revenue_expenditure",
+        name: "Hàng hóa",
+        components: [
+          {
+            name: "Quản lý sản phẩm",
+            decentralizationName: "product_list",
+            componentChilds: [
+              {
+                name: "DS sản phẩm",
+                decentralizationName: "product_list",
+              },
+              {
+                name: "Thêm mới",
+                decentralizationName: "product_add",
+              },
+              {
+                name: "Cập nhập",
+                decentralizationName: "product_update",
+              },
+              {
+                name: "Sao chép",
+                decentralizationName: "product_copy",
+              },
+              {
+                name: "Xóa",
+                decentralizationName: "product_remove_hide",
+              },
+              {
+                name: "Lấy phẩm sàn TMĐT",
+                decentralizationName: "product_ecommerce",
+              },
+              {
+                name: "In mã vạch",
+                decentralizationName: "barcode_print",
+              },
+              {
+                name: "Cài đặt hoa hồng",
+                decentralizationName: "product_commission",
+              },
+              {
+                name: "Xuất file excel",
+                decentralizationName: "product_export_to_excel",
+              },
+              {
+                name: "Nhập file excel",
+                decentralizationName: "product_import_from_excel",
+              },
+            ],
+          },
+          {
+            name: "Danh mục sản phẩm",
+            decentralizationName: "product_category_list",
+            componentChilds: [
+              {
+                name: "DS danh mục",
+                decentralizationName: "product_category_list",
+              },
+              {
+                name: "Thêm mới",
+                decentralizationName: "product_category_add",
+              },
+              {
+                name: "Cập nhập",
+                decentralizationName: "product_category_update",
+              },
+              {
+                name: "Xóa",
+                decentralizationName: "product_category_remove",
+              },
+            ],
+          },
+          {
+            name: "Thuộc tính sản phẩm",
+            decentralizationName: "product_attribute_list",
+            componentChilds: [
+              {
+                name: "DS thuộc tính sản phẩm",
+                decentralizationName: "product_attribute_list",
+              },
+              {
+                name: "Thêm mới",
+                decentralizationName: "product_attribute_add",
+              },
+              {
+                name: "Cập nhập",
+                decentralizationName: "product_attribute_update",
+              },
+              {
+                name: "Xóa",
+                decentralizationName: "product_attribute_remove",
+              },
+            ],
+          },
         ],
       },
       {
-        name: "Quản lý đơn hàng",
-        header: ["Tạo đơn hàng", "Xem hóa đơn"],
-        body: ["create_order_pos", "order_list"],
-      },
-      {
-        name: "Quản lý kho",
-        header: ["Nhập hàng", "Kiểm kho", "Kho hàng"],
-        body: ["inventory_import", "inventory_tally_sheet", "inventory_list"],
-      },
-      {
-        name: "Quản lý sản phẩm",
-        header: ["Danh sách sản phẩm", "Danh mục sản phẩm"],
-        body: ["product_list", "product_category_list"],
-      },
-      {
-        name: "Quản lý thu chi",
-        header: ["Tạo khoản thu", "Tạo khoản chi"],
-        body: ["add_revenue", "add_expenditure"],
-      },
-      {
-        name: "Báo cáo",
-        header: ["Báo cáo bán hàng", "Báo cáo kho", "Báo cáo tài chính"],
-        body: ["report_overview", "report_inventory", "report_finance"],
-      },
-      {
-        name: "Quản lý nhân viên & khách hàng",
-        header: ["Khách hàng", "Nhân viên", "Nhà cung cấp"],
-        body: ["customer_list", "staff_list", "supplier"],
-      },
-      {
-        name: "Sàn thương mại điện tử",
-        header: [
-          "Danh sách kết nối",
-          "Danh sách sản phẩm",
-          "Danh sách đơn hàng",
-          "Quản lý tồn kho",
+        name: "Quản lý đơn hàng và kho",
+        components: [
+          {
+            name: "Đơn hàng",
+            decentralizationName: "order_list",
+            componentChilds: [
+              {
+                name: "Xem hóa đơn",
+                decentralizationName: "order_list",
+              },
+              {
+                name: "Xuất file excel",
+                decentralizationName: "order_export_to_excel",
+              },
+              // {
+              //   name: "Nhập file excel",
+              //   decentralizationName: "order_import_from_excel",
+              // },
+              {
+                name: "Thay đổi trạng thái đơn hàng",
+                decentralizationName: "order_allow_change_status",
+              },
+              {
+                name: "Bán hàng tại quầy",
+                decentralizationName: "create_order_pos",
+              },
+            ],
+          },
+          {
+            name: "Quản lý kho",
+            decentralizationName: "inventory_list",
+            componentChilds: [
+              {
+                name: "Tồn kho",
+                decentralizationName: "inventory_list",
+              },
+              {
+                name: "Phiếu kiểm kho",
+                decentralizationName: "inventory_tally_sheet",
+              },
+              {
+                name: "Nhập hàng",
+                decentralizationName: "inventory_import",
+              },
+              {
+                name: "Chuyển kho",
+                decentralizationName: "transfer_stock",
+              },
+              {
+                name: "Nhà cung cấp",
+                decentralizationName: "supplier",
+              },
+            ],
+          },
         ],
-        body: [
-          "ecommerce_connect",
-          "ecommerce_products",
-          "ecommerce_orders",
-          "ecommerce_inventory",
+      },
+      {
+        name: "Quản lý báo cáo",
+        components: [
+          {
+            name: "Báo cáo",
+            decentralizationName: "report_overview",
+            componentChilds: [
+              {
+                name: "Báo cáo chung",
+                decentralizationName: "report_overview",
+              },
+              {
+                name: "Báo cáo kho",
+                decentralizationName: "report_inventory",
+              },
+              {
+                name: "Báo cáo tài chính",
+                decentralizationName: "report_finance",
+              },
+            ],
+          },
         ],
       },
       {
-        name: "Cài đặt",
-        header: [
-          "Cài đặt máy in",
-          "Cài đặt xu KH",
-          "Cài đặt chung",
-          "In mã vạch",
+        name: "Đối tác",
+        components: [
+          {
+            name: "Khách hàng",
+            decentralizationName: "customer_list",
+            componentChilds: [
+              {
+                name: "DS khách hàng",
+                decentralizationName: "customer_list",
+                componentChilds: [],
+              },
+              {
+                name: "Xu thưởng",
+                decentralizationName: "customer_config_point",
+                componentChilds: [],
+              },
+              {
+                name: "Chat với khách hàng",
+                decentralizationName: "chat_list",
+                componentChilds: [],
+              },
+              {
+                name: "Nhóm khách hàng",
+                decentralizationName: "group_customer",
+                componentChilds: [],
+              },
+            ],
+          },
+          {
+            name: "Cộng tác viên",
+            decentralizationName: "collaborator_list",
+            componentChilds: [
+              {
+                name: "Danh sách CTV",
+                decentralizationName: "collaborator_list",
+                componentChilds: [],
+              },
+              {
+                name: "Cấu hình CTV",
+                decentralizationName: "collaborator_config",
+                componentChilds: [],
+              },
+              {
+                name: "Yêu cầu làm CTV",
+                decentralizationName: "collaborator_register",
+                componentChilds: [],
+              },
+              {
+                name: "Top doanh số",
+                decentralizationName: "collaborator_top_sale",
+                componentChilds: [],
+              },
+              {
+                name: "Danh sách yêu cầu thanh toán",
+                decentralizationName: "collaborator_payment_request_list",
+                componentChilds: [],
+              },
+              {
+                name: "Lịch sử thanh toán",
+                decentralizationName: "collaborator_payment_request_history",
+                componentChilds: [],
+              },
+              {
+                name: "Thay đổi số dư CTV",
+                decentralizationName: "collaborator_add_sub_balance",
+                componentChilds: [],
+              },
+            ],
+          },
+          {
+            name: "Đại lý",
+            decentralizationName: "agency_list",
+            componentChilds: [
+              {
+                name: "Danh sách đại lý",
+                decentralizationName: "agency_list",
+                componentChilds: [],
+              },
+              {
+                name: "Cấu hình đại lý",
+                decentralizationName: "agency_config",
+                componentChilds: [],
+              },
+              {
+                name: "Yêu cầu làm đại lý",
+                decentralizationName: "agency_register",
+                componentChilds: [],
+              },
+              {
+                name: "Top nhập hàng",
+                decentralizationName: "agency_top_import",
+                componentChilds: [],
+              },
+              {
+                name: "Chương trình thưởng đại lý",
+                decentralizationName: "agency_bonus_program",
+                componentChilds: [],
+              },
+              {
+                name: "Top hoa hồng",
+                decentralizationName: "agency_top_commission",
+                componentChilds: [],
+              },
+              {
+                name: "Danh sách yêu cầu thanh toán",
+                decentralizationName: "agency_payment_request_list",
+                componentChilds: [],
+              },
+              {
+                name: "Lịch sử thanh toán",
+                decentralizationName: "agency_payment_request_history",
+                componentChilds: [],
+              },
+              {
+                name: "Thay đổi số dư đại lý",
+                decentralizationName: "agency_add_sub_balance",
+                componentChilds: [],
+              },
+            ],
+          },
+          {
+            name: "Sale",
+            decentralizationName: "sale_config",
+            componentChilds: [
+              {
+                name: "Danh sách sale",
+                decentralizationName: "sale_list",
+                componentChilds: [],
+              },
+              {
+                name: "Cấu hình sale",
+                decentralizationName: "sale_config",
+                componentChilds: [],
+              },
+              {
+                name: "Top sale",
+                decentralizationName: "sale_top",
+                componentChilds: [],
+              },
+            ],
+          },
+          {
+            name: "Onsale",
+            decentralizationName: "onsale_list",
+            componentChilds: [
+              {
+                name: "Danh sách onsale",
+                decentralizationName: "onsale_list",
+                componentChilds: [],
+              },
+              {
+                name: "Thêm khách hàng onsale",
+                decentralizationName: "onsale_add",
+                componentChilds: [],
+              },
+              {
+                name: "Cập nhập khách hàng onsale",
+                decentralizationName: "onsale_edit",
+                componentChilds: [],
+              },
+              {
+                name: "Xóa khách hàng onsale",
+                decentralizationName: "onsale_remove",
+                componentChilds: [],
+              },
+              {
+                name: "Gán khách hàng onsale cho nhân viên",
+                decentralizationName: "onsale_assignment",
+                componentChilds: [],
+              },
+            ],
+          },
         ],
-        body: [
-          "setting_print",
-          "customer_config_point",
-          "config_setting",
-          "barcode_print",
+      },
+      {
+        name: "Cài đặt và khác",
+        components: [
+          {
+            name: "Cài đặt",
+            decentralizationName: "setting",
+            componentChilds: [
+              {
+                name: "Chi nhánh",
+                decentralizationName: "branch_list",
+              },
+              {
+                name: "Nhân viên",
+                decentralizationName: "staff_list",
+                componentChilds: [],
+              },
+              {
+                name: "Cài đặt chung",
+                decentralizationName: "config_setting",
+              },
+              {
+                name: "Cài đặt SMS",
+                decentralizationName: "config_sms",
+              },
+              {
+                name: "Cài đặt mẫu in",
+                decentralizationName: "invoice_template",
+              },
+              {
+                name: "Cài đặt phân quyền",
+                decentralizationName: "decentralization_list",
+              },
+              {
+                name: "Cài đặt quảng cáo",
+                decentralizationName: "banner_ads",
+              },
+            ],
+          },
+          {
+            name: "Giao diện khách hàng",
+            decentralizationName: "web_theme",
+            componentChilds: [
+              {
+                name: "Tổng quan",
+                decentralizationName: "web_theme_overview",
+              },
+              {
+                name: "Màn hình trang chủ",
+                decentralizationName: "web_theme_edit",
+              },
+              {
+                name: "Liên hệ",
+                decentralizationName: "web_theme_contact",
+              },
+              {
+                name: "Hỗ trợ",
+                decentralizationName: "web_theme_help",
+              },
+              {
+                name: "Chân trang",
+                decentralizationName: "web_theme_footer",
+              },
+              {
+                name: "Banners",
+                decentralizationName: "web_theme_banner",
+              },
+              {
+                name: "SEO",
+                decentralizationName: "web_theme_seo",
+              },
+            ],
+          },
+          {
+            name: "Khác",
+            decentralizationName: "delivery_pick_address_list",
+            componentChilds: [
+              {
+                name: "Vận chuyển",
+                decentralizationName: "delivery_pick_address_list",
+              },
+              {
+                name: "Thanh toán",
+                decentralizationName: "payment_list",
+              },
+              {
+                name: "Lên lịch thông báo",
+                decentralizationName: "notification_schedule_list",
+              },
+              {
+                name: "Đánh giá khách hàng",
+                decentralizationName: "customer_review_list",
+              },
+              {
+                name: "Lịch sử thao tác",
+                decentralizationName: "history_operation",
+              },
+              {
+                name: "Gamification",
+                decentralizationName: "gamification",
+              },
+            ],
+          },
         ],
       },
     ];
@@ -449,16 +531,23 @@ const permission = (channel) => {
 
 export const initialPermission = () => {
   var state = {
-    revenue_expenditure: false,
     name: "",
     description: "",
+    revenue_expenditure: false,
+    accountant_time_sheet: false,
     product_list: false,
     product_add: false,
     product_update: false,
+    product_copy: false,
     product_remove_hide: false,
     product_category_list: false,
     product_category_add: false,
     agency_list: false,
+    agency_register: false,
+    agency_top_import: false,
+    agency_bonus_program: false,
+    agency_top_commission: false,
+    agency_payment_request_list: false,
     agency_config: false,
     agency_payment_request: false,
     agency_payment_request_solve: false,
@@ -470,8 +559,9 @@ export const initialPermission = () => {
     product_attribute_update: false,
     product_attribute_remove: false,
     product_ecommerce: false,
-    product_import_from_exel: false,
-    product_export_to_exel: false,
+    product_commission: false,
+    product_import_from_excel: false,
+    product_export_to_excel: false,
     customer_list: false,
     customer_config_point: false,
     customer_review_list: false,
@@ -482,6 +572,9 @@ export const initialPermission = () => {
     promotion_discount_end: false,
     promotion_voucher_list: false,
     sale_list: false,
+    sale_config: false,
+    sale_top: false,
+    onsale_list: false,
     onsale_edit: false,
     onsale_add: false,
     onsale_remove: false,
@@ -493,6 +586,10 @@ export const initialPermission = () => {
     promotion_combo_add: false,
     promotion_combo_update: false,
     promotion_combo_end: false,
+    promotion_bonus_product_list: false,
+    promotion_bonus_product_add: false,
+    promotion_bonus_product_update: false,
+    promotion_bonus_product_end: false,
     promotion: false,
     post_list: false,
     store_info: false,
@@ -511,8 +608,10 @@ export const initialPermission = () => {
     app_theme_category_product: false,
     app_theme_product_screen: false,
     app_theme_contact_screen: false,
-    order_list: true,
-    order_allow_change_status: true,
+    order_list: false,
+    order_export_to_excel: false,
+    order_import_from_excel: false,
+    order_allow_change_status: false,
     gamification: false,
     web_theme_edit: false,
     web_theme_overview: false,
@@ -520,6 +619,7 @@ export const initialPermission = () => {
     web_theme_help: false,
     web_theme_footer: false,
     web_theme_banner: false,
+    web_theme_seo: false,
     delivery_pick_address_list: false,
     delivery_pick_address_update: false,
     delivery_provider_update: false,
@@ -534,6 +634,8 @@ export const initialPermission = () => {
     popup_update: false,
     popup_remove: false,
     collaborator_list: false,
+    collaborator_register: false,
+    collaborator_top_sale: false,
     collaborator_config: false,
     collaborator_payment_request_list: false,
     collaborator_payment_request_solve: false,
@@ -546,7 +648,6 @@ export const initialPermission = () => {
     config_setting: false,
     barcode_print: false,
     create_order_pos: false,
-    order_list: false,
     inventory_import: false,
     inventory_tally_sheet: false,
     inventory_list: false,
@@ -561,7 +662,6 @@ export const initialPermission = () => {
     report_view: false,
     report_overview: false,
     report_product: false,
-    report_order: false,
     decentralization_list: false,
     decentralization_update: false,
     decentralization_add: false,
@@ -571,6 +671,8 @@ export const initialPermission = () => {
     staff_add: false,
     staff_remove: false,
     staff_delegating: false,
+    collaborator_add_sub_balance: false,
+    agency_add_sub_balance: false,
     onsale: false,
     train: false,
     ecommerce_list: false,
@@ -579,6 +681,10 @@ export const initialPermission = () => {
     ecommerce_orders: false,
     ecommerce_inventory: false,
     config_sms: false,
+    invoice_template: false,
+    banner_ads: false,
+    group_customer: false,
+    history_operation: false,
   };
   return { ...state };
 };

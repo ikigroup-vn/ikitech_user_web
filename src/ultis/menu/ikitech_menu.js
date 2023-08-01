@@ -54,7 +54,7 @@ export const ikitech_menu = [
             to: "/product/category",
           },
           {
-            class: "product_category_list",
+            class: "product_attribute_list",
             display: "hide",
             name: "Thuộc tính tìm kiếm",
             isShowWhenManyBranch: true,
@@ -71,106 +71,106 @@ export const ikitech_menu = [
           // },
         ],
       },
-      {
-        name: "Sàn TMĐT",
-        class: "ecommerce_list",
-        setOpenKey: [
-          "/ecommerce/manage",
-          "/ecommerce/ecommerce_products/shopee",
-          "/ecommerce/ecommerce_products/tiktok",
-          "/ecommerce/ecommerce_products/lazada",
-          "/ecommerce/ecommerce_products/tiki",
-          "/ecommerce/ecommerce_orders/shopee",
-          "/ecommerce/ecommerce_orders/tiktok",
-          "/ecommerce/ecommerce_orders/lazada",
-          "/ecommerce/ecommerce_orders/tiki",
-        ],
-        icon: "fas fa-th-large",
-        open: "ecommerce",
-        children: [
-          {
-            name: "Kết nối sàn TMĐT",
-            class: "ecommerce_connect",
-            display: "hide",
-            exact: true,
-            to: "/ecommerce/manage",
-          },
-          {
-            class: "ecommerce_products",
-            display: "hide",
-            name: "Sản phẩm",
-            exact: true,
-            to: "",
-            children: [
-              {
-                class: "ecommerce_products",
-                display: "hide",
-                name: "Shopee.vn",
-                exact: true,
-                to: "/ecommerce/ecommerce_products/shopee",
-              },
-              {
-                class: "ecommerce_products",
-                display: "hide",
-                name: "Tiktok.com",
-                exact: true,
-                to: "/ecommerce/ecommerce_products/tiktok",
-              },
-              {
-                class: "ecommerce_products",
-                display: "hide",
-                name: "Lazada.vn",
-                exact: true,
-                to: "/ecommerce/ecommerce_products/lazada",
-              },
-              {
-                class: "ecommerce_products",
-                display: "hide",
-                name: "Tiki.vn",
-                exact: true,
-                to: "/ecommerce/ecommerce_products/tiki",
-              },
-            ],
-          },
-          {
-            class: "ecommerce_orders",
-            display: "hide",
-            name: "Đơn hàng",
-            exact: true,
-            to: "",
-            children: [
-              {
-                class: "ecommerce_orders",
-                display: "hide",
-                name: "Shopee.vn",
-                exact: true,
-                to: "/ecommerce/ecommerce_orders/shopee",
-              },
-              {
-                class: "ecommerce_orders",
-                display: "hide",
-                name: "Tiktok.com",
-                exact: true,
-                to: "/ecommerce/ecommerce_orders/tiktok",
-              },
-              {
-                class: "ecommerce_orders",
-                display: "hide",
-                name: "Lazada.vn",
-                exact: true,
-                to: "/ecommerce/ecommerce_orders/lazada",
-              },
-              {
-                class: "ecommerce_orders",
-                display: "hide",
-                name: "Tiki.vn",
-                exact: true,
-                to: "/ecommerce/ecommerce_orders/tiki",
-              },
-            ],
-          },
-        ],
-      },
+      // {
+      //   name: "Sàn TMĐT",
+      //   class: "ecommerce_list",
+      //   setOpenKey: [
+      //     "/ecommerce/manage",
+      //     "/ecommerce/ecommerce_products/shopee",
+      //     "/ecommerce/ecommerce_products/tiktok",
+      //     "/ecommerce/ecommerce_products/lazada",
+      //     "/ecommerce/ecommerce_products/tiki",
+      //     "/ecommerce/ecommerce_orders/shopee",
+      //     "/ecommerce/ecommerce_orders/tiktok",
+      //     "/ecommerce/ecommerce_orders/lazada",
+      //     "/ecommerce/ecommerce_orders/tiki",
+      //   ],
+      //   icon: "fas fa-th-large",
+      //   open: "ecommerce",
+      //   children: [
+      //     {
+      //       name: "Kết nối sàn TMĐT",
+      //       class: "ecommerce_connect",
+      //       display: "hide",
+      //       exact: true,
+      //       to: "/ecommerce/manage",
+      //     },
+      //     {
+      //       class: "ecommerce_products",
+      //       display: "hide",
+      //       name: "Sản phẩm",
+      //       exact: true,
+      //       to: "",
+      //       children: [
+      //         {
+      //           class: "ecommerce_products",
+      //           display: "hide",
+      //           name: "Shopee.vn",
+      //           exact: true,
+      //           to: "/ecommerce/ecommerce_products/shopee",
+      //         },
+      //         {
+      //           class: "ecommerce_products",
+      //           display: "hide",
+      //           name: "Tiktok.com",
+      //           exact: true,
+      //           to: "/ecommerce/ecommerce_products/tiktok",
+      //         },
+      //         {
+      //           class: "ecommerce_products",
+      //           display: "hide",
+      //           name: "Lazada.vn",
+      //           exact: true,
+      //           to: "/ecommerce/ecommerce_products/lazada",
+      //         },
+      //         {
+      //           class: "ecommerce_products",
+      //           display: "hide",
+      //           name: "Tiki.vn",
+      //           exact: true,
+      //           to: "/ecommerce/ecommerce_products/tiki",
+      //         },
+      //       ],
+      //     },
+      //     {
+      //       class: "ecommerce_orders",
+      //       display: "hide",
+      //       name: "Đơn hàng",
+      //       exact: true,
+      //       to: "",
+      //       children: [
+      //         {
+      //           class: "ecommerce_orders",
+      //           display: "hide",
+      //           name: "Shopee.vn",
+      //           exact: true,
+      //           to: "/ecommerce/ecommerce_orders/shopee",
+      //         },
+      //         {
+      //           class: "ecommerce_orders",
+      //           display: "hide",
+      //           name: "Tiktok.com",
+      //           exact: true,
+      //           to: "/ecommerce/ecommerce_orders/tiktok",
+      //         },
+      //         {
+      //           class: "ecommerce_orders",
+      //           display: "hide",
+      //           name: "Lazada.vn",
+      //           exact: true,
+      //           to: "/ecommerce/ecommerce_orders/lazada",
+      //         },
+      //         {
+      //           class: "ecommerce_orders",
+      //           display: "hide",
+      //           name: "Tiki.vn",
+      //           exact: true,
+      //           to: "/ecommerce/ecommerce_orders/tiki",
+      //         },
+      //       ],
+      //     },
+      //   ],
+      // },
       {
         name: "Kho",
         setOpenKey: [
@@ -314,7 +314,7 @@ export const ikitech_menu = [
           {
             name: "Bảng công",
             // class: "timekeeping",
-            class: "revenue_expenditure",
+            class: "accountant_time_sheet",
 
             display: "hide",
             icon: "fas fa-fw fa-calendar-days",
@@ -354,7 +354,7 @@ export const ikitech_menu = [
           },
           {
             name: "Nhóm khách hàng",
-            class: "chat_list",
+            class: "group_customer",
             display: "hide",
             icon: "fa fa-comment-alt",
             exact: true,
@@ -397,10 +397,10 @@ export const ikitech_menu = [
         name: "Onsale",
         setOpenKey: ["/customer_sales"],
         icon: "fas fa-user",
-        open: "onsale",
+        open: "onsale_list",
         children: [
           {
-            class: "onsale",
+            class: "onsale_list",
             display: "hide",
             name: "Tất cả",
             exact: true,
@@ -409,7 +409,7 @@ export const ikitech_menu = [
             to: "/customer_sales",
           },
           {
-            class: "onsale",
+            class: "onsale_list",
             display: "hide",
             name: "Cần tư vấn",
             exact: true,
@@ -418,7 +418,7 @@ export const ikitech_menu = [
             to: "/customer_sales",
           },
           {
-            class: "onsale",
+            class: "onsale_list",
             display: "hide",
             name: "Đang tư vấn",
             exact: true,
@@ -426,7 +426,7 @@ export const ikitech_menu = [
             to: "/customer_sales",
           },
           {
-            class: "onsale",
+            class: "onsale_list",
             display: "hide",
             name: "Thành công",
             exact: true,
@@ -435,7 +435,7 @@ export const ikitech_menu = [
             to: "/customer_sales",
           },
           {
-            class: "onsale",
+            class: "onsale_list",
             display: "hide",
             name: "Thất bại",
 
@@ -571,7 +571,7 @@ export const ikitech_menu = [
         children: [
           {
             name: "Giảm giá sản phẩm",
-            class: "promotion",
+            class: "promotion_discount_list",
             display: "hide",
             icon: "fas-usd-circle",
             exact: true,
@@ -579,7 +579,7 @@ export const ikitech_menu = [
           },
           {
             name: "Voucher giảm giá hóa đơn",
-            class: "promotion",
+            class: "promotion_voucher_list",
             display: "hide",
             icon: "fas fa-fw fa-cog",
             exact: true,
@@ -587,7 +587,7 @@ export const ikitech_menu = [
           },
           {
             name: "Combo giảm giá",
-            class: "promotion",
+            class: "promotion_combo_list",
             display: "hide",
             icon: "fas fa-fw fa-cog",
             exact: true,
@@ -595,7 +595,7 @@ export const ikitech_menu = [
           },
           {
             name: "Thưởng sản phẩm",
-            class: "promotion",
+            class: "promotion_bonus_product_list",
             display: "hide",
             icon: "fas fa-fw fa-cog",
             exact: true,
@@ -630,17 +630,20 @@ export const ikitech_menu = [
         icon: "fas fa-cogs",
         setOpenKey: [
           "/theme",
+          "/setting/index",
           "/branch/index",
           "/staff/index",
           "/decentralization/index",
           "/config_sms",
+          "/invoice_template/index",
+          "/banner_ads",
         ],
 
         open: "setting",
         children: [
           {
             name: "Chỉnh sửa website",
-            class: "web_theme_edit",
+            class: "web_theme_overview",
             display: "hide",
             exact: true,
             to: "/theme",
@@ -663,7 +666,7 @@ export const ikitech_menu = [
 
           {
             name: "Chọn mẫu in",
-            class: "config_setting",
+            class: "invoice_template",
             display: "hide",
             exact: true,
             to: "/invoice_template/index",
@@ -681,7 +684,7 @@ export const ikitech_menu = [
             display: "hide",
             exact: true,
             to: "/banner_ads",
-            class: "web_theme_edit",
+            class: "banner_ads",
           },
 
           {
@@ -712,6 +715,8 @@ export const ikitech_menu = [
           "review",
           "/notifications/schedule",
           "popup",
+          "/history_operation",
+          "/manual",
         ],
 
         children: [
@@ -759,7 +764,7 @@ export const ikitech_menu = [
           },
           {
             name: "Lịch sử thao tác",
-            class: "notification_schedule_list",
+            class: "history_operation",
             display: "hide",
             icon: "fa fa-bell",
             exact: true,

@@ -33,10 +33,20 @@ class GuessNumber extends Component {
   componentDidMount() {
     const { page } = this.state;
     this.handleFetchListGameGuessNumbers(page);
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      this.state.isLoading != true &&
+      typeof this.props.permission.product_list != "undefined"
+    ) {
+      var permissions = this.props.permission;
 
-    if (this.state.isLoading !== true) {
-      var isShow = true;
-      this.setState({ isShow, isLoading: true });
+      var isShow = permissions.gamification;
+
+      this.setState({
+        isLoading: true,
+        isShow,
+      });
     }
   }
   shouldComponentUpdate(nextProps, nextState) {
@@ -164,6 +174,7 @@ const mapStateToProps = (state) => {
       state.gamificationReducers.guess_numbers.listGameGuessNumbers,
     deletedSuccessfully:
       state.gamificationReducers.guess_numbers.deletedSuccessfully,
+    permission: state.authReducers.permission.data,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {

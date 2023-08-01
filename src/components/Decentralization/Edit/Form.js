@@ -27,7 +27,7 @@ class Form extends Component {
     console.log(nextProps.data);
     if (
       !shallowEqual(nextProps.data, this.props.data) ||
-      this.isLoading == false
+      this.isLoading != false
     ) {
       this.isLoading = true;
       var { data, id } = nextProps;
@@ -193,7 +193,6 @@ class Form extends Component {
     history.goBack();
   };
   render() {
-    console.log(this.state);
     var { name, description } = this.state;
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
 

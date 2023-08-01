@@ -154,7 +154,7 @@ class Discount extends Component {
       typeof this.props.permission.product_list != "undefined"
     ) {
       var permissions = this.props.permission;
-      var isShow = permissions.promotion;
+      var isShow = permissions.promotion_discount_list;
 
       this.setState({
         isLoading: true,

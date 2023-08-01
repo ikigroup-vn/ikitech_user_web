@@ -88,8 +88,14 @@ class ListCollaborator extends Component {
   };
 
   render() {
-    var { customer, chat, collaborators, store_code, tabId, store_code } =
-      this.props;
+    var {
+      customer,
+      chat,
+      collaborators,
+      store_code,
+      tabId,
+      collaborator_add_sub_balance,
+    } = this.props;
 
     var customerImg =
       typeof customer.avatar_image == "undefined" ||
@@ -144,6 +150,7 @@ class ListCollaborator extends Component {
         </div>
         <div className="card-body">
           <Table
+            collaborator_add_sub_balance={collaborator_add_sub_balance}
             tabId={tabId}
             showChatBox={showChatBox}
             handleShowChatBox={this.handleShowChatBox}

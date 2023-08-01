@@ -153,9 +153,8 @@ class Table extends Component {
   };
 
   showData = (collaborators) => {
-    var { store_code } = this.props;
-    const permissionChangeBalance =
-      this.props?.permission?.collaborator_add_sub_balance || false;
+    var { store_code, collaborator_add_sub_balance } = this.props;
+    const permissionChangeBalance = collaborator_add_sub_balance;
     var result = null;
     if (collaborators.length > 0) {
       result = collaborators.map((data, index) => {

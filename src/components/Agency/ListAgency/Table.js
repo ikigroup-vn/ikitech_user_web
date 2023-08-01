@@ -179,8 +179,7 @@ class Table extends Component {
   showData = (agencys) => {
     var { store_code, listItemSelected } = this.props;
 
-    const permissionChangeBalance =
-      this.props?.permission?.agency_add_sub_balance || false;
+    const permissionChangeBalance = this.props.agency_add_sub_balance;
     var result = null;
     if (agencys.length > 0) {
       result = agencys.map((data, index) => {

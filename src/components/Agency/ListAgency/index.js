@@ -132,8 +132,16 @@ class ListAgency extends Component {
   };
 
   render() {
-    var { customer, chat, agencys, store_code, tabId, types, config } =
-      this.props;
+    var {
+      customer,
+      chat,
+      agencys,
+      store_code,
+      tabId,
+      types,
+      config,
+      agency_add_sub_balance,
+    } = this.props;
 
     var customerImg =
       typeof customer.avatar_image == "undefined" ||
@@ -237,6 +245,7 @@ class ListAgency extends Component {
 
         <div className="card-body">
           <Table
+            agency_add_sub_balance={agency_add_sub_balance}
             passType={this.passType}
             page={page}
             searchValue={searchValue}

@@ -22,9 +22,20 @@ class ActionsGameSpinWheel extends Component {
     const { store_code } = this.props.match.params;
     fetchAllAgencyType(store_code);
     fetchGroupCustomer(store_code);
-    if (this.state.isLoading !== true) {
-      var isShow = true;
-      this.setState({ isShow, isLoading: true });
+  }
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      this.state.isLoading != true &&
+      typeof this.props.permission.product_list != "undefined"
+    ) {
+      var permissions = this.props.permission;
+
+      var isShow = permissions.gamification;
+
+      this.setState({
+        isLoading: true,
+        isShow,
+      });
     }
   }
 
@@ -67,6 +78,7 @@ class ActionsGameSpinWheel extends Component {
 const mapStateToProps = (state) => {
   return {
     auth: state.authReducers.login.authentication,
+    permission: state.authReducers.permission.data,
   };
 };
 

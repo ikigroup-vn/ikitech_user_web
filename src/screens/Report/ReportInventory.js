@@ -17,6 +17,7 @@ import Pagination from "./Pagination";
 import { getBranchId, getBranchIds } from "../../ultis/branchUtils";
 import { formatNoD } from "../../ultis/helpers";
 import ShowData from "./ShowData";
+import NotAccess from "../../components/Partials/NotAccess";
 
 class ReportInventory extends Component {
   constructor(props) {
@@ -63,6 +64,19 @@ class ReportInventory extends Component {
       document.getElementsByClassName("r-input")[0].placeholder = "Chọn ngày";
     } catch (error) {}
   };
+
+  componentWillReceiveProps(nextProps) {
+    if (
+      this.state.isLoading != true &&
+      typeof nextProps.permission.product_list != "undefined"
+    ) {
+      var permissions = nextProps.permission;
+
+      var isShow = permissions.report_inventory;
+      this.setState({ isLoading: true, isShow });
+    }
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     if (this.state.txtStart !== nextState.txtStart) {
       const branch_id = getBranchId();
@@ -228,6 +242,7 @@ class ReportInventory extends Component {
     var { store_code } = this.props.match.params;
     const { reportInventory, reportImportExport } = this.props;
     const { total_stock, total_value_stock } = reportInventory;
+    var { isShow } = this.state;
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
@@ -236,108 +251,123 @@ class ReportInventory extends Component {
             <div id="content">
               <Topbar store_code={store_code} handeOnload={this.handeOnload} />
 
-              <div className="container-fluid">
-                <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
-                <General
-                  reportImportExport={reportImportExport}
-                  reportInventory={reportInventory}
-                  store_code={store_code}
-                />
-                <div className="card">
-                  <div
-                    className="card-header py-3"
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <div className="stock-title text-primary">
-                      <h4>Báo cáo tồn kho</h4>
-                    </div>
-
-                    <div className="label-value">
-                      <p className="sale_user_label bold">
-                        Giá trị tồn kho:{" "}
-                        <span id="total_selected">
-                          {formatNoD(total_value_stock?.toFixed(3))}
-                        </span>
-                      </p>
-                      <p className="sale_user_label bold">
-                        Số lượng tồn kho:{" "}
-                        <span id="total_selected">
-                          {formatNoD(total_stock)}
-                        </span>
-                      </p>
-                    </div>
-
+              {typeof isShow == "undefined" ? (
+                <div style={{ height: "500px" }}></div>
+              ) : isShow == true ? (
+                <div className="container-fluid">
+                  <Alert
+                    type={Types.ALERT_UID_STATUS}
+                    alert={this.props.alert}
+                  />
+                  <General
+                    reportImportExport={reportImportExport}
+                    reportInventory={reportInventory}
+                    store_code={store_code}
+                  />
+                  <div className="card">
                     <div
-                      class="form-group"
+                      className="card-header py-3"
                       style={{
                         display: "flex",
-                        alignItems: "center",
-                        marginRight: "100px",
+                        justifyContent: "space-between",
                       }}
                     >
-                      <label for="product_name" style={{ marginRight: "20px" }}>
-                        Thời gian
-                      </label>
-                      <MomentInput
-                        placeholder="Chọn thời gian"
-                        format="DD-MM-YYYY"
-                        options={true}
-                        enableInputClick={true}
-                        monthSelect={true}
-                        readOnly={true}
-                        translations={{
-                          DATE: "Ngày",
-                          TIME: "Giờ",
-                          SAVE: "Đóng",
-                          HOURS: "Giờ",
-                          MINUTES: "Phút",
+                      <div className="stock-title text-primary">
+                        <h4>Báo cáo tồn kho</h4>
+                      </div>
+
+                      <div className="label-value">
+                        <p className="sale_user_label bold">
+                          Giá trị tồn kho:{" "}
+                          <span id="total_selected">
+                            {formatNoD(total_value_stock?.toFixed(3))}
+                          </span>
+                        </p>
+                        <p className="sale_user_label bold">
+                          Số lượng tồn kho:{" "}
+                          <span id="total_selected">
+                            {formatNoD(total_stock)}
+                          </span>
+                        </p>
+                      </div>
+
+                      <div
+                        class="form-group"
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          marginRight: "100px",
                         }}
-                        onSave={() => {}}
-                        onChange={this.onChangeStart}
+                      >
+                        <label
+                          for="product_name"
+                          style={{ marginRight: "20px" }}
+                        >
+                          Thời gian
+                        </label>
+                        <MomentInput
+                          placeholder="Chọn thời gian"
+                          format="DD-MM-YYYY"
+                          options={true}
+                          enableInputClick={true}
+                          monthSelect={true}
+                          readOnly={true}
+                          translations={{
+                            DATE: "Ngày",
+                            TIME: "Giờ",
+                            SAVE: "Đóng",
+                            HOURS: "Giờ",
+                            MINUTES: "Phút",
+                          }}
+                          onSave={() => {}}
+                          onChange={this.onChangeStart}
+                        />
+                      </div>
+                    </div>
+                    <div className="card-body">
+                      <div class="table-responsive">
+                        <table
+                          class="table  "
+                          id="dataTable"
+                          width="100%"
+                          cellspacing="0"
+                        >
+                          <thead>
+                            <tr>
+                              <th>STT</th>
+                              <th>Hình ảnh</th>
+                              <th>Tên sản phẩm</th>
+                              <th>Giá vốn</th>
+
+                              <th>Số lượng tồn kho</th>
+                              <th>Giá trị tồn</th>
+                            </tr>
+                          </thead>
+
+                          <tbody>
+                            {typeof reportInventory.data != "undefined" ? (
+                              this.showData(
+                                reportInventory.data,
+                                reportInventory.per_page,
+                                reportInventory.current_page
+                              )
+                            ) : (
+                              <ShowLoading></ShowLoading>
+                            )}
+                          </tbody>
+                        </table>
+                      </div>
+
+                      <Pagination
+                        store_code={store_code}
+                        reportInventory={reportInventory}
                       />
                     </div>
                   </div>
-                  <div className="card-body">
-                    <div class="table-responsive">
-                      <table
-                        class="table  "
-                        id="dataTable"
-                        width="100%"
-                        cellspacing="0"
-                      >
-                        <thead>
-                          <tr>
-                            <th>STT</th>
-                            <th>Hình ảnh</th>
-                            <th>Tên sản phẩm</th>
-                            <th>Giá vốn</th>
-
-                            <th>Số lượng tồn kho</th>
-                            <th>Giá trị tồn</th>
-                          </tr>
-                        </thead>
-
-                        <tbody>
-                          {typeof reportInventory.data != "undefined" ? (
-                            this.showData(
-                              reportInventory.data,
-                              reportInventory.per_page,
-                              reportInventory.current_page
-                            )
-                          ) : (
-                            <ShowLoading></ShowLoading>
-                          )}
-                        </tbody>
-                      </table>
-                    </div>
-
-                    <Pagination
-                      store_code={store_code}
-                      reportInventory={reportInventory}
-                    />
-                  </div>
                 </div>
-              </div>
+              ) : (
+                <NotAccess />
+              )}
             </div>
 
             <Footer />
@@ -352,6 +382,7 @@ const mapStateToProps = (state) => {
     reportInventory: state.reportReducers.reportInventory,
     reportImportExport: state.reportReducers.reportImportExport,
     currentBranch: state.branchReducers.branch.currentBranch,
+    permission: state.authReducers.permission.data,
   };
 };
 

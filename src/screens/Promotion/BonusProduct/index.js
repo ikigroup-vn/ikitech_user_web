@@ -154,7 +154,7 @@ class BonusProduct extends Component {
     ) {
       var permissions = this.props.permission;
 
-      var isShow = permissions.promotion;
+      var isShow = permissions.promotion_bonus_product_list;
 
       this.setState({
         isLoading: true,

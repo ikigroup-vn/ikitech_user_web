@@ -78,13 +78,16 @@ class AttributeSearch extends Component {
     ) {
       var permissions = this.props.permission;
 
-      var isShow = permissions.product_category_list;
+      var isShow = permissions.product_attribute_list;
+      var insert = permissions.product_attribute_add;
+      var update = permissions.product_attribute_update;
+      var _delete = permissions.product_attribute_remove;
 
       this.setState({
         isLoading: true,
-        insert: true,
-        update: true,
-        _delete: true,
+        insert,
+        update,
+        _delete,
         isShow,
       });
     }
@@ -148,6 +151,7 @@ class AttributeSearch extends Component {
                       <div class="card-body card-body123">
                         <Table
                           store_code={store_code}
+                          insert={insert}
                           update={update}
                           _delete={_delete}
                           attribute_search={attribute_search}

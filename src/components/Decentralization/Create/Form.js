@@ -18,8 +18,14 @@ class Form extends Component {
     this.setState({ [item]: checked });
   };
 
-  showListTable = (data) => {
-    return <Table handleChangeValue={this.handleChangeValue} data={data} />;
+  showListTable = (data, state) => {
+    return (
+      <Table
+        handleChangeValue={this.handleChangeValue}
+        data={data}
+        state={state}
+      />
+    );
   };
 
   onChange = (e) => {
@@ -91,7 +97,7 @@ class Form extends Component {
                 onChange={this.onChange}
               />
             </div>
-            {this.showListTable(this.initialTable)}
+            {this.showListTable(this.initialTable, this.state)}
           </div>
 
           <div class="box-footer">

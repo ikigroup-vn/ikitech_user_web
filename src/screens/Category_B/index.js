@@ -66,10 +66,13 @@ class CategoryBlog extends Component {
       typeof nextProps.permission.product_list != "undefined"
     ) {
       var permissions = nextProps.permission;
-      var insert = permissions.post_category_add;
-      var update = permissions.post_category_update;
-      var _delete = permissions.post_category_remove;
-      var isShow = permissions.post_category_list;
+      // var insert = permissions.post_category_add;
+      // var update = permissions.post_category_update;
+      // var _delete = permissions.post_category_remove;
+      var insert = permissions.post_list;
+      var update = permissions.post_list;
+      var _delete = permissions.post_list;
+      var isShow = permissions.post_list;
 
       this.setState({ isLoading: true, insert, update, _delete, isShow });
     }

@@ -41,7 +41,7 @@ class BannerAds extends Component {
     ) {
       var permissions = nextProps.permission;
 
-      var isShow = permissions.web_theme_edit;
+      var isShow = permissions.banner_ads;
 
       this.setState({
         isLoading: true,

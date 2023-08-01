@@ -208,7 +208,6 @@ class DataItem extends Component {
               Đã có tài khoản
             </div>
           ) : null}
-
           <div
             style={{
               fontSize: "11.5px",
@@ -217,78 +216,89 @@ class DataItem extends Component {
             {" "}
             Ngày thêm: {getDDMMYYY(data.created_at)}
           </div>
+
           <div className="" style={{ marginTop: "6px" }}>
-            <div
-              id="color-picker"
-              onClick={() => {
-                this.setState({ showDrop: !showDrop });
-              }}
-            >
-              <div className="wrapper-dropdown">
-                <span
-                  style={{
-                    backgroundColor: colorStatus,
-                    fontWeight: "500",
-                    fontSize: "13px",
-                  }}
-                >
-                  {status}
-                </span>
-                <ul className={`dropdown ${showDrop === true ? "" : "hide"}`}>
-                  <li>
-                    {this.list_status.map((v, i) => {
-                      return (
-                        <div
-                          className="hover-product"
-                          style={{ display: "flex" }}
-                        >
+            {edit ? (
+              <div
+                id="color-picker"
+                onClick={() => {
+                  this.setState({ showDrop: !showDrop });
+                }}
+              >
+                <div className="wrapper-dropdown">
+                  <span
+                    style={{
+                      backgroundColor: colorStatus,
+                      fontWeight: "500",
+                      fontSize: "13px",
+                    }}
+                  >
+                    {status}
+                  </span>
+                  <ul className={`dropdown ${showDrop === true ? "" : "hide"}`}>
+                    <li>
+                      {this.list_status.map((v, i) => {
+                        return (
                           <div
-                            className="dot"
-                            style={{ background: v.color, margin: "auto 0px" }}
-                          ></div>
-                          <span
-                            onClick={() => this.onChangeStatus(v.index)}
-                            style={{ display: "block", marginLeft: "6px" }}
+                            className="hover-product"
+                            style={{ display: "flex" }}
                           >
-                            {v.title}
-                          </span>
-                        </div>
-                      );
-                    })}
-                  </li>
-                </ul>
+                            <div
+                              className="dot"
+                              style={{
+                                background: v.color,
+                                margin: "auto 0px",
+                              }}
+                            ></div>
+                            <span
+                              onClick={() => this.onChangeStatus(v.index)}
+                              style={{ display: "block", marginLeft: "6px" }}
+                            >
+                              {v.title}
+                            </span>
+                          </div>
+                        );
+                      })}
+                    </li>
+                  </ul>
+                </div>
               </div>
-            </div>
-            <button
-              className="btn btn-primary btn-sm"
-              type="button"
-              style={{
-                padding: "0.1rem 0.4rem",
-                "font-size": ".850em",
-              }}
-              class="btn btn-secondary-no-background btn-sm"
-              data-toggle="modal"
-              data-target="#modalEditCustomer"
-              onClick={() => {
-                this.props.handleSetInfor(data);
-              }}
-            >
-              <i class="fa fa-pencil"></i> Sửa
-            </button>
-            <button
-              type="button"
-              style={{
-                marginLeft: "5px",
-                padding: "0.1rem 0.4rem",
-                "font-size": ".850em",
-              }}
-              class="btn btn-primary-no-background btn-sm"
-              onClick={(e) => this.passDataModal(e, data.id, data.name)}
-              data-toggle="modal"
-              data-target="#removeModal"
-            >
-              <i class="fa fa-trash"></i> Xóa
-            </button>
+            ) : null}
+
+            {edit ? (
+              <button
+                className="btn btn-primary btn-sm"
+                type="button"
+                style={{
+                  padding: "0.1rem 0.4rem",
+                  "font-size": ".850em",
+                }}
+                class="btn btn-secondary-no-background btn-sm"
+                data-toggle="modal"
+                data-target="#modalEditCustomer"
+                onClick={() => {
+                  this.props.handleSetInfor(data);
+                }}
+              >
+                <i class="fa fa-pencil"></i> Sửa
+              </button>
+            ) : null}
+            {remove ? (
+              <button
+                type="button"
+                style={{
+                  marginLeft: "5px",
+                  padding: "0.1rem 0.4rem",
+                  "font-size": ".850em",
+                }}
+                class="btn btn-primary-no-background btn-sm"
+                onClick={(e) => this.passDataModal(e, data.id, data.name)}
+                data-toggle="modal"
+                data-target="#removeModal"
+              >
+                <i class="fa fa-trash"></i> Xóa
+              </button>
+            ) : null}
           </div>
         </td>
         {/* <td>

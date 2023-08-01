@@ -21,7 +21,7 @@ class Index extends Component {
     ) {
       var permissions = nextProps.permission;
 
-      var isShow = permissions.promotion;
+      var isShow = permissions.promotion_voucher_list;
       this.setState({ isLoading: true, isShow });
     }
   }

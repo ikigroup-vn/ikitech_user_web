@@ -8,21 +8,21 @@ import Barcode from "react-barcode";
 import Loading from "../Loading";
 import * as Env from "../../ultis/default";
 import NotAccess from "../../components/Partials/NotAccess";
-import ModalCreate from "../../components/Customer/ModalCreate"
+import ModalCreate from "../../components/Customer/ModalCreate";
 import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
-import ModalEdit from "../../components/Customer/ModalEdit"
-import './barcode_style.css'
-import ReactToPrint from 'react-to-print';
+import ModalEdit from "../../components/Customer/ModalEdit";
+import "./barcode_style.css";
+import ReactToPrint from "react-to-print";
 import BarcodePagePrint from "./ComponentPrint/BarcodePagePrint";
 import { AsyncPaginate } from "react-select-async-paginate";
 import CardProduct from "../../components/Pos_Order/CardProduct";
 import Table from "./Tablet";
 import * as productApi from "../../data/remote/product";
 import { getBranchId } from "../../ultis/branchUtils";
-import * as profileAction from "../../actions/profile"
-import * as dashboardAction from "../../actions/dashboard"
-import * as branchAction from "../../actions/branch"
-import * as productAction from "../../actions/product"
+import * as profileAction from "../../actions/profile";
+import * as dashboardAction from "../../actions/dashboard";
+import * as branchAction from "../../actions/branch";
+import * as productAction from "../../actions/product";
 import { randomString } from "../../ultis/helpers";
 
 class PrintBarcode extends Component {
@@ -33,14 +33,11 @@ class PrintBarcode extends Component {
       product_map_list: [],
       showPrice: true,
       showName: true,
-      showBarcode : true,
+      showBarcode: true,
     };
   }
 
-
-
   componentWillReceiveProps(nextProps) {
-
     if (
       this.state.isLoading != true &&
       typeof nextProps.permission.product_list != "undefined"
@@ -52,21 +49,20 @@ class PrintBarcode extends Component {
     }
   }
 
-  componentDidMount() {
-
-  }
-
+  componentDidMount() {}
 
   getComponentRef = (ref) => {
-    return <BarcodePagePrint ref={ref} />
-  }
-
+    return <BarcodePagePrint ref={ref} />;
+  };
 
   buildListPrintOption = () => {
-
     var data = [
       {
-        name: (<div>Mẫu giấy <b>180</b> </div>),  //ok
+        name: (
+          <div>
+            Mẫu giấy <b>180</b>{" "}
+          </div>
+        ), //ok
         size: "Khổ A4 - 20x15mm.",
         isA4: true,
         widthPrint: 210,
@@ -80,7 +76,7 @@ class PrintBarcode extends Component {
       },
       {
         name: "Mẫu giấy 65 nhãn",
-        size: "Khổ A4, Tomy 145 - 210x297mm.",  //ok
+        size: "Khổ A4, Tomy 145 - 210x297mm.", //ok
         isA4: true,
         widthBarcode: 1.2,
         widthPrint: 210,
@@ -232,46 +228,62 @@ class PrintBarcode extends Component {
       //   image: "https://i.imgur.com/gKuOulQ.png",
       //   componentRef: this.componentRef7,
       // },
-    ]
+    ];
 
-
-    return data.map((item) =>
+    return data.map((item) => (
       <div key={randomString(10)} className="col-6">
-        <div class="card-body" style={{
-          border: "1px solid rgba(0,0,0,.125)",
-          borderRadius: "0.25rem",
-          textAlign: "center",
-          marginTop: 1,
-          marginRight: 1,
-          marginBottom: 2,
-          padding: "10px 2px 10px 2px",
-        }}>
-          <div style={{
-            fontSize: 12
-          }}>{item.name} </div>
-          <div style={{
-            fontStyle: "italic",
-            fontSize: 12
-          }}>- {item.size}</div>
+        <div
+          class="card-body"
+          style={{
+            border: "1px solid rgba(0,0,0,.125)",
+            borderRadius: "0.25rem",
+            textAlign: "center",
+            marginTop: 1,
+            marginRight: 1,
+            marginBottom: 2,
+            padding: "10px 2px 10px 2px",
+          }}
+        >
+          <div
+            style={{
+              fontSize: 12,
+            }}
+          >
+            {item.name}{" "}
+          </div>
+          <div
+            style={{
+              fontStyle: "italic",
+              fontSize: 12,
+            }}
+          >
+            - {item.size}
+          </div>
           <img height={80} src={item.image} class="image-option-print"></img>
           <ReactToPrint
-
             trigger={() => {
-              return <button style={{
-                marginTop: 8,
-                textAlign: "center"
-              }} type="button" class="btn btn-outline-primary"><i class="fa fa-print" aria-hidden="true"></i> In</button>
+              return (
+                <button
+                  style={{
+                    marginTop: 8,
+                    textAlign: "center",
+                  }}
+                  type="button"
+                  class="btn btn-outline-primary"
+                >
+                  <i class="fa fa-print" aria-hidden="true"></i> In
+                </button>
+              );
             }}
             content={() => item.componentRef}
           />
 
-          <div style={{ display: "none" }} >
+          <div style={{ display: "none" }}>
             {
-
               <BarcodePagePrint
                 key={item.name}
                 isA4={item.isA4}
-                ref={el => (item.componentRef = el)}
+                ref={(el) => (item.componentRef = el)}
                 widthBarcode={item.widthBarcode}
                 widthPrint={item.widthPrint}
                 paddingTop={item.paddingTop}
@@ -284,32 +296,30 @@ class PrintBarcode extends Component {
                 products={this.state.products}
                 product_map_list={this.state.product_map_list}
               />
-
             }
-
           </div>
-
-        </div>  </div>
-    )
-  }
+        </div>{" "}
+      </div>
+    ));
+  };
 
   loadProducts = async (search, loadedOptions, { page }) => {
-
-
-
     var { store_code } = this.props.match.params;
     var branch_id = getBranchId();
 
     const params = `&search=${search}`;
-    const res = await productApi
-      .fetchAllProductV2(store_code, branch_id, page, params);
-
+    const res = await productApi.fetchAllProductV2(
+      store_code,
+      branch_id,
+      page,
+      params
+    );
 
     if (res.status != 200) {
       return {
         options: [],
         hasMore: false,
-      }
+      };
     }
 
     return {
@@ -317,7 +327,7 @@ class PrintBarcode extends Component {
         return {
           value: i.id,
           label: `${i.name}`,
-          product: i
+          product: i,
         };
       }),
 
@@ -328,78 +338,66 @@ class PrintBarcode extends Component {
     };
   };
 
-
   getDatasProducts = (products) => {
-    var arr = []
+    var arr = [];
 
-    products.forEach(pro => {
-
+    products.forEach((pro) => {
       for (var i = 0; i < pro.quantity; i++) {
         arr.push(pro);
       }
-
     });
 
     return arr;
-
-  }
-
+  };
 
   onChangeProduct = (selectValue) => {
     if (selectValue != null && selectValue.product != null) {
-      var data = selectValue?.product
+      var data = selectValue?.product;
 
-
-      var index = this.state.products.findIndex(pro => pro.id === data?.id);
+      var index = this.state.products.findIndex((pro) => pro.id === data?.id);
       if (index == -1) {
         data.quantity = 1;
-        this.state.products.push(data)
+        this.state.products.push(data);
         this.setState({
           ...this.state,
           products: this.state.products,
-          product_map_list: this.getDatasProducts(this.state.products)
-        })
+          product_map_list: this.getDatasProducts(this.state.products),
+        });
       }
-
-
     }
-
   };
 
   onChangeQuantity = (productId, quantity) => {
-
-
-    var index = this.state.products.findIndex(pro => pro.id === productId);
+    var index = this.state.products.findIndex((pro) => pro.id === productId);
     if (index != -1) {
       this.state.products[index].quantity = quantity;
 
       this.setState({
         ...this.state,
         products: this.state.products,
-      })
+      });
 
       this.setState({
         ...this.state,
-        product_map_list: this.getDatasProducts(this.state.products)
-      })
+        product_map_list: this.getDatasProducts(this.state.products),
+      });
     }
-  }
+  };
 
   removeProduct = (productId) => {
-    var index = this.state.products.findIndex(pro => pro.id === productId);
+    var index = this.state.products.findIndex((pro) => pro.id === productId);
     if (index != -1) {
       this.state.products.splice(index, 1);
       this.setState({
         ...this.state,
         products: this.state.products,
-        product_map_list: this.getDatasProducts(this.state.products)
-      })
+        product_map_list: this.getDatasProducts(this.state.products),
+      });
     }
-  }
+  };
 
   handChangeCheckbox = (e) => {
-
-    var name = e.target.name
+    var name = e.target.name;
     if (name == "showName") {
       this.setState({
         [e.target.name]: !this.state.showName,
@@ -416,38 +414,30 @@ class PrintBarcode extends Component {
         [e.target.name]: !this.state.showBarcode,
       });
     }
-   
-  }
-
+  };
 
   render() {
     var { store_code } = this.props.match.params;
 
     const customStyles = {
-      menu: styles => ({
+      menu: (styles) => ({
         ...styles,
-        width: '600px',
-
+        width: "600px",
       }),
       option: (provided, state) => ({
         ...provided,
-        borderBottom: '1px dotted pink',
+        borderBottom: "1px dotted pink",
         fontWeight: 200,
         padding: 20,
         color: "black",
       }),
-    }
-
-    const formatOptionLabel = ({ value, label, product }) => {
-
-      return <CardProduct isItemSearch={true} product={product} />
     };
 
+    const formatOptionLabel = ({ value, label, product }) => {
+      return <CardProduct isItemSearch={true} product={product} />;
+    };
 
-
-
-
-    const { products, showName, showPrice, isShow  , showBarcode} = this.state
+    const { products, showName, showPrice, isShow, showBarcode } = this.state;
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
@@ -469,45 +459,50 @@ class PrintBarcode extends Component {
                     <h4 className="h4 title_content mb-0 text-gray-800">
                       In mã vạch
                     </h4>{" "}
-                    {getChannel() == IKIPOS && <a
-                      data-toggle="modal"
-                      data-target="#modalCreateCustomer"
-                      class="btn btn-info btn-icon-split btn-sm"
-                      style={{ height: "fit-content", width: "fit-content" }}
-                    >
-                      <span class="icon text-white-50">
-                        <i class="fas fa-plus"></i>
-                      </span>
-                      <span
-                        style={{
-                          color: "white",
-                        }}
-                        class={`text `}
+                    {getChannel() == IKIPOS && (
+                      <a
+                        data-toggle="modal"
+                        data-target="#modalCreateCustomer"
+                        class="btn btn-info btn-icon-split btn-sm"
+                        style={{ height: "fit-content", width: "fit-content" }}
                       >
-                        Thêm khách hàng
-                      </span>
-                    </a>}
+                        <span class="icon text-white-50">
+                          <i class="fas fa-plus"></i>
+                        </span>
+                        <span
+                          style={{
+                            color: "white",
+                          }}
+                          class={`text `}
+                        >
+                          Thêm khách hàng
+                        </span>
+                      </a>
+                    )}
                   </div>
 
                   <br></br>
 
-
                   <div className="row">
-
                     <div className="card shadow mb-4 col-lg-8 col-md-12 col-sm-12">
-                      <div className="card-header py-3"><h6 className="m-0 title_content font-weight-bold text-primary">Sản phẩm tự chọn</h6></div>
+                      <div className="card-header py-3">
+                        <h6 className="m-0 title_content font-weight-bold text-primary">
+                          Sản phẩm tự chọn
+                        </h6>
+                      </div>
 
-
-                      <div style={{
-                        padding: 15
-                      }}>
+                      <div
+                        style={{
+                          padding: 15,
+                        }}
+                      >
                         <AsyncPaginate
                           autoFocus
                           selectRef={(ref) => {
                             this.refSearchProduct = ref;
                           }}
-                          noOptionsMessage={() => 'Không tìm thấy sản phẩm nào'}
-                          loadingMessage={() => 'Đang tìm...'}   //minor type-O here
+                          noOptionsMessage={() => "Không tìm thấy sản phẩm nào"}
+                          loadingMessage={() => "Đang tìm..."} //minor type-O here
                           placeholder="Tìm kiếm sản phẩm"
                           value={null}
                           loadOptions={this.loadProducts}
@@ -524,7 +519,6 @@ class PrintBarcode extends Component {
                         />
                       </div>
 
-
                       <div class="card-body">
                         <Table
                           // insert={insert}
@@ -538,39 +532,83 @@ class PrintBarcode extends Component {
                           onChangeQuantity={this.onChangeQuantity}
                           removeProduct={this.removeProduct}
                         />
-
                       </div>
-
                     </div>
 
-
                     <div className="col-lg-4 col-md-12 col-sm-12">
-
                       <div className="card shadow mb-4 ">
-                        <div className="card-header py-3"><h6 className="m-0 title_content font-weight-bold text-primary">Cấu hình tem in</h6></div>
+                        <div className="card-header py-3">
+                          <h6 className="m-0 title_content font-weight-bold text-primary">
+                            Cấu hình tem in
+                          </h6>
+                        </div>
 
                         <div className="card-body">
                           <div className="print-feature-container">
-                            <div class="custom-control custom-switch" style = {{paddingLeft : "1.5rem"}}>
-                              <input type="checkbox" class="custom-control-input" id="switch1" name="showBarcode" checked={showBarcode} onChange={this.handChangeCheckbox} />
-                              <label class="custom-control-label" for="switch1"></label>
+                            <div
+                              class="custom-control custom-switch"
+                              style={{ paddingLeft: "1.5rem" }}
+                            >
+                              <input
+                                type="checkbox"
+                                class="custom-control-input"
+                                id="switch1"
+                                name="showBarcode"
+                                checked={showBarcode}
+                                onChange={this.handChangeCheckbox}
+                              />
+                              <label
+                                class="custom-control-label"
+                                for="switch1"
+                              ></label>
                             </div>
-                            <div className="name"><span>Mã barcode</span></div>
+                            <div className="name">
+                              <span>Mã barcode</span>
+                            </div>
                           </div>
                           <div className="print-feature-container">
-                            <div class="custom-control custom-switch" style = {{paddingLeft : "1.5rem"}}>
-                              <input type="checkbox" class="custom-control-input" id="showName" name="showName" checked={this.state.showName} onChange={this.handChangeCheckbox} />
-                              <label class="custom-control-label" for="showName"></label>
+                            <div
+                              class="custom-control custom-switch"
+                              style={{ paddingLeft: "1.5rem" }}
+                            >
+                              <input
+                                type="checkbox"
+                                class="custom-control-input"
+                                id="showName"
+                                name="showName"
+                                checked={this.state.showName}
+                                onChange={this.handChangeCheckbox}
+                              />
+                              <label
+                                class="custom-control-label"
+                                for="showName"
+                              ></label>
                             </div>
-                            <div className="name"><span>Tên sản phẩm</span></div>
-
+                            <div className="name">
+                              <span>Tên sản phẩm</span>
+                            </div>
                           </div>
                           <div className="print-feature-container">
-                            <div class="custom-control custom-switch" style = {{paddingLeft : "1.5rem"}}>
-                              <input type="checkbox" class="custom-control-input" id="showPrice" name="showPrice" checked={this.state.showPrice} onChange={this.handChangeCheckbox} />
-                              <label class="custom-control-label" for="showPrice"></label>
+                            <div
+                              class="custom-control custom-switch"
+                              style={{ paddingLeft: "1.5rem" }}
+                            >
+                              <input
+                                type="checkbox"
+                                class="custom-control-input"
+                                id="showPrice"
+                                name="showPrice"
+                                checked={this.state.showPrice}
+                                onChange={this.handChangeCheckbox}
+                              />
+                              <label
+                                class="custom-control-label"
+                                for="showPrice"
+                              ></label>
                             </div>
-                            <div className="name"><span>Giá bán</span></div>
+                            <div className="name">
+                              <span>Giá bán</span>
+                            </div>
                           </div>
 
                           {/* <div class="custom-control custom-switch">
@@ -578,10 +616,10 @@ class PrintBarcode extends Component {
                           <label class="custom-control-label" for="switch1">Khổ rộng</label>
                         </div> */}
 
-
-
-                          <div className="barcode-wrap" style = {{marginTop : "10px"}}>
-
+                          <div
+                            className="barcode-wrap"
+                            style={{ marginTop: "10px" }}
+                          >
                             {showName && <div>Tên sản phẩm</div>}
 
                             <Barcode
@@ -591,40 +629,31 @@ class PrintBarcode extends Component {
                               height={52}
                               textPosition={"top"}
                               displayValue={false}
-                              value="123456789123456" />
+                              value="123456789123456"
+                            />
 
                             {showBarcode && <span>IKINO1</span>}
 
                             {showPrice && <p>1.000.000</p>}
                           </div>
-
-
                         </div>
-
                       </div>
 
+                      {
+                        <div className="card shadow mb-4 ">
+                          <div className="card-header py-3">
+                            <h6 className="m-0 title_content font-weight-bold text-primary">
+                              Chọn khổ giấy và in
+                            </h6>
+                          </div>
 
-
-                      {<div className="card shadow mb-4 ">
-                        <div className="card-header py-3"><h6 className="m-0 title_content font-weight-bold text-primary">Chọn khổ giấy và in</h6></div>
-
-
-                        <div className="row">
-                          {this.buildListPrintOption()}
+                          <div className="row">
+                            {this.buildListPrintOption()}
+                          </div>
                         </div>
-
-                      </div>
-
                       }
-
                     </div>
-
-
                   </div>
-
-
-
-
                 </div>
               ) : (
                 <NotAccess />
@@ -633,11 +662,9 @@ class PrintBarcode extends Component {
 
             <Footer />
           </div>
-
         </div>
       </div>
     );
-
   }
 }
 
@@ -648,26 +675,24 @@ const mapStateToProps = (state) => {
     user: state.userReducers.user.userID,
     currentBranch: state.branchReducers.branch.currentBranch,
     permission: state.authReducers.permission.data,
-
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
   return {
-
     fetchAllProductV2: (store_code, branch_id, page, params) => {
-      dispatch(productAction.fetchAllProductV2(store_code, branch_id, page, params));
-
+      dispatch(
+        productAction.fetchAllProductV2(store_code, branch_id, page, params)
+      );
     },
     fetchBranchStore: (store_code) => {
-      dispatch(dashboardAction.fetchBranchStore(store_code))
+      dispatch(dashboardAction.fetchBranchStore(store_code));
     },
     fetchUserId: () => {
       dispatch(profileAction.fetchUserId());
     },
     changeBranch: (branchData) => {
-      dispatch(branchAction.changeBranch(branchData))
-    }
-
+      dispatch(branchAction.changeBranch(branchData));
+    },
   };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(PrintBarcode);

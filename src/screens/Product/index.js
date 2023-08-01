@@ -390,26 +390,30 @@ class Product extends Component {
       typeof this.props.permission.product_list != "undefined"
     ) {
       var permissions = this.props.permission;
-      var insert = permissions.product_list;
-      var update = permissions.product_list;
-      var _delete = permissions.product_list;
-      var _import = permissions.product_list;
-      var _export = permissions.product_list;
-      var ecommerce = permissions.product_list;
+      var insert = permissions.product_add;
+      var update = permissions.product_update;
+      var _copy = permissions.product_copy;
+      var _delete = permissions.product_remove_hide;
+      var _import = permissions.product_import_from_excel;
+      var _export = permissions.product_export_to_excel;
+      var ecommerce = permissions.product_ecommerce;
+      var barcode_print = permissions.barcode_print;
+      var product_commission = permissions.product_commission;
 
       var isShow = permissions.product_list;
-      var barcode_print = permissions.barcode_print;
 
       this.setState({
         isLoading: true,
         insert,
         update,
+        _copy,
         _delete,
         _import,
         _export,
         isShow,
         ecommerce,
         barcode_print,
+        product_commission,
       });
     }
   }
@@ -496,12 +500,14 @@ class Product extends Component {
       var {
         insert,
         update,
+        _copy,
         _delete,
         _import,
         _export,
         isShow,
         ecommerce,
         barcode_print,
+        product_commission,
         openModalTypeImport,
         listCategory,
         categorySelected,
@@ -647,7 +653,7 @@ class Product extends Component {
                           data-target="#colConfig"
                           style={{ marginRight: "10px" }}
                           class={`btn btn-danger btn-icon-split btn-sm  ${
-                            _export == true ? "show" : "hide"
+                            product_commission == true ? "show" : "hide"
                           }`}
                         >
                           <span class="icon text-white-50">
@@ -958,6 +964,7 @@ class Product extends Component {
                           insert={insert}
                           _delete={_delete}
                           update={update}
+                          _copy={_copy}
                           page={page}
                           limit={numPage}
                           categorySelected={categorySelected}

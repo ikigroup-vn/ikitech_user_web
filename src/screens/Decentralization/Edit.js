@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Sidebar from "../../components/Partials/Sidebar";
 import Topbar from "../../components/Partials/Topbar";
 import Footer from "../../components/Partials/Footer";
-import { connect } from "react-redux";
+import { connect, shallowEqual } from "react-redux";
 import { Redirect } from "react-router-dom";
 import Form from "../../components/Decentralization/Edit/Form";
 import Loading from "../Loading";
@@ -24,8 +24,8 @@ class DecentralizationEdit extends Component {
   }
   componentWillReceiveProps(nextProps) {
     if (
-      this.state.isLoading != true &&
-      typeof nextProps.permission.product_list != "undefined"
+      this.state.isLoading != true ||
+      !shallowEqual(this.props.permission, nextProps.permission)
     ) {
       var permissions = nextProps.permission;
 
@@ -38,6 +38,7 @@ class DecentralizationEdit extends Component {
     var { id, store_code } = this.props.match.params;
     var { decentralization, history } = this.props;
     var { isShow } = this.state;
+
     if (this.props.auth) {
       return (
         <div id="wrapper">
@@ -47,7 +48,7 @@ class DecentralizationEdit extends Component {
               <div id="content">
                 <Topbar store_code={store_code} />
                 {typeof isShow == "undefined" ? (
-                  <div></div>
+                  <div style={{ height: "500px" }}></div>
                 ) : isShow == true ? (
                   <div class="container-fluid">
                     <Alert

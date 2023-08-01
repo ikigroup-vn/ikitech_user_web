@@ -48,10 +48,21 @@ class PaymentStatus extends Component {
       return;
     }
 
+    var disable = this.props.order_allow_change_status;
+    if (disable == false) {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Không có quyền thay đổi trạng thái",
+        },
+      });
+      return;
+    }
     window.$("#postModalPayment").modal("show");
 
-    var disable = this.props.order_allow_change_status;
-    if (disable == false) return;
     this.props.handleUpdateStatusPayment({
       payment_status_code: statusCode,
       statusName: name,

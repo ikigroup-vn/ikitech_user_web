@@ -16,6 +16,7 @@ import { formatNoD } from "../../../ultis/helpers";
 import { DateRangePickerComponent } from "@syncfusion/ej2-react-calendars";
 import history from "../../../history";
 import { getQueryParams } from "../../../ultis/helpers";
+import NotAccess from "../../../components/Partials/NotAccess";
 
 class InventoryHistory extends Component {
   constructor(props) {
@@ -27,6 +28,18 @@ class InventoryHistory extends Component {
       time_to: "",
       paginate: getQueryParams("page") || 1,
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (
+      this.state.isLoading != true &&
+      typeof nextProps.permission.product_list != "undefined"
+    ) {
+      var permissions = nextProps.permission;
+
+      var isShow = permissions.report_inventory;
+      this.setState({ isLoading: true, isShow });
+    }
   }
   componentWillMount() {
     const { store_code } = this.props.match.params;
@@ -203,7 +216,7 @@ class InventoryHistory extends Component {
 
   render() {
     var { store_code } = this.props.match.params;
-    var { time_from, time_to } = this.state;
+    var { time_from, time_to, isShow } = this.state;
     const { reportHistory } = this.props;
     const { reportInventory, reportImportExport } = this.props;
     const {
@@ -229,123 +242,134 @@ class InventoryHistory extends Component {
           <div id="content-wrapper" className="d-flex flex-column">
             <div id="content">
               <Topbar store_code={store_code} />
-
-              <div className="container-fluid">
-                <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
-                <General
-                  time_from={time_from}
-                  time_to={time_to}
-                  reportImportExport={reportImportExport}
-                  reportInventory={reportInventory}
-                  store_code={store_code}
-                />
-                <div className="card">
-                  <div
-                    className="card-header py-3"
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
-                    <div className="stock-title text-success">
-                      <h4>Sổ kho</h4>
-                    </div>
-                    <div className="label-value">
-                      <p className="sale_user_label bold">
-                        Giá trị nhập kho:{" "}
-                        <span id="total_selected">
-                          {formatNoD(import_total_amount?.toFixed(3))} - SL:{" "}
-                          {formatNoD(import_count_stock)}{" "}
-                        </span>
-                      </p>
-                      <p className="sale_user_label bold">
-                        Giá trị xuất kho:{" "}
-                        <span id="total_selected">
-                          {formatNoD(export_total_amount?.toFixed(3))} - SL:{" "}
-                          {formatNoD(export_count_stock)}
-                        </span>
-                      </p>
-                    </div>
-                    <div className="wap-header" style={{ display: "flex" }}>
-                      <DateRangePickerComponent
-                        value={[
-                          new Date(moment(time_from, "YYYY-MM-DD")),
-                          new Date(moment(time_to, "YYYY-MM-DD")),
-                        ]}
-                        id="daterangepicker"
-                        placeholder="Khoảng thời gian..."
-                        format="dd/MM/yyyy"
-                        onChange={this.onchangeDateFromTo}
+              {typeof isShow == "undefined" ? (
+                <div style={{ height: "500px" }}></div>
+              ) : isShow == true ? (
+                <div className="container-fluid">
+                  <Alert
+                    type={Types.ALERT_UID_STATUS}
+                    alert={this.props.alert}
+                  />
+                  <General
+                    time_from={time_from}
+                    time_to={time_to}
+                    reportImportExport={reportImportExport}
+                    reportInventory={reportInventory}
+                    store_code={store_code}
+                  />
+                  <div className="card">
+                    <div
+                      className="card-header py-3"
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <div className="stock-title text-success">
+                        <h4>Sổ kho</h4>
+                      </div>
+                      <div className="label-value">
+                        <p className="sale_user_label bold">
+                          Giá trị nhập kho:{" "}
+                          <span id="total_selected">
+                            {formatNoD(import_total_amount?.toFixed(3))} - SL:{" "}
+                            {formatNoD(import_count_stock)}{" "}
+                          </span>
+                        </p>
+                        <p className="sale_user_label bold">
+                          Giá trị xuất kho:{" "}
+                          <span id="total_selected">
+                            {formatNoD(export_total_amount?.toFixed(3))} - SL:{" "}
+                            {formatNoD(export_count_stock)}
+                          </span>
+                        </p>
+                      </div>
+                      <div className="wap-header" style={{ display: "flex" }}>
+                        <DateRangePickerComponent
+                          value={[
+                            new Date(moment(time_from, "YYYY-MM-DD")),
+                            new Date(moment(time_to, "YYYY-MM-DD")),
+                          ]}
+                          id="daterangepicker"
+                          placeholder="Khoảng thời gian..."
+                          format="dd/MM/yyyy"
+                          onChange={this.onchangeDateFromTo}
+                        />
+                        {/* <div class="form-group" style={{ display: "flex", alignItems: "center" }}>
+                      <label for="product_name" style={{ marginRight: "20px" }}>Ngày bắt đầu</label>
+                      <MomentInput
+                        placeholder="Chọn thời gian"
+                        format="DD-MM-YYYY"
+                        options={true}
+                        enableInputClick={true}
+                        monthSelect={true}
+                        readOnly={true}
+                        translations={
+                          { DATE: "Ngày", TIME: "Giờ", SAVE: "Đóng", HOURS: "Giờ", MINUTES: "Phút" }
+                        }
+                        onSave={() => { }}
+                        onChange={this.onChangeStart}
                       />
-                      {/* <div class="form-group" style={{ display: "flex", alignItems: "center" }}>
-                        <label for="product_name" style={{ marginRight: "20px" }}>Ngày bắt đầu</label>
-                        <MomentInput
-                          placeholder="Chọn thời gian"
-                          format="DD-MM-YYYY"
-                          options={true}
-                          enableInputClick={true}
-                          monthSelect={true}
-                          readOnly={true}
-                          translations={
-                            { DATE: "Ngày", TIME: "Giờ", SAVE: "Đóng", HOURS: "Giờ", MINUTES: "Phút" }
-                          }
-                          onSave={() => { }}
-                          onChange={this.onChangeStart}
-                        />
-                      </div> */}
-                      {/* <div class="form-group" style={{ display: "flex", alignItems: "center", marginLeft: "20px" }}>
-                        <label for="product_name" style={{ marginRight: "20px" }}>Ngày kết thúc</label>
-                        <MomentInput
-                          placeholder="Chọn thời gian"
-                          format="DD-MM-YYYY"
-                          options={true}
-                          enableInputClick={true}
-                          monthSelect={true}
-                          readOnly={true}
-                          translations={
-                            { DATE: "Ngày", TIME: "Giờ", SAVE: "Đóng", HOURS: "Giờ", MINUTES: "Phút" }
-                          }
-                          onSave={() => { }}
-                          onChange={this.onChangeEnd}
-                        />
-                      </div> */}
-                      {/* <button className='btn btn-primary btn-sm' style={{ marginLeft: "20px", marginBottom: "10px" }} onClick={this.handleFindItem}>Tìm kiếm</button> */}
+                    </div> */}
+                        {/* <div class="form-group" style={{ display: "flex", alignItems: "center", marginLeft: "20px" }}>
+                      <label for="product_name" style={{ marginRight: "20px" }}>Ngày kết thúc</label>
+                      <MomentInput
+                        placeholder="Chọn thời gian"
+                        format="DD-MM-YYYY"
+                        options={true}
+                        enableInputClick={true}
+                        monthSelect={true}
+                        readOnly={true}
+                        translations={
+                          { DATE: "Ngày", TIME: "Giờ", SAVE: "Đóng", HOURS: "Giờ", MINUTES: "Phút" }
+                        }
+                        onSave={() => { }}
+                        onChange={this.onChangeEnd}
+                      />
+                    </div> */}
+                        {/* <button className='btn btn-primary btn-sm' style={{ marginLeft: "20px", marginBottom: "10px" }} onClick={this.handleFindItem}>Tìm kiếm</button> */}
+                      </div>
                     </div>
-                  </div>
-                  <div className="card-body">
-                    <div class="table-responsive">
-                      <table
-                        class="table  "
-                        id="dataTable"
-                        width="100%"
-                        cellspacing="0"
-                      >
-                        <thead>
-                          <tr>
-                            <th>STT</th>
-                            <th>Mã phiếu</th>
-                            <th>Tên sản phẩm</th>
-                            <th>SL tồn kho</th>
-                            <th>SL thay đổi </th>
-                            <th>Giá vốn thay đổi </th>
-                            <th>Trạng thái</th>
-                            <th>Thời gian</th>
-                            {/* <th>Hành động</th> */}
-                          </tr>
-                        </thead>
+                    <div className="card-body">
+                      <div class="table-responsive">
+                        <table
+                          class="table  "
+                          id="dataTable"
+                          width="100%"
+                          cellspacing="0"
+                        >
+                          <thead>
+                            <tr>
+                              <th>STT</th>
+                              <th>Mã phiếu</th>
+                              <th>Tên sản phẩm</th>
+                              <th>SL tồn kho</th>
+                              <th>SL thay đổi </th>
+                              <th>Giá vốn thay đổi </th>
+                              <th>Trạng thái</th>
+                              <th>Thời gian</th>
+                              {/* <th>Hành động</th> */}
+                            </tr>
+                          </thead>
 
-                        <tbody>
-                          {this.showData(reportHistory.data, store_code)}
-                        </tbody>
-                      </table>
+                          <tbody>
+                            {this.showData(reportHistory.data, store_code)}
+                          </tbody>
+                        </table>
+                      </div>
+                      <Pagination
+                        time_from={time_from}
+                        time_to={time_to}
+                        store_code={store_code}
+                        reportHistory={reportHistory}
+                        setPaginate={this.setPaginate}
+                      />
                     </div>
-                    <Pagination
-                      time_from={time_from}
-                      time_to={time_to}
-                      store_code={store_code}
-                      reportHistory={reportHistory}
-                      setPaginate={this.setPaginate}
-                    />
                   </div>
                 </div>
-              </div>
+              ) : (
+                <NotAccess />
+              )}
             </div>
 
             <Footer />
@@ -360,6 +384,7 @@ const mapStateToProps = (state) => {
     reportHistory: state.reportReducers.reportHistory,
     reportInventory: state.reportReducers.reportInventory,
     reportImportExport: state.reportReducers.reportImportExport,
+    permission: state.authReducers.permission.data,
   };
 };
 

@@ -53,11 +53,16 @@ class collaborator extends Component {
       typeof this.props.permission.product_list != "undefined"
     ) {
       var permissions = this.props.permission;
-      // var payment_request_list = permissions.collaborator_payment_request_list
-      // var config = permissions.collaborator_config
-      // var payment_request_history = permissions.collaborator_payment_request_history
-      // var collaborator_list = permissions.collaborator_list
-      // var payment_request_solve = permissions.collaborator_payment_request_solve
+      var collaborator_list = permissions.collaborator_list;
+      var collaborator_config = permissions.collaborator_config;
+      var collaborator_register = permissions.collaborator_register;
+      var collaborator_top_sale = permissions.collaborator_top_sale;
+      var collaborator_payment_request_list =
+        permissions.collaborator_payment_request_list;
+      var collaborator_payment_request_history =
+        permissions.collaborator_payment_request_history;
+      var collaborator_add_sub_balance =
+        permissions.collaborator_add_sub_balance;
       var isShow = permissions.collaborator_list;
 
       // var isShow = payment_request_list == false && config == false && payment_request_history == false && collaborator_list == false ? false : true
@@ -70,12 +75,14 @@ class collaborator extends Component {
       this.defaultIndex = tabIndex;
       this.setState({
         isLoading: true,
-        collaborator_list: true,
-        payment_request_list: true,
-        config: true,
-        payment_request_history: true,
-        payment_request_solve: true,
         isShow,
+        collaborator_list,
+        collaborator_config,
+        collaborator_register,
+        collaborator_top_sale,
+        collaborator_payment_request_list,
+        collaborator_payment_request_history,
+        collaborator_add_sub_balance,
       });
     }
   }
@@ -85,10 +92,12 @@ class collaborator extends Component {
       tabId,
       tabDefault,
       collaborator_list,
-      payment_request_list,
-      config,
-      payment_request_history,
-      payment_request_solve,
+      collaborator_config,
+      collaborator_register,
+      collaborator_top_sale,
+      collaborator_payment_request_list,
+      collaborator_payment_request_history,
+      collaborator_add_sub_balance,
       isShow,
     } = this.state;
     return (
@@ -122,7 +131,7 @@ class collaborator extends Component {
                         onSelect={(index) => this.fetchDataOnTap(index)}
                       >
                         <TabList>
-                          {config == true ? (
+                          {collaborator_config == true ? (
                             <Tab>
                               <Link to={"?tab-index=0"}>
                                 {" "}
@@ -142,7 +151,7 @@ class collaborator extends Component {
                               </Link>
                             </Tab>
                           ) : null}
-                          {collaborator_list == true ? (
+                          {collaborator_register == true ? (
                             <Tab>
                               <Link to={"?tab-index=2"}>
                                 {" "}
@@ -151,7 +160,7 @@ class collaborator extends Component {
                               </Link>
                             </Tab>
                           ) : null}
-                          {collaborator_list == true ? (
+                          {collaborator_top_sale == true ? (
                             <Tab>
                               <Link to={"?tab-index=3"}>
                                 {" "}
@@ -161,7 +170,7 @@ class collaborator extends Component {
                               </Link>
                             </Tab>
                           ) : null}
-                          {payment_request_list == true ? (
+                          {collaborator_payment_request_list == true ? (
                             <Tab>
                               <Link to={"?tab-index=4"}>
                                 {" "}
@@ -171,7 +180,7 @@ class collaborator extends Component {
                               </Link>
                             </Tab>
                           ) : null}
-                          {payment_request_history == true ? (
+                          {collaborator_payment_request_history == true ? (
                             <Tab>
                               <Link to={"?tab-index=5"}>
                                 {" "}
@@ -183,7 +192,7 @@ class collaborator extends Component {
                           ) : null}
                         </TabList>
 
-                        {config == true ? (
+                        {collaborator_config == true ? (
                           <TabPanel>
                             <Config
                               tabId={tabId}
@@ -199,11 +208,14 @@ class collaborator extends Component {
                             <ListCollaborator
                               tabId={tabId}
                               store_code={store_code}
+                              collaborator_add_sub_balance={
+                                collaborator_add_sub_balance
+                              }
                             />
                           </TabPanel>
                         ) : null}
 
-                        {collaborator_list == true ? (
+                        {collaborator_register == true ? (
                           <TabPanel>
                             <ListCollaboratorRegisterRequest
                               tabId={tabId}
@@ -212,27 +224,29 @@ class collaborator extends Component {
                           </TabPanel>
                         ) : null}
 
-                        {collaborator_list == true ? (
+                        {collaborator_top_sale == true ? (
                           <TabPanel>
                             <TopReport
                               paramId={id}
                               tabId={tabId}
                               store_code={store_code}
-                              payment_request_solve={payment_request_solve}
+                              payment_request_solve={collaborator_top_sale}
                             />
                           </TabPanel>
                         ) : null}
-                        {payment_request_list == true ? (
+                        {collaborator_payment_request_list == true ? (
                           <TabPanel>
                             <RequestPayment
                               paramId={id}
                               tabId={tabId}
                               store_code={store_code}
-                              payment_request_solve={payment_request_solve}
+                              payment_request_solve={
+                                collaborator_payment_request_list
+                              }
                             />
                           </TabPanel>
                         ) : null}
-                        {payment_request_history == true ? (
+                        {collaborator_payment_request_history == true ? (
                           <TabPanel>
                             <HistoryPayment
                               tabId={tabId}

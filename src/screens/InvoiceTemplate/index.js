@@ -21,26 +21,30 @@ class InvoiceTemplate extends Component {
     this.state = {
       tabId: "",
       change: "",
-
     };
   }
-
 
   fetchDataOnTap = (index) => {
     this.setState({ tabId: index, change: helper.randomString(10) });
   };
 
+  componentWillReceiveProps(nextProps) {
+    if (
+      this.state.isLoading != true &&
+      typeof nextProps.permission.product_list != "undefined"
+    ) {
+      var permissions = nextProps.permission;
+
+      var isShow = permissions.invoice_template;
+      this.setState({ isLoading: true, isShow });
+    }
+  }
 
   render() {
     var { store_code } = this.props.match.params;
-    var {
-      tabId,
-      web_theme_overview,
-
-    } = this.state;
+    var { tabId, isShow } = this.state;
     var { theme } = this.props;
 
-    var isShow = true
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
@@ -60,7 +64,7 @@ class InvoiceTemplate extends Component {
                     style={{ display: "flex", justifyContent: "space-between" }}
                   >
                     <h4 className="h4 title_content mb-0 text-gray-800">
-                    Cài đặt mẫu in
+                      Cài đặt mẫu in
                     </h4>
                   </div>
                   <br></br>
@@ -74,11 +78,8 @@ class InvoiceTemplate extends Component {
                         <TabList>
                           <Tab>
                             <i class="fa fa-list-alt"></i>
-                            <span style={{ fontSize: "0.8rem" }}>
-                              Đơn hàng
-                            </span>
+                            <span style={{ fontSize: "0.8rem" }}>Đơn hàng</span>
                           </Tab>
-
                         </TabList>
 
                         <TabPanel>
@@ -88,8 +89,6 @@ class InvoiceTemplate extends Component {
                             theme={theme}
                           />
                         </TabPanel>
-
-
                       </Tabs>
                     </div>
                   </div>
