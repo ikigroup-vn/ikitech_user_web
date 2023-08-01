@@ -86,7 +86,7 @@ class Table extends Component {
 
   showData = (categories) => {
     var result = null;
-    var { update, _delete } = this.props;
+    var { update, _delete, insert } = this.props;
     if (categories.length > 0) {
       result = categories.map((data, index) => {
         return (
@@ -222,17 +222,17 @@ class Table extends Component {
                   className="create-category-child"
                   style={{ float: "right" }}
                 >
-                  <a
-                    style={{ marginLeft: "10px", width: "28px" }}
-                    onClick={(e) => this.createChild(e, data.id)}
-                    data-toggle="modal"
-                    data-target="#createModalChild"
-                    class={`btn btn-info btn-icon-split btn-sm show ${
-                      _delete == true ? "show" : "hide"
-                    }`}
-                  >
-                    <i class="fas fa-plus" style={{ padding: "6px" }}></i>
-                  </a>
+                  {insert ? (
+                    <a
+                      style={{ marginLeft: "10px", width: "28px" }}
+                      onClick={(e) => this.createChild(e, data.id)}
+                      data-toggle="modal"
+                      data-target="#createModalChild"
+                      class={`btn btn-info btn-icon-split btn-sm show`}
+                    >
+                      <i class="fas fa-plus" style={{ padding: "6px" }}></i>
+                    </a>
+                  ) : null}
                 </div>
               </div>
               <div></div>

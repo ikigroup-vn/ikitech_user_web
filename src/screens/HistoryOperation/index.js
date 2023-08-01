@@ -153,8 +153,13 @@ class HistoryOperation extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    if (this.state.isLoading != true) {
-      var isShow = true;
+    if (
+      this.state.isLoading != true &&
+      typeof this.props.permission.product_list != "undefined"
+    ) {
+      var permissions = this.props.permission;
+      var isShow = permissions.history_operation;
+
       this.setState({ isLoading: true, isShow });
     }
   }

@@ -146,7 +146,7 @@ class Table extends Component {
       return result;
     }
     if (products.length > 0) {
-      var { _delete, update, insert } = this.props;
+      var { _delete, update, insert, _copy } = this.props;
       result = products.map((data, index) => {
         var status_name = data.status == 0 ? "Hiển thị" : "Đã ẩn";
         var status_stock =
@@ -181,6 +181,7 @@ class Table extends Component {
         var distributes = data.distributes;
         return (
           <ShowData
+            _copy={_copy}
             _delete={_delete}
             passDataModal={this.passDataModal}
             min_price={min_price}
@@ -259,7 +260,7 @@ class Table extends Component {
         ? true
         : false;
     var multiDelete = selected.length > 0 ? "show" : "hide";
-    var { _delete, update, insert } = this.props;
+    var { _delete, update, insert, _copy } = this.props;
 
     return (
       <TableProductStyles>

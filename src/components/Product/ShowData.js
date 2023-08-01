@@ -221,6 +221,7 @@ class ShowData extends Component {
       min_price,
       max_price,
       _delete,
+      _copy,
       update,
       insert,
       checked,
@@ -284,9 +285,9 @@ class ShowData extends Component {
               searchValue ? `&search=${searchValue}` : ""
             }&limit=${limit}`}
           >
-            {data.name}  
+            {data.name}
           </Link>
-            {"  "}
+          {"  "}
           <span
             style={{
               color: "rgb(127, 140, 141)",
@@ -356,7 +357,7 @@ class ShowData extends Component {
               className="a"
               style={{
                 float: "left",
-                paddingRight:20
+                paddingRight: 20,
               }}
             >
               {min_price === max_price ? (
@@ -373,7 +374,6 @@ class ShowData extends Component {
                 </div>
               )}
             </div>
-            
           )}
 
           {"  "}
@@ -437,7 +437,7 @@ class ShowData extends Component {
             <Link
               to={`/product/create/${store_code}/${data.id}`}
               class={`btn btn-outline-primary btn-sm ${
-                insert == true ? "show" : "hide"
+                insert == true && _copy == true ? "show" : "hide"
               }`}
             >
               <i class="fa fa-copy"></i>

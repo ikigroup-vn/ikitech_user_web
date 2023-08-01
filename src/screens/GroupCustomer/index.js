@@ -55,7 +55,7 @@ class GroupCustomer extends PureComponent {
       this.state.isLoading !== true &&
       typeof nextProps.permission.customer_list !== "undefined"
     ) {
-      const isShow = nextProps.permission.customer_list;
+      const isShow = nextProps.permission.group_customer;
       this.setState({ isShow, isLoading: true });
     }
   }

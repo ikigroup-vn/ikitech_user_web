@@ -20,7 +20,7 @@ class Table extends Component {
       name: name,
       image_url: image,
       is_show_home: isShowHome,
-      banner_ads: banner_ads
+      banner_ads: banner_ads,
     });
     e.preventDefault();
   };
@@ -104,7 +104,7 @@ class Table extends Component {
 
   showData = (categories) => {
     var result = null;
-    var { update, _delete } = this.props;
+    var { update, _delete, insert } = this.props;
     if (categories.length > 0) {
       result = categories.map((data, index) => {
         var image_url =
@@ -116,7 +116,11 @@ class Table extends Component {
           <SortableItem key={data.id}>
             <div
               class="resp-table-row"
-              style={{ width: "100%", cursor: "auto", background:index%2 == 0 ?"#F6F7F7C2" : null }}
+              style={{
+                width: "100%",
+                cursor: "auto",
+                background: index % 2 == 0 ? "#F6F7F7C2" : null,
+              }}
             >
               <div class="table-body-cell" style={{ width: "65px" }}>
                 <SortableKnob>
@@ -170,41 +174,45 @@ class Table extends Component {
                     {data.name}
                   </div>
                   <div className="group-btn-table">
-                    <a
-                      style={{
-                        marginLeft: "10px",
-                        color: "#d69a2b",
-                        fontSize: 18,
-                      }}
-                      onClick={(e) =>
-                        this.passEditFunc(
-                          e,
-                          data.id,
-                          data.name,
-                          data.image_url,
-                          data.is_show_home,
-                          data.banner_ads
-                        )
-                      }
-                      data-toggle="modal"
-                      data-target="#updateModal"
-                    >
-                      <i class="fa fa-edit"></i>
-                    </a>
-                    <a
-                      style={{
-                        marginLeft: "10px",
-                        color: "#ff6767",
-                        fontSize: 18,
-                      }}
-                      onClick={(e) =>
-                        this.passDeleteFunc(e, data.id, data.name)
-                      }
-                      data-toggle="modal"
-                      data-target="#removeModal"
-                    >
-                      <i class="fa fa-trash"></i>
-                    </a>
+                    {update ? (
+                      <a
+                        style={{
+                          marginLeft: "10px",
+                          color: "#d69a2b",
+                          fontSize: 18,
+                        }}
+                        onClick={(e) =>
+                          this.passEditFunc(
+                            e,
+                            data.id,
+                            data.name,
+                            data.image_url,
+                            data.is_show_home,
+                            data.banner_ads
+                          )
+                        }
+                        data-toggle="modal"
+                        data-target="#updateModal"
+                      >
+                        <i class="fa fa-edit"></i>
+                      </a>
+                    ) : null}
+                    {_delete ? (
+                      <a
+                        style={{
+                          marginLeft: "10px",
+                          color: "#ff6767",
+                          fontSize: 18,
+                        }}
+                        onClick={(e) =>
+                          this.passDeleteFunc(e, data.id, data.name)
+                        }
+                        data-toggle="modal"
+                        data-target="#removeModal"
+                      >
+                        <i class="fa fa-trash"></i>
+                      </a>
+                    ) : null}
                   </div>
                 </div>
               </div>
@@ -280,40 +288,49 @@ class Table extends Component {
                           class="button-category btn-group"
                           style={{ height: "30px" }}
                         >
-                          <a
-                            style={{
-                              marginLeft: "10px",
-                              color: "#d69a2b",
-                              fontSize: 18,
-                            }}
-                            onClick={(e) =>
-                              this.editChild(
-                                e,
-                                data.id,
-                                data1.id,
-                                data1.name,
-                                data1.image_url
-                              )
-                            }
-                            data-toggle="modal"
-                            data-target="#updateModalChild"
-                          >
-                            <i class="fa fa-edit"></i>
-                          </a>
-                          <a
-                            style={{
-                              marginLeft: "10px",
-                              color: "#ff6767",
-                              fontSize: 18,
-                            }}
-                            onClick={(e) =>
-                              this.deleteChild(e, data.id, data1.id, data1.name)
-                            }
-                            data-toggle="modal"
-                            data-target="#removeModalChild"
-                          >
-                            <i class="fa fa-trash"></i>
-                          </a>
+                          {update ? (
+                            <a
+                              style={{
+                                marginLeft: "10px",
+                                color: "#d69a2b",
+                                fontSize: 18,
+                              }}
+                              onClick={(e) =>
+                                this.editChild(
+                                  e,
+                                  data.id,
+                                  data1.id,
+                                  data1.name,
+                                  data1.image_url
+                                )
+                              }
+                              data-toggle="modal"
+                              data-target="#updateModalChild"
+                            >
+                              <i class="fa fa-edit"></i>
+                            </a>
+                          ) : null}
+                          {_delete ? (
+                            <a
+                              style={{
+                                marginLeft: "10px",
+                                color: "#ff6767",
+                                fontSize: 18,
+                              }}
+                              onClick={(e) =>
+                                this.deleteChild(
+                                  e,
+                                  data.id,
+                                  data1.id,
+                                  data1.name
+                                )
+                              }
+                              data-toggle="modal"
+                              data-target="#removeModalChild"
+                            >
+                              <i class="fa fa-trash"></i>
+                            </a>
+                          ) : null}
                         </div>
                       </div>
                     </SortableItem>
@@ -323,22 +340,22 @@ class Table extends Component {
                   className="create-category-child"
                   style={{ float: "right" }}
                 >
-                  <a
-                    style={{
-                      marginLeft: "10px",
-                      width: "28px",
-                      color: "white",
-                      fontSize: 14,
-                    }}
-                    onClick={(e) => this.createChild(e, data.id)}
-                    data-toggle="modal"
-                    data-target="#createModalChild"
-                    class={`btn btn-info btn-icon-split btn-sm show ${
-                      _delete == true ? "show" : "hide"
-                    }`}
-                  >
-                    <i class="fas fa-plus" style={{ padding: "6px" }}></i>
-                  </a>
+                  {insert ? (
+                    <a
+                      style={{
+                        marginLeft: "10px",
+                        width: "28px",
+                        color: "white",
+                        fontSize: 14,
+                      }}
+                      onClick={(e) => this.createChild(e, data.id)}
+                      data-toggle="modal"
+                      data-target="#createModalChild"
+                      class={`btn btn-info btn-icon-split btn-sm show`}
+                    >
+                      <i class="fas fa-plus" style={{ padding: "6px" }}></i>
+                    </a>
+                  ) : null}
                 </div>
               </SortableList>
               <div></div>

@@ -127,14 +127,20 @@ class ProductInventory extends Component {
       typeof this.props.permission.product_list != "undefined"
     ) {
       var permissions = this.props.permission;
-      var insert = permissions.product_add;
-      var update = permissions.product_update;
-      var _delete = permissions.product_remove_hide;
-      var _import = permissions.product_import_from_exel;
-      var _export = permissions.product_export_to_exel;
-      var ecommerce = permissions.product_ecommerce;
+      // var insert = permissions.product_add;
+      // var update = permissions.product_update;
+      // var _delete = permissions.product_remove_hide;
+      // var _import = permissions.product_import_from_exel;
+      // var _export = permissions.product_export_to_exel;
+      // var ecommerce = permissions.product_ecommerce;
+      var insert = permissions.inventory_list;
+      var update = permissions.inventory_list;
+      var _delete = permissions.inventory_list;
+      var _import = permissions.inventory_list;
+      var _export = permissions.inventory_list;
+      var ecommerce = permissions.inventory_list;
 
-      var isShow = permissions.product_list;
+      var isShow = permissions.inventory_list;
 
       this.setState({
         isLoading: true,

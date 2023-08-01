@@ -90,9 +90,9 @@ class CustomerSale extends Component {
     ) {
       var permissions = nextProps.permission;
 
-      var isShow = permissions.onsale;
-      var edit = permissions.onsale_edit;
+      var isShow = permissions.onsale_list;
       var add = permissions.onsale_add;
+      var edit = permissions.onsale_edit;
       var remove = permissions.onsale_remove;
       var assignment = permissions.onsale_assignment;
       this.setState({
@@ -100,7 +100,7 @@ class CustomerSale extends Component {
         isShow,
         chat_allow: true,
         edit,
-        add: true,
+        add,
         remove,
         assignment,
       });
@@ -306,28 +306,29 @@ class CustomerSale extends Component {
                             Export Excel
                           </span>
                         </a>
-
-                        <a
-                          data-toggle="modal"
-                          data-target="#modalCreateCustomer"
-                          class="btn btn-info btn-icon-split btn-sm"
-                          style={{
-                            height: "fit-content",
-                            width: "fit-content",
-                          }}
-                        >
-                          <span class="icon text-white-50">
-                            <i class="fas fa-plus"></i>
-                          </span>
-                          <span
+                        {add ? (
+                          <a
+                            data-toggle="modal"
+                            data-target="#modalCreateCustomer"
+                            class="btn btn-info btn-icon-split btn-sm"
                             style={{
-                              color: "white",
+                              height: "fit-content",
+                              width: "fit-content",
                             }}
-                            class={`text `}
                           >
-                            Thêm khách hàng
-                          </span>
-                        </a>
+                            <span class="icon text-white-50">
+                              <i class="fas fa-plus"></i>
+                            </span>
+                            <span
+                              style={{
+                                color: "white",
+                              }}
+                              class={`text `}
+                            >
+                              Thêm khách hàng
+                            </span>
+                          </a>
+                        ) : null}
                       </div>
                     </div>
 

@@ -153,7 +153,7 @@ class Combo extends Component {
     ) {
       var permissions = this.props.permission;
 
-      var isShow = permissions.promotion;
+      var isShow = permissions.promotion_combo_list;
 
       this.setState({
         isLoading: true,

@@ -483,8 +483,14 @@ class Bill extends Component {
       var permissions = nextProps.permission;
       var isShow = permissions.order_list || this.isSale();
       var chat_allow = permissions.chat_allow;
+      var order_export_to_excel = permissions.order_export_to_excel;
 
-      this.setState({ isLoading: true, chat_allow, isShow });
+      this.setState({
+        isLoading: true,
+        chat_allow,
+        isShow,
+        order_export_to_excel,
+      });
     }
   }
 
@@ -769,6 +775,7 @@ class Bill extends Component {
       collaborator_by_customer_id,
       agency_by_customer_id,
       statusTime,
+      order_export_to_excel,
     } = this.state;
     var listBill = typeof bills.data == "undefined" ? [] : bills.data;
 
@@ -842,31 +849,41 @@ class Bill extends Component {
                             </div>
                           </form>
                           <div>
-                            <button
-                              style={{ margin: "auto 0px", marginRight: 15 }}
-                              onClick={this.exportAllListOrderMisa}
-                              class={`btn btn-info btn-icon-split btn-sm `}
-                            >
-                              <span class="icon text-white-50">
-                                <i class="fas fa-file-export"></i>
-                              </span>
-                              <span style={{ color: "white" }} class="text">
-                                Export Excel Misa
-                              </span>
-                            </button>
+                            {order_export_to_excel ? (
+                              <>
+                                <button
+                                  style={{
+                                    margin: "auto 0px",
+                                    marginRight: 15,
+                                  }}
+                                  onClick={this.exportAllListOrderMisa}
+                                  class={`btn btn-info btn-icon-split btn-sm `}
+                                >
+                                  <span class="icon text-white-50">
+                                    <i class="fas fa-file-export"></i>
+                                  </span>
+                                  <span style={{ color: "white" }} class="text">
+                                    Export Excel Misa
+                                  </span>
+                                </button>
 
-                            <button
-                              style={{ margin: "auto 0px", marginRight: 15 }}
-                              onClick={this.exportAllListOrder}
-                              class={`btn btn-success btn-icon-split btn-sm `}
-                            >
-                              <span class="icon text-white-50">
-                                <i class="fas fa-file-export"></i>
-                              </span>
-                              <span style={{ color: "white" }} class="text">
-                                Export Excel Ikitech
-                              </span>
-                            </button>
+                                <button
+                                  style={{
+                                    margin: "auto 0px",
+                                    marginRight: 15,
+                                  }}
+                                  onClick={this.exportAllListOrder}
+                                  class={`btn btn-success btn-icon-split btn-sm `}
+                                >
+                                  <span class="icon text-white-50">
+                                    <i class="fas fa-file-export"></i>
+                                  </span>
+                                  <span style={{ color: "white" }} class="text">
+                                    Export Excel Ikitech
+                                  </span>
+                                </button>
+                              </>
+                            ) : null}
 
                             <button
                               // onClick={(e) => this.handleMultiDelCallBack(e, selected)}

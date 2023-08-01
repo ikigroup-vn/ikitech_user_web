@@ -30,7 +30,6 @@ class Theme extends Component {
   componentDidMount() {
     var { store_code } = this.props.match.params;
 
-
     this.props.fetchTheme(store_code);
   }
 
@@ -46,26 +45,32 @@ class Theme extends Component {
       var permissions = this.props.permission;
 
       var web_theme_overview = permissions.web_theme_overview;
+      var web_theme_edit = permissions.web_theme_edit;
       var web_theme_contact = permissions.web_theme_contact;
       var web_theme_help = permissions.web_theme_help;
       var web_theme_footer = permissions.web_theme_footer;
       var web_theme_banner = permissions.web_theme_banner;
+      var web_theme_seo = permissions.web_theme_seo;
       var isShow =
         web_theme_overview == false &&
-          web_theme_contact == false &&
-          web_theme_help == false &&
-          web_theme_footer == false &&
-          web_theme_banner == false
+        web_theme_edit == false &&
+        web_theme_contact == false &&
+        web_theme_help == false &&
+        web_theme_footer == false &&
+        web_theme_banner == false &&
+        web_theme_seo == false
           ? false
           : true;
 
       this.setState({
         isLoading: true,
         web_theme_overview,
+        web_theme_edit,
         web_theme_contact,
         web_theme_help,
         web_theme_footer,
         web_theme_banner,
+        web_theme_seo,
         isShow,
       });
     }
@@ -75,10 +80,12 @@ class Theme extends Component {
     var {
       tabId,
       web_theme_overview,
+      web_theme_edit,
       web_theme_contact,
       web_theme_help,
       web_theme_footer,
       web_theme_banner,
+      web_theme_seo,
       isShow,
     } = this.state;
     var { theme } = this.props;
@@ -121,13 +128,15 @@ class Theme extends Component {
                               </span>
                             </Tab>
                           ) : null}
-                          <Tab>
-                            <i class="fa fa-home"></i>
-                            <span style={{ fontSize: "0.8rem" }}>
-                              Màn hình trang chủ
-                            </span>
-                          </Tab>
-                         
+                          {web_theme_edit == true ? (
+                            <Tab>
+                              <i class="fa fa-home"></i>
+                              <span style={{ fontSize: "0.8rem" }}>
+                                Màn hình trang chủ
+                              </span>
+                            </Tab>
+                          ) : null}
+
                           {web_theme_contact == true ? (
                             <Tab>
                               <i class="fas fa-address-book"></i>
@@ -161,14 +170,12 @@ class Theme extends Component {
                             </Tab>
                           ) : null}
 
-
-
-                          {web_theme_banner == true ? <Tab>
-                            <i class="fa fa-search-plus "></i>
-                            <span>SEO</span>
-                          </Tab> : null}
-
-
+                          {web_theme_seo == true ? (
+                            <Tab>
+                              <i class="fa fa-search-plus "></i>
+                              <span>SEO</span>
+                            </Tab>
+                          ) : null}
                         </TabList>
 
                         {web_theme_overview == true ? (
@@ -187,7 +194,7 @@ class Theme extends Component {
                             theme={theme}
                           />
                         </TabPanel>
-                      
+
                         {web_theme_contact == true ? (
                           <TabPanel>
                             <Contact
@@ -228,15 +235,15 @@ class Theme extends Component {
                           </TabPanel>
                         ) : null}
 
-                        {web_theme_banner == true ? <TabPanel>
-                          <Seo
-                            theme={theme}
-                            tabId={tabId}
-                            store_code={store_code}
-                          />
-                        </TabPanel> : null}
-
-
+                        {web_theme_banner == true ? (
+                          <TabPanel>
+                            <Seo
+                              theme={theme}
+                              tabId={tabId}
+                              store_code={store_code}
+                            />
+                          </TabPanel>
+                        ) : null}
                       </Tabs>
                     </div>
                   </div>

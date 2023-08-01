@@ -84,12 +84,15 @@ class Store extends Component {
       var permissions = this.props.permission;
 
       var isShow = permissions.product_category_list;
+      var insert = permissions.product_category_add;
+      var update = permissions.product_category_update;
+      var _delete = permissions.product_category_remove;
 
       this.setState({
         isLoading: true,
-        insert: true,
-        update: true,
-        _delete: true,
+        insert,
+        update,
+        _delete,
         isShow,
       });
     }
@@ -153,6 +156,7 @@ class Store extends Component {
                       <div class="card-body card-body123">
                         <Table
                           store_code={store_code}
+                          insert={insert}
                           update={update}
                           _delete={_delete}
                           category_product={category_product}

@@ -14,36 +14,35 @@ import Alert from "../../components/Partials/Alert";
 class Create extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-
-    }
-
+    this.state = {};
   }
   componentWillReceiveProps(nextProps) {
-    if (this.state.isLoading != true && typeof nextProps.permission.product_list != "undefined") {
-      var permissions = nextProps.permission
+    if (
+      this.state.isLoading != true &&
+      typeof nextProps.permission.product_list != "undefined"
+    ) {
+      var permissions = nextProps.permission;
 
-      var isShow = permissions.product_category_add
-      this.setState({ isLoading: true, isShow })
+      var isShow = permissions.post_list;
+      this.setState({ isLoading: true, isShow });
     }
   }
 
   render() {
-    var { store_code } = this.props.match.params
+    var { store_code } = this.props.match.params;
     var { history } = this.props;
-    var { isShow } = this.state
+    var { isShow } = this.state;
 
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
         <div className="col-10 col-10-wrapper">
-
           <div id="content-wrapper" className="d-flex flex-column">
             <div id="content">
               <Topbar store_code={store_code} />
-              {typeof isShow == "undefined" ?             <div style = {{height : "500px"}}></div> :
- isShow == true ?
-
+              {typeof isShow == "undefined" ? (
+                <div style={{ height: "500px" }}></div>
+              ) : isShow == true ? (
                 <div class="container-fluid">
                   <Alert
                     type={Types.ALERT_UID_STATUS}
@@ -73,17 +72,16 @@ class Create extends Component {
                     </div>
                   </div>
                 </div>
-                : <NotAccess />}
-
+              ) : (
+                <NotAccess />
+              )}
             </div>
 
             <Footer />
           </div>
         </div>
       </div>
-
     );
-
   }
 }
 
@@ -92,7 +90,6 @@ const mapStateToProps = (state) => {
     auth: state.authReducers.login.authentication,
     alert: state.categoryBReducers.alert.alert_uid,
     permission: state.authReducers.permission.data,
-
   };
 };
 

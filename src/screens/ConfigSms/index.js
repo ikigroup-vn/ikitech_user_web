@@ -65,7 +65,7 @@ class ConfigSms extends Component {
     ) {
       var permissions = this.props.permission;
       // var update = permissions.delivery_provider_update
-      var isShow = permissions.delivery_pick_address_list;
+      var isShow = permissions.config_sms;
 
       this.setState({ isLoading: true, isShow });
     }

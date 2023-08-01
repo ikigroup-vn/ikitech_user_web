@@ -48,7 +48,10 @@ class Sale extends Component {
       typeof this.props.permission.product_list != "undefined"
     ) {
       var permissions = this.props.permission;
-      var isShow = permissions.collaborator_list;
+      var isShow = permissions.sale_list;
+      var sale_list = permissions.sale_list;
+      var sale_config = permissions.sale_config;
+      var sale_top = permissions.sale_top;
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
       var tabIndex = urlParams.get("tab-index");
@@ -58,15 +61,16 @@ class Sale extends Component {
       this.defaultIndex = tabIndex;
       this.setState({
         isLoading: true,
-        sale_list: true,
-        config: true,
+        sale_list,
+        sale_config,
+        sale_top,
         isShow,
       });
     }
   }
   render() {
     var { store_code, id } = this.props.match.params;
-    var { tabId, sale_list, config, isShow } = this.state;
+    var { tabId, sale_list, sale_config, sale_top, isShow } = this.state;
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
@@ -94,7 +98,7 @@ class Sale extends Component {
                         onSelect={(index) => this.fetchDataOnTap(index)}
                       >
                         <TabList>
-                          {config == true ? (
+                          {sale_config == true ? (
                             <Tab>
                               <Link
                                 to={"?tab-index=0"}
@@ -126,7 +130,7 @@ class Sale extends Component {
                               </Link>
                             </Tab>
                           ) : null}
-                          {sale_list == true ? (
+                          {sale_top == true ? (
                             <Tab>
                               <Link
                                 to={"?tab-index=2"}
@@ -144,7 +148,7 @@ class Sale extends Component {
                           ) : null}
                         </TabList>
 
-                        {config == true ? (
+                        {sale_config == true ? (
                           <TabPanel>
                             <Config
                               tabId={tabId}
@@ -160,7 +164,7 @@ class Sale extends Component {
                             <ListSale tabId={tabId} store_code={store_code} />
                           </TabPanel>
                         ) : null}
-                        {sale_list == true ? (
+                        {sale_top == true ? (
                           <TabPanel>
                             <TopCommission
                               paramId={id}

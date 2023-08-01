@@ -73,10 +73,21 @@ class OrderStatus extends Component {
       return;
     }
 
-    window.$("#postModal").modal("show");
-
     var disable = this.props.order_allow_change_status;
-    if (disable == false) return;
+    if (disable == false) {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Không có quyền thay đổi trạng thái",
+        },
+      });
+      return;
+    }
+
+    window.$("#postModal").modal("show");
 
     this.props.handleUpdateStatusOrder({
       order_status_code: statusCode,

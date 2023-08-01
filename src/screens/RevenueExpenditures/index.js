@@ -144,10 +144,14 @@ class RevenueExpenditures extends Component {
       typeof nextProps.permission.add_revenue != "undefined"
     ) {
       var permissions = nextProps.permission;
-      var add_revenue = permissions.add_revenue;
-      var add_expenditure = permissions.add_expenditure
-      var isShow = add_revenue == false && add_expenditure == false ? false : true
-      this.setState({ isLoading: true, isShow , add_revenue , add_expenditure });
+      // var add_revenue = permissions.add_revenue;
+      // var add_expenditure = permissions.add_expenditure
+      // var isShow = add_revenue == false && add_expenditure == false ? false : true
+      var add_revenue = permissions.revenue_expenditure;
+      var add_expenditure = permissions.revenue_expenditure;
+      var isShow =
+        add_revenue == false && add_expenditure == false ? false : true;
+      this.setState({ isLoading: true, isShow, add_revenue, add_expenditure });
     }
     if (this.props.reportExpenditure !== nextProps.reportExpenditure) {
       const { datePrime } = this.state;
@@ -185,7 +189,7 @@ class RevenueExpenditures extends Component {
       total,
       datePrime,
       add_revenue,
-      add_expenditure
+      add_expenditure,
     } = this.state;
 
     if (this.props.auth) {
@@ -287,29 +291,37 @@ class RevenueExpenditures extends Component {
                           </form>
 
                           <div
-                          style = {{maxWidth : "240px"}}
-                    className="box-body table-responsive pt0"
-                >
-
-                    <br />
-                    <div>
-                        <p className="sale_user_label bold">
-                            Tổng thu:{" "}
-                            <span id="total_selected">{format(this.props.reportExpenditure.renvenure)}</span>
-                        </p>
-                        <p className="sale_user_label bold">
-                            Tổng chi:{" "}
-                            <span id="total_selected">-{format(this.props.reportExpenditure.expenditure)}</span>
-                        </p>
-                        <p className="sale_user_label bold" style = {{color : "red"}}>
-                            Tồn cuối kì:{" "}
-                            <span id="total_selected">{format(total)}</span>
-                        </p>
-                    </div>
-            
-        
-
-                </div>
+                            style={{ maxWidth: "240px" }}
+                            className="box-body table-responsive pt0"
+                          >
+                            <br />
+                            <div>
+                              <p className="sale_user_label bold">
+                                Tổng thu:{" "}
+                                <span id="total_selected">
+                                  {format(
+                                    this.props.reportExpenditure.renvenure
+                                  )}
+                                </span>
+                              </p>
+                              <p className="sale_user_label bold">
+                                Tổng chi:{" "}
+                                <span id="total_selected">
+                                  -
+                                  {format(
+                                    this.props.reportExpenditure.expenditure
+                                  )}
+                                </span>
+                              </p>
+                              <p
+                                className="sale_user_label bold"
+                                style={{ color: "red" }}
+                              >
+                                Tồn cuối kì:{" "}
+                                <span id="total_selected">{format(total)}</span>
+                              </p>
+                            </div>
+                          </div>
 
                           {/* <div
                             style={{
@@ -417,10 +429,8 @@ class RevenueExpenditures extends Component {
                       </div>
 
                       <div className="card-body">
-                        {
-                        supplier.data !== undefined &&
-                          customers.data !== undefined &&
-                           (
+                        {supplier.data !== undefined &&
+                          customers.data !== undefined && (
                             <Table
                               // numPage={numPage}
 
@@ -491,38 +501,34 @@ class RevenueExpenditures extends Component {
               <Footer />
             </div>
 
-            {supplier.data &&
-              customers.data  &&
-              staff && (
-                <ModalRevenue
-                  store_code={store_code}
-                  branch_id={branch_id}
-                  revenueExpenditures={reportExpenditure}
-                  staff={staff}
-                  // supplier={supplier.data}
-                  // customers={customers.data}
-                  is_revenue={true}
-                  limit={numPage}
-                  searchValue={searchValue}
-                  datePrime={datePrime}
-                />
-              )}
-            {supplier.data  &&
-              customers.data  &&
-              staff && (
-                <ModalExpenditures
-                  store_code={store_code}
-                  branch_id={branch_id}
-                  revenueExpenditures={reportExpenditure}
-                  staff={staff}
-                  supplier={supplier.data}
-                  customers={customers.data}
-                  is_revenue={false}
-                  limit={numPage}
-                  searchValue={searchValue}
-                  datePrime={datePrime}
-                />
-              )}
+            {supplier.data && customers.data && staff && (
+              <ModalRevenue
+                store_code={store_code}
+                branch_id={branch_id}
+                revenueExpenditures={reportExpenditure}
+                staff={staff}
+                // supplier={supplier.data}
+                // customers={customers.data}
+                is_revenue={true}
+                limit={numPage}
+                searchValue={searchValue}
+                datePrime={datePrime}
+              />
+            )}
+            {supplier.data && customers.data && staff && (
+              <ModalExpenditures
+                store_code={store_code}
+                branch_id={branch_id}
+                revenueExpenditures={reportExpenditure}
+                staff={staff}
+                supplier={supplier.data}
+                customers={customers.data}
+                is_revenue={false}
+                limit={numPage}
+                searchValue={searchValue}
+                datePrime={datePrime}
+              />
+            )}
           </div>
         </div>
       );
