@@ -192,6 +192,9 @@ export default function handleBillMisa(newItem, arangeKeyItem, product) {
     if (key == "gtgt") {
       newItem["Tiền thuế GTGT"] = value;
     }
+    if (key == "discount_total") {
+      newItem["Giảm giá khuyến mãi"] = value;
+    }
     if (key == "updated_at") {
       newItem["Ngày sửa"] = value;
     }
