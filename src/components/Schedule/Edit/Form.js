@@ -385,7 +385,7 @@ class Form extends Component {
 
             <div class="form-group">
               <label for="product_name">Mô tả</label>
-              <input
+              <textarea
                 type="text"
                 class="form-control"
                 id="description"

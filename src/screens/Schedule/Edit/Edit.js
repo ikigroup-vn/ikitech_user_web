@@ -136,7 +136,7 @@ class ScheduleEdit extends Component {
                   style={{ display: "flex", justifyContent: "space-between" }}
                 >
                   <h4 className="h4 title_content mb-0 text-gray-800">
-                    Chỉnh sửa cửa hàng
+                   Lên lịch thông báo
                   </h4>
                 </div>
                 <br></br>
