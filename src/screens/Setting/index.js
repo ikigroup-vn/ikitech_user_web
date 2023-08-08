@@ -105,9 +105,9 @@ class Theme extends Component {
                       >
                         <TabList>
                             <Tab>
-                              <i class="fa fa-bell"></i>
+                              <i class="fa fa-cog"></i>
                               <span style={{ fontSize: "0.8rem" }}>
-                                Thông báo kho
+                               Cài đặt chung
                               </span>
                             </Tab>
                           <Tab>
