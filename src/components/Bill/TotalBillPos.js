@@ -123,6 +123,7 @@ class TotalBill extends Component {
     var combo_discount_amount = bill.combo_discount_amount || 0;
     console.log(combo_discount_amount, combo_discount_amount > 0);
     var total_final = bill.total_final;
+    var vat = bill.vat;
     var agree =
       bill.order_status_code == "WAITING_FOR_PROGRESSING" ? "show" : "hide";
     var cancel =
@@ -168,10 +169,12 @@ class TotalBill extends Component {
               <div className="sale_user_label bold bold group-total">
                 <div>Phí giao hàng:</div>
 
-                { !(bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE &&
-                bill.order_from !== null &&
-                bill.order_status_code !== "COMPLETED" &&
-                bill.order_status_code !== "CUSTOMER_HAS_RETURNS") ? (
+                {!(
+                  bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE &&
+                  bill.order_from !== null &&
+                  bill.order_status_code !== "COMPLETED" &&
+                  bill.order_status_code !== "CUSTOMER_HAS_RETURNS"
+                ) ? (
                   <span
                     style={{ "border-bottom": "1px solid", cursor: "pointer" }}
                   >
@@ -289,6 +292,18 @@ class TotalBill extends Component {
                             </span>
                         </p>
                     </div> */}
+
+          {vat > 0 && (
+            <div>
+              <p className="sale_user_label bold bold group-total">
+                <div> VAT:</div>
+
+                <span className="cart_payment_method">
+                  {format(vat)}
+                </span>
+              </p>
+            </div>
+          )}
 
           {total_final > 0 && (
             <div>
