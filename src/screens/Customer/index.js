@@ -508,6 +508,7 @@ class Customer extends Component {
         newCustomer["wards_name"] = item["Phường/Xã"];
         newCustomer["district_name"] = item["Quận/Huyện"];
         newCustomer["province_name"] = item["Tỉnh/TP"];
+        newCustomer["sex"] = item["Giới tính"]?.toString()?.trim();
         newCustomer["date_of_birth"] = item["Ngày sinh"]
           ? moment(item["Ngày sinh"]).format("YYYY-MM-DD")
           : "";
