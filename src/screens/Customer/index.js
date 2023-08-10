@@ -508,11 +508,12 @@ class Customer extends Component {
         newCustomer["wards_name"] = item["Phường/Xã"];
         newCustomer["district_name"] = item["Quận/Huyện"];
         newCustomer["province_name"] = item["Tỉnh/TP"];
-        newCustomer["sex"] = item["Giới tính"]?.toString()?.trim();
+
         newCustomer["date_of_birth"] = item["Ngày sinh"]
           ? moment(item["Ngày sinh"]).format("YYYY-MM-DD")
           : "";
         newCustomer["points"] = item["Xu hiện tại"] ? item["Xu hiện tại"] : "";
+        newCustomer["sex"] = item["Giới tính"]?.toString()?.trim();
         newCustomer["official"] = item["Chính thức"] ? true : false;
         newCustomer["created_at"] = item["Ngày tạo"];
         newCustomer["updated_at"] = item["Ngày cập nhật"];
