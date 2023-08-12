@@ -330,7 +330,7 @@ class PanelBottom extends Component {
           txtSex: oneCart.customer_sex ?? "",
           txtAddressDetail: oneCart.address_detail ?? "",
           selectedDate: selectedDate,
-          cod: oneCart.info_cart.total_final,
+          // cod: oneCart.info_cart.total_final,
           isDisabledButton:
             oneCart == null || oneCart.customer == null
               ? false
@@ -1378,7 +1378,7 @@ class PanelBottom extends Component {
           {this.state.type_ship == 1 && (
             <React.Fragment>
               {" "}
-              <div
+              {/* <div
                 className="row"
                 style={{ padding: "5px 10px", marginBottom: "2px" }}
               >
@@ -1401,7 +1401,7 @@ class PanelBottom extends Component {
                   onChange={this.onChange}
                   // value = {cod}
                 ></input>
-              </div>
+              </div> */}
               <div
                 className="row"
                 style={{ padding: "5px 10px", marginBottom: "2px" }}
