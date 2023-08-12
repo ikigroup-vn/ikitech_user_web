@@ -69,9 +69,7 @@ export const exportAllListCustomer = (store_code, params, isSale) => {
                       ? "Nam"
                       : "Không xác định",
                   date_of_birth:
-                    item.date_of_birth == null
-                      ? ""
-                      : formatDDMMYYYY(item.date_of_birth),
+                    item.date_of_birth == null ? "" : item.date_of_birth,
                   points: item.points ?? "",
                   official: item.official,
                   created_at: item.created_at,
@@ -166,7 +164,6 @@ export const exportAllListCustomer = (store_code, params, isSale) => {
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
-        console.log("all customers: ", res.data.data);
         if (res.data.code == 200) {
           if (res.data.data.data.length > 0) {
             var newArray = [];
@@ -187,9 +184,7 @@ export const exportAllListCustomer = (store_code, params, isSale) => {
                     ? "Nam"
                     : "Không xác định",
                 date_of_birth:
-                  item.date_of_birth == null
-                    ? ""
-                    : formatDDMMYYYY(item.date_of_birth),
+                  item.date_of_birth == null ? "" : item.date_of_birth,
                 points: item.points ?? "",
                 official: item.official,
                 created_at: item.created_at,

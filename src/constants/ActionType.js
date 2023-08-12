@@ -355,6 +355,7 @@ export const FETCH_ALL_GENERAL_SETTING = "FETCH_ALL_GENERAL_SETTING";
 
 export const FETCH_INFO_CUSTOMER = "FETCH_INFO_CUSTOMER";
 export const UPDATE_PRICE_ITEM = "UPDATE_PRICE_ITEM";
+export const UPDATE_NOTE_ITEM = "UPDATE_NOTE_ITEM";
 
 // GROUP CUSTOMER
 export const TYPE_COMPARE_TOTAL_FINAL_COMPLETED = 0; // Tổng mua (Chỉ đơn hoàn thành trừ trả hàng),

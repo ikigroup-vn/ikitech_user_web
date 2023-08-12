@@ -95,16 +95,32 @@ export default class BillPos extends Component {
     bill.line_items_at_time.forEach((element, index) => {
       arr.push(
         <li style={{ listStyle: "none" }}>
-          <span
+          <div
             className="prName"
             style={{
               width: "100%",
-              display: "inline-block",
+              display: "flex",
               fontStyle: "italic",
             }}
           >
-            {index + 1}. {element.name} {this.getDistribute(element)}
-          </span>
+            <div>{index + 1}.</div>
+            <div
+              style={{
+                maxWidth: "200px",
+              }}
+            >
+              <div>
+                {element.name} {this.getDistribute(element)}
+              </div>
+              <div
+                style={{
+                  fontSize: "12px",
+                }}
+              >
+                {element.note}
+              </div>
+            </div>
+          </div>
           <span
             className="price"
             style={{
@@ -394,7 +410,7 @@ export default class BillPos extends Component {
                   </span>
                 </li>
               )}
-  {bill.total_shipping_fee > 0 && (
+              {bill.total_shipping_fee > 0 && (
                 <li style={{ fontWeight: "bold", listStyle: "none" }}>
                   <span
                     className="price"
@@ -431,7 +447,7 @@ export default class BillPos extends Component {
                       verticalAlign: "top",
                     }}
                   >
-                    +{formatNoD(bill.total_shipping_fee )}
+                    +{formatNoD(bill.total_shipping_fee)}
                   </span>
                 </li>
               )}

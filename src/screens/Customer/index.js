@@ -510,7 +510,7 @@ class Customer extends Component {
         newCustomer["province_name"] = item["Tỉnh/TP"];
 
         newCustomer["date_of_birth"] = item["Ngày sinh"]
-          ? moment(item["Ngày sinh"]).format("YYYY-MM-DD")
+          ? moment(item["Ngày sinh"]).format("YYYY-MM-DD HH:mm:ss")
           : "";
         newCustomer["points"] = item["Xu hiện tại"] ? item["Xu hiện tại"] : "";
         newCustomer["sex"] = item["Giới tính"]?.toString()?.trim();
@@ -562,7 +562,7 @@ class Customer extends Component {
               >
                 <h3>Lưu ý</h3>
                 <p>
-                  Chỉ cho phép tối đa 250 khách hàng mỗi lần import, vui lòng
+                  Chỉ cho phép tối đa 800 khách hàng mỗi lần import, vui lòng
                   tách nhiều file Excel để thực hiện !
                 </p>
                 <div
