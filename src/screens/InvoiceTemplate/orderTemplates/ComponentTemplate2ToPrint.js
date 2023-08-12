@@ -313,6 +313,28 @@ export default class ComponentTemplate2ToPrint extends Component {
                   Hóa đơn bán hàng ({bill.order_code})
                 </h6>
               </div>
+
+              {bill?.order_ship_code?.from_shipper_code && (
+                <div
+                  style={{
+                    padding: "0px 0 0",
+                    marginTop: -5,
+                    fontWeight: "normal",
+                    textAlign: "center",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  <p
+                    style={{
+                      fontWeight: "normal",
+                      padding: "0px 0 0",
+                    }}
+                  >
+                    Mã vận đơn: ({bill?.order_ship_code?.from_shipper_code})
+                  </p>
+                </div>
+              )}
+
             </div>
             <br />
             <ul

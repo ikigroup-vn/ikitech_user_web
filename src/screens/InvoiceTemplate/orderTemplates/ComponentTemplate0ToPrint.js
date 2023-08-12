@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import { filter_arr, format, getDetailAdress } from "../../../ultis/helpers";
-import { getDDMMYYYHis } from '../../../ultis/date';
+import { getDDMMYYYHis } from "../../../ultis/date";
 
 export default class ComponentTemplate0ToPrint extends Component {
   constructor(props) {
@@ -85,14 +85,15 @@ export default class ComponentTemplate0ToPrint extends Component {
       arr.push(
         <tr>
           <td>{index + 1}</td>
-          <td style={{ textAlign: "start" }}>{element.name} {element.is_bonus == true ? "(Thưởng)" : ""}</td>
+          <td style={{ textAlign: "start" }}>
+            {element.name} {element.is_bonus == true ? "(Thưởng)" : ""}
+          </td>
           <td>{format(element.item_price)}</td>
           <td>{element.quantity}</td>
           <td style={{ textAlign: "end" }}>
-          {element.is_bonus == true ? format(0) : format(
-              (element.item_price) *
-              element.quantity
-            )}
+            {element.is_bonus == true
+              ? format(0)
+              : format(element.item_price * element.quantity)}
           </td>
         </tr>
       );
@@ -118,18 +119,21 @@ export default class ComponentTemplate0ToPrint extends Component {
           <td></td>
 
           <td></td>
-        {(
-              (bill.product_discount_amount || 0) +
-              (bill.voucher_discount_amount || 0) +
-              (bill.combo_discount_amount || 0)
-            ) > 0 ?   <td style={{ textAlign: "end" }} colSpan="3">
-            -{" "}
-            {format(
-              (bill.product_discount_amount || 0) +
-              (bill.voucher_discount_amount || 0) +
-              (bill.combo_discount_amount || 0)
-            )}
-          </td> : <td></td>}
+          {(bill.product_discount_amount || 0) +
+            (bill.voucher_discount_amount || 0) +
+            (bill.combo_discount_amount || 0) >
+          0 ? (
+            <td style={{ textAlign: "end" }} colSpan="3">
+              -{" "}
+              {format(
+                (bill.product_discount_amount || 0) +
+                  (bill.voucher_discount_amount || 0) +
+                  (bill.combo_discount_amount || 0)
+              )}
+            </td>
+          ) : (
+            <td></td>
+          )}
         </tr>
       </React.Fragment>
     );
@@ -163,8 +167,8 @@ export default class ComponentTemplate0ToPrint extends Component {
       typeof badges.address_pickup == "undefined"
         ? null
         : badges.address_pickup == null
-          ? null
-          : badges.address_pickup.address_detail +
+        ? null
+        : badges.address_pickup.address_detail +
           ", " +
           badges.address_pickup.wards_name +
           ", " +
@@ -173,7 +177,34 @@ export default class ComponentTemplate0ToPrint extends Component {
           badges.address_pickup.province_name;
     return (
       <div className="parent" style={{ margin: "30px" }}>
-        <p className="order_code">Mã đơn hàng : {state.order_code ?? bill.order_code}</p>
+        <div style={{ display: "flex", alignItems: "center",
+          justifyContent: "space-between"
+      }}>
+          <p className="order_code" style={{ fontSize: 16 }}>
+            Mã đơn hàng : {state.order_code ?? bill.order_code}
+          </p>
+
+          {bill?.order_ship_code?.from_shipper_code && (
+            <div
+              style={{
+                padding: "0px 0 0",
+                marginTop: -5,
+                fontWeight: "normal",
+                textAlign: "center",
+              }}
+            >
+              <p
+                style={{
+                  fontSize: 16,
+                  fontWeight: "normal",
+                  padding: "0px 0 0",
+                }}
+              >
+                Mã vận đơn: ({bill?.order_ship_code?.from_shipper_code})
+              </p>
+            </div>
+          )}
+        </div>
 
         <div className="row">
           <div className="col-6">
@@ -194,7 +225,8 @@ export default class ComponentTemplate0ToPrint extends Component {
                 {store.address}
               </p>
               <p class="" id="info">
-                <span>Số điện thoại:</span> {store.user?.phone_number ?? bill.user_phone}
+                <span>Số điện thoại:</span>{" "}
+                {store.user?.phone_number ?? bill.user_phone}
               </p>
             </div>
           </div>
@@ -204,19 +236,28 @@ export default class ComponentTemplate0ToPrint extends Component {
 
               <p class="" id="sale_user_name">
                 <span style={{ fontWeight: "500" }}>
-                  Tên: {state?.customer_name ?? bill.customer_name ?? bill?.customer?.name ?? ""}
+                  Tên:{" "}
+                  {state?.customer_name ??
+                    bill.customer_name ??
+                    bill?.customer?.name ??
+                    ""}
                 </span>
               </p>
               <p class="" id="info">
-                <span>Địa chỉ: </span> { getDetailAdress(
-              bill.customer_address?.address_detail,
-              bill.customer_address?.wards_name,
-              bill.customer_address?.district_name,
-              bill.customer_address?.province_name
-            )}
+                <span>Địa chỉ: </span>{" "}
+                {getDetailAdress(
+                  bill.customer_address?.address_detail,
+                  bill.customer_address?.wards_name,
+                  bill.customer_address?.district_name,
+                  bill.customer_address?.province_name
+                )}
               </p>
               <p class="" id="info">
-                <span>Số điện thoại: </span> {state?.customer_phone ?? bill.customer_phone ?? bill?.customer?.phone_number ?? ""}
+                <span>Số điện thoại: </span>{" "}
+                {state?.customer_phone ??
+                  bill.customer_phone ??
+                  bill?.customer?.phone_number ??
+                  ""}
               </p>
             </div>
           </div>
@@ -234,7 +275,7 @@ export default class ComponentTemplate0ToPrint extends Component {
             </p>
 
             <div style={{ fontSize: "18px", textAlign: "center" }}>
-            {getDDMMYYYHis(bill.created_at)}
+              {getDDMMYYYHis(bill.created_at)}
             </div>
           </div>
         </div>

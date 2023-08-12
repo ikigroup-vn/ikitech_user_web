@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { shallowEqual } from "../../ultis/shallowEqual";
-import { filter_arr, format , getDetailAdress } from "../../ultis/helpers";
+import { filter_arr, format, getDetailAdress } from "../../ultis/helpers";
 
 export default class ComponentToPrint extends Component {
   constructor(props) {
@@ -29,8 +29,13 @@ export default class ComponentToPrint extends Component {
       this.setState({
         customer_name: bill.customer_address.name,
 
-        customer_address: getDetailAdress(bill.customer_address.address_detail ,bill.customer_address?.wards_name ,  bill.customer_address?.district_name , bill.customer_address?.province_name),
-      
+        customer_address: getDetailAdress(
+          bill.customer_address.address_detail,
+          bill.customer_address?.wards_name,
+          bill.customer_address?.district_name,
+          bill.customer_address?.province_name
+        ),
+
         customer_phone: bill.customer_address.phone,
 
         order_code: bill.order_code,
@@ -95,21 +100,22 @@ export default class ComponentToPrint extends Component {
     bill.line_items_at_time.forEach((element, index) => {
       arr.push(
         <tr>
-        <td>{index + 1}</td>
-        <td style={{ textAlign: "start" }}>{element.name} {element.is_bonus == true ? ("Thưởng"):"" }</td>
-        <td>{element.quantity}</td>
-        <td style={{ textAlign: "end" }}>
-        {element.is_bonus == true ? format(0) : format(
-              (element.item_price) *
-              element.quantity
-            )}
-        </td>
-      </tr>
+          <td>{index + 1}</td>
+          <td style={{ textAlign: "start" }}>
+            {element.name} {element.is_bonus == true ? "Thưởng" : ""}
+          </td>
+          <td>{element.quantity}</td>
+          <td style={{ textAlign: "end" }}>
+            {element.is_bonus == true
+              ? format(0)
+              : format(element.item_price * element.quantity)}
+          </td>
+        </tr>
       );
     });
     arr.push(
       <React.Fragment>
-         {bill.total_shipping_fee > 0 && (
+        {bill.total_shipping_fee > 0 && (
           <tr>
             <td></td>
 
@@ -127,20 +133,20 @@ export default class ComponentToPrint extends Component {
           <td style={{ textAlign: "start" }}>Giảm giá, Voucher, Combo</td>
           <td></td>
 
-          {(
-              (bill.product_discount_amount || 0) +
-              (bill.voucher_discount_amount || 0) +
-              (bill.combo_discount_amount || 0)
-            ) > 0 &&   <td style={{ textAlign: "end" }} colSpan="3">
-            -{" "}
-            {format(
-              (bill.product_discount_amount || 0) +
-              (bill.voucher_discount_amount || 0) +
-              (bill.combo_discount_amount || 0)
-            )}
-          </td> }
+          {(bill.product_discount_amount || 0) +
+            (bill.voucher_discount_amount || 0) +
+            (bill.combo_discount_amount || 0) >
+            0 && (
+            <td style={{ textAlign: "end" }} colSpan="3">
+              -{" "}
+              {format(
+                (bill.product_discount_amount || 0) +
+                  (bill.voucher_discount_amount || 0) +
+                  (bill.combo_discount_amount || 0)
+              )}
+            </td>
+          )}
         </tr>
-        
       </React.Fragment>
     );
     return arr;
@@ -182,7 +188,13 @@ export default class ComponentToPrint extends Component {
         : null;
     return (
       <div className="parent" style={{ margin: "30px" }}>
-        <p className="order_code">Mã đơn hàng : {state.order_code}</p>
+        <div style={{
+          display:"flex"
+        }}>
+          <p className="order_code">Mã đơn hàng : {state.order_code}</p>
+
+       
+        </div>
 
         <div className="row">
           <div className="col-6">

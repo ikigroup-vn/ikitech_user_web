@@ -136,20 +136,21 @@ export default class ComponentTemplate1ToPrint extends Component {
           <td style={{ textAlign: "start" }}>Giảm giá, Voucher, Combo</td>
           <td></td>
           <td></td>
-          {(
-              (bill.product_discount_amount || 0) +
-              (bill.voucher_discount_amount || 0) +
-              (bill.combo_discount_amount || 0)
-            ) > 0 ?   <td style={{ textAlign: "end" }} colSpan="3">
-            -{" "}
-            {format(
-              (bill.product_discount_amount || 0) +
-                (bill.voucher_discount_amount || 0) +
-                (bill.combo_discount_amount || 0)
-            )}
-          </td>  :<td></td> }
-
-         
+          {(bill.product_discount_amount || 0) +
+            (bill.voucher_discount_amount || 0) +
+            (bill.combo_discount_amount || 0) >
+          0 ? (
+            <td style={{ textAlign: "end" }} colSpan="3">
+              -{" "}
+              {format(
+                (bill.product_discount_amount || 0) +
+                  (bill.voucher_discount_amount || 0) +
+                  (bill.combo_discount_amount || 0)
+              )}
+            </td>
+          ) : (
+            <td></td>
+          )}
         </tr>
       </React.Fragment>
     );
@@ -341,6 +342,24 @@ export default class ComponentTemplate1ToPrint extends Component {
             >
               Mã: {bill.order_code ?? bill.order_code}
             </p>
+
+            {bill?.order_ship_code?.from_shipper_code && (
+                <div
+                  style={{
+                    fontSize: "18px",
+                    textAlign: "left",
+                    margin: 0,
+                    padding: 0,
+                  }}
+                >
+                  <p
+                    className="order_code"
+                  >
+                    Mã vận đơn ({bill?.order_ship_code?.from_shipper_code})
+                  </p>
+                </div>
+              )}
+
             <div
               style={{
                 fontSize: "23px",

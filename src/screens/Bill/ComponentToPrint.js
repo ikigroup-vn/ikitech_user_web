@@ -177,6 +177,7 @@ export default class ComponentToPrint extends Component {
           Mã đơn hàng : {state.order_code ?? bill.order_code}
         </p>
 
+
         <div className="row">
           <div className="col-6">
             <div class="">

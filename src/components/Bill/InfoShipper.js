@@ -403,8 +403,16 @@ class InfoShipper extends Component {
                 </p>
                 <div id="total_before">{shipper_name}</div>
               </div>
+
+           {bill?.order_ship_code?.from_shipper_code != null &&   <div className="mt-3">
+                <p className="sale_user_label bold" style={{ color: "grey" }}>
+                  Mã vận đơn:
+                </p>
+                <div id="total_before">{bill?.order_ship_code?.from_shipper_code}</div>
+              </div> }
+
               {historyDeliveryStatus.map((history) => (
-                <div id="item_fee">
+                <div class="mt-3" id="item_fee" >
                   <div className="sale_user_label bold">
                     {history.status_text}:
                   </div>
