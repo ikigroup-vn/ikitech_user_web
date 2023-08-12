@@ -94,12 +94,31 @@ class ItemInCart extends Component {
       totalStocks: 0,
       showEditCost: false,
       txtCostInput: "",
+      showEditNote: false,
+      txtNoteInput: "",
     };
     this.nameElementDistribute = "";
     this.nameSubElementDistribute = "";
     this.wrapperRef = React.createRef();
     this.changeQuantity = debounce(this.handleChangeQuantity, 400);
   }
+  setTxtNoteInput(txtNoteInput) {
+    this.setState({ txtNoteInput });
+  }
+
+  setShowEditNote(showEditNote) {
+    this.setState({ showEditNote });
+  }
+
+  handleInputNote = (note) => {
+    this.setShowEditNote(true);
+    this.setTxtNoteInput(note);
+  };
+
+  handleChangeNote = (e) => {
+    const value = e.target.value;
+    this.setTxtNoteInput(value);
+  };
 
   setTxtCostInput(txtCostInput) {
     this.setState({ txtCostInput });
@@ -109,6 +128,7 @@ class ItemInCart extends Component {
     this.setState({ showEditCost });
   }
   handleInputCost = (price) => {
+    console.log("🚀 ~ file: ItemInCart.js:131 ~ ItemInCart ~ price:", price);
     const newValue = formatNumberV2(price);
     this.setShowEditCost(true);
     this.setTxtCostInput(newValue);
@@ -117,6 +137,15 @@ class ItemInCart extends Component {
     const value = e.target.value;
     const newValue = formatNumberV2(value);
     this.setTxtCostInput(newValue);
+  };
+  handleUpdateNoteItem = (item) => {
+    const { store_code, updateNoteItem, branch_id, listItemPos } = this.props;
+    const { txtNoteInput } = this.state;
+
+    const data = {
+      note: txtNoteInput,
+    };
+    updateNoteItem(store_code, branch_id, listItemPos.id, item.id, data);
   };
   handleUpdatePriceItem = (item) => {
     const { store_code, updatePriceItem, branch_id, listItemPos } = this.props;
@@ -174,9 +203,12 @@ class ItemInCart extends Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
+    console.log("nextProps:: ", nextProps);
     if (!shallowEqual(this.props.updatedPrice, nextProps.updatedPrice)) {
       this.setShowEditCost(false);
+    }
+    if (!shallowEqual(this.props.updatedNote, nextProps.updatedNote)) {
+      this.setShowEditNote(false);
     }
     if (
       !shallowEqual(this.props.item.quantity, nextProps.item.quantity) ||
@@ -255,6 +287,7 @@ class ItemInCart extends Component {
     this.setState({
       currentQuantity: this.props.item.quantity,
       distribute: this.props.item.product.distributes,
+      txtNoteInput: this.props.item.note,
     });
   }
 
@@ -476,7 +509,9 @@ class ItemInCart extends Component {
   // "sub_element_distribute_name": "đo111"
   render() {
     const { item, index } = this.props;
-    const { currentQuantity, showEditCost } = this.state;
+
+    const { currentQuantity, showEditCost, showEditNote, txtNoteInput } =
+      this.state;
 
     const maxQuantity = stockOfProduct(
       item.product,
@@ -874,8 +909,89 @@ class ItemInCart extends Component {
                   </div>
                 </div>
               )}
-            </div>
+              <div
+                style={{
+                  fontSize: "12px",
+                  color: "rgba(0, 0, 0, 0.54)",
+                }}
+              >
+                {!showEditNote ? (
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      columnGap: "5px",
+                      cursor: "pointer",
+                    }}
+                    onClick={() => this.handleInputNote(item.note)}
+                  >
+                    <i
+                      style={{
+                        fontSize: "10px",
+                      }}
+                      className="fas fa-pencil-alt"
+                    ></i>
+                    <span>{txtNoteInput ? txtNoteInput : "Thêm ghi chú"}</span>
+                  </div>
+                ) : (
+                  <div
+                    style={{
+                      marginTop: "5px",
+                      display: "flex",
+                      alignItems: "center",
+                      columnGap: "5px",
+                      borderBottom: "1px solid #dadbdb",
+                      paddingBottom: "3px",
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: "100%",
+                      }}
+                    >
+                      <input
+                        style={{
+                          color: "gray",
+                          width: "100%",
+                        }}
+                        type="text"
+                        value={this.state.txtNoteInput}
+                        onChange={this.handleChangeNote}
+                        placeholder="Thêm ghi chú"
+                      />
+                    </div>
 
+                    <div
+                      className="iconInputConfirm"
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        columnGap: "4px",
+                      }}
+                    >
+                      <span
+                        style={{
+                          color: "#2ecc71",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => this.handleUpdateNoteItem(item)}
+                      >
+                        <i className="fa fa-check"></i>
+                      </span>
+                      <span
+                        style={{
+                          color: "#e74c3c",
+                          cursor: "pointer",
+                        }}
+                        onClick={() => this.setShowEditNote(false)}
+                      >
+                        <i className="fa fa-times"></i>
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
             <div className="quantity" style={{ paddingLeft: "0" }}>
               <div
                 className=""
@@ -967,7 +1083,9 @@ class ItemInCart extends Component {
               {!showEditCost ? (
                 <div className="iconInputCost">
                   <span
-                    onClick={() => this.handleInputCost(item.item_price)}
+                    onClick={() =>
+                      this.handleInputCost(Number(item.item_price))
+                    }
                     style={{
                       color: item.has_edit_item_price
                         ? "rgb(220 122 13)"
@@ -1044,6 +1162,7 @@ class ItemInCart extends Component {
 const mapStateToProps = (state) => {
   return {
     updatedPrice: state.posReducers.pos_reducer.updatedPrice,
+    updatedNote: state.posReducers.pos_reducer.updatedNote,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -1059,6 +1178,11 @@ const mapDispatchToProps = (dispatch, props) => {
     updatePriceItem: (store_code, branch_id, cart_id, idItem, data) => {
       dispatch(
         posAction.updatePriceItem(store_code, branch_id, cart_id, idItem, data)
+      );
+    },
+    updateNoteItem: (store_code, branch_id, cart_id, idItem, data) => {
+      dispatch(
+        posAction.updateNoteItem(store_code, branch_id, cart_id, idItem, data)
       );
     },
   };

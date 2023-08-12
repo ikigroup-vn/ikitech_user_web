@@ -452,7 +452,6 @@ export const refreshEditOrder = (data) => {
 
 export const fetchVoucher = (store_code, branch_id, id, data) => {
   return (dispatch) => {
-    
     dispatch({
       type: Types.USE_VOUCHER_CART_LOAD,
     });
@@ -561,6 +560,49 @@ export const updatePriceItem = (
       .then((res) => {
         dispatch({
           type: Types.UPDATE_PRICE_ITEM,
+          data: res.data.data,
+        });
+
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content:
+              error?.response?.data?.msg || error?.response?.data?.message,
+          },
+        });
+      });
+  };
+};
+
+export const updateNoteItem = (
+  store_code,
+  branch_id,
+  cart_id,
+  idItem,
+  data
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.LOADING_CHANGE_QUANTITY_LINE_ITEM,
+    });
+    PosApi.updateNoteItem(store_code, branch_id, cart_id, idItem, data)
+      .then((res) => {
+        dispatch({
+          type: Types.UPDATE_NOTE_ITEM,
           data: res.data.data,
         });
 

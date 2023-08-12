@@ -121,3 +121,16 @@ export const updatePriceItem = (
     data
   );
 };
+export const updateNoteItem = (
+  store_code,
+  branch_id,
+  cart_id,
+  idItem,
+  data
+) => {
+  return callApi(
+    `/store/${store_code}/carts/${branch_id}/list/${cart_id}/items/${idItem}/note`,
+    "put",
+    data
+  );
+};

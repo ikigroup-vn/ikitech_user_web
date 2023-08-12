@@ -7,11 +7,13 @@ var initialState = {
   inforCustomer: "",
   loadingHandleChangeQuantity: false,
   loadingHandleChangePriceItem: false,
+  loadingHandleChangeNoteItem: false,
   orderAfterPayment: {},
   loadingOrder: false,
   allowAutoPrint: true,
   fromEditOrder: false,
   updatedPrice: {},
+  updatedNote: {},
   loadingHandleUseVoucher: null,
 };
 
@@ -81,6 +83,11 @@ export const pos_reducer = (state = initialState, action) => {
       newState.loadingHandleChangePriceItem = false;
       newState.oneCart = action.data;
       newState.updatedPrice = action.data;
+      return newState;
+    case Types.UPDATE_NOTE_ITEM:
+      newState.loadingHandleChangeNoteItem = false;
+      newState.oneCart = action.data;
+      newState.updatedNote = action.data;
       return newState;
     default:
       return newState;

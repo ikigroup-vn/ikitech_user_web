@@ -330,7 +330,7 @@ class PanelBottom extends Component {
           txtSex: oneCart.customer_sex ?? "",
           txtAddressDetail: oneCart.address_detail ?? "",
           selectedDate: selectedDate,
-
+          cod: oneCart.info_cart.total_final,
           isDisabledButton:
             oneCart == null || oneCart.customer == null
               ? false

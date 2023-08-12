@@ -74,10 +74,14 @@ class InfoProductPos extends Component {
                   Phân loại:
                   <span class="cart_payment_method">{distribute.value}</span>
                 </p>
-              {distribute.sub_element_distributes != null && distribute.sub_element_distributes!= "" &&  <p class=" bold sale_user_label">
-                  
-                  <span class="cart_payment_method">{distribute.sub_element_distributes}</span> 
-                </p>}
+                {distribute.sub_element_distributes != null &&
+                  distribute.sub_element_distributes != "" && (
+                    <p class=" bold sale_user_label">
+                      <span class="cart_payment_method">
+                        {distribute.sub_element_distributes}
+                      </span>
+                    </p>
+                  )}
               </div>
             ) : null}
           </>
@@ -489,6 +493,15 @@ class InfoProductPos extends Component {
                             </p>
                           </div>
                         )}
+                        {product.note ? (
+                          <div>
+                            <p class=" bold sale_user_label">
+                              Ghi chú:
+                              <span id="total_selected">{product.note}</span>
+                            </p>
+                          </div>
+                        ) : null}
+
                         <div>
                           <p
                             class=" bold sale_user_label"
@@ -498,8 +511,7 @@ class InfoProductPos extends Component {
                             <span
                               class={`cart_payment_method ${
                                 showTagDelPrice != 0 ||
-                                product.before_price ==
-                                  product.item_price ||
+                                product.before_price == product.item_price ||
                                 product.before_discount_price ==
                                   product.item_price
                                   ? "show"
@@ -507,8 +519,7 @@ class InfoProductPos extends Component {
                               }`}
                             >
                               {format(
-                                product.before_price ||
-                                  product.item_price
+                                product.before_price || product.item_price
                               )}
                             </span>
                             <del
