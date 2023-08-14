@@ -433,10 +433,12 @@ export const UPDATE_GAME_GUESS_NUMBERS = "UPDATE_GAME_GUESS_NUMBERS";
 export const DELETE_GAME_GUESS_NUMBERS = "DELETE_GAME_GUESS_NUMBERS";
 
 //Spin Wheel For + Guess Numbers For
+
 export const GROUP_CUSTOMER_ALL = 0;
 export const GROUP_CUSTOMER_CTV = 1;
 export const GROUP_CUSTOMER_AGENCY = 2;
 export const GROUP_CUSTOMER_BY_CONDITION = 4;
+export const GROUP_CUSTOMER_NORMAL_GUEST = 5;
 
 // Status spin wheel + guess numbers
 export const PROGRESSING = 0;

@@ -17,6 +17,8 @@ import getChannel, { IKIPOS, IKITECH } from "../../../../ultis/channel";
 import * as AgencyAction from "../../../../actions/agency";
 import * as groupCustomerAction from "../../../../actions/group_customer";
 import styled from "styled-components";
+import { typeGroupCustomer } from "../../../../ultis/groupCustomer/typeGroupCustomer";
+import Select from "react-select";
 
 const FormStyles = styled.form`
   .status-product {
@@ -76,6 +78,10 @@ class Form extends Component {
       agency_type_id: null,
       group_type_id: null,
       is_public: true,
+
+      group_customers: [Types.GROUP_CUSTOMER_ALL],
+      agency_types: [],
+      group_types: [],
     };
   }
   componentDidMount() {
@@ -117,6 +123,8 @@ class Form extends Component {
     var name = target.name;
     var value = target.value;
     var checked = target.checked;
+    const { group_customers } = this.state;
+
     const _value = formatNumber(value);
     if (name === "is_public") {
       this.setState({ [name]: checked });
@@ -145,6 +153,19 @@ class Form extends Component {
           }
         }
       }
+    } else if (name == `group_customer_${value}`) {
+      const valueNumber = Number(value);
+      let new_group_customers = [];
+
+      if (group_customers.includes(valueNumber)) {
+        new_group_customers = group_customers.filter(
+          (group) => group !== valueNumber
+        );
+      } else {
+        new_group_customers = [...group_customers, valueNumber];
+      }
+
+      this.setState({ group_customers: new_group_customers });
     } else {
       this.setState({ [name]: value });
     }
@@ -254,10 +275,25 @@ class Form extends Component {
       "YYYY-MM-DD HH:mm:ss"
     );
     var voucherType = type == "store" ? 0 : 1;
-    var { group_customer, agency_type_id, group_type_id } = this.state;
+    var {
+      group_customer,
+      agency_type_id,
+      group_type_id,
+      group_customers,
+      agency_types,
+      group_types,
+    } = this.state;
     var agency_type_name =
       this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]
         ?.name || null;
+    const agency_types_convert = agency_types.map((agency) => ({
+      id: agency.value,
+      name: agency.label,
+    }));
+    const group_types_convert = group_types.map((group) => ({
+      id: group.value,
+      name: group.label,
+    }));
     console.log(this.props.types, agency_type_name);
     var form = {
       group_customer,
@@ -294,6 +330,9 @@ class Form extends Component {
       set_limit_amount: true,
       is_show_voucher: 1,
       is_public: state.is_public,
+      group_customers,
+      agency_types: agency_types_convert,
+      group_types: group_types_convert,
     };
     if (type == "store") delete form.product_ids;
     if (this.state.limit == "hide") form.set_limit_value_discount = false;
@@ -406,6 +445,30 @@ class Form extends Component {
       this.setState({ limit: "hide", txtLimitTotal: "" });
     } else this.setState({ limit: "hide" });
   };
+
+  convertOptions = (opts) => {
+    if (opts?.length > 0) {
+      const newOptions = opts.reduce(
+        (prevOption, currentOption) => [
+          ...prevOption,
+          {
+            value: currentOption.id,
+            label: currentOption.name,
+          },
+        ],
+        []
+      );
+      return newOptions;
+    }
+    return [];
+  };
+
+  handleChangeAgency = (agency) => {
+    this.setState({ agency_types: [...agency] });
+  };
+  handleChangeGroupCustomer = (group) => {
+    this.setState({ group_types: [...group] });
+  };
   render() {
     var {
       txtName,
@@ -431,6 +494,10 @@ class Form extends Component {
       group_type_id,
       ship_discount_value,
       is_public,
+
+      group_customers,
+      agency_types,
+      group_types,
     } = this.state;
 
     var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
@@ -579,105 +646,142 @@ class Form extends Component {
                   <div
                     style={{
                       display: "flex",
+                      alignItems: "center",
+                      columnGap: "15px",
                     }}
-                    className="radio discount-for"
-                    onChange={this.onChange}
+                    className=""
                   >
-                    <label>
-                      <input
-                        type="radio"
-                        name="group_customer"
-                        checked={group_customer == 0 ? true : false}
-                        className="group_customer"
-                        id="ship"
-                        value="0"
-                      />
-                      {"  "} Tất cả
-                    </label>
-                    <label>
-                      <input
-                        type="radio"
-                        name="group_customer"
-                        checked={group_customer == 2 ? true : false}
-                        className="group_customer"
-                        id="bill"
-                        value="2"
-                      />
-                      {"  "}Đại lý
-                    </label>
-
-                    <label>
-                      <input
-                        type="radio"
-                        name="group_customer"
-                        checked={group_customer == 1 ? true : false}
-                        className="group_customer"
-                        id="ship"
-                        value="1"
-                      />
-                      {"  "} Cộng tác viên
-                    </label>
-
-                    <label>
-                      <input
-                        type="radio"
-                        name="group_customer"
-                        checked={group_customer == 5 ? true : false}
-                        className="group_customer"
-                        id="ship"
-                        value="5"
-                      />
-                      {"  "} Khách lẻ
-                    </label>
-
-                    <label>
-                      <input
-                        type="radio"
-                        name="group_customer"
-                        checked={group_customer == 4 ? true : false}
-                        className="group_customer"
-                        id="ship"
-                        value="4"
-                      />
-                      {"  "} Nhóm khách hàng
-                    </label>
+                    {typeGroupCustomer.map((group) => (
+                      <label
+                        key={group.id}
+                        htmlFor={group.title}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          columnGap: "5px",
+                        }}
+                      >
+                        <input
+                          type="checkbox"
+                          name={`group_customer_${group.value}`}
+                          checked={
+                            group_customers.includes(group.value) ? true : false
+                          }
+                          className="group_customer"
+                          id={group.title}
+                          value={group.value}
+                          onChange={this.onChange}
+                        />
+                        {group.title}
+                      </label>
+                    ))}
                   </div>
-                  {group_customer == 2 && (
-                    <select
-                      onChange={this.onChange}
-                      value={agency_type_id}
-                      name="agency_type_id"
-                      class="form-control"
-                    >
-                      <option value={-1}>--- Chọn cấp đại lý ---</option>
-                      <option value={0}>Tất cả</option>
-                      {types.map((v) => {
-                        return (
-                          <option value={v.id} key={v.id}>
-                            {v.name}
-                          </option>
-                        );
-                      })}
-                    </select>
-                  )}
-                  {group_customer == 4 && (
-                    <select
-                      onChange={this.onChange}
-                      value={group_type_id}
-                      name="group_type_id"
-                      class="form-control"
-                    >
-                      <option value={-1}>--- Chọn nhóm khách hàng ---</option>
-                      {groupCustomer.length > 0 &&
-                        groupCustomer.map((group) => {
-                          return (
-                            <option value={group.id} key={group.id}>
-                              {group.name}
-                            </option>
-                          );
-                        })}
-                    </select>
-                  )}
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "10px",
+                    }}
+                  >
+                    {group_customers.includes(Types.GROUP_CUSTOMER_AGENCY) ? (
+                      <label
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "10px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            flexShrink: 0,
+                            width: "80px",
+                          }}
+                        >
+                          Đại lý
+                        </div>
+                        <div
+                          style={{
+                            width: "100%",
+                          }}
+                        >
+                          <Select
+                            options={this.convertOptions(types)}
+                            placeholder={"Chọn đại lý"}
+                            value={agency_types}
+                            onChange={this.handleChangeAgency}
+                            isMulti={true}
+                            noOptionsMessage={() => "Không tìm thấy kết quả"}
+                          ></Select>
+                        </div>
+                      </label>
+                    ) : // <select
+                    //   onChange={this.onChange}
+                    //   value={agency_type_id}
+                    //   name="agency_type_id"
+                    //   class="form-control"
+                    // >
+                    //   <option value={-1}>--- Chọn cấp đại lý ---</option>
+                    //   <option value={0}>Tất cả</option>
+                    //   {types.map((v) => {
+                    //     return (
+                    //       <option value={v.id} key={v.id}>
+                    //         {v.name}
+                    //       </option>
+                    //     );
+                    //   })}
+                    // </select>
+                    null}
+                    {group_customers.includes(
+                      Types.GROUP_CUSTOMER_BY_CONDITION
+                    ) ? (
+                      <label
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "10px",
+                        }}
+                      >
+                        <div
+                          style={{
+                            flexShrink: 0,
+                            width: "80px",
+                          }}
+                        >
+                          Nhóm KH
+                        </div>
+                        <div
+                          style={{
+                            width: "100%",
+                          }}
+                        >
+                          <Select
+                            options={this.convertOptions(groupCustomer)}
+                            placeholder={"Chọn nhóm khách hàng"}
+                            value={group_types}
+                            onChange={this.handleChangeGroupCustomer}
+                            isMulti={true}
+                            noOptionsMessage={() => "Không tìm thấy kết quả"}
+                          ></Select>
+                        </div>
+                      </label>
+                    ) : // <select
+                    //   onChange={this.onChange}
+                    //   value={group_type_id}
+                    //   name="group_type_id"
+                    //   class="form-control"
+                    // >
+                    //   <option value={-1}>--- Chọn nhóm khách hàng ---</option>
+                    //   {groupCustomer.length > 0 &&
+                    //     groupCustomer.map((group) => {
+                    //       return (
+                    //         <option value={group.id} key={group.id}>
+                    //           {group.name}
+                    //         </option>
+                    //       );
+                    //     })}
+                    // </select>
+                    null}
+                  </div>
                 </div>
 
                 <div class="form-group">
