@@ -161,8 +161,10 @@ export default class ComponentTemplate2ToPrint extends Component {
               fontStyle: "italic",
             }}
           >
-            {index + 1}. {element.name} {this.getDistribute(element)}
+            {index + 1}. {element.name} {this.getDistribute(element)}{" "}
+            {element.note ? ` (${element.note})` : ""}
           </span>
+
           <span
             className="price"
             style={{
@@ -334,7 +336,6 @@ export default class ComponentTemplate2ToPrint extends Component {
                   </p>
                 </div>
               )}
-
             </div>
             <br />
             <ul
@@ -591,7 +592,7 @@ export default class ComponentTemplate2ToPrint extends Component {
                 padding: "8px 0 5px",
                 textAlign: "center",
                 borderTop: "1px solid #444",
-                fontSize:"10px"
+                fontSize: "10px",
               }}
             >
               <h6 style={{ textTransform: "uppercase" }}>

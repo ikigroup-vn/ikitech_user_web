@@ -86,7 +86,20 @@ export default class ComponentTemplate0ToPrint extends Component {
         <tr>
           <td>{index + 1}</td>
           <td style={{ textAlign: "start" }}>
-            {element.name} {element.is_bonus == true ? "(Thưởng)" : ""}
+            <div>
+              <div>
+                {element.name} {element.is_bonus == true ? "(Thưởng)" : ""}
+              </div>
+              {element.note ? (
+                <div
+                  style={{
+                    fontSize: "14px",
+                  }}
+                >
+                  {element.note}
+                </div>
+              ) : null}
+            </div>
           </td>
           <td>{format(element.item_price)}</td>
           <td>{element.quantity}</td>
@@ -177,9 +190,13 @@ export default class ComponentTemplate0ToPrint extends Component {
           badges.address_pickup.province_name;
     return (
       <div className="parent" style={{ margin: "30px" }}>
-        <div style={{ display: "flex", alignItems: "center",
-          justifyContent: "space-between"
-      }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+          }}
+        >
           <p className="order_code" style={{ fontSize: 16 }}>
             Mã đơn hàng : {state.order_code ?? bill.order_code}
           </p>
