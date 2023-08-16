@@ -3,7 +3,7 @@ import ComponentToPrint from "./ComponentToPrint";
 import ComponentTemplate0ToPrint from "../InvoiceTemplate/orderTemplates/ComponentTemplate0ToPrint";
 import ComponentTemplate1ToPrint from "../InvoiceTemplate/orderTemplates/ComponentTemplate1ToPrint";
 import { getInvoiceTemplate } from "../../data/local/print";
-import ComponentTemplate2ToPrint from '../InvoiceTemplate/orderTemplates/ComponentTemplate2ToPrint';
+import ComponentTemplate2ToPrint from "../InvoiceTemplate/orderTemplates/ComponentTemplate2ToPrint";
 
 export default class ListComponentToPrint extends Component {
   constructor(props) {
@@ -30,7 +30,7 @@ export default class ListComponentToPrint extends Component {
       return (
         <ComponentTemplate2ToPrint
           currentBranch={currentBranch}
-          heightPage={3 + (bill.line_items_at_time?.length*0.4)}
+          heightPage={3 + bill.line_items_at_time?.length * 0.4}
           badges={badges}
           bill={bill}
           store={store}

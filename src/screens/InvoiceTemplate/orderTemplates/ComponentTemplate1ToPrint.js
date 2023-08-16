@@ -102,9 +102,22 @@ export default class ComponentTemplate1ToPrint extends Component {
         <tr>
           <td>{index + 1}</td>
           <td style={{ textAlign: "start" }}>
-            {element.name}
-            {valueDistribute}
-            {element.is_bonus == true ? "(Thưởng)" : ""}
+            <div>
+              <div>
+                {element.name}
+                {valueDistribute}
+                {element.is_bonus == true ? "(Thưởng)" : ""}
+              </div>
+              {element.note ? (
+                <div
+                  style={{
+                    fontSize: "14px",
+                  }}
+                >
+                  {element.note}
+                </div>
+              ) : null}
+            </div>
           </td>
           <td>{format(element.item_price)}</td>
           <td>{element.quantity}</td>
@@ -344,21 +357,19 @@ export default class ComponentTemplate1ToPrint extends Component {
             </p>
 
             {bill?.order_ship_code?.from_shipper_code && (
-                <div
-                  style={{
-                    fontSize: "18px",
-                    textAlign: "left",
-                    margin: 0,
-                    padding: 0,
-                  }}
-                >
-                  <p
-                    className="order_code"
-                  >
-                    Mã vận đơn ({bill?.order_ship_code?.from_shipper_code})
-                  </p>
-                </div>
-              )}
+              <div
+                style={{
+                  fontSize: "18px",
+                  textAlign: "left",
+                  margin: 0,
+                  padding: 0,
+                }}
+              >
+                <p className="order_code">
+                  Mã vận đơn ({bill?.order_ship_code?.from_shipper_code})
+                </p>
+              </div>
+            )}
 
             <div
               style={{
