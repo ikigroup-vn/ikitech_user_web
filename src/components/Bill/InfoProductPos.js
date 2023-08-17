@@ -395,7 +395,14 @@ class InfoProductPos extends Component {
                             </div>
                           )}
                         </div>
-
+                        {product.note ? (
+                          <div>
+                            <p class=" bold sale_user_label">
+                              Ghi chú:
+                              <span id="total_selected">{product.note}</span>
+                            </p>
+                          </div>
+                        ) : null}
                         {/* <div >
                                               <p class=" bold sale_user_label">
                                                   Tổng số lượng:
@@ -493,14 +500,6 @@ class InfoProductPos extends Component {
                             </p>
                           </div>
                         )}
-                        {product.note ? (
-                          <div>
-                            <p class=" bold sale_user_label">
-                              Ghi chú:
-                              <span id="total_selected">{product.note}</span>
-                            </p>
-                          </div>
-                        ) : null}
 
                         <div>
                           <p

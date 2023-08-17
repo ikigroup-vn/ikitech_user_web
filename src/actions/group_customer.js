@@ -109,9 +109,9 @@ export const createGroupCustomer = (store_code, data) => {
                 type: Types.ALERT_UID_STATUS,
                 alert: {
                   type: "success",
-                  title: "Thành công ",
+                  title: "Thành công",
                   disable: "show",
-                  content: res.data?.data.msg,
+                  content: res.data?.msg,
                 },
               });
             })
@@ -163,13 +163,14 @@ export const updateGroupCustomer = (store_code, idGroupCustomer, data) => {
                   data: res.data.data.data,
                 });
               }
+
               dispatch({
                 type: Types.ALERT_UID_STATUS,
                 alert: {
                   type: "success",
-                  title: "Thành công ",
+                  title: "Thành công",
                   disable: "show",
-                  content: res.data?.data.msg,
+                  content: res.data?.msg,
                 },
               });
             })
