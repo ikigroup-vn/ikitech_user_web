@@ -406,7 +406,7 @@ class ListProduct extends Component {
                 style={{
                   width: "100%",
                   height: "59px",
-                  width:"59px",
+                  width: "59px",
                   background: "#0000000d",
                 }}
               />
@@ -511,6 +511,18 @@ class ListProduct extends Component {
     var params = `&search=${searchValue}`;
     this.props.fetchAllProductV2(store_code, branch_id, 1, params);
   };
+  getParams = (listType, is_near_out_of_stock, search, limit) => {
+    var params = "";
+
+    if (search) {
+      params += `&search=${search}`;
+    }
+    if (limit) {
+      params += `&limit=${search}`;
+    }
+
+    return params;
+  };
 
   render() {
     var { products, store_code, listProducts, combos } = this.props;
@@ -597,7 +609,7 @@ class ListProduct extends Component {
                 store_code={store_code}
                 products={products}
                 passNumPage={this.passNumPage}
-                limit={this.state.numPage}
+                getParams={this.getParams}
               />
               <div style={{ marginTop: "10px" }}>
                 <button

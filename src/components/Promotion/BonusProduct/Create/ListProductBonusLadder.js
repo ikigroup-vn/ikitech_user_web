@@ -26,15 +26,8 @@ class ListProduct extends Component {
     console.log(checked);
     var data = JSON.parse(value);
     if (checked == true)
-      this.props.handleAddProduct(
-        data,
-        null,
-        "add",
-        null,
-        false,
-        false,
-        true
-      ); // true đến từ sản phẩm bonus
+      this.props.handleAddProduct(data, null, "add", null, false, false, true);
+    // true đến từ sản phẩm bonus
     else {
       if (data.length > 0) {
         this.props.handleAddProduct(
@@ -506,6 +499,18 @@ class ListProduct extends Component {
     var params = `&search=${searchValue}`;
     this.props.fetchAllProductV2(store_code, branch_id, 1, params);
   };
+  getParams = (listType, is_near_out_of_stock, search, limit) => {
+    var params = "";
+
+    if (search) {
+      params += `&search=${search}`;
+    }
+    if (limit) {
+      params += `&limit=${search}`;
+    }
+
+    return params;
+  };
 
   render() {
     var { products, store_code, listProducts, combos } = this.props;
@@ -592,7 +597,7 @@ class ListProduct extends Component {
                 store_code={store_code}
                 products={products}
                 passNumPage={this.passNumPage}
-                limit={this.state.numPage}
+                getParams={this.getParams}
               />
               <div style={{ marginTop: "10px" }}>
                 <button
