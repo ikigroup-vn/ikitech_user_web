@@ -7,9 +7,9 @@ class Table extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      modalId : null,
-      imgViettelPost : null
-    }
+      modalId: null,
+      imgViettelPost: null,
+    };
   }
 
   passEditFunc = (e, id, token) => {
@@ -140,10 +140,12 @@ class Table extends Component {
               {data.id == 2 && (
                 <button
                   style={{ marginLeft: "10px" }}
-                  onClick={(e) => this.setState({
-                    modalId : data.id , 
-                    imgViettelPost : data.image_url
-                  })}
+                  onClick={(e) =>
+                    this.setState({
+                      modalId: data.id,
+                      imgViettelPost: data.image_url,
+                    })
+                  }
                   data-toggle="modal"
                   data-target="#modalLogin"
                   class={`btn btn-primary btn-sm`}
@@ -209,7 +211,11 @@ class Table extends Component {
 
           <tbody>{this.showData(this.props.shipment)}</tbody>
         </table>
-        <ModalLogin imgViettelPost = {this.state.imgViettelPost} store_code = {this.props.store_code} modalId = {this.state.modalId}></ModalLogin>
+        <ModalLogin
+          imgViettelPost={this.state.imgViettelPost}
+          store_code={this.props.store_code}
+          modalId={this.state.modalId}
+        ></ModalLogin>
       </div>
     );
   }

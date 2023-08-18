@@ -68,9 +68,7 @@ class InfoShipper extends Component {
         height: nextProps?.bill?.package_height,
         length: nextProps?.bill?.package_length,
         width: nextProps?.bill?.package_width,
-        cod: nextProps?.bill?.cod
-          ? formatNumberV2(nextProps?.bill?.cod)
-          : nextProps?.bill?.cod,
+        cod: nextProps?.bill?.cod,
       };
       this.setState({
         shipperId: nextProps?.bill?.partner_shipper_id,
@@ -88,13 +86,13 @@ class InfoShipper extends Component {
     const { packet } = this.state;
     const value = e.target.value;
     const _value = formatNumber(value);
-    const valuePrice = formatNumberV2(value);
     const name = e.target.name;
     if (!isUpdated) return;
+
     this.setState({
       packet: {
         ...packet,
-        [name]: name === "cod" ? valuePrice : _value,
+        [name]: name === "cod" ? value : _value,
       },
     });
   };
@@ -106,9 +104,7 @@ class InfoShipper extends Component {
       package_length: packet.length,
       package_width: packet.width,
       package_height: packet.height,
-      cod: packet.cod
-        ? Number(packet.cod?.toString().replace(/\./g, ""))
-        : packet.cod,
+      cod: packet.cod,
     };
     updateShippingPackage(store_code, order_code, formData, () => {
       this.setIsUpdated(false);
