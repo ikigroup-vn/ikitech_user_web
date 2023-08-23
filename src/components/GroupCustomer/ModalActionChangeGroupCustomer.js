@@ -121,6 +121,11 @@ const ModalAddGroupCustomerStyles = styled.div`
       }
     }
   }
+  .conditionGroup__main {
+    max-height: 400px;
+    overflow-y: auto;
+    padding-right: 4px;
+  }
   @keyframes popup {
     0% {
       opacity: 0;
@@ -600,15 +605,17 @@ class ModalActionChangeGroupCustomer extends Component {
                   </div>
                   <div class="form-group-customer-condition">
                     <p>Thiết lập điều kiện thêm khách hàng vào nhóm:</p>
-                    <ConditionGroupCustomer
-                      conditionItems={this.state.conditionItems}
-                      province={province}
-                      types={types}
-                      handleChangeInput={this.handleChangeInput}
-                      handleRemoveConditionGroupCustomer={
-                        this.handleRemoveConditionGroupCustomer
-                      }
-                    ></ConditionGroupCustomer>
+                    <div className="conditionGroup__main">
+                      <ConditionGroupCustomer
+                        conditionItems={this.state.conditionItems}
+                        province={province}
+                        types={types}
+                        handleChangeInput={this.handleChangeInput}
+                        handleRemoveConditionGroupCustomer={
+                          this.handleRemoveConditionGroupCustomer
+                        }
+                      ></ConditionGroupCustomer>
+                    </div>
                   </div>
                   <div
                     className="form-group-customer-addCondition"
