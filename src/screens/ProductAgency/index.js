@@ -821,6 +821,11 @@ class Product extends Component {
                           products={products}
                           setArrayCheckBox={this.setArrayCheckBox}
                           arrayCheckBox={arrayCheckBox}
+                          getParams={this.getParams}
+                          categorySelected={this.state.categorySelected}
+                          categoryChildSelected={
+                            this.state.categoryChildSelected
+                          }
                         />
                         <div
                           style={{

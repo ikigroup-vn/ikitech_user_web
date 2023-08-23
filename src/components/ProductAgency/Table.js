@@ -73,18 +73,33 @@ class Table extends Component {
   };
 
   changePage = (data) => {
-    var { store_code, page, agency_type_id, numPage, searchValue } = this.props;
+    var {
+      store_code,
+      page,
+      agency_type_id,
+      numPage,
+      searchValue,
+      getParams,
+      categorySelected,
+      categoryChildSelected,
+    } = this.props;
     var price =
       data.distributes?.length > 0
         ? ""
         : window.$(`.price-${data.id} > input`).val();
     var importPrice = data.distributes?.length > 0 ? "" : data.import_price;
+    const params = getParams(
+      searchValue,
+      numPage,
+      categorySelected,
+      categoryChildSelected
+    );
     history.push(
       `/product-agency/edit-price/${store_code}/${
         data.id
-      }/${agency_type_id}?page=${page}&limit=${numPage}&search=${searchValue}${
-        price !== "" ? `&price=${price}` : ""
-      }${importPrice !== "" ? `&importPrice=${importPrice}` : ""}`
+      }/${agency_type_id}?page=${page}${price !== "" ? `&price=${price}` : ""}${
+        importPrice !== "" ? `&importPrice=${importPrice}` : ""
+      }${params}`
     );
   };
   onchangeCheckBox = (e) => {
