@@ -96,7 +96,9 @@ class ProductEdit extends Component {
     var numPage = getQueryParams("limit") ?? 20;
     var search = getQueryParams("search") ?? "";
     var tabIndex = getQueryParams("tab-index") ?? 0;
-    var url = `/product-agency/index/${store_code}/${agency_type_id}?tab-index=${tabIndex}&page=${page}&search=${search}&limit=${numPage}`;
+    var category_ids = getQueryParams("category_ids") ?? "";
+    var category_children_ids = getQueryParams("category_children_ids") ?? "";
+    var url = `/product-agency/index/${store_code}/${agency_type_id}?tab-index=${tabIndex}&page=${page}&search=${search}&limit=${numPage}&category_ids=${category_ids}&category_children_ids=${category_children_ids}`;
     this.props.updateAgencyPrice(store_code, form, productId, null, url);
   };
   goBack = (e) => {
@@ -106,9 +108,11 @@ class ProductEdit extends Component {
     var page = getQueryParams("page") ?? 0;
     var numPage = getQueryParams("limit") ?? 20;
     var search = getQueryParams("search") ?? "";
+    var category_ids = getQueryParams("category_ids") ?? "";
+    var category_children_ids = getQueryParams("category_children_ids") ?? "";
     var tabIndex = getQueryParams("tab-index") ?? 0;
 
-    var url = `/product-agency/index/${store_code}/${agency_type_id}?tab-index=${tabIndex}&page=${page}&search=${search}&limit=${numPage}`;
+    var url = `/product-agency/index/${store_code}/${agency_type_id}?tab-index=${tabIndex}&page=${page}&search=${search}&limit=${numPage}&category_ids=${category_ids}&category_children_ids=${category_children_ids}`;
     history.replace(url);
   };
   onChangeQuantityStock = (total) => {
