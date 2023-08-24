@@ -491,7 +491,15 @@ class ProductEdit extends Component {
     const pageNum = getQueryParams("page") || 1;
     const limit = getQueryParams("limit") || 20;
     const search = getQueryParams("search") || "";
-    const params = `&limit=${limit}${search ? `&search=${search}` : ""}`;
+    const category_ids = getQueryParams("category_ids") || "";
+    const category_children_ids = getQueryParams("category_children_ids") || "";
+    const params = `&limit=${limit}${search ? `&search=${search}` : ""}${
+      category_ids ? `&category_ids=${category_ids}` : ""
+    }${
+      category_children_ids
+        ? `&category_children_ids=${category_children_ids}`
+        : ""
+    }`;
     this.props.updateDistribute(
       store_code,
       distributeData,

@@ -234,12 +234,21 @@ class ShowData extends Component {
       searchValue,
       limit,
       distributes,
+      categorySelected,
+      categoryChildSelected,
+      getParams,
     } = this.props;
     const listDistribute =
       data.inventory?.distributes !== null &&
       data.inventory?.distributes.length > 0
         ? data.inventory?.distributes[0]
         : [];
+    const paramsUrl = getParams(
+      searchValue,
+      limit,
+      categorySelected,
+      categoryChildSelected
+    );
 
     let discount_percent = null;
 
@@ -425,9 +434,7 @@ class ShowData extends Component {
             }}
           >
             <Link
-              to={`/product/edit/${store_code}/${data.id}?page=${page}${
-                searchValue ? `&search=${searchValue}` : ""
-              }&limit=${limit}`}
+              to={`/product/edit/${store_code}/${data.id}?page=${page}${paramsUrl}`}
               class={`btn btn-outline-warning btn-sm ${
                 update == true ? "show" : "hide"
               }`}

@@ -141,6 +141,7 @@ class Table extends Component {
       limit,
       categorySelected,
       categoryChildSelected,
+      getParams,
     } = this.props;
     if (typeof products === "undefined") {
       return result;
@@ -196,6 +197,7 @@ class Table extends Component {
             categorySelected={categorySelected}
             categoryChildSelected={categoryChildSelected}
             searchValue={searchValue}
+            getParams={getParams}
             status={status}
             status_name={status_name}
             status_stock={status_stock}
