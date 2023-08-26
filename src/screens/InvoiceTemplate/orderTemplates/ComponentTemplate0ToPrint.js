@@ -91,9 +91,9 @@ export default class ComponentTemplate0ToPrint extends Component {
                 {element.name}{" "}
                 {element.distributes_selected != null &&
                 element.distributes_selected.length > 0
-                  ? ( " - " + element.distributes_selected.value ?? " ") +
+                  ? ( " - " + element.distributes_selected[0].value ?? " ") +
                     " " +
-                    (element.distributes_selected.sub_element_distributes ?? "")
+                    (element.distributes_selected[0].sub_element_distributes ?? "")
                   : ""}{" "}
                 {element.is_bonus == true ? "(Thưởng)" : ""}
               </div>
