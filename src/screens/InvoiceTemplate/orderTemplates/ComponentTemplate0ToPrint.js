@@ -88,7 +88,14 @@ export default class ComponentTemplate0ToPrint extends Component {
           <td style={{ textAlign: "start" }}>
             <div>
               <div>
-                {element.name} {element.is_bonus == true ? "(Thưởng)" : ""}
+                {element.name}{" "}
+                {element.distributes_selected != null &&
+                element.distributes_selected.length > 0
+                  ? ( " - " + element.distributes_selected.value ?? " ") +
+                    " " +
+                    (element.distributes_selected.sub_element_distributes ?? "")
+                  : ""}{" "}
+                {element.is_bonus == true ? "(Thưởng)" : ""}
               </div>
               {element.note ? (
                 <div
