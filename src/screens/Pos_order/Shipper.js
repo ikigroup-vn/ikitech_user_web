@@ -1158,7 +1158,7 @@ class PanelBottom extends Component {
                     }}
                     disabled={true}
                     value={""}
-                    class="form-control select-has-search-box select2-hidden-accessible"
+                    class="form-control select-has-search-box select2-hidden-accessible selectb-overlay"
                     onChange={this.onChangeProvince2}
                     name="txtProvince"
                     tabindex="-1"
@@ -1214,7 +1214,7 @@ class PanelBottom extends Component {
                     </span>
                   </div>
                   <select
-                    class="form-control select-has-search-box customerInfo select2-hidden-accessible"
+                    class="form-control select-has-search-box customerInfo select2-hidden-accessible  selectb-overlay"
                     style={{
                       background: isDisabledButton ? "#eaecf4" : "white",
                       fontSize: "13px",
@@ -1292,7 +1292,7 @@ class PanelBottom extends Component {
                     value={""}
                     onChange={this.onChangeWards2}
                     name="txtWards"
-                    class="form-control select-has-search-box customerInfo select2-hidden-accessible"
+                    class="form-control select-has-search-box customerInfo select2-hidden-accessible  selectb-overlay"
                     id="customerWardLocationId"
                     tabindex="-1"
                     aria-hidden="true"
