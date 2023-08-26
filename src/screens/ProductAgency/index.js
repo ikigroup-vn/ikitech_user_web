@@ -222,9 +222,12 @@ class Product extends Component {
   };
   componentDidMount() {
     var { store_code, agency_type_id } = this.props.match.params;
-    var { searchValue, numPage } = this.state;
-    var page = getQueryParams("page");
-    var params = `&limit=${numPage}&search=${searchValue}`;
+    var page = getQueryParams("page") || 1;
+    var search = getQueryParams("search") || "";
+    var limit = getQueryParams("limit") || 20;
+    var category_ids = getQueryParams("category_ids") || "";
+    var category_children_ids = getQueryParams("category_children_ids") || "";
+    var params = `&limit=${limit}&search=${search}&category_ids=${category_ids}&category_children_ids=${category_children_ids}`;
     this.props.fetchAllCategoryP(store_code);
     if (
       typeof page != "undefined" &&
