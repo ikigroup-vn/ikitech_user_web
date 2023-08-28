@@ -587,8 +587,19 @@ class Table extends Component {
                     <span>SĐT người giới thiệu:</span>
                     <span>{data.referral_phone_number}</span>
                   </div>
+                
                   <div className="explode__item">
-                    <span>Ngày đăng ký:</span>
+                    <span>Tỉnh/Thành phố:</span>
+                    {data.province_name == null
+                      ? "Chưa cập nhật"
+                      : data.province_name}
+                  </div>
+                  <div className="explode__item">
+                    <span>Tình trạng:</span>
+                    <span>{data.official ? "Đã đăng ký" : "Chưa đăng ký"}</span>
+                  </div>
+                  <div className="explode__item">
+                    <span>Ngày thêm/đăng ký:</span>
                     <span>{data.created_at}</span>
                   </div>
                   <div className="explode__item">
