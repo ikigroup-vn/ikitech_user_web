@@ -12,6 +12,7 @@ npm run build
 rm -rf ../ikitech_user_build/*
 mv ./build/* ../ikitech_user_build/
 cd ../ikitech_user_build 
+git pull
 git add .
 git commit -m "New"
 git push -f
