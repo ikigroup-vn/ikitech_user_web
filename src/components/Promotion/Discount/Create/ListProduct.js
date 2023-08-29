@@ -359,8 +359,9 @@ class ListProduct extends Component {
             : null;
         var checked = this.checkExsit(list, data.id);
         var disaled = this.checkDisable(discounts, data.id);
-        disaled = false;
         var background_disable = disaled == true ? "#ffddd766" : "white";
+
+   
         const {
           product_discount,
           min_price,
@@ -392,7 +393,7 @@ class ListProduct extends Component {
                 <label>
                   <input
                     type="checkbox"
-                    disabled={disaled}
+                    disabled={false}
                     checked={checked}
                     onChange={this.onChange}
                     value={JSON.stringify(data)}
@@ -419,7 +420,13 @@ class ListProduct extends Component {
             </td>
             <td>{data.sku}</td>
 
-            <td>{data.name}</td>
+            <td>
+              <p>{data.name}</p>
+              {disaled && <p style={{
+                fontSize:11,
+                color:"grey"
+              }}>{"Sản phẩm có tồn tại ở chương trình giảm giá khác"}</p>}
+            </td>
 
             <td>
               {product_discount == null && (
