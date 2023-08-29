@@ -292,13 +292,14 @@ hr {
 }
 
 .chat-box-tray {
-  background: #36b9cc;
+  background: white;
   display: flex;
   align-items: baseline;
   padding: 10px 15px;
   align-items: center;
   margin-top: 19px;
   bottom: 0;
+  justify-content: space-between;
 }
 
 span.step {
@@ -575,6 +576,7 @@ html {
   background: var(--right-msg-bg);
   color: #fff;
   border-bottom-right-radius: 0;
+  white-space: pre-wrap;
 }
 
 .right-msg .msg-img {

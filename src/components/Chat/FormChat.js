@@ -11,14 +11,14 @@ import ModalSendImg from "./ModalSendImg";
 import Alert from "../../components/Partials/Alert";
 import LoadMess from "../Loading/Chatbox/LoadMess";
 import * as Env from "../../ultis/default";
-import * as  helpers  from '../../ultis/helpers';
+import * as helpers from "../../ultis/helpers";
 
 class FormChat extends Component {
   constructor(props) {
     super(props);
     this.state = {
       message: "",
-      chat: {data:[]},
+      chat: { data: [] },
       newMessage: "",
       pag: 1,
       loading: false,
@@ -40,18 +40,15 @@ class FormChat extends Component {
   showListImg = (imgs) => {
     var result = <LoadMess />;
     if (typeof imgs == "undefined" || imgs == null) {
-      return null
+      return null;
     }
     if (imgs.length > 0) {
-      console.log(imgs)
-      var img = ""
+      console.log(imgs);
+      var img = "";
       result = imgs.map((item, index) => {
         try {
-          if (typeof item.link_images == "undefined")
-            img = Env.IMG_NOT_FOUND
-          else
-            img = item.link_images
-
+          if (typeof item.link_images == "undefined") img = Env.IMG_NOT_FOUND;
+          else img = item.link_images;
 
           return (
             <img
@@ -68,7 +65,6 @@ class FormChat extends Component {
             />
           );
         } catch (error) {
-       
           return (
             <img
               style={{ cursor: "pointer", objectFit: "cover" }}
@@ -97,7 +93,7 @@ class FormChat extends Component {
     this.props.fetchChatId(store_code, customerId, pag);
   };
   showMessages = (messages, customerImg, userImg) => {
-    console.log(messages)
+    console.log(messages);
     var result = null;
 
     if (typeof messages.data == "undefined" || messages == null) {
@@ -106,7 +102,7 @@ class FormChat extends Component {
     var dateTimeOld = "";
     if (messages.data.length > 0) {
       var numPages = messages.last_page;
-      console.log(numPages)
+      console.log(numPages);
       var listMes = [...messages.data].reverse();
       result = listMes.map((mes, index) => {
         var isUser = mes.is_user == true ? "right-msg" : "left-msg";
@@ -125,16 +121,16 @@ class FormChat extends Component {
         );
         var img = mes.is_user == true ? userImg : customerImg;
         var showLoading = index == 0 && numPages > 1 ? "show" : "hide";
-        var date = moment(
-          mes.created_at,
-          "YYYY-MM-DD HH:mm:ss"
-        ).format("YYYY-MM-DD") == moment().format("YYYY-MM-DD") ? "Hôm nay" : moment(
-          mes.created_at,
-          "YYYY-MM-DD HH:mm:ss"
-        ).format("DD-MM-YYYY")
+        var date =
+          moment(mes.created_at, "YYYY-MM-DD HH:mm:ss").format("YYYY-MM-DD") ==
+          moment().format("YYYY-MM-DD")
+            ? "Hôm nay"
+            : moment(mes.created_at, "YYYY-MM-DD HH:mm:ss").format(
+                "DD-MM-YYYY"
+              );
         var showDateTime = date == dateTimeOld ? "hide" : "show";
         dateTimeOld = date;
-        var unRead = this.props.unRead == true ? "Đã xem" : "Đã gửi"
+        var unRead = this.props.unRead == true ? "Đã xem" : "Đã gửi";
         return (
           <React.Fragment>
             <div
@@ -178,18 +174,19 @@ class FormChat extends Component {
                 style={{ backgroundImage: `url(${img})`, cursor: "pointer" }}
               ></div>
 
-              <div class={`msg-bubble ${backGroundImg}`} style={{ maxWidth: "35%" }}>
-
-
+              <div
+                class={`msg-bubble ${backGroundImg}`}
+                style={{ maxWidth: "35%" }}
+              >
                 <div class={` ${isImg}`}>{this.showListImg(listimg)}</div>
                 <div class={`msg-text ${isContent}`}>{mes.content}</div>
                 <div class="msg-info">
                   <div class="msg-info-time">{time}</div>
-                  {
-                    isUser == "right-msg" &&  <div class="msg-info-time" style = {{marginLeft : "10px"}}>{unRead}</div>
-                  }
-                 
-
+                  {isUser == "right-msg" && (
+                    <div class="msg-info-time" style={{ marginLeft: "10px" }}>
+                      {unRead}
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -203,48 +200,50 @@ class FormChat extends Component {
   componentDidMount() {
     var c = $(".msger-chatbox");
     c.scrollTop(c.prop("scrollHeight"), 1000);
-    console.log(this.props)
+    console.log(this.props);
     if (this.props.chat?.data?.length > 0) {
-
-        var chat = { ...this.state.chat };
-        var arrChat = [...(this.props.chat.data ?? [])]
-        var newArr = chat.data.concat(arrChat);
-        chat.data = newArr;
-        this.setState({ chat: chat, loading: false });
-      
+      var chat = { ...this.state.chat };
+      var arrChat = [...(this.props.chat.data ?? [])];
+      var newArr = chat.data.concat(arrChat);
+      chat.data = newArr;
+      this.setState({ chat: chat, loading: false });
     }
-    if (this.props.customerId != "" && this.props.customerId != null ) {
-
+    if (this.props.customerId != "" && this.props.customerId != null) {
       this.socket = io(helpers.callUrlSocket(), {
         transports: ["websocket"],
       });
       this.socket.on(
         `chat:message_from_customer:${this.props.customerId}`,
-        (res) =>  {console.log(res);this.changeMess(res)}
+        (res) => {
+          console.log(res);
+          this.changeMess(res);
+        }
       );
     }
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.customerId != this.props.customerId) {
-
       this.socket = io(helpers.callUrlSocket(), {
         transports: ["websocket"],
       });
       this.socket.on(
         `chat:message_from_customer:${nextProps.customerId}`,
-        (res) => {console.log(res);this.changeMess(res)}
+        (res) => {
+          console.log(res);
+          this.changeMess(res);
+        }
       );
     }
   }
   shouldComponentUpdate(nextProps, nextState) {
     if (!shallowEqual(nextProps.chat, this.props.chat)) {
-      console.log("chat ne" , nextProps.chat)
+      console.log("chat ne", nextProps.chat);
 
       if (nextState.pag !== 1) {
         var chat = { ...nextState.chat };
-        console.log(chat)
-        var arrChat = [...nextProps.chat.data]
+        console.log(chat);
+        var arrChat = [...nextProps.chat.data];
         var newArr = chat.data.concat(arrChat);
         chat.data = newArr;
         this.setState({ chat: chat, loading: false });
@@ -257,7 +256,6 @@ class FormChat extends Component {
       !shallowEqual(nextState.newMessage, this.state.newMessage) &&
       nextState.newMessage != ""
     ) {
-
       var messengers = { ...nextState.chat };
       var mess = { ...nextState.newMessage };
       var arr_mess = [...messengers.data];
@@ -272,8 +270,7 @@ class FormChat extends Component {
       !shallowEqual(nextProps.message, this.props.message) &&
       nextProps.message != {}
     ) {
-
-      console.log("chat ne" , nextProps.message)
+      console.log("chat ne", nextProps.message);
 
       var messengers = { ...this.state.chat };
       var mess = { ...nextProps.message };
@@ -300,13 +297,14 @@ class FormChat extends Component {
       c.scrollTop(c.prop("scrollHeight"), 1000);
     }
 
-    if (this.state.isLoading != true && typeof this.props.permission.product_list != "undefined") {
-      var permissions = this.props.permission
-      var chat_allow = permissions.chat_allow 
+    if (
+      this.state.isLoading != true &&
+      typeof this.props.permission.product_list != "undefined"
+    ) {
+      var permissions = this.props.permission;
+      var chat_allow = permissions.chat_allow;
 
-
-      this.setState({ isLoading: true , chat_allow })
-
+      this.setState({ isLoading: true, chat_allow });
     }
   }
 
@@ -317,14 +315,37 @@ class FormChat extends Component {
   sendMessage = (e) => {
     e.preventDefault();
     var { message } = this.state;
-    var { store_code, customerId ,isActive} = this.props;
+    var { store_code, customerId, isActive } = this.props;
 
     this.props.sendMessage(store_code, isActive, message);
     this.setState({ message: "" });
   };
 
+  handleKeyDown = (e) => {
+    if (e.key === "Enter" && e.ctrlKey) {
+      const textArea = e.target;
+      const startPos = textArea.selectionStart;
+      const endPos = textArea.selectionEnd;
+      const oldValue = textArea.value;
+
+      const newValue =
+        oldValue.substring(0, startPos) + "\n" + oldValue.substring(endPos);
+
+      this.setState({
+        message: newValue,
+      });
+
+      textArea.selectionStart = textArea.selectionEnd = startPos + 1;
+
+      e.preventDefault();
+    } else if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      this.sendMessage(e);
+    }
+  };
+
   render() {
-    var { chat, img, message , chat_allow } = this.state;
+    var { chat, img, message, chat_allow } = this.state;
     var { customerImg, user, customerId, store_code, listChat } = this.props;
     var customerImg =
       typeof customerImg == "undefined" || customerImg == null
@@ -335,7 +356,7 @@ class FormChat extends Component {
         ? Env.IMG_NOT_FOUND
         : user.avatar_image;
 
-    var showInputChat = listChat.length == 0 ? "hide" : "show"
+    var showInputChat = listChat.length == 0 ? "hide" : "show";
 
     return (
       <React.Fragment>
@@ -349,16 +370,43 @@ class FormChat extends Component {
         <div className="row">
           <div className="col-12">
             <form onSubmit={this.sendMessage}>
-
-              <div className={`chat-box-tray ${showInputChat}  ${chat_allow == true ? "show" : "hide"}`}>
-                <input value={message}
+              <div
+                className={`chat-box-tray ${showInputChat}  ${
+                  chat_allow == true ? "show" : "hide"
+                }`}
+              >
+                {/* <input
+                  value={message}
                   style={{ width: "90%" }}
                   name="message"
                   onChange={this.onChange}
-                  type="text" placeholder="Nhập tin nhắn..."
+                  type="text"
+                  placeholder="Nhập tin nhắn..."
                   required
                   autoComplete="off"
-                />
+                /> */}
+                <textarea
+                  value={message}
+                  name="message"
+                  onKeyDown={this.handleKeyDown}
+                  onChange={this.onChange}
+                  style={{
+                    resize: "none",
+                    boxSizing: "border-box",
+                    height: "auto",
+                    minHeight: "41px",
+                    maxHeight: "97px",
+                    width: "90%",
+                    border: "1px solid #e4e7ec",
+                    borderRadius: "10px",
+                    backgroundColor: "#f9fafb",
+                    outline: "none",
+                    padding: "12px 24px 0 24px",
+                    overflow: "hidden",
+                  }}
+                >
+                  fdsfds
+                </textarea>
 
                 <button
                   type="button"
@@ -378,10 +426,12 @@ class FormChat extends Component {
             </form>
           </div>
           <ModalImg img={img}></ModalImg>
-          <ModalSendImg customerId={customerId} store_code={store_code}></ModalSendImg>
+          <ModalSendImg
+            customerId={customerId}
+            store_code={store_code}
+          ></ModalSendImg>
         </div>
       </React.Fragment>
-
     );
   }
 }
@@ -393,7 +443,6 @@ const mapStateToProps = (state) => {
     alert: state.chatReducers.alert.alert_send,
 
     permission: state.authReducers.permission.data,
-
   };
 };
 
