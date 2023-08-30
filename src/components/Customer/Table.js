@@ -470,7 +470,13 @@ class Table extends Component {
                   style={{
                     position: "relative",
                   }}
-                  onClick={(e) => this.handlleCustomerSelected(e, data)}
+                  onClick={(e) => {
+                    var permissions = this.props.permission;
+                    var customerRoleRdit = permissions.customer_role_edit;
+                    if (customerRoleRdit) {
+                      this.handlleCustomerSelected(e, data);
+                    }
+                  }}
                 >
                   {data.is_collaborator === true
                     ? "Cộng tác viên"
@@ -587,7 +593,7 @@ class Table extends Component {
                     <span>SĐT người giới thiệu:</span>
                     <span>{data.referral_phone_number}</span>
                   </div>
-                
+
                   <div className="explode__item">
                     <span>Tỉnh/Thành phố:</span>
                     {data.province_name == null
@@ -793,6 +799,7 @@ const mapStateToProps = (state) => {
     types: state.agencyReducers.agency.allAgencyType,
     addCustomerToSaleSuccessfully:
       state.saleReducers.sale.addCustomerToSaleSuccessfully,
+    permission: state.authReducers.permission.data,
   };
 };
 

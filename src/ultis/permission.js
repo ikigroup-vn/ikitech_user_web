@@ -251,7 +251,7 @@ const permission = (channel) => {
         ],
       },
       {
-        name: "Đối tác",
+        name: "Khách hàng/Đối tác",
         components: [
           {
             name: "Khách hàng",
@@ -275,6 +275,11 @@ const permission = (channel) => {
               {
                 name: "Nhóm khách hàng",
                 decentralizationName: "group_customer",
+                componentChilds: [],
+              },
+              {
+                name: "Chỉnh sửa vai trò",
+                decentralizationName: "customer_role_edit",
                 componentChilds: [],
               },
             ],
@@ -569,6 +574,7 @@ export const initialPermission = () => {
     customer_list: false,
     customer_config_point: false,
     customer_review_list: false,
+    customer_role_edit: false,
     customer_review_censorship: false,
     promotion_discount_list: false,
     promotion_discount_add: false,
