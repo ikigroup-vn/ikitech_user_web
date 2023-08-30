@@ -94,7 +94,7 @@ class DetailPos extends Component {
                           <Tab>
                             <i class="fa fa-history"></i>
                             <span style={{ fontSize: "0.8rem" }}>
-                              Lịch sử xu mua hàng
+                              Lịch sử xu
                             </span>
                           </Tab>
                         </TabList>

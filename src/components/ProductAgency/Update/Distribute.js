@@ -123,6 +123,10 @@ class Distribute extends Component {
     ) {
       var distributes = [];
       var distributes_default = [];
+      console.log(
+        "🚀 ~ componentWillReceiveProps ~ distributes_default:",
+        nextProps.product
+      );
 
       if (nextProps.product.distributes != null) {
         distributes = [...nextProps.product.distributes];
@@ -473,8 +477,6 @@ class Distribute extends Component {
   }
 
   showDetail = (list_distribute, list_distribute_default) => {
-    console.log("list_distribute::: ", list_distribute);
-    console.log("list_distribute_default::: ", list_distribute_default);
     var result = [];
     if (typeof list_distribute == "undefined" || list_distribute.length == 0) {
       return result;
@@ -633,7 +635,6 @@ class Distribute extends Component {
               const valueFormat =
                 element.price != null ? formatNumber(element.price) : "";
               var price = valueFormat == "" ? "" : formatNoD(valueFormat);
-
               const valueFormat_default =
                 list_distribute_default[0].element_distributes[_index].price !=
                 null

@@ -1378,7 +1378,9 @@ export const updateAgencyPrice = (
   data,
   productId,
   page,
-  url = null
+  url = null,
+  isNotReplace = true,
+  onSuccess = () => {}
 ) => {
   return (dispatch) => {
     if (data.main_price) {
@@ -1418,9 +1420,14 @@ export const updateAgencyPrice = (
             content: res.data.msg,
           },
         });
-        if (url) history.replace(url);
-        // history.push(`/product/index/${store_code}/${page}`);
-        else history.goBack();
+        if (isNotReplace) {
+          if (url) history.replace(url);
+          // history.push(`/product/index/${store_code}/${page}`);
+          else history.goBack();
+        }
+        if (onSuccess) {
+          onSuccess();
+        }
       })
       .catch(function (error) {
         var content = "";

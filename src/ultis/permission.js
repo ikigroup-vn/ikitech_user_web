@@ -193,6 +193,10 @@ const permission = (channel) => {
                 name: "Bán hàng tại quầy",
                 decentralizationName: "create_order_pos",
               },
+              {
+                name: "Chỉnh sửa giá sản phẩm tại quầy",
+                decentralizationName: "change_price_pos",
+              },
             ],
           },
           {
@@ -648,6 +652,7 @@ export const initialPermission = () => {
     config_setting: false,
     barcode_print: false,
     create_order_pos: false,
+    change_price_pos: false,
     inventory_import: false,
     inventory_tally_sheet: false,
     inventory_list: false,

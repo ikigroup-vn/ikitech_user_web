@@ -121,7 +121,7 @@ class ProductEdit extends Component {
 
   render() {
     var { product, itemProduct } = this.props;
-    console.log(product);
+
     return (
       <div class="container-fluid">
         <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />

@@ -3,10 +3,12 @@ import { Link } from "react-router-dom";
 import * as Env from "../../../ultis/default";
 import * as helper from "../../../ultis/helpers";
 import { shallowEqual } from "../../../ultis/shallowEqual";
+import * as collaboratorAction from "../../../actions/collaborator";
 import { format } from "../../../ultis/helpers";
 import ModalImg from "../ModalImg";
 import moment from "moment";
-import { getQueryParams } from "../../../ultis/helpers";
+import { getQueryParams, removeAscent } from "../../../ultis/helpers";
+import { connect } from "react-redux";
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -99,9 +101,9 @@ class Table extends Component {
     if (requestPayment.length > 0) {
       requestPayment.forEach((data, index) => {
         var avatar =
-          data.collaborator.customer.avatar_image == null
+          data.collaborator.customer?.avatar_image == null
             ? Env.IMG_NOT_FOUND
-            : data.collaborator.customer.avatar_image;
+            : data.collaborator.customer?.avatar_image;
         var img_front =
           data.collaborator.front_card == null
             ? Env.IMG_NOT_FOUND
@@ -187,8 +189,8 @@ class Table extends Component {
                     <span class="fa fa-plus"></span>
                   </button>
                 </td>{" "}
-                <td>{data.collaborator.customer.name}</td>
-                <td>{data.collaborator.customer.phone_number}</td>
+                <td>{data.collaborator?.customer?.name}</td>
+                <td>{data.collaborator?.customer?.phone_number}</td>
                 <td>
                   {data.from == 0
                     ? "Khách hàng yêu cầu"
@@ -508,25 +510,33 @@ class Table extends Component {
     var newArr = [];
     if (requestPayment?.length > 0) {
       for (const item of requestPayment) {
-        console.log(
-          item.collaborator.customer.name,
-          item.collaborator.customer.name?.includes(searchValue)
-        );
-
+        const itemSearch =
+          item.collaborator?.customer?.name?.toString()?.trim().toLowerCase() ||
+          "";
+        const itemAccountNumber = item.collaborator?.account_number
+          ?.toString()
+          ?.trim()
+          .toLowerCase();
+        const valueSearch = searchValue?.toString()?.trim().toLowerCase();
         if (
-          item.collaborator.customer.name?.includes(searchValue) ||
-          item.collaborator.account_number?.includes(searchValue)
+          removeAscent(itemSearch)?.includes(removeAscent(valueSearch)) ||
+          removeAscent(itemAccountNumber)?.includes(removeAscent(valueSearch))
         ) {
           newArr.push(item);
         }
       }
     }
-    console.log(requestPayment);
+
     this.setState({ requestPayment: newArr });
   };
 
   onChangeSearch = (e) => {
     this.setState({ searchValue: e.target.value });
+  };
+  exportListRequest = () => {
+    const { store_code } = this.props;
+    const { from, searchValue } = this.state;
+    this.props.exportListRequest(store_code, searchValue, from);
   };
   render() {
     console.log(getQueryParams("from"));
@@ -578,9 +588,13 @@ class Table extends Component {
               </div>
             </div>
           </form>
-          {
+          <div
+            style={{
+              display: "flex",
+              gap: "10px",
+            }}
+          >
             <button
-              style={{ float: "right" }}
               class={`btn btn-success btn-sm ${
                 payment_request_solve == true ? "show" : "hide"
               }`}
@@ -589,7 +603,14 @@ class Table extends Component {
             >
               <i class="fa fa-list"></i> Quyết toán cho toàn bộ CTV
             </button>
-          }
+            <button
+              onClick={this.exportListRequest}
+              class={`btn btn-danger btn-sm`}
+            >
+              <i class="fas fa-file-export"></i>
+              Export Excel
+            </button>
+          </div>
         </div>
         <div className={`group-btn ${disable_group}`}>
           {/* <div> */}
@@ -660,4 +681,17 @@ class Table extends Component {
   }
 }
 
-export default Table;
+const mapStateToProps = (state) => {
+  return {};
+};
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    exportListRequest: (store_code, searchValue, from) => {
+      dispatch(
+        collaboratorAction.exportListRequest(store_code, searchValue, from)
+      );
+    },
+  };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Table);

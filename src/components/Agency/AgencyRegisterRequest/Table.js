@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import * as Env from "../../../ultis/default";
 import * as helper from "../../../ultis/helpers";
 import { shallowEqual } from "../../../ultis/shallowEqual";
-import { format, randomString } from "../../../ultis/helpers";
+import { format, randomString, formatNumberV2 } from "../../../ultis/helpers";
 import { connect } from "react-redux";
 import * as agencyAction from "../../../actions/agency";
 import ModalImg from "../ModalImg";
@@ -218,9 +218,16 @@ class Table extends Component {
                   index +
                   1}
               </td>{" "}
-              <td>{data.customer.name}</td>
+              <td>{data?.customer?.name}</td>
               <td>{data.account_name}</td>
-              <td>{data.customer.phone_number}</td>
+              <td>{data?.customer?.phone_number}</td>
+              <td>
+                {data?.customer?.total_after_discount_no_bonus
+                  ? `${formatNumberV2(
+                      data?.customer?.total_after_discount_no_bonus
+                    )}đ`
+                  : ""}
+              </td>
               <td>
                 {data2.status == 0 ? (
                   <span style={{ color: "#e2950f" }}>Chờ duyệt</span>
@@ -381,9 +388,8 @@ class Table extends Component {
               <th>Tên profile</th>
               <th>Tên tài khoản</th>
               <th>Số điện thoại</th>
-
+              <th>Doanh số</th>
               <th>Trạng thái</th>
-
               <th>Hành động</th>
               <th>Thời gian yêu cầu</th>
             </tr>
