@@ -11,14 +11,24 @@ import {
 import * as Env from "../../ultis/default";
 
 import { shallowEqual } from "../../ultis/shallowEqual";
+import * as productAction from "../../actions/product";
+import UpdatePriceAgencyModal from "../../screens/ProductAgency/UpdatePriceAgencyModal";
+import { connect } from "react-redux";
 class Table extends Component {
   constructor(props) {
     super(props);
     this.state = {
       selected: [],
       arrayCheckBox: [],
+      productId: null,
     };
   }
+
+  handleShowUpdatePrice = (product) => {
+    var { store_code, agency_type_id } = this.props;
+    this.setState({ productId: product.id });
+    this.props.fetchProductAgencyPrice(store_code, product.id, agency_type_id);
+  };
 
   passDataModal = (event, store_code, id, name) => {
     this.props.handleDelCallBack({
@@ -101,6 +111,26 @@ class Table extends Component {
         importPrice !== "" ? `&importPrice=${importPrice}` : ""
       }${params}`
     );
+  };
+  fetchAllProduct = () => {
+    var {
+      store_code,
+      page,
+      agency_type_id,
+      numPage,
+      searchValue,
+      getParams,
+      categorySelected,
+      categoryChildSelected,
+    } = this.props;
+
+    const params = getParams(
+      searchValue,
+      numPage,
+      categorySelected,
+      categoryChildSelected
+    );
+    this.props.fetchAllProduct(store_code, page, params, agency_type_id);
   };
   onchangeCheckBox = (e) => {
     var value = e.target.value;
@@ -291,82 +321,103 @@ class Table extends Component {
               )}
             </td>
             <td>
-              {product_discount == null && (
-                <div className="eea">
-                  {a_min_price === a_max_price ? (
-                    contactOrNumber(
-                      format(
-                        Number(
-                          discount_percent == null
-                            ? a_min_price
-                            : a_min_price -
-                                a_min_price * discount_percent * 0.01
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "5px",
+                }}
+              >
+                {product_discount == null && (
+                  <div className="eea">
+                    {a_min_price === a_max_price ? (
+                      contactOrNumber(
+                        format(
+                          Number(
+                            discount_percent == null
+                              ? a_min_price
+                              : a_min_price -
+                                  a_min_price * discount_percent * 0.01
+                          )
                         )
                       )
-                    )
-                  ) : distributes && distributes.length == 0 ? (
-                    contactOrNumber(
-                      format(
-                        Number(
-                          discount_percent == null
-                            ? a_min_price
-                            : a_min_price -
-                                a_min_price * discount_percent * 0.01
+                    ) : distributes && distributes.length == 0 ? (
+                      contactOrNumber(
+                        format(
+                          Number(
+                            discount_percent == null
+                              ? a_min_price
+                              : a_min_price -
+                                  a_min_price * discount_percent * 0.01
+                          )
                         )
                       )
-                    )
-                  ) : (
-                    <div className="ae">
-                      {format(
-                        Number(
-                          discount_percent == null
-                            ? a_min_price
-                            : a_min_price -
-                                a_min_price * discount_percent * 0.01
-                        )
-                      )}
-                      {" - "}
-                      {format(
-                        Number(
-                          discount_percent == null
-                            ? a_max_price
-                            : a_max_price -
-                                a_max_price * discount_percent * 0.01
-                        )
-                      )}
-                    </div>
-                  )}
-                </div>
-              )}
+                    ) : (
+                      <div className="ae">
+                        {format(
+                          Number(
+                            discount_percent == null
+                              ? a_min_price
+                              : a_min_price -
+                                  a_min_price * discount_percent * 0.01
+                          )
+                        )}
+                        {" - "}
+                        {format(
+                          Number(
+                            discount_percent == null
+                              ? a_max_price
+                              : a_max_price -
+                                  a_max_price * discount_percent * 0.01
+                          )
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+                {product_discount && (
+                  <div
+                    className="a"
+                    style={{
+                      float: "left",
+                    }}
+                  >
+                    {a_min_price === a_max_price ? (
+                      contactOrNumber(format(Number(a_min_price)))
+                    ) : (
+                      <div className="row e">
+                        <div
+                          style={
+                            {
+                              // textDecoration: "line-through",
+                            }
+                          }
+                        >
+                          {format(Number(a_min_price))}
+                          {" - "}
+                          {format(Number(a_max_price))}
+                        </div>
 
-              {product_discount && (
-                <div
-                  className="a"
+                        {/* <div className="discount e">&emsp; -{discount_percent}%</div> */}
+                      </div>
+                    )}
+                  </div>
+                )}
+                <span
                   style={{
-                    float: "left",
+                    color: "rgb(127, 140, 141)",
                   }}
                 >
-                  {a_min_price === a_max_price ? (
-                    contactOrNumber(format(Number(a_min_price)))
-                  ) : (
-                    <div className="row e">
-                      <div
-                        style={
-                          {
-                            // textDecoration: "line-through",
-                          }
-                        }
-                      >
-                        {format(Number(a_min_price))}
-                        {" - "}
-                        {format(Number(a_max_price))}
-                      </div>
-
-                      {/* <div className="discount e">&emsp; -{discount_percent}%</div> */}
-                    </div>
-                  )}
-                </div>
-              )}
+                  <i
+                    onClick={() => {
+                      this.handleShowUpdatePrice(data);
+                    }}
+                    data-toggle="modal"
+                    data-target="#updateModalNewPriceAgeny"
+                    class="fa fa-edit"
+                  ></i>
+                </span>
+              </div>
             </td>
             {/* <td>{format(Number(data.price))}</td> */}
 
@@ -413,8 +464,8 @@ class Table extends Component {
     }
   };
   render() {
-    var { products, store_code } = this.props;
-    var { selected, arrayCheckBox } = this.state;
+    var { products, store_code, agency_type_id } = this.props;
+    var { selected, arrayCheckBox, productId } = this.state;
     var per_page = products.per_page;
     var current_page = products.current_page;
 
@@ -430,7 +481,7 @@ class Table extends Component {
         : false;
     var multiDelete = selected.length > 0 ? "show" : "hide";
     var { _delete, update, insert } = this.props;
-    console.log(products);
+
     return (
       <div>
         {/* <button
@@ -442,6 +493,13 @@ class Table extends Component {
         >
           <i class="fa fa-trash"></i> Xóa {selected.length} sản phẩm
         </button> */}
+        <UpdatePriceAgencyModal
+          store_code={this.props.store_code}
+          agency_type_id={agency_type_id}
+          productId={productId}
+          fetchAllProduct={this.fetchAllProduct}
+          updatePriceOneProduct={this.props.updatePriceOneProduct}
+        ></UpdatePriceAgencyModal>
         <table
           class="table table-border "
           id="dataTable"
@@ -482,4 +540,27 @@ class Table extends Component {
   }
 }
 
-export default Table;
+const mapStateToProps = (state) => {
+  return {
+    product: state.productReducers.product.product_agency_price_id,
+  };
+};
+const mapDispatchToProps = (dispatch, props) => {
+  return {
+    fetchProductAgencyPrice: (store_code, productId, agency_type_id) => {
+      dispatch(
+        productAction.fetchProductAgencyPrice(
+          store_code,
+          productId,
+          agency_type_id
+        )
+      );
+    },
+    fetchAllProduct: (store_code, page, params, agency_type_id) => {
+      dispatch(
+        productAction.fetchAllProduct(store_code, page, params, agency_type_id)
+      );
+    },
+  };
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Table);

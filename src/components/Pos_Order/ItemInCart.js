@@ -280,6 +280,19 @@ class ItemInCart extends Component {
         });
     }
   }
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      this.state.isLoading != true &&
+      typeof this.props.permission.product_list != "undefined"
+    ) {
+      var permissions = this.props.permission;
+      var change_price_pos = permissions.change_price_pos;
+      this.setState({
+        isLoading: true,
+        change_price_pos,
+      });
+    }
+  }
 
   componentDidMount() {
     document.addEventListener("mousedown", this.handleClickOutside, true);
@@ -510,8 +523,13 @@ class ItemInCart extends Component {
   render() {
     const { item, index } = this.props;
 
-    const { currentQuantity, showEditCost, showEditNote, txtNoteInput } =
-      this.state;
+    const {
+      currentQuantity,
+      showEditCost,
+      showEditNote,
+      txtNoteInput,
+      change_price_pos,
+    } = this.state;
 
     const maxQuantity = stockOfProduct(
       item.product,
@@ -1080,32 +1098,38 @@ class ItemInCart extends Component {
                   </div>
                 </div>
               )}
-              {!showEditCost ? (
-                <div className="iconInputCost">
-                  <span
-                    onClick={() =>
-                      this.handleInputCost(Number(item.item_price))
-                    }
-                    style={{
-                      color: item.has_edit_item_price
-                        ? "rgb(220 122 13)"
-                        : "#7f8c8d",
-                    }}
-                  >
-                    <i className="fa fa-edit"></i>
-                  </span>
-                  {!item.has_edit_item_price ? null : (
-                    <span
-                      onClick={() => this.handleUpdatePriceItemDefault(item)}
-                      style={{
-                        marginLeft: "5px",
-                        color: "#4e73df",
-                      }}
-                    >
-                      <i className="fa fa-sync"></i>
-                    </span>
-                  )}
-                </div>
+              {change_price_pos ? (
+                <>
+                  {!showEditCost ? (
+                    <div className="iconInputCost">
+                      <span
+                        onClick={() =>
+                          this.handleInputCost(Number(item.item_price))
+                        }
+                        style={{
+                          color: item.has_edit_item_price
+                            ? "rgb(220 122 13)"
+                            : "#7f8c8d",
+                        }}
+                      >
+                        <i className="fa fa-edit"></i>
+                      </span>
+                      {!item.has_edit_item_price ? null : (
+                        <span
+                          onClick={() =>
+                            this.handleUpdatePriceItemDefault(item)
+                          }
+                          style={{
+                            marginLeft: "5px",
+                            color: "#4e73df",
+                          }}
+                        >
+                          <i className="fa fa-sync"></i>
+                        </span>
+                      )}
+                    </div>
+                  ) : null}
+                </>
               ) : null}
             </div>
 
@@ -1163,6 +1187,7 @@ const mapStateToProps = (state) => {
   return {
     updatedPrice: state.posReducers.pos_reducer.updatedPrice,
     updatedNote: state.posReducers.pos_reducer.updatedNote,
+    permission: state.authReducers.permission.data,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {

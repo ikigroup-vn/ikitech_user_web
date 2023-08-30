@@ -3,6 +3,7 @@ import * as collaboratorApi from "../data/remote/collaborator";
 import * as chatApi from "../data/remote/chat";
 import { saveAs } from "file-saver";
 import XlsxPopulate from "xlsx-populate";
+import { removeAscent } from "../ultis/helpers";
 
 function getSheetData(data, header) {
   var fields = Object.keys(data[0]);
@@ -106,6 +107,166 @@ export const exportListCollaborator = (store_code, page, params) => {
               }
             }
       });
+  };
+};
+
+export const exportListRequest = (store_code, searchValue, from) => {
+  return (dispatch) => {
+    collaboratorApi.fetchAllRequestPayment(store_code).then((res) => {
+      if (res.data.code !== 401)
+        if (res.data.code !== 401)
+          if (typeof res.data.data != "undefined") {
+            if (res.data.data.length > 0) {
+              var newArray = [];
+              var index = 0;
+
+              var newArr = [];
+              if (res.data.data?.length > 0) {
+                for (const item of res.data.data) {
+                  const itemSearch =
+                    item.collaborator?.customer?.name
+                      ?.toString()
+                      ?.trim()
+                      .toLowerCase() || "";
+                  const itemAccountNumber = item.collaborator?.account_number
+                    ?.toString()
+                    ?.trim()
+                    .toLowerCase();
+                  const valueSearch = searchValue
+                    ?.toString()
+                    ?.trim()
+                    .toLowerCase();
+                  if (
+                    removeAscent(itemSearch)?.includes(
+                      removeAscent(valueSearch)
+                    ) ||
+                    removeAscent(itemAccountNumber)?.includes(
+                      removeAscent(valueSearch)
+                    )
+                  ) {
+                    newArr.push(item);
+                  }
+                }
+              }
+              const resFrom =
+                from == ""
+                  ? newArr
+                  : newArr.filter((item) => item.from == from);
+              if (resFrom.length == 0) return;
+
+              const handleAddress = (
+                address_detail,
+                wards_name,
+                district_name,
+                province_name
+              ) => {
+                let addressDefault = "";
+                if (address_detail) {
+                  addressDefault += address_detail ? `${address_detail}, ` : "";
+                }
+                if (wards_name) {
+                  addressDefault += wards_name ? `${wards_name}, ` : "";
+                }
+                if (district_name) {
+                  addressDefault += district_name ? `${district_name}, ` : "";
+                }
+                if (province_name) {
+                  addressDefault += province_name ? `${province_name}` : "";
+                }
+                return addressDefault;
+              };
+              for (const item of resFrom) {
+                var newItem = {};
+                var arangeKeyItem = {
+                  name: item?.collaborator?.customer?.name,
+                  phone_number: item?.collaborator?.customer?.phone_number,
+                  from:
+                    item.from == 0
+                      ? "Khách hàng yêu cầu"
+                      : item.from == 1
+                      ? "Từ admin"
+                      : "Tất cả",
+                  money: Number(item.money),
+                  date: item.created_at,
+                  account_name:
+                    item?.collaborator?.account_name === null
+                      ? ""
+                      : item?.collaborator?.account_name,
+                  account_number:
+                    item?.collaborator?.account_number === null
+                      ? ""
+                      : item?.collaborator?.account_number,
+                  bank:
+                    item?.collaborator?.bank === null
+                      ? ""
+                      : item?.collaborator?.bank,
+                  cmnd:
+                    item?.collaborator?.cmnd === null
+                      ? ""
+                      : item?.collaborator?.cmnd,
+                  issued_by:
+                    item?.collaborator?.issued_by === null
+                      ? ""
+                      : item?.collaborator?.issued_by,
+                  address_default: handleAddress(
+                    item?.collaborator?.customer?.address_detail,
+                    item?.collaborator?.customer?.wards_name,
+                    item?.collaborator?.customer?.district_name,
+                    item?.collaborator?.customer?.province_name
+                  ),
+                };
+                Object.entries(arangeKeyItem).forEach(([key, value], index) => {
+                  if (key == "name") {
+                    newItem["Họ tên"] = value;
+                  }
+                  if (key == "phone_number") {
+                    newItem["Số điện thoại"] = value;
+                  }
+                  if (key == "from") {
+                    newItem["Nguồn yêu cầu"] = value;
+                  }
+                  if (key == "money") {
+                    newItem["Số tiền"] = value;
+                  }
+                  if (key == "date") {
+                    newItem["Ngày yêu cầu"] = value;
+                  }
+                  if (key == "account_name") {
+                    newItem["Tên chủ tài khoản"] = value;
+                  }
+                  if (key == "account_number") {
+                    newItem["Số tài khoản"] = value;
+                  }
+                  if (key == "bank") {
+                    newItem["Tên ngân hàng"] = value;
+                  }
+                  if (key == "cmnd") {
+                    newItem["CMND/CCCD"] = value;
+                  }
+                  if (key == "issued_by") {
+                    newItem["Nơi đăng kí"] = value;
+                  }
+                  if (key == "address_default") {
+                    newItem["Địa chỉ"] = value;
+                  }
+                });
+
+                newArray.push(newItem);
+              }
+              var header = [];
+              if (newArray.length > 0) {
+                Object.entries(newArray[0]).forEach(([key, value], index) => {
+                  header.push(key);
+                });
+              }
+              console.log(header);
+              saveAsExcel(
+                { data: newArray, header: header },
+                "Danh sách Quyết toán đại lý"
+              );
+            }
+          }
+    });
   };
 };
 
@@ -494,8 +655,8 @@ export const handleCollaboratorRegisterRequest = (store_code, id, status) => {
         });
         dispatch({
           type: Types.SUCCESS_EDIT_REQUEST_STATUS_COLLABORATOR,
-          status:status,
-          id:id
+          status: status,
+          id: id,
         });
         dispatch({
           type: Types.ALERT_UID_STATUS,
