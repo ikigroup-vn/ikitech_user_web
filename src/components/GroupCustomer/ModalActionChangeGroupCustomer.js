@@ -12,6 +12,7 @@ import * as Types from "../../constants/ActionType";
 import { Component } from "react";
 import { shallowEqual } from "../../ultis/shallowEqual";
 import * as AgencyAction from "../../actions/agency";
+import ListCustomerInGroup from "./ListCustomerInGroup";
 
 const ModalAddGroupCustomerStyles = styled.div`
   background-color: rgba(0, 0, 0, 0.3);
@@ -25,7 +26,7 @@ const ModalAddGroupCustomerStyles = styled.div`
     animation: popup 1s ease-in-out 1;
   }
   .modal-body {
-    padding: 1rem 0 0 !important;
+    padding: 1rem 0 0;
     .modal-body-tabs {
       ul {
         display: flex;
@@ -44,7 +45,7 @@ const ModalAddGroupCustomerStyles = styled.div`
         display: flex;
         align-items: center;
         label {
-          width: 20%;
+          width: 25%;
           font-size: 15px;
           font-weight: 600;
           sup {
@@ -157,8 +158,14 @@ class ModalActionChangeGroupCustomer extends Component {
       errors: null,
       nameGroupCustomer: "",
       noteGroupCustomer: "",
+      group_type: Types.GROUP_TYPE_CONDITION,
+      listCustomers: [],
     };
   }
+
+  setListCustomers = (customers) => {
+    this.setState({ listCustomers: customers });
+  };
   handleCloseModalAddGroupCustomer = () => {
     this.props.setOpenModalActionChangeGroupCustomer();
     this.props.setIdGroupCustomer(null);
@@ -170,7 +177,14 @@ class ModalActionChangeGroupCustomer extends Component {
   handleChangeInput = (e, indexCondition) => {
     const name = e.target.name;
     const value = e.target.value;
-    if (typeof indexCondition === "undefined") {
+    if (
+      name === "group_type_condition" ||
+      name === "group_type_list_customer"
+    ) {
+      this.setState({
+        group_type: value,
+      });
+    } else if (typeof indexCondition === "undefined") {
       this.setState({
         [name]: value,
       });
@@ -345,7 +359,10 @@ class ModalActionChangeGroupCustomer extends Component {
         message: "Ghi chú không được để trống!",
       };
     }
-    if (Number(this.state.conditionItems[0].valueCompareGroupCustomer) === -1) {
+    if (
+      Number(this.state.conditionItems[0].valueCompareGroupCustomer) === -1 &&
+      this.state.group_type != Types.GROUP_TYPE_LIST_CUSTOMER
+    ) {
       errors.conditionItems = {
         message: "Vui lòng chọn đại lý!",
       };
@@ -358,7 +375,8 @@ class ModalActionChangeGroupCustomer extends Component {
     if (
       this.state.nameGroupCustomer !== "" &&
       this.state.noteGroupCustomer !== "" &&
-      Number(this.state.conditionItems[0].valueCompareGroupCustomer) !== -1
+      Number(this.state.conditionItems[0].valueCompareGroupCustomer) !== -1 &&
+      this.state.group_type != Types.GROUP_TYPE_LIST_CUSTOMER
     ) {
       this.setState({
         errors: null,
@@ -377,6 +395,26 @@ class ModalActionChangeGroupCustomer extends Component {
         name: this.state.nameGroupCustomer,
         note: this.state.noteGroupCustomer,
         condition_items,
+        group_type: Types.GROUP_TYPE_CONDITION,
+      };
+      const { store_code } = this.props;
+      this.props.createGroupCustomer(store_code, values);
+      this.props.setOpenModalActionChangeGroupCustomer();
+      this.props.setIdGroupCustomer(null);
+    } else if (
+      this.state.nameGroupCustomer !== "" &&
+      this.state.noteGroupCustomer !== "" &&
+      this.state.group_type == Types.GROUP_TYPE_LIST_CUSTOMER
+    ) {
+      const { listCustomers } = this.state;
+      const values = {
+        name: this.state.nameGroupCustomer,
+        note: this.state.noteGroupCustomer,
+        customer_ids:
+          listCustomers.length > 0
+            ? listCustomers.map((customer) => customer.id)
+            : [],
+        group_type: Types.GROUP_TYPE_LIST_CUSTOMER,
       };
       const { store_code } = this.props;
       this.props.createGroupCustomer(store_code, values);
@@ -459,25 +497,33 @@ class ModalActionChangeGroupCustomer extends Component {
     const { groupCustomerById } = nextProps;
     if (
       shallowEqual(this.state, nextState) &&
-      nextProps.idGroupCustomer !== null &&
-      groupCustomerById?.condition_items?.length > 0
+      nextProps.idGroupCustomer !== null
+      // groupCustomerById?.condition_items?.length > 0
     ) {
-      const newConditionItems = groupCustomerById.condition_items.map(
-        (group) => {
-          return {
-            typeCompareGroupCustomer: group.type_compare,
-            comparisonExpressionGroupCustomer: group.comparison_expression,
-            valueCompareGroupCustomer:
-              Number(group.type_compare) < Types.TYPE_COMPARE_MONTH_BIRTH
-                ? formatNumberV2(group.value_compare)
-                : group.value_compare,
-          };
-        }
-      );
+      const newConditionItems =
+        groupCustomerById?.condition_items?.length > 0
+          ? groupCustomerById?.condition_items.map((group) => {
+              return {
+                typeCompareGroupCustomer: group.type_compare,
+                comparisonExpressionGroupCustomer: group.comparison_expression,
+                valueCompareGroupCustomer:
+                  Number(group.type_compare) < Types.TYPE_COMPARE_MONTH_BIRTH
+                    ? formatNumberV2(group.value_compare)
+                    : group.value_compare,
+              };
+            })
+          : this.state.conditionItems;
       this.setState({
         nameGroupCustomer: groupCustomerById.name,
         noteGroupCustomer: groupCustomerById.note,
         conditionItems: newConditionItems,
+        group_type: groupCustomerById.group_type
+          ? Types.GROUP_TYPE_LIST_CUSTOMER
+          : Types.GROUP_TYPE_CONDITION,
+        listCustomers:
+          groupCustomerById?.customers?.length > 0
+            ? groupCustomerById?.customers
+            : [],
       });
     }
     return true;
@@ -490,7 +536,7 @@ class ModalActionChangeGroupCustomer extends Component {
     this.props.fetchAllAgencyType(store_code);
   }
   render() {
-    const { province, idGroupCustomer, types } = this.props;
+    const { province, idGroupCustomer, types, store_code } = this.props;
     return (
       <ModalAddGroupCustomerStyles
         className="modal"
@@ -603,30 +649,120 @@ class ModalActionChangeGroupCustomer extends Component {
                       </svg>
                     </div>
                   </div>
-                  <div class="form-group-customer-condition">
-                    <p>Thiết lập điều kiện thêm khách hàng vào nhóm:</p>
-                    <div className="conditionGroup__main">
-                      <ConditionGroupCustomer
-                        conditionItems={this.state.conditionItems}
-                        province={province}
-                        types={types}
-                        handleChangeInput={this.handleChangeInput}
-                        handleRemoveConditionGroupCustomer={
-                          this.handleRemoveConditionGroupCustomer
-                        }
-                      ></ConditionGroupCustomer>
+                  <div
+                    class="form-group-customer"
+                    style={{
+                      marginTop: "20px",
+                    }}
+                  >
+                    <label
+                      htmlFor="group_type"
+                      style={{
+                        marginBottom: "0px",
+                      }}
+                    >
+                      Loại nhóm KH <sup>*</sup>
+                    </label>
+                    <div
+                      style={{
+                        borderBottom: "none",
+                        display: "flex",
+                        gap: "20px",
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "5px",
+                        }}
+                      >
+                        <input
+                          type="radio"
+                          name="group_type_condition"
+                          id="group_type_condition"
+                          value={Types.GROUP_TYPE_CONDITION}
+                          checked={
+                            Types.GROUP_TYPE_CONDITION == this.state.group_type
+                          }
+                          onChange={this.handleChangeInput}
+                        />
+                        <label
+                          style={{
+                            width: "100%",
+                            marginBottom: "0px",
+                            fontWeight: "normal",
+                          }}
+                          htmlFor="group_type_condition"
+                        >
+                          Theo điều kiện
+                        </label>
+                      </div>
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "5px",
+                        }}
+                      >
+                        <input
+                          type="radio"
+                          name="group_type_list_customer"
+                          id="group_type_list_customer"
+                          value={Types.GROUP_TYPE_LIST_CUSTOMER}
+                          checked={
+                            Types.GROUP_TYPE_LIST_CUSTOMER ==
+                            this.state.group_type
+                          }
+                          onChange={this.handleChangeInput}
+                        />
+                        <label
+                          style={{
+                            width: "100%",
+                            marginBottom: "0px",
+                            fontWeight: "normal",
+                          }}
+                          htmlFor="group_type_list_customer"
+                        >
+                          Theo danh sách
+                        </label>
+                      </div>
                     </div>
                   </div>
-                  <div
-                    className="form-group-customer-addCondition"
-                    onClick={this.handleAddConditionGroupCustomer}
-                  >
-                    <span>
-                      <i className="fas fa-plus"></i>
-                    </span>
-                    <span>Thêm điều kiện</span>
-                  </div>
-                  {console.log(this.state.errors)}
+                  {this.state.group_type == Types.GROUP_TYPE_LIST_CUSTOMER ? (
+                    <ListCustomerInGroup
+                      store_code={store_code}
+                      listCustomers={this.state.listCustomers}
+                      setListCustomers={this.setListCustomers}
+                    ></ListCustomerInGroup>
+                  ) : (
+                    <>
+                      <div class="form-group-customer-condition">
+                        <p>Thiết lập điều kiện thêm khách hàng vào nhóm:</p>
+                        <div className="conditionGroup__main">
+                          <ConditionGroupCustomer
+                            conditionItems={this.state.conditionItems}
+                            province={province}
+                            types={types}
+                            handleChangeInput={this.handleChangeInput}
+                            handleRemoveConditionGroupCustomer={
+                              this.handleRemoveConditionGroupCustomer
+                            }
+                          ></ConditionGroupCustomer>
+                        </div>
+                      </div>
+                      <div
+                        className="form-group-customer-addCondition"
+                        onClick={this.handleAddConditionGroupCustomer}
+                      >
+                        <span>
+                          <i className="fas fa-plus"></i>
+                        </span>
+                        <span>Thêm điều kiện</span>
+                      </div>
+                    </>
+                  )}
+
                   {this.state.errors !== null && (
                     <div className="form-group-customer-error">
                       <h4>Lưu ý:</h4>
@@ -636,9 +772,11 @@ class ModalActionChangeGroupCustomer extends Component {
                       {this.state.errors.noteGroupCustomer && (
                         <p>- {this.state.errors.noteGroupCustomer.message}</p>
                       )}
-                      {this.state.errors.conditionItems && (
+                      {this.state.errors.conditionItems &&
+                      this.state.group_type !=
+                        Types.GROUP_TYPE_LIST_CUSTOMER ? (
                         <p>- {this.state.errors.conditionItems.message}</p>
-                      )}
+                      ) : null}
                     </div>
                   )}
                 </form>
