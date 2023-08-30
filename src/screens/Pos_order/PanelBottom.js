@@ -743,6 +743,7 @@ class PanelBottom extends Component {
                     style={{
                       background: isDisabledButton ? "#eaecf4" : "white",
                       fontSize: "13px",
+                      zIndex:-1
                     }}
                     onClick={() => {
                       this.toggleOpenProvince();
@@ -809,6 +810,7 @@ class PanelBottom extends Component {
                     style={{
                       background: isDisabledButton ? "#eaecf4" : "white",
                       fontSize: "13px",
+                      zIndex:-1
                     }}
                     onClick={() => {
                       this.toggleOpenDistrict();
@@ -875,6 +877,7 @@ class PanelBottom extends Component {
                     style={{
                       background: isDisabledButton ? "#eaecf4" : "white",
                       fontSize: "13px",
+                      zIndex:-1
                     }}
                     onClick={() => {
                       this.toggleOpenWards();

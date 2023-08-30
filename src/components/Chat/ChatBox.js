@@ -84,15 +84,15 @@ class ChatBox extends Component {
     if (listChat.length > 0) {
       result = listChat.map((chat, index) => {
         var time =
-          moment(chat.last_message.created_at, "YYYY-MM-DD HH:mm:ss").format(
+          moment(chat.last_message?.created_at, "YYYY-MM-DD HH:mm:ss").format(
             "YYYY-MM-DD"
           ) == moment().format("YYYY-MM-DD")
             ? moment(
-                chat.last_message.created_at,
+                chat.last_message?.created_at,
                 "YYYY-MM-DD HH:mm:ss"
               ).format("HH:mm")
             : moment(
-                chat.last_message.created_at,
+                chat.last_message?.created_at,
                 "YYYY-MM-DD HH:mm:ss"
               ).format("DD-MM-YYYY HH:mm");
         var _isActive = chat.customer_id == isActive ? "active-mess" : null;
@@ -108,7 +108,7 @@ class ChatBox extends Component {
             : chat.customer.avatar_image;
 
         var content = "";
-        if (chat.last_message.content != null)
+        if (chat.last_message?.content != null)
           content =
             chat.last_message.content.length > 50
               ? chat.last_message.content.slice(0, 50) + "....."
@@ -117,7 +117,7 @@ class ChatBox extends Component {
 
         var unRead = chat.user_unread == 0 ? null : "bold-unread";
         var showUnRead = chat.user_unread == 0 ? "hide" : "show";
-        console.log(chat.last_message.content);
+        console.log(chat.last_message?.content);
         return (
           <React.Fragment>
             <div

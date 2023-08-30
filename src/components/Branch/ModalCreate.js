@@ -146,7 +146,7 @@ class ModalCreate extends Component {
     const errors = this.validator.validate(this.state);
 
     var {
-      is_default,
+      is_default_order_online,
       txtAddress_detail,
       txtDistrict,
       txtProvince,
@@ -197,7 +197,7 @@ class ModalCreate extends Component {
       wards: txtWards,
       address_detail: txtAddress_detail,
       postcode: txtPost_branch,
-      is_default: is_default,
+      is_default_order_online: is_default_order_online,
       txt_code: txtTaxCode,
       account_number: txtAccountNumber,
       account_name: txtAccountName,
@@ -256,7 +256,7 @@ class ModalCreate extends Component {
       txtCode_branch,
       txtPost_branch,
       txtEmail_branch,
-      is_default,
+      is_default_order_online,
       txtTaxCode,
       txtAccountNumber,
       txtAccountName,
@@ -510,9 +510,9 @@ class ModalCreate extends Component {
                               type="checkbox"
                               class="form-check-input"
                               onChange={() =>
-                                this.setState({ is_default: !is_default })
+                                this.setState({ is_default_order_online: !is_default_order_online })
                               }
-                              checked={is_default}
+                              checked={is_default_order_online}
                             />
                             Chi nhánh mặc định
                           </label>

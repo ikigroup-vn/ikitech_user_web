@@ -21,6 +21,7 @@ class Pagination extends Component {
       categorySelected,
       getParams,
     } = this.props;
+    
     const params = getParams(searchValue, limit, categorySelected);
     passNumPage(page);
     history.push(`/product/index/${store_code}?page=${page}${params}`);
@@ -42,7 +43,25 @@ class Pagination extends Component {
     } = this.props;
     passNumPage(page);
 
-    const params = getParams(listType, is_near_out_of_stock, search, limit);
+    var params = getParams(listType, is_near_out_of_stock, search, limit);
+    if (categorySelected !== "" && categorySelected !== null && categorySelected?.length > 0) {
+      const newCategorySelected = categorySelected.reduce(
+        (prevCategory, currentCategory, index) => {
+          return (
+            prevCategory +
+            `${
+              index === categorySelected.length - 1
+                ? currentCategory?.id
+                : `${currentCategory?.id},`
+            }`
+          );
+        },
+        "&category_ids="
+      );
+      params += newCategorySelected;
+    }
+
+
     const branch_id = getBranchId();
     const branch_ids = getBranchIds();
     const branchIds = branch_ids ? branch_ids : branch_id;

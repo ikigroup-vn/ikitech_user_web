@@ -393,59 +393,59 @@ export const ikitech_menu = [
           },
         ],
       },
-      {
-        name: "Onsale",
-        setOpenKey: ["/customer_sales"],
-        icon: "fas fa-user",
-        open: "onsale_list",
-        children: [
-          {
-            class: "onsale_list",
-            display: "hide",
-            name: "Tất cả",
-            exact: true,
-            params: "?status=",
+      // {
+      //   name: "Onsale",
+      //   setOpenKey: ["/customer_sales"],
+      //   icon: "fas fa-user",
+      //   open: "onsale_list",
+      //   children: [
+      //     {
+      //       class: "onsale_list",
+      //       display: "hide",
+      //       name: "Tất cả",
+      //       exact: true,
+      //       params: "?status=",
 
-            to: "/customer_sales",
-          },
-          {
-            class: "onsale_list",
-            display: "hide",
-            name: "Cần tư vấn",
-            exact: true,
-            params: "?status=0",
+      //       to: "/customer_sales",
+      //     },
+      //     {
+      //       class: "onsale_list",
+      //       display: "hide",
+      //       name: "Cần tư vấn",
+      //       exact: true,
+      //       params: "?status=0",
 
-            to: "/customer_sales",
-          },
-          {
-            class: "onsale_list",
-            display: "hide",
-            name: "Đang tư vấn",
-            exact: true,
-            params: "?status=1",
-            to: "/customer_sales",
-          },
-          {
-            class: "onsale_list",
-            display: "hide",
-            name: "Thành công",
-            exact: true,
-            params: "?status=2",
+      //       to: "/customer_sales",
+      //     },
+      //     {
+      //       class: "onsale_list",
+      //       display: "hide",
+      //       name: "Đang tư vấn",
+      //       exact: true,
+      //       params: "?status=1",
+      //       to: "/customer_sales",
+      //     },
+      //     {
+      //       class: "onsale_list",
+      //       display: "hide",
+      //       name: "Thành công",
+      //       exact: true,
+      //       params: "?status=2",
 
-            to: "/customer_sales",
-          },
-          {
-            class: "onsale_list",
-            display: "hide",
-            name: "Thất bại",
+      //       to: "/customer_sales",
+      //     },
+      //     {
+      //       class: "onsale_list",
+      //       display: "hide",
+      //       name: "Thất bại",
 
-            exact: true,
-            params: "?status=3",
+      //       exact: true,
+      //       params: "?status=3",
 
-            to: "/customer_sales",
-          },
-        ],
-      },
+      //       to: "/customer_sales",
+      //     },
+      //   ],
+      // },
 
       // {
       //   class: "revenue_expenditure",

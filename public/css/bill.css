@@ -1,6 +1,14 @@
 
 
 
+.selectb-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* Đảm bảo lớp chồng lên không ảnh hưởng tới phần tử phía dưới */
+}
 
 .table-responsive::-webkit-scrollbar {
   height: 5px !important;
@@ -284,13 +292,14 @@ hr {
 }
 
 .chat-box-tray {
-  background: #36b9cc;
+  background: white;
   display: flex;
   align-items: baseline;
   padding: 10px 15px;
   align-items: center;
   margin-top: 19px;
   bottom: 0;
+  justify-content: space-between;
 }
 
 span.step {
@@ -567,6 +576,7 @@ html {
   background: var(--right-msg-bg);
   color: #fff;
   border-bottom-right-radius: 0;
+  white-space: pre-wrap;
 }
 
 .right-msg .msg-img {

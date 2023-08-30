@@ -30,7 +30,7 @@ class ModalEdit extends Component {
       error_email: { status: false, text: "" },
       error_phone: { status: false, text: "" },
       error_name: { status: false, text: "" },
-      is_default: false,
+      is_default_order_online: false,
       errors: {},
     };
     const rules = [
@@ -119,7 +119,7 @@ class ModalEdit extends Component {
         txtWards: nextProps.modal.wards,
         txtAddress_detail: nextProps.modal.address_detail,
         txtPost_branch: nextProps.modal.postcode,
-        is_default: nextProps.modal.is_default,
+        is_default_order_online: nextProps.modal.is_default_order_online,
 
         txtTaxCode: nextProps.modal.txt_code,
         txtAccountNumber: nextProps.modal.account_number,
@@ -150,7 +150,7 @@ class ModalEdit extends Component {
     const errors = this.validator.validate(this.state);
 
     var {
-      is_default,
+      is_default_order_online,
       txtAddress_detail,
       txtDistrict,
       txtProvince,
@@ -200,7 +200,7 @@ class ModalEdit extends Component {
       wards: txtWards,
       address_detail: txtAddress_detail,
       postcode: txtPost_branch,
-      is_default: is_default,
+      is_default_order_online: is_default_order_online,
 
       txt_code: txtTaxCode,
       account_number: txtAccountNumber,
@@ -284,7 +284,7 @@ class ModalEdit extends Component {
       txtCode_branch,
       txtPost_branch,
       txtEmail_branch,
-      is_default,
+      is_default_order_online,
       txtTaxCode,
       txtAccountNumber,
       txtAccountName,
@@ -537,12 +537,12 @@ class ModalEdit extends Component {
                             <input
                               type="checkbox"
                               class="form-check-input"
-                              name="is_default"
-                              id="is_default"
+                              name="is_default_order_online"
+                              id="is_default_order_online"
                               onChange={() =>
-                                this.setState({ is_default: !is_default })
+                                this.setState({ is_default_order_online: !is_default_order_online })
                               }
-                              checked={is_default}
+                              checked={is_default_order_online}
                             />
                             Chi nhánh mặc định
                           </label>
