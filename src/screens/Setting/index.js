@@ -22,10 +22,8 @@ class Theme extends Component {
     this.state = {
       tabId: "",
       change: "",
-      
     };
   }
-
 
   fetchDataOnTap = (index) => {
     this.setState({ tabId: index, change: helper.randomString(10) });
@@ -65,14 +63,10 @@ class Theme extends Component {
   // }
   render() {
     var { store_code } = this.props.match.params;
-    var {
-      tabId,
-      web_theme_overview,
-
-    } = this.state;
+    var { tabId, web_theme_overview } = this.state;
     var { theme } = this.props;
 
-    var isShow = true
+    var isShow = true;
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
@@ -104,35 +98,27 @@ class Theme extends Component {
                         onSelect={(index) => this.fetchDataOnTap(index)}
                       >
                         <TabList>
-                            <Tab>
-                              <i class="fa fa-cog"></i>
-                              <span style={{ fontSize: "0.8rem" }}>
-                               Cài đặt chung
-                              </span>
-                            </Tab>
+                          <Tab>
+                            <i class="fa fa-cog"></i>
+                            <span style={{ fontSize: "0.8rem" }}>
+                              Cài đặt chung
+                            </span>
+                          </Tab>
                           <Tab>
                             <i class="fa fa-envelope"></i>
                             <span style={{ fontSize: "0.8rem" }}>
                               Email gửi tới khách hàng
                             </span>
                           </Tab>
-                         
-                      
-
-
-
-                          
-
-
                         </TabList>
 
-                          <TabPanel>
-                            <Inventory
-                              tabId={tabId}
-                              store_code={store_code}
-                              theme={theme}
-                            />
-                          </TabPanel>
+                        <TabPanel>
+                          <Inventory
+                            tabId={tabId}
+                            store_code={store_code}
+                            theme={theme}
+                          />
+                        </TabPanel>
                         <TabPanel>
                           <NotiEmail
                             tabId={tabId}
@@ -140,9 +126,6 @@ class Theme extends Component {
                             theme={theme}
                           />
                         </TabPanel>
-                      
-
-
                       </Tabs>
                     </div>
                   </div>
