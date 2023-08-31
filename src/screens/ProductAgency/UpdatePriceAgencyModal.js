@@ -92,6 +92,7 @@ class UpdatePriceAgencyModal extends Component {
       () => {
         fetchAllProduct();
         window.$(".modal").modal("hide");
+        this.onClose();
       }
     );
   };
@@ -115,10 +116,12 @@ class UpdatePriceAgencyModal extends Component {
       return { form: formdata };
     });
   };
+  onClose = () => {
+    this.props.setShowModalUpdatePriceAgency(false);
+  };
 
   render() {
     var { product } = this.props;
-    console.log("🚀 ~ file ~ render ~ product:", product);
 
     return (
       <div
@@ -142,6 +145,7 @@ class UpdatePriceAgencyModal extends Component {
                 class="close"
                 data-dismiss="modal"
                 aria-hidden="true"
+                onClick={this.onClose}
               >
                 &times;
               </button>
@@ -195,6 +199,7 @@ class UpdatePriceAgencyModal extends Component {
                   type="button"
                   class="btn btn-default"
                   data-dismiss="modal"
+                  onClick={this.onClose}
                 >
                   Đóng
                 </button>

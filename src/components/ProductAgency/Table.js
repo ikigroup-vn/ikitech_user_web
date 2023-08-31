@@ -21,12 +21,16 @@ class Table extends Component {
       selected: [],
       arrayCheckBox: [],
       productId: null,
+      showModalUpdatePriceAgency: false,
     };
   }
 
+  setShowModalUpdatePriceAgency = (showModal) => {
+    this.setState({ showModalUpdatePriceAgency: showModal });
+  };
   handleShowUpdatePrice = (product) => {
     var { store_code, agency_type_id } = this.props;
-    this.setState({ productId: product.id });
+    this.setState({ productId: product.id, showModalUpdatePriceAgency: true });
     this.props.fetchProductAgencyPrice(store_code, product.id, agency_type_id);
   };
 
@@ -158,6 +162,35 @@ class Table extends Component {
     }
     return false;
   };
+  handleChangeAgencyPrice(data) {
+    var {
+      store_code,
+      page,
+      agency_type_id,
+      numPage,
+      searchValue,
+      getParams,
+      categorySelected,
+      categoryChildSelected,
+    } = this.props;
+    var price =
+      data.distributes?.length > 0
+        ? ""
+        : window.$(`.price-${data.id} > input`).val();
+    var importPrice = data.distributes?.length > 0 ? "" : data.import_price;
+    const params = getParams(
+      searchValue,
+      numPage,
+      categorySelected,
+      categoryChildSelected
+    );
+    history.push(
+      `/product-agency/index/${store_code}/${agency_type_id}?page=${page}${
+        price !== "" ? `&price=${price}` : ""
+      }${importPrice !== "" ? `&importPrice=${importPrice}` : ""}${params}`
+    );
+    this.handleShowUpdatePrice(data);
+  }
   showData = (products, per_page, current_page) => {
     var result = null;
     var { store_code, page, agency_type_id } = this.props;
@@ -409,9 +442,7 @@ class Table extends Component {
                   }}
                 >
                   <i
-                    onClick={() => {
-                      this.handleShowUpdatePrice(data);
-                    }}
+                    onClick={() => this.handleChangeAgencyPrice(data)}
                     data-toggle="modal"
                     data-target="#updateModalNewPriceAgeny"
                     class="fa fa-edit"
@@ -465,7 +496,8 @@ class Table extends Component {
   };
   render() {
     var { products, store_code, agency_type_id } = this.props;
-    var { selected, arrayCheckBox, productId } = this.state;
+    var { selected, arrayCheckBox, productId, showModalUpdatePriceAgency } =
+      this.state;
     var per_page = products.per_page;
     var current_page = products.current_page;
 
@@ -493,13 +525,17 @@ class Table extends Component {
         >
           <i class="fa fa-trash"></i> Xóa {selected.length} sản phẩm
         </button> */}
-        <UpdatePriceAgencyModal
-          store_code={this.props.store_code}
-          agency_type_id={agency_type_id}
-          productId={productId}
-          fetchAllProduct={this.fetchAllProduct}
-          updatePriceOneProduct={this.props.updatePriceOneProduct}
-        ></UpdatePriceAgencyModal>
+        {showModalUpdatePriceAgency ? (
+          <UpdatePriceAgencyModal
+            store_code={this.props.store_code}
+            agency_type_id={agency_type_id}
+            productId={productId}
+            setShowModalUpdatePriceAgency={this.setShowModalUpdatePriceAgency}
+            fetchAllProduct={this.fetchAllProduct}
+            updatePriceOneProduct={this.props.updatePriceOneProduct}
+          ></UpdatePriceAgencyModal>
+        ) : null}
+
         <table
           class="table table-border "
           id="dataTable"
