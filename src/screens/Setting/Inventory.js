@@ -2,6 +2,16 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import * as SettingAction from "../../actions/notification";
+import styled from "styled-components";
+
+const SettingStyles = styled.div`
+  .setting__percentVar {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translate(130%, -50%);
+  }
+`;
 
 class Setting extends Component {
   constructor(props) {
@@ -11,6 +21,7 @@ class Setting extends Component {
       checked_switch2: false,
       stock: 0,
       enable_vat: false,
+      percent_vat: 10,
     };
   }
   handChangeEnableVat = (e) => {
@@ -23,7 +34,12 @@ class Setting extends Component {
     this.setState({ checked_switch3: !this.state.checked_switch3 });
   };
   onChange = (e) => {
-    this.setState({ stock: e.target.value });
+    const value = e.target.value;
+    const name = e.target.name;
+    if (name === "percent_vat" && Number(value) > 99) {
+      return;
+    }
+    this.setState({ [name]: value });
   };
 
   handleUpdate = () => {
@@ -33,6 +49,7 @@ class Setting extends Component {
       allow_semi_negative: this.state.checked_switch3,
       noti_stock_count_near: this.state.stock,
       enable_vat: this.state.enable_vat,
+      percent_vat: Number(this.state.percent_vat),
     };
     this.props.updateGeneralSetting(store_code, formData);
   };
@@ -45,6 +62,7 @@ class Setting extends Component {
         checked_switch2: nextProps.generalSetting.noti_near_out_stock,
         stock: nextProps.generalSetting.noti_stock_count_near,
         enable_vat: nextProps.generalSetting.enable_vat,
+        percent_vat: nextProps.generalSetting.percent_vat,
       });
     }
     if (
@@ -67,7 +85,7 @@ class Setting extends Component {
     const { store_code } = this.props;
     var { isShow } = this.state;
     return (
-      <div className="">
+      <SettingStyles className="">
         <div className="wrap-card">
           <div
             className="wrap-setting"
@@ -76,6 +94,7 @@ class Setting extends Component {
               display: "flex",
               justifyContent: "space-between",
               padding: "10px 0",
+              position: "relative",
             }}
           >
             <div>Bật phí VAT</div>
@@ -92,6 +111,20 @@ class Setting extends Component {
                 <label class="custom-control-label" for="switch4"></label>
               </div>
             </form>
+            {this.state.enable_vat ? (
+              <div className="setting__percentVar">
+                <input
+                  type="number"
+                  class="form-control"
+                  name="percent_vat"
+                  min={0}
+                  max={99}
+                  onChange={this.onChange}
+                  value={this.state.percent_vat}
+                  style={{ width: "100px" }}
+                />
+              </div>
+            ) : null}
           </div>
 
           <div
@@ -155,7 +188,7 @@ class Setting extends Component {
             <input
               type="number"
               class="form-control"
-              name="payment_limit"
+              name="stock"
               onChange={this.onChange}
               value={this.state.stock}
               style={{ width: "100px" }}
@@ -165,7 +198,7 @@ class Setting extends Component {
         <button class="btn btn-primary btn-sm" onClick={this.handleUpdate}>
           <i class="fa fa-save"></i> Lưu
         </button>
-      </div>
+      </SettingStyles>
     );
   }
 }
