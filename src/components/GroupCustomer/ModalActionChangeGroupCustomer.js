@@ -434,7 +434,10 @@ class ModalActionChangeGroupCustomer extends Component {
         message: "Ghi chú không được để trống!",
       };
     }
-    if (Number(this.state.conditionItems[0].valueCompareGroupCustomer) === -1) {
+    if (
+      Number(this.state.conditionItems[0].valueCompareGroupCustomer) === -1 &&
+      this.state.group_type != Types.GROUP_TYPE_LIST_CUSTOMER
+    ) {
       errors.conditionItems = {
         message: "Vui lòng chọn đại lý!",
       };
@@ -447,7 +450,8 @@ class ModalActionChangeGroupCustomer extends Component {
     if (
       this.state.nameGroupCustomer !== "" &&
       this.state.noteGroupCustomer !== "" &&
-      Number(this.state.conditionItems[0].valueCompareGroupCustomer) !== -1
+      Number(this.state.conditionItems[0].valueCompareGroupCustomer) !== -1 &&
+      this.state.group_type != Types.GROUP_TYPE_LIST_CUSTOMER
     ) {
       this.setState({
         errors: null,
@@ -466,6 +470,26 @@ class ModalActionChangeGroupCustomer extends Component {
         name: this.state.nameGroupCustomer,
         note: this.state.noteGroupCustomer,
         condition_items,
+        group_type: Types.GROUP_TYPE_CONDITION,
+      };
+      const { store_code, idGroupCustomer } = this.props;
+      this.props.updateGroupCustomer(store_code, idGroupCustomer, values);
+      this.props.setOpenModalActionChangeGroupCustomer();
+      this.props.setIdGroupCustomer(null);
+    } else if (
+      this.state.nameGroupCustomer !== "" &&
+      this.state.noteGroupCustomer !== "" &&
+      this.state.group_type == Types.GROUP_TYPE_LIST_CUSTOMER
+    ) {
+      const { listCustomers } = this.state;
+      const values = {
+        name: this.state.nameGroupCustomer,
+        note: this.state.noteGroupCustomer,
+        customer_ids:
+          listCustomers.length > 0
+            ? listCustomers.map((customer) => customer.id)
+            : [],
+        group_type: Types.GROUP_TYPE_LIST_CUSTOMER,
       };
       const { store_code, idGroupCustomer } = this.props;
       this.props.updateGroupCustomer(store_code, idGroupCustomer, values);

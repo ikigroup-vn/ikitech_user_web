@@ -12,6 +12,18 @@ const ListCustomerInGroupStyles = styled.div`
       }
     }
   }
+  .form-condition-deleteBtn {
+    color: #a1a09e;
+    transition: 0.3s all;
+    cursor: pointer;
+    svg {
+      width: 18px;
+    }
+    &:hover {
+      color: #7f8c8d;
+      transform: scale(1.2);
+    }
+  }
 `;
 
 class ListCustomerInGroup extends Component {
@@ -45,9 +57,7 @@ class ListCustomerInGroup extends Component {
             >
               <span
                 className="form-condition-deleteBtn"
-                // onClick={() =>
-                //   this.props.handleRemoveConditionGroupCustomer(index)
-                // }
+                onClick={() => this.handleRemoveCustomerInGroup(data)}
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -55,10 +65,6 @@ class ListCustomerInGroup extends Component {
                   viewBox="0 0 24 24"
                   strokeWidth="1.5"
                   stroke="currentColor"
-                  style={{
-                    width: "16px",
-                    height: "16px",
-                  }}
                 >
                   <path
                     strokeLinecap="round"
@@ -77,6 +83,15 @@ class ListCustomerInGroup extends Component {
   };
   setOpenModalCustomer = (openModalCustomer) => {
     this.setState({ openModalCustomer });
+  };
+  handleRemoveCustomerInGroup = (data) => {
+    const { listCustomers, setListCustomers } = this.props;
+    if (listCustomers?.length > 0) {
+      const newListCustomers = listCustomers.filter(
+        (customer) => customer.id != data.id
+      );
+      setListCustomers(newListCustomers);
+    }
   };
 
   render() {

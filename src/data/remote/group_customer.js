@@ -33,7 +33,7 @@ export const createGroupCustomer = (store_code, data) => {
 export const updateGroupCustomer = (store_code, idGroupCustomer, data) => {
   return callApi(
     `/store/${store_code}/group_customers/${idGroupCustomer}`,
-    "post",
+    "put",
     data
   );
 };
