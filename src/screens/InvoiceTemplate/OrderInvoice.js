@@ -10,6 +10,7 @@ import ComponentTemplate1ToPrint from "./orderTemplates/ComponentTemplate1ToPrin
 import * as dashboardAction from "../../actions/dashboard";
 import { getInvoiceTemplate, setInvoiceTemplate } from "../../data/local/print";
 import ComponentTemplate2ToPrint from "./orderTemplates/ComponentTemplate2ToPrint";
+import ComponentTemplate3ToPrint from "./orderTemplates/ComponentTemplate3ToPrint";
 
 const HomeScreenStyles = styled.div`
   .theme__list {
@@ -90,7 +91,6 @@ class OrderInvoice extends Component {
       {
         index: 0,
         name: "Mẫu mặc định",
-
         image: "/images/invoice_templates/0.png",
         componentPrint: (
           <ComponentTemplate0ToPrint
@@ -127,6 +127,20 @@ class OrderInvoice extends Component {
             bill={dataOrderExample}
             store={this.store}
             ref={(el) => (this.initTheme[2].componentRef = el)}
+          />
+        ),
+      },
+      {
+        index: 3,
+        name: "Mẫu 3 (Đại lý in cho khách lẻ)",
+        image: "/images/invoice_templates/0.png",
+        componentPrint: (
+          <ComponentTemplate3ToPrint
+            currentBranch={this.props.currentBranch}
+            badges={this.props.badges}
+            bill={dataOrderExample}
+            store={this.store}
+            ref={(el) => (this.initTheme[3].componentRef = el)}
           />
         ),
       },
