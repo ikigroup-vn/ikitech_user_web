@@ -89,6 +89,7 @@ class Form extends Component {
       has_discount_ship: false,
       defaultListProducts: [],
       is_public: true,
+      is_use_once: false,
       group_customers: [Types.GROUP_CUSTOMER_ALL],
       agency_types: [],
       group_types: [],
@@ -212,6 +213,7 @@ class Form extends Component {
         ship_discount_value: voucher.ship_discount_value,
         has_discount_ship: voucher.discount_for !== null ? true : false,
         is_public: voucher.is_public ? true : false,
+        is_use_once: voucher.is_use_once ? true : false,
       });
     }
     if (this.props.image !== nextProps.image) {
@@ -238,7 +240,7 @@ class Form extends Component {
     const { group_customers } = this.state;
 
     const _value = formatNumber(value);
-    if (name === "is_public") {
+    if (name === "is_public" || name === "is_use_once") {
       this.setState({ [name]: checked });
     } else if (
       name == "txtValueLimitTotal" ||
@@ -436,6 +438,7 @@ class Form extends Component {
       set_limit_total: true,
       set_limit_amount: true,
       is_public: state.is_public,
+      is_use_once: state.is_use_once,
 
       group_customers,
       agency_types: agency_types_convert,
@@ -654,7 +657,7 @@ class Form extends Component {
       agency_type_id,
       group_type_id,
       is_public,
-
+      is_use_once,
       group_customers,
       agency_types,
       group_types,
@@ -816,22 +819,41 @@ class Form extends Component {
                   </select>
 
                 </div> */}
-                <div className="form-group status">
-                  <label for="txtMaxAmountCoin">
-                    Hiển thị cho khách hàng chọn
-                  </label>
-                  <label className="status-product on-off">
-                    <input
-                      type="checkbox"
-                      hidden
-                      class="checkbox"
-                      name="is_public"
-                      value={is_public}
-                      checked={is_public}
-                      onChange={this.onChange}
-                    />
-                    <div></div>
-                  </label>
+                <div className="row">
+                  <div className="form-group status col-6">
+                    <label for="txtMaxAmountCoin">
+                      Hiển thị cho khách hàng chọn
+                    </label>
+                    <label className="status-product on-off">
+                      <input
+                        type="checkbox"
+                        hidden
+                        class="checkbox"
+                        name="is_public"
+                        value={is_public}
+                        checked={is_public}
+                        onChange={this.onChange}
+                      />
+                      <div></div>
+                    </label>
+                  </div>
+                  <div className="form-group status col-6">
+                    <label for="txtMaxAmountCoin">
+                      Khách hàng chỉ được áp dụng 1 lần
+                    </label>
+                    <label className="status-product on-off">
+                      <input
+                        type="checkbox"
+                        hidden
+                        class="checkbox"
+                        name="is_use_once"
+                        value={is_use_once}
+                        checked={is_use_once}
+                        onChange={this.onChange}
+                      />
+                      <div></div>
+                    </label>
+                  </div>
                 </div>
                 <div className="form-group discount-for">
                   <label htmlFor="group_customer">Áp dụng cho</label>
