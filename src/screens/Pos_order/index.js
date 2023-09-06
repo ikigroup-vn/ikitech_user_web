@@ -160,8 +160,8 @@ class PostOrder extends Component {
     var customer_note = {};
 
     if (
-      this.props.oneCart.id == newState.cartId ||
-      this.props.oneCart.id == newState.idCart
+      this.props.oneCart?.id == newState.cartId ||
+      this.props.oneCart?.id == newState.idCart
     ) {
       if (typeof newState.select_customer != "undefined") {
         customer = { customer_id: newState?.select_customer?.value ?? null };
