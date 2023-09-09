@@ -376,7 +376,7 @@ class ListProduct extends Component {
                   <input
                     type="checkbox"
                     disabled={disaled}
-                    // checked={checked}
+                    checked={checked}
                     onChange={(e) => this.onChange(e, "PARENT")}
                     value={this.getData(_data, listDistribute, data)}
                   />

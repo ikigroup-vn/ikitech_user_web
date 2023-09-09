@@ -2,7 +2,8 @@ import * as Types from "../../constants/ActionType";
 
 var initialState = {
   allBonusProduct: [],
-  bonusProductId : {}
+  bonusProductId: {},
+  bonusProductItem: {},
 };
 
 export const bonusProduct = (state = initialState, action) => {
@@ -13,6 +14,9 @@ export const bonusProduct = (state = initialState, action) => {
       return newState;
     case Types.FETCH_ID_BONUS_PRODUCT:
       newState.bonusProductId = action.data;
+      return newState;
+    case Types.FETCH_BONUS_PRODUCT_ITEM:
+      newState.bonusProductItem = action.data;
       return newState;
     default:
       return newState;
