@@ -959,7 +959,6 @@ class Form extends Component {
     var type_discount_default = txtDiscoutType == "0" ? "show" : "hide";
     var type_discount_percent = txtDiscoutType == "1" ? "show" : "hide";
 
-    console.log(ladder_reward);
     return (
       <React.Fragment>
         <form role="form" onSubmit={this.onSave} method="post">
@@ -1239,13 +1238,7 @@ class Form extends Component {
                     handleAddProduct={this.handleAddProduct}
                     products={saveListProductsLadder}
                   ></TableLadder>
-                ) : (
-                  <Table
-                    handleChangeQuantity={this.handleChangeQuantity}
-                    handleAddProduct={this.handleAddProduct}
-                    products={saveListProducts}
-                  ></Table>
-                )}
+                ) : null}
               </div>
               {/* {getChannel() == IKITECH &&
                 <div class="form-group">
@@ -1268,13 +1261,7 @@ class Form extends Component {
                     products={saveListProductsBonusLadder}
                     fromProduct={saveListProductsLadder}
                   ></TableBonusLadder>
-                ) : (
-                  <TableBonus
-                    handleChangeQuantity={this.handleChangeQuantity}
-                    handleAddProduct={this.handleAddProduct}
-                    products={saveListProductsBonus}
-                  ></TableBonus>
-                )}
+                ) : null}
               </div>
               {/* {getChannel() == IKITECH &&
                 <div class="form-group">
@@ -1309,14 +1296,6 @@ class Form extends Component {
         </form>
 
         <ModalUpload />
-        <ModalListProduct
-          onSaveProduct={this.onSaveProduct}
-          combos={combos}
-          handleAddProduct={this.handleAddProduct}
-          listProducts={listProducts}
-          store_code={store_code}
-          products={products}
-        />
         <ModalListProductLadder
           onSaveProduct={this.onSaveProduct}
           combos={combos}
@@ -1330,14 +1309,6 @@ class Form extends Component {
           combos={combos}
           handleAddProduct={this.handleAddProduct}
           listProducts={listProductsBonusLadder}
-          store_code={store_code}
-          products={products}
-        />
-        <ModalListProductBonus
-          onSaveProduct={this.onSaveProduct}
-          combos={combos}
-          handleAddProduct={this.handleAddProduct}
-          listProducts={listProductsBonus}
           store_code={store_code}
           products={products}
         />

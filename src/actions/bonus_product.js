@@ -334,3 +334,186 @@ export const initialUpload = () => {
     });
   };
 };
+
+export const fetchBonusProductItem = (store_id, bonus_product_id, params) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    bonusProductApi
+      .fetchBonusProductItem(store_id, bonus_product_id, params)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        if (res.data.code !== 401)
+          dispatch({
+            type: Types.FETCH_BONUS_PRODUCT_ITEM,
+            data: res.data.data,
+          });
+      });
+  };
+};
+
+export const createBonusProductItem = (
+  store_code,
+  bonus_product_id,
+  data,
+  onSuccess = () => {}
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    bonusProductApi
+      .createBonusProductItem(store_code, bonus_product_id, data)
+      .then((res) => {
+        if (res.data.code !== 401)
+          dispatch({
+            type: Types.FETCH_BONUS_PRODUCT_ITEM,
+            data: res.data.data,
+          });
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+        bonusProductApi
+          .fetchBonusProductId(store_code, bonus_product_id)
+          .then((res) => {
+            if (onSuccess) {
+              onSuccess(res.data.data?.group_products?.length - 1);
+            }
+            dispatch({
+              type: Types.SHOW_LOADING,
+              loading: "hide",
+            });
+            if (res.data.code !== 401)
+              dispatch({
+                type: Types.FETCH_ID_BONUS_PRODUCT,
+                data: res.data.data,
+              });
+          });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+
+export const updateBonusProductItem = (store_code, bonus_product_id, data) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    bonusProductApi
+      .updateBonusProductItem(store_code, bonus_product_id, data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+
+export const destroyBonusProductItem = (
+  store_code,
+  bonus_product_id,
+  data,
+  onSuccess = () => {}
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    bonusProductApi
+      .destroyBonusProductItem(store_code, bonus_product_id, data)
+      .then((res) => {
+        if (onSuccess) {
+          onSuccess();
+        }
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        bonusProductApi
+          .fetchBonusProductId(store_code, bonus_product_id)
+          .then((res) => {
+            dispatch({
+              type: Types.SHOW_LOADING,
+              loading: "hide",
+            });
+            if (res.data.code !== 401)
+              dispatch({
+                type: Types.FETCH_ID_BONUS_PRODUCT,
+                data: res.data.data,
+              });
+          });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
