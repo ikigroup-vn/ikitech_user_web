@@ -1691,6 +1691,9 @@ export const updateDistribute = (
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
+        dispatch(
+          updateProduct(store_code, form, productId, page, params, funcModal)
+        );
       })
       .catch(function (error) {
         dispatch({
@@ -1702,12 +1705,12 @@ export const updateDistribute = (
             content: error?.response?.data?.msg || error,
           },
         });
-      })
-      .finally(() => {
-        dispatch(
-          updateProduct(store_code, form, productId, page, params, funcModal)
-        );
       });
+    // .finally(() => {
+    //   dispatch(
+    //     updateProduct(store_code, form, productId, page, params, funcModal)
+    //   );
+    // });
   };
 };
 
