@@ -699,7 +699,13 @@ class FormGroupProduct extends Component {
           </div>
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <div class="box-footer">
+              <div
+                class="box-footer"
+                style={{
+                  display: "flex",
+                  columnGap: "10px",
+                }}
+              >
                 <button type="submit" class="btn btn-info   btn-sm">
                   {isFormCreate ? (
                     <>
