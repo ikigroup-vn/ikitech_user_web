@@ -130,20 +130,20 @@ class OrderInvoice extends Component {
           />
         ),
       },
-      {
-        index: 3,
-        name: "Mẫu 3 (Đại lý in cho khách lẻ)",
-        image: "/images/invoice_templates/0.png",
-        componentPrint: (
-          <ComponentTemplate3ToPrint
-            currentBranch={this.props.currentBranch}
-            badges={this.props.badges}
-            bill={dataOrderExample}
-            store={this.store}
-            ref={(el) => (this.initTheme[3].componentRef = el)}
-          />
-        ),
-      },
+      // {
+      //   index: 3,
+      //   name: "Mẫu 3 (Đại lý in cho khách lẻ)",
+      //   image: "/images/invoice_templates/0.png",
+      //   componentPrint: (
+      //     <ComponentTemplate3ToPrint
+      //       currentBranch={this.props.currentBranch}
+      //       badges={this.props.badges}
+      //       bill={dataOrderExample}
+      //       store={this.store}
+      //       ref={(el) => (this.initTheme[3].componentRef = el)}
+      //     />
+      //   ),
+      // },
     ];
 
     return (
