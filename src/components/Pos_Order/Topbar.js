@@ -896,7 +896,10 @@ class Topbar extends Component {
                   marginRight: "30px",
                   display: this.props.order_code ? "none" : "block",
                 }}
-                onClick={() => this.handleCreateTab()}
+                onClick={() => {
+                  this.handleCreateTab();
+                  this.setState({ idEditCart: null, txtEditCart: "" });
+                }}
               >
                 <div>
                   <i class="fas fa-plus"></i>
