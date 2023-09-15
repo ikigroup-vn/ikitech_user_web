@@ -105,7 +105,7 @@ class Topbar extends Component {
             }
           });
         }
-        console.log("🚀 ~ file: Topbar.js:109 ~ indexSelecTap:", indexSelecTap);
+
         this.setState({ selectTap: indexSelecTap });
       } else {
         if (nextProps.listPos?.length > 0) {
@@ -180,7 +180,7 @@ class Topbar extends Component {
   };
 
   handleDelete = (idCart) => {
-    this.setState({ selectTap: -1, idCart: idCart });
+    this.setState({ idCart: idCart });
   };
   handleCreateTab = () => {
     const branch_id = localStorage.getItem("branch_id");
@@ -188,47 +188,40 @@ class Topbar extends Component {
     this.props.createOneTab(store_code, branch_id, null);
   };
   handleChooseTab = (e, oneCart, index, type) => {
-    const countClick = e.detail;
-    switch (countClick) {
-      case 1:
-        const { idEditCart } = this.state;
-        if (
-          !e.target.closest(".btn_updateName") &&
-          idEditCart &&
-          idEditCart !== oneCart.id
-        ) {
-          this.setState({ idEditCart: null, txtEditCart: "" });
-        }
-        this.setState({ selectTap: index });
-        this.props.handleCallbackTab(oneCart.id);
-        break;
-      case 2:
-        this.handleUpdateCart(oneCart, type);
-        break;
-      default:
-        break;
+    if (e.target.closest(".btn__remove-input")) return;
+    if (this.state.selectTap === index) {
+      if (e.target.closest(".btn__remove-name")) return;
+      this.handleUpdateCart(oneCart, type);
+    } else {
+      const { idEditCart } = this.state;
+      if (
+        !e.target.closest(".btn__update-name") &&
+        idEditCart &&
+        idEditCart !== oneCart.id
+      ) {
+        this.setState({ idEditCart: null, txtEditCart: "" });
+      }
+
+      this.setState({ selectTap: index });
+      this.props.handleCallbackTab(oneCart.id);
     }
   };
   handleChooseTab1 = (e, oneCart, type) => {
-    const countClick = e.detail;
-    switch (countClick) {
-      case 1:
-        const { idEditCart } = this.state;
-        if (
-          !e.target.closest(".btn_updateName") &&
-          idEditCart &&
-          idEditCart !== oneCart.id
-        ) {
-          this.setState({ idEditCart: null, txtEditCart: "" });
-        }
-        this.setState({ selectTap: -1 });
-        this.props.handleCallbackTab(oneCart.id);
-        break;
-      case 2:
-        this.handleUpdateCart(oneCart, type);
-        break;
-      default:
-        break;
+    if (e.target.closest(".btn__remove-input")) return;
+    if (this.state.selectTap === -1) {
+      if (e.target.closest(".btn__remove-name")) return;
+      this.handleUpdateCart(oneCart, type);
+    } else {
+      const { idEditCart } = this.state;
+      if (
+        !e.target.closest(".btn__update-name") &&
+        idEditCart &&
+        idEditCart !== oneCart.id
+      ) {
+        this.setState({ idEditCart: null, txtEditCart: "" });
+      }
+      this.setState({ selectTap: -1 });
+      this.props.handleCallbackTab(oneCart.id);
     }
   };
   searchData = (e) => {
@@ -676,7 +669,7 @@ class Topbar extends Component {
                                 style={{
                                   color: "gray",
                                   width: "100%",
-                                  minWidth: "150px",
+                                  minWidth: "90px",
                                 }}
                                 type="text"
                                 value={txtEditCart}
@@ -709,6 +702,7 @@ class Topbar extends Component {
                                   color: "#e74c3c",
                                   cursor: "pointer",
                                 }}
+                                className="btn__remove-input"
                                 onClick={() =>
                                   this.handleUpdateCart(listPos[0], "hide")
                                 }
@@ -740,7 +734,7 @@ class Topbar extends Component {
                               }}
                             >
                               {/* <i
-                                className="fas fa-pencil-alt btn_updateName"
+                                className="fas fa-pencil-alt btn__update-name"
                                 style={{
                                   fontSize: "11px",
                                 }}
@@ -750,7 +744,10 @@ class Topbar extends Component {
                               ></i> */}
                               {listPos.length > 1 && (
                                 <i
-                                  class="fa fa-window-close"
+                                  class="fa fa-window-close btn__remove-name"
+                                  style={{
+                                    cursor: "pointer",
+                                  }}
                                   onClick={() =>
                                     this.handleDelete(listPos[0].id)
                                   }
@@ -795,7 +792,7 @@ class Topbar extends Component {
                                     style={{
                                       color: "gray",
                                       width: "100%",
-                                      minWidth: "150px",
+                                      minWidth: "90px",
                                     }}
                                     type="text"
                                     value={txtEditCart}
@@ -828,6 +825,7 @@ class Topbar extends Component {
                                       color: "#e74c3c",
                                       cursor: "pointer",
                                     }}
+                                    className="btn__remove-input"
                                     onClick={() =>
                                       this.handleUpdateCart(item, "hide")
                                     }
@@ -849,6 +847,7 @@ class Topbar extends Component {
                                   style={{ marginRight: "5px" }}
                                 >
                                   {item.name}
+                                  {item.is_default ? "(Mặc định)" : ""}
                                 </div>
                                 <span
                                   style={{
@@ -857,7 +856,7 @@ class Topbar extends Component {
                                   }}
                                 >
                                   {/* <i
-                                    className="fas fa-pencil-alt btn_updateName"
+                                    className="fas fa-pencil-alt btn__update-name"
                                     style={{
                                       fontSize: "11px",
                                     }}
@@ -865,12 +864,17 @@ class Topbar extends Component {
                                       this.handleUpdateCart(item, "show")
                                     }
                                   ></i> */}
-                                  <i
-                                    class="fa fa-window-close"
-                                    onClick={() => this.handleDelete(item.id)}
-                                    data-toggle="modal"
-                                    data-target="#removeModal"
-                                  ></i>
+                                  {item.is_default ? null : (
+                                    <i
+                                      class="fa fa-window-close btn__remove-name"
+                                      style={{
+                                        cursor: "pointer",
+                                      }}
+                                      onClick={() => this.handleDelete(item.id)}
+                                      data-toggle="modal"
+                                      data-target="#removeModal"
+                                    ></i>
+                                  )}
                                 </span>
                               </div>
                             )}

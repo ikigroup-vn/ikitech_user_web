@@ -25,10 +25,10 @@ const permission = (channel) => {
                 name: "Đào tạo",
                 decentralizationName: "train",
               },
-              {
-                name: "Chấm công",
-                decentralizationName: "timekeeping",
-              },
+              // {
+              //   name: "Chấm công",
+              //   decentralizationName: "timekeeping",
+              // },
             ],
           },
           {
@@ -53,22 +53,22 @@ const permission = (channel) => {
               },
             ],
           },
-          {
-            name: "Kế toán",
-            decentralizationName: "revenue_expenditure",
-            componentChilds: [
-              {
-                name: "Thu chi",
-                decentralizationName: "revenue_expenditure",
-                componentChilds: [],
-              },
-              {
-                name: "Bảng công",
-                decentralizationName: "accountant_time_sheet",
-                componentChilds: [],
-              },
-            ],
-          },
+          // {
+          //   name: "Kế toán",
+          //   decentralizationName: "revenue_expenditure",
+          //   componentChilds: [
+          //     {
+          //       name: "Thu chi",
+          //       decentralizationName: "revenue_expenditure",
+          //       componentChilds: [],
+          //     },
+          //     {
+          //       name: "Bảng công",
+          //       decentralizationName: "accountant_time_sheet",
+          //       componentChilds: [],
+          //     },
+          //   ],
+          // },
         ],
       },
       {
@@ -245,6 +245,11 @@ const permission = (channel) => {
               {
                 name: "Báo cáo tài chính",
                 decentralizationName: "report_finance",
+              },
+              {
+                name: "Thu chi",
+                decentralizationName: "revenue_expenditure",
+                componentChilds: [],
               },
             ],
           },

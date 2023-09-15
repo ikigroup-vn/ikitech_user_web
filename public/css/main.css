@@ -7117,6 +7117,10 @@ p {
   padding: 15px !important;
   border-radius: 0 !important;
   font-weight: 500;
+
+}
+.activess.item-cart-list{
+  cursor: text;
 }
 
 .activesss {
