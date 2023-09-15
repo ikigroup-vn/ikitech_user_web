@@ -16,6 +16,45 @@ export const listPosOrder = (store_code, branch_id) => {
   };
 };
 
+export const updateNameInCart = (
+  store_code,
+  branch_id,
+  id_cart,
+  data,
+  onSuccess = () => {}
+) => {
+  return (dispatch) => {
+    PosApi.updateNameInCart(store_code, branch_id, id_cart, data)
+      .then((res) => {
+        if (onSuccess) onSuccess();
+        dispatch({
+          type: Types.UPDATE_NAME_POS_ORDER,
+          data: res.data.data,
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+
 export const addComboInCart = (store_code, branch_id, id_cart, data) => {
   return (dispatch) => {
     PosApi.addComboInCart(store_code, branch_id, id_cart, data)

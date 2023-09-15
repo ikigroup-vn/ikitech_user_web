@@ -15,6 +15,7 @@ var initialState = {
   updatedPrice: {},
   updatedNote: {},
   loadingHandleUseVoucher: null,
+  updatedNamePosOrder: {},
 };
 
 export const pos_reducer = (state = initialState, action) => {
@@ -52,6 +53,15 @@ export const pos_reducer = (state = initialState, action) => {
     case Types.FETCH_LIST_POS_ORDER:
       newState.listPosOrder = action.data;
       newState.loadingCart = false;
+      return newState;
+    case Types.UPDATE_NAME_POS_ORDER:
+      const cloneState = JSON.parse(JSON.stringify(newState));
+      newState.listPosOrder = cloneState.listPosOrder.map((item) => ({
+        ...item,
+        name: item.id === action.data.id ? action.data.name : item.name,
+      }));
+      newState.loadingCart = false;
+      newState.updatedNamePosOrder = action.data;
       return newState;
     case Types.FETCH_LIST_POS_ORDER_LOADING:
       newState.loadingCart = true;
