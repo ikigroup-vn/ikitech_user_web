@@ -257,7 +257,12 @@ export const ikitech_menu = [
 
       {
         name: "Báo cáo",
-        setOpenKey: ["/report", "/report_"],
+        setOpenKey: [
+          "/report",
+          "/report_",
+          "/revenue_expenditure",
+          "/accountant/time_sheet/",
+        ],
         isShowWhenManyBranch: true,
         icon: "fas fa-chart-bar",
         open: "report",
@@ -286,22 +291,6 @@ export const ikitech_menu = [
             exact: true,
             to: "/report_finance",
           },
-          // {
-          //   class: "report_finance",
-          //   display: "hide",
-          //   name: "Thu chi",
-          //   exact: true,
-          //   to: "/revenue_expenditure",
-          // },
-        ],
-      },
-      {
-        name: "Kế toán",
-        setOpenKey: ["/revenue_expenditure", "/accountant/time_sheet/"],
-
-        icon: "fas fa-coins",
-        open: "revenue_expenditure",
-        children: [
           {
             // class: "report_finance",
             class: "revenue_expenditure",
@@ -311,18 +300,46 @@ export const ikitech_menu = [
             to: "/revenue_expenditure",
           },
 
-          {
-            name: "Bảng công",
-            // class: "timekeeping",
-            class: "accountant_time_sheet",
+          // {
+          //   name: "Bảng công",
+          //   // class: "timekeeping",
+          //   class: "accountant_time_sheet",
 
-            display: "hide",
-            icon: "fas fa-fw fa-calendar-days",
-            exact: true,
-            to: "/accountant/time_sheet",
-          },
+          //   display: "hide",
+          //   icon: "fas fa-fw fa-calendar-days",
+          //   exact: true,
+          //   to: "/accountant/time_sheet",
+          // },
         ],
       },
+      // {
+      //   name: "Kế toán",
+      //   setOpenKey: ["/revenue_expenditure", "/accountant/time_sheet/"],
+
+      //   icon: "fas fa-coins",
+      //   open: "revenue_expenditure",
+      //   children: [
+      //     {
+      //       // class: "report_finance",
+      //       class: "revenue_expenditure",
+      //       display: "hide",
+      //       name: "Thu chi",
+      //       exact: true,
+      //       to: "/revenue_expenditure",
+      //     },
+
+      //     {
+      //       name: "Bảng công",
+      //       // class: "timekeeping",
+      //       class: "accountant_time_sheet",
+
+      //       display: "hide",
+      //       icon: "fas fa-fw fa-calendar-days",
+      //       exact: true,
+      //       to: "/accountant/time_sheet",
+      //     },
+      //   ],
+      // },
       {
         name: "Khách hàng",
         setOpenKey: ["/customer", "/reward_point", "chat", "/group_customer"],
@@ -457,69 +474,69 @@ export const ikitech_menu = [
       //   itemHasTabName: "agency",
       // },
 
-      {
-        name: "Chấm công",
-        icon: "fa fa-calendar",
-        class: "timekeeping",
-        setOpenKey: [
-          "/shift",
-          "/calendar_shift",
-          "/time_sheet",
-          "/work_location",
-          "/request",
-        ],
-        ExcludeSetOpenKey: ["/accountant/time_sheet/"],
+      // {
+      //   name: "Chấm công",
+      //   icon: "fa fa-calendar",
+      //   class: "timekeeping",
+      //   setOpenKey: [
+      //     "/shift",
+      //     "/calendar_shift",
+      //     "/time_sheet",
+      //     "/work_location",
+      //     "/request",
+      //   ],
+      //   ExcludeSetOpenKey: ["/accountant/time_sheet/"],
 
-        open: "timekeeping",
+      //   open: "timekeeping",
 
-        children: [
-          {
-            class: "timekeeping",
-            name: "Ca làm việc",
-            display: "hide",
-            icon: "fas fa-clock-nin",
-            exact: true,
-            to: "/shift",
+      //   children: [
+      //     {
+      //       class: "timekeeping",
+      //       name: "Ca làm việc",
+      //       display: "hide",
+      //       icon: "fas fa-clock-nin",
+      //       exact: true,
+      //       to: "/shift",
 
-            // class: "timekeeping_shift",
-          },
-          {
-            name: "Lịch làm việc",
-            class: "timekeeping",
-            display: "hide",
-            icon: "fas fa-fw fa-calendar-days",
-            exact: true,
-            to: "/calendar_shift",
-          },
-          {
-            name: "Bảng công",
-            class: "timekeeping",
+      //       // class: "timekeeping_shift",
+      //     },
+      //     {
+      //       name: "Lịch làm việc",
+      //       class: "timekeeping",
+      //       display: "hide",
+      //       icon: "fas fa-fw fa-calendar-days",
+      //       exact: true,
+      //       to: "/calendar_shift",
+      //     },
+      //     {
+      //       name: "Bảng công",
+      //       class: "timekeeping",
 
-            display: "hide",
-            icon: "fas fa-fw fa-calendar-days",
-            exact: true,
-            to: "/time_sheet",
-          },
-          {
-            name: "Địa điểm làm việc",
-            class: "timekeeping",
-            display: "hide",
-            icon: "fas fa-fw fa-location-dot",
+      //       display: "hide",
+      //       icon: "fas fa-fw fa-calendar-days",
+      //       exact: true,
+      //       to: "/time_sheet",
+      //     },
+      //     {
+      //       name: "Địa điểm làm việc",
+      //       class: "timekeeping",
+      //       display: "hide",
+      //       icon: "fas fa-fw fa-location-dot",
 
-            exact: true,
-            to: "/work_location",
-          },
-          {
-            name: "Xử lý yêu cầu",
-            class: "timekeeping",
-            display: "hide",
-            icon: "fas fa-fw fa-location-dot",
+      //       exact: true,
+      //       to: "/work_location",
+      //     },
+      //     {
+      //       name: "Xử lý yêu cầu",
+      //       class: "timekeeping",
+      //       display: "hide",
+      //       icon: "fas fa-fw fa-location-dot",
 
-            exact: true,
-            to: "/request",
-          },
-        ],
-      },
+      //       exact: true,
+      //       to: "/request",
+      //     },
+      //   ],
+      // },
       {
         name: "Đào tạo",
         class: "train",
