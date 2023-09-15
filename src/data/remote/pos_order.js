@@ -11,6 +11,15 @@ export const addProductInCart = (store_code, branch_id, id, data) => {
     data
   );
 };
+
+export const updateNameInCart = (store_code, branch_id, id, data) => {
+  return callApi(
+    `/store/${store_code}/carts/${branch_id}/list/${id}/change_name`,
+    "put",
+    data
+  );
+};
+
 export const addComboInCart = (store_code, branch_id, id, data) => {
   return callApi(
     `/store/${store_code}/carts/${branch_id}/list/${id}/use_combo`,
