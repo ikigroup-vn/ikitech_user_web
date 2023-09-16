@@ -4,6 +4,8 @@ var initialState = {
   allStaff: [],
   staffID: {},
   type: [],
+  historySalerToDistributor: {},
+  reportSalerToDistributor: [],
 };
 
 export const staff = (state = initialState, action) => {
@@ -17,7 +19,15 @@ export const staff = (state = initialState, action) => {
       return newState;
     case Types.UPDATE_STAFF_TO_SALE:
       return newState;
-
+    case Types.FETCH_HISTORY_SALE_TO_DISTRIBUTOR:
+      return {
+        ...newState, 
+        historySalerToDistributor : action.data
+      };
+    case Types.REPORT_SALER_TO_DISTRIBUTOR:
+      newState.reportSalerToDistributor = action.data.data;
+      console.log('action', action.data.data)
+      return newState;
     default:
       return newState;
   }
