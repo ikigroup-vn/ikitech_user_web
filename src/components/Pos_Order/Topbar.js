@@ -35,6 +35,8 @@ class Topbar extends Component {
       numOfScanner: 1,
       startAsync: false,
       isChangeValue: "",
+      idEditCart: null,
+      txtEditCart: "",
     };
 
     this.refSearchProduct = React.createRef();
@@ -42,6 +44,7 @@ class Topbar extends Component {
     this.afterEnter = false;
     this.search = "";
   }
+
   componentDidMount() {
     const { store_code, order_code } = this.props;
     const branch_id = localStorage.getItem("branch_id");
@@ -88,14 +91,32 @@ class Topbar extends Component {
     }
 
     if (!shallowEqual(this.props.listPos, nextProps.listPos)) {
-      if (nextProps.listPos?.length > 0) {
-        this.props.handleCallbackTab(nextProps.listPos[0]?.id);
-      } else {
-        if (nextProps.listPos?.length == 0) {
-          this.handleCreateTab();
+      if (
+        !shallowEqual(
+          this.props.updatedNamePosOrder,
+          nextProps.updatedNamePosOrder
+        )
+      ) {
+        let indexSelecTap = -1;
+        if (nextProps.listPos?.length > 0) {
+          nextProps.listPos.forEach((element, index) => {
+            if (element.id === nextProps.updatedNamePosOrder?.id) {
+              indexSelecTap = index - 1;
+            }
+          });
         }
+
+        this.setState({ selectTap: indexSelecTap });
+      } else {
+        if (nextProps.listPos?.length > 0) {
+          this.props.handleCallbackTab(nextProps.listPos[0]?.id);
+        } else {
+          if (nextProps.listPos?.length == 0) {
+            this.handleCreateTab();
+          }
+        }
+        this.setState({ selectTap: -1 });
       }
-      this.setState({ selectTap: -1 });
     }
 
     if (this.props.loadingCart == true && nextProps.loadingCart == false) {
@@ -150,21 +171,58 @@ class Topbar extends Component {
     return true;
   }
 
+  setIdEditCart = (idEditCart) => {
+    this.setState({ idEditCart });
+  };
+
+  setTxtEditCart = (txtEditCart) => {
+    this.setState({ txtEditCart });
+  };
+
   handleDelete = (idCart) => {
-    this.setState({ selectTap: -1, idCart: idCart });
+    this.setState({ idCart: idCart });
   };
   handleCreateTab = () => {
     const branch_id = localStorage.getItem("branch_id");
     const { store_code } = this.props;
     this.props.createOneTab(store_code, branch_id, null);
   };
-  handleChooseTab = (id, index) => {
-    this.setState({ selectTap: index });
-    this.props.handleCallbackTab(id);
+  handleChooseTab = (e, oneCart, index, type) => {
+    if (e.target.closest(".btn__remove-input")) return;
+    if (this.state.selectTap === index) {
+      if (e.target.closest(".btn__remove-name")) return;
+      this.handleUpdateCart(oneCart, type);
+    } else {
+      const { idEditCart } = this.state;
+      if (
+        !e.target.closest(".btn__update-name") &&
+        idEditCart &&
+        idEditCart !== oneCart.id
+      ) {
+        this.setState({ idEditCart: null, txtEditCart: "" });
+      }
+
+      this.setState({ selectTap: index });
+      this.props.handleCallbackTab(oneCart.id);
+    }
   };
-  handleChooseTab1 = (id) => {
-    this.setState({ selectTap: -1 });
-    this.props.handleCallbackTab(id);
+  handleChooseTab1 = (e, oneCart, type) => {
+    if (e.target.closest(".btn__remove-input")) return;
+    if (this.state.selectTap === -1) {
+      if (e.target.closest(".btn__remove-name")) return;
+      this.handleUpdateCart(oneCart, type);
+    } else {
+      const { idEditCart } = this.state;
+      if (
+        !e.target.closest(".btn__update-name") &&
+        idEditCart &&
+        idEditCart !== oneCart.id
+      ) {
+        this.setState({ idEditCart: null, txtEditCart: "" });
+      }
+      this.setState({ selectTap: -1 });
+      this.props.handleCallbackTab(oneCart.id);
+    }
   };
   searchData = (e) => {
     e.preventDefault();
@@ -411,10 +469,38 @@ class Topbar extends Component {
     }
   };
 
+  handleUpdateCart = (cartOne, type) => {
+    this.setState({
+      idEditCart: type === "hide" ? null : cartOne.id,
+      txtEditCart: type === "hide" ? "" : cartOne.name,
+    });
+  };
+  handleChangeEditCart = (e) => {
+    const value = e.target.value;
+    this.setState({
+      txtEditCart: value,
+    });
+  };
+  handleUpdateCartItem = (cartOne) => {
+    const { updateNameInCart, store_code } = this.props;
+    const { txtEditCart } = this.state;
+    const branch_id = localStorage.getItem("branch_id");
+    const data = {
+      name: txtEditCart,
+    };
+    updateNameInCart(store_code, branch_id, cartOne.id, data, () => {
+      this.setState({
+        idEditCart: null,
+        txtEditCart: "",
+      });
+    });
+  };
+
   render() {
     var { listPos, branchStore, user, store_code, currentBranch, selectValue } =
       this.props;
-    var { idCart, selected_product_id, selectValue } = this.state;
+    var { idCart, selected_product_id, selectValue, idEditCart, txtEditCart } =
+      this.state;
 
     const formatOptionLabel = ({ value, label, product }) => {
       return <CardProduct isItemSearch={true} product={product} />;
@@ -554,34 +640,131 @@ class Topbar extends Component {
                   {listPos !== null && listPos.length > 0 ? (
                     <ul class="navbar-nav" style={{ alignItems: "center" }}>
                       <li
-                        onClick={() => this.handleChooseTab1(listPos[0].id)}
+                        onClick={(e) =>
+                          this.handleChooseTab1(e, listPos[0], "show")
+                        }
                         className={
                           this.state.selectTap === -1
                             ? "activess nav-item item-cart-list"
                             : "nav-item item-cart-list"
                         }
                       >
-                        <div
-                          className="tab-item"
-                          style={{ marginRight: "5px" }}
-                        >
-                          {listPos[0]?.name
-                            ? listPos[0].name
-                            : "Hóa đơn mặc định"}
-                        </div>
-                        {listPos.length > 1 && (
-                          <i
-                            class="fa fa-window-close"
-                            onClick={() => this.handleDelete(listPos[0].id)}
-                            data-toggle="modal"
-                            data-target="#removeModal"
-                          ></i>
+                        {idEditCart === listPos[0].id ? (
+                          <div
+                            style={{
+                              marginTop: "5px",
+                              display: "flex",
+                              alignItems: "center",
+                              columnGap: "5px",
+                              borderBottom: "1px solid #dadbdb",
+                              paddingBottom: "3px",
+                            }}
+                          >
+                            <div
+                              style={{
+                                width: "100%",
+                              }}
+                            >
+                              <input
+                                style={{
+                                  color: "gray",
+                                  width: "100%",
+                                  minWidth: "90px",
+                                }}
+                                type="text"
+                                value={txtEditCart}
+                                onChange={this.handleChangeEditCart}
+                                placeholder="Nhập tên đơn hàng..."
+                              />
+                            </div>
+
+                            <div
+                              className="iconInputConfirm"
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                columnGap: "4px",
+                              }}
+                            >
+                              <span
+                                style={{
+                                  color: "#2ecc71",
+                                  cursor: "pointer",
+                                }}
+                                onClick={() =>
+                                  this.handleUpdateCartItem(listPos[0])
+                                }
+                              >
+                                <i className="fa fa-check"></i>
+                              </span>
+                              <span
+                                style={{
+                                  color: "#e74c3c",
+                                  cursor: "pointer",
+                                }}
+                                className="btn__remove-input"
+                                onClick={() =>
+                                  this.handleUpdateCart(listPos[0], "hide")
+                                }
+                              >
+                                <i className="fa fa-times"></i>
+                              </span>
+                            </div>
+                          </div>
+                        ) : (
+                          <div
+                            style={{
+                              display: "flex",
+                              columnGap: "8px",
+                              alignItems: "center",
+                            }}
+                          >
+                            <div
+                              className="tab-item"
+                              style={{ marginRight: "5px" }}
+                            >
+                              {listPos[0]?.name
+                                ? listPos[0].name
+                                : "Hóa đơn mặc định"}
+                            </div>
+                            <span
+                              style={{
+                                display: "flex",
+                                columnGap: "5px",
+                              }}
+                            >
+                              {/* <i
+                                className="fas fa-pencil-alt btn__update-name"
+                                style={{
+                                  fontSize: "11px",
+                                }}
+                                onClick={() =>
+                                  this.handleUpdateCart(listPos[0], "show")
+                                }
+                              ></i> */}
+                              {listPos.length > 1 && (
+                                <i
+                                  class="fa fa-window-close btn__remove-name"
+                                  style={{
+                                    cursor: "pointer",
+                                  }}
+                                  onClick={() =>
+                                    this.handleDelete(listPos[0].id)
+                                  }
+                                  data-toggle="modal"
+                                  data-target="#removeModal"
+                                ></i>
+                              )}
+                            </span>
+                          </div>
                         )}
                       </li>
                       {listPos.slice(1, listPos.length).map((item, index) => {
                         return (
                           <li
-                            onClick={() => this.handleChooseTab(item.id, index)}
+                            onClick={(e) =>
+                              this.handleChooseTab(e, item, index, "show")
+                            }
                             key={index}
                             className={
                               index === this.state.selectTap
@@ -589,18 +772,112 @@ class Topbar extends Component {
                                 : "nav-item item-cart-list"
                             }
                           >
-                            <div
-                              className="tab-item"
-                              style={{ marginRight: "5px" }}
-                            >
-                              {item.name}
-                            </div>
-                            <i
-                              class="fa fa-window-close"
-                              onClick={() => this.handleDelete(item.id)}
-                              data-toggle="modal"
-                              data-target="#removeModal"
-                            ></i>
+                            {idEditCart === item.id ? (
+                              <div
+                                style={{
+                                  marginTop: "5px",
+                                  display: "flex",
+                                  alignItems: "center",
+                                  columnGap: "5px",
+                                  borderBottom: "1px solid #dadbdb",
+                                  paddingBottom: "3px",
+                                }}
+                              >
+                                <div
+                                  style={{
+                                    width: "100%",
+                                  }}
+                                >
+                                  <input
+                                    style={{
+                                      color: "gray",
+                                      width: "100%",
+                                      minWidth: "90px",
+                                    }}
+                                    type="text"
+                                    value={txtEditCart}
+                                    onChange={this.handleChangeEditCart}
+                                    placeholder="Nhập tên đơn hàng..."
+                                  />
+                                </div>
+
+                                <div
+                                  className="iconInputConfirm"
+                                  style={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    columnGap: "4px",
+                                  }}
+                                >
+                                  <span
+                                    style={{
+                                      color: "#2ecc71",
+                                      cursor: "pointer",
+                                    }}
+                                    onClick={() =>
+                                      this.handleUpdateCartItem(item)
+                                    }
+                                  >
+                                    <i className="fa fa-check"></i>
+                                  </span>
+                                  <span
+                                    style={{
+                                      color: "#e74c3c",
+                                      cursor: "pointer",
+                                    }}
+                                    className="btn__remove-input"
+                                    onClick={() =>
+                                      this.handleUpdateCart(item, "hide")
+                                    }
+                                  >
+                                    <i className="fa fa-times"></i>
+                                  </span>
+                                </div>
+                              </div>
+                            ) : (
+                              <div
+                                style={{
+                                  display: "flex",
+                                  columnGap: "8px",
+                                  alignItems: "center",
+                                }}
+                              >
+                                <div
+                                  className="tab-item"
+                                  style={{ marginRight: "5px" }}
+                                >
+                                  {item.name}
+                                  {item.is_default ? "(Mặc định)" : ""}
+                                </div>
+                                <span
+                                  style={{
+                                    display: "flex",
+                                    columnGap: "5px",
+                                  }}
+                                >
+                                  {/* <i
+                                    className="fas fa-pencil-alt btn__update-name"
+                                    style={{
+                                      fontSize: "11px",
+                                    }}
+                                    onClick={() =>
+                                      this.handleUpdateCart(item, "show")
+                                    }
+                                  ></i> */}
+                                  {item.is_default ? null : (
+                                    <i
+                                      class="fa fa-window-close btn__remove-name"
+                                      style={{
+                                        cursor: "pointer",
+                                      }}
+                                      onClick={() => this.handleDelete(item.id)}
+                                      data-toggle="modal"
+                                      data-target="#removeModal"
+                                    ></i>
+                                  )}
+                                </span>
+                              </div>
+                            )}
                           </li>
                         );
                       })}
@@ -619,7 +896,10 @@ class Topbar extends Component {
                   marginRight: "30px",
                   display: this.props.order_code ? "none" : "block",
                 }}
-                onClick={() => this.handleCreateTab()}
+                onClick={() => {
+                  this.handleCreateTab();
+                  this.setState({ idEditCart: null, txtEditCart: "" });
+                }}
               >
                 <div>
                   <i class="fas fa-plus"></i>
@@ -759,6 +1039,7 @@ class Topbar extends Component {
 const mapStateToProps = (state) => {
   return {
     listPos: state.posReducers.pos_reducer.listPosOrder,
+    updatedNamePosOrder: state.posReducers.pos_reducer.updatedNamePosOrder,
     branchStore: state.storeReducers.store.branchStore,
     user: state.userReducers.user.userID,
     loadingCart: state.posReducers.pos_reducer.loadingCart,
@@ -770,6 +1051,17 @@ const mapDispatchToProps = (dispatch, props) => {
   return {
     listPosOrder: (store_code, branch_id) => {
       dispatch(posAction.listPosOrder(store_code, branch_id));
+    },
+    updateNameInCart: (store_code, branch_id, id_cart, data, onSuccess) => {
+      dispatch(
+        posAction.updateNameInCart(
+          store_code,
+          branch_id,
+          id_cart,
+          data,
+          onSuccess
+        )
+      );
     },
     createOneTab: (store_code, branch_id, data) => {
       dispatch(posAction.createOneTab(store_code, branch_id, data));
