@@ -710,7 +710,9 @@ class CreateImportStock extends Component {
                             }}
                           >
                             <div>Tổng tiền hàng:</div>
-                            <div>{format(Number(price_total))}</div>
+                            <div>
+                              {price_total ? format(Number(price_total)) : 0}
+                            </div>
                           </div>
                           <div
                             style={{

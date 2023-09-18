@@ -1629,7 +1629,6 @@ export const updateProduct = (
     productApi
       .updateProduct(store_code, data, productId)
       .then((res) => {
-        console.log(res);
         funcModal();
         dispatch({
           type: Types.SHOW_LOADING,
@@ -1644,7 +1643,6 @@ export const updateProduct = (
             content: res.data.msg,
           },
         });
-        history.push(`/product/index/${store_code}?page=${page}${params}`);
         // history.goBack();
       })
       .catch(function (error) {

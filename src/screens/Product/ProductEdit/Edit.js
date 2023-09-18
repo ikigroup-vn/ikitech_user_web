@@ -23,6 +23,8 @@ import * as Types from "../../../constants/ActionType";
 import Alert from "../../../components/Partials/Alert";
 import SeoOption from "../../../components/Product/Update/SeoOption";
 import getChannel, { IKITECH, IKIPOS } from "../../../ultis/channel";
+import { getBranchId, getBranchIds } from "../../../ultis/branchUtils";
+import history from "../../../history";
 
 class ProductEdit extends Component {
   constructor(props) {
@@ -500,6 +502,7 @@ class ProductEdit extends Component {
         ? `&category_children_ids=${category_children_ids}`
         : ""
     }`;
+
     this.props.updateDistribute(
       store_code,
       distributeData,
@@ -512,6 +515,8 @@ class ProductEdit extends Component {
         this.props.setUpAttributeSearch(store_code, productId, {
           list_attribute_search_childs: this.state.attributeSearch,
         });
+
+        history.push(`/product/index/${store_code}?page=${pageNum}${params}`);
       }
     );
   };
@@ -571,8 +576,10 @@ class ProductEdit extends Component {
       isShowAttr,
       isCreate,
       isRemove,
+      update,
     } = this.props;
     var { total, disableInventory, disableDistribute } = this.state;
+
     var afterAttribute = this.afterAttribute();
     console.log(afterAttribute);
     return (
@@ -631,12 +638,15 @@ class ProductEdit extends Component {
             <div class="card-body" style={{ padding: "0.8rem" }}>
               <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                  <button
-                    class="btn btn-primary btn-sm"
-                    onClick={this.postProduct}
-                  >
-                    <i class="fa fa-plus"></i> Lưu thay đổi
-                  </button>
+                  {update ? (
+                    <button
+                      class="btn btn-primary btn-sm"
+                      onClick={this.postProduct}
+                    >
+                      <i class="fa fa-plus"></i> Lưu thay đổi
+                    </button>
+                  ) : null}
+
                   <a
                     style={{ marginLeft: "10px" }}
                     onClick={this.goBack}
@@ -747,12 +757,15 @@ class ProductEdit extends Component {
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <button
-                  class="btn btn-primary btn-sm"
-                  onClick={this.postProduct}
-                >
-                  <i class="fa fa-plus"></i> Lưu thay đổi
-                </button>
+                {update ? (
+                  <button
+                    class="btn btn-primary btn-sm"
+                    onClick={this.postProduct}
+                  >
+                    <i class="fa fa-plus"></i> Lưu thay đổi
+                  </button>
+                ) : null}
+
                 <a
                   className="color-white"
                   style={{ marginLeft: "10px" }}
@@ -825,6 +838,11 @@ const mapDispatchToProps = (dispatch, props) => {
           params,
           funcModal
         )
+      );
+    },
+    fetchAllProductV2: (store_code, branch_id, page, params) => {
+      dispatch(
+        productAction.fetchAllProductV2(store_code, branch_id, page, params)
       );
     },
     fetchAllBlog: (id, page) => {

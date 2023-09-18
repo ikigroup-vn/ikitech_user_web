@@ -8,6 +8,8 @@ import * as productAction from "../../../actions/product";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import { formatNumber } from "../../../ultis/helpers";
 import { isEmpty } from "../../../ultis/helpers";
+import SortableList, { SortableItem, SortableKnob } from "react-easy-sort";
+import arrayMove from "array-move";
 
 class Distribute extends Component {
   constructor(props) {
@@ -159,9 +161,7 @@ class Distribute extends Component {
     }
   };
 
-
   componentWillReceiveProps(nextProps) {
-   
     if (
       !shallowEqual(
         nextProps.product.distributes,
@@ -214,7 +214,6 @@ class Distribute extends Component {
     }
   }
 
-
   addRow = () => {
     var list_distribute = [...this.state.list_distribute];
     console.log(list_distribute);
@@ -228,6 +227,7 @@ class Distribute extends Component {
         price: null,
         quantity_in_stock: null,
         sub_element_distributes: [],
+        position: 0,
       };
       list_distribute[0].element_distributes.push(newObject);
     } else if (typeof list_distribute[0].name == "undefined") {
@@ -240,6 +240,7 @@ class Distribute extends Component {
         price: null,
         quantity_in_stock: null,
         sub_element_distributes: [],
+        position: 0,
       };
       list_distribute[0].element_distributes.push(newObject);
     } else if (
@@ -257,6 +258,7 @@ class Distribute extends Component {
         price: null,
         quantity_in_stock: null,
         import_price: null,
+        position: 0,
       };
       list_distribute[0].element_distributes.forEach((element) => {
         typeof element == "object" &&
@@ -281,7 +283,10 @@ class Distribute extends Component {
     };
     list_distribute[0].element_distributes.forEach((element) => {
       typeof element == "object" &&
-        element.sub_element_distributes.push({ ...newObject });
+        element.sub_element_distributes.push({
+          ...newObject,
+          position: element.sub_element_distributes.length,
+        });
     });
     // list_distribute[0].element_distributes[0].sub_element_distributes.push(newObject)
     this.setState({ list_distribute: [...list_distribute] });
@@ -312,6 +317,7 @@ class Distribute extends Component {
   removeRowChild = (key) => {
     var list_distribute = [...this.state.list_distribute];
     list_distribute[0].element_distributes.splice(key, 1);
+
     if (
       list_distribute[0].element_distributes &&
       list_distribute[0].element_distributes.length == 0
@@ -319,6 +325,11 @@ class Distribute extends Component {
       this.setState({ list_distribute: [] });
       return;
     }
+    list_distribute[0].element_distributes =
+      list_distribute[0].element_distributes.map((item, index) => ({
+        ...item,
+        position: index,
+      }));
 
     this.setState({ list_distribute: [...list_distribute] });
   };
@@ -332,6 +343,14 @@ class Distribute extends Component {
           if (key == index) {
             element.sub_element_distributes.splice(index, 1);
           }
+        });
+      }
+    });
+
+    list_distribute[0].element_distributes.forEach((element, _key) => {
+      if (element.sub_element_distributes.length > 0) {
+        element.sub_element_distributes.forEach((item, index) => {
+          item.position = index;
         });
       }
     });
@@ -361,6 +380,7 @@ class Distribute extends Component {
       image_url: null,
       price: null,
       quantity_in_stock: null,
+      position: list_distribute[0].element_distributes.length,
       sub_element_distributes: [...newItem],
     };
 
@@ -373,113 +393,206 @@ class Distribute extends Component {
       return result;
     }
 
-    if (list_distribute.length > 0) {
-      list_distribute.map((_data) => {
-        if (_data.element_distributes.length > 0) {
-          result = _data.element_distributes.map((data, index) => {
-            var disable = index == 0 ? "" : "hide";
-            var disable_addButton =
-              index == _data.element_distributes.length - 1 ? "" : "hide";
+    if (
+      list_distribute.length > 0 &&
+      list_distribute[0].element_distributes?.length > 0
+    ) {
+      return (
+        <tr>
+          <td
+            style={{
+              verticalAlign: "top",
+            }}
+          >
+            <input
+              type="text"
+              id="input"
+              class={`form-control`}
+              value={list_distribute[0].name}
+              required="required"
+              onChange={(e) =>
+                this.onChange(e, "PARENT", { name: "name", index: 0 })
+              }
+            />
+          </td>
+          <td colSpan={3}>
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                rowGap: "10px",
+              }}
+            >
+              <SortableList
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  rowGap: "10px",
+                }}
+                onSortEnd={this.onSortEnd}
+              >
+                {list_distribute.map((_data) => {
+                  if (_data.element_distributes.length > 0) {
+                    return _data.element_distributes.map((data, index) => {
+                      var disable = index == 0 ? "" : "hide";
+                      var disable_addButton =
+                        index == _data.element_distributes.length - 1
+                          ? ""
+                          : "hide";
 
-            var method =
-              index == 0 && _data.element_distributes.length == 1
-                ? "removeRowChild"
-                : "removeRowChild";
+                      var method =
+                        index == 0 && _data.element_distributes.length == 1
+                          ? "removeRowChild"
+                          : "removeRowChild";
 
-            var visible = index == 0 ? null : "visibled";
-            var border = index == 0 ? null : "hide-border";
-            var img = data.image_url;
-            var status_btn =
-              img == "" || img == null || typeof img == "undefined"
-                ? "show"
-                : "hide";
-            var status_img =
-              img == "" || img == null || typeof img == "undefined"
-                ? "hide"
-                : "show";
-            return (
-              <tr className={`${border}`}>
-                <td>
-                  <input
-                    type="text"
-                    id="input"
-                    class={`form-control ${disable}`}
-                    value={_data.name}
-                    required="required"
-                    onChange={(e) =>
-                      this.onChange(e, "PARENT", { name: "name", index })
-                    }
-                  />
-                </td>
-                <td>
-                  <input
-                    type="text"
-                    id="input"
-                    class="form-control"
-                    value={data.name}
-                    onChange={(e) =>
-                      this.onChange(e, "PARENT", { name: "value", index })
-                    }
-                    required="required"
-                  />
-                  <button
-                    onClick={this.addRowChild}
-                    class={`btn btn-success btn-sm ${disable_addButton}`}
-                  >
-                    <i class="fa fa-plus"></i>
-                    Thêm thuộc tính
-                  </button>
-                </td>
-                <td
-                  className="btn-img"
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                  }}
+                      var visible = index == 0 ? null : "visibled";
+                      var border = index == 0 ? null : "hide-border";
+                      var img = data.image_url;
+                      var status_btn =
+                        img == "" || img == null || typeof img == "undefined"
+                          ? "show"
+                          : "hide";
+                      var status_img =
+                        img == "" || img == null || typeof img == "undefined"
+                          ? "hide"
+                          : "show";
+                      return (
+                        <SortableItem key={data.id}>
+                          <div
+                            style={{
+                              display: "flex",
+                            }}
+                          >
+                            <div
+                              style={{
+                                border: "none",
+                                flexWrap: "nowrap",
+                                alignItems: "start",
+                              }}
+                              className="col-6 row"
+                            >
+                              <div
+                                style={{
+                                  display: "flex",
+                                  flexWrap: "nowrap",
+                                  alignItems: "center",
+                                  width: "100%",
+                                  columnGap: "5px",
+                                }}
+                              >
+                                <span
+                                  style={{
+                                    flexShrink: 1,
+                                  }}
+                                >
+                                  <SortableKnob>
+                                    <span style={{ cursor: "move" }}>
+                                      <svg
+                                        width="16px"
+                                        height="16px"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <path
+                                          d="M18 10.75H5.99998C5.85218 10.751 5.70747 10.7077 5.58449 10.6257C5.46151 10.5437 5.3659 10.4268 5.30998 10.29C5.25231 10.1528 5.23673 10.0016 5.26523 9.85561C5.29372 9.70959 5.36499 9.57535 5.46998 9.46995L11.47 3.46995C11.6106 3.3295 11.8012 3.25061 12 3.25061C12.1987 3.25061 12.3894 3.3295 12.53 3.46995L18.53 9.46995C18.635 9.57535 18.7062 9.70959 18.7347 9.85561C18.7632 10.0016 18.7476 10.1528 18.69 10.29C18.6341 10.4268 18.5384 10.5437 18.4155 10.6257C18.2925 10.7077 18.1478 10.751 18 10.75ZM7.80998 9.24995H16.19L12 5.05995L7.80998 9.24995Z"
+                                          fill="#a6a4a4"
+                                        />
+                                        <path
+                                          d="M12 20.7499C11.9014 20.7504 11.8038 20.7311 11.7128 20.6934C11.6218 20.6556 11.5392 20.6 11.47 20.5299L5.46998 14.5299C5.36499 14.4245 5.29372 14.2903 5.26523 14.1442C5.23673 13.9982 5.25231 13.847 5.30998 13.7099C5.3659 13.5731 5.46151 13.4561 5.58449 13.3742C5.70747 13.2922 5.85218 13.2489 5.99998 13.2499H18C18.1478 13.2489 18.2925 13.2922 18.4155 13.3742C18.5384 13.4561 18.6341 13.5731 18.69 13.7099C18.7476 13.847 18.7632 13.9982 18.7347 14.1442C18.7062 14.2903 18.635 14.4245 18.53 14.5299L12.53 20.5299C12.4607 20.6 12.3782 20.6556 12.2872 20.6934C12.1962 20.7311 12.0985 20.7504 12 20.7499ZM7.80998 14.7499L12 18.9399L16.19 14.7499H7.80998Z"
+                                          fill="#a6a4a4"
+                                        />
+                                      </svg>
+                                    </span>
+                                  </SortableKnob>
+                                </span>
+                                <input
+                                  type="text"
+                                  id="input"
+                                  class="form-control"
+                                  value={data.name}
+                                  onChange={(e) =>
+                                    this.onChange(e, "PARENT", {
+                                      name: "value",
+                                      index,
+                                    })
+                                  }
+                                  required="required"
+                                />
+                              </div>
+                            </div>
+                            <div
+                              className="btn-img col-4"
+                              style={{
+                                paddingLeft: "50px",
+                              }}
+                            >
+                              <button
+                                class={`btn btn-primary btn-sm ${status_btn}`}
+                                data-toggle="modal"
+                                data-target="#uploadModalDis"
+                                onClick={(e) => {
+                                  this.getIdImg(e, { index });
+                                }}
+                              >
+                                <i class="fa fa-plus"></i> Upload ảnh
+                              </button>
+
+                              <div className={`box ${status_img}`}>
+                                <div
+                                  className={`box-icon`}
+                                  style={{ width: "100px" }}
+                                  onClick={(e) =>
+                                    this.removeListFromImg(e, index)
+                                  }
+                                >
+                                  <i class="fas cursor fa-times-circle"></i>
+                                </div>
+                                <img
+                                  src={img}
+                                  width="100"
+                                  height="100"
+                                  class="img-responsive"
+                                  alt="Image"
+                                />
+                              </div>
+                            </div>
+                            <div
+                              className="btn-action col-2"
+                              style={{
+                                border: "none",
+                                paddingLeft: "35px",
+                              }}
+                            >
+                              <button
+                                class="btn btn-danger btn-sm"
+                                onClick={() => {
+                                  this[method](index);
+                                }}
+                              >
+                                <i class="fa fa-trash"></i> Xóa
+                              </button>
+                            </div>
+                          </div>
+                        </SortableItem>
+                      );
+                    });
+                  }
+                })}
+              </SortableList>
+              <div>
+                <button
+                  onClick={this.addRowChild}
+                  class={`btn btn-success btn-sm`}
                 >
-                  <button
-                    class={`btn btn-primary btn-sm ${status_btn}`}
-                    data-toggle="modal"
-                    data-target="#uploadModalDis"
-                    onClick={(e) => {
-                      this.getIdImg(e, { index });
-                    }}
-                  >
-                    <i class="fa fa-plus"></i> Upload ảnh
-                  </button>
-
-                  <div className={`box ${status_img}`}>
-                    <div
-                      className={`box-icon`}
-                      style={{ width: "100px" }}
-                      onClick={(e) => this.removeListFromImg(e, index)}
-                    >
-                      <i class="fas cursor fa-times-circle"></i>
-                    </div>
-                    <img
-                      src={img}
-                      width="100"
-                      height="100"
-                      class="img-responsive"
-                      alt="Image"
-                    />
-                  </div>
-                </td>
-                <td className="btn-action">
-                  <button
-                    class="btn btn-danger btn-sm"
-                    onClick={() => {
-                      this[method](index);
-                    }}
-                  >
-                    <i class="fa fa-trash"></i> Xóa
-                  </button>
-                </td>
-              </tr>
-            );
-          });
-        }
-      });
+                  <i class="fa fa-plus"></i>
+                  Thêm thuộc tính
+                </button>
+              </div>
+            </div>
+          </td>
+        </tr>
+      );
     }
     return result;
   };
@@ -489,119 +602,214 @@ class Distribute extends Component {
     if (typeof list_distribute === "undefined") {
       return result;
     }
-    if (list_distribute.length > 0) {
-      list_distribute.map((_data, _index) => {
-        if (_data.element_distributes.length > 0) {
-          if (
-            typeof _data.element_distributes[0].sub_element_distributes ==
-            "undefined"
-          ) {
-          } else {
-            if (
-              _data.element_distributes[0].sub_element_distributes.length > 0
-            ) {
-              result = _data.element_distributes[0].sub_element_distributes.map(
-                (data, index) => {
-                  var disable = index == 0 ? "" : "hide";
-                  var method =
-                    index == 0 ? "removeRowChildSup" : "removeRowChildSup";
-                  var disable_addButton =
-                    index ==
-                    _data.element_distributes[0].sub_element_distributes
-                      .length -
-                      1
-                      ? ""
-                      : "hide";
-
-                  var visible = index == 0 ? null : "visibled";
-                  var border = index == 0 ? null : "hide-border";
-                  var img = data.image_url;
-                  var status_btn =
-                    img == "" || img == null || typeof img == "undefined"
-                      ? "show"
-                      : "hide";
-                  var status_img =
-                    img == "" || img == null || typeof img == "undefined"
-                      ? "hide"
-                      : "show";
-
-                  return (
-                    <React.Fragment>
-                      {index == 0 && <h6>Tên phân loại phụ </h6>}
-                      <tr className={`${border}`}>
-                        <td>
-                          <input
-                            type="text"
-                            name="name"
-                            onChange={(e) =>
-                              this.onChange(e, "SUP", {
-                                name: "name",
-                                index,
-                                _index: 0,
-                              })
-                            }
-                            id="input"
-                            class={`form-control ${disable}`}
-                            value={_data.sub_element_distribute_name}
-                            required="required"
-                          />
-                        </td>
-                        <td>
-                          <input
-                            onChange={(e) =>
-                              this.onChange(e, "SUP", {
-                                name: "value",
-                                index,
-                                _index: 0,
-                              })
-                            }
-                            type="text"
-                            name="name_property"
-                            id="input"
-                            class="form-control"
-                            value={data.name}
-                            required="required"
-                          />
-                          <button
-                            onClick={this.addRowChildSup}
-                            class={`btn btn-success btn-sm ${disable_addButton}`}
-                          >
-                            <i class="fa fa-plus"></i>
-                            Thêm thuộc tính
-                          </button>
-                        </td>
-                        <td
-                          className="btn-img"
-                          style={{
-                            display: "flex",
-                            flexDirection: "column",
-                          }}
-                        ></td>
-                        <td className="btn-action">
-                          <button
-                            class="btn btn-danger btn-sm"
-                            onClick={() => {
-                              this[method](index);
-                            }}
-                          >
-                            <i class="fa fa-trash"></i> Xóa
-                          </button>
-                        </td>
-                      </tr>
-                    </React.Fragment>
-                  );
+    if (
+      list_distribute.length > 0 &&
+      list_distribute[0].element_distributes?.length > 0 &&
+      list_distribute[0].element_distributes[0]?.sub_element_distributes
+        ?.length > 0
+    ) {
+      return (
+        <>
+          <h6>Tên phân loại phụ </h6>
+          <tr>
+            <td
+              style={{
+                verticalAlign: "top",
+              }}
+            >
+              <input
+                type="text"
+                name="name"
+                onChange={(e) =>
+                  this.onChange(e, "SUP", {
+                    name: "name",
+                    index: 0,
+                    _index: 0,
+                  })
                 }
-              );
-            }
-          }
-        }
-      });
+                id="input"
+                class={`form-control`}
+                value={list_distribute[0].sub_element_distribute_name}
+                required="required"
+              />
+            </td>
+            <td colSpan={3}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  rowGap: "10px",
+                }}
+              >
+                <SortableList
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    rowGap: "10px",
+                  }}
+                  onSortEnd={this.onSortEndSub}
+                >
+                  {list_distribute.map((_data, _index) => {
+                    if (_data.element_distributes.length > 0) {
+                      if (
+                        typeof _data.element_distributes[0]
+                          .sub_element_distributes == "undefined"
+                      ) {
+                        return [];
+                      } else {
+                        if (
+                          _data.element_distributes[0].sub_element_distributes
+                            .length > 0
+                        ) {
+                          return _data.element_distributes[0].sub_element_distributes.map(
+                            (data, index) => {
+                              var disable = index == 0 ? "" : "hide";
+                              var method =
+                                index == 0
+                                  ? "removeRowChildSup"
+                                  : "removeRowChildSup";
+                              var disable_addButton =
+                                index ==
+                                _data.element_distributes[0]
+                                  .sub_element_distributes.length -
+                                  1
+                                  ? ""
+                                  : "hide";
+                              var visible = index == 0 ? null : "visibled";
+                              var border = index == 0 ? null : "hide-border";
+                              var img = data.image_url;
+                              var status_btn =
+                                img == "" ||
+                                img == null ||
+                                typeof img == "undefined"
+                                  ? "show"
+                                  : "hide";
+                              var status_img =
+                                img == "" ||
+                                img == null ||
+                                typeof img == "undefined"
+                                  ? "hide"
+                                  : "show";
+                              return (
+                                <SortableItem key={data.id}>
+                                  <div
+                                    style={{
+                                      display: "flex",
+                                    }}
+                                  >
+                                    <div
+                                      style={{
+                                        border: "none",
+                                        flexWrap: "nowrap",
+                                        alignItems: "start",
+                                      }}
+                                      className="col-6 row"
+                                    >
+                                      <div
+                                        style={{
+                                          display: "flex",
+                                          flexWrap: "nowrap",
+                                          alignItems: "center",
+                                          width: "100%",
+                                          columnGap: "5px",
+                                        }}
+                                      >
+                                        <span
+                                          style={{
+                                            flexShrink: 1,
+                                          }}
+                                        >
+                                          <SortableKnob>
+                                            <span style={{ cursor: "move" }}>
+                                              <svg
+                                                width="16px"
+                                                height="16px"
+                                                viewBox="0 0 24 24"
+                                                fill="none"
+                                                xmlns="http://www.w3.org/2000/svg"
+                                              >
+                                                <path
+                                                  d="M18 10.75H5.99998C5.85218 10.751 5.70747 10.7077 5.58449 10.6257C5.46151 10.5437 5.3659 10.4268 5.30998 10.29C5.25231 10.1528 5.23673 10.0016 5.26523 9.85561C5.29372 9.70959 5.36499 9.57535 5.46998 9.46995L11.47 3.46995C11.6106 3.3295 11.8012 3.25061 12 3.25061C12.1987 3.25061 12.3894 3.3295 12.53 3.46995L18.53 9.46995C18.635 9.57535 18.7062 9.70959 18.7347 9.85561C18.7632 10.0016 18.7476 10.1528 18.69 10.29C18.6341 10.4268 18.5384 10.5437 18.4155 10.6257C18.2925 10.7077 18.1478 10.751 18 10.75ZM7.80998 9.24995H16.19L12 5.05995L7.80998 9.24995Z"
+                                                  fill="#a6a4a4"
+                                                />
+                                                <path
+                                                  d="M12 20.7499C11.9014 20.7504 11.8038 20.7311 11.7128 20.6934C11.6218 20.6556 11.5392 20.6 11.47 20.5299L5.46998 14.5299C5.36499 14.4245 5.29372 14.2903 5.26523 14.1442C5.23673 13.9982 5.25231 13.847 5.30998 13.7099C5.3659 13.5731 5.46151 13.4561 5.58449 13.3742C5.70747 13.2922 5.85218 13.2489 5.99998 13.2499H18C18.1478 13.2489 18.2925 13.2922 18.4155 13.3742C18.5384 13.4561 18.6341 13.5731 18.69 13.7099C18.7476 13.847 18.7632 13.9982 18.7347 14.1442C18.7062 14.2903 18.635 14.4245 18.53 14.5299L12.53 20.5299C12.4607 20.6 12.3782 20.6556 12.2872 20.6934C12.1962 20.7311 12.0985 20.7504 12 20.7499ZM7.80998 14.7499L12 18.9399L16.19 14.7499H7.80998Z"
+                                                  fill="#a6a4a4"
+                                                />
+                                              </svg>
+                                            </span>
+                                          </SortableKnob>
+                                        </span>
+                                        <input
+                                          onChange={(e) =>
+                                            this.onChange(e, "SUP", {
+                                              name: "value",
+                                              index,
+                                              _index: 0,
+                                            })
+                                          }
+                                          type="text"
+                                          name="name_property"
+                                          id="input"
+                                          class="form-control"
+                                          value={data.name}
+                                          required="required"
+                                        />
+                                      </div>
+                                    </div>
+                                    <div
+                                      className="btn-img col-4"
+                                      style={{
+                                        paddingLeft: "50px",
+                                      }}
+                                    ></div>
+                                    <div
+                                      className="btn-action  col-2"
+                                      style={{
+                                        border: "none",
+                                        paddingLeft: "35px",
+                                      }}
+                                    >
+                                      <button
+                                        class="btn btn-danger btn-sm"
+                                        onClick={() => {
+                                          this[method](index);
+                                        }}
+                                      >
+                                        <i class="fa fa-trash"></i> Xóa
+                                      </button>
+                                    </div>
+                                  </div>
+                                </SortableItem>
+                              );
+                            }
+                          );
+                        }
+                      }
+                    }
+                  })}
+                </SortableList>
+                <div>
+                  <button
+                    onClick={this.addRowChildSup}
+                    class={`btn btn-success btn-sm`}
+                  >
+                    <i class="fa fa-plus"></i>
+                    Thêm thuộc tính
+                  </button>
+                </div>
+              </div>
+            </td>
+          </tr>
+        </>
+      );
     }
     return result;
   };
 
   shouldComponentUpdate(nextProps, nextState) {
     this.props.handleDataFromDistribute(nextState.list_distribute);
+
     var list_distribute = [...nextState.list_distribute];
     var total = null;
     try {
@@ -932,10 +1140,62 @@ class Distribute extends Component {
     return result;
   };
 
+  onSortEnd = (oldIndex, newIndex) => {
+    const { list_distribute } = this.state;
+    const new_list_distribute = JSON.parse(JSON.stringify(list_distribute));
+    new_list_distribute[0].element_distributes = arrayMove(
+      list_distribute?.[0]?.element_distributes,
+      oldIndex,
+      newIndex
+    );
+
+    new_list_distribute[0].element_distributes =
+      new_list_distribute[0].element_distributes.map((item, index) => ({
+        ...item,
+        position: index,
+      }));
+
+    this.setState({
+      list_distribute: new_list_distribute,
+    });
+  };
+
+  onSortEndSub = (oldIndex, newIndex) => {
+    const { list_distribute } = this.state;
+    const new_list_distribute = JSON.parse(JSON.stringify(list_distribute));
+
+    const new_element_distributes =
+      new_list_distribute?.[0]?.element_distributes.map((item) => {
+        let new_sub_element_distributes = arrayMove(
+          item?.sub_element_distributes,
+          oldIndex,
+          newIndex
+        );
+
+        new_sub_element_distributes = new_sub_element_distributes.map(
+          (item, index) => ({
+            ...item,
+            position: index,
+          })
+        );
+        return {
+          ...item,
+          sub_element_distributes: new_sub_element_distributes,
+        };
+      });
+
+    new_list_distribute[0].element_distributes = new_element_distributes;
+
+    this.setState({
+      list_distribute: new_list_distribute,
+    });
+  };
+
   render() {
-   if(this.props.isHide == true) return <></>
+    if (this.props.isHide == true) return <></>;
 
     var { list_distribute } = this.state;
+    console.log("🚀 ~ list_distribute:", list_distribute);
     // var openDistribute = disableDistribute == true && disableInventory == true ? "" : "hide";
 
     var disable = "";
@@ -949,16 +1209,14 @@ class Distribute extends Component {
     return (
       <div class="table-responsive">
         <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
-
         {this.props.isSpeedEdit != true && (
           <div>
             <table class="table table-border">
               <thead>
                 <tr>
-                  <th>Tên phân loại chính</th>
+                  <th width="25%">Tên phân loại chính</th>
                   <th>Giá trị</th>
                   <th>Hình ảnh (tùy chọn)</th>
-
                   <th>Hành động</th>
                 </tr>
               </thead>
