@@ -35,8 +35,7 @@ class Table extends Component {
             </td>
             <td colSpan={2}>{data?.total_staff_visit}</td>
             <td colSpan={2}>{formatNumber(data?.balance)}</td>
-            <td>{Math.ceil(data?.total_time_visit / 60)}</td>
-            <td>{data?.percent_pin}</td>
+            <td colSpan={2}>{Math.ceil(data?.total_time_visit / 60)}</td>
             <td colSpan={2}>
               <span className="total_customers primary" onClick={() => this.setOpenHistorySidebar(true, data.id, data.name)}>
                 Xem LS
@@ -114,16 +113,9 @@ class Table extends Component {
               <th
                 style={{ border: '1px solid #c4c4c4', color: 'grey', verticalAlign: 'middle' }}
                 rowSpan={2}
-                colSpan={1}
+                colSpan={2}
               >
                 TG(p)
-              </th>
-              <th
-                style={{ border: '1px solid #c4c4c4', color: 'grey', verticalAlign: 'middle' }}
-                rowSpan={2}
-                colSpan={1}
-              >
-                Pin(%)
               </th>
             </tr>
           </thead>

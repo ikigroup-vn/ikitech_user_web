@@ -47,29 +47,27 @@ class WatchingSaler extends Component {
     this.props.fetchHistoryToDistributor(store_code, today);
   }
 
-  createMap(staff) {
-    const staffArray = [...Object.values(staff)];
-    let [latitude, longitude] = [];
-    if (staffArray.length > 0) {
-      const lastSaler = staffArray[staffArray.length - 1];
-      [latitude, longitude] = [lastSaler.latitude, lastSaler.longitude];
+  createMap(staffArr) {
+    const map = L.map('map');
+    const hanoiCoordinates = [21.0285, 105.8542];
+    if (staffArr.length === 0) {
+      // Nếu không có dữ liệu staffArr, set view về Hà Nội
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      }).addTo(map);
+      map.setView(hanoiCoordinates, 13);
     } else {
-      // Nếu không có saler nào, tạo bản đồ mặc định ở hà nội
-      [latitude, longitude] = [21.0285, 105.8542];
-    }
-
-    const map = L.map('map').setView([latitude, longitude], 13);
-
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    }).addTo(map);
-
-    this.map = map;
-
-    if (staffArray.length > 0) {
-      staffArray.forEach((saler) => {
-        const { latitude, longitude, name, sale_avatar_image } = saler;
+      // Nếu có dữ liệu staffArr, tạo bản đồ và hiển thị các marker và popup
+      const bounds = new L.LatLngBounds(); // Để tính toán giới hạn hiển thị của bản đồ
+  
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      }).addTo(map);
+  
+      staffArr.forEach((record, index) => {
+        const { longitude, latitude, name, sale_avatar_image } = record;
         const popupContent = `
           <div style="text-align: center">
             <div style="width: 100%">
@@ -78,10 +76,20 @@ class WatchingSaler extends Component {
             <p style="color: #4e73df">${name}</p>
           </div>
         `;
-        const marker = L.marker([latitude, longitude], { autoPopup: true }).addTo(this.map);
+  
+        const marker = L.marker([latitude, longitude], { autoPopup: false }).addTo(map);
         marker.bindPopup(popupContent);
+  
+        // Thêm marker vào giới hạn hiển thị của bản đồ
+        bounds.extend(marker.getLatLng());
+  
+        // Nếu là marker cuối cùng, thì fit bản đồ theo giới hạn
+        if (index === staffArr.length - 1) {
+          map.fitBounds(bounds);
+        }
       });
     }
+    this.map = map;
   }
 
   updateMapMarkers() {
