@@ -8,11 +8,13 @@ import ModalRemove from "../../components/Sale/Config/ModalRemove";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
+
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import NotAccess from "../../components/Partials/NotAccess";
 import Config from "../../components/Sale/Config";
 import ListSale from "../../components/Sale/ListSale";
+import WatchingSale from "../../components/Sale/WatchingSale/index.js";
 import TopCommission from "../../components/Sale/TopComiss";
 
 class Sale extends Component {
@@ -51,6 +53,7 @@ class Sale extends Component {
       var isShow = permissions.sale_list;
       var sale_list = permissions.sale_list;
       var sale_config = permissions.sale_config;
+      var sale_watching = permissions.sale_watching;
       var sale_top = permissions.sale_top;
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
@@ -63,6 +66,7 @@ class Sale extends Component {
         isLoading: true,
         sale_list,
         sale_config,
+        sale_watching,
         sale_top,
         isShow,
       });
@@ -70,7 +74,7 @@ class Sale extends Component {
   }
   render() {
     var { store_code, id } = this.props.match.params;
-    var { tabId, sale_list, sale_config, sale_top, isShow } = this.state;
+    var { tabId, sale_list, sale_config, sale_top, sale_watching, isShow } = this.state;
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
@@ -146,6 +150,22 @@ class Sale extends Component {
                               </Link>
                             </Tab>
                           ) : null}
+                          {sale_watching == true ? (
+                            <Tab>
+                              <Link
+                                to={"?tab-index=3"}
+                                style={{
+                                  display: "flex",
+                                  columnGap: "5px",
+                                  alignItems: "center",
+                                }}
+                              >
+                                {" "}
+                                <i class="fas fa-map-marked-alt"></i>
+                                <span>Giám sát sale thị trường</span>
+                              </Link>
+                            </Tab>
+                          ) : null}
                         </TabList>
 
                         {sale_config == true ? (
@@ -171,6 +191,11 @@ class Sale extends Component {
                               tabId={tabId}
                               store_code={store_code}
                             />
+                          </TabPanel>
+                        ) : null}
+                        {sale_watching == true ? (
+                          <TabPanel>
+                            <WatchingSale store_code={store_code} tabId={tabId}/>
                           </TabPanel>
                         ) : null}
                       </Tabs>

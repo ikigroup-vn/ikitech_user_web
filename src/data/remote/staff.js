@@ -38,3 +38,12 @@ export const destroyStaff = (store_code, id) => {
 export const updateCustomerToSale = (store_code, id, data) => {
   return callApi(`/store/${store_code}/staffs/${id}/update_sale`, "post", data);
 };
+
+// coder newer
+export const historyReportSalerToDistributor  = (store_code, date) => {
+  return callApi(`/store/${store_code}/overview_sale_visit_agencies${date ? `?date_to=${date}` : ''}`, 'get')
+}
+
+export const reportSalerToDistributor = (store_code, date, staff_id) => {
+  return callApi(`/store/${store_code}/sale_visit_agencies${date ? `?date_to=${date}` : ''}${staff_id ? `&staff_id=${staff_id}` : ''}`, 'get');
+}
