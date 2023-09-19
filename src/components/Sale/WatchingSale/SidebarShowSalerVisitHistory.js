@@ -39,6 +39,28 @@ const ImageSliderWrapper = styled.div`
   padding: 20px 0;
 `;
 
+const ImageShortList = styled.div`
+  cursor: pointer;
+  width: 400px;
+  display: flex;
+  padding: 20px 0;
+`;
+const ImageShortListImg = styled.img`
+  width: 50px;
+  height: 50px;
+  margin-left: 6px;
+  object-fit: cover;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  transition: transform 0.1s;
+  &:active {
+    cursor: grabbing;
+    transform: scale(1.1);
+    transition: transform 0.2s;
+  }
+`;
+
 const Image = styled.img`
   width: 50px;
   height: 50px;
@@ -119,25 +141,25 @@ const ScrollContainer = styled.div`
 `;
 
 const MarkerStyled = styled.div`
-  .div_icon_blue{
+  .div_icon_blue {
     background-color: #687eff;
-    color: #000000; 
-    border-radius: 50%; 
+    color: #000000;
+    border-radius: 50%;
     border: solid 1px #875252;
     width: 30px;
-    height: 30px; 
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
   }
-  .div_icon_red{
+  .div_icon_red {
     background-color: #ff6868;
-    color: #000000; 
-    border-radius: 50%; 
+    color: #000000;
+    border-radius: 50%;
     border: solid 1px #875252;
     width: 30px;
-    height: 30px; 
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -167,14 +189,14 @@ const PrevNextButtons = styled.div`
     right: 10px;
   }
 
-  .slick-prev:before{
-    content: "←";
+  .slick-prev:before {
+    content: '←';
     font-size: 24px;
     color: #000;
   }
 
-  .slick-next:before{
-    content: "→";
+  .slick-next:before {
+    content: '→';
     font-size: 24px;
     color: #000;
   }
@@ -235,7 +257,7 @@ class SidebarShowSalerVisitHistory extends Component {
           </div>
         `;
         const customIcon = L.divIcon({
-          className: isLastPoint ? "div_icon_red" : "div_icon_blue",
+          className: isLastPoint ? 'div_icon_red' : 'div_icon_blue',
           html: `<div>${index + 1}</div>`,
           iconSize: [30, 30],
         });
@@ -248,7 +270,6 @@ class SidebarShowSalerVisitHistory extends Component {
           marker.openPopup();
         }
       });
-
     }
     this.map = map;
   }
@@ -297,7 +318,7 @@ class SidebarShowSalerVisitHistory extends Component {
   handleCloseSiderBar = (state) => {
     this.props.setOpenHistorySidebar(state);
   };
-  
+
   openModal = (images, selectedIndex) => {
     this.setState({
       showModal: true,
@@ -329,6 +350,14 @@ class SidebarShowSalerVisitHistory extends Component {
     }
   };
 
+  formatSeconds(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+  
+    const formattedTime = `${minutes}p ${remainingSeconds}s`;
+    return formattedTime;
+  }
+  
   render() {
     const { staff } = this.props;
     const { staff_name } = this.props;
@@ -350,20 +379,21 @@ class SidebarShowSalerVisitHistory extends Component {
             <ModalContent>
               <CloseButton onClick={this.closeModal}>X</CloseButton>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <PrevNextButtons>
-                <div className="slick-prev" onClick={this.prevImage} style={{opacity: this.state.selectedIndex === 0 ? '0.5' : '1'}}>
-                </div>
-
-              </PrevNextButtons>
+                <PrevNextButtons>
+                  <div
+                    className="slick-prev"
+                    onClick={this.prevImage}
+                    style={{ opacity: this.state.selectedIndex === 0 ? '0.5' : '1' }}
+                  ></div>
+                </PrevNextButtons>
                 <ModalImage src={this.state.selectedImages[this.state.selectedIndex]} />
                 <PrevNextButtons>
-                <div
-                  className="slick-next" disabled={this.state.selectedImages.length - 1}
-                  onClick={this.nextImage}
-                  style={{ opacity: this.state.selectedImages.length - 1 ? '0.5' : '1'}}
-                >
-                </div>
-
+                  <div
+                    className="slick-next"
+                    disabled={this.state.selectedImages.length - 1}
+                    onClick={this.nextImage}
+                    style={{ opacity: this.state.selectedImages.length - 1 ? '0.5' : '1' }}
+                  ></div>
                 </PrevNextButtons>
               </div>
             </ModalContent>
@@ -387,7 +417,7 @@ class SidebarShowSalerVisitHistory extends Component {
                 </thead>
 
                 {staff?.length ? (
-                  staff.map((record, index) => (
+                  staff.reverse().map((record, index) => (
                     <tbody>
                       <tr style={{ borderBottom: '1px solid #c4c4c4' }}>
                         <td>{index + 1}</td>
@@ -407,7 +437,7 @@ class SidebarShowSalerVisitHistory extends Component {
                             </div>
                             <div style={{ wordBreak: 'break-word' }}>
                               <span>
-                                <span style={{ color: 'grey' }}>Viếng thăm</span> ({Math.ceil(record?.time_visit / 60)}p
+                                <span style={{ color: 'grey' }}>Viếng thăm</span> ({this.formatSeconds(record?.time_visit)} {' '}
                                 - {record?.percent_pin || 0}% pin - {record?.images?.length || 0} ảnh)
                               </span>{' '}
                               <br />
@@ -418,11 +448,18 @@ class SidebarShowSalerVisitHistory extends Component {
                               </span>
                             </div>
                             <div style={{ display: 'flex' }}>
-                              <div>{' '}</div>
+                              <div> </div>
                               <div>
                                 <i
                                   class="fas fa-directions"
-                                  style={{ fontSize: '24px', color: '#e75353', cursor: 'pointer', marginLeft: '280px', position: 'absolute', marginTop: '-20px' }}
+                                  style={{
+                                    fontSize: '24px',
+                                    color: '#e75353',
+                                    cursor: 'pointer',
+                                    marginLeft: '280px',
+                                    position: 'absolute',
+                                    marginTop: '-20px',
+                                  }}
                                   onClick={() => this.showSelectedMarker(record, index)}
                                 ></i>
                               </div>
@@ -431,14 +468,21 @@ class SidebarShowSalerVisitHistory extends Component {
                               <span style={{ color: 'grey' }}>Ghi chú :</span>
                               <span> {record?.note || ''}</span> <br />
                               {record?.images?.length > 0 ? (
-                                <div>
+                                record?.images?.length > 5 ? (
                                   <div>
-                                    <span style={{ color: 'grey' }}>Ảnh sản phẩm chụp tại cửa hàng :</span> <br />
-                                  </div>
-                                  <ImageSlider>
-                                    <ScrollContainer>
-                                      <ImageSliderWrapper>
-                                          <Slider dots={true} infinite={true} speed={500} slidesToShow={Math.ceil(record?.images?.length / 2)} slidesToScroll={1}>
+                                    <div>
+                                      <span style={{ color: 'grey' }}>Ảnh sản phẩm chụp tại cửa hàng :</span> <br />
+                                    </div>
+                                    <ImageSlider>
+                                      <ScrollContainer>
+                                        <ImageSliderWrapper>
+                                          <Slider
+                                            dots={true}
+                                            infinite={true}
+                                            speed={500}
+                                            slidesToShow={Math.ceil(record?.images?.length / 2)}
+                                            slidesToScroll={1}
+                                          >
                                             {record?.images.map((img, index) => (
                                               <div key={index}>
                                                 <Image
@@ -450,10 +494,33 @@ class SidebarShowSalerVisitHistory extends Component {
                                               </div>
                                             ))}
                                           </Slider>
-                                      </ImageSliderWrapper>
-                                    </ScrollContainer>
-                                  </ImageSlider>
-                                </div>
+                                        </ImageSliderWrapper>
+                                      </ScrollContainer>
+                                    </ImageSlider>
+                                  </div>
+                                ) : (
+                                  <div>
+                                    <div>
+                                      <span style={{ color: 'grey' }}>Ảnh sản phẩm chụp tại cửa hàng :</span> <br />
+                                    </div>
+                                    <ImageSlider>
+                                      <ScrollContainer>
+                                        <ImageShortList>
+                                          {record?.images.map((img, index) => (
+                                            <div key={index}>
+                                              <ImageShortListImg
+                                                src={img}
+                                                alt="ảnh chụp tại cửa hàng"
+                                                draggable="true"
+                                                onClick={() => this.openModal(record?.images, index)}
+                                              />
+                                            </div>
+                                          ))}
+                                        </ImageShortList>
+                                      </ScrollContainer>
+                                    </ImageSlider>
+                                  </div>
+                                )
                               ) : (
                                 ''
                               )}
@@ -477,7 +544,7 @@ class SidebarShowSalerVisitHistory extends Component {
           </div>
 
           {/* Map cpn here */}
-          <div style={{width: '65%'}}>
+          <div style={{ width: '65%' }}>
             <MarkerStyled>
               <div
                 id="map"
