@@ -65,7 +65,6 @@ const Image = styled.img`
   width: 50px;
   height: 50px;
   object-fit: cover;
-  /* margin: 0 6px; */
   cursor: grab;
   touch-action: none;
   user-select: none;
@@ -291,10 +290,16 @@ class SidebarShowSalerVisitHistory extends Component {
     const { latitude, longitude } = record;
     const { selectedMarker } = this.state;
     const map = this.map;
+    const isLastPoint = index === record.length - 1;
     if (selectedMarker) {
       map.removeLayer(selectedMarker);
     }
-    const newSelectedMarker = L.marker([latitude, longitude]).addTo(map);
+    const customIcon = L.divIcon({
+      className: isLastPoint ? 'div_icon_red' : 'div_icon_blue',
+      html: `<div>${index + 1}</div>`,
+      iconSize: [30, 30],
+    });
+    const newSelectedMarker = L.marker([latitude, longitude], { icon: customIcon }).addTo(map);
     newSelectedMarker.bindPopup(`${index + 1}- ${record?.agency?.customer?.name}`);
     newSelectedMarker.openPopup();
     this.setState({ selectedMarker: newSelectedMarker });
@@ -353,11 +358,10 @@ class SidebarShowSalerVisitHistory extends Component {
   formatSeconds(seconds) {
     const minutes = Math.floor(seconds / 60);
     const remainingSeconds = seconds % 60;
-  
     const formattedTime = `${minutes}p ${remainingSeconds}s`;
     return formattedTime;
   }
-  
+
   render() {
     const { staff } = this.props;
     const { staff_name } = this.props;
@@ -417,10 +421,27 @@ class SidebarShowSalerVisitHistory extends Component {
                 </thead>
 
                 {staff?.length ? (
-                  staff.reverse().map((record, index) => (
+                  staff.map((record, index) => (
                     <tbody>
                       <tr style={{ borderBottom: '1px solid #c4c4c4' }}>
-                        <td>{index + 1}</td>
+                        <td>
+                          <div
+                            style={{
+                              color: '#000000',
+                              borderRadius: '50%',
+                              border: 'solid 1px #875252',
+                              width: '30px',
+                              height: '30px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontWeight: 'bold',
+                              backgroundColor: index === 0 ? '#ff6868' : '#687eff',
+                            }}
+                          >
+                            {staff?.length - index}
+                          </div>
+                        </td>
                         <td>
                           <div style={{ padding: '4px 0' }}>
                             <div>
@@ -437,8 +458,9 @@ class SidebarShowSalerVisitHistory extends Component {
                             </div>
                             <div style={{ wordBreak: 'break-word' }}>
                               <span>
-                                <span style={{ color: 'grey' }}>Viếng thăm</span> ({this.formatSeconds(record?.time_visit)} {' '}
-                                - {record?.percent_pin || 0}% pin - {record?.images?.length || 0} ảnh)
+                                <span style={{ color: 'grey' }}>Viếng thăm</span> (
+                                {this.formatSeconds(record?.time_visit)} - {record?.percent_pin || 0}% pin -{' '}
+                                {record?.images?.length || 0} ảnh)
                               </span>{' '}
                               <br />
                               <span>
@@ -456,9 +478,9 @@ class SidebarShowSalerVisitHistory extends Component {
                                     fontSize: '24px',
                                     color: '#e75353',
                                     cursor: 'pointer',
-                                    marginLeft: '280px',
+                                    marginLeft: '425px',
                                     position: 'absolute',
-                                    marginTop: '-20px',
+                                    marginTop: '-63px',
                                   }}
                                   onClick={() => this.showSelectedMarker(record, index)}
                                 ></i>
@@ -480,7 +502,7 @@ class SidebarShowSalerVisitHistory extends Component {
                                             dots={true}
                                             infinite={true}
                                             speed={500}
-                                            slidesToShow={Math.ceil(record?.images?.length / 2)}
+                                            slidesToShow={5}
                                             slidesToScroll={1}
                                           >
                                             {record?.images.map((img, index) => (

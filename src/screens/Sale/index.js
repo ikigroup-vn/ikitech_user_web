@@ -150,7 +150,7 @@ class Sale extends Component {
                               </Link>
                             </Tab>
                           ) : null}
-                          {/* {sale_watching == true ? (
+                          {sale_watching == true ? (
                             <Tab>
                               <Link
                                 to={"?tab-index=3"}
@@ -165,7 +165,7 @@ class Sale extends Component {
                                 <span>Giám sát sale thị trường</span>
                               </Link>
                             </Tab>
-                          ) : null} */}
+                          ) : null}
                         </TabList>
 
                         {sale_config == true ? (
@@ -193,14 +193,14 @@ class Sale extends Component {
                             />
                           </TabPanel>
                         ) : null}
-                        {/* {sale_watching == true ? (
+                        {sale_watching == true ? (
                           <TabPanel>
                             <WatchingSale
                               store_code={store_code}
                               tabId={tabId}
                             />
                           </TabPanel>
-                        ) : null} */}
+                        ) : null}
                       </Tabs>
                     </div>
                   </div>
