@@ -25,6 +25,10 @@ const permission = (channel) => {
                 name: "Đào tạo",
                 decentralizationName: "train",
               },
+              {
+                name: "Cộng đồng",
+                decentralizationName: "communication_list",
+              },
               // {
               //   name: "Chấm công",
               //   decentralizationName: "timekeeping",
@@ -378,6 +382,10 @@ const permission = (channel) => {
                 name: "Thay đổi số dư đại lý",
                 decentralizationName: "agency_add_sub_balance",
                 componentChilds: [],
+              },{
+                name: "Thay đổi cấp  đại lý",
+                decentralizationName: "agency_change_level",
+                componentChilds: [],
               },
             ],
           },
@@ -557,6 +565,8 @@ export const initialPermission = () => {
     product_category_list: false,
     product_category_add: false,
     agency_list: false,
+    agency_change_level: false,
+    communication_list: false,
     agency_register: false,
     agency_top_import: false,
     agency_bonus_program: false,

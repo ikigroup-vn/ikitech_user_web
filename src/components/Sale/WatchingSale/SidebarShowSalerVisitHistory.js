@@ -10,7 +10,7 @@ import DatePicker from '../../DatePicker/DatePickerADay.jsx';
 import { connect, shallowEqual } from 'react-redux';
 
 const SidebarShowHistoryStyles = styled.div`
-  width: 100%;
+  width: 90%;
   position: fixed;
   top: 0;
   right: 0;
@@ -420,7 +420,7 @@ class SidebarShowSalerVisitHistory extends Component {
         )}
 
         <div className="history_item">
-          <div style={{ width: '35%' }}>
+          <div style={{ width: '490px', height: '100vh', overflowY: 'scroll' }}>
             <div style={{ paddingRight: '20px' }}>
               {/* date picker here */}
               <div style={{ marginBottom: '15px', display: 'flex' }}>
@@ -475,9 +475,11 @@ class SidebarShowSalerVisitHistory extends Component {
                             <div style={{ wordBreak: 'break-word' }}>
                               <span>
                                 <span style={{ color: 'grey' }}>Viếng thăm</span> (
-                                {this.formatSeconds(record?.time_visit)} - {record?.percent_pin || 0}% pin -{' '}
+                                {this.formatSeconds(record?.time_visit)} -{' '}
                                 {record?.images?.length || 0} ảnh)
                               </span>{' '}
+                              <br />
+                              <span style={{ color: 'grey' }}>Tên thiết bị : {record?.device_name || ''}</span>
                               <br />
                               <span>
                                 <span style={{ color: 'grey' }}>Địa chỉ cửa hàng:</span>{' '}
@@ -587,7 +589,7 @@ class SidebarShowSalerVisitHistory extends Component {
           </div>
 
           {/* Map cpn here */}
-          <div style={{ width: '65%' }}>
+          <div style={{width: '100%'}}>
             <MarkerStyled>
               <div
                 id="map"
