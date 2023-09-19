@@ -252,12 +252,12 @@ class SidebarShowSalerVisitHistory extends Component {
         const isLastPoint = index === staffArr.length - 1;
         const popupContent = `
           <div style="text-align: center, margin-bottom: 40px">
-            <p style="color: #4e73df">${index + 1} - ${record?.agency?.customer?.name}</p>
+            <p style="color: #4e73df">${ (staffArr.length - index) + 1 } - ${record?.agency?.customer?.name}</p>
           </div>
         `;
         const customIcon = L.divIcon({
           className: isLastPoint ? 'div_icon_red' : 'div_icon_blue',
-          html: `<div>${index + 1}</div>`,
+          html: `<div>${ staffArr.length - index}</div>`,
           iconSize: [30, 30],
         });
         const marker = L.marker([latitude, longitude], { icon: customIcon }).addTo(map);
@@ -286,21 +286,20 @@ class SidebarShowSalerVisitHistory extends Component {
   }
 
   // when on clink to icon direction show map and marker on it self
-  showSelectedMarker(record, index) {
+  showSelectedMarker(record, index, numericalOrder) {
     const { latitude, longitude } = record;
     const { selectedMarker } = this.state;
     const map = this.map;
-    const isLastPoint = index === record.length - 1;
     if (selectedMarker) {
       map.removeLayer(selectedMarker);
     }
     const customIcon = L.divIcon({
-      className: isLastPoint ? 'div_icon_red' : 'div_icon_blue',
-      html: `<div>${index + 1}</div>`,
+      className: index == numericalOrder ? 'div_icon_red' : 'div_icon_blue',
+      html: `<div>${index}</div>`,
       iconSize: [30, 30],
     });
     const newSelectedMarker = L.marker([latitude, longitude], { icon: customIcon }).addTo(map);
-    newSelectedMarker.bindPopup(`${index + 1}- ${record?.agency?.customer?.name}`);
+    newSelectedMarker.bindPopup(`${index}- ${record?.agency?.customer?.name}`);
     newSelectedMarker.openPopup();
     this.setState({ selectedMarker: newSelectedMarker });
     map.setView([latitude, longitude], 15);
@@ -482,7 +481,7 @@ class SidebarShowSalerVisitHistory extends Component {
                                     position: 'absolute',
                                     marginTop: '-63px',
                                   }}
-                                  onClick={() => this.showSelectedMarker(record, index)}
+                                  onClick={() => this.showSelectedMarker(record, staff?.length - index, staff?.length)}
                                 ></i>
                               </div>
                             </div>
