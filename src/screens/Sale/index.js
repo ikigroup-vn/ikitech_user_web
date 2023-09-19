@@ -8,7 +8,6 @@ import ModalRemove from "../../components/Sale/Config/ModalRemove";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
-
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import NotAccess from "../../components/Partials/NotAccess";
@@ -74,7 +73,8 @@ class Sale extends Component {
   }
   render() {
     var { store_code, id } = this.props.match.params;
-    var { tabId, sale_list, sale_config, sale_top, sale_watching, isShow } = this.state;
+    var { tabId, sale_list, sale_config, sale_top, sale_watching, isShow } =
+      this.state;
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
@@ -150,7 +150,7 @@ class Sale extends Component {
                               </Link>
                             </Tab>
                           ) : null}
-                          {sale_watching == true ? (
+                          {/* {sale_watching == true ? (
                             <Tab>
                               <Link
                                 to={"?tab-index=3"}
@@ -165,7 +165,7 @@ class Sale extends Component {
                                 <span>Giám sát sale thị trường</span>
                               </Link>
                             </Tab>
-                          ) : null}
+                          ) : null} */}
                         </TabList>
 
                         {sale_config == true ? (
@@ -193,11 +193,14 @@ class Sale extends Component {
                             />
                           </TabPanel>
                         ) : null}
-                        {sale_watching == true ? (
+                        {/* {sale_watching == true ? (
                           <TabPanel>
-                            <WatchingSale store_code={store_code} tabId={tabId}/>
+                            <WatchingSale
+                              store_code={store_code}
+                              tabId={tabId}
+                            />
                           </TabPanel>
-                        ) : null}
+                        ) : null} */}
                       </Tabs>
                     </div>
                   </div>

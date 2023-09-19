@@ -27,12 +27,14 @@ class Index extends Component {
       var isShowAttr = permissions.product_list;
       var isCreate = permissions.product_list;
       var isRemove = permissions.product_list;
+      var update = permissions.product_update;
       this.setState({
         isLoading: true,
         isShow,
         isShowAttr,
         isCreate,
         isRemove,
+        update,
       });
     }
   }
@@ -40,7 +42,7 @@ class Index extends Component {
   render() {
     var { store_code, productId, page } = this.props.match.params;
     var { history, auth } = this.props;
-    var { isShow, isShowAttr, isCreate, isRemove } = this.state;
+    var { isShow, isShowAttr, isCreate, isRemove, update } = this.state;
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
@@ -60,6 +62,7 @@ class Index extends Component {
                     isShowAttr={isShowAttr}
                     isCreate={isCreate}
                     isRemove={isRemove}
+                    update={update}
                   />
                 ) : (
                   <NotAccess />
