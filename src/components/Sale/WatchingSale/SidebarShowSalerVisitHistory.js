@@ -118,6 +118,33 @@ const ScrollContainer = styled.div`
   }
 `;
 
+const MarkerStyled = styled.div`
+  .div_icon_blue{
+    background-color: #687eff;
+    color: #000000; 
+    border-radius: 50%; 
+    border: solid 1px #875252;
+    width: 30px;
+    height: 30px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
+  .div_icon_red{
+    background-color: #ff6868;
+    color: #000000; 
+    border-radius: 50%; 
+    border: solid 1px #875252;
+    width: 30px;
+    height: 30px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
+`;
+
 const PrevNextButtons = styled.div`
   .slick-prev,
   .slick-next {
@@ -201,12 +228,18 @@ class SidebarShowSalerVisitHistory extends Component {
 
       staffArr.forEach((record, index) => {
         const { longitude, latitude } = record;
+        const isLastPoint = index === staffArr.length - 1;
         const popupContent = `
-          <div style="text-align: center">
-            <p style="color: #4e73df">${index + 1} - Điểm check in gần nhất</p>
+          <div style="text-align: center, margin-bottom: 40px">
+            <p style="color: #4e73df">${index + 1} - ${record?.agency?.customer?.name}</p>
           </div>
         `;
-        const marker = L.marker([latitude, longitude], { autoPopup: true }).addTo(map);
+        const customIcon = L.divIcon({
+          className: isLastPoint ? "div_icon_red" : "div_icon_blue",
+          html: `<div>${index + 1}</div>`,
+          iconSize: [30, 30],
+        });
+        const marker = L.marker([latitude, longitude], { icon: customIcon }).addTo(map);
         marker.openPopup();
         marker.bindPopup(popupContent);
         bounds.extend(marker.getLatLng());
@@ -215,6 +248,7 @@ class SidebarShowSalerVisitHistory extends Component {
           marker.openPopup();
         }
       });
+
     }
     this.map = map;
   }
@@ -236,19 +270,13 @@ class SidebarShowSalerVisitHistory extends Component {
     const { latitude, longitude } = record;
     const { selectedMarker } = this.state;
     const map = this.map;
-    // Xóa marker trước đó (nếu có)
     if (selectedMarker) {
       map.removeLayer(selectedMarker);
     }
-    // Tạo marker mới
     const newSelectedMarker = L.marker([latitude, longitude]).addTo(map);
-    // Đặt nội dung cho popup
-    newSelectedMarker.bindPopup(`Thứ tự check in: ${index + 1}`);
-    // Hiển thị marker
+    newSelectedMarker.bindPopup(`${index + 1}- ${record?.agency?.customer?.name}`);
     newSelectedMarker.openPopup();
-    // Đặt marker mới vào state
     this.setState({ selectedMarker: newSelectedMarker });
-    // Di chuyển bản đồ đến vị trí marker được chọn
     map.setView([latitude, longitude], 15);
   }
 
@@ -304,16 +332,6 @@ class SidebarShowSalerVisitHistory extends Component {
   render() {
     const { staff } = this.props;
     const { staff_name } = this.props;
-    const image = [
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVKTICmGiRWVCtc6_nUkRrYdqtAZDyJgafUz6Rt0cd9g&s',
-      'https://kenh14cdn.com/thumb_w/660/2020/7/17/brvn-15950048783381206275371.jpg',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXky4Xwhw55qd8rLfgCPu6TRoYGbFCx42aeuyp51ag&s',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfhYQOvhnxQpIOI9lxWCaGKcg1vC9jTOeve31ereWwJw&s',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREMtwq5iPsJ0bw8cO7ZVoBQV0q2QvNxTO-A4hGLaMDKw&s',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZSGngUVqUBkPyJtwktvS6k4ubENlKvmYQk-QNkiR2&s',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiGhW0FIDAPndbSY7vOPaU_z9itEc36_C7uh9L1eX4&s',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBPy9eQMZ94ZFQ8favL_77uo4xdeH6K5s7uKEENkgr&s',
-    ];
 
     return (
       <SidebarShowHistoryStyles>
@@ -380,9 +398,9 @@ class SidebarShowSalerVisitHistory extends Component {
                                 {record?.agency?.customer?.name || 'Không xác định'}
                               </span>{' '}
                               <br />
-                              <span style={{ color: 'grey' }}>check in: </span>
-                              <span style={{ color: 'rgb(196 186 99)' }}>{record?.time_checkin}</span> -{' '}
-                              <span style={{ color: 'grey' }}>check out: </span>
+                              <span style={{ color: 'grey' }}>check-in: </span>
+                              <span style={{ color: 'rgb(71, 79, 23)' }}>{record?.time_checkin}</span> -{' '}
+                              <span style={{ color: 'grey' }}>check-out: </span>
                               <span style={{ color: '#c12026' }}>
                                 {record?.time_checkout || <span color="#22d822">Đang ở tại cửa hàng</span>}
                               </span>
@@ -400,18 +418,18 @@ class SidebarShowSalerVisitHistory extends Component {
                               </span>
                             </div>
                             <div style={{ display: 'flex' }}>
-                              <div>Xem vị trí ghim trên bản đồ: </div>
+                              <div>{' '}</div>
                               <div>
                                 <i
                                   class="fas fa-directions"
-                                  style={{ fontSize: '24px', color: '#e75353', cursor: 'pointer', marginLeft: '20px' }}
+                                  style={{ fontSize: '24px', color: '#e75353', cursor: 'pointer', marginLeft: '280px', position: 'absolute', marginTop: '-20px' }}
                                   onClick={() => this.showSelectedMarker(record, index)}
                                 ></i>
                               </div>
                             </div>
                             <div>
                               <span style={{ color: 'grey' }}>Ghi chú :</span>
-                              <span> {record?.note || 'Không có ghi chú!'}</span> <br />
+                              <span> {record?.note || ''}</span> <br />
                               {record?.images?.length > 0 ? (
                                 <div>
                                   <div>
@@ -459,15 +477,19 @@ class SidebarShowSalerVisitHistory extends Component {
           </div>
 
           {/* Map cpn here */}
-          <div
-            id="map"
-            style={{
-              height: '90vh',
-              border: '1px solid #c4c4c4',
-              width: '65%',
-              marginRight: '20px',
-            }}
-          ></div>
+          <div style={{width: '65%'}}>
+            <MarkerStyled>
+              <div
+                id="map"
+                style={{
+                  height: '90vh',
+                  border: '1px solid #c4c4c4',
+                  width: '100%',
+                  marginRight: '20px',
+                }}
+              ></div>
+            </MarkerStyled>
+          </div>
         </div>
       </SidebarShowHistoryStyles>
     );

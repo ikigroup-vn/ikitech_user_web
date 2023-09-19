@@ -31,13 +31,13 @@ class Table extends Component {
           <tr className="hover-product">
             <td>{index + 1}</td>
             <td colSpan={2}>
-              <span className="primary name_customers">{data.name}</span>
+              <span className="primary name_customers">{data.staff_name}</span>
             </td>
             <td colSpan={2}>{data?.total_staff_visit}</td>
             <td colSpan={2}>{formatNumber(data?.balance)}</td>
             <td colSpan={2}>{Math.ceil(data?.total_time_visit / 60)}</td>
             <td colSpan={2}>
-              <span className="total_customers primary" onClick={() => this.setOpenHistorySidebar(true, data.id, data.name)}>
+              <span className="total_customers primary" onClick={() => this.setOpenHistorySidebar(true, data.id, data.staff_name)}>
                 Xem LS
               </span>
             </td>
