@@ -876,32 +876,34 @@ class InfoProduct extends Component {
             />
           </div>
         )}
-        {getChannel() == IKITECH && (
-          <div class="form-group">
-            <label for="is_medicine">Sản phẩm chỉ được liên hệ</label>
-            <i
-              style={{
-                display: "block",
-                marginBottom: "5px",
-              }}
+        <div class="form-group">
+          <div class="form-check form-switch">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              id="is_medicine"
+              name="is_medicine"
+              value={is_medicine}
+              checked={is_medicine}
+              onChange={this.onChange}
+            />
+            <label
+              style={{ fontWeight: "750" }}
+              class="form-check-label"
+              for="is_medicine"
             >
-              Sản phẩm này không thể đặt mua bình thường mà phải liên hệ tư vấn
-            </i>
-            <label className="status-product on-off">
-              <input
-                type="checkbox"
-                hidden
-                class="checkbox"
-                id="is_medicine"
-                name="is_medicine"
-                value={is_medicine}
-                checked={is_medicine}
-                onChange={this.onChange}
-              />
-              <div></div>
+              Sản phẩm chỉ được liên hệ
             </label>
           </div>
-        )}
+          <i
+            style={{
+              display: "block",
+              marginBottom: "5px",
+            }}
+          >
+            Sản phẩm này không thể đặt mua bình thường mà phải liên hệ tư vấn
+          </i>
+        </div>
         {getChannel() == IKITECH && (
           <div class="form-group">
             <label for="product_name">Trạng thái</label>
