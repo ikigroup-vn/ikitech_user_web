@@ -8,6 +8,38 @@ import { shallowEqual } from "../../../ultis/shallowEqual";
 import { formatNumber, formatNoD } from "../../../ultis/helpers";
 import getChannel, { IKITECH } from "../../../ultis/channel";
 import * as Types from "../../../constants/ActionType";
+import styled from "styled-components";
+
+const InfoProductStyles = styled.div`
+  .status-product {
+    width: 42px;
+    height: 24px;
+    border-radius: 100rem;
+    background-color: #ecf0f1;
+    border: 1px solid #dfe6e9;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s;
+    padding: 0 2px;
+    margin-bottom: 0;
+    cursor: pointer;
+    & > div {
+      width: 18px;
+      height: 18px;
+      border-radius: 100rem;
+      background-color: #7f8c8d;
+      transition: all 0.3s;
+    }
+    &:has(input:checked) {
+      background-color: #2ecc71;
+    }
+    input:checked + div {
+      transform: translateX(100%);
+      background-color: white;
+    }
+  }
+`;
+
 class InfoProduct extends Component {
   constructor(props) {
     super(props);
@@ -40,6 +72,7 @@ class InfoProduct extends Component {
       categorySearch: "",
       point_for_agency: 0,
       txtPosition: "",
+      is_medicine: false,
     };
   }
   handleChangeCheckParent(id) {
@@ -123,6 +156,9 @@ class InfoProduct extends Component {
           this.setState({ [name]: value });
         }
       }
+    } else if (name === "is_medicine") {
+      const checked = e.target.checked;
+      this.setState({ [name]: checked });
     } else {
       if (name == "txtBarcode" || name == "sku") {
         if (helper.containsSpecialChars(value)) {
@@ -329,6 +365,7 @@ class InfoProduct extends Component {
         txtCostOfCapital: product.main_cost_of_capital,
         txtWeight: _weight,
         txtPosition: product.shelf_position,
+        is_medicine: product.is_medicine,
       });
 
       this.props.checkDistribute(checkHasDistribute, product.check_inventory);
@@ -548,12 +585,13 @@ class InfoProduct extends Component {
       txtWeight,
       point_for_agency,
       txtPosition,
+      is_medicine,
     } = this.state;
     console.log(checkHasDistribute);
     var txtQuantityInStock = txtQuantityInStock == -1 ? "" : txtQuantityInStock;
     var { isCopy } = this.props;
     return (
-      <div class="card-body" style={{ padding: "0.8rem" }}>
+      <InfoProductStyles class="card-body" style={{ padding: "0.8rem" }}>
         <div class="form-group">
           <label for="product_name">Tên sản phẩm</label>
           <input
@@ -840,6 +878,32 @@ class InfoProduct extends Component {
         )}
         {getChannel() == IKITECH && (
           <div class="form-group">
+            <label for="is_medicine">Sản phẩm chỉ được liên hệ</label>
+            <i
+              style={{
+                display: "block",
+                marginBottom: "5px",
+              }}
+            >
+              Sản phẩm này không thể đặt mua bình thường mà phải liên hệ tư vấn
+            </i>
+            <label className="status-product on-off">
+              <input
+                type="checkbox"
+                hidden
+                class="checkbox"
+                id="is_medicine"
+                name="is_medicine"
+                value={is_medicine}
+                checked={is_medicine}
+                onChange={this.onChange}
+              />
+              <div></div>
+            </label>
+          </div>
+        )}
+        {getChannel() == IKITECH && (
+          <div class="form-group">
             <label for="product_name">Trạng thái</label>
 
             <select
@@ -1105,7 +1169,7 @@ class InfoProduct extends Component {
             </div>
           </div>
         </div>
-      </div>
+      </InfoProductStyles>
     );
   }
 }

@@ -87,6 +87,7 @@ class ProductEdit extends Component {
         .replace(/\./g, "");
       formdata.percent_collaborator = data.txtPercentC;
       formdata.sku = data.sku;
+      formdata.is_medicine = data.is_medicine;
       formdata.check_inventory = data.check_inventory;
 
       var categories = [];
