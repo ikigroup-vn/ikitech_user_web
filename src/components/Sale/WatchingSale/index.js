@@ -1,10 +1,29 @@
 import React, { Component } from 'react';
 import { connect, shallowEqual } from 'react-redux';
 import * as L from 'leaflet';
+import styled from 'styled-components';
 
 import Table from './Table';
 import * as staffAction from '../../../actions/staff';
 import DatePicker from '../../DatePicker/DatePickerADay.jsx';
+
+const MarkerStyled = styled.div`
+  .marker_img {
+    border-radius: 50% !important;
+  }
+  .div_icon {
+    background-color: #ff4f4f;
+    color: #000000;
+    border-radius: 50%; 
+    border: solid 1px #875252;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
+`;
 
 class WatchingSaler extends Component {
   constructor(props) {
@@ -14,12 +33,6 @@ class WatchingSaler extends Component {
       date_to: '',
     };
   }
-
-  // componentDidUpdate(prevProps) {
-  //   if (prevProps.staff !== this.props.staff) {
-  //     this.updateMapMarkers();
-  //   }
-  // }
 
   shouldComponentUpdate(nextProps, nextState) {
     if (!shallowEqual(nextProps.staff, this.props.staff)) {
@@ -60,29 +73,33 @@ class WatchingSaler extends Component {
     } else {
       // Nếu có dữ liệu staffArr, tạo bản đồ và hiển thị các marker và popup
       const bounds = new L.LatLngBounds(); // Để tính toán giới hạn hiển thị của bản đồ
-  
+
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       }).addTo(map);
-  
+
       staffArr.forEach((record, index) => {
-        const { longitude, latitude, name, sale_avatar_image } = record;
+        const { longitude, latitude, staff_name, sale_avatar_image } = record;
         const popupContent = `
           <div style="text-align: center">
             <div style="width: 100%">
-              <img src="${sale_avatar_image}" alt="${name}'s Avatar" style="width: 85%; height: 53px; object-fit: cover; border-radius: 51%;" />
+              <img src="${
+                sale_avatar_image || '/images/people.png'
+              }" alt="${staff_name}'s Avatar" style="width: 53px; height: 53px; object-fit: cover; border-radius: 51%;" />
             </div>
-            <p style="color: #4e73df">${name}</p>
+            <p style="color: #4e73df">${staff_name}</p>
           </div>
         `;
-  
-        const marker = L.marker([latitude, longitude], { autoPopup: false }).addTo(map);
+        const customIcon = L.divIcon({
+          className: 'div_icon',
+          html: `<div>${index + 1}</div>`,
+          iconSize: [30, 30],
+        });
+        const marker = L.marker([latitude, longitude], { icon: customIcon }).addTo(map);
         marker.bindPopup(popupContent);
-  
         // Thêm marker vào giới hạn hiển thị của bản đồ
         bounds.extend(marker.getLatLng());
-  
         // Nếu là marker cuối cùng, thì fit bản đồ theo giới hạn
         if (index === staffArr.length - 1) {
           map.fitBounds(bounds);
@@ -105,17 +122,24 @@ class WatchingSaler extends Component {
     }
 
     if (staffArray.length > 0) {
-      staffArray.forEach((saler) => {
-        const { latitude, longitude, name, sale_avatar_image } = saler;
+      staffArray.forEach((saler, index) => {
+        const { latitude, longitude, staff_name, sale_avatar_image } = saler;
         const popupContent = `
         <div style="text-align: center">
           <div style="width: 100%">
-            <img src="${sale_avatar_image}" alt="${name}'s Avatar" style="width: 85%; height: 53px; object-fit: cover; border-radius: 51%;" />
+            <img src="${
+              sale_avatar_image || '/images/people.png'
+            }" alt="${staff_name}'s Avatar" style="width: 85%; height: 53px; object-fit: cover; border-radius: 51%;" />
           </div>
-          <p style="color: #4e73df">${name}</p>
+          <p style="color: #4e73df">${staff_name}</p>
         </div>
       `;
-        const marker = L.marker([latitude, longitude], { autoPopup: true }).addTo(this.map);
+        const customIcon = L.divIcon({
+          className: 'div_icon',
+          html: `<div>${index + 1}</div>`,
+          iconSize: [30, 30],
+        });
+        const marker = L.marker([latitude, longitude], { icon: customIcon }).addTo(this.map);
         marker.bindPopup(popupContent);
       });
     }
@@ -145,7 +169,9 @@ class WatchingSaler extends Component {
           </div>
 
           <div style={{ width: '40%', paddingLeft: '15px' }}>
-            <div id="map" style={{ height: '100%', minHeight: '500px' }}></div>
+            <MarkerStyled>
+              <div id="map" style={{ height: '100%', minHeight: '500px' }}></div>
+            </MarkerStyled>
           </div>
         </div>
       </div>

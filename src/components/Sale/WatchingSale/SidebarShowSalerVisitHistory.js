@@ -39,11 +39,32 @@ const ImageSliderWrapper = styled.div`
   padding: 20px 0;
 `;
 
+const ImageShortList = styled.div`
+  cursor: pointer;
+  width: 400px;
+  display: flex;
+  padding: 20px 0;
+`;
+const ImageShortListImg = styled.img`
+  width: 50px;
+  height: 50px;
+  margin-left: 6px;
+  object-fit: cover;
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  transition: transform 0.1s;
+  &:active {
+    cursor: grabbing;
+    transform: scale(1.1);
+    transition: transform 0.2s;
+  }
+`;
+
 const Image = styled.img`
   width: 50px;
   height: 50px;
   object-fit: cover;
-  /* margin: 0 6px; */
   cursor: grab;
   touch-action: none;
   user-select: none;
@@ -118,6 +139,45 @@ const ScrollContainer = styled.div`
   }
 `;
 
+const MarkerStyled = styled.div`
+  .div_icon_blue {
+    background-color: #687eff;
+    color: #000000;
+    border-radius: 50%;
+    border: solid 1px #875252;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
+  .div_icon_red {
+    background-color: #ff6868;
+    color: #000000;
+    border-radius: 50%;
+    border: solid 1px #875252;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
+  .div_icon_green {
+    background-color: #78ff64;
+    color: #000000;
+    border-radius: 50%;
+    border: solid 1px #875252;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
+`;
+
 const PrevNextButtons = styled.div`
   .slick-prev,
   .slick-next {
@@ -140,14 +200,14 @@ const PrevNextButtons = styled.div`
     right: 10px;
   }
 
-  .slick-prev:before{
-    content: "←";
+  .slick-prev:before {
+    content: '←';
     font-size: 24px;
     color: #000;
   }
 
-  .slick-next:before{
-    content: "→";
+  .slick-next:before {
+    content: '→';
     font-size: 24px;
     color: #000;
   }
@@ -165,6 +225,7 @@ class SidebarShowSalerVisitHistory extends Component {
       showModal: false,
       selectedImages: [],
       selectedMarker: 0,
+      focusItem: null,
     };
   }
 
@@ -199,23 +260,31 @@ class SidebarShowSalerVisitHistory extends Component {
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       }).addTo(map);
 
-      staffArr.forEach((record, index) => {
+      staffArr.reverse().forEach((record, index) => {
         const { longitude, latitude } = record;
+        const isLastPoint = staffArr.length - (index + 1) == 0 ? true : false;
+
         const popupContent = `
-          <div style="text-align: center">
-            <p style="color: #4e73df">${index + 1} - Điểm check in gần nhất</p>
+          <div style="text-align: center, margin-bottom: 40px">
+            <p style="color: #4e73df">${index + 1} - ${record?.agency?.customer?.name}</p>
           </div>
         `;
-        const marker = L.marker([latitude, longitude], { autoPopup: true }).addTo(map);
+        const customIcon = L.divIcon({
+          className: isLastPoint == true ? 'div_icon_red' : 'div_icon_blue',
+          html: `<div>${index + 1}</div>`,
+          iconSize: [30, 30],
+        });
+        const marker = L.marker([latitude, longitude], { icon: customIcon }).addTo(map);
         marker.openPopup();
         marker.bindPopup(popupContent);
         bounds.extend(marker.getLatLng());
-        if (index === staffArr.length - 1) {
+        if (isLastPoint) {
           map.fitBounds(bounds);
           marker.openPopup();
         }
       });
     }
+
     this.map = map;
   }
 
@@ -232,23 +301,23 @@ class SidebarShowSalerVisitHistory extends Component {
   }
 
   // when on clink to icon direction show map and marker on it self
-  showSelectedMarker(record, index) {
+  showSelectedMarker(record, index, numericalOrder) {
+    this.setState({ focusItem: index });
     const { latitude, longitude } = record;
     const { selectedMarker } = this.state;
     const map = this.map;
-    // Xóa marker trước đó (nếu có)
     if (selectedMarker) {
       map.removeLayer(selectedMarker);
     }
-    // Tạo marker mới
-    const newSelectedMarker = L.marker([latitude, longitude]).addTo(map);
-    // Đặt nội dung cho popup
-    newSelectedMarker.bindPopup(`Thứ tự check in: ${index + 1}`);
-    // Hiển thị marker
+    const customIcon = L.divIcon({
+      className: index == numericalOrder ? 'div_icon_red' : 'div_icon_green',
+      html: `<div>${index}</div>`,
+      iconSize: [30, 30],
+    });
+    const newSelectedMarker = L.marker([latitude, longitude], { icon: customIcon }).addTo(map);
+    newSelectedMarker.bindPopup(`${index}- ${record?.agency?.customer?.name}`);
     newSelectedMarker.openPopup();
-    // Đặt marker mới vào state
     this.setState({ selectedMarker: newSelectedMarker });
-    // Di chuyển bản đồ đến vị trí marker được chọn
     map.setView([latitude, longitude], 15);
   }
 
@@ -269,7 +338,7 @@ class SidebarShowSalerVisitHistory extends Component {
   handleCloseSiderBar = (state) => {
     this.props.setOpenHistorySidebar(state);
   };
-  
+
   openModal = (images, selectedIndex) => {
     this.setState({
       showModal: true,
@@ -301,19 +370,16 @@ class SidebarShowSalerVisitHistory extends Component {
     }
   };
 
+  formatSeconds(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    const formattedTime = `${minutes}p ${remainingSeconds}s`;
+    return formattedTime;
+  }
+
   render() {
     const { staff } = this.props;
     const { staff_name } = this.props;
-    const image = [
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQVKTICmGiRWVCtc6_nUkRrYdqtAZDyJgafUz6Rt0cd9g&s',
-      'https://kenh14cdn.com/thumb_w/660/2020/7/17/brvn-15950048783381206275371.jpg',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXky4Xwhw55qd8rLfgCPu6TRoYGbFCx42aeuyp51ag&s',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTfhYQOvhnxQpIOI9lxWCaGKcg1vC9jTOeve31ereWwJw&s',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREMtwq5iPsJ0bw8cO7ZVoBQV0q2QvNxTO-A4hGLaMDKw&s',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRZSGngUVqUBkPyJtwktvS6k4ubENlKvmYQk-QNkiR2&s',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTiGhW0FIDAPndbSY7vOPaU_z9itEc36_C7uh9L1eX4&s',
-      'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSBPy9eQMZ94ZFQ8favL_77uo4xdeH6K5s7uKEENkgr&s',
-    ];
 
     return (
       <SidebarShowHistoryStyles>
@@ -332,20 +398,21 @@ class SidebarShowSalerVisitHistory extends Component {
             <ModalContent>
               <CloseButton onClick={this.closeModal}>X</CloseButton>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <PrevNextButtons>
-                <div className="slick-prev" onClick={this.prevImage} style={{opacity: this.state.selectedIndex === 0 ? '0.5' : '1'}}>
-                </div>
-
-              </PrevNextButtons>
+                <PrevNextButtons>
+                  <div
+                    className="slick-prev"
+                    onClick={this.prevImage}
+                    style={{ opacity: this.state.selectedIndex === 0 ? '0.5' : '1' }}
+                  ></div>
+                </PrevNextButtons>
                 <ModalImage src={this.state.selectedImages[this.state.selectedIndex]} />
                 <PrevNextButtons>
-                <div
-                  className="slick-next" disabled={this.state.selectedImages.length - 1}
-                  onClick={this.nextImage}
-                  style={{ opacity: this.state.selectedImages.length - 1 ? '0.5' : '1'}}
-                >
-                </div>
-
+                  <div
+                    className="slick-next"
+                    disabled={this.state.selectedImages.length - 1}
+                    onClick={this.nextImage}
+                    style={{ opacity: this.state.selectedImages.length - 1 ? '0.5' : '1' }}
+                  ></div>
                 </PrevNextButtons>
               </div>
             </ModalContent>
@@ -372,7 +439,25 @@ class SidebarShowSalerVisitHistory extends Component {
                   staff.map((record, index) => (
                     <tbody>
                       <tr style={{ borderBottom: '1px solid #c4c4c4' }}>
-                        <td>{index + 1}</td>
+                        <td>
+                          <div
+                            style={{
+                              color: '#000000',
+                              borderRadius: '50%',
+                              border: 'solid 1px #875252',
+                              width: '30px',
+                              height: '30px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              fontWeight: 'bold',
+                              backgroundColor:
+                                this.state.focusItem === (staff.length - index ) ? '#58ff58' : index === 0 ? '#ff6868' : '#687eff',
+                            }}
+                          >
+                            {staff?.length - index}
+                          </div>
+                        </td>
                         <td>
                           <div style={{ padding: '4px 0' }}>
                             <div>
@@ -380,47 +465,67 @@ class SidebarShowSalerVisitHistory extends Component {
                                 {record?.agency?.customer?.name || 'Không xác định'}
                               </span>{' '}
                               <br />
-                              <span style={{ color: 'grey' }}>check in: </span>
-                              <span style={{ color: 'rgb(196 186 99)' }}>{record?.time_checkin}</span> -{' '}
-                              <span style={{ color: 'grey' }}>check out: </span>
+                              <span style={{ color: 'grey' }}>check-in: </span>
+                              <span style={{ color: 'rgb(71, 79, 23)' }}>{record?.time_checkin}</span> -{' '}
+                              <span style={{ color: 'grey' }}>check-out: </span>
                               <span style={{ color: '#c12026' }}>
                                 {record?.time_checkout || <span color="#22d822">Đang ở tại cửa hàng</span>}
                               </span>
                             </div>
                             <div style={{ wordBreak: 'break-word' }}>
                               <span>
-                                <span style={{ color: 'grey' }}>Viếng thăm</span> ({Math.ceil(record?.time_visit / 60)}p
-                                - {record?.percent_pin || 0}% pin - {record?.images?.length || 0} ảnh)
+                                <span style={{ color: 'grey' }}>Viếng thăm</span> (
+                                {this.formatSeconds(record?.time_visit)} - {record?.percent_pin || 0}% pin -{' '}
+                                {record?.images?.length || 0} ảnh)
                               </span>{' '}
                               <br />
                               <span>
-                                <span style={{ color: 'grey' }}>Địa chỉ :</span>{' '}
+                                <span style={{ color: 'grey' }}>Địa chỉ cửa hàng:</span>{' '}
                                 {record?.agency?.customer?.address_detail || ''} -{' '}
                                 {record?.agency?.customer?.district_name || ''}
                               </span>
+                              <br />
+                              <span>
+                                <span style={{ color: 'grey' }}>Địa chỉ check-in:</span>{' '}
+                                {record?.address_checkin || ''}
+                              </span>
                             </div>
                             <div style={{ display: 'flex' }}>
-                              <div>Xem vị trí ghim trên bản đồ: </div>
+                              <div> </div>
                               <div>
                                 <i
                                   class="fas fa-directions"
-                                  style={{ fontSize: '24px', color: '#e75353', cursor: 'pointer', marginLeft: '20px' }}
-                                  onClick={() => this.showSelectedMarker(record, index)}
+                                  style={{
+                                    fontSize: '24px',
+                                    color: '#e75353',
+                                    cursor: 'pointer',
+                                    marginLeft: '425px',
+                                    position: 'absolute',
+                                    marginTop: '-63px',
+                                  }}
+                                  onClick={() => this.showSelectedMarker(record, staff?.length - index, staff?.length)}
                                 ></i>
                               </div>
                             </div>
                             <div>
                               <span style={{ color: 'grey' }}>Ghi chú :</span>
-                              <span> {record?.note || 'Không có ghi chú!'}</span> <br />
+                              <span> {record?.note || ''}</span> <br />
                               {record?.images?.length > 0 ? (
-                                <div>
+                                record?.images?.length > 5 ? (
                                   <div>
-                                    <span style={{ color: 'grey' }}>Ảnh sản phẩm chụp tại cửa hàng :</span> <br />
-                                  </div>
-                                  <ImageSlider>
-                                    <ScrollContainer>
-                                      <ImageSliderWrapper>
-                                          <Slider dots={true} infinite={true} speed={500} slidesToShow={Math.ceil(record?.images?.length / 2)} slidesToScroll={1}>
+                                    <div>
+                                      <span style={{ color: 'grey' }}>Ảnh sản phẩm chụp tại cửa hàng :</span> <br />
+                                    </div>
+                                    <ImageSlider>
+                                      <ScrollContainer>
+                                        <ImageSliderWrapper>
+                                          <Slider
+                                            dots={true}
+                                            infinite={true}
+                                            speed={500}
+                                            slidesToShow={5}
+                                            slidesToScroll={1}
+                                          >
                                             {record?.images.map((img, index) => (
                                               <div key={index}>
                                                 <Image
@@ -432,10 +537,33 @@ class SidebarShowSalerVisitHistory extends Component {
                                               </div>
                                             ))}
                                           </Slider>
-                                      </ImageSliderWrapper>
-                                    </ScrollContainer>
-                                  </ImageSlider>
-                                </div>
+                                        </ImageSliderWrapper>
+                                      </ScrollContainer>
+                                    </ImageSlider>
+                                  </div>
+                                ) : (
+                                  <div>
+                                    <div>
+                                      <span style={{ color: 'grey' }}>Ảnh sản phẩm chụp tại cửa hàng :</span> <br />
+                                    </div>
+                                    <ImageSlider>
+                                      <ScrollContainer>
+                                        <ImageShortList>
+                                          {record?.images.map((img, index) => (
+                                            <div key={index}>
+                                              <ImageShortListImg
+                                                src={img}
+                                                alt="ảnh chụp tại cửa hàng"
+                                                draggable="true"
+                                                onClick={() => this.openModal(record?.images, index)}
+                                              />
+                                            </div>
+                                          ))}
+                                        </ImageShortList>
+                                      </ScrollContainer>
+                                    </ImageSlider>
+                                  </div>
+                                )
                               ) : (
                                 ''
                               )}
@@ -459,15 +587,19 @@ class SidebarShowSalerVisitHistory extends Component {
           </div>
 
           {/* Map cpn here */}
-          <div
-            id="map"
-            style={{
-              height: '90vh',
-              border: '1px solid #c4c4c4',
-              width: '65%',
-              marginRight: '20px',
-            }}
-          ></div>
+          <div style={{ width: '65%' }}>
+            <MarkerStyled>
+              <div
+                id="map"
+                style={{
+                  height: '90vh',
+                  border: '1px solid #c4c4c4',
+                  width: '100%',
+                  marginRight: '20px',
+                }}
+              ></div>
+            </MarkerStyled>
+          </div>
         </div>
       </SidebarShowHistoryStyles>
     );
