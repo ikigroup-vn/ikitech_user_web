@@ -164,6 +164,18 @@ const MarkerStyled = styled.div`
     justify-content: center;
     font-weight: bold;
   }
+  .div_icon_green {
+    background-color: #78ff64;
+    color: #000000;
+    border-radius: 50%;
+    border: solid 1px #875252;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
 `;
 
 const PrevNextButtons = styled.div`
@@ -213,6 +225,7 @@ class SidebarShowSalerVisitHistory extends Component {
       showModal: false,
       selectedImages: [],
       selectedMarker: 0,
+      focusItem: null,
     };
   }
 
@@ -247,29 +260,31 @@ class SidebarShowSalerVisitHistory extends Component {
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
       }).addTo(map);
 
-      staffArr.forEach((record, index) => {
+      staffArr.reverse().forEach((record, index) => {
         const { longitude, latitude } = record;
-        const isLastPoint = index === staffArr.length - 1;
+        const isLastPoint = staffArr.length - (index + 1) == 0 ? true : false;
+
         const popupContent = `
           <div style="text-align: center, margin-bottom: 40px">
-            <p style="color: #4e73df">${ (staffArr.length - index) + 1 } - ${record?.agency?.customer?.name}</p>
+            <p style="color: #4e73df">${index + 1} - ${record?.agency?.customer?.name}</p>
           </div>
         `;
         const customIcon = L.divIcon({
-          className: isLastPoint ? 'div_icon_red' : 'div_icon_blue',
-          html: `<div>${ staffArr.length - index}</div>`,
+          className: isLastPoint == true ? 'div_icon_red' : 'div_icon_blue',
+          html: `<div>${index + 1}</div>`,
           iconSize: [30, 30],
         });
         const marker = L.marker([latitude, longitude], { icon: customIcon }).addTo(map);
         marker.openPopup();
         marker.bindPopup(popupContent);
         bounds.extend(marker.getLatLng());
-        if (index === staffArr.length - 1) {
+        if (isLastPoint) {
           map.fitBounds(bounds);
           marker.openPopup();
         }
       });
     }
+
     this.map = map;
   }
 
@@ -287,6 +302,7 @@ class SidebarShowSalerVisitHistory extends Component {
 
   // when on clink to icon direction show map and marker on it self
   showSelectedMarker(record, index, numericalOrder) {
+    this.setState({ focusItem: index });
     const { latitude, longitude } = record;
     const { selectedMarker } = this.state;
     const map = this.map;
@@ -294,7 +310,7 @@ class SidebarShowSalerVisitHistory extends Component {
       map.removeLayer(selectedMarker);
     }
     const customIcon = L.divIcon({
-      className: index == numericalOrder ? 'div_icon_red' : 'div_icon_blue',
+      className: index == numericalOrder ? 'div_icon_red' : 'div_icon_green',
       html: `<div>${index}</div>`,
       iconSize: [30, 30],
     });
@@ -435,7 +451,8 @@ class SidebarShowSalerVisitHistory extends Component {
                               alignItems: 'center',
                               justifyContent: 'center',
                               fontWeight: 'bold',
-                              backgroundColor: index === 0 ? '#ff6868' : '#687eff',
+                              backgroundColor:
+                                this.state.focusItem === (staff.length - index ) ? '#58ff58' : index === 0 ? '#ff6868' : '#687eff',
                             }}
                           >
                             {staff?.length - index}
@@ -463,9 +480,14 @@ class SidebarShowSalerVisitHistory extends Component {
                               </span>{' '}
                               <br />
                               <span>
-                                <span style={{ color: 'grey' }}>Địa chỉ :</span>{' '}
+                                <span style={{ color: 'grey' }}>Địa chỉ cửa hàng:</span>{' '}
                                 {record?.agency?.customer?.address_detail || ''} -{' '}
                                 {record?.agency?.customer?.district_name || ''}
+                              </span>
+                              <br />
+                              <span>
+                                <span style={{ color: 'grey' }}>Địa chỉ check-in:</span>{' '}
+                                {record?.address_checkin || ''}
                               </span>
                             </div>
                             <div style={{ display: 'flex' }}>
