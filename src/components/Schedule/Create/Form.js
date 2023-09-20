@@ -541,11 +541,11 @@ class Form extends Component {
                 <label for="product_name">Thời gian thông báo trong ngày</label>
                 <div className="set-top-moment">
                   <MomentInput
-                    value={moment(time_of_day, "HH:mm")}
-                    format="HH:mm"
-                    options={false}
-                    enableInputClick={true}
-                    readOnly={true}
+                     value={moment("2021-10-10T00:00:00+02:00", "HH:mm")}
+                     format="HH:mm"
+                     options={false}
+                     enableInputClick={true}
+                   readOnly={true}
                     tab={1}
                     translations={{
                       SAVE: "Lưu",
