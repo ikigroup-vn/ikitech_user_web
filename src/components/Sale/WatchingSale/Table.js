@@ -131,6 +131,7 @@ class Table extends Component {
               store_code={this.props.store_code}
               staff_name={this.state.staffName}
               createMap={this.props.createMap}
+              dateQuery={this.props.date_query}
             />
           )}
         </div>

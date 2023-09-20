@@ -10,7 +10,7 @@ import DatePicker from '../../DatePicker/DatePickerADay.jsx';
 import { connect, shallowEqual } from 'react-redux';
 
 const SidebarShowHistoryStyles = styled.div`
-  width: 90%;
+  width: 100%;
   position: fixed;
   top: 0;
   right: 0;
@@ -20,7 +20,6 @@ const SidebarShowHistoryStyles = styled.div`
   padding-top: 20px;
   padding-left: 20px;
   box-shadow: 0 0 10px 4px rgba(0, 0, 0, 0.1);
-  overflow-y: auto;
   .history_item {
     display: flex;
   }
@@ -226,21 +225,24 @@ class SidebarShowSalerVisitHistory extends Component {
       selectedImages: [],
       selectedMarker: 0,
       focusItem: null,
+      date_query: this.props.dateQuery,
     };
   }
 
   componentDidMount() {
     const { data } = this.props;
     const { store_code } = this.props;
-    const date = this.getCurrentDate();
-    this.props.fetchReportSaler(store_code, date, data);
+    const { dateQuery } = this.props;
+    if(dateQuery){
+      this.props.fetchReportSaler(store_code, dateQuery, dateQuery, data);
+    } else {
+      const date = this.getCurrentDate();
+      this.props.fetchReportSaler(store_code, date, date, data);
+    }
 
     if (this.map) {
       this.map.remove();
     }
-    setTimeout(() => {
-      this.createMap([]);
-    }, 100);
   }
 
   createMap(staffArr) {
@@ -324,7 +326,10 @@ class SidebarShowSalerVisitHistory extends Component {
   onChangeDateFromComponent = (date) => {
     const { data } = this.props;
     const { store_code } = this.props;
-    this.props.fetchReportSaler(store_code, date, data);
+    this.setState({
+      date_query: date,
+    })
+    this.props.fetchReportSaler(store_code, date, date, data);
   };
 
   getCurrentDate() {
@@ -380,11 +385,19 @@ class SidebarShowSalerVisitHistory extends Component {
   render() {
     const { staff } = this.props;
     const { staff_name } = this.props;
-
+    const today = this.getCurrentDate.dateQuery; 
+    const date = this.state.date_query;
     return (
       <SidebarShowHistoryStyles>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <h4 className="primary name_customers">Lịch sử di chuyển của saler: {staff_name}</h4>
+          <div style={{ display: 'flex' }}>
+            <i
+              class="fas fa-arrow-left"
+              style={{ fontSize: '30px', cursor: 'pointer', paddingRight: '20px' }}
+              onClick={() => this.handleCloseSiderBar(false)}
+            ></i>
+            <h4 className="primary name_customers">Lịch sử di chuyển của saler: {staff_name} {' '}-{' '}ngày {date == today ? 'hôm nay' : date || 'hôm nay'}</h4>
+          </div>
           <i
             style={{ fontSize: '30px', cursor: 'pointer', paddingRight: '20px' }}
             onClick={() => this.handleCloseSiderBar(false)}
@@ -420,7 +433,7 @@ class SidebarShowSalerVisitHistory extends Component {
         )}
 
         <div className="history_item">
-          <div style={{ width: '490px', height: '100vh', overflowY: 'scroll' }}>
+          <div style={{ width: '35%', height: '100vh', overflowY: 'scroll', maxWidth: '620px' }}>
             <div style={{ paddingRight: '20px' }}>
               {/* date picker here */}
               <div style={{ marginBottom: '15px', display: 'flex' }}>
@@ -452,7 +465,11 @@ class SidebarShowSalerVisitHistory extends Component {
                               justifyContent: 'center',
                               fontWeight: 'bold',
                               backgroundColor:
-                                this.state.focusItem === (staff.length - index ) ? '#58ff58' : index === 0 ? '#ff6868' : '#687eff',
+                                this.state.focusItem === staff.length - index
+                                  ? '#58ff58'
+                                  : index === 0
+                                  ? '#ff6868'
+                                  : '#687eff',
                             }}
                           >
                             {staff?.length - index}
@@ -465,9 +482,9 @@ class SidebarShowSalerVisitHistory extends Component {
                                 {record?.agency?.customer?.name || 'Không xác định'}
                               </span>{' '}
                               <br />
-                              <span style={{ color: 'grey' }}>check-in: </span>
+                              <span style={{ color: 'grey' }}>Check-in: </span>
                               <span style={{ color: 'rgb(71, 79, 23)' }}>{record?.time_checkin}</span> -{' '}
-                              <span style={{ color: 'grey' }}>check-out: </span>
+                              <span style={{ color: 'grey' }}>Check-out: </span>
                               <span style={{ color: '#c12026' }}>
                                 {record?.time_checkout || <span color="#22d822">Đang ở tại cửa hàng</span>}
                               </span>
@@ -475,11 +492,10 @@ class SidebarShowSalerVisitHistory extends Component {
                             <div style={{ wordBreak: 'break-word' }}>
                               <span>
                                 <span style={{ color: 'grey' }}>Viếng thăm</span> (
-                                {this.formatSeconds(record?.time_visit)} -{' '}
-                                {record?.images?.length || 0} ảnh)
+                                {this.formatSeconds(record?.time_visit)} - {record?.images?.length || 0} ảnh)
                               </span>{' '}
                               <br />
-                              <span style={{ color: 'grey' }}>Tên thiết bị : {record?.device_name || ''}</span>
+                              <span style={{ color: 'grey' }}>Tên thiết bị: {record?.device_name || ''}</span>
                               <br />
                               <span>
                                 <span style={{ color: 'grey' }}>Địa chỉ cửa hàng:</span>{' '}
@@ -488,29 +504,12 @@ class SidebarShowSalerVisitHistory extends Component {
                               </span>
                               <br />
                               <span>
-                                <span style={{ color: 'grey' }}>Địa chỉ check-in:</span>{' '}
-                                {record?.address_checkin || ''}
+                                <span style={{ color: 'grey' }}>Địa chỉ check-in:</span> {record?.address_checkin || ''}
                               </span>
                             </div>
-                            <div style={{ display: 'flex' }}>
-                              <div> </div>
-                              <div>
-                                <i
-                                  class="fas fa-directions"
-                                  style={{
-                                    fontSize: '24px',
-                                    color: '#e75353',
-                                    cursor: 'pointer',
-                                    marginLeft: '425px',
-                                    position: 'absolute',
-                                    marginTop: '-63px',
-                                  }}
-                                  onClick={() => this.showSelectedMarker(record, staff?.length - index, staff?.length)}
-                                ></i>
-                              </div>
-                            </div>
+
                             <div>
-                              <span style={{ color: 'grey' }}>Ghi chú :</span>
+                              <span style={{ color: 'grey' }}>Ghi chú:</span>
                               <span> {record?.note || ''}</span> <br />
                               {record?.images?.length > 0 ? (
                                 record?.images?.length > 5 ? (
@@ -572,6 +571,19 @@ class SidebarShowSalerVisitHistory extends Component {
                             </div>
                           </div>
                         </td>
+                        <td>
+                          <div>
+                            <i
+                              class="fas fa-directions"
+                              style={{
+                                fontSize: '24px',
+                                color: '#e75353',
+                                cursor: 'pointer',
+                              }}
+                              onClick={() => this.showSelectedMarker(record, staff?.length - index, staff?.length)}
+                            ></i>
+                          </div>
+                        </td>
                       </tr>
                     </tbody>
                   ))
@@ -589,7 +601,7 @@ class SidebarShowSalerVisitHistory extends Component {
           </div>
 
           {/* Map cpn here */}
-          <div style={{width: '100%'}}>
+          <div style={{ width: '65%' }}>
             <MarkerStyled>
               <div
                 id="map"
@@ -616,8 +628,8 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    fetchReportSaler: (store_code, date, staff_id) => {
-      dispatch(staffAction.fetchReportSalerToDistributord(store_code, date, staff_id));
+    fetchReportSaler: (store_code, date_from, date_to, staff_id) => {
+      dispatch(staffAction.fetchReportSalerToDistributord(store_code, date_from, date_to, staff_id));
     },
   };
 };

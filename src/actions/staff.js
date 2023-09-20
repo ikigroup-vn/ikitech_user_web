@@ -229,13 +229,13 @@ export const updateCustomerToSale = (store_code, id, data, branch_id) => {
 };
 
 // code newer
-export const fetchHistoryToDistributorByStaffId = (store_code, date) => {
+export const fetchHistoryToDistributorByStaffId = (store_code, date_form, date_to) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
     });
-    staffApi.historyReportSalerToDistributor(store_code, date).then((res) => {
+    staffApi.historyReportSalerToDistributor(store_code, date_form, date_to).then((res) => {
       if (res.data.code !== 401)
         dispatch({
           type: Types.SHOW_LOADING,
@@ -249,13 +249,13 @@ export const fetchHistoryToDistributorByStaffId = (store_code, date) => {
   };
 };
 
-export const fetchReportSalerToDistributord = (store_code, date, staff_id) => {
+export const fetchReportSalerToDistributord = (store_code, date_from, date_to, staff_id) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
     });
-    staffApi.reportSalerToDistributor(store_code, date, staff_id).then((res) => {
+    staffApi.reportSalerToDistributor(store_code, date_from, date_to, staff_id).then((res) => {
       if (res.data.code !== 401)
         dispatch({
           type: Types.SHOW_LOADING,
