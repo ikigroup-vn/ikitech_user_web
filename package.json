@@ -52,7 +52,7 @@
     "react-html-parser": "^2.0.2",
     "react-image-file-resizer": "^0.4.8",
     "react-keyboard-event-handler": "^1.5.4",
-    "react-moment-input": "^0.2.31",
+    "react-moment-input": "^0.2.30",
     "react-motion": "^0.5.2",
     "react-qr-barcode-scanner": "^1.0.6",
     "react-redux": "^7.2.9",
