@@ -141,6 +141,7 @@ class ListAgency extends Component {
       types,
       config,
       agency_add_sub_balance,
+      agency_change_level
     } = this.props;
 
     var customerImg =
@@ -246,6 +247,7 @@ class ListAgency extends Component {
         <div className="card-body">
           <Table
             agency_add_sub_balance={agency_add_sub_balance}
+            agency_change_level={agency_change_level}
             passType={this.passType}
             page={page}
             searchValue={searchValue}

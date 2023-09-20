@@ -1,16 +1,16 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
-import * as Env from "../../../ultis/default";
-import * as helper from "../../../ultis/helpers";
-import { shallowEqual } from "../../../ultis/shallowEqual";
-import { format, randomString, insertParam } from "../../../ultis/helpers";
-import { connect } from "react-redux";
-import * as agencyAction from "../../../actions/agency";
-import styled from "styled-components";
-import ModalHistoryBalance from "./ModalHistoryBalance";
-import ModalChangeBalance from "./ModalChangeBalance";
-import ModalListReferences from "../../Collaborator/ListCollaborator/ModalListReferences";
-import SidebarListReferences from "../../Collaborator/ListCollaborator/SidebarListReferences";
+import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
+import * as Env from '../../../ultis/default';
+import * as helper from '../../../ultis/helpers';
+import { shallowEqual } from '../../../ultis/shallowEqual';
+import { format, randomString, insertParam } from '../../../ultis/helpers';
+import { connect } from 'react-redux';
+import * as agencyAction from '../../../actions/agency';
+import styled from 'styled-components';
+import ModalHistoryBalance from './ModalHistoryBalance';
+import ModalChangeBalance from './ModalChangeBalance';
+import ModalListReferences from '../../Collaborator/ListCollaborator/ModalListReferences';
+import SidebarListReferences from '../../Collaborator/ListCollaborator/SidebarListReferences';
 
 const TableStyles = styled.div`
   .exploder {
@@ -78,8 +78,7 @@ class Table extends Component {
   }
   componentDidUpdate(prevProps, prevState) {
     if (
-      (!shallowEqual(prevProps.agencys, this.props.agencys) &&
-        prevProps.agencys.length == 0) ||
+      (!shallowEqual(prevProps.agencys, this.props.agencys) && prevProps.agencys.length == 0) ||
       prevProps.tabId != 1 ||
       prevState.loadFrist != this.state.loadFrist
     ) {
@@ -123,7 +122,7 @@ class Table extends Component {
 
   onChangeStatus = (e, id) => {
     const { page, getParams, numPage, searchValue, typeAgency } = this.props;
-    var checked = this["checked" + id].checked;
+    var checked = this['checked' + id].checked;
     var status = checked == true ? 1 : 0;
     this.props.updateAgency(
       this.props.store_code,
@@ -132,7 +131,7 @@ class Table extends Component {
         status: status,
       },
       page,
-      getParams(searchValue, typeAgency, numPage)
+      getParams(searchValue, typeAgency, numPage),
     );
   };
 
@@ -147,7 +146,7 @@ class Table extends Component {
         agency_type_id: value,
       },
       page,
-      getParams(searchValue, typeAgency, numPage)
+      getParams(searchValue, typeAgency, numPage),
     );
   };
 
@@ -155,7 +154,7 @@ class Table extends Component {
     const name = e.target.name;
     const { agencys, listItemSelected, setListItemSelected } = this.props;
     var data = agencys.data;
-    if (name === "input__checkAll") {
+    if (name === 'input__checkAll') {
       if (listItemSelected.length === data.length) {
         setListItemSelected([]);
       } else {
@@ -166,9 +165,7 @@ class Table extends Component {
       }
     } else {
       if (listItemSelected.includes(idAgency)) {
-        const newListItemSelected = listItemSelected.filter(
-          (item) => item !== idAgency
-        );
+        const newListItemSelected = listItemSelected.filter((item) => item !== idAgency);
         setListItemSelected(newListItemSelected);
       } else {
         setListItemSelected([...listItemSelected, idAgency]);
@@ -180,62 +177,42 @@ class Table extends Component {
     var { store_code, listItemSelected } = this.props;
 
     const permissionChangeBalance = this.props.agency_add_sub_balance;
+    const permissionChangeLevel = this.props.agency_change_level;
+    console.log('permissionChangeLevel', permissionChangeLevel)
     var result = null;
     if (agencys.length > 0) {
       result = agencys.map((data, index) => {
-        var avatar =
-          data.customer.avatar_image == null
-            ? Env.IMG_NOT_FOUND
-            : data.customer.avatar_image;
-        var img_front =
-          data.front_card == null ? Env.IMG_NOT_FOUND : data.front_card;
-        var img_back =
-          data.back_card == null ? Env.IMG_NOT_FOUND : data.back_card;
+        var avatar = data.customer.avatar_image == null ? Env.IMG_NOT_FOUND : data.customer.avatar_image;
+        var img_front = data.front_card == null ? Env.IMG_NOT_FOUND : data.front_card;
+        var img_back = data.back_card == null ? Env.IMG_NOT_FOUND : data.back_card;
 
-        var address_default = "";
+        var address_default = '';
 
-        if (data.customer != null && typeof data.customer != "undefined") {
-          if (
-            typeof data.customer.default_address === "object" &&
-            data.customer.default_address !== null
-          ) {
+        if (data.customer != null && typeof data.customer != 'undefined') {
+          if (typeof data.customer.default_address === 'object' && data.customer.default_address !== null) {
             if (
               data.customer.default_address.address_detail !== null &&
-              data.customer.default_address.address_detail !== ""
+              data.customer.default_address.address_detail !== ''
             ) {
-              address_default =
-                address_default +
-                data.customer.default_address.address_detail +
-                ", ";
+              address_default = address_default + data.customer.default_address.address_detail + ', ';
             }
-            if (
-              data.customer.default_address.wards_name !== null &&
-              data.customer.default_address.wards_name !== ""
-            ) {
-              address_default =
-                address_default +
-                data.customer.default_address.wards_name +
-                ", ";
+            if (data.customer.default_address.wards_name !== null && data.customer.default_address.wards_name !== '') {
+              address_default = address_default + data.customer.default_address.wards_name + ', ';
             }
             if (
               data.customer.default_address.district_name !== null &&
-              data.customer.default_address.district_name !== ""
+              data.customer.default_address.district_name !== ''
             ) {
-              address_default =
-                address_default +
-                data.customer.default_address.district_name +
-                ", ";
+              address_default = address_default + data.customer.default_address.district_name + ', ';
             }
             if (
               data.customer.default_address.province_name !== null &&
-              data.customer.default_address.province_name !== ""
+              data.customer.default_address.province_name !== ''
             ) {
-              address_default =
-                address_default + data.customer.default_address.province_name;
+              address_default = address_default + data.customer.default_address.province_name;
             }
           }
         }
-        console.log("check", data.agency_type_id == null);
         return (
           <React.Fragment>
             <tr class="sub-container hover-product">
@@ -250,28 +227,13 @@ class Table extends Component {
                 />
               </td>
               <td>
-                <button
-                  type="button"
-                  style={{ width: "25px" }}
-                  className=" btn-outline-success exploder"
-                >
+                <button type="button" style={{ width: '25px' }} className=" btn-outline-success exploder">
                   <span className="fa fa-plus"></span>
                 </button>
               </td>
-              <td>
-                {(this.props.agencys.current_page - 1) *
-                  Number(this.props.agencys.per_page) +
-                  index +
-                  1}
-              </td>{" "}
-              <td style={{ textAlign: "center" }}>
-                <img
-                  src={avatar}
-                  class="img-responsive"
-                  width="80px"
-                  height="80px"
-                  alt="Image"
-                />
+              <td>{(this.props.agencys.current_page - 1) * Number(this.props.agencys.per_page) + index + 1}</td>{' '}
+              <td style={{ textAlign: 'center' }}>
+                <img src={avatar} class="img-responsive" width="80px" height="80px" alt="Image" />
               </td>
               <td>{data.customer.name}</td>
               <td>{data.customer.phone_number}</td>
@@ -281,9 +243,9 @@ class Table extends Component {
                     className="agency_balance"
                     onClick={() => this.setAgencySelected(data)}
                     style={{
-                      display: "flex",
-                      alignItems: "center",
-                      columnGap: "5px",
+                      display: 'flex',
+                      alignItems: 'center',
+                      columnGap: '5px',
                     }}
                   >
                     <span>{format(Number(data.balance))}</span>
@@ -295,24 +257,21 @@ class Table extends Component {
               </td>
               <td>
                 <select
-                  style={{ width: "100%" }}
+                  style={{ width: '100%' }}
                   name="agency_type_id"
                   id="input"
-                  value={
-                    data.agency_type_id === null ? "0" : data.agency_type_id
-                  }
+                  value={data.agency_type_id === null ? '0' : data.agency_type_id}
                   required="required"
                   onChange={(e) => this.changeAgencyType(e, data.id)}
                   className="form-control"
+                  disabled={permissionChangeLevel}
                 >
-                  {<option value="0">--Chưa chọn--</option>}{" "}
-                  {this.props.types.map((data, index) => {
-                    return (
-                      <React.Fragment>
-                        <option value={data.id}>{data.name}</option>
-                      </React.Fragment>
-                    );
-                  })}
+                  {<option value="0">--Chưa chọn--</option>}
+                  {this.props.types.map((data, index) => (
+                    <option key={data.id} value={data.id}>
+                      {data.name}
+                    </option>
+                  ))}
                 </select>
               </td>
               {/* <td>
@@ -333,12 +292,12 @@ class Table extends Component {
               </td> */}
               <td
                 style={{
-                  display: "flex",
-                  "flex-direction": "column",
+                  display: 'flex',
+                  'flex-direction': 'column',
                 }}
               >
                 <Link
-                  style={{ margin: "2px 0" }}
+                  style={{ margin: '2px 0' }}
                   to={`/order/${this.props.store_code}?agency_by_customer_id=${data.customer_id}&tab-index=1&page=${this.props.page}&search=${this.props.searchValue}`}
                   class="btn btn-outline-danger btn-sm"
                 >
@@ -346,7 +305,7 @@ class Table extends Component {
                 </Link>
 
                 <Link
-                  style={{ margin: "2px 0" }}
+                  style={{ margin: '2px 0' }}
                   to={`/agency/${this.props.store_code}/report/${data.customer_id}?tab-index=1`}
                   class="btn btn-outline-info btn-sm"
                 >
@@ -360,28 +319,27 @@ class Table extends Component {
                   <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                     <div class="info_user">
                       <p class="sale_user_label">
-                        Số tài khoản:{" "}
+                        Số tài khoản:{' '}
                         <span id="user_tel">
                           {data.account_number} - {data.bank}
                         </span>
                       </p>
                       <p class="sale_user_label">
-                        Tên chủ tài khoản:{" "}
-                        <span id="user_tel">{data.account_name}</span>
+                        Tên chủ tài khoản: <span id="user_tel">{data.account_name}</span>
                       </p>
                       <p
                         class="sale_user_label"
                         style={{
-                          display: "flex",
-                          alignItems: "center",
+                          display: 'flex',
+                          alignItems: 'center',
                         }}
                       >
-                        Số dư hoa hồng:{" "}
+                        Số dư hoa hồng:{' '}
                         <span
                           id="user_tel"
                           style={{
-                            color: "#2980b9",
-                            marginLeft: "2px",
+                            color: '#2980b9',
+                            marginLeft: '2px',
                           }}
                         >
                           {format(Number(data.balance))}
@@ -389,29 +347,25 @@ class Table extends Component {
                         {permissionChangeBalance ? (
                           <div
                             style={{
-                              marginLeft: "15px",
-                              display: "flex",
-                              alignItems: "center",
-                              columnGap: "5px",
+                              marginLeft: '15px',
+                              display: 'flex',
+                              alignItems: 'center',
+                              columnGap: '5px',
                             }}
                           >
                             <button
                               type="button"
-                              style={{ width: "25px" }}
+                              style={{ width: '25px' }}
                               className=" btn-outline-success btn-exploder"
-                              onClick={() =>
-                                this.handleOpenModalChangeBalance(data, false)
-                              }
+                              onClick={() => this.handleOpenModalChangeBalance(data, false)}
                             >
                               <span className="fa fa-plus"></span>
                             </button>
                             <button
                               type="button"
-                              style={{ width: "25px" }}
+                              style={{ width: '25px' }}
                               className=" btn-outline-danger btn-exploder"
-                              onClick={() =>
-                                this.handleOpenModalChangeBalance(data, true)
-                              }
+                              onClick={() => this.handleOpenModalChangeBalance(data, true)}
                             >
                               <span className="fa fa-minus"></span>
                             </button>
@@ -428,16 +382,16 @@ class Table extends Component {
               <td>
                 <div
                   style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    rowGap: "5px",
+                    display: 'flex',
+                    flexDirection: 'column',
+                    rowGap: '5px',
                   }}
                 >
                   <button
-                    onClick={() => this.showChatBox(data.customer.id, "show")}
+                    onClick={() => this.showChatBox(data.customer.id, 'show')}
                     class="btn btn-outline-success btn-sm"
                     style={{
-                      width: "fit-content",
+                      width: 'fit-content',
                     }}
                   >
                     <i class="fa fa-comment-alt"></i> Chat
@@ -446,7 +400,7 @@ class Table extends Component {
                     href={`tel:${data.customer.phone_number}`}
                     class="btn btn-outline-primary btn-sm"
                     style={{
-                      width: "fit-content",
+                      width: 'fit-content',
                     }}
                   >
                     <i class="fa fa-phone"></i> Gọi ngay
@@ -454,11 +408,9 @@ class Table extends Component {
                   <button
                     class="btn btn-outline-info btn-sm"
                     style={{
-                      width: "fit-content",
+                      width: 'fit-content',
                     }}
-                    onClick={() =>
-                      this.handleShowSidebarListReferences(data.customer)
-                    }
+                    onClick={() => this.handleShowSidebarListReferences(data.customer)}
                   >
                     <i class="fa fa-users"></i>
                     Danh sách giới thiệu ({data.customer.total_referrals})
@@ -492,16 +444,12 @@ class Table extends Component {
     this.props.passType(value);
   };
   render() {
-    var agencys =
-      typeof this.props.agencys.data == "undefined"
-        ? []
-        : this.props.agencys.data;
-    var { txtType, agencySelected, agencySelectedForChangeBalance, isSub } =
-      this.state;
+    var agencys = typeof this.props.agencys.data == 'undefined' ? [] : this.props.agencys.data;
+    var { txtType, agencySelected, agencySelectedForChangeBalance, isSub } = this.state;
     const { typeAgency, listItemSelected } = this.props;
 
     return (
-      <TableStyles class="" style={{ overflow: "auto" }}>
+      <TableStyles class="" style={{ overflow: 'auto' }}>
         <table class="table table-border">
           <thead>
             <tr>
@@ -510,16 +458,13 @@ class Table extends Component {
                   type="checkbox"
                   name="input__checkAll"
                   className="input__checkAll"
-                  checked={
-                    agencys.length > 0 &&
-                    listItemSelected.length === agencys.length
-                  }
+                  checked={agencys.length > 0 && listItemSelected.length === agencys.length}
                   onChange={this.onChangeSelected}
                 ></input>
               </th>
               <th></th>
               <th>STT</th>
-              <th style={{ textAlign: "center" }}>Ảnh</th>
+              <th style={{ textAlign: 'center' }}>Ảnh</th>
               <th>Họ tên</th>
               <th>Số điện thoại</th>
               <th>Số dư hoa hồng</th>
@@ -572,9 +517,7 @@ class Table extends Component {
             store_code={this.props.store_code}
             isSub={isSub}
             agencySelectedForChangeBalance={agencySelectedForChangeBalance}
-            setAgencySelectedForChangeBalance={
-              this.setAgencySelectedForChangeBalance
-            }
+            setAgencySelectedForChangeBalance={this.setAgencySelectedForChangeBalance}
           />
         ) : null}
       </TableStyles>

@@ -97,6 +97,7 @@ class agency extends Component {
       var agency_payment_request_history =
         permissions.agency_payment_request_history;
       var agency_add_sub_balance = permissions.agency_add_sub_balance;
+      var agency_change_level  = permissions.agency_change_level;
       var isShow = permissions.collaborator_list;
 
       var isShow = permissions.agency_list;
@@ -121,6 +122,7 @@ class agency extends Component {
         agency_payment_request_list,
         agency_payment_request_history,
         agency_add_sub_balance,
+        agency_change_level 
       });
     }
   }
@@ -140,6 +142,7 @@ class agency extends Component {
       agency_add_sub_balance,
       isShow,
       isAutoSetLevelAgency,
+      agency_change_level
     } = this.state;
     return (
       <div id="wrapper">
@@ -332,6 +335,7 @@ class agency extends Component {
                               tabId={tabId}
                               store_code={store_code}
                               agency_add_sub_balance={agency_add_sub_balance}
+                              agency_change_level={agency_change_level}
                             />
                           </TabPanel>
                         ) : null}

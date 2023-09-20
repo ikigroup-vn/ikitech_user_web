@@ -40,10 +40,10 @@ export const updateCustomerToSale = (store_code, id, data) => {
 };
 
 // coder newer
-export const historyReportSalerToDistributor  = (store_code, date) => {
-  return callApi(`/store/${store_code}/overview_sale_visit_agencies${date ? `?date_to=${date}` : ''}`, 'get')
+export const historyReportSalerToDistributor  = (store_code, from_time, to_time) => {
+  return callApi(`/store/${store_code}/overview_sale_visit_agencies${from_time ? `?from_time=${from_time}` : ''}${to_time ? `&to_time=${to_time}` : ''}`, 'get')
 }
 
-export const reportSalerToDistributor = (store_code, date, staff_id) => {
-  return callApi(`/store/${store_code}/sale_visit_agencies${date ? `?date_to=${date}` : ''}${staff_id ? `&staff_id=${staff_id}` : ''}`, 'get');
+export const reportSalerToDistributor = (store_code, from_time, to_time, staff_id) => {
+  return callApi(`/store/${store_code}/sale_visit_agencies${from_time ? `?from_time=${from_time}` : ''}${to_time ? `&to_time=${to_time}` : ''}${staff_id ? `&staff_id=${staff_id}` : ''}`, 'get');
 }
