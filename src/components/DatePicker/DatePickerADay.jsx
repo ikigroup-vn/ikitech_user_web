@@ -76,6 +76,7 @@ class DatePickerADay extends Component {
           className="form-control"
           required="required"
         >
+          <option value="" selected disabled hidden>Chọn ngày</option>
           <option value="HOM-NAY">Hôm nay</option>
           <option value="HOM-QUA">Hôm qua</option>
           <option value="TUY-CHINH">Tùy chỉnh</option>
