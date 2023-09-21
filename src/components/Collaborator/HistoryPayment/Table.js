@@ -30,9 +30,9 @@ class Table extends Component {
     if (historyPayment.length > 0) {
       historyPayment.forEach((data, index) => {
         var avatar =
-          data.collaborator.customer.avatar_image == null
+          data.collaborator?.customer?.avatar_image == null
             ? Env.IMG_NOT_FOUND
-            : data.collaborator.customer.avatar_image;
+            : data.collaborator?.customer?.avatar_image;
         var img_front =
           data.collaborator.front_card == null
             ? Env.IMG_NOT_FOUND
@@ -56,12 +56,12 @@ class Table extends Component {
         var address_default = "";
 
         if (
-          data.collaborator.customer != null &&
-          typeof data.collaborator.customer != "undefined"
+          data.collaborator?.customer != null &&
+          typeof data.collaborator?.customer != "undefined"
         ) {
           if (
-            typeof data.collaborator.customer.default_address === "object" &&
-            data.collaborator.customer.default_address !== null
+            typeof data.collaborator.customer?.default_address === "object" &&
+            data.collaborator.customer?.default_address !== null
           ) {
             if (
               data.collaborator.customer.default_address.address_detail !==
@@ -116,7 +116,7 @@ class Table extends Component {
                   <span class="fa fa-plus"></span>
                 </button>
               </td>{" "}
-              <td>{data.collaborator.customer.name}</td>
+              <td>{data.collaborator.customer?.name}</td>
               {/* <th>Chủ tài khoản</th>
                             <th>Số tài khoản</th>
                             <th>Ngày yêu cầu</th>
