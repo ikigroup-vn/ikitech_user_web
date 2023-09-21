@@ -167,13 +167,34 @@ export const fetchReportExpenditure = (
 ) => {
   if (branch_ids?.toString()?.includes(",")) {
     return callApi(
-      `/store/${store_code}/report/finance/revenue_expenditure?branch_ids=${branch_ids}&page=${page}&${params}`,
+      `/store/${store_code}/report/finance/revenue_expenditure?branch_ids=${branch_ids}&page=${page}${params}`,
       "get",
       null
     );
   } else {
     return callApi(
-      `/store/${store_code}/report/finance/${branch_ids}/revenue_expenditure?page=${page}&${params}`,
+      `/store/${store_code}/report/finance/${branch_ids}/revenue_expenditure?page=${page}${params}`,
+      "get",
+      null
+    );
+  }
+};
+
+export const exportRevenueExpenditure = (
+  store_id,
+  branch_ids,
+  page,
+  params
+) => {
+  if (branch_ids?.toString()?.includes(",")) {
+    return callApi(
+      `/store/${store_id}/report/finance/revenue_expenditure/link_export?branch_ids=${branch_ids}&page=${page}${params}`,
+      "get",
+      null
+    );
+  } else {
+    return callApi(
+      `/store/${store_id}/report/finance/${branch_ids}/revenue_expenditure/link_export?page=${page}${params}`,
       "get",
       null
     );

@@ -32,6 +32,7 @@ class RevenueExpenditures extends Component {
       searchValue: "",
       revenueExpendituresValue: "",
       numPage: 20,
+      page: 1,
       typeSelect: "Hôm nay",
       datePrime: "",
       typeDate: "",
@@ -69,6 +70,9 @@ class RevenueExpenditures extends Component {
     }
     return true;
   }
+  setPage = (page) => {
+    this.setState({ page });
+  };
   handleGetDatePost = (date, typeSelect) => {
     this.setState({
       datePrime: {
@@ -101,7 +105,7 @@ class RevenueExpenditures extends Component {
 
     var params = `&search=${searchValue}&limit=${numPage}&is_revenue=${revenueExpendituresValue}&date_from=${datePrime.from}&date_to=${datePrime.to}`;
     // this.setState({ statusOrder: "", numPage: 20 });
-    // this.setState({ numPage: 20 });
+    this.setState({ page: 1 });
     // this.props.fetchAllRevenueExpenditures(store_code, branch_id, 1, params);
     this.props.fetchReportExpenditure(store_code, branch_id, 1, params);
   };
@@ -115,6 +119,7 @@ class RevenueExpenditures extends Component {
     var numPage = e.target.value;
     this.setState({
       numPage,
+      page: 1,
     });
 
     // var params = `&search=${searchValue}&order_status_code=${statusOrder}&limit=${numPage}`;
@@ -126,17 +131,18 @@ class RevenueExpenditures extends Component {
   onChangeRevenueExpendituresValue = (data) => {
     this.setState({ revenueExpendituresValue: data });
   };
-  // fetchAllData = () => {
-  //   var { store_code } = this.props.match.params;
-  //   const branch_id = getBranchId();
+  exportListRevenueExpenditure = () => {
+    var { store_code } = this.props.match.params;
+    const branch_id = getBranchId();
 
-  //   this.props.fetchAllStaff(store_code);
-  //   this.props.fetchAllCustomer(store_code);
-  //   this.props.fetchAllSupplier(store_code);
+    var { searchValue, numPage, revenueExpendituresValue, datePrime, page } =
+      this.state;
 
-  //   this.props.fetchAllRevenueExpenditures(store_code, branch_id, 1);
-  //   this.setState({ total: this.props.reportExpenditure.reserve });
-  // };
+    var params = `&search=${searchValue}&limit=${numPage}&is_revenue=${revenueExpendituresValue}&date_from=${datePrime.from}&date_to=${datePrime.to}`;
+    // this.setState({ statusOrder: "", numPage: 20 });
+    // this.setState({ numPage: 20 });
+    this.props.exportRevenueExpenditure(store_code, branch_id, page, params);
+  };
 
   componentWillReceiveProps(nextProps) {
     if (
@@ -220,6 +226,18 @@ class RevenueExpenditures extends Component {
                         Thu chi
                       </h4>{" "}
                       <div>
+                        <button
+                          style={{ margin: "auto 20px" }}
+                          onClick={this.exportListRevenueExpenditure}
+                          class={`btn btn-success btn-icon-split btn-sm `}
+                        >
+                          <span class="icon text-white-50">
+                            <i class="fas fa-file-export"></i>
+                          </span>
+                          <span style={{ color: "white" }} class="text">
+                            Export Excel
+                          </span>
+                        </button>
                         <a
                           data-toggle="modal"
                           data-target="#modalRevenue"
@@ -484,6 +502,7 @@ class RevenueExpenditures extends Component {
                         <Pagination
                           searchValue={searchValue}
                           limit={numPage}
+                          setPage={this.setPage}
                           store_code={store_code}
                           branch_id={branch_id}
                           revenueExpenditures={reportExpenditure}
@@ -580,6 +599,16 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchReportExpenditure: (store_code, branch_id, page, params) => {
       dispatch(
         reportAction.fetchReportExpenditure(store_code, branch_id, page, params)
+      );
+    },
+    exportRevenueExpenditure: (store_code, branch_id, page, params) => {
+      dispatch(
+        reportAction.exportRevenueExpenditure(
+          store_code,
+          branch_id,
+          page,
+          params
+        )
       );
     },
   };

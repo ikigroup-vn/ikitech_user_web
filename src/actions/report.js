@@ -148,6 +148,31 @@ export const fetchReportExpenditure = (store_code, branch_id, page, params) => {
       });
   };
 };
+
+export const exportRevenueExpenditure = (
+  store_code,
+  branch_id,
+  page,
+  params,
+  onSuccess = () => {}
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    storeApi
+      .exportRevenueExpenditure(store_code, branch_id, page, params)
+      .then((res) => {
+        const newTab = window.open(res.data.data, "_blank");
+        newTab.focus();
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+      });
+  };
+};
 export const fetchAllSupplierDebt = (store_code, branch_id, page, params) => {
   return (dispatch) => {
     dispatch({
