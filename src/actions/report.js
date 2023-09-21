@@ -164,8 +164,10 @@ export const exportRevenueExpenditure = (
     storeApi
       .exportRevenueExpenditure(store_code, branch_id, page, params)
       .then((res) => {
-        const newTab = window.open(res.data.data, "_blank");
-        newTab.focus();
+        const aTag = document.createElement("a");
+        aTag.href = res.data.data;
+        aTag.click();
+
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",
