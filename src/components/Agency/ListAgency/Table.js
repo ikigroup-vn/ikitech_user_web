@@ -264,7 +264,7 @@ class Table extends Component {
                   required="required"
                   onChange={(e) => this.changeAgencyType(e, data.id)}
                   className="form-control"
-                  disabled={permissionChangeLevel}
+                  disabled={!(permissionChangeLevel)}
                 >
                   {<option value="0">--Chưa chọn--</option>}
                   {this.props.types.map((data, index) => (

@@ -3,7 +3,7 @@ import { callUrl, isEmpty } from "../ultis/helpers"
 import {  getStoreCode } from "../ultis/branchUtils";
 
 
-export const handleImageUploadBefore = (files, info,core,  uploadHandler) => {
+export const handleImageUploadBefore = (files, info,  uploadHandler) => {
     try {
         uploadImageCallBack(files[0]).then((data) => {
 
