@@ -39,6 +39,7 @@ class EditImportStock extends Component {
 
       discount: "",
       cost: "",
+      total_payment: "",
       txtDiscoutType: 0,
       txtValueDiscount: "",
       infoProduct: {
@@ -86,7 +87,8 @@ class EditImportStock extends Component {
   componentWillReceiveProps(nextProps) {
     var total_price = 0;
     if (!shallowEqual(nextProps.itemImportStock, this.props.itemImportStock)) {
-      const { discount, cost, tax, note, supplier } = nextProps.itemImportStock;
+      const { discount, cost, total_payment, tax, note, supplier } =
+        nextProps.itemImportStock;
       const newImportStock = this.state.listImportStock;
       nextProps.itemImportStock.import_stock_items.forEach((item) => {
         total_price = parseInt(total_price) + parseInt(item.import_price);
@@ -114,6 +116,7 @@ class EditImportStock extends Component {
           : null,
         tax: tax,
         cost: cost,
+        total_payment: total_payment,
         note: note,
       });
     }
@@ -133,7 +136,11 @@ class EditImportStock extends Component {
     var name = target.name;
     var value = target.value;
     const _value = formatNumber(value);
-    if (name == "txtValueDiscount") {
+    if (
+      name == "txtValueDiscount" ||
+      name == "cost" ||
+      name == "total_payment"
+    ) {
       if (!isNaN(Number(_value))) {
         value = new Intl.NumberFormat().format(_value);
         if (name == "txtValueDiscount" && this.state.txtDiscoutType == "1") {
@@ -238,7 +245,10 @@ class EditImportStock extends Component {
       status: 0,
       supplier_id: select_supplier ? select_supplier.value : null,
       tax: this.state.tax,
-      cost: this.state.cost,
+      cost: this.state.cost ? formatNumber(this.state.cost) : 0,
+      total_payment: this.state.total_payment
+        ? formatNumber(this.state.total_payment)
+        : 0,
       discount: affterDiscount,
       import_stock_items: this.state.listImportStock.map((item) => {
         return {
@@ -334,6 +344,7 @@ class EditImportStock extends Component {
       price_total,
       reality_exist_total,
       cost,
+      total_payment,
       select_supplier,
     } = this.state;
     const bonusParam = "&check_inventory=true";
@@ -553,6 +564,34 @@ class EditImportStock extends Component {
                               id="usr"
                               onChange={this.onChange}
                             />
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              marginTop: "5px",
+                            }}
+                          >
+                            <div>Thanh toán:</div>
+                            <input
+                              type="text"
+                              name="total_payment"
+                              class=" col-4"
+                              value={total_payment}
+                              id="usr"
+                              style={{
+                                height: "28px",
+                                width: "100px",
+                                textAlign: "right",
+                                border: 0,
+                                borderRadius: 0,
+                                borderBottom:
+                                  "1px solid rgb(128 128 128 / 71%)",
+                                paddingRight: 0,
+                              }}
+                              onChange={this.onChange}
+                            ></input>
                           </div>
                         </div>
                       </div>

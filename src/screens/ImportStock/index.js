@@ -100,6 +100,7 @@ class ImportStock extends Component {
             <td>{(dataListImportStock.current_page - 1) * 20 + index + 1}</td>
             <td>{item.code}</td>
             <td>{format(Number(item.total_final))}</td>
+            <td>{format(Number(item.total_payment))}</td>
             <td>{item.supplier?.name}</td>
             <td>
               {item.status === 0
@@ -208,6 +209,7 @@ class ImportStock extends Component {
                               <th>STT</th>
                               <th>Mã phiếu</th>
                               <th>Tổng tiền</th>
+                              <th>Tổng thanh toán</th>
                               <th>Nhà cung cấp</th>
                               <th>Trạng thái</th>
                               <th>Thời gian đặt hàng</th>

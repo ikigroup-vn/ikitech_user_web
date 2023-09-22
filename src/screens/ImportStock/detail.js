@@ -129,7 +129,7 @@ class DetailImportStock extends Component {
     ).format("YYYY-MM-DD");
     const total =
       this.state.total_price - itemImportStock.discount + itemImportStock.cost;
-    console.log(this.state.list_refund);
+
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
@@ -175,9 +175,16 @@ class DetailImportStock extends Component {
                 <div class="card card-import">
                   <div class="row d-flex justify-content-center">
                     <div class="col-12">
-                      <ul id="progressbar" class="text-center">
+                      <ul
+                        id="progressbar"
+                        class="text-center"
+                        style={{
+                          display: "flex",
+                          justifyContent: "center",
+                        }}
+                      >
                         <li class="active step0"></li>
-                        <li
+                        {/* <li
                           class={
                             this.state.isActive1 ? "active step0" : "step0"
                           }
@@ -186,15 +193,15 @@ class DetailImportStock extends Component {
                           class={
                             this.state.isActive2 ? "active step0" : "step0"
                           }
-                        ></li>
+                        ></li> */}
                         <li
                           class={
-                            this.state.isActive3
+                            statusFinal === 4 ||
+                            statusFinal === 5 ||
+                            statusFinal === 6
+                              ? "step0 activeDelete"
+                              : this.state.isActive2
                               ? "active step0"
-                              : statusFinal === 4 ||
-                                statusFinal === 5 ||
-                                statusFinal === 6
-                              ? "activeDelete step0"
                               : "step0"
                           }
                         ></li>
@@ -202,8 +209,14 @@ class DetailImportStock extends Component {
                     </div>
                   </div>
                   {isShow == true && (
-                    <div class="row justify-content-between top">
-                      <div class="row d-flex icon-content">
+                    <div class="row justify-content-center top">
+                      <div
+                        class="row d-flex icon-content justify-content-center"
+                        style={{
+                          width: "25%",
+                          marginLeft: "50px",
+                        }}
+                      >
                         {" "}
                         <img
                           style={{ width: "45px", height: "45px" }}
@@ -222,7 +235,7 @@ class DetailImportStock extends Component {
                           </div>
                         </div>
                       </div>
-                      {this.state.isActive1 ? (
+                      {/* {this.state.isActive1 ? (
                         <div class="row d-flex icon-content">
                           {" "}
                           <img
@@ -256,8 +269,8 @@ class DetailImportStock extends Component {
                             </p>
                           </div>
                         </div>
-                      )}
-                      {this.state.isActive2 ? (
+                      )} */}
+                      {/* {this.state.isActive2 ? (
                         <div class="row d-flex icon-content">
                           {" "}
                           <img
@@ -291,10 +304,16 @@ class DetailImportStock extends Component {
                             </p>
                           </div>
                         </div>
-                      )}
+                      )} */}
 
                       {statusFinal === 4 ? (
-                        <div class="row d-flex icon-content">
+                        <div
+                          class="row d-flex icon-content justify-content-center"
+                          style={{
+                            width: "35%",
+                            marginLeft: "80px",
+                          }}
+                        >
                           {" "}
                           <img
                             style={{ width: "45px", height: "45px" }}
@@ -316,7 +335,13 @@ class DetailImportStock extends Component {
                           </div>
                         </div>
                       ) : statusFinal === 5 ? (
-                        <div class="row d-flex icon-content">
+                        <div
+                          class="row d-flex icon-content justify-content-center"
+                          style={{
+                            width: "35%",
+                            marginLeft: "80px",
+                          }}
+                        >
                           {" "}
                           <img
                             class="icon"
@@ -338,7 +363,13 @@ class DetailImportStock extends Component {
                           </div>
                         </div>
                       ) : statusFinal === 6 ? (
-                        <div class="row d-flex icon-content">
+                        <div
+                          class="row d-flex icon-content justify-content-center"
+                          style={{
+                            width: "35%",
+                            marginLeft: "80px",
+                          }}
+                        >
                           {" "}
                           <img
                             class="icon"
@@ -359,8 +390,14 @@ class DetailImportStock extends Component {
                             </div>
                           </div>
                         </div>
-                      ) : this.state.isActive3 ? (
-                        <div class="row d-flex icon-content">
+                      ) : this.state.isActive2 ? (
+                        <div
+                          class="row d-flex icon-content justify-content-center"
+                          style={{
+                            width: "35%",
+                            marginLeft: "80px",
+                          }}
+                        >
                           {" "}
                           <img
                             class="icon"
@@ -382,7 +419,13 @@ class DetailImportStock extends Component {
                           </div>
                         </div>
                       ) : (
-                        <div class="row d-flex icon-content">
+                        <div
+                          class="row d-flex icon-content justify-content-center"
+                          style={{
+                            width: "35%",
+                            marginLeft: "80px",
+                          }}
+                        >
                           {" "}
                           <img
                             class="icon"
@@ -488,33 +531,9 @@ class DetailImportStock extends Component {
                             <button
                               class="btn btn-danger"
                               style={{ marginTop: "20px" }}
-                              onClick={() => this.handleChangeStatus(1)}
-                            >
-                              Duyệt
-                            </button>
-                            <button
-                              className="cancel btn btn-secondary"
-                              style={{ marginTop: "20px" }}
-                              data-toggle="modal"
-                              data-target="#removeModal"
-                            >
-                              Hủy đơn nhập
-                            </button>
-                          </div>
-                        ) : itemImportStock.status === 1 ? (
-                          <div
-                            style={{
-                              display: "flex",
-                              justifyContent: "space-between",
-                              alignItems: "center",
-                            }}
-                          >
-                            <button
-                              class="btn btn-danger"
-                              style={{ marginTop: "20px" }}
                               onClick={() => this.handleChangeStatus(2)}
                             >
-                              Nhập kho
+                              Hoàn thành
                             </button>
                             <button
                               className="cancel btn btn-secondary"
@@ -529,38 +548,63 @@ class DetailImportStock extends Component {
                           <div
                             style={{
                               display: "flex",
-                              columnGap: "10px",
+                              justifyContent: "space-between",
                               alignItems: "center",
-                              flexWrap: "wrap",
                             }}
                           >
-                            <button
+                            {/* <button
                               class="btn btn-danger"
                               style={{ marginTop: "20px" }}
-                              data-toggle="modal"
-                              data-target="#payment"
+                              onClick={() => this.handleChangeStatus(2)}
                             >
-                              Hoàn thành
-                            </button>
-                            <button
-                              className="cancel btn btn-success"
-                              style={{ marginTop: "20px" }}
-                              onClick={() => {
-                                this.changeStatus(true);
-                              }}
-                            >
-                              Hoàn trả nhà cung cấp
-                            </button>
+                              Nhập kho
+                            </button> */}
                             <button
                               className="cancel btn btn-secondary"
                               style={{ marginTop: "20px" }}
                               data-toggle="modal"
-                              data-target="#endModal"
+                              data-target="#removeModal"
                             >
-                              Kết thúc đơn nhập
+                              Hủy đơn nhập
                             </button>
                           </div>
                         ) : (
+                          // : itemImportStock.status === 2 ? (
+                          //   <div
+                          //     style={{
+                          //       display: "flex",
+                          //       columnGap: "10px",
+                          //       alignItems: "center",
+                          //       flexWrap: "wrap",
+                          //     }}
+                          //   >
+                          //     <button
+                          //       class="btn btn-danger"
+                          //       style={{ marginTop: "20px" }}
+                          //       data-toggle="modal"
+                          //       data-target="#payment"
+                          //     >
+                          //       Hoàn thành
+                          //     </button>
+                          //     <button
+                          //       className="cancel btn btn-success"
+                          //       style={{ marginTop: "20px" }}
+                          //       onClick={() => {
+                          //         this.changeStatus(true);
+                          //       }}
+                          //     >
+                          //       Hoàn trả nhà cung cấp
+                          //     </button>
+                          //     <button
+                          //       className="cancel btn btn-secondary"
+                          //       style={{ marginTop: "20px" }}
+                          //       data-toggle="modal"
+                          //       data-target="#endModal"
+                          //     >
+                          //       Kết thúc đơn nhập
+                          //     </button>
+                          //   </div>
+                          // )
                           ""
                         )}
                         <ModalDelete store_code={store_code} id={id} />
