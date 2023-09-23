@@ -48,7 +48,7 @@ export const fetchDetailImportStock = (store_code, branch_id, id) => {
       });
   };
 };
-export const createImportStocks = (store_code, branch_id, id, onSuccess) => {
+export const createImportStocks = (store_code, branch_id, id) => {
   return (dispatch) => {
     dispatch({
       type: Type.SHOW_LOADING,
@@ -57,7 +57,6 @@ export const createImportStocks = (store_code, branch_id, id, onSuccess) => {
     importStock
       .createImportStocks(store_code, branch_id, id)
       .then((res) => {
-        if (onSuccess) onSuccess(res.data.data.id);
         dispatch({
           type: Type.SHOW_LOADING,
           loading: "hide",
@@ -71,6 +70,7 @@ export const createImportStocks = (store_code, branch_id, id, onSuccess) => {
             content: res.data.msg,
           },
         });
+        history.replace(`/import_stocks/index/${store_code}`);
       })
       .catch(function (error) {
         dispatch({
@@ -232,7 +232,13 @@ export const changeStatus = (store_code, branch_id, id, data, onSuccess) => {
   };
 };
 
-export const postRefund = (id, data, store_code, branch = getBranchId()) => {
+export const postRefund = (
+  id,
+  data,
+  store_code,
+  branch = getBranchId(),
+  onSuccess = () => {}
+) => {
   return (dispatch) => {
     dispatch({
       type: Type.SHOW_LOADING,
@@ -241,6 +247,7 @@ export const postRefund = (id, data, store_code, branch = getBranchId()) => {
     importStock
       .postRefund(id, data, store_code, branch)
       .then((res) => {
+        if (onSuccess) onSuccess();
         dispatch({
           type: Type.SHOW_LOADING,
           loading: "hide",

@@ -117,6 +117,8 @@ class ImportStock extends Component {
                 ? "Kết thúc"
                 : item.status === 6
                 ? "Trả hàng"
+                : item.status === 7
+                ? "Đã hoàn hết"
                 : ""}
             </td>
             <td>{datetime}</td>

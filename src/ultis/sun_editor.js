@@ -2,7 +2,7 @@ import * as userLocalApi from "../data/local/user";
 import { callUrl, isEmpty } from "../ultis/helpers";
 import { getStoreCode } from "../ultis/branchUtils";
 
-export const handleImageUploadBefore = (files, info, core, uploadHandler) => {
+export const handleImageUploadBefore = (files, info, uploadHandler) => {
   try {
     uploadImageCallBack(files[0]).then((data) => {
       var response = {
@@ -14,17 +14,11 @@ export const handleImageUploadBefore = (files, info, core, uploadHandler) => {
           },
         ],
       };
-      console.log(
-        "🚀 ~ file: sun_editor.js:18 ~ uploadImageCallBack ~ response:",
-        uploadHandler
-      );
+
       uploadHandler(response);
     });
   } catch (err) {
-    console.log(
-      "🚀 ~ file: sun_editor.js:22 ~ handleImageUploadBefore ~ err:",
-      err
-    );
+
     uploadHandler(null);
   }
 };

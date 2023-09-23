@@ -23,6 +23,7 @@ import Paginations from "../../components/Import_stock/Paginations";
 import { AsyncPaginate } from "react-select-async-paginate";
 import { getBranchId, getBranchIds } from "../../ultis/branchUtils";
 import history from "../../history";
+import Select from "react-select";
 
 class CreateImportStock extends Component {
   constructor(props) {
@@ -39,6 +40,28 @@ class CreateImportStock extends Component {
       infoSupplier: "",
       cost: "",
       total_payment: "",
+      payment_method_selected: {
+        value: 0,
+        label: "Tiền mặt",
+      },
+      listPaymentMethod: [
+        {
+          value: 0,
+          label: "Tiền mặt",
+        },
+        {
+          value: 1,
+          label: "Quẹt thẻ",
+        },
+        {
+          value: 2,
+          label: "Cod",
+        },
+        {
+          value: 3,
+          label: "Chuyển khoản",
+        },
+      ],
       txtDiscoutType: 0,
       txtValueDiscount: "",
       modalUpdateCart: null,
@@ -280,13 +303,16 @@ class CreateImportStock extends Component {
     }
     const formData = {
       note: this.state.note,
-      status: 0,
+      status: status === "COMPLETED" ? 3 : 0,
       supplier_id: select_supplier ? select_supplier.value : null,
       cost: this.state.cost ? formatNumber(this.state.cost) : 0,
       total_payment: this.state.total_payment
         ? formatNumber(this.state.total_payment)
         : 0,
       discount: affterDiscount,
+      payment_method: this.state.payment_method_selected
+        ? this.state.payment_method_selected.value
+        : 0,
       import_stock_items: this.state.listImportStock.map((item) => {
         return {
           product_id: item.product_id,
@@ -298,21 +324,7 @@ class CreateImportStock extends Component {
         };
       }),
     };
-    this.props.createImportStocks(store_code, branch_id, formData, (id) => {
-      if (status === "COMPLETED") {
-        this.props.changeStatus(
-          store_code,
-          branch_id,
-          id,
-          { status: 2 },
-          () => {
-            history.replace(`/import_stocks/index/${store_code}`);
-          }
-        );
-      } else {
-        history.replace(`/import_stocks/index/${store_code}`);
-      }
-    });
+    this.props.createImportStocks(store_code, branch_id, formData);
   };
 
   onChangeSearch = (e) => {
@@ -567,6 +579,10 @@ class CreateImportStock extends Component {
     this.props.fetchAllProductV2(store_code, branchIds, 1, params);
   };
 
+  onChangeSelect = (selectValue) => {
+    this.setState({ payment_method_selected: selectValue });
+  };
+
   componentDidMount() {
     const { store_code } = this.props.match.params;
     const branch_id = localStorage.getItem("branch_id");
@@ -605,6 +621,8 @@ class CreateImportStock extends Component {
       listCategory,
       categorySelected,
       categoryChildSelected,
+      payment_method_selected,
+      listPaymentMethod,
     } = this.state;
     var type_discount_default = txtDiscoutType == "0" ? "show" : "hide";
     var type_discount_percent = txtDiscoutType == "1" ? "show" : "hide";
@@ -860,6 +878,25 @@ class CreateImportStock extends Component {
                               }}
                               onChange={this.onChange}
                             ></input>
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              marginTop: "5px",
+                            }}
+                          >
+                            <div>Phương thức thanh toán:</div>
+                            <Select
+                              isClearable
+                              isSearchable
+                              placeholder="--Chọn hình thức--"
+                              value={payment_method_selected}
+                              options={listPaymentMethod}
+                              name="payment_method"
+                              onChange={this.onChangeSelect}
+                            />
                           </div>
                         </div>
                       </div>
@@ -1216,10 +1253,8 @@ const mapDispatchToProps = (dispatch, props) => {
         productAction.fetchAllProductV2(store_code, branch_id, page, params)
       );
     },
-    createImportStocks: (store_code, branch_id, data, onSuccess) => {
-      dispatch(
-        ImportAction.createImportStocks(store_code, branch_id, data, onSuccess)
-      );
+    createImportStocks: (store_code, branch_id, data) => {
+      dispatch(ImportAction.createImportStocks(store_code, branch_id, data));
     },
     changeStatus: (store_code, branch_id, id, data, onSuccess) => {
       dispatch(
