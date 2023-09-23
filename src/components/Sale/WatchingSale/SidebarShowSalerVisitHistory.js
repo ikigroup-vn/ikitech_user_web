@@ -434,7 +434,7 @@ class SidebarShowSalerVisitHistory extends Component {
 
         <div className="history_item">
           <div style={{ width: '35%', height: '100vh', overflowY: 'scroll', maxWidth: '620px' }}>
-            <div style={{ paddingRight: '20px' }}>
+            <div style={{ paddingRight: '20px', marginBottom: '70px' }}>
               {/* date picker here */}
               <div style={{ marginBottom: '15px', display: 'flex' }}>
                 <DatePicker onChangeDate={(date) => this.onChangeDateFromComponent(date)} />
@@ -500,7 +500,8 @@ class SidebarShowSalerVisitHistory extends Component {
                               <span>
                                 <span style={{ color: 'grey' }}>Địa chỉ cửa hàng:</span>{' '}
                                 {record?.agency?.customer?.address_detail || ''} -{' '}
-                                {record?.agency?.customer?.district_name || ''}
+                                {record?.agency?.customer?.district_name || ''} -{' '}
+                                {record?.agency?.customer?.province_name || ''}
                               </span>
                               <br />
                               <span>

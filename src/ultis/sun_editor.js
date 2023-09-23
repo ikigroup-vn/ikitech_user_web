@@ -15,9 +15,9 @@ export const handleImageUploadBefore = (files, info, uploadHandler) => {
         ],
       };
 
-      uploadHandler(response);
-    });
-  } catch (err) {
+export const handleImageUploadBefore = (files, info,  uploadHandler) => {
+    try {
+        uploadImageCallBack(files[0]).then((data) => {
 
     uploadHandler(null);
   }
