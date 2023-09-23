@@ -20,6 +20,7 @@ import ListImportStock from "../../components/Import_stock/ListImportStock";
 import { format, formatNumber } from "../../ultis/helpers";
 import * as storeAction from "../../data/remote/store";
 import { AsyncPaginate } from "react-select-async-paginate";
+import Select from "react-select";
 
 class EditImportStock extends Component {
   constructor(props) {
@@ -36,9 +37,31 @@ class EditImportStock extends Component {
       infoSupplier: "",
       tax: "",
       select_supplier: null,
-
       discount: "",
       cost: "",
+      total_payment: "",
+      payment_method_selected: {
+        value: 0,
+        label: "Tiền mặt",
+      },
+      listPaymentMethod: [
+        {
+          value: 0,
+          label: "Tiền mặt",
+        },
+        {
+          value: 1,
+          label: "Quẹt thẻ",
+        },
+        {
+          value: 2,
+          label: "Cod",
+        },
+        {
+          value: 3,
+          label: "Chuyển khoản",
+        },
+      ],
       txtDiscoutType: 0,
       txtValueDiscount: "",
       infoProduct: {
@@ -86,7 +109,15 @@ class EditImportStock extends Component {
   componentWillReceiveProps(nextProps) {
     var total_price = 0;
     if (!shallowEqual(nextProps.itemImportStock, this.props.itemImportStock)) {
-      const { discount, cost, tax, note, supplier } = nextProps.itemImportStock;
+      const {
+        discount,
+        cost,
+        total_payment,
+        tax,
+        note,
+        supplier,
+        payment_method,
+      } = nextProps.itemImportStock;
       const newImportStock = this.state.listImportStock;
       nextProps.itemImportStock.import_stock_items.forEach((item) => {
         total_price = parseInt(total_price) + parseInt(item.import_price);
@@ -101,6 +132,9 @@ class EditImportStock extends Component {
           reality_exist: item.quantity,
         });
       });
+      const new_payment_method_selected = this.state.listPaymentMethod.filter(
+        (item) => item.value === payment_method
+      );
       this.setState({
         listImportStock: newImportStock,
         price_total: total_price,
@@ -113,7 +147,14 @@ class EditImportStock extends Component {
             }
           : null,
         tax: tax,
-        cost: cost,
+        cost: cost ? new Intl.NumberFormat().format(cost) : cost,
+        total_payment: total_payment
+          ? new Intl.NumberFormat().format(total_payment)
+          : total_payment,
+        payment_method_selected:
+          new_payment_method_selected.length > 0
+            ? new_payment_method_selected[0]
+            : this.state.payment_method_selected,
         note: note,
       });
     }
@@ -133,7 +174,11 @@ class EditImportStock extends Component {
     var name = target.name;
     var value = target.value;
     const _value = formatNumber(value);
-    if (name == "txtValueDiscount") {
+    if (
+      name == "txtValueDiscount" ||
+      name == "cost" ||
+      name == "total_payment"
+    ) {
       if (!isNaN(Number(_value))) {
         value = new Intl.NumberFormat().format(_value);
         if (name == "txtValueDiscount" && this.state.txtDiscoutType == "1") {
@@ -222,9 +267,10 @@ class EditImportStock extends Component {
     this.setState({ listImportStock: newInventory });
   };
 
-  updateImportStock = () => {
+  updateImportStock = (status) => {
     const { store_code, id } = this.props.match.params;
     const { select_supplier } = this.state;
+    const { itemImportStock } = this.props;
     const branch_id = localStorage.getItem("branch_id");
     var affterDiscount = "";
     if (this.state.txtDiscoutType == 0) {
@@ -235,11 +281,17 @@ class EditImportStock extends Component {
     }
     const formData = {
       note: this.state.note,
-      status: 0,
+      status: status === "COMPLETED" ? 3 : itemImportStock.status,
       supplier_id: select_supplier ? select_supplier.value : null,
       tax: this.state.tax,
-      cost: this.state.cost,
+      cost: this.state.cost ? formatNumber(this.state.cost) : 0,
+      total_payment: this.state.total_payment
+        ? formatNumber(this.state.total_payment)
+        : 0,
       discount: affterDiscount,
+      payment_method: this.state.payment_method_selected
+        ? this.state.payment_method_selected.value
+        : 0,
       import_stock_items: this.state.listImportStock.map((item) => {
         return {
           product_id: item.product_id,
@@ -320,8 +372,12 @@ class EditImportStock extends Component {
       this.setState({ select_supplier: selectValue });
     }
   };
+  onChangeSelect = (selectValue) => {
+    this.setState({ payment_method_selected: selectValue });
+  };
   render() {
-    var { supplier, products, province, wards, district } = this.props;
+    var { supplier, products, province, wards, district, itemImportStock } =
+      this.props;
     var { txtDiscoutType, txtValueDiscount, openModal } = this.state;
     var type_discount_default = txtDiscoutType == "0" ? "show" : "hide";
     var type_discount_percent = txtDiscoutType == "1" ? "show" : "hide";
@@ -334,7 +390,10 @@ class EditImportStock extends Component {
       price_total,
       reality_exist_total,
       cost,
+      total_payment,
       select_supplier,
+      payment_method_selected,
+      listPaymentMethod,
     } = this.state;
     const bonusParam = "&check_inventory=true";
 
@@ -554,6 +613,54 @@ class EditImportStock extends Component {
                               onChange={this.onChange}
                             />
                           </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              marginTop: "5px",
+                            }}
+                          >
+                            <div>Thanh toán:</div>
+                            <input
+                              type="text"
+                              name="total_payment"
+                              class=" col-4"
+                              value={total_payment}
+                              id="usr"
+                              style={{
+                                height: "28px",
+                                width: "100px",
+                                textAlign: "right",
+                                border: 0,
+                                borderRadius: 0,
+                                borderBottom:
+                                  "1px solid rgb(128 128 128 / 71%)",
+                                paddingRight: 0,
+                              }}
+                              onChange={this.onChange}
+                            ></input>
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              marginTop: "5px",
+                            }}
+                          >
+                            <div>Phương thức thanh toán:</div>
+                            <Select
+                              isClearable
+                              isSearchable
+                              isDisabled
+                              placeholder="--Chọn hình thức--"
+                              value={payment_method_selected}
+                              options={listPaymentMethod}
+                              name="payment_method"
+                              onChange={this.onChangeSelect}
+                            />
+                          </div>
                         </div>
                       </div>
                       <div class="form-group">
@@ -567,13 +674,41 @@ class EditImportStock extends Component {
                           onChange={this.onChanges}
                         ></textarea>
                       </div>
-                      <button
-                        className="btn btn-warning"
-                        style={{ marginTop: "20px" }}
-                        onClick={() => this.updateImportStock()}
+                      <div
+                        style={{
+                          display: "flex",
+                          columnGap: "15px",
+                        }}
                       >
-                        Lưu
-                      </button>
+                        <button
+                          className="btn btn-primary"
+                          style={{
+                            marginTop: "20px",
+                            display: "flex",
+                            alignItems: "center",
+                            columnGap: "5px",
+                          }}
+                          onClick={() => this.updateImportStock()}
+                        >
+                          <span class="fa fa-floppy-o"></span>
+                          Lưu
+                        </button>
+                        {itemImportStock.status !== 3 ? (
+                          <button
+                            className="btn btn-warning"
+                            style={{
+                              marginTop: "20px",
+                              display: "flex",
+                              alignItems: "center",
+                              columnGap: "5px",
+                            }}
+                            onClick={() => this.updateImportStock("COMPLETED")}
+                          >
+                            <span class="fa fa-check"></span>
+                            Hoàn thành
+                          </button>
+                        ) : null}
+                      </div>
                     </div>
                   </div>
 

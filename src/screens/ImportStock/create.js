@@ -23,6 +23,7 @@ import Paginations from "../../components/Import_stock/Paginations";
 import { AsyncPaginate } from "react-select-async-paginate";
 import { getBranchId, getBranchIds } from "../../ultis/branchUtils";
 import history from "../../history";
+import Select from "react-select";
 
 class CreateImportStock extends Component {
   constructor(props) {
@@ -38,6 +39,29 @@ class CreateImportStock extends Component {
       note: "",
       infoSupplier: "",
       cost: "",
+      total_payment: "",
+      payment_method_selected: {
+        value: 0,
+        label: "Tiền mặt",
+      },
+      listPaymentMethod: [
+        {
+          value: 0,
+          label: "Tiền mặt",
+        },
+        {
+          value: 1,
+          label: "Quẹt thẻ",
+        },
+        {
+          value: 2,
+          label: "Cod",
+        },
+        {
+          value: 3,
+          label: "Chuyển khoản",
+        },
+      ],
       txtDiscoutType: 0,
       txtValueDiscount: "",
       modalUpdateCart: null,
@@ -181,7 +205,11 @@ class CreateImportStock extends Component {
     var name = target.name;
     var value = target.value;
     const _value = formatNumber(value);
-    if (name == "txtValueDiscount") {
+    if (
+      name == "txtValueDiscount" ||
+      name == "cost" ||
+      name == "total_payment"
+    ) {
       if (!isNaN(Number(_value))) {
         value = new Intl.NumberFormat().format(_value);
         if (name == "txtValueDiscount" && this.state.txtDiscoutType == "1") {
@@ -262,7 +290,7 @@ class CreateImportStock extends Component {
     this.setState({ listImportStock: newInventory });
   };
 
-  createImportStock = () => {
+  createImportStock = (status) => {
     const { store_code } = this.props.match.params;
     const { select_supplier } = this.state;
     const branch_id = localStorage.getItem("branch_id");
@@ -275,10 +303,16 @@ class CreateImportStock extends Component {
     }
     const formData = {
       note: this.state.note,
-      status: 0,
+      status: status === "COMPLETED" ? 3 : 0,
       supplier_id: select_supplier ? select_supplier.value : null,
-      cost: this.state.cost,
+      cost: this.state.cost ? formatNumber(this.state.cost) : 0,
+      total_payment: this.state.total_payment
+        ? formatNumber(this.state.total_payment)
+        : 0,
       discount: affterDiscount,
+      payment_method: this.state.payment_method_selected
+        ? this.state.payment_method_selected.value
+        : 0,
       import_stock_items: this.state.listImportStock.map((item) => {
         return {
           product_id: item.product_id,
@@ -292,6 +326,7 @@ class CreateImportStock extends Component {
     };
     this.props.createImportStocks(store_code, branch_id, formData);
   };
+
   onChangeSearch = (e) => {
     this.setState({ searchValue: e.target.value });
   };
@@ -544,6 +579,10 @@ class CreateImportStock extends Component {
     this.props.fetchAllProductV2(store_code, branchIds, 1, params);
   };
 
+  onChangeSelect = (selectValue) => {
+    this.setState({ payment_method_selected: selectValue });
+  };
+
   componentDidMount() {
     const { store_code } = this.props.match.params;
     const branch_id = localStorage.getItem("branch_id");
@@ -582,6 +621,8 @@ class CreateImportStock extends Component {
       listCategory,
       categorySelected,
       categoryChildSelected,
+      payment_method_selected,
+      listPaymentMethod,
     } = this.state;
     var type_discount_default = txtDiscoutType == "0" ? "show" : "hide";
     var type_discount_percent = txtDiscoutType == "1" ? "show" : "hide";
@@ -798,9 +839,8 @@ class CreateImportStock extends Component {
                             <input
                               type="text"
                               name="cost"
-                              id="usr"
                               class=" col-4"
-                              value={this.state.priceCustomer}
+                              value={this.state.cost}
                               style={{
                                 height: "28px",
                                 width: "100px",
@@ -812,6 +852,51 @@ class CreateImportStock extends Component {
                               }}
                               onChange={this.onChange}
                             ></input>
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              marginTop: "5px",
+                            }}
+                          >
+                            <div>Thanh toán:</div>
+                            <input
+                              type="text"
+                              name="total_payment"
+                              class=" col-4"
+                              value={this.state.total_payment}
+                              style={{
+                                height: "28px",
+                                width: "100px",
+                                textAlign: "right",
+                                border: 0,
+                                borderRadius: 0,
+                                borderBottom:
+                                  "1px solid rgb(128 128 128 / 71%)",
+                              }}
+                              onChange={this.onChange}
+                            ></input>
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              marginTop: "5px",
+                            }}
+                          >
+                            <div>Phương thức thanh toán:</div>
+                            <Select
+                              isClearable
+                              isSearchable
+                              placeholder="--Chọn hình thức--"
+                              value={payment_method_selected}
+                              options={listPaymentMethod}
+                              name="payment_method"
+                              onChange={this.onChangeSelect}
+                            />
                           </div>
                         </div>
                       </div>
@@ -825,13 +910,39 @@ class CreateImportStock extends Component {
                           onChange={this.onChanges}
                         ></textarea>
                       </div>
-                      <button
-                        className="btn btn-warning"
-                        style={{ marginTop: "20px" }}
-                        onClick={() => this.createImportStock()}
+                      <div
+                        style={{
+                          display: "flex",
+                          columnGap: "15px",
+                        }}
                       >
-                        Tạo đơn nhập
-                      </button>
+                        <button
+                          className="btn btn-primary"
+                          style={{
+                            marginTop: "20px",
+                            display: "flex",
+                            alignItems: "center",
+                            columnGap: "5px",
+                          }}
+                          onClick={() => this.createImportStock()}
+                        >
+                          <span class="fa fa-floppy-o"></span>
+                          Lưu
+                        </button>
+                        <button
+                          className="btn btn-warning"
+                          style={{
+                            marginTop: "20px",
+                            display: "flex",
+                            alignItems: "center",
+                            columnGap: "5px",
+                          }}
+                          onClick={() => this.createImportStock("COMPLETED")}
+                        >
+                          <span class="fa fa-check"></span>
+                          Hoàn thành
+                        </button>
+                      </div>
                     </div>
                   </div>
 
@@ -1144,6 +1255,11 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     createImportStocks: (store_code, branch_id, data) => {
       dispatch(ImportAction.createImportStocks(store_code, branch_id, data));
+    },
+    changeStatus: (store_code, branch_id, id, data, onSuccess) => {
+      dispatch(
+        ImportAction.changeStatus(store_code, branch_id, id, data, onSuccess)
+      );
     },
     fetchAllSupplier: (store_code) => {
       dispatch(dashboardAction.fetchAllSupplier(store_code));

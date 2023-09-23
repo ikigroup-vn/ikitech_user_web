@@ -1,17 +1,24 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import * as ImportAction from "../../actions/import_stock"
+import * as ImportAction from "../../actions/import_stock";
 import { getBranchId } from "../../ultis/branchUtils";
 class ModalDelete extends Component {
-    
   onSave = (e) => {
     e.preventDefault();
-    window.$('.modal').modal('hide');
-    const { store_code, id } = this.props
-    const branch_id = getBranchId()
+    const { store_code, id } = this.props;
+    const branch_id = getBranchId();
 
-    const data = { status: 4 }
-    this.props.changeStatus(store_code, branch_id, id, data)
+    this.props.postRefund(
+      id,
+      {
+        refund_line_items: [],
+      },
+      store_code,
+      branch_id,
+      () => {
+        window.$(".modal").modal("hide");
+      }
+    );
   };
 
   render() {
@@ -71,9 +78,16 @@ class ModalDelete extends Component {
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    changeStatus: (store_code, branch_id, id, data) => {
-      dispatch(ImportAction.changeStatus(store_code, branch_id, id, data))
-  }
+    changeStatus: (store_code, branch_id, id, data, onSuccess) => {
+      dispatch(
+        ImportAction.changeStatus(store_code, branch_id, id, data, onSuccess)
+      );
+    },
+    postRefund: (id, data, store_code, branch_id, onSuccess) => {
+      dispatch(
+        ImportAction.postRefund(id, data, store_code, branch_id, onSuccess)
+      );
+    },
   };
 };
 export default connect(null, mapDispatchToProps)(ModalDelete);

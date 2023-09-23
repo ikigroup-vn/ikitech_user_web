@@ -70,7 +70,6 @@ export const createImportStocks = (store_code, branch_id, id) => {
             content: res.data.msg,
           },
         });
-
         history.replace(`/import_stocks/index/${store_code}`);
       })
       .catch(function (error) {
@@ -188,7 +187,7 @@ export const chooseMethorPayment = (store_code, branch_id, id, data) => {
       });
   };
 };
-export const changeStatus = (store_code, branch_id, id, data) => {
+export const changeStatus = (store_code, branch_id, id, data, onSuccess) => {
   return (dispatch) => {
     dispatch({
       type: Type.SHOW_LOADING,
@@ -199,6 +198,7 @@ export const changeStatus = (store_code, branch_id, id, data) => {
         type: Type.SHOW_LOADING,
         loading: "hide",
       });
+      if (onSuccess) onSuccess();
       importStock
         .fetchDetailImportStock(store_code, branch_id, id)
         .then((res) => {
@@ -232,7 +232,13 @@ export const changeStatus = (store_code, branch_id, id, data) => {
   };
 };
 
-export const postRefund = (id, data, store_code, branch = getBranchId()) => {
+export const postRefund = (
+  id,
+  data,
+  store_code,
+  branch = getBranchId(),
+  onSuccess = () => {}
+) => {
   return (dispatch) => {
     dispatch({
       type: Type.SHOW_LOADING,
@@ -241,6 +247,7 @@ export const postRefund = (id, data, store_code, branch = getBranchId()) => {
     importStock
       .postRefund(id, data, store_code, branch)
       .then((res) => {
+        if (onSuccess) onSuccess();
         dispatch({
           type: Type.SHOW_LOADING,
           loading: "hide",
