@@ -21,18 +21,6 @@ const permission = (channel) => {
                 name: "Tin tức bài viết",
                 decentralizationName: "post_list",
               },
-              {
-                name: "Đào tạo",
-                decentralizationName: "train",
-              },
-              {
-                name: "Cộng đồng",
-                decentralizationName: "communication_list",
-              },
-              // {
-              //   name: "Chấm công",
-              //   decentralizationName: "timekeeping",
-              // },
             ],
           },
           {
@@ -57,22 +45,83 @@ const permission = (channel) => {
               },
             ],
           },
-          // {
-          //   name: "Kế toán",
-          //   decentralizationName: "revenue_expenditure",
-          //   componentChilds: [
-          //     {
-          //       name: "Thu chi",
-          //       decentralizationName: "revenue_expenditure",
-          //       componentChilds: [],
-          //     },
-          //     {
-          //       name: "Bảng công",
-          //       decentralizationName: "accountant_time_sheet",
-          //       componentChilds: [],
-          //     },
-          //   ],
-          // },
+          {
+            name: "Đào tạo",
+            decentralizationName: "train",
+            componentChilds: [
+              {
+                name: "DS khóa học",
+                decentralizationName: "train",
+                componentChilds: [],
+              },
+              {
+                name: "Thêm khóa học",
+                decentralizationName: "train_add",
+                componentChilds: [],
+              },
+              {
+                name: "Chỉnh sửa khóa học",
+                decentralizationName: "train_update",
+                componentChilds: [],
+              },
+              {
+                name: "Xóa khóa học",
+                decentralizationName: "train_delete",
+                componentChilds: [],
+              },
+              {
+                name: "DS bài thi",
+                decentralizationName: "train_exam_list",
+                componentChilds: [],
+              },
+              {
+                name: "Thêm bài thi",
+                decentralizationName: "train_exam_add",
+                componentChilds: [],
+              },
+              {
+                name: "Sửa bài thi",
+                decentralizationName: "train_exam_update",
+                componentChilds: [],
+              },
+              {
+                name: "Xóa bài thi",
+                decentralizationName: "train_exam_delete",
+                componentChilds: [],
+              },
+            ],
+          },
+          {
+            name: "Cộng đồng",
+            decentralizationName: "communication_list",
+            componentChilds: [
+              {
+                name: "DS tin đăng",
+                decentralizationName: "communication_list",
+                componentChilds: [],
+              },
+              {
+                name: "Chỉnh sửa bài đăng",
+                decentralizationName: "communication_update",
+                componentChilds: [],
+              },
+              {
+                name: "Đăng lại bài đăng",
+                decentralizationName: "communication_add",
+                componentChilds: [],
+              },
+              {
+                name: "Xóa bài đăng",
+                decentralizationName: "communication_delete",
+                componentChilds: [],
+              },
+              {
+                name: "Duyệt bài đăng",
+                decentralizationName: "communication_approve",
+                componentChilds: [],
+              },
+            ],
+          },
         ],
       },
       {
@@ -382,7 +431,8 @@ const permission = (channel) => {
                 name: "Thay đổi số dư đại lý",
                 decentralizationName: "agency_add_sub_balance",
                 componentChilds: [],
-              },{
+              },
+              {
                 name: "Thay đổi cấp  đại lý",
                 decentralizationName: "agency_change_level",
                 componentChilds: [],
@@ -567,6 +617,10 @@ export const initialPermission = () => {
     agency_list: false,
     agency_change_level: false,
     communication_list: false,
+    communication_update: false,
+    communication_delete: false,
+    communication_add: false,
+    communication_approve: false,
     agency_register: false,
     agency_top_import: false,
     agency_bonus_program: false,
@@ -701,6 +755,13 @@ export const initialPermission = () => {
     agency_add_sub_balance: false,
     onsale: false,
     train: false,
+    train_add: false,
+    train_update: false,
+    train_delete: false,
+    train_exam_list: false,
+    train_exam_add: false,
+    train_exam_update: false,
+    train_exam_delete: false,
     ecommerce_list: false,
     ecommerce_products: false,
     ecommerce_connect: false,

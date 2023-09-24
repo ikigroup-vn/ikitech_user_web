@@ -18,33 +18,30 @@ class Quiz extends Component {
         title: "",
         id: "",
         name: "",
-
       },
       numPage: 20,
       courseId: this.props?.courseId ?? null,
-      modalupdate: {}
-
+      modalupdate: {},
     };
   }
 
   onChangeNumPage = (e) => {
     var { store_code } = this.props;
     // var {searchValue} = this.state
-    var numPage = e.target.value
+    var numPage = e.target.value;
     this.setState({
-      numPage
-    })
-    var params = `&limit=${numPage}`
+      numPage,
+    });
+    var params = `&limit=${numPage}`;
 
     this.props.fetchAllQuiz(store_code, this.state.courseId, 1, params);
-  }
-
+  };
 
   handleDelCallBack = (modal) => {
     this.setState({ modal: modal });
   };
   handleUpdateCallBack = (modal) => {
-    console.log(modal)
+    console.log(modal);
     this.setState({ modalupdate: modal });
   };
 
@@ -52,13 +49,22 @@ class Quiz extends Component {
     this.props.fetchAllQuiz(this.props.store_code, this.state.courseId);
   }
   componentWillReceiveProps(nextProps) {
-    if (this.state.isLoading != true && typeof nextProps.permission.product_list != "undefined") {
-      var permissions = nextProps.permission
-      // var insert = permissions.post_add
-      // var update = permissions.post_update
-      // var _delete = permissions.post_remove_hide
-      var isShow = permissions.post_list
-      this.setState({ isLoading: true, insert: true, update: true, _delete: true, isShow })
+    if (
+      this.state.isLoading != true &&
+      typeof nextProps.permission.product_list != "undefined"
+    ) {
+      var permissions = nextProps.permission;
+      var isShow = permissions.train_exam_list;
+      var train_exam_add = permissions.train_exam_add;
+      var train_exam_update = permissions.train_exam_update;
+      var train_exam_delete = permissions.train_exam_delete;
+      this.setState({
+        isLoading: true,
+        insert: train_exam_add,
+        update: train_exam_update,
+        _delete: train_exam_delete,
+        isShow,
+      });
     }
   }
   onChangeSearch = (e) => {
@@ -75,26 +81,17 @@ class Quiz extends Component {
   };
 
   render() {
-    var { store_code, courseId } = this.props
-    var { quizs } = this.props
-    var { numPage, searchValue } = this.state
-    var { insert, update, _delete, isShow } = this.state
-    console.log(quizs)
+    var { store_code, courseId } = this.props;
+    var { quizs } = this.props;
+    var { numPage, searchValue } = this.state;
+    var { insert, update, _delete, isShow } = this.state;
+    console.log(quizs);
     return (
       <div className="">
-
-
-        <Alert
-          type={Types.ALERT_UID_STATUS}
-          alert={this.props.alert}
-        />
-        <div
-          style={{ display: "flex", justifyContent: "space-between" }}
-        >
+        <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
           <form onSubmit={this.searchData}>
-            <div
-              class="input-group mb-6"
-            >
+            <div class="input-group mb-6">
               <input
                 style={{ maxWidth: "400px", minWidth: "300px" }}
                 type="search"
@@ -105,22 +102,19 @@ class Quiz extends Component {
                 placeholder="Tìm kiếm..."
               />
               <div class="input-group-append">
-                <button
-                  class="btn btn-primary"
-                  type="submit"
-
-                >
+                <button class="btn btn-primary" type="submit">
                   <i class="fa fa-search"></i>
                 </button>
               </div>
-
             </div>
-          
           </form>
-          <button data-toggle="modal"
+          <button
+            data-toggle="modal"
             data-target="#createQuizModal"
-            style = {{marginTop : "auto"}}
-            class={`btn btn-info btn-icon-split btn-sm ${insert == true ? "show" : "hide"}`}
+            style={{ marginTop: "auto" }}
+            class={`btn btn-info btn-icon-split btn-sm ${
+              insert == true ? "show" : "hide"
+            }`}
           >
             <span class="icon text-white-50">
               <i class="fas fa-plus"></i>
@@ -159,35 +153,30 @@ class Quiz extends Component {
                 {/* <p class="total-item" id="sale_user_name">
                   <span className="num-total_item" >{products.total}&nbsp;</span><span className="text-total_item" id="user_name">sản phẩm</span>
                 </p> */}
-            {/* </form> */} 
+              {/* </form> */}
+            </div>
+          </div>
 
-
+          <div className="">
+            <Table
+              handleUpdateCallBack={this.handleUpdateCallBack}
+              courseId={courseId}
+              update={update}
+              _delete={_delete}
+              store_code={store_code}
+              handleDelCallBack={this.handleDelCallBack}
+              quizs={quizs}
+            />
           </div>
         </div>
-
-        <div className="">
-          <Table handleUpdateCallBack={this.handleUpdateCallBack}
-            courseId={courseId}
-            update={update} _delete={_delete} store_code={store_code} handleDelCallBack={this.handleDelCallBack} quizs={quizs} />
-
-
-        </div>
+        <ModalCreate store_code={store_code} courseId={courseId} />
+        <ModalUpdate
+          modal={this.state.modalupdate}
+          store_code={store_code}
+          courseId={courseId}
+        />
       </div>
-      <ModalCreate
-              store_code={store_code}
-              courseId={courseId}
-            />
-                 <ModalUpdate
-              modal={this.state.modalupdate}
-              store_code={store_code}
-              courseId={courseId}
-
-            />
-
-      </div >
-
-      );
-
+    );
   }
 }
 
@@ -196,7 +185,6 @@ const mapStateToProps = (state) => {
     quizs: state.trainReducers.train.allQuiz,
     auth: state.authReducers.login.authentication,
     permission: state.authReducers.permission.data,
-
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
