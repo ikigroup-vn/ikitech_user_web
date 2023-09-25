@@ -460,6 +460,10 @@ const permission = (channel) => {
                 componentChilds: [],
               },
               {
+                name: "Public API Hook",
+                decentralizationName: "config_setting",
+              },
+              {
                 name: "Cài đặt chung",
                 decentralizationName: "config_setting",
               },

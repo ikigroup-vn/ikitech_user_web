@@ -180,6 +180,7 @@ import Ecommerce from "./screens/Ecommerce";
 import ProductEcommerce from "./screens/Ecommerce/product";
 import OrderEcommerce from "./screens/Ecommerce/order";
 import ConfigSms from "./screens/ConfigSms";
+import PublicApiHook from "./screens/PublicApiHook/index.js";
 
 const routes = [
   {
@@ -193,6 +194,12 @@ const routes = [
     exact: true,
 
     main: ({ match }) => <Decentralization match={match} />,
+  },
+  {
+    path: "/config_public_api_hook/:store_code",
+    exact: true,
+
+    main: ({ match }) => <PublicApiHook match={match} />,
   },
   {
     path: "/setting/index/:store_code",

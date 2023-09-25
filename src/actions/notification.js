@@ -126,3 +126,76 @@ export const updateGeneralSetting = (store_code, data) => {
     });
   };
 };
+
+export const fetchPublicApiConfig = (store_code) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    notificationApi.fetchPublicApiConfig(store_code).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide",
+      });
+      if (res.data.code !== 401) {
+        dispatch({
+          type: Types.FETCH_PUBLIC_API_CONFIG,
+          data: res.data.data,
+        });
+      }
+    });
+  };
+};
+
+export const changeToken = (store_code) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    notificationApi.changeToken(store_code).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide",
+      });
+      if (res.data.code !== 401) {
+        dispatch({
+          type: Types.FETCH_PUBLIC_API_CONFIG,
+          data: res.data.data,
+        });
+      }
+    });
+  };
+};
+
+export const UpdateConfigPublicApiConfig = (store_code, data) => {
+  console.log('data',data)
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    notificationApi.UpdateConfigPublicApiConfig(store_code, data).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide",
+      });
+      if (res.data.code !== 401) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+        dispatch({
+          type: Types.FETCH_PUBLIC_API_CONFIG,
+          data: res.data.data,
+        });
+      }
+    });
+  };
+};

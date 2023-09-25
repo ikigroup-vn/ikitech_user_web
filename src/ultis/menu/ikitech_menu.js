@@ -703,7 +703,13 @@ export const ikitech_menu = [
             to: "/banner_ads",
             class: "banner_ads",
           },
-
+          {
+            name: "Public API Hook",
+            class: "config_setting",
+            display: "show",
+            exact: true,
+            to: "/config_public_api_hook",
+          },
           {
             name: "Cài đặt chung",
             class: "config_setting",
