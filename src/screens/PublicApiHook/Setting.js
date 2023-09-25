@@ -154,7 +154,7 @@ class Setting extends Component {
             >
               <div>
                 Tài liệu tham khảo:{' '}
-                <a style={{ marginLeft: '10px' }} href="https://tailieuweb.myiki.vn/khac/public-api">
+                <a style={{ marginLeft: '10px' }} href="https://tailieuweb.myiki.vn/khac/public-api" target="_blank" >
                   Hướng dẫn sử dụng public api  
                 </a>
               </div>
@@ -217,7 +217,7 @@ class Setting extends Component {
 
             <div style={{ marginTop: '20px' }}>
               Tài liệu tham khảo:{' '}
-              <a style={{ marginLeft: '10px' }} href="https://tailieuweb.myiki.vn/khac/web-hook">
+              <a style={{ marginLeft: '10px' }} href="https://tailieuweb.myiki.vn/khac/web-hook" target="_blank">
                 Hướng dẫn sử dụng Web hook  
               </a>
             </div>

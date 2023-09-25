@@ -704,13 +704,6 @@ export const ikitech_menu = [
             class: "banner_ads",
           },
           {
-            name: "Public API Hook",
-            class: "config_setting",
-            display: "show",
-            exact: true,
-            to: "/config_public_api_hook",
-          },
-          {
             name: "Cài đặt chung",
             class: "config_setting",
             display: "hide",
@@ -784,6 +777,13 @@ export const ikitech_menu = [
             icon: "fa fa-bell",
             exact: true,
             to: "/notifications/schedule",
+          },
+          {
+            name: "Public API Hook",
+            class: "config_setting",
+            display: "show",
+            exact: true,
+            to: "/config_public_api_hook",
           },
           {
             name: "Lịch sử thao tác",
