@@ -48,7 +48,7 @@ class Theme extends Component {
                 <div className="container-fluid">
                   <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
                   <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <h4 className="h4 title_content mb-0 text-gray-800">Public API-webhooks</h4>
+                    <h4 className="h4 title_content mb-0 text-gray-800">Public API webhook</h4>
                   </div>
                   <br></br>
 
