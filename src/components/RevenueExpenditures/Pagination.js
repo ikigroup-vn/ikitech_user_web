@@ -24,27 +24,33 @@ class Pagination extends Component {
       limit,
       searchValue,
       revenueExpendituresValue,
+      setPage,
       datePrime,
       recipient_group,
-      recipient_references_id
+      recipient_references_id,
     } = this.props;
-    var params = null
-    console.log( recipient_group,
-      recipient_references_id)
-    // var params = `&order_status_code=${status_order}&payment_status_code=${status_payment}&limit=${limit}`;
-    if(typeof recipient_group !="undefined" && recipient_references_id)
-    params = `recipient_group=${recipient_group}&recipient_references_id=${recipient_references_id}`;
-    else
-    params = `search=${searchValue}&limit=${limit}&is_revenue=${revenueExpendituresValue || ""}`;
+    var params = null;
 
-    if(datePrime)
-    params = params + `&date_from=${datePrime?.from}&date_to=${datePrime?.to}`
-    if(typeof recipient_group !="undefined" && recipient_references_id)
-    this.props.fetchAllRevenueExpenditures(store_code, branch_id, page, `&recipient_group=${recipient_group}&recipient_references_id=${recipient_references_id}`);
-      else
+    setPage(page);
+    if (typeof recipient_group != "undefined" && recipient_references_id)
+      params = `&recipient_group=${recipient_group}&recipient_references_id=${recipient_references_id}`;
+    else
+      params = `&search=${searchValue}&limit=${limit}&is_revenue=${
+        revenueExpendituresValue || ""
+      }`;
+
+    if (datePrime)
+      params =
+        params + `&date_from=${datePrime?.from}&date_to=${datePrime?.to}`;
+    if (typeof recipient_group != "undefined" && recipient_references_id)
+      this.props.fetchAllRevenueExpenditures(
+        store_code,
+        branch_id,
+        page,
+        `&recipient_group=${recipient_group}&recipient_references_id=${recipient_references_id}`
+      );
     // this.props.fetchAllRevenueExpenditures(store_code, branch_id, page, params);
-  
-    this.props.fetchReportExpenditure(store_code, branch_id, page, params);
+    else this.props.fetchReportExpenditure(store_code, branch_id, page, params);
   };
 
   showData = (links) => {
@@ -89,7 +95,10 @@ class Pagination extends Component {
 
   render() {
     return (
-      <nav aria-label="Page navigation" className={`float-pagination ${getChannel()}`}>
+      <nav
+        aria-label="Page navigation"
+        className={`float-pagination ${getChannel()}`}
+      >
         <ul class="pagination  tab-pagination pg-blue">
           {this.showData(this.props.revenueExpenditures.links)}
         </ul>
