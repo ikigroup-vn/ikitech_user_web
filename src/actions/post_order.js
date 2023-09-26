@@ -422,7 +422,14 @@ export const updateInfoCarts = (store_code, branch_id, id, data) => {
       });
   };
 };
-export const paymentOrderPos = (store_code, branch_id, id, data, _this) => {
+export const paymentOrderPos = (
+  store_code,
+  branch_id,
+  id,
+  data,
+  _this,
+  onSuccess = () => {}
+) => {
   return (dispatch) => {
     dispatch({
       type: Types.POS_ORDER_PAYMENT_LOADING,
@@ -444,6 +451,7 @@ export const paymentOrderPos = (store_code, branch_id, id, data, _this) => {
             },
           });
         }
+        if (onSuccess) onSuccess(res.data.data?.order_code);
         dispatch({
           type: Types.POS_ORDER_PAYMENT_SUCCESS,
           data: {

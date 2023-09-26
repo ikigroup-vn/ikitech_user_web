@@ -560,104 +560,131 @@ class Table extends Component {
             </tr>
             <tr class="explode hide">
               <td colSpan={11}>
-                <div className="explode__info">
-                  <div className="explode__item">
-                    <span>Họ tên:</span>
-                    <span>{data.name}</span>
-                  </div>
-                  <div className="explode__item">
-                    <span>Giới tính:</span>
-                    <span>
-                      {data.sex == 1
-                        ? "Nam"
-                        : data.sex == 2
-                        ? "Nữ"
-                        : data.sex == 0
-                        ? "Khác"
-                        : ""}
-                    </span>
-                  </div>
-                  <div className="explode__item">
-                    <span>Email:</span>
-                    <span>{data.email}</span>
-                  </div>
-                  <div className="explode__item">
-                    <span>Số điện thoại:</span>
-                    <span>{data.phone_number}</span>
-                  </div>
-                  <div className="explode__item">
-                    <span>Ngày sinh:</span>
-                    <span>{data.date_of_birth}</span>
-                  </div>
-                  <div className="explode__item">
-                    <span>SĐT người giới thiệu:</span>
-                    <span>{data.referral_phone_number}</span>
-                  </div>
-
-                  <div className="explode__item">
-                    <span>Tỉnh/Thành phố:</span>
-                    {data.province_name == null
-                      ? "Chưa cập nhật"
-                      : data.province_name}
-                  </div>
-                  <div className="explode__item">
-                    <span>Tình trạng:</span>
-                    <span>{data.official ? "Đã đăng ký" : "Chưa đăng ký"}</span>
-                  </div>
-                  <div className="explode__item">
-                    <span>Ngày thêm/đăng ký:</span>
-                    <span>{data.created_at}</span>
-                  </div>
-                  <div className="explode__item">
-                    <span>Số xu:</span>
-                    <div className="explode__point">
-                      <span
-                        style={{
-                          color: "#2980b9",
-                        }}
-                      >
-                        {data.points}
+                <div
+                  style={{
+                    display: "flex",
+                    columnGap: "20px",
+                  }}
+                >
+                  <div
+                    className="explode__info"
+                    style={{
+                      width: "100%",
+                    }}
+                  >
+                    <div className="explode__item">
+                      <span>Họ tên:</span>
+                      <span>{data.name}</span>
+                    </div>
+                    <div className="explode__item">
+                      <span>Giới tính:</span>
+                      <span>
+                        {data.sex == 1
+                          ? "Nam"
+                          : data.sex == 2
+                          ? "Nữ"
+                          : data.sex == 0
+                          ? "Khác"
+                          : ""}
                       </span>
-                      <div
-                        style={{
-                          marginLeft: "15px",
-                          display: "flex",
-                          alignItems: "center",
-                          columnGap: "5px",
-                        }}
-                      >
-                        <button
-                          type="button"
-                          style={{ width: "25px" }}
-                          className=" btn-outline-success btn-exploder"
-                          onClick={() =>
-                            this.handleOpenModalChangePoint(data, false)
-                          }
+                    </div>
+                    <div className="explode__item">
+                      <span>Email:</span>
+                      <span>{data.email}</span>
+                    </div>
+                    <div className="explode__item">
+                      <span>Số điện thoại:</span>
+                      <span>{data.phone_number}</span>
+                    </div>
+                    <div className="explode__item">
+                      <span>Ngày sinh:</span>
+                      <span>{data.date_of_birth}</span>
+                    </div>
+                    <div className="explode__item">
+                      <span>SĐT người giới thiệu:</span>
+                      <span>{data.referral_phone_number}</span>
+                    </div>
+
+                    <div className="explode__item">
+                      <span>Tỉnh/Thành phố:</span>
+                      {data.province_name == null
+                        ? "Chưa cập nhật"
+                        : data.province_name}
+                    </div>
+                    <div className="explode__item">
+                      <span>Tình trạng:</span>
+                      <span>
+                        {data.official ? "Đã đăng ký" : "Chưa đăng ký"}
+                      </span>
+                    </div>
+                    <div className="explode__item">
+                      <span>Ngày thêm/đăng ký:</span>
+                      <span>{data.created_at}</span>
+                    </div>
+                    <div className="explode__item">
+                      <span>Số xu:</span>
+                      <div className="explode__point">
+                        <span
+                          style={{
+                            color: "#2980b9",
+                          }}
                         >
-                          <span className="fa fa-plus"></span>
-                        </button>
-                        <button
-                          type="button"
-                          style={{ width: "25px" }}
-                          className=" btn-outline-danger btn-exploder"
-                          onClick={() =>
-                            this.handleOpenModalChangePoint(data, true)
-                          }
+                          {data.points}
+                        </span>
+                        <div
+                          style={{
+                            marginLeft: "15px",
+                            display: "flex",
+                            alignItems: "center",
+                            columnGap: "5px",
+                          }}
                         >
-                          <span className="fa fa-minus"></span>
-                        </button>
+                          <button
+                            type="button"
+                            style={{ width: "25px" }}
+                            className=" btn-outline-success btn-exploder"
+                            onClick={() =>
+                              this.handleOpenModalChangePoint(data, false)
+                            }
+                          >
+                            <span className="fa fa-plus"></span>
+                          </button>
+                          <button
+                            type="button"
+                            style={{ width: "25px" }}
+                            className=" btn-outline-danger btn-exploder"
+                            onClick={() =>
+                              this.handleOpenModalChangePoint(data, true)
+                            }
+                          >
+                            <span className="fa fa-minus"></span>
+                          </button>
+                        </div>
                       </div>
                     </div>
+                    <div className="explode__item">
+                      <span>Số nợ hiện tại:</span>
+                      {data.debt
+                        ? new Intl.NumberFormat().format(data.debt)
+                        : 0}
+                    </div>
+                    <div className="explode__item">
+                      <span>Tỉnh/Thành phố:</span>
+                      {data.province_name == null
+                        ? "Chưa cập nhật"
+                        : data.province_name}
+                    </div>
                   </div>
-                  <div className="explode__item">
-                    <span>Số nợ hiện tại:</span>
-                    {data.debt ? new Intl.NumberFormat().format(data.debt) : 0}
-                  </div>
-                  <div className="explode__item">
-                    <span>Tỉnh/Thành phố:</span>
-                    {data.province_name == null
-                      ? "Chưa cập nhật"
-                      : data.province_name}
+                  <div>
+                    <button
+                      onClick={() => this.showChatBox(data.id, "show")}
+                      class="btn btn-outline-success btn-sm"
+                      style={{
+                        width: "fit-content",
+                      }}
+                    >
+                      <i class="fa fa-comment-alt"></i> Chat
+                    </button>
                   </div>
                 </div>
               </td>

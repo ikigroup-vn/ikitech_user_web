@@ -14,7 +14,7 @@ import ItemDetail from "../../components/Import_stock/ItemDetail";
 import ModalPayment from "../../components/Import_stock/ModalPayment";
 import ModalDelete from "../../components/Import_stock/ModalDelete";
 import ModalEnd from "../../components/Import_stock/ModalEnd";
-import { format, randomString } from "../../ultis/helpers";
+import { callUrl, format, randomString } from "../../ultis/helpers";
 import ItemDetailRefund from "../../components/Import_stock/ItemDetailRefund";
 import history from "../../history";
 import { getQueryParams } from "../../ultis/helpers";
@@ -116,6 +116,14 @@ class DetailImportStock extends Component {
       history.goBack();
     }
   };
+  handlePrintImportStock = () => {
+    const { store_code, id } = this.props.match.params;
+    const { printImportStock } = this.props;
+    const branch_id = localStorage.getItem("branch_id");
+
+    printImportStock(store_code, branch_id, id);
+  };
+
   render() {
     const { store_code, id } = this.props.match.params;
     const { itemImportStock } = this.props;
@@ -145,17 +153,23 @@ class DetailImportStock extends Component {
                     display: "flex",
                     justifyContent: "end",
                     marginBottom: "10px",
+                    columnGap: "10px",
                   }}
                 >
                   <button
-                    style={{ marginRight: "10px" }}
                     type="button"
                     onClick={this.goBack}
                     class="btn btn-warning  btn-sm"
                   >
                     <i class="fa fa-arrow-left"></i>&nbsp;Trở về
                   </button>
-
+                  <button
+                    type="button"
+                    class="btn btn-success  btn-sm"
+                    onClick={this.handlePrintImportStock}
+                  >
+                    <i class="fas fa-print"></i>&nbsp;In hóa đơn
+                  </button>
                   {(itemImportStock.status === 0 ||
                     itemImportStock.status === 1 ||
                     itemImportStock.status === 2 ||
@@ -817,6 +831,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchDetailImportStock: (store_code, branch_id, id) => {
       dispatch(ImportAction.fetchDetailImportStock(store_code, branch_id, id));
+    },
+    printImportStock: (store_code, branch_id, id) => {
+      dispatch(ImportAction.printImportStock(store_code, branch_id, id));
     },
     changeStatus: (store_code, branch_id, id, data) => {
       dispatch(ImportAction.changeStatus(store_code, branch_id, id, data));
