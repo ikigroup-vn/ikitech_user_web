@@ -460,37 +460,37 @@ const permission = (channel) => {
               },
             ],
           },
-          {
-            name: "Onsale",
-            decentralizationName: "onsale_list",
-            componentChilds: [
-              {
-                name: "Danh sách onsale",
-                decentralizationName: "onsale_list",
-                componentChilds: [],
-              },
-              {
-                name: "Thêm khách hàng onsale",
-                decentralizationName: "onsale_add",
-                componentChilds: [],
-              },
-              {
-                name: "Cập nhập khách hàng onsale",
-                decentralizationName: "onsale_edit",
-                componentChilds: [],
-              },
-              {
-                name: "Xóa khách hàng onsale",
-                decentralizationName: "onsale_remove",
-                componentChilds: [],
-              },
-              {
-                name: "Gán khách hàng onsale cho nhân viên",
-                decentralizationName: "onsale_assignment",
-                componentChilds: [],
-              },
-            ],
-          },
+          // {
+          //   name: "Onsale",
+          //   decentralizationName: "onsale_list",
+          //   componentChilds: [
+          //     {
+          //       name: "Danh sách onsale",
+          //       decentralizationName: "onsale_list",
+          //       componentChilds: [],
+          //     },
+          //     {
+          //       name: "Thêm khách hàng onsale",
+          //       decentralizationName: "onsale_add",
+          //       componentChilds: [],
+          //     },
+          //     {
+          //       name: "Cập nhập khách hàng onsale",
+          //       decentralizationName: "onsale_edit",
+          //       componentChilds: [],
+          //     },
+          //     {
+          //       name: "Xóa khách hàng onsale",
+          //       decentralizationName: "onsale_remove",
+          //       componentChilds: [],
+          //     },
+          //     {
+          //       name: "Gán khách hàng onsale cho nhân viên",
+          //       decentralizationName: "onsale_assignment",
+          //       componentChilds: [],
+          //     },
+          //   ],
+          // },
         ],
       },
       {

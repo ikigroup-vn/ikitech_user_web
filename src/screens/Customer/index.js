@@ -16,6 +16,7 @@ import {
   getQueryParams,
   setQueryParamInUrl,
 } from "../../ultis/helpers";
+import * as Env from "../../ultis/default";
 import $ from "jquery";
 import * as XLSX from "xlsx";
 import ModalCreate from "../../components/Customer/ModalCreate";
@@ -33,6 +34,7 @@ import moment from "moment";
 import ModalUpdatePasswordImport from "./ModalUpdatePasswordImport";
 import history from "../../history";
 import * as saleAction from "../../actions/sale";
+import Chat from "../../components/Chat";
 
 const CustomerStyles = styled.div`
   .filter-search-customer {
@@ -608,7 +610,7 @@ class Customer extends Component {
     reader.readAsBinaryString(f);
   };
   render() {
-    var { customer, customers, customersSale } = this.props;
+    var { customer, customers, customersSale, chat } = this.props;
 
     var { store_code } = this.props.match.params;
     var {
@@ -627,6 +629,20 @@ class Customer extends Component {
       openModalImport,
     } = this.state;
     const { wards, district, province, types } = this.props;
+    var customerImg =
+      typeof customer.avatar_image == "undefined" ||
+      customer.avatar_image == null
+        ? Env.IMG_NOT_FOUND
+        : customer.avatar_image;
+    var customerId =
+      typeof customer.id == "undefined" || customer.id == null
+        ? null
+        : customer.id;
+    var customerName =
+      typeof customer.name == "undefined" || customer.name == null
+        ? "Trống"
+        : customer.name;
+
     if (this.props.auth) {
       return (
         <CustomerStyles id="wrapper">
@@ -836,6 +852,15 @@ class Customer extends Component {
                           isSale={this.isSale}
                           customers={this.isSale() ? customersSale : customers}
                         />
+                        <Chat
+                          customerName={customerName}
+                          customerImg={customerImg}
+                          customerId={customerId}
+                          chat={chat}
+                          store_code={store_code}
+                          closeChatBox={this.closeChatBox}
+                          showChatBox={showChatBox}
+                        ></Chat>
                       </div>
                     </div>
                   </div>
