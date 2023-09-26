@@ -12,3 +12,16 @@ export const readAllNotification = (store_code,branch_id) => {
 export const updateGeneralSetting = (store_code,data) => {
   return callApi(`/store/${store_code}/general_settings`, "post", data);
 };
+
+// code newer phuctd
+export const fetchPublicApiConfig = (store_code) => {
+  return callApi(`/store/${store_code}/public_api_config`, 'get');
+}
+
+export const changeToken = (store_code) => {
+  return callApi(`/store/${store_code}/public_api_config/change_token`, 'get');
+}
+
+export const UpdateConfigPublicApiConfig = (store_code, data) => {
+  return callApi(`/store/${store_code}/public_api_config`, 'post', data);
+}
