@@ -779,19 +779,19 @@ export const ikitech_menu = [
             to: "/notifications/schedule",
           },
           {
-            name: "Public API Hook",
-            class: "config_setting",
-            display: "show",
-            exact: true,
-            to: "/config_public_api_hook",
-          },
-          {
             name: "Lịch sử thao tác",
             class: "history_operation",
             display: "hide",
             icon: "fa fa-bell",
             exact: true,
             to: "/history_operation",
+          },
+          {
+            name: "Public API Hook",
+            class: "config_setting",
+            display: "show",
+            exact: true,
+            to: "/config_public_api_hook",
           },
           {
             name: "Hỗ trợ & hướng dẫn",
