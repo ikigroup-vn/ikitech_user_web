@@ -280,7 +280,7 @@ class ReportInventory extends Component {
                         <p className="sale_user_label bold">
                           Giá trị tồn kho:{" "}
                           <span id="total_selected">
-                            {formatNoD(total_value_stock?.toFixed(3))}
+                            {formatNoD(total_value_stock?.toFixed(2))}
                           </span>
                         </p>
                         <p className="sale_user_label bold">
