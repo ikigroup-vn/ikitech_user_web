@@ -10,6 +10,7 @@ import ModalImg from "../ModalImg";
 import moment from "moment";
 import styled from "styled-components";
 import { getDDMMYYYHis } from "../../../ultis/date";
+import ModalUpdateAgencyType from "./ModalUpdateAgencyType";
 
 const ListAgencyStyles = styled.div`
   .exploder {
@@ -111,6 +112,8 @@ class Table extends Component {
   };
 
   componentDidMount() {
+    const { fetchAllAgencyType, store_code } = this.props;
+    fetchAllAgencyType(store_code);
     this.setState({ loadFrist: true });
   }
   componentDidUpdate(prevProps, prevState) {
@@ -125,7 +128,9 @@ class Table extends Component {
   }
 
   handleAgencyRegisterRequest = (id, status) => {
-    this.props.handleAgencyRegisterRequest(this.props.store_code, id, status);
+    this.props.handleAgencyRegisterRequest(this.props.store_code, id, {
+      status,
+    });
   };
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -257,7 +262,8 @@ class Table extends Component {
                     <button
                       style={{ margin: "2px 0" }}
                       onClick={() => {
-                        this.handleAgencyRegisterRequest(data2.id, 2);
+                        // this.handleAgencyRegisterRequest(data2.id, 2);
+                        this.setAgencySelected(data2);
                       }}
                       class="btn btn-outline-info btn-sm"
                     >
@@ -377,9 +383,18 @@ class Table extends Component {
         ? []
         : this.props.agencies.data;
 
+    const { agencySelected } = this.state;
     return (
       <ListAgencyStyles class="" style={{ overflow: "auto" }}>
         <ModalImg img={this.state.modalImg}></ModalImg>
+        {Object.entries(agencySelected).length > 0 ? (
+          <ModalUpdateAgencyType
+            store_code={this.props.store_code}
+            agencySelected={agencySelected}
+            setAgencySelected={this.setAgencySelected}
+            handleAgencyRegisterRequest={this.props.handleAgencyRegisterRequest}
+          ></ModalUpdateAgencyType>
+        ) : null}
         <table class="table table-border">
           <thead>
             <tr>
@@ -413,10 +428,18 @@ const mapDispatchToProps = (dispatch, props) => {
     updateAgency: (store_code, id, data, page, params) => {
       dispatch(agencyAction.updateAgency(store_code, id, data, page, params));
     },
-    handleAgencyRegisterRequest: (store_code, id, status) => {
+    handleAgencyRegisterRequest: (store_code, id, data, onSuccess) => {
       dispatch(
-        agencyAction.handleAgencyRegisterRequest(store_code, id, status)
+        agencyAction.handleAgencyRegisterRequest(
+          store_code,
+          id,
+          data,
+          onSuccess
+        )
       );
+    },
+    fetchAllAgencyType: (store_code) => {
+      dispatch(agencyAction.fetchAllAgencyType(store_code));
     },
   };
 };
