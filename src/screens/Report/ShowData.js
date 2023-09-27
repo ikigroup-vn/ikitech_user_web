@@ -220,13 +220,16 @@ class ShowData extends Component {
             </>
           ) : (
             <>
-              <td>{formatNoD(Number(data.main_stock.cost_of_capital))}</td>
+              <td>
+                {formatNoD(Number(data.main_stock.cost_of_capital?.toFixed(2)))}
+              </td>
 
               <td>{formatNoD(data.main_stock.stock)}</td>
 
               <td>
                 {formatNoD(
-                  data.main_stock.cost_of_capital * data.main_stock.stock
+                  data.main_stock.cost_of_capital?.toFixed(2) *
+                    data.main_stock.stock
                 )}
               </td>
             </>

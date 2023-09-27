@@ -376,12 +376,7 @@ class CreateImportStock extends Component {
     this.setState({ modalUpdateCart: modal });
   };
   onChangeSelect4 = (selectValue) => {
-    console.log(selectValue);
-
-    var supplier = selectValue?.supplier;
-    if (selectValue != null && supplier != null) {
-      this.setState({ select_supplier: selectValue });
-    }
+    this.setState({ select_supplier: selectValue });
   };
 
   loadSuppliers = async (search, loadedOptions, { page }) => {

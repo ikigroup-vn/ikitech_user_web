@@ -272,14 +272,14 @@ class InventoryHistory extends Component {
                         <p className="sale_user_label bold">
                           Giá trị nhập kho:{" "}
                           <span id="total_selected">
-                            {formatNoD(import_total_amount?.toFixed(3))} - SL:{" "}
+                            {formatNoD(import_total_amount?.toFixed(2))} - SL:{" "}
                             {formatNoD(import_count_stock)}{" "}
                           </span>
                         </p>
                         <p className="sale_user_label bold">
                           Giá trị xuất kho:{" "}
                           <span id="total_selected">
-                            {formatNoD(export_total_amount?.toFixed(3))} - SL:{" "}
+                            {formatNoD(export_total_amount?.toFixed(2))} - SL:{" "}
                             {formatNoD(export_count_stock)}
                           </span>
                         </p>

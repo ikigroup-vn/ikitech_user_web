@@ -409,25 +409,25 @@ class ImportExportStock extends Component {
                         <p className="sale_user_label bold">
                           Tồn kho cuối kỳ:{" "}
                           <span id="total_selected">
-                            {formatNoD(total_amount_end?.toFixed(3))}
+                            {formatNoD(total_amount_end?.toFixed(2))}
                           </span>
                         </p>
                         <p className="sale_user_label bold">
                           Tồn kho đầu kỳ:{" "}
                           <span id="total_selected">
-                            {formatNoD(total_amount_begin?.toFixed(3))}
+                            {formatNoD(total_amount_begin?.toFixed(2))}
                           </span>
                         </p>
                         <p className="sale_user_label bold">
                           Nhập trong kỳ:{" "}
                           <span id="total_selected">
-                            {formatNoD(import_total_amount?.toFixed(3))}
+                            {formatNoD(import_total_amount?.toFixed(2))}
                           </span>
                         </p>
                         <p className="sale_user_label bold">
                           Xuất trong kỳ:{" "}
                           <span id="total_selected">
-                            {formatNoD(export_total_amount?.toFixed(3))}
+                            {formatNoD(export_total_amount?.toFixed(2))}
                           </span>
                         </p>
                       </div>

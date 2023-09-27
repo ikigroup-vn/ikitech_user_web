@@ -42,7 +42,7 @@ class PanelBottom extends Component {
       txtName: "",
       txtEmail: "",
       isShow: false,
-      filterCategory: [],
+      filterCategory: "all",
       isShowDetailCombo: false,
       modal: { products: [] },
       filter_sort: "new",
@@ -743,7 +743,7 @@ class PanelBottom extends Component {
                     style={{
                       background: isDisabledButton ? "#eaecf4" : "white",
                       fontSize: "13px",
-                      zIndex:-1
+                      zIndex: -1,
                     }}
                     onClick={() => {
                       this.toggleOpenProvince();
@@ -810,7 +810,7 @@ class PanelBottom extends Component {
                     style={{
                       background: isDisabledButton ? "#eaecf4" : "white",
                       fontSize: "13px",
-                      zIndex:-1
+                      zIndex: -1,
                     }}
                     onClick={() => {
                       this.toggleOpenDistrict();
@@ -877,7 +877,7 @@ class PanelBottom extends Component {
                     style={{
                       background: isDisabledButton ? "#eaecf4" : "white",
                       fontSize: "13px",
-                      zIndex:-1
+                      zIndex: -1,
                     }}
                     onClick={() => {
                       this.toggleOpenWards();
@@ -1175,9 +1175,10 @@ class PanelBottom extends Component {
   showCategory = () => {
     var result = null;
     var { category_product } = this.props;
+
     if (category_product?.length > 0) {
       result = category_product.map((data, index) => (
-        <option value={data.value}>{data.name}</option>
+        <option value={data.id}>{data.name}</option>
       ));
     }
     return result;
@@ -1244,6 +1245,10 @@ class PanelBottom extends Component {
       isShowDetailCombo,
       modal,
     } = this.state;
+    console.log(
+      "🚀 ~ file: PanelBottom.js:1247 ~ render ~ filterCategory:",
+      filterCategory
+    );
     var show = isShow == true ? "show" : "hide";
     var isShowDetailCombo = isShowDetailCombo == true ? "show" : "hide";
 

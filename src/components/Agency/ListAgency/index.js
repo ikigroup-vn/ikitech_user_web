@@ -141,7 +141,7 @@ class ListAgency extends Component {
       types,
       config,
       agency_add_sub_balance,
-      agency_change_level
+      agency_change_level,
     } = this.props;
 
     var customerImg =
@@ -231,7 +231,7 @@ class ListAgency extends Component {
 
             <button
               style={{ margin: "auto 0px" }}
-              // onClick={this.exportListAgency}
+              onClick={this.exportListAgency}
               class={`btn btn-danger btn-icon-split btn-sm `}
             >
               <span class="icon text-white-50">
@@ -263,6 +263,7 @@ class ListAgency extends Component {
             agencys={agencys}
             listItemSelected={listItemSelected}
             setListItemSelected={this.setListItemSelected}
+            auto_set_level_agency={config?.auto_set_level_agency}
           />
           <div style={{ display: "flex", justifyContent: "end" }}>
             <div style={{ display: "flex" }}>

@@ -40,14 +40,15 @@ class General extends Component {
                 <div className="row no-gutters align-items-center">
                   <div className="col mr-2">
                     <div className=" font-weight-bold text-primary text-uppercase mb-1">
-                      Tồn kho cuối kỳ: {formatNoD(total_value_stock)} - Số
-                      lượng: {formatNoD(total_stock)}{" "}
+                      Tồn kho cuối kỳ:{" "}
+                      {formatNoD(total_value_stock?.toFixed(2))} - Số lượng:{" "}
+                      {formatNoD(total_stock)}{" "}
                     </div>
                     <span>Số lượng bao gồm các sản phẩm đang giao dịch</span>
                     <div className="text-gray-800">
                       Nhập trong kỳ :{" "}
-                      {formatNoD(import_total_amount?.toFixed(3))} - Xuất trong
-                      kỳ : {formatNoD(export_total_amount?.toFixed(3))}
+                      {formatNoD(import_total_amount?.toFixed(2))} - Xuất trong
+                      kỳ : {formatNoD(export_total_amount?.toFixed(2))}
                     </div>
                     <div className="text-gray-800">
                       Giá trị tồn kho = Số lượng * Giá vốn (Giá vốn (MAC) là

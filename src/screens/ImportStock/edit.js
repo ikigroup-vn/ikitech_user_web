@@ -138,7 +138,9 @@ class EditImportStock extends Component {
       this.setState({
         listImportStock: newImportStock,
         price_total: total_price,
-        txtValueDiscount: discount,
+        txtValueDiscount: discount
+          ? new Intl.NumberFormat().format(discount)
+          : discount,
         select_supplier: supplier
           ? {
               value: supplier.id,
@@ -273,11 +275,13 @@ class EditImportStock extends Component {
     const { itemImportStock } = this.props;
     const branch_id = localStorage.getItem("branch_id");
     var affterDiscount = "";
+
     if (this.state.txtDiscoutType == 0) {
       affterDiscount = formatNumber(this.state.txtValueDiscount);
     } else {
       affterDiscount =
-        (this.state.txtValueDiscount / 100) * this.state.price_total;
+        (formatNumber(this.state.txtValueDiscount) / 100) *
+        this.state.price_total;
     }
     const formData = {
       note: this.state.note,
@@ -365,12 +369,10 @@ class EditImportStock extends Component {
     };
   };
   onChangeSelect4 = (selectValue) => {
-    console.log(selectValue);
-
-    var supplier = selectValue?.supplier;
-    if (selectValue != null && supplier != null) {
-      this.setState({ select_supplier: selectValue });
-    }
+    this.setState({ select_supplier: selectValue });
+    // var supplier = selectValue?.supplier;
+    // if (selectValue != null && supplier != null) {
+    // }
   };
   onChangeSelect = (selectValue) => {
     this.setState({ payment_method_selected: selectValue });
@@ -446,20 +448,26 @@ class EditImportStock extends Component {
                               margin: 10,
                             }}
                           ></i>
-
-                          <AsyncPaginate
-                            placeholder="Tìm nhà cung cấp"
-                            value={select_supplier}
-                            loadOptions={this.loadSuppliers}
-                            name="recipientReferences1"
-                            onChange={this.onChangeSelect4}
-                            additional={{
-                              page: 1,
+                          <div
+                            style={{
+                              width: "100%",
                             }}
-                            debounceTimeout={500}
-                            isClearable
-                            isSearchable
-                          />
+                          >
+                            <AsyncPaginate
+                              placeholder="Tìm nhà cung cấp"
+                              value={select_supplier}
+                              loadOptions={this.loadSuppliers}
+                              name="recipientReferences1"
+                              onChange={this.onChangeSelect4}
+                              additional={{
+                                page: 1,
+                              }}
+                              debounceTimeout={500}
+                              // isClearable
+                              isSearchable
+                              isDisabled
+                            />
+                          </div>
                         </div>
                         <i
                           class="fas fa-plus"
