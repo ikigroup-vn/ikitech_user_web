@@ -878,34 +878,38 @@ export const fetchAllAgency = (store_code, page = 1, params = null) => {
   };
 };
 
-export const handleAgencyRegisterRequest = (store_code, id, status) => {
+export const handleAgencyRegisterRequest = (
+  store_code,
+  id,
+  data,
+  onSuccess = () => {}
+) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING_LAZY,
       loading: "show",
     });
-    agencyApi
-      .handleAgencyRegisterRequest(store_code, id, status)
-      .then((res) => {
-        dispatch({
-          type: Types.SHOW_LOADING_LAZY,
-          loading: "hide",
-        });
-        dispatch({
-          type: Types.SUCCESS_EDIT_REQUEST_STATUS_AGENCY,
-          status: status,
-          id: id,
-        });
-        dispatch({
-          type: Types.ALERT_UID_STATUS,
-          alert: {
-            type: "success",
-            title: "Thành công ",
-            disable: "show",
-            content: res.data.msg,
-          },
-        });
+    agencyApi.handleAgencyRegisterRequest(store_code, id, data).then((res) => {
+      if (onSuccess) onSuccess();
+      dispatch({
+        type: Types.SHOW_LOADING_LAZY,
+        loading: "hide",
       });
+      dispatch({
+        type: Types.SUCCESS_EDIT_REQUEST_STATUS_AGENCY,
+        status: data.status,
+        id: id,
+      });
+      dispatch({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "success",
+          title: "Thành công ",
+          disable: "show",
+          content: res.data.msg,
+        },
+      });
+    });
   };
 };
 
