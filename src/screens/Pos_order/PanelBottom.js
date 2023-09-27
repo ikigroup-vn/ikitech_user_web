@@ -1175,7 +1175,6 @@ class PanelBottom extends Component {
   showCategory = () => {
     var result = null;
     var { category_product } = this.props;
-
     if (category_product?.length > 0) {
       result = category_product.map((data, index) => (
         <option value={data.id}>{data.name}</option>
@@ -1245,14 +1244,10 @@ class PanelBottom extends Component {
       isShowDetailCombo,
       modal,
     } = this.state;
-    console.log(
-      "🚀 ~ file: PanelBottom.js:1247 ~ render ~ filterCategory:",
-      filterCategory
-    );
     var show = isShow == true ? "show" : "hide";
     var isShowDetailCombo = isShowDetailCombo == true ? "show" : "hide";
 
-    var { category_product, listCombo } = this.props;
+    var { category_product, listCombo, oneCart } = this.props;
     var settings = {
       infinite: listCombo.length > 2,
       slidesToShow: 2,
@@ -1262,7 +1257,6 @@ class PanelBottom extends Component {
     var current_page_product = products?.current_page || 1;
     var last_page_product = products?.last_page || 1;
 
-    console.log(listCombo);
     return (
       <div
         className="panel-bottom"
@@ -1492,7 +1486,19 @@ class PanelBottom extends Component {
               aria-controls="content-css"
               aria-selected="false"
             >
-              Khách hàng
+              Khách hàng(
+              {oneCart.customer ? (
+                <>
+                  {oneCart.customer?.is_agency
+                    ? "Đại lý"
+                    : oneCart.customer?.is_collaborator
+                    ? "CTV"
+                    : "Khách lẻ"}
+                </>
+              ) : (
+                "Khách vãng lai"
+              )}
+              )
             </a>
           </li>
           {listCombo?.length > 0 && (
