@@ -270,11 +270,11 @@ class PanelBottom extends Component {
         console.log(oneCart.customer_date_of_birth);
         selectedDate =
           oneCart == null ||
-          oneCart.customer_date_of_birth == null ||
-          oneCart.customer_date_of_birth == "0000-00-00" ||
-          oneCart.customer_date_of_birth == "0000-00-00 00:00:00"
+          oneCart.customer?.date_of_birth == null ||
+          oneCart.customer?.date_of_birth == "0000-00-00" ||
+          oneCart.customer?.date_of_birth == "0000-00-00 00:00:00"
             ? ""
-            : new Date(oneCart.customer_date_of_birth);
+            : new Date(oneCart.customer?.date_of_birth);
       } catch (error) {
         selectedDate = null;
       }
@@ -386,7 +386,6 @@ class PanelBottom extends Component {
   };
 
   setStartDate = (date) => {
-    console.log(date);
     this.setState({
       selectedDate: date,
     });
@@ -455,9 +454,9 @@ class PanelBottom extends Component {
       txtSex: cus.sex ?? "",
       txtAddressDetail: cus.address_detail ?? "",
       selectedDate:
-        cus == null || cus.customer_date_of_birth == null
+        cus == null || cus.date_of_birth == null
           ? ""
-          : new Date(cus.customer_date_of_birth),
+          : new Date(cus.date_of_birth),
       isDisabledButton: cus == null ? false : cus.is_passersby,
 
       districtName: cus.district_name,

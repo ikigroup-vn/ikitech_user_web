@@ -252,7 +252,7 @@ class Form extends Component {
                               "italic",
                               "fontColor",
                               "textStyle",
-                              "outdent",
+                              // "outdent",
                               "align",
                               "horizontalRule",
                               "list",
