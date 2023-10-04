@@ -34,6 +34,30 @@ class TableVoucher extends Component {
     }));
   };
 
+  getCurrentTime() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0'); 
+    const day = String(today.getDate()).padStart(2, '0');
+    const hours = String(today.getHours()).padStart(2, '0');
+    const minutes = String(today.getMinutes()).padStart(2, '0');
+    const seconds = String(today.getSeconds()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    return formattedDate;
+  }
+
+  compareDates(date1, date2) {
+    const dateObj1 = new Date(date1);
+    const dateObj2 = new Date(date2);
+    if (dateObj1 > dateObj2) {
+      return 1;
+    } else if (dateObj1 < dateObj2) {
+      return 0;
+    } else {
+      return 2;
+    }
+  }
+
   showData = (vouchers) => {
     var result = null;
     if (typeof vouchers === 'undefined') {
@@ -58,7 +82,7 @@ class TableVoucher extends Component {
             <td>{data.use_time || 'Chưa sử dụng'}</td>
             <td>{data.start_time}</td>
             <td>{data.end_time}</td>
-            <td>{data.status === 0 ? 'Đã phát hành' : data.status === 1 ? 'Đã sử dụng' : 'Đã kết thúc'}</td>
+            {this.compareDates(this.getCurrentTime(), data.end_time) >  0 ? (<td>Đã kết thúc</td>) : (<td>{data.status === 0 ? 'Đã phát hành' : data.status === 1 ? 'Đã sử dụng' : 'Đã kết thúc'}</td>)}
           </tr>
         );
       });
@@ -86,9 +110,10 @@ class TableVoucher extends Component {
       this.setState({ showButton: false });
     });
   };
-
+  
   render() {
     const { VoucherCodes } = this.props;
+    
     return (
       <div class="table-responsive">
         {this.state.showModal && (
@@ -124,7 +149,7 @@ class TableVoucher extends Component {
 
         {this.state.showButton && (
           <button type="button" class="btn btn-primary" onClick={() => this.setState({ showModal: true })}>
-            Vô hiệu
+            Kết thúc
           </button>
         )}
         <table class="table table-border" id="dataTable" width="100%" cellspacing="0">

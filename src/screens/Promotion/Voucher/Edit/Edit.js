@@ -194,7 +194,7 @@ class Edit extends Component {
               <div
                 style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', margin: '30px auto' }}
               >
-                <div style={{ width: '60%' }}><Pagination store_code={store_code} listVoucherCodes={this.props.listVoucherCodes}/></div>
+                <div style={{ width: '60%' }}><Pagination store_code={store_code} listVoucherCodes={this.props.listVoucherCodes} vourcher_id={voucherId}/></div>
                 <div style={{ width: '45%', display: 'flex', alignItems: 'center', flexWrap: 'wrap'}}>
                   <div>
                     <span>Số lượng bản ghi mỗi trang: </span>

@@ -275,6 +275,18 @@ class Form extends Component {
       });
       return;
     }
+    if ((Number(state.txt_voucher_length) <=  state.txt_starting_character.length)) {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: 'danger',
+          title: 'Lỗi',
+          disable: 'show',
+          content: 'Độ dài kí tự đầu phải nhỏ hơn độ dài mã!',
+        },
+      });
+      return;
+    }
     if (
       state.txtDiscountType == 0 &&
       formatNumber(state.txtValueLimitTotal) < formatNumber(state.txtValueDiscount) &&

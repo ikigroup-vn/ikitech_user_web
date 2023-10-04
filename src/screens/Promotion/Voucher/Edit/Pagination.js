@@ -13,7 +13,7 @@ class Pagination extends Component {
   passPagination = (page) => {
     this.props.fetchVoucherCodes(
       this.props.store_code,
-      512, page, '', '', 10
+      this.props.vourcher_id, page, '', '', 10
     );
   };
 
@@ -61,7 +61,7 @@ class Pagination extends Component {
     return (
       <nav aria-label="Page navigation">
         <ul class="pagination  tab-pagination pg-blue">
-          {this.showData(this.props.listVoucherCodes.links)}
+          {this.showData(this.props.listVoucherCodes?.links)}
         </ul>
       </nav>
     );
