@@ -347,7 +347,8 @@ export const exportAllListOrderMisa = (
                         total_before_discount: item.total_before_discount,
                         discountMoney: item.discount,
                         gtgt: "",
-                        discount_total: item.total_final - item.total_before_discount,
+                        discount_total:
+                          item.total_final - item.total_before_discount,
                         total_final: item.total_final,
                         invoiced: "Chưa lập",
                         checkInvoice: "TRUE",
@@ -1305,7 +1306,7 @@ export const updateShippingPackage = (
   store_code,
   order_code,
   data,
-  funcModal
+  funcModal = () => {}
 ) => {
   return (dispatch) => {
     dispatch({
@@ -1315,7 +1316,7 @@ export const updateShippingPackage = (
     billApi
       .updateShippingPackage(store_code, order_code, data)
       .then((res) => {
-        funcModal();
+        if (funcModal) funcModal();
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",

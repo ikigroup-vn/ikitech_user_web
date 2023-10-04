@@ -289,7 +289,6 @@ class Form extends Component {
               ></textarea>
             </div>
 
-
             <div class="form-group">
               <label for="product_name">Nội dung bài viết</label>
               <SunEditor
@@ -336,7 +335,7 @@ class Form extends Component {
                       "italic",
                       "fontColor",
                       "textStyle",
-                      "outdent",
+                      // "outdent",
                       "align",
                       "horizontalRule",
                       "list",
@@ -349,7 +348,7 @@ class Form extends Component {
                       "imageGallery",
                       "fullScreen",
                       "preview",
-                      "codeView",
+                      // "codeView",
                       "removeFormat",
                     ],
                   ],

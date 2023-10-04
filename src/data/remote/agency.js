@@ -234,11 +234,11 @@ export const fetchAllAgencyRegisterRequests = (
     );
 };
 
-export const handleAgencyRegisterRequest = (store_code, id, status) => {
+export const handleAgencyRegisterRequest = (store_code, id, data) => {
   return callApi(
     `/store/${store_code}/agency_register_requests/${id}/status`,
     "put",
-    { status }
+    data
   );
 };
 

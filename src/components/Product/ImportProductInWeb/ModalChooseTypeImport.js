@@ -100,9 +100,9 @@ class ModalChooseTypeImport extends Component {
         return;
       }
       //Filter Data
-      //Index: 0: "Tên sản phẩm", 1: "Mã SKU", 2: "Mã BARCODE", 3: "Theo dõi kho", 4: "Danh mục", 5: "Thuộc tính", 6: "Có phân loại", 7: "Phân loại chính", 8: "Phân loại phụ", 9: "DS phân loại", 10: "Giá bán lẻ", 11: "Giá nhập", 12: "Hình ảnh", 13: "Hoa hồng CTV (%)", 14: "Xu cho đại lý", 15: "Mô tả", 16: "Nội dung cho CTV", 17: "Trạng thái", 18: "Tiêu đề SEO", 19: "Miêu tả SEO",
+      //Index: 0: "Tên sản phẩm", 1: "Mã SKU", 2: "Mã BARCODE", 3: "Theo dõi kho", 4: "Danh mục", 5: "Thuộc tính", 6: "Thuộc tính tìm kiếm", 7: "Cân nặng", 8: "Có phân loại", 9: "Phân loại chính", 10: "Phân loại phụ", 11: "DS phân loại", 12: "Giá bán lẻ", 13: "Giá nhập", 14: "Hình ảnh", 15: "Hoa hồng CTV (%)", 16: "Xu cho đại lý", 17: "Mô tả", 18: "Nội dung cho CTV", 19: "Trạng thái", 20: "Tiêu đề SEO", 21: "Miêu tả SEO",
 
-      //Index: 0: "Tên sản phẩm", 1: "Mã SKU", 2: "Mã BARCODE", 3: "Theo dõi kho (Có/Không)", 4: "Danh mục", 5: "Thuộc tính", 6: "Hoa hồng CTV (%)", 7: "Xu cho đại lý",8: "Mô tả", 9: "Nội dung cho CTV", 10: "Trạng thái (Ẩn/Hiện)", 11: "Tiêu đề SEO", 12: "Miêu tả SEO", 13: "Có phân loại (Có/Không)", 14: "Phân loại chính", 15: "Phân loại phụ", 16: "DS phân loại", 17: "Giá bán lẻ", 18: "Giá nhập", 19: "Hình ảnh",
+      //Index: 0: "Tên sản phẩm", 1: "Mã SKU", 2: "Mã BARCODE", 3: "Theo dõi kho (Có/Không)", 4: "Danh mục", 5: "Thuộc tính", 6: "Thuộc tính tìm kiếm", 7: "Cân nặng", 8: "Hoa hồng CTV (%)", 9: "Xu cho đại lý", 10: "Mô tả", 11: "Nội dung cho CTV", 12: "Trạng thái (Ẩn/Hiện)", 13: "Tiêu đề SEO", 14: "Miêu tả SEO", 15: "Có phân loại (Có/Không)", 16: "Phân loại chính", 17: "Phân loại phụ", 18: "DS phân loại", 19: "Giá bán lẻ", 20: "Giá nhập", 21: "Hình ảnh",
       const dataXlsxEmptyTitle = data.slice(1);
       const newProducts = [];
 
@@ -113,21 +113,22 @@ class ModalChooseTypeImport extends Component {
       let positionDistributeProduct = -1;
       dataXlsxEmptyTitle.forEach((product, index) => {
         const newProduct = {};
+        console.log("🚀 ~ dataXlsxEmptyTitle.forEach ~ newProduct:", product);
 
-        if (product[13]?.toString().toLowerCase().trim() === "không") {
+        if (product[15]?.toString().toLowerCase().trim() === "không") {
           newProduct["name"] = product[0];
           newProduct["sku"] = product[1];
           newProduct["barcode"] = product[2];
-          newProduct["percent_collaborator"] = product[6];
-          newProduct["point_for_agency"] = product[7];
-          newProduct["description"] = product[8];
-          newProduct["content_for_collaborator"] = product[9];
+          newProduct["percent_collaborator"] = product[8];
+          newProduct["point_for_agency"] = product[9];
+          newProduct["description"] = product[10];
+          newProduct["content_for_collaborator"] = product[11];
           newProduct["status"] =
-            product[10]?.toString().toLowerCase().trim() === "hiện" ? 0 : -1;
-          newProduct["seo_title"] = product[11];
-          newProduct["seo_description"] = product[12];
+            product[12]?.toString().toLowerCase().trim() === "hiện" ? 0 : -1;
+          newProduct["seo_title"] = product[13];
+          newProduct["seo_description"] = product[14];
           newProduct["check_inventory"] =
-            product[3]?.toString().toLowerCase().trim() === "có" ? true : false;
+            product[5]?.toString().toLowerCase().trim() === "có" ? true : false;
           // Hanlde Categories
           newProduct["list_category"] = product[4]
             ? product[4]
@@ -160,28 +161,33 @@ class ModalChooseTypeImport extends Component {
                   newAttribute.value = currentAttribute.split(":")[1];
                   return [...prevAttribute, newAttribute];
                 }, []);
+          // Handle Attribute Search
+          newProduct["attribute_search_children"] = product[6]
+            ? product[6]?.toString().split(",")
+            : [];
+          newProduct["weight"] = product[7] ? Number(product[7]) : 0;
           newProduct["distributes"] = [];
-          newProduct["images"] = !product[19] ? [] : product[19].split(",");
-          newProduct["price"] = !product[17] ? 0 : Number(product[17]);
-          newProduct["import_price"] = !product[18] ? 0 : Number(product[18]);
+          newProduct["images"] = !product[21] ? [] : product[21].split(",");
+          newProduct["price"] = !product[19] ? 0 : Number(product[19]);
+          newProduct["import_price"] = !product[20] ? 0 : Number(product[20]);
           newProducts.push(newProduct);
-        } else if (product[13]?.toString().toLowerCase().trim() === "có") {
+        } else if (product[15]?.toString().toLowerCase().trim() === "có") {
           newProductHasDistribute["name"] = product[0];
           newProductHasDistribute["sku"] = product[1];
           newProductHasDistribute["barcode"] = product[2];
-          newProductHasDistribute["percent_collaborator"] = product[6];
-          newProductHasDistribute["point_for_agency"] = product[7];
-          newProductHasDistribute["description"] = product[8];
-          newProductHasDistribute["content_for_collaborator"] = product[9];
+          newProductHasDistribute["percent_collaborator"] = product[8];
+          newProductHasDistribute["point_for_agency"] = product[9];
+          newProductHasDistribute["description"] = product[10];
+          newProductHasDistribute["content_for_collaborator"] = product[11];
           newProductHasDistribute["status"] =
-            product[10]?.toString().toLowerCase().trim() === "hiện" ? 0 : -1;
-          newProductHasDistribute["seo_title"] = product[11];
-          newProductHasDistribute["seo_description"] = product[12];
+            product[12]?.toString().toLowerCase().trim() === "hiện" ? 0 : -1;
+          newProductHasDistribute["seo_title"] = product[13];
+          newProductHasDistribute["seo_description"] = product[14];
           newProductHasDistribute["check_inventory"] =
             product[3]?.toString().toLowerCase().trim() === "có" ? true : false;
-          newProductHasDistribute["images"] = !product[19]
+          newProductHasDistribute["images"] = !product[21]
             ? []
-            : product[19].split(",");
+            : product[21].split(",");
           // Hanlde Categories
           newProductHasDistribute["list_category"] = product[4]
             ? product[4]
@@ -214,36 +220,43 @@ class ModalChooseTypeImport extends Component {
                   newAttribute.value = currentAttribute.split(":")[1];
                   return [...prevAttribute, newAttribute];
                 }, []);
+          // Handle Attribute Search
+          newProductHasDistribute["attribute_search_children"] = product[6]
+            ? product[6]?.toString().split(",")
+            : [];
+          newProductHasDistribute["weight"] = product[7]
+            ? Number(product[7])
+            : 0;
           const dataDistribute = {
-            name: product[14],
-            sub_element_distribute_name: !product[15] ? "" : product[15],
+            name: product[16],
+            sub_element_distribute_name: !product[17] ? "" : product[17],
             element_distributes: [],
           };
           newDistributes.push(dataDistribute);
-        } else if (product[16]) {
-          const nameProductDistributeTemp = product[16]
-            ? product[16]?.toString().split(",")[0]
+        } else if (product[20]) {
+          const nameProductDistributeTemp = product[18]
+            ? product[18]?.toString().split(",")[0]
             : "";
-          const nameProductSubDistributeTemp = product[16]
-            ? product[16]?.toString().split(",")[1]
+          const nameProductSubDistributeTemp = product[18]
+            ? product[18]?.toString().split(",")[1]
             : "";
-          const imagesProductDistributeTemp = !product[19]
+          const imagesProductDistributeTemp = !product[21]
             ? ""
-            : product[19]?.split(",");
+            : product[21]?.split(",");
           isDistributeProduct = true;
           if (nameElementDistribute !== nameProductDistributeTemp) {
             positionDistributeProduct++;
             newDistributes[0]["element_distributes"].push({
               name: nameProductDistributeTemp,
               price: nameProductDistributeTemp
-                ? !product[17]
+                ? !product[19]
                   ? 0
-                  : Number(product[17])
+                  : Number(product[19])
                 : 0,
               import_price: nameProductDistributeTemp
-                ? !product[18]
+                ? !product[20]
                   ? 0
-                  : Number(product[18])
+                  : Number(product[20])
                 : 0,
               image_url: imagesProductDistributeTemp
                 ? imagesProductDistributeTemp[0]
@@ -257,8 +270,8 @@ class ModalChooseTypeImport extends Component {
               "sub_element_distributes"
             ].push({
               name: nameProductSubDistributeTemp,
-              price: !product[17] ? 0 : Number(product[17]),
-              import_price: !product[18] ? 0 : Number(product[18]),
+              price: !product[19] ? 0 : Number(product[19]),
+              import_price: !product[20] ? 0 : Number(product[20]),
             });
           }
         }

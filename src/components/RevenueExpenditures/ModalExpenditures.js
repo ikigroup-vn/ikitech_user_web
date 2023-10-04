@@ -101,21 +101,29 @@ class ModalExpenditures extends Component {
 
   componentDidMount() {
     var options1 = [];
-    if(this.props.customer)
-    {
-      this.setState({recipient_group : this.state.listRecipientGroup[0] , recipient_references_id : {value : this.props.customer.id , label: this.props.customer.name}  })
-
+    if (this.props.customer) {
+      this.setState({
+        recipient_group: this.state.listRecipientGroup[0],
+        recipient_references_id: {
+          value: this.props.customer.id,
+          label: this.props.customer.name,
+        },
+      });
     }
-    if(this.props.supplierID)
-    {
-      this.setState({recipient_group : this.state.listRecipientGroup[1] , recipient_references_id : {value : this.props.supplierID.id , label: this.props.supplierID.name}  })
-
+    if (this.props.supplierID) {
+      this.setState({
+        recipient_group: this.state.listRecipientGroup[1],
+        recipient_references_id: {
+          value: this.props.supplierID.id,
+          label: this.props.supplierID.name,
+        },
+      });
     }
     var staff = [...this.props.staff];
     // var supplier = [...this.props.supplier];
     // var customers = [...this.props.customers];
 
-    if (staff.length > 0) {
+    if (staff?.length > 0) {
       options1 = staff.map((value, index) => {
         return {
           value: value.id,
@@ -160,7 +168,7 @@ class ModalExpenditures extends Component {
 
       var staff = [...this.props.staff];
 
-      if (staff.length > 0) {
+      if (staff?.length > 0) {
         options1 = staff.map((value, index) => {
           return {
             value: value.id,
@@ -319,32 +327,29 @@ class ModalExpenditures extends Component {
       description,
     });
     var funcModal = null;
-    var getForId = null
-    if(this.props.notDate == true && this.props.customer)
-    {
-      getForId = true
+    var getForId = null;
+    if (this.props.notDate == true && this.props.customer) {
+      getForId = true;
       var params = `&recipient_group=0&recipient_references_id=${this.props.customer.id}`;
       funcModal = function () {
-        window.$('.modal').modal('hide')
-      }
-    }
-    else if(this.props.notDate == true && this.props.supplierID)
-    {
-      getForId = true
+        window.$(".modal").modal("hide");
+      };
+    } else if (this.props.notDate == true && this.props.supplierID) {
+      getForId = true;
       funcModal = function () {
-        window.$('.modal').modal('hide')
-      }
-      var params = `&recipient_group=1&recipient_references_id=${this.props.supplierID.id || 0}`;
-    }
-    else
-    {
-      getForId = false
+        window.$(".modal").modal("hide");
+      };
+      var params = `&recipient_group=1&recipient_references_id=${
+        this.props.supplierID.id || 0
+      }`;
+    } else {
+      getForId = false;
       funcModal = function () {
-        window.$('.modal').modal('hide')
-      }
+        window.$(".modal").modal("hide");
+      };
       var params = `&search=${this.props.searchValue}&limit=${this.props.limit}&date_from=${this.props.datePrime.from}&date_to=${this.props.datePrime.to}`;
     }
-   
+
     this.props.createRevenueExpenditures(
       this.props.store_code,
       this.props.branch_id,
@@ -358,7 +363,11 @@ class ModalExpenditures extends Component {
         allow_accounting,
         description,
       },
-      params,funcModal,getForId == true ? this.props.getFor : null,this)
+      params,
+      funcModal,
+      getForId == true ? this.props.getFor : null,
+      this
+    );
   };
 
   render() {
@@ -389,7 +398,10 @@ class ModalExpenditures extends Component {
       >
         <div class="modal-dialog" role="document">
           <div class="modal-content">
-            <div class="modal-header" style={{ backgroundColor: themeData().backgroundColor }}>
+            <div
+              class="modal-header"
+              style={{ backgroundColor: themeData().backgroundColor }}
+            >
               <h4 class="modal-title">Thêm phiếu chi</h4>
 
               <button
@@ -600,8 +612,15 @@ const mapDispatchToProps = (dispatch, props) => {
     showError: (error) => {
       dispatch(error);
     },
-    createRevenueExpenditures: (id, branch_id, data, params,funcModal,
-      getForId = null , _this) => {
+    createRevenueExpenditures: (
+      id,
+      branch_id,
+      data,
+      params,
+      funcModal,
+      getForId = null,
+      _this
+    ) => {
       dispatch(
         revenueExpendituresAction.createRevenueExpenditures(
           id,

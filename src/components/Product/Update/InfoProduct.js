@@ -587,7 +587,7 @@ class InfoProduct extends Component {
       txtPosition,
       is_medicine,
     } = this.state;
-    console.log(checkHasDistribute);
+
     var txtQuantityInStock = txtQuantityInStock == -1 ? "" : txtQuantityInStock;
     var { isCopy } = this.props;
     return (

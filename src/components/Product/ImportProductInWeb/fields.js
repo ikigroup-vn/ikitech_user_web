@@ -5,6 +5,8 @@ export const fields = [
   "Theo dõi kho (Có/Không)",
   "Danh mục",
   "Thuộc tính",
+  "Thuộc tính tìm kiếm",
+  "Cân nặng",
   "Hoa hồng CTV (%)",
   "Xu cho đại lý",
   "Mô tả",

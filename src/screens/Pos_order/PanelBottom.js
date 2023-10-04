@@ -42,7 +42,7 @@ class PanelBottom extends Component {
       txtName: "",
       txtEmail: "",
       isShow: false,
-      filterCategory: [],
+      filterCategory: "all",
       isShowDetailCombo: false,
       modal: { products: [] },
       filter_sort: "new",
@@ -270,11 +270,11 @@ class PanelBottom extends Component {
         console.log(oneCart.customer_date_of_birth);
         selectedDate =
           oneCart == null ||
-          oneCart.customer_date_of_birth == null ||
-          oneCart.customer_date_of_birth == "0000-00-00" ||
-          oneCart.customer_date_of_birth == "0000-00-00 00:00:00"
+          oneCart.customer?.date_of_birth == null ||
+          oneCart.customer?.date_of_birth == "0000-00-00" ||
+          oneCart.customer?.date_of_birth == "0000-00-00 00:00:00"
             ? ""
-            : new Date(oneCart.customer_date_of_birth);
+            : new Date(oneCart.customer?.date_of_birth);
       } catch (error) {
         selectedDate = null;
       }
@@ -386,7 +386,6 @@ class PanelBottom extends Component {
   };
 
   setStartDate = (date) => {
-    console.log(date);
     this.setState({
       selectedDate: date,
     });
@@ -455,9 +454,9 @@ class PanelBottom extends Component {
       txtSex: cus.sex ?? "",
       txtAddressDetail: cus.address_detail ?? "",
       selectedDate:
-        cus == null || cus.customer_date_of_birth == null
+        cus == null || cus.date_of_birth == null
           ? ""
-          : new Date(cus.customer_date_of_birth),
+          : new Date(cus.date_of_birth),
       isDisabledButton: cus == null ? false : cus.is_passersby,
 
       districtName: cus.district_name,
@@ -743,7 +742,7 @@ class PanelBottom extends Component {
                     style={{
                       background: isDisabledButton ? "#eaecf4" : "white",
                       fontSize: "13px",
-                      zIndex:-1
+                      zIndex: -1,
                     }}
                     onClick={() => {
                       this.toggleOpenProvince();
@@ -810,7 +809,7 @@ class PanelBottom extends Component {
                     style={{
                       background: isDisabledButton ? "#eaecf4" : "white",
                       fontSize: "13px",
-                      zIndex:-1
+                      zIndex: -1,
                     }}
                     onClick={() => {
                       this.toggleOpenDistrict();
@@ -877,7 +876,7 @@ class PanelBottom extends Component {
                     style={{
                       background: isDisabledButton ? "#eaecf4" : "white",
                       fontSize: "13px",
-                      zIndex:-1
+                      zIndex: -1,
                     }}
                     onClick={() => {
                       this.toggleOpenWards();
@@ -1177,7 +1176,7 @@ class PanelBottom extends Component {
     var { category_product } = this.props;
     if (category_product?.length > 0) {
       result = category_product.map((data, index) => (
-        <option value={data.value}>{data.name}</option>
+        <option value={data.id}>{data.name}</option>
       ));
     }
     return result;
@@ -1247,7 +1246,7 @@ class PanelBottom extends Component {
     var show = isShow == true ? "show" : "hide";
     var isShowDetailCombo = isShowDetailCombo == true ? "show" : "hide";
 
-    var { category_product, listCombo } = this.props;
+    var { category_product, listCombo, oneCart } = this.props;
     var settings = {
       infinite: listCombo.length > 2,
       slidesToShow: 2,
@@ -1257,7 +1256,6 @@ class PanelBottom extends Component {
     var current_page_product = products?.current_page || 1;
     var last_page_product = products?.last_page || 1;
 
-    console.log(listCombo);
     return (
       <div
         className="panel-bottom"
@@ -1487,7 +1485,19 @@ class PanelBottom extends Component {
               aria-controls="content-css"
               aria-selected="false"
             >
-              Khách hàng
+              Khách hàng(
+              {oneCart.customer ? (
+                <>
+                  {oneCart.customer?.is_agency
+                    ? "Đại lý"
+                    : oneCart.customer?.is_collaborator
+                    ? "CTV"
+                    : "Khách lẻ"}
+                </>
+              ) : (
+                "Khách vãng lai"
+              )}
+              )
             </a>
           </li>
           {listCombo?.length > 0 && (

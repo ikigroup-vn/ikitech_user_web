@@ -159,6 +159,10 @@ export const fetchAllListProduct = (store_code, search) => {
         if (typeof res.data.data != "undefined") {
           if (typeof res.data.data.data != "undefined") {
             if (res.data.data.data.length > 0) {
+              console.log(
+                "🚀 ~ productApi.fetchAllListProduct ~ res.data.data.data:",
+                res.data.data.data
+              );
               var newArray = [];
 
               for (const item of res.data.data.data) {
@@ -172,6 +176,8 @@ export const fetchAllListProduct = (store_code, search) => {
                   quantity_in_stock: item.quantity_in_stock,
                   categories: item.categories,
                   attributes: item.attributes,
+                  attribute_search_children: item.attribute_search_children,
+                  weight: item.weight,
                   percent_collaborator: item.percent_collaborator,
                   point_for_agency: item.point_for_agency,
                   full_description: item.full_description,
@@ -256,6 +262,31 @@ export const fetchAllListProduct = (store_code, search) => {
                       }
                       newItem["Danh mục"] = stringCategory;
                     }
+                  }
+                  if (key == "attribute_search_children") {
+                    if (Array.isArray(value)) {
+                      var stringAttributeSearch = "";
+                      for (const [index, attribute_search] of value.entries()) {
+                        if (
+                          attribute_search.name &&
+                          typeof attribute_search.name != "undefined"
+                        ) {
+                          if (index == value.length - 1) {
+                            stringAttributeSearch += formatStringCharactor(
+                              attribute_search.name
+                            );
+                          } else {
+                            stringAttributeSearch +=
+                              formatStringCharactor(attribute_search.name) +
+                              ",";
+                          }
+                        }
+                      }
+                      newItem["Thuộc tính tìm kiếm"] = stringAttributeSearch;
+                    }
+                  }
+                  if (key == "weight") {
+                    newItem["Cân nặng"] = value;
                   }
                   if (key == "images") {
                     if (Array.isArray(value)) {

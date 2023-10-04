@@ -2,6 +2,7 @@ import * as Type from "../constants/ActionType";
 import * as importStock from "../data/remote/import_stock";
 import history from "../history";
 import { getBranchId } from "../ultis/branchUtils";
+import { callUrl } from "../ultis/helpers";
 
 export const fetchAllImportStock = (store_code, branch_id, page, params) => {
   return (dispatch) => {
@@ -262,6 +263,43 @@ export const postRefund = (
           },
         });
         history.goBack();
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Type.SHOW_LOADING,
+          loading: "hide",
+        });
+        dispatch({
+          type: Type.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+
+export const printImportStock = (store_code, branch_id, id) => {
+  return (dispatch) => {
+    dispatch({
+      type: Type.SHOW_LOADING,
+      loading: "show",
+    });
+    importStock
+      .printImportStock(store_code, branch_id, id)
+      .then((res) => {
+        dispatch({
+          type: Type.SHOW_LOADING,
+          loading: "hide",
+        });
+        const link = document.createElement("a");
+        link.href = `${callUrl()}/store/${store_code}/${localStorage.getItem(
+          "branch_id"
+        )}/inventory/import_stocks/${id}/print`;
+        link.click();
       })
       .catch(function (error) {
         dispatch({

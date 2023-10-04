@@ -13,6 +13,7 @@ import * as productAction from "../../actions/product";
 import { connect } from "react-redux";
 import CardProduct from "../../components/Pos_Order/CardProduct";
 import * as posAction from "../../actions/post_order";
+import * as billAction from "../../actions/bill";
 import ModalDetail from "../../components/Pos_Order/ModalDetail";
 import ModalUpdateDetail from "../../components/Pos_Order/UpdateModal";
 
@@ -137,6 +138,10 @@ class PostOrder extends Component {
         quantityProduct: "",
         quantityProductWithDistribute: "",
       },
+      weight: "",
+      length: "",
+      width: "",
+      height: "",
     };
     this.onSave = false;
     this.changeSearch = debounce(this.handleSearch, 1000);
@@ -236,6 +241,10 @@ class PostOrder extends Component {
           discount: newState.discount,
           ...customer_note,
         },
+        weight: newState.weight,
+        length: newState.length,
+        width: newState.width,
+        height: newState.height,
       });
     }
   };
@@ -565,6 +574,7 @@ class PostOrder extends Component {
     var data = null;
     var { oneCart } = this.props;
     var { allowAutoPrint } = this.props;
+    const { weight, length, width, height } = this.state;
     if (getChannel() == IKITECH) {
       if (
         this.state.oneCart?.total_shipping_fee > 0 ||
@@ -631,7 +641,17 @@ class PostOrder extends Component {
       branch_id,
       this.state.idCart,
       data,
-      this
+      this,
+      (order_code) => {
+        if (weight !== "" || length !== "" || width !== "" || height !== "") {
+          this.props.updateShippingPackage(store_code, order_code, {
+            package_weight: Number(weight),
+            package_length: Number(length),
+            package_width: Number(width),
+            package_height: Number(height),
+          });
+        }
+      }
     );
   };
 
@@ -665,9 +685,9 @@ class PostOrder extends Component {
       var discount = {};
       if (nextProps.oneCart?.id != this.props.oneCart?.id && !order_code) {
         discount = { discount: nextProps.oneCart.discount };
-        this.setState({
-          priceCustomer: nextProps.oneCart.info_cart.total_final,
-        });
+        // this.setState({
+        //   priceCustomer: nextProps.oneCart.info_cart.total_final,
+        // });
       }
       var customerNote = {};
       if (this.loadFirstNote == true) {
@@ -819,7 +839,7 @@ class PostOrder extends Component {
       !order_code
     ) {
       this.onGetSuggestion(nextState.totalFinal);
-      this.setState({ priceCustomer: nextState.totalFinal });
+      // this.setState({ priceCustomer: nextState.totalFinal });
     }
 
     if (
@@ -1986,9 +2006,33 @@ const mapDispatchToProps = (dispatch, props) => {
     updateInfoCarts: (store_code, branch_id, id_cart, data) => {
       dispatch(posAction.updateInfoCarts(store_code, branch_id, id_cart, data));
     },
-    paymentOrderPos: (store_code, branch_id, id_cart, data, _this) => {
+    paymentOrderPos: (
+      store_code,
+      branch_id,
+      id_cart,
+      data,
+      _this,
+      onSuccess
+    ) => {
       dispatch(
-        posAction.paymentOrderPos(store_code, branch_id, id_cart, data, _this)
+        posAction.paymentOrderPos(
+          store_code,
+          branch_id,
+          id_cart,
+          data,
+          _this,
+          onSuccess
+        )
+      );
+    },
+    updateShippingPackage: (store_code, order_code, data, funcModal) => {
+      dispatch(
+        billAction.updateShippingPackage(
+          store_code,
+          order_code,
+          data,
+          funcModal
+        )
       );
     },
     fetchVoucher: (store_code, branch_id, id_cart, data) => {

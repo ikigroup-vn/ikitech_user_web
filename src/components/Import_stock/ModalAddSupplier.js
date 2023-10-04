@@ -133,6 +133,25 @@ class ModalCreate extends Component {
       this.props.resetModal();
     }
   }
+
+  resetSupplier = () => {
+    this.setState({
+      provinceName: "",
+      districtName: "",
+      wardsName: "",
+      txtAddress_detail: "",
+      txtCountry: 1,
+      txtProvince: "",
+      txtDistrict: "",
+      txtWards: "",
+      isLoaded: false,
+      listWards: [],
+      listDistrict: [],
+      txtName_branch: "",
+      txtPhone_branch: "",
+      txtEmail_branch: "",
+    });
+  };
   handleOnClick = () => {
     const errors = this.validator.validate(this.state);
 
@@ -184,25 +203,10 @@ class ModalCreate extends Component {
       postcode: txtPost_branch,
       is_default: true,
     };
-    this.props.createSupplier(store_code, Formdata, function () {
+    this.props.createSupplier(store_code, Formdata, () => {
+      this.resetSupplier();
       window.$(".modal").modal("hide");
     });
-    // this.setState({
-    //     provinceName: "",
-    //     districtName: "",
-    //     wardsName: "",
-    //     txtAddress_detail: "",
-    //     txtCountry: 1,
-    //     txtProvince: "",
-    //     txtDistrict: "",
-    //     txtWards: "",
-    //     isLoaded: false,
-    //     listWards: [],
-    //     listDistrict: [],
-    //     txtName_branch:"",
-    //     txtPhone_branch:"",
-    //     txtEmail_branch:""
-    // })
   };
   showProvince = (places) => {
     var result = null;

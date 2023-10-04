@@ -177,7 +177,7 @@ class Table extends Component {
   };
 
   showData = (agencys) => {
-    var { store_code, listItemSelected } = this.props;
+    var { store_code, listItemSelected, auto_set_level_agency } = this.props;
 
     const permissionChangeBalance = this.props.agency_add_sub_balance;
     const permissionChangeLevel = this.props.agency_change_level;
@@ -239,16 +239,18 @@ class Table extends Component {
         return (
           <React.Fragment>
             <tr class="sub-container hover-product">
-              <td>
-                <input
-                  type="checkbox"
-                  name="input__check"
-                  className="input__check"
-                  value={listItemSelected.includes(data.id)}
-                  checked={listItemSelected.includes(data.id)}
-                  onChange={(e) => this.onChangeSelected(e, data.id)}
-                />
-              </td>
+              {auto_set_level_agency ? (
+                <td>
+                  <input
+                    type="checkbox"
+                    name="input__check"
+                    className="input__check"
+                    value={listItemSelected.includes(data.id)}
+                    checked={listItemSelected.includes(data.id)}
+                    onChange={(e) => this.onChangeSelected(e, data.id)}
+                  />
+                </td>
+              ) : null}
               <td>
                 <button
                   type="button"
@@ -497,25 +499,28 @@ class Table extends Component {
         : this.props.agencys.data;
     var { txtType, agencySelected, agencySelectedForChangeBalance, isSub } =
       this.state;
-    const { typeAgency, listItemSelected } = this.props;
+    const { typeAgency, listItemSelected, auto_set_level_agency } = this.props;
 
     return (
       <TableStyles class="" style={{ overflow: "auto" }}>
         <table class="table table-border">
           <thead>
             <tr>
-              <th>
-                <input
-                  type="checkbox"
-                  name="input__checkAll"
-                  className="input__checkAll"
-                  checked={
-                    agencys.length > 0 &&
-                    listItemSelected.length === agencys.length
-                  }
-                  onChange={this.onChangeSelected}
-                ></input>
-              </th>
+              {auto_set_level_agency ? (
+                <th>
+                  <input
+                    type="checkbox"
+                    name="input__checkAll"
+                    className="input__checkAll"
+                    checked={
+                      agencys.length > 0 &&
+                      listItemSelected.length === agencys.length
+                    }
+                    onChange={this.onChangeSelected}
+                  ></input>
+                </th>
+              ) : null}
+
               <th></th>
               <th>STT</th>
               <th style={{ textAlign: "center" }}>Ảnh</th>

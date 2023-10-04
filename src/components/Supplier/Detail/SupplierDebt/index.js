@@ -342,44 +342,40 @@ class Footer extends Component {
           supplier={supplier}
           customers={customers}
         />
-        {supplier.data !== undefined &&
-          customers.data !== undefined &&
-          staff.length !== 0 && (
-            <ModalRevenue
-              getFor="SUPPLIER"
-              notDate={true}
-              store_code={store_code}
-              branch_id={branch_id}
-              revenueExpenditures={reportExpenditure}
-              staff={staff}
-              supplierID={supplierID}
-              // supplier={supplier.data}
-              // customers={customers.data}
-              is_revenue={true}
-              limit={numPage}
-              searchValue={searchValue}
-              datePrime={datePrime}
-            />
-          )}
-        {supplier.data !== undefined &&
-          customers.data !== undefined &&
-          staff.length !== 0 && (
-            <ModalExpenditures
-              supplierID={supplierID}
-              notDate={true}
-              getFor="SUPPLIER"
-              store_code={store_code}
-              branch_id={branch_id}
-              revenueExpenditures={reportExpenditure}
-              staff={staff}
-              supplier={supplier.data}
-              customers={customers.data}
-              is_revenue={false}
-              limit={numPage}
-              searchValue={searchValue}
-              datePrime={datePrime}
-            />
-          )}
+        {supplier.data !== undefined && customers.data !== undefined && (
+          <ModalRevenue
+            getFor="SUPPLIER"
+            notDate={true}
+            store_code={store_code}
+            branch_id={branch_id}
+            revenueExpenditures={reportExpenditure}
+            staff={staff}
+            supplierID={supplierID}
+            // supplier={supplier.data}
+            // customers={customers.data}
+            is_revenue={true}
+            limit={numPage}
+            searchValue={searchValue}
+            datePrime={datePrime}
+          />
+        )}
+        {supplier.data !== undefined && customers.data !== undefined && (
+          <ModalExpenditures
+            supplierID={supplierID}
+            notDate={true}
+            getFor="SUPPLIER"
+            store_code={store_code}
+            branch_id={branch_id}
+            revenueExpenditures={reportExpenditure}
+            staff={staff}
+            supplier={supplier.data}
+            customers={customers.data}
+            is_revenue={false}
+            limit={numPage}
+            searchValue={searchValue}
+            datePrime={datePrime}
+          />
+        )}
       </div>
     );
   }
