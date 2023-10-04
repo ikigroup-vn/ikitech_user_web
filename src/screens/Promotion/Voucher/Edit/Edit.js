@@ -282,7 +282,7 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(voucherAction.fetchExportVoucherCodes(store_code, vourcher_id));
     },
     fetchChangeStatusCodes: (store_code, vourcher_id, data, onSuccess) => {
-      dispatch(voucherAction.ChangeStatuVourcherCodes(store_code, vourcher_id, data, onSuccess));
+      dispatch(voucherAction.changeStatuVourcherCodes(store_code, vourcher_id, data, onSuccess));
     },
   };
 };

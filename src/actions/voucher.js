@@ -390,13 +390,13 @@ export const fetchExportVoucherCodes = (store_code, vourcher_id) => {
   };
 };
 
-export const ChangeStatuVourcherCodes = (store_code, vourcher_id, data, onSuccess = () => {}) => {
+export const changeStatuVourcherCodes = (store_code, vourcher_id, data, onSuccess = () => {}) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
     });
-    voucherApi.ChangeStatuVourcherCodes(store_code, vourcher_id, data).then((res) => {
+    voucherApi.changeStatuVourcherCodes(store_code, vourcher_id, data).then((res) => {
       dispatch({
         type: Types.SHOW_LOADING,
         loading: "hide",
