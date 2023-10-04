@@ -15,6 +15,7 @@ class Pagination extends Component {
       this.props.store_code,
       this.props.vourcher_id, page, '', '', 10
     );
+    this.props.setPage(page);
   };
 
   showData = (links) => {

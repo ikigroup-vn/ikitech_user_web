@@ -36,7 +36,6 @@ class Edit extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (
       !shallowEqual(this.state.selectValue, prevState.selectValue) ||
-      !shallowEqual(this.state.searchValue, prevState.searchValue) ||
       !shallowEqual(this.state.page, prevState.page) ||
       !shallowEqual(this.state.perpage, prevState.perpage)
     ) {
@@ -46,10 +45,10 @@ class Edit extends Component {
     }
   }
 
-  onSearch = (e) => {
-    this.setState({
-      searchValue: e.target.value,
-    });
+  onSearch = () => {
+    const { store_code, voucherId } = this.props;
+    const { searchValue, selectValue, page, perpage } = this.state;
+    this.props.fetchVoucherCodes(store_code, voucherId, page, searchValue, selectValue, perpage);
   };
 
   onSelectChange = (e) => {
@@ -125,27 +124,13 @@ class Edit extends Component {
                           display: 'flex',
                         }}
                       >
-                        <div
-                          className="col-lg-3 col-sm-3 col-md-6"
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            border: '1px solid #dcc9c9',
-                            padding: '6px 12px',
-                            borderRadius: '4px',
-                            justifyContent: 'space-between',
-                            height: '38px',
-                          }}
-                        >
-                          <input
-                            value={this.state.searchValue}
-                            onChange={this.onSearch}
-                            type="text"
-                            placeholder="Tìm kiếm chương trình..."
-                          />
-                          <span className="search-icon">
-                            <i className="fa fa-search"></i>
-                          </span>
+                        <div class="input-group mb-3">
+                          <input type="text" class="form-control" placeholder="Tìm kiếm mã voucher" value={this.state.searchValue} onChange={(e) => this.setState({searchValue: e.target.value})} />
+                          <div class="input-group-append">
+                            <button class="btn btn-outline-secondary" type="button" onClick={this.onSearch}>
+                              <i className="fa fa-search"></i>
+                            </button>
+                          </div>
                         </div>
                         <div>
                           <div
@@ -194,8 +179,15 @@ class Edit extends Component {
               <div
                 style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center', margin: '30px auto' }}
               >
-                <div style={{ width: '60%' }}><Pagination store_code={store_code} listVoucherCodes={this.props.listVoucherCodes} vourcher_id={voucherId}/></div>
-                <div style={{ width: '45%', display: 'flex', alignItems: 'center', flexWrap: 'wrap'}}>
+                <div style={{ width: '60%' }}>
+                  <Pagination
+                    store_code={store_code}
+                    listVoucherCodes={this.props.listVoucherCodes}
+                    vourcher_id={voucherId}
+                    setPage={page => this.setState({ page: page })}
+                  />
+                </div>
+                <div style={{ width: '45%', display: 'flex', alignItems: 'center', flexWrap: 'wrap' }}>
                   <div>
                     <span>Số lượng bản ghi mỗi trang: </span>
                   </div>

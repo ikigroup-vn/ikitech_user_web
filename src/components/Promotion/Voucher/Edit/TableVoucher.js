@@ -74,7 +74,7 @@ class TableVoucher extends Component {
                 disabled={data.status === 2 ? true : false}
               />
             </td>
-            <td>{index + 1}</td>
+            <td>{(this.props.page - 1) * (this.props.perpage) + index + 1}</td>
             <td>
               <span style={{ fontWeight: '600' }}>{data.code}</span>
             </td>
@@ -98,13 +98,14 @@ class TableVoucher extends Component {
     };
     this.props.fetChangeStatusVourcherCodes(this.props.store_code, this.props.vourcher_id, data, () => {
       this.setState({ showModal: false });
+      const {store_code, vourcher_id, page, searchValue, selectValue, perpage} = this.props;
       this.props.fetchAllVoucherCodes(
-        this.props.store_code,
-        this.props.vourcher_id,
-        this.props.page,
-        this.props.searchValue,
-        this.props.selectValue,
-        this.props.perpage,
+        store_code,
+        vourcher_id,
+        page,
+        searchValue,
+        selectValue,
+        perpage,
       );
       this.setState({ selectedItems: [] });
       this.setState({ showButton: false });
@@ -113,7 +114,10 @@ class TableVoucher extends Component {
   
   render() {
     const { VoucherCodes } = this.props;
-    
+    console.log('page', this.props.page)
+    console.log('perpage', this.props.perpage)
+    console.log('assssssssssssssssss', (this.props.page - 1) * (this.props.perpage))
+
     return (
       <div class="table-responsive">
         {this.state.showModal && (
