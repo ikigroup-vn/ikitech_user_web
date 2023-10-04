@@ -1,12 +1,13 @@
-import React, { Component } from "react";
-import Sidebar from "../../../../components/Partials/Sidebar";
-import Topbar from "../../../../components/Partials/Topbar";
-import Footer from "../../../../components/Partials/Footer";
-import { connect } from "react-redux";
-import { Redirect } from "react-router-dom";
-import Loading from "../../../Loading";
-import NotAccess from "../../../../components/Partials/NotAccess";
-import Edit from "./Edit";
+import React, { Component } from 'react';
+import Sidebar from '../../../../components/Partials/Sidebar';
+import Topbar from '../../../../components/Partials/Topbar';
+import Footer from '../../../../components/Partials/Footer';
+import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
+import Loading from '../../../Loading';
+import NotAccess from '../../../../components/Partials/NotAccess';
+import Edit from './Edit';
+import TableVoucher from '../../../../components/Promotion/Voucher/Edit/TableVoucher.js';
 
 class Index extends Component {
   constructor(props) {
@@ -15,10 +16,7 @@ class Index extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (
-      this.state.isLoading != true &&
-      typeof nextProps.permission.product_list != "undefined"
-    ) {
+    if (this.state.isLoading != true && typeof nextProps.permission.product_list != 'undefined') {
       var permissions = nextProps.permission;
 
       var isShow = permissions.promotion_voucher_list;
@@ -33,20 +31,15 @@ class Index extends Component {
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
-        {auth != "a" ? (
+        {auth != 'a' ? (
           <div className="col-10 col-10-wrapper">
             <div id="content-wrapper" className="d-flex flex-column">
               <div id="content">
                 <Topbar store_code={store_code} />
-                {typeof isShow == "undefined" ? (
-                  <div style={{ height: "500px" }}></div>
+                {typeof isShow == 'undefined' ? (
+                  <div style={{ height: '500px' }}></div>
                 ) : isShow == true ? (
-                  <Edit
-                    type={type}
-                    voucherId={voucherId}
-                    store_code={store_code}
-                    history={history}
-                  />
+                  <Edit type={type} voucherId={voucherId} store_code={store_code} history={history} />
                 ) : (
                   <NotAccess />
                 )}

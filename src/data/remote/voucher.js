@@ -27,3 +27,18 @@ export const destroyVoucher= (store_code, id) =>{
 export const upload = (file) =>{
   return callApi(`/images`, "post", file);
 }
+
+export const fetchAllVoucherCodes = (store_code, vourcher_id, page, search_value, status, perpage) => {
+  return callApi(
+    `/store/${store_code}/vouchers/${vourcher_id}/codes?search=${search_value}&page=${page}&status=${status}&limit=${perpage} `,
+    "get",
+  );
+}
+
+export const fetchExportVoucherCodes = (store_code, vourcher_id) => {
+  return callApi(`/store/${store_code}/vouchers/${vourcher_id}/codes/link_export`, "get");
+}
+
+export const ChangeStatuVourcherCodes = (store_code, voucher_id, ids) => {
+  return callApi(`/store/${store_code}/vouchers/${voucher_id}/codes`, "put", ids);
+}
