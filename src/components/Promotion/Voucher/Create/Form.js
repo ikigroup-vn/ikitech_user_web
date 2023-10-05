@@ -3,9 +3,7 @@ import * as Types from '../../../../constants/ActionType';
 import { connect } from 'react-redux';
 import * as voucherAction from '../../../../actions/voucher';
 import Table from './Table';
-import { shallowEqual } from '../../../../ultis/shallowEqual';
 import moment from 'moment';
-import Datetime from 'react-datetime';
 import ModalListProduct from '../../Discount/Create/ListProduct';
 import CKEditor from 'ckeditor4-react';
 import ModalUpload from '../ModalUpload';
@@ -19,7 +17,6 @@ import * as groupCustomerAction from '../../../../actions/group_customer';
 import styled from 'styled-components';
 import { typeGroupCustomer } from '../../../../ultis/groupCustomer/typeGroupCustomer';
 import Select from 'react-select';
-import { isNumber } from 'lodash';
 
 const FormStyles = styled.form`
   .status-product {
@@ -239,7 +236,7 @@ class Form extends Component {
       });
       return;
     }
-    if ((state.txt_voucher_length == null || !isEmpty(state.txt_voucher_length) || state.txt_voucher_length < 3)) {
+    if ((state.txt_voucher_length == null || !isEmpty(state.txt_voucher_length) || state.txt_voucher_length < 3) && state.is_use_once_code_multiple_time === false) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
         alert: {
@@ -251,7 +248,7 @@ class Form extends Component {
       });
       return;
     }
-    if ((state.txt_amount_use_once == null || !isEmpty(state.txt_amount_use_once))) {
+    if ((state.txt_amount_use_once == null || !isEmpty(state.txt_amount_use_once)) && state.is_use_once_code_multiple_time === false ) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
         alert: {
@@ -263,7 +260,7 @@ class Form extends Component {
       });
       return;
     }
-    if ((state.txt_voucher_length == null || !isEmpty(state.txt_voucher_length))) {
+    if ((state.txt_voucher_length == null || !isEmpty(state.txt_voucher_length)) && state.is_use_once_code_multiple_time === false) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
         alert: {
@@ -275,7 +272,7 @@ class Form extends Component {
       });
       return;
     }
-    if ((Number(state.txt_voucher_length) <=  state.txt_starting_character.length)) {
+    if ((Number(state.txt_voucher_length) <=  state.txt_starting_character.length) && state.is_use_once_code_multiple_time === false) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
         alert: {
@@ -324,7 +321,6 @@ class Form extends Component {
       id: group.value,
       name: group.label,
     }));
-    console.log(this.props.types, agency_type_name);
     var form = {
       group_customer,
       agency_type_id,
@@ -368,7 +364,6 @@ class Form extends Component {
     if (form.product_ids == '') {
       delete form.product_ids;
     }
-    console.log(form);
     var { discount_for, is_free_ship, ship_discount_value } = this.state;
 
     var dataShip = {};
@@ -406,7 +401,6 @@ class Form extends Component {
   };
 
   handleAddProduct = (product, id, type, onSave = null) => {
-    console.log(product);
     var products = [...this.state.listProducts];
 
     if (type == 'remove') {
