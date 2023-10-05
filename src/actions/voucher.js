@@ -339,3 +339,81 @@ export const initialUpload = () => {
     });
   };
 };
+
+export const fetchAllVoucherCodes = (store_code, vourcher_id, page, search_value, status, perpage) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    voucherApi.fetchAllVoucherCodes(store_code, vourcher_id, page, search_value, status, perpage).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide",
+      });
+      if (res.data.code !== 401)
+        dispatch({
+          type: Types.FETCH_ALL_VOUCHER_CODES,
+          data: res.data.data,
+        });
+    });
+  };
+};
+
+export const fetchExportVoucherCodes = (store_code, vourcher_id) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    voucherApi.fetchExportVoucherCodes(store_code, vourcher_id).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide",
+      });
+      if (res.data.code !== 401){
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công",
+            disable: "show",
+            content: "Xuất file thành công !",
+          },
+        });
+        let anchor = document.createElement('a');
+        anchor.href = res.data.data;
+        anchor.click();
+        document.body.removeChild(anchor);
+      }
+    });
+  };
+};
+
+export const changeStatuVourcherCodes = (store_code, vourcher_id, data, onSuccess = () => {}) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    voucherApi.changeStatuVourcherCodes(store_code, vourcher_id, data).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide",
+      });
+      if (res.data.code !== 401){
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công",
+            disable: "show",
+            content: "Vô hiệu mã thành công !",
+          },
+        });
+        if(onSuccess) onSuccess()
+      }
+    });
+  };
+};
+

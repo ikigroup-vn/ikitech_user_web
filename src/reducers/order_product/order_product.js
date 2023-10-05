@@ -1,11 +1,11 @@
-import * as Types from "../../constants/ActionType";
+import * as Types from '../../constants/ActionType';
 
 var initialState = {
   listOrder: [],
-  listVoucher:[],
-  listPertion:[],
-  inforOnePersion:[],
-  listCombo:[]
+  listVoucher: [],
+  listPertion: [],
+  inforOnePersion: [],
+  listCombo: [],
 };
 
 export const order_product = (state = initialState, action) => {
@@ -18,17 +18,17 @@ export const order_product = (state = initialState, action) => {
       newState.listVoucher = action.data;
       return newState;
     case Types.FETCH_ALL_PERTION_INFO:
-        newState.listPertion = action.data;
-        return newState;
+      newState.listPertion = action.data;
+      return newState;
     case Types.FETCH_SEARCH_PERSION:
-        newState.listPertion = action.data;
-        return newState;
+      newState.listPertion = action.data;
+      return newState;
     case Types.FETCH_INFO_PERSION:
-        newState.inforOnePersion = action.data;
-        return newState;
+      newState.inforOnePersion = action.data;
+      return newState;
     case Types.FETCH_ALL_COMBO_PRODUCT:
-        newState.listCombo = action.data;
-        return newState;
+      newState.listCombo = action.data;
+      return newState;
     default:
       return newState;
   }

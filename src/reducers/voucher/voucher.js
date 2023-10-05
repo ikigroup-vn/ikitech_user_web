@@ -1,8 +1,10 @@
-import * as Types from "../../constants/ActionType";
+import * as Types from '../../constants/ActionType';
 
 var initialState = {
   allVoucher: [],
-  voucherId : {}
+  voucherId: {},
+  listVoucherCodes: {},
+  linkExport: {},
 };
 
 export const voucher = (state = initialState, action) => {
@@ -13,6 +15,12 @@ export const voucher = (state = initialState, action) => {
       return newState;
     case Types.FETCH_ID_VOUCHER:
       newState.voucherId = action.data;
+      return newState;
+    case Types.FETCH_ALL_VOUCHER_CODES:
+      newState.listVoucherCodes = action.data;
+      return newState;
+    case Types.FETCH_EXPORT_VOUCHER_CODES:
+      newState.linkExport = action.data;
       return newState;
     default:
       return newState;
