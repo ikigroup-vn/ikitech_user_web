@@ -114,9 +114,6 @@ class TableVoucher extends Component {
   
   render() {
     const { VoucherCodes } = this.props;
-    console.log('page', this.props.page)
-    console.log('perpage', this.props.perpage)
-    console.log('assssssssssssssssss', (this.props.page - 1) * (this.props.perpage))
 
     return (
       <div class="table-responsive">
