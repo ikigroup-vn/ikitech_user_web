@@ -74,7 +74,7 @@ class TableVoucher extends Component {
                 disabled={data.status === 2 ? true : false}
               />
             </td>
-            <td>{(this.props.page - 1) * (this.props.perpage) + index + 1}</td>
+            <td>{(this.props.VoucherCodes?.current_page - 1) * Number(this.props.VoucherCodes?.per_page) + index + 1}</td>
             <td>
               <span style={{ fontWeight: '600' }}>{data.code}</span>
             </td>
@@ -114,7 +114,6 @@ class TableVoucher extends Component {
   
   render() {
     const { VoucherCodes } = this.props;
-
     return (
       <div class="table-responsive">
         {this.state.showModal && (
