@@ -36,9 +36,13 @@ class Edit extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (
       !shallowEqual(this.state.selectValue, prevState.selectValue) ||
-      !shallowEqual(this.state.page, prevState.page) ||
       !shallowEqual(this.state.perpage, prevState.perpage)
     ) {
+      const { store_code, voucherId } = this.props;
+      const { searchValue, selectValue, perpage } = this.state;
+      this.setState({page: 1});
+      this.props.fetchVoucherCodes(store_code, voucherId, 1, searchValue, selectValue, perpage);
+    } else if (!shallowEqual(this.state.page, prevState.page)) {
       const { store_code, voucherId } = this.props;
       const { searchValue, selectValue, page, perpage } = this.state;
       this.props.fetchVoucherCodes(store_code, voucherId, page, searchValue, selectValue, perpage);
@@ -47,8 +51,9 @@ class Edit extends Component {
 
   onSearch = () => {
     const { store_code, voucherId } = this.props;
-    const { searchValue, selectValue, page, perpage } = this.state;
-    this.props.fetchVoucherCodes(store_code, voucherId, page, searchValue, selectValue, perpage);
+    const { searchValue, selectValue, perpage } = this.state;
+    this.setState({page: 1});
+    this.props.fetchVoucherCodes(store_code, voucherId, 1, searchValue, selectValue, perpage);
   };
 
   onSelectChange = (e) => {
@@ -102,6 +107,8 @@ class Edit extends Component {
           </div>
         </div>
 
+        {voucher?.is_use_once_code_multiple_time === false ? 
+        <>
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <h4 className="h4 title_content mb-0 text-gray-800">
             Danh sách voucher được phát hành từ chương trình <span style={{ fontWeight: '600' }}>{voucher.name}</span>
@@ -109,7 +116,6 @@ class Edit extends Component {
         </div>
         <br></br>
         <div class="card shadow mb-4">
-          {1 ? (
             <div class="card-body">
               <section class="content">
                 <div class="row">
@@ -122,12 +128,13 @@ class Edit extends Component {
                         style={{
                           marginTop: '20px',
                           display: 'flex',
+                          justifyContent: 'space-between'
                         }}
                       >
-                        <div class="input-group mb-3">
+                        <div class="input-group mb-3" style={{maxWidth: '350px'}}>
                           <input type="text" class="form-control" placeholder="Tìm kiếm mã voucher" value={this.state.searchValue} onChange={(e) => this.setState({searchValue: e.target.value})} />
                           <div class="input-group-append">
-                            <button class="btn btn-outline-secondary" type="button" onClick={this.onSearch}>
+                            <button class="btn-primary btn" type="button" onClick={this.onSearch}>
                               <i className="fa fa-search"></i>
                             </button>
                           </div>
@@ -231,10 +238,10 @@ class Edit extends Component {
                 </div>
               </div>
             </div>
-          ) : (
-            ''
-          )}
-        </div>
+        </div> 
+        </>
+        : null}
+        
       </div>
     );
   }

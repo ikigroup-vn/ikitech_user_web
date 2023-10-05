@@ -708,7 +708,6 @@ class Form extends Component {
                   <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
                     <input
                       type="radio"
-                      // class="form-control"
                       id="is_use_once_code_multiple_time"
                       name="is_use_once_code_multiple_time"
                       value={true}

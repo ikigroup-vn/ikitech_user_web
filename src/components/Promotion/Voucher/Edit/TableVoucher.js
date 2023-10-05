@@ -71,15 +71,15 @@ class TableVoucher extends Component {
               <input
                 type="checkbox"
                 onChange={(e) => this.handleCheckboxChange(data.id, e)}
-                disabled={data.status === 2 ? true : false}
+                disabled={data.status === 2 || data.status === 1 ? true : false}
               />
             </td>
             <td>{(this.props.VoucherCodes?.current_page - 1) * Number(this.props.VoucherCodes?.per_page) + index + 1}</td>
             <td>
               <span style={{ fontWeight: '600' }}>{data.code}</span>
             </td>
-            <td>{data.customer || 'Chưa sử dụng'}</td>
-            <td>{data.use_time || 'Chưa sử dụng'}</td>
+            <td>{data.customer?.name || (<div style={{width: '60%', borderBottom: '1px dashed grey'}}></div>)}</td>
+            <td>{data.use_time || (<div style={{width: '60%', borderBottom: '1px dashed grey'}}></div>)}</td>
             <td>{data.start_time}</td>
             <td>{data.end_time}</td>
             {this.compareDates(this.getCurrentTime(), data.end_time) >  0 ? (<td>Đã kết thúc</td>) : (<td>{data.status === 0 ? 'Đã phát hành' : data.status === 1 ? 'Đã sử dụng' : 'Đã kết thúc'}</td>)}
