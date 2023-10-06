@@ -879,7 +879,7 @@ class Bill extends Component {
                                     <i class="fas fa-file-export"></i>
                                   </span>
                                   <span style={{ color: "white" }} class="text">
-                                    Export Excel Ikitech
+                                    Export Excel Ikitech 
                                   </span>
                                 </button>
                               </>
