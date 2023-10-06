@@ -1100,6 +1100,7 @@ class Form extends Component {
                   <div
                     style={{
                       display: "flex",
+                      flexWrap: "wrap",
                       alignItems: "center",
                       columnGap: "15px",
                     }}

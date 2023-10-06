@@ -76,7 +76,6 @@ class Table extends Component {
     this.setState({ modalElement: modalElement });
   };
   handleCallBackSubElement = (modalSub) => {
-    console.log("modalSub", modalSub);
     this.setState({ modalSub: modalSub });
   };
 
@@ -249,10 +248,6 @@ class Table extends Component {
   render() {
     var { products, store_code } = this.props;
     var { selected, modalSub, modalElement, formData } = this.state;
-    console.log(
-      "🚀 ~ file: Table.js:245 ~ Table ~ render ~ selected:",
-      selected
-    );
     var per_page = products.per_page;
     var current_page = products.current_page;
 

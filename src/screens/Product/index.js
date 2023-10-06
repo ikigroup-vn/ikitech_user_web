@@ -2,10 +2,8 @@ import React, { Component } from "react";
 import Sidebar from "../../components/Partials/Sidebar";
 import Topbar from "../../components/Partials/Topbar";
 import Footer from "../../components/Partials/Footer";
-import $ from "jquery";
 import { Link, Redirect } from "react-router-dom";
 import Table from "../../components/Product/Table";
-import General from "../../components/Product/General";
 import * as Types from "../../constants/ActionType";
 import Alert from "../../components/Partials/Alert";
 import Pagination from "../../components/Product/Pagination";
@@ -19,7 +17,6 @@ import Loading from "../Loading";
 import * as productAction from "../../actions/product";
 import * as CategoryPAction from "../../actions/category_product";
 import * as XLSX from "xlsx";
-import { randomString } from "../../ultis/helpers";
 import Shopee from "../../components/Product/Ecomerce/Shopee";
 import Sendo from "../../components/Product/Ecomerce/Sendo";
 import getChannel, { IKITECH, IKIPOS } from "../../ultis/channel";
@@ -145,19 +142,6 @@ class Product extends Component {
 
     return true;
   }
-  // handleDisplayCategory = () => {
-  //   const {}  = this.state;
-  //   const categoryIds = getQueryParams("category_ids")?.split(",") || [];
-
-  //   if (categoryIds?.length > 0) {
-  //     const categorySelected = option.filter((item) =>
-  //       categoryIds.includes(item?.id?.toString())
-  //     );
-  //     this.setState({
-  //       categorySelected: categorySelected,
-  //     });
-  //   }
-  // };
 
   getNameSelected() {
     const { categorySelected, categoryChildSelected } = this.state;

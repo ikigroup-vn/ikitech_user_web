@@ -75,11 +75,6 @@ class Index extends Component {
         )}
       </div>
     );
-    // } else if (this.props.auth === false) {
-    //     return <Redirect to="/login" />;
-    // } else {
-    //     return <Loading />;
-    // }
   }
 }
 
