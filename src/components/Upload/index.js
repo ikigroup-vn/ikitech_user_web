@@ -143,10 +143,16 @@ class Upload extends Component {
     };
   }
 
-  componentDidMount() {
-    const { images, isShowDefault } = this.props;
+  componentDidUpdate() {
+    const { images, isShowDefault, isUpdating } = this.props;
+
     if (isShowDefault) {
       this.setFileList(images);
+    }
+
+    if(isUpdating && !this.state.fileList.length ){
+      const listImgUrl = images.map(image => image.image_url);
+      this.setFileList(listImgUrl);
     }
   }
 
@@ -239,7 +245,7 @@ class Upload extends Component {
   };
 
   render() {
-    const { style, multiple, limit, loading } = this.props;
+    const { style, multiple, limit, loading, typeUpload } = this.props;
     const { fileList, file } = this.state;
     const forbiddenLinks = this.props.forbiddenLinks || [];
     return (

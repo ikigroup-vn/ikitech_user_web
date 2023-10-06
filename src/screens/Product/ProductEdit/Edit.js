@@ -450,6 +450,8 @@ class ProductEdit extends Component {
       this.props;
     var { total, disableInventory, disableDistribute } = this.state;
 
+    console.log('product?.images',product?.images)
+
     var afterAttribute = this.afterAttribute();
     return (
       <div class="container-fluid">
@@ -500,8 +502,9 @@ class ProductEdit extends Component {
                         multiple
                         setFiles={this.handleImageData}
                         files={this.state.images}
-                        images={""}
+                        images={product?.images}
                         limit={13}
+                        isUpdating={true}
                       />
                     </div>
                   </div>
