@@ -255,10 +255,7 @@ class Table extends Component {
         : false;
     var multiDelete = selected.length > 0 ? "show" : "hide";
     var { _delete, update, insert } = this.props;
-    console.log(
-      "🚀 ~ file: Table.js:152 ~ Table ~ listItemSelected:",
-      this.state.listItemSelected
-    );
+
     return (
       <div>
         <button
@@ -279,7 +276,7 @@ class Table extends Component {
           <thead>
             <tr>
               <th>STT</th>
-              <th></th>
+              {/* <th></th> */}
               <th>Hình ảnh</th>
               <th>Mã SKU</th>
               <th>Mã Barcode</th>
