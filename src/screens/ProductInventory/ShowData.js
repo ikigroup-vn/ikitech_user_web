@@ -153,6 +153,17 @@ class ShowData extends Component {
                 result.push(
                   <tr className="wrap-item hover-product">
                     <td></td>
+                    {/* <td>
+                      <input
+                        type="checkbox"
+                        name="input__check"
+                        className="input__check"
+                        // value={listItemSelected.includes(data.id)}
+                        // checked={listItemSelected.includes(data.id)}
+                        disabled={!data.check_inventory}
+                        // onChange={(e) => this.onChangeSelected(e, data.id)}
+                      />
+                    </td> */}
                     <td className="item">
                       <img
                         src={
@@ -242,7 +253,17 @@ class ShowData extends Component {
             result.push(
               <tr className="wrap-item hover-product">
                 <td></td>
-
+                {/* <td>
+                  <input
+                    type="checkbox"
+                    name="input__check"
+                    className="input__check"
+                    // value={listItemSelected.includes(data.id)}
+                    // checked={listItemSelected.includes(data.id)}
+                    disabled={!data.check_inventory}
+                    // onChange={(e) => this.onChangeSelected(e, data.id)}
+                  />
+                </td> */}
                 <td className="item">
                   <img
                     src={
@@ -335,6 +356,45 @@ class ShowData extends Component {
     }
     return result;
   };
+  handleCheckData = (item, type) => {
+    const { handleListItemSelected } = this.props;
+    let data = {};
+
+    if (type === "product") {
+      data = {
+        cost_of_capital: item.inventory?.main_cost_of_capital,
+        quantity_in_stock: item.inventory?.main_stock,
+        idProduct: item.id,
+        nameSubElement: "",
+        nameElement: "",
+        NameDistribute: "",
+      };
+    }
+
+    if (type === "sub") {
+      data = {
+        cost_of_capital: item.inventory?.main_cost_of_capital,
+        quantity_in_stock: item.inventory?.main_stock,
+        idProduct: item.id,
+        nameSubElement: item.sub?.name,
+        nameElement: item.element,
+        NameDistribute: item.distribute,
+      };
+    }
+
+    if (type === "element") {
+      data = {
+        cost_of_capital: item.inventory?.main_cost_of_capital,
+        quantity_in_stock: item.inventory?.main_stock,
+        idProduct: item.id,
+        nameSubElement: item.sub?.name,
+        nameElement: item.element,
+        NameDistribute: item.distribute,
+      };
+    }
+
+    handleListItemSelected(data);
+  };
 
   render() {
     const {
@@ -359,7 +419,7 @@ class ShowData extends Component {
       discount_percent = product_discount.value;
     }
 
-    var { formData } = this.props;
+    var { formData, isChecked } = this.props;
     console.log("datadata", data);
 
     return (
@@ -369,6 +429,17 @@ class ShowData extends Component {
           style={{ background: "rgba(227, 230, 240, 0.1)" }}
         >
           <td>{per_page * (current_page - 1) + (index + 1)}</td>
+          {/* <td>
+            <input
+              type="checkbox"
+              name="input__check"
+              className="input__check"
+              value={isChecked(data)}
+              checked={isChecked(data)}
+              disabled={!data.check_inventory || data.distributes?.length > 0}
+              onChange={() => this.props.handleListItemSelected(data)}
+            />
+          </td> */}
           <td>
             <img
               src={
