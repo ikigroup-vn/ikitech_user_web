@@ -153,7 +153,7 @@ class ShowData extends Component {
                 result.push(
                   <tr className="wrap-item hover-product">
                     <td></td>
-                    {/* <td>
+                    <td>
                       <input
                         type="checkbox"
                         name="input__check"
@@ -163,7 +163,7 @@ class ShowData extends Component {
                         disabled={!data.check_inventory}
                         // onChange={(e) => this.onChangeSelected(e, data.id)}
                       />
-                    </td> */}
+                    </td>
                     <td className="item">
                       <img
                         src={
@@ -253,7 +253,7 @@ class ShowData extends Component {
             result.push(
               <tr className="wrap-item hover-product">
                 <td></td>
-                {/* <td>
+                <td>
                   <input
                     type="checkbox"
                     name="input__check"
@@ -263,7 +263,7 @@ class ShowData extends Component {
                     disabled={!data.check_inventory}
                     // onChange={(e) => this.onChangeSelected(e, data.id)}
                   />
-                </td> */}
+                </td>
                 <td className="item">
                   <img
                     src={
@@ -429,7 +429,7 @@ class ShowData extends Component {
           style={{ background: "rgba(227, 230, 240, 0.1)" }}
         >
           <td>{per_page * (current_page - 1) + (index + 1)}</td>
-          {/* <td>
+          <td>
             <input
               type="checkbox"
               name="input__check"
@@ -437,9 +437,9 @@ class ShowData extends Component {
               value={isChecked(data)}
               checked={isChecked(data)}
               disabled={!data.check_inventory || data.distributes?.length > 0}
-              onChange={() => this.props.handleListItemSelected(data)}
+              onChange={() => this.handleCheckData(data, "product")}
             />
-          </td> */}
+          </td>
           <td>
             <img
               src={
