@@ -577,6 +577,7 @@ class Form extends Component {
                       display: "flex",
                       alignItems: "center",
                       columnGap: "15px",
+                      flexWrap: "wrap",
                     }}
                     className=""
                   >

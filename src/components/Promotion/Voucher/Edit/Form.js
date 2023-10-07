@@ -956,6 +956,7 @@ class Form extends Component {
                     style={{
                       display: "flex",
                       alignItems: "center",
+                      flexWrap: "wrap",
                       columnGap: "15px",
                     }}
                     className=""

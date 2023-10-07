@@ -879,16 +879,13 @@ class Bill extends Component {
                                     <i class="fas fa-file-export"></i>
                                   </span>
                                   <span style={{ color: "white" }} class="text">
-                                    Export Excel Ikitech
+                                    Export Excel Ikitech 
                                   </span>
                                 </button>
                               </>
                             ) : null}
 
                             <button
-                              // onClick={(e) => this.handleMultiDelCallBack(e, selected)}
-                              // data-toggle="modal"
-                              // data-target="#removeMultiModal"
                               style={{
                                 margin: "auto 0px",
                               }}

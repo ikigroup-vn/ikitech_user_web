@@ -18,42 +18,39 @@ class ModalUpload extends Component {
     e.preventDefault();
     window.$('.modal').modal('hide');
 
-    // if (this.props.listImgProduct.length + this.state.files.length > 10) {
-    //   this.props.checkNumImg(
-    //     {
-    //       type: Types.ALERT_UID_STATUS,
-    //       alert: {
-    //         type: "danger",
-    //         title: "Lỗi ",
-    //         disable: "show",
-    //         content: "Chỉ được chọn tối đa 10 hình ảnh",
-    //       },
-    //     }
-    //   )
-    // }
-    // else {
       if (this.state.files.length > 0) {
         window.$('#file-listp').fileinput('clear');
         this.setState({
           files: [],
           files_copy: [],
         })
-        // this.props.startProgressBar()
         this.props.uploadListImgProduct(this.state.files)
 
       }
     }
-  // }
 
   componentDidMount() {
     var _this = this
 
     window.$('#file-listp').on('fileloaded', function (event, file, previewId, fileId, index, reader) {
-      var files = [..._this.state.files]
+      var files = [..._this.state.files];
+      // console.log('something', files)
       var files_copy = [..._this.state.files_copy]
-      files.push(file)
-      files_copy.push(previewId)
-      _this.setState({ files, files_copy })
+      if(Number(event.target.files?.length) - Number(files_copy?.length) + Number(_this.props.listImgProduct?.length) <= 13){
+          // files.push(file)
+          // files_copy.push(previewId)
+          // _this.setState({ files, files_copy })  
+      } else {
+        _this.props.showErr({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: "Bạn chỉ có thể chọn tối đa 13 ảnh",
+          },
+        });
+      }
     });
 
     window.$('#file-listp').on('fileremoved', function (event, id, index) {
@@ -76,6 +73,7 @@ class ModalUpload extends Component {
     window.$('#file-listp').trigger('click');
   }
   render() {
+    
     return (
       <div
         class="modal fade"
@@ -89,7 +87,7 @@ class ModalUpload extends Component {
           <div class="modal-content">
             <div class="modal-header">
               <h4 class="modal-title">Upload ảnh</h4>
-
+{this.state.files.length}
               <button
                 type="button"
                 class="close"

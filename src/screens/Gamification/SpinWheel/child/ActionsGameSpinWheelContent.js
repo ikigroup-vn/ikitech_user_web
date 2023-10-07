@@ -579,7 +579,6 @@ class ActionsGameSpinWheelContent extends Component {
       backgroundDefaultImage,
       backgroundSelfPostedImage,
     } = this.state;
-    console.log("backgroundSelfPostedImage:::", backgroundSelfPostedImage);
 
     return (
       <div class="container-fluid">

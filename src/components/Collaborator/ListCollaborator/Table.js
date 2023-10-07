@@ -237,32 +237,9 @@ class Table extends Component {
                   </span>
                 </div>
               </td>
-              {/* 
-              <td>
-                {" "}
-                {data.customer.points == null
-                  ? null
-                  : new Intl.NumberFormat().format(
-                    data.customer.points.toString()
-                  )}
-              </td> */}
+
               <td>{data.customer.referral_phone_number || null}</td>
-              {/* <td>
-                <label className="status-product on-off">
-                  <input
-                    ref={(ref) => (this["checked" + data.id] = ref)}
-                    type="checkbox"
-                    hidden
-                    class="checkbox"
-                    name={`${randomString(10)}`}
-                    checked={data.status == 1 ? true : false}
-                    onChange={(e) => {
-                      this.onChangeStatus(e, data.id);
-                    }}
-                  />
-                  <div></div>
-                </label>
-              </td> */}
+              
               <td className="btn-voucher">
                 <Link
                   style={{ margin: "2px 0" }}
@@ -283,7 +260,7 @@ class Table extends Component {
               </td>
             </tr>
             <tr class="explode hide">
-              <td colSpan={8}>
+              <td colSpan={7}>
                 <div class="row">
                   <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                     <div class="info_user">
@@ -297,11 +274,7 @@ class Table extends Component {
                         Tên chủ tài khoản:{" "}
                         <span id="user_tel">{data.account_name}</span>
                       </p>
-                      {/* <p class="sale_user_label">
-                        Gmail:{" "}
-                        <span id="user_tel">             {data.customer.email == null ? "Trống" : data.customer.email}
-                        </span>
-                      </p> */}
+                     
                       <p
                         class="sale_user_label"
                         style={{

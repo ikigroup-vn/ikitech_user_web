@@ -18,12 +18,17 @@ export const typeGroupCustomer = [
   },
   {
     id: 4,
-    title: "Khách lẻ",
+    title: "Khách lẻ đã đăng nhập",
     value: Types.GROUP_CUSTOMER_NORMAL_GUEST,
   },
   {
     id: 5,
     title: "Nhóm khách hàng",
     value: Types.GROUP_CUSTOMER_BY_CONDITION,
+  },
+  {
+    id: 6,
+    title: "Khách lẻ chưa đăng nhập",
+    value: Types.GROUP_CUSTOMER_NORMAL_GUEST_NOT_LOGGED,
   },
 ];

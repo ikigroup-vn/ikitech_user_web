@@ -968,13 +968,14 @@ export const uploadListImgProduct = function (files) {
     var images = [];
     for (let i = 0; i < files.length; i++) {
       const fd = new FormData();
-
       fd.append(`image`, await compressed(files[i]));
       try {
+        dispatch({
+          type: Types.LOADING_UPLOAD_ALL_PRODUCT_IMG,
+          loading: true,
+        });
         var res = await uploadApi.upload(fd);
-        console.log(res);
       } catch (error) {
-        console.log(error);
 
         dispatch({
           type: Types.ALERT_UID_STATUS,
@@ -987,7 +988,6 @@ export const uploadListImgProduct = function (files) {
         });
       }
       if (res.data.code == 400) {
-        console.log(res.data);
         {
           dispatch({
             type: Types.ALERT_UID_STATUS,
@@ -1001,7 +1001,6 @@ export const uploadListImgProduct = function (files) {
         }
       } else {
         images.push(res.data.data);
-        console.log(images);
       }
       if (i == files.length - 1) {
         dispatch({
@@ -1009,6 +1008,10 @@ export const uploadListImgProduct = function (files) {
           data: images,
         });
       }
+      dispatch({
+        type: Types.LOADING_UPLOAD_ALL_PRODUCT_IMG,
+        loading: false,
+      });
     }
   };
 };
