@@ -74,10 +74,10 @@ class ProductEdit extends Component {
     });
   };
 
-  handleDataFromProductImg = (data) => {
+  handleDataFromProductImg = (imgs) => {
     this.setState((prevState, props) => {
       var formdata = { ...prevState.form };
-      formdata.images = data.listImgProduct;
+      formdata.images = imgs;
       return { form: formdata };
     });
   };
@@ -176,7 +176,6 @@ class ProductEdit extends Component {
                 form.list_distribute[0].element_distributes[index].quantity_in_stock = quantity_in_stock;
                 form.list_distribute[0].element_distributes[index].barcode = removeVietnameseTones(barcode);
                 form.list_distribute[0].element_distributes[index].stock = quantity_in_stock;
-                console.log(price, form.list_distribute[0].element_distributes[index].price);
 
                 if (typeof element.sub_element_distributes != 'undefined') {
                   if (element.sub_element_distributes.length > 0) {
@@ -378,7 +377,7 @@ class ProductEdit extends Component {
                   />
                 </div>
                 <div>
-                  <Upload multiple setFiles={this.handleImageData} files={this.state.images} images={product?.images} isUpdating={true} limit={13} />
+                  <Upload multiple setFiles={this.handleImageData} files={this.state.images} images={product?.images?.map(image => image?.image_url)}  limit={13} />
                 </div>
               </div>
             </div>

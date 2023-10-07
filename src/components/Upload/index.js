@@ -143,16 +143,11 @@ class Upload extends Component {
     };
   }
 
-  componentDidUpdate() {
-    const { images, isShowDefault, isUpdating } = this.props;
-
+  componentDidMount() {
+    const { images, isShowDefault } = this.props;
+    
     if (isShowDefault) {
       this.setFileList(images);
-    }
-
-    if(isUpdating && !this.state.fileList.length ){
-      const listImgUrl = images.map(image => image.image_url);
-      this.setFileList(listImgUrl);
     }
   }
 

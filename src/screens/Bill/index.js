@@ -886,9 +886,6 @@ class Bill extends Component {
                             ) : null}
 
                             <button
-                              // onClick={(e) => this.handleMultiDelCallBack(e, selected)}
-                              // data-toggle="modal"
-                              // data-target="#removeMultiModal"
                               style={{
                                 margin: "auto 0px",
                               }}

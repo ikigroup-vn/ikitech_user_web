@@ -356,7 +356,7 @@ class Table extends Component {
               </td>
             </tr>
             <tr class="explode hide">
-              <td colSpan={8}>
+              <td colSpan={7}>
                 <div class="row">
                   <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                     <div class="info_user">

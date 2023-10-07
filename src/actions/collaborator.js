@@ -17,12 +17,6 @@ function getSheetData(data, header) {
 }
 
 async function saveAsExcel(value, title) {
-  // var data = [
-  //   { name: "John", city: "Seattle" },
-  //   { name: "Mike", city: "Los Angeles" },
-  //   { name: "Zach", city: "New York" }
-  // ];
-  // let header = ["Name", "City"];
   var data = value.data;
   var data_header = value.header;
   XlsxPopulate.fromBlankAsync().then(async (workbook) => {
@@ -98,7 +92,6 @@ export const exportListCollaborator = (store_code, page, params) => {
                       }
                     );
                   }
-                  console.log(header);
                   saveAsExcel(
                     { data: newArray, header: header },
                     "Danh sách CTV"
