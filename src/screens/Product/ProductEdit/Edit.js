@@ -1,30 +1,30 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import InfoProduct from '../../../components/Product/Update/InfoProduct';
-import ContentDetail from '../../../components/Product/Update/ContentDetail';
-import Video from '../../../components/Product/Update/Video';
-import { getQueryParams, isEmpty } from '../../../ultis/helpers';
+import React, { Component } from "react";
+import { connect, shallowEqual } from "react-redux";
+import InfoProduct from "../../../components/Product/Update/InfoProduct";
+import ContentDetail from "../../../components/Product/Update/ContentDetail";
+import Video from "../../../components/Product/Update/Video";
+import { getQueryParams, isEmpty } from "../../../ultis/helpers";
 
-import * as blogAction from '../../../actions/blog';
+import * as blogAction from "../../../actions/blog";
 
-import Attribute from '../../../components/Product/Update/Attribute';
-import Distribute from '../../../components/Product/Update/Distribute';
-import * as productAction from '../../../actions/product';
-import * as CategoryPAction from '../../../actions/category_product';
-import * as AttributeAction from '../../../actions/attribute_search';
-import * as Types from '../../../constants/ActionType';
-import Alert from '../../../components/Partials/Alert';
-import SeoOption from '../../../components/Product/Update/SeoOption';
-import getChannel, { IKITECH, IKIPOS } from '../../../ultis/channel';
-import history from '../../../history';
-import Upload from '../../../components/Upload/index.js';
+import Attribute from "../../../components/Product/Update/Attribute";
+import Distribute from "../../../components/Product/Update/Distribute";
+import * as productAction from "../../../actions/product";
+import * as CategoryPAction from "../../../actions/category_product";
+import * as AttributeAction from "../../../actions/attribute_search";
+import * as Types from "../../../constants/ActionType";
+import Alert from "../../../components/Partials/Alert";
+import SeoOption from "../../../components/Product/Update/SeoOption";
+import getChannel, { IKITECH, IKIPOS } from "../../../ultis/channel";
+import history from "../../../history";
+import Upload from "../../../components/Upload/index.js";
 
 class ProductEdit extends Component {
   constructor(props) {
     super(props);
     this.state = {
       form: {},
-      total: '',
+      total: "",
       disableDistribute: false,
       disableInventory: false,
       attributeSearch: [],
@@ -50,18 +50,34 @@ class ProductEdit extends Component {
       var formdata = { ...prevState.form };
       formdata.name = data.txtName;
       formdata.shelf_position = data.txtPosition;
-      formdata.price = data.txtPrice.toString().replace(/,/g, '').replace(/\./g, '');
+      formdata.price = data.txtPrice
+        .toString()
+        .replace(/,/g, "")
+        .replace(/\./g, "");
       formdata.money_amount_collaborator = data.money_amount_collaborator
         ?.toString()
-        .replace(/,/g, '')
-        .replace(/\./g, '');
-      formdata.type_share_collaborator_number = data.type_share_collaborator_number;
-      formdata.weight = data.txtWeight.toString().replace(/,/g, '').replace(/\./g, '');
-      formdata.import_price = data.txtImportPrice.toString().replace(/,/g, '').replace(/\./g, '');
+        .replace(/,/g, "")
+        .replace(/\./g, "");
+      formdata.type_share_collaborator_number =
+        data.type_share_collaborator_number;
+      formdata.weight = data.txtWeight
+        .toString()
+        .replace(/,/g, "")
+        .replace(/\./g, "");
+      formdata.import_price = data.txtImportPrice
+        .toString()
+        .replace(/,/g, "")
+        .replace(/\./g, "");
       formdata.barcode = data.txtBarcode;
       formdata.status = data.txtStatus;
-      formdata.quantity_in_stock = data.txtQuantityInStock.toString().replace(/,/g, '').replace(/\./g, '');
-      formdata.point_for_agency = data.point_for_agency?.toString().replace(/,/g, '').replace(/\./g, '');
+      formdata.quantity_in_stock = data.txtQuantityInStock
+        .toString()
+        .replace(/,/g, "")
+        .replace(/\./g, "");
+      formdata.point_for_agency = data.point_for_agency
+        ?.toString()
+        .replace(/,/g, "")
+        .replace(/\./g, "");
       formdata.percent_collaborator = data.txtPercentC;
       formdata.sku = data.sku;
       formdata.is_medicine = data.is_medicine;
@@ -75,9 +91,11 @@ class ProductEdit extends Component {
         });
       }
       if (data.category_children_ids.length > 0) {
-        category_children_ids = data.category_children_ids.map((categoryChild, index) => {
-          return categoryChild.id;
-        });
+        category_children_ids = data.category_children_ids.map(
+          (categoryChild, index) => {
+            return categoryChild.id;
+          }
+        );
       }
       formdata.categories = categories;
       formdata.category_children_ids = category_children_ids;
@@ -137,16 +155,18 @@ class ProductEdit extends Component {
       var formdata = { ...prevState.form };
       var listAttribute = [];
       var item = {};
-      var name = '';
+      var name = "";
       Object.entries(data).forEach(([key, attribute], index) => {
         Object.entries(attribute).forEach(([_key, attributeItem], _index) => {
-          Object.entries(attributeItem).forEach(([__key, _attributeItem], __index) => {
-            if (__key === 'name') {
-              name = _attributeItem;
-            } else {
-              item = { name, value: _attributeItem };
+          Object.entries(attributeItem).forEach(
+            ([__key, _attributeItem], __index) => {
+              if (__key === "name") {
+                name = _attributeItem;
+              } else {
+                item = { name, value: _attributeItem };
+              }
             }
-          });
+          );
           listAttribute.push(item);
         });
       });
@@ -173,87 +193,146 @@ class ProductEdit extends Component {
       quantity_in_stock: Number(this.state.form?.quantity_in_stock),
     };
 
-    form.point_for_agency = form.point_for_agency?.toString().replace(/,/g, '').replace(/\./g, '');
+    form.point_for_agency = form.point_for_agency
+      ?.toString()
+      .replace(/,/g, "")
+      .replace(/\./g, "");
     form.index_image_avatar = 0;
-    if (typeof form.list_distribute != 'undefined') {
-      if (typeof form.list_distribute[0] != 'undefined') {
-        if (typeof form.list_distribute[0].element_distributes != 'undefined') {
+    if (typeof form.list_distribute != "undefined") {
+      if (typeof form.list_distribute[0] != "undefined") {
+        if (typeof form.list_distribute[0].element_distributes != "undefined") {
           if (form.list_distribute[0].element_distributes.length > 0) {
-            form.list_distribute[0].element_distributes.forEach((element, index) => {
-              try {
-                const price = element.price != null ? element.price.toString().replace(/,/g, '').replace(/\./g, '') : 0;
-                const barcode = element.barcode != null ? element.barcode.toString() : 0;
+            form.list_distribute[0].element_distributes.forEach(
+              (element, index) => {
+                try {
+                  const price =
+                    element.price != null
+                      ? element.price
+                          .toString()
+                          .replace(/,/g, "")
+                          .replace(/\./g, "")
+                      : 0;
+                  const barcode =
+                    element.barcode != null ? element.barcode.toString() : 0;
 
-                const quantity_in_stock =
-                  element.quantity_in_stock != null
-                    ? element.quantity_in_stock.toString().replace(/,/g, '').replace(/\./g, '')
-                    : 0;
-                const import_price =
-                  element.import_price != null
-                    ? element.import_price.toString().replace(/,/g, '').replace(/\./g, '')
-                    : 0;
-                form.list_distribute[0].element_distributes[index].price = Number(price);
-                form.list_distribute[0].element_distributes[index].import_price = Number(import_price);
+                  const quantity_in_stock =
+                    element.quantity_in_stock != null
+                      ? element.quantity_in_stock
+                          .toString()
+                          .replace(/,/g, "")
+                          .replace(/\./g, "")
+                      : 0;
+                  const import_price =
+                    element.import_price != null
+                      ? element.import_price
+                          .toString()
+                          .replace(/,/g, "")
+                          .replace(/\./g, "")
+                      : 0;
+                  form.list_distribute[0].element_distributes[index].price =
+                    Number(price);
+                  form.list_distribute[0].element_distributes[
+                    index
+                  ].import_price = Number(import_price);
 
-                form.list_distribute[0].element_distributes[index].quantity_in_stock = Number(quantity_in_stock);
-                form.list_distribute[0].element_distributes[index].barcode = barcode;
-                if (typeof element.sub_element_distributes != 'undefined') {
-                  if (element.sub_element_distributes.length > 0) {
-                    element.sub_element_distributes.forEach((_element, _index) => {
-                      try {
-                        const price =
-                          _element.price != null ? _element.price.toString().replace(/,/g, '').replace(/\./g, '') : 0;
-                        const barcode = _element.barcode != null ? _element.barcode.toString() : '';
-                        const quantity_in_stock =
-                          _element.quantity_in_stock != null
-                            ? _element.quantity_in_stock.toString().replace(/,/g, '').replace(/\./g, '')
-                            : 0;
-                        const import_price =
-                          _element.import_price != null
-                            ? _element.import_price.toString().replace(/,/g, '').replace(/\./g, '')
-                            : 0;
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[
-                          _index
-                        ].import_price = Number(import_price);
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].price =
-                          Number(price);
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[
-                          _index
-                        ].quantity_in_stock = Number(quantity_in_stock);
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].barcode =
-                          barcode;
-                      } catch (error) {
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].price = 0;
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[
-                          _index
-                        ].quantity_in_stock = 0;
-                        form.list_distribute[0].element_distributes[index].sub_element_distributes[_index].barcode = '';
-                      }
-                    });
+                  form.list_distribute[0].element_distributes[
+                    index
+                  ].quantity_in_stock = Number(quantity_in_stock);
+                  form.list_distribute[0].element_distributes[index].barcode =
+                    barcode;
+                  if (typeof element.sub_element_distributes != "undefined") {
+                    if (element.sub_element_distributes.length > 0) {
+                      element.sub_element_distributes.forEach(
+                        (_element, _index) => {
+                          try {
+                            const price =
+                              _element.price != null
+                                ? _element.price
+                                    .toString()
+                                    .replace(/,/g, "")
+                                    .replace(/\./g, "")
+                                : 0;
+                            const barcode =
+                              _element.barcode != null
+                                ? _element.barcode.toString()
+                                : "";
+                            const quantity_in_stock =
+                              _element.quantity_in_stock != null
+                                ? _element.quantity_in_stock
+                                    .toString()
+                                    .replace(/,/g, "")
+                                    .replace(/\./g, "")
+                                : 0;
+                            const import_price =
+                              _element.import_price != null
+                                ? _element.import_price
+                                    .toString()
+                                    .replace(/,/g, "")
+                                    .replace(/\./g, "")
+                                : 0;
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[_index].import_price =
+                              Number(import_price);
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[_index].price =
+                              Number(price);
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[
+                              _index
+                            ].quantity_in_stock = Number(quantity_in_stock);
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[_index].barcode = barcode;
+                          } catch (error) {
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[_index].price = 0;
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[
+                              _index
+                            ].quantity_in_stock = 0;
+                            form.list_distribute[0].element_distributes[
+                              index
+                            ].sub_element_distributes[_index].barcode = "";
+                          }
+                        }
+                      );
+                    }
                   }
+                } catch (error) {
+                  form.list_distribute[0].element_distributes[index].price = 0;
+                  form.list_distribute[0].element_distributes[
+                    index
+                  ].quantity_in_stock = 0;
+                  form.list_distribute[0].element_distributes[index].barcode =
+                    "";
                 }
-              } catch (error) {
-                form.list_distribute[0].element_distributes[index].price = 0;
-                form.list_distribute[0].element_distributes[index].quantity_in_stock = 0;
-                form.list_distribute[0].element_distributes[index].barcode = '';
               }
-            });
+            );
           }
         }
       }
     }
-    var total = this.state.total.toString().replace(/,/g, '').replace(/\./g, '');
-    if (typeof form.list_distribute != 'undefined') {
-      form.quantity_in_stock = form.list_distribute.length > 0 ? total : form.quantity_in_stock;
+    var total = this.state.total
+      .toString()
+      .replace(/,/g, "")
+      .replace(/\./g, "");
+    if (typeof form.list_distribute != "undefined") {
+      form.quantity_in_stock =
+        form.list_distribute.length > 0 ? total : form.quantity_in_stock;
     }
     if (form.name == null || !isEmpty(form.name)) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
         alert: {
-          type: 'danger',
-          title: 'Lỗi',
-          disable: 'show',
-          content: 'Vui lòng nhập tên sản phẩm',
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng nhập tên sản phẩm",
         },
       });
       return;
@@ -263,10 +342,10 @@ class ProductEdit extends Component {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
         alert: {
-          type: 'danger',
-          title: 'Lỗi',
-          disable: 'show',
-          content: 'Barcode không thể trùng với mã SKU',
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Barcode không thể trùng với mã SKU",
         },
       });
       return;
@@ -276,10 +355,10 @@ class ProductEdit extends Component {
         this.props.showError({
           type: Types.ALERT_UID_STATUS,
           alert: {
-            type: 'danger',
-            title: 'Lỗi',
-            disable: 'show',
-            content: 'Vui lòng nhập giá bán lẻ',
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: "Vui lòng nhập giá bán lẻ",
           },
         });
         return;
@@ -288,10 +367,10 @@ class ProductEdit extends Component {
         this.props.showError({
           type: Types.ALERT_UID_STATUS,
           alert: {
-            type: 'danger',
-            title: 'Lỗi',
-            disable: 'show',
-            content: 'Vui lòng nhập giá nhập',
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: "Vui lòng nhập giá nhập",
           },
         });
         return;
@@ -301,39 +380,47 @@ class ProductEdit extends Component {
     var list_distribute = form.list_distribute ?? [];
 
     if (list_distribute.length > 0) {
-      list_distribute[0].element_distributes = list_distribute[0].element_distributes.map((ele) => {
-        if (ele.id != null) {
-          ele.is_edit = true;
-        } else {
-          ele.is_edit = false;
-        }
+      list_distribute[0].element_distributes =
+        list_distribute[0].element_distributes.map((ele) => {
+          if (ele.id != null) {
+            ele.is_edit = true;
+          } else {
+            ele.is_edit = false;
+          }
 
-        if (ele.id != null && ele.before_name == null) {
-          ele.before_name = ele.name;
-          ele.is_edit = true;
-        }
+          if (ele.id != null && ele.before_name == null) {
+            ele.before_name = ele.name;
+            ele.is_edit = true;
+          }
 
-        return ele;
-      });
-      list_distribute[0].element_distributes = list_distribute[0].element_distributes.map((ele) => {
-        if (ele != null && ele.sub_element_distributes != null && ele.sub_element_distributes.length > 0) {
-          ele.sub_element_distributes = ele.sub_element_distributes.map((sub) => {
-            if (sub.id != null) {
-              sub.is_edit = true;
-            } else {
-              sub.is_edit = false;
-            }
+          return ele;
+        });
+      list_distribute[0].element_distributes =
+        list_distribute[0].element_distributes.map((ele) => {
+          if (
+            ele != null &&
+            ele.sub_element_distributes != null &&
+            ele.sub_element_distributes.length > 0
+          ) {
+            ele.sub_element_distributes = ele.sub_element_distributes.map(
+              (sub) => {
+                if (sub.id != null) {
+                  sub.is_edit = true;
+                } else {
+                  sub.is_edit = false;
+                }
 
-            if (sub.id != null && sub.before_name == null) {
-              sub.before_name = sub.name;
-              sub.is_edit = true;
-            }
+                if (sub.id != null && sub.before_name == null) {
+                  sub.before_name = sub.name;
+                  sub.is_edit = true;
+                }
 
-            return sub;
-          });
-        }
-        return ele;
-      });
+                return sub;
+              }
+            );
+          }
+          return ele;
+        });
     }
 
     var distributeData = {};
@@ -355,33 +442,42 @@ class ProductEdit extends Component {
       distributeData.distribute_name = list_distribute[0].name;
       if (
         list_distribute[0].element_distributes[0] &&
-        list_distribute[0].element_distributes[0].sub_element_distributes != null &&
+        list_distribute[0].element_distributes[0].sub_element_distributes !=
+          null &&
         list_distribute[0].element_distributes[0] &&
-        list_distribute[0].element_distributes[0].sub_element_distributes.length > 0
+        list_distribute[0].element_distributes[0].sub_element_distributes
+          .length > 0
       ) {
         distributeData.has_sub = true;
-        distributeData.sub_element_distribute_name = list_distribute[0].sub_element_distribute_name;
+        distributeData.sub_element_distribute_name =
+          list_distribute[0].sub_element_distribute_name;
       }
     }
 
     distributeData.element_distributes =
-      list_distribute.length > 0 ? list_distribute[0].element_distributes : distributeData.element_distributes;
+      list_distribute.length > 0
+        ? list_distribute[0].element_distributes
+        : distributeData.element_distributes;
     const formData = { ...form };
-    if (form.description && form.description?.includes('<iframe')) {
-      const sunEditorContent = document.querySelector('.sun-editor-editable');
+    if (form.description && form.description?.includes("<iframe")) {
+      const sunEditorContent = document.querySelector(".sun-editor-editable");
       if (sunEditorContent) {
         formData.description = sunEditorContent?.innerHTML;
       }
     }
 
-    const pageNum = getQueryParams('page') || 1;
-    const limit = getQueryParams('limit') || 20;
-    const search = getQueryParams('search') || '';
-    const category_ids = getQueryParams('category_ids') || '';
-    const category_children_ids = getQueryParams('category_children_ids') || '';
-    const params = `&limit=${limit}${search ? `&search=${search}` : ''}${
-      category_ids ? `&category_ids=${category_ids}` : ''
-    }${category_children_ids ? `&category_children_ids=${category_children_ids}` : ''}`;
+    const pageNum = getQueryParams("page") || 1;
+    const limit = getQueryParams("limit") || 20;
+    const search = getQueryParams("search") || "";
+    const category_ids = getQueryParams("category_ids") || "";
+    const category_children_ids = getQueryParams("category_children_ids") || "";
+    const params = `&limit=${limit}${search ? `&search=${search}` : ""}${
+      category_ids ? `&category_ids=${category_ids}` : ""
+    }${
+      category_children_ids
+        ? `&category_children_ids=${category_children_ids}`
+        : ""
+    }`;
 
     this.props.updateDistribute(
       store_code,
@@ -397,7 +493,7 @@ class ProductEdit extends Component {
         });
 
         history.push(`/product/index/${store_code}?page=${pageNum}${params}`);
-      },
+      }
     );
   };
   goBack = (e) => {
@@ -444,23 +540,45 @@ class ProductEdit extends Component {
     });
   };
 
+  shouldComponentUpdate(nextProps) {
+    if (!shallowEqual(nextProps.product, this.props.product)) {
+      var { product } = { ...nextProps };
+      const images = product?.images?.map((image) => image?.image_url) || [];
+
+      this.setImages(images);
+    }
+
+    return true;
+  }
+
   render() {
     var { store_code, productId } = this.props;
-    var { category_product, attribute_search, attributeP, auth, product, isShowAttr, isCreate, isRemove, update } =
-      this.props;
+    var {
+      category_product,
+      attribute_search,
+      attributeP,
+      auth,
+      product,
+      isShowAttr,
+      isCreate,
+      isRemove,
+      update,
+    } = this.props;
     var { total, disableInventory, disableDistribute } = this.state;
 
     var afterAttribute = this.afterAttribute();
     return (
       <div class="container-fluid">
         <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
-        <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-          <h4 className="h4 title_content mb-0 text-gray-800">Chỉnh sửa sản phẩm:&nbsp;{product.name}</h4>
+        <div style={{ display: "flex", justifyContent: "space-between" }}>
+          <h4 className="h4 title_content mb-0 text-gray-800">
+            Chỉnh sửa sản phẩm:&nbsp;{product.name}
+          </h4>
         </div>
         <br></br>
         <div class="card mb-4">
           <div class="card-header title_content">Nhập thông tin sản phẩm</div>
-          <div class="card-body" style={{ padding: '0.8rem' }}>
+          <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
               <div class="col-lg-6">
                 <div>
@@ -477,7 +595,10 @@ class ProductEdit extends Component {
                 </div>
               </div>
 
-              <div class="col-lg-6" style={{ borderLeft: '0.5px solid #e6dfdf' }}>
+              <div
+                class="col-lg-6"
+                style={{ borderLeft: "0.5px solid #e6dfdf" }}
+              >
                 <div>
                   <Video
                     store_code={store_code}
@@ -486,41 +607,48 @@ class ProductEdit extends Component {
                     handleDataFromProductVideo={this.handleDataFromProductVideo}
                   />
                 </div>
-                <div style={{paddingTop: 20}}>
-                    <label
-                      for="txtName"
-                      style={{
-                        fontWeight: "750",
-                      }}
-                    >
-                      Hình ảnh mô tả (Tối đa 13 ảnh)
-                    </label>
-                    <div>
-                      <Upload
-                        multiple
-                        setFiles={this.handleImageData}
-                        files={this.state.images}
-                        images={product?.images?.map(image => image?.image_url)}
-                        limit={13}
-                      />
-                    </div>
+                <div style={{ paddingTop: 20 }}>
+                  <label
+                    for="txtName"
+                    style={{
+                      fontWeight: "750",
+                    }}
+                  >
+                    Hình ảnh mô tả (Tối đa 13 ảnh)
+                  </label>
+                  <div>
+                    <Upload
+                      multiple
+                      setFiles={this.handleImageData}
+                      files={this.state.images}
+                      images={this.state.images}
+                      limit={13}
+                    />
                   </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
         {getChannel() == IKITECH && (
           <div class="card mb-4">
-            <div class="card-body" style={{ padding: '0.8rem' }}>
+            <div class="card-body" style={{ padding: "0.8rem" }}>
               <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                   {update ? (
-                    <button class="btn btn-primary btn-sm" onClick={this.postProduct}>
+                    <button
+                      class="btn btn-primary btn-sm"
+                      onClick={this.postProduct}
+                    >
                       <i class="fa fa-plus"></i> Lưu thay đổi
                     </button>
                   ) : null}
 
-                  <a style={{ marginLeft: '10px' }} onClick={this.goBack} class={`btn btn-warning btn-sm color-white `}>
+                  <a
+                    style={{ marginLeft: "10px" }}
+                    onClick={this.goBack}
+                    class={`btn btn-warning btn-sm color-white `}
+                  >
                     <i class="fa fa-arrow-left"></i> Trở về
                   </a>
                 </div>
@@ -530,15 +658,19 @@ class ProductEdit extends Component {
         )}
         <div
           class={`card mb-4 ${
-            typeof isShowAttr == 'undefined' || isShowAttr == false || getChannel() == IKIPOS ? 'hide' : ''
+            typeof isShowAttr == "undefined" ||
+            isShowAttr == false ||
+            getChannel() == IKIPOS
+              ? "hide"
+              : ""
           }`}
         >
           <div class="card-header title_content">Thuộc tính sản phẩm</div>
-          <div class="card-body" style={{ padding: '0.8rem' }}>
+          <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
               <div class="col-lg-12">
                 <div>
-                  <div class="card-body" style={{ padding: '0.8rem' }}>
+                  <div class="card-body" style={{ padding: "0.8rem" }}>
                     <Attribute
                       isCreate={isCreate}
                       isRemove={isRemove}
@@ -554,13 +686,17 @@ class ProductEdit extends Component {
           </div>
         </div>
 
-        <div class={`card mb-4 ${this.state.disableDistribute == true ? '' : 'hide'}`}>
+        <div
+          class={`card mb-4 ${
+            this.state.disableDistribute == true ? "" : "hide"
+          }`}
+        >
           <div class="card-header title_content">Phân loại sản phẩm</div>
-          <div class="card-body" style={{ padding: '0.8rem' }}>
+          <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
               <div class="col-lg-12">
                 <div>
-                  <div class="card-body" style={{ padding: '0.8rem' }}>
+                  <div class="card-body" style={{ padding: "0.8rem" }}>
                     <Distribute
                       disableDistribute={disableDistribute}
                       disableInventory={disableInventory}
@@ -577,7 +713,7 @@ class ProductEdit extends Component {
         {getChannel() == IKITECH && (
           <div class="card mb-4">
             <div class="card-header title_content">Nội dung chi tiết</div>
-            <div class="card-body" style={{ padding: '0.8rem' }}>
+            <div class="card-body" style={{ padding: "0.8rem" }}>
               <div class="row">
                 <ContentDetail
                   store_code={store_code}
@@ -592,26 +728,32 @@ class ProductEdit extends Component {
         {getChannel() == IKITECH && (
           <div class="card mb-4">
             <div class="card-header title_content">Tối ưu SEO</div>
-            <div class="card-body" style={{ padding: '0.8rem' }}>
+            <div class="card-body" style={{ padding: "0.8rem" }}>
               <div class="row">
-                <SeoOption product={product} handleDataFromContent={this.handleDataFromCustomizeSEO} />
+                <SeoOption
+                  product={product}
+                  handleDataFromContent={this.handleDataFromCustomizeSEO}
+                />
               </div>
             </div>
           </div>
         )}
         <div class="card mb-4">
-          <div class="card-body" style={{ padding: '0.8rem' }}>
+          <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 {update ? (
-                  <button class="btn btn-primary btn-sm" onClick={this.postProduct}>
+                  <button
+                    class="btn btn-primary btn-sm"
+                    onClick={this.postProduct}
+                  >
                     <i class="fa fa-plus"></i> Lưu thay đổi
                   </button>
                 ) : null}
 
                 <a
                   className="color-white"
-                  style={{ marginLeft: '10px' }}
+                  style={{ marginLeft: "10px" }}
                   onClick={this.goBack}
                   class={`btn btn-warning btn-sm color-white `}
                 >
@@ -630,7 +772,8 @@ const mapStateToProps = (state) => {
   return {
     attributeP: state.attributePReducers.attribute_product.allAttrbute,
     category_product: state.categoryPReducers.category_product.allCategoryP,
-    attribute_search: state.attributeSearchReducers.attribute_search.allAttribute,
+    attribute_search:
+      state.attributeSearchReducers.attribute_search.allAttribute,
     product: state.productReducers.product.productId,
     alert: state.productReducers.alert.alert_uid,
     blogs: state.blogReducers.blog.allBlog,
@@ -655,13 +798,37 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(productAction.fetchProductId(store_code, productId));
     },
     updateProduct: (store_code, product, productId, page) => {
-      dispatch(productAction.updateProduct(store_code, product, productId, page));
+      dispatch(
+        productAction.updateProduct(store_code, product, productId, page)
+      );
     },
-    updateDistribute: (store_code, product, productId, branchId, data, page, params, funcModal) => {
-      dispatch(productAction.updateDistribute(store_code, product, productId, branchId, data, page, params, funcModal));
+    updateDistribute: (
+      store_code,
+      product,
+      productId,
+      branchId,
+      data,
+      page,
+      params,
+      funcModal
+    ) => {
+      dispatch(
+        productAction.updateDistribute(
+          store_code,
+          product,
+          productId,
+          branchId,
+          data,
+          page,
+          params,
+          funcModal
+        )
+      );
     },
     fetchAllProductV2: (store_code, branch_id, page, params) => {
-      dispatch(productAction.fetchAllProductV2(store_code, branch_id, page, params));
+      dispatch(
+        productAction.fetchAllProductV2(store_code, branch_id, page, params)
+      );
     },
     fetchAllBlog: (id, page) => {
       dispatch(blogAction.fetchAllBlog(id, page));

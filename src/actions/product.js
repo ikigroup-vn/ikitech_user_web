@@ -865,7 +865,6 @@ export const destroyAttributeP = ($this, store_code, data) => {
   };
 };
 export const uploadAvataProduct = (file) => {
-  console.log(file);
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -966,17 +965,16 @@ export const editStock = (
 export const uploadListImgProduct = function (files) {
   return async (dispatch) => {
     var images = [];
+    dispatch({
+      type: Types.LOADING_UPLOAD_ALL_PRODUCT_IMG,
+      loading: true,
+    });
     for (let i = 0; i < files.length; i++) {
       const fd = new FormData();
       fd.append(`image`, await compressed(files[i]));
       try {
-        dispatch({
-          type: Types.LOADING_UPLOAD_ALL_PRODUCT_IMG,
-          loading: true,
-        });
         var res = await uploadApi.upload(fd);
       } catch (error) {
-
         dispatch({
           type: Types.ALERT_UID_STATUS,
           alert: {
@@ -1008,11 +1006,11 @@ export const uploadListImgProduct = function (files) {
           data: images,
         });
       }
-      dispatch({
-        type: Types.LOADING_UPLOAD_ALL_PRODUCT_IMG,
-        loading: false,
-      });
     }
+    dispatch({
+      type: Types.LOADING_UPLOAD_ALL_PRODUCT_IMG,
+      loading: false,
+    });
   };
 };
 export const uploadListImgProductV2 = function (files) {
