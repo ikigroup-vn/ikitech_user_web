@@ -23,7 +23,6 @@ class Create extends Component {
   render() {
     var { products, history, vouchers } = this.props;
     var { store_code, type } = this.props;
-    console.log('products', products)
     return (
       <div class="container-fluid">
         <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />

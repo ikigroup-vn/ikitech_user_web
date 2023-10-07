@@ -6,7 +6,6 @@ import InfoProduct from "../../../components/Product/Create/InfoProduct";
 import ContentDetail from "../../../components/Product/Create/ContentDetail";
 import Attribute from "../../../components/Product/Create/Attribute";
 import Distribute from "../../../components/Product/Create/Distribute";
-import StoreImage from "../../../components/Product/Create/StoreImage";
 import Video from "../../../components/Product/Create/Video";
 
 import * as productAction from "../../../actions/product";
@@ -19,6 +18,7 @@ import Alert from "../../../components/Partials/Alert";
 import SeoOption from "../../../components/Product/Create/SeoOption";
 import getChannel, { IKITECH, IKIPOS } from "../../../ultis/channel";
 import { isEmpty, removeVietnameseTones } from "../../../ultis/helpers";
+import Upload from "../../../components/Upload/index.js";
 class ProductCreate extends Component {
   constructor(props) {
     super(props);
@@ -29,6 +29,7 @@ class ProductCreate extends Component {
       disableDistribute: false,
       disableInventory: false,
       attributeSearch: [],
+      images: [],
     };
   }
 
@@ -131,7 +132,6 @@ class ProductCreate extends Component {
   };
 
   checkDistribute = (status, _status) => {
-    console.log(status, _status);
     this.setState({ disableDistribute: status, disableInventory: _status });
   };
 
@@ -152,7 +152,6 @@ class ProductCreate extends Component {
             form.list_distribute[0].element_distributes.forEach(
               (element, index) => {
                 try {
-                  console.log(element);
                   const price =
                     element.price != null
                       ? element.price
@@ -200,10 +199,6 @@ class ProductCreate extends Component {
                     removeVietnameseTones(barcode);
                   form.list_distribute[0].element_distributes[index].stock =
                     quantity_in_stock;
-                  console.log(
-                    price,
-                    form.list_distribute[0].element_distributes[index].price
-                  );
 
                   if (typeof element.sub_element_distributes != "undefined") {
                     if (element.sub_element_distributes.length > 0) {
@@ -268,7 +263,6 @@ class ProductCreate extends Component {
                             ].sub_element_distributes[_index].barcode =
                               removeVietnameseTones(barcode);
 
-                            console.log("sub element form", form);
                           } catch (error) {
                             form.list_distribute[0].element_distributes[
                               index
@@ -298,7 +292,6 @@ class ProductCreate extends Component {
                     }
                   }
                 } catch (error) {
-                  console.log(error);
                   form.list_distribute[0].element_distributes[index].price = 0;
                   form.list_distribute[0].element_distributes[
                     index
@@ -327,7 +320,6 @@ class ProductCreate extends Component {
       form.quantity_in_stock =
         form.list_distribute.length > 0 ? total : form.quantity_in_stock;
     }
-    // this.props.postProduct(store_code, form)
     if (form.name == null || !isEmpty(form.name)) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
@@ -379,98 +371,9 @@ class ProductCreate extends Component {
         return;
       }
     }
-    // if (form.import_price == null || !isEmpty(form.import_price)) {
-    //   this.props.showError({
-    //     type: Types.ALERT_UID_STATUS,
-    //     alert: {
-    //       type: "danger",
-    //       title: "Lỗi",
-    //       disable: "show",
-    //       content: "Vui lòng nhập giá nhập",
-    //     },
-    //   });
-    //   return;
-    // }
+    
     var is_error = false;
-    // if (typeof form.list_distribute != "undefined") {
-    //   if (typeof form.list_distribute[0] != "undefined") {
-    //     if (typeof form.list_distribute[0].element_distributes != "undefined") {
-    //       if (form.list_distribute[0].element_distributes.length > 0) {
-    //         form.list_distribute[0].element_distributes.forEach(
-    //           (element, index) => {
-    //             if (typeof element?.sub_element_distributes != "undefined") {
-    //               if (element?.sub_element_distributes.length > 0) {
-    //                 element?.sub_element_distributes.forEach(
-    //                   (_element, _index) => {
-    //                     const price = _element.price
-    //                       .toString()
-    //                       .replace(/,/g, "")
-    //                       .replace(/\./g, "");
-    //                     const import_price = _element.import_price
-    //                       .toString()
-    //                       .replace(/,/g, "")
-    //                       .replace(/\./g, "");
-    //                     console.log(
-    //                       price,
-    //                       import_price,
-    //                       Number(import_price),
-    //                       typeof Number(import_price),
-    //                       Number(import_price) == 0
-    //                     );
-    //                     if (
-    //                       // price == null ||
-    //                       Number(price) == 0
-    //                       // !isEmpty(price)
-    //                     ) {
-    //                       is_error = true;
-    //                       this.props.showError({
-    //                         type: Types.ALERT_UID_STATUS,
-    //                         alert: {
-    //                           type: "danger",
-    //                           title: "Lỗi",
-    //                           disable: "show",
-    //                           content: "Vui lòng nhập giá bán lẻ cho phân loại",
-    //                         },
-    //                       });
-    //                       this.setState({
-    //                         isError: true,
-    //                       });
-    //                     }
-
-    //                     if (
-    //                       // import_price == null ||
-    //                       Number(import_price) == 0
-    //                       // !isEmpty(import_price)
-    //                     ) {
-    //                       is_error = true;
-    //                       this.props.showError({
-    //                         type: Types.ALERT_UID_STATUS,
-    //                         alert: {
-    //                           type: "danger",
-    //                           title: "Lỗi",
-    //                           disable: "show",
-    //                           content: "Vui lòng nhập giá nhập cho phân loại",
-    //                         },
-    //                       });
-    //                       this.setState({
-    //                         isError: true,
-    //                       });
-    //                     } else {
-    //                       is_error = false;
-    //                       this.setState({
-    //                         isError: false,
-    //                       });
-    //                     }
-    //                   }
-    //                 );
-    //               }
-    //             }
-    //           }
-    //         );
-    //       }
-    //     }
-    //   }
-    // }
+    
     if (this.state.isError || is_error) {
       return;
     }
@@ -518,7 +421,6 @@ class ProductCreate extends Component {
         });
       });
       formdata.list_attribute = listAttribute;
-      console.log(listAttribute);
       return { form: formdata };
     });
   };
@@ -530,13 +432,11 @@ class ProductCreate extends Component {
       return { form: formdata };
     });
 
-    console.log("form", this.state.form);
   };
   onChangeQuantityStock = (total) => {
     this.setState({ total: total });
   };
   handleDataFromProductImg = (imgs) => {
-    console.log(imgs);
     this.setState((prevState, props) => {
       var formdata = { ...prevState.form };
       formdata.images = imgs;
@@ -548,13 +448,6 @@ class ProductCreate extends Component {
     this.setState((prevState, props) => {
       var formdata = { ...prevState.form };
       formdata.video_url = video;
-      return { form: formdata };
-    });
-  };
-  handleDataFromAvatarImg = (data) => {
-    this.setState((prevState, props) => {
-      var formdata = { ...prevState.form };
-      formdata.index_image_avatar = data.avatar_product;
       return { form: formdata };
     });
   };
@@ -588,6 +481,17 @@ class ProductCreate extends Component {
     var { history } = this.props;
     history.goBack();
   };
+
+  setImages = (images) => {
+    this.setState({ images });
+  };
+  
+  handleImageData = (data) => {
+    this.handleDataFromProductImg([
+     ...data
+    ])
+    this.setImages(data)
+  }
   render() {
     var { store_code } = this.props;
     var {
@@ -635,13 +539,25 @@ class ProductCreate extends Component {
                     handleDataFromProductVideo={this.handleDataFromProductVideo}
                   />
                 </div>
-                <div>
-                  <StoreImage
-                    store_code={store_code}
-                    handleDataFromAvatarImg={this.handleDataFromAvatarImg}
-                    handleDataFromProductImg={this.handleDataFromProductImg}
-                  />
-                </div>
+                <div style={{paddingTop: 20}}>
+                    <label
+                      for="txtName"
+                      style={{
+                        fontWeight: "750",
+                      }}
+                    >
+                      Hình ảnh mô tả (Tối đa 13 ảnh)
+                    </label>
+                    <div>
+                      <Upload
+                        multiple
+                        setFiles={this.handleImageData}
+                        files={this.state.images}
+                        images={""}
+                        limit={13}
+                      />
+                    </div>
+                  </div>
               </div>
             </div>
           </div>
@@ -747,17 +663,6 @@ class ProductCreate extends Component {
             </div>
           </div>
         )}
-        {/* <div class="card mb-4">
-          <div class="card-header title_content">Thông tin khuyến mại</div>
-          <div class="card-body" style={{ padding: "0.8rem" }}>
-            <div class="row">
-              <InfoDiscount
-                blogs = {this.props.blogs.data || []}
-                handleDataFromDiscount={this.handleDataFromDiscount}
-              />
-            </div>
-          </div>
-        </div> */}
         <div class="card mb-4">
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">

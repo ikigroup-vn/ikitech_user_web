@@ -5,10 +5,8 @@ import Footer from "../../../components/Partials/Footer";
 import { connect } from "react-redux";
 import { Redirect } from "react-router-dom";
 import Loading from "../../Loading";
-import * as Types from "../../../constants/ActionType";
 import NotAccess from "../../../components/Partials/NotAccess";
 import Edit from "./Edit";
-import * as notificationAction from "../../../actions/notification";
 
 class Index extends Component {
   constructor(props) {
@@ -79,11 +77,7 @@ class Index extends Component {
         )}
       </div>
     );
-    // } else if (this.props.auth === false) {
-    //     return <Redirect to="/login" />;
-    // } else {
-    //     return <Loading />;
-    // }
+  
   }
 }
 

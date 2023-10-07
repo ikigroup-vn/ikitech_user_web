@@ -9,9 +9,8 @@ import ModalRemove from "../../components/Collaborator/Config/ModalRemove";
 import TopReport from "../../components/Collaborator/TopReport";
 
 import Alert from "../../components/Partials/Alert";
-import { Redirect, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import Loading from "../Loading";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import Config from "../../components/Collaborator/Config";
@@ -65,7 +64,6 @@ class collaborator extends Component {
         permissions.collaborator_add_sub_balance;
       var isShow = permissions.collaborator_list;
 
-      // var isShow = payment_request_list == false && config == false && payment_request_history == false && collaborator_list == false ? false : true
       const queryString = window.location.search;
       const urlParams = new URLSearchParams(queryString);
       var tabIndex = urlParams.get("tab-index");

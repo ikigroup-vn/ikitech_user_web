@@ -1,11 +1,12 @@
-import * as Types from "../../constants/ActionType";
+import * as Types from '../../constants/ActionType';
 
 var initialState = {
-  product_img: "",
+  product_img: '',
   listImgProduct: [],
   listImgProductV2: [],
   listImgDistribute: [],
-  product_video: "",
+  product_video: '',
+  loadingImg: false,
 };
 
 export const productImg = (state = initialState, action) => {
@@ -19,6 +20,9 @@ export const productImg = (state = initialState, action) => {
       return newState;
     case Types.UPLOAD_ALL_PRODUCT_IMG:
       newState.listImgProduct = action.data;
+      return newState;
+    case Types.LOADING_UPLOAD_ALL_PRODUCT_IMG:
+      newState.loadingImg = action.loading;
       return newState;
     case Types.UPLOAD_ALL_PRODUCT_IMG_V2:
       newState.listImgProductV2 = action.data;

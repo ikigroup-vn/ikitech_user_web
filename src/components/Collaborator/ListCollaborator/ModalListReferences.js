@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { shallowEqual } from "../../../ultis/shallowEqual";
 import Table from "./ModalListReferences/Table";
 import * as customerAction from "../../../actions/customer";
 import Pagination from "./ModalListReferences/Pagination";

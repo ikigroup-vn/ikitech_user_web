@@ -92,8 +92,8 @@ export const exportAllListOrder = (
                     product_discount_amount: item.product_discount_amount,
                     voucher_discount_amount: item.voucher_discount_amount,
 
-                    total_after_discount: item.total_after_discount,
                     total_before_discount: item.total_before_discount,
+                    total_after_discount: item.total_after_discount,
 
                     balance_collaborator_used: item.balance_collaborator_used,
                     bonus_points_amount_used: item.bonus_points_amount_used,
@@ -217,10 +217,11 @@ export const exportAllListOrder = (
                         newItem["Giảm giá voucher"] = value;
                       }
 
-                      if (key == "total_after_discount") {
+                      if (key == "total_before_discount") {
                         newItem["Trước khi giảm giá"] = value;
                       }
-                      if (key == "total_before_discount") {
+
+                      if (key == "total_after_discount") {
                         newItem["Sau khi giảm giá"] = value;
                       }
 
