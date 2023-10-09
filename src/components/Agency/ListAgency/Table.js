@@ -176,6 +176,12 @@ class Table extends Component {
     }
   };
 
+  handleShowSidebar = (data) => {
+    const { setSaleInfo, setShowCustomerOfSale } = this.props;
+    setSaleInfo(data);
+    setShowCustomerOfSale(true);
+  };
+
   showData = (agencys) => {
     var { store_code, listItemSelected, auto_set_level_agency } = this.props;
 
@@ -276,7 +282,9 @@ class Table extends Component {
                 />
               </td>
               <td>{data.customer.name}</td>
-              <td>{data.customer.phone_number}</td>
+              <td>
+                {data.customer.phone_number}
+              </td>
               <td>
                 <span className="primary">
                   <div
@@ -295,6 +303,12 @@ class Table extends Component {
                   </div>
                 </span>
               </td>
+
+              <td><span
+                className="total_customers primary"
+                onClick={() => this.handleShowSidebar(data)}
+              >{data?.customer?.referral_phone_number || null}</span></td>
+
               <td>
                 <select
                   style={{ width: "100%" }}
@@ -316,22 +330,7 @@ class Table extends Component {
                   ))}
                 </select>
               </td>
-              {/* <td>
-                <label className="status-product on-off">
-                  <input
-                    ref={(ref) => (this["checked" + data.id] = ref)}
-                    type="checkbox"
-                    hidden
-                    class="checkbox"
-                    name={`${randomString(10)}`}
-                    checked={data.status == 1 ? true : false}
-                    onChange={(e) => {
-                      this.onChangeStatus(e, data.id);
-                    }}
-                  />
-                  <div></div>
-                </label>
-              </td> */}
+              
               <td
                 style={{
                   display: "flex",
@@ -527,6 +526,7 @@ class Table extends Component {
               <th>Họ tên</th>
               <th>Số điện thoại</th>
               <th>Số dư hoa hồng</th>
+              <th>Mã giới thiệu</th>
 
               <th>
                 <select

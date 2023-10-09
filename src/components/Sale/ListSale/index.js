@@ -5,8 +5,8 @@ import { getQueryParams, removeAscent } from "../../../ultis/helpers";
 import * as staffAction from "../../../actions/staff";
 import * as saleAction from "../../../actions/sale";
 import { getBranchId } from "../../../ultis/branchUtils";
-import SidebarShowCustomerOfSale from "./SidebarShowCustomerOfSale";
 import SidebarShowStatisticalSale from "./SidebarShowStatisticalSale.";
+import SiderbarCusReferPhone from "../../Agency/ListAgency/SiderbarCusReferPhone/index.js";
 
 class ListSale extends Component {
   constructor(props) {
@@ -202,13 +202,13 @@ class ListSale extends Component {
             />
           </div>
         </div>
-        <SidebarShowCustomerOfSale
+        <SiderbarCusReferPhone
           store_code={store_code}
           showSidebar={showCustomerOfSale}
           setShowSidebar={this.setShowCustomerOfSale}
           saleInfo={saleInfo}
           setSaleInfo={this.setSaleInfo}
-        ></SidebarShowCustomerOfSale>
+        ></SiderbarCusReferPhone>
         <SidebarShowStatisticalSale
           showSidebar={showStatisticalSale}
           setShowSidebar={this.setShowStatisticalSale}
