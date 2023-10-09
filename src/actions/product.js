@@ -115,12 +115,6 @@ function getSheetData(data, header) {
 }
 
 async function saveAsExcel(value, nameFile = "Danh sách sản phẩm") {
-  // var data = [
-  //   { name: "John", city: "Seattle" },
-  //   { name: "Mike", city: "Los Angeles" },
-  //   { name: "Zach", city: "New York" }
-  // ];
-  // let header = ["Name", "City"];
   var data = value.data;
   var data_header = value.header;
   XlsxPopulate.fromBlankAsync().then(async (workbook) => {
@@ -130,15 +124,22 @@ async function saveAsExcel(value, nameFile = "Danh sách sản phẩm") {
     const totalColumns = sheetData[0].length;
 
     sheet1.cell("A1").value(sheetData);
+    
     const range = sheet1.usedRange();
     const endColumn = String.fromCharCode(64 + totalColumns);
     sheet1.row(1).style("bold", true);
+    const listColumn = ["B","C","E","F","G","H","I","J","K","L","M","N","O","Q","R","S","T","U"];
+    for(let column of listColumn){
+      sheet1.column(column).width(20);
+    }
+    sheet1.column("A").width(65);
+    sheet1.column("D").width(25);
+    sheet1.column("P").width(25);
     sheet1.range("A1:M1").style("fill", "F4D03F");
     sheet1.range("N1:" + endColumn + "1").style("fill", "92d050");
     // range.style("border", true);
     sheet1.freezePanes(1, 1);
     return workbook.outputAsync().then((res) => {
-      console.log(res);
       saveAs(res, `${nameFile}.xlsx`);
     });
   });
@@ -159,10 +160,6 @@ export const fetchAllListProduct = (store_code, search) => {
         if (typeof res.data.data != "undefined") {
           if (typeof res.data.data.data != "undefined") {
             if (res.data.data.data.length > 0) {
-              console.log(
-                "🚀 ~ productApi.fetchAllListProduct ~ res.data.data.data:",
-                res.data.data.data
-              );
               var newArray = [];
 
               for (const item of res.data.data.data) {
@@ -527,6 +524,7 @@ export const fetchAllListProduct = (store_code, search) => {
     });
   };
 };
+
 export const fetchProductInventory = (store_code, branch_id, params) => {
   return (dispatch) => {
     dispatch({
