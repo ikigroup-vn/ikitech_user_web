@@ -26,6 +26,7 @@ class Table extends Component {
       modalProduct: "",
       formData: "",
       passFormdata: {},
+      listItemSelected: [],
     };
   }
 
@@ -115,9 +116,39 @@ class Table extends Component {
     });
     e.preventDefault();
   };
+
+  handleListItemSelected = (product) => {
+    const { listItemSelected } = this.state;
+    const isChecked = this.isChecked();
+    let newItemSelected = [];
+    if (isChecked) {
+      newItemSelected = listItemSelected.filter(
+        (item) =>
+          item.product_id !== product.product_id ||
+          (item.distribute_name !== product.distribute_name &&
+            item.sub_element_distribute_name !==
+              product.sub_element_distribute_name)
+      );
+    } else {
+      newItemSelected = [...listItemSelected, product];
+    }
+    this.setState({
+      listItemSelected: newItemSelected,
+    });
+  };
+  isChecked = (data) => {
+    const { listItemSelected } = this.state;
+    return listItemSelected.some(
+      (item) =>
+        item.product_id === data.product_id &&
+        item.distribute_name === data.distribute_name &&
+        item.sub_element_distribute_name === data.sub_element_distribute_name
+    );
+  };
   showData = (products, per_page, current_page) => {
     var result = null;
     var { store_code, page } = this.props;
+    var { listItemSelected } = this.state;
     if (typeof products === "undefined") {
       return result;
     }
@@ -177,9 +208,12 @@ class Table extends Component {
             index={index}
             store_code={store_code}
             discount={discount}
+            listItemSelected={listItemSelected}
             handleCallBackElement={this.handleCallBackElement}
             handleCallBackSubElement={this.handleCallBackSubElement}
             handleCallBackProduct={this.handleCallBackProduct}
+            handleListItemSelected={this.handleListItemSelected}
+            isChecked={this.isChecked}
           />
         );
       });
@@ -221,7 +255,7 @@ class Table extends Component {
         : false;
     var multiDelete = selected.length > 0 ? "show" : "hide";
     var { _delete, update, insert } = this.props;
-    console.log(products);
+
     return (
       <div>
         <button
@@ -242,6 +276,7 @@ class Table extends Component {
           <thead>
             <tr>
               <th>STT</th>
+              {/* <th></th> */}
               <th>Hình ảnh</th>
               <th>Mã SKU</th>
               <th>Mã Barcode</th>
