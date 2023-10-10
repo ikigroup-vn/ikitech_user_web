@@ -152,6 +152,12 @@ class Table extends Component {
     this.setState({ modalImg: url });
   };
 
+  handleShowSidebar = (data) => {
+    const { setSaleInfo, setShowCustomerOfSale } = this.props;
+    setSaleInfo(data);
+    setShowCustomerOfSale(true);
+  };
+
   showData = (collaborators) => {
     var { store_code, collaborator_add_sub_balance } = this.props;
     const permissionChangeBalance = collaborator_add_sub_balance;
@@ -199,7 +205,7 @@ class Table extends Component {
         }
         return (
           <React.Fragment>
-            <tr class="sub-container hover-product">
+            <tr class="sub-container hover-product" colSpan={8}>
               <td>
                 <button
                   type="button"
@@ -225,7 +231,9 @@ class Table extends Component {
                 />
               </td>
               <td>{data.customer.name}</td>
-              <td>{data.customer.phone_number}</td>
+              <td>
+                {data.customer.phone_number}
+              </td>
               <td>
                 <div
                   className="collaborators_balance"
@@ -238,9 +246,12 @@ class Table extends Component {
                 </div>
               </td>
 
-              <td>{data.customer.referral_phone_number || null}</td>
+              <td><span
+                className="total_customers primary"
+                onClick={() => this.handleShowSidebar(data)}
+              >{data?.customer?.referral_phone_number || null}</span></td>
               
-              <td className="btn-voucher">
+              <td>
                 <Link
                   style={{ margin: "2px 0" }}
                   to={`/order/${this.props.store_code}?collaborator_by_customer_id=${data.customer_id}&tab-index=1&page=${this.props.page}&search=${this.props.searchValue}`}

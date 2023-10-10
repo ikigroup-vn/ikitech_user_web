@@ -7,6 +7,8 @@ import Table from "./Table";
 import * as customerAction from "../../../actions/customer";
 import Pagination from "./Pagination";
 import { getQueryParams, insertParam } from "../../../ultis/helpers";
+import SidebarShowCustomerOfSale from "../../Sale/ListSale/SidebarShowCustomerOfSale.js";
+import SiderbarCusReferPhone from "../../Agency/ListAgency/SiderbarCusReferPhone/index.js";
 
 class ListCollaborator extends Component {
   constructor(props) {
@@ -16,6 +18,8 @@ class ListCollaborator extends Component {
       page: getQueryParams("page") || 1,
       searchValue: getQueryParams("search") || "",
       numPage: getQueryParams("limit") || 20,
+      showCustomerOfSale: false,
+      saleInfo: {},
     };
   }
 
@@ -87,6 +91,18 @@ class ListCollaborator extends Component {
     this.setState({ searchValue: e.target.value });
   };
 
+  setShowCustomerOfSale = (isShowed) => {
+    this.setState({
+      showCustomerOfSale: isShowed,
+    });
+  };
+
+  setSaleInfo = (saleInfo) => {
+    this.setState({
+      saleInfo,
+    });
+  };
+
   render() {
     var {
       customer,
@@ -112,7 +128,7 @@ class ListCollaborator extends Component {
         : customer.name;
 
     var { showChatBox, searchValue, page, numPage } = this.state;
-    console.log(this.props.state);
+    
     return (
       <div id="">
         <div class="row" style={{ "justify-content": "space-between" }}>
@@ -160,6 +176,8 @@ class ListCollaborator extends Component {
             page={page}
             searchValue={searchValue}
             numPage={numPage}
+            setShowCustomerOfSale={this.setShowCustomerOfSale}
+            setSaleInfo={this.setSaleInfo}
           />
           <div style={{ display: "flex", justifyContent: "end" }}>
             <div style={{ display: "flex" }}>
@@ -200,6 +218,14 @@ class ListCollaborator extends Component {
             />
           </div>
         </div>
+
+        <SiderbarCusReferPhone
+          store_code={store_code}
+          showSidebar={this.state.showCustomerOfSale}
+          setShowSidebar={this.setShowCustomerOfSale}
+          saleInfo={this.state.saleInfo}
+          setSaleInfo={this.setSaleInfo}
+        ></SiderbarCusReferPhone>
 
         <Chat
           customerName={customerName}
