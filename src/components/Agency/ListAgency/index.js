@@ -1,24 +1,25 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import * as agencyAction from "../../../actions/agency";
-import Chat from "../../Chat";
-import * as Env from "../../../ultis/default";
-import Table from "./Table";
-import * as customerAction from "../../../actions/customer";
-import Pagination from "./Pagination";
-import { getQueryParams, insertParam } from "../../../ultis/helpers";
-import ModalAutoSetLevelAgency from "./ModalAutoSetLevelAgency";
-import ModalAutoSetLevelAgencyAll from "./ModalAutoSetLevelAgencyAll";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import * as agencyAction from '../../../actions/agency';
+import Chat from '../../Chat';
+import * as Env from '../../../ultis/default';
+import Table from './Table';
+import * as customerAction from '../../../actions/customer';
+import Pagination from './Pagination';
+import { getQueryParams, insertParam } from '../../../ultis/helpers';
+import ModalAutoSetLevelAgency from './ModalAutoSetLevelAgency';
+import ModalAutoSetLevelAgencyAll from './ModalAutoSetLevelAgencyAll';
+import SiderbarCusReferPhone from './SiderbarCusReferPhone/index.js';
 
 class ListAgency extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      showChatBox: "hide",
-      page: getQueryParams("page") || 1,
-      searchValue: getQueryParams("search") || "",
-      numPage: getQueryParams("limit") || 20,
-      typeAgency: getQueryParams("agency_type_id") || "",
+      showChatBox: 'hide',
+      page: getQueryParams('page') || 1,
+      searchValue: getQueryParams('search') || '',
+      numPage: getQueryParams('limit') || 20,
+      typeAgency: getQueryParams('agency_type_id') || '',
       listItemSelected: [],
     };
   }
@@ -63,10 +64,10 @@ class ListAgency extends Component {
   getParams = (searchValue, type, limit = 20) => {
     var params = ``;
 
-    if (searchValue != "" && searchValue != null) {
+    if (searchValue != '' && searchValue != null) {
       params = params + `&search=${searchValue}`;
     }
-    if (type != "" && type != null) {
+    if (type != '' && type != null) {
       params = params + `&agency_type_id=${type}`;
     }
     params += `&limit=${limit}`;
@@ -82,7 +83,7 @@ class ListAgency extends Component {
     var params = this.getParams(searchValue, typeAgency, numPage);
     this.setPage(1);
     insertParam({ search: searchValue });
-    const page = getQueryParams("page");
+    const page = getQueryParams('page');
     if (page) {
       insertParam({ page: 1 });
     }
@@ -109,72 +110,59 @@ class ListAgency extends Component {
     this.setState({ searchValue: e.target.value });
   };
   onAutoSetLevelAgencyType = (from, to, funcModal, type) => {
-    const { searchValue, numPage, typeAgency, listItemSelected, page } =
-      this.state;
+    const { searchValue, numPage, typeAgency, listItemSelected, page } = this.state;
     const { autoSetLevelAgencyType, store_code, fetchAllAgency } = this.props;
     const params = this.getParams(searchValue, typeAgency, numPage);
 
     autoSetLevelAgencyType(
       store_code,
       {
-        is_all: type === "all" ? true : false,
-        agency_ids: type === "all" ? [] : listItemSelected,
+        is_all: type === 'all' ? true : false,
+        agency_ids: type === 'all' ? [] : listItemSelected,
         date_from: from,
         date_to: to,
       },
       () => {
         if (funcModal) funcModal();
-        window.$(".modal").modal("hide");
+        window.$('.modal').modal('hide');
         this.setListItemSelected([]);
         fetchAllAgency(this.props.store_code, page, params);
-      }
+      },
     );
   };
 
+  setShowCustomerOfSale = (isShowed) => {
+    this.setState({
+      showCustomerOfSale: isShowed,
+    });
+  };
+
+  setSaleInfo = (saleInfo) => {
+    this.setState({
+      saleInfo,
+    });
+  };
+
   render() {
-    var {
-      customer,
-      chat,
-      agencys,
-      store_code,
-      tabId,
-      types,
-      config,
-      agency_add_sub_balance,
-      agency_change_level,
-    } = this.props;
+    var { customer, chat, agencys, store_code, tabId, types, config, agency_add_sub_balance, agency_change_level } =
+      this.props;
 
     var customerImg =
-      typeof customer.avatar_image == "undefined" ||
-      customer.avatar_image == null
+      typeof customer.avatar_image == 'undefined' || customer.avatar_image == null
         ? Env.IMG_NOT_FOUND
         : customer.avatar_image;
-    var customerId =
-      typeof customer.id == "undefined" || customer.id == null
-        ? null
-        : customer.id;
-    var customerName =
-      typeof customer.name == "undefined" || customer.name == null
-        ? "Trống"
-        : customer.name;
+    var customerId = typeof customer.id == 'undefined' || customer.id == null ? null : customer.id;
+    var customerName = typeof customer.name == 'undefined' || customer.name == null ? 'Trống' : customer.name;
 
-    var {
-      showChatBox,
-      searchValue,
-      page,
-      numPage,
-      typeAgency,
-      listItemSelected,
-    } = this.state;
-    console.log(this.props.state);
+    var { showChatBox, searchValue, page, numPage, typeAgency, listItemSelected } = this.state;
 
     return (
       <div id="">
-        <div class="row" style={{ "justify-content": "space-between" }}>
+        <div class="row" style={{ 'justify-content': 'space-between' }}>
           <form onSubmit={this.searchData}>
-            <div class="input-group mb-6" style={{ padding: "7px 20px" }}>
+            <div class="input-group mb-6" style={{ padding: '7px 20px' }}>
               <input
-                style={{ maxWidth: "400px", minWidth: "300px" }}
+                style={{ maxWidth: '400px', minWidth: '300px' }}
                 type="search"
                 name="txtSearch"
                 value={searchValue}
@@ -192,15 +180,15 @@ class ListAgency extends Component {
 
           <div
             style={{
-              display: "flex",
-              gap: "10px",
-              alignItems: "center",
-              flexWrap: "wrap",
+              display: 'flex',
+              gap: '10px',
+              alignItems: 'center',
+              flexWrap: 'wrap',
             }}
           >
             {listItemSelected?.length > 0 && config?.auto_set_level_agency && (
               <button
-                style={{ margin: "auto 0px" }}
+                style={{ margin: 'auto 0px' }}
                 class={`btn btn-primary btn-icon-split btn-sm `}
                 data-toggle="modal"
                 data-target="#autoSetLevelAgency"
@@ -208,14 +196,14 @@ class ListAgency extends Component {
                 <span class="icon text-white-50">
                   <i className="fa fa-cog"></i>
                 </span>
-                <span style={{ color: "white" }} class="text">
+                <span style={{ color: 'white' }} class="text">
                   Tự động cập nhật cấp theo doanh số đã chọn
                 </span>
               </button>
             )}
             {config?.auto_set_level_agency && (
               <button
-                style={{ margin: "auto 0px" }}
+                style={{ margin: 'auto 0px' }}
                 class={`btn btn-success btn-icon-split btn-sm `}
                 data-toggle="modal"
                 data-target="#autoSetLevelAgencyAll"
@@ -223,21 +211,21 @@ class ListAgency extends Component {
                 <span class="icon text-white-50">
                   <i className="fa fa-cog"></i>
                 </span>
-                <span style={{ color: "white" }} class="text">
+                <span style={{ color: 'white' }} class="text">
                   Tự động cập nhật cấp theo doanh số
                 </span>
               </button>
             )}
 
             <button
-              style={{ margin: "auto 0px" }}
+              style={{ margin: 'auto 0px' }}
               onClick={this.exportListAgency}
               class={`btn btn-danger btn-icon-split btn-sm `}
             >
               <span class="icon text-white-50">
                 <i class="fas fa-file-export"></i>
               </span>
-              <span style={{ color: "white" }} class="text">
+              <span style={{ color: 'white' }} class="text">
                 Export Excel
               </span>
             </button>
@@ -264,22 +252,24 @@ class ListAgency extends Component {
             listItemSelected={listItemSelected}
             setListItemSelected={this.setListItemSelected}
             auto_set_level_agency={config?.auto_set_level_agency}
+            setShowCustomerOfSale={this.setShowCustomerOfSale}
+            setSaleInfo={this.setSaleInfo}
           />
-          <div style={{ display: "flex", justifyContent: "end" }}>
-            <div style={{ display: "flex" }}>
+          <div style={{ display: 'flex', justifyContent: 'end' }}>
+            <div style={{ display: 'flex' }}>
               <span
                 style={{
-                  margin: "20px 10px auto auto",
+                  margin: '20px 10px auto auto',
                 }}
               >
                 Hiển thị
               </span>
               <select
                 style={{
-                  margin: "auto",
-                  marginTop: "10px",
-                  marginRight: "20px",
-                  width: "80px",
+                  margin: 'auto',
+                  marginTop: '10px',
+                  marginRight: '20px',
+                  width: '80px',
                 }}
                 onChange={this.onChangeNumPage}
                 value={numPage}
@@ -305,14 +295,16 @@ class ListAgency extends Component {
             />
           </div>
         </div>
-        <ModalAutoSetLevelAgencyAll
+        <ModalAutoSetLevelAgencyAll store_code={store_code} onAutoSetLevelAgencyType={this.onAutoSetLevelAgencyType} />
+        <ModalAutoSetLevelAgency store_code={store_code} onAutoSetLevelAgencyType={this.onAutoSetLevelAgencyType} />
+
+        <SiderbarCusReferPhone
           store_code={store_code}
-          onAutoSetLevelAgencyType={this.onAutoSetLevelAgencyType}
-        />
-        <ModalAutoSetLevelAgency
-          store_code={store_code}
-          onAutoSetLevelAgencyType={this.onAutoSetLevelAgencyType}
-        />
+          showSidebar={this.state.showCustomerOfSale}
+          setShowSidebar={this.setShowCustomerOfSale}
+          saleInfo={this.state.saleInfo}
+          setSaleInfo={this.setSaleInfo}
+        ></SiderbarCusReferPhone>
         <Chat
           customerName={customerName}
           customerImg={customerImg}
@@ -356,9 +348,7 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(agencyAction.exportListAgency(store_code, page, params));
     },
     autoSetLevelAgencyType: (store_code, data, funcModal) => {
-      dispatch(
-        agencyAction.autoSetLevelAgencyType(store_code, data, funcModal)
-      );
+      dispatch(agencyAction.autoSetLevelAgencyType(store_code, data, funcModal));
     },
     fetchAgencyConf: (store_code) => {
       dispatch(agencyAction.fetchAgencyConf(store_code));
