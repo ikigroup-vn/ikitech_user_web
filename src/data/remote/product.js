@@ -198,6 +198,14 @@ export const editStock = (store_code, branch_id, data) => {
   );
 };
 
+export const editListStock = (store_code, branch_id, data) => {
+  return callApi(
+    `/store/${store_code}/${branch_id}/inventory/update_balance/list`,
+    "put",
+    data
+  );
+};
+
 export const changePercentCol = (store_code, value) => {
   return callApi(
     `/store_v2/${store_code}/collaborator_products`,
