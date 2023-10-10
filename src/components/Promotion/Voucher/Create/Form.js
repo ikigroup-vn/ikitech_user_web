@@ -1,22 +1,22 @@
-import React, { Component } from 'react';
-import * as Types from '../../../../constants/ActionType';
-import { connect } from 'react-redux';
-import * as voucherAction from '../../../../actions/voucher';
-import Table from './Table';
-import moment from 'moment';
-import ModalListProduct from '../../Discount/Create/ListProduct';
-import CKEditor from 'ckeditor4-react';
-import ModalUpload from '../ModalUpload';
-import * as Env from '../../../../ultis/default';
-import MomentInput from 'react-moment-input';
-import { formatNumber, removeAscent } from '../../../../ultis/helpers';
-import { isEmpty } from '../../../../ultis/helpers';
-import getChannel, { IKIPOS, IKITECH } from '../../../../ultis/channel';
-import * as AgencyAction from '../../../../actions/agency';
-import * as groupCustomerAction from '../../../../actions/group_customer';
-import styled from 'styled-components';
-import { typeGroupCustomer } from '../../../../ultis/groupCustomer/typeGroupCustomer';
-import Select from 'react-select';
+import React, { Component } from "react";
+import * as Types from "../../../../constants/ActionType";
+import { connect } from "react-redux";
+import * as voucherAction from "../../../../actions/voucher";
+import Table from "./Table";
+import moment from "moment";
+import ModalListProduct from "../../Discount/Create/ListProduct";
+import CKEditor from "ckeditor4-react";
+import ModalUpload from "../ModalUpload";
+import * as Env from "../../../../ultis/default";
+import MomentInput from "react-moment-input";
+import { formatNumber, removeAscent } from "../../../../ultis/helpers";
+import { isEmpty } from "../../../../ultis/helpers";
+import getChannel, { IKIPOS, IKITECH } from "../../../../ultis/channel";
+import * as AgencyAction from "../../../../actions/agency";
+import * as groupCustomerAction from "../../../../actions/group_customer";
+import styled from "styled-components";
+import { typeGroupCustomer } from "../../../../ultis/groupCustomer/typeGroupCustomer";
+import Select from "react-select";
 
 const FormStyles = styled.form`
   .status-product {
@@ -52,25 +52,25 @@ class Form extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      txtName: '',
-      txtStart: '',
-      txtEnd: '',
-      txtAmount: '',
-      txt_amount_use_once: '',
-      txt_voucher_length: '',
-      txt_starting_character: '',
+      txtName: "",
+      txtStart: "",
+      txtEnd: "",
+      txtAmount: "",
+      txt_amount_use_once: "",
+      txt_voucher_length: "",
+      txt_starting_character: "",
       txtDiscountType: 0,
-      txtValueDiscount: '',
-      txtCode: '',
-      txtMaxValueDiscount: '',
-      txtValueLimitTotal: '',
+      txtValueDiscount: "",
+      txtCode: "",
+      txtMaxValueDiscount: "",
+      txtValueLimitTotal: "",
       listProducts: [],
-      txtContent: '',
-      image: '',
-      is_type_discount: 'show',
-      is_limit: 'hide',
-      limit: 'hide',
-      displayError: 'hide',
+      txtContent: "",
+      image: "",
+      is_type_discount: "show",
+      is_limit: "hide",
+      limit: "hide",
+      displayError: "hide",
       saveListProducts: [],
       is_free_ship: false,
       ship_discount_value: null,
@@ -89,8 +89,10 @@ class Form extends Component {
   }
   componentDidMount() {
     try {
-      document.getElementsByClassName('r-input')[0].placeholder = 'Chọn ngày và thời gian';
-      document.getElementsByClassName('r-input')[1].placeholder = 'Chọn ngày và thời gian';
+      document.getElementsByClassName("r-input")[0].placeholder =
+        "Chọn ngày và thời gian";
+      document.getElementsByClassName("r-input")[1].placeholder =
+        "Chọn ngày và thời gian";
     } catch (error) {}
     this.props.initialUpload();
     this.props.fetchAllAgencyType(this.props.store_code);
@@ -127,32 +129,32 @@ class Form extends Component {
     const { group_customers } = this.state;
 
     const _value = formatNumber(value);
-    if (name === 'is_public' || name === 'is_use_once') {
+    if (name === "is_public" || name === "is_use_once") {
       this.setState({ [name]: checked });
-    } else if (name === 'is_use_once_code_multiple_time') {
-      this.setState({ [name]: value === 'true' ? true : false });
+    } else if (name === "is_use_once_code_multiple_time") {
+      this.setState({ [name]: value === "true" ? true : false });
     } else if (
-      name == 'txtValueLimitTotal' ||
-      name == 'txtAmount' ||
-      name == 'txtValueDiscount' ||
-      name == 'txtMaxValueDiscount' ||
-      name == 'ship_discount_value' ||
-      name == 'txt_amount_use_once' ||
-      name == 'txt_voucher_length'
+      name == "txtValueLimitTotal" ||
+      name == "txtAmount" ||
+      name == "txtValueDiscount" ||
+      name == "txtMaxValueDiscount" ||
+      name == "ship_discount_value" ||
+      name == "txt_amount_use_once" ||
+      name == "txt_voucher_length"
     ) {
       if (!isNaN(Number(_value))) {
         value = new Intl.NumberFormat().format(_value);
-        if (name == 'txtValueDiscount' && this.state.is_limit == 'show') {
+        if (name == "txtValueDiscount" && this.state.is_limit == "show") {
           if (value.length < 3) {
             if (value == 0) {
-              this.setState({ [name]: '' });
+              this.setState({ [name]: "" });
             } else {
               this.setState({ [name]: value });
             }
           }
         } else {
           if (value == 0) {
-            this.setState({ [name]: '' });
+            this.setState({ [name]: "" });
           } else {
             this.setState({ [name]: value });
           }
@@ -163,14 +165,16 @@ class Form extends Component {
       let new_group_customers = [];
 
       if (group_customers.includes(valueNumber)) {
-        new_group_customers = group_customers.filter((group) => group !== valueNumber);
+        new_group_customers = group_customers.filter(
+          (group) => group !== valueNumber
+        );
       } else {
         new_group_customers = [...group_customers, valueNumber];
       }
 
       this.setState({ group_customers: new_group_customers });
     } else {
-      if (name === 'txt_starting_character') {
+      if (name === "txt_starting_character") {
         this.setState({ [name]: removeAscent(value)?.trim() });
       } else {
         this.setState({ [name]: value });
@@ -178,13 +182,17 @@ class Form extends Component {
     }
   };
   onChangeStart = (e) => {
-    var time = moment(e, 'DD-MM-YYYY HH:mm').format('DD-MM-YYYY HH:mm');
+    var time = moment(e, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm");
     var { txtEnd } = this.state;
-    if (e != '' && txtEnd != '') {
-      if (!moment(e, 'DD-MM-YYYY HH:mm').isBefore(moment(txtEnd, 'DD-MM-YYYY HH:mm'))) {
-        this.setState({ displayError: 'show' });
+    if (e != "" && txtEnd != "") {
+      if (
+        !moment(e, "DD-MM-YYYY HH:mm").isBefore(
+          moment(txtEnd, "DD-MM-YYYY HH:mm")
+        )
+      ) {
+        this.setState({ displayError: "show" });
       } else {
-        this.setState({ displayError: 'hide' });
+        this.setState({ displayError: "hide" });
       }
     }
     this.setState({
@@ -193,14 +201,18 @@ class Form extends Component {
   };
 
   onChangeEnd = (e) => {
-    var time = moment(e, 'DD-MM-YYYY HH:mm').format('DD-MM-YYYY HH:mm');
+    var time = moment(e, "DD-MM-YYYY HH:mm").format("DD-MM-YYYY HH:mm");
     var { txtStart } = this.state;
 
-    if (txtStart != '' && e != '') {
-      if (!moment(txtStart, 'DD-MM-YYYY HH:mm').isBefore(moment(e, 'DD-MM-YYYY HH:mm'))) {
-        this.setState({ displayError: 'show' });
+    if (txtStart != "" && e != "") {
+      if (
+        !moment(txtStart, "DD-MM-YYYY HH:mm").isBefore(
+          moment(e, "DD-MM-YYYY HH:mm")
+        )
+      ) {
+        this.setState({ displayError: "show" });
       } else {
-        this.setState({ displayError: 'hide' });
+        this.setState({ displayError: "hide" });
       }
     }
     this.setState({
@@ -210,92 +222,113 @@ class Form extends Component {
 
   checkStatus = (start_time) => {
     var now = moment().valueOf();
-    var start_time = moment(start_time, 'YYYY-MM-DD HH:mm:ss').valueOf();
+    var start_time = moment(start_time, "YYYY-MM-DD HH:mm:ss").valueOf();
     if (now < start_time) {
-      return '0';
+      return "0";
     } else {
-      return '2';
+      return "2";
     }
   };
 
   onSave = (e) => {
     e.preventDefault();
-    if (this.state.displayError == 'show') {
+    if (this.state.displayError == "show") {
       return;
     }
     var state = this.state;
-    if ((state.txtValueDiscount == null || !isEmpty(state.txtValueDiscount)) && discount_for == 0) {
+    if (
+      (state.txtValueDiscount == null || !isEmpty(state.txtValueDiscount)) &&
+      discount_for == 0
+    ) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
         alert: {
-          type: 'danger',
-          title: 'Lỗi',
-          disable: 'show',
-          content: 'Vui lòng chọn giá trị giảm giá',
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng chọn giá trị giảm giá",
         },
       });
       return;
     }
-    if ((state.txt_voucher_length == null || !isEmpty(state.txt_voucher_length) || state.txt_voucher_length < 3) && state.is_use_once_code_multiple_time === false) {
+    if (
+      (state.txt_voucher_length == null ||
+        !isEmpty(state.txt_voucher_length) ||
+        state.txt_voucher_length < 3) &&
+      state.is_use_once_code_multiple_time === false
+    ) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
         alert: {
-          type: 'danger',
-          title: 'Lỗi',
-          disable: 'show',
-          content: 'Độ dài của mã phải lớn hơn 2 kí tự !',
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Độ dài của mã phải lớn hơn 2 kí tự !",
         },
       });
       return;
     }
-    if ((state.txt_amount_use_once == null || !isEmpty(state.txt_amount_use_once)) && state.is_use_once_code_multiple_time === false ) {
+    if (
+      (state.txt_amount_use_once == null ||
+        !isEmpty(state.txt_amount_use_once)) &&
+      state.is_use_once_code_multiple_time === false
+    ) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
         alert: {
-          type: 'danger',
-          title: 'Lỗi',
-          disable: 'show',
-          content: 'Vui lòng nhập số lượng mã !',
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng nhập số lượng mã !",
         },
       });
       return;
     }
-    if ((state.txt_voucher_length == null || !isEmpty(state.txt_voucher_length)) && state.is_use_once_code_multiple_time === false) {
+    if (
+      (state.txt_voucher_length == null ||
+        !isEmpty(state.txt_voucher_length)) &&
+      state.is_use_once_code_multiple_time === false
+    ) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
         alert: {
-          type: 'danger',
-          title: 'Lỗi',
-          disable: 'show',
-          content: 'Vui lòng nhập độ dài mã !',
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng nhập độ dài mã !",
         },
       });
       return;
     }
-    if ((Number(state.txt_voucher_length) <=  state.txt_starting_character.length) && state.is_use_once_code_multiple_time === false) {
+    if (
+      Number(state.txt_voucher_length) <= state.txt_starting_character.length &&
+      state.is_use_once_code_multiple_time === false
+    ) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
         alert: {
-          type: 'danger',
-          title: 'Lỗi',
-          disable: 'show',
-          content: 'Độ dài kí tự đầu phải nhỏ hơn độ dài mã!',
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Độ dài kí tự đầu phải nhỏ hơn độ dài mã!",
         },
       });
       return;
     }
     if (
       state.txtDiscountType == 0 &&
-      formatNumber(state.txtValueLimitTotal) < formatNumber(state.txtValueDiscount) &&
+      formatNumber(state.txtValueLimitTotal) <
+        formatNumber(state.txtValueDiscount) &&
       discount_for == 0
     ) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
         alert: {
-          type: 'danger',
-          title: 'Lỗi',
-          disable: 'show',
-          content: 'Giá trị voucher không thể vượt quá giá trị tối thiểu của đơn hàng',
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content:
+            "Giá trị voucher không thể vượt quá giá trị tối thiểu của đơn hàng",
         },
       });
       return;
@@ -303,16 +336,30 @@ class Form extends Component {
     var { store_code, type } = this.props;
 
     var listProducts = state.saveListProducts;
-    var product_ids = '';
+    var product_ids = "";
     listProducts.forEach((element, index) => {
-      if (listProducts.length == index + 1) product_ids = product_ids + element.id;
-      else product_ids = product_ids + element.id + ',';
+      if (listProducts.length == index + 1)
+        product_ids = product_ids + element.id;
+      else product_ids = product_ids + element.id + ",";
     });
-    var startTime = moment(state.txtStart, 'DD-MM-YYYY HH:mm').format('YYYY-MM-DD HH:mm:ss');
-    var endTime = moment(state.txtEnd, 'DD-MM-YYYY HH:mm').format('YYYY-MM-DD HH:mm:ss');
-    var voucherType = type == 'store' ? 0 : 1;
-    var { group_customer, agency_type_id, group_type_id, group_customers, agency_types, group_types } = this.state;
-    var agency_type_name = this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]?.name || null;
+    var startTime = moment(state.txtStart, "DD-MM-YYYY HH:mm").format(
+      "YYYY-MM-DD HH:mm:ss"
+    );
+    var endTime = moment(state.txtEnd, "DD-MM-YYYY HH:mm").format(
+      "YYYY-MM-DD HH:mm:ss"
+    );
+    var voucherType = type == "store" ? 0 : 1;
+    var {
+      group_customer,
+      agency_type_id,
+      group_type_id,
+      group_customers,
+      agency_types,
+      group_types,
+    } = this.state;
+    var agency_type_name =
+      this.props.types.filter((v) => v.id === parseInt(agency_type_id))?.[0]
+        ?.name || null;
     const agency_types_convert = agency_types.map((agency) => ({
       id: agency.value,
       name: agency.label,
@@ -328,23 +375,38 @@ class Form extends Component {
       group_type_id,
       name: state.txtName,
       is_use_once_code_multiple_time: state.is_use_once_code_multiple_time,
-      start_time: startTime == 'Invalid date' ? null : startTime,
-      end_time: endTime == 'Invalid date' ? null : endTime,
-      amount: state.txtAmount == null ? state.txtAmount : formatNumber(state.txtAmount),
-      amount_use_once : state.txt_amount_use_once == null ? state.txt_amount_use_once : formatNumber(state.txt_amount_use_once),
+      start_time: startTime == "Invalid date" ? null : startTime,
+      end_time: endTime == "Invalid date" ? null : endTime,
+      amount:
+        state.txtAmount == null
+          ? state.txtAmount
+          : formatNumber(state.txtAmount),
+      amount_use_once:
+        state.txt_amount_use_once == null
+          ? state.txt_amount_use_once
+          : formatNumber(state.txt_amount_use_once),
       voucher_length:
-        state.txt_voucher_length == null ? state.txt_voucher_length : formatNumber(state.txt_voucher_length),
+        state.txt_voucher_length == null
+          ? state.txt_voucher_length
+          : formatNumber(state.txt_voucher_length),
       starting_character: state.txt_starting_character,
       product_ids: product_ids,
       description: state.txtContent,
       image_url: state.image,
       voucher_type: voucherType,
       discount_type: state.txtDiscountType,
-      value_discount: state.txtValueDiscount == null ? state.txtValueDiscount : formatNumber(state.txtValueDiscount),
+      value_discount:
+        state.txtValueDiscount == null
+          ? state.txtValueDiscount
+          : formatNumber(state.txtValueDiscount),
       max_value_discount:
-        state.txtMaxValueDiscount == null ? state.txtMaxValueDiscount : formatNumber(state.txtMaxValueDiscount),
+        state.txtMaxValueDiscount == null
+          ? state.txtMaxValueDiscount
+          : formatNumber(state.txtMaxValueDiscount),
       value_limit_total:
-        state.txtValueLimitTotal == null ? state.txtValueLimitTotal : formatNumber(state.txtValueLimitTotal),
+        state.txtValueLimitTotal == null
+          ? state.txtValueLimitTotal
+          : formatNumber(state.txtValueLimitTotal),
       code: state.txtCode,
       set_limit_value_discount: true,
       set_limit_total: true,
@@ -356,18 +418,20 @@ class Form extends Component {
       agency_types: agency_types_convert,
       group_types: group_types_convert,
     };
-    if (type == 'store') delete form.product_ids;
-    if (this.state.limit == 'hide') form.set_limit_value_discount = false;
-    if (form.value_limit_total == '') form.set_limit_total = false;
-    if (form.amount == '') form.set_limit_amount = false;
+    if (type == "store") delete form.product_ids;
+    if (this.state.limit == "hide") form.set_limit_value_discount = false;
+    if (form.value_limit_total == "") form.set_limit_total = false;
+    if (form.amount == "") form.set_limit_amount = false;
 
-    if (form.product_ids == '') {
+    if (form.product_ids == "") {
       delete form.product_ids;
     }
     var { discount_for, is_free_ship, ship_discount_value } = this.state;
 
     var dataShip = {};
-    var formatShipDiscount = ship_discount_value ? formatNumber(ship_discount_value) : null;
+    var formatShipDiscount = ship_discount_value
+      ? formatNumber(ship_discount_value)
+      : null;
     if (discount_for == 1) {
       if (is_free_ship == true) {
         dataShip = {
@@ -391,7 +455,11 @@ class Form extends Component {
         discount_for: discount_for,
       };
     }
-    this.props.createVoucher(store_code, { ...form, ...dataShip }, this.checkStatus(startTime));
+    this.props.createVoucher(
+      store_code,
+      { ...form, ...dataShip },
+      this.checkStatus(startTime)
+    );
   };
 
   goBack = (e) => {
@@ -403,7 +471,7 @@ class Form extends Component {
   handleAddProduct = (product, id, type, onSave = null) => {
     var products = [...this.state.listProducts];
 
-    if (type == 'remove') {
+    if (type == "remove") {
       if (products.length > 0) {
         products.forEach((item, index) => {
           if (item.id === id) {
@@ -423,40 +491,41 @@ class Form extends Component {
         products.push(product);
       }
     }
-    if (onSave == true) this.setState({ listProducts: products, saveListProducts: products });
+    if (onSave == true)
+      this.setState({ listProducts: products, saveListProducts: products });
     else this.setState({ listProducts: products });
   };
 
   setTypeDiscount = (e) => {
     var value = e.target.value;
     this.setState({ txtDiscountType: value }, () => {
-      if (value == '0')
+      if (value == "0")
         this.setState({
-          is_type_discount: 'show',
-          is_limit: 'hide',
-          txtValueDiscount: '',
+          is_type_discount: "show",
+          is_limit: "hide",
+          txtValueDiscount: "",
         });
-      else if (value == '1')
+      else if (value == "1")
         this.setState({
-          is_type_discount: 'hide',
-          is_limit: 'show',
-          txtValueDiscount: '',
+          is_type_discount: "hide",
+          is_limit: "show",
+          txtValueDiscount: "",
         });
       else
         this.setState({
-          is_type_discount: 'hide',
-          is_limit: 'hide',
-          txtValueDiscount: '',
+          is_type_discount: "hide",
+          is_limit: "hide",
+          txtValueDiscount: "",
         });
     });
   };
 
   onChangeLimit = (e) => {
     var value = e.target.value;
-    if (value == '0') this.setState({ limit: 'show' });
-    else if (value == '1') {
-      this.setState({ limit: 'hide', txtLimitTotal: '' });
-    } else this.setState({ limit: 'hide' });
+    if (value == "0") this.setState({ limit: "show" });
+    else if (value == "1") {
+      this.setState({ limit: "hide", txtLimitTotal: "" });
+    } else this.setState({ limit: "hide" });
   };
 
   convertOptions = (opts) => {
@@ -469,7 +538,7 @@ class Form extends Component {
             label: currentOption.name,
           },
         ],
-        [],
+        []
       );
       return newOptions;
     }
@@ -514,12 +583,12 @@ class Form extends Component {
       group_types,
       is_use_once_code_multiple_time,
       txt_starting_character,
-      txt_voucher_length
+      txt_voucher_length,
     } = this.state;
 
-    var image = image == '' || image == null ? Env.IMG_NOT_FOUND : image;
+    var image = image == "" || image == null ? Env.IMG_NOT_FOUND : image;
     var { products, store_code, vouchers, types, groupCustomer } = this.props;
-    var disableOfType = this.props.type == 'store' ? 'hide' : 'show';
+    var disableOfType = this.props.type == "store" ? "hide" : "show";
     return (
       <React.Fragment>
         <FormStyles role="form" onSubmit={this.onSave} method="post">
@@ -577,11 +646,11 @@ class Form extends Component {
                     monthSelect={true}
                     readOnly={true}
                     translations={{
-                      DATE: 'Ngày',
-                      TIME: 'Giờ',
-                      SAVE: 'Đóng',
-                      HOURS: 'Giờ',
-                      MINUTES: 'Phút',
+                      DATE: "Ngày",
+                      TIME: "Giờ",
+                      SAVE: "Đóng",
+                      HOURS: "Giờ",
+                      MINUTES: "Phút",
                     }}
                     onSave={() => {}}
                     onChange={this.onChangeStart}
@@ -597,18 +666,21 @@ class Form extends Component {
                     monthSelect={true}
                     readOnly={true}
                     translations={{
-                      DATE: 'Ngày',
-                      TIME: 'Giờ',
-                      SAVE: 'Đóng',
-                      HOURS: 'Giờ',
-                      MINUTES: 'Phút',
+                      DATE: "Ngày",
+                      TIME: "Giờ",
+                      SAVE: "Đóng",
+                      HOURS: "Giờ",
+                      MINUTES: "Phút",
                     }}
                     onSave={() => {}}
                     onChange={this.onChangeEnd}
                   />
                 </div>
                 <div class="form-group">
-                  <div class={`alert alert-danger ${displayError}`} role="alert">
+                  <div
+                    class={`alert alert-danger ${displayError}`}
+                    role="alert"
+                  >
                     Thời gian kết thúc phải sau thời gian bắt đầu
                   </div>
                 </div>
@@ -627,7 +699,13 @@ class Form extends Component {
                 </div>
                 <div class="form-group">
                   <label>Chọn kiểu phát hành mã voucher</label>
-                  <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      cursor: "pointer",
+                    }}
+                  >
                     <input
                       type="radio"
                       // class="form-control"
@@ -638,12 +716,21 @@ class Form extends Component {
                       autoComplete="off"
                       onChange={this.onChange}
                     />
-                    <label htmlFor="is_use_once_code_multiple_time" style={{ marginLeft: '15px', marginTop: '8px' }}>
+                    <label
+                      htmlFor="is_use_once_code_multiple_time"
+                      style={{ marginLeft: "15px", marginTop: "8px" }}
+                    >
                       Một mã sử dụng nhiều lần
                     </label>
                   </div>
 
-                  <div style={{ display: 'flex', alignItems: 'center', cursor: 'pointer' }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      cursor: "pointer",
+                    }}
+                  >
                     <input
                       type="radio"
                       // class="form-control"
@@ -656,13 +743,20 @@ class Form extends Component {
                     />
                     <label
                       htmlFor="is_use_once_code_multiple_time_option2"
-                      style={{ marginLeft: '15px', marginTop: '8px' }}
+                      style={{ marginLeft: "15px", marginTop: "8px" }}
                     >
                       Nhiều mã chỉ sử dụng 1 lần
                     </label>
                   </div>
-                  
-                  <span>Chú ý: <span style={{color: '#76c376'}}> Hãy chắc chắn với lựa chọn kiểu phát hành, sau khi tạo ra chương trình sẽ không thể thay đổi kiểu phát hành.</span></span>
+
+                  <span>
+                    Chú ý:{" "}
+                    <span style={{ color: "#76c376" }}>
+                      {" "}
+                      Hãy chắc chắn với lựa chọn kiểu phát hành, sau khi tạo ra
+                      chương trình sẽ không thể thay đổi kiểu phát hành.
+                    </span>
+                  </span>
                 </div>
               </div>
             </div>
@@ -685,7 +779,9 @@ class Form extends Component {
                     </div>
                     <div className="row">
                       <div className="form-group status col-6">
-                        <label for="txtMaxAmountCoin">Hiển thị cho khách hàng chọn</label>
+                        <label for="txtMaxAmountCoin">
+                          Hiển thị cho khách hàng chọn
+                        </label>
                         <label className="status-product on-off">
                           <input
                             type="checkbox"
@@ -700,7 +796,9 @@ class Form extends Component {
                         </label>
                       </div>
                       <div className="form-group status col-6">
-                        <label for="txtMaxAmountCoin">Khách hàng chỉ được áp dụng 1 lần</label>
+                        <label for="txtMaxAmountCoin">
+                          Khách hàng chỉ được áp dụng 1 lần
+                        </label>
                         <label className="status-product on-off">
                           <input
                             type="checkbox"
@@ -715,19 +813,19 @@ class Form extends Component {
                         </label>
                       </div>
                     </div>
-                     <div class="form-group">
-                  <label htmlFor="product_name">Số mã có thể sử dụng</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="txtAmount"
-                    name="txtAmount"
-                    value={txtAmount}
-                    placeholder="Số lượng mã phiểu có thể sử dụng"
-                    autoComplete="off"
-                    onChange={this.onChange}
-                  />
-                </div>
+                    <div class="form-group">
+                      <label htmlFor="product_name">Số mã có thể sử dụng</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="txtAmount"
+                        name="txtAmount"
+                        value={txtAmount}
+                        placeholder="Số lượng mã phiểu có thể sử dụng"
+                        autoComplete="off"
+                        onChange={this.onChange}
+                      />
+                    </div>
                   </React.Fragment>
                 ) : (
                   <React.Fragment>
@@ -762,28 +860,30 @@ class Form extends Component {
                     </div>
 
                     <div class="form-group">
-                  <label htmlFor="product_name">Số mã có thể sử dụng</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="txt_amount_use_once"
-                    name="txt_amount_use_once"
-                    value={txt_amount_use_once}
-                    placeholder="Số lượng mã phiểu có thể sử dụng"
-                    autoComplete="off"
-                    onChange={this.onChange}
-                  />
-                </div>
+                      <label htmlFor="product_name">Số mã có thể sử dụng</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="txt_amount_use_once"
+                        name="txt_amount_use_once"
+                        value={txt_amount_use_once}
+                        placeholder="Số lượng mã phiểu có thể sử dụng"
+                        autoComplete="off"
+                        onChange={this.onChange}
+                      />
+                    </div>
                   </React.Fragment>
                 )}
                 <div className="form-group discount-for">
-                  <label htmlFor="group_customer">Áp dụng cho</label>
+                  <label htmlFor="group_customer">
+                    Hiển thị cho(Áp dụng cho KH đăng nhập)
+                  </label>
                   <div
                     style={{
-                      display: 'flex',
-                      alignItems: 'center',
+                      display: "flex",
+                      alignItems: "center",
                       flexWrap: "wrap",
-                      columnGap: '15px',
+                      columnGap: "15px",
                     }}
                     className=""
                   >
@@ -792,15 +892,17 @@ class Form extends Component {
                         key={group.id}
                         htmlFor={group.title}
                         style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          columnGap: '5px',
+                          display: "flex",
+                          alignItems: "center",
+                          columnGap: "5px",
                         }}
                       >
                         <input
                           type="checkbox"
                           name={`group_customer_${group.value}`}
-                          checked={group_customers.includes(group.value) ? true : false}
+                          checked={
+                            group_customers.includes(group.value) ? true : false
+                          }
                           className="group_customer"
                           id={group.title}
                           value={group.value}
@@ -812,39 +914,39 @@ class Form extends Component {
                   </div>
                   <div
                     style={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      gap: '10px',
+                      display: "flex",
+                      flexDirection: "column",
+                      gap: "10px",
                     }}
                   >
                     {group_customers.includes(Types.GROUP_CUSTOMER_AGENCY) ? (
                       <label
                         style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '10px',
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "10px",
                         }}
                       >
                         <div
                           style={{
                             flexShrink: 0,
-                            width: '80px',
+                            width: "80px",
                           }}
                         >
                           Đại lý
                         </div>
                         <div
                           style={{
-                            width: '100%',
+                            width: "100%",
                           }}
                         >
                           <Select
                             options={this.convertOptions(types)}
-                            placeholder={'Chọn đại lý'}
+                            placeholder={"Chọn đại lý"}
                             value={agency_types}
                             onChange={this.handleChangeAgency}
                             isMulti={true}
-                            noOptionsMessage={() => 'Không tìm thấy kết quả'}
+                            noOptionsMessage={() => "Không tìm thấy kết quả"}
                           ></Select>
                         </div>
                       </label>
@@ -865,34 +967,36 @@ class Form extends Component {
                     //   })}
                     // </select>
                     null}
-                    {group_customers.includes(Types.GROUP_CUSTOMER_BY_CONDITION) ? (
+                    {group_customers.includes(
+                      Types.GROUP_CUSTOMER_BY_CONDITION
+                    ) ? (
                       <label
                         style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '10px',
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "10px",
                         }}
                       >
                         <div
                           style={{
                             flexShrink: 0,
-                            width: '80px',
+                            width: "80px",
                           }}
                         >
                           Nhóm KH
                         </div>
                         <div
                           style={{
-                            width: '100%',
+                            width: "100%",
                           }}
                         >
                           <Select
                             options={this.convertOptions(groupCustomer)}
-                            placeholder={'Chọn nhóm khách hàng'}
+                            placeholder={"Chọn nhóm khách hàng"}
                             value={group_types}
                             onChange={this.handleChangeGroupCustomer}
                             isMulti={true}
-                            noOptionsMessage={() => 'Không tìm thấy kết quả'}
+                            noOptionsMessage={() => "Không tìm thấy kết quả"}
                           ></Select>
                         </div>
                       </label>
@@ -919,8 +1023,8 @@ class Form extends Component {
                   <label htmlFor="discount_for"></label>
                   <div
                     style={{
-                      display: 'flex',
-                      flexDirection: 'column',
+                      display: "flex",
+                      flexDirection: "column",
                     }}
                     className="radio discount-for"
                     onChange={this.onChange}
@@ -934,9 +1038,9 @@ class Form extends Component {
                         id="bill"
                         value="0"
                       />
-                      {'  '}Giảm giá cho đơn hàng
+                      {"  "}Giảm giá cho đơn hàng
                     </label>
-                    {this.props.type === 'store' && (
+                    {this.props.type === "store" && (
                       <label>
                         <input
                           type="radio"
@@ -946,7 +1050,7 @@ class Form extends Component {
                           id="ship"
                           value="1"
                         />
-                        {'  '} Giảm giá cho vận chuyển
+                        {"  "} Giảm giá cho vận chuyển
                       </label>
                     )}
                   </div>
@@ -955,21 +1059,25 @@ class Form extends Component {
                   <>
                     {discount_for == 1 && (
                       <>
-                        <div class="form-group" style={{ marginTop: '10px' }}>
+                        <div class="form-group" style={{ marginTop: "10px" }}>
                           <div class="form-check">
                             <input
                               class="form-check-input"
                               name="is_free_ship"
-                              onChange={(e) => this.setState({ is_free_ship: !is_free_ship })}
+                              onChange={(e) =>
+                                this.setState({ is_free_ship: !is_free_ship })
+                              }
                               checked={is_free_ship}
                               type="checkbox"
                             />
-                            <label class="form-check-label">Miễn phí vận chuyển</label>
+                            <label class="form-check-label">
+                              Miễn phí vận chuyển
+                            </label>
                           </div>
                         </div>
                         {is_free_ship == false && (
                           <input
-                            style={{ marginTop: '10px' }}
+                            style={{ marginTop: "10px" }}
                             type="text"
                             class="form-control"
                             id="txtAmount"
@@ -989,7 +1097,12 @@ class Form extends Component {
                     <div class="form-group">
                       <label htmlFor="product_name">Loại giảm giá</label>
 
-                      <select name="" id="input" class="form-control" onChange={this.setTypeDiscount}>
+                      <select
+                        name=""
+                        id="input"
+                        class="form-control"
+                        onChange={this.setTypeDiscount}
+                      >
                         <option value="0">Giảm giá cố định</option>
                         <option value="1">Giảm giá theo %</option>
                       </select>
@@ -1028,7 +1141,7 @@ class Form extends Component {
                             <input type="radio" value="0" name="limit" />
                             Chọn mức giảm
                           </label>
-                          <label style={{ marginLeft: '20px' }}>
+                          <label style={{ marginLeft: "20px" }}>
                             <input type="radio" value="1" name="limit" />
                             Không giới hạn
                           </label>
@@ -1056,12 +1169,18 @@ class Form extends Component {
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <div className={`${disableOfType}`}>
-                <Table handleAddProduct={this.handleAddProduct} products={saveListProducts}></Table>
+                <Table
+                  handleAddProduct={this.handleAddProduct}
+                  products={saveListProducts}
+                ></Table>
               </div>
               {getChannel == IKITECH && (
                 <div class="form-group">
                   <label htmlFor="product_name">Mô tả</label>
-                  <CKEditor data={txtContent} onChange={this.onChangeDecription} />
+                  <CKEditor
+                    data={txtContent}
+                    onChange={this.onChangeDecription}
+                  />
                 </div>
               )}
             </div>
@@ -1072,7 +1191,11 @@ class Form extends Component {
                 <button type="submit" class="btn btn-info   btn-sm">
                   <i class="fas fa-save"></i> Tạo
                 </button>
-                <button style={{ marginLeft: '10px' }} onClick={this.goBack} class="btn btn-warning   btn-sm">
+                <button
+                  style={{ marginLeft: "10px" }}
+                  onClick={this.goBack}
+                  class="btn btn-warning   btn-sm"
+                >
                   <i class="fas fa-arrow-left"></i> Trở về
                 </button>
               </div>

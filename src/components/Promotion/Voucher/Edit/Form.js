@@ -951,7 +951,9 @@ class Form extends Component {
                   </React.Fragment>
                 )}
                 <div className="form-group discount-for">
-                  <label htmlFor="group_customer">Áp dụng cho</label>
+                  <label htmlFor="group_customer">
+                    Hiển thị cho(Áp dụng cho KH đăng nhập)
+                  </label>
                   <div
                     style={{
                       display: "flex",
