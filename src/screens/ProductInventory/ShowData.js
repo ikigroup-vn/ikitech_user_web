@@ -131,6 +131,7 @@ class ShowData extends Component {
   };
 
   showDistribute = (listDistribute, data) => {
+    const { isChecked } = this.props;
     var result = [];
     if (typeof listDistribute == "undefined" || listDistribute.length === 0) {
       return result;
@@ -152,18 +153,34 @@ class ShowData extends Component {
                     .sub_element_distributes[index]?.stock;
                 result.push(
                   <tr className="wrap-item hover-product">
-                    <td></td>
-                    {/* <td>
+                    <td>
                       <input
                         type="checkbox"
                         name="input__check"
                         className="input__check"
-                        // value={listItemSelected.includes(data.id)}
-                        // checked={listItemSelected.includes(data.id)}
+                        checked={isChecked({
+                          product_id: data.id,
+                          distribute_name: listDistribute.name,
+                          element_distribute_name: element.name,
+                          sub_element_distribute_name:
+                            listDistribute.element_distributes[_index]
+                              .sub_element_distributes[index]?.name,
+                        })}
                         disabled={!data.check_inventory}
-                        // onChange={(e) => this.onChangeSelected(e, data.id)}
+                        onChange={() =>
+                          this.handleCheckData(
+                            {
+                              sub: listDistribute.element_distributes[_index]
+                                .sub_element_distributes[index],
+                              element: element.name,
+                              distribute: listDistribute.name,
+                            },
+                            "sub"
+                          )
+                        }
                       />
-                    </td> */}
+                    </td>
+                    <td></td>
                     <td className="item">
                       <img
                         src={
@@ -252,18 +269,30 @@ class ShowData extends Component {
           } else {
             result.push(
               <tr className="wrap-item hover-product">
-                <td></td>
-                {/* <td>
+                <td>
                   <input
                     type="checkbox"
                     name="input__check"
                     className="input__check"
-                    // value={listItemSelected.includes(data.id)}
-                    // checked={listItemSelected.includes(data.id)}
+                    checked={isChecked({
+                      product_id: data.id,
+                      distribute_name: listDistribute.name,
+                      element_distribute_name: element.name,
+                      sub_element_distribute_name: "",
+                    })}
                     disabled={!data.check_inventory}
-                    // onChange={(e) => this.onChangeSelected(e, data.id)}
+                    onChange={() =>
+                      this.handleCheckData(
+                        {
+                          element: element,
+                          distribute: listDistribute.name,
+                        },
+                        "element"
+                      )
+                    }
                   />
-                </td> */}
+                </td>
+                <td></td>
                 <td className="item">
                   <img
                     src={
@@ -362,34 +391,40 @@ class ShowData extends Component {
 
     if (type === "product") {
       data = {
-        cost_of_capital: item.inventory?.main_cost_of_capital,
+        cost_of_capital: item.inventory?.main_cost_of_capital
+          ? Math.ceil(item.inventory?.main_cost_of_capital)
+          : 0,
         quantity_in_stock: item.inventory?.main_stock,
-        idProduct: item.id,
-        nameSubElement: "",
-        nameElement: "",
-        NameDistribute: "",
+        product_id: item.id,
+        sub_element_distribute_name: "",
+        element_distribute_name: "",
+        distribute_name: "",
       };
     }
 
     if (type === "sub") {
       data = {
-        cost_of_capital: item.inventory?.main_cost_of_capital,
-        quantity_in_stock: item.inventory?.main_stock,
-        idProduct: item.id,
-        nameSubElement: item.sub?.name,
-        nameElement: item.element,
-        NameDistribute: item.distribute,
+        cost_of_capital: item.sub?.cost_of_capital
+          ? Math.ceil(item.sub?.cost_of_capital)
+          : 0,
+        quantity_in_stock: item.sub?.stock,
+        product_id: this.props.data?.id,
+        sub_element_distribute_name: item.sub?.name,
+        element_distribute_name: item.element,
+        distribute_name: item.distribute,
       };
     }
 
     if (type === "element") {
       data = {
-        cost_of_capital: item.inventory?.main_cost_of_capital,
-        quantity_in_stock: item.inventory?.main_stock,
-        idProduct: item.id,
-        nameSubElement: item.sub?.name,
-        nameElement: item.element,
-        NameDistribute: item.distribute,
+        cost_of_capital: item.element?.cost_of_capital
+          ? Math.ceil(item.element?.cost_of_capital)
+          : 0,
+        quantity_in_stock: item.element?.stock,
+        product_id: this.props.data?.id,
+        sub_element_distribute_name: "",
+        element_distribute_name: item.element?.name,
+        distribute_name: item.distribute,
       };
     }
 
@@ -420,7 +455,7 @@ class ShowData extends Component {
     }
 
     var { formData, isChecked } = this.props;
-    console.log("datadata", data);
+    console.log("datadata:::: ", data);
 
     return (
       <>
@@ -428,18 +463,22 @@ class ShowData extends Component {
           className="hover-product"
           style={{ background: "rgba(227, 230, 240, 0.1)" }}
         >
-          <td>{per_page * (current_page - 1) + (index + 1)}</td>
-          {/* <td>
+          <td>
             <input
               type="checkbox"
               name="input__check"
               className="input__check"
-              value={isChecked(data)}
-              checked={isChecked(data)}
+              checked={isChecked({
+                product_id: data.id,
+                distribute_name: "",
+                element_distribute_name: "",
+                sub_element_distribute_name: "",
+              })}
               disabled={!data.check_inventory || data.distributes?.length > 0}
               onChange={() => this.handleCheckData(data, "product")}
             />
-          </td> */}
+          </td>
+          <td>{per_page * (current_page - 1) + (index + 1)}</td>
           <td>
             <img
               src={

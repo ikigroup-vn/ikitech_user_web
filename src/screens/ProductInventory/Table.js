@@ -8,6 +8,7 @@ import EditStock from "./EditStock";
 import ShowData from "./ShowData";
 import * as productAction from "../../actions/product";
 import { getBranchId, getBranchIds } from "../../ultis/branchUtils";
+import EditListStock from "./EditListStock";
 class Table extends Component {
   constructor(props) {
     super(props);
@@ -39,7 +40,6 @@ class Table extends Component {
     });
     event.preventDefault();
   };
-
   editStockCallBack = (form) => {
     this.setState({ formData: form });
   };
@@ -119,15 +119,15 @@ class Table extends Component {
 
   handleListItemSelected = (product) => {
     const { listItemSelected } = this.state;
-    const isChecked = this.isChecked();
+    const isChecked = this.isChecked(product);
     let newItemSelected = [];
     if (isChecked) {
+      const distributeString = `${product.distribute_name}${product.element_distribute_name}${product.sub_element_distribute_name}`;
       newItemSelected = listItemSelected.filter(
         (item) =>
           item.product_id !== product.product_id ||
-          (item.distribute_name !== product.distribute_name &&
-            item.sub_element_distribute_name !==
-              product.sub_element_distribute_name)
+          `${item.distribute_name}${item.element_distribute_name}${item.sub_element_distribute_name}` !==
+            distributeString
       );
     } else {
       newItemSelected = [...listItemSelected, product];
@@ -136,14 +136,37 @@ class Table extends Component {
       listItemSelected: newItemSelected,
     });
   };
-  isChecked = (data) => {
+  editListItemSelected = (data, onSuccess = () => {}) => {
+    const { editListStock, store_code, page } = this.props;
+    const branch_id = getBranchId();
+    const branch_ids = getBranchIds();
+    const branchIds = branch_ids ? branch_ids : branch_id;
+
+    editListStock(store_code, branchIds, data, page, this.props.params, () => {
+      if (onSuccess) {
+        onSuccess();
+        this.setState({ listItemSelected: [] });
+      }
+    });
+  };
+  isChecked = (
+    data = {
+      product_id: "",
+      distribute_name: "",
+      element_distribute_name: "",
+      sub_element_distribute_name: "",
+    }
+  ) => {
     const { listItemSelected } = this.state;
-    return listItemSelected.some(
+    const isChecked = listItemSelected.some(
       (item) =>
         item.product_id === data.product_id &&
         item.distribute_name === data.distribute_name &&
+        item.element_distribute_name === data.element_distribute_name &&
         item.sub_element_distribute_name === data.sub_element_distribute_name
     );
+
+    return isChecked;
   };
   showData = (products, per_page, current_page) => {
     var result = null;
@@ -255,17 +278,21 @@ class Table extends Component {
         : false;
     var multiDelete = selected.length > 0 ? "show" : "hide";
     var { _delete, update, insert } = this.props;
+    const { listItemSelected } = this.state;
+    console.log("🚀 ~ render ~ listItemSelected:", listItemSelected);
 
     return (
       <div>
         <button
-          onClick={(e) => this.handleMultiDelCallBack(e, selected)}
           data-toggle="modal"
-          data-target="#removeMultiModal"
+          data-target="#listStockModal"
           style={{ marginLeft: "10px" }}
-          class={`btn btn-danger btn-sm ${multiDelete}`}
+          class={`btn btn-primary btn-sm ${
+            listItemSelected?.length > 0 ? "show" : "hide"
+          }`}
         >
-          <i class="fa fa-trash"></i> Xóa {selected.length} sản phẩm
+          <i class="fa fa-edit"></i> Cập nhật {listItemSelected?.length} sản
+          phẩm
         </button>
         <table
           class="table table-border "
@@ -275,8 +302,8 @@ class Table extends Component {
         >
           <thead>
             <tr>
+              <th></th>
               <th>STT</th>
-              {/* <th></th> */}
               <th>Hình ảnh</th>
               <th>Mã SKU</th>
               <th>Mã Barcode</th>
@@ -297,6 +324,12 @@ class Table extends Component {
           modalProduct={modalProduct}
           editStockCallBack={this.editStockCallBack}
         />
+        <EditListStock
+          getParams={this.props.getParams}
+          store_code={store_code}
+          listItemSelected={listItemSelected}
+          editListItemSelected={this.editListItemSelected}
+        />
       </div>
     );
   }
@@ -307,6 +340,18 @@ const mapDispatchToProps = (dispatch, props) => {
     editStock: (store_code, branch_id, data, page, params) => {
       dispatch(
         productAction.editStock(store_code, branch_id, data, page, params)
+      );
+    },
+    editListStock: (store_code, branch_id, data, page, params, onSuccess) => {
+      dispatch(
+        productAction.editListStock(
+          store_code,
+          branch_id,
+          data,
+          page,
+          params,
+          onSuccess
+        )
       );
     },
   };

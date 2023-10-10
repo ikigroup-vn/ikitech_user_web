@@ -962,6 +962,65 @@ export const editStock = (
   };
 };
 
+export const editListStock = (
+  store_code,
+  branch_id,
+  data,
+  page = 1,
+  params = null,
+  onSuccess = () => {}
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    productApi
+      .editListStock(store_code, branch_id, data)
+      .then((res) => {
+        if (onSuccess) onSuccess();
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
+        });
+        productApi
+          .fetchAllProductV2(store_code, branch_id, page, params)
+          .then((res) => {
+            dispatch({
+              type: Types.SHOW_LOADING,
+              loading: "hide",
+            });
+            if (res.data.code !== 401)
+              dispatch({
+                type: Types.FETCH_ALL_PRODUCT,
+                data: res.data.data,
+              });
+          });
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
+      });
+  };
+};
+
 export const uploadListImgProduct = function (files) {
   return async (dispatch) => {
     var images = [];
