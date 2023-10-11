@@ -224,9 +224,11 @@ class ListProduct extends Component {
   checkDisable = (discounts, id) => {
     if (discounts.length > 0) {
       for (const element of discounts) {
-        for (const item of element.products) {
-          if (item.id == id) {
-            return true;
+        if (discounts.products?.length > 0) {
+          for (const item of element.products) {
+            if (item.id == id) {
+              return true;
+            }
           }
         }
       }
@@ -361,7 +363,6 @@ class ListProduct extends Component {
         var disaled = this.checkDisable(discounts, data.id);
         var background_disable = disaled == true ? "#ffddd766" : "white";
 
-   
         const {
           product_discount,
           min_price,
@@ -422,10 +423,16 @@ class ListProduct extends Component {
 
             <td>
               <p>{data.name}</p>
-              {disaled && <p style={{
-                fontSize:11,
-                color:"grey"
-              }}>{"Sản phẩm có tồn tại ở chương trình giảm giá khác"}</p>}
+              {disaled && (
+                <p
+                  style={{
+                    fontSize: 11,
+                    color: "grey",
+                  }}
+                >
+                  {"Sản phẩm có tồn tại ở chương trình giảm giá khác"}
+                </p>
+              )}
             </td>
 
             <td>
@@ -519,6 +526,12 @@ class ListProduct extends Component {
 
   render() {
     var { products, store_code, listProducts, discounts } = this.props;
+    console.log(
+      "🚀 ~ file: ListProduct.js:527 ~ ListProduct ~ render ~ products:",
+      products,
+      listProducts,
+      discounts
+    );
     var { searchValue, listCategory, numPage } = this.state;
     return (
       <div
