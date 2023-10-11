@@ -450,7 +450,6 @@ class Product extends Component {
     var f = evt.target.files[0];
     const reader = new FileReader();
     window.$("#importModal").modal("show");
-    // this.setState({ allow_skip_same_name: randomString(10) });
     var _this = this;
     reader.onload = function (evt) {
       const bstr = evt.target.result;
