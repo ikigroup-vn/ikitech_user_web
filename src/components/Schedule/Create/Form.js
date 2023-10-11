@@ -1,17 +1,14 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as ScheduleAction from "../../../actions/schedule";
-import Datetime from "react-datetime";
 import ListProduct from "../TableProduct";
 import ListCProduct from "../TableC_Product";
 import ListCBlog from "../TableC_Blog";
-import * as popupAction from "../../../actions/popup";
-import ModalUpload from "../ModalUpload";
 import ListBlog from "../TableBlog";
 import * as productAction from "../../../actions/product";
 import moment from "moment";
 import MomentInput from "react-moment-input";
-import { format, isEmail, isEmpty, isPhone } from "../../../ultis/helpers";
+import { isEmpty } from "../../../ultis/helpers";
 import * as AgencyAction from "../../../actions/agency";
 import * as blogAction from "../../../actions/blog";
 import * as categoryBAction from "../../../actions/category_blog";
@@ -267,6 +264,7 @@ class Form extends Component {
       products,
       category_product,
       blogs,
+      blogList,
       category_blog,
       groupCustomer,
     } = this.props;
@@ -309,7 +307,7 @@ class Form extends Component {
         <ListBlog
           handleAddBlog={this.handleAddBlog}
           store_code={store_code}
-          blogs={blogs}
+          blogs={blogList}
         />
         <form role="form" onSubmit={this.onSave} method="post">
           <div class="box-body">
@@ -436,17 +434,6 @@ class Form extends Component {
                     onChange={(e) => this.onChangeDate(e, "time_run")}
                   />
                 </div>
-                {/* <Datetime
-                  inputProps={{
-                    placeholder: "Chọn ngày (dd:mm:yyyy hh:mm)",
-                  }}
-                  value={time_run}
-                  onChange={(e) => this.onChangeDate(e, "time_run")}
-                  dateFormat="DD-MM-YYYY"
-                  timeFormat="HH:mm:ss"
-
-                />
-                 */}
               </div>
             </div>
             <div className={disable_everyDay}>
@@ -468,15 +455,6 @@ class Form extends Component {
                     onSave={() => {}}
                     onChange={(e) => this.onChangeDate(e, "time_of_day")}
                   />
-                  {/* <Datetime
-                  inputProps={{
-                    placeholder: "Chọn thời gian (hh:mm)",
-                  }}
-                  value={time_of_day}
-                  onChange={(e) => this.onChangeDate(e, "time_of_day")}
-                  dateFormat={false}
-                  timeFormat="HH:mm:ss"
-                /> */}
                 </div>
               </div>
             </div>
@@ -612,8 +590,6 @@ class Form extends Component {
                 <div class={`media ${showProduct}`} id="product_preview">
                   <img width="100px" height="120px" src={product.img} alt="" />
                   <div class="media-body" style={{ marginLeft: "10px" }}>
-                    {/* <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{product.name} </h5> */}
-                    {/* <p>{format(Number(product.price))}</p> */}
                   </div>
                 </div>
               </div>
@@ -636,12 +612,6 @@ class Form extends Component {
 
                 <br></br>
                 <div class={`media ${showCProduct}`} id="product_preview">
-                  {/* <img
-                    width="100px"
-                    height="120px"
-                    src={category.img}
-                    alt=""
-                  /> */}
                   <div class="media-body" style={{ marginLeft: "10px" }}>
                     <h5 style={{ fontSize: "18px" }} class="mt-0 h3">
                       {category.name}{" "}
@@ -669,9 +639,6 @@ class Form extends Component {
                 <br></br>
                 <div class={`media ${showBlog}`} id="product_preview">
                   <img width="100px" height="120px" src={blog.img} alt="" />
-                  {/* <div class="media-body" style={{ marginLeft: "10px" }}>
-                    <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{blog.name} </h5>
-                  </div> */}
                 </div>
               </div>
 
@@ -700,9 +667,6 @@ class Form extends Component {
                     src={categoryBlog.img}
                     alt=""
                   />
-                  {/* <div class="media-body" style={{ marginLeft: "10px" }}>
-                    <h5 style={{ fontSize: "18px" }} class="mt-0 h3">{categoryBlog.name} </h5>
-                  </div> */}
                 </div>
               </div>
             </div>
@@ -732,6 +696,7 @@ const mapStateToProps = (state) => {
     products: state.productReducers.product.allProduct,
     category_product: state.categoryPReducers.category_product.allCategoryP,
     blogs: state.blogReducers.blog.allBlog,
+    blogList: state.blogReducers.blog.blogList,
     groupCustomer: state.groupCustomerReducers.group_customer.groupCustomer,
   };
 };

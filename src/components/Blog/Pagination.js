@@ -1,50 +1,50 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-import * as blogAction from "../../actions/blog";
-import getChannel from "../../ultis/channel";
+import * as blogAction from '../../actions/blog';
+import getChannel from '../../ultis/channel';
 class Pagination extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      page : 1
-    }
+      page: 1,
+    };
   }
 
   passPagination = (page) => {
-    var { store_code,  limit  } = this.props
-    var params =`&limit=${limit}`
-    this.props.fetchAllBlog(store_code , page , params)    
-}
-
-
+    var { store_code, limit, searchValue } = this.props;
+    var params = searchValue ? `&limit=${limit}&search=${searchValue}` : `&limit=${limit}`;
+    this.props.fetchAllBlog(store_code, page, params);
+  };
 
   showData = (links) => {
     var result = null;
-    var url = null
-    if(typeof links == "undefined")
-    {
-      return result
+    var url = null;
+    if (typeof links == 'undefined') {
+      return result;
     }
     if (links.length > 0) {
       result = links.map((data, index) => {
-        var active = data.active == true ? "active" : null;
-        var label = (data.label.includes("&laquo; ") || data.label.includes(" &raquo;")) 
-        ? data.label.replace("&laquo; Previous", "Trước").replace("Next &raquo;", "Sau")
-        : data.label
-        if(data.url == null)
-        {
+        var active = data.active == true ? 'active' : null;
+        var label =
+          data.label.includes('&laquo; ') || data.label.includes(' &raquo;')
+            ? data.label.replace('&laquo; Previous', 'Trước').replace('Next &raquo;', 'Sau')
+            : data.label;
+        if (data.url == null) {
           return (
-            <li class={`page-item ${active} `}><a class="page-link">{label}</a></li>
+            <li class={`page-item ${active} `}>
+              <a class="page-link">{label}</a>
+            </li>
+          );
+        } else {
+          return (
+            <li class={`page-item ${active} `}>
+              <a onClick={() => this.passPagination(data.url.split('?page=')[1])} class="page-link">
+                {label}
+              </a>
+            </li>
           );
         }
-        else{
-     
-          return (
-            <li class={`page-item ${active} `}><a onClick = {()=> this.passPagination(data.url.split('?page=')[1])} class="page-link">{label}</a></li>
-          );
-        }
-     
       });
     } else {
       return result;
@@ -53,26 +53,19 @@ class Pagination extends Component {
   };
 
   render() {
-    var links = this.props.blogs.links || []
+    var links = this.props.blogs.links || [];
     return (
-        
-   
-<nav aria-label="Page navigation" className={`float-pagination ${this.props.style} ${getChannel()}`}>
-  <ul class="pagination  tab-pagination pg-blue">
-    {this.showData(links)}
-  </ul>
-</nav>
-   
-        
+      <nav aria-label="Page navigation" className={`float-pagination ${this.props.style} ${getChannel()}`}>
+        <ul class="pagination  tab-pagination pg-blue">{this.showData(links)}</ul>
+      </nav>
     );
   }
 }
 
 const mapDispatchToProps = (dispatch, props) => {
   return {
-
-    fetchAllBlog: (store_code , page , params) => {
-      dispatch(blogAction.fetchAllBlog(store_code , page , params));
+    fetchAllBlog: (store_code, page, params) => {
+      dispatch(blogAction.fetchAllBlog(store_code, page, params));
     },
   };
 };
