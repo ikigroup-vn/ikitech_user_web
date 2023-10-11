@@ -147,7 +147,6 @@ export const fetchAllListProduct = (store_code, search) => {
               var newArray = [];
 
               for (const item of res.data.data.data) {
-                console.log('itemhPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA', item);
                 var newItem = {};
                 var isCheckedDistribute = false;
                 var arangeKeyItem = {
@@ -443,8 +442,9 @@ export const fetchProductInventory = (store_code, branch_id, params) => {
               name: item.name,
               sku: item.sku,
               barcode: item.barcode,
-              distributes: item.inventory.distributes,
+              check_inventory: item.check_inventory,
               shelf_position: item.shelf_position,
+              distributes: item.inventory.distributes,
             };
             // eslint-disable-next-line no-loop-func
             Object.entries(arangeKeyItem).forEach(([key, value], index) => {
@@ -456,6 +456,9 @@ export const fetchProductInventory = (store_code, branch_id, params) => {
               }
               if (key == 'barcode') {
                 newItem['Mã BARCODE'] = value;
+              }
+              if (key == 'check_inventory') {
+                newItem['Theo dõi kho (Có/Không)'] = `${value ? 'Có' : 'Không'}`;
               }
               if (key == 'shelf_position') {
                 newItem['Vị trí kệ hàng'] = value;
