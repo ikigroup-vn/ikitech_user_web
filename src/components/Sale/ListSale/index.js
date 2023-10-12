@@ -92,20 +92,34 @@ class ListSale extends Component {
       if (value === "") {
         newStaffSearch = newStaffSearchSaleClone;
       } else {
-        newStaffSearch = newStaffSearchSaleClone.filter((staff) =>
-          removeAscent(staff.name.trim().toLowerCase()).includes(
-            removeAscent(value.trim().toLowerCase())
-          )
+        newStaffSearch = newStaffSearchSaleClone.filter(
+          (staff) =>
+            removeAscent(staff.name.trim().toLowerCase()).includes(
+              removeAscent(value.trim().toLowerCase())
+            ) ||
+            removeAscent(staff.username.trim().toLowerCase()).includes(
+              removeAscent(value.trim().toLowerCase())
+            ) ||
+            removeAscent(staff.phone_number.trim().toLowerCase()).includes(
+              removeAscent(value.trim().toLowerCase())
+            )
         );
       }
     } else {
       if (value === "") {
         newStaffSearch = staff;
       } else {
-        newStaffSearch = newStaffSearchClone.filter((staff) =>
-          removeAscent(staff.name.trim().toLowerCase()).includes(
-            removeAscent(value.trim().toLowerCase())
-          )
+        newStaffSearch = newStaffSearchClone.filter(
+          (staff) =>
+            removeAscent(staff.name.trim().toLowerCase()).includes(
+              removeAscent(value.trim().toLowerCase())
+            ) ||
+            removeAscent(staff.username.trim().toLowerCase()).includes(
+              removeAscent(value.trim().toLowerCase())
+            ) ||
+            removeAscent(staff.phone_number.trim().toLowerCase()).includes(
+              removeAscent(value.trim().toLowerCase())
+            )
         );
       }
     }
