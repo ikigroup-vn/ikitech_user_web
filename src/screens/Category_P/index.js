@@ -63,7 +63,6 @@ class Store extends Component {
     this.setState({ modalcreatechild: modal });
   };
   handleUpdateChild = (modal) => {
-    console.log("model child", modal);
     this.setState({ modalupdatechild: modal });
   };
   handleUpdateCallBack = (modal) => {

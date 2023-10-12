@@ -4,7 +4,6 @@ import * as Env from "../../ultis/default";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import * as billAction from "../../actions/bill";
-import { shallowEqual } from "../../ultis/shallowEqual";
 import * as Types from "../../constants/ActionType";
 class InfoProductPos extends Component {
   constructor(props) {
@@ -23,7 +22,6 @@ class InfoProductPos extends Component {
   }
 
   hasBonusProduct = (listProduct) => {
-    console.log(listProduct);
     if (listProduct?.length == 0) {
       return false;
     } else {
@@ -65,7 +63,6 @@ class InfoProductPos extends Component {
     }
     if (distributes.length > 0) {
       result = distributes.map((distribute, index) => {
-        console.log("aaa", distribute);
         return (
           <>
             {distribute.name !== null ? (
@@ -165,22 +162,18 @@ class InfoProductPos extends Component {
 
   checkItem = (id) => {
     var list_refunds = [...this.state.list_refunds];
-    console.log(list_refunds, id);
     var listItems = [];
     var _id = this.getLineItemId(id);
-    console.log(_id);
     if (list_refunds?.length == 0) return false;
     else {
       listItems = list_refunds.filter(function (e) {
         return e.line_item_id === _id && e.check === true;
       });
     }
-    console.log(listItems);
     return listItems.length > 0;
   };
 
   check = (e, id) => {
-    console.log(id);
     var list_refunds = [...this.state.list_refunds];
 
     for (var element of list_refunds) {
@@ -233,7 +226,6 @@ class InfoProductPos extends Component {
     if (type == "INCREASE") {
       for (var element of list_refunds) {
         if (element.line_item_id == id) {
-          console.log(element, max);
           if (element.quantity + 1 > max) {
             return;
           }
@@ -243,7 +235,6 @@ class InfoProductPos extends Component {
     } else {
       for (var element of list_refunds) {
         if (element.line_item_id == id) {
-          console.log(" da vaoaaa");
 
           if (element.quantity - 1 <= 0) {
             return;
@@ -252,7 +243,6 @@ class InfoProductPos extends Component {
         }
       }
     }
-    console.log(list_refunds);
     this.setState({ list_refunds: [...list_refunds] });
     this.postTotalRefund(list_refunds);
   };
@@ -326,12 +316,9 @@ class InfoProductPos extends Component {
         var product_img =
           product.image_url == null ? Env.IMG_NOT_FOUND : product.image_url;
         var showTagDelPrice = product_discount_amount > 0 ? 0 : 1;
-        console.log(product.product_discount_amount);
-        console.log(showTagDelPrice);
         var line_list_product =
           index < Number(products.length - 1) ? "line-list-product" : null;
         var store_code = this.props.store_code;
-        console.log(this.getCanQuantity(product.id, list_items));
         return (
           <React.Fragment>
             {this.checkExsitProduct(product.id) == true && (
@@ -340,7 +327,7 @@ class InfoProductPos extends Component {
                 style={{ display: "flex", marginBottom: "10px" }}
               >
                 <li className="cart_item cart_item_change col-lg-3 col-md-12 col-sm-12 ">
-                  <div className="panel panel-default mb0" style={{}}>
+                  <div className="panel panel-default mb0">
                     <div className="panel-body pd0" style={{ display: "flex" }}>
                       <Link to={`/product/edit/${store_code}/${product.id}`}>
                         <img
@@ -736,7 +723,6 @@ class InfoProductPos extends Component {
 
     var { product_discount_amount } = bill;
     var total_final = bill.total_final;
-    console.log(bills);
     return (
       <div className="card box box-warning cart_wrapper mb0">
         <div className="box-header">

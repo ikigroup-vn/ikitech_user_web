@@ -64,7 +64,7 @@ class ListProduct extends Component {
         }
         return (
           <tr>
-            <td>{Number(this.props.products.current_page - 1)* 20 + index + 1}</td>
+            <td>{Number(this.props.products.current_page - 1) * 20 + index + 1}</td>
             <td>
               <img
                 src={data.images.length > 0 ? data.images[0].image_url : Env.IMG_NOT_FOUND}
@@ -117,13 +117,11 @@ class ListProduct extends Component {
                     contactOrNumber(format(Number(min_price)))
                   ) : (
                     <div className="row e">
-                      <div
-                      >
+                      <div>
                         {format(Number(min_price))}
                         {' - '}
                         {format(Number(max_price))}
                       </div>
-
                     </div>
                   )}
                 </div>

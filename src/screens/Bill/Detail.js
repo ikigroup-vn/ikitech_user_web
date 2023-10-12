@@ -10,12 +10,10 @@ import Loading from "../Loading";
 import * as billAction from "../../actions/bill";
 import Form from "../../components/Bill/Form";
 import { shallowEqual } from "../../ultis/shallowEqual";
-import NotAccess from "../../components/Partials/NotAccess";
 import ReactToPrint from "react-to-print";
 import ListComponentToPrint from "./ListComponentPrint";
 import ComponentToPrintPos from "./ComponentToPrintPos";
 import getChannel, { IKITECH, IKIPOS } from "../../ultis/channel";
-import { getQueryParams } from "../../ultis/helpers";
 import * as shipmentAction from "../../actions/shipment";
 import * as posAction from "../../actions/post_order";
 
@@ -92,7 +90,6 @@ class Detail extends Component {
     );
   };
   handleShowModalDelete = () => {
-    console.log("zooooo!");
     this.setOrderSelected(this.props.bill);
     this.setShowModalDeleteOrder(true);
   };
@@ -135,8 +132,6 @@ class Detail extends Component {
             <div id="content-wrapper" className="d-flex flex-column">
               <div style={{ marginBottom: "25px" }} id="content">
                 <Topbar store_code={store_code} />
-                {/* {typeof isShow == "undefined" ? <div style={{ height: "500px" }}></div> :
-                                    isShow == true ? */}
                 <div className="container-fluid">
                   <Alert
                     type={Types.ALERT_UID_STATUS}

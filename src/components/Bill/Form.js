@@ -103,7 +103,6 @@ class Form extends Component {
         ? "Trống"
         : bill.customer.name;
 
-    console.log(store_code);
     return (
       <React.Fragment>
         <ModalOrder
