@@ -255,7 +255,7 @@ class Upload extends Component {
   };
 
   render() {
-    const { style, multiple, limit, loading } = this.props;
+    const { style, multiple, limit = 1, loading } = this.props;
     const { fileList, file } = this.state;
 
     const forbiddenLinks = this.props.forbiddenLinks || [];
@@ -347,7 +347,6 @@ class Upload extends Component {
                 <p>Chọn ảnh hoặc kéo và thả</p>
               </div>
             )}
-
             <input
               type="file"
               multiple={multiple ? true : false}
