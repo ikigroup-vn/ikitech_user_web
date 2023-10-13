@@ -14,6 +14,7 @@ import Loading from "../Loading";
 import BadgeTable from "../../components/Dashboard/BadgeTable";
 import * as dashboardAction from "../../actions/dashboard";
 import * as collaboratorAction from "../../actions/collaborator";
+import * as productAction from "../../actions/product";
 import * as helper from "../../ultis/helpers";
 import Statistical from "../../components/Sale/Statistical";
 
@@ -48,6 +49,7 @@ class Dashboard extends Component {
         `?date_from=${date.from}&date_to=${date.to}`
       );
       this.props.fetchAllCollaborator(store_code);
+      this.props.getAmountProductNearlyOutStock(store_code, idBranch);
     }
   }
 
@@ -126,6 +128,9 @@ class Dashboard extends Component {
                     numDiscount={numDiscount}
                     collaborators={collaborators}
                     store={this.props.store}
+                    countProductNearlyOutStock={
+                      this.props.countProductNearlyOutStock
+                    }
                   />
                   <br></br>
 
@@ -201,6 +206,8 @@ const mapStateToProps = (state) => {
     collaborators: state.collaboratorReducers.collaborator.allCollaborator,
     permission: state.authReducers.permission.data,
     currentBranch: state.branchReducers.branch.currentBranch,
+    countProductNearlyOutStock:
+      state.productReducers.product.countProductNearlyOutStock,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -218,6 +225,11 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchAllCollaborator: (store_code) => {
       dispatch(collaboratorAction.fetchAllCollaborator(store_code));
+    },
+    getAmountProductNearlyOutStock: (store_code, branch_id) => {
+      dispatch(
+        productAction.getAmountProductNearlyOutStock(store_code, branch_id)
+      );
     },
   };
 };

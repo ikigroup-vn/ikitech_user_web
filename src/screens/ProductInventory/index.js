@@ -119,6 +119,10 @@ class ProductInventory extends Component {
       );
     }
     this.props.fetchDataId(this.props.match.params.store_code);
+    this.props.getAmountProductNearlyOutStock(
+      this.props.match.params.store_code,
+      branch_id
+    );
   }
 
   componentDidUpdate() {
@@ -349,6 +353,9 @@ class ProductInventory extends Component {
                       branch_id={branchIds}
                       badges={badges}
                       products={this.props.products}
+                      countProductNearlyOutStock={
+                        this.props.countProductNearlyOutStock
+                      }
                     />
 
                     <div
@@ -531,6 +538,8 @@ const mapStateToProps = (state) => {
     products: state.productReducers.product.allProduct,
     alert: state.productReducers.alert.alert_success,
     allProductList: state.productReducers.product.allProductList,
+    countProductNearlyOutStock:
+      state.productReducers.product.countProductNearlyOutStock,
     permission: state.authReducers.permission.data,
     badges: state.badgeReducers.allBadge,
     store: state.storeReducers.store.storeID,
@@ -546,6 +555,11 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchProductInventory: (store_code, branch_id, params) => {
       dispatch(
         productAction.fetchProductInventory(store_code, branch_id, params)
+      );
+    },
+    getAmountProductNearlyOutStock: (store_code, branch_id) => {
+      dispatch(
+        productAction.getAmountProductNearlyOutStock(store_code, branch_id)
       );
     },
     fetchDataId: (id) => {

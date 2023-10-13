@@ -8,6 +8,7 @@ var initialState = {
   allProductSendo: {},
   allProductShopee: {},
   product_agency_price_id: {},
+  countProductNearlyOutStock: 0,
   messageImport: {},
 };
 
@@ -19,8 +20,8 @@ export const product = (state = initialState, action) => {
       return newState;
 
     case Types.SUCCESS_EDIT_ITEM_PRODUCT_IN_LIST:
-      var dataNew =  {
-        ...state.allProduct
+      var dataNew = {
+        ...state.allProduct,
       };
       dataNew.data = newState.allProduct.data.map((ele) => {
         if (ele.id == action.data.id) {
@@ -51,6 +52,9 @@ export const product = (state = initialState, action) => {
       return newState;
     case Types.IMPORT_FILE_PRODUCTS:
       newState.messageImport = action.data;
+      return newState;
+    case Types.FETCH_AMOUNT_PRODUCT_NEARLY_OUT_STOCK:
+      newState.countProductNearlyOutStock = action.data;
       return newState;
     default:
       return newState;
