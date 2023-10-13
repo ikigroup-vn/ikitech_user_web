@@ -244,12 +244,12 @@ class Upload extends Component {
 
   onSortEnd = ( oldIndex, newIndex ) => {
     const { setFiles } = this.props;
-    this.setState(({ fileList }) => {
-      const sortedFiles = arrayMove(fileList, oldIndex, newIndex);
-      setFiles(sortedFiles);
-      return {
+    const { fileList } = this.state;
+    const sortedFiles = arrayMove(fileList, oldIndex, newIndex);
+
+    setFiles(sortedFiles);
+    this.setState({
         fileList: sortedFiles,
-      };
     });
   };
 
