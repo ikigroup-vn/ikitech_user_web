@@ -75,10 +75,7 @@ class General extends Component {
                     Sắp hết hàng
                   </div>
                   <div className="h5 mb-0 font-weight-bold text-gray-800">
-                    {
-                      this.props.badges
-                        ?.total_product_or_discount_nearly_out_stock
-                    }
+                    {this.props.countProductNearlyOutStock || 0}
                   </div>
                 </div>
                 <div className="col-auto">

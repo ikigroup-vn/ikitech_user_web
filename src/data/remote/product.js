@@ -213,3 +213,11 @@ export const changePercentCol = (store_code, value) => {
     value
   );
 };
+
+export const getAmountProductNearlyOutStock = (store_code, branch_id) => {
+  return callApi(
+    `/store_v2/${store_code}/${branch_id}/amount_product_nearly_out_stock`,
+    "get",
+    null
+  );
+};
