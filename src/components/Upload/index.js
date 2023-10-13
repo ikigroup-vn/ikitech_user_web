@@ -7,7 +7,7 @@ import themeData from '../../ultis/theme_data';
 import * as Types from '../../constants/ActionType';
 import LoadingImg from '../Loading/LoadingImg.js';
 import SortableList, { SortableItem } from 'react-easy-sort';
-import arrayMove from "array-move";
+import arrayMove from 'array-move';
 
 const Spinner = styled.div`
   .spinner {
@@ -34,8 +34,11 @@ const DropFileStyles = styled.div`
   align-items: center;
   column-gap: 20px;
   row-gap: 20px;
+  position: relative;
   .drop-file-input {
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 140px;
     height: 130px;
     border: 2px dotted;
@@ -45,6 +48,13 @@ const DropFileStyles = styled.div`
     justify-content: center;
     cursor: pointer;
     background-color: #f4f4f4;
+  }
+  .list_image {
+    .upload__item {
+      &:first-child {
+        margin-left: 160px;
+      }
+    }
   }
 
   .drop-file-input input {
@@ -181,8 +191,14 @@ class Upload extends Component {
   }
 
   setFileList = (fileList) => {
-    this.setState({ fileList: [...this.state.fileList, ...fileList] });
+    // Gán một id duy nhất cho mỗi file
+    const filesWithId = fileList.map((file, index) => ({
+      ...file,
+      id: index, // Sử dụng index làm id trong ví dụ này
+    }));
+    this.setState({ fileList: [...this.state.fileList, ...filesWithId] });
   };
+
   setFile = (file) => {
     this.setState({ file });
   };
@@ -206,7 +222,24 @@ class Upload extends Component {
     const newFiles = e.target.files;
     const { file, fileList } = this.state;
     const { uploadListImgProduct, uploadAvataProduct, multiple, limit, showError } = this.props;
-    if (newFiles.length > 0) {
+
+    const areAllFilesImages = Array.from(newFiles).every((newFile) => {
+      const imageExtensions = /\.(jpg|jpeg|png|gif|svg|jfif)$/i;
+      return imageExtensions.test(newFile.name);
+    });
+
+    if (!areAllFilesImages) {
+      showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: 'danger',
+          title: 'Lỗi',
+          disable: 'show',
+          content: 'Một số tệp bạn đã chọn không phải là hình ảnh',
+        },
+      });
+      return;
+    } else if (newFiles.length > 0) {
       const updatedList = [...newFiles];
       if (multiple) {
         if (limit) {
@@ -242,20 +275,27 @@ class Upload extends Component {
     setFiles(newFileList);
   };
 
-  onSortEnd = ( oldIndex, newIndex ) => {
+  onSortEnd = (oldIndex, newIndex) => {
     const { setFiles } = this.props;
     const { fileList } = this.state;
     const sortedFiles = arrayMove(fileList, oldIndex, newIndex);
 
     setFiles(sortedFiles);
     this.setState({
-        fileList: sortedFiles,
+      fileList: sortedFiles,
     });
   };
 
   render() {
     const { style, multiple, limit, loading } = this.props;
     const { fileList, file } = this.state;
+    const cssProps = {
+      width: 80,
+      height: 80,
+      transformScale: 0.7,
+      marginLeft: 160,
+      marginTop: 30,
+    };
 
     const forbiddenLinks = this.props.forbiddenLinks || [];
     return (
@@ -324,19 +364,24 @@ class Upload extends Component {
         )}
 
         {loading ? (
-          <LoadingImg width={80} height={80} backgroundColor={'grey'} transformScale={0.7} />
+          <LoadingImg styleCss={cssProps} dotColor="grey" />
         ) : (
-          <SortableList onSortEnd={this.onSortEnd} style={{
-            display: "flex",
-            gap: "20px",
-            flexWrap: 'wrap',
-          }}>
+          <SortableList
+            className="list"
+            draggedItemClassName="dragged"
+            onSortEnd={this.onSortEnd}
+            style={{
+              display: 'flex',
+              gap: '20px',
+              flexWrap: 'wrap',
+            }}
+          >
             {multiple &&
               fileList.length > 0 &&
               fileList.map((file, index) => (
-                <SortableItem key={file}>
+                <SortableItem key={index} className="list-image">
                   <div className="upload__item">
-                    <div
+                  <div
                       style={{
                         backgroundImage: `url(${file})`,
                       }}
