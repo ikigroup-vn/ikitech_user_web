@@ -94,8 +94,8 @@ const DropFileStyles = styled.div`
     span {
       position: relative;
       svg {
-        width: 28px;
-        height: 28px;
+        width: 30px;
+        height: 30px;
       }
       & > span {
         position: absolute;
@@ -108,6 +108,9 @@ const DropFileStyles = styled.div`
     }
   }
   .upload__item {
+    &:first-child {
+    margin-left: 160px;
+  }
     position: relative;
     width: 140px;
     height: 130px;
@@ -191,12 +194,7 @@ class Upload extends Component {
   }
 
   setFileList = (fileList) => {
-    // Gán một id duy nhất cho mỗi file
-    const filesWithId = fileList.map((file, index) => ({
-      ...file,
-      id: index, // Sử dụng index làm id trong ví dụ này
-    }));
-    this.setState({ fileList: [...this.state.fileList, ...filesWithId] });
+    this.setState({ fileList: [...this.state.fileList, fileList] });
   };
 
   setFile = (file) => {
@@ -213,13 +211,19 @@ class Upload extends Component {
     dropFileInput.classList.remove('dragover');
   };
 
-  onDrop = () => {
+  onDrop = (e) => {
     const dropFileInput = document.querySelector('.drop-file-input');
     dropFileInput.classList.remove('dragover');
+    this.onFileDrop(e.dataTransfer.files, true)
   };
 
-  onFileDrop = async (e) => {
-    const newFiles = e.target.files;
+  onFileDrop = async (e, isDrop = false) => {
+    let newFiles;
+    if(isDrop){
+      newFiles = e.dataTransfer.filess;
+    } else {
+      newFiles = e.target.files;
+    }
     const { file, fileList } = this.state;
     const { uploadListImgProduct, uploadAvataProduct, multiple, limit, showError } = this.props;
 
@@ -379,15 +383,40 @@ class Upload extends Component {
             {multiple &&
               fileList.length > 0 &&
               fileList.map((file, index) => (
-                <SortableItem key={index} className="list-image">
-                  <div className="upload__item">
+                <SortableItem key={file} className="list-content">
                   <div
+                    className="upload__item"
+                    style={{
+                      position: 'relative',
+                      width: 140,
+                      height: 130,
+                      border: '1px solid #ddd',
+                      borderRadius: 6,
+                    }}
+                  >
+                    <div
                       style={{
                         backgroundImage: `url(${file})`,
+                        height: '100%',
+                        borderRadius: 6,
+                        width: 'initial',
+                        minHeight: '100%',
+                        border: '1px solid #ddd',
+                        backgroundSize: 'contain',
+                        backgroundPosition: '50%',
+                        backgroundRepeat: 'no-repeat',
                       }}
                       className="upload__item__content"
                     />
-                    <span class="item__delete" onClick={() => this.removeFile(index)}>
+                    <span
+                      className="item__delete"
+                      onClick={() => this.removeFile(index)}
+                      style={{
+                        position: 'absolute',
+                        right: -10,
+                        top: -10,
+                      }}
+                    >
                       <svg xmlns="http://www.w3.org/2000/svg" width="23" height="23" viewBox="0 0 23 23">
                         <g fill="none" fillRule="evenodd" stroke="none" strokeWidth="1">
                           <g transform="translate(-301 -387)">
