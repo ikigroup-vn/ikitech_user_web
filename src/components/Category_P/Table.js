@@ -42,7 +42,6 @@ class Table extends Component {
     e.preventDefault();
   };
   deleteChild = (e, id, idChild, name) => {
-    console.log("infor", name);
     this.props.handleDeleteChild({
       title: "danh mục con",
       id: id,

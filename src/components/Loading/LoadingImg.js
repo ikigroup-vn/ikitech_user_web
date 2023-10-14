@@ -17,7 +17,7 @@ const LoadingImgStyles = styled.div`
     width: 7px;
     height: 7px;
     border-radius: 50%;
-    background: ${props => props.backgroundColor ?  props.backgroundColor : '#fff'};
+    background: ${props => props.dotColor ?  props.dotColor : '#fff'};
     margin: -4px 0 0 -4px;
   }
   .lds-roller div:nth-child(1) {
@@ -91,15 +91,13 @@ class LoadingImg extends Component {
   }
 
   render() {
-    const { width, height, top, left, backgroundColor, transformScale, ...rest } = this.props;
+    const { dotColor, styleCss, ...rest } = this.props;
     return (
-      <LoadingImgStyles backgroundColor={backgroundColor} top={top} left={left}>
+      <LoadingImgStyles dotColor={dotColor} style={styleCss}>
         <div
           className="lds-roller"
           style={{
-            width: width ? width : 80,
-            height:  height ? height : 80,
-            transform: `scale(${transformScale})`,
+            transform: `scale(${styleCss?.transformScale})`,
           }}
           {...rest}
         >

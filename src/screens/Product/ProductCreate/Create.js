@@ -541,7 +541,7 @@ class ProductCreate extends Component {
                 </div>
                 <div style={{paddingTop: 20}}>
                     <label
-                      for="txtName"
+                      htmlFor="txt-name"
                       style={{
                         fontWeight: "750",
                       }}
