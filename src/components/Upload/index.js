@@ -194,7 +194,7 @@ class Upload extends Component {
   }
 
   setFileList = (fileList) => {
-    this.setState({ fileList: [...this.state.fileList, ..fileList] });
+    this.setState({ fileList: [...this.state.fileList, ...fileList] });
   };
 
   setFile = (file) => {
