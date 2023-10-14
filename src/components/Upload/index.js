@@ -214,13 +214,13 @@ class Upload extends Component {
   onDrop = (e) => {
     const dropFileInput = document.querySelector('.drop-file-input');
     dropFileInput.classList.remove('dragover');
-    this.onFileDrop(e.dataTransfer.files, true)
+    this.onFileDrop(e, true)
   };
 
   onFileDrop = async (e, isDrop = false) => {
     let newFiles;
     if(isDrop){
-      newFiles = e.dataTransfer.filess;
+      newFiles = e.dataTransfer.files;
     } else {
       newFiles = e.target.files;
     }
