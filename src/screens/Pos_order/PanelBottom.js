@@ -1486,7 +1486,7 @@ class PanelBottom extends Component {
               aria-selected="false"
             >
               Khách hàng(
-              {oneCart.customer ? (
+              {oneCart?.customer ? (
                 <>
                   {oneCart.customer?.is_agency
                     ? "Đại lý"
