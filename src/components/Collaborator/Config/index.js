@@ -51,6 +51,19 @@ const CollaboratorStyles = styled.div`
       }
     }
   }
+  .ctv-note {
+    ul {
+      list-style: disc;
+      padding-left: 15px;
+      margin-bottom: 5px;
+    }
+    p {
+      color: #bb1f25;
+      display: flex;
+      column-gap: 10px;
+      font-style: italic;
+    }
+  }
 `;
 class Config extends Component {
   constructor(props) {
@@ -408,6 +421,43 @@ class Config extends Component {
           </div>
           <div className="form-group">
             <label htmlFor="name">
+              CTV nhận % hoa hồng trực tiếp qua 3 hình thức:
+            </label>
+
+            <div className="ctv-note">
+              <ul>
+                <li>Dropship (Đặt hộ): CTV đặt hàng hộ khách hàng</li>
+                <li>CTV nhập hàng</li>
+                <li>
+                  Affiliate: CTV giới thiệu khách hàng mua hàng qua link hoặc mã
+                  số giới thiệu (ưu tiên)
+                </li>
+              </ul>
+              <p>
+                <span>*</span>% hoa hồng trực tiếp mà CTV được nhận sẽ được cài
+                trong phần sản phẩm
+              </p>
+            </div>
+          </div>
+          <div className="form-group">
+            <label htmlFor="name">
+              CTV1 giới thiệu CTV2 sẽ nhận được hoa hồng gián tiếp qua 3 hình
+              thức sau:
+            </label>
+
+            <div className="ctv-note">
+              <ul>
+                <li>TH1: CTV2 đặt hàng hộ khách hàng</li>
+                <li>TH2: CTV2 nhập hàng</li>
+                <li>
+                  TH3: CTV2 giới thiệu khách hàng mua hàng qua link hoặc mã số
+                  giới thiệu (ưu tiên)
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div className="form-group">
+            <label htmlFor="name">
               Phần trăm hoa hồng cho người giới thiệu CTV mua hàng{" "}
             </label>
             <div className="bonusTypeForCTV">
@@ -430,7 +480,7 @@ class Config extends Component {
                     onChange={(e) => this.setBonusTypeForCTVT2(e.target.value)}
                   />{" "}
                   <label htmlFor="bonus_type_for_ctv_t2_option1">
-                    Từ tổng đơn hàng
+                    % hoa hồng CTV1 được nhận từ tổng tiền đơn hàng
                   </label>
                   <span className="bonusTypeForCTV_note">
                     <span className="bonusTypeForCTV_noteIcon">?</span>
@@ -451,7 +501,7 @@ class Config extends Component {
                     checked={bonus_type_for_ctv_t2 == 1}
                   />{" "}
                   <label htmlFor="bonus_type_for_ctv_t2_option2">
-                    Từ hoa hồng cộng tác viên mua hàng
+                    % hoa hồng CTV1 được nhận từ số hoa hồng CTV2 được hưởng
                   </label>
                   <span className="bonusTypeForCTV_note">
                     <span className="bonusTypeForCTV_noteIcon">?</span>

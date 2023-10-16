@@ -79,6 +79,19 @@ const AgencyStyles = styled.div`
       background-color: white;
     }
   }
+  .agency-note {
+    ul {
+      list-style: disc;
+      padding-left: 15px;
+      margin-bottom: 5px;
+    }
+    p {
+      color: #bb1f25;
+      display: flex;
+      column-gap: 10px;
+      font-style: italic;
+    }
+  }
 `;
 class Config extends Component {
   constructor(props) {
@@ -481,6 +494,48 @@ class Config extends Component {
             </div>
             <div className="form-group">
               <label htmlFor="name">
+                Đại lý nhận % chiết khấu nhập hàng theo từng nhóm đại lý
+              </label>
+
+              <div className="agency-note">
+                Đại lý nhập hàng, VD: Đại lý cấp 1 (40%), Đại lý cấp 2 (35%),
+                Đại lý cấp N...
+              </div>
+            </div>{" "}
+            <div className="form-group">
+              <label htmlFor="name">
+                Đại lý nhận % hoa hồng trực tiếp qua 2 hình thức:
+              </label>
+
+              <div className="agency-note">
+                <ul>
+                  <li>Dropship (Đặt hộ): Đại lý đặt hàng hộ khách hàng</li>
+                  <li>
+                    Affiliate: Đại lý giới thiệu khách hàng mua hàng qua link
+                    hoặc mã số giới thiệu (ưu tiên)
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div className="form-group">
+              <label htmlFor="name">
+                Đại lý giới thiệu CTV sẽ nhận được % hoa hồng gián tiếp qua 3
+                hình thức sau:
+              </label>
+
+              <div className="agency-note">
+                <ul>
+                  <li>TH1: CTV đặt hàng hộ khách hàng</li>
+                  <li>TH2: CTV nhập hàng</li>
+                  <li>
+                    TH3: CTV giới thiệu khách hàng mua hàng qua link hoặc mã số
+                    giới thiệu (ưu tiên)
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div className="form-group">
+              <label htmlFor="name">
                 Phần trăm hoa hồng cho người giới thiệu CTV mua hàng{" "}
               </label>
               <div className="bonusTypeForAgency">
@@ -505,7 +560,7 @@ class Config extends Component {
                       }
                     />{" "}
                     <label htmlFor="bonus_type_for_ctv_t2_option1">
-                      Từ tổng đơn hàng
+                      % hoa hồng Đại lý được nhận từ tổng tiền đơn hàng
                     </label>
                     <span className="bonusTypeForAgency_note">
                       <span className="bonusTypeForAgency_noteIcon">?</span>
@@ -528,7 +583,9 @@ class Config extends Component {
                       checked={bonus_type_for_ctv_t2 == 1}
                     />{" "}
                     <label htmlFor="bonus_type_for_ctv_t2_option2">
-                      Từ tổng hoa hồng sản phẩm theo cấp đại lý đã thiết định
+                      % hoa hồng từ chính Đại lý được hưởng(phần tiền này sẽ
+                      được tính tọa dựa trên số % hoa hồng của đại lý từng sản
+                      phẩm cộng lại theo cấu hình cấp đại lý)
                     </label>
                     <span className="bonusTypeForAgency_note">
                       <span className="bonusTypeForAgency_noteIcon">?</span>
