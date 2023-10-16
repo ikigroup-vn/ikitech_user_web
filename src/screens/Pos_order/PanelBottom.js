@@ -442,6 +442,9 @@ class PanelBottom extends Component {
   };
 
   onSeletedCustomer = (cus) => {
+    const newDate = isNaN(new Date(cus.date_of_birth))
+      ? ""
+      : new Date(cus.date_of_birth);
     this.setState({
       ...this.state,
       txtProvince: cus.province ?? "",
@@ -453,10 +456,7 @@ class PanelBottom extends Component {
 
       txtSex: cus.sex ?? "",
       txtAddressDetail: cus.address_detail ?? "",
-      selectedDate:
-        cus == null || cus.date_of_birth == null
-          ? ""
-          : new Date(cus.date_of_birth),
+      selectedDate: cus == null || cus.date_of_birth == null ? "" : newDate,
       isDisabledButton: cus == null ? false : cus.is_passersby,
 
       districtName: cus.district_name,
