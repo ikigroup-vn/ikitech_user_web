@@ -35,6 +35,8 @@ const DropFileStyles = styled.div`
   column-gap: 20px;
   row-gap: 20px;
   position: relative;
+  width: 140px;
+  height: 130px;
   .drop-file-input {
     position: absolute;
     top: 0;
