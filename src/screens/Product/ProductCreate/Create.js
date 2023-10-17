@@ -539,7 +539,7 @@ class ProductCreate extends Component {
                     handleDataFromProductVideo={this.handleDataFromProductVideo}
                   />
                 </div>
-                <div style={{paddingTop: 20}}>
+                <div style={{paddingTop: 20, width: '100%'}}>
                     <label
                       htmlFor="txt-name"
                       style={{
@@ -548,7 +548,7 @@ class ProductCreate extends Component {
                     >
                       Hình ảnh mô tả (Tối đa 13 ảnh)
                     </label>
-                    <div>
+                    <div style={{width: '100%'}}>
                       <Upload
                         multiple
                         setFiles={this.handleImageData}

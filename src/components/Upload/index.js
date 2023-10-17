@@ -35,8 +35,8 @@ const DropFileStyles = styled.div`
   column-gap: 20px;
   row-gap: 20px;
   position: relative;
-  width: 140px;
-  height: 130px;
+  width: 100%;
+  min-height: 130px;
   .drop-file-input {
     position: absolute;
     top: 0;
@@ -443,6 +443,7 @@ class Upload extends Component {
                       height: 130,
                       border: "1px solid #ddd",
                       borderRadius: 6,
+                      marginLeft: index === 0 && limit === fileList.length ? 0 : index !== 0 ? 0 : 160
                     }}
                   >
                     <div
