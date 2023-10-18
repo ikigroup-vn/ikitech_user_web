@@ -9,7 +9,6 @@ export const createOrder = (store_code, data) => {
     orderApi
       .createOrder(store_code, data)
       .then((res) => {
-        console.log("res", res);
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",
@@ -145,7 +144,6 @@ export const fetchAllCombo = (store_code) => {
       loading: "show",
     });
     orderApi.fetchAllCombo(store_code).then((res) => {
-      
       dispatch({
         type: Types.SHOW_LOADING,
         loading: "hide",
