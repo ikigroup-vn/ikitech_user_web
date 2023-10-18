@@ -67,7 +67,6 @@ export const createOrderBill = (store_code, data) => {
     orderApi
       .createOrderBill(store_code, data)
       .then((res) => {
-        console.log("res", res);
         dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",
