@@ -45,6 +45,7 @@ class Setting extends Component {
       allow_branch_payment_order: !this.state.allow_branch_payment_order,
     });
   };
+  
   handleAutoChooseDefaultBranchPaymentOrder = (e) => {
     this.setState({
       auto_choose_default_branch_payment_order:
