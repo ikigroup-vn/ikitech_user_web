@@ -22,7 +22,6 @@ export const exportAllListOrder = (
   params = null,
   params_agency = null
 ) => {
-  console.log("xxx");
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
