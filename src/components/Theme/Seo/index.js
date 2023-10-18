@@ -11,7 +11,8 @@ class Seo extends Component {
         this.state = {
             google_tag_manager_id: null,
             code_google_analytics: null,
-            google_site_verification_code:null
+            google_site_verification_code:null,
+            meta_pixel_code:null
         }
     }
 
@@ -23,7 +24,8 @@ class Seo extends Component {
             this.setState({
                 google_tag_manager_id: theme.google_tag_manager_id,
                 code_google_analytics: theme.code_google_analytics,
-                google_site_verification_code:theme.google_site_verification_code
+                google_site_verification_code:theme.google_site_verification_code,
+                meta_pixel_code:theme.meta_pixel_code
             })
         }
     }
@@ -45,7 +47,8 @@ class Seo extends Component {
             this.setState({
                 google_tag_manager_id: theme.google_tag_manager_id,
                 code_google_analytics: theme.code_google_analytics,
-                google_site_verification_code:theme.google_site_verification_code
+                google_site_verification_code:theme.google_site_verification_code,
+                meta_pixel_code:theme.meta_pixel_code
             })
         }
 
@@ -61,6 +64,7 @@ class Seo extends Component {
         form.google_tag_manager_id = theme.google_tag_manager_id
         form.code_google_analytics = theme.code_google_analytics
         form.google_site_verification_code = theme.google_site_verification_code
+        form.meta_pixel_code = theme.meta_pixel_code
 
         this.props.updateTheme(store_code, form);
     }
@@ -68,7 +72,8 @@ class Seo extends Component {
         var
             { google_tag_manager_id,
                 code_google_analytics,
-                google_site_verification_code
+                google_site_verification_code,
+                meta_pixel_code
             } = this.state
 
         return (
@@ -110,6 +115,17 @@ class Seo extends Component {
                             <label htmlFor="name">Mã Google Site Verification</label>
                             <div class="form-group" style={{ display: "flex" }}>
                                 <input style={{ maxWidth: "500px" }}  name="google_site_verification_code" value={google_site_verification_code} placeholder="Nhập mã..." onChange={this.onChange} className="form-control" id="txtName" autoComplete="off" />
+
+
+                            </div>
+
+                        </div>
+
+
+                        <div className="form-group">
+                            <label htmlFor="name">Meta Pixel Code</label>
+                            <div class="form-group" style={{ display: "flex" }}>
+                                <input style={{ maxWidth: "500px" }}  name="meta_pixel_code" value={meta_pixel_code} placeholder="Nhập mã..." onChange={this.onChange} className="form-control" id="txtName" autoComplete="off" />
 
 
                             </div>
