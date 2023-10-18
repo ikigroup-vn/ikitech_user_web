@@ -22,6 +22,8 @@ class Setting extends Component {
       stock: 0,
       enable_vat: false,
       percent_vat: 10,
+      allow_branch_payment_order: false,
+      auto_choose_default_branch_payment_order: true,
     };
   }
   handChangeEnableVat = (e) => {
@@ -33,6 +35,23 @@ class Setting extends Component {
   handChangeCheckbox3 = (e) => {
     this.setState({ checked_switch3: !this.state.checked_switch3 });
   };
+  handleAllowBranchPaymentOrder = (e) => {
+    if (e.target.checked) {
+      this.setState({
+        auto_choose_default_branch_payment_order: true,
+      });
+    }
+    this.setState({
+      allow_branch_payment_order: !this.state.allow_branch_payment_order,
+    });
+  };
+  handleAutoChooseDefaultBranchPaymentOrder = (e) => {
+    this.setState({
+      auto_choose_default_branch_payment_order:
+        !this.state.auto_choose_default_branch_payment_order,
+    });
+  };
+
   onChange = (e) => {
     const value = e.target.value;
     const name = e.target.name;
@@ -50,19 +69,25 @@ class Setting extends Component {
       noti_stock_count_near: this.state.stock,
       enable_vat: this.state.enable_vat,
       percent_vat: Number(this.state.percent_vat),
+      allow_branch_payment_order: this.state.allow_branch_payment_order,
+      auto_choose_default_branch_payment_order:
+        this.state.auto_choose_default_branch_payment_order,
     };
     this.props.updateGeneralSetting(store_code, formData);
   };
 
   componentWillReceiveProps = (nextProps) => {
     if (nextProps.generalSetting !== this.props.generalSetting) {
-      console.log("helllo");
       this.setState({
         checked_switch3: nextProps.generalSetting.allow_semi_negative,
         checked_switch2: nextProps.generalSetting.noti_near_out_stock,
         stock: nextProps.generalSetting.noti_stock_count_near,
         enable_vat: nextProps.generalSetting.enable_vat,
         percent_vat: nextProps.generalSetting.percent_vat,
+        allow_branch_payment_order:
+          nextProps.generalSetting.allow_branch_payment_order,
+        auto_choose_default_branch_payment_order:
+          nextProps.generalSetting.auto_choose_default_branch_payment_order,
       });
     }
     if (
@@ -174,6 +199,65 @@ class Setting extends Component {
               </div>
             </form>
           </div>
+          <div
+            className="wrap-setting"
+            style={{
+              maxWidth: "430px",
+              display: "flex",
+              justifyContent: "space-between",
+              padding: "10px 0",
+            }}
+          >
+            <div>Cho phép chọn chi nhánh khi thanh toán đơn hàng</div>
+            <form>
+              <div class="custom-control custom-switch">
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  id="allow_branch_payment_order"
+                  name="allow_branch_payment_order"
+                  checked={this.state.allow_branch_payment_order}
+                  onChange={this.handleAllowBranchPaymentOrder}
+                />
+                <label
+                  class="custom-control-label"
+                  for="allow_branch_payment_order"
+                ></label>
+              </div>
+            </form>
+          </div>
+          {this.state.allow_branch_payment_order ? (
+            <div
+              className="wrap-setting"
+              style={{
+                maxWidth: "430px",
+                display: "flex",
+                justifyContent: "space-between",
+                padding: "10px 0",
+              }}
+            >
+              <div>Tự động chọn chi nhánh mặc định khi thanh toán đơn hàng</div>
+              <form>
+                <div class="custom-control custom-switch">
+                  <input
+                    type="checkbox"
+                    class="custom-control-input"
+                    id="auto_choose_default_branch_payment_order"
+                    name="auto_choose_default_branch_payment_order"
+                    checked={
+                      this.state.auto_choose_default_branch_payment_order
+                    }
+                    onChange={this.handleAutoChooseDefaultBranchPaymentOrder}
+                  />
+                  <label
+                    class="custom-control-label"
+                    for="auto_choose_default_branch_payment_order"
+                  ></label>
+                </div>
+              </form>
+            </div>
+          ) : null}
+
           <div
             className="wrap-setting"
             style={{
