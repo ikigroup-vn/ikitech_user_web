@@ -40,6 +40,7 @@ class EditImportStock extends Component {
       discount: "",
       cost: "",
       total_payment: "",
+      vat: "",
       payment_method_selected: {
         value: 0,
         label: "Tiền mặt",
@@ -112,6 +113,7 @@ class EditImportStock extends Component {
       const {
         discount,
         cost,
+        vat,
         total_payment,
         tax,
         note,
@@ -150,6 +152,7 @@ class EditImportStock extends Component {
           : null,
         tax: tax,
         cost: cost ? new Intl.NumberFormat().format(cost) : cost,
+        vat: vat ? new Intl.NumberFormat().format(vat) : vat,
         total_payment: total_payment
           ? new Intl.NumberFormat().format(total_payment)
           : total_payment,
@@ -179,7 +182,8 @@ class EditImportStock extends Component {
     if (
       name == "txtValueDiscount" ||
       name == "cost" ||
-      name == "total_payment"
+      name == "total_payment" ||
+      name == "vat"
     ) {
       if (!isNaN(Number(_value))) {
         value = new Intl.NumberFormat().format(_value);
@@ -289,6 +293,7 @@ class EditImportStock extends Component {
       supplier_id: select_supplier ? select_supplier.value : null,
       tax: this.state.tax,
       cost: this.state.cost ? formatNumber(this.state.cost) : 0,
+      vat: this.state.vat ? formatNumber(this.state.vat) : 0,
       total_payment: this.state.total_payment
         ? formatNumber(this.state.total_payment)
         : 0,
@@ -592,6 +597,33 @@ class EditImportStock extends Component {
                                 ></input>
                               </div>
                             </div>
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              marginTop: "5px",
+                            }}
+                          >
+                            <div>VAT:</div>
+                            <input
+                              type="text"
+                              name="vat"
+                              class=" col-4"
+                              value={this.state.vat}
+                              style={{
+                                height: "28px",
+                                width: "100px",
+                                textAlign: "right",
+                                border: 0,
+                                borderRadius: 0,
+                                borderBottom:
+                                  "1px solid rgb(128 128 128 / 71%)",
+                                padding: 0,
+                              }}
+                              onChange={this.onChange}
+                            ></input>
                           </div>
                           <div
                             style={{
