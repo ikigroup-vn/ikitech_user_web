@@ -110,12 +110,13 @@ class Form extends Component {
               className="form-control form-control-user"
               id="exampleInputEmail"
               aria-describedby="emailHelp"
+              autocomplete="off1"
               placeholder={
                 isEmail(this.props.email)
                   ? "Nhập mã xác nhận từ Email"
                   : "Nhập mã xác nhận từ số điện thoại"
               }
-              autoComplete="off"
+               autoComplete='new-password'
               name="txtOTP"
               value={txtOTP}
               onChange={this.onChange}
@@ -127,7 +128,8 @@ class Form extends Component {
               type={toggle == true ? "text" : "password"}
               className="form-control form-control-user"
               placeholder="Nhập mật khẩu mới"
-              autoComplete="off"
+               autoComplete='new-password'
+              autocomplete="off1"
               value={txtPassword}
               onChange={this.onChange}
               name="txtPassword"

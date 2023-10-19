@@ -137,7 +137,7 @@ class Table extends Component {
             </td>
 
             <td>
-              {data.id == 2 && (
+              {(data.id == 2 || data.id == 4 || data.id == 3) && (
                 <button
                   style={{ marginLeft: "10px" }}
                   onClick={(e) =>
@@ -153,7 +153,7 @@ class Table extends Component {
                   <i class="fa fa-sign-in"></i>Đăng nhập
                 </button>
               )}
-              {data.id !== 2 && (
+              {data.id !== 2 && data.id !== 3 && data.id !== 4 && (
                 <button
                   style={{ marginLeft: "10px" }}
                   onClick={(e) => this.passEditFunc(e, data.id, token)}
@@ -204,7 +204,6 @@ class Table extends Component {
               <th>Đơn vị vận chuyển</th>
               <th>Mã Token </th>
               <th style={{ textAlign: "center" }}>Trạng thái hoạt động </th>
-
               <th>Hành động</th>
             </tr>
           </thead>
