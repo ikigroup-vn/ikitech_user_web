@@ -204,7 +204,6 @@ class Table extends Component {
               <th>Đơn vị vận chuyển</th>
               <th>Mã Token </th>
               <th style={{ textAlign: "center" }}>Trạng thái hoạt động </th>
-
               <th>Hành động</th>
             </tr>
           </thead>
