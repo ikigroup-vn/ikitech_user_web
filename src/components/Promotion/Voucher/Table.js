@@ -120,7 +120,7 @@ class Table extends Component {
         var status_limit_amount = data.set_limit_amount == true ? "" : "danger";
 
         var type_voucher =
-          data.voucher_type == 0 ? "Toàn shop" : "Theo sản phảm";
+          data.voucher_type == 0 ? "Toàn shop" : "Theo sản phẩm";
         var discount_for = data.discount_for !== 1 ? "Đơn hàng" : "Vận chuyển";
         var type_discount = data.discount_type == 0 ? "Cố định" : "Theo %";
         var is_show_voucher =

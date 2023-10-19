@@ -1038,7 +1038,7 @@ class PostOrder extends Component {
     const length = oneCart.info_cart?.line_items.length;
     console.log("hiiiiiiiiiiiiiii: ", oneCart);
     const ship_discount_amount = oneCart.info_cart?.ship_discount_amount;
-    console.log(oneCart.info_cart);
+    console.log("oneCart.info_cart::: ", oneCart.info_cart);
     var handleKeyPress = {
       onKeyUp: (event) => {
         // event.preventDefault()
@@ -1543,6 +1543,22 @@ class PostOrder extends Component {
                               </button>
                             </div>
                           </Popover>
+                          {oneCart?.info_cart?.vat > 0 ? (
+                            <div
+                              className="row item-info"
+                              style={{
+                                justifyContent: "space-between",
+                              }}
+                            >
+                              <div className="col-6">VAT</div>
+                              <span
+                                className="col-6"
+                                style={{ textAlign: "end" }}
+                              >
+                                {formatNoD(oneCart.info_cart?.vat)}
+                              </span>
+                            </div>
+                          ) : null}
                           {ship_discount_amount > 0 && (
                             <div className="row item-info">
                               <div className="item-discount-name col-6">

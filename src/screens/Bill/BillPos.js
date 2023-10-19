@@ -570,6 +570,9 @@ export default class BillPos extends Component {
               <p>
                 <b>Khách hàng:</b> {bill.customer_name} {bill.customer_phone}
               </p>
+              <p>
+                <b>Ghi chú:</b> {bill.customer_note}
+              </p>
             </div>
             <div
               style={{
@@ -579,7 +582,7 @@ export default class BillPos extends Component {
               }}
             >
               <h4 style={{ textTransform: "uppercase" }}>
-                Cám ơn quý khách đã mua hàng!
+                Cảm ơn quý khách đã mua hàng!
               </h4>
             </div>
           </div>

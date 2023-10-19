@@ -15,7 +15,7 @@ export const fields = [
   "Trạng thái (Ẩn/Hiện)",
   "Tiêu đề SEO",
   "Miêu tả SEO",
-  "Có phân loại (Có/Không)",
+  "Phân loại (Có/Không)",
   "Phân loại chính",
   "Phân loại phụ",
   "DS phân loại",
