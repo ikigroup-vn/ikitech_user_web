@@ -103,12 +103,12 @@ class Form extends Component {
             <input
               className="form-control form-control-user"
               id="exampleInputEmail"
+              autoComplete="off"
               placeholder={
                 !this.state.isSendToPhone
                   ? "Nhập mã xác nhận từ Email"
                   : "Nhập mã xác nhận từ SĐT"
               }
-              autoComplete="off"
               name="txtOTP"
               value={txtOTP}
               onChange={this.onChange}

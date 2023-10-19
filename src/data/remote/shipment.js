@@ -17,8 +17,16 @@ export const updateShipment = (store_code,id ,data) =>{
 }
 
 
+
+
 export const loginShipment = (store_code, id , data) =>{
   return callApi(`/store/${store_code}/shipment_get_token/viettel`, "post", data);
+}
+export const loginShipmentVietNamPost = (store_code, id , data) =>{
+  return callApi(`/store/${store_code}/shipment_get_token/vietnam_post`, "post", data);
+}
+export const loginShipmentNhatTin = (store_code, id , data) =>{
+  return callApi(`/store/${store_code}/shipment_get_token/nhat_tin`, "post", data);
 }
 export const destroyShipment = (store_code, id) =>{
   return callApi(`/store/${store_code}/shipments/${id}`, "delete", null);
