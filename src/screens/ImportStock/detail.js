@@ -580,14 +580,14 @@ class DetailImportStock extends Component {
                             >
                               Hoàn thành
                             </button>
-                            <button
+                            {/* <button
                               className="cancel btn btn-secondary"
                               style={{ marginTop: "20px" }}
                               data-toggle="modal"
                               data-target="#removeModal"
                             >
                               Hủy đơn nhập
-                            </button>
+                            </button> */}
                           </div>
                         ) : itemImportStock.status === 3 ? (
                           <div
@@ -766,6 +766,15 @@ class DetailImportStock extends Component {
                           >
                             <div>Chi phí nhập hàng</div>
                             <div>{format(Number(itemImportStock.cost))}</div>
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                            }}
+                          >
+                            <div>VAT</div>
+                            <div>{format(Number(itemImportStock.vat))}</div>
                           </div>
                           <div
                             style={{
