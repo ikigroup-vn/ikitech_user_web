@@ -126,33 +126,228 @@ async function saveAsExcel(value, nameFile = "Danh sách sản phẩm") {
     const endColumn = String.fromCharCode(64 + totalColumns);
     sheet1.row(1).style("bold", true);
     const listColumn = [
-      "B",
-      "C",
-      "E",
-      "F",
-      "G",
-      "H",
-      "I",
-      "K",
-      "L",
-      "M",
-      "N",
-      "O",
-      "R",
-      "S",
-      "T",
-      "U",
+      {
+        name: "A",
+        width: 14,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "B",
+        width: 9,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "C",
+        width: 9,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "D",
+        width: 9,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "E",
+        width: 8,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "F",
+        width: 10,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "G",
+        width: 7,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "H",
+        width: 7,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "I",
+        width: 5,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "J",
+        width: 7,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "K",
+        width: 7,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "L",
+        width: 8,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "M",
+        width: 8,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "N",
+        width: 8,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "O",
+        width: 8,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "P",
+        width: 8,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "Q",
+        width: 9,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "R",
+        width: 7,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "S",
+        width: 7,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "T",
+        width: 10,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "U",
+        width: 9,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "V",
+        width: 9,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
+      {
+        name: "W",
+        width: 12,
+        style: {
+          fontSize: 8,
+          shrinkToFit: true,
+          wrapText: true,
+        },
+      },
     ];
     for (let column of listColumn) {
-      sheet1.column(column).width(20);
+      sheet1.column(column.name).style(column.style);
+      sheet1.column(column.name).width(column.width);
     }
-    sheet1.column("A").width(65);
-    sheet1.column("D").width(25);
-    sheet1.column("P").width(25);
-    sheet1.column("Q").width(30);
-    sheet1.column("J").width(30);
-    sheet1.range("A1:M1").style("fill", "F4D03F");
-    sheet1.range("N1:" + endColumn + "1").style("fill", "92d050");
+
+    sheet1.range("A1:" + endColumn + "1").style({
+      horizontalAlignment: "center",
+      verticalAlignment: "center",
+      wrapText: true,
+    });
+    const row = sheet1.row(1);
+    row.height(50);
+    sheet1.range("A1:P1").style("fill", "deebf7");
+    sheet1.range("Q1:" + endColumn + "1").style("fill", "f6f9d4");
     // range.style("border", true);
     sheet1.freezePanes(1, 1);
     return workbook.outputAsync().then((res) => {
@@ -402,7 +597,7 @@ export const fetchAllListProduct = (store_code, search) => {
                                 checkedDistributeExist === false &&
                                 checkedDistributeExist2 === false
                               ) {
-                                newItem["Có phân loại (Có/Không)"] = "Có";
+                                newItem["Phân loại (Có/Không)"] = "Có";
                                 newItem["Phân loại chính"] =
                                   typeDistributeOrigin;
                                 newItem["Phân loại phụ"] = typeDistributeSub;
@@ -466,7 +661,7 @@ export const fetchAllListProduct = (store_code, search) => {
                             }
                           } else {
                             if (index == 0) {
-                              newItem["Có phân loại (Có/Không)"] = "Có";
+                              newItem["Phân loại (Có/Không)"] = "Có";
                               newItem["Phân loại chính"] = typeDistributeOrigin;
                               newItem["Phân loại phụ"] = typeDistributeSub;
                               newItem["DS phân loại"] = "";
@@ -518,7 +713,7 @@ export const fetchAllListProduct = (store_code, search) => {
                         }
                       }
                     } else {
-                      newItem["Có phân loại (Có/Không)"] = "Không";
+                      newItem["Phân loại (Có/Không)"] = "Không";
                       newItem["Phân loại chính"] = "";
                       newItem["Phân loại phụ"] = "";
                       newItem["DS phân loại"] = "";
@@ -618,7 +813,7 @@ export const fetchProductInventory = (store_code, branch_id, params) => {
                               checkedDistributeExist === false &&
                               checkedDistributeExist2 === false
                             ) {
-                              newItem["Có phân loại (Có/Không)"] = "Có";
+                              newItem["Phân loại (Có/Không)"] = "Có";
                               newItem["DS phân loại"] = "";
                               newItem["Giá bán lẻ"] = "";
                               newItem["Giá vốn"] = "";
@@ -677,7 +872,7 @@ export const fetchProductInventory = (store_code, branch_id, params) => {
                           }
                         } else {
                           if (index == 0) {
-                            newItem["Có phân loại (Có/Không)"] = "Có";
+                            newItem["Phân loại (Có/Không)"] = "Có";
                             newItem["DS phân loại"] = "";
                             newItem["Giá bán lẻ"] = "";
                             newItem["Giá vốn"] = "";
@@ -729,7 +924,7 @@ export const fetchProductInventory = (store_code, branch_id, params) => {
                       }
                     }
                   } else {
-                    newItem["Có phân loại (Có/Không)"] = "Không";
+                    newItem["Phân loại (Có/Không)"] = "Không";
                     newItem["DS phân loại"] = "";
                     newItem["Giá bán lẻ"] = `${item.price ? item.price : "0"}`;
                     newItem[

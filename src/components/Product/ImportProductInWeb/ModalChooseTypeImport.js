@@ -100,7 +100,7 @@ class ModalChooseTypeImport extends Component {
         return;
       }
       //Filter Data
-      //Index: 0: "Tên sản phẩm", 1: "Mã SKU", 2: "Mã BARCODE", 3: "Theo dõi kho (Có/Không)", 4: "Danh mục", 5: "Thuộc tính", 6: "Thuộc tính tìm kiếm", 7: "Cân nặng", 8: "Hoa hồng CTV (%/VND)", 9: "Xu cho đại lý", 10: "Mô tả", 11: "Nội dung cho CTV", 12: "Trạng thái (Ẩn/Hiện)", 13: "Tiêu đề SEO", 14: "Miêu tả SEO", 15: "Có phân loại (Có/Không)", 16: "Phân loại chính", 17: "Phân loại phụ", 18: "DS phân loại", 19: "Giá bán lẻ", 20: "Giá nhập", 21: "Hình ảnh",
+      //Index: 0: "Tên sản phẩm", 1: "Mã SKU", 2: "Mã BARCODE", 3: "Theo dõi kho (Có/Không)", 4: "Danh mục", 5: "Thuộc tính", 6: "Thuộc tính tìm kiếm", 7: "Cân nặng", 8: "Hoa hồng CTV (%/VND)", 9: "Xu cho đại lý", 10: "Mô tả", 11: "Nội dung cho CTV", 12: "Trạng thái (Ẩn/Hiện)", 13: "Tiêu đề SEO", 14: "Miêu tả SEO", 15: "Phân loại (Có/Không)", 16: "Phân loại chính", 17: "Phân loại phụ", 18: "DS phân loại", 19: "Giá bán lẻ", 20: "Giá nhập", 21: "Hình ảnh",
 
       const dataXlsxEmptyTitle = data.slice(1);
       const newProducts = [];
