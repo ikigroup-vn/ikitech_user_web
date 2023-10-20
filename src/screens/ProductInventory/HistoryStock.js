@@ -21,7 +21,9 @@ class HistoryStock extends Component {
         );
         return (
           <tr>
-            <td> {index + 1}</td>
+            <td>
+              {(this.props.historyInventory.current_page - 1) * 20 + index + 1}
+            </td>
             <td> {data.branch?.name}</td>
             <td>{formatNoD(data.stock)}</td>
             <td>{formatNoD(data.cost_of_capital)}</td>
@@ -74,7 +76,12 @@ class HistoryStock extends Component {
             >
               <div className="title-history"> Lịch sử kho</div>
             </div>
-            <div class="modal-body">
+            <div
+              class="modal-body"
+              style={{
+                height: "calc(80vh - 45px)",
+              }}
+            >
               <table
                 class="table table-border "
                 id="dataTable"
