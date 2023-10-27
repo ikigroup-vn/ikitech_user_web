@@ -11,6 +11,7 @@ class ModalUpdate extends Component {
       USERNAME: "",
       PASSWORD: "",
       CUSTOMERCODE: "",
+      CONTRACTCODE: "",
       toggle: false,
       iconShow: "fa fa-fw fa-eye",
       iconHide: "fa fa-fw fa-eye-slash",
@@ -29,7 +30,7 @@ class ModalUpdate extends Component {
 
   onSave = (e) => {
     e.preventDefault();
-    var { USERNAME, PASSWORD, CUSTOMERCODE } = this.state;
+    var { USERNAME, PASSWORD, CUSTOMERCODE, CONTRACTCODE } = this.state;
     if (!isEmpty(USERNAME) || !isEmpty(PASSWORD)) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
@@ -58,6 +59,7 @@ class ModalUpdate extends Component {
           USERNAME: USERNAME,
           PASSWORD: PASSWORD,
           CUSTOMERCODE: CUSTOMERCODE,
+          CONTRACTCODE: CONTRACTCODE,
         }
       );
     }
@@ -134,8 +136,15 @@ class ModalUpdate extends Component {
   };
 
   render() {
-    var { PASSWORD, USERNAME, CUSTOMERCODE, toggle, iconHide, iconShow } =
-      this.state;
+    var {
+      PASSWORD,
+      USERNAME,
+      CUSTOMERCODE,
+      CONTRACTCODE,
+      toggle,
+      iconHide,
+      iconShow,
+    } = this.state;
     return (
       <div
         class="modal fade"
@@ -226,6 +235,21 @@ class ModalUpdate extends Component {
                       value={CUSTOMERCODE}
                       onChange={this.onChange}
                       name="CUSTOMERCODE"
+                    />
+                  </div>
+                )}
+                {this.props.modalId == 3 && (
+                  <div class="form-group">
+                    <label for="product_name">Mã hợp đồng</label>
+                    <input
+                      type={toggle == true ? "text" : "CONTRACTCODE"}
+                      class="form-control"
+                      id="txtToken"
+                      placeholder="Nhập mã hợp đồng"
+                      autoComplete="off"
+                      value={CONTRACTCODE}
+                      onChange={this.onChange}
+                      name="CONTRACTCODE"
                     />
                   </div>
                 )}
