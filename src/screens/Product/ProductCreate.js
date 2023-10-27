@@ -325,7 +325,6 @@ class ProductCreate extends Component {
                           <a
                             style={{ marginLeft: "10px" }}
                             onClick={this.goBack}
-
                             class="btn btn-warning btn-icon-split  btn-sm"
                           >
                             <span class="icon text-white-50">

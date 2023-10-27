@@ -14,8 +14,13 @@ import * as Types from "../../../constants/ActionType";
 import Alert from "../../../components/Partials/Alert";
 import SeoOption from "../../../components/Product/Update/SeoOption";
 import getChannel, { IKITECH, IKIPOS } from "../../../ultis/channel";
-import { isEmpty, removeVietnameseTones } from "../../../ultis/helpers";
+import {
+  formatNumberV2,
+  isEmpty,
+  removeVietnameseTones,
+} from "../../../ultis/helpers";
 import Upload from "../../../components/Upload/index.js";
+import Discount from "../../../components/Product/Create_C/Discount";
 
 class ProductEdit extends Component {
   constructor(props) {
@@ -26,6 +31,7 @@ class ProductEdit extends Component {
       disableDistribute: false,
       disableInventory: false,
       images: [],
+      discountList: [],
     };
   }
 
@@ -34,10 +40,95 @@ class ProductEdit extends Component {
       var { product } = { ...nextProps };
       const images = product?.images?.map((image) => image?.image_url) || [];
       this.setImages(images);
+      const product_retail_steps =
+        product?.is_product_retail_step && product?.product_retail_steps
+          ? product?.product_retail_steps?.map((item) => ({
+              from: item.from_quantity,
+              to: item.to_quantity,
+              price: item.price ? formatNumberV2(item.price) : 0,
+              errors: {
+                from: "",
+                to: "",
+                price: "",
+              },
+            }))
+          : [];
+      this.setState({ discountList: product_retail_steps });
     }
 
     return true;
   }
+
+  showDiscountList = () => {
+    const { form, disableDistribute } = this.state;
+    let isSamePrice = false;
+
+    if (disableDistribute) {
+      if (
+        form?.list_distribute &&
+        form?.list_distribute?.[0]?.element_distributes?.length > 0
+      ) {
+        if (
+          form?.list_distribute?.[0]?.element_distributes?.length === 1 &&
+          form?.list_distribute?.[0]?.element_distributes?.[0]
+            .sub_element_distributes?.length < 2
+        ) {
+          if (
+            Number(
+              form?.list_distribute?.[0]?.element_distributes?.[0]?.price
+            ) > 0
+          ) {
+            isSamePrice = true;
+          } else {
+            isSamePrice = false;
+          }
+        } else {
+          if (
+            form?.list_distribute?.[0]?.element_distributes[0]
+              ?.sub_element_distributes?.length > 0
+          ) {
+            let priceSub = "";
+            isSamePrice = true;
+            form?.list_distribute?.[0]?.element_distributes.forEach(
+              (element) => {
+                element?.sub_element_distributes.forEach((subElement) => {
+                  if (
+                    !subElement.price ||
+                    (priceSub && priceSub !== subElement.price)
+                  ) {
+                    isSamePrice = false;
+                    return;
+                  }
+                  priceSub = subElement.price;
+                });
+              }
+            );
+          } else {
+            let priceElement = "";
+            isSamePrice = true;
+            form?.list_distribute?.[0]?.element_distributes.forEach(
+              (element) => {
+                if (
+                  !element.price ||
+                  (priceElement && priceElement !== element.price)
+                ) {
+                  isSamePrice = false;
+                  return;
+                }
+                priceElement = element.price;
+              }
+            );
+          }
+        }
+      }
+    }
+
+    return disableDistribute
+      ? isSamePrice
+      : !disableDistribute && form?.price
+      ? true
+      : false;
+  };
 
   checkDistribute = (status, _status) => {
     this.setState({ disableDistribute: status, disableInventory: _status });
@@ -50,6 +141,10 @@ class ProductEdit extends Component {
     this.props.fetchAllCategoryP(store_code);
     this.props.fetchAllBlog(store_code, 1);
   }
+
+  setDiscountList = (discountList) => {
+    this.setState({ discountList });
+  };
 
   handleDataFromInfo = (data) => {
     this.setState((prevState, props) => {
@@ -408,6 +503,32 @@ class ProductEdit extends Component {
         return;
       }
     }
+    if (this.showDiscountList() && this.state.discountList?.length > 0) {
+      let isError = false;
+      this.state.discountList.forEach((element) => {
+        const hasError = Object.values(element.errors).some(
+          (error) => error != ""
+        );
+
+        if (!element.from || !element.to || !element.price || hasError) {
+          isError = true;
+          return;
+        }
+      });
+
+      if (isError) {
+        this.props.showError({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: "Vui lòng nhập đầy đủ trường trong mua nhiều giảm giá",
+          },
+        });
+        return;
+      }
+    }
 
     var is_error = false;
 
@@ -418,7 +539,24 @@ class ProductEdit extends Component {
       delete form.list_distribute;
     }
 
-    const formData = { ...form };
+    let product_retail_steps = [];
+
+    if (this.showDiscountList() && this.state.discountList?.length > 0) {
+      product_retail_steps = this.state.discountList.map((item) => ({
+        from_quantity: item.from,
+        to_quantity: item.to,
+        price: item.price
+          ? Number(item.price?.toString()?.replace(/[.,]/g, ""))
+          : 0,
+      }));
+    }
+
+    const formData = {
+      ...form,
+      is_product_retail_step: product_retail_steps.length > 0,
+      product_retail_steps: product_retail_steps,
+    };
+
     if (form.description && form.description?.includes("<iframe")) {
       const sunEditorContent = document.querySelector(".sun-editor-editable");
       if (sunEditorContent) {
@@ -456,7 +594,8 @@ class ProductEdit extends Component {
       isCreate,
       isRemove,
     } = this.props;
-    var { total, disableInventory, disableDistribute } = this.state;
+    var { total, disableInventory, disableDistribute, discountList } =
+      this.state;
     return (
       <div class="container-fluid">
         <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
@@ -472,7 +611,7 @@ class ProductEdit extends Component {
           <div class="card-header title_content">Nhập thông tin sản phẩm</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
-              <div class="col-lg-6">
+              <div class="col-lg-8">
                 <div>
                   <InfoProduct
                     isCopy={true}
@@ -486,7 +625,7 @@ class ProductEdit extends Component {
               </div>
 
               <div
-                class="col-lg-6"
+                class="col-lg-4"
                 style={{ borderLeft: "0.5px solid #e6dfdf" }}
               >
                 <div>
@@ -586,6 +725,13 @@ class ProductEdit extends Component {
             </div>
           </div>
         </div>
+        <Discount
+          priceDefault={this.state.form?.price}
+          list_distribute={this.state.form?.list_distribute?.[0]}
+          discountList={discountList}
+          setDiscountList={this.setDiscountList}
+          isShow={this.showDiscountList()}
+        ></Discount>
         {getChannel() == IKITECH && (
           <div class="card mb-4">
             <div class="card-header title_content">Nội dung chi tiết</div>

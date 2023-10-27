@@ -19,6 +19,7 @@ import SeoOption from "../../../components/Product/Create/SeoOption";
 import getChannel, { IKITECH, IKIPOS } from "../../../ultis/channel";
 import { isEmpty, removeVietnameseTones } from "../../../ultis/helpers";
 import Upload from "../../../components/Upload/index.js";
+import Discount from "../../../components/Product/Create/Discount";
 class ProductCreate extends Component {
   constructor(props) {
     super(props);
@@ -30,6 +31,7 @@ class ProductCreate extends Component {
       disableInventory: false,
       attributeSearch: [],
       images: [],
+      discountList: [],
     };
   }
 
@@ -39,6 +41,10 @@ class ProductCreate extends Component {
     this.props.fetchAllAttributeSearch(this.props.store_code);
     this.props.fetchAllBlog(this.props.store_code, 1);
   }
+
+  setDiscountList = (discountList) => {
+    this.setState({ discountList });
+  };
 
   handleDataFromInfo = (data) => {
     this.setState((prevState, props) => {
@@ -262,7 +268,6 @@ class ProductCreate extends Component {
                               index
                             ].sub_element_distributes[_index].barcode =
                               removeVietnameseTones(barcode);
-
                           } catch (error) {
                             form.list_distribute[0].element_distributes[
                               index
@@ -371,9 +376,35 @@ class ProductCreate extends Component {
         return;
       }
     }
-    
+    if (this.showDiscountList() && this.state.discountList?.length > 0) {
+      let isError = false;
+      this.state.discountList.forEach((element) => {
+        const hasError = Object.values(element.errors).some(
+          (error) => error != ""
+        );
+
+        if (!element.from || !element.to || !element.price || hasError) {
+          isError = true;
+          return;
+        }
+      });
+
+      if (isError) {
+        this.props.showError({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: "Vui lòng nhập đầy đủ trường trong mua nhiều giảm giá",
+          },
+        });
+        return;
+      }
+    }
+
     var is_error = false;
-    
+
     if (this.state.isError || is_error) {
       return;
     }
@@ -385,7 +416,23 @@ class ProductCreate extends Component {
       form.weight = 100;
     }
 
-    const formData = { ...form };
+    let product_retail_steps = [];
+
+    if (this.showDiscountList() && this.state.discountList?.length > 0) {
+      product_retail_steps = this.state.discountList.map((item) => ({
+        from_quantity: item.from,
+        to_quantity: item.to,
+        price: item.price
+          ? Number(item.price?.toString()?.replace(/[.,]/g, ""))
+          : 0,
+      }));
+    }
+
+    const formData = {
+      ...form,
+      is_product_retail_step: product_retail_steps.length > 0,
+      product_retail_steps: product_retail_steps,
+    };
     if (form.description && form.description?.includes("<iframe")) {
       const sunEditorContent = document.querySelector(".sun-editor-editable");
       if (sunEditorContent) {
@@ -431,7 +478,6 @@ class ProductCreate extends Component {
       formdata.list_distribute = data;
       return { form: formdata };
     });
-
   };
   onChangeQuantityStock = (total) => {
     this.setState({ total: total });
@@ -485,13 +531,81 @@ class ProductCreate extends Component {
   setImages = (images) => {
     this.setState({ images });
   };
-  
+
   handleImageData = (data) => {
-    this.handleDataFromProductImg([
-     ...data
-    ])
-    this.setImages(data)
-  }
+    this.handleDataFromProductImg([...data]);
+    this.setImages(data);
+  };
+  showDiscountList = () => {
+    const { form, disableDistribute } = this.state;
+    let isSamePrice = false;
+
+    if (disableDistribute) {
+      if (
+        form?.list_distribute &&
+        form?.list_distribute?.[0]?.element_distributes?.length > 0
+      ) {
+        if (
+          form?.list_distribute?.[0]?.element_distributes?.length === 1 &&
+          form?.list_distribute?.[0]?.element_distributes?.[0]
+            .sub_element_distributes?.length < 2
+        ) {
+          if (
+            Number(
+              form?.list_distribute?.[0]?.element_distributes?.[0]?.price
+            ) > 0
+          ) {
+            isSamePrice = true;
+          } else {
+            isSamePrice = false;
+          }
+        } else {
+          if (
+            form?.list_distribute?.[0]?.element_distributes[0]
+              ?.sub_element_distributes?.length > 0
+          ) {
+            let priceSub = "";
+            isSamePrice = true;
+            form?.list_distribute?.[0]?.element_distributes.forEach(
+              (element) => {
+                element?.sub_element_distributes.forEach((subElement) => {
+                  if (
+                    !subElement.price ||
+                    (priceSub && priceSub !== subElement.price)
+                  ) {
+                    isSamePrice = false;
+                    return;
+                  }
+                  priceSub = subElement.price;
+                });
+              }
+            );
+          } else {
+            let priceElement = "";
+            isSamePrice = true;
+            form?.list_distribute?.[0]?.element_distributes.forEach(
+              (element) => {
+                if (
+                  !element.price ||
+                  (priceElement && priceElement !== element.price)
+                ) {
+                  isSamePrice = false;
+                  return;
+                }
+                priceElement = element.price;
+              }
+            );
+          }
+        }
+      }
+    }
+
+    return disableDistribute
+      ? isSamePrice
+      : !disableDistribute && form?.price
+      ? true
+      : false;
+  };
   render() {
     var { store_code } = this.props;
     var {
@@ -503,7 +617,9 @@ class ProductCreate extends Component {
       isRemove,
       attribute_search,
     } = this.props;
-    var { total, disableInventory, disableDistribute } = this.state;
+    var { total, disableInventory, disableDistribute, discountList } =
+      this.state;
+    console.log("data::: ", this.state.form);
     return (
       <div class="container-fluid">
         <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
@@ -515,7 +631,7 @@ class ProductCreate extends Component {
           <div class="card-header title_content">Nhập thông tin sản phẩm</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
-              <div class="col-lg-6">
+              <div class="col-lg-8">
                 <div>
                   <InfoProduct
                     badges={this.props.badges}
@@ -530,7 +646,7 @@ class ProductCreate extends Component {
               </div>
 
               <div
-                class="col-lg-6"
+                class="col-lg-4"
                 style={{ borderLeft: "0.5px solid #e6dfdf" }}
               >
                 <div>
@@ -539,25 +655,25 @@ class ProductCreate extends Component {
                     handleDataFromProductVideo={this.handleDataFromProductVideo}
                   />
                 </div>
-                <div style={{paddingTop: 20, width: '100%'}}>
-                    <label
-                      htmlFor="txt-name"
-                      style={{
-                        fontWeight: "750",
-                      }}
-                    >
-                      Hình ảnh mô tả (Tối đa 13 ảnh)
-                    </label>
-                    <div style={{width: '100%'}}>
-                      <Upload
-                        multiple
-                        setFiles={this.handleImageData}
-                        files={this.state.images}
-                        images={""}
-                        limit={13}
-                      />
-                    </div>
+                <div style={{ paddingTop: 20, width: "100%" }}>
+                  <label
+                    htmlFor="txt-name"
+                    style={{
+                      fontWeight: "750",
+                    }}
+                  >
+                    Hình ảnh mô tả (Tối đa 13 ảnh)
+                  </label>
+                  <div style={{ width: "100%" }}>
+                    <Upload
+                      multiple
+                      setFiles={this.handleImageData}
+                      files={this.state.images}
+                      images={""}
+                      limit={13}
+                    />
                   </div>
+                </div>
               </div>
             </div>
           </div>
@@ -636,6 +752,13 @@ class ProductCreate extends Component {
             </div>
           </div>
         )}
+        <Discount
+          priceDefault={this.state.form?.price}
+          list_distribute={this.state.form?.list_distribute?.[0]}
+          discountList={discountList}
+          setDiscountList={this.setDiscountList}
+          isShow={this.showDiscountList()}
+        ></Discount>
 
         {getChannel() == IKITECH && (
           <div class="card mb-4">

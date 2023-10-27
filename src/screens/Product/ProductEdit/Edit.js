@@ -3,7 +3,11 @@ import { connect, shallowEqual } from "react-redux";
 import InfoProduct from "../../../components/Product/Update/InfoProduct";
 import ContentDetail from "../../../components/Product/Update/ContentDetail";
 import Video from "../../../components/Product/Update/Video";
-import { getQueryParams, isEmpty } from "../../../ultis/helpers";
+import {
+  formatNumberV2,
+  getQueryParams,
+  isEmpty,
+} from "../../../ultis/helpers";
 
 import * as blogAction from "../../../actions/blog";
 
@@ -18,6 +22,7 @@ import SeoOption from "../../../components/Product/Update/SeoOption";
 import getChannel, { IKITECH, IKIPOS } from "../../../ultis/channel";
 import history from "../../../history";
 import Upload from "../../../components/Upload/index.js";
+import Discount from "../../../components/Product/Update/Discount";
 
 class ProductEdit extends Component {
   constructor(props) {
@@ -29,6 +34,7 @@ class ProductEdit extends Component {
       disableInventory: false,
       attributeSearch: [],
       images: [],
+      discountList: [],
     };
   }
 
@@ -44,6 +50,10 @@ class ProductEdit extends Component {
     this.props.fetchAllAttributeSearch(store_code);
     this.props.fetchAllBlog(store_code, 1);
   }
+
+  setDiscountList = (discountList) => {
+    this.setState({ discountList });
+  };
 
   handleDataFromInfo = (data) => {
     this.setState((prevState, props) => {
@@ -376,6 +386,33 @@ class ProductEdit extends Component {
         return;
       }
     }
+    if (this.showDiscountList() && this.state.discountList?.length > 0) {
+      let isError = false;
+      this.state.discountList.forEach((element) => {
+        const hasError = Object.values(element.errors).some(
+          (error) => error != ""
+        );
+
+        if (!element.from || !element.to || !element.price || hasError) {
+          isError = true;
+          return;
+        }
+      });
+
+      if (isError) {
+        this.props.showError({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: "Vui lòng nhập đầy đủ trường trong mua nhiều giảm giá",
+          },
+        });
+        return;
+      }
+    }
+
     var { page, currentBranch } = this.props;
     var list_distribute = form.list_distribute ?? [];
 
@@ -458,7 +495,25 @@ class ProductEdit extends Component {
       list_distribute.length > 0
         ? list_distribute[0].element_distributes
         : distributeData.element_distributes;
-    const formData = { ...form };
+
+    let product_retail_steps = [];
+
+    if (this.showDiscountList() && this.state.discountList?.length > 0) {
+      product_retail_steps = this.state.discountList.map((item) => ({
+        from_quantity: item.from,
+        to_quantity: item.to,
+        price: item.price
+          ? Number(item.price?.toString()?.replace(/[.,]/g, ""))
+          : 0,
+      }));
+    }
+
+    const formData = {
+      ...form,
+      is_product_retail_step: product_retail_steps.length > 0,
+      product_retail_steps: product_retail_steps,
+    };
+
     if (form.description && form.description?.includes("<iframe")) {
       const sunEditorContent = document.querySelector(".sun-editor-editable");
       if (sunEditorContent) {
@@ -543,13 +598,98 @@ class ProductEdit extends Component {
   shouldComponentUpdate(nextProps) {
     if (!shallowEqual(nextProps.product, this.props.product)) {
       var { product } = { ...nextProps };
-      const images = product?.images?.map((image) => image?.image_url) || [];
 
+      const images = product?.images?.map((image) => image?.image_url) || [];
       this.setImages(images);
+      const product_retail_steps =
+        product?.is_product_retail_step && product?.product_retail_steps
+          ? product?.product_retail_steps?.map((item) => ({
+              from: item.from_quantity,
+              to: item.to_quantity,
+              price: item.price ? formatNumberV2(item.price) : 0,
+              errors: {
+                from: "",
+                to: "",
+                price: "",
+              },
+            }))
+          : [];
+      this.setState({ discountList: product_retail_steps });
     }
 
     return true;
   }
+
+  showDiscountList = () => {
+    const { form, disableDistribute } = this.state;
+    let isSamePrice = false;
+
+    if (disableDistribute) {
+      if (
+        form?.list_distribute &&
+        form?.list_distribute?.[0]?.element_distributes?.length > 0
+      ) {
+        if (
+          form?.list_distribute?.[0]?.element_distributes?.length === 1 &&
+          form?.list_distribute?.[0]?.element_distributes?.[0]
+            .sub_element_distributes?.length < 2
+        ) {
+          if (
+            Number(
+              form?.list_distribute?.[0]?.element_distributes?.[0]?.price
+            ) > 0
+          ) {
+            isSamePrice = true;
+          } else {
+            isSamePrice = false;
+          }
+        } else {
+          if (
+            form?.list_distribute?.[0]?.element_distributes[0]
+              ?.sub_element_distributes?.length > 0
+          ) {
+            let priceSub = "";
+            isSamePrice = true;
+            form?.list_distribute?.[0]?.element_distributes.forEach(
+              (element) => {
+                element?.sub_element_distributes.forEach((subElement) => {
+                  if (
+                    !subElement.price ||
+                    (priceSub && priceSub !== subElement.price)
+                  ) {
+                    isSamePrice = false;
+                    return;
+                  }
+                  priceSub = subElement.price;
+                });
+              }
+            );
+          } else {
+            let priceElement = "";
+            isSamePrice = true;
+            form?.list_distribute?.[0]?.element_distributes.forEach(
+              (element) => {
+                if (
+                  !element.price ||
+                  (priceElement && priceElement !== element.price)
+                ) {
+                  isSamePrice = false;
+                  return;
+                }
+                priceElement = element.price;
+              }
+            );
+          }
+        }
+      }
+    }
+
+    return disableDistribute
+      ? isSamePrice
+      : !disableDistribute && form?.price
+      ? true
+      : false;
+  };
 
   render() {
     var { store_code, productId } = this.props;
@@ -564,7 +704,8 @@ class ProductEdit extends Component {
       isRemove,
       update,
     } = this.props;
-    var { total, disableInventory, disableDistribute } = this.state;
+    var { total, disableInventory, disableDistribute, discountList } =
+      this.state;
 
     var afterAttribute = this.afterAttribute();
     return (
@@ -580,7 +721,7 @@ class ProductEdit extends Component {
           <div class="card-header title_content">Nhập thông tin sản phẩm</div>
           <div class="card-body" style={{ padding: "0.8rem" }}>
             <div class="row">
-              <div class="col-lg-6">
+              <div class="col-lg-8">
                 <div>
                   <InfoProduct
                     store_code={store_code}
@@ -596,7 +737,7 @@ class ProductEdit extends Component {
               </div>
 
               <div
-                class="col-lg-6"
+                class="col-lg-4"
                 style={{ borderLeft: "0.5px solid #e6dfdf" }}
               >
                 <div>
@@ -710,6 +851,13 @@ class ProductEdit extends Component {
             </div>
           </div>
         </div>
+        <Discount
+          priceDefault={this.state.form?.price}
+          list_distribute={this.state.form?.list_distribute?.[0]}
+          discountList={discountList}
+          setDiscountList={this.setDiscountList}
+          isShow={this.showDiscountList()}
+        ></Discount>
         {getChannel() == IKITECH && (
           <div class="card mb-4">
             <div class="card-header title_content">Nội dung chi tiết</div>
