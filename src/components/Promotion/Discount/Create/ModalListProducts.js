@@ -1,18 +1,12 @@
-import React, { Component } from "react";
-import { connect, shallowEqual } from "react-redux";
-import Pagination from "../../../../components/Product/Pagination";
-import themeData from "../../../../ultis/theme_data";
-import * as productAction from "../../../../actions/product";
-import * as Env from "../../../../ultis/default";
-import {
-  format,
-  formatNumber,
-  contactOrNumber,
-} from "../../../../ultis/helpers";
-import styled from "styled-components";
-import { shallowCompare } from "react-shallow-compare";
+import React, { Component } from 'react';
+import { connect, shallowEqual } from 'react-redux';
+import Pagination from '../../../Product/Pagination';
+import themeData from '../../../../ultis/theme_data';
+import * as productAction from '../../../../actions/product';
+import * as Env from '../../../../ultis/default';
+import { format, contactOrNumber } from '../../../../ultis/helpers';
+import styled from 'styled-components';
 
-const ListProductStyles = styled.tr``;
 const SearchDataStyles = styled.div`
   display: flex;
   justify-content: space-between;
@@ -21,25 +15,23 @@ const SearchDataStyles = styled.div`
     margin-right: 20px;
   }
 `;
+
 class ListProduct extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      txtName: "",
       page: 1,
       numPage: 20,
-      searchValue: "",
+      searchValue: '',
       listCategory: [],
       categorySelected: [],
-      txtCategory: [],
       listProduct: [],
+      listProducts_ids: [],
     };
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (
-      !shallowEqual(this.props.category_product, nextProps.category_product)
-    ) {
+    if (!shallowEqual(this.props.category_product, nextProps.category_product)) {
       var option = [];
       var categories = [...nextProps.category_product];
       if (categories.length > 0) {
@@ -55,18 +47,21 @@ class ListProduct extends Component {
         });
       }
     }
-
+    if (!shallowEqual(nextProps.listProductsSelected, this.props.listProductsSelected)) {
+      this.setState((prevState) => ({
+        listProduct: nextProps.listProductsSelected,
+      }));
+    }
+    if (!shallowEqual(nextProps.listIdsProductsSelected, this.props.listIdsProductsSelected)) {
+      this.setState((prevState) => ({
+        listProducts_ids: nextProps.listIdsProductsSelected,
+      }));
+    }
     return true;
   }
 
   handleCloseChecked = () => {
-    const {
-      setListProducts,
-      discountId,
-      defaultListProducts,
-      products,
-      discounts,
-    } = this.props;
+    const { setListProducts, discountId, defaultListProducts, products, discounts } = this.props;
     if (discountId) {
       setListProducts(defaultListProducts);
       const newDiscountProduct = [];
@@ -77,134 +72,89 @@ class ListProduct extends Component {
           });
         }
       });
-      if (
-        defaultListProducts?.length !==
-        products?.data?.length - newDiscountProduct?.length
-      ) {
-        document.querySelector("#inputCheckAll").checked = false;
+      if (defaultListProducts?.length !== products?.data?.length - newDiscountProduct?.length) {
+        document.querySelector('#inputCheckAll').checked = false;
       }
     }
   };
 
   onChange = (e) => {
     var { value, checked } = e.target;
-    const { products, discounts, listProducts, discountId } = this.props;
-
-    if (!checked) {
-      document.querySelector("#inputCheckAll").checked = false;
-    } else {
-      var newDiscountProduct = [];
-      discounts?.forEach((element) => {
-        if (discountId) {
-          if (element.products?.length > 0 && discountId != element?.id) {
-            element.products?.forEach((product) => {
-              if (products?.data?.map((p) => p.id).includes(product.id)) {
-                newDiscountProduct.push(product);
-              }
-            });
-          }
-        } else {
-          if (element.products?.length > 0) {
-            element.products?.forEach((product) => {
-              if (products?.data?.map((p) => p.id).includes(product.id)) {
-                newDiscountProduct.push(product);
-              }
-            });
-          }
-        }
-      });
-      if (
-        listProducts?.length ===
-        products?.data?.length - newDiscountProduct?.length - 1
-      ) {
-        document.querySelector("#inputCheckAll").checked = true;
-      }
-    }
     var data = JSON.parse(value);
-    console.log("ListProduct ~ data:", data);
-    if (checked == true) this.props.handleAddProduct(data, null, "add");
-    else this.props.handleAddProduct(null, data.id, "remove");
-  };
-  onChangeAll = (e) => {
-    const { value, checked } = e.target;
-    const {
-      products,
-      discounts,
-      setListProducts,
-      defaultListProducts,
-      discountId,
-    } = this.props;
-    var currentProducts = [];
-
     if (checked) {
-      var newDiscountIds = this.props.listProducts.map((pro) => pro.id);
-      if (discountId) {
-        discounts?.forEach((element) => {
-          if (
-            element.products?.length > 0 &&
-            discountId &&
-            discountId != element?.id
-          ) {
-            element.products?.forEach((product) => {
-              newDiscountIds.push(product.id);
-            });
-          }
-        });
-      } else {
-        discounts?.forEach((element) => {
-          if (element.products?.length > 0) {
-            element.products?.forEach((product) => {
-              newDiscountIds.push(product.id);
-            });
-          }
-        });
+      // Nếu checkbox được chọn, kiểm tra xem mục đã tồn tại trong mảng listProduct chưa
+      if (!this.state.listProduct.some((item) => item.id === data.id)) {
+        // Nếu không tồn tại, thêm mục vào mảng listProduct
+        this.setState((prevState) => ({
+          listProduct: [...prevState.listProduct, data],
+        }));
+        // choox nayf set lại state cho mảng ids
+        this.setState((prevState) => ({
+          listProducts_ids: [...prevState.listProducts_ids, data.id],
+        }));
       }
-      currentProducts = products?.data?.filter(
-        (product) => newDiscountIds.includes(product.id) == false
-      );
+    } else {
+      // Nếu checkbox không được chọn, loại bỏ mục khỏi mảng listPro  duct
+      this.setState((prevState) => ({
+        listProduct: prevState.listProduct.filter((item) => item.id !== data.id),
+      }));
+      // choox nayf set lại state cho mảng ids
+      this.setState((prevState) => ({
+        listProducts_ids: prevState.listProducts_ids.filter((item) => item !== data.id),
+      }));
+    }
+  };
 
-      this.props.listProducts?.forEach((element) => {
-        const has = currentProducts.some((item) => item.id === element.id);
-        if (has == false) {
-          currentProducts.push(element);
+  isCheckedAll = () => {
+    const { products } = this.props;
+    const { listProducts_ids } = this.state;
+    let isCheckAll = false;
+    if (products?.data?.length > 0) {
+      isCheckAll = products.data.every(product => listProducts_ids.includes(product.id));
+    }
+    return isCheckAll;
+  };
+
+  onChangeAll = (e) => {
+    const { checked } = e.target;
+    const { products } = this.props;
+    const { listProducts_ids, listProduct } = this.state;
+    if (checked) {
+      const newListProduct = JSON.parse(JSON.stringify(listProduct)) || [];
+      const newListProductIds = JSON.parse(JSON.stringify(listProducts_ids)) || [];
+      const listData = products.data || [];
+      listData.forEach((product) => {
+        const isExist =
+          listProducts_ids?.length > 0 ? listProducts_ids.some((element) => product.id === element) : false;
+        if (!isExist) {
+          newListProduct.push(product);
+          newListProductIds.push(product.id);
         }
       });
+      this.setState({ listProducts_ids: newListProductIds });
+      this.setState({ listProduct: newListProduct });
     } else {
-      var newListProducts = [];
-      if (discountId) {
-        discounts?.forEach((element) => {
-          if (element.products?.length > 0 && discountId == element?.id) {
-            element.products?.forEach((product) => {
-              if (
-                defaultListProducts.map((d) => d?.id)?.includes(product?.id)
-              ) {
-                newListProducts.push(product);
-              }
-            });
-          }
-        });
-        currentProducts = newListProducts;
-      } else {
-        currentProducts = [];
-      }
-
-      currentProducts = [];
+      const newListProduct = listProduct.filter(item => !products.data.map(product => product.id)?.includes(item.id));
+      const newListProductIds = listProducts_ids.filter(item => !products.data.map(product => product.id)?.includes(item));
+      
+      this.setState({ listProducts_ids: newListProductIds });
+      this.setState({ listProduct: newListProduct });
     }
-
-    console.log(products, discounts, defaultListProducts);
-    setListProducts(currentProducts);
   };
+
   onChangeSearch = (e) => {
     this.setState({ searchValue: e.target.value });
   };
+
   passNumPage = (page) => {
     this.setState({ page: page });
   };
+
   searchData = (e) => {
     e.preventDefault();
     var { store_code } = this.props;
     var { searchValue, numPage, categorySelected } = this.state;
-    const branch_id = localStorage.getItem("branch_id");
+    const branch_id = localStorage.getItem('branch_id');
     this.setState({ page: 1 });
     var params = this.getParams('', '', searchValue, numPage, categorySelected);
     this.props.fetchAllProductV2(store_code, branch_id, 1, params);
@@ -213,7 +163,7 @@ class ListProduct extends Component {
   checkExsit = (list, id) => {
     if (list.length > 0) {
       for (const element of list) {
-        if (element.id == id) {
+        if (element == id) {
           return true;
         }
       }
@@ -237,36 +187,28 @@ class ListProduct extends Component {
   };
 
   onSaveProduct = () => {
-    this.props.onSaveProduct();
-    window.$(".modal").modal("hide");
+    this.props.onSaveProduct([...this.state.listProduct], [...this.state.listProducts_ids]);
+    window.$('.modal').modal('hide');
   };
+
   getNameSelected() {
     const { categorySelected } = this.state;
-    var name = "";
+    var name = '';
     if (categorySelected.length > 0) {
-      name += categorySelected.reduce(
-        (prevCategory, currentCategory, index) => {
-          return (
-            prevCategory +
-            `${
-              index === categorySelected.length - 1
-                ? currentCategory?.label
-                : `${currentCategory?.label}, `
-            }`
-          );
-        },
-        ""
-      );
+      name += categorySelected.reduce((prevCategory, currentCategory, index) => {
+        return (
+          prevCategory +
+          `${index === categorySelected.length - 1 ? currentCategory?.label : `${currentCategory?.label}, `}`
+        );
+      }, '');
     }
-
     return name;
   }
+
   handleCheckedCategory = (idCategory) => {
     const { categorySelected } = this.state;
     if (categorySelected?.length > 0) {
-      const checked = categorySelected
-        .map((category) => category?.id)
-        .includes(idCategory);
+      const checked = categorySelected.map((category) => category?.id).includes(idCategory);
       return checked;
     }
     return false;
@@ -275,30 +217,28 @@ class ListProduct extends Component {
   handleChangeCategory = (category) => {
     const { categorySelected, numPage } = this.state;
     const { store_code } = this.props;
-    const branch_id = localStorage.getItem("branch_id");
+    const branch_id = localStorage.getItem('branch_id');
     var newCategorySelected = [];
 
     const isExisted = categorySelected.map((c) => c?.id).includes(category?.id);
     if (isExisted) {
-      newCategorySelected = categorySelected.filter(
-        (c) => c?.id !== category.id
-      );
+      newCategorySelected = categorySelected.filter((c) => c?.id !== category.id);
     } else {
       newCategorySelected = [...categorySelected, category];
     }
 
-    const params = this.getParams("",'', '', numPage, newCategorySelected);
+    const params = this.getParams('', '', '', numPage, newCategorySelected);
     this.setState({
       categorySelected: newCategorySelected,
       page: 1,
-      searchValue: "",
+      searchValue: '',
     });
     this.props.fetchAllProductV2(store_code, branch_id, 1, params);
   };
   onChangeNumPage = (e) => {
     const { categorySelected, searchValue } = this.state;
     const { store_code } = this.props;
-    const branch_id = localStorage.getItem("branch_id");
+    const branch_id = localStorage.getItem('branch_id');
     var numPage = e.target.value;
     this.setState({
       numPage,
@@ -308,87 +248,42 @@ class ListProduct extends Component {
     this.props.fetchAllProductV2(store_code, branch_id, 1, params);
   };
   getParams = (listType, is_near_out_of_stock, search, limit, categories) => {
-    document.querySelector("#inputCheckAll").checked = false;
+    document.querySelector('#inputCheckAll').checked = false;
     var params = ``;
-    if (search != "" && search != null) {
+    if (search != '' && search != null) {
       params = params + `&search=${search}`;
     }
-    if (limit != "" && limit != null) {
+    if (limit != '' && limit != null) {
       params = params + `&limit=${limit}`;
     }
-    if (categories !== "" && categories !== null && categories?.length > 0) {
-      const newCategorySelected = categories.reduce(
-        (prevCategory, currentCategory, index) => {
-          return (
-            prevCategory +
-            `${
-              index === categories.length - 1
-                ? currentCategory?.id
-                : `${currentCategory?.id},`
-            }`
-          );
-        },
-        "&category_ids="
-      );
+    if (categories !== '' && categories !== null && categories?.length > 0) {
+      const newCategorySelected = categories?.reduce((prevCategory, currentCategory, index) => {
+        return prevCategory + `${index === categories.length - 1 ? currentCategory?.id : `${currentCategory?.id},`}`;
+      }, '&category_ids=');
       params += newCategorySelected;
     }
-
     return params;
   };
 
   showData = (products, list, discounts) => {
     var result = null;
-    if (typeof products === "undefined") {
+    if (typeof products === 'undefined') {
       return result;
     }
     if (products.length > 0) {
       result = products.map((data, index) => {
-        var status_name =
-          data.status == 0
-            ? "Còn hàng"
-            : data.status == 1
-            ? "Đã ẩn"
-            : data.status == 2
-            ? "Hết hàng"
-            : null;
-        var status =
-          data.status == 0
-            ? "success"
-            : data.status == 1
-            ? "secondary"
-            : data.status == 2
-            ? "danger"
-            : null;
         var checked = this.checkExsit(list, data.id);
         var disaled = this.checkDisable(discounts, data.id);
-        var background_disable = disaled == true ? "#ffddd766" : "white";
+        var background_disable = disaled === true ? '#ffddd766' : 'white';
 
-        const {
-          product_discount,
-          min_price,
-          max_price,
-          _delete,
-          update,
-          insert,
-          per_page,
-          current_page,
-          store_code,
-          page,
-          status_stock,
-          discount,
-          historyInventory,
-          distributes,
-        } = data;
+        const { product_discount, min_price, max_price, distributes } = data;
         let discount_percent = null;
 
         if (product_discount) {
           discount_percent = product_discount.value;
         }
         return (
-          <tr
-            className={disaled == true ? "" : "hover-product"}
-            style={{ background: background_disable }}
-          >
+          <tr className={disaled == true ? '' : 'hover-product'} style={{ background: background_disable }}>
             <td>
               <div class="checkbox">
                 <label>
@@ -404,18 +299,13 @@ class ListProduct extends Component {
             </td>
             <td>
               <img
-                src={
-                  data.images.length > 0
-                    ? data.images[0].image_url
-                    : Env.IMG_NOT_FOUND
-                }
+                src={data.images.length > 0 ? data.images[0].image_url : Env.IMG_NOT_FOUND}
                 className="img-responsive"
                 alt="Image"
                 style={{
-                  width: "100%",
-                  height: "59px",
-                  width: "59px",
-                  background: "#0000000d",
+                  width: '100%',
+                  height: '59px',
+                  background: '#0000000d',
                 }}
               />
             </td>
@@ -427,10 +317,10 @@ class ListProduct extends Component {
                 <p
                   style={{
                     fontSize: 11,
-                    color: "grey",
+                    color: 'grey',
                   }}
                 >
-                  {"Sản phẩm có tồn tại ở chương trình giảm giá khác"}
+                  {'Sản phẩm có tồn tại ở chương trình giảm giá khác'}
                 </p>
               )}
             </td>
@@ -441,39 +331,23 @@ class ListProduct extends Component {
                   {min_price === max_price ? (
                     contactOrNumber(
                       format(
-                        Number(
-                          discount_percent == null
-                            ? min_price
-                            : min_price - min_price * discount_percent * 0.01
-                        )
-                      )
+                        Number(discount_percent == null ? min_price : min_price - min_price * discount_percent * 0.01),
+                      ),
                     )
                   ) : distributes && distributes.length == 0 ? (
                     contactOrNumber(
                       format(
-                        Number(
-                          discount_percent == null
-                            ? min_price
-                            : min_price - min_price * discount_percent * 0.01
-                        )
-                      )
+                        Number(discount_percent == null ? min_price : min_price - min_price * discount_percent * 0.01),
+                      ),
                     )
                   ) : (
                     <div className="ae">
                       {format(
-                        Number(
-                          discount_percent == null
-                            ? min_price
-                            : min_price - min_price * discount_percent * 0.01
-                        )
+                        Number(discount_percent == null ? min_price : min_price - min_price * discount_percent * 0.01),
                       )}
-                      {" - "}
+                      {' - '}
                       {format(
-                        Number(
-                          discount_percent == null
-                            ? max_price
-                            : max_price - max_price * discount_percent * 0.01
-                        )
+                        Number(discount_percent == null ? max_price : max_price - max_price * discount_percent * 0.01),
                       )}
                     </div>
                   )}
@@ -484,37 +358,23 @@ class ListProduct extends Component {
                 <div
                   className="a"
                   style={{
-                    float: "left",
+                    float: 'left',
                   }}
                 >
                   {min_price === max_price ? (
                     contactOrNumber(format(Number(min_price)))
                   ) : (
                     <div className="row e">
-                      <div
-                        style={
-                          {
-                            // textDecoration: "line-through",
-                          }
-                        }
-                      >
+                      <div>
                         {format(Number(min_price))}
-                        {" - "}
+                        {' - '}
                         {format(Number(max_price))}
                       </div>
-
-                      {/* <div className="discount e">&emsp; -{discount_percent}%</div> */}
                     </div>
                   )}
                 </div>
               )}
             </td>
-
-            {/* <td> <h5>
-              <span class={`badge badge-${status}`}>
-                {status_name}
-              </span>
-            </h5></td> */}
           </tr>
         );
       });
@@ -525,8 +385,8 @@ class ListProduct extends Component {
   };
 
   render() {
-    var { products, store_code, listProducts, discounts } = this.props;
-    var { searchValue, listCategory, numPage } = this.state;
+    var { products, store_code, discounts } = this.props;
+    var { searchValue, listCategory, numPage, listProducts_ids } = this.state;
     return (
       <div
         class="modal fade"
@@ -537,18 +397,15 @@ class ListProduct extends Component {
         data-backdrop="static"
       >
         <div class="modal-dialog modal-lg" role="document">
-          <div class="modal-content" style={{ maxHeight: "630px" }}>
-            <div class="modal-header" style={{ background: "white" }}>
+          <div class="modal-content" style={{ maxHeight: '630px' }}>
+            <div class="modal-header" style={{ background: 'white' }}>
               <div>
-                <h4 style={{ color: "black", display: "block" }}>
-                  Chọn sản phẩm
-                </h4>
+                <h4 style={{ color: 'black', display: 'block' }}>Chọn sản phẩm modal</h4>
 
-                <i style={{ color: "red" }}>
-                  {" "}
-                  Những sản phẩm được tô đậm là những sản phẩm đang nằm trong
-                  các chương trình khuyến mại khác! Vui lòng xóa nếu muốn thêm
-                  vào chương trình này
+                <i style={{ color: 'red' }}>
+                  {' '}
+                  Những sản phẩm được tô đậm là những sản phẩm đang nằm trong các chương trình khuyến mại khác! Vui lòng
+                  xóa nếu muốn thêm vào chương trình này
                 </i>
               </div>
 
@@ -564,10 +421,10 @@ class ListProduct extends Component {
             </div>
 
             <SearchDataStyles>
-              <form style={{ marginTop: "10px" }} onSubmit={this.searchData}>
-                <div class="input-group mb-6" style={{ padding: "0 20px" }}>
+              <form style={{ marginTop: '10px' }} onSubmit={this.searchData}>
+                <div class="input-group mb-6" style={{ padding: '0 20px' }}>
                   <input
-                    style={{ maxWidth: "280px", minWidth: "150px" }}
+                    style={{ maxWidth: '280px', minWidth: '150px' }}
                     type="search"
                     name="txtSearch"
                     value={searchValue}
@@ -586,13 +443,13 @@ class ListProduct extends Component {
                 <div
                   id="accordion"
                   style={{
-                    width: "300px",
-                    position: "relative",
+                    width: '300px',
+                    position: 'relative',
                   }}
                 >
                   <div
                     className="wrap_category input-group"
-                    style={{ display: "flex" }}
+                    style={{ display: 'flex' }}
                     data-toggle="collapse"
                     data-target="#collapseOne"
                     aria-expanded="false"
@@ -604,12 +461,12 @@ class ListProduct extends Component {
                       class="form-control"
                       placeholder="--Chọn danh mục--"
                       style={{
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        paddingRight: "55px",
-                        position: "relative",
-                        backgroundColor: "transparent",
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        paddingRight: '55px',
+                        position: 'relative',
+                        backgroundColor: 'transparent',
                       }}
                       value={this.getNameSelected()}
                     ></input>
@@ -617,17 +474,11 @@ class ListProduct extends Component {
                       class="btn  btn-accordion-collapse collapsed input-group-text"
                       id="headingOne"
                       style={{
-                        borderTopLeftRadius: "0",
-                        borderBottomLeftRadius: "0",
+                        borderTopLeftRadius: '0',
+                        borderBottomLeftRadius: '0',
                       }}
                     >
-                      <i
-                        className={
-                          this.state.icon
-                            ? "fa fa-caret-down"
-                            : "fa fa-caret-down"
-                        }
-                      ></i>
+                      <i className={this.state.icon ? 'fa fa-caret-down' : 'fa fa-caret-down'}></i>
                     </button>
                   </div>
                   <div
@@ -636,20 +487,20 @@ class ListProduct extends Component {
                     ariaLabelledby="headingOne"
                     dataParent="#accordion"
                     style={{
-                      position: "absolute",
-                      width: "100%",
-                      left: "0",
-                      top: "100%",
-                      zIndex: "10",
-                      background: "#fff",
+                      position: 'absolute',
+                      width: '100%',
+                      left: '0',
+                      top: '100%',
+                      zIndex: '10',
+                      background: '#fff',
                     }}
                   >
                     <ul
                       style={{
-                        listStyle: "none",
-                        margin: "5px 0",
-                        height: "250px",
-                        overflowY: "auto",
+                        listStyle: 'none',
+                        margin: '5px 0',
+                        height: '250px',
+                        overflowY: 'auto',
                       }}
                       class="list-group"
                     >
@@ -658,30 +509,28 @@ class ListProduct extends Component {
                           <li
                             class=""
                             style={{
-                              cursor: "pointer",
-                              paddingTop: "5px",
-                              paddingLeft: "5px",
-                              display: "flex",
+                              cursor: 'pointer',
+                              paddingTop: '5px',
+                              paddingLeft: '5px',
+                              display: 'flex',
                             }}
                           >
                             <input
                               type="checkbox"
                               style={{
-                                marginRight: "10px",
-                                width: "30px",
-                                height: "15px",
-                                flexShrink: "0",
+                                marginRight: '10px',
+                                width: '30px',
+                                height: '15px',
+                                flexShrink: '0',
                               }}
                               checked={this.handleCheckedCategory(category.id)}
-                              onChange={() =>
-                                this.handleChangeCategory(category)
-                              }
+                              onChange={() => this.handleChangeCategory(category)}
                             />
                             <div
                               style={{
-                                whiteSpace: "nowrap",
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
                               }}
                               title={category.label}
                             >
@@ -692,8 +541,8 @@ class ListProduct extends Component {
                       ) : (
                         <div
                           style={{
-                            marginTop: "20px",
-                            textAlign: "center",
+                            marginTop: '20px',
+                            textAlign: 'center',
                           }}
                         >
                           Không có kết quả !
@@ -706,10 +555,7 @@ class ListProduct extends Component {
             </SearchDataStyles>
 
             <div class="table-responsive">
-              <table
-                class="table  table-hover table-border"
-                style={{ color: "black" }}
-              >
+              <table class="table  table-hover table-border" style={{ color: 'black' }}>
                 <thead>
                   <tr>
                     <th>
@@ -717,9 +563,10 @@ class ListProduct extends Component {
                         type="checkbox"
                         id="inputCheckAll"
                         onChange={this.onChangeAll}
+                        checked={this.isCheckedAll()}
                       />
                     </th>
-                    <th style={{ width: "13%" }}>Hình ảnh</th>
+                    <th style={{ width: '13%' }}>Hình ảnh</th>
 
                     <th>Mã SKU</th>
                     <th>Tên sản phẩm</th>
@@ -727,32 +574,30 @@ class ListProduct extends Component {
                   </tr>
                 </thead>
 
-                <tbody>
-                  {this.showData(products?.data, listProducts, discounts)}
-                </tbody>
+                <tbody>{this.showData(products?.data, listProducts_ids, discounts)}</tbody>
               </table>
             </div>
 
             <div
               class="group-pagination_flex col-xs-12 col-sm-12 col-md-12 col-lg-12"
               style={{
-                display: "flex",
-                justifyContent: "space-between",
-                flexWrap: "wrap",
+                display: 'flex',
+                justifyContent: 'space-between',
+                flexWrap: 'wrap',
               }}
             >
               <div
                 style={{
-                  display: "flex",
-                  columnGap: "10px",
-                  alignItems: "center",
-                  flexWrap: "wrap",
+                  display: 'flex',
+                  columnGap: '10px',
+                  alignItems: 'center',
+                  flexWrap: 'wrap',
                 }}
               >
                 <div
                   style={{
-                    flexShrink: "0",
-                    marginBottom: "-6px",
+                    flexShrink: '0',
+                    marginBottom: '-6px',
                   }}
                 >
                   {products && (
@@ -774,7 +619,7 @@ class ListProduct extends Component {
                   id="input"
                   class="form-control"
                   style={{
-                    width: "80px",
+                    width: '80px',
                   }}
                 >
                   <option value="20">20</option>
@@ -785,17 +630,17 @@ class ListProduct extends Component {
               </div>
               <div
                 style={{
-                  marginTop: "10px",
-                  marginBottom: "1rem",
-                  display: "flex",
-                  justifyContent: "flex-end",
-                  width: "100%",
+                  marginTop: '10px',
+                  marginBottom: '1rem',
+                  display: 'flex',
+                  justifyContent: 'flex-end',
+                  width: '100%',
                 }}
               >
                 <button
                   style={{
-                    border: "1px solid",
-                    marginRight: "10px",
+                    border: '1px solid',
+                    marginRight: '10px',
                   }}
                   type="button"
                   class="btn btn-default"
@@ -819,6 +664,7 @@ class ListProduct extends Component {
     );
   }
 }
+
 const mapStateToProps = (state) => {
   return {
     category_product: state.categoryPReducers.category_product.allCategoryP,
@@ -827,9 +673,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch, props) => {
   return {
     fetchAllProductV2: (store_code, branch_id, page, params) => {
-      dispatch(
-        productAction.fetchAllProductV2(store_code, branch_id, page, params)
-      );
+      dispatch(productAction.fetchAllProductV2(store_code, branch_id, page, params));
     },
   };
 };

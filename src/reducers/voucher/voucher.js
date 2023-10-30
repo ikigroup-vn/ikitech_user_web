@@ -5,6 +5,7 @@ var initialState = {
   voucherId: {},
   listVoucherCodes: {},
   linkExport: {},
+  listProductsByVoucherId: {},
 };
 
 export const voucher = (state = initialState, action) => {
@@ -21,6 +22,9 @@ export const voucher = (state = initialState, action) => {
       return newState;
     case Types.FETCH_EXPORT_VOUCHER_CODES:
       newState.linkExport = action.data;
+      return newState;
+    case Types.FETCH_LIST_PRODUCTS_BY_VOUCHER_ID:
+      newState.listProductsByVoucherId = action.data;
       return newState;
     default:
       return newState;

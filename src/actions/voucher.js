@@ -44,7 +44,7 @@ export const fetchAllVoucherEnd = (store_id, page = 1) => {
   };
 };
 
-export const fetchVoucherId = (store_id, voucherId) => {
+export const fetchVoucherId = (store_id, voucherId, onSuccess = () => {}) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -56,6 +56,7 @@ export const fetchVoucherId = (store_id, voucherId) => {
         loading: "hide",
       });
       if (res.data.code !== 401)
+        onSuccess();
         dispatch({
           type: Types.FETCH_ID_VOUCHER,
           data: res.data.data,
@@ -417,3 +418,24 @@ export const changeStatuVourcherCodes = (store_code, vourcher_id, data, onSucces
   };
 };
 
+export const fetchAllListProductsByVoucherId = (store_code, vourcher_id, page, perpage, onSuccess = () => {}) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    voucherApi.fetchAllListProductsByVoucherId(store_code, vourcher_id, page, perpage).then((res) => {
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide",
+      });
+      if (res.data.code !== 401){
+        onSuccess();
+        dispatch({
+          type: Types.FETCH_LIST_PRODUCTS_BY_VOUCHER_ID,
+          data: res.data.data,
+        });
+      }
+    });
+  };
+};

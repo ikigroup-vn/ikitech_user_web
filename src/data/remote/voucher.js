@@ -42,3 +42,10 @@ export const fetchExportVoucherCodes = (store_code, vourcher_id) => {
 export const changeStatuVourcherCodes = (store_code, voucher_id, ids) => {
   return callApi(`/store/${store_code}/vouchers/${voucher_id}/codes`, "put", ids);
 }
+
+export const fetchAllListProductsByVoucherId = (store_code, vourcher_id, page, perpage) => {
+  return callApi(
+    `/store/${store_code}/vouchers/${vourcher_id}/products?page=${page}&limit=${perpage} `,
+    "get",
+  );
+}
