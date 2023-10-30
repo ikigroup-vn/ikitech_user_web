@@ -113,12 +113,16 @@ class ShowData extends Component {
                       </div>
                     </td>
                     <td className="item">
-                      {formatNoD(Number(cost_of_capital))}
+                      {cost_of_capital
+                        ? formatNoD(Number(cost_of_capital)?.toFixed(2))
+                        : 0}
                     </td>
                     <td className="item">{formatNoD(stock)}</td>
 
                     <td className="item">
-                      {formatNoD(stock * cost_of_capital)}
+                      {cost_of_capital
+                        ? formatNoD(Number(stock * cost_of_capital)?.toFixed(2))
+                        : 0}
                     </td>
                   </tr>
                 );
@@ -147,7 +151,9 @@ class ShowData extends Component {
                 </td>
                 <td className="item">
                   <div className="price-distribute">
-                    {formatNoD(Number(element.cost_of_capital))}
+                    {element.cost_of_capital
+                      ? formatNoD(Number(element.cost_of_capital)?.toFixed(2))
+                      : 0}
                   </div>
                 </td>
                 <td className="item">
@@ -157,7 +163,13 @@ class ShowData extends Component {
                 </td>
                 <td className="item">
                   <div className="quantity-distribute">
-                    {formatNoD(element.stock * element.cost_of_capital)}
+                    {element.cost_of_capital
+                      ? formatNoD(
+                          Number(
+                            element.stock * element.cost_of_capital
+                          )?.toFixed(2)
+                        )
+                      : 0}
                   </div>
                 </td>
               </tr>
@@ -221,16 +233,22 @@ class ShowData extends Component {
           ) : (
             <>
               <td>
-                {formatNoD(Number(data.main_stock.cost_of_capital?.toFixed(2)))}
+                {data.main_stock.cost_of_capital
+                  ? formatNoD(
+                      Number(data.main_stock.cost_of_capital?.toFixed(2))
+                    )
+                  : 0}
               </td>
 
               <td>{formatNoD(data.main_stock.stock)}</td>
 
               <td>
-                {formatNoD(
-                  data.main_stock.cost_of_capital?.toFixed(2) *
-                    data.main_stock.stock
-                )}
+                {data.main_stock.cost_of_capital
+                  ? formatNoD(
+                      data.main_stock.cost_of_capital?.toFixed(2) *
+                        data.main_stock.stock
+                    )
+                  : 0}
               </td>
             </>
           )}

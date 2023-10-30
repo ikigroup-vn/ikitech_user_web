@@ -175,17 +175,11 @@ class TotalBill extends Component {
                   bill.order_status_code !== "COMPLETED" &&
                   bill.order_status_code !== "CUSTOMER_HAS_RETURNS"
                 ) ? (
-                  <span
-                    style={{ "border-bottom": "1px solid", cursor: "pointer" }}
-                  >
+                  <span>
                     {"    "}+&nbsp;{format(total_shipping_fee)}{" "}
                   </span>
                 ) : (
-                  <span
-                    data-target="#modalShipAmount"
-                    data-toggle="modal"
-                    style={{ "border-bottom": "1px solid", cursor: "pointer" }}
-                  >
+                  <span data-target="#modalShipAmount" data-toggle="modal">
                     <i
                       style={{ fontSize: "14px" }}
                       className="fa fa-pencil"
@@ -298,9 +292,7 @@ class TotalBill extends Component {
               <p className="sale_user_label bold bold group-total">
                 <div> VAT:</div>
 
-                <span className="cart_payment_method">
-                  {format(vat)}
-                </span>
+                <span className="cart_payment_method">{format(vat)}</span>
               </p>
             </div>
           )}
@@ -310,7 +302,10 @@ class TotalBill extends Component {
               <p className="sale_user_label bold bold group-total">
                 <div> Thành tiền:</div>
 
-                <span className="cart_payment_method">
+                <span
+                  className="cart_payment_method"
+                  style={{ paddingTop: "3px", borderTop: "1px solid black" }}
+                >
                   {format(total_final)}
                 </span>
               </p>

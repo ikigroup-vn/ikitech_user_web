@@ -77,7 +77,18 @@ class UpdatePriceModal extends Component {
                 .replace(/\./g, "")
             : 0;
 
-        ele.price = price;
+        ele.price = Number(price);
+
+        const import_price =
+          ele.import_price != null
+            ? ele.import_price
+                .toString()
+                .replace(",", "")
+                .replace(/,/g, "")
+                .replace(/\./g, "")
+            : 0;
+
+        ele.import_price = Number(import_price);
 
         ele.is_edit = true;
         ele.before_name = ele.name;
@@ -91,6 +102,17 @@ class UpdatePriceModal extends Component {
                   .replace(/\./g, "")
               : 0;
           sub.price = price;
+
+          const import_price =
+            sub.import_price != null
+              ? sub.import_price
+                  .toString()
+                  .replace(",", "")
+                  .replace(/,/g, "")
+                  .replace(/\./g, "")
+              : 0;
+
+          sub.import_price = Number(import_price);
 
           sub.before_name = sub.name;
           sub.is_edit = true;

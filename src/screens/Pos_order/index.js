@@ -643,6 +643,7 @@ class PostOrder extends Component {
       data,
       this,
       (order_code) => {
+        this.setState({ customerNote: "" });
         if (weight !== "" || length !== "" || width !== "" || height !== "") {
           this.props.updateShippingPackage(store_code, order_code, {
             package_weight: Number(weight),
@@ -1035,7 +1036,7 @@ class PostOrder extends Component {
       isShow,
       idCart,
     } = this.state;
-    const length = oneCart.info_cart?.line_items.length;
+    const length = oneCart.info_cart?.line_items.length || 0;
     console.log("hiiiiiiiiiiiiiii: ", oneCart);
     const ship_discount_amount = oneCart.info_cart?.ship_discount_amount;
     console.log("oneCart.info_cart::: ", oneCart.info_cart);
