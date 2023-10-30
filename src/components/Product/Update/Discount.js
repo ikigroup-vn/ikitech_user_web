@@ -371,8 +371,7 @@ class Discount extends Component {
                         }}
                       >
                         *Giá sỉ chỉ có thể được thiết lập khi sản phẩm không có
-                        phân loại hoặc các phân loại đồng giá và không áp dụng
-                        các chương trình khuyến mãi.
+                        phân loại hoặc các phân loại đồng giá.
                       </div>
                       {isShow ? (
                         <div className="discount">
