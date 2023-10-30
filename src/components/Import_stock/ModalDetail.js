@@ -125,47 +125,12 @@ class ModalDetail extends Component {
     }
   };
 
-  // handleClickElement = (nameElement, price, index, id) => {
-  //     var sub_element_distribute = this.state.elementObject.sub_element_distributes
-  //     var { sub_element_distributes } = this.state.elementDistributeOj
-  //     var subImport = findImportPriceSub(sub_element_distributes, nameElement)
-  //     if (typeof subImport == "undefined") {
-  //         return;
-  //     } if (this.props.modal.discountProduct) {
-  //         var { value } = this.props.modal.discountProduct
-  //         this.setState({ subElementDistributeSelected: index, element_distributes: nameElement })
-  //         var indexDistribute = sub_element_distribute.map(e => e.name).indexOf(nameElement)
-  //         var sub_element = sub_element_distribute[indexDistribute]
-  //         this.setState({
-  //             // afterChoosePrice: sub_element.price - (sub_element.price * value / 100),
-  //             // priceBeforeDiscount: sub_element.price,
-  //             afterChoosePrice: sub_element.cost_of_capital,
-
-  //             priceBeforeDiscount: sub_element.cost_of_capital,
-  //             quantityInStock: sub_element.stock, messageErr: "",
-  //             idElement: id,
-  //         })
-  //     } else {
-  //         if (sub_element_distribute) {
-  //             this.setState({ subElementDistributeSelected: index, element_distributes: nameElement })
-  //             var indexDistributes = sub_element_distribute.map(e => e.name).indexOf(nameElement)
-  //             var sub_elements = sub_element_distribute[indexDistributes]
-  //             this.setState({
-  //                 afterChoosePrice: subImport.import_price,
-  //                 priceBeforeDiscount: sub_elements?.price,
-  //                 quantityInStock: sub_elements?.stock,
-  //                 idElement: id,
-  //                 messageErr: ""
-  //             })
-  //         } else {
-  //             this.setState({ afterChoosePrice: subImport.import_price, subElementDistributeSelected: index, idElement: id, element_distributes: nameElement, quantityInStock: sub_elements?.stock, })
-  //         }
-
-  //     }
-
-  // }
   handleClickElement = (nameElement, import_price, index, id) => {
     var { sub_element_distributes } = this.state.elementObject;
+    console.log(
+      "🚀 ~ file: ModalDetail.js:131 ~ ModalDetail ~ this.props.modal.discountProduct:",
+      this.props.modal
+    );
     if (this.props.modal.discountProduct) {
       var { value } = this.props.modal.discountProduct;
       this.setState({
@@ -179,10 +144,6 @@ class ModalDetail extends Component {
       this.setState({
         afterChoosePrice: sub_element.price - (sub_element.price * value) / 100,
         priceBeforeDiscount: sub_element.price,
-        // afterChoosePrice: sub_element.cost_of_capital,
-
-        // priceBeforeDiscount: sub_element.cost_of_capital,
-
         quantityInStock: sub_element.stock,
         messageErr: "",
         idElement: id,
@@ -204,9 +165,9 @@ class ModalDetail extends Component {
             ].sub_element_distributes[index].import_price,
           priceBeforeDiscount: sub_elements.price,
           quantityInStock:
-            this.props.modal.distributes[0].element_distributes[
+            this.props.modal.inventory.distributes[0].element_distributes[
               this.state.distributeSelected
-            ].sub_element_distributes[index].quantity_in_stock,
+            ].sub_element_distributes[index].stock,
           idElement: id,
           messageErr: "",
         });
@@ -340,30 +301,16 @@ class ModalDetail extends Component {
   }
   render() {
     var inforProduct = this.props.modal;
+    console.log(
+      "🚀 ~ file: ModalDetail.js:304 ~ ModalDetail ~ render ~ inforProduct:",
+      inforProduct
+    );
 
     var itemParent =
-      inforProduct.distributes?.length > 0 ? inforProduct.distributes[0] : [];
+      inforProduct?.inventory?.distributes?.length > 0
+        ? inforProduct?.inventory?.distributes[0]
+        : [];
 
-    console.log(
-      this.props.modal,
-      this.state,
-      inforProduct,
-      this.state.afterChoosePrice === ""
-        ? inforProduct.discountProduct === null
-          ? this.props.modal.minPriceProduct ===
-            this.props.modal.maxPriceProduct
-            ? format(Number(this.props.modal.minPriceProduct))
-            : `${format(Number(this.props.modal.minPriceProduct))}-${format(
-                Number(this.props.modal.maxPriceProduct)
-              )}`
-          : this.state.minPriceAfterDiscount ===
-            this.state.maxPriceAfterDiscount
-          ? `${format(Number(this.state.minPriceAfterDiscount))}`
-          : `${format(Number(this.state.minPriceAfterDiscount))} - ${format(
-              Number(this.state.maxPriceAfterDiscount)
-            )}`
-        : format(Number(this.state.afterChoosePrice))
-    );
     return (
       <div class="modal" id="modalDetails">
         <div class="modal-dialog">
@@ -519,7 +466,7 @@ class ModalDetail extends Component {
                                         itemParent.name,
                                         index,
                                         itemChild.id,
-                                        itemChild.quantity_in_stock
+                                        itemChild.stock
                                       )
                                     }
                                   >

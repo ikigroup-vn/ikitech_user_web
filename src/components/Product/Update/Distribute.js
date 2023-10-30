@@ -1195,7 +1195,10 @@ class Distribute extends Component {
     if (this.props.isHide == true) return <></>;
 
     var { list_distribute } = this.state;
-    console.log("🚀 ~ list_distribute:", list_distribute);
+    console.log(
+      "🚀 ~ file: Distribute.js:1198 ~ Distribute ~ render ~ list_distribute:",
+      list_distribute
+    );
     // var openDistribute = disableDistribute == true && disableInventory == true ? "" : "hide";
 
     var disable = "";

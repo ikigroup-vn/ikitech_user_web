@@ -536,7 +536,7 @@ class Config extends Component {
             </div>
             <div className="form-group">
               <label htmlFor="name">
-                Phần trăm hoa hồng cho người giới thiệu CTV mua hàng{" "}
+                Phần trăm hoa hồng đại lí giới thiệu CTV{" "}
               </label>
               <div className="bonusTypeForAgency">
                 <input
@@ -560,7 +560,7 @@ class Config extends Component {
                       }
                     />{" "}
                     <label htmlFor="bonus_type_for_ctv_t2_option1">
-                      % hoa hồng Đại lý được nhận từ tổng tiền đơn hàng
+                      trên tổng đơn hàng phát sinh từ CTV
                     </label>
                     <span className="bonusTypeForAgency_note">
                       <span className="bonusTypeForAgency_noteIcon">?</span>
@@ -583,9 +583,8 @@ class Config extends Component {
                       checked={bonus_type_for_ctv_t2 == 1}
                     />{" "}
                     <label htmlFor="bonus_type_for_ctv_t2_option2">
-                      % hoa hồng từ chính Đại lý được hưởng(phần tiền này sẽ
-                      được tính tọa dựa trên số % hoa hồng của đại lý từng sản
-                      phẩm cộng lại theo cấu hình cấp đại lý)
+                      trên hoa hồng trực tiếp của đại lí bán hàng affilate hoặc
+                      dropship ( hoa hồng các cấp cấu hình đại lí tương ứng)
                     </label>
                     <span className="bonusTypeForAgency_note">
                       <span className="bonusTypeForAgency_noteIcon">?</span>
