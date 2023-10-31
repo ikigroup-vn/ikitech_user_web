@@ -49,7 +49,6 @@ class Table extends Component {
 
   render() {
     var { products, setDefaultListProducts } = this.props;
-    console.log(products);
     return (
       <React.Fragment>
         <div class="form-group">
@@ -67,7 +66,7 @@ class Table extends Component {
             <span class="text">&nbsp;Chọn sản phẩm</span>
           </button>
         </div>
-        <div class="form-group">
+        <div class="form-group" >
           <label for="product_name">Danh sách sản phẩm : </label>
 
           <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">

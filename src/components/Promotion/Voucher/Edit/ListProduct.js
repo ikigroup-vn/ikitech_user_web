@@ -15,7 +15,6 @@ class ListProduct extends Component {
 
   onChange = (e) => {
     var { value, checked } = e.target
-    console.log(checked)
     var data = JSON.parse(value);
     if (checked == true)
       this.props.handleAddProduct(data, null, "add")
