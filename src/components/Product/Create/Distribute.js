@@ -363,7 +363,11 @@ class Distribute extends Component {
 
             return (
               <tr className={`${border}`}>
-                <td>
+                <td
+                  style={{
+                    verticalAlign: "top",
+                  }}
+                >
                   <input
                     type="text"
                     id="input"
@@ -429,7 +433,12 @@ class Distribute extends Component {
                     />
                   </div>
                 </td>
-                <td className="btn-action">
+                <td
+                  className="btn-action"
+                  style={{
+                    verticalAlign: "top",
+                  }}
+                >
                   <button
                     class="btn btn-danger btn-sm"
                     onClick={() => {
@@ -493,7 +502,11 @@ class Distribute extends Component {
                     <React.Fragment>
                       {index == 0 && <h6>Tên phân loại phụ </h6>}
                       <tr className={`${border}`}>
-                        <td>
+                        <td
+                          style={{
+                            verticalAlign: "top",
+                          }}
+                        >
                           <input
                             type="text"
                             name="name"
@@ -541,7 +554,12 @@ class Distribute extends Component {
                             flexDirection: "column",
                           }}
                         ></td>
-                        <td className="btn-action">
+                        <td
+                          className="btn-action"
+                          style={{
+                            verticalAlign: "top",
+                          }}
+                        >
                           <button
                             class="btn btn-danger btn-sm"
                             onClick={() => {

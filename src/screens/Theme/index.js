@@ -15,7 +15,7 @@ import NotAccess from "../../components/Partials/NotAccess";
 
 import FooterTheme from "../../components/Theme/Footer/index";
 import Overview from "../../components/Theme/OverView/index";
-import Home_Screen from "../../components/Theme/Home_Screen/index";
+import HomeScreen from "../../components/Theme/Home_Screen/index";
 import Custom_Screen from "../../components/Theme/Custom_Screen/index";
 import * as themeAction from "../../actions/theme";
 import * as helper from "../../ultis/helpers";
@@ -187,13 +187,15 @@ class Theme extends Component {
                             />
                           </TabPanel>
                         ) : null}
-                        <TabPanel>
-                          <Home_Screen
-                            tabId={tabId}
-                            store_code={store_code}
-                            theme={theme}
-                          />
-                        </TabPanel>
+                        {web_theme_edit == true ? (
+                          <TabPanel>
+                            <HomeScreen
+                              tabId={tabId}
+                              store_code={store_code}
+                              theme={theme}
+                            />
+                          </TabPanel>
+                        ) : null}
 
                         {web_theme_contact == true ? (
                           <TabPanel>
@@ -235,7 +237,7 @@ class Theme extends Component {
                           </TabPanel>
                         ) : null}
 
-                        {web_theme_banner == true ? (
+                        {web_theme_seo == true ? (
                           <TabPanel>
                             <Seo
                               theme={theme}
