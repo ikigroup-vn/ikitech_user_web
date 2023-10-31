@@ -98,12 +98,16 @@ class Form extends Component {
 
     return (
       <React.Fragment>
-        <form onSubmit={this.onSave} className="user">
+        <form
+          onSubmit={this.onSave}
+          className="user"
+          autoComplete="new-password"
+        >
           <div className="form-group">
             <input
               className="form-control form-control-user"
               id="exampleInputEmail"
-              autoComplete="off"
+              autoComplete="new-password"
               placeholder={
                 !this.state.isSendToPhone
                   ? "Nhập mã xác nhận từ Email"

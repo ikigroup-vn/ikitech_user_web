@@ -265,7 +265,7 @@ export default class ComponentTemplate1ToPrint extends Component {
                   style={{
                     fontWeight: "bold",
                     textTransform: "uppercase",
-                    fontSize: 30,
+                    fontSize: 25,
                     margin: 0,
                     padding: 0,
                   }}
@@ -280,6 +280,7 @@ export default class ComponentTemplate1ToPrint extends Component {
                 style={{
                   margin: 0,
                   padding: 0,
+                  fontSize: 20,
                 }}
               >
                 <span>
@@ -294,6 +295,7 @@ export default class ComponentTemplate1ToPrint extends Component {
                 style={{
                   margin: 0,
                   padding: 0,
+                  fontSize: 20,
                 }}
               >
                 <span>
@@ -307,6 +309,7 @@ export default class ComponentTemplate1ToPrint extends Component {
                 style={{
                   margin: 0,
                   padding: 0,
+                  fontSize: 20,
                 }}
               >
                 <span>
@@ -321,6 +324,7 @@ export default class ComponentTemplate1ToPrint extends Component {
                 style={{
                   margin: 0,
                   padding: 0,
+                  fontSize: 20,
                 }}
               >
                 <span>
@@ -333,7 +337,7 @@ export default class ComponentTemplate1ToPrint extends Component {
 
             <p
               style={{
-                fontSize: "30px",
+                fontSize: 25,
                 fontWeight: "bold",
                 textAlign: "left",
 
@@ -346,7 +350,7 @@ export default class ComponentTemplate1ToPrint extends Component {
             </p>
             <p
               style={{
-                fontSize: "23px",
+                fontSize: 20,
                 textAlign: "left",
                 margin: 0,
                 padding: 0,
@@ -359,7 +363,7 @@ export default class ComponentTemplate1ToPrint extends Component {
             {bill?.order_ship_code?.from_shipper_code && (
               <div
                 style={{
-                  fontSize: "18px",
+                  fontSize: 20,
                   textAlign: "left",
                   margin: 0,
                   padding: 0,
@@ -373,7 +377,7 @@ export default class ComponentTemplate1ToPrint extends Component {
 
             <div
               style={{
-                fontSize: "23px",
+                fontSize: 20,
                 textAlign: "left",
                 margin: 0,
                 padding: 0,

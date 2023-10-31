@@ -46,6 +46,7 @@ class Form extends Component {
       });
     }
   }
+
   toggleCPassword = () => {
     this.setState({ toggleC: !this.state.toggleC });
   };
@@ -162,7 +163,7 @@ class Form extends Component {
     console.log(products);
     return (
       <React.Fragment>
-        <form onSubmit={this.onSave} className="user">
+        <form onSubmit={this.onSave} className="user" autoComplete="off">
           <div className="form-group row">
             <div className="col-sm-6 mb-3 mb-sm-0">
               <input
@@ -195,7 +196,7 @@ class Form extends Component {
               className="form-control form-control-user"
               id="exampleInputEmail"
               placeholder="Email"
-              autoComplete="off"
+              autoComplete="new-password"
               name="txtEmail"
               value={txtEmail}
               onChange={this.onChange}
@@ -207,7 +208,7 @@ class Form extends Component {
                 type={toggle == true ? "text" : "password"}
                 className="form-control form-control-user"
                 placeholder="Mật khẩu"
-                autoComplete="off"
+                autoComplete="new-password"
                 name="txtPassword"
                 value={txtPassword}
                 onChange={this.onChange}

@@ -562,6 +562,7 @@ class Distribute extends Component {
                               style={{
                                 border: "none",
                                 paddingLeft: "35px",
+                                verticalAlign: "top",
                               }}
                             >
                               <button
@@ -768,6 +769,7 @@ class Distribute extends Component {
                                       style={{
                                         border: "none",
                                         paddingLeft: "35px",
+                                        verticalAlign: "top",
                                       }}
                                     >
                                       <button
