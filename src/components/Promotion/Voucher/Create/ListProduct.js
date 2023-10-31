@@ -121,7 +121,6 @@ class ListProduct extends Component {
 
   render() {
     var { products, store_code, listProducts, vouchers } = this.props;
-    console.log(products, store_code, listProducts, vouchers);
     return (
       <div
         class="modal fade"
