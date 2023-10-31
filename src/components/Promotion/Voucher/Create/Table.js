@@ -65,7 +65,7 @@ class Table extends Component {
             <span class="text">&nbsp;Chọn sản phẩm</span>
           </button>
         </div>
-        <div class="form-group" style={{maxHeight: 450, overflow: 'scroll'}}>
+        <div class="form-group" style={{ maxHeight: 450, overflow: "auto" }}>
           <label for="product_name">Danh sách sản phẩm : </label>
 
           <div class="col-xs-9 col-sm-9 col-md-9 col-lg-9">
