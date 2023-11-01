@@ -26,7 +26,7 @@ class HistoryStock extends Component {
             </td>
             <td> {data.branch?.name}</td>
             <td>{formatNoD(data.stock)}</td>
-            <td>{formatNoD(data.cost_of_capital)}</td>
+            <td>{format(Number(data.cost_of_capital))}</td>
 
             <td>
               {data.change !== 0 && (
