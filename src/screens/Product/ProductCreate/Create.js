@@ -412,6 +412,69 @@ class ProductCreate extends Component {
       delete form.list_distribute;
     }
 
+    if (form?.list_distribute?.length > 0) {
+      let isErrorEmpty = false;
+      const skuDuplicate = [];
+      if (
+        form?.list_distribute[0].element_distributes?.[0]
+          ?.sub_element_distributes?.length > 0
+      ) {
+        form?.list_distribute[0].element_distributes.forEach((element) => {
+          element.sub_element_distributes.forEach((subElement) => {
+            if (!subElement.sku) {
+              isErrorEmpty = true;
+              return;
+            }
+            skuDuplicate.push(subElement.sku);
+          });
+          if (isErrorEmpty) {
+            return;
+          }
+        });
+      } else if (form?.list_distribute[0].element_distributes?.length > 0) {
+        form?.list_distribute[0].element_distributes.forEach((element) => {
+          if (!element.sku) {
+            isErrorEmpty = true;
+            return;
+          }
+          skuDuplicate.push(element.sku);
+        });
+      }
+
+      if (isErrorEmpty) {
+        this.props.showError({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: "Vui lòng nhập đầy đủ mã sku",
+          },
+        });
+        return;
+      }
+
+      const isErrorDuplicate =
+        skuDuplicate.length > 0
+          ? skuDuplicate.some(
+              (value, index, seft) => seft.indexOf(value) !== index
+            )
+          : false;
+
+      if (isErrorDuplicate) {
+        this.props.showError({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: "Vui lòng nhập mã sku khác nhau",
+          },
+        });
+        return;
+      }
+    }
+
     if (form.weight == "") {
       form.weight = 100;
     }
@@ -433,6 +496,7 @@ class ProductCreate extends Component {
       is_product_retail_step: product_retail_steps.length > 0,
       product_retail_steps: product_retail_steps,
     };
+
     if (form.description && form.description?.includes("<iframe")) {
       const sunEditorContent = document.querySelector(".sun-editor-editable");
       if (sunEditorContent) {

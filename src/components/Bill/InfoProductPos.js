@@ -235,7 +235,6 @@ class InfoProductPos extends Component {
     } else {
       for (var element of list_refunds) {
         if (element.line_item_id == id) {
-
           if (element.quantity - 1 <= 0) {
             return;
           }
@@ -309,6 +308,10 @@ class InfoProductPos extends Component {
     list_items,
     total_final
   ) => {
+    console.log(
+      "🚀 ~ file: InfoProductPos.js:312 ~ InfoProductPos ~ products:",
+      products
+    );
     var result = null;
     var { check } = this.props;
     if (products.length > 0) {
@@ -321,7 +324,8 @@ class InfoProductPos extends Component {
         var store_code = this.props.store_code;
         return (
           <React.Fragment>
-            {this.checkExsitProduct(product.id) == true && (
+            {
+              // this.checkExsitProduct(product.id) == true &&
               <li
                 className={`${line_list_product} row`}
                 style={{ display: "flex", marginBottom: "10px" }}
@@ -627,7 +631,7 @@ class InfoProductPos extends Component {
                   </div>
                 </li>
               </li>
-            )}
+            }
 
             {/* {index == products.length - 1 && (
                             <li className={`${line_list_product} row`} style={{ display: "flex", marginBottom: "10px" }}>

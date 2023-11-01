@@ -71,6 +71,7 @@ class ModalUpdate extends Component {
         {
           USERNAME: USERNAME,
           PASSWORD: PASSWORD,
+          CUSTOMERCODE: CUSTOMERCODE,
         }
       );
     }
@@ -223,7 +224,7 @@ class ModalUpdate extends Component {
                     }}
                   ></span>
                 </div>
-                {this.props.modalId == 3 && (
+                {this.props.modalId == 3 || this.props.modalId == 4 ? (
                   <div class="form-group">
                     <label for="product_name">Mã khách hàng</label>
                     <input
@@ -237,7 +238,7 @@ class ModalUpdate extends Component {
                       name="CUSTOMERCODE"
                     />
                   </div>
-                )}
+                ) : null}
                 {this.props.modalId == 3 && (
                   <div class="form-group">
                     <label for="product_name">Mã hợp đồng</label>
