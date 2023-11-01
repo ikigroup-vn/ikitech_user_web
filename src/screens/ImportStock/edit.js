@@ -728,6 +728,7 @@ class EditImportStock extends Component {
                             alignItems: "center",
                             columnGap: "5px",
                           }}
+                          disabled={this.props.loading === "show"}
                           onClick={() => this.updateImportStock()}
                         >
                           <span class="fa fa-floppy-o"></span>
@@ -742,6 +743,7 @@ class EditImportStock extends Component {
                               alignItems: "center",
                               columnGap: "5px",
                             }}
+                            disabled={this.props.loading === "show"}
                             onClick={() => this.updateImportStock("COMPLETED")}
                           >
                             <span class="fa fa-check"></span>
@@ -836,6 +838,7 @@ const mapStateToProps = (state) => {
     wards: state.placeReducers.wards,
     province: state.placeReducers.province,
     district: state.placeReducers.district,
+    loading: state.loadingReducers.disable,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {

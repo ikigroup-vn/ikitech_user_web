@@ -626,7 +626,7 @@ class CreateImportStock extends Component {
     var type_discount_percent = txtDiscoutType == "1" ? "show" : "hide";
     const bonusParam = "&check_inventory=true";
 
-    console.log(select_supplier_id);
+    console.log("this.props.loading::: ", this.props.loading);
     return (
       <div id="wrapper">
         <Sidebar store_code={store_code} />
@@ -951,6 +951,7 @@ class CreateImportStock extends Component {
                             alignItems: "center",
                             columnGap: "5px",
                           }}
+                          disabled={this.props.loading === "show"}
                           onClick={() => this.createImportStock()}
                         >
                           <span class="fa fa-floppy-o"></span>
@@ -964,6 +965,7 @@ class CreateImportStock extends Component {
                             alignItems: "center",
                             columnGap: "5px",
                           }}
+                          disabled={this.props.loading === "show"}
                           onClick={() => this.createImportStock("COMPLETED")}
                         >
                           <span class="fa fa-check"></span>
@@ -1271,6 +1273,7 @@ const mapStateToProps = (state) => {
     province: state.placeReducers.province,
     district: state.placeReducers.district,
     category_product: state.categoryPReducers.category_product.allCategoryP,
+    loading: state.loadingReducers.disable,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
