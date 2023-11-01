@@ -70,6 +70,8 @@ class Distribute extends Component {
         list_distribute[0].name = value;
       } else if (obj.name == "barcode") {
         list_distribute[0].element_distributes[obj.index][obj.name] = value;
+      } else if (obj.name == "sku") {
+        list_distribute[0].element_distributes[obj.index][obj.name] = value;
       } else if (obj.name == "value") {
         list_distribute[0].element_distributes[obj.index].name = value;
       } else {
@@ -105,6 +107,10 @@ class Distribute extends Component {
       if (obj.name == "name") {
         list_distribute[0].sub_element_distribute_name = value;
       } else if (obj.name == "barcode") {
+        list_distribute[0].element_distributes[
+          obj._index
+        ].sub_element_distributes[obj.index][obj.name] = value;
+      } else if (obj.name == "sku") {
         list_distribute[0].element_distributes[
           obj._index
         ].sub_element_distributes[obj.index][obj.name] = value;
@@ -647,6 +653,9 @@ class Distribute extends Component {
                   var barcode =
                     list_distribute[0].element_distributes[_index]
                       .sub_element_distributes[index].barcode;
+                  var sku =
+                    list_distribute[0].element_distributes[_index]
+                      .sub_element_distributes[index].sku;
                   var value_import_price =
                     list_distribute[0].element_distributes[_index]
                       .sub_element_distributes[index].import_price;
@@ -737,14 +746,24 @@ class Distribute extends Component {
                             title=""
                           />
                         </td>
-                        {/* <td>
-                        <input
-                          value={barcode}
-                          onChange={(e) => this.onChange(e, "SUP", { name: "barcode", index,  _index, title: _element.name })}
-
-                          name="" id="input" class="form-control" required="required" title="" />
-
-                      </td> */}
+                        <td>
+                          <input
+                            value={sku}
+                            onChange={(e) =>
+                              this.onChange(e, "SUP", {
+                                name: "sku",
+                                index,
+                                _index,
+                                title: _element.name,
+                              })
+                            }
+                            name="sku"
+                            id="input"
+                            class="form-control"
+                            required="required"
+                            title=""
+                          />
+                        </td>
 
                         <td>
                           <input
@@ -820,14 +839,23 @@ class Distribute extends Component {
                           />
                         </td>
 
-                        {/* <td>
-                        <input
-                          value={barcode}
-                          onChange={(e) => this.onChange(e, "PARENT", { name: "barcode", index, _index })}
-
-                          name="" id="input" class="form-control" required="required" title="" />
-
-                      </td> */}
+                        <td>
+                          <input
+                            value={sku}
+                            onChange={(e) =>
+                              this.onChange(e, "PARENT", {
+                                name: "sku",
+                                index,
+                                _index,
+                              })
+                            }
+                            name="sku"
+                            id="input"
+                            class="form-control"
+                            required="required"
+                            title=""
+                          />
+                        </td>
 
                         <td>
                           <input
@@ -896,6 +924,7 @@ class Distribute extends Component {
                   : new Intl.NumberFormat().format(_values_cost);
             } catch (error) {
               var barcode = element.barcode;
+              var sku = element.sku;
               var price = element.price;
               var quantity_in_stock = element.quantity_in_stock;
               var cost_of_capital = element.cost_of_capital;
@@ -938,14 +967,22 @@ class Distribute extends Component {
                     />
                   </td>
 
-                  {/* <td>
+                  <td>
                     <input
-                      value={barcode}
-                      onChange={(e) => this.onChange(e, "PARENT", { name: "barcode", index: _index })}
-
-                      name="" id="input" class="form-control" required="required" title="" />
-
-                  </td> */}
+                      value={sku}
+                      onChange={(e) =>
+                        this.onChange(e, "PARENT", {
+                          name: "sku",
+                          index: _index,
+                        })
+                      }
+                      name=""
+                      id="input"
+                      class="form-control"
+                      required="required"
+                      title=""
+                    />
+                  </td>
 
                   <td>
                     <input
@@ -1046,7 +1083,7 @@ class Distribute extends Component {
               <th>Tên thuộc tính</th>
               <th>Giá bán lẻ</th>
               <th>Giá nhập</th>
-              {/* <th>Barcode</th> */}
+              <th>Mã sku</th>
               <th className={openDistribute}>Tồn kho ban đầu</th>
               <th className={openDistribute}>Giá vốn</th>
             </tr>
