@@ -359,11 +359,8 @@ class ModalChooseTypeImport extends Component {
         allow_skip_same_name,
         list: newProducts,
       };
-      console.log(
-        "🚀 ~ ModalChooseTypeImport ~ dataPostProducts:",
-        dataPostProducts
-      );
-      // postMultiProduct(store_code, dataPostProducts);
+
+      postMultiProduct(store_code, dataPostProducts);
     };
     document.getElementById("import_file_iki").value = null;
     reader.readAsBinaryString(file);
