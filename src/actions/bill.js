@@ -329,7 +329,7 @@ export const exportAllListOrderMisa = (
                         voucherNumber: "",
                         accountDate: "",
                         voucherDate: "",
-                        staffName: "",
+                        staffName: item.sale_name,
                         customerCode: "",
                         customerName: item.customer_name,
                         address: handleAddress(
