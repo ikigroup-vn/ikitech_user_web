@@ -125,7 +125,7 @@ const ModalAddGroupCustomerStyles = styled.div`
   .conditionGroup__main {
     max-height: 400px;
     overflow-y: auto;
-    padding-right: 4px;
+    padding-right: 15px;
   }
   @keyframes popup {
     0% {
