@@ -157,7 +157,7 @@ class ListSale extends Component {
             class="row"
             style={{ "justify-content": "space-between", alignItems: "center" }}
           >
-            <form>
+            <div>
               <div
                 class=" mb-6"
                 style={{ padding: "7px 20px", position: "relative" }}
@@ -188,7 +188,7 @@ class ListSale extends Component {
                   <i class="fa fa-search"></i>
                 </div>
               </div>
-            </form>
+            </div>
             <select
               name=""
               id="input"
