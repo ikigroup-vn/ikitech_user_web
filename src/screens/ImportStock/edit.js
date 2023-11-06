@@ -382,6 +382,25 @@ class EditImportStock extends Component {
   onChangeSelect = (selectValue) => {
     this.setState({ payment_method_selected: selectValue });
   };
+
+  displayPaymentNeed = () => {
+    const { txtDiscoutType, txtValueDiscount, price_total, vat, cost } =
+      this.state;
+    const txtValuePercent =
+      txtDiscoutType == "1" && txtValueDiscount
+        ? formatNumber(price_total) / formatNumber(txtValueDiscount)
+        : 0;
+    const value_default =
+      txtDiscoutType == "1" ? txtValuePercent : formatNumber(txtValueDiscount);
+
+    return format(
+      formatNumber(price_total) -
+        value_default +
+        formatNumber(vat) +
+        formatNumber(cost)
+    );
+  };
+
   render() {
     var { supplier, products, province, wards, district, itemImportStock } =
       this.props;
@@ -652,6 +671,23 @@ class EditImportStock extends Component {
                               id="usr"
                               onChange={this.onChange}
                             />
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              marginTop: "15px",
+                            }}
+                          >
+                            <div>Số tiền cần thanh toán:</div>
+                            <div
+                              style={{
+                                color: "red",
+                              }}
+                            >
+                              {this.displayPaymentNeed()}
+                            </div>
                           </div>
                           <div
                             style={{

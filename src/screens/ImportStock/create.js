@@ -581,6 +581,24 @@ class CreateImportStock extends Component {
     this.setState({ payment_method_selected: selectValue });
   };
 
+  displayPaymentNeed = () => {
+    const { txtDiscoutType, txtValueDiscount, price_total, vat, cost } =
+      this.state;
+    const txtValuePercent =
+      txtDiscoutType == "1" && txtValueDiscount
+        ? formatNumber(price_total) / formatNumber(txtValueDiscount)
+        : 0;
+    const value_default =
+      txtDiscoutType == "1" ? txtValuePercent : formatNumber(txtValueDiscount);
+
+    return format(
+      formatNumber(price_total) -
+        value_default +
+        formatNumber(vat) +
+        formatNumber(cost)
+    );
+  };
+
   componentDidMount() {
     const { store_code } = this.props.match.params;
     const branch_id = localStorage.getItem("branch_id");
@@ -878,6 +896,23 @@ class CreateImportStock extends Component {
                               }}
                               onChange={this.onChange}
                             ></input>
+                          </div>
+                          <div
+                            style={{
+                              display: "flex",
+                              justifyContent: "space-between",
+                              alignItems: "center",
+                              marginTop: "15px",
+                            }}
+                          >
+                            <div>Số tiền cần thanh toán:</div>
+                            <div
+                              style={{
+                                color: "red",
+                              }}
+                            >
+                              {this.displayPaymentNeed()}
+                            </div>
                           </div>
                           <div
                             style={{
