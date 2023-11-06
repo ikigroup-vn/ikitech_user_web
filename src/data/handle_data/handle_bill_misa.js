@@ -221,6 +221,7 @@ export default function handleBillMisa(newItem, arangeKeyItem, product) {
     }
   });
   if (product) {
+    newItem["Mã hàng"] = product.sku;
     newItem["Tên hàng"] = product.name;
     newItem["Số lượng"] = product.quantity;
     newItem["Đơn giá"] = product.item_price;
