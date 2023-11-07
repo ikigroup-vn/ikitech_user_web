@@ -10,10 +10,16 @@ class Pagination extends Component {
   }
 
   passPagination = (page) => {
-    const { setPage, fetchAllCustomer, store_code, saleInfo, searchValue } = this.props;
+    const { setPage, fetchAllCustomer, store_code, saleInfo, searchValue } =
+      this.props;
     setPage(page);
     const params = `&search=${searchValue}`;
-    fetchAllCustomer(store_code, page, params, saleInfo.customer.phone_number);
+    fetchAllCustomer(
+      store_code,
+      page,
+      params,
+      saleInfo?.customer?.referral_phone_number
+    );
   };
 
   showData = (links) => {

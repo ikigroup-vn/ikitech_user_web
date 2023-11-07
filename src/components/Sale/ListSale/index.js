@@ -7,6 +7,7 @@ import * as saleAction from "../../../actions/sale";
 import { getBranchId } from "../../../ultis/branchUtils";
 import SidebarShowStatisticalSale from "./SidebarShowStatisticalSale.";
 import SiderbarCusReferPhone from "../../Agency/ListAgency/SiderbarCusReferPhone/index.js";
+import SidebarShowCustomerOfSale from "./SidebarShowCustomerOfSale.js";
 
 class ListSale extends Component {
   constructor(props) {
@@ -216,13 +217,13 @@ class ListSale extends Component {
             />
           </div>
         </div>
-        <SiderbarCusReferPhone
+        <SidebarShowCustomerOfSale
           store_code={store_code}
           showSidebar={showCustomerOfSale}
           setShowSidebar={this.setShowCustomerOfSale}
           saleInfo={saleInfo}
           setSaleInfo={this.setSaleInfo}
-        ></SiderbarCusReferPhone>
+        ></SidebarShowCustomerOfSale>
         <SidebarShowStatisticalSale
           showSidebar={showStatisticalSale}
           setShowSidebar={this.setShowStatisticalSale}
