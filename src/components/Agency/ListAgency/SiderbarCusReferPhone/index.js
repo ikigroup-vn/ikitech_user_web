@@ -26,7 +26,12 @@ class SidebarShowCustomerOfSale extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     const { saleInfo, fetchAllCustomer, store_code } = this.props;
     if (!shallowEqual(saleInfo, nextProps.saleInfo)) {
-      fetchAllCustomer(store_code, 1, "", nextProps.saleInfo?.phone_number);
+      fetchAllCustomer(
+        store_code,
+        1,
+        "",
+        nextProps.saleInfo?.customer?.referral_phone_number
+      );
     }
     return true;
   }
@@ -53,7 +58,12 @@ class SidebarShowCustomerOfSale extends Component {
       page: 1,
     });
     const params = `&search=${searchValue}`;
-    fetchAllCustomer(store_code, 1, params, saleInfo?.customer?.phone_number);
+    fetchAllCustomer(
+      store_code,
+      1,
+      params,
+      saleInfo?.customer?.referral_phone_number
+    );
   };
 
   render() {
@@ -66,7 +76,7 @@ class SidebarShowCustomerOfSale extends Component {
     const { page } = this.state;
     return (
       <SidebarFilter
-        title={`Những khách hàng được giới thiệu bởi ${saleInfo?.phone_number}`}
+        title={`Những khách hàng được giới thiệu bởi ${saleInfo?.customer?.referral_phone_number}`}
         widthSideBar="70%"
         showSidebar={showSidebar}
         setShowSidebar={this.handleShowSidebar}
