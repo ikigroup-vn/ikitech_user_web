@@ -13,7 +13,6 @@ class Pagination extends Component {
     const { setPage, fetchGroupCustomer, store_code } = this.props;
     setPage(page);
     const params = `page=${page}`;
-    console.log("🚀 ~ file: Pagination.js:17 ~ Pagination ~ params:", params);
     fetchGroupCustomer(store_code, params);
   };
 

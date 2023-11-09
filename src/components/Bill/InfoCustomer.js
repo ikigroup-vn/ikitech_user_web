@@ -78,6 +78,11 @@ class InfoCustomer extends Component {
             <p class="sale_user_label" id="sale_user_name">
               <b>Đơn này từ {order_from}</b>
             </p>
+            {bill.staff_name ? (
+              <p class="sale_user_label" id="sale_user_name">
+                Nhân viên bán hàng: {bill.staff_name}
+              </p>
+            ) : null}
             {bill.is_order_for_customer ? (
               <>
                 <p class="sale_user_label" id="sale_user_name">
