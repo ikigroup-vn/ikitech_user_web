@@ -242,6 +242,12 @@ const permission = (channel) => {
                 name: "Thay đổi trạng thái đơn hàng",
                 decentralizationName: "order_allow_change_status",
               },
+            ],
+          },
+          {
+            name: "Quản lý tại pos",
+            decentralizationName: "create_order_pos",
+            componentChilds: [
               {
                 name: "Bán hàng tại quầy",
                 decentralizationName: "create_order_pos",
@@ -249,6 +255,10 @@ const permission = (channel) => {
               {
                 name: "Chỉnh sửa giá sản phẩm tại quầy",
                 decentralizationName: "change_price_pos",
+              },
+              {
+                name: "Chỉnh sửa chiết khấu tại quầy",
+                decentralizationName: "change_discount_pos",
               },
             ],
           },
@@ -732,6 +742,7 @@ export const initialPermission = () => {
     barcode_print: false,
     create_order_pos: false,
     change_price_pos: false,
+    change_discount_pos: false,
     inventory_import: false,
     inventory_tally_sheet: false,
     inventory_list: false,

@@ -740,7 +740,8 @@ class PostOrder extends Component {
       var permissions = nextProps.permission;
 
       var isShow = permissions.create_order_pos;
-      this.setState({ isLoading: true, isShow });
+      var isChangeDiscountPos = permissions.change_discount_pos;
+      this.setState({ isLoading: true, isShow, isChangeDiscountPos });
     }
   }
   componentDidUpdate(prevProps, prevState) {
@@ -1035,7 +1036,12 @@ class PostOrder extends Component {
       select_customer_id,
       isShow,
       idCart,
+      isChangeDiscountPos,
     } = this.state;
+    console.log(
+      "🚀 ~ file: index.js:1041 ~ PostOrder ~ render ~ isChangeDiscountPos:",
+      isChangeDiscountPos
+    );
     const length = oneCart.info_cart?.line_items.length || 0;
     console.log("hiiiiiiiiiiiiiii: ", oneCart);
     const ship_discount_amount = oneCart.info_cart?.ship_discount_amount;
@@ -1509,6 +1515,7 @@ class PostOrder extends Component {
                             <div className="row item-info">
                               <div
                                 onClick={() =>
+                                  isChangeDiscountPos &&
                                   this.setIsPopoverOpen(
                                     !this.state.isPopoverOpen
                                   )
@@ -1521,6 +1528,7 @@ class PostOrder extends Component {
                               <button
                                 className="trigger-discount"
                                 onClick={() =>
+                                  isChangeDiscountPos &&
                                   this.setIsPopoverOpen(
                                     !this.state.isPopoverOpen
                                   )
