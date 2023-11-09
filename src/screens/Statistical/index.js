@@ -79,7 +79,7 @@ class Statistical extends Component {
                                   <div className="col mr-2">
                                     <div>
                                       <div className=" font-weight-bold text-primary text-uppercase mb-1">
-                                        Tổng doanh thu
+                                        Tổng doanh số
                                       </div>
                                     </div>
                                     <div className="d-sm-flex  align-items-center justify-content-between">
@@ -238,7 +238,7 @@ class Statistical extends Component {
                             }}
                           />
                           <span className="font-weight-bold text-uppercase">
-                            Thưởng theo mức doanh thu theo{" "}
+                            Thưởng theo mức doanh số theo{" "}
                             {statistical?.sale_config?.type_bonus_period == 0
                               ? "tháng"
                               : statistical?.sale_config?.type_bonus_period == 1

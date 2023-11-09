@@ -5,6 +5,8 @@ import SidebarFilter from "../../Partials/SidebarFilter";
 import * as customerAction from "../../../actions/customer";
 import TableCustomerOfSale from "./TableCustomerOfSale";
 import Pagination from "./Pagination";
+import moment from "moment";
+import DateRangePickerCustom from "../../DatePicker/DateRangePickerCustom";
 
 const SidebarShowCustomerOfSaleStyles = styled.div`
   .totalContent {
@@ -19,18 +21,33 @@ class SidebarShowCustomerOfSale extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      date_from: "",
+      date_to: "",
       page: 1,
     };
   }
   shouldComponentUpdate(nextProps, nextState) {
     const { saleInfo, fetchAllCustomer, store_code } = this.props;
-    const { page } = this.state;
+    const { page, date_from, date_to } = this.state;
     if (!shallowEqual(saleInfo, nextProps.saleInfo)) {
       const params = `&sale_staff_id=${nextProps.saleInfo.id}`;
       fetchAllCustomer(store_code, nextState.page, params);
     }
     return true;
   }
+
+  onChangeDateFromComponent = (date) => {
+    const { saleInfo, fetchAllCustomer, store_code } = this.props;
+
+    const params = `&sale_staff_id=${saleInfo.id}&date_from=${date.from}&date_to=${date.to}`;
+    fetchAllCustomer(store_code, 1, params);
+    this.setState({
+      date_from: date.from,
+      date_to: date.to,
+      page: 1,
+    });
+  };
+
   setPage = (page) => {
     this.setState({ page });
   };
@@ -52,7 +69,17 @@ class SidebarShowCustomerOfSale extends Component {
       >
         <SidebarShowCustomerOfSaleStyles>
           {customers?.data?.length > 0 && (
-            <div className="card-body">
+            <div>
+              <div
+                style={{
+                  marginBottom: "10px",
+                }}
+              >
+                <DateRangePickerCustom
+                  row={true}
+                  onChangeDate={this.onChangeDateFromComponent}
+                />
+              </div>
               <TableCustomerOfSale
                 store_code={store_code}
                 data={customers.data}

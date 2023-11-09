@@ -1,17 +1,17 @@
 import * as Types from "../constants/ActionType";
 import * as groupCustomerApi from "../data/remote/group_customer";
 
-export const fetchGroupCustomer = (store_code) => {
+export const fetchGroupCustomer = (store_code, params) => {
   return (dispatch) => {
     dispatch({ type: Types.SHOW_LOADING, loading: "show" });
     groupCustomerApi
-      .fetchGroupCustomer(store_code)
+      .fetchGroupCustomer(store_code, params)
       .then((res) => {
         dispatch({ type: Types.SHOW_LOADING, loading: "hidden" });
         if (res.data.code !== 401) {
           dispatch({
             type: Types.FETCH_ALL_GROUP_CUSTOMER,
-            data: res.data.data.data,
+            data: res.data.data,
           });
         }
       })
@@ -102,7 +102,7 @@ export const createGroupCustomer = (store_code, data) => {
               if (res.data.code !== 401) {
                 dispatch({
                   type: Types.FETCH_ALL_GROUP_CUSTOMER,
-                  data: res.data.data.data,
+                  data: res.data.data,
                 });
               }
               dispatch({
@@ -142,7 +142,12 @@ export const createGroupCustomer = (store_code, data) => {
   };
 };
 
-export const updateGroupCustomer = (store_code, idGroupCustomer, data) => {
+export const updateGroupCustomer = (
+  store_code,
+  idGroupCustomer,
+  data,
+  params
+) => {
   return (dispatch) => {
     dispatch({ type: Types.SHOW_LOADING, loading: "show" });
     groupCustomerApi
@@ -155,12 +160,12 @@ export const updateGroupCustomer = (store_code, idGroupCustomer, data) => {
             data: res.data.data,
           });
           groupCustomerApi
-            .fetchGroupCustomer(store_code)
+            .fetchGroupCustomer(store_code, params)
             .then((res) => {
               if (res.data.code !== 401) {
                 dispatch({
                   type: Types.FETCH_ALL_GROUP_CUSTOMER,
-                  data: res.data.data.data,
+                  data: res.data.data,
                 });
               }
 
@@ -201,7 +206,7 @@ export const updateGroupCustomer = (store_code, idGroupCustomer, data) => {
   };
 };
 
-export const deleteGroupCustomer = (store_code, idGroupCustomer) => {
+export const deleteGroupCustomer = (store_code, idGroupCustomer, params) => {
   return (dispatch) => {
     dispatch({ type: Types.SHOW_LOADING, loading: "show" });
     groupCustomerApi
@@ -214,12 +219,12 @@ export const deleteGroupCustomer = (store_code, idGroupCustomer) => {
             message: res.data.msg,
           });
           groupCustomerApi
-            .fetchGroupCustomer(store_code)
+            .fetchGroupCustomer(store_code, params)
             .then((res) => {
               if (res.data.code !== 401) {
                 dispatch({
                   type: Types.FETCH_ALL_GROUP_CUSTOMER,
-                  data: res.data.data.data,
+                  data: res.data.data,
                 });
               }
               dispatch({

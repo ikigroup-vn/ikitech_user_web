@@ -1,7 +1,11 @@
 import callApi from "../../ultis/apiCaller";
 
-export const fetchGroupCustomer = (store_code) => {
-  return callApi(`/store/${store_code}/group_customers`, "get", null);
+export const fetchGroupCustomer = (store_code, params) => {
+  return callApi(
+    `/store/${store_code}/group_customers${params ? `?${params}` : ""}`,
+    "get",
+    null
+  );
 };
 
 export const fetchListCustomerByGroup = (

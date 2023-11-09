@@ -10,7 +10,7 @@ export const fetchAllStaff = (store_code, page = 1, params, branch_id) => {
     });
     staffApi.fetchAllStaff(store_code, page, params, branch_id).then((res) => {
       dispatch({
-        type: Types.SHOW_LOADING,       
+        type: Types.SHOW_LOADING,
         loading: "hide",
       });
       if (res.data.code !== 401)
@@ -196,6 +196,10 @@ export const updateCustomerToSale = (store_code, id, data, branch_id) => {
       .updateCustomerToSale(store_code, id, data)
       .then((res) => {
         dispatch({
+          type: Types.UPDATE_STATUS_STAFF_STAFF,
+          data: res.data.data,
+        });
+        dispatch({
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
@@ -208,7 +212,7 @@ export const updateCustomerToSale = (store_code, id, data, branch_id) => {
             content: res.data.msg,
           },
         });
-        dispatch(fetchAllStaff(store_code, null, "", branch_id));
+        // dispatch(fetchAllStaff(store_code, null, "", branch_id));
       })
       .catch(function (error) {
         dispatch({
@@ -229,42 +233,55 @@ export const updateCustomerToSale = (store_code, id, data, branch_id) => {
 };
 
 // code newer
-export const fetchHistoryToDistributorByStaffId = (store_code, date_form, date_to) => {
+export const fetchHistoryToDistributorByStaffId = (
+  store_code,
+  date_form,
+  date_to
+) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
     });
-    staffApi.historyReportSalerToDistributor(store_code, date_form, date_to).then((res) => {
-      if (res.data.code !== 401)
+    staffApi
+      .historyReportSalerToDistributor(store_code, date_form, date_to)
+      .then((res) => {
+        if (res.data.code !== 401)
+          dispatch({
+            type: Types.SHOW_LOADING,
+            loading: "hide",
+          });
         dispatch({
-          type: Types.SHOW_LOADING,
-          loading: "hide",
+          type: Types.FETCH_HISTORY_SALE_TO_DISTRIBUTOR,
+          data: res.data.data,
         });
-      dispatch({
-        type: Types.FETCH_HISTORY_SALE_TO_DISTRIBUTOR,
-        data: res.data.data,
       });
-    });
   };
 };
 
-export const fetchReportSalerToDistributord = (store_code, date_from, date_to, staff_id) => {
+export const fetchReportSalerToDistributord = (
+  store_code,
+  date_from,
+  date_to,
+  staff_id
+) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
     });
-    staffApi.reportSalerToDistributor(store_code, date_from, date_to, staff_id).then((res) => {
-      if (res.data.code !== 401)
+    staffApi
+      .reportSalerToDistributor(store_code, date_from, date_to, staff_id)
+      .then((res) => {
+        if (res.data.code !== 401)
+          dispatch({
+            type: Types.SHOW_LOADING,
+            loading: "hide",
+          });
         dispatch({
-          type: Types.SHOW_LOADING,
-          loading: "hide",
+          type: Types.REPORT_SALER_TO_DISTRIBUTOR,
+          data: res.data.data,
         });
-      dispatch({
-        type: Types.REPORT_SALER_TO_DISTRIBUTOR,
-        data: res.data.data,
       });
-    });
   };
 };

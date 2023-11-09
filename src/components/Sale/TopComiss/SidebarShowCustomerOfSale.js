@@ -54,7 +54,7 @@ class SidebarShowCustomerOfSale extends Component {
                 }`
               );
             },
-            "&customer_ids="
+            `&sale_staff_id=${nextProps.saleInfo?.id}&customer_ids=`
           );
         fetchAllCustomer(store_code, nextState.page, paramsCustomer);
       }
