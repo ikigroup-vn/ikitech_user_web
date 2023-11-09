@@ -33,7 +33,11 @@ class ModalDeleteGroupCustomer extends PureComponent {
   handleDeleteGroupCustomer = (e) => {
     e.preventDefault();
     const { store_code, idGroupCustomer } = this.props;
-    this.props.deleteGroupCustomer(store_code, idGroupCustomer);
+    this.props.deleteGroupCustomer(
+      store_code,
+      idGroupCustomer,
+      `page=${this.props.page}`
+    );
     this.props.setOpenModalDeleteGroupCustomer();
     this.props.setIdGroupCustomer(null);
   };
@@ -88,9 +92,13 @@ class ModalDeleteGroupCustomer extends PureComponent {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    deleteGroupCustomer: (store_code, idGroupCustomer) => {
+    deleteGroupCustomer: (store_code, idGroupCustomer, params) => {
       dispatch(
-        groupCustomerAction.deleteGroupCustomer(store_code, idGroupCustomer)
+        groupCustomerAction.deleteGroupCustomer(
+          store_code,
+          idGroupCustomer,
+          params
+        )
       );
     },
   };

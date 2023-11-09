@@ -473,7 +473,12 @@ class ModalActionChangeGroupCustomer extends Component {
         group_type: Types.GROUP_TYPE_CONDITION,
       };
       const { store_code, idGroupCustomer } = this.props;
-      this.props.updateGroupCustomer(store_code, idGroupCustomer, values);
+      this.props.updateGroupCustomer(
+        store_code,
+        idGroupCustomer,
+        values,
+        `page=${this.props.page}`
+      );
       this.props.setOpenModalActionChangeGroupCustomer();
       this.props.setIdGroupCustomer(null);
     } else if (
@@ -492,7 +497,12 @@ class ModalActionChangeGroupCustomer extends Component {
         group_type: Types.GROUP_TYPE_LIST_CUSTOMER,
       };
       const { store_code, idGroupCustomer } = this.props;
-      this.props.updateGroupCustomer(store_code, idGroupCustomer, values);
+      this.props.updateGroupCustomer(
+        store_code,
+        idGroupCustomer,
+        values,
+        `page=${this.props.page}`
+      );
       this.props.setOpenModalActionChangeGroupCustomer();
       this.props.setIdGroupCustomer(null);
     }
@@ -856,12 +866,13 @@ const mapDispatchToProps = (dispatch) => {
     createGroupCustomer: (store_code, data) => {
       dispatch(groupCustomerAction.createGroupCustomer(store_code, data));
     },
-    updateGroupCustomer: (store_code, idGroupCustomer, data) => {
+    updateGroupCustomer: (store_code, idGroupCustomer, data, params) => {
       dispatch(
         groupCustomerAction.updateGroupCustomer(
           store_code,
           idGroupCustomer,
-          data
+          data,
+          params
         )
       );
     },

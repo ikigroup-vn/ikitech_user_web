@@ -226,8 +226,7 @@ class Table extends Component {
 
               <th>Ngày bắt đầu</th>
               <th>Ngày kết thúc</th>
-              <th>Só lần thưởng còn lại</th>
-
+              <th>Số lần thưởng còn lại</th>
               <th>Giới hạn số lần thưởng</th>
 
               <th className={action}>Hành động</th>

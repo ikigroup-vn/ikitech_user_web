@@ -79,12 +79,14 @@ class SidebarShowStatisticalSale extends Component {
                           <div className="col mr-2">
                             <div>
                               <div className=" font-weight-bold text-primary text-uppercase mb-1">
-                                Tổng doanh thu
+                                Tổng doanh số
                               </div>
                             </div>
                             <div className="d-sm-flex  align-items-center justify-content-between">
                               <div className="h5 mb-0 font-weight-bold text-gray-800">
-                                {format(statisticalUser.total_final)}
+                                {format(
+                                  statisticalUser.total_after_discount_no_bonus
+                                )}
                               </div>
                               <div className="font-weight-bold text-gray-800 h5">
                                 {statisticalUser.total_order} đơn
@@ -107,7 +109,9 @@ class SidebarShowStatisticalSale extends Component {
                             </div>
                             <div className="d-sm-flex  align-items-center justify-content-between">
                               <div className="h5 mb-0 font-weight-bold text-gray-800">
-                                {format(statisticalUser.total_final_in_day)}
+                                {format(
+                                  statisticalUser.total_after_discount_no_bonus_in_day
+                                )}
                               </div>
                               <div className="font-weight-bold text-gray-800 h5">
                                 {statisticalUser.count_in_day} đơn
@@ -130,7 +134,9 @@ class SidebarShowStatisticalSale extends Component {
                             </div>
                             <div className="d-sm-flex  align-items-center justify-content-between">
                               <div className="h5 mb-0 font-weight-bold text-gray-800">
-                                {format(statisticalUser.total_final_in_week)}
+                                {format(
+                                  statisticalUser.total_after_discount_no_bonus_in_week
+                                )}
                               </div>
                               <div className="font-weight-bold text-gray-800 h5">
                                 {statisticalUser.count_in_week} đơn
@@ -153,7 +159,9 @@ class SidebarShowStatisticalSale extends Component {
                             </div>
                             <div className="d-sm-flex  align-items-center justify-content-between">
                               <div className="h5 mb-0 font-weight-bold text-gray-800">
-                                {format(statisticalUser.total_final_in_month)}
+                                {format(
+                                  statisticalUser.total_after_discount_no_bonus_in_month
+                                )}
                               </div>
                               <div className="font-weight-bold text-gray-800 h5">
                                 {statisticalUser.count_in_month} đơn
@@ -176,7 +184,9 @@ class SidebarShowStatisticalSale extends Component {
                             </div>
                             <div className="d-sm-flex  align-items-center justify-content-between">
                               <div className="h5 mb-0 font-weight-bold text-gray-800">
-                                {format(statisticalUser.total_final_in_quarter)}
+                                {format(
+                                  statisticalUser.total_after_discount_no_bonus_in_quarter
+                                )}
                               </div>
                               <div className="font-weight-bold text-gray-800 h5">
                                 {
@@ -202,7 +212,9 @@ class SidebarShowStatisticalSale extends Component {
                             </div>
                             <div className="d-sm-flex  align-items-center justify-content-between">
                               <div className="h5 mb-0 font-weight-bold text-gray-800">
-                                {format(statisticalUser.total_final_in_year)}
+                                {format(
+                                  statisticalUser.total_after_discount_no_bonus_in_year
+                                )}
                               </div>
                               <div className="font-weight-bold text-gray-800 h5">
                                 {statisticalUser.count_in_year} đơn
@@ -238,7 +250,7 @@ class SidebarShowStatisticalSale extends Component {
                       fontSize: "1.25rem",
                     }}
                   >
-                    Thưởng theo mức doanh thu theo{" "}
+                    Thưởng theo mức doanh số theo{" "}
                     {statisticalUser?.sale_config?.type_bonus_period == 0
                       ? "tháng"
                       : statisticalUser?.sale_config?.type_bonus_period == 1

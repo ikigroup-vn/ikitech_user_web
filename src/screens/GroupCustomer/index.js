@@ -8,6 +8,7 @@ import Topbar from "../../components/Partials/Topbar";
 import Loading from "../Loading";
 import NotAccess from "../../components/Partials/NotAccess";
 import Table from "../../components/GroupCustomer/Table";
+import Pagination from "../../components/GroupCustomer/Pagination";
 import * as placeAction from "../../actions/place";
 import ModalDeleteGroupCustomer from "../../components/GroupCustomer/ModalDeleteGroupCustomer";
 import ModalActionChangeGroupCustomer from "../../components/GroupCustomer/ModalActionChangeGroupCustomer";
@@ -22,12 +23,16 @@ class GroupCustomer extends PureComponent {
       idGroupCustomer: null,
       showCustomerByGroup: false,
       groupInfo: {},
+      page: 1,
     };
   }
   setGroupInfo = (groupInfo) => {
     this.setState({
       groupInfo,
     });
+  };
+  setPage = (page) => {
+    this.setState({ page });
   };
   setShowCustomerByGroup = (isShowed) => {
     this.setState({
@@ -60,12 +65,12 @@ class GroupCustomer extends PureComponent {
     }
   }
   componentDidMount() {
-    this.props.fetchGroupCustomer(this.props.match.params.store_code);
+    this.props.fetchGroupCustomer(this.props.match.params.store_code, "");
     this.props.fetchPlaceProvince();
   }
 
   render() {
-    const { groupCustomer, province } = this.props;
+    const { groupCustomer, province, fetchGroupCustomer } = this.props;
     const { store_code } = this.props.match.params;
     const { isShow, showCustomerByGroup, groupInfo } = this.state;
     if (this.props.auth) {
@@ -112,21 +117,33 @@ class GroupCustomer extends PureComponent {
                     <br></br>
                     <div className="card shadow mb-4">
                       <div className="card-body">
-                        {groupCustomer.length > 0 ? (
-                          <Table
-                            store_code={store_code}
-                            groupCustomer={groupCustomer}
-                            province={province}
-                            setOpenModalDeleteGroupCustomer={
-                              this.setOpenModalDeleteGroupCustomer
-                            }
-                            setOpenModalActionChangeGroupCustomer={
-                              this.setOpenModalActionChangeGroupCustomer
-                            }
-                            setIdGroupCustomer={this.setIdGroupCustomer}
-                            setGroupInfo={this.setGroupInfo}
-                            setShowCustomerByGroup={this.setShowCustomerByGroup}
-                          />
+                        {groupCustomer?.data?.length > 0 ? (
+                          <>
+                            <Table
+                              store_code={store_code}
+                              groupCustomer={groupCustomer.data}
+                              province={province}
+                              setOpenModalDeleteGroupCustomer={
+                                this.setOpenModalDeleteGroupCustomer
+                              }
+                              setOpenModalActionChangeGroupCustomer={
+                                this.setOpenModalActionChangeGroupCustomer
+                              }
+                              setIdGroupCustomer={this.setIdGroupCustomer}
+                              setGroupInfo={this.setGroupInfo}
+                              setShowCustomerByGroup={
+                                this.setShowCustomerByGroup
+                              }
+                            />
+                            <div>
+                              <Pagination
+                                setPage={this.setPage}
+                                store_code={store_code}
+                                groupCustomer={groupCustomer}
+                                fetchGroupCustomer={fetchGroupCustomer}
+                              />
+                            </div>
+                          </>
                         ) : (
                           <div
                             className="card-groupEmpty"
@@ -164,6 +181,7 @@ class GroupCustomer extends PureComponent {
                     this.setOpenModalActionChangeGroupCustomer
                   }
                   setIdGroupCustomer={this.setIdGroupCustomer}
+                  page={this.state.page}
                 ></ModalActionChangeGroupCustomer>
               )}
               {this.state.openModalDeleteGroupCustomer && (
@@ -177,6 +195,7 @@ class GroupCustomer extends PureComponent {
                     this.setOpenModalDeleteGroupCustomer
                   }
                   setIdGroupCustomer={this.setIdGroupCustomer}
+                  page={this.state.page}
                 ></ModalDeleteGroupCustomer>
               )}
 
@@ -203,8 +222,8 @@ const mapStateToProps = (state) => {
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    fetchGroupCustomer: (store_code) => {
-      dispatch(groupCustomerAction.fetchGroupCustomer(store_code));
+    fetchGroupCustomer: (store_code, params) => {
+      dispatch(groupCustomerAction.fetchGroupCustomer(store_code, params));
     },
     fetchPlaceProvince: () => {
       dispatch(placeAction.fetchPlaceProvince());
