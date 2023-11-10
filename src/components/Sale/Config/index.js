@@ -4,21 +4,21 @@ import { connect, shallowEqual } from "react-redux";
 import styled from "styled-components";
 import * as Types from "../../../constants/ActionType";
 const ConfigStyles = styled.div`
-  .bonusTypeForCTV_note {
+  .bonusTypeForSale_note {
     position: relative;
     &:hover {
-      .bonusTypeForCTV_noteTooltip {
+      .bonusTypeForSale_noteTooltip {
         opacity: 1;
         visibility: visible;
       }
     }
-    .bonusTypeForCTV_noteIcon {
+    .bonusTypeForSale_noteIcon {
       text-decoration: underline;
       color: #3498db;
       margin-left: 10px;
       cursor: pointer;
     }
-    .bonusTypeForCTV_noteTooltip {
+    .bonusTypeForSale_noteTooltip {
       position: absolute;
       left: 50%;
       bottom: 100%;
@@ -34,7 +34,7 @@ const ConfigStyles = styled.div`
       transition: all 0.5s;
     }
   }
-  .bonusTypeForCTV {
+  .bonusTypeForSale {
     display: flex;
     align-items: center;
     column-gap: 30px;
@@ -223,6 +223,17 @@ class Config extends Component {
                 ( Là phần thưởng dành cho Sale khi chinh phục được các mức doanh
                 số )
               </i>
+            </p>
+            <p>
+              Doanh số sale được tính từ tổng đơn hàng không bao gồm phí ship và
+              trừ chương trình khuyến mại{" "}
+              <span className="bonusTypeForSale_note">
+                <span className="bonusTypeForSale_noteIcon">?</span>
+                <div className="bonusTypeForSale_noteTooltip">
+                  Đơn hàng của đại lí là 1.000.000đ , sau khi triết khấu 50% ,
+                  khuyến mại 10% , thì doanh số sale nhận được là 40% = 400.000đ
+                </div>
+              </span>
             </p>
           </div>
 
