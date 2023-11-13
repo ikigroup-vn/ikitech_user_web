@@ -328,6 +328,7 @@ class ModalDelete extends Component {
                     onChange={this.onChangeDistrict}
                     name="txtDistrict"
                   >
+                    <option value="">-- Chọn Quận/huyện --</option>
                     {this.showDistrict(listDistrict)}
                   </select>
                 </div>
@@ -341,6 +342,7 @@ class ModalDelete extends Component {
                     onChange={this.onChange}
                     name="txtWards"
                   >
+                    <option value="">-- Chọn phường xã --</option>
                     {this.showWards(listWards)}
                   </select>
                 </div>

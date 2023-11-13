@@ -132,7 +132,8 @@ class InfoCustomer extends Component {
             <p class="sale_user_label" id="booking_time">
               Phương thức thanh toán:{" "}
               <span id="booking_time_txt">
-                {payment_method_name || ""} {payment_partner_name}
+                {payment_method_name || ""}
+                {/* {payment_partner_name} */}
               </span>
             </p>
             <p class="sale_user_label">

@@ -541,8 +541,8 @@ class PostOrder extends Component {
                 discount: discount,
                 totalFinal:
                   this.state.totalAfterDiscount - stringToInit(discount),
-                priceCustomer:
-                  this.state.totalAfterDiscount - stringToInit(discount),
+                // priceCustomer:
+                //   this.state.totalAfterDiscount - stringToInit(discount),
               },
               () => {
                 this.changeDiscount(discount);
@@ -555,7 +555,7 @@ class PostOrder extends Component {
             {
               discount: num,
               totalFinal: this.state.totalAfterDiscount - stringToInit(num),
-              priceCustomer: this.state.totalAfterDiscount - stringToInit(num),
+              // priceCustomer: this.state.totalAfterDiscount - stringToInit(num),
             },
             () => {
               this.changeDiscount(num);
@@ -1353,20 +1353,44 @@ class PostOrder extends Component {
                           </div>
 
                           {oneCart?.info_cart?.product_discount_amount != 0 && (
-                            <div className="row item-info">
-                              <div className="item-discount-name col-6">
-                                Giảm giá sản phẩm
-                              </div>
-                              <span
-                                className="col-6"
-                                style={{ textAlign: "end" }}
-                              >
-                                -
-                                {formatNoD(
-                                  oneCart?.info_cart?.product_discount_amount
-                                )}
-                              </span>
-                            </div>
+                            <>
+                              {oneCart?.info_cart?.product_discount_amount <
+                              0 ? (
+                                <div className="row item-info">
+                                  <div className="item-discount-name col-6">
+                                    Phụ phí
+                                  </div>
+                                  <span
+                                    className="col-6"
+                                    style={{ textAlign: "end" }}
+                                  >
+                                    +
+                                    {formatNoD(
+                                      Math.abs(
+                                        oneCart?.info_cart
+                                          ?.product_discount_amount
+                                      )
+                                    )}
+                                  </span>
+                                </div>
+                              ) : (
+                                <div className="row item-info">
+                                  <div className="item-discount-name col-6">
+                                    Giảm giá sản phẩm
+                                  </div>
+                                  <span
+                                    className="col-6"
+                                    style={{ textAlign: "end" }}
+                                  >
+                                    -
+                                    {formatNoD(
+                                      oneCart?.info_cart
+                                        ?.product_discount_amount
+                                    )}
+                                  </span>
+                                </div>
+                              )}
+                            </>
                           )}
 
                           {oneCart?.info_cart?.voucher_discount_amount > 0 && (

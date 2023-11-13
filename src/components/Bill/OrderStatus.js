@@ -111,7 +111,46 @@ class OrderStatus extends Component {
       if (
         status == "PACKING" ||
         status == "COMPLETED" ||
-        status == "SHIPPING"
+        status == "SHIPPING" ||
+        status == "WAITING_FOR_PROGRESSING" ||
+        status == "RECEIVED_PRODUCT"
+      ) {
+        return true;
+      }
+      if (curentStatus == "USER_CANCELLED" || status == "OUT_OF_STOCK") {
+        return true;
+      }
+      if (
+        curentStatus == "CUSTOMER_CANCELLED" ||
+        status == "OUT_OF_STOCK" ||
+        status == "USER_CANCELLED"
+      ) {
+        return true;
+      }
+      if (
+        curentStatus == "DELIVERY_ERROR" ||
+        status == "OUT_OF_STOCK" ||
+        status == "USER_CANCELLED" ||
+        status == "CUSTOMER_CANCELLED"
+      ) {
+        return true;
+      }
+      if (
+        curentStatus == "CUSTOMER_RETURNING" ||
+        status == "OUT_OF_STOCK" ||
+        status == "USER_CANCELLED" ||
+        status == "CUSTOMER_CANCELLED" ||
+        status == "DELIVERY_ERROR"
+      ) {
+        return true;
+      }
+      if (
+        curentStatus == "CUSTOMER_HAS_RETURNS" ||
+        status == "OUT_OF_STOCK" ||
+        status == "USER_CANCELLED" ||
+        status == "CUSTOMER_CANCELLED" ||
+        status == "DELIVERY_ERROR" ||
+        status == "CUSTOMER_RETURNING"
       ) {
         return true;
       }

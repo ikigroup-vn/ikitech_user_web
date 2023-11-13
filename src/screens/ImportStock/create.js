@@ -24,6 +24,33 @@ import { AsyncPaginate } from "react-select-async-paginate";
 import { getBranchId, getBranchIds } from "../../ultis/branchUtils";
 import history from "../../history";
 import Select from "react-select";
+import styled from "styled-components";
+
+const ImportCreateStyles = styled.div`
+  .import_stock_vat {
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+    .import_stock_content {
+      display: flex;
+      align-items: center;
+      column-gap: 5px;
+      .import_stock_vat_percent {
+        padding: 0px 8px;
+        border-radius: 3px;
+        font-size: 12px;
+        color: #fff;
+        cursor: pointer;
+        &:nth-child(1) {
+          background-color: #0072bc;
+        }
+        &:nth-child(2) {
+          background-color: #9c27b0;
+        }
+      }
+    }
+  }
+`;
 
 class CreateImportStock extends Component {
   constructor(props) {
@@ -599,6 +626,13 @@ class CreateImportStock extends Component {
     );
   };
 
+  handleSelectPercentVAT = (value) => {
+    const { price_total } = this.state;
+    const newVAT = new Intl.NumberFormat().format(Number(price_total) / 10);
+
+    this.setState({ vat: value > 0 ? newVAT : 0 });
+  };
+
   componentDidMount() {
     const { store_code } = this.props.match.params;
     const branch_id = localStorage.getItem("branch_id");
@@ -646,7 +680,7 @@ class CreateImportStock extends Component {
 
     console.log("this.props.loading::: ", this.props.loading);
     return (
-      <div id="wrapper">
+      <ImportCreateStyles id="wrapper">
         <Sidebar store_code={store_code} />
         <ModalAddSupplier
           openModal={openModal}
@@ -851,7 +885,25 @@ class CreateImportStock extends Component {
                               marginTop: "5px",
                             }}
                           >
-                            <div>VAT:</div>
+                            <div className="import_stock_vat">
+                              <div>VAT:</div>
+                              <div className="import_stock_content">
+                                <div
+                                  className="import_stock_vat_percent"
+                                  onClick={() => this.handleSelectPercentVAT(0)}
+                                >
+                                  0
+                                </div>
+                                <div
+                                  className="import_stock_vat_percent"
+                                  onClick={() =>
+                                    this.handleSelectPercentVAT(10)
+                                  }
+                                >
+                                  10%
+                                </div>
+                              </div>
+                            </div>
                             <input
                               type="text"
                               name="vat"
@@ -1295,7 +1347,7 @@ class CreateImportStock extends Component {
           </div>
         </div>
         <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
-      </div>
+      </ImportCreateStyles>
     );
   }
 }
