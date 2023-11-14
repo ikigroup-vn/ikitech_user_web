@@ -346,6 +346,16 @@ class ActionsGameSpinWheelContent extends Component {
           content: "Vui lòng chọn phần thưởng",
         },
       });
+    } else if (listGift.length < 2) {
+      showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Vui lòng chọn từ 2 phần thưởng",
+        },
+      });
     } else if (isErrorNameGifts === false) {
       showError({
         type: Types.ALERT_UID_STATUS,
@@ -442,6 +452,7 @@ class ActionsGameSpinWheelContent extends Component {
       typeBackgroundImage,
       backgroundDefaultImage,
       backgroundSelfPostedImage,
+      listGift,
     } = this.state;
 
     const { updateGameSpinWheels, store_code, idGameSpinWheel, showError } =
@@ -1110,7 +1121,8 @@ class ActionsGameSpinWheelContent extends Component {
 const mapStateToProps = (state) => {
   return {
     types: state.agencyReducers.agency.allAgencyType,
-    groupCustomer: state.groupCustomerReducers.group_customer.groupCustomer,
+    groupCustomer:
+      state.groupCustomerReducers.group_customer.groupCustomer.data,
     gameSpinWheels: state.gamificationReducers.spin_wheel.gameSpinWheels,
   };
 };

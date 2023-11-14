@@ -106,7 +106,7 @@ class Form extends Component {
     if (this.props.image !== nextProps.image) {
       this.setState({ image: nextProps.image });
     }
-    if (group_type_id === null && nextProps.groupCustomer.length > 0) {
+    if (group_type_id === null && nextProps.groupCustomer?.length > 0) {
       this.setState({
         group_type_id: -1,
         agency_type_id: -1,
@@ -1222,7 +1222,8 @@ const mapStateToProps = (state) => {
   return {
     image: state.UploadReducers.voucherImg.voucher_img,
     types: state.agencyReducers.agency.allAgencyType,
-    groupCustomer: state.groupCustomerReducers.group_customer.groupCustomer,
+    groupCustomer:
+      state.groupCustomerReducers.group_customer.groupCustomer.data,
   };
 };
 

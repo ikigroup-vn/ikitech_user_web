@@ -763,7 +763,8 @@ const mapStateToProps = (state) => {
     products: state.productReducers.product.allProduct,
     category_product: state.categoryPReducers.category_product.allCategoryP,
     blogs: state.blogReducers.blog.allBlog,
-    groupCustomer: state.groupCustomerReducers.group_customer.groupCustomer,
+    groupCustomer:
+      state.groupCustomerReducers.group_customer.groupCustomer.data,
   };
 };
 

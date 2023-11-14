@@ -770,6 +770,7 @@ class EditGiftGameSpinWheel extends Component {
               setOpen={this.setOpenModalDelete}
               open={openModalDelete}
               idGame={idGameSpinWheel}
+              listGift={listGift}
             />
           </div>
         </div>

@@ -7,6 +7,7 @@ import moment from "moment";
 import styled from "styled-components";
 import { formatNumber, formatNumberV2 } from "../../ultis/helpers";
 import ModalCancelDelivery from "./ModalCancelDelivery";
+import * as Types from "../../constants/ActionType";
 
 const InfoShipperStyles = styled.div`
   .shipping__packet {
@@ -120,6 +121,19 @@ class InfoShipper extends Component {
 
   sendOrderToDelivery = () => {
     var { bill, order_code, store_code } = this.props;
+    const { shipperId } = this.state;
+    if (shipperId === null || shipperId < 0) {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Thất bại",
+          disable: "show",
+          content: "Chưa chọn đơn vị vận chuyển",
+        },
+      });
+      return;
+    }
 
     this.props.sendOrderToDelivery(
       null,
@@ -400,12 +414,14 @@ class InfoShipper extends Component {
                     type="button"
                     onClick={() => this.sendOrderToDelivery()}
                     className="btn btn-primary  btn-sm"
-                    style={{ marginRight: "10px" }}
-                    disabled={
-                      this.state.shipperId === null || this.state.shipperId < 0
-                        ? true
-                        : false
-                    }
+                    style={{
+                      marginRight: "10px",
+                      opacity:
+                        this.state.shipperId === null ||
+                        this.state.shipperId < 0
+                          ? 0.7
+                          : 1,
+                    }}
                   >
                     <i className="fas fa-shipping-fast"></i>
                     &nbsp;Đăng đơn hàng
@@ -546,6 +562,9 @@ const mapDispatchToProps = (dispatch, props) => {
           funcModal
         )
       );
+    },
+    showError: (action) => {
+      dispatch(action);
     },
   };
 };

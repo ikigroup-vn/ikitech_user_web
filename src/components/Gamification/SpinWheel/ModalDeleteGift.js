@@ -1,6 +1,7 @@
 import { PureComponent } from "react";
 import themeData from "../../../ultis/theme_data";
 import * as gamificationAction from "../../../actions/gamification";
+import * as Types from "../../../constants/ActionType";
 import styled from "styled-components";
 import { connect } from "react-redux";
 import ModalCustom from "../../ModalCustom/ModalCustom";
@@ -35,7 +36,20 @@ class ModalDeleteGift extends PureComponent {
     setOpen(showModal);
   };
   handleDeleteGiftGameSpinWheel = () => {
-    const { store_code, idGift, deleteGiftGameSpinWheels, idGame } = this.props;
+    const { store_code, idGift, deleteGiftGameSpinWheels, idGame, listGift } =
+      this.props;
+    if (listGift.length <= 2) {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Không thể xóa chương trình có 2 phần thưởng",
+        },
+      });
+      return;
+    }
     deleteGiftGameSpinWheels(store_code, idGame, idGift);
   };
   render() {
@@ -81,6 +95,9 @@ class ModalDeleteGift extends PureComponent {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    showError: (error) => {
+      dispatch(error);
+    },
     deleteGiftGameSpinWheels: (store_code, idGameSpinWheels, idGift) => {
       dispatch(
         gamificationAction.deleteGiftGameSpinWheels(
