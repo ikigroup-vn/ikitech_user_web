@@ -8,6 +8,7 @@ import {
   formatNoD,
 } from "../../../ultis/helpers";
 import { getDDMMYYYHis } from "../../../ultis/date";
+import BarcodeComponent from "../../../components/Partials/Barcode";
 
 export default class ComponentTemplate2ToPrint extends Component {
   constructor(props) {
@@ -333,6 +334,13 @@ export default class ComponentTemplate2ToPrint extends Component {
                     }}
                   >
                     Mã vận đơn: ({bill?.order_ship_code?.from_shipper_code})
+                    <BarcodeComponent
+                      number={bill?.order_ship_code?.from_shipper_code}
+                      displayValue={false}
+                      style={{
+                        height: 30,
+                      }}
+                    />
                   </p>
                 </div>
               )}
@@ -583,6 +591,9 @@ export default class ComponentTemplate2ToPrint extends Component {
                 <b>Ngày:</b> {bill.created_at}
               </p>
               {/* <p><b>Thu ngân:</b></p> */}
+              <p>
+                <b>Ghi chú:</b> {bill.customer_note}
+              </p>
               <p>
                 <b>Khách hàng:</b> {bill.customer_name} {bill.customer_phone}
               </p>

@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import { filter_arr, format, getDetailAdress } from "../../../ultis/helpers";
 import { getDDMMYYYHis } from "../../../ultis/date";
+import BarcodeComponent from "../../../components/Partials/Barcode";
 
 export default class ComponentTemplate0ToPrint extends Component {
   constructor(props) {
@@ -91,9 +92,10 @@ export default class ComponentTemplate0ToPrint extends Component {
                 {element.name}{" "}
                 {element.distributes_selected != null &&
                 element.distributes_selected.length > 0
-                  ? ( " - " + element.distributes_selected[0].value ?? " ") +
+                  ? (" - " + element.distributes_selected[0].value ?? " ") +
                     " " +
-                    (element.distributes_selected[0].sub_element_distributes ?? "")
+                    (element.distributes_selected[0].sub_element_distributes ??
+                      "")
                   : ""}{" "}
                 {element.is_bonus == true ? "(Thưởng)" : ""}
               </div>
@@ -224,6 +226,10 @@ export default class ComponentTemplate0ToPrint extends Component {
                   padding: "0px 0 0",
                 }}
               >
+                <BarcodeComponent
+                  number={bill?.order_ship_code?.from_shipper_code}
+                  displayValue={false}
+                />{" "}
                 Mã vận đơn: ({bill?.order_ship_code?.from_shipper_code})
               </p>
             </div>
@@ -307,7 +313,8 @@ export default class ComponentTemplate0ToPrint extends Component {
         <div className="row">
           <div class="col-12-print">
             <p className="order_code">
-              Nội dung đơn hàng : (Tổng số lượng sản phẩm: {total_product})
+              Nội dung đơn hàng: {bill?.customer_note ?? ""}(Tổng số lượng sản
+              phẩm: {total_product})
             </p>
 
             <table class="table table-hover">

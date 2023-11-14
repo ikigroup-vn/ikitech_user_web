@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { shallowEqual } from "../../../ultis/shallowEqual";
 import { filter_arr, format, getDetailAdress } from "../../../ultis/helpers";
 import { getDDMMYYYHis } from "../../../ultis/date";
+import BarcodeComponent from "../../../components/Partials/Barcode";
 
 export default class ComponentTemplate1ToPrint extends Component {
   constructor(props) {
@@ -359,7 +360,16 @@ export default class ComponentTemplate1ToPrint extends Component {
             >
               Mã: {bill.order_code ?? bill.order_code}
             </p>
-
+            <div
+              style={{
+                fontSize: 20,
+                textAlign: "left",
+                margin: 0,
+                padding: 0,
+              }}
+            >
+              Ngày: {getDDMMYYYHis(bill.created_at)}
+            </div>
             {bill?.order_ship_code?.from_shipper_code && (
               <div
                 style={{
@@ -371,20 +381,13 @@ export default class ComponentTemplate1ToPrint extends Component {
               >
                 <p className="order_code">
                   Mã vận đơn ({bill?.order_ship_code?.from_shipper_code})
+                  <BarcodeComponent
+                    number={bill?.order_ship_code?.from_shipper_code}
+                    displayValue={false}
+                  />
                 </p>
               </div>
             )}
-
-            <div
-              style={{
-                fontSize: 20,
-                textAlign: "left",
-                margin: 0,
-                padding: 0,
-              }}
-            >
-              Ngày: {getDDMMYYYHis(bill.created_at)}
-            </div>
           </div>
         </div>
 
