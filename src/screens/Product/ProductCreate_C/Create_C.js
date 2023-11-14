@@ -10,6 +10,7 @@ import Distribute from "../../../components/Product/Update/Distribute";
 import StoreImage from "../../../components/Product/Update/StoreImage";
 import * as productAction from "../../../actions/product";
 import * as CategoryPAction from "../../../actions/category_product";
+import * as AttributeAction from "../../../actions/attribute_search";
 import * as Types from "../../../constants/ActionType";
 import Alert from "../../../components/Partials/Alert";
 import SeoOption from "../../../components/Product/Update/SeoOption";
@@ -139,6 +140,7 @@ class ProductEdit extends Component {
     this.props.fetchProductId(store_code, productId);
     this.props.fetchAllAttributeP(store_code);
     this.props.fetchAllCategoryP(store_code);
+    this.props.fetchAllAttributeSearch(store_code);
     this.props.fetchAllBlog(store_code, 1);
   }
 
@@ -584,7 +586,7 @@ class ProductEdit extends Component {
   };
 
   render() {
-    var { store_code } = this.props;
+    var { store_code, productId } = this.props;
     var {
       category_product,
       attributeP,
@@ -593,6 +595,7 @@ class ProductEdit extends Component {
       isShowAttr,
       isCreate,
       isRemove,
+      attribute_search,
     } = this.props;
     var { total, disableInventory, disableDistribute, discountList } =
       this.state;
@@ -618,8 +621,11 @@ class ProductEdit extends Component {
                     checkDistribute={this.checkDistribute}
                     total={total}
                     product={product}
+                    store_code={store_code}
+                    productId={productId}
                     handleDataFromInfo={this.handleDataFromInfo}
                     category_product={category_product}
+                    attribute_search={attribute_search}
                   />
                 </div>
               </div>
@@ -791,6 +797,8 @@ const mapStateToProps = (state) => {
   return {
     attributeP: state.attributePReducers.attribute_product.allAttrbute,
     category_product: state.categoryPReducers.category_product.allCategoryP,
+    attribute_search:
+      state.attributeSearchReducers.attribute_search.allAttribute,
     product: state.productReducers.product.productId,
     alert: state.productReducers.alert.alert_uid,
     blogs: state.blogReducers.blog.allBlog,
@@ -804,6 +812,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchAllCategoryP: (store_code) => {
       dispatch(CategoryPAction.fetchAllCategoryP(store_code));
+    },
+    fetchAllAttributeSearch: (store_code, params) => {
+      dispatch(AttributeAction.fetchAllAttributeSearch(store_code, params));
     },
     postProductV2: (store_code, branch_id, form) => {
       dispatch(productAction.postProductV2(store_code, branch_id, form));

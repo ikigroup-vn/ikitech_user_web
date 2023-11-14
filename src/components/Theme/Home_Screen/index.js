@@ -206,7 +206,7 @@ class Home_Screen extends Component {
         themeTop: "../images/Dodientu_giadung_top_11.jpg",
         theme: "../images/Dodientu_giadung_11.png",
         arr_index_component: [12, 11, 11, 9, 7],
-        demo_link: "https://shophoaquademo.myiki.vn/",
+        demo_link: "https://dientuvip1.myiki.vn/",
         name: "Điện tử VIP 1",
         banner_type: "Banner trải dài",
         banner_height: "702",

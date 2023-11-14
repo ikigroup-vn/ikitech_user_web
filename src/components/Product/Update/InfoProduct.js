@@ -245,7 +245,23 @@ class InfoProduct extends Component {
     this.props.handleDataFromInfo(this.state);
   };
   componentDidMount() {
+    var option = [];
+    this.setState({ attribute_search_parent: [] });
+    var attribute_search = [...this.props.attribute_search];
+    if (attribute_search.length > 0) {
+      option = attribute_search.map((attribute, index) => {
+        return {
+          id: attribute.id,
+          label: attribute.name,
+          attribute_search_child: attribute.product_attribute_search_children,
+        };
+      });
+      this.setState({
+        listAttributeSearch: option,
+      });
+    }
     const { getAttributeSearch, productId, store_code } = this.props;
+
     getAttributeSearch(store_code, productId);
   }
   componentWillReceiveProps(nextProps) {
@@ -587,6 +603,10 @@ class InfoProduct extends Component {
       txtPosition,
       is_medicine,
     } = this.state;
+    console.log(
+      "🚀 ~ file: InfoProduct.js:591 ~ render ~ listAttributeSearch:",
+      listAttributeSearch
+    );
 
     var txtQuantityInStock = txtQuantityInStock == -1 ? "" : txtQuantityInStock;
     var { isCopy } = this.props;
@@ -932,7 +952,7 @@ class InfoProduct extends Component {
               data-target="#demo2"
             >
               <input
-                disabled
+                // disabled
                 type="text"
                 class="form-control"
                 placeholder="--Chọn danh mục--"
@@ -1049,7 +1069,7 @@ class InfoProduct extends Component {
                 aria-controls="collapseOneAttribute"
               >
                 <input
-                  disabled
+                  // disabled
                   type="text"
                   class="form-control"
                   placeholder="--Chọn thuộc tính--"

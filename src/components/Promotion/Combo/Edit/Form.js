@@ -805,7 +805,8 @@ const mapStateToProps = (state) => {
   return {
     image: state.UploadReducers.comboImg.combo_img,
     types: state.agencyReducers.agency.allAgencyType,
-    groupCustomer: state.groupCustomerReducers.group_customer.groupCustomer,
+    groupCustomer:
+      state.groupCustomerReducers.group_customer.groupCustomer.data,
   };
 };
 

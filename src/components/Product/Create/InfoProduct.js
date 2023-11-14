@@ -498,6 +498,7 @@ class InfoProduct extends Component {
   onChangeIcon = () => {
     this.setState({ icon: !this.state.icon });
   };
+
   searchData = (e) => {
     e.preventDefault();
     var { store_code } = this.props;
@@ -532,6 +533,7 @@ class InfoProduct extends Component {
           : Types.TYPE_SHARE_COLLABORATOR_NUMBER,
     });
   };
+
   render() {
     const { inputValue, menuIsOpen } = this.state;
     var {
@@ -932,16 +934,17 @@ class InfoProduct extends Component {
           <div className="Choose-category-product">
             <div id="accordion">
               <div
-                className="wrap_category"
+                className="wrap_category btn-accordion-collapse collapsed"
                 style={{ display: "flex" }}
                 onClick={this.onChangeIcon}
                 data-toggle="collapse"
                 data-target="#collapseOne"
-                aria-expanded="false"
+                aria-expanded={"false"}
                 aria-controls="collapseOne"
+                id="headingOne"
               >
                 <input
-                  disabled
+                  // disabled
                   type="text"
                   class="form-control"
                   placeholder="--Chọn danh mục--"
@@ -955,7 +958,7 @@ class InfoProduct extends Component {
                   value={this.getNameSelected()}
                 ></input>
                 <button
-                  class="btn btn-link btn-collapse btn-accordion-collapse collapsed"
+                  class="btn btn-link  btn-collase-category"
                   id="headingOne"
                   style={{
                     position: "absolute",
@@ -972,33 +975,10 @@ class InfoProduct extends Component {
               </div>
               <div
                 id="collapseOne"
-                class="collapse"
+                class={`collapse`}
                 aria-labelledby="headingOne"
                 data-parent="#accordion"
               >
-                {/* <form onSubmit={this.searchData}>
-                <div
-                  class="input-group mb-6"
-                  style={{
-                    paddingTop: "10px",
-                  }}
-                >
-                  <input
-                    style={{ maxWidth: "200px", minWidth: "200px" }}
-                    type="search"
-                    name="categorySearch"
-                    value={categorySearch}
-                    onChange={this.onChange}
-                    class="form-control"
-                    placeholder="Tìm kiếm danh mục"
-                  />
-                  <div class="input-group-append">
-                    <button class="btn btn-primary" type="button" onClick={this.searchData}>
-                      <i class="fa fa-search"></i>
-                    </button>
-                  </div>
-                </div>
-                </form> */}
                 <ul
                   style={{ listStyle: "none", margin: "5px 0" }}
                   class="list-group"
@@ -1063,16 +1043,17 @@ class InfoProduct extends Component {
           <div className="Choose-category-product">
             <div id="accordionAttribute">
               <div
-                className="wrap_category"
+                className="wrap_category btn-collapse btn-accordion-collapse collapsed"
                 style={{ display: "flex" }}
                 onClick={this.onChangeIcon}
                 data-toggle="collapse"
                 data-target="#collapseOneAttribute"
                 aria-expanded="false"
                 aria-controls="collapseOneAttribute"
+                id="headingOne"
               >
                 <input
-                  disabled
+                  // disabled
                   type="text"
                   class="form-control"
                   placeholder="--Chọn thuộc tính--"
@@ -1086,7 +1067,7 @@ class InfoProduct extends Component {
                   value={this.getNameSelectedAttribute()}
                 ></input>
                 <button
-                  class="btn btn-link btn-collapse btn-accordion-collapse collapsed"
+                  class="btn btn-link"
                   id="headingOneAttribute"
                   style={{
                     position: "absolute",

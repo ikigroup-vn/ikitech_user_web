@@ -48,7 +48,7 @@ class Form extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     const { group_type_id } = nextState;
     const { groupCustomer } = nextProps;
-    if (group_type_id === null && groupCustomer.length > 0) {
+    if (group_type_id === null && groupCustomer?.length > 0) {
       this.setState({
         group_type_id: -1,
         agency_type_id: -1,
@@ -519,11 +519,11 @@ class Form extends Component {
                 <label for="product_name">Thời gian thông báo trong ngày</label>
                 <div className="set-top-moment">
                   <MomentInput
-                     value={moment("2021-10-10T00:00:00+02:00", "HH:mm")}
-                     format="HH:mm"
-                     options={false}
-                     enableInputClick={true}
-                   readOnly={true}
+                    value={moment("2021-10-10T00:00:00+02:00", "HH:mm")}
+                    format="HH:mm"
+                    options={false}
+                    enableInputClick={true}
+                    readOnly={true}
                     tab={1}
                     translations={{
                       SAVE: "Lưu",
@@ -589,8 +589,7 @@ class Form extends Component {
                 <br></br>
                 <div class={`media ${showProduct}`} id="product_preview">
                   <img width="100px" height="120px" src={product.img} alt="" />
-                  <div class="media-body" style={{ marginLeft: "10px" }}>
-                  </div>
+                  <div class="media-body" style={{ marginLeft: "10px" }}></div>
                 </div>
               </div>
               <div class={`form-group ${disable_category_product}`}>
@@ -697,7 +696,8 @@ const mapStateToProps = (state) => {
     category_product: state.categoryPReducers.category_product.allCategoryP,
     blogs: state.blogReducers.blog.allBlog,
     blogList: state.blogReducers.blog.blogList,
-    groupCustomer: state.groupCustomerReducers.group_customer.groupCustomer,
+    groupCustomer:
+      state.groupCustomerReducers.group_customer.groupCustomer.data,
   };
 };
 

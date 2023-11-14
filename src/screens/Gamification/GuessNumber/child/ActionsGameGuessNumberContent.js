@@ -1407,7 +1407,8 @@ class ActionsGameGuessNumberContent extends Component {
 const mapStateToProps = (state) => {
   return {
     types: state.agencyReducers.agency.allAgencyType,
-    groupCustomer: state.groupCustomerReducers.group_customer.groupCustomer,
+    groupCustomer:
+      state.groupCustomerReducers.group_customer.groupCustomer.data,
     gameGuessNumbers: state.gamificationReducers.guess_numbers.gameGuessNumbers,
   };
 };

@@ -64,6 +64,7 @@ class Table extends PureComponent {
           Danh mục tin tức
         </option>
         <option value={Types.FUNCTION_TYPE_ORDER}>Đơn hàng</option>
+        <option value={Types.FUNCTION_POINT}>Cấu hình xu</option>
         <option value={Types.FUNCTION_TYPE_THEME}>Giao diện</option>
         <option value={Types.FUNCTION_TYPE_PROMOTION}>Khuyến mãi</option>
       </select>
