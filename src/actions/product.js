@@ -741,6 +741,7 @@ export const fetchAllListProduct = (store_code, search) => {
                       newItem["Giá nhập"] = `${
                         item.import_price ? item.import_price : "0"
                       }`;
+                      newItem["Mã SKU"] = "";
                       newItem["Hình ảnh"] = "";
                     }
                   }
