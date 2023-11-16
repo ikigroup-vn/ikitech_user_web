@@ -332,8 +332,9 @@ class ItemInCart extends Component {
     }
   }
   handleOnChange = (e) => {
-    const quantity = e.target.value;
+    let quantity = e.target.value;
 
+    if (isNaN(quantity) || Number(quantity) <= 0) quantity = 1;
     this.changeQuantity(quantity);
 
     if (
