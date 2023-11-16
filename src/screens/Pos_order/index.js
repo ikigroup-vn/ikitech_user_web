@@ -412,11 +412,17 @@ class PostOrder extends Component {
     if (isCheckedOrder) {
       this.handleOpenShipment();
     }
-    if (order_code && isCheckedOrder) {
+
+    if (order_code && paidOrder) {
       this.setState({
         priceCustomer: formatNoD(paidOrder),
       });
     }
+    // if (order_code && isCheckedOrder) {
+    //   this.setState({
+    //     priceCustomer: formatNoD(paidOrder),
+    //   });
+    // }
   }
 
   refreshProductList = () => {
@@ -1078,6 +1084,8 @@ class PostOrder extends Component {
           }
         : null;
     var total_shipping_fee = oneCart?.total_shipping_fee;
+    const moneyCustomerNeedPaid =
+      removeSignNumber(priceCustomer) - removeSignNumber(totalFinal);
     return (
       <React.Fragment>
         {typeof isShow == "undefined" ? (
@@ -1691,7 +1699,7 @@ class PostOrder extends Component {
                                 padding: "10px 0",
                               }}
                             >
-                              <div
+                              {/* <div
                                 className="title-price col-6"
                                 style={{
                                   color: exchange < 0 ? "red" : "black",
@@ -1707,6 +1715,25 @@ class PostOrder extends Component {
                                 style={{ textAlign: "end", fontSize: "22px" }}
                               >
                                 {formatNoD(Math.abs(exchange))}
+                              </span>
+                            </div> */}
+                              <div
+                                className="title-price col-6"
+                                style={{
+                                  color:
+                                    moneyCustomerNeedPaid < 0 ? "red" : "black",
+                                  fontWeight: "500",
+                                }}
+                              >
+                                {moneyCustomerNeedPaid < 0
+                                  ? "Khách còn thiếu"
+                                  : "Tiền thừa trả khách"}
+                              </div>
+                              <span
+                                className="col-6"
+                                style={{ textAlign: "end", fontSize: "22px" }}
+                              >
+                                {formatNoD(Math.abs(moneyCustomerNeedPaid))}
                               </span>
                             </div>
                           )}
