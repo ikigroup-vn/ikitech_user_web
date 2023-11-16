@@ -23,6 +23,7 @@ import {
   removeSignNumber,
   stringToInit,
   randomString,
+  formatNumberV2,
 } from "../../ultis/helpers";
 import Pagination from "../../components/Pos_Order/Pagination";
 import Dropdown from "./component/Dropdown";
@@ -42,6 +43,62 @@ import moment from "moment";
 import ModalFilter from "./component/Filter";
 import { getBranchId } from "../../ultis/branchUtils";
 import ShowModalDetailCombo from "../../components/Pos_Order/ShowDetailCombo";
+import styled from "styled-components";
+
+const ShipperStyles = styled.div`
+  .delivery-method,
+  .delivery-input {
+    border: none;
+    overflow: hidden;
+    border-radius: 10px;
+    margin-bottom: 20px !important;
+    .box-delivery-cart {
+      padding: 1.25rem 1.5625rem;
+      background-color: white;
+      border-bottom: 1px solid #ebebeb;
+      text-transform: uppercase;
+      h5 {
+        font-weight: 600;
+        font-size: 16px;
+      }
+    }
+    .content-delivery-cart-parent {
+      font-size: 13px;
+      padding: 5px 15px;
+      .content-delivery-cart {
+        padding: 0.5rem 1.5625rem !important;
+        margin: 0;
+        input {
+          border-radius: 5px;
+        }
+        span {
+          font-weight: 500;
+        }
+      }
+    }
+    .content-delivery-cart-child {
+      .content-delivery-cart {
+        display: flex;
+        justify-content: space-between;
+        .content-delivery-cart-description {
+          display: flex;
+          align-items: center;
+          flex-grow: 1;
+          padding-left: 5px;
+          label {
+            flex-grow: 1;
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+  }
+  .custom-checkbox {
+    width: 10px;
+    height: 10px;
+    border-radius: 100rem;
+  }
+`;
 
 class PanelBottom extends Component {
   constructor(props) {
@@ -80,17 +137,29 @@ class PanelBottom extends Component {
       sent_delivery: false,
       isError: false,
       modalAddress: {},
+      shipmentInfo: {
+        description: "",
+        ship_speed_code: "",
+        partner_id: "",
+        fee: 0,
+      },
     };
 
     this.onChangeNum = debounce(this.handleChangeNum, 0);
     this.onSearchCustomer = debounce(this.handleSearchCustomer, 500);
     this.changeNewShipment = debounce(this.props.calculateShipment, 2000);
+    this.changeListShipmentFee = debounce(this.postListShipperFee, 2000);
     this.loadFirst = true;
   }
 
   componentDidMount() {
     this.props.fetchAllShipment(this.props.store_code);
   }
+
+  setShipmentInfo(shipmentInfo) {
+    this.setState({ shipmentInfo });
+  }
+
   showProvince = (places) => {
     var result = null;
     if (places.length > 0) {
@@ -391,8 +460,18 @@ class PanelBottom extends Component {
     // })
   };
 
+  postListShipperFee = (data) => {
+    const { fetchListShipmentV2, store_code } = this.props;
+    fetchListShipmentV2(store_code, data);
+  };
+
+  handleShipmentFeeSelect = (info, partner_id) => {
+    this.setShipmentInfo({ ...info, partner_id });
+    this.getShipment(partner_id, info.ship_speed_code, info.fee);
+  };
+
   shouldComponentUpdate(nextProps, nextState) {
-    console.log("Đã vô", nextState, this.state, nextProps.badges);
+    console.log("Đã vô:::", nextState.weight);
     if (
       nextState.weight != this.state.weight ||
       nextState.length != this.state.length ||
@@ -403,9 +482,12 @@ class PanelBottom extends Component {
       !shallowEqual(this.state.valueDistrict, nextState.valueDistrict) ||
       !shallowEqual(this.state.valueWards, nextState.valueWards)
     ) {
-      var { weight, length, width, height, txtAddressDetail } = nextState;
-      var { badges, totalFinal, shipment, store_code } = nextProps;
       var {
+        weight,
+        length,
+        width,
+        height,
+        txtAddressDetail,
         txtProvince,
         txtDistrict,
         txtWards,
@@ -413,7 +495,10 @@ class PanelBottom extends Component {
         valueProvince,
         valueWards,
       } = nextState;
+      var { badges, totalFinal, shipment, store_code } = nextProps;
+
       console.log(badges);
+
       var data = {
         money_collection: totalFinal,
         sender_province_id: badges.address_pickup?.province,
@@ -445,7 +530,17 @@ class PanelBottom extends Component {
       }
       this.setState({ isError: false });
 
-      this.changeNewShipment(store_code, shipment, data);
+      // this.changeNewShipment(store_code, shipment, data);
+      const isHasProvince =
+        valueProvince?.value || this.state.valueProvince?.value ? true : false;
+      const isHasDistrict =
+        valueDistrict?.value || this.state.valueDistrict?.value ? true : false;
+      const isHasWards =
+        valueWards?.value || this.state.valueWards?.value ? true : false;
+      const isHasFullField = isHasProvince && isHasDistrict && isHasWards;
+      if (isHasFullField) {
+        this.changeListShipmentFee(data);
+      }
       // console.log(address_store)
       // this.props.calculateShipment(store_code , shipment , data);
     }
@@ -805,6 +900,7 @@ class PanelBottom extends Component {
   formatOptionLabel = ({ value, label, address }) => {
     return this.itemAddress(label);
   };
+
   buildTabCustomer = () => {
     var { province } = this.props;
 
@@ -900,7 +996,8 @@ class PanelBottom extends Component {
       //  }),
     };
 
-    var { weight, length, width, height, cod, select_customer } = this.state;
+    var { weight, length, width, height, cod, select_customer, shipmentInfo } =
+      this.state;
 
     var { total_shipping_fee, badges, store_code } = this.props;
 
@@ -915,7 +1012,6 @@ class PanelBottom extends Component {
         ? true
         : false;
 
-    console.log(this.state.fee);
     var addressPickup = badges.address_pickup
       ? {
           value: badges.address_pickup?.id,
@@ -925,7 +1021,7 @@ class PanelBottom extends Component {
       : null;
 
     return (
-      <div
+      <ShipperStyles
         style={{
           padding: 5,
         }}
@@ -1476,42 +1572,18 @@ class PanelBottom extends Component {
                   onChange={this.onChange}
                 ></input>
               </div>
-              <div className="list-payment" style={{ padding: "0 5px" }}>
-                {loadShipper == "show" ? (
+              {loadShipper == "show" ? (
+                <div className="list-payment" style={{ padding: "0 5px" }}>
                   <div style={{ textAlign: "center", padding: "10px" }}>
                     ...Đang tải
                   </div>
-                ) : this.props.calculate?.length > 0 &&
-                  this.state.isError == false &&
-                  check == true ? (
-                  this.props.calculate.map((item, value) => {
-                    return (
-                      <div className="item-payment">
-                        <input
-                          type="radio"
-                          name="shipment"
-                          onClick={() => {
-                            this.getShipment(
-                              item.partner_id,
-                              item.ship_type,
-                              item.fee
-                            );
-                          }}
-                        />
-                        <img
-                          style={{ objectFit: "contain" }}
-                          src={item.image_url}
-                          width={50}
-                          height={50}
-                        ></img>
-                        <span className="name">{item.name}</span>
-                        <span className="price">
-                          {item.fee ? formatNoD(item.fee) : 0}
-                        </span>
-                      </div>
-                    );
-                  })
-                ) : (
+                </div>
+              ) : this.props.listShipmentV2?.length === 0 &&
+                !weight &&
+                !length &&
+                !width &&
+                !height ? (
+                <div className="list-payment" style={{ padding: "0 5px" }}>
                   <div
                     style={{
                       textAlign: "center",
@@ -1519,21 +1591,11 @@ class PanelBottom extends Component {
                       color: "red",
                     }}
                   >
-                    {" "}
-                    {this.state.isError == false && loadShipper != "initial" ? (
-                      <Link
-                        style={{ color: "red", "text-decoration": "underline" }}
-                        to={`/shipment/${this.props.store_code}`}
-                      >
-                        Chưa có đơn vị vận chuyển hoặc mã token không hợp lệ.
-                        Nhấp để cài đặt
-                      </Link>
-                    ) : (
-                      "Vui lòng chọn khối lượng và địa chỉ giao hàng để xem báo giá của nhà vận chuyển"
-                    )}
+                    Vui lòng chọn khối lượng và địa chỉ giao hàng để xem báo giá
+                    của nhà vận chuyển
                   </div>
-                )}
-              </div>
+                </div>
+              ) : null}
             </React.Fragment>
           )}
           {this.state.type_ship == 2 && (
@@ -1573,8 +1635,79 @@ class PanelBottom extends Component {
                   </label>
                 </div> */}
           </div>
+          {true || this.props.listShipmentV2?.length > 0 ? (
+            <div className="delivery-method">
+              {this.props.listShipmentV2.map((v, i) => (
+                <div key={i} className="delivery-cart">
+                  <div className="row content-delivery-cart-parent">
+                    {v.name}
+                  </div>
+                  <div className="content-delivery-cart-child">
+                    {v.fee_with_type_ship?.length > 0 &&
+                      v.fee_with_type_ship?.map((service) => (
+                        <div className="content-delivery-cart">
+                          <div className="content-delivery-cart-description">
+                            <input
+                              type="checkbox"
+                              name="delivery"
+                              id={service.description}
+                              checked={
+                                shipmentInfo.ship_speed_code ===
+                                service.ship_speed_code
+                              }
+                              onChange={() =>
+                                this.handleShipmentFeeSelect(
+                                  service,
+                                  v.partner_id
+                                )
+                              }
+                              style={{ display: "none" }}
+                            />
+                            <span
+                              className="custom-checkbox"
+                              onClick={() =>
+                                this.handleShipmentFeeSelect(
+                                  service,
+                                  v.partner_id
+                                )
+                              }
+                              style={{
+                                cursor: "pointer",
+                                marginRight: "8px",
+                                backgroundColor:
+                                  shipmentInfo.ship_speed_code ===
+                                  service.ship_speed_code
+                                    ? "#c62025"
+                                    : "white",
+                                boxShadow: `${
+                                  shipmentInfo.ship_speed_code ===
+                                  service.ship_speed_code
+                                    ? `0 0 0 2px white, 0 0 0 3px #c62025`
+                                    : "0 0 0 2px white, 0 0 0 3px #dadada"
+                                }`,
+                              }}
+                            ></span>
+                            <label
+                              htmlFor={service.description}
+                              style={{ cursor: "pointer" }}
+                            >
+                              {service.description}
+                            </label>
+                          </div>
+                          <span>
+                            {service.fee
+                              ? `${formatNumberV2(service.fee)}đ`
+                              : "0đ"}
+                          </span>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : null}
         </div>
-      </div>
+      </ShipperStyles>
     );
   };
 
@@ -1810,9 +1943,10 @@ const mapStateToProps = (state) => {
     products: state.productReducers.product.allProduct,
     shipment: state.shipmentReducers.shipment.allShipment,
     calculate: state.shipmentReducers.shipment.calculate,
+    listShipmentV2: state.shipmentReducers.shipment.listShipmentV2,
+    loadShipper: state.loadingReducers.disable_shipper,
 
     badges: state.badgeReducers.allBadge,
-    loadShipper: state.loadingReducers.disable_shipper,
   };
 };
 
@@ -1849,6 +1983,9 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     fetchAllShipment: (store_code) => {
       dispatch(shipmentAction.fetchAllShipment(store_code));
+    },
+    fetchListShipmentV2: (store_code, data) => {
+      dispatch(shipmentAction.fetchListShipmentV2(store_code, data));
     },
 
     updateStoreA: (storeAId, form, store_code, $this) => {
