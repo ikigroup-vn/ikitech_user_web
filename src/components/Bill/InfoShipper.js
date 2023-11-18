@@ -1,6 +1,7 @@
 import { data } from "jquery";
 import React, { Component } from "react";
 import * as billAction from "../../actions/bill";
+import * as shipmentAction from "../../actions/shipment";
 import { connect, shallowEqual } from "react-redux";
 import ChooseShipper from "./ChooseShipper";
 import moment from "moment";
@@ -37,6 +38,46 @@ const InfoShipperStyles = styled.div`
       }
     }
   }
+  .content-delivery-cart-parent {
+    font-size: 16px;
+    padding: 5px 15px;
+    color: black;
+    .content-delivery-cart {
+      padding: 0.5rem 1.5625rem !important;
+      margin: 0;
+      display: flex;
+      column-gap: 20px;
+      align-items: center;
+      input {
+        border-radius: 5px;
+      }
+      span {
+        font-weight: 500;
+        flex-shrink: 0;
+      }
+    }
+  }
+  .content-delivery-cart-child {
+    .content-delivery-cart {
+      display: flex;
+      justify-content: space-between;
+      .content-delivery-cart-description {
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+        padding-left: 5px;
+        label {
+          flex-grow: 1;
+          margin-bottom: 0;
+        }
+      }
+    }
+  }
+  .custom-checkbox {
+    width: 10px;
+    height: 10px;
+    border-radius: 100rem;
+  }
 `;
 class InfoShipper extends Component {
   constructor(props) {
@@ -58,6 +99,10 @@ class InfoShipper extends Component {
         "DELIVERY_ERROR",
         "CUSTOMER_RETURNING",
       ],
+      shipmentInfo: {
+        ship_speed_code_selected: null,
+        data: null,
+      },
     };
   }
 
@@ -168,6 +213,7 @@ class InfoShipper extends Component {
   onChangeShipper = (e) => {
     var { value } = e.target;
     var { bill, order_code, store_code } = this.props;
+
     if (value == "") {
       this.setState({
         error: "Chưa chọn phương thức vận chuyển",
@@ -180,6 +226,28 @@ class InfoShipper extends Component {
       store_code,
       order_code
     );
+
+    // const data = {
+    //   money_collection: bill.cod,
+    //   receiver_province_id: bill.customer_province,
+    //   receiver_district_id: bill.customer_district,
+    //   receiver_wards_id: bill.customer_wards,
+    //   receiver_address: bill.customer_address_detail,
+    //   branch_id: bill.branch_id,
+    //   weight: bill.package_weight,
+    //   length: bill.package_length,
+    //   width: bill.package_width,
+    //   height: bill.package_height,
+    // };
+
+    // this.props.calculateShipmentV2(store_code, value, data, (data) => {
+    //   this.setState({
+    //     shipmentInfo: {
+    //       ...this.state.shipmentInfo,
+    //       data,
+    //     },
+    //   });
+    // });
   };
   handleShowCancelButton = () => {
     const { bill } = this.props;
@@ -193,7 +261,7 @@ class InfoShipper extends Component {
 
   render() {
     var { bill, historyDeliveryStatus } = this.props;
-    const { packet, isUpdated } = this.state;
+    const { packet, isUpdated, shipmentInfo } = this.state;
     var shipper_name = bill.shipper_name;
     var agree =
       bill.order_status_code == "WAITING_FOR_PROGRESSING" ? "show" : "hide";
@@ -439,6 +507,73 @@ class InfoShipper extends Component {
                 Chuyển đơn hàng sang đơn vị vận chuyển
               </p>
             </div>
+            {/* {shipmentInfo.data ? (
+              <div className="delivery-cart">
+                <div className="row content-delivery-cart-parent">
+                  {shipmentInfo.data?.name}
+                </div>
+                <div className="content-delivery-cart-child">
+                  {shipmentInfo.data?.fee_with_type_ship?.length > 0 &&
+                    shipmentInfo.data?.fee_with_type_ship?.map((service) => (
+                      <div className="content-delivery-cart">
+                        <div className="content-delivery-cart-description">
+                          <input
+                            type="checkbox"
+                            name="delivery"
+                            id={service.ship_speed_code}
+                            checked={
+                              shipmentInfo.ship_speed_code_selected ===
+                              service.ship_speed_code
+                            }
+                            onChange={() =>
+                              this.handleShipmentFeeSelect(
+                                service,
+                                shipmentInfo.data?.partner_id
+                              )
+                            }
+                            style={{ display: "none" }}
+                          />
+                          <span
+                            className="custom-checkbox"
+                            onClick={() =>
+                              this.handleShipmentFeeSelect(
+                                service,
+                                shipmentInfo.data?.partner_id
+                              )
+                            }
+                            style={{
+                              cursor: "pointer",
+                              marginRight: "8px",
+                              backgroundColor:
+                                shipmentInfo.ship_speed_code_selected ===
+                                service.ship_speed_code
+                                  ? "#c62025"
+                                  : "white",
+                              boxShadow: `${
+                                shipmentInfo.ship_speed_code_selected ===
+                                service.ship_speed_code
+                                  ? `0 0 0 2px white, 0 0 0 3px #c62025`
+                                  : "0 0 0 2px white, 0 0 0 3px #dadada"
+                              }`,
+                            }}
+                          ></span>
+                          <label
+                            htmlFor={service.ship_speed_code}
+                            style={{ cursor: "pointer" }}
+                          >
+                            {service.description}
+                          </label>
+                        </div>
+                        <span>
+                          {service.fee
+                            ? `${formatNumberV2(service.fee)}đ`
+                            : "0đ"}
+                        </span>
+                      </div>
+                    ))}
+                </div>
+              </div>
+            ) : null} */}
           </div>
         ) : (
           <div className="box box-warning cart_wrapper mb0">
@@ -512,6 +647,7 @@ const mapStateToProps = (state) => {
   return {
     historyDeliveryStatus: state.billReducers.bill.historyDeliveryStatus,
     shipment: state.shipmentReducers.shipment.allShipment,
+    loadShipper: state.loadingReducers.disable_shipper,
   };
 };
 const mapDispatchToProps = (dispatch, props) => {
@@ -552,6 +688,16 @@ const mapDispatchToProps = (dispatch, props) => {
     },
     updateOrder: (data, store_code, order_code) => {
       dispatch(billAction.updateOrder(data, store_code, order_code));
+    },
+    calculateShipmentV2: (store_code, partner_id, data, onSuccess) => {
+      dispatch(
+        shipmentAction.calculateShipmentV2(
+          store_code,
+          partner_id,
+          data,
+          onSuccess
+        )
+      );
     },
     updateShippingPackage: (store_code, order_code, data, funcModal) => {
       dispatch(

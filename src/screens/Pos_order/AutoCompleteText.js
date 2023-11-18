@@ -76,6 +76,8 @@ export default class AutoCompleteText extends React.Component {
   onTextChanged = (e) => {
     var value = e.target.value;
 
+    if (value !== "" && (isNaN(value) || Number(value) < 0)) return;
+
     let suggestions = [];
     if (value.length > 0 && value.length > LENGTH_NUM_SEARCH) {
       suggestions = this.findSuggestion(value);

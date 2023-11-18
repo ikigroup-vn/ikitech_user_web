@@ -95,13 +95,36 @@ class CardProduct extends Component {
     );
 
     return (
-      <div>
+      <div
+        style={{
+          position: "relative",
+        }}
+      >
+        {data?.product_retail_steps?.length > 0 ? (
+          <div
+            style={{
+              position: "absolute",
+              top: -20,
+              left: -20,
+              zIndex: 100,
+              borderBottomRightRadius: "5px",
+              padding: "5px",
+              backgroundColor: "#f57224",
+              fontSize: "10px",
+              color: "#fff",
+            }}
+          >
+            Có khoảng giá
+          </div>
+        ) : null}
+
         <div
           style={{
             display: "flex",
             height: "auto",
             justifyContent: "space-between",
             alignItems: "center",
+            position: "relative",
           }}
         >
           {image}
@@ -227,6 +250,7 @@ class CardProduct extends Component {
   render() {
     var { products, isItemSearch } = this.props;
     var listProducts = filter_arr(products.data);
+    console.log("🚀 ~ render ~ listProducts:", listProducts);
 
     if (isItemSearch) {
       return this.buildItemProduct(this.props.product);

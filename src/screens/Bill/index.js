@@ -879,7 +879,7 @@ class Bill extends Component {
                                     <i class="fas fa-file-export"></i>
                                   </span>
                                   <span style={{ color: "white" }} class="text">
-                                    Export Excel Ikitech 
+                                    Export Excel Ikitech
                                   </span>
                                 </button>
                               </>
@@ -958,6 +958,10 @@ class Bill extends Component {
                                   onChange={([date]) =>
                                     this.onchangeDateFrom(date)
                                   }
+                                  onClose={(selectedDates, dateStr) => {
+                                    // Thực hiện chỉ khi dropdown đóng lại
+                                    this.onchangeDateFrom(selectedDates[0]);
+                                  }}
                                 />
                                 <Flatpickr
                                   data-enable-time
@@ -988,6 +992,10 @@ class Bill extends Component {
                                   onChange={([date]) =>
                                     this.onchangeDateTo(date)
                                   }
+                                  onClose={(selectedDates, dateStr) => {
+                                    // Thực hiện chỉ khi dropdown đóng lại
+                                    this.onchangeDateTo(selectedDates[0]);
+                                  }}
                                 />
                               </div>
                             </div>

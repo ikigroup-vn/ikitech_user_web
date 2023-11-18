@@ -143,6 +143,7 @@ class PanelBottom extends Component {
         partner_id: "",
         fee: 0,
       },
+      listShipment: [],
     };
 
     this.onChangeNum = debounce(this.handleChangeNum, 0);
@@ -158,6 +159,10 @@ class PanelBottom extends Component {
 
   setShipmentInfo(shipmentInfo) {
     this.setState({ shipmentInfo });
+  }
+
+  setListShipment(listShipment) {
+    this.setState({ listShipment });
   }
 
   showProvince = (places) => {
@@ -462,7 +467,9 @@ class PanelBottom extends Component {
 
   postListShipperFee = (data) => {
     const { fetchListShipmentV2, store_code } = this.props;
-    fetchListShipmentV2(store_code, data);
+    fetchListShipmentV2(store_code, data, (list) => {
+      this.setListShipment(list);
+    });
   };
 
   handleShipmentFeeSelect = (info, partner_id) => {
@@ -996,8 +1003,16 @@ class PanelBottom extends Component {
       //  }),
     };
 
-    var { weight, length, width, height, cod, select_customer, shipmentInfo } =
-      this.state;
+    var {
+      weight,
+      length,
+      width,
+      height,
+      cod,
+      select_customer,
+      shipmentInfo,
+      listShipment,
+    } = this.state;
 
     var { total_shipping_fee, badges, store_code } = this.props;
 
@@ -1578,7 +1593,7 @@ class PanelBottom extends Component {
                     ...Đang tải
                   </div>
                 </div>
-              ) : this.props.listShipmentV2?.length === 0 &&
+              ) : listShipment?.length === 0 &&
                 !weight &&
                 !length &&
                 !width &&
@@ -1635,9 +1650,9 @@ class PanelBottom extends Component {
                   </label>
                 </div> */}
           </div>
-          {true || this.props.listShipmentV2?.length > 0 ? (
+          {listShipment?.length > 0 ? (
             <div className="delivery-method">
-              {this.props.listShipmentV2.map((v, i) => (
+              {listShipment.map((v, i) => (
                 <div key={i} className="delivery-cart">
                   <div className="row content-delivery-cart-parent">
                     {v.name}
@@ -1943,7 +1958,6 @@ const mapStateToProps = (state) => {
     products: state.productReducers.product.allProduct,
     shipment: state.shipmentReducers.shipment.allShipment,
     calculate: state.shipmentReducers.shipment.calculate,
-    listShipmentV2: state.shipmentReducers.shipment.listShipmentV2,
     loadShipper: state.loadingReducers.disable_shipper,
 
     badges: state.badgeReducers.allBadge,
@@ -1984,8 +1998,8 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchAllShipment: (store_code) => {
       dispatch(shipmentAction.fetchAllShipment(store_code));
     },
-    fetchListShipmentV2: (store_code, data) => {
-      dispatch(shipmentAction.fetchListShipmentV2(store_code, data));
+    fetchListShipmentV2: (store_code, data, onSuccess) => {
+      dispatch(shipmentAction.fetchListShipmentV2(store_code, data, onSuccess));
     },
 
     updateStoreA: (storeAId, form, store_code, $this) => {

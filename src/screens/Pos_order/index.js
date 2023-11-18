@@ -520,6 +520,8 @@ class PostOrder extends Component {
     var name = e.target.name;
     var value_text = e.target.value;
     var value = value_text;
+
+    if (value && value?.length > 15) return;
     const _value = formatNumber(value);
     var totalPrice = this.props.oneCart.info_cart?.total_before_discount;
     var num1 = (totalPrice * value) / 100;

@@ -267,7 +267,6 @@ class PanelBottom extends Component {
       // if (oneCart.noUpdateUI != true) {
       var selectedDate = null;
       try {
-        console.log(oneCart.customer_date_of_birth);
         selectedDate =
           oneCart == null ||
           oneCart.customer?.date_of_birth == null ||
@@ -301,7 +300,7 @@ class PanelBottom extends Component {
           txtName: oneCart.customer_name ?? "",
           txtEmail: oneCart.customer_email ?? "",
           txtPhoneNumber: oneCart.customer_phone ?? "",
-          txtSex: oneCart.customer_sex ?? "",
+          txtSex: oneCart.customer_sex,
           txtAddressDetail: oneCart.address_detail ?? "",
           selectedDate: selectedDate,
 
@@ -395,7 +394,7 @@ class PanelBottom extends Component {
     var list = [];
     var maxYear = new Date().getFullYear();
 
-    for (var i = 1922; i < maxYear; i++) {
+    for (var i = 1922; i <= maxYear; i++) {
       list.push(i);
     }
     return list;
@@ -928,7 +927,7 @@ class PanelBottom extends Component {
             <div class="input-group mb-2">
               <select
                 disabled={isDisabledButton}
-                value={txtSex || ""}
+                value={txtSex}
                 onChange={this.onChangeSex}
                 name="txtSex"
                 class="form-control customerInfo px-1"
@@ -955,6 +954,7 @@ class PanelBottom extends Component {
                   }
                   // customInput={<ExampleCustomInput />}
                   placeholderText="Ngày sinh"
+                  maxDate={new Date()}
                   renderCustomHeader={({
                     date,
                     changeYear,
