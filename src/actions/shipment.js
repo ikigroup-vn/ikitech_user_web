@@ -51,7 +51,7 @@ export const calculateShipment = (store_code, shipment, value) => {
   };
 };
 
-export const fetchListShipmentV2 = (store_code, dataShipment) => {
+export const fetchListShipmentV2 = (store_code, dataShipment, onSuccess) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING_SHIPPER,
@@ -71,28 +71,57 @@ export const fetchListShipmentV2 = (store_code, dataShipment) => {
                   dataShipment
                 )
                 .then((resService) => {
-                  if (resService?.data?.code === 200) {
-                    if (resService?.data.data?.fee_with_type_ship?.length > 0) {
-                      data.push(resService.data.data);
+                  if (
+                    resService?.data?.code === 200 &&
+                    resService?.data.data?.fee_with_type_ship?.length > 0
+                  ) {
+                    data.push(resService.data.data);
+                    if (onSuccess) {
+                      onSuccess(data);
                     }
-                    dispatch({
-                      type: Types.FETCH_LIST_SHIPMENT,
-                      data: data,
-                    });
                   }
                 });
             }
           } else {
-            dispatch({
-              type: Types.FETCH_LIST_SHIPMENT,
-              data: [],
-            });
+            onSuccess([]);
           }
         }
       })
       .finally(() => {
         dispatch({
           type: Types.SHOW_LOADING_SHIPPER,
+          loading: "hide",
+        });
+      });
+  };
+};
+
+export const calculateShipmentV2 = (
+  store_code,
+  partner_id,
+  data,
+  onSuccess
+) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    shipmentApi
+      .calculateShipmentV2(store_code, partner_id, data)
+      .then((res) => {
+        if (
+          res?.data?.code === 200 &&
+          res?.data.data?.fee_with_type_ship?.length > 0
+        ) {
+          if (onSuccess) {
+            onSuccess(res.data.data);
+          }
+        }
+      })
+      .finally(() => {
+        dispatch({
+          type: Types.SHOW_LOADING,
           loading: "hide",
         });
       });

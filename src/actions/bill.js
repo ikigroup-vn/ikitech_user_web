@@ -265,8 +265,8 @@ async function saveAsExcelMisa(value) {
     sheet1.cell("A1").value(sheetData);
     const range = sheet1.usedRange();
     sheet1.row(1).style("bold", true);
-    sheet1.range("A1:AN1").style("fill", "ccccff");
-    sheet1.range("AO1:AU1").style("fill", "ccffff");
+    sheet1.range("A1:AO1").style("fill", "ccccff");
+    sheet1.range("AP1:AV1").style("fill", "ccffff");
     range.style("border", true);
 
     return workbook.outputAsync().then((res) => {
@@ -329,6 +329,7 @@ export const exportAllListOrderMisa = (
                         voucherNumber: "",
                         accountDate: "",
                         voucherDate: "",
+                        staffId: item.sale_username,
                         staffName: item.sale_name,
                         customerCode: "",
                         customerName: item.customer_name,
@@ -354,7 +355,6 @@ export const exportAllListOrderMisa = (
                         checkInvoice: "TRUE",
                         shipped: "Đã xuất",
                         typeOfDocument: "",
-                        staffId: "",
                         businessUnit: "",
                         orderer_customer_province: item.customer_province_name,
                         orderer_customer_district: item.customer_district_name,
