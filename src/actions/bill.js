@@ -329,8 +329,8 @@ export const exportAllListOrderMisa = (
                         voucherNumber: "",
                         accountDate: "",
                         voucherDate: "",
-                        staffId: item.sale_username,
-                        staffName: item.sale_name,
+                        staffId: item.staff_username,
+                        staffName: item.staff_name,
                         customerCode: "",
                         customerName: item.customer_name,
                         address: handleAddress(
@@ -862,7 +862,7 @@ export const cancelConnectToDelivery = (
   };
 };
 
-export const updateOrder = (data, store_code, order_code) => {
+export const updateOrder = (data, store_code, order_code, onSuccess) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -873,6 +873,7 @@ export const updateOrder = (data, store_code, order_code) => {
       .updateOrder(data, store_code, order_code)
       .then((res) => {
         if (res.data.code === 200) {
+          if (onSuccess) onSuccess();
           dispatch({
             type: Types.SHOW_LOADING,
             loading: "hide",
