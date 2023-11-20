@@ -110,12 +110,13 @@ export const calculateShipmentV2 = (
     shipmentApi
       .calculateShipmentV2(store_code, partner_id, data)
       .then((res) => {
-        if (
-          res?.data?.code === 200 &&
-          res?.data.data?.fee_with_type_ship?.length > 0
-        ) {
+        if (res?.data?.code === 200) {
           if (onSuccess) {
-            onSuccess(res.data.data);
+            const dataReturn =
+              res?.data.data?.fee_with_type_ship?.length > 0
+                ? res.data.data
+                : null;
+            onSuccess(dataReturn);
           }
         }
       })
