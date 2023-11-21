@@ -112,13 +112,42 @@ export const calculateShipmentV2 = (
       .then((res) => {
         if (res?.data?.code === 200) {
           if (onSuccess) {
-            const dataReturn =
-              res?.data.data?.fee_with_type_ship?.length > 0
-                ? res.data.data
-                : null;
-            onSuccess(dataReturn);
+            if (res?.data.data?.fee_with_type_ship?.length > 0) {
+              onSuccess(res.data.data);
+            } else {
+              dispatch({
+                type: Types.ALERT_UID_STATUS,
+                alert: {
+                  type: "danger",
+                  title: "Lỗi",
+                  disable: "show",
+                  content: "Không có dịch vụ vận chuyển",
+                },
+              });
+            }
           }
+        } else {
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "danger",
+              title: "Lỗi",
+              disable: "show",
+              content: res?.data?.msg,
+            },
+          });
         }
+      })
+      .catch(function (error) {
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content: error?.response?.data?.msg,
+          },
+        });
       })
       .finally(() => {
         dispatch({
