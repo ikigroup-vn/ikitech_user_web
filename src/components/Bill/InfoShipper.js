@@ -443,8 +443,7 @@ class InfoShipper extends Component {
                             shipmentInfo.shipment_selected === null ? 0.7 : 1,
                         }}
                       >
-                        <i className="fas fa-shipping-fast"></i>
-                        &nbsp;Thay đổi đơn vị vận chuyển
+                        Lưu thay đổi
                       </button>
                     </div>
                   </>

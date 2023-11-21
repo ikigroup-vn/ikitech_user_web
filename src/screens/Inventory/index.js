@@ -10,11 +10,10 @@ import { Link } from "react-router-dom";
 import Pagination from "../../components/Inventory/Pagination";
 import moment from "moment";
 import history from "../../history";
-import General from "../../components/Product/General";
 import NotAccess from "../../components/Partials/NotAccess";
 import { getQueryParams } from "../../ultis/helpers";
-
 import * as productAction from "../../actions/product";
+// import ListProduct from "./ListProduct";
 
 class Inventory extends Component {
   constructor(props) {
@@ -41,6 +40,7 @@ class Inventory extends Component {
       searchValue: search,
     });
     this.props.fetchAllInventory(store_code, branch_id, page, params);
+    this.props.fetchAllProductV2(store_code, branch_id, 1, "");
   }
   onChangeSearch = (e) => {
     this.setState({ searchValue: e.target.value });
@@ -127,9 +127,17 @@ class Inventory extends Component {
     }
     return result;
   };
+
+  exportProducts = () => {
+    const { store_code } = this.props.match.params;
+    const { exportSheetInventory } = this.props;
+    const branch_id = localStorage.getItem("branch_id");
+
+    exportSheetInventory(store_code, branch_id, "");
+  };
   render() {
     const { store_code } = this.props.match.params;
-    const { sheetsInventory, badges } = this.props;
+    const { sheetsInventory, badges, products } = this.props;
     const { searchValue, isShow } = this.state;
     return (
       <div id="wrapper">
@@ -152,15 +160,48 @@ class Inventory extends Component {
                     <h4 className="title_content text-primary">
                       Phiếu kiểm kho
                     </h4>
-
-                    <Link to={`/inventory/create/${store_code}`}>
-                      <div class="btn btn-info btn-icon-split btn-sm show">
+                    <div>
+                      {/* <div
+                        style={{ marginRight: "10px" }}
+                        onClick={this.exportProducts}
+                        className={`btn btn-success btn-icon-split btn-sm`}
+                        // class={`btn btn-success btn-icon-split btn-sm  ${
+                        //   _export == true ? "show" : "hide"
+                        // }`}
+                      >
                         <span class="icon text-white-50">
-                          <i class="fas fa-plus"></i>
+                          <i class="fas fa-file-export"></i>
                         </span>
-                        <span class="text ">Tạo phiếu kiểm kho</span>
+                        <span style={{ color: "white" }} class="text">
+                          Export tất cả sản phẩm mẫu
+                        </span>
                       </div>
-                    </Link>
+                      <div
+                        style={{ marginRight: "10px" }}
+                        className={`btn btn-primary btn-icon-split btn-sm`}
+                        data-toggle="modal"
+                        data-target="#showListProduct"
+                        // class={`btn btn-success btn-icon-split btn-sm  ${
+                        //   _export == true ? "show" : "hide"
+                        // }`}
+                      >
+                        <span class="icon text-white-50">
+                          <i class="fas fa-file-export"></i>
+                        </span>
+                        <span style={{ color: "white" }} class="text">
+                          Export sản phẩm được chọn mẫu
+                        </span>
+                      </div> */}
+
+                      <Link to={`/inventory/create/${store_code}`}>
+                        <div class="btn btn-info btn-icon-split btn-sm show">
+                          <span class="icon text-white-50">
+                            <i class="fas fa-plus"></i>
+                          </span>
+                          <span class="text ">Tạo phiếu kiểm kho</span>
+                        </div>
+                      </Link>
+                    </div>
                   </div>
 
                   <br></br>
@@ -236,6 +277,7 @@ class Inventory extends Component {
             <Footer />
           </div>
         </div>
+        {/* <ListProduct store_code={store_code} products={products} /> */}
       </div>
     );
   }
@@ -258,6 +300,11 @@ const mapDispatchToProps = (dispatch, props) => {
     fetchAllProductV2: (store_code, branch_id, page, params) => {
       dispatch(
         productAction.fetchAllProductV2(store_code, branch_id, page, params)
+      );
+    },
+    exportSheetInventory: (store_code, branch_id, params, data) => {
+      dispatch(
+        productAction.exportSheetInventory(store_code, branch_id, params, data)
       );
     },
   };
