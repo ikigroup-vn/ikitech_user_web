@@ -244,7 +244,7 @@ class Inventory extends Component {
                           width="100%"
                           cellspacing="0"
                         >
-                          <thead>
+                          <thead>``
                             <tr>
                               <th>STT</th>
                               <th>Mã phiếu</th>

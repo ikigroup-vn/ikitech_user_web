@@ -127,15 +127,15 @@ export const calculateShipmentV2 = (
             }
           }
         } else {
-          dispatch({
-            type: Types.ALERT_UID_STATUS,
-            alert: {
-              type: "danger",
-              title: "Lỗi",
-              disable: "show",
-              content: res?.data?.msg,
-            },
-          });
+          // dispatch({
+          //   type: Types.ALERT_UID_STATUS,
+          //   alert: {
+          //     type: "danger",
+          //     title: "Lỗi",
+          //     disable: "show",
+          //     content: res?.data?.msg,
+          //   },
+          // });
         }
       })
       .catch(function (error) {
@@ -145,7 +145,7 @@ export const calculateShipmentV2 = (
             type: "danger",
             title: "Lỗi",
             disable: "show",
-            content: error?.response?.data?.msg,
+            content: error?.response?.data?.message,
           },
         });
       })
