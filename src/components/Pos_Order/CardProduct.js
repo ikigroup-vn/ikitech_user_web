@@ -110,7 +110,7 @@ class CardProduct extends Component {
               borderBottomRightRadius: "5px",
               padding: "5px",
               backgroundColor: "#f57224",
-              fontSize: "10px",
+              fontSize: "8px",
               color: "#fff",
             }}
           >

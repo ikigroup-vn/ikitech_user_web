@@ -49,6 +49,7 @@ import Loading from "../../components/Partials/Loading";
 
 import * as OrderFrom from "../../ultis/order_from";
 import styled from "styled-components";
+import ModalRetailSteps from "../../components/Pos_Order/ModalRetailSteps";
 
 const PosModalStyles = styled.div`
   .loading-spin {
@@ -1046,14 +1047,9 @@ class PostOrder extends Component {
       idCart,
       isChangeDiscountPos,
     } = this.state;
-    console.log(
-      "🚀 ~ file: index.js:1041 ~ PostOrder ~ render ~ isChangeDiscountPos:",
-      isChangeDiscountPos
-    );
+
     const length = oneCart.info_cart?.line_items.length || 0;
-    console.log("hiiiiiiiiiiiiiii: ", oneCart);
     const ship_discount_amount = oneCart.info_cart?.ship_discount_amount;
-    console.log("oneCart.info_cart::: ", oneCart.info_cart);
     var handleKeyPress = {
       onKeyUp: (event) => {
         // event.preventDefault()
@@ -2008,6 +2004,7 @@ class PostOrder extends Component {
                 listVoucher={listVoucher}
                 handleCallbackVoucherInput={this.handleCallbackVoucherInput}
               />
+              <ModalRetailSteps></ModalRetailSteps>
             </div>
             <Alert type={Types.ALERT_UID_STATUS} alert={this.props.alert} />
           </PosModalStyles>

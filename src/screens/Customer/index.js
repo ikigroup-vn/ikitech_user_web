@@ -716,13 +716,6 @@ class Customer extends Component {
                                 Import Excel
                               </span>
                             </button>
-                            <input
-                              id="file-excel-import-customer"
-                              type="file"
-                              name="name"
-                              hidden
-                              onChange={this.onChangeExcel}
-                            />
                           </>
                         )}
 

@@ -6,6 +6,7 @@ import Sidebar from "../../components/Partials/Sidebar";
 import Topbar from "../../components/Partials/Topbar";
 import * as Types from "../../constants/ActionType";
 import * as inventoryAction from "../../actions/inventory";
+import * as XLSX from "xlsx";
 import { Link } from "react-router-dom";
 import Pagination from "../../components/Inventory/Pagination";
 import moment from "moment";
@@ -13,7 +14,8 @@ import history from "../../history";
 import NotAccess from "../../components/Partials/NotAccess";
 import { getQueryParams } from "../../ultis/helpers";
 import * as productAction from "../../actions/product";
-// import ListProduct from "./ListProduct";
+import ListProduct from "./ListProduct";
+import { confirmAlert } from "react-confirm-alert";
 
 class Inventory extends Component {
   constructor(props) {
@@ -22,7 +24,15 @@ class Inventory extends Component {
       page: 1,
       searchValue: "",
       filterStatus: getQueryParams("status") || null,
+      fields: [
+        "Mã sản phẩm",
+        "Tên sản phẩm",
+        "Tên phân loại chính",
+        "DS phân loại",
+        "Tồn kho thực tế",
+      ],
     };
+    this.fileInputRef = React.createRef();
   }
   componentDidMount() {
     const { store_code } = this.props.match.params;
@@ -135,6 +145,136 @@ class Inventory extends Component {
 
     exportSheetInventory(store_code, branch_id, "");
   };
+
+  onChangeExcel = (evt) => {
+    console.log("🚀 ~ file: index.js:150 ~ Inventory ~ evt:", evt);
+    const { showError, createInventorys } = this.props;
+    const { store_code } = this.props.match.params;
+    const { fields } = this.state;
+    const branch_id = localStorage.getItem("branch_id");
+
+    var f = evt.target.files[0];
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      const bstr = evt.target.result;
+      const wb = XLSX.read(bstr, { type: "binary" });
+      const wsname = wb.SheetNames[0];
+      const ws = wb.Sheets[wsname];
+      const data = XLSX.utils.sheet_to_json(ws, { header: 2 });
+      const xlsxFields = data[0];
+      //Check Valid XLSX Field
+      let isCheckedValidField = true;
+      const lengthXlsxFields = Object.keys(xlsxFields).length;
+      if (fields.length > lengthXlsxFields.length) isCheckedValidField = false;
+      else {
+        const arraysXlsxFields = Object.keys(xlsxFields);
+        fields.forEach((element) => {
+          if (!arraysXlsxFields.includes(element)) {
+            isCheckedValidField = false;
+            return;
+          }
+        });
+      }
+      if (!isCheckedValidField) {
+        showError({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "danger",
+            title: "Lỗi",
+            disable: "show",
+            content:
+              "Trường 'Mã sản phẩm', 'Tên sản phẩm', 'Tên phân loại chính', 'DS phân loại' và 'Tồn kho thực tế' không hợp lệ!",
+          },
+        });
+        return;
+      }
+
+      //Filter Data
+      const newListCustomers = [];
+      for (var item of data) {
+        const newCustomer = {};
+        newCustomer["product_id"] = item["Mã sản phẩm"];
+        newCustomer["name"] = item["Tên sản phẩm"];
+        newCustomer["reality_exist"] = item["Tồn kho thực tế"]
+          ? Number(item["Tồn kho thực tế"])
+          : 0;
+        newCustomer["distribute_name"] = item["Tên phân loại chính"]
+          ? item["Tên phân loại chính"]
+          : null;
+
+        const classify = item["DS phân loại"]
+          ? item["DS phân loại"].split(",")
+          : null;
+
+        newCustomer["element_distribute_name"] = classify ? classify[0] : null;
+        newCustomer["sub_element_distribute_name"] = classify
+          ? classify[1]
+          : null;
+
+        newListCustomers.push(newCustomer);
+      }
+
+      if (newListCustomers.length > 400) {
+        confirmAlert({
+          customUI: ({ onClose }) => {
+            return (
+              <div
+                className="custom-ui"
+                style={{
+                  width: "400px",
+                  padding: "30px",
+                  textAlign: "left",
+                  background: "#fff",
+                  borderRadius: "10px",
+                  boxShadow: "0 20px 75px rgba(0, 0, 0, 0.13)",
+                  color: "#666",
+                }}
+              >
+                <h3>Lưu ý</h3>
+                <p>
+                  Chỉ cho phép tối đa 400 sản phẩm mỗi lần import, vui lòng tách
+                  nhiều file Excel để thực hiện !
+                </p>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    columnGap: "20px",
+                  }}
+                >
+                  <button
+                    onClick={() => {
+                      onClose();
+                    }}
+                    className="btn btn-primary"
+                  >
+                    Đồng ý
+                  </button>
+                </div>
+              </div>
+            );
+          },
+          buttons: [
+            {
+              label: "Đồng ý",
+              onClick: () => alert("Click Yes"),
+            },
+          ],
+        });
+
+        return;
+      }
+
+      const dataImport = {
+        note: "",
+        tally_sheet_items: newListCustomers,
+      };
+
+      createInventorys(store_code, branch_id, dataImport);
+    };
+    document.getElementById("file-excel-import-sheet-inventory").value = null;
+    reader.readAsBinaryString(f);
+  };
   render() {
     const { store_code } = this.props.match.params;
     const { sheetsInventory, badges, products } = this.props;
@@ -161,7 +301,7 @@ class Inventory extends Component {
                       Phiếu kiểm kho
                     </h4>
                     <div>
-                      {/* <div
+                      <div
                         style={{ marginRight: "10px" }}
                         onClick={this.exportProducts}
                         className={`btn btn-success btn-icon-split btn-sm`}
@@ -178,7 +318,7 @@ class Inventory extends Component {
                       </div>
                       <div
                         style={{ marginRight: "10px" }}
-                        className={`btn btn-primary btn-icon-split btn-sm`}
+                        className={`btn btn-success btn-icon-split btn-sm`}
                         data-toggle="modal"
                         data-target="#showListProduct"
                         // class={`btn btn-success btn-icon-split btn-sm  ${
@@ -191,7 +331,27 @@ class Inventory extends Component {
                         <span style={{ color: "white" }} class="text">
                           Export sản phẩm được chọn mẫu
                         </span>
-                      </div> */}
+                      </div>
+                      <button
+                        onClick={() => this.fileInputRef?.current?.click()}
+                        style={{ marginRight: "10px" }}
+                        class={`btn btn-primary btn-icon-split btn-sm `}
+                      >
+                        <span class="icon text-white-50">
+                          <i class="fas fa-file-import"></i>
+                        </span>
+                        <span style={{ color: "white" }} class="text">
+                          Import Excel
+                        </span>
+                      </button>
+                      <input
+                        ref={this.fileInputRef}
+                        id="file-excel-import-sheet-inventory"
+                        type="file"
+                        name="name"
+                        hidden
+                        onChange={this.onChangeExcel}
+                      />
 
                       <Link to={`/inventory/create/${store_code}`}>
                         <div class="btn btn-info btn-icon-split btn-sm show">
@@ -244,7 +404,8 @@ class Inventory extends Component {
                           width="100%"
                           cellspacing="0"
                         >
-                          <thead>``
+                          <thead>
+                            ``
                             <tr>
                               <th>STT</th>
                               <th>Mã phiếu</th>
@@ -277,7 +438,7 @@ class Inventory extends Component {
             <Footer />
           </div>
         </div>
-        {/* <ListProduct store_code={store_code} products={products} /> */}
+        <ListProduct store_code={store_code} products={products} />
       </div>
     );
   }
@@ -306,6 +467,9 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(
         productAction.exportSheetInventory(store_code, branch_id, params, data)
       );
+    },
+    createInventorys: (store_code, branch_id, data) => {
+      dispatch(inventoryAction.createInventorys(store_code, branch_id, data));
     },
   };
 };

@@ -137,27 +137,27 @@ class ListProduct extends Component {
     var currentProducts = [];
     if (checked) {
       var newDiscountIds = [];
-      if (discountId) {
-        discounts?.forEach((element) => {
-          if (
-            element.products_combo?.length > 0 &&
-            discountId &&
-            discountId != element?.id
-          ) {
-            element.products_combo?.forEach((product) => {
-              newDiscountIds.push(product?.product?.id);
-            });
-          }
-        });
-      } else {
-        discounts?.forEach((element) => {
-          if (element.products_combo?.length > 0) {
-            element.products_combo?.forEach((product) => {
-              newDiscountIds.push(product?.product?.id);
-            });
-          }
-        });
-      }
+      // if (discountId) {
+      //   discounts?.forEach((element) => {
+      //     if (
+      //       element.products_combo?.length > 0 &&
+      //       discountId &&
+      //       discountId != element?.id
+      //     ) {
+      //       element.products_combo?.forEach((product) => {
+      //         newDiscountIds.push(product?.product?.id);
+      //       });
+      //     }
+      //   });
+      // } else {
+      //   discounts?.forEach((element) => {
+      //     if (element.products_combo?.length > 0) {
+      //       element.products_combo?.forEach((product) => {
+      //         newDiscountIds.push(product?.product?.id);
+      //       });
+      //     }
+      //   });
+      // }
       const currentProductsCombo = products?.data?.filter(
         (product) => newDiscountIds.includes(product.id) == false
       );
@@ -167,27 +167,27 @@ class ListProduct extends Component {
       }));
     } else {
       var newListProducts = [];
-      if (discountId) {
-        discounts?.forEach((element) => {
-          if (element.products_combo?.length > 0 && discountId == element?.id) {
-            element.products_combo?.forEach((product) => {
-              if (
-                defaultListProducts
-                  .map((d) => d?.product?.id)
-                  ?.includes(product?.product?.id)
-              ) {
-                newListProducts.push({
-                  quality: 1,
-                  product: product?.product,
-                });
-              }
-            });
-          }
-        });
-        currentProducts = newListProducts;
-      } else {
-        currentProducts = [];
-      }
+      // if (discountId) {
+      //   discounts?.forEach((element) => {
+      //     if (element.products_combo?.length > 0 && discountId == element?.id) {
+      //       element.products_combo?.forEach((product) => {
+      //         if (
+      //           defaultListProducts
+      //             .map((d) => d?.product?.id)
+      //             ?.includes(product?.product?.id)
+      //         ) {
+      //           newListProducts.push({
+      //             quality: 1,
+      //             product: product?.product,
+      //           });
+      //         }
+      //       });
+      //     }
+      //   });
+      //   currentProducts = newListProducts;
+      // } else {
+      currentProducts = [];
+      // }
     }
 
     setListProducts(currentProducts);
@@ -381,15 +381,16 @@ class ListProduct extends Component {
         }
         return (
           <tr
-            className={disaled == true ? "" : "hover-product"}
-            style={{ background: background_disable }}
+            // className={disaled == true ? "" : "hover-product"}
+            // style={{ background: background_disable }}
+            className={"hover-product"}
           >
             <td>
               <div class="checkbox">
                 <label>
                   <input
                     type="checkbox"
-                    disabled={disaled}
+                    // disabled={disaled}
                     checked={checked}
                     onChange={this.onChange}
                     value={JSON.stringify(data)}
@@ -409,7 +410,7 @@ class ListProduct extends Component {
                 style={{
                   width: "100%",
                   height: "59px",
-                  width:"59px",
+                  width: "59px",
                   background: "#0000000d",
                 }}
               />
@@ -527,12 +528,12 @@ class ListProduct extends Component {
                   Chọn sản phẩm
                 </h4>
 
-                <i style={{ color: "red" }}>
+                {/* <i style={{ color: "red" }}>
                   {" "}
                   Những sản phẩm được tô đậm là những sản phẩm đang nằm trong
                   các chương trình khuyến mại khác! Vui lòng xóa nếu muốn thêm
                   vào chương trình này
-                </i>
+                </i> */}
               </div>
 
               <button
