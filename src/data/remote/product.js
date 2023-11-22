@@ -221,3 +221,11 @@ export const getAmountProductNearlyOutStock = (store_code, branch_id) => {
     null
   );
 };
+
+export const getProductRetailSteps = (store_code, branch_id, idProduct) => {
+  return callApi(
+    `/store_v2/${store_code}/${branch_id}/product_retail_steps/${idProduct}`,
+    "get",
+    null
+  );
+};

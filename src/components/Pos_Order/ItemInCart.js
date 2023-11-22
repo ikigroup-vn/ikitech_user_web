@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { debounce } from "lodash";
 import * as Env from "../../ultis/default";
 import * as posAction from "../../actions/post_order";
+import * as productAction from "../../actions/product";
 import ReactDOM from "react-dom";
 import {
   findImportPrice,
@@ -499,6 +500,12 @@ class ItemInCart extends Component {
     this.props.showDetail(null);
   };
 
+  handleFetchRetailSteps = () => {
+    const { getProductRetailSteps, store_code, branch_id, item } = this.props;
+
+    getProductRetailSteps(store_code, branch_id, item.product.id);
+  };
+
   //   nameProduct: item.product.nameProduct,
   //   product_id: item.product.idProduct,
   //   element_id: idElement,
@@ -523,6 +530,7 @@ class ItemInCart extends Component {
   // "sub_element_distribute_name": "đo111"
   render() {
     const { item, index } = this.props;
+    console.log("🚀 ~  render ~ item:", item);
 
     const {
       currentQuantity,
@@ -1011,6 +1019,27 @@ class ItemInCart extends Component {
                 )}
               </div>
             </div>
+            <div
+              style={{
+                width: "100px",
+              }}
+            >
+              {item.product.is_product_retail_step ? (
+                <span
+                  style={{
+                    color: "#005aff",
+                    fontSize: "13px",
+                    textDecoration: "underline",
+                    cursor: "pointer",
+                  }}
+                  onClick={this.handleFetchRetailSteps}
+                  data-toggle="modal"
+                  data-target="#modalRetailSteps"
+                >
+                  Xem khoảng giá
+                </span>
+              ) : null}
+            </div>
             <div className="quantity" style={{ paddingLeft: "0" }}>
               <div
                 className=""
@@ -1209,6 +1238,11 @@ const mapDispatchToProps = (dispatch, props) => {
     updateNoteItem: (store_code, branch_id, cart_id, idItem, data) => {
       dispatch(
         posAction.updateNoteItem(store_code, branch_id, cart_id, idItem, data)
+      );
+    },
+    getProductRetailSteps: (store_code, branch_id, idProduct) => {
+      dispatch(
+        productAction.getProductRetailSteps(store_code, branch_id, idProduct)
       );
     },
   };

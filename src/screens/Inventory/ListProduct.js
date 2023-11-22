@@ -94,7 +94,7 @@ class ListProduct extends Component {
       }));
 
       exportSheetInventory(store_code, branch_id, "", newListProducts);
-      // window.$(".modal").modal("hide");
+      window.$(".modal").modal("hide");
     }
   };
 

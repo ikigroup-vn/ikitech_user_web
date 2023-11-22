@@ -7,6 +7,7 @@ var initialState = {
   allProductTiki: {},
   allProductSendo: {},
   allProductShopee: {},
+  allProductRetailSteps: [],
   product_agency_price_id: {},
   countProductNearlyOutStock: 0,
   messageImport: {},
@@ -55,6 +56,9 @@ export const product = (state = initialState, action) => {
       return newState;
     case Types.FETCH_AMOUNT_PRODUCT_NEARLY_OUT_STOCK:
       newState.countProductNearlyOutStock = action.data;
+      return newState;
+    case Types.FETCH_ALL_PRODUCT_RETAIL_STEPS:
+      newState.allProductRetailSteps = action.data;
       return newState;
     default:
       return newState;

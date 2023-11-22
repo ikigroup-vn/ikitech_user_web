@@ -1069,69 +1069,12 @@ export const exportSheetInventory = (
       type: Types.SHOW_LOADING,
       loading: "show",
     });
-
-    if (sheetInventory) {
-      var newArray = [];
-
-      for (const item of sheetInventory) {
-        var newItem = {};
-        var arangeKeyItem = {
-          product_id: item.product_id,
-          name: item.name,
-          distribute_name: item.distribute_name,
-          element_distribute_name: item.element_distribute_name,
-          sub_element_distribute_name: item.sub_element_distribute_name,
-          reality_exist: 0,
-        };
-        // eslint-disable-next-line no-loop-func
-        Object.entries(arangeKeyItem).forEach(([key, value], index) => {
-          if (key == "product_id") {
-            newItem["Mã sản phẩm"] = formatStringCharactor(value);
-          }
-          if (key == "name") {
-            newItem["Tên sản phẩm"] = formatStringCharactor(value);
-          }
-          if (key == "distribute_name") {
-            newItem["Tên phân loại chính"] = value;
-
-            if (item["sub_element_distribute_name"]) {
-              newItem[
-                "DS phân loại"
-              ] = `${item["element_distribute_name"]},${item["sub_element_distribute_name"]}`;
-            } else {
-              newItem["DS phân loại"] = `${
-                item["element_distribute_name"] ?? ""
-              }`;
-            }
-          }
-          if (key == "reality_exist") {
-            newItem["Tồn kho thực tế"] = value;
-          }
-        });
-
-        newArray.push(newItem);
-      }
-      var header = [];
-      if (newArray.length > 0) {
-        Object.entries(newArray[0]).forEach(([key, value], index) => {
-          header.push(key);
-        });
-      }
-      saveAsSheetInventoryExcel(
-        { data: newArray, header: header },
-        "DS_kiem_kho"
-      );
-      dispatch({
-        type: Types.SHOW_LOADING,
-        loading: "hide",
-      });
-    } else {
+    if (!sheetInventory) {
       productApi
         .fetchAllListProduct(store_code, "")
         .then((res) => {
           if (res.data.code !== 401) {
             if (res.data.data.data.length > 0) {
-              console.log("🚀 ~ res.data.data.data:", res.data.data.data);
               let dataSheetInventory = [];
               for (const item of res.data.data.data) {
                 const distribute =
@@ -1160,7 +1103,16 @@ export const exportSheetInventory = (
                             ?.sub_element_distributes?.length > 0
                         ) {
                           distribute.element_distributes[0].sub_element_distributes.forEach(
-                            (sub_element) => {}
+                            (sub_element) => {
+                              dataSheetInventory.push({
+                                product_id: item.id,
+                                name: item.name,
+                                reality_exist: 0,
+                                distribute_name: distribute.name,
+                                element_distribute_name: element.name,
+                                sub_element_distribute_name: sub_element.name,
+                              });
+                            }
                           );
                         } else {
                           let _data = {
@@ -1180,199 +1132,7 @@ export const exportSheetInventory = (
                 }
               }
 
-              // var newArray = [];
-              // for (const item of res.data.data.data) {
-              //   var newItem = {};
-              //   var isCheckedDistribute = false;
-              //   var arangeKeyItem = {
-              //     name: item.name,
-              //     sku: item.sku,
-              //     barcode: item.barcode,
-              //     check_inventory: item.check_inventory,
-              //     shelf_position: item.shelf_position,
-              //     distributes: item.inventory.distributes,
-              //   };
-              //   // eslint-disable-next-line no-loop-func
-              //   Object.entries(arangeKeyItem).forEach(([key, value], index) => {
-              //     if (key == "name") {
-              //       newItem["Tên sản phẩm"] = formatStringCharactor(value);
-              //     }
-              //     if (key == "sku") {
-              //       newItem["Mã SKU"] = value;
-              //     }
-              //     if (key == "barcode") {
-              //       newItem["Mã BARCODE"] = value;
-              //     }
-              //     if (key == "check_inventory") {
-              //       newItem["Theo dõi kho (Có/Không)"] = `${
-              //         value ? "Có" : "Không"
-              //       }`;
-              //     }
-              //     if (key == "shelf_position") {
-              //       newItem["Vị trí kệ hàng"] = value;
-              //     }
-              //     if (key == "distributes") {
-              //       if (value.length > 0) {
-              //         isCheckedDistribute = true;
-              //         if (value[0].element_distributes.length > 0) {
-              //           for (const [
-              //             index,
-              //             element,
-              //           ] of value[0].element_distributes.entries()) {
-              //             let checkedDistributeExist = false;
-              //             let checkedDistributeExist2 = false;
-              //             if (element.sub_element_distributes?.length > 0) {
-              //               for (const [
-              //                 index2,
-              //                 elementSub,
-              //               ] of element.sub_element_distributes.entries()) {
-              //                 if (
-              //                   index == 0 &&
-              //                   checkedDistributeExist === false &&
-              //                   checkedDistributeExist2 === false
-              //                 ) {
-              //                   newItem["Phân loại (Có/Không)"] = "Có";
-              //                   newItem["DS phân loại"] = "";
-              //                   newItem["Giá bán lẻ"] = "";
-              //                   newItem["Giá vốn"] = "";
-              //                   newItem["Giá nhập"] = "";
-              //                   newItem["Tồn kho"] = "";
-              //                   newArray.push(newItem);
-              //                   const newItemEmpty = {};
-              //                   for (const key of Object.keys(arangeKeyItem)) {
-              //                     newItemEmpty[key] = "";
-              //                   }
-              //                   newItemEmpty["DS phân loại"] = `${
-              //                     element.name
-              //                   },${elementSub.name}${
-              //                     index !== element.length - 1 ? "" : ","
-              //                   }`;
-              //                   newItemEmpty["Giá bán lẻ"] = `${
-              //                     elementSub.price ? elementSub.price : "0"
-              //                   }`;
-              //                   newItemEmpty["Giá vốn"] = `${
-              //                     elementSub.cost_of_capital
-              //                       ? elementSub.cost_of_capital
-              //                       : "0"
-              //                   }`;
-              //                   newItemEmpty["Giá nhập"] = `${
-              //                     elementSub.import_price
-              //                       ? elementSub.import_price
-              //                       : "0"
-              //                   }`;
-              //                   newItemEmpty["Tồn kho"] = `${elementSub.stock}`;
-              //                   newArray.push(newItemEmpty);
-              //                 } else {
-              //                   const newItemEmpty = {};
-              //                   for (const key of Object.keys(arangeKeyItem)) {
-              //                     newItemEmpty[key] = "";
-              //                   }
-              //                   newItemEmpty["DS phân loại"] = `${
-              //                     element.name
-              //                   },${elementSub.name}${
-              //                     index !== element.length - 1 ? "" : ","
-              //                   }`;
-              //                   newItemEmpty["Giá bán lẻ"] = `${
-              //                     elementSub.price ? elementSub.price : "0"
-              //                   }`;
-              //                   newItemEmpty["Giá vốn"] = `${
-              //                     elementSub.cost_of_capital
-              //                       ? elementSub.cost_of_capital
-              //                       : "0"
-              //                   }`;
-              //                   newItemEmpty["Giá nhập"] = `${
-              //                     elementSub.import_price
-              //                       ? elementSub.import_price
-              //                       : "0"
-              //                   }`;
-              //                   newItemEmpty["Tồn kho"] = `${elementSub.stock}`;
-              //                   newArray.push(newItemEmpty);
-              //                 }
-              //               }
-              //             } else {
-              //               if (index == 0) {
-              //                 newItem["Phân loại (Có/Không)"] = "Có";
-              //                 newItem["DS phân loại"] = "";
-              //                 newItem["Giá bán lẻ"] = "";
-              //                 newItem["Giá vốn"] = "";
-              //                 newItem["Giá nhập"] = "";
-              //                 newItem["Tồn kho"] = "";
-              //                 newArray.push(newItem);
-              //                 const newItemEmpty = {};
-              //                 for (const key of Object.keys(arangeKeyItem)) {
-              //                   newItemEmpty[key] = "";
-              //                 }
-              //                 newItemEmpty["Giá bán lẻ"] = `${
-              //                   element.price ? element.price : "0"
-              //                 }`;
-              //                 newItemEmpty["Giá vốn"] = `${
-              //                   element.cost_of_capital
-              //                     ? element.cost_of_capital
-              //                     : "0"
-              //                 }`;
-              //                 newItemEmpty["Giá nhập"] = `${
-              //                   element.import_price
-              //                     ? element.import_price
-              //                     : "0"
-              //                 }`;
-              //                 newItemEmpty["DS phân loại"] = `${element.name}`;
-              //                 newItemEmpty["Tồn kho"] = `${element.stock}`;
-              //                 newArray.push(newItemEmpty);
-              //               } else {
-              //                 const newItemEmpty = {};
-              //                 for (const key of Object.keys(arangeKeyItem)) {
-              //                   newItemEmpty[key] = "";
-              //                 }
-              //                 newItemEmpty["DS phân loại"] = `${element.name}`;
-              //                 newItemEmpty["Giá bán lẻ"] = `${
-              //                   element.price ? element.price : "0"
-              //                 }`;
-              //                 newItemEmpty["Giá vốn"] = `${
-              //                   element.cost_of_capital
-              //                     ? element.cost_of_capital
-              //                     : "0"
-              //                 }`;
-              //                 newItemEmpty["Giá nhập"] = `${
-              //                   element.import_price
-              //                     ? element.import_price
-              //                     : "0"
-              //                 }`;
-              //                 newItemEmpty["Tồn kho"] = `${element.stock}`;
-              //                 newArray.push(newItemEmpty);
-              //               }
-              //             }
-              //           }
-              //         }
-              //       } else {
-              //         newItem["Phân loại (Có/Không)"] = "Không";
-              //         newItem["DS phân loại"] = "";
-              //         newItem["Giá bán lẻ"] = `${
-              //           item.price ? item.price : "0"
-              //         }`;
-              //         newItem[
-              //           "Giá vốn"
-              //         ] = `${item.inventory.main_cost_of_capital}`;
-              //         newItem["Giá nhập"] = `${
-              //           item.import_price ? item.import_price : "0"
-              //         }`;
-              //         newItem["Tồn kho"] = `${item.inventory.main_stock}`;
-              //       }
-              //     }
-              //   });
-              //   if (!isCheckedDistribute) {
-              //     newArray.push(newItem);
-              //   }
-              // }
-              // var header = [];
-              // if (newArray.length > 0) {
-              //   Object.entries(newArray[0]).forEach(([key, value], index) => {
-              //     header.push(key);
-              //   });
-              // }
-              // saveAsSheetInventoryExcel(
-              //   { data: newArray, header: header },
-              //   "DS_kiem_kho"
-              // );
+              componentExportSheet(dataSheetInventory);
             }
           }
         })
@@ -1382,8 +1142,62 @@ export const exportSheetInventory = (
             loading: "hide",
           });
         });
+    } else {
+      componentExportSheet(sheetInventory);
+      dispatch({
+        type: Types.SHOW_LOADING,
+        loading: "hide",
+      });
     }
   };
+};
+
+const componentExportSheet = (dataSheetInventory) => {
+  var newArray = [];
+
+  for (const item of dataSheetInventory) {
+    var newItem = {};
+    var arangeKeyItem = {
+      product_id: item.product_id,
+      name: item.name,
+      distribute_name: item.distribute_name,
+      element_distribute_name: item.element_distribute_name,
+      sub_element_distribute_name: item.sub_element_distribute_name,
+      reality_exist: 0,
+    };
+    // eslint-disable-next-line no-loop-func
+    Object.entries(arangeKeyItem).forEach(([key, value], index) => {
+      if (key == "product_id") {
+        newItem["Mã sản phẩm"] = formatStringCharactor(value);
+      }
+      if (key == "name") {
+        newItem["Tên sản phẩm"] = formatStringCharactor(value);
+      }
+      if (key == "distribute_name") {
+        newItem["Tên phân loại chính"] = value;
+
+        if (item["sub_element_distribute_name"]) {
+          newItem[
+            "DS phân loại"
+          ] = `${item["element_distribute_name"]},${item["sub_element_distribute_name"]}`;
+        } else {
+          newItem["DS phân loại"] = `${item["element_distribute_name"] ?? ""}`;
+        }
+      }
+      if (key == "reality_exist") {
+        newItem["Tồn kho thực tế"] = value;
+      }
+    });
+
+    newArray.push(newItem);
+  }
+  var header = [];
+  if (newArray.length > 0) {
+    Object.entries(newArray[0]).forEach(([key, value], index) => {
+      header.push(key);
+    });
+  }
+  saveAsSheetInventoryExcel({ data: newArray, header: header }, "DS_kiem_kho");
 };
 
 export const fetchAllAttributeP = (store_code) => {
@@ -2671,6 +2485,30 @@ export const getAmountProductNearlyOutStock = (store_code, branch_id) => {
         //     content: error?.response?.data?.msg,
         //   },
         // });
+      });
+  };
+};
+
+export const getProductRetailSteps = (store_code, branch_id, idProduct) => {
+  return (dispatch) => {
+    dispatch({
+      type: Types.SHOW_LOADING,
+      loading: "show",
+    });
+    productApi
+      .getProductRetailSteps(store_code, branch_id, idProduct)
+      .then((res) => {
+        if (res.data.code !== 401)
+          dispatch({
+            type: Types.FETCH_ALL_PRODUCT_RETAIL_STEPS,
+            data: res.data.data,
+          });
+      })
+      .finally(() => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
       });
   };
 };
