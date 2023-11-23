@@ -394,6 +394,7 @@ class InfoShipper extends Component {
                                     style={{
                                       cursor: "pointer",
                                       marginRight: "8px",
+                                      flexShrink: 0,
                                       backgroundColor:
                                         shipmentInfo.shipment_selected
                                           ?.ship_speed_code ===
