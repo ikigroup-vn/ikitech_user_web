@@ -104,6 +104,8 @@ class ModalChooseTypeImport extends Component {
       //Index: 0: "Tên sản phẩm", 1: "Mã BARCODE", 2: "Theo dõi kho (Có/Không)", 3: "Vị trí kệ hàng" , 4: "Danh mục", 5: "Thuộc tính", 6: "Thuộc tính tìm kiếm", 7: "Cân nặng", 8: "Hoa hồng CTV (%/VND)", 9: "Xu cho đại lý", 10: "Mô tả", 11: "Nội dung cho CTV", 12: "Trạng thái (Ẩn/Hiện)", 13: "Tiêu đề SEO", 14: "Miêu tả SEO", 15: "Phân loại (Có/Không)", 16: "Phân loại chính", 17: "Phân loại phụ", 18: "DS phân loại", 19: "Giá bán lẻ", 20: "Giá nhập", 21: "Mã SKU", 22: "Hình ảnh",
 
       const dataXlsxEmptyTitle = data.slice(1);
+      // console.log("🚀 ~ file: ~ dataXlsxEmptyTitle:", dataXlsxEmptyTitle);
+      // return;
       const newProducts = [];
 
       let newDistributes = [];
@@ -279,7 +281,8 @@ class ModalChooseTypeImport extends Component {
             element_distributes: [],
           };
           newDistributes.push(dataDistribute);
-        } else if (product[20]) {
+          // } else if (product[20]) {
+        } else {
           const nameProductDistributeTemp = product[18]
             ? product[18]?.toString().split(",")[0]
             : "";
