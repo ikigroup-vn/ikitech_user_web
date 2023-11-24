@@ -350,6 +350,11 @@ const permission = (channel) => {
                 decentralizationName: "customer_role_edit",
                 componentChilds: [],
               },
+              {
+                name: "Chỉnh sửa xu",
+                decentralizationName: "customer_change_point",
+                componentChilds: [],
+              },
             ],
           },
           {
@@ -658,6 +663,7 @@ export const initialPermission = () => {
     customer_config_point: false,
     customer_review_list: false,
     customer_role_edit: false,
+    customer_change_point: false,
     customer_review_censorship: false,
     promotion_discount_list: false,
     promotion_discount_add: false,
