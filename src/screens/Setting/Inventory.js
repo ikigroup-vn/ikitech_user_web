@@ -24,6 +24,7 @@ class Setting extends Component {
       percent_vat: 10,
       allow_branch_payment_order: false,
       auto_choose_default_branch_payment_order: true,
+      required_agency_ctv_has_referral_code: false,
     };
   }
   handChangeEnableVat = (e) => {
@@ -45,7 +46,14 @@ class Setting extends Component {
       allow_branch_payment_order: !this.state.allow_branch_payment_order,
     });
   };
-  
+
+  handleRequiredAgencyCTVHasReferralCode = (e) => {
+    this.setState({
+      required_agency_ctv_has_referral_code:
+        !this.state.required_agency_ctv_has_referral_code,
+    });
+  };
+
   handleAutoChooseDefaultBranchPaymentOrder = (e) => {
     this.setState({
       auto_choose_default_branch_payment_order:
@@ -73,6 +81,8 @@ class Setting extends Component {
       allow_branch_payment_order: this.state.allow_branch_payment_order,
       auto_choose_default_branch_payment_order:
         this.state.auto_choose_default_branch_payment_order,
+      required_agency_ctv_has_referral_code:
+        this.state.required_agency_ctv_has_referral_code,
     };
     this.props.updateGeneralSetting(store_code, formData);
   };
@@ -89,6 +99,8 @@ class Setting extends Component {
           nextProps.generalSetting.allow_branch_payment_order,
         auto_choose_default_branch_payment_order:
           nextProps.generalSetting.auto_choose_default_branch_payment_order,
+        required_agency_ctv_has_referral_code:
+          nextProps.generalSetting.required_agency_ctv_has_referral_code,
       });
     }
     if (
@@ -197,6 +209,33 @@ class Setting extends Component {
                   onChange={this.handChangeCheckbox3}
                 />
                 <label class="custom-control-label" for="switch3"></label>
+              </div>
+            </form>
+          </div>
+          <div
+            className="wrap-setting"
+            style={{
+              maxWidth: "430px",
+              display: "flex",
+              justifyContent: "space-between",
+              padding: "10px 0",
+            }}
+          >
+            <div>Bắt buộc nhập mã giới thiệu để trở thành CTV hoặc đại lý</div>
+            <form>
+              <div class="custom-control custom-switch">
+                <input
+                  type="checkbox"
+                  class="custom-control-input"
+                  id="	required_agency_ctv_has_referral_code"
+                  name="	required_agency_ctv_has_referral_code"
+                  checked={this.state.required_agency_ctv_has_referral_code}
+                  onChange={this.handleRequiredAgencyCTVHasReferralCode}
+                />
+                <label
+                  class="custom-control-label"
+                  for="	required_agency_ctv_has_referral_code"
+                ></label>
               </div>
             </form>
           </div>

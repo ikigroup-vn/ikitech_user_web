@@ -238,8 +238,14 @@ class Customer extends Component {
     ) {
       var permissions = nextProps.permission;
       var chat_allow = permissions.chat_allow;
+      var customer_change_point = permissions.customer_change_point;
       var isShow = permissions.customer_list || this.isSale();
-      this.setState({ isLoading: true, isShow, chat_allow });
+      this.setState({
+        isLoading: true,
+        isShow,
+        customer_change_point,
+        chat_allow,
+      });
     }
   }
   shouldComponentUpdate(nextProps, nextState) {
@@ -627,6 +633,7 @@ class Customer extends Component {
       customerInfo,
       pageReferralPhone,
       openModalImport,
+      customer_change_point,
     } = this.state;
     const { wards, district, province, types } = this.props;
     var customerImg =
@@ -824,6 +831,7 @@ class Customer extends Component {
                           searchValue={searchValue}
                           currentParams={this.state.currentParams}
                           chat_allow={chat_allow}
+                          customer_change_point={customer_change_point}
                           showChatBox={showChatBox}
                           handleShowChatBox={this.handleShowChatBox}
                           store_code={store_code}

@@ -265,7 +265,7 @@ class Config extends Component {
             </div>
           </div>
 
-          <div className="config__item">
+          {/* <div className="config__item">
             <span>Cho phép sale</span>
             <label
               className="status-product"
@@ -281,7 +281,7 @@ class Config extends Component {
               />
               <div></div>
             </label>
-          </div>
+          </div> */}
           <div className="config__item">
             <span>Kỳ thưởng</span>
             <select

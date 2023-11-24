@@ -395,7 +395,7 @@ class Table extends Component {
   };
 
   showData = (customer) => {
-    var { store_code, paginate, types } = this.props;
+    var { store_code, paginate, types, customer_change_point } = this.props;
     const { customerSelected, listItemSelected } = this.state;
     var result = null;
     if (customer.length > 0) {
@@ -631,35 +631,37 @@ class Table extends Component {
                         >
                           {data.points}
                         </span>
-                        <div
-                          style={{
-                            marginLeft: "15px",
-                            display: "flex",
-                            alignItems: "center",
-                            columnGap: "5px",
-                          }}
-                        >
-                          <button
-                            type="button"
-                            style={{ width: "25px" }}
-                            className=" btn-outline-success btn-exploder"
-                            onClick={() =>
-                              this.handleOpenModalChangePoint(data, false)
-                            }
+                        {customer_change_point ? (
+                          <div
+                            style={{
+                              marginLeft: "15px",
+                              display: "flex",
+                              alignItems: "center",
+                              columnGap: "5px",
+                            }}
                           >
-                            <span className="fa fa-plus"></span>
-                          </button>
-                          <button
-                            type="button"
-                            style={{ width: "25px" }}
-                            className=" btn-outline-danger btn-exploder"
-                            onClick={() =>
-                              this.handleOpenModalChangePoint(data, true)
-                            }
-                          >
-                            <span className="fa fa-minus"></span>
-                          </button>
-                        </div>
+                            <button
+                              type="button"
+                              style={{ width: "25px" }}
+                              className=" btn-outline-success btn-exploder"
+                              onClick={() =>
+                                this.handleOpenModalChangePoint(data, false)
+                              }
+                            >
+                              <span className="fa fa-plus"></span>
+                            </button>
+                            <button
+                              type="button"
+                              style={{ width: "25px" }}
+                              className=" btn-outline-danger btn-exploder"
+                              onClick={() =>
+                                this.handleOpenModalChangePoint(data, true)
+                              }
+                            >
+                              <span className="fa fa-minus"></span>
+                            </button>
+                          </div>
+                        ) : null}
                       </div>
                     </div>
                     <div className="explode__item">
