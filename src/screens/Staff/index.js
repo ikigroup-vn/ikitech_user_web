@@ -72,9 +72,19 @@ class Staff extends Component {
         isShow,
       });
     }
-    $("#dataTable").DataTable(config());
 
-    $("#dataTable").DataTable(config());
+    var dataTable = $("#dataTable").DataTable(config());
+    dataTable
+      .on("order.dt search.dt", function () {
+        let i = 1;
+
+        dataTable
+          .cells(null, 0, { search: "applied", order: "applied" })
+          .every(function (cell) {
+            this.data(i++);
+          });
+      })
+      .draw();
 
     window.$(".dataTables_info").hide();
   }

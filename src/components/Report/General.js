@@ -44,7 +44,7 @@ class General extends Component {
                         "DD-MM-YYYY"
                       )}&to=${moment().format("DD-MM-YYYY")}`}
                     >
-                      Đơn hàng
+                      Đơn hàng hôm nay
                     </Link>
                   </div>
                   <div className="h5 mb-0 font-weight-bold text-gray-800">

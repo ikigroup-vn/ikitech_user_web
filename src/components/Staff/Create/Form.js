@@ -89,6 +89,18 @@ class Form extends Component {
       id_decentralization,
       password,
     } = this.state;
+    if (name == null || !isEmpty(name)) {
+      this.props.showError({
+        type: Types.ALERT_UID_STATUS,
+        alert: {
+          type: "danger",
+          title: "Lỗi",
+          disable: "show",
+          content: "Chưa nhập tên nhân viên",
+        },
+      });
+      return;
+    }
     if (username == null || !isEmpty(username)) {
       this.props.showError({
         type: Types.ALERT_UID_STATUS,
