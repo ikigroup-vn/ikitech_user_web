@@ -167,8 +167,11 @@ class DetailInventory extends Component {
                           >
                             <div>Tạo bởi:</div>
                             <div>
-                              {itemInventory.user !== undefined &&
-                                itemInventory.user.name}
+                              {itemInventory?.user
+                                ? itemInventory.user?.name
+                                : itemInventory?.staff
+                                ? itemInventory.staff?.name
+                                : null}
                             </div>
                           </div>
                           <div
