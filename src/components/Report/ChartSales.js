@@ -541,7 +541,7 @@ class Chart extends Component {
                 <div class="row">
                   <div class="col">
                     <h5 class="card-title card-size text-uppercase text-muted mb-0">
-                      Số đơn
+                      Số đơn hàng
                     </h5>
                     <span class="h2 card-h2 font-weight-bold mb-0">
                       {total_order_count}
