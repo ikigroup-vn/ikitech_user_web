@@ -117,6 +117,7 @@ class TotalBill extends Component {
     var product_discount_amount = bill.product_discount_amount || 0;
     var voucher_discount_amount = bill.voucher_discount_amount || 0;
     var balance_collaborator_used = bill.balance_collaborator_used || 0;
+    var balance_agency_used = bill.balance_agency_used || 0;
     var discount = bill.discount || 0;
     var ship_discount_amount = bill.ship_discount_amount;
     console.log(ship_discount_amount);
@@ -194,8 +195,15 @@ class TotalBill extends Component {
             <div id="item_fee">
               <div className="sale_user_label bold bold group-total">
                 <div>Giảm giá ví CTV:</div>
-
                 <span>-&nbsp;{format(balance_collaborator_used)}</span>
+              </div>
+            </div>
+          )}
+          {balance_agency_used > 0 && (
+            <div id="item_fee">
+              <div className="sale_user_label bold bold group-total">
+                <div>Giảm giá ví Đại lý:</div>
+                <span>-&nbsp;{format(balance_agency_used)}</span>
               </div>
             </div>
           )}
