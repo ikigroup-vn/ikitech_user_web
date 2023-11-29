@@ -31,6 +31,7 @@ class Customer extends Component {
       listDistrict: [],
       txtName_branch: "",
       txtPhone_branch: "",
+      txtReferralPhone_branch: "",
       txtEmail_branch: "",
       idCustomer: "",
       txtDateOfBirth: "null",
@@ -52,6 +53,7 @@ class Customer extends Component {
       this.setState({
         txtName_branch: this.props.customer.name,
         txtPhone_branch: this.props.customer.phone_number,
+        txtReferralPhone_branch: this.props.customer.referral_phone_number,
         txtEmail_branch: this.props.customer.email,
         txtProvince: this.props.customer.province,
         txtDistrict: this.props.customer.district,
@@ -151,6 +153,7 @@ class Customer extends Component {
       this.setState({
         txtName_branch: nextProps.customer.name,
         txtPhone_branch: nextProps.customer.phone_number,
+        txtReferralPhone_branch: nextProps.customer.referral_phone_number,
         txtEmail_branch: nextProps.customer.email,
         txtProvince: nextProps.customer.province,
         txtDistrict: nextProps.customer.district,
@@ -194,8 +197,9 @@ class Customer extends Component {
     ) {
       var permissions = nextProps.permission;
 
+      var customer_change_referral = permissions.customer_change_referral;
       var isShow = permissions.customer_list || this.isSale();
-      this.setState({ isLoading: true, isShow });
+      this.setState({ isLoading: true, isShow, customer_change_referral });
     }
   }
   isSale = () => {
@@ -229,6 +233,7 @@ class Customer extends Component {
       txtWards,
       txtName_branch,
       txtPhone_branch,
+      txtReferralPhone_branch,
       txtEmail_branch,
       idCustomer,
       txtDateOfBirth,
@@ -238,6 +243,7 @@ class Customer extends Component {
     const Formdata = {
       name: txtName_branch,
       phone_number: txtPhone_branch,
+      referral_phone_number: txtReferralPhone_branch,
       email: txtEmail_branch,
       province: txtProvince,
       district: txtDistrict,
@@ -321,10 +327,12 @@ class Customer extends Component {
       txtDateOfBirth,
       txtSex,
       isShow,
+      customer_change_referral,
     } = this.state;
     var {
       txtName_branch,
       txtPhone_branch,
+      txtReferralPhone_branch,
       txtCode_branch,
       txtPost_branch,
       txtEmail_branch,
@@ -385,7 +393,7 @@ class Customer extends Component {
             />
           </div> */}
           <div class="form-group">
-            <label for="product_name">Giới tính</label>
+            <label for="customerGender">Giới tính</label>
             <select
               value={txtSex}
               onChange={this.onChangeSex}
@@ -400,7 +408,7 @@ class Customer extends Component {
             </select>
           </div>
           <div class="form-group">
-            <label for="product_name">Số điện thoại</label>
+            <label for="txtPhone_branch">Số điện thoại</label>
             <input
               type="text"
               class="form-control"
@@ -413,7 +421,23 @@ class Customer extends Component {
             />
           </div>
           <div class="form-group">
-            <label for="product_name">Email</label>
+            <label for="txtReferralPhone_branch">
+              Số điện thoại người giới thiệu
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              id="txtReferralPhone_branch"
+              placeholder="Nhập số điện thoại"
+              autoComplete="off"
+              value={txtReferralPhone_branch || ""}
+              onChange={this.onChange}
+              name="txtReferralPhone_branch"
+              disabled={!customer_change_referral}
+            />
+          </div>
+          <div class="form-group">
+            <label for="txtEmail_branch">Email</label>
             <input
               type="text"
               class="form-control"
@@ -427,7 +451,7 @@ class Customer extends Component {
           </div>
         </div>
         <div class="form-group">
-          <label for="product_name">Địa chỉ chi tiết</label>
+          <label for="txtAddress_detail">Địa chỉ chi tiết</label>
           <input
             type="text"
             class="form-control"

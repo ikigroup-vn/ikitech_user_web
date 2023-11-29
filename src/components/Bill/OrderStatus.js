@@ -4,6 +4,20 @@ import { connect } from "react-redux";
 import * as billAction from "../../actions/bill";
 import * as Types from "../../constants/ActionType";
 
+const statusCode = {
+  WAITING_FOR_PROGRESSING: "WAITING_FOR_PROGRESSING",
+  PACKING: "PACKING",
+  OUT_OF_STOCK: "OUT_OF_STOCK",
+  SHIPPING: "SHIPPING",
+  RECEIVED_PRODUCT: "RECEIVED_PRODUCT",
+  COMPLETED: "COMPLETED",
+  USER_CANCELLED: "USER_CANCELLED",
+  CUSTOMER_CANCELLED: "CUSTOMER_CANCELLED",
+  DELIVERY_ERROR: "DELIVERY_ERROR",
+  CUSTOMER_RETURNING: "CUSTOMER_RETURNING",
+  CUSTOMER_HAS_RETURNS: "CUSTOMER_HAS_RETURNS",
+};
+
 class OrderStatus extends Component {
   constructor(props) {
     super(props);
@@ -12,48 +26,98 @@ class OrderStatus extends Component {
         {
           name: "Chờ xử lý",
           code: "WAITING_FOR_PROGRESSING",
+          accept: [
+            statusCode["PACKING"],
+            statusCode["OUT_OF_STOCK"],
+            statusCode["SHIPPING"],
+            statusCode["RECEIVED_PRODUCT"],
+            statusCode["COMPLETED"],
+            statusCode["USER_CANCELLED"],
+            statusCode["CUSTOMER_CANCELLED"],
+          ],
         },
         {
           name: "Đang chuẩn bị hàng",
           code: "PACKING",
-        },
-        {
-          name: "Đang giao hàng",
-          code: "SHIPPING",
-        },
-        {
-          name: "Đã nhận hàng",
-          code: "RECEIVED_PRODUCT",
-        },
-        {
-          name: "Đã hoàn thành",
-          code: "COMPLETED",
+          accept: [
+            statusCode["OUT_OF_STOCK"],
+            statusCode["SHIPPING"],
+            statusCode["RECEIVED_PRODUCT"],
+            statusCode["COMPLETED"],
+            statusCode["USER_CANCELLED"],
+            statusCode["CUSTOMER_CANCELLED"],
+          ],
         },
         {
           name: "Hết hàng",
           code: "OUT_OF_STOCK",
+          accept: [],
+        },
+        {
+          name: "Đang giao hàng",
+          code: "SHIPPING",
+          accept: [
+            statusCode["RECEIVED_PRODUCT"],
+            statusCode["COMPLETED"],
+            statusCode["USER_CANCELLED"],
+            statusCode["CUSTOMER_CANCELLED"],
+            statusCode["DELIVERY_ERROR"],
+            statusCode["CUSTOMER_RETURNING"],
+            statusCode["CUSTOMER_HAS_RETURNS"],
+          ],
+        },
+        {
+          name: "Đã nhận hàng",
+          code: "RECEIVED_PRODUCT",
+          accept: [
+            statusCode["COMPLETED"],
+            statusCode["CUSTOMER_RETURNING"],
+            statusCode["CUSTOMER_HAS_RETURNS"],
+          ],
+        },
+        {
+          name: "Đã hoàn thành",
+          code: "COMPLETED",
+          accept: [
+            statusCode["CUSTOMER_RETURNING"],
+            statusCode["CUSTOMER_HAS_RETURNS"],
+          ],
         },
         {
           name: "Shop đã hủy",
           code: "USER_CANCELLED",
+          accept: [
+            statusCode["CUSTOMER_RETURNING"],
+            statusCode["CUSTOMER_HAS_RETURNS"],
+          ],
         },
         {
           name: "Khách đã hủy",
           code: "CUSTOMER_CANCELLED",
+          accept: [
+            statusCode["CUSTOMER_RETURNING"],
+            statusCode["CUSTOMER_HAS_RETURNS"],
+          ],
         },
 
         {
           name: "Lỗi giao hàng",
           code: "DELIVERY_ERROR",
+          accept: [
+            statusCode["CUSTOMER_RETURNING"],
+            statusCode["CUSTOMER_HAS_RETURNS"],
+          ],
         },
 
         {
           name: "Chờ trả hàng",
           code: "CUSTOMER_RETURNING",
+          accept: [statusCode["CUSTOMER_HAS_RETURNS"]],
         },
         {
           name: "Đã trả hàng",
           code: "CUSTOMER_HAS_RETURNS",
+          accept: [],
         },
       ],
     };
@@ -96,96 +160,107 @@ class OrderStatus extends Component {
   };
 
   checkStatus = (status, curentStatus) => {
-    if (curentStatus == "WAITING_FOR_PROGRESSING") {
-      return false;
+    const currentOrderStatus = this.state.status?.find(
+      (item) => item.code == curentStatus
+    );
+    if (currentOrderStatus) {
+      return currentOrderStatus.accept.includes(status) ? false : true;
     }
 
-    if (
-      curentStatus == "OUT_OF_STOCK" ||
-      curentStatus == "USER_CANCELLED" ||
-      curentStatus == "CUSTOMER_CANCELLED" ||
-      curentStatus == "DELIVERY_ERROR" ||
-      curentStatus == "CUSTOMER_RETURNING" ||
-      curentStatus == "CUSTOMER_HAS_RETURNS"
-    ) {
-      if (
-        status == "PACKING" ||
-        status == "COMPLETED" ||
-        status == "SHIPPING" ||
-        status == "WAITING_FOR_PROGRESSING" ||
-        status == "RECEIVED_PRODUCT"
-      ) {
-        return true;
-      }
-      if (curentStatus == "USER_CANCELLED" || status == "OUT_OF_STOCK") {
-        return true;
-      }
-      if (
-        curentStatus == "CUSTOMER_CANCELLED" ||
-        status == "OUT_OF_STOCK" ||
-        status == "USER_CANCELLED"
-      ) {
-        return true;
-      }
-      if (
-        curentStatus == "DELIVERY_ERROR" ||
-        status == "OUT_OF_STOCK" ||
-        status == "USER_CANCELLED" ||
-        status == "CUSTOMER_CANCELLED"
-      ) {
-        return true;
-      }
-      if (
-        curentStatus == "CUSTOMER_RETURNING" ||
-        status == "OUT_OF_STOCK" ||
-        status == "USER_CANCELLED" ||
-        status == "CUSTOMER_CANCELLED" ||
-        status == "DELIVERY_ERROR"
-      ) {
-        return true;
-      }
-      if (
-        curentStatus == "CUSTOMER_HAS_RETURNS" ||
-        status == "OUT_OF_STOCK" ||
-        status == "USER_CANCELLED" ||
-        status == "CUSTOMER_CANCELLED" ||
-        status == "DELIVERY_ERROR" ||
-        status == "CUSTOMER_RETURNING"
-      ) {
-        return true;
-      }
-    } else if (curentStatus == "SHIPPING") {
-      if (status == "WAITING_FOR_PROGRESSING" || status == "PACKING") {
-        return true;
-      } else {
-        return false;
-      }
-    } else if (curentStatus == "COMPLETED") {
-      if (status !== "COMPLETED") {
-        return true;
-      } else {
-        return false;
-      }
-    } else if (curentStatus == "RECEIVED_PRODUCT") {
-      if (
-        status == "WAITING_FOR_PROGRESSING" ||
-        status == "PACKING" ||
-        status == "SHIPPING"
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    } else if (curentStatus == "PACKING") {
-      if (status == "WAITING_FOR_PROGRESSING") {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return false;
-    }
+    return false;
   };
+
+  // checkStatus = (status, curentStatus) => {
+  //   if (curentStatus == "WAITING_FOR_PROGRESSING") {
+  //     return false;
+  //   }
+
+  //   if (
+  //     curentStatus == "OUT_OF_STOCK" ||
+  //     curentStatus == "USER_CANCELLED" ||
+  //     curentStatus == "CUSTOMER_CANCELLED" ||
+  //     curentStatus == "DELIVERY_ERROR" ||
+  //     curentStatus == "CUSTOMER_RETURNING" ||
+  //     curentStatus == "CUSTOMER_HAS_RETURNS"
+  //   ) {
+  //     if (
+  //       status == "PACKING" ||
+  //       status == "COMPLETED" ||
+  //       status == "SHIPPING" ||
+  //       status == "WAITING_FOR_PROGRESSING" ||
+  //       status == "RECEIVED_PRODUCT"
+  //     ) {
+  //       return true;
+  //     }
+  //     if (curentStatus == "USER_CANCELLED" || status == "OUT_OF_STOCK") {
+  //       return true;
+  //     }
+  //     if (
+  //       curentStatus == "CUSTOMER_CANCELLED" ||
+  //       status == "OUT_OF_STOCK" ||
+  //       status == "USER_CANCELLED"
+  //     ) {
+  //       return true;
+  //     }
+  //     if (
+  //       curentStatus == "DELIVERY_ERROR" ||
+  //       status == "OUT_OF_STOCK" ||
+  //       status == "USER_CANCELLED" ||
+  //       status == "CUSTOMER_CANCELLED"
+  //     ) {
+  //       return true;
+  //     }
+  //     if (
+  //       curentStatus == "CUSTOMER_RETURNING" ||
+  //       status == "OUT_OF_STOCK" ||
+  //       status == "USER_CANCELLED" ||
+  //       status == "CUSTOMER_CANCELLED" ||
+  //       status == "DELIVERY_ERROR"
+  //     ) {
+  //       return true;
+  //     }
+  //     if (
+  //       curentStatus == "CUSTOMER_HAS_RETURNS" ||
+  //       status == "OUT_OF_STOCK" ||
+  //       status == "USER_CANCELLED" ||
+  //       status == "CUSTOMER_CANCELLED" ||
+  //       status == "DELIVERY_ERROR" ||
+  //       status == "CUSTOMER_RETURNING"
+  //     ) {
+  //       return true;
+  //     }
+  //   } else if (curentStatus == "SHIPPING") {
+  //     if (status == "WAITING_FOR_PROGRESSING" || status == "PACKING") {
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   } else if (curentStatus == "COMPLETED") {
+  //     if (status !== "COMPLETED") {
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   } else if (curentStatus == "RECEIVED_PRODUCT") {
+  //     if (
+  //       status == "WAITING_FOR_PROGRESSING" ||
+  //       status == "PACKING" ||
+  //       status == "SHIPPING"
+  //     ) {
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   } else if (curentStatus == "PACKING") {
+  //     if (status == "WAITING_FOR_PROGRESSING") {
+  //       return true;
+  //     } else {
+  //       return false;
+  //     }
+  //   } else {
+  //     return false;
+  //   }
+  // };
   showOrderStatus = (status) => {
     var orderStatus = this.state.status;
 
@@ -249,7 +324,7 @@ class OrderStatus extends Component {
           </li>
           <li
             style={{
-              maxHeight: "400px",
+              maxHeight: "510px",
               overflow: "auto",
               background: disable,
             }}
