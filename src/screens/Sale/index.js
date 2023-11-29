@@ -50,7 +50,7 @@ class Sale extends Component {
     ) {
       var permissions = this.props.permission;
       var isShow = permissions.sale_list;
-      var sale_list = permissions.sale_list;
+      var sale_view = permissions.sale_view;
       var sale_config = permissions.sale_config;
       var sale_watching = permissions.sale_watching;
       var sale_top = permissions.sale_top;
@@ -63,7 +63,7 @@ class Sale extends Component {
       this.defaultIndex = tabIndex;
       this.setState({
         isLoading: true,
-        sale_list,
+        sale_view,
         sale_config,
         sale_watching,
         sale_top,
@@ -73,7 +73,7 @@ class Sale extends Component {
   }
   render() {
     var { store_code, id } = this.props.match.params;
-    var { tabId, sale_list, sale_config, sale_top, sale_watching, isShow } =
+    var { tabId, sale_view, sale_config, sale_top, sale_watching, isShow } =
       this.state;
     return (
       <div id="wrapper">
@@ -118,7 +118,7 @@ class Sale extends Component {
                               </Link>
                             </Tab>
                           ) : null}
-                          {sale_list == true ? (
+                          {sale_view == true ? (
                             <Tab>
                               <Link
                                 to={"?tab-index=1"}
@@ -179,7 +179,7 @@ class Sale extends Component {
                           </TabPanel>
                         ) : null}
 
-                        {sale_list == true ? (
+                        {sale_view == true ? (
                           <TabPanel>
                             <ListSale tabId={tabId} store_code={store_code} />
                           </TabPanel>

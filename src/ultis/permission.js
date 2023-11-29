@@ -372,7 +372,7 @@ const permission = (channel) => {
             componentChilds: [
               {
                 name: "Danh sách CTV",
-                decentralizationName: "collaborator_list",
+                decentralizationName: "collaborator_view",
                 componentChilds: [],
               },
               {
@@ -413,7 +413,7 @@ const permission = (channel) => {
             componentChilds: [
               {
                 name: "Danh sách đại lý",
-                decentralizationName: "agency_list",
+                decentralizationName: "agency_view",
                 componentChilds: [],
               },
               {
@@ -465,11 +465,11 @@ const permission = (channel) => {
           },
           {
             name: "Sale",
-            decentralizationName: "sale_config",
+            decentralizationName: "sale_list",
             componentChilds: [
               {
                 name: "Danh sách sale",
-                decentralizationName: "sale_list",
+                decentralizationName: "sale_view",
                 componentChilds: [],
               },
               {
