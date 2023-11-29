@@ -432,6 +432,7 @@ class Table extends Component {
                 {data.name}
               </td>
               <td>{data.phone_number}</td>
+              <td>{data.referral_phone_number}</td>
               <td>
                 {data.sale_staff ? (
                   <div className="explode__item">
@@ -441,7 +442,6 @@ class Table extends Component {
                   ""
                 )}
               </td>
-              <td>{getDDMMYYYHis(data.created_at)}</td>
               <td
                 className="total_referral"
                 onClick={() => this.handleShowCustomersByReferralPhone(data)}
@@ -778,9 +778,8 @@ class Table extends Component {
               <th>Họ tên</th>
 
               <th>Số điện thoại</th>
-
+              <th>SĐT người giới thiệu</th>
               <th>Sale</th>
-              <th>Ngày đăng ký</th>
               <th>Giới thiệu</th>
               <th>Xu</th>
               <th>Tổng mua</th>
