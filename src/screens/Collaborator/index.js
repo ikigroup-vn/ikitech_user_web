@@ -52,7 +52,7 @@ class collaborator extends Component {
       typeof this.props.permission.product_list != "undefined"
     ) {
       var permissions = this.props.permission;
-      var collaborator_list = permissions.collaborator_list;
+      var collaborator_view = permissions.collaborator_view;
       var collaborator_config = permissions.collaborator_config;
       var collaborator_register = permissions.collaborator_register;
       var collaborator_top_sale = permissions.collaborator_top_sale;
@@ -74,7 +74,7 @@ class collaborator extends Component {
       this.setState({
         isLoading: true,
         isShow,
-        collaborator_list,
+        collaborator_view,
         collaborator_config,
         collaborator_register,
         collaborator_top_sale,
@@ -89,7 +89,7 @@ class collaborator extends Component {
     var {
       tabId,
       tabDefault,
-      collaborator_list,
+      collaborator_view,
       collaborator_config,
       collaborator_register,
       collaborator_top_sale,
@@ -139,7 +139,7 @@ class collaborator extends Component {
                               </Link>
                             </Tab>
                           ) : null}
-                          {collaborator_list == true ? (
+                          {collaborator_view == true ? (
                             <Tab>
                               <Link to={"?tab-index=1"}>
                                 {" "}
@@ -201,7 +201,7 @@ class collaborator extends Component {
                           </TabPanel>
                         ) : null}
 
-                        {collaborator_list == true ? (
+                        {collaborator_view == true ? (
                           <TabPanel>
                             <ListCollaborator
                               tabId={tabId}

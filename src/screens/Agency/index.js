@@ -87,7 +87,7 @@ class agency extends Component {
       typeof this.props.permission.product_list != "undefined"
     ) {
       var permissions = this.props.permission;
-      var agency_list = permissions.agency_list;
+      var agency_view = permissions.agency_view;
       var agency_config = permissions.agency_config;
       var agency_register = permissions.agency_register;
       var agency_top_import = permissions.agency_top_import;
@@ -112,7 +112,7 @@ class agency extends Component {
       this.setState({
         isLoading: true,
         isShow,
-        agency_list,
+        agency_view,
         agency_config,
         agency_register,
         agency_top_import,
@@ -130,7 +130,7 @@ class agency extends Component {
     var {
       tabId,
       tabDefault,
-      agency_list,
+      agency_view,
       agency_config,
       agency_register,
       agency_top_import,
@@ -197,7 +197,7 @@ class agency extends Component {
                               </Link>
                             </Tab>
                           ) : null}
-                          {agency_list == true ? (
+                          {agency_view == true ? (
                             <Tab>
                               <Link
                                 to={"?tab-index=1"}
@@ -328,7 +328,7 @@ class agency extends Component {
                             </Type>
                           </TabPanel>
                         ) : null}
-                        {agency_list == true ? (
+                        {agency_view == true ? (
                           <TabPanel>
                             <ListAgency
                               tabId={tabId}
