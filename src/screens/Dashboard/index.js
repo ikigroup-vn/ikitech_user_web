@@ -54,11 +54,14 @@ class Dashboard extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // if (this.state.isLoading !== true && typeof nextProps.permission.product_list != "undefined") {
-    //   var permissions = nextProps.permission
-    //   var isShow = permissions.report_view
-    //   this.setState({ isLoading: true, isShow })
-    // }
+    if (
+      this.state.isLoading !== true &&
+      typeof nextProps.permission.product_list != "undefined"
+    ) {
+      var permissions = nextProps.permission;
+      var isShow = permissions.report_view;
+      this.setState({ isLoading: true, isShow });
+    }
     var { store_code } = this.props.match.params;
 
     if (!shallowEqual(nextProps.currentBranch, this.props.currentBranch)) {
@@ -115,72 +118,83 @@ class Dashboard extends Component {
                     <Statistical store_code={store_code} />
                   </div>
                 ) : null}
-                <div className="container-fluid">
-                  <div className="d-sm-flex  align-items-center justify-content-between mb-4">
-                    <h4 className="h4 title_content mb-0 text-gray-800">
-                      Hôm nay
-                    </h4>
-                  </div>
+                {isShow ? (
+                  <div className="container-fluid">
+                    <div className="d-sm-flex  align-items-center justify-content-between mb-4">
+                      <h4 className="h4 title_content mb-0 text-gray-800">
+                        Hôm nay
+                      </h4>
+                    </div>
 
-                  <General
-                    badges={badges}
-                    store_code={store_code}
-                    numDiscount={numDiscount}
-                    collaborators={collaborators}
-                    store={this.props.store}
-                    countProductNearlyOutStock={
-                      this.props.countProductNearlyOutStock
-                    }
-                  />
-                  <br></br>
+                    <General
+                      badges={badges}
+                      store_code={store_code}
+                      numDiscount={numDiscount}
+                      collaborators={collaborators}
+                      store={this.props.store}
+                      countProductNearlyOutStock={
+                        this.props.countProductNearlyOutStock
+                      }
+                    />
+                    <br></br>
 
-                  <div
-                    class="row"
-                    style={{ display: "flex", justifyContent: "space-between" }}
-                  >
                     <div
-                      className="col-lg-3 col-md-12 col-sm-12"
-                      style={{ paddingBottom: "15px" }}
+                      class="row"
+                      style={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
                     >
-                      <div class="card shadow mb-4 " style={{ height: "100%" }}>
+                      <div
+                        className="col-lg-3 col-md-12 col-sm-12"
+                        style={{ paddingBottom: "15px" }}
+                      >
+                        <div
+                          class="card shadow mb-4 "
+                          style={{ height: "100%" }}
+                        >
+                          <div class="card-header py-3">
+                            <h6 class="m-0 title_content font-weight-bold text-primary">
+                              Thông tin chỉ số
+                            </h6>
+                          </div>
+                          <div class="card-body">
+                            <BadgeTable
+                              badges={badges}
+                              store_code={store_code}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                      <div
+                        class="card shadow mb-4 col-lg-9 col-md-12 col-sm-12"
+                        style={{ height: "100%" }}
+                      >
                         <div class="card-header py-3">
                           <h6 class="m-0 title_content font-weight-bold text-primary">
-                            Thông tin chỉ số
+                            Báo cáo doanh thu
                           </h6>
                         </div>
                         <div class="card-body">
-                          <BadgeTable badges={badges} store_code={store_code} />
+                          <ChartSales
+                            store_code={store_code}
+                            overview={overview}
+                          />
                         </div>
                       </div>
                     </div>
-                    <div
-                      class="card shadow mb-4 col-lg-9 col-md-12 col-sm-12"
-                      style={{ height: "100%" }}
-                    >
+                    <div class="card shadow mb-4 col-12">
                       <div class="card-header py-3">
                         <h6 class="m-0 title_content font-weight-bold text-primary">
-                          Báo cáo doanh thu
+                          Top 10 sản phẩm
                         </h6>
                       </div>
                       <div class="card-body">
-                        <ChartSales
-                          store_code={store_code}
-                          overview={overview}
-                        />
+                        <ChartTopTen topten={topten} store_code={store_code} />
                       </div>
                     </div>
                   </div>
-                  <div class="card shadow mb-4 col-12">
-                    <div class="card-header py-3">
-                      <h6 class="m-0 title_content font-weight-bold text-primary">
-                        Top 10 sản phẩm
-                      </h6>
-                    </div>
-                    <div class="card-body">
-                      <ChartTopTen topten={topten} store_code={store_code} />
-                    </div>
-                  </div>
-                </div>
+                ) : null}
               </div>
 
               <Footer />

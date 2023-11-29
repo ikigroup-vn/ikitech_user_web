@@ -21,6 +21,10 @@ const permission = (channel) => {
                 name: "Tin tức bài viết",
                 decentralizationName: "post_list",
               },
+              {
+                name: "Xem chỉ số và báo cáo doanh thu",
+                decentralizationName: "report_view",
+              },
             ],
           },
           {
