@@ -1611,6 +1611,36 @@ class PostOrder extends Component {
                               </span>
                             </div>
                           )}
+                          {oneCart?.balance_collaborator_used_before > 0 && (
+                            <div className="row item-info">
+                              <div className="item-discount-name col-6">
+                                Giảm giá ví CTV
+                              </div>
+                              <span
+                                className="col-6"
+                                style={{ textAlign: "end" }}
+                              >
+                                -{" "}
+                                {formatNoD(
+                                  oneCart?.balance_collaborator_used_before
+                                )}
+                              </span>
+                            </div>
+                          )}
+                          {oneCart?.balance_agency_used_before > 0 && (
+                            <div className="row item-info">
+                              <div className="item-discount-name col-6">
+                                Giảm giá ví Đại lý
+                              </div>
+                              <span
+                                className="col-6"
+                                style={{ textAlign: "end" }}
+                              >
+                                -{" "}
+                                {formatNoD(oneCart?.balance_agency_used_before)}
+                              </span>
+                            </div>
+                          )}
                           <div className="row item-info">
                             <div
                               className="title-price col-6"
