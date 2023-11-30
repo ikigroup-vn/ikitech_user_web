@@ -167,9 +167,9 @@ class Table extends Component {
       result = agencyRegisterRequests.map((data2, index) => {
         var data = data2.agency;
         var avatar =
-          data.customer.avatar_image == null
+          data.customer?.avatar_image == null
             ? Env.IMG_NOT_FOUND
-            : data.customer.avatar_image;
+            : data.customer?.avatar_image;
         var img_front =
           data.front_card == null ? Env.IMG_NOT_FOUND : data.front_card;
         var img_back =

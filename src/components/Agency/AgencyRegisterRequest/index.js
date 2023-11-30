@@ -105,16 +105,16 @@ class ListAgencyRegisterRequest extends Component {
       this.props;
 
     var customerImg =
-      typeof customer.avatar_image == "undefined" ||
-      customer.avatar_image == null
+      typeof customer?.avatar_image == "undefined" ||
+      customer?.avatar_image == null
         ? Env.IMG_NOT_FOUND
         : customer.avatar_image;
     var customerId =
-      typeof customer.id == "undefined" || customer.id == null
+      typeof customer?.id == "undefined" || customer?.id == null
         ? null
         : customer.id;
     var customerName =
-      typeof customer.name == "undefined" || customer.name == null
+      typeof customer?.name == "undefined" || customer?.name == null
         ? "Trống"
         : customer.name;
 
