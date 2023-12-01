@@ -726,6 +726,13 @@ class Customer extends Component {
                           </>
                         )}
 
+                        <input
+                          id="file-excel-import-customer"
+                          type="file"
+                          name="name"
+                          style={{ display: "none" }}
+                          onChange={this.onChangeExcel}
+                        />
                         <a
                           data-toggle="modal"
                           data-target="#modalCreateCustomer"
