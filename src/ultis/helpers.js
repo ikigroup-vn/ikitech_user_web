@@ -28,7 +28,7 @@ export const getDetailAdress = (
     return "";
   }
   if (address_detail) detail += address_detail;
-  if (wards_name) detail += address_detail ? ", " : "" + wards_name;
+  if (wards_name) detail += `${wards_name ? ", " : ""}${wards_name}`;
   if (district_name)
     detail += `${address_detail || wards_name ? ", " : ""}${district_name}`;
   if (province_name)
