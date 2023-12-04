@@ -2,7 +2,12 @@ import { data } from "jquery";
 import React, { Component } from "react";
 import getChannel, { IKIPOS, IKITECH } from "../../ultis/channel";
 import getNamePaymentMethod from "../../ultis/payment_method";
-import { filter_var, filter_arr, format } from "../../ultis/helpers";
+import {
+  filter_var,
+  filter_arr,
+  format,
+  getDetailAdress,
+} from "../../ultis/helpers";
 import payment_method from "../../ultis/payment_method";
 import { Link } from "react-router-dom";
 import * as OrderFrom from "../../ultis/order_from";
@@ -116,8 +121,12 @@ class InfoCustomer extends Component {
                 <p class="sale_user_label" id="delivery_address">
                   Địa chỉ nhận:{" "}
                   <span id="user_address">
-                    {address_detail}, {wards_name}, {district_name},{" "}
-                    {province_name}
+                    {getDetailAdress(
+                      address_detail,
+                      wards_name,
+                      district_name,
+                      province_name
+                    )}
                   </span>
                 </p>
               </div>

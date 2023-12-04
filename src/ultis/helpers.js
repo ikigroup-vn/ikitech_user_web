@@ -23,10 +23,18 @@ export const getDetailAdress = (
   province_name
 ) => {
   var detail = "";
-  if (address_detail) detail = detail + address_detail + ", ";
-  if (wards_name) detail = detail + wards_name + ", ";
-  if (district_name) detail = detail + district_name + ", ";
-  if (province_name) detail = detail + province_name;
+
+  if (!address_detail && !wards_name && !district_name && !province_name) {
+    return "";
+  }
+  if (address_detail) detail += address_detail;
+  if (wards_name) detail += address_detail ? ", " : "" + wards_name;
+  if (district_name)
+    detail += `${address_detail || wards_name ? ", " : ""}${district_name}`;
+  if (province_name)
+    detail += `${
+      address_detail || wards_name || district_name ? ", " : ""
+    }${province_name}`;
 
   return detail;
 };

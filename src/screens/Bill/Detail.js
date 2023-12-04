@@ -169,7 +169,6 @@ class Detail extends Component {
                         <i className="fa fa-edit"></i>&nbsp;Chỉnh sửa
                       </button>
                       <ReactToPrint
-                      
                         trigger={() => {
                           return (
                             <button
