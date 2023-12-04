@@ -542,6 +542,10 @@ const permission = (channel) => {
                 decentralizationName: "config_setting",
               },
               {
+                name: "Cài đặt điều khoản đăng ký đại lý, ctv",
+                decentralizationName: "config_terms_agency_collaborator",
+              },
+              {
                 name: "Cài đặt SMS",
                 decentralizationName: "config_sms",
               },
@@ -758,6 +762,7 @@ export const initialPermission = () => {
     supplier: false,
     setting_print: false,
     config_setting: false,
+    config_terms_agency_collaborator: false,
     barcode_print: false,
     create_order_pos: false,
     change_price_pos: false,
