@@ -16,6 +16,7 @@ import NotiEmail from "./NotiEmail";
 
 import * as themeAction from "../../actions/theme";
 import * as helper from "../../ultis/helpers";
+import TermsAgencyCollaborator from "./TermsAgencyCollaborator";
 class Theme extends Component {
   constructor(props) {
     super(props);
@@ -61,9 +62,23 @@ class Theme extends Component {
   //     });
   //   }
   // }
+
+  componentWillReceiveProps = (nextProps) => {
+    if (
+      this.state.isLoading != true &&
+      typeof nextProps.permission.branch_list != "undefined"
+    ) {
+      var permissions = nextProps.permission;
+
+      var config_terms_agency_collaborator =
+        permissions.config_terms_agency_collaborator;
+      this.setState({ isLoading: true, config_terms_agency_collaborator });
+    }
+  };
   render() {
     var { store_code } = this.props.match.params;
-    var { tabId, web_theme_overview } = this.state;
+    var { tabId, web_theme_overview, config_terms_agency_collaborator } =
+      this.state;
     var { theme } = this.props;
 
     var isShow = true;
@@ -110,6 +125,14 @@ class Theme extends Component {
                               Email gửi tới khách hàng
                             </span>
                           </Tab>
+                          {config_terms_agency_collaborator ? (
+                            <Tab>
+                              <i class="fa fa-cogs"></i>
+                              <span style={{ fontSize: "0.8rem" }}>
+                                Cài đặt điều khoản đăng ký đại lý, ctv
+                              </span>
+                            </Tab>
+                          ) : null}
                         </TabList>
 
                         <TabPanel>
@@ -126,6 +149,15 @@ class Theme extends Component {
                             theme={theme}
                           />
                         </TabPanel>
+                        {config_terms_agency_collaborator ? (
+                          <TabPanel>
+                            <TermsAgencyCollaborator
+                              tabId={tabId}
+                              store_code={store_code}
+                              theme={theme}
+                            />
+                          </TabPanel>
+                        ) : null}
                       </Tabs>
                     </div>
                   </div>
