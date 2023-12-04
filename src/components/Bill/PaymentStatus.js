@@ -69,6 +69,11 @@ class PaymentStatus extends Component {
     });
   };
   checkStatus = (status, currentStatus) => {
+    var { bill } = this.props;
+    var order_status_code = bill.order_status_code;
+    if (order_status_code == "OUT_OF_STOCK") {
+      return true;
+    }
     if (currentStatus == "UNPAID") {
       return false;
     } else if (currentStatus == "PAID" || currentStatus == "REFUNDS") {

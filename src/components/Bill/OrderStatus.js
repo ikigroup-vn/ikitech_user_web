@@ -153,17 +153,43 @@ class OrderStatus extends Component {
 
     window.$("#postModal").modal("show");
 
-    this.props.handleUpdateStatusOrder({
-      order_status_code: statusCode,
-      statusName: name,
-    });
+    this.props.handleUpdateStatusOrder(
+      {
+        order_status_code: statusCode,
+        statusName: name,
+      },
+      () => {
+        this.props.fetchBillHistory(this.props.store_code, this.props.bill?.id);
+      }
+    );
   };
 
   checkStatus = (status, curentStatus) => {
+    const { billHistoty } = this.props;
+
     const currentOrderStatus = this.state.status?.find(
       (item) => item.code == curentStatus
     );
     if (currentOrderStatus) {
+      if (
+        (curentStatus == "USER_CANCELLED" ||
+          curentStatus == "CUSTOMER_CANCELLED") &&
+        (status == "CUSTOMER_RETURNING" || status == "CUSTOMER_HAS_RETURNS")
+      ) {
+        const isCheckValid =
+          billHistoty?.length > 0
+            ? !billHistoty?.some(
+                (item) =>
+                  item?.order_status !== null &&
+                  (item?.order_status == 5 || item?.order_status == 11)
+              )
+            : false;
+
+        return currentOrderStatus.accept.includes(status) && !isCheckValid
+          ? false
+          : true;
+      }
+
       return currentOrderStatus.accept.includes(status) ? false : true;
     }
 
@@ -350,6 +376,9 @@ const mapDispatchToProps = (dispatch, props) => {
       dispatch(
         billAction.updateStatusOrder(data, store_code, billId, order_code)
       );
+    },
+    fetchBillHistory: (store_code, billId) => {
+      dispatch(billAction.fetchBillHistory(store_code, billId));
     },
     showError: (error) => {
       dispatch(error);
