@@ -93,6 +93,11 @@ const permission = (channel) => {
                 decentralizationName: "train_exam_delete",
                 componentChilds: [],
               },
+              {
+                name: "Lịch sử thi",
+                decentralizationName: "train_exam_history",
+                componentChilds: [],
+              },
             ],
           },
           {
@@ -801,6 +806,7 @@ export const initialPermission = () => {
     train_exam_add: false,
     train_exam_update: false,
     train_exam_delete: false,
+    train_exam_history: false,
     ecommerce_list: false,
     ecommerce_products: false,
     ecommerce_connect: false,
