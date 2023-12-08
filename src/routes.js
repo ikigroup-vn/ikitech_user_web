@@ -181,6 +181,8 @@ import ProductEcommerce from "./screens/Ecommerce/product";
 import OrderEcommerce from "./screens/Ecommerce/order";
 import ConfigSms from "./screens/ConfigSms";
 import PublicApiHook from "./screens/PublicApiHook/index.js";
+import HistoryQuiz from "./screens/Train/HistoryQuiz/index.js";
+import HistoryDetailQuizForCustomer from "./screens/Train/HistoryQuiz/historyDetail/HistoryDetailQuizForCustomer.js";
 
 const routes = [
   {
@@ -1059,6 +1061,18 @@ const routes = [
     exact: true,
 
     main: ({ match }) => <Course match={match} />,
+  },
+  {
+    path: "/train/history/:store_code",
+    exact: true,
+
+    main: ({ match }) => <HistoryQuiz match={match} />,
+  },
+  {
+    path: "/train/history/:store_code/:customerId",
+    exact: true,
+
+    main: ({ match }) => <HistoryDetailQuizForCustomer match={match} />,
   },
 
   {

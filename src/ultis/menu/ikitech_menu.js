@@ -537,13 +537,37 @@ export const ikitech_menu = [
       //     },
       //   ],
       // },
+      // {
+      //   name: "Đào tạo",
+      //   class: "train",
+
+      //   icon: "fas fa-book-open",
+      //   exact: true,
+      //   to: "/train/course",
+      // },
+
       {
         name: "Đào tạo",
-        class: "train",
-
+        setOpenKey: ["/train/course", "/train/history"],
         icon: "fas fa-book-open",
-        exact: true,
-        to: "/train/course",
+        open: "train",
+        children: [
+          {
+            name: "Khóa học đào tạo",
+            class: "train",
+            display: "hide",
+            exact: true,
+            to: "/train/course",
+          },
+          {
+            name: "Lịch sử đào tạo",
+            class: "train_exam_history",
+            display: "hide",
+            icon: "fa fa-history",
+            exact: true,
+            to: "/train/history",
+          },
+        ],
       },
       // {
       //   name: "Đào tạo",
