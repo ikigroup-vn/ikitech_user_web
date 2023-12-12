@@ -768,7 +768,13 @@ export const destroyLesson = (store_code, id, train_course_id) => {
   };
 };
 
-export const destroyQuestion = (store_code, id, train_course_id, quizId) => {
+export const destroyQuestion = (
+  store_code,
+  id,
+  train_course_id,
+  quizId,
+  onSuccess
+) => {
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -781,6 +787,7 @@ export const destroyQuestion = (store_code, id, train_course_id, quizId) => {
           type: Types.SHOW_LOADING,
           loading: "hide",
         });
+        if (onSuccess) onSuccess();
 
         trainApi
           .fetchQuizId(store_code, train_course_id, quizId)

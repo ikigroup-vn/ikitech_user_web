@@ -168,7 +168,18 @@ class TotalBill extends Component {
             // bill.order_status_code !== "CUSTOMER_HAS_RETURNS" &&
             <div id="item_fee">
               <div className="sale_user_label bold bold group-total">
-                <div>Phí giao hàng:</div>
+                <div>
+                  Phí giao hàng:{" "}
+                  {ship_discount_amount > 0 ? (
+                    <span
+                      style={{
+                        fontSize: "12px",
+                      }}
+                    >
+                      (-&nbsp;{format(ship_discount_amount)})
+                    </span>
+                  ) : null}
+                </div>
 
                 {!(
                   bill.order_from !== OrderFrom.ORDER_FROM_POS_IN_STORE &&
@@ -250,19 +261,7 @@ class TotalBill extends Component {
               </div>
             </div>
           )}
-          {ship_discount_amount > 0 && (
-            <div id={`item_fee"}`}>
-              <div
-                className="sale_user_label bold bold group-total
 
-              "
-              >
-                <div> Giảm phí vận chuyển:</div>
-
-                <span>-&nbsp;{format(ship_discount_amount)}</span>
-              </div>
-            </div>
-          )}
           {bill.bonus_points_amount_used != null &&
             bill.bonus_points_amount_used != 0 && (
               <div>
