@@ -83,22 +83,6 @@ class InfoCustomer extends Component {
             <p class="sale_user_label" id="sale_user_name">
               <b>Đơn này từ {order_from}</b>
             </p>
-            {bill.staff_name ? (
-              <p class="sale_user_label" id="sale_user_name">
-                Nhân viên bán hàng: {bill.staff_name}
-              </p>
-            ) : null}
-            {bill.is_order_for_customer ? (
-              <>
-                <p class="sale_user_label" id="sale_user_name">
-                  Đơn đặt hộ: {bill.order_code}
-                </p>
-                <p class="sale_user_label" id="sale_user_name">
-                  Hoa hồng đặt đơn hộ:{" "}
-                  {format(bill.total_commission_order_for_customer || 0)}
-                </p>
-              </>
-            ) : null}
             <p class="sale_user_label" id="sale_user_name">
               Khách hàng:{" "}
               <Link id="user_name" to={`/customer/detail/${store_code}/${id}`}>
@@ -145,6 +129,42 @@ class InfoCustomer extends Component {
                 {/* {payment_partner_name} */}
               </span>
             </p>
+            {bill.staff_name ? (
+              <p class="sale_user_label" id="sale_user_name">
+                Nhân viên bán hàng: {bill.staff_name}
+              </p>
+            ) : null}
+            {bill.is_order_for_customer ? (
+              <>
+                <p class="sale_user_label" id="sale_user_name">
+                  Đơn đặt hộ: {bill.order_code}
+                </p>
+                <p class="sale_user_label" id="sale_user_name">
+                  Hoa hồng đặt đơn hộ:{" "}
+                  {format(bill.total_commission_order_for_customer || 0)}
+                </p>
+              </>
+            ) : null}
+            {bill.collaborator_direct ? (
+              <p class="sale_user_label" id="sale_user_name">
+                CTV trực tiếp: {bill.collaborator_direct?.name}
+              </p>
+            ) : null}
+            {bill.collaborator_indirect ? (
+              <p class="sale_user_label" id="sale_user_name">
+                CTV gián tiếp: {bill.collaborator_indirect?.name}
+              </p>
+            ) : null}
+            {bill.agency_direct ? (
+              <p class="sale_user_label" id="sale_user_name">
+                Đại lý trực tiếp: {bill.agency_direct?.name}
+              </p>
+            ) : null}
+            {bill.agency_indirect ? (
+              <p class="sale_user_label" id="sale_user_name">
+                Đại lý gián tiếp: {bill.agency_indirect?.name}
+              </p>
+            ) : null}
             <p class="sale_user_label">
               Ghi chú: <span id="user_note">{note}</span>
             </p>
