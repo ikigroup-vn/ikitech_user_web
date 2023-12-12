@@ -1476,8 +1476,21 @@ class PostOrder extends Component {
                               </span>
                             </div>
                           )}
+                          {ship_discount_amount > 0 && (
+                            <div className="row item-info">
+                              <div className="item-discount-name col-6">
+                                Giảm phí vận chuyển
+                              </div>
+                              <span
+                                className="col-6"
+                                style={{ textAlign: "end" }}
+                              >
+                                - {formatNoD(ship_discount_amount)}
+                              </span>
+                            </div>
+                          )}
 
-                          {total_shipping_fee > 0 && (
+                          {oneCart?.info_cart?.total_shipping_fee >= 0 && (
                             <div className="row item-info">
                               <div className="item-discount-name col-6">
                                 Phí vận chuyển
@@ -1486,7 +1499,10 @@ class PostOrder extends Component {
                                 className="col-6"
                                 style={{ textAlign: "end" }}
                               >
-                                +{formatNoD(total_shipping_fee)}
+                                +
+                                {formatNoD(
+                                  oneCart?.info_cart?.total_shipping_fee
+                                )}
                               </span>
                             </div>
                           )}
@@ -1598,19 +1614,6 @@ class PostOrder extends Component {
                               </span>
                             </div>
                           ) : null}
-                          {ship_discount_amount > 0 && (
-                            <div className="row item-info">
-                              <div className="item-discount-name col-6">
-                                Giảm phí vận chuyển
-                              </div>
-                              <span
-                                className="col-6"
-                                style={{ textAlign: "end" }}
-                              >
-                                - {formatNoD(ship_discount_amount)}
-                              </span>
-                            </div>
-                          )}
                           {oneCart?.balance_collaborator_used_before > 0 && (
                             <div className="row item-info">
                               <div className="item-discount-name col-6">
