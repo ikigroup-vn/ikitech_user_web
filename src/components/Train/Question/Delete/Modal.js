@@ -4,13 +4,25 @@ import * as trainAction from "../../../../actions/train";
 import themeData from "../../../../ultis/theme_data";
 
 class Modal extends Component {
-
   onSave = (e) => {
     e.preventDefault();
-    window.$('.modal').modal('hide');
-    var {id} = this.props.modal;
-    var { store_code , quizId , courseId} = this.props
-    this.props.destroyQuestion(store_code, id ,courseId  , quizId );
+    window.$(".modal").modal("hide");
+    var { id } = this.props.modal;
+    var { store_code, quizId, courseId, quiz } = this.props;
+    this.props.destroyQuestion(store_code, id, courseId, quizId, () => {
+      if (quiz?.count_answer_right_complete === quiz?.questions?.length) {
+        this.props.updateQuiz(
+          quizId,
+          {
+            count_answer_right_complete: quiz?.count_answer_right_complete - 1,
+          },
+          store_code,
+          null,
+          null,
+          courseId
+        );
+      }
+    });
   };
 
   render() {
@@ -30,7 +42,8 @@ class Modal extends Component {
               class="modal-header"
               style={{ backgroundColor: themeData().backgroundColor }}
             >
-              <h4 style={{ color: "white" }}>Thông báo</h4>              <button
+              <h4 style={{ color: "white" }}>Thông báo</h4>{" "}
+              <button
                 type="button"
                 class="close"
                 data-dismiss="modal"
@@ -61,7 +74,6 @@ class Modal extends Component {
                 </button>
                 <button type="submit" class="btn btn-warning">
                   Xóa
-
                 </button>
               </div>
             </form>
@@ -72,11 +84,31 @@ class Modal extends Component {
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+    quiz: state.trainReducers.train.quizID,
+  };
+};
+
 const mapDispatchToProps = (dispatch, props) => {
   return {
-    destroyQuestion: (store_code, id ,courseId  , quizId ) => {
-      dispatch(trainAction.destroyQuestion(store_code, id ,courseId  , quizId ));
+    destroyQuestion: (store_code, id, courseId, quizId, onSuccess) => {
+      dispatch(
+        trainAction.destroyQuestion(store_code, id, courseId, quizId, onSuccess)
+      );
+    },
+    updateQuiz: (id, data, store_code, _this, resetModal, courseId) => {
+      dispatch(
+        trainAction.updateQuiz(
+          id,
+          data,
+          store_code,
+          _this,
+          resetModal,
+          courseId
+        )
+      );
     },
   };
 };
-export default connect(null, mapDispatchToProps)(Modal);
+export default connect(mapStateToProps, mapDispatchToProps)(Modal);

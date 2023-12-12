@@ -1476,7 +1476,7 @@ class PostOrder extends Component {
                               </span>
                             </div>
                           )}
-                          {ship_discount_amount > 0 && (
+                          {/* {ship_discount_amount > 0 && (
                             <div className="row item-info">
                               <div className="item-discount-name col-6">
                                 Giảm phí vận chuyển
@@ -1488,12 +1488,20 @@ class PostOrder extends Component {
                                 - {formatNoD(ship_discount_amount)}
                               </span>
                             </div>
-                          )}
+                          )} */}
 
                           {oneCart?.info_cart?.total_shipping_fee >= 0 && (
                             <div className="row item-info">
                               <div className="item-discount-name col-6">
                                 Phí vận chuyển
+                                {ship_discount_amount > 0 ? (
+                                  <span
+                                    className="col-6"
+                                    style={{ textAlign: "end" }}
+                                  >
+                                    (- {formatNoD(ship_discount_amount)})
+                                  </span>
+                                ) : null}
                               </div>
                               <span
                                 className="col-6"

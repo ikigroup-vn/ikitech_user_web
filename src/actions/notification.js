@@ -52,7 +52,6 @@ export const fetchAllGeneralSetting = (store_code) => {
 };
 
 export const fetchAllBadge = (store_code) => {
-  
   // if(branch_id == null) return;
   const branch_id = getBranchId();
   const branch_ids = getBranchIds();
@@ -86,7 +85,7 @@ export const fetchAllBadge = (store_code) => {
             type: Types.FETCH_PERMISSION,
             data:
               typeof res.data.data != "undefined" &&
-                res.data.data.decentralization != null
+              res.data.data.decentralization != null
                 ? res.data.data.decentralization
                 : {},
           });
@@ -121,6 +120,15 @@ export const updateGeneralSetting = (store_code, data) => {
         dispatch({
           type: Types.FETCH_ALL_GENERAL_SETTING,
           data: res.data.data,
+        });
+        dispatch({
+          type: Types.ALERT_UID_STATUS,
+          alert: {
+            type: "success",
+            title: "Thành công ",
+            disable: "show",
+            content: res.data.msg,
+          },
         });
       }
     });
@@ -170,32 +178,34 @@ export const changeToken = (store_code) => {
 };
 
 export const UpdateConfigPublicApiConfig = (store_code, data) => {
-  console.log('data',data)
+  console.log("data", data);
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
       loading: "show",
     });
-    notificationApi.UpdateConfigPublicApiConfig(store_code, data).then((res) => {
-      dispatch({
-        type: Types.SHOW_LOADING,
-        loading: "hide",
+    notificationApi
+      .UpdateConfigPublicApiConfig(store_code, data)
+      .then((res) => {
+        dispatch({
+          type: Types.SHOW_LOADING,
+          loading: "hide",
+        });
+        if (res.data.code !== 401) {
+          dispatch({
+            type: Types.ALERT_UID_STATUS,
+            alert: {
+              type: "success",
+              title: "Thành công ",
+              disable: "show",
+              content: res.data.msg,
+            },
+          });
+          dispatch({
+            type: Types.FETCH_PUBLIC_API_CONFIG,
+            data: res.data.data,
+          });
+        }
       });
-      if (res.data.code !== 401) {
-        dispatch({
-          type: Types.ALERT_UID_STATUS,
-          alert: {
-            type: "success",
-            title: "Thành công ",
-            disable: "show",
-            content: res.data.msg,
-          },
-        });
-        dispatch({
-          type: Types.FETCH_PUBLIC_API_CONFIG,
-          data: res.data.data,
-        });
-      }
-    });
   };
 };
