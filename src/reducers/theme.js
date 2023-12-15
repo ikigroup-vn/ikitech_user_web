@@ -1,4 +1,3 @@
-
 import * as Types from "../constants/ActionType";
 
 var initialState = {
@@ -13,6 +12,7 @@ var initialState = {
   post_id_return_policy: "",
   post_id_support_policy: "",
   post_id_privacy_policy: "",
+  post_id_delivery_policy: "",
 };
 
 export const themeReducers = (state = initialState, action) => {
@@ -52,8 +52,10 @@ export const themeReducers = (state = initialState, action) => {
     case Types.POST_ID_PRIVACY_POLICY:
       newState.post_id_privacy_policy = action.data;
       return newState;
+    case Types.POST_ID_DELIVERY_POLICY:
+      newState.post_id_delivery_policy = action.data;
+      return newState;
     default:
       return newState;
   }
 };
-

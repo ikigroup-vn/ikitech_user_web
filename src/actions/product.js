@@ -2279,7 +2279,10 @@ export const destroyProduct = (store_code, id, brandId, page, params) => {
   };
 };
 
-export const destroyMultiProduct = (store_code, data) => {
+export const destroyMultiProduct = (store_code, data, page, params) => {
+  const branch_id = getBranchId();
+  const branch_ids = getBranchIds();
+  const branchIds = branch_ids ? branch_ids : branch_id;
   return (dispatch) => {
     dispatch({
       type: Types.SHOW_LOADING,
@@ -2293,7 +2296,7 @@ export const destroyMultiProduct = (store_code, data) => {
           loading: "hide",
         });
         productApi
-          .fetchAllData(store_code)
+          .fetchAllProductV2(store_code, branchIds, page, params)
           .then((res) => {
             if (res.data.code !== 401)
               dispatch({
